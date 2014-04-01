@@ -542,7 +542,8 @@ public:
 	void movingDistance(CCPoint t) // 영호.
 	{
 		CCLog("%f %f", t.x, t.y);
-		
+		if(m_isLoadedRGB == false)
+			return;
 //		return;
 		// t 에 반대쪽으로 m_vertices 를 조작함.
 		// 모든 m_vertices 에 대한 y, x 에 대한 RGB 값은 m_silColors[y][x] 로 참조하면 됨.
