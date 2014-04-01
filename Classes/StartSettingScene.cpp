@@ -511,7 +511,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 	
 	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 	upgrade_price*=1000;
-	if(mySGD->getGold() < upgrade_price)
+	if(mySGD->getGold() < upgrade_price + use_item_price_gold.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(-300, "골드가 부족합니다."), kStartSettingZorder_popup);
 		return;
@@ -657,7 +657,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 
 void StartSettingScene::startItemGacha()
 {
-	if(!is_menu_enable || (use_item_price_gold.getV() + 1000) <= mySGD->getGold())
+	if(!is_menu_enable || (use_item_price_gold.getV() + 1000) > mySGD->getGold())
 		return;
 	
 	is_menu_enable = false;
