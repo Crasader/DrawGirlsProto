@@ -67,6 +67,7 @@ private:
 	bool isAnimated;
 	CCPoint touch_p;
     long touchStartTime;
+	long first_touch_time;
 	CCPoint touchStart_p;
 	CCPoint moveSpeed_p;
 	float zoom_base_distance;

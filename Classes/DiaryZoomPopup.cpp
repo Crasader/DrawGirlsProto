@@ -371,6 +371,7 @@ void DiaryZoomPopup::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		
 		if(multiTouchData.size() == 1)
 		{
+			first_touch_time = touchStartTime;
 			is_scrolling = true;
 		}
 		else if(multiTouchData.size() == 2)
@@ -530,6 +531,14 @@ void DiaryZoomPopup::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				
 				timeval time;
 				gettimeofday(&time, NULL);
+				
+				CCLog("first : %d / last : %d , sub : %d", int(first_touch_time), int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec), int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time));
+				
+				if(int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 100000)
+				{
+					first_img->ccTouchEnded(touch, pEvent);
+				}
+				
 				long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
 				CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
 
