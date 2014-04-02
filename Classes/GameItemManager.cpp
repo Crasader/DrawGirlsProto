@@ -464,7 +464,7 @@ void GameItemSubOneDie::myInit(bool is_near)
 		return;
 	}
 	
-	item_img = CCSprite::create("item6.png");
+	item_img = CCSprite::create(CCString::createWithFormat("item%d.png", kIC_subOneDie)->getCString());
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
@@ -526,7 +526,7 @@ void GameItemSilence::myInit(bool is_near)
 		return;
 	}
 	
-	item_img = CCSprite::create("item8.png");
+	item_img = CCSprite::create(CCString::createWithFormat("item%d.png", kIC_silence)->getCString());
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);

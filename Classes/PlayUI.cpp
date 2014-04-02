@@ -1017,7 +1017,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		takeCoinModeOn();
 	}
 	
-	percentageLabel->setString(CCString::createWithFormat("%d%%", int(floorf(t_p*10000))/100)->getCString());
+	percentageLabel->setString(CCString::createWithFormat("%.1f%%", floorf(t_p*1000)/10.f)->getCString());
 	
 	if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && floorf(t_p*10000.f)/10000.f*100.f >= clr_cdt_per*100.f &&
 	   floorf(t_p*10000.f)/10000.f*100.f <= (clr_cdt_per+clr_cdt_range)*100.f)

@@ -33,6 +33,7 @@
 #include "TouchSuctionLayer.h"
 #include "NewMainFlowScene.h"
 #include "CommonButton.h"
+#include "StoneMissile.h"
 
 CCScene* StartSettingScene::scene()
 {
@@ -442,28 +443,24 @@ void StartSettingScene::setMain()
 	
 	
 	StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
-	string missile_type_str;
-	if(missile_type_code == kStoneType_guided)
-		missile_type_str = "유도형";
-	else if(missile_type_code == kStoneType_spread)
-		missile_type_str = "방사형";
-	else if(missile_type_code == kStoneType_range)
-		missile_type_str = "범위형";
-	else if(missile_type_code == kStoneType_mine)
-		missile_type_str = "지뢰형";
-	else if(missile_type_code == kStoneType_laser)
-		missile_type_str = "레이저형";
-	else if(missile_type_code == kStoneType_spirit)
-		missile_type_str = "소환형";
-	else if(missile_type_code == kStoneType_global)
-		missile_type_str = "전체공격형";
-	
-	CCLabelTTF* missile_type = CCLabelTTF::create(missile_type_str.c_str(), mySGD->getFont().c_str(), 12);
-	missile_type->setPosition(ccp(94,157));
-	main_case->addChild(missile_type);
 	
 	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
-	missile_data = CCLabelTTF::create(CCString::createWithFormat("레벨 %d    파워 %d(임시)", missile_level, 999)->getCString(), mySGD->getFont().c_str(), 12);
+	
+	if(missile_type_code == kStoneType_guided)
+	{
+		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
+		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+		t_gm->setPosition(ccp(94,157));
+		main_case->addChild(t_gm);
+		
+		int grade = (missile_level-1)/5+1;
+		
+		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+		
+		missile_img = t_gm;
+	}
+	
+	missile_data = CCLabelTTF::create(CCString::createWithFormat("레벨 %d    파워 %d", missile_level, StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data->setPosition(ccp(94,95));
 	main_case->addChild(missile_data);
 	
@@ -514,8 +511,11 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 	
 	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 	upgrade_price*=1000;
-	if(mySGD->getGold() < upgrade_price)
+	if(mySGD->getGold() < upgrade_price + use_item_price_gold.getV())
+	{
+		addChild(ASPopupView::getCommonNoti(-300, "골드가 부족합니다."), kStartSettingZorder_popup);
 		return;
+	}
 	
 	is_menu_enable = false;
 	
@@ -580,7 +580,31 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 							   myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, nullptr);
 							   
 							   missile_level++;
-							   missile_data->setString(CCString::createWithFormat("레벨 %d    파워 %d(임시)", missile_level, 999)->getCString());
+							   missile_data->setString(CCString::createWithFormat("레벨 %d    파워 %d", missile_level, StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
+							   
+							   CCPoint missile_position;
+							   if(missile_img)
+								{
+									missile_position = missile_img->getPosition();
+								   missile_img->removeFromParent();
+								}
+							   
+							   StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
+							   
+							   if(missile_type_code == kStoneType_guided)
+							   {
+								   GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
+								   t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+								   t_gm->setPosition(missile_position);
+								   main_case->addChild(t_gm);
+								   
+								   int grade = (missile_level-1)/5+1;
+								   
+								   t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+								   
+								   missile_img = t_gm;
+							   }
+							   
 							   
 							   
 							   CCPoint upgrade_position = upgrade_menu->getPosition();
@@ -633,7 +657,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 
 void StartSettingScene::startItemGacha()
 {
-	if(!is_menu_enable || mySGD->getGold() < 1000)
+	if(!is_menu_enable || (use_item_price_gold.getV() + 1000) > mySGD->getGold())
 		return;
 	
 	is_menu_enable = false;
