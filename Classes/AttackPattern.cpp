@@ -11,6 +11,7 @@
 void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
+			
 	//		m_position = t_sp;
 	//		firstJackPosition = ip2ccp(myGD->getJackPoint());
 	
@@ -3516,7 +3517,7 @@ void CobWeb::framing()
 				// 밖에 있다가 들어옴.
 				if(state == kOuter)
 				{
-					myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 0.5f);
+					myGD->setAlphaSpeed(myGD->getAlphaSpeed() - decreaseSpeed);
 					CCLog("-0.5");
 					state = kInner;
 				}
@@ -3526,7 +3527,7 @@ void CobWeb::framing()
 				// 안에 있다가 나갔으면
 				if(state == kInner)
 				{
-					myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 0.5f);
+					myGD->setAlphaSpeed(myGD->getAlphaSpeed() + decreaseSpeed);
 					CCLog("+0.5");
 					state = kOuter;
 				}
@@ -3559,7 +3560,7 @@ void CobWeb::stopFrame()
 
 	if(state == kInner)
 	{
-		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+decreaseSpeed);
 	}
 	m_cumber->setCobWebAttack(nullptr);
 	state = kFrameTerminated;
@@ -3574,7 +3575,7 @@ void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternD
 	reader.parse(patternData, pattern);
 	KS::KSLog("%", pattern);
 	slowFrame = pattern.get("totalframe", 60*4).asInt();
-
+	decreaseSpeed = pattern.get("decrease", 0.5f).asFloat();	
 
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader1 = new CCBReader(nodeLoader);

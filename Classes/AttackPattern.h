@@ -1089,6 +1089,7 @@ private:
 	int slowFrame;
 	int ingFrame;
 	bool is_stop;
+	float decreaseSpeed;
 	enum {kElse, kInner, kOuter, kFrameTerminated} state;
 	CCSprite* cobwebImg;
 	FromToWithDuration<float> m_scaleFromTo;
