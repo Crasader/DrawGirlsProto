@@ -397,7 +397,6 @@
 		D71DFB15186BB28E00BD3BCD /* KSProtect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71DFB13186BB28E00BD3BCD /* KSProtect.cpp */; };
 		D71DFB18186BB92F00BD3BCD /* CardMatching.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71DFB16186BB92F00BD3BCD /* CardMatching.cpp */; };
 		D73162CC1871A16F00890BE9 /* MiniGamePopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D73162CA1871A16F00890BE9 /* MiniGamePopup.cpp */; };
-		D737A41418DFC72300E127A3 /* dyci.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D737A41318DFC72300E127A3 /* dyci.framework */; };
 		D74445AA18DAC0A100153EE6 /* EasingAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D74445A918DAC0A100153EE6 /* EasingAction.cpp */; };
 		D753BE8F18963DFD00B316B0 /* GivenFriendList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D753BE8D18963DFD00B316B0 /* GivenFriendList.cpp */; };
 		D753BE921897CCC300B316B0 /* GachaShowReward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D753BE901897CCC300B316B0 /* GachaShowReward.cpp */; };
@@ -1415,7 +1414,6 @@
 		D7315B7718716F0900890BE9 /* libcryptopp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcryptopp.a; path = ../Classes/cryptopp562/libcryptopp.a; sourceTree = "<group>"; };
 		D73162CA1871A16F00890BE9 /* MiniGamePopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MiniGamePopup.cpp; sourceTree = "<group>"; };
 		D73162CB1871A16F00890BE9 /* MiniGamePopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiniGamePopup.h; sourceTree = "<group>"; };
-		D737A41318DFC72300E127A3 /* dyci.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = dyci.framework; path = ../../../../../Downloads/dyci.framework; sourceTree = "<group>"; };
 		D74445A818DAC09000153EE6 /* EasingAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EasingAction.h; sourceTree = "<group>"; };
 		D74445A918DAC0A100153EE6 /* EasingAction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EasingAction.cpp; sourceTree = "<group>"; };
 		D753BE8D18963DFD00B316B0 /* GivenFriendList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GivenFriendList.cpp; sourceTree = "<group>"; };
@@ -1872,7 +1870,6 @@
 				D70B54D71814BC4F001FC90A /* libXStreamStatic.a in Frameworks */,
 				D70B54D81814BC4F001FC90A /* libXSystemStatic.a in Frameworks */,
 				D70B54D91814BC4F001FC90A /* libXInNetworkStatic_x86.a in Frameworks */,
-				D737A41418DFC72300E127A3 /* dyci.framework in Frameworks */,
 				D70B54DA1814BC4F001FC90A /* libXPlatformStatic_x86.a in Frameworks */,
 				D70B54DB1814BC4F001FC90A /* libXStreamStatic_x86.a in Frameworks */,
 				D70B54DC1814BC4F001FC90A /* libXSystemStatic_x86.a in Frameworks */,
@@ -3707,7 +3704,6 @@
 		F293B3CB15EB7BE500256477 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D737A41318DFC72300E127A3 /* dyci.framework */,
 				D7315B7718716F0900890BE9 /* libcryptopp.a */,
 				D71DFB101869297600BD3BCD /* libdyld.dylib */,
 				D71DFB0E1869284700BD3BCD /* dylib1.o */,
