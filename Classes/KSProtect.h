@@ -4,22 +4,27 @@
 #include <type_traits>
 #include <string>
 #include <cstdlib>
+#include "CipherUtils.h"
 class KSProtectStr
 {
 	
 private:
-	std::string m_buff;
+	std::string m_cipher;
 private:
 	void encrypt(const std::string& data)
 	{
-		m_buff = data;
+		char *keyString = "drawgirls__jjang";
+		CipherUtils::encrypt(keyString, data, m_cipher);
 	}
 	
 public:
 	
 	std::string getV() const
 	{
-		return m_buff;
+		std::string decrypted;
+		char *keyString = "drawgirls__jjang";
+		CipherUtils::decrypt(keyString, m_cipher, decrypted);
+		return decrypted;
 	}
 	explicit KSProtectStr(const std::string& v)
 	{
@@ -38,22 +43,53 @@ template<typename T>
 class KSProtectVar
 {
 private:
-	T m_buff;
+	//T m_buff;
+	std::string m_cipher;
 private:
 	void encrypt(const T& data)
 	{
-		m_buff = data;
+		char *keyString = "drawgirls__jjang";
+		CipherUtils::encrypt(keyString, &data, sizeof(data), m_cipher);
+		//m_buff = data;
 		//		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
 //																								 m_bufferLength, key, keyLen);
 	}
 	
 public:
 	
+	std::string toString(T arg) const
+	{
+		int varSizeInByte = sizeof(arg);
+		std::string retValue;
+		retValue.resize(varSizeInByte);
+		char* pV = (char*)&arg;
+		for(int i=0; i<varSizeInByte; i++)
+		{
+			retValue[i] = pV[i];
+		}
+
+		return retValue;
+	}
+	T toVar(const std::string& str) const
+	{
+		T retValue;
+		char* pV = (char*)&retValue;
+		int varSizeInByte = sizeof(T);
+
+		for(int i=0; i<varSizeInByte; i++)
+		{
+			pV[i] = str[i];
+		}
+		return retValue;
+	}
 	T getV() const
 	{
-		return m_buff;
+		std::string decrypted;
+		char *keyString = "drawgirls__jjang";
+		CipherUtils::decrypt(keyString, m_cipher, decrypted);
+		return toVar(decrypted);
 	}
-	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v) : m_buff(0)
+	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v)
 	{
 		encrypt(v);
 	}
@@ -61,7 +97,7 @@ public:
 	{
 		encrypt(copyCtor.getV());
 	}
-	KSProtectVar() : m_buff(0)
+	KSProtectVar()
 	{
 		encrypt(static_cast<T>(0));
 	}
