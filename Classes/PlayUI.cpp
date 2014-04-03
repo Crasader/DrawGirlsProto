@@ -2589,10 +2589,7 @@ void PlayUI::continueAction ()
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	
-	if(countingCnt >= 130)
-	{
-		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
-	}
+	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	
 	total_time += countingCnt;
 	

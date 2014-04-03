@@ -2767,6 +2767,8 @@ void CrashLazerWrapper::myAction()
 			crashRect = CCRectMake(-30, (-m_crashSize + 10*t_scale), 460, (m_crashSize + 10*t_scale)); //x좌표에 -30추가, 무조건 1자로 깍도록
 			//				crashRect = CCRectMake(0, -60/2 + 10, 460, +60/2 + 10);
 			lineCrashMap(c_sp, angle, 460, 60);
+			
+			myGD->communication("MS_resetRects", false);
 		}
 	}
 	else if(ingFrame <= chargeFrame+crashFrame)
@@ -2802,9 +2804,16 @@ void CrashLazerWrapper::lineCrashMap( CCPoint t_sp, float t_angle, int t_width, 
 		{
 			CCPoint t_tp = ccp((i-1)*pixelSize+1,(j-1)*pixelSize+1);
 			CCPoint a_tp = spinTransform(t_tp, t_sp, t_angle);
-			if(crashRect.containsPoint(a_tp))
+			if(crashRect.containsPoint(a_tp) && (myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline))
 			{
-				crashMapForIntPoint(IntPoint(i,j));
+				if(a_tp.y < crashRect.origin.y + 1.5f || a_tp.y > crashRect.origin.y + crashRect.size.height - 1.5f)
+				{
+					for(int k=i-2;k<=i+2;k++)
+						for(int l=j-2;l<=j+2;l++)
+							crashMapForIntPoint(IntPoint(k,l));
+				}
+				else
+					crashMapForIntPoint(IntPoint(i,j));
 			}
 		}
 	}
