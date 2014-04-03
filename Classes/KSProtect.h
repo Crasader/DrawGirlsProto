@@ -146,7 +146,7 @@ public:
 	}
 	T operator=(const T& arg)
 	{
-		*this = KSProtectVar<T>(arg);
+		encrypt(arg);
 		return getV();
 	}
 	T operator=(const KSProtectVar<T>& arg)

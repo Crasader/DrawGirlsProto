@@ -27,6 +27,7 @@ void CipherUtils::encrypt(char *keyString, const string& plain, string &cipher)
 	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
 	try
 	{
+		cipher.clear();
 		ECB_Mode< AES >::Encryption e;
 		// ECB Mode does not use an IV
 		e.SetKey( key, sizeof(key) );
@@ -55,7 +56,7 @@ void CipherUtils::encrypt(char *keyString, const void *plain, size_t length, std
 	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
 	try
 	{
-		
+		cipher.clear();
 		StringSource( (const byte*)plain, length, true,
 								 new HexEncoder( new StringSink( cipher ) )
 								 ); // StringSource
@@ -63,6 +64,9 @@ void CipherUtils::encrypt(char *keyString, const void *plain, size_t length, std
 		ECB_Mode< AES >::Encryption e;
 		// ECB Mode does not use an IV
 		e.SetKey( key, sizeof(key) );
+		
+		
+		
 		// The StreamTransformationFilter adds padding
 		//  as required. ECB and CBC Mode must be padded
 		//  to the block size of the cipher.
