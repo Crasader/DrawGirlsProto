@@ -1678,7 +1678,7 @@ void Jack::setJackState( jackState t_s )
 			jack_ccb_manager->runAnimationsForSequenceNamed("move");
 //		jackImg->setColor(ccWHITE);
 //		jackImg->setVisible(true);
-		line_edge->setVisible(false);
+//		line_edge->setVisible(false);
 		myGD->communication("Main_setLineParticle", false);
 		if(!is_hard && !jack_barrier->isVisible())
 			jack_barrier->setVisible(true);
@@ -1688,7 +1688,7 @@ void Jack::setJackState( jackState t_s )
 	}
 	else if(myState == jackStateDrawing)
 	{
-		line_edge->setVisible(true);
+//		line_edge->setVisible(true);
 		myGD->communication("Main_setLineParticle", true);
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("draw");
@@ -1701,7 +1701,7 @@ void Jack::setJackState( jackState t_s )
 	}
 	else if(myState == jackStateBackTracking)
 	{
-		line_edge->setVisible(false);
+//		line_edge->setVisible(false);
 		myGD->communication("Main_setLineParticle", false);
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("rewind"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("rewind");
@@ -2039,10 +2039,10 @@ void Jack::myInit()
 	else
 		path_color = "empty";
 	
-	line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
-	line_edge->setVisible(false);
-	line_edge->setScale(0.5f);
-	addChild(line_edge, kJackZ_line);
+//	line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
+//	line_edge->setVisible(false);
+//	line_edge->setScale(0.5f);
+//	addChild(line_edge, kJackZ_line);
 	
 	
 	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1) + ".ccbi");

@@ -1175,22 +1175,24 @@ void FallMeteor::fall ()
 		for(int i=0;i<11;i++)
 		{
 			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
+			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+2+i));
 		}
 		for(int i=0;i<7;i++)
 		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x-2, leftDownPoint.y+4+i));
+			crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+4+i));
+			crashMapForIntPoint(IntPoint(leftDownPoint.x-4, leftDownPoint.y+4+i));
 		}
-		crashMapForIntPoint(IntPoint(leftDownPoint.x-3, leftDownPoint.y+7));
 		
 		for(int i=0;i<11;i++)
 		{
 			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-1));
+			crashMapForIntPoint(IntPoint(leftDownPoint.x+2+i, leftDownPoint.y-2));
 		}
 		for(int i=0;i<7;i++)
 		{
-			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-2));
+			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-3));
+			crashMapForIntPoint(IntPoint(leftDownPoint.x+4+i, leftDownPoint.y-4));
 		}
-		crashMapForIntPoint(IntPoint(leftDownPoint.x+7, leftDownPoint.y-3));
 		
 		stopFall();
 	}
@@ -1247,7 +1249,7 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 	explosionFrame = t_explosionFrame;
 	mSize = t_mSize;
 	
-	meteorChanger.init(t_sp, fp, 0.75f);
+	meteorChanger.init(t_sp, fp, 1.f);//0.75f);
 	//		fall_dv = ccpSub(fp, t_sp);
 	////		fall_dv = (fall_dv / ccpLength(fall_dv)) * 10.f;
 	//		fall_dv = ccpMult(fall_dv, 1.f/fallFrame);

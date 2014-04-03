@@ -248,8 +248,6 @@ private:
 	
 	bool isReverse;
 	
-	CCSprite* line_edge;
-	
 	KeepDirection keep_direction; // rotary
 
 	IntPoint btPoint;

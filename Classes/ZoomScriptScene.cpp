@@ -77,7 +77,7 @@ bool ZoomScript::init()
 	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
 	addChild(zoom_img, kZS_Z_script_case);
 	
-	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 18);
+	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 16);
 	script_label->setPosition(ccp(210,30));
 	addChild(script_label, kZS_Z_script_label);
 	
