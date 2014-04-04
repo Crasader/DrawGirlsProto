@@ -103,6 +103,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 		}
 		
 		Json::Value cards = result_data["cards"];
+		NSDS_SI(mySD->getSilType(), kSDS_SI_cardCount_i, cards.size(), false);
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];

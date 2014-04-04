@@ -108,6 +108,7 @@ bool ClearPopup::init()
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	p1_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
 	p1_data["highstage"] = mySGD->suitable_stage;
+	p1_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
 	
@@ -205,6 +206,10 @@ bool ClearPopup::init()
 		p["memberID"]=hspConnector::get()->getKakaoID();
 		p["score"]=int(mySGD->getScore());
 		p["stageNo"]=mySD->getSilType();
+	Json::Value p_data;
+	p_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	Json::FastWriter p_data_writer;
+	p["data"] = p_data_writer.write(p_data);
 	
 	send_command_list.push_back(CommandParam("setStageScore",p,nullptr));
 	
@@ -1043,7 +1048,11 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(rank_label);
 			}
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i]["nick"].asString().c_str(), mySGD->getFont().c_str(), 11);
+			Json::Reader reader;
+			Json::Value read_data;
+			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
+			
+			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 11); // user_list[i]["nick"].asString().c_str()
 			nick_label->enableOuterStroke(ccBLACK, 1);
 			nick_label->setPosition(ccp(83,13));
 			list_cell_case->addChild(nick_label);

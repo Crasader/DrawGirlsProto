@@ -449,8 +449,8 @@ void StartSettingScene::setMain()
 	if(missile_type_code == kStoneType_guided)
 	{
 		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 		t_gm->setPosition(ccp(94,157));
+		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 		main_case->addChild(t_gm);
 		
 		int grade = (missile_level-1)/5+1;
@@ -594,8 +594,8 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 							   if(missile_type_code == kStoneType_guided)
 							   {
 								   GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-								   t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 								   t_gm->setPosition(missile_position);
+								   t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 								   main_case->addChild(t_gm);
 								   
 								   int grade = (missile_level-1)/5+1;

@@ -125,7 +125,11 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(rank_label);
 			}
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i]["nick"].asString().c_str(), mySGD->getFont().c_str(), 11);
+			Json::Reader reader;
+			Json::Value read_data;
+			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
+			
+			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 11); // user_list[i]["nick"].asString().c_str()
 			nick_label->enableOuterStroke(ccBLACK, 1);
 			nick_label->setPosition(ccp(83,13));
 			list_cell_case->addChild(nick_label);

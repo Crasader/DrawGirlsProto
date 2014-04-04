@@ -35,7 +35,7 @@ void SilhouetteData::startSetting()
 			int i = ((y*dataRate+y_offset)*tx->getWidth()+(x*dataRate+x_offset))*imgByte;
 			
 			//순서대로 r,g,b 값을 더하여 10 이상일때 실루엣으로 인식
-			if(pData[i]+pData[i+1]+pData[i+2]>=10)
+			if(pData[i+2] > 200)//  pData[i]+pData[i+1]+pData[i+2]>=10)
 			{
 				must_cnt++;
 				silData[x+1][215-y]=true;
