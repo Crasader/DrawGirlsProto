@@ -676,6 +676,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_itemOptionDoubleItemPercent_i)			rv = "itemOption_doubleItem_percent";
 	else if(t_key == kSDS_SI_itemOptionLongTimeSec_i)	rv = "itemOption_longTime_sec";
 	else if(t_key == kSDS_SI_itemOptionBaseSpeedUpUnit_i)	rv = "itemOption_baseSpeedUp_unit";
+	else if(t_key == kSDS_SI_cardCount_i)				rv = "cardCount";
 	else if(t_key == kSDS_SI_level_int1_card_i)			rv = "level%d_card";
 	else if(t_key == kSDS_SI_level_i)					rv = "level";
 	else if(t_key == kSDS_SI_boss_s)					rv = "boss";

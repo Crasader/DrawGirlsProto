@@ -191,6 +191,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				}
 				
 				Json::Value cards = stage_list[i]["cards"];
+				NSDS_SI(stage_number, kSDS_SI_cardCount_i, cards.size(), false);
 				for(int i=0;i<cards.size();i++)
 				{
 					Json::Value t_card = cards[i];

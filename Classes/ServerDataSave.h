@@ -147,6 +147,7 @@ enum SDS_KEY
 	kSDS_SI_itemOptionDoubleItemPercent_i,
 	kSDS_SI_itemOptionLongTimeSec_i,
 	kSDS_SI_itemOptionBaseSpeedUpUnit_i,
+	kSDS_SI_cardCount_i,
 	kSDS_SI_level_int1_card_i,
 	kSDS_SI_level_i,
 	kSDS_SI_boss_s,
@@ -155,8 +156,8 @@ enum SDS_KEY
 	kSDS_SI_minigame_b,
 	kSDS_SI_end = 2999,
 	kSDS_CI_base = 3000,
-	kSDS_CI_int1_rank_i,
-	kSDS_CI_int1_grade_i,
+	kSDS_CI_int1_rank_i, // 1,2,3,4 or 3,4,5,6 etc..
+	kSDS_CI_int1_grade_i, // 1,2,3,4
 	kSDS_CI_int1_durability_i,
 	kSDS_CI_int1_theme_i,
 	kSDS_CI_int1_stage_i,
