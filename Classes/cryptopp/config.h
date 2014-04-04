@@ -1,6 +1,11 @@
 #ifndef CRYPTOPP_CONFIG_H
 #define CRYPTOPP_CONFIG_H
 
+// For TARGET_OS_IPHONE and TARGET_IPHONE_SIMULATOR
+#if defined(__APPLE__)
+# include "TargetConditionals.h"
+#endif
+
 // ***************** Important Settings ********************
 
 // define this if running on a big-endian CPU
@@ -251,6 +256,14 @@ NAMESPACE_END
 #define CRYPTOPP_UNCAUGHT_EXCEPTION_AVAILABLE
 #endif
 
+// For cross-compiles, just ignore host settings that bleed through for Xcode/iOS
+// We will accidentally catch some device builds that use x86 on Android.
+#if defined(__ANDROID__) || defined(TARGET_OS_IPHONE) || defined(TARGET_IPHONE_SIMULATOR)
+# define CRYPTOPP_DISABLE_ASM 1
+# define CRYPTOPP_DISABLE_SSE2 1
+# define CRYPTOPP_DISABLE_SSE3 1
+#endif
+
 #ifdef CRYPTOPP_DISABLE_X86ASM		// for backwards compatibility: this macro had both meanings
 #define CRYPTOPP_DISABLE_ASM
 #define CRYPTOPP_DISABLE_SSE2
@@ -464,4 +477,7 @@ NAMESPACE_END
 #define CRYPTOPP_STATIC_TEMPLATE_CLASS CRYPTOPP_EXTERN_STATIC_TEMPLATE_CLASS
 #endif
 
+
+#define CRYPTOPP_DISABLE_ASM 1
+#define CRYPTOPP_DISABLE_SSE2 1
 #endif
