@@ -273,8 +273,8 @@ void ZoomScript::showtimeFirstAction()
 	
 	int card_number;
 	
-	if(is_exchanged)		card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
-	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
+	if(is_exchanged)		card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
+	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
 	
 	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 	second_img->putBasicInfomation();	// 기본정보 들어가게.

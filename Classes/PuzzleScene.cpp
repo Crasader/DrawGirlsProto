@@ -332,8 +332,9 @@ bool PuzzleScene::init()
 		
 		
 		int take_level;
-		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
-		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
+		else if(mySGD->is_showtime)							take_level = 3;
+		else if(mySGD->is_exchanged)						take_level = 2;
 		else												take_level = 1;
 		
 		clear_star_take_level = take_level;
@@ -1542,143 +1543,176 @@ void PuzzleScene::setReward()
 	{
 		reward_node->removeAllChildren();
 		
-		bool is_have_card_list[3] = {false,};
-		int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 1);
-		is_have_card_list[0] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
-		CCSprite* card_img1;
-		if(is_have_card_list[0])
-		{
-			card_img1 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
-			card_img1->setScale(58.f/card_img1->getContentSize().width);
-			reward_node->addChild(card_img1);
-		}
-		else
-		{
-			card_img1 = CCSprite::create("puzzle_reward_cardback.png");
-			reward_node->addChild(card_img1);
-			
-			CCSprite* condition = CCSprite::create("puzzle_reward_condition1.png");
-			condition->setPosition(ccp(card_img1->getContentSize().width/2.f, card_img1->getContentSize().height/2.f));
-			card_img1->addChild(condition);
-		}
-		card_img1->setPosition(ccp(-32, 54));
+		bool is_have_card_list[4] = {false,};
 		
+		CCPoint card_position[4];
+		card_position[0] = ccp(-32, 54);
+		card_position[1] = ccp(32, 54);
+		card_position[2] = ccp(-32, -37);
+		card_position[3] = ccp(32, -37);
 		
-		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 2);
-		is_have_card_list[1] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
-		CCSprite* card_img2;
-		CCSprite* card_img3;
-		if(is_have_card_list[1])
+		int stage_card_count = NSDS_GI(selected_stage_number, kSDS_SI_cardCount_i);
+		for(int i=1;i<=stage_card_count && i <= 4;i++)
 		{
-			card_img2 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
-			card_img2->setScale(58.f/card_img2->getContentSize().width);
-			reward_node->addChild(card_img2);
+			int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
+			is_have_card_list[i-1] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
+			CCSprite* card_img1;
+			if(is_have_card_list[i-1])
+			{
+				card_img1 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
+				card_img1->setScale(58.f/card_img1->getContentSize().width);
+				reward_node->addChild(card_img1);
+			}
+			else
+			{
+				card_img1 = CCSprite::create("puzzle_reward_cardback.png");
+				reward_node->addChild(card_img1);
+				
+				CCSprite* condition = CCSprite::create(CCString::createWithFormat("puzzle_reward_condition%d.png", i)->getCString());
+				condition->setPosition(ccp(card_img1->getContentSize().width/2.f, card_img1->getContentSize().height/2.f));
+				card_img1->addChild(condition);
+			}
 			
-			card_img3 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
-			card_img3->setScale(58.f/card_img3->getContentSize().width);
-			reward_node->addChild(card_img3);
+			card_img1->setPosition(card_position[i-1]);
 		}
-		else
-		{
-			card_img2 = CCSprite::create("puzzle_reward_cardback.png");
-			reward_node->addChild(card_img2);
-			
-			CCSprite* condition = CCSprite::create("puzzle_reward_condition2.png");
-			condition->setPosition(ccp(card_img2->getContentSize().width/2.f, card_img2->getContentSize().height/2.f));
-			card_img2->addChild(condition);
-			
-			card_img3 = CCSprite::create("puzzle_reward_cardback.png");
-			reward_node->addChild(card_img3);
-			
-			CCSprite* condition2 = CCSprite::create("puzzle_reward_condition3.png");
-			condition2->setPosition(ccp(card_img3->getContentSize().width/2.f, card_img3->getContentSize().height/2.f));
-			card_img3->addChild(condition2);
-		}
-		card_img2->setPosition(ccp(32, 54));
-		card_img3->setPosition(ccp(-32, -37));
+		//////////////////////////////////////////////////////////////////
 		
-		
-		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 3);
-		is_have_card_list[2] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
-		CCSprite* card_img4;
-		if(is_have_card_list[2])
-		{
-			card_img4 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
-			card_img4->setScale(58.f/card_img4->getContentSize().width);
-			reward_node->addChild(card_img4);
-		}
-		else
-		{
-			card_img4 = CCSprite::create("puzzle_reward_cardback.png");
-			reward_node->addChild(card_img4);
-			
-			CCSprite* condition = CCSprite::create("puzzle_reward_condition4.png");
-			condition->setPosition(ccp(card_img4->getContentSize().width/2.f, card_img4->getContentSize().height/2.f));
-			card_img4->addChild(condition);
-		}
-		card_img4->setPosition(ccp(32, -37));
+//		int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 1);
+//		is_have_card_list[0] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
+//		CCSprite* card_img1;
+//		if(is_have_card_list[0])
+//		{
+//			card_img1 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
+//			card_img1->setScale(58.f/card_img1->getContentSize().width);
+//			reward_node->addChild(card_img1);
+//		}
+//		else
+//		{
+//			card_img1 = CCSprite::create("puzzle_reward_cardback.png");
+//			reward_node->addChild(card_img1);
+//			
+//			CCSprite* condition = CCSprite::create("puzzle_reward_condition1.png");
+//			condition->setPosition(ccp(card_img1->getContentSize().width/2.f, card_img1->getContentSize().height/2.f));
+//			card_img1->addChild(condition);
+//		}
+//		card_img1->setPosition(ccp(-32, 54));
+//		
+//		
+//		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 2);
+//		is_have_card_list[1] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
+//		CCSprite* card_img2;
+//		CCSprite* card_img3;
+//		if(is_have_card_list[1])
+//		{
+//			card_img2 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
+//			card_img2->setScale(58.f/card_img2->getContentSize().width);
+//			reward_node->addChild(card_img2);
+//			
+//			card_img3 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
+//			card_img3->setScale(58.f/card_img3->getContentSize().width);
+//			reward_node->addChild(card_img3);
+//		}
+//		else
+//		{
+//			card_img2 = CCSprite::create("puzzle_reward_cardback.png");
+//			reward_node->addChild(card_img2);
+//			
+//			CCSprite* condition = CCSprite::create("puzzle_reward_condition2.png");
+//			condition->setPosition(ccp(card_img2->getContentSize().width/2.f, card_img2->getContentSize().height/2.f));
+//			card_img2->addChild(condition);
+//			
+//			card_img3 = CCSprite::create("puzzle_reward_cardback.png");
+//			reward_node->addChild(card_img3);
+//			
+//			CCSprite* condition2 = CCSprite::create("puzzle_reward_condition3.png");
+//			condition2->setPosition(ccp(card_img3->getContentSize().width/2.f, card_img3->getContentSize().height/2.f));
+//			card_img3->addChild(condition2);
+//		}
+//		card_img2->setPosition(ccp(32, 54));
+//		card_img3->setPosition(ccp(-32, -37));
+//		
+//		
+//		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 3);
+//		is_have_card_list[2] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
+//		CCSprite* card_img4;
+//		if(is_have_card_list[2])
+//		{
+//			card_img4 = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", step_card_number)->getCString()));
+//			card_img4->setScale(58.f/card_img4->getContentSize().width);
+//			reward_node->addChild(card_img4);
+//		}
+//		else
+//		{
+//			card_img4 = CCSprite::create("puzzle_reward_cardback.png");
+//			reward_node->addChild(card_img4);
+//			
+//			CCSprite* condition = CCSprite::create("puzzle_reward_condition4.png");
+//			condition->setPosition(ccp(card_img4->getContentSize().width/2.f, card_img4->getContentSize().height/2.f));
+//			card_img4->addChild(condition);
+//		}
+//		card_img4->setPosition(ccp(32, -37));
 		
 		
 		CCSprite* reward_back_left_top = CCSprite::create("puzzle_reward_back_bronze.png");
-		reward_back_left_top->setPosition(card_img1->getPosition());
+		reward_back_left_top->setPosition(card_position[0]);
 		reward_node->addChild(reward_back_left_top);
 		
 		CCSprite* reward_back_right_top = CCSprite::create("puzzle_reward_back_silver.png");
-		reward_back_right_top->setPosition(card_img2->getPosition());
+		reward_back_right_top->setPosition(card_position[1]);
 		reward_node->addChild(reward_back_right_top);
 		
 		CCSprite* reward_back_left_bottom = CCSprite::create("puzzle_reward_back_silver.png");
-		reward_back_left_bottom->setPosition(card_img3->getPosition());
+		reward_back_left_bottom->setPosition(card_position[2]);
 		reward_node->addChild(reward_back_left_bottom);
 		
 		CCSprite* reward_back_right_bottom = CCSprite::create("puzzle_reward_back_gold.png");
-		reward_back_right_bottom->setPosition(card_img4->getPosition());
+		reward_back_right_bottom->setPosition(card_position[3]);
 		reward_node->addChild(reward_back_right_bottom);
 		
 		
-		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 1);
+		int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 1);
 		CCLabelTTF* step_reward1 = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		step_reward1->setPosition(ccpAdd(card_img1->getPosition(), ccp(14, -31)));
+		step_reward1->setPosition(ccpAdd(card_position[0], ccp(14, -31)));
 		reward_node->addChild(step_reward1);
 		
 		if(is_have_card_list[0])
 		{
 			CCSprite* t_complete1 = CCSprite::create("stageinfo_complete.png");
-			t_complete1->setPosition(ccpAdd(card_img1->getPosition(), ccp(-12, 19)));
+			t_complete1->setPosition(ccpAdd(card_position[0], ccp(-12, 19)));
 			reward_node->addChild(t_complete1);
 		}
 		
 		
 		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 2);
 		CCLabelTTF* step_reward2 = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		step_reward2->setPosition(ccpAdd(card_img2->getPosition(), ccp(14, -31)));
+		step_reward2->setPosition(ccpAdd(card_position[1], ccp(14, -31)));
 		reward_node->addChild(step_reward2);
 		
 		CCLabelTTF* step_reward3 = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		step_reward3->setPosition(ccpAdd(card_img3->getPosition(), ccp(14, -31)));
+		step_reward3->setPosition(ccpAdd(card_position[2], ccp(14, -31)));
 		reward_node->addChild(step_reward3);
 		
 		if(is_have_card_list[1])
 		{
 			CCSprite* t_complete2 = CCSprite::create("stageinfo_complete.png");
-			t_complete2->setPosition(ccpAdd(card_img2->getPosition(), ccp(-12, 19)));
+			t_complete2->setPosition(ccpAdd(card_position[1], ccp(-12, 19)));
 			reward_node->addChild(t_complete2);
 			
 			CCSprite* t_complete3 = CCSprite::create("stageinfo_complete.png");
-			t_complete3->setPosition(ccpAdd(card_img3->getPosition(), ccp(-12, 19)));
+			t_complete3->setPosition(ccpAdd(card_position[2], ccp(-12, 19)));
 			reward_node->addChild(t_complete3);
 		}
 		
 		
 		step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, 3);
 		CCLabelTTF* step_reward4 = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		step_reward4->setPosition(ccpAdd(card_img4->getPosition(), ccp(14, -31)));
+		step_reward4->setPosition(ccpAdd(card_position[3], ccp(14, -31)));
 		reward_node->addChild(step_reward4);
 		
 		if(is_have_card_list[2])
 		{
 			CCSprite* t_complete4 = CCSprite::create("stageinfo_complete.png");
-			t_complete4->setPosition(ccpAdd(card_img4->getPosition(), ccp(-12, 19)));
+			t_complete4->setPosition(ccpAdd(card_position[3], ccp(-12, 19)));
 			reward_node->addChild(t_complete4);
 		}
 		
