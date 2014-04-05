@@ -187,6 +187,7 @@ private:
 	CCArray* drawRects;
 	
 	void divideRect(IntPoint crashPoint);
+	void divideRects(IntRect crashRect);
 	
 	void setMoveGamePosition(CCPoint t_p);
 	

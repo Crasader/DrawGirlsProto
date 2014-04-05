@@ -131,6 +131,7 @@ class CrashMapObject : public CCNode
 {
 public:
 	void crashMapForIntPoint (IntPoint t_p);
+	void crashMapForIntRect (IntRect t_r);
 	virtual void jackDie () = 0;
 	virtual void lineDie (IntPoint t_p) = 0;
 };

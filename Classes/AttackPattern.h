@@ -716,6 +716,7 @@ public:
 	void lineCrashMap(CCPoint t_sp, float t_angle, int t_width, int t_height);
 	
 	void crashMapForIntPoint(IntPoint t_p);
+	void crashMapForIntRect(IntRect t_r);
 	
 	CCPoint spinTransform(CCPoint t_tp, CCPoint t_bp, float t_angle); // jack, boss, angle;
 protected:

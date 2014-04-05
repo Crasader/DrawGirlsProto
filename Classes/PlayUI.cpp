@@ -864,6 +864,26 @@ void PlayUI::addScore (int t_score)
 			myGD->communication("UI_writeScore");
 	}
 }
+
+void PlayUI::decreasePercentages(int t_cnt)
+{
+	for(int i=0;i<t_cnt;i++)
+		decreasePercentage();
+//	percentage_decrease_cnt+=t_cnt;
+//	if(percentage_decrease_cnt >= mySD->must_cnt/1000.f)
+//	{
+//		int d_decrease = floor(percentage_decrease_cnt/(mySD->must_cnt/1000.f));
+//		
+//		beforePercentage ^= t_tta;
+//		beforePercentage -= d_decrease;
+//		percentageLabel->setString(CCString::createWithFormat("%.1f%%", beforePercentage/10.f)->getCString());
+//		if(m_areaGage)
+//			m_areaGage->setPercentage(beforePercentage/1000.f);
+//		beforePercentage ^= t_tta;
+//		percentage_decrease_cnt -= floor(d_decrease*(mySD->must_cnt/1000.f));
+//	}
+}
+
 void PlayUI::decreasePercentage ()
 {
 	percentage_decrease_cnt++;
@@ -2551,6 +2571,7 @@ void PlayUI::myInit ()
 	myGD->V_FB["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1, _2);
 	myGD->V_F["UI_subBossLife"] = std::bind(&PlayUI::subBossLife, this, _1);
 	myGD->V_V["UI_decreasePercentage"] = std::bind(&PlayUI::decreasePercentage, this);
+	myGD->V_I["UI_decreasePercentages"] = std::bind(&PlayUI::decreasePercentages, this, _1);
 	myGD->B_V["UI_beRevivedJack"] = std::bind(&PlayUI::beRevivedJack, this);
 	myGD->V_TDTD["UI_showContinuePopup"] = std::bind(&PlayUI::showContinuePopup, this, _1, _2, _3, _4);
 	myGD->V_V["UI_catchSubCumber"] = std::bind(&PlayUI::catchSubCumber, this);
