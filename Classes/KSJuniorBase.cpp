@@ -223,7 +223,7 @@ void KSJuniorBase::startAnimationNoDirection()
 void KSJuniorBase::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
-	if(m_damageData.timer < 1)
+	if(m_damageData.timer < m_damageData.stiffenSecond)
 	{
 		//		m_headImg->setColor(ccc3(255, 0, 0)); //##
 	}
@@ -241,8 +241,7 @@ void KSJuniorBase::damageReaction(float)
 void KSJuniorBase::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
-	
-	if(m_damageData.timer < m_damageData.stiffenSecond)
+	if(m_noDirection.state == 1)	
 	{
 		/// 좀 돌았으면 돌아감.
 		//		if(m_noDirection.timer >= 5)
