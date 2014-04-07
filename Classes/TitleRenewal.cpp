@@ -796,8 +796,8 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 		{
 			Json::Value puzzle_list = result_data["list"];
 			
-//			NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size(), false);
-			NSDS_SI(kSDS_GI_puzzleListCount_i, 3, false);
+			NSDS_SI(kSDS_GI_puzzleListCount_i, puzzle_list.size(), false);
+//			NSDS_SI(kSDS_GI_puzzleListCount_i, 3, false);
 			
 			int puzzle_cnt = puzzle_list.size();
 			for(int i=0;i<puzzle_cnt;i++)
