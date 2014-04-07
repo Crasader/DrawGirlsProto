@@ -400,7 +400,7 @@ public:
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
 			if(rgb.g <= 5)
 				continue;
-			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * rgb.g  / -7.f;
+			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * rgb.g  / -9.f;
 			//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
 			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.1f,
 																							 [=](CCPoint t){
