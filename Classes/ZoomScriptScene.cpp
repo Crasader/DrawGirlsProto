@@ -63,8 +63,8 @@ bool ZoomScript::init()
 	
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 	first_img->putBasicInfomation();	// 기본정보 들어가게.
-	if(NSDS_GI(kSDS_CI_int1_grade_i, card_number) < 3)
-		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+//	if(NSDS_GI(kSDS_CI_int1_grade_i, card_number) < 3)
+//		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 	first_img->triangulationWithPoints();
 	
 	first_img->setPosition(ccp(160,215));
@@ -278,8 +278,8 @@ void ZoomScript::showtimeFirstAction()
 	
 	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 	second_img->putBasicInfomation();	// 기본정보 들어가게.
-	if(NSDS_GI(kSDS_CI_int1_grade_i, card_number) < 3)
-		second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+//	if(NSDS_GI(kSDS_CI_int1_grade_i, card_number) < 3)
+//		second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 	second_img->triangulationWithPoints();
 	
 	second_img->setPosition(ccp(160,215));

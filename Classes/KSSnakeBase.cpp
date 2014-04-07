@@ -290,10 +290,11 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
-		m_state = CUMBERSTATEDAMAGING;
+		
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
+			m_state = CUMBERSTATEDAMAGING;
 			schedule(schedule_selector(ThisClassType::damageReaction));
 		}
 	}
@@ -304,10 +305,11 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		//	CCLog("%f %f", dx, dy);
-		m_state = CUMBERSTATEDAMAGING;
+		
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
+			m_state = CUMBERSTATEDAMAGING;
 			schedule(schedule_selector(ThisClassType::damageReaction));
 		}
 	}
