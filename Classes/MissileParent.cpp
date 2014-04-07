@@ -184,9 +184,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 {
 	int power = StoneAttack::getPower(grade, level);
 	AttackOption ao = getAttackOption(stoneType, grade);
+	int missileNumbersInt = floor(missileNumbers);
 	if(stoneType == StoneType::kStoneType_guided)
 	{
-		for(int i=0; i<missileNumbers; i++)
+		for(int i=0; i<missileNumbersInt; i++)
 		{
 			string fileName = boost::str(boost::format("me_guide%||.ccbi") % level);
 			KSCumberBase* target = nullptr;
@@ -208,7 +209,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 	}
 	else if(stoneType == StoneType::kStoneType_mine)
 	{
-		for(int i=0; i<missileNumbers; i++)
+		for(int i=0; i<missileNumbersInt; i++)
 		{
 			IntPoint mapPoint;
 			bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
@@ -236,7 +237,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 
 	else if(stoneType == StoneType::kStoneType_global)
 	{
-		for(int i=0; i<=4 + 2 * missileNumbers; i++)
+		for(int i=0; i<=4 + 2 * missileNumbersInt; i++)
 		{
 			RandomBomb* rb = RandomBomb::create(40 + grade * 20, power, ao);
 			addChild(rb);
@@ -244,7 +245,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 	}
 	else if(stoneType == StoneType::kStoneType_spirit)
 	{
-		for(int i=0; i<missileNumbers; i++)
+		for(int i=0; i<missileNumbersInt; i++)
 		{
 			IntPoint mapPoint2;
 			bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);

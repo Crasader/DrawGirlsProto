@@ -2798,24 +2798,193 @@ void CrashLazerWrapper::myAction()
 
 void CrashLazerWrapper::lineCrashMap( CCPoint t_sp, float t_angle, int t_width, int t_height )
 {
+	int check_map[mapWidthOutlineEnd][mapHeightOutlineEnd] = {0,};
+	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
 			CCPoint t_tp = ccp((i-1)*pixelSize+1,(j-1)*pixelSize+1);
 			CCPoint a_tp = spinTransform(t_tp, t_sp, t_angle);
-			if(crashRect.containsPoint(a_tp) && (myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline))
+			if(crashRect.containsPoint(a_tp) && (myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline) && check_map[i][j] == 0)
 			{
 				if(a_tp.y < crashRect.origin.y + 1.5f || a_tp.y > crashRect.origin.y + crashRect.size.height - 1.5f)
 				{
 					for(int k=i-2;k<=i+2;k++)
 						for(int l=j-2;l<=j+2;l++)
-							crashMapForIntPoint(IntPoint(k,l));
+							check_map[k][l] = 1;
+
+//					crashMapForIntRect(IntRect(i-2, j-2, 5, 5));
 				}
 				else
-					crashMapForIntPoint(IntPoint(i,j));
+					check_map[i][j] = 1;
+//					crashMapForIntPoint(IntPoint(i,j));
 			}
 		}
+	}
+	
+	CCArray* rects = CCArray::createWithCapacity(256);
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(check_map[i][j] == 1)
+			{
+				IntMoveState start = IntMoveState(i, j, directionRightUp);
+				
+				IntPoint origin = IntPoint(start.origin.x, start.origin.y);
+				IntSize size = IntSize(0, 0);
+				
+				bool isUpper = true;
+				bool isRighter = true;
+				queue<IntMoveState> loopArray;
+				loopArray.push(start);
+				
+				queue<IntMoveState> nextLoopArray;
+				
+				while(!loopArray.empty())
+				{
+					if(isUpper)				size.height++;
+					if(isRighter)			size.width++;
+					
+					bool upable = isUpper;
+					bool rightable = isRighter;
+					
+					while(!loopArray.empty())
+					{
+						IntMoveState t_ms = loopArray.front();
+						loopArray.pop();
+						
+						
+						if(t_ms.direction == directionUp && !isUpper)
+							continue;
+						if(t_ms.direction == directionRight && !isRighter)
+							continue;
+						
+						if(check_map[t_ms.origin.x][t_ms.origin.y] == 1)				check_map[t_ms.origin.x][t_ms.origin.y] = 2;
+						
+						if(t_ms.direction == directionUp)
+						{
+							if(isUpper)
+							{
+								IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+								if(n_msUp.origin.isInnerMap() && check_map[n_msUp.origin.x][n_msUp.origin.y] == 1)
+									nextLoopArray.push(n_msUp);
+								else		upable = false;
+							}
+						}
+						else if(t_ms.direction == directionRight)
+						{
+							if(isRighter)
+							{
+								IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+								if(n_msRight.origin.isInnerMap() && check_map[n_msRight.origin.x][n_msRight.origin.y] == 1)
+									nextLoopArray.push(n_msRight);
+								else		rightable = false;
+							}
+						}
+						else if(t_ms.direction == directionRightUp)
+						{
+							if(isUpper)
+							{
+								IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+								if(n_msUp.origin.isInnerMap() && check_map[n_msUp.origin.x][n_msUp.origin.y] == 1)
+									nextLoopArray.push(n_msUp);
+								else		upable = false;
+							}
+							
+							if(isRighter)
+							{
+								IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+								if(n_msRight.origin.isInnerMap() && check_map[n_msRight.origin.x][n_msRight.origin.y] == 1)
+									nextLoopArray.push(n_msRight);
+								else		rightable = false;
+							}
+							
+							if(upable && rightable)
+							{
+								IntMoveState n_msRightUp = IntMoveState(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
+								if(n_msRightUp.origin.isInnerMap() && check_map[n_msRightUp.origin.x][n_msRightUp.origin.y] == 1)
+									nextLoopArray.push(n_msRightUp);
+								else		rightable = false;
+							}
+						}
+					}
+					
+					isUpper = upable;
+					isRighter = rightable;
+					
+					if(isUpper || isRighter)
+					{
+						while(!nextLoopArray.empty())
+						{
+							loopArray.push(nextLoopArray.front());
+							nextLoopArray.pop();
+						}
+					}
+				}
+				
+				IntRect* r_rect = new IntRect(origin.x, origin.y, size.width, size.height);
+				r_rect->autorelease();
+				
+				rects->addObject(r_rect);
+			}
+		}
+	}
+	
+	for(int i=0;i<rects->count();i++)
+	{
+		IntRect* t_rect = (IntRect*)rects->objectAtIndex(i);
+		crashMapForIntRect(IntRect(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height));
+	}
+}
+
+void CrashLazerWrapper::crashMapForIntRect (IntRect t_r)
+{
+	IntPoint jackPoint = myGD->getJackPoint();
+	
+	bool is_die = false;
+	
+	myGD->communication("VS_divideRects", t_r);
+	
+	for(int i=t_r.origin.x;i<t_r.origin.x+t_r.size.width;i++)
+	{
+		for(int j=t_r.origin.y;j<t_r.origin.y+t_r.size.height;j++)
+		{
+			IntPoint t_p = IntPoint(i,j);
+			if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget))
+			{
+				myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+				myGD->communication("MFP_createNewFragment", t_p);
+			}
+			
+			if(!is_die && t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
+			{
+				is_die = true;
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+				stopMyAction();
+			}
+		}
+	}
+	
+	for(int i=t_r.origin.x-1;i<=t_r.origin.x+t_r.size.width;i++)
+	{
+		if(myGD->mapState[i][t_r.origin.y+t_r.size.height] == mapOldget)		myGD->mapState[i][t_r.origin.y+t_r.size.height] = mapOldline;
+		if(myGD->mapState[i][t_r.origin.y-1] == mapOldget)						myGD->mapState[i][t_r.origin.y-1] = mapOldline;
+	}
+	for(int j=t_r.origin.y;j<t_r.origin.y+t_r.size.height;j++)
+	{
+		if(myGD->mapState[t_r.origin.x-1][j] == mapOldget)						myGD->mapState[t_r.origin.x-1][j] = mapOldline;
+		if(myGD->mapState[t_r.origin.x+t_r.size.width][j] == mapOldget)			myGD->mapState[t_r.origin.x+t_r.size.width][j] = mapOldline;
+	}
+	
+	if(!is_die && jackPoint.x >= t_r.origin.x && jackPoint.x < t_r.origin.x+t_r.size.width && jackPoint.y >= t_r.origin.y && jackPoint.y < t_r.origin.y+t_r.size.height)
+	{
+		is_die = true;
+		myGD->communication("CP_jackCrashDie");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+		stopMyAction();
 	}
 }
 

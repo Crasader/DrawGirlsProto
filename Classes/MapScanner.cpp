@@ -1509,6 +1509,127 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 	}
 }
 
+void VisibleParent::divideRects(IntRect crashRect)
+{
+	int decrease_count = 0;
+	for(int i=crashRect.origin.x;i<crashRect.origin.x + crashRect.size.width;i++)
+	{
+		for(int j=crashRect.origin.y;j<crashRect.origin.y + crashRect.size.height;j++)
+		{
+			if(IntPoint(i,j).isInnerMap() && mySD->silData[i][j] && (myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline))
+				decrease_count++;
+		}
+	}
+	
+	myGD->communication("UI_decreasePercentages", decrease_count);
+	
+	crashRect.origin.x = (crashRect.origin.x-1.f)*pixelSize;
+	crashRect.origin.y = (crashRect.origin.y-1.f)*pixelSize;
+	crashRect.size.width = crashRect.size.width*pixelSize;
+	crashRect.size.height = crashRect.size.height*pixelSize;
+	
+	CCRect crash_rect = CCRectMake(crashRect.origin.x, crashRect.origin.y, crashRect.size.width, crashRect.size.height);
+	
+	vector<IntRect*> removeArray;
+	int loopCnt = drawRects->count();
+	
+	CCArray* add_rects = CCArray::create();
+	
+	for(int i=0;i<loopCnt;i++)
+	{
+		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+		CCRect f_rect = CCRectMake(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height);
+		if(crash_rect.intersectsRect(f_rect))
+		{
+			// divide rect
+			IntSize t_size;
+			
+			// left down
+			t_size.width = crashRect.origin.x - t_rect->origin.x;
+			t_size.height = (crashRect.origin.y + crashRect.size.height) - t_rect->origin.y;
+			if(t_size.width >= pixelSize && t_size.height >= pixelSize) // left down create
+			{
+				if(t_size.width > t_rect->size.width)
+					t_size.width = t_rect->size.width;
+				if(t_size.height > t_rect->size.height)
+					t_size.height = t_rect->size.height;
+				
+				IntRect* n_rect = new IntRect(t_rect->origin.x, t_rect->origin.y, t_size.width, t_size.height);
+				n_rect->autorelease();
+				add_rects->addObject(n_rect);
+			}
+			
+			// down right
+			t_size.width = (t_rect->origin.x + t_rect->size.width) - crashRect.origin.x;
+			t_size.height = crashRect.origin.y - t_rect->origin.y;
+			if(t_size.height >= pixelSize && t_size.width >= pixelSize) // down right create
+			{
+				if(t_size.width > t_rect->size.width)
+					t_size.width = t_rect->size.width;
+				if(t_size.height > t_rect->size.height)
+					t_size.height = t_rect->size.height;
+				
+				int after_x;
+				if(crashRect.origin.x < t_rect->origin.x)
+					after_x = t_rect->origin.x;
+				else
+					after_x = crashRect.origin.x;
+				
+				IntRect* n_rect = new IntRect(after_x, t_rect->origin.y, t_size.width, t_size.height);
+				n_rect->autorelease();
+				add_rects->addObject(n_rect);
+			}
+			
+			// right up
+			t_size.width = (t_rect->origin.x + t_rect->size.width) - (crashRect.origin.x + crashRect.size.width);
+			t_size.height = (t_rect->origin.y + t_rect->size.height) - crashRect.origin.y;
+			if(t_size.width >= pixelSize && t_size.height >= pixelSize)
+			{
+				if(t_size.width > t_rect->size.width)
+					t_size.width = t_rect->size.width;
+				if(t_size.height > t_rect->size.height)
+					t_size.height = t_rect->size.height;
+				
+				int after_y;
+				if(crashRect.origin.y < t_rect->origin.y)
+					after_y = t_rect->origin.y;
+				else
+					after_y = crashRect.origin.y;
+				
+				IntRect* n_rect = new IntRect(crashRect.origin.x + crashRect.size.width, after_y, t_size.width, t_size.height);
+				n_rect->autorelease();
+				add_rects->addObject(n_rect);
+			}
+			
+			// up left
+			t_size.width = (crashRect.origin.x + crashRect.size.width) - t_rect->origin.x;
+			t_size.height = (t_rect->origin.y + t_rect->size.height) - (crashRect.origin.y + crashRect.size.height);
+			if(t_size.height >= pixelSize && t_size.width >= pixelSize)
+			{
+				if(t_size.width > t_rect->size.width)
+					t_size.width = t_rect->size.width;
+				if(t_size.height > t_rect->size.height)
+					t_size.height = t_rect->size.height;
+				
+				IntRect* n_rect = new IntRect(t_rect->origin.x, crashRect.origin.y + crashRect.size.height, t_size.width, t_size.height);
+				n_rect->autorelease();
+				add_rects->addObject(n_rect);
+			}
+			
+			removeArray.push_back(t_rect);
+		}
+	}
+	
+	drawRects->addObjectsFromArray(add_rects);
+	
+	while(!removeArray.empty())
+	{
+		IntRect* t_rect = removeArray.back();
+		removeArray.pop_back();
+		drawRects->removeObject(t_rect);
+	}
+}
+
 void VisibleParent::setMoveGamePosition( CCPoint t_p )
 {
 	//		if(!myGD->is_setted_jack || myGD->game_step == kGS_unlimited)
@@ -1577,6 +1698,7 @@ void VisibleParent::myInit( const char* filename, bool isPattern, string sil_fil
 	setPosition(CCPointZero);
 
 	myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);
+	myGD->V_Ir["VS_divideRects"] = std::bind(&VisibleParent::divideRects, this, _1);
 	myGD->V_CCP["VS_setMoveGamePosition"] = std::bind(&VisibleParent::setMoveGamePosition, this, _1);
 	myGD->V_V["VS_setLimittedMapPosition"] = std::bind(&VisibleParent::setLimittedMapPosition, this);
 	myGD->V_I["VS_changingGameStep"] = std::bind(&VisibleParent::changingGameStep, this, _1);

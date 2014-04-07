@@ -665,6 +665,55 @@ void CrashMapObject::crashMapForIntPoint (IntPoint t_p)
 		lineDie(t_p);
 	}
 }
+void CrashMapObject::crashMapForIntRect (IntRect t_r)
+{
+	IntPoint jackPoint = myGD->getJackPoint();
+	
+	bool is_die = false;
+	
+	for(int i=t_r.origin.x;i<t_r.origin.x+t_r.size.width;i++)
+	{
+		for(int j=t_r.origin.y;j<t_r.origin.y+t_r.size.height;j++)
+		{
+			IntPoint t_p = IntPoint(i,j);
+			if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget))
+			{
+				myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+				myGD->communication("MFP_createNewFragment", t_p);
+			}
+			
+			if(!is_die && t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
+			{
+				is_die = true;
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+				lineDie(t_p);
+			}
+		}
+	}
+	
+	for(int i=t_r.origin.x-1;i<=t_r.origin.x+t_r.size.width;i++)
+	{
+		if(IntPoint(i, t_r.origin.y+t_r.size.height).isInnerMap() && myGD->mapState[i][t_r.origin.y+t_r.size.height] == mapOldget)		myGD->mapState[i][t_r.origin.y+t_r.size.height] = mapOldline;
+		if(IntPoint(i, t_r.origin.y-1).isInnerMap() && myGD->mapState[i][t_r.origin.y-1] == mapOldget)									myGD->mapState[i][t_r.origin.y-1] = mapOldline;
+	}
+	for(int j=t_r.origin.y;j<t_r.origin.y+t_r.size.height;j++)
+	{
+		if(IntPoint(t_r.origin.x-1, j).isInnerMap() && myGD->mapState[t_r.origin.x-1][j] == mapOldget)									myGD->mapState[t_r.origin.x-1][j] = mapOldline;
+		if(IntPoint(t_r.origin.x+t_r.size.width, j).isInnerMap() && myGD->mapState[t_r.origin.x+t_r.size.width][j] == mapOldget)		myGD->mapState[t_r.origin.x+t_r.size.width][j] = mapOldline;
+	}
+	
+	myGD->communication("VS_divideRects", t_r);
+	
+	if(!is_die && jackPoint.x >= t_r.origin.x && jackPoint.x < t_r.origin.x+t_r.size.width && jackPoint.y >= t_r.origin.y && jackPoint.y < t_r.origin.y+t_r.size.height)
+	{
+		is_die = true;
+		myGD->communication("CP_jackCrashDie");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+		jackDie();
+	}
+}
+
 WindmillObject * WindmillObject::create (IntPoint t_sp, int t_thornsFrame)
 {
 	WindmillObject* t_to = new WindmillObject();
@@ -1162,13 +1211,15 @@ void FallMeteor::fall ()
 	
 	IntSize size = IntSize(rightUpPoint.x - leftDownPoint.x + 1, rightUpPoint.y - leftDownPoint.y + 1); // size
 	
-	for(int i = leftDownPoint.x;i<leftDownPoint.x+size.width;i++)
-	{
-		for(int j = leftDownPoint.y;j<leftDownPoint.y+size.height;j++)
-		{
-			crashMapForIntPoint(IntPoint(i, j));
-		}
-	}
+	crashMapForIntRect(IntRect(leftDownPoint.x, leftDownPoint.y, size.width, size.height));
+	
+//	for(int i = leftDownPoint.x;i<leftDownPoint.x+size.width;i++)
+//	{
+//		for(int j = leftDownPoint.y;j<leftDownPoint.y+size.height;j++)
+//		{
+//			crashMapForIntPoint(IntPoint(i, j));
+//		}
+//	}
 	if(!notFinish)
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);

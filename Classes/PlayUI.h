@@ -225,6 +225,7 @@ public:
 	virtual ~ PlayUI ();
 	void addScore (int t_score);
 	void decreasePercentage ();
+	void decreasePercentages(int t_cnt);
 	float getScore ();
 	float getPercentage ();
 	void setPercentage (float t_p, bool t_b);
