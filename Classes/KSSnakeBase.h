@@ -150,12 +150,6 @@ protected:
 	
 	deque< SnakeTrace > m_cumberTrace; // back 은 항상 머리를 가르킴.
 	
-	struct DamageData
-	{
-		float m_damageX;
-		float m_damageY;
-		float timer;
-	}m_damageData;
 	
 	/// 방사형 에니메이션 용.
 	struct NoDirection

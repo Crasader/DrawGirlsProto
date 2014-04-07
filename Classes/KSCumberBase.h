@@ -474,6 +474,28 @@ protected:
 		float lastChangeDirectionTime; // 방향이 아예 바꼈을 때의 시간.
 	}m_earthwarm;	
 	
+	struct DamageData
+	{
+		float m_damageX;
+		float m_damageY;
+		float timer;
+		float stiffenSecond;
+		bool setStiffen(float stiffenDuration)
+		{
+			if(stiffenSecond - timer < stiffenDuration) // 들어오는 시간이 더 크다면, 
+			{
+				timer = 0;
+				stiffenSecond = stiffenDuration;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		
+	}m_damageData;
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
 	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
 

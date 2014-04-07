@@ -137,15 +137,6 @@ protected:
 		int state; // 1 : 도는상태, 2 : 다시 제 위치로 돌아가는 상태
 	}m_noDirection;
 	
-	struct DamageData
-	{
-		float m_damageX;
-		float m_damageY;
-		float timer;
-	}m_damageData;
-	
-	
-	
 	
 	
 	

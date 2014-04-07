@@ -77,16 +77,18 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		m_state = CUMBERSTATEMOVING;
 		
 	}
-	if(m_state == CUMBERSTATEMOVING && stiffen)
+	if((m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEDAMAGING) && stiffen)
 	{
-		CCLog("m_state == CUMBERSTATEMOVING");
+//		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
 		m_state = CUMBERSTATEDAMAGING;
 		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSCircleBase::damageReaction));
+		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
+		{
+			schedule(schedule_selector(ThisClassType::damageReaction));
+		}
 	}
 	if(m_state == CUMBERSTATESTOP && stiffen)
 	{
@@ -96,8 +98,10 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		m_damageData.m_damageY = sin(rad);
 		m_state = CUMBERSTATEDAMAGING;
 		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSCircleBase::damageReaction));
+		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
+		{
+			schedule(schedule_selector(ThisClassType::damageReaction));
+		}
 		
 		if(currentTimelineFooter == "_b")
 		{
@@ -146,13 +150,12 @@ void KSCircleBase::startAnimationNoDirection()
 void KSCircleBase::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
-	if(m_damageData.timer < 1)
+	if(m_damageData.timer < m_damageData.stiffenSecond)
 	{
 		//		m_headImg->setColor(ccc3(255, 0, 0)); //##
 	}
 	else if(currentTimelineFooter == "")
 	{
-		//		m_headImg->setColor(ccc3(255, 255, 255));
 		if(m_state != CUMBERSTATEMOVING)
 		{
 			m_state = CUMBERSTATEMOVING;

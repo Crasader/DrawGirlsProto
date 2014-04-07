@@ -304,6 +304,37 @@ AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 	
 	if(st == StoneType::kStoneType_guided)
 	{
+		return AttackOption::kStiffen;
+	}
+	else if(st == StoneType::kStoneType_spread)
+	{
+		return AttackOption::kStiffen;
+	}
+	else if(st == StoneType::kStoneType_laser)
+	{
+		return AttackOption::kStiffen;
+	}
+	else if(st == StoneType::kStoneType_mine)
+	{
+		return AttackOption::kStiffen;
+	}
+	else if(st == StoneType::kStoneType_spirit)
+	{
+		return AttackOption::kStiffen;
+	}
+	else if(st == StoneType::kStoneType_range)
+	{
+		return AttackOption::kStiffen;
+	}
+
+	else if(st == StoneType::kStoneType_global)
+	{
+		return AttackOption::kStiffen;
+	}
+// 등급에 따라 옵션이 붙게 하는 코든데 없앰.
+#if 0 
+	if(st == StoneType::kStoneType_guided)
+	{
 		switch(grade)
 		{
 			case 1:
@@ -438,6 +469,7 @@ AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 				return AttackOption::kNoOption;
 		}
 	}
+#endif
 	return AttackOption::kNoOption;
 }
 int MissileParent::getJackMissileCnt()

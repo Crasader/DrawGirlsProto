@@ -87,7 +87,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 	{
 		m_state = CUMBERSTATEMOVING;
 	}
-	if(m_state == CUMBERSTATEMOVING && stiffen)
+	if((m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEDAMAGING) && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);
@@ -96,8 +96,10 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		//	CCLog("%f %f", dx, dy);
 		m_state = CUMBERSTATEDAMAGING;
 		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSJuniorBase::damageReaction));
+		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
+		{
+			schedule(schedule_selector(ThisClassType::damageReaction));
+		}
 	}
 	
 	if(m_state == CUMBERSTATESTOP && stiffen)
@@ -109,8 +111,10 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		//	CCLog("%f %f", dx, dy);
 		m_state = CUMBERSTATEDAMAGING;
 		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSJuniorBase::damageReaction));
+		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
+		{
+			schedule(schedule_selector(ThisClassType::damageReaction));
+		}
 	}
 	if(m_state == CUMBERSTATEFURY && castCancel)
 	{
@@ -236,7 +240,7 @@ void KSJuniorBase::animationNoDirection(float dt)
 {
 	m_noDirection.timer += 1.f/60.f;
 	
-	if(m_noDirection.state == 1)
+	if(m_damageData.timer < m_damageData.stiffenSecond)
 	{
 		/// 좀 돌았으면 돌아감.
 		//		if(m_noDirection.timer >= 5)

@@ -283,7 +283,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		m_state = CUMBERSTATEMOVING; //#!
 		
 	}
-	if(m_state == CUMBERSTATEMOVING && stiffen)
+	if((m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEDAMAGING) && stiffen)
 	{
 		CCLog("m_state == CUMBERSTATEMOVING");
 		float rad = deg2Rad(angle);
@@ -292,8 +292,10 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		//	CCLog("%f %f", dx, dy);
 		m_state = CUMBERSTATEDAMAGING;
 		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSSnakeBase::damageReaction));
+		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
+		{
+			schedule(schedule_selector(ThisClassType::damageReaction));
+		}
 	}
 	if(m_state == CUMBERSTATESTOP && stiffen)
 	{
@@ -304,8 +306,10 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		//	CCLog("%f %f", dx, dy);
 		m_state = CUMBERSTATEDAMAGING;
 		
-		m_damageData.timer = 0;
-		schedule(schedule_selector(KSSnakeBase::damageReaction));
+		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
+		{
+			schedule(schedule_selector(ThisClassType::damageReaction));
+		}
 	}
 	if(m_state == CUMBERSTATEFURY && castCancel)
 	{
@@ -338,7 +342,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 void KSSnakeBase::damageReaction(float)
 {
 	m_damageData.timer += 1 / 60.f;
-	if(m_damageData.timer < 1)
+	if(m_damageData.timer < m_damageData.stiffenSecond)
 	{
 		m_headImg->setColor(ccc3(255, 0, 0));
 		m_tailImg->setColor(ccc3(255, 0, 0));
