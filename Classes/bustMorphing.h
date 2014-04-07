@@ -375,7 +375,7 @@ public:
 		m_validTouch = false;
 		//			local = m_validTouchPosition;
 		CCLog("%f %f", local.x, local.y);
-		m_waveRange = 100;
+		m_waveRange = 1000;
 		vector<Vertex3D*> movingVertices;
 		map<Vertex3D*, ccColor4B> movingVertexColors; // 움직일 좌표의 rgb 임.
 		map<Vertex3D*, float> distance; // 클릭한 곳으로부터로의 위치
@@ -398,7 +398,9 @@ public:
 			ccColor4B rgb = movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * rgb.g  / -5.f;
+			if(rgb.g <= 5)
+				continue;
+			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * rgb.g  / -7.f;
 			//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
 			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.1f,
 																							 [=](CCPoint t){
@@ -541,17 +543,17 @@ public:
 	}
 	void movingDistance(CCPoint t) // 영호.
 	{
-		CCLog("%f %f", t.x, t.y);
+//		CCLog("%f %f", t.x, t.y);
 		if(m_isLoadedRGB == false)
 			return;
-//		return;
+
 		// t 에 반대쪽으로 m_vertices 를 조작함.
 		// 모든 m_vertices 에 대한 y, x 에 대한 RGB 값은 m_silColors[y][x] 로 참조하면 됨.
 		for(int i=0; i<m_triCount * 3; i++)
 		{
 			Vertex3D original = m_2xVertices[i];
 			ccColor4B color = m_silColors[original.y][original.x];
-			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
+			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
 			CCPoint against = t * (float)color.g / 10.f / 12.f;// / 12.f; //  / 50.f; // / 30.f;
 			if( !(against.x == 0.f && against.y == 0.f) )
 			{
@@ -560,7 +562,6 @@ public:
 			}
 			else
 			{
-//				return;
 				// 여기서 부터는 출렁 해야됨.
 				auto backupPosition = m_backupVertices[&m_vertices[i]];
 				
