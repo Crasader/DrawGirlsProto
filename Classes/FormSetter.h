@@ -224,6 +224,9 @@ public:
 				if((it->second).obj &&!(it->second).data["scale"].isNull())
 					((it->second).obj)->setScale((it->second).data.get("scale", 1).asFloat());
 				
+				if((it->second).obj && !(it->second).data["anchorX"].isNull())
+					((it->second).obj)->setAnchorPoint(ccp((it->second).data.get("anchorX", 0).asFloat(),(it->second).data.get("anchorY", 0).asFloat()));
+				
 				//펑션이 등록되어있으면 콜해준다.
 				if((it->second).func)(it->second).func(p[*iter]);
 				

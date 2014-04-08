@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center" >
+
+    <TableRow>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:tag="sample.login.manual.login"
+            android:text="Manual Login"
+            android:textSize="16sp" />
+
+        <!-- Auto Login 버튼 -->
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:tag="sample.login.auto.login"
+            android:text="Auto Login"
+            android:textSize="16sp" />
+    </TableRow>
+
+    <TableRow>
+
+        <!-- Logout 버튼 -->
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:tag="sample.login.logout"
+            android:text="Logout"
+            android:textSize="16sp" />
+
+        <!-- Reset 버튼 -->
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:tag="sample.login.reset"
+            android:text="Reset Account"
+            android:textSize="16sp" />
+    </TableRow>
+
+    <TableRow>
+
+        <!-- Mapping 버튼 -->
+        
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:tag="sample.login.mapping"
+            android:text="Mapping"
+            android:textSize="16sp" />
+
+        <!-- Exit Game 버튼 -->
+        
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:tag="sample.login.withdraw"
+            android:text="Withdraw Account"
+            android:textSize="16sp" />
+    </TableRow>
+
+</TableLayout>

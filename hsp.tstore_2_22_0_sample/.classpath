@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="bin/dexedLibs/android-support-v4-45929a2fb328ef3b7e64531c634988c7.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

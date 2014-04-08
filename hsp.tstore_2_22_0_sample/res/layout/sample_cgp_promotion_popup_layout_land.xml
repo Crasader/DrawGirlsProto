@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="366.67dp"
+  android:layout_height="262.66dp"
+  android:layout_gravity="center"
+  android:padding="8dp"
+  android:background="@color/hsp.common.background"
+  >
+
+  <TextView
+      android:id="@+id/popupImg"
+      android:layout_width="350.67dp"
+      android:layout_height="221.33dp"
+      android:background="@drawable/cgp_popup_image"
+      android:tag="popupImg" />
+  
+  	<RelativeLayout
+  	    android:layout_width="fill_parent"
+  	    android:layout_height="21.33dp"
+  	    android:layout_below="@+id/popupImg"
+  	    android:layout_marginTop="5dp"
+  	    android:gravity="center_vertical" >
+
+  	    <CheckBox
+  	        android:id="@+id/checkbox"
+  	        android:layout_width="20dp"
+  	        android:layout_height="20dp"
+  	        android:adjustViewBounds="true"
+  	        android:button="@drawable/cgp_popup_check_land"
+  	        android:checked="false"
+  	        android:layout_alignParentLeft="true"
+  	        android:tag="hsp.auth.globalgame.welcome.agreement.checkbox" />
+
+  	    <TextView
+  	        android:layout_width="wrap_content"
+  	        android:layout_height="fill_parent"
+  	        android:layout_toRightOf="@+id/checkbox"
+  	        android:textSize="12dp"
+  	        android:layout_marginLeft="5.33dp"
+  	        android:gravity="center_vertical"
+  	        android:textColor="@color/hsp.common.black.bold.text"
+  	        android:text="오늘하루 열지않음" />
+
+  	    <Button
+  	        android:layout_width="48.67dp"
+  	        android:layout_height="21.33dp"
+  	        android:layout_alignParentRight="true"
+  	        android:tag="popupClose"
+  	        android:background="@drawable/cgp_popup_close_land" />
+  	</RelativeLayout>
+
+</RelativeLayout>

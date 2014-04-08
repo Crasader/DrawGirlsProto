@@ -41,6 +41,8 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		super.onCreate(savedInstanceState);
 		if(com.litqoo.lib.hspConnector.setup(10289, "SKDRAWGIRLSA", "1.0.0.KS")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
+			com.litqoo.lib.hspConnector.testRegisterListener();
+			
 		}else{
 			Log.i("com.litqoo.dgproto","hspcore create fail");
 		}

@@ -2,6 +2,7 @@ package com.litqoo.lib;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import android.util.Log;
 import android.os.Handler;
 
 import com.hangame.hsp.HSPCore;
+import com.hangame.hsp.HSPMessage;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPMyProfile;
 import com.hangame.hsp.HSPServiceProperties;
@@ -1471,6 +1473,100 @@ public class hspConnector{
 //		);
 //	}
 //	
+
+    private static String mMessage = "Hello~ Message Test";
+    private static long mReceiver = 4105000000131917L;
+    private static HSPMessage.HSPReceiveMessageListener mReceiveMessageListener;
+
+    private static HSPMessage.HSPReceivePacketListener mReceivePacketListener;
+    private static HSPMessage.HSPReceivePushNotificationListener mReceivePushNotificationListener;
+
+	   public static void testSendPacket() {
+	        // Send packet to user with memberNo(4105000000131917)
+	        byte[] data = mMessage.getBytes();
+
+	        HSPMessage.sendPacket(mReceiver, 0, data, new HSPMessage.HSPSendPacketCB() {
+	            @Override
+	            public void onPacketSend(HSPResult result) {
+	                if (result.isSuccess()) {
+	                    Log.i("litqoo","Send Packet has been successful.");
+	                } else {
+	                    Log.i("litqoo","Failed to send packet: " + result);
+	                }
+	            }
+	        });
+	    }
+
+	   public static void sendPushMessage(){
+		   Log.i("litqoo","java sendPushMessage, go test");
+		    testSendPushNotification();
+	   }
+	   public static void testSendPushNotification() {
+	        // Send push message to user with memberNo(4105000000131917)
+	    	//03-29 09:31:58.183: D/cocos2d-x debug info(15545):    "hspMemberNo" : 88899626759605474,
+
+	        mReceiver = 88899626759605474L;
+	        Map<String, String> mapData = new LinkedHashMap<String, String>();
+	        mapData.put("content", mMessage);
+	        mapData.put("url", "http://www.hangame.com");
+	        mapData.put("extraData", "기타데이터");
+
+	        HSPMessage.sendPushNotification(mReceiver, "test ~!!", mapData, new HSPMessage.HSPSendPushNotificationCB() {
+	            @Override
+	            public void onPushNotificationSend(HSPResult result) {
+	                if (result.isSuccess()) {
+	                	 Log.i("litqoo","Send Push message has been successful.");
+	                } else {
+	                	 Log.i("litqoo","Failed to Send push message. ( " + result + " )");
+	                }
+	            }
+	        });
+	    }
+
+	    public static void testRegisterListener() {
+	    	
+	    	 Log.i("litqoo","regist message listener");
+	        // An event that is invoked when a message is received
+	        mReceiveMessageListener = new HSPMessage.HSPReceiveMessageListener() {
+	            @Override
+	            public void onMessageReceive(HSPMessage message) {
+	                // the actions required when handling incoming message
+	            	 Log.i("litqoo","onMessageReceive");
+	            }
+	        };
+
+	        HSPMessage.addMessageReceiveListener(mReceiveMessageListener);
+
+	        // An event that is invoked when a packet is received
+	        mReceivePacketListener = new HSPMessage.HSPReceivePacketListener() {
+	            @Override
+	            public void onPacketReceive(int gameNo, int type, long senderMemberNo, byte[] data) {
+	                // the actions required when handling incoming packet
+	            	 Log.i("litqoo","onPacketReceive");
+	            }
+	        };
+
+	        HSPMessage.addPacketReceiveListener(mReceivePacketListener);
+
+	        // An event that is invoked when a push message is received
+	        mReceivePushNotificationListener = new HSPMessage.HSPReceivePushNotificationListener() {
+	            @Override
+	            public void onPushNotificationReceive(Map<String, Object> pushData) {
+	                // the actions required when handling incoming push message
+	                // log("onPushNotificationReceive");
+	                //
+	                // log("extradata :: " + extraData.toString());
+
+	                Log.d("nPush", "onPushNotificationReceive :: " + pushData.toString());
+	                Log.d("nPush", "id " + pushData.get("id") + " :: badge " + pushData.get("badge") + " :: content "
+	                        + pushData.get("content"));
+	            }
+	        };
+
+	        HSPMessage.addPushNotificationReceiveListener(mReceivePushNotificationListener);
+	    }
+	
+	
 	
 	public static String getCocos2dxPackageName() {
 		return hspConnector.sPackageName;

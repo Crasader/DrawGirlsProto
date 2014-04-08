@@ -16,7 +16,7 @@ import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.litqoo.DGproto.R;
+//import com.litqoo.DGproto.R;
 
 import android.app.AlertDialog;
 import android.content.Context;

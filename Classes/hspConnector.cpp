@@ -116,6 +116,24 @@ long long int hspConnector::getHSPMemberNo(){
 #endif
 }
 
+void hspConnector::sendPushMessage(){
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	
+	CCLog("call sendPushMessage");
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "sendPushMessage", "()V")) {
+		t.env->CallStaticVoidMethod(t.classID, t.methodID);
+		t.env->DeleteLocalRef(t.classID);
+		CCLog("result sendPushMessage");
+//		jlong result = t.env->CallStaticLongMethod(t.classID, t.methodID);
+//		t.env->DeleteLocalRef(t.classID);
+//		return (long long int)result;
+	}
+#endif
+}
+
 string hspConnector::getKakaoID(){
 	return graphdog->getKakaoMemberID();
 	//return this->myKakaoInfo.get("user_id", "").asString();

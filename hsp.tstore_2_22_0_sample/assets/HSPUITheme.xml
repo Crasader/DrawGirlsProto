@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><ui_theme>
+
+    <login>
+
+        <toast_welcome_view>
+
+            <item key="TOAST_WELCOME_VIEW_BACKGROUND_IMAGE_PORT" value="hsp_auth_toast_background_port"/>
+
+            <item key="TOAST_WELCOME_VIEW_BACKGROUND_IMAGE_LAND" value="hsp_auth_toast_background_land"/>
+
+            <item key="TOAST_WELCOME_VIEW_AGREEMENT_TEXT_COLOR" value="#FFFFFF"/>
+            
+			<item key="TOAST_WELCOME_VIEW_PLAYGUIDE_TEXT_COLOR" value="#FFFFFF"/>
+                        
+        </toast_welcome_view>
+        
+        <toast_new_welcome_view>
+
+            <item key="TOAST_NEW_WELCOME_VIEW_BACKGROUND_IMAGE_PORT" value="hsp_auth_toast_background_port"/>
+
+            <item key="TOAST_NEW_WELCOME_VIEW_BACKGROUND_IMAGE_LAND" value="hsp_auth_toast_background_land"/>
+
+			<item key="TOAST_NEW_WELCOME_VIEW_PLAYGUIDE_TEXT_COLOR" value="#FFFFFF"/>
+                        
+        </toast_new_welcome_view>
+        
+        <toast_new_us_welcome_view>
+
+            <item key="TOAST_NEW_US_WELCOME_VIEW_BACKGROUND_IMAGE_PORT" value="hsp_auth_toast_background_port"/>
+
+            <item key="TOAST_NEW_US_WELCOME_VIEW_BACKGROUND_IMAGE_LAND" value="hsp_auth_toast_background_land"/>
+
+        </toast_new_us_welcome_view>
+    </login>
+
+
+
+    <view>
+        <toast_view>
+
+            <item key="TOAST_VIEW_VISIBAL_PUSH_LAYOUT_OF_SETTING" value="visible"/>
+            
+            <item key="TOAST_VIEW_VISIBAL_PRIVACY_LAYOUT_OF_SETTING" value="visible"/>
+            
+            <item key="TOAST_VIEW_VISIBAL_SNS_LAYOUT_OF_SETTING" value="visible"/>
+            
+            <item key="TOAST_VIEW_VISIBAL_ACCOUNT_LAYOUT_OF_SETTING" value="visible"/>
+            
+            <item key="TOAST_VIEW_VISIBAL_ACCOUNT_RESET_LAYOUT_OF_SETTING" value="visible"/>
+
+        </toast_view>
+      </view>
+
+</ui_theme>

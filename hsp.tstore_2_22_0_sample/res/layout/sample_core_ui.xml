@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:tag="sample.ui.gnb"
+            android:text="GNB Show" />
+
+        <CheckBox
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:tag="sample.ui.topbar"
+            android:text="Top Bar Show" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="sample.ui.category" />
+
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="sample.ui.view" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:tag="sample.ui.launch"
+        android:text="Launch" >
+    </Button>
+
+</LinearLayout>

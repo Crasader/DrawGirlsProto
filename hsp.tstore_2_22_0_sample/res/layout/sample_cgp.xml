@@ -1,0 +1,464 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" xmlns:tools="http://schemas.android.com/tools" tools:context="com.hangame.hsp.qatest.SettingActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:background="@color/hsp.common.black"
+            android:gravity="center"
+            android:text="HSP Promotion Sample"
+            android:textColor="@color/hsp.common.white"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/hsp.common.orange"
+        android:text="" />
+
+    <LinearLayout
+        android:id="@+id/desc1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:tag="desc1" >
+
+        <TextView
+            android:id="@+id/textZone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="textZone"
+            android:textColor="#ffffff00"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/textGameNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:tag="textGameNo"
+            android:textColor="#ffffff00"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/textMemberNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.5"
+            android:tag="textMemberNo"
+            android:textColor="#ffffffff"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/RevisionText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:tag="RevisionText"
+            android:text=""
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/desc2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:tag="desc2" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:text="Market Type:"
+            android:textColor="#ffffff00"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/textMarketType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:tag="textMarketType"
+            android:textColor="#ffffffff"
+            android:textSize="12dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:text="Game Type:"
+            android:textColor="#ffffff00"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/textGameType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:tag="textGameType"
+            android:text="Single Game"
+            android:textColor="#ffffffff"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#aa333333" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:tag="scrollView1" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HSP Base Component"
+                android:textColor="#ffdddd00" />
+
+            <LinearLayout
+                android:id="@+id/TableRow01"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:tag="TableRow01" >
+
+                <Button
+                    android:id="@+id/loginButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:onClick="onLoginClick"
+                    android:tag="loginButton"
+                    android:text="Login" />
+
+                <Button
+                    android:id="@+id/btnReset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.7"
+                    android:onClick="onReset"
+                    android:tag="btnReset"
+                    android:text="Reset"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnSuspend"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:onClick="onSuspendClick"
+                    android:tag="btnSuspend"
+                    android:text="Suspend"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/launchNomadUI"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:onClick="onLaunchNomadUI"
+                    android:tag="launchNomadUI"
+                    android:text="NomadUI" />
+
+                <ToggleButton
+                    android:id="@+id/toggleWifi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:tag="toggleWifi"
+                    android:textOff="Wifi Off"
+                    android:textOn="Wifi On" />
+            </LinearLayout>
+
+            <!-- 자동 테스트 시에 활성화 -->
+
+            <LinearLayout
+                android:id="@+id/autoTestLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:tag="autoTestLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#aa333333" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CGP 자동 테스트"
+                    android:textColor="#ffdddd00" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/btnRequestPromotion"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1.3"
+                        android:enabled="false"
+                        android:onClick="onRequestPromotion"
+                        android:tag="btnRequestPromotion"
+                        android:text="프로모션 확인" />
+
+                    <Button
+                        android:id="@+id/btnGetPromotionInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onGetPromotionInfo"
+                        android:tag="btnGetPromotionInfo"
+                        android:text="PromoInfo" />
+
+                    <Button
+                        android:id="@+id/btnGetImageInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:onClick="onGetImageInfo"
+                        android:tag="btnGetImageInfo"
+                        android:text="ImageInfo" />
+                    
+                     
+                </LinearLayout>
+                
+            </LinearLayout>
+            <!-- 수동 테스트 시에 활성화 -->
+
+            <LinearLayout
+                android:id="@+id/manualTestLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:tag="manualTestLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#aa333333" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CGP 수동 테스트"
+                    android:textColor="#ffdddd00" />
+
+                <Button
+                    android:id="@+id/btnRequestPromotion"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onRequestPromotion"
+                    android:tag="btnRequestPromotion"
+                    android:text="1. 프로모션 여부 확인" />
+
+                <Button
+                    android:id="@+id/btnShowPromotion"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onShowPromotion"
+                    android:tag="btnShowPromotion"
+                    android:text="2. 프로모션 이미지 보기" />
+
+                <Button
+                    android:id="@+id/btnRequestPromotion"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onRequestPromotion"
+                    android:tag="btnRequestPromotion"
+                    android:text="3. 보상 여부 확인" />
+
+                <Button
+                    android:id="@+id/btnProcessReward"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onProcessReward"
+                    android:tag="btnProcessReward"
+                    android:text="4. 보상 처리" />
+
+                <Button
+                    android:id="@+id/btnGetPromotionData"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onCompletePromotion"
+                    android:tag="btnGetPromotionData"
+                    android:text="5. 보상완료 알림" />
+
+                <Button
+                    android:id="@+id/btnShowReward"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onShowReward"
+                    android:tag="btnShowReward"
+                    android:text="6. 보상 이미지 보기" />
+                
+                                <Button
+                    android:id="@+id/btnGetInstallPromotionData"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onCompleteInstallPromotion"
+                    android:tag="btnGetInstallPromotionData"
+                    android:text="7. 설치 보상완료 알림" />
+
+                <Button
+                    android:id="@+id/btnShowInstallReward"
+                    android:layout_width="250dp"
+                    android:layout_height="45dp"
+                    android:gravity="left"
+                    android:onClick="onShowInstallReward"
+                    android:tag="btnShowInstallReward"
+                    android:text="8. 설치 보상 이미지 보기" />
+                
+            </LinearLayout>
+            
+            
+			<TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CGP custom data 보내기"
+                    android:textColor="#ffdddd00" />
+                
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+                    
+                     <EditText 
+                        android:layout_width="fill_parent"
+                    	android:layout_height="wrap_content"
+                         android:tag="sendCustomKey"
+                         android:layout_weight="1"
+                         />
+                     <EditText
+                        android:layout_width="fill_parent"
+                    	android:layout_height="wrap_content" 
+                         android:tag="sendCustomValue"
+                         android:layout_weight="1"
+                         />
+                     </LinearLayout>
+                     <LinearLayout
+		                    android:layout_width="fill_parent"
+		                    android:layout_height="wrap_content"
+		                    android:orientation="horizontal" >
+			                <Button
+			                        android:id="@+id/btnSendCustomData"
+			                        android:layout_width="0dp"
+			                        android:layout_height="50dp"
+			                        android:layout_weight="1.3"
+			                        android:enabled="false"
+			                        android:onClick="onSendCustomData"
+			                        android:tag="btnSendCustomData"
+			                        android:text="custom data보내기" />
+                	</LinearLayout>
+            
+            
+            <LinearLayout
+                android:id="@+id/dbTestLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:tag="dbTestLayout"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#aa333333" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Client DB"
+                    android:textColor="#ffdddd00" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/btnSelectDB"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:onClick="onSelectDB"
+                        android:tag="btnSelectDB"
+                        android:text="DB 조회" />
+
+                    <Button
+                        android:id="@+id/btnDeleteDB"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:onClick="onDeleteDB"
+                        android:tag="btnDeleteDB"
+                        android:text="DB 삭제" />
+                    
+                    <Button
+	                    android:id="@+id/btnDelPromotionData"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:enabled="false"
+	                    android:onClick="onDeletePromotion"
+	                    android:tag="btnDelPromotionData"
+	                    android:text="CGP서버 정보삭제" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#aa333333" />
+
+                <TextView
+                    android:id="@+id/log"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:bufferType="spannable"
+                    android:tag="log"
+                    android:textSize="12dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
