@@ -27,8 +27,9 @@
  1.웹어드민에 id를 등록하고 대충 x,y,scale값을 일단 대충 적습니다.
  2.조절할 오브젝트를 추가해줍니다.
 	FormSetter::get()->addObject("id",object); //웹어드민에 등록한 id , 조절할 오브젝트(CCNode*)
- 3.이제 실행해서 해당페이지 펼쳐놓고 웹어드민 설정하면서 최적화된 값을 찾습니다.
- 4.값을 찾았으면 2번의 소스를 지우고 setPosition이용해 코딩합니다.
+ 3.오브젝트가 제거될땐(씬전환시) FormSetter::get()->removeObject("id"); 로 제거해준다.
+ 4.이제 실행해서 해당페이지 펼쳐놓고 웹어드민 설정하면서 최적화된 값을 찾습니다.
+ 5.값을 찾았으면 2번의 소스를 지우고 setPosition이용해 코딩합니다.
  
  
  
@@ -141,6 +142,11 @@ public:
 	
 	//오브젝트가 사라질때 반드시 제거해줘야 오류를 피할수있다.
 	void removeObj(string name){
+		m_list.erase(name);
+	}
+	
+	//오브젝트가 사라질때 반드시 제거해줘야 오류를 피할수있다.
+	void removeObject(string name){
 		m_list.erase(name);
 	}
 	
