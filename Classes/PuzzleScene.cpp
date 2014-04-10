@@ -31,6 +31,7 @@
 #include "MailPopup.h"
 #include "OptionPopup.h"
 #include "AchievePopup.h"
+#include "DiaryZoomPopup.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -1487,10 +1488,13 @@ void PuzzleScene::setRight()
 	{
 		int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
 		is_have_card_list[i-1] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
+		
+		CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-62-(i-1)*45);
+		
 		if(is_have_card_list[i-1])
 		{
 			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("puzzle_right_sumcrop.png"));
-			t_clipping->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-62-(i-1)*45));
+			t_clipping->setPosition(step_position);
 			right_body->addChild(t_clipping);
 			
 			t_clipping->setAlphaThreshold(0.1f);
@@ -1498,6 +1502,32 @@ void PuzzleScene::setRight()
 			CCSprite* t_inner = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", step_card_number)->getCString()));
 			t_inner->setScale(0.4f);
 			t_clipping->addChild(t_inner);
+			
+			int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
+			for(int j=0;j<card_rank;j++)
+			{
+				CCSprite* t_star = CCSprite::create("puzzle_right_staron.png");
+				t_star->setPosition(ccpAdd(step_position, ccp(-43.5f+j*13.5f,9.5f)));
+				right_body->addChild(t_star);
+			}
+			
+			CommonButton* show_img = CommonButton::create("보기", 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
+			show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
+			show_img->setFunction([=](CCObject* sender)
+								  {
+									  if(!is_menu_enable)
+										  return;
+									  
+									  is_menu_enable = false;
+									  
+									  mySGD->selected_collectionbook = step_card_number;
+									  
+									  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
+									  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+									  t_popup->is_before_no_diary = true;
+									  addChild(t_popup, kPuzzleZorder_popup);
+								  });
+			right_body->addChild(show_img);
 		}
 	}
 }

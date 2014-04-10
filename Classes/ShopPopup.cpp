@@ -23,6 +23,7 @@
 #include "StartSettingScene.h"
 #include "CommonButton.h"
 #include "ScrollMenu.h"
+#include "KSLabelTTF.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -274,14 +275,17 @@ void ShopPopup::setShopCode(ShopCode t_code)
 		
 		for(int i=1;i<=6;i++)
 		{
-			CCSprite* main_content = CCSprite::create("shop_button_back.png");
-			main_content->setPosition(getContentPosition(kSP_MT_content1 + i - 1));
-			main_case->addChild(main_content, kSP_Z_content, kSP_MT_content1 + i - 1);
+			CCNode* content_node = CCNode::create();
+			content_node->setPosition(getContentPosition(kSP_MT_content1 + i - 1));
+			main_case->addChild(content_node, kSP_Z_content, kSP_MT_content1 + i - 1);
+			
+			CCSprite* n_content = CCSprite::create("shop_button_back.png");
+			CCSprite* s_content = CCSprite::create("shop_button_back.png");
+			s_content->setColor(ccGRAY);
 			
 			CCSprite* inner = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
-			inner->setPosition(ccp(main_content->getContentSize().width/2.f, main_content->getContentSize().height/2.f));
 			addPriceReward(inner, i);
-			main_content->addChild(inner);
+			content_node->addChild(inner, 2);
 			
 			string sale_str;
 			string price_type;
@@ -308,75 +312,47 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			if(!sale_str.empty())
 			{
 				CCSprite* tab = CCSprite::create("shop_tab.png");
-				tab->setPosition(ccp(97,83));
-				main_content->addChild(tab);
+				tab->setPosition(ccp(32,33));
+				content_node->addChild(tab, 4);
 				
 				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 10);
-				sale_label->setColor(ccBLACK);
 				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+3));
 				tab->addChild(sale_label);
 			}
 			
-			CCSprite* n_button = CCSprite::create("buy_button.png");
-			CCSprite* s_button = CCSprite::create("buy_button.png");
-			s_button->setColor(ccGRAY);
-			
-			
 			if(price_type == "money")
 			{
-				CCLabelTTF* n_won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				n_won_label->setPosition(ccp(n_button->getContentSize().width/2.f, n_button->getContentSize().height/2.f));
-				n_button->addChild(n_won_label);
-				
-				CCLabelTTF* s_won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				s_won_label->setPosition(ccp(s_button->getContentSize().width/2.f, s_button->getContentSize().height/2.f));
-				s_button->addChild(s_won_label);
+				CCLabelTTF* won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+				won_label->setPosition(ccp(0, -33));
+				content_node->addChild(won_label, 3);
 			}
 			else if(price_type == "ruby")
 			{
-				CCSprite* n_ruby_img = CCSprite::create("price_ruby_img.png");
-				n_ruby_img->setPosition(ccp(n_button->getContentSize().width/2.f-30, n_button->getContentSize().height/2.f));
-				n_button->addChild(n_ruby_img);
+				CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
+				ruby_img->setPosition(ccp(-30, -33));
+				content_node->addChild(ruby_img, 3);
 				
-				CCLabelTTF* n_ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				n_ruby_label->setPosition(ccp(n_button->getContentSize().width/2.f+10, n_button->getContentSize().height/2.f));
-				n_button->addChild(n_ruby_label);
-				
-				CCSprite* s_ruby_img = CCSprite::create("price_ruby_img.png");
-				s_ruby_img->setPosition(ccp(s_button->getContentSize().width/2.f-30, s_button->getContentSize().height/2.f));
-				s_ruby_img->setColor(ccGRAY);
-				s_button->addChild(s_ruby_img);
-				
-				CCLabelTTF* s_ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				s_ruby_label->setPosition(ccp(s_button->getContentSize().width/2.f+10, s_button->getContentSize().height/2.f));
-				s_button->addChild(s_ruby_label);
+				CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+				ruby_label->setPosition(ccp(10, -33));
+				content_node->addChild(ruby_label, 3);
 			}
 			else if(price_type == "gold")
 			{
-				CCSprite* n_gold_img = CCSprite::create("price_gold_img.png");
-				n_gold_img->setPosition(ccp(n_button->getContentSize().width/2.f-30, n_button->getContentSize().height/2.f));
-				n_button->addChild(n_gold_img);
+				CCSprite* gold_img = CCSprite::create("price_gold_img.png");
+				gold_img->setPosition(ccp(-30, -33));
+				content_node->addChild(gold_img, 3);
 				
-				CCLabelTTF* n_gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				n_gold_label->setPosition(ccp(n_button->getContentSize().width/2.f+10, n_button->getContentSize().height/2.f));
-				n_button->addChild(n_gold_label);
-				
-				CCSprite* s_gold_img = CCSprite::create("price_gold_img.png");
-				s_gold_img->setPosition(ccp(s_button->getContentSize().width/2.f-30, s_button->getContentSize().height/2.f));
-				s_gold_img->setColor(ccGRAY);
-				s_button->addChild(s_gold_img);
-				
-				CCLabelTTF* s_gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				s_gold_label->setPosition(ccp(s_button->getContentSize().width/2.f+10, s_button->getContentSize().height/2.f));
-				s_button->addChild(s_gold_label);
+				CCLabelTTF* gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+				gold_label->setPosition(ccp(10, -33));
+				content_node->addChild(gold_label, 3);
 			}
 			
-			CCMenuItem* content_item = CCMenuItemSprite::create(n_button, s_button, this, menu_selector(ShopPopup::menuAction));
+			CCMenuItem* content_item = CCMenuItemSprite::create(n_content, s_content, this, menu_selector(ShopPopup::menuAction));
 			content_item->setTag(kSP_MT_content1 + i - 1);
 			
 			CCMenu* content_menu = CCMenu::createWithItem(content_item);
-			content_menu->setPosition(ccp(main_content->getContentSize().width/2.f, 17));
-			main_content->addChild(content_menu);
+			content_menu->setPosition(CCPointZero);
+			content_node->addChild(content_menu, 1);
 			
 			content_menu->setTouchPriority(-300-4);
 		}
@@ -646,11 +622,20 @@ bool ShopPopup::init()
 	
 	is_menu_enable = false;
 	
-	main_case = CCSprite::create("shop_back.png");
-	main_case->setAnchorPoint(ccp(0.5,0.5));
+	
+	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kSP_Z_back);
 	
+	KSLabelTTF* title_label = KSLabelTTF::create("상점", mySGD->getFont().c_str(), 17);
+	title_label->setPosition(ccp(40,256));
+	main_case->addChild(title_label);
+	
+	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_inner->setContentSize(CCSizeMake(445, 228));
+	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f);
+	main_case->addChild(main_inner);
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-300-4);
 	close_menu->setPosition(getContentPosition(kSP_MT_close));
@@ -851,11 +836,11 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	else if(t_tag == kSP_MT_card)
 		return_value = ccp(141.5f,256);
 	else if(t_tag == kSP_MT_ruby)
-		return_value = ccp(59,256);//ccp(224,256);
+		return_value = ccp(225,256);//ccp(59,256);//ccp(224,256);
 	else if(t_tag == kSP_MT_gold)
-		return_value = ccp(141.5f,256);//ccp(306,256);
+		return_value = ccp(305,256);//ccp(141.5f,256);//ccp(306,256);
 	else if(t_tag == kSP_MT_heart)
-		return_value = ccp(224,256);//ccp(388.5f,256);
+		return_value = ccp(385,256);//ccp(224,256);//ccp(388.5f,256);
 	else if(t_tag == kSP_MT_content1)
 		return_value = ccp(100,177);
 	else if(t_tag == kSP_MT_content2)

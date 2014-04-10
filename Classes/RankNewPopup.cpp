@@ -45,10 +45,19 @@ bool RankNewPopup::init()
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray);
 	
-	main_case = CCSprite::create("rank_new_back.png");
-	main_case->setAnchorPoint(ccp(0.5,0.5));
+	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_case->setContentSize(CCSizeMake(290, 315));
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, 1);
+	
+	KSLabelTTF* title_label = KSLabelTTF::create("랭킹", mySGD->getFont().c_str(), 17);
+	title_label->setPosition(ccp(40,288));
+	main_case->addChild(title_label);
+	
+	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_inner->setContentSize(CCSizeMake(265, 265));
+	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f);
+	main_case->addChild(main_inner);
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-185);
 	close_menu->setPosition(ccp(main_case->getContentSize().width-29,main_case->getContentSize().height-27));
@@ -87,18 +96,18 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		{
 			string case_name;
 			if(myrank == user_list[i]["rank"].asInt())
-				case_name = "gameresult_rank_me.png";
+				case_name = "rankpopup_me.png";
 			else
-				case_name = "gameresult_rank_normal.png";
+				case_name = "rankpopup_normal.png";
 			
 			CCSprite* list_cell_case = CCSprite::create(case_name.c_str());
-			list_cell_case->setPosition(ccp(142,218-i*26));
+			list_cell_case->setPosition(ccp(main_case->getContentSize().width/2.f,247-i*35));
 			main_case->addChild(list_cell_case);
 			
 			if(myrank == user_list[i]["rank"].asInt())
-				list_cell_case->setScale(1.06f);
+				list_cell_case->setScale(1.03f);
 			
-			CCPoint rank_position = ccp(13,13);
+			CCPoint rank_position = ccp(24,15);
 			if(i == 0)
 			{
 				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
@@ -119,9 +128,13 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", user_list[i]["rank"].asInt())->getCString(), mySGD->getFont().c_str(), 11);
+				int rank_value = user_list[i]["rank"].asInt();
+				if(rank_value <= 0)
+					rank_value = result_data["alluser"].asInt()+1;
+				
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", rank_value)->getCString(), mySGD->getFont().c_str(), 11);
 				rank_label->enableOuterStroke(ccBLACK, 1);
-				rank_label->setPosition(rank_position);
+				rank_label->setPosition(ccpAdd(rank_position, ccp(0,2)));
 				list_cell_case->addChild(rank_label);
 			}
 			
@@ -131,12 +144,14 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			
 			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 11); // user_list[i]["nick"].asString().c_str()
 			nick_label->enableOuterStroke(ccBLACK, 1);
-			nick_label->setPosition(ccp(83,13));
+			nick_label->setPosition(ccp(120,17));
 			list_cell_case->addChild(nick_label);
 			
-			CCLabelTTF* score_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-			score_label->setColor(ccBLACK);
-			score_label->setPosition(ccp(168,13));
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->enableOuterStroke(ccBLACK, 1);
+			score_label->setColor(ccc3(255, 150, 80));
+			score_label->setAnchorPoint(ccp(1.f,0.5f));
+			score_label->setPosition(ccp(230,17));
 			list_cell_case->addChild(score_label);
 		}
 	}

@@ -25,6 +25,8 @@ public:
 	virtual void onEnterTransitionDidFinish();
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
+	bool is_before_no_diary;
+	
 private:
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
