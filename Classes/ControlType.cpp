@@ -321,6 +321,7 @@
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
+#define TouchOutWidth		5.f
 
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
@@ -344,12 +345,206 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	
 	if(t_b)
 	{
-		myJack->changeDirection(directionStop, directionStop);
-		beforeDirection = directionStop;
-		beforeSecondDirection = directionStop;
-		unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
-		myJack->setTouchPointByJoystick(distancePoint, directionStop, t_b);
-		return;
+		if(distanceValue > minimumDistanceJ && (t_p.x > 480.f-TouchOutWidth || t_p.x < TouchOutWidth || t_p.y > myDSH->ui_top-TouchOutWidth || t_p.y < TouchOutWidth))
+		{
+			CCLog("Touch Out Action!!!");
+			IntPoint jackPoint = myGD->getJackPoint();
+			
+			if(angle < -180.f+regular_spectrum/2.f)
+			{
+				angleDirection = directionLeft;
+				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
+				else												secondDirection = directionDown;
+			}
+			else if(angle < -180.f+(regular_spectrum+irregular_spectrum)/2.f)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionLeftDown;
+					if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionDown;
+					else												secondDirection = directionLeft;
+				}
+				else
+				{
+					angleDirection = directionLeft;
+					if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
+					else												secondDirection = directionDown;
+				}
+			}
+			else if(angle < -180.f+regular_spectrum/2.f+irregular_spectrum)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionLeftDown;
+					if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionLeft;
+					else												secondDirection = directionDown;
+				}
+				else
+				{
+					angleDirection = directionDown;
+					if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
+					else												secondDirection = directionLeft;
+				}
+			}
+			else if(angle < -180.f+regular_spectrum+irregular_spectrum)
+			{
+				angleDirection = directionDown;
+				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
+				else												secondDirection = directionLeft;
+			}
+			else if(angle < -180.f+regular_spectrum*3.f/2.f+irregular_spectrum)
+			{
+				angleDirection = directionDown;
+				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
+				else												secondDirection = directionRight;
+			}
+			else if(angle < -180.f+(regular_spectrum+irregular_spectrum)*3.f/2.f)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionRightDown;
+					if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionRight;
+					else												secondDirection = directionDown;
+				}
+				else
+				{
+					angleDirection = directionDown;
+					if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
+					else												secondDirection = directionRight;
+				}
+			}
+			else if(angle < -180.f+regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionRightDown;
+					if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionDown;
+					else												secondDirection = directionRight;
+				}
+				else
+				{
+					angleDirection = directionRight;
+					if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
+					else												secondDirection = directionDown;
+				}
+			}
+			else if(angle < 0.f)
+			{
+				angleDirection = directionRight;
+				if(jackPoint.y == mapHeightInnerBegin)				secondDirection = directionUp;
+				else												secondDirection = directionDown;
+			}
+			else if(angle < regular_spectrum/2.f)
+			{
+				angleDirection = directionRight;
+				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
+				else												secondDirection = directionUp;
+			}
+			else if(angle < regular_spectrum/2.f+irregular_spectrum/2.f)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionRightUp;
+					if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionUp;
+					else												secondDirection = directionRight;
+				}
+				else
+				{
+					angleDirection = directionRight;
+					if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
+					else												secondDirection = directionUp;
+				}
+			}
+			else if(angle < regular_spectrum/2.f+irregular_spectrum)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionRightUp;
+					if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionRight;
+					else												secondDirection = directionUp;
+				}
+				else
+				{
+					angleDirection = directionUp;
+					if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
+					else												secondDirection = directionRight;
+				}
+			}
+			else if(angle < regular_spectrum+irregular_spectrum)
+			{
+				angleDirection = directionUp;
+				if(jackPoint.x == mapWidthInnerEnd-1)				secondDirection = directionLeft;
+				else												secondDirection = directionRight;
+			}
+			else if(angle < regular_spectrum*3.f/2.f+irregular_spectrum)
+			{
+				angleDirection = directionUp;
+				if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
+				else												secondDirection = directionLeft;
+			}
+			else if(angle < (regular_spectrum+irregular_spectrum)*3.f/2.f)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionLeftUp;
+					if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionLeft;
+					else												secondDirection = directionUp;
+				}
+				else
+				{
+					angleDirection = directionUp;
+					if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionRight;
+					else												secondDirection = directionLeft;
+				}
+			}
+			else if(angle < regular_spectrum*3.f/2.f+irregular_spectrum*2.f)
+			{
+				if(isEnableIrregularDirection)
+				{
+					angleDirection = directionLeftUp;
+					if(jackPoint.x == mapWidthInnerBegin)				secondDirection = directionUp;
+					else												secondDirection = directionLeft;
+				}
+				else
+				{
+					angleDirection = directionLeft;
+					if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
+					else												secondDirection = directionUp;
+				}
+			}
+			else
+			{
+				angleDirection = directionLeft;
+				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
+				else												secondDirection = directionUp;
+			}
+			
+			if(angleDirection != beforeDirection || isButtonAction)
+			{
+				isButtonAction = false;
+				myJack->changeDirection(angleDirection, secondDirection);
+				schedule(schedule_selector(ControlJoystickButton::directionKeeping));
+				//			AudioEngine::sharedInstance()->playEffect("sound_jack_drawing.mp3", false);
+				beforeDirection = angleDirection;
+				beforeSecondDirection = secondDirection;
+			}
+			else if(beforeSecondDirection != secondDirection)
+			{
+				myJack->changeDirection(angleDirection, secondDirection);
+				schedule(schedule_selector(ControlJoystickButton::directionKeeping));
+				beforeDirection = angleDirection;
+				beforeSecondDirection = secondDirection;
+			}
+		}
+		else
+		{
+			myJack->changeDirection(directionStop, directionStop);
+			beforeDirection = directionStop;
+			beforeSecondDirection = directionStop;
+			unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
+			myJack->setTouchPointByJoystick(distancePoint, directionStop, t_b);
+			return;
+		}
 	}
 	
 	if(button_touch && !myJack->isDie && !myJack->isDrawingOn && myJack->getJackState() == jackStateNormal)
@@ -721,6 +916,8 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		}
 		else
 		{
+			unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
+			
 			if(!joystick_touch && !myJack->willBackTracking && !isStun)
 			{
 				CCPoint after_circle_position = location;

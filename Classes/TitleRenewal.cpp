@@ -1178,7 +1178,7 @@ void TitleRenewalScene::successDownloadAction()
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		
 		
-		for(int j=0;j<puzzle_download_list.size();j++)
+		for(int j=0;j<puzzle_download_list.size() && j < puzzle_download_list_puzzle_number.size();j++)
 		{
 			if(puzzle_download_list[j].key == "map")
 				continue;
@@ -1357,7 +1357,7 @@ void TitleRenewalScene::endingCheck()
 	
 	if(nick == "")
 	{
-		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, true);
+//		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, true);
 		
 		state_label->setString("");
 		

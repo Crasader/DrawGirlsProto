@@ -53,6 +53,8 @@ private:
 	
 	bool is_menu_enable;
 	
+	int is_unlock_puzzle;
+	
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
 //	CountingBMLabel* friend_point_label;
@@ -91,6 +93,8 @@ private:
 	void popupClose();
 	void mailPopupClose();
 	void tutorialCardSettingClose();
+	
+	void endUnlockAnimation();
 	
 	void puzzleLoadSuccess();
 	
