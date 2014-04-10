@@ -27,7 +27,7 @@ private:
 	
 public:
 	static void removeZerosPadding(std::string& str);
-	static void encrypt(char *keyString, const std::string& plain, std::string& cipher);
-	static void encrypt(char *keyString, const void* plain, size_t length, std::string& cipher);
-	static void decrypt(char *keyString, const std::string& cipher, std::string& decrypted);
+	static void encrypt(const char *keyString, const char* plain, std::string& cipher);
+	static void encrypt(const char *keyString, const void* plain, size_t length, std::string& cipher);
+	static void decrypt(const char *keyString, const char* cipher, std::string& decrypted);
 };

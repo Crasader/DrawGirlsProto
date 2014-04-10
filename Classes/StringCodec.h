@@ -12,4 +12,7 @@
 using namespace std;
 std::basic_string<char> stringEnc(string plainText);
 string stringDecode(std::basic_string<char> encodedText);
+
+std::basic_string<char> stringEncWithAES(string plainText);
+string stringDecodeWithAES(std::basic_string<char> encodedText);
 #endif /* defined(__BasketWorldCup2__StringCodec__) */

@@ -21,21 +21,29 @@ void CipherUtils::removeZerosPadding(string& str)
   else str.erase(str.begin(), str.end());
 }
 
-void CipherUtils::encrypt(char *keyString, const string& plain, string &cipher)
+void CipherUtils::encrypt(const char *keyString, const char* plain, string &cipher)
 {
+	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
 	byte key[ AES::DEFAULT_KEYLENGTH ];
+	
 	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
 	try
 	{
 		cipher.clear();
+		StringSource( plain, true,
+								 new HexEncoder( new StringSink( cipher ) )
+								 ); // StringSource
+		
 		ECB_Mode< AES >::Encryption e;
 		// ECB Mode does not use an IV
 		e.SetKey( key, sizeof(key) );
 		
+		
+		
 		// The StreamTransformationFilter adds padding
 		//  as required. ECB and CBC Mode must be padded
 		//  to the block size of the cipher.
-		StringSource( plain, true,
+		StringSource(cipher, true,
 								 new StreamTransformationFilter( e,
 																								new StringSink( cipher ), StreamTransformationFilter::ZEROS_PADDING
 																								) // StreamTransformationFilter
@@ -47,11 +55,10 @@ void CipherUtils::encrypt(char *keyString, const string& plain, string &cipher)
 		//cerr << e.what() << endl;
 		//cerr << endl;
 	}
-	/*********************************\
-	 \*********************************/
 }
-void CipherUtils::encrypt(char *keyString, const void *plain, size_t length, std::string& cipher)
+void CipherUtils::encrypt(const char *keyString, const void *plain, size_t length, std::string& cipher)
 {
+	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
 	byte key[ AES::DEFAULT_KEYLENGTH ];
 	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
 	try
@@ -83,8 +90,9 @@ void CipherUtils::encrypt(char *keyString, const void *plain, size_t length, std
 		//cerr << endl;
 	}
 }
-void CipherUtils::decrypt(char *keyString, const string& cipher, string& decrypted)
+void CipherUtils::decrypt(const char *keyString, const char* cipher, string& decrypted)
 {
+	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
 	byte key[ AES::DEFAULT_KEYLENGTH ];
 	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
 	
