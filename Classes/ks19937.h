@@ -8,7 +8,7 @@ private:
 public:
 	// This is equivalent to srand().
 	static void seed(std::mt19937::result_type new_seed = std::mt19937::default_seed) {
-		//rng.seed(new_seed);
+		rng.seed(new_seed);
 	}
 
 	// This is equivalent to rand().
