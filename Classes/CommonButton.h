@@ -30,6 +30,8 @@ enum CommonButtonType {
 		CommonButtonPupple,
 	CommonButtonDarkPupple,
 	CommonButtonLightPupple,
+	CommonButtonYellowDown,
+	CommonButtonYellowUp,
 		CommonButtonClose
 	};
 
@@ -160,6 +162,8 @@ public:
 		else if(btnType==CommonButtonPupple) btnBackImg = "common_button_pupple.png";
 		else if(btnType==CommonButtonDarkPupple)	btnBackImg = "common_button_darkpupple.png";
 		else if(btnType==CommonButtonLightPupple)	btnBackImg = "common_button_lightpupple.png";
+		else if(btnType==CommonButtonYellowDown)	btnBackImg = "common_button_yellowdown.png";
+		else if(btnType==CommonButtonYellowUp)		btnBackImg = "common_button_yellowup.png";
 		else if(btnType==CommonButtonClose) btnBackImg = "common_button_close.png";
 		
 		CCScale9Sprite* back = CCScale9Sprite::create(btnBackImg.c_str());
@@ -171,7 +175,7 @@ public:
 			back->setInsetRight(9);
 			
 		}
-		else if(btnType == CommonButtonDarkPupple || btnType == CommonButtonLightPupple)
+		else if(btnType >= CommonButtonDarkPupple && btnType <= CommonButtonYellowUp)
 		{
 			back->setInsetBottom(16);
 			back->setInsetTop(34-16*2);
@@ -192,7 +196,7 @@ public:
 		if(type == CommonButtonClose){
 			this->setSize(CCSizeMake(45,45));
 		}
-		else if(type == CommonButtonDarkPupple || type == CommonButtonLightPupple)
+		else if(type >= CommonButtonDarkPupple && type <= CommonButtonYellowUp)
 		{
 			m_btnBack->setInsetBottom(16);
 			m_btnBack->setInsetTop(34-16*2);
