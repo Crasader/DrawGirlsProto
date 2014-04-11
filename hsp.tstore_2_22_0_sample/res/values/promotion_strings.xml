@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gameno_prompt">Choose game number</string>
+    <string name="gameversion_prompt">Choose game version</string>
+    <string name="memberno_prompt">Choose memberNo</string>
+    <string name="market_prompt">Choose Market Type</string>
+    <string name="lnc_prompt">Choose LNC</string>
+    <string name="locale_prompt">Choose Locale</string>
+	<string name="progress">Processing...</string> 
+</resources>

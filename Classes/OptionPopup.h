@@ -10,10 +10,12 @@
 #define __DGproto__OptionPopup__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 #include "GameData.h"
 #include "DataStorageHub.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 class OptionPopup : public CCLayer
@@ -34,7 +36,7 @@ private:
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
-	CCSprite* main_case;
+	CCScale9Sprite* main_case;
 	CCSprite* gray;
 	
 	bool is_menu_enable;

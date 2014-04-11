@@ -40,7 +40,7 @@ private:
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
-	CCSprite* main_case;
+	CCScale9Sprite* main_case;
 	CCSprite* gray;
 	
 	void showPopup();

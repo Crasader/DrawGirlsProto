@@ -39,6 +39,8 @@ bool DiaryZoomPopup::init()
         return false;
     }
 	
+	is_before_no_diary = false;
+	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -226,12 +228,19 @@ void DiaryZoomPopup::menuAction(CCObject *sender)
 		first_img->setTouchEnabled(false);
 		unschedule(schedule_selector(DiaryZoomPopup::moveAnimation));
 		
-		CollectionBookPopup* t_popup = CollectionBookPopup::create();
-		t_popup->setHideFinalAction(target_final, delegate_final);
-		getParent()->addChild(t_popup, kPMS_Z_popup);
-		
-		target_final = NULL;
-		hidePopup();
+		if(is_before_no_diary)
+		{
+			hidePopup();
+		}
+		else
+		{
+			CollectionBookPopup* t_popup = CollectionBookPopup::create();
+			t_popup->setHideFinalAction(target_final, delegate_final);
+			getParent()->addChild(t_popup, kPMS_Z_popup);
+			
+			target_final = NULL;
+			hidePopup();
+		}
 		
 		
 //		CCDirector::sharedDirector()->replaceScene(CollectionBook::scene());

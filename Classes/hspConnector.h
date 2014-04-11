@@ -177,7 +177,7 @@ public:
     void setup(string pHSPID, int pHSPNo, string pGraphdogVersion){
         hspID = pHSPID;
         hspNo = pHSPNo;
-        graphdog->setup("12345678", pGraphdogVersion);
+				graphdog->setup("drawgirls_tstore", "12345678","", pGraphdogVersion);
     }
     
     bool command(const std::vector<CommandParam>& params){
@@ -222,6 +222,7 @@ public:
 
     void login(Json::Value param,Json::Value callbackParam,jsonSelType func);
     void logout(jsonSelType func);
+	void sendPushMessage();
 		//void loadMyInfo(Json::Value obj);
     //void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
     //void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);

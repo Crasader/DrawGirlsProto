@@ -22,11 +22,6 @@ using namespace std;
 class CountingBMLabel;
 class HeartTime;
 
-enum PuzzleRightCode{
-	kPuzzleRightCode_reward = 1,
-	kPuzzleRightCode_rank
-};
-
 enum PuzzleZorder{
 	kPuzzleZorder_back = 1,
 	kPuzzleZorder_puzzle,
@@ -36,7 +31,7 @@ enum PuzzleZorder{
 };
 
 class RankFriendInfo;
-class PuzzleScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
+class PuzzleScene : public CCLayer
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -52,6 +47,8 @@ public:
 	CCNode* tutorial_node;
 private:
 	
+	void heartRefresh();
+	
 	bool clear_is_empty_piece;
 	bool clear_is_empty_star;
 	int clear_star_take_level;
@@ -64,6 +61,9 @@ private:
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;
 	CountingBMLabel* friend_point_label;
+	
+	CCSprite* postbox_count_case;
+	CCLabelTTF* postbox_count_label;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
@@ -106,36 +106,13 @@ private:
 	void menuAction(CCObject* sender);
 	void setTop();
 	
-	PuzzleRightCode recent_right_code;
 	void setRight();
 	CCNode* right_case;
 	
-	void setRightHead();
-	CCNode* right_head;
-	void setRightContent();
-	
-	void setReward();
-	CCNode* reward_node;
-	CCMenu* start_menu;
-	
-	void setRank();
-	CCNode* rank_node;
-//	vector<RankFriendInfo> friend_list;
-//	void resultGetStageScoreList(Json::Value result_data);
-	CCTableView* rank_table;
-	int selected_friend_idx;
-	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
-	virtual void scrollViewDidScroll(CCScrollView* view);
-    virtual void scrollViewDidZoom(CCScrollView* view);
-	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
-    virtual CCSize cellSizeForTable(CCTableView *table);
-    virtual unsigned int numberOfCellsInTableView(CCTableView *table);
-	
-//	void setMonster();
-//	CCNode* monster_node;
-//	CCMenu* monster_start_menu;
+	void countingMessage();
 	
 	void popupClose();
+	void mailPopupClose();
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked();

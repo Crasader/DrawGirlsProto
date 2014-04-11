@@ -8,7 +8,7 @@
 USING_NS_CC;
 using namespace std;
 
-#define HEART_DISTANCE 14
+#define HEART_DISTANCE 16
 #define LZZ_INLINE inline
 class HeartTime : public CCNode
 {

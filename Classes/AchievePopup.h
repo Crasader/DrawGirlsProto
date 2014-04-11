@@ -50,7 +50,7 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	CCSprite* gray;
-	CCSprite* main_case;
+	CCScale9Sprite* main_case;
 	
 	bool is_menu_enable;
 	

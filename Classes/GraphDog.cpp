@@ -333,7 +333,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	string token="";
 	//CCLog("t_function2");
 	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
-	string dataset = "&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
+	string dataset = "&gid="+GraphDog::get()->aID+"&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
 	//CCLog("t_function3");
 	//string commandurl = "http://litqoo.com/dgserver/data.php";
 	string commandurl = "http://182.162.201.147:10010/data.php"; //"http://182.162.201.147:10010/data.php"; //

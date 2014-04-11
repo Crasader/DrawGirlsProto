@@ -1904,33 +1904,34 @@ public:
 	
 	void loseStep2(){
 		
+		return;
 		
-		myPointLbl->addChild(KSGradualValue<float>::create(0, (float)myPoint, 1.5f,
-																											 [=](float t)
-																											 {
-																												 myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																												 
-																												 otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																												 
-																											 },
-																											 [=](float t)
-																											 {
-																												 
-																												 this->addChild(KSTimer::create(1.f, [=](){
-																													 titleLose->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
-																													 
-																													 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
-																													 this->loseStep3();
-																													 otherPointLbl->addChild(KSGradualValue<float>::create((float)myPoint, (float)otherPoint, 1.0f,
-																																																							[=](float t)
-																																																							{
-																																																								otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																																																							},[=](float t){
-																																																								
-																																																								
-																																																							}));
-																												 }));
-																											 }));
+//		myPointLbl->addChild(KSGradualValue<float>::create(0, (float)myPoint, 1.5f,
+//																											 [=](float t)
+//																											 {
+//																												 myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+//																												 
+//																												 otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+//																												 
+//																											 },
+//																											 [=](float t)
+//																											 {
+//																												 
+//																												 this->addChild(KSTimer::create(1.f, [=](){
+//																													 titleLose->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+//																													 
+//																													 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+//																													 this->loseStep3();
+//																													 otherPointLbl->addChild(KSGradualValue<float>::create((float)myPoint, (float)otherPoint, 1.0f,
+//																																																							[=](float t)
+//																																																							{
+//																																																								otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+//																																																							},[=](float t){
+//																																																								
+//																																																								
+//																																																							}));
+//																												 }));
+//																											 }));
 	}
 	
 	void loseStep3(){
@@ -2000,33 +2001,33 @@ public:
 	
 	void winStep2(){
 		
-		
-		myPointLbl->addChild(KSGradualValue<float>::create(0, (float)otherPoint, 1.5f,
-																											 [=](float t)
-																											 {
-																												 myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																												 
-																												 otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																												 
-																											 },
-																											 [=](float t)
-																											 {
-																												 
-																												 this->addChild(KSTimer::create(1.f, [=](){
-																													 titleWin->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
-																													 
-																													 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
-																													 this->winStep3();
-																													 myPointLbl->addChild(KSGradualValue<float>::create((float)otherPoint, (float)myPoint, 1.0f,
-																																																							[=](float t)
-																																																							{
-																																																								myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
-																																																							},[=](float t){
-																																																								
-																																																								
-																																																							}));
-																												 }));
-																											 }));
+//		
+//		myPointLbl->addChild(KSGradualValue<float>::create(0, (float)otherPoint, 1.5f,
+//																											 [=](float t)
+//																											 {
+//																												 myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+//																												 
+//																												 otherPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+//																												 
+//																											 },
+//																											 [=](float t)
+//																											 {
+//																												 
+//																												 this->addChild(KSTimer::create(1.f, [=](){
+//																													 titleWin->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,1)));
+//																													 
+//																													 title->runAction(CCEaseBounceIn::create(CCScaleTo::create(0.3f,0)));
+//																													 this->winStep3();
+//																													 myPointLbl->addChild(KSGradualValue<float>::create((float)otherPoint, (float)myPoint, 1.0f,
+//																																																							[=](float t)
+//																																																							{
+//																																																								myPointLbl->setString(CCString::createWithFormat("%d",(int)t)->getCString());
+//																																																							},[=](float t){
+//																																																								
+//																																																								
+//																																																							}));
+//																												 }));
+//																											 }));
 	}
 	
 	void winStep3(){
