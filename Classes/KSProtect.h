@@ -15,7 +15,7 @@ private:
 	void encrypt(const std::string& data)
 	{
 		const char *keyString = "drawgirls__jjang";
-		CipherUtils::encrypt(encryptChars(keyString).c_str(), data.c_str(), m_cipher);
+		m_cipher = CipherUtils::encrypt(encryptChars(keyString).c_str(), data.c_str());
 	}
 	
 public:
@@ -24,7 +24,7 @@ public:
 	{
 		std::string decrypted;
 		const char *keyString = "drawgirls__jjang";
-		CipherUtils::decrypt(encryptChars(keyString).c_str(), m_cipher.c_str(), decrypted);
+		decrypted = CipherUtils::decrypt(encryptChars(keyString).c_str(), m_cipher.c_str());
 		return decrypted;
 	}
 	explicit KSProtectStr(const std::string& v)
@@ -50,7 +50,7 @@ private:
 	void encrypt(const T& data)
 	{
 		char *keyString = "drawgirls__jjang";
-		CipherUtils::encrypt(encryptChars(keyString).c_str(), &data, sizeof(data), m_cipher);
+		m_cipher = CipherUtils::encrypt(encryptChars(keyString).c_str(), &data, sizeof(data));
 		//m_buff = data;
 		//		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
 //																								 m_bufferLength, key, keyLen);
@@ -87,7 +87,7 @@ public:
 	{
 		std::string decrypted;
 		char *keyString = "drawgirls__jjang";
-		CipherUtils::decrypt(keyString, m_cipher.c_str(), decrypted);
+		decrypted = CipherUtils::decrypt(encryptChars(keyString).c_str(), m_cipher.c_str());
 		return toVar(decrypted);
 	}
 	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v)
