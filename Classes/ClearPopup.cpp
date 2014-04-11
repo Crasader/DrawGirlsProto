@@ -1704,7 +1704,7 @@ void ClearPopup::scoreAnimation(float dt)
 				increase_score += decreaseUnit;
 			}
 		}
-		score_label->setString(CCString::createWithFormat("%.0f",increase_score)->getCString());
+		score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f",increase_score)->getCString()).c_str());
 	}
 	else
 		stopScoreAnimation();
@@ -1713,7 +1713,7 @@ void ClearPopup::scoreAnimation(float dt)
 void ClearPopup::stopScoreAnimation()
 {
 	unschedule(schedule_selector(ClearPopup::scoreAnimation));
-	score_label->setString(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString());
+	score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString()).c_str());
 	AudioEngine::sharedInstance()->stopAllEffects();
 }
 

@@ -20,6 +20,7 @@
 #include "CardStrengthPopup.h"
 #include "MainFlowScene.h"
 #include "StageImgLoader.h"
+#include <random>
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -37,6 +38,7 @@ enum CBP_MenuTag{
 	kCBP_MT_strength,
 	kCBP_MT_second,
 	kCBP_MT_third,
+	kCBP_MT_forth,
 	kCBP_MT_cardBase = 10000
 };
 
@@ -50,37 +52,27 @@ CCPoint CollectionBookPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCBP_MT_zoom)		return_value = ccp(55, 40);
+	if(t_tag == kCBP_MT_zoom)		return_value = ccp(45, 51);
 	else if(t_tag == kCBP_MT_pre)	return_value = ccp(120, 51);
 	else if(t_tag == kCBP_MT_next)	return_value = ccp(170, 51);
-	else if(t_tag == kCBP_MT_second)	return_value = ccp(93,222);
-	else if(t_tag == kCBP_MT_third)	return_value = ccp(163,234);
-	else if(t_tag == kCBP_MT_close)	return_value = ccp(225, 30);
-	else if(t_tag == kCBP_MT_inputText)	return_value = ccp(115,95);
-	else if(t_tag == kCBP_MT_strength)	return_value = ccp(45,51);
-	
-	return return_value;
-}
-
-int CollectionBookPopup::getContentRotate(int t_tag)
-{
-	int return_value;
-	
-	if(t_tag == kCBP_MT_second)			return_value = 5;
-	else if(t_tag == kCBP_MT_third)		return_value = -11;
+	else if(t_tag == kCBP_MT_second)	return_value = ccp(50,225);
+	else if(t_tag == kCBP_MT_third)	return_value = ccp(110,225);
+	else if(t_tag == kCBP_MT_forth)	return_value = ccp(170,225);
+	else if(t_tag == kCBP_MT_close)	return_value = ccp(200, 287);
+	else if(t_tag == kCBP_MT_inputText)	return_value = ccp(112,95);
+	else if(t_tag == kCBP_MT_strength)	return_value = ccp(55,40);
 	
 	return return_value;
 }
 
 void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 {
-	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(180, 60), kCCTextAlignmentLeft);
-	r_stage_script->setPosition(ccp(25,175));
+	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft);
+	r_stage_script->setPosition(ccp(25,152));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_script->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_script);
-	
 	
 	CommonButton* close = CommonButton::createCloseButton(-191);
 	close->setFunction([=](CCObject* sender)
@@ -93,16 +85,17 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	target->addChild(close, 1, kCBP_MT_close);
 	
 	
-	CommonButton* strength = CommonButton::create("카드 강화", 11, CCSizeMake(65,45), CommonButtonYellow, -191);
-	strength->setFunction([=](CCObject* sender)
-						  {
-							  CCNode* t_node = CCNode::create();
-							  t_node->setTag(kCBP_MT_strength);
-							  menuAction(t_node);
-						  });
-	strength->setPosition(getContentPosition(kCBP_MT_strength));
-	target->addChild(strength, 1, kCBP_MT_strength);
-	strength->setVisible(false);//myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0);
+	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
+	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
+	s_zoom->setColor(ccGRAY);
+	
+	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBookPopup::menuAction));
+	zoom_item->setTag(kCBP_MT_zoom);
+	
+	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
+	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
+	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
+	zoom_menu->setTouchPriority(-191);
 	
 	
 	float mul_value = 0.88f;
@@ -113,6 +106,15 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	
 	int stage_card_count = NSDS_GI(stage_number, kSDS_SI_cardCount_i);
 	target->setTag(stage_card_count);
+	
+	random_device rd;
+	default_random_engine e1(rd());
+	uniform_int_distribution<int> uniform_dist(-10, 10);
+	uniform_int_distribution<int> uniform_dist_x(8, 82);
+	uniform_int_distribution<int> uniform_dist_y(8, 112);
+	uniform_int_distribution<int> uniform_dist_cnt(1, 2);
+	uniform_int_distribution<int> uniform_dist_type(1, 3);
+	uniform_int_distribution<int> uniform_dist_rotate(-90,90);
 	
 	for(int i=1;i<=stage_card_count;i++)
 	{
@@ -126,19 +128,18 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		
 		if(position_index == 1)
 		{
-			rotation_value = getContentRotate(kCBP_MT_second);
-			position_value = getContentPosition(kCBP_MT_second);
+			rotation_value = uniform_dist(e1);
+			position_value = ccpAdd(getContentPosition(kCBP_MT_second), ccp(0,uniform_dist(e1)));
 		}
 		else if(position_index == 2)
 		{
-			rotation_value = getContentRotate(kCBP_MT_third);
-			position_value = getContentPosition(kCBP_MT_third);
+			rotation_value = uniform_dist(e1);
+			position_value = ccpAdd(getContentPosition(kCBP_MT_third), ccp(0,uniform_dist(e1)));
 		}
 		else
 		{
-			int t_position_index = position_index-3;
-			rotation_value = 0;
-			position_value = ccpAdd(ccpAdd(getContentPosition(kCBP_MT_second), ccp(0,-50)), ccpMult(ccp(60,0), t_position_index));
+			rotation_value = uniform_dist(e1);
+			position_value = ccpAdd(getContentPosition(kCBP_MT_forth), ccp(0,uniform_dist(e1)));
 		}
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
@@ -149,6 +150,35 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
             second_img->setPosition(position_value);
             target->addChild(second_img);
 			
+			CCSprite* img_case = CCSprite::create("diary_frame.png");
+			img_case->setPosition(ccp(second_img->getContentSize().width/2.f, second_img->getContentSize().height/2.f-4.f));
+			second_img->addChild(img_case);
+			
+			int tape_cnt = uniform_dist_cnt(e1);
+			for(int j=0;j<tape_cnt;j++)
+			{
+				int tape_type = uniform_dist_type(e1);
+				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
+				bool is_x = uniform_dist_cnt(e1) == 1;
+				bool is_first = uniform_dist_cnt(e1) == 1;
+				if(is_x)
+				{
+					if(is_first)
+						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
+					else
+						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
+				}
+				else
+				{
+					if(is_first)
+						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
+					else
+						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
+				}
+				img_case->addChild(tape_img);
+				tape_img->setRotation(uniform_dist_rotate(e1));
+			}
+			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
 			second_item->setTag(kCBP_MT_cardBase + check_card_number);
 			second_item->setRotation(rotation_value);
@@ -158,152 +188,52 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			target->addChild(second_menu, 1, kCBP_MT_second+position_index-1);
 			second_menu->setTouchPriority(-191);
 		}
+		else
+		{
+			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
+			no_img->setScale(mul_value);
+			no_img->setRotation(rotation_value);
+            no_img->setPosition(position_value);
+            target->addChild(no_img);
+			
+			CCSprite* img_case = CCSprite::create("diary_frame.png");
+			img_case->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f-4.f));
+			no_img->addChild(img_case);
+			
+			int tape_cnt = uniform_dist_cnt(e1);
+			for(int j=0;j<tape_cnt;j++)
+			{
+				int tape_type = uniform_dist_type(e1);
+				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
+				bool is_x = uniform_dist_cnt(e1) == 1;
+				bool is_first = uniform_dist_cnt(e1) == 1;
+				if(is_x)
+				{
+					if(is_first)
+						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
+					else
+						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
+				}
+				else
+				{
+					if(is_first)
+						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
+					else
+						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
+				}
+				img_case->addChild(tape_img);
+				tape_img->setRotation(uniform_dist_rotate(e1));
+			}
+		}
 		position_index++;
 	}
-	///////////////////////////////////////////////////////////////////////////////////////////
-//    if(level_number == 1)
-//    {
-//		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1);
-//        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
-//        {
-//            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
-//            second_img->setScale(mul_value);
-//			second_img->setRotation(getContentRotate(kCBP_MT_second));
-//            second_img->setPosition(getContentPosition(kCBP_MT_second));
-//            target->addChild(second_img);
-//			
-//			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-//			second_item->setTag(kCBP_MT_cardBase + check_card_number);
-//			second_item->setRotation(getContentRotate(kCBP_MT_second));
-//			
-//			CCMenu* second_menu = CCMenu::createWithItem(second_item);
-//			second_menu->setPosition(second_img->getPosition());
-//			target->addChild(second_menu, 1, kCBP_MT_second);
-//			second_menu->setTouchPriority(-191);
-//        }
-//        
-//		check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+2);
-//        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
-//        {
-//            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
-//            third_img->setScale(mul_value);
-//			third_img->setRotation(getContentRotate(kCBP_MT_third));
-//            third_img->setPosition(getContentPosition(kCBP_MT_third));
-//            target->addChild(third_img);
-//            
-//			//            if(mySD->isAnimationStage(stage_number))
-//			//            {
-//			//                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
-//			//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", stage_number, level_number+2)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
-//			//                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
-//			//                third_img->addChild(ani_img);
-//			//            }
-//			
-//			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-//			third_item->setTag(kCBP_MT_cardBase + check_card_number);
-//			third_item->setRotation(getContentRotate(kCBP_MT_third));
-//			
-//			CCMenu* third_menu = CCMenu::createWithItem(third_item);
-//			third_menu->setPosition(third_img->getPosition());
-//			target->addChild(third_menu, 1, kCBP_MT_third);
-//			third_menu->setTouchPriority(-191);
-//        }
-//    }
-//    else if(level_number == 2)
-//    {
-//		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1);
-//        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
-//        {
-//            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
-//            first_img->setScale(mul_value);
-//			first_img->setRotation(getContentRotate(kCBP_MT_second));
-//            first_img->setPosition(getContentPosition(kCBP_MT_second));
-//            target->addChild(first_img);
-//			
-//			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-//			second_item->setTag(kCBP_MT_cardBase + check_card_number);
-//			second_item->setRotation(getContentRotate(kCBP_MT_second));
-//			
-//			CCMenu* second_menu = CCMenu::createWithItem(second_item);
-//			second_menu->setPosition(first_img->getPosition());
-//			target->addChild(second_menu, 1, kCBP_MT_second);
-//			second_menu->setTouchPriority(-191);
-//        }
-//        
-//		check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number+1);
-//        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
-//        {
-//            CCSprite* third_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
-//            third_img->setScale(mul_value);
-//			third_img->setRotation(getContentRotate(kCBP_MT_third));
-//            third_img->setPosition(getContentPosition(kCBP_MT_third));
-//            target->addChild(third_img);
-//            
-//			//            if(mySD->isAnimationStage(stage_number))
-//			//            {
-//			//                CCSize ani_size = mySD->getAnimationCutSize(stage_number);
-//			//                CCSprite* ani_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_animation.png", stage_number, level_number+1)->getCString(), CCRectMake(0, 0, ani_size.width, ani_size.height));
-//			//                ani_img->setPosition(mySD->getAnimationPosition(stage_number));
-//			//                third_img->addChild(ani_img);
-//			//            }
-//			
-//			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-//			third_item->setTag(kCBP_MT_cardBase + check_card_number);
-//			third_item->setRotation(getContentRotate(kCBP_MT_third));
-//			
-//			CCMenu* third_menu = CCMenu::createWithItem(third_item);
-//			third_menu->setPosition(third_img->getPosition());
-//			target->addChild(third_menu, 1, kCBP_MT_third);
-//			third_menu->setTouchPriority(-191);
-//        }
-//    }
-//    else if(level_number == 3)
-//    {
-//		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-2);
-//        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
-//        {
-//            CCSprite* first_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
-//            first_img->setScale(mul_value);
-//			first_img->setRotation(getContentRotate(kCBP_MT_second));
-//            first_img->setPosition(getContentPosition(kCBP_MT_second));
-//            target->addChild(first_img);
-//			
-//			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-//			second_item->setTag(kCBP_MT_cardBase + check_card_number);
-//			second_item->setRotation(getContentRotate(kCBP_MT_second));
-//			
-//			CCMenu* second_menu = CCMenu::createWithItem(second_item);
-//			second_menu->setPosition(first_img->getPosition());
-//			target->addChild(second_menu, 1, kCBP_MT_second);
-//			second_menu->setTouchPriority(-191);
-//        }
-//        
-//		check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, level_number-1);
-//        if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
-//        {
-//            CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
-//            second_img->setScale(mul_value);
-//			second_img->setRotation(getContentRotate(kCBP_MT_third));
-//            second_img->setPosition(getContentPosition(kCBP_MT_third));
-//            target->addChild(second_img);
-//			
-//			CCMenuItem* third_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-//			third_item->setTag(kCBP_MT_cardBase + check_card_number);
-//			third_item->setRotation(getContentRotate(kCBP_MT_third));
-//			
-//			CCMenu* third_menu = CCMenu::createWithItem(third_item);
-//			third_menu->setPosition(second_img->getPosition());
-//			target->addChild(third_menu, 1, kCBP_MT_third);
-//			third_menu->setTouchPriority(-191);
-//        }
-//    }
 	
-	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d-%d", stage_number, level_number)->getCString(), mySGD->getFont().c_str(), 8);
-	r_stage_label->setPosition(ccp(180, 287));
+	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d", stage_number)->getCString(), mySGD->getFont().c_str(), 8);
+	r_stage_label->setAnchorPoint(ccp(0,0.5f));
+	r_stage_label->setPosition(ccp(138, 287));
 	r_stage_label->setColor(ccBLACK);
 	r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
 	r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-	r_stage_label->setAnchorPoint(ccp(0.5,0.5));
 	target->addChild(r_stage_label);
 }
 
@@ -328,18 +258,6 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	right_bottom_paper->setRotation(180);
 	right_bottom_paper->setPosition(ccp(213,44));
 	target->addChild(right_bottom_paper);
-	
-	
-	CommonButton* zoom_menu = CommonButton::create("확대", 11, CCSizeMake(50, 40), CommonButtonYellow, -191);
-	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
-	zoom_menu->setTag(kCBP_MT_zoom);
-	zoom_menu->setFunction([=](CCObject* sender)
-						   {
-							   CCNode* t_node = CCNode::create();
-							   t_node->setTag(kCBP_MT_zoom);
-							   menuAction(t_node);
-						   });
-	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
 	
 //	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
 //	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
@@ -413,7 +331,7 @@ bool CollectionBookPopup::init()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
 	input_text->setPlaceHolder(input_data.c_str());
 	input_text->setReturnType(kKeyboardReturnTypeDone);
@@ -462,7 +380,7 @@ bool CollectionBookPopup::init()
 		
 		setLeftPage(after_left_img, pre_number);
 		
-		((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//		((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 		
 		
 		after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
@@ -473,7 +391,7 @@ bool CollectionBookPopup::init()
 		setRightPage(after_right_img, next_number);
 		
 		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 		int sub_count = after_right_img->getTag();
 		for(int i=0;i<sub_count;i++)
 		{
@@ -720,7 +638,7 @@ void CollectionBookPopup::startNextPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
@@ -736,7 +654,7 @@ void CollectionBookPopup::startNextPage()
 //		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
 	
 	
-	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
@@ -750,7 +668,7 @@ void CollectionBookPopup::startNextPage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
 	input_text->setPlaceHolder(input_data.c_str());
 	input_text->setReturnType(kKeyboardReturnTypeDone);
@@ -795,7 +713,7 @@ void CollectionBookPopup::startNextFullSelectedPage()
 	setRightPage(after_right_img, mySGD->selected_collectionbook);
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -860,7 +778,7 @@ void CollectionBookPopup::startPreFullSelectedPage()
 	
 	setLeftPage(after_left_img, mySGD->selected_collectionbook);
 	
-	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	animation_angle = 0;
 	animation_img = recent_left_img;
@@ -878,7 +796,7 @@ void CollectionBookPopup::startPreSelectedPage()
 	after_left_img = NULL;
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
-	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	
 	recent_card_number = mySGD->selected_collectionbook;
 	
@@ -893,7 +811,7 @@ void CollectionBookPopup::startPreSelectedPage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
 	input_text->setPlaceHolder(input_data.c_str());
 	input_text->setReturnType(kKeyboardReturnTypeDone);
@@ -907,7 +825,7 @@ void CollectionBookPopup::startPreSelectedPage()
         input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = covered_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -969,7 +887,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
@@ -985,7 +903,7 @@ void CollectionBookPopup::startNextSelectedPage()
 //	if(recent_right_img->getChildByTag(kCBP_MT_third))
 //		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
 	
-	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
@@ -998,7 +916,7 @@ void CollectionBookPopup::startNextSelectedPage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
 	input_text->setPlaceHolder(input_data.c_str());
 	input_text->setReturnType(kKeyboardReturnTypeDone);
@@ -1061,7 +979,7 @@ void CollectionBookPopup::endNextPage()
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
@@ -1074,7 +992,7 @@ void CollectionBookPopup::endNextPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1134,7 +1052,7 @@ void CollectionBookPopup::endNextSelectedPage()
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
 	
@@ -1146,7 +1064,7 @@ void CollectionBookPopup::endNextSelectedPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1197,7 +1115,7 @@ void CollectionBookPopup::startPrePage()
 	after_left_img = NULL;
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
-	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	
 	recent_card_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
@@ -1212,7 +1130,7 @@ void CollectionBookPopup::startPrePage()
     if(input_data == "")
         input_data = "입력해주세요.";
     
-    input_text = CCEditBox::create(CCSizeMake(185, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6)));
+    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
 	input_text->setPlaceHolder(input_data.c_str());
 	input_text->setReturnType(kKeyboardReturnTypeDone);
@@ -1226,7 +1144,7 @@ void CollectionBookPopup::startPrePage()
         input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = covered_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1289,7 +1207,7 @@ void CollectionBookPopup::endPrePage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 
@@ -1313,7 +1231,7 @@ void CollectionBookPopup::endPrePage()
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	
 	after_right_img->removeFromParent();
@@ -1327,7 +1245,7 @@ void CollectionBookPopup::endPrePage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1379,7 +1297,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(true);
+	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
@@ -1403,7 +1321,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	setLeftPage(after_left_img, pre_number);
-	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	
 	after_right_img->removeFromParent();
@@ -1417,7 +1335,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_strength))->setEnabled(false);
+	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
