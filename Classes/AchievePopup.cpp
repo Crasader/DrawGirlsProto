@@ -63,11 +63,6 @@ bool AchievePopup::init()
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray, kAchievePopupZorder_gray);
 	
-//	main_case = CCSprite::create("achievement_back.png");
-//	main_case->setPosition(ccp(240,160-450));
-//	addChild(main_case, kAchievePopupZorder_back);
-	
-	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-450));
@@ -85,8 +80,8 @@ bool AchievePopup::init()
 	
 	recent_code = kAchievePopupListCode_all;
 	
-	all_reward_menu = CommonButton::create("모든보상 받기", 13, CCSizeMake(120,40), CommonButtonLightPupple, -190);
-	all_reward_menu->setPosition(ccp(390,30));
+	all_reward_menu = CommonButton::create("모든보상 받기", 13, CCSizeMake(100,35), CommonButtonLightPupple, -190);
+	all_reward_menu->setPosition(ccp(395,32));
 	main_case->addChild(all_reward_menu, kAchievePopupZorder_menu);
 	all_reward_menu->setFunction([=](CCObject* sender)
 						  {
@@ -374,11 +369,11 @@ void AchievePopup::setAchieveTable()
 	CCSize table_size = CCSizeMake(410, 180);
 	CCPoint table_position = ccp(34, 52);
 	
-	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
-	temp_back->setAnchorPoint(CCPointZero);
-	temp_back->setOpacity(100);
-	temp_back->setPosition(table_position);
-	main_case->addChild(temp_back, kAchievePopupZorder_table);
+//	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
+//	temp_back->setAnchorPoint(CCPointZero);
+//	temp_back->setOpacity(100);
+//	temp_back->setPosition(table_position);
+//	main_case->addChild(temp_back, kAchievePopupZorder_table);
 	
 	achieve_table = CCTableView::create(this, table_size);
 	achieve_table->setAnchorPoint(CCPointZero);
@@ -456,36 +451,39 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	cell->autorelease();
 	
 	string cell_back_filename;
-	if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2]) == -1 || AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2]))
+	if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2]) == -1)
 		cell_back_filename = "achievement_cellback_success.png";
+	else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2]))
+		cell_back_filename = "achievement_cellback_reward.png";
 	else
 		cell_back_filename = "achievement_cellback_normal.png";
 	
-	CCSprite* cell_back = CCSprite::create(cell_back_filename.c_str());
+	CCScale9Sprite* cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+	cell_back->setContentSize(CCSizeMake(206, 47));
 	cell_back->setAnchorPoint(CCPointZero);
 	cell_back->setPosition(ccp(0,0));
 	cell->addChild(cell_back);
 	
-	CCLabelTTF* cell_title = CCLabelTTF::create(CCString::createWithFormat("%s(%d/%d)",
+	KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s(%d/%d)",
 																		   AchieveTitleContent::getAchievementScript(achieve_list[idx*2]).title.c_str(),
 																		   AchieveConditionReward::sharedInstance()->getRecentValue(achieve_list[idx*2]),
 																		   AchieveConditionReward::sharedInstance()->getCondition(achieve_list[idx*2]))->getCString(),
-																		   mySGD->getFont().c_str(), 10);
-	cell_title->setColor(ccBLACK);
+																		   mySGD->getFont().c_str(), 11);
+	cell_title->enableOuterStroke(ccc3(200, 30, 0), 1);
 	cell_title->setAnchorPoint(ccp(0,0.5));
-	cell_title->setPosition(ccp(6,26));
+	cell_title->setPosition(ccp(8,30));
 	cell_back->addChild(cell_title);
 	
 	CCLabelTTF* cell_content = CCLabelTTF::create(AchieveTitleContent::getAchievementScript(achieve_list[idx*2]).content.c_str(), mySGD->getFont().c_str(), 8);
-	cell_content->setColor(ccBLACK);
 	cell_content->setAnchorPoint(ccp(0,0.5));
-	cell_content->setPosition(ccp(6,13));
+	cell_content->setPosition(ccp(8,14));
 	cell_back->addChild(cell_content);
 	
+	CCPoint img_position = ccp(170,24);
 	if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2]) == -1)
 	{
 		CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
-		success_img->setPosition(ccp(170,21));
+		success_img->setPosition(img_position);
 		cell_back->addChild(success_img);
 	}
 	else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2]))
@@ -504,7 +502,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		n_reward_img->addChild(n_reward_type_img);
 		CCLabelTTF* n_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2]))->getCString(),
 													  mySGD->getFont().c_str(), 10);
-		n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+9, n_reward_img->getContentSize().height/2.f-7));
+		n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+7, n_reward_img->getContentSize().height/2.f-7));
 		n_reward_img->addChild(n_reward_value);
 		
 		CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
@@ -515,14 +513,14 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		s_reward_img->addChild(s_reward_type_img);
 		CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2]))->getCString(),
 														mySGD->getFont().c_str(), 10);
-		s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+9, s_reward_img->getContentSize().height/2.f-7));
+		s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+7, s_reward_img->getContentSize().height/2.f-7));
 		s_reward_img->addChild(s_reward_value);
 		
 		CCMenuItem* reward_get_item = CCMenuItemSprite::create(n_reward_img, s_reward_img, this, menu_selector(AchievePopup::cellAction));
 		reward_get_item->setTag(idx*2);
 		
 		ScrollMenu* reward_get_menu = ScrollMenu::create(reward_get_item, NULL);
-		reward_get_menu->setPosition(ccp(170,21));
+		reward_get_menu->setPosition(img_position);
 		cell_back->addChild(reward_get_menu);
 		reward_get_menu->setTouchPriority(-188);
 	}
@@ -536,7 +534,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			reward_type_str = "price_gold_img.png";
 		
 		CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
-		ing_back->setPosition(ccp(170,21));
+		ing_back->setPosition(img_position);
 		cell_back->addChild(ing_back);
 		CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
 		reward_type_img->setScale(0.5f);
@@ -544,43 +542,47 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		ing_back->addChild(reward_type_img);
 		CCLabelTTF* reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2]))->getCString(),
 														mySGD->getFont().c_str(), 10);
-		reward_value->setPosition(ccp(ing_back->getContentSize().width/2.f+9, ing_back->getContentSize().height/2.f-7));
+		reward_value->setPosition(ccp(ing_back->getContentSize().width/2.f+7, ing_back->getContentSize().height/2.f-7));
 		ing_back->addChild(reward_value);
 	}
 	
 	if(idx*2+1 < achieve_list.size())
 	{
 		string cell_back_filename;
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2+1]) == -1 || AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2+1]))
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2+1]) == -1)
 			cell_back_filename = "achievement_cellback_success.png";
+		else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2+1]))
+			cell_back_filename = "achievement_cellback_reward.png";
 		else
 			cell_back_filename = "achievement_cellback_normal.png";
 		
-		CCSprite* cell_back = CCSprite::create(cell_back_filename.c_str());
+		CCScale9Sprite* cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+		cell_back->setContentSize(CCSizeMake(206, 47));
 		cell_back->setAnchorPoint(CCPointZero);
 		cell_back->setPosition(ccp(385-180,0));
 		cell->addChild(cell_back);
 		
-		CCLabelTTF* cell_title = CCLabelTTF::create(CCString::createWithFormat("%s(%d/%d)",
+		KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s(%d/%d)",
 																			   AchieveTitleContent::getAchievementScript(achieve_list[idx*2+1]).title.c_str(),
 																			   AchieveConditionReward::sharedInstance()->getRecentValue(achieve_list[idx*2+1]),
 																			   AchieveConditionReward::sharedInstance()->getCondition(achieve_list[idx*2+1]))->getCString(),
-													mySGD->getFont().c_str(), 10);
-		cell_title->setColor(ccBLACK);
+													mySGD->getFont().c_str(), 11);
+		cell_title->enableOuterStroke(ccc3(200, 30, 0), 1);
 		cell_title->setAnchorPoint(ccp(0,0.5));
-		cell_title->setPosition(ccp(6,26));
+		cell_title->setPosition(ccp(8,30));
 		cell_back->addChild(cell_title);
 		
 		CCLabelTTF* cell_content = CCLabelTTF::create(AchieveTitleContent::getAchievementScript(achieve_list[idx*2+1]).content.c_str(), mySGD->getFont().c_str(), 8);
-		cell_content->setColor(ccBLACK);
 		cell_content->setAnchorPoint(ccp(0,0.5));
-		cell_content->setPosition(ccp(6,13));
+		cell_content->setPosition(ccp(8,14));
 		cell_back->addChild(cell_content);
+		
+		CCPoint img_position = ccp(170,24);
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2+1]) == -1)
 		{
 			CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
-			success_img->setPosition(ccp(170,21));
+			success_img->setPosition(img_position);
 			cell_back->addChild(success_img);
 		}
 		else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2+1]))
@@ -599,7 +601,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			n_reward_img->addChild(n_reward_type_img);
 			CCLabelTTF* n_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2+1]))->getCString(),
 															mySGD->getFont().c_str(), 10);
-			n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+9, n_reward_img->getContentSize().height/2.f-7));
+			n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+7, n_reward_img->getContentSize().height/2.f-7));
 			n_reward_img->addChild(n_reward_value);
 			
 			CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
@@ -610,14 +612,14 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			s_reward_img->addChild(s_reward_type_img);
 			CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2+1]))->getCString(),
 															mySGD->getFont().c_str(), 10);
-			s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+9, s_reward_img->getContentSize().height/2.f-7));
+			s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+7, s_reward_img->getContentSize().height/2.f-7));
 			s_reward_img->addChild(s_reward_value);
 			
 			CCMenuItem* reward_get_item = CCMenuItemSprite::create(n_reward_img, s_reward_img, this, menu_selector(AchievePopup::cellAction));
 			reward_get_item->setTag(idx*2+1);
 			
 			ScrollMenu* reward_get_menu = ScrollMenu::create(reward_get_item, NULL);
-			reward_get_menu->setPosition(ccp(170,21));
+			reward_get_menu->setPosition(img_position);
 			cell_back->addChild(reward_get_menu);
 			reward_get_menu->setTouchPriority(-188);
 		}
@@ -631,7 +633,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				reward_type_str = "price_gold_img.png";
 			
 			CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
-			ing_back->setPosition(ccp(170,21));
+			ing_back->setPosition(img_position);
 			cell_back->addChild(ing_back);
 			CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
 			reward_type_img->setScale(0.5f);
@@ -639,7 +641,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			ing_back->addChild(reward_type_img);
 			CCLabelTTF* reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2+1]))->getCString(),
 														  mySGD->getFont().c_str(), 10);
-			reward_value->setPosition(ccp(ing_back->getContentSize().width/2.f+9, ing_back->getContentSize().height/2.f-7));
+			reward_value->setPosition(ccp(ing_back->getContentSize().width/2.f+7, ing_back->getContentSize().height/2.f-7));
 			ing_back->addChild(reward_value);
 		}
 	}
@@ -658,7 +660,7 @@ void AchievePopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 
 CCSize AchievePopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake(385, 42);
+	return CCSizeMake(385, 47);
 }
 
 unsigned int AchievePopup::numberOfCellsInTableView( CCTableView *table )
@@ -697,9 +699,9 @@ void AchievePopup::setAllMenu()
 {
 	if(!all_menu)
 	{
-		all_menu = CommonButton::create("전체보기", 13, CCSizeMake(100,38), CommonButtonYellowUp, -190);
+		all_menu = CommonButton::create("전체보기", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
 //		all_menu->setTitleColor(ccWHITE);
-		all_menu->setPosition(ccp(70,256));
+		all_menu->setPosition(ccp(150,256));
 		main_case->addChild(all_menu, kAchievePopupZorder_menu);
 		all_menu->setFunction([=](CCObject* sender)
 							  {
@@ -718,9 +720,9 @@ void AchievePopup::setSuccessMenu()
 {
 	if(!success_menu)
 	{
-		success_menu = CommonButton::create("업적달성", 13, CCSizeMake(100,38), CommonButtonYellowUp, -190);
+		success_menu = CommonButton::create("업적달성", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
 //		success_menu->setTitleColor(ccWHITE);
-		success_menu->setPosition(ccp(172,256));
+		success_menu->setPosition(ccp(225,256));
 		main_case->addChild(success_menu, kAchievePopupZorder_menu);
 		success_menu->setFunction([=](CCObject* sender)
 							  {
@@ -739,9 +741,9 @@ void AchievePopup::setIngMenu()
 {
 	if(!ing_menu)
 	{
-		ing_menu = CommonButton::create("업적미완성", 13, CCSizeMake(100,38), CommonButtonYellowUp, -190);
+		ing_menu = CommonButton::create("업적미완성", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
 //		ing_menu->setTitleColor(ccWHITE);
-		ing_menu->setPosition(ccp(274,256));
+		ing_menu->setPosition(ccp(300,256));
 		main_case->addChild(ing_menu, kAchievePopupZorder_menu);
 		ing_menu->setFunction([=](CCObject* sender)
 								  {
@@ -760,9 +762,9 @@ void AchievePopup::setRewardMenu()
 {
 	if(!reward_menu)
 	{
-		reward_menu = CommonButton::create("업적보상", 13, CCSizeMake(100,38), CommonButtonYellowUp, -190);
+		reward_menu = CommonButton::create("업적보상", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
 //		reward_menu->setTitleColor(ccWHITE);
-		reward_menu->setPosition(ccp(376,256));
+		reward_menu->setPosition(ccp(375,256));
 		main_case->addChild(reward_menu, kAchievePopupZorder_menu);
 		reward_menu->setFunction([=](CCObject* sender)
 							  {

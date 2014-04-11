@@ -63,7 +63,7 @@ bool KSLabelTTF::updateTexture()
 		label->setColor(m_outerStrokeColor);
 
 		ccBlendFunc originalBlendFunc = label->getBlendFunc();
-		ccBlendFunc _t = {GL_SRC_ALPHA, GL_ONE};
+		ccBlendFunc _t = {GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
 		label->setBlendFunc(_t);
 		CCPoint bottomLeft = ccp(label->getTexture()->getContentSize().width * label->getAnchorPoint().x + m_outerStrokeSize, label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize);
 		CCPoint position = ccpSub(label->getPosition(), ccp(-label->getContentSize().width / 2.0f,-label->getContentSize().height / 2.0f));

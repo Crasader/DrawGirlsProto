@@ -22,6 +22,7 @@ using namespace std;
 class CardListViewer;
 class ListViewerScroll;
 class IntPoint;
+class CommonButton;
 class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -44,8 +45,12 @@ private:
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
-	CCSprite* main_case;
+	CCScale9Sprite* main_case;
 	CCSprite* gray;
+	
+	CommonButton* align_default_menu;
+	CommonButton* align_take_menu;
+	CommonButton* align_rank_menu;
 	
 	int server_puzzle_list_count;
 	vector<int> server_puzzle_list_no;
