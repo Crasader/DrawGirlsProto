@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := hellolua/main.cpp \
     $(SOURCE_FILES)
 	
 LOCAL_CFLAGS    := -fvisibility=hidden
+LOCAL_CFLAGS := -DENABLE_OPENSL
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../boost_1_55_0
 
