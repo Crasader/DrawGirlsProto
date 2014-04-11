@@ -321,7 +321,7 @@
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
-#define TouchOutWidth		5.f
+#define TouchOutWidth		10.f
 
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
