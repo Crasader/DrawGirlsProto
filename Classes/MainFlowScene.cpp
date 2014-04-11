@@ -13,7 +13,6 @@
 #include "HeartTime.h"
 #include "ShopPopup.h"
 #include "OptionPopup.h"
-#include "MailPopup.h"
 #include "RankPopup.h"
 #include "CardSettingPopup.h"
 #include "GachaPurchase.h"
@@ -36,7 +35,7 @@
 #include "MyLocalization.h"
 #include "NewMainFlowScene.h"
 #include "RankNewPopup.h"
-
+#include "SumranMailPopup.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -806,7 +805,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_postbox)
 		{
-			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+			SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
 			addChild(t_pp, kMainFlowZorder_popup);
 			
 			postbox_count_case->setVisible(false);
