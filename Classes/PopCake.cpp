@@ -167,8 +167,8 @@ void PopCake::successRgbAction()
 	
 	n->putBasicInfomation();	// 기본정보 들어가게.
 //	n->loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
-	n->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
-	n->triangulationWithPoints();
+//	n->loadRGB(mySIL->getDocumentPath() + "morphing_rgb.png"); // 실루엣 z 정보 넣는 곳.
+//	n->triangulationWithPoints();
 }
 
 void PopCake::failRgbAction()

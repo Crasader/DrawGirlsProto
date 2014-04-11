@@ -282,6 +282,10 @@ public:
 		
 		texture->release();
 	}
+	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+	{
+		return true;
+	}
 	virtual void registerWithTouchDispatcher ()
 	{
 		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
@@ -616,7 +620,6 @@ public:
 //		m_points.push_back(Vertex3DMake(-halfWidth, -halfHeight, 0));
 //		m_points.push_back(Vertex3DMake(halfWidth, -halfHeight, 0));
 		putBasicInfomation();	 // 기본정보 들어가게.
-		//loadRGB(CCFileUtils::sharedFileUtils()->fullPathForFilename("bmTest2.png").c_str()); // 실루엣 z 정보 넣는 곳.
 
 		triangulationWithPoints(m_points);
 		return true;

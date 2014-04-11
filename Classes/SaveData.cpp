@@ -53,7 +53,7 @@ string SaveData::getSyncKey(SaveDataFile t_sdf, int i1)
 void SaveData::createJSON(string filename)
 {
 	string rawData = readF(filename);
-	string key = stringEnc(filename);
+	string key = stringEncWithAES(filename);
 	if(rawData == "")
 	{
 		Json::Reader reader;
@@ -78,10 +78,10 @@ void SaveData::setKeyValue(string filename, string _key, string _value, bool dis
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
+	string file_key = stringEncWithAES(filename);
 	
-	string key = stringEnc(_key);
-	string value = stringEnc(_value);
+	string key = stringEncWithAES(_key);
+	string value = stringEncWithAES(_value);
 	
 	file_sync[file_key][key] = value;
 	if(diskWrite)
@@ -101,10 +101,10 @@ void SaveData::addKeyValue(string filename, string _key, string _value)
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
+	string file_key = stringEncWithAES(filename);
 	
-	string key = stringEnc(_key);
-	string value = stringEnc(_value);
+	string key = stringEncWithAES(_key);
+	string value = stringEncWithAES(_value);
 	
 	(file_sync[file_key])[key] = value;
 	Json::FastWriter writer;
@@ -127,7 +127,7 @@ void SaveData::resetData(string filename)
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
+	string file_key = stringEncWithAES(filename);
 	
 	Json::Reader reader;
 	reader.parse("{}", file_sync[file_key]);
@@ -141,12 +141,12 @@ void SaveData::setKeyValue(string filename, string _key, int _value, bool diskWr
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
+	string file_key = stringEncWithAES(filename);
 	
-	string key = stringEnc(_key);
+	string key = stringEncWithAES(_key);
 	ostringstream valueoss;
 	valueoss << _value;
-	string value = stringEnc(valueoss.str());
+	string value = stringEncWithAES(valueoss.str());
 	file_sync[file_key][key] = value;
 	if(diskWrite)
 	{
@@ -164,12 +164,12 @@ void SaveData::setKeyValue(string filename, string _key, double _value, bool dis
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
+	string file_key = stringEncWithAES(filename);
 	
-	string key = stringEnc(_key);
+	string key = stringEncWithAES(_key);
 	ostringstream valueoss;
 	valueoss << _value;
-	string value = stringEnc(valueoss.str());
+	string value = stringEncWithAES(valueoss.str());
 	file_sync[file_key][key] = value;
 	if(diskWrite)
 	{
@@ -187,10 +187,10 @@ string SaveData::getValue(string filename, string _key, string _defaultValue)
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
-	string key = stringEnc(_key);
+	string file_key = stringEncWithAES(filename);
+	string key = stringEncWithAES(_key);
 	string v = (file_sync[file_key])[key].asString();
-	string v2 = stringDecode(v);
+	string v2 = stringDecodeWithAES(v);
 	if(v2 == "")
 		return _defaultValue;
 	else
@@ -206,10 +206,10 @@ int SaveData::getValue(string filename, string _key, int _defaultValue)
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
-	string key = stringEnc(_key);
+	string file_key = stringEncWithAES(filename);
+	string key = stringEncWithAES(_key);
 	string v = (file_sync[file_key])[key].asString();
-	string v2 = stringDecode(v);
+	string v2 = stringDecodeWithAES(v);
 	int _v2 = atoi(v2.c_str());
 	if(v2 == "")
 		return _defaultValue;
@@ -226,10 +226,10 @@ double SaveData::getValue(string filename, string _key, double _defaultValue)
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
-	string key = stringEnc(_key);
+	string file_key = stringEncWithAES(filename);
+	string key = stringEncWithAES(_key);
 	string v = (file_sync[file_key])[key].asString();
-	string v2 = stringDecode(v);
+	string v2 = stringDecodeWithAES(v);
 	double _v2 = atof(v2.c_str());
 	if(v2 == "")
 		return _defaultValue;
@@ -246,7 +246,7 @@ void SaveData::fFlush(string filename)
 	if(iter == file_init.end())
 		createJSON(filename);
 	
-	string file_key = stringEnc(filename);
+	string file_key = stringEncWithAES(filename);
 		
 	Json::FastWriter writer;
 	testF(filename, writer.write(file_sync[file_key]));

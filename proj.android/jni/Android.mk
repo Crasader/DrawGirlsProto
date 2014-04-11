@@ -8,16 +8,15 @@ LOCAL_MODULE_FILENAME := libcocos2dlua
 
 CLASSES_DIRECTORY := $(LOCAL_PATH)/../../Classes
 
-LOCAL_CFLAGS := -DENABLE_OPENSL
-
-SOURCE_FILES := $(shell find $(CLASSES_DIRECTORY) -name *.cpp)
+SOURCE_FILES := $(shell find $(CLASSES_DIRECTORY) -name *.cpp -o -name *.a)
 SOURCE_FILES := $(sort $(SOURCE_FILES))
 SOURCE_FILES := $(subst $(LOCAL_PATH)/,,$(SOURCE_FILES))
 
 LOCAL_SRC_FILES := hellolua/main.cpp \
     $(SOURCE_FILES)
 	
-
+LOCAL_CFLAGS    := -fvisibility=hidden
+LOCAL_CFLAGS := -DENABLE_OPENSL
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../boost_1_55_0
 

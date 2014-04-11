@@ -29,7 +29,8 @@
 #endif
 #include "BaseXX.h"
 #include "KSDes.h"
-
+#include "CipherUtils.h"
+#include "EncryptCharsA.h"
 
 int AutoIncrease::cnt = 0;
 size_t GraphDog::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp){
@@ -332,16 +333,16 @@ void* GraphDog::t_function(void *_insertIndex)
 	//CCLog("t_function2");
 	string token="";
 	//CCLog("t_function2");
-	string paramStr = toBase64(desEncryption(graphdog->sKey, command.commandStr));
+	string paramStr =  CipherUtils::encryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), command.commandStr.c_str()); //toBase64(desEncryption(graphdog->sKey, command.commandStr));
+	
 	string dataset = "&gid="+GraphDog::get()->aID+"&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
 	//CCLog("t_function3");
 	//string commandurl = "http://litqoo.com/dgserver/data.php";
-	string commandurl = "http://182.162.201.147:10010/data.php"; //"http://182.162.201.147:10010/data.php"; //
+	string commandurl = "http://182.162.201.147:10010/command.php"; //"http://182.162.201.147:10010/data.php"; //
     //commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
     //commandurl=commandurl.append("/");
     //commandurl=commandurl.append(GraphDog::get()->aID);
-    
-    CCLog("graphdog command : %s",command.commandStr.c_str());
+	
 	// << "&param=" << paramStr
 	//curl으로 명령을 날리고 겨로가를 얻는다.
 	CURL *handle = GraphDog::get()->getCURL();
@@ -361,14 +362,17 @@ void* GraphDog::t_function(void *_insertIndex)
 	{
 		//CCLog("t_function OK1");
 		resultStr = command.chunk.memory;// gdchunk.memory;
-        CCLog("get str %s",resultStr.c_str());
+        //CCLog("get str %s",resultStr.c_str());
         if(*resultStr.rbegin() == '#') // success
 		{
 			try
 			{
 				vector<char> encText = base64To(std::string(resultStr.begin(), resultStr.end() - 1) ); // unbase64
-				resultStr = desDecryption(graphdog->sKey, std::string(encText.begin(), encText.end())); // des Decryption
-                resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
+				//resultStr = desDecryption(graphdog->sKey, std::string(encText.begin(), encText.end())); // des Decryption
+				
+				resultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
+				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
+				
 				
 				CCLog("t_function OK2 %s",resultStr.c_str());
 			}

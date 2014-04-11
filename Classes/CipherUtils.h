@@ -19,6 +19,12 @@ using CryptoPP::AES;
 #include "cryptopp/ccm.h"
 using CryptoPP::ECB_Mode;
 
+#include "cryptopp/des.h"
+using CryptoPP::DES;
+
+#include "cryptopp/base64.h"
+using CryptoPP::Base64Encoder;
+using CryptoPP::Base64Decoder;
 class CipherUtils
 {
 private:
@@ -27,7 +33,13 @@ private:
 	
 public:
 	static void removeZerosPadding(std::string& str);
-	static void encrypt(char *keyString, const std::string& plain, std::string& cipher);
-	static void encrypt(char *keyString, const void* plain, size_t length, std::string& cipher);
-	static void decrypt(char *keyString, const std::string& cipher, std::string& decrypted);
+	static std::string encrypt(const char *keyString, const char* plain); // HEX 변환후 AES
+	static std::string encrypt(const char *keyString, const void* plain, size_t length); // HEX 변환후 AES (데이터 암호화용)
+	static std::string decrypt(const char *keyString, const char* cipher); // AES 풀고 HEX 품.
+	
+	static std::string encryptDESBASE64(const char *keyString, const char* plain);
+	static std::string decryptDESBASE64(const char *keyString, const char* cipher);
+	
+	static std::string encryptAESBASE64(const char *keyString, const char* plain);
+	static std::string decryptAESBASE64(const char *keyString, const char* cipher);
 };
