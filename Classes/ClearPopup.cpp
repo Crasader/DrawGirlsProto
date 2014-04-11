@@ -271,7 +271,8 @@ bool ClearPopup::init()
 		int stage_number = mySD->getSilType();
 		
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 14);
-		stage_number_label->enableOuterStroke(ccBLACK, 1.f);
+		stage_number_label->setColor(ccc3(255, 170, 20));
+		stage_number_label->enableOuterStroke(ccc3(95, 65, 130), 1.f);
 		stage_number_label->setPosition(ccp(24, 16));
 		stage_tab->addChild(stage_number_label);
 		
@@ -284,9 +285,10 @@ bool ClearPopup::init()
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 14);
-		piece_number_label->enableOuterStroke(ccBLACK, 1.f);
+		piece_number_label->setColor(ccc3(255, 170, 20));
+		piece_number_label->enableOuterStroke(ccc3(95, 65, 130), 1.f);
 		piece_number_label->setPosition(ccp(24, 16));
-		stage_tab->addChild(piece_number_label, kZ_CP_img);
+		stage_tab->addChild(piece_number_label);
 	}
 	
 	int stage_number = mySD->getSilType();
@@ -750,8 +752,8 @@ bool ClearPopup::init()
 	goldbox_menu->addChild(goldbox3_item);
 	
 	
-	KSLabelTTF* time_ment = KSLabelTTF::create("타임", mySGD->getFont().c_str(), 18);
-	time_ment->enableOuterStroke(ccBLACK, 1.f);
+	KSLabelTTF* time_ment = KSLabelTTF::create("타임", mySGD->getFont().c_str(), 15);
+	time_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	time_ment->setPosition(ccp(48,148));
 	main_case->addChild(time_ment, kZ_CP_img);
 	
@@ -759,14 +761,14 @@ bool ClearPopup::init()
 	time_img->setPosition(ccp(80,148));
 	main_case->addChild(time_img, kZ_CP_img);
 	
-	time_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 18);
-	time_label->enableOuterStroke(ccBLACK, 1.f);
+	time_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+	time_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	time_label->setAnchorPoint(ccp(1,0.5));
 	time_label->setPosition(ccp(220,148));
 	main_case->addChild(time_label, kZ_CP_img);
 	
-	KSLabelTTF* gold_ment = KSLabelTTF::create("골드", mySGD->getFont().c_str(), 18);
-	gold_ment->enableOuterStroke(ccBLACK, 1.f);
+	KSLabelTTF* gold_ment = KSLabelTTF::create("골드", mySGD->getFont().c_str(), 15);
+	gold_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	gold_ment->setPosition(ccp(48,115));
 	main_case->addChild(gold_ment, kZ_CP_img);
 	
@@ -774,14 +776,14 @@ bool ClearPopup::init()
 	gold_img->setPosition(ccp(80,115));
 	main_case->addChild(gold_img, kZ_CP_img);
 	
-	gold_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 18);
-	gold_label->enableOuterStroke(ccBLACK, 1.f);
+	gold_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+	gold_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	gold_label->setAnchorPoint(ccp(1,0.5));
 	gold_label->setPosition(ccp(220,115));
 	main_case->addChild(gold_label, kZ_CP_img);
 	
-	KSLabelTTF* score_ment = KSLabelTTF::create("점수", mySGD->getFont().c_str(), 18);
-	score_ment->enableOuterStroke(ccBLACK, 1.f);
+	KSLabelTTF* score_ment = KSLabelTTF::create("점수", mySGD->getFont().c_str(), 15);
+	score_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	score_ment->setPosition(ccp(48,82));
 	main_case->addChild(score_ment, kZ_CP_img);
 	
@@ -789,8 +791,8 @@ bool ClearPopup::init()
 	score_img->setPosition(ccp(80,82));
 	main_case->addChild(score_img, kZ_CP_img);
 	
-	score_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 18);
-	score_label->enableOuterStroke(ccBLACK, 1.f);
+	score_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+	score_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	score_label->setAnchorPoint(ccp(1,0.5));
 	score_label->setPosition(ccp(220,82));
 	main_case->addChild(score_label, kZ_CP_img);
@@ -798,17 +800,17 @@ bool ClearPopup::init()
 	
 	
 	CCSprite* n_ok = CCSprite::create("ending_button.png");
-	KSLabelTTF* n_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 20);
-	n_ok_label->setColor(ccBLACK);
-	n_ok_label->enableOuterStroke(ccBLACK, 0.25f);
+	KSLabelTTF* n_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 22);
+	n_ok_label->setColor(ccc3(50, 30, 5));
+	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_ok_label->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-3));
 	n_ok->addChild(n_ok_label);
 	
 	CCSprite* s_ok = CCSprite::create("ending_button.png");
 	s_ok->setColor(ccGRAY);
-	KSLabelTTF* s_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 20);
-	s_ok_label->setColor(ccBLACK);
-	s_ok_label->enableOuterStroke(ccBLACK, 0.25f);
+	KSLabelTTF* s_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 22);
+	s_ok_label->setColor(ccc3(50, 30, 5));
+	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_ok_label->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-3));
 	s_ok->addChild(s_ok_label);
 	
@@ -824,16 +826,16 @@ bool ClearPopup::init()
 //	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 //	{
 		CCSprite* n_replay = CCSprite::create("ending_button.png");
-	KSLabelTTF* n_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 20);
-	n_replay_label->setColor(ccBLACK);
-	n_replay_label->enableOuterStroke(ccBLACK, 0.25f);
+	KSLabelTTF* n_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 22);
+	n_replay_label->setColor(ccc3(50, 30, 5));
+	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_replay_label->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-3));
 	n_replay->addChild(n_replay_label);
 		CCSprite* s_replay = CCSprite::create("ending_button.png");
 		s_replay->setColor(ccGRAY);
-	KSLabelTTF* s_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 20);
-	s_replay_label->setColor(ccBLACK);
-	s_replay_label->enableOuterStroke(ccBLACK, 0.25f);
+	KSLabelTTF* s_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 22);
+	s_replay_label->setColor(ccc3(50, 30, 5));
+	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_replay_label->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-3));
 	s_replay->addChild(s_replay_label);
 		
@@ -919,8 +921,9 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		rank_percent_case->setPosition(ccp(257+195,230));
 		main_case->addChild(rank_percent_case, kZ_CP_img);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.1f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 10);
-		percent_label->enableOuterStroke(ccBLACK, 1);
+		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
+		percent_label->setColor(ccc3(255, 170, 20));
+		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
 		
@@ -944,11 +947,11 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			}
 			
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(210, 65));
-			list_cell_case->setPosition(ccp(348,158-i*65));
+			list_cell_case->setContentSize(CCSizeMake(210, 40));
+			list_cell_case->setPosition(ccp(355,185-i*35));
 			main_case->addChild(list_cell_case, kZ_CP_img);
 			
-			CCPoint rank_position = ccp(13,13);
+			CCPoint rank_position = ccp(20,20);
 			if(i == 0)
 			{
 				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
@@ -969,7 +972,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 11);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
 				rank_label->enableOuterStroke(ccBLACK, 1);
 				rank_label->setPosition(rank_position);
 				list_cell_case->addChild(rank_label);
@@ -979,37 +982,39 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 11); // user_list[i]["nick"].asString().c_str()
-			nick_label->enableOuterStroke(ccBLACK, 1);
-			nick_label->setPosition(ccp(83,13));
+			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
+			nick_label->setPosition(ccp(83,20));
 			list_cell_case->addChild(nick_label);
 			
-			CCLabelTTF* score_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-			score_label->setColor(ccBLACK);
-			score_label->setPosition(ccp(168,13));
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setColor(ccc3(255, 170, 20));
+			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+			score_label->setPosition(ccp(168,20));
 			list_cell_case->addChild(score_label);
 		}
 		
 		if(myrank > 3)
 		{
-			CCSprite* list_cell_case = CCSprite::create("gameresult_rank_me.png");
-			list_cell_case->setPosition(ccp(348,80));
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+			list_cell_case->setContentSize(CCSizeMake(210, 65));
+			list_cell_case->setPosition(ccp(355,185-3*35));
 			main_case->addChild(list_cell_case, kZ_CP_img);
 			
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 11);
+			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 12);
 			rank_label->enableOuterStroke(ccBLACK, 1);
-			rank_label->setPosition(ccp(13,13));
+			rank_label->setPosition(ccp(20,20));
 			list_cell_case->addChild(rank_label);
 			
-			
-			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 11);
-			nick_label->enableOuterStroke(ccBLACK, 1);
-			nick_label->setPosition(ccp(83,13));
+			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
+			nick_label->setPosition(ccp(83,20));
 			list_cell_case->addChild(nick_label);
 			
-			CCLabelTTF* score_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-			score_label->setColor(ccBLACK);
-			score_label->setPosition(ccp(168,13));
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setColor(ccc3(255, 170, 20));
+			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+			score_label->setPosition(ccp(168,20));
 			list_cell_case->addChild(score_label);
 		}
 	}

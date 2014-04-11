@@ -532,21 +532,24 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 		
 		if(found_stage1 != -1)
 		{
-			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", found_stage1)->getCString(), mySGD->getFont().c_str(), 18);
+			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", found_stage1)->getCString(), mySGD->getFont().c_str(), 20);
+			stage_number_label->setColor(ccc3(255, 150, 50));
+			stage_number_label->enableOuterStroke(ccBLACK, 1.f);
 			stage_number_label->setAnchorPoint(ccp(0,0.5));
-			stage_number_label->setPosition(ccp(20,67));
+			stage_number_label->setPosition(ccp(10,67));
 			cell->addChild(stage_number_label);
 			
 			KSLabelTTF* stage_ment_label = KSLabelTTF::create("스테이지", mySGD->getFont().c_str(), 13);
+			stage_ment_label->enableOuterStroke(ccBLACK, 1.f);
 			stage_ment_label->setAnchorPoint(ccp(0,0.5));
-			stage_ment_label->setPosition(ccp(20,50));
+			stage_ment_label->setPosition(ccp(10,47));
 			cell->addChild(stage_ment_label);
 			
 			int stage_card_count = NSDS_GI(found_stage1, kSDS_SI_cardCount_i);
 			for(int i=1;i<=stage_card_count;i++)
 			{
 				int card_number = mySGD->isHasGottenCards(found_stage1, i);
-				CCPoint card_position = ccp(100.f + (i-1)*(68.f+1.f), 43.f);
+				CCPoint card_position = ccp(100.f + (i-1)*(81.f), 50.f);
 				if(card_number > 0)
 				{
 					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
@@ -555,9 +558,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
 					n_card->addChild(n_case);
-					n_card->setScale(0.85f);
 					
-					CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width*0.85f, n_card->getContentSize().height*0.85f));
+					CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width, n_card->getContentSize().height));
 					n_node->setOpacity(0);
 					n_card->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
 					n_node->addChild(n_card);
@@ -571,9 +573,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
 					s_card->addChild(s_case);
-					s_card->setScale(0.85f);
 					
-					CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width*0.85f, s_card->getContentSize().height*0.85f));
+					CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width, s_card->getContentSize().height));
 					s_node->setOpacity(0);
 					s_card->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
 					s_node->addChild(s_card);
@@ -601,7 +602,6 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					if(recent_selected_card_number == card_number)
 					{
 						CCSprite* select_img = CCSprite::create("card_check.png");
-						select_img->setScale(0.85f);
 						select_img->setPosition(card_position);
 						cell->addChild(select_img);
 					}
@@ -609,12 +609,27 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				else
 				{
 					CCSprite* n_card_img = CCSprite::create("cardsetting_blank.png");
+					
+					string condition_text;
+					if(i == 1)
+						condition_text = "85%";
+					else if(i == 2)
+						condition_text = "85%\n+ 체인지";
+					else if(i == 3)
+						condition_text = "100%";
+					else
+						condition_text = "100%\n+ 체인지";
+					
+					KSLabelTTF* n_condition = KSLabelTTF::create(condition_text.c_str(), mySGD->getFont().c_str(), 14);
+					n_condition->enableOuterStroke(ccBLACK, 1.f);
+					n_condition->setPosition(ccp(n_card_img->getContentSize().width/2.f, n_card_img->getContentSize().height/2.f));
+					n_card_img->addChild(n_condition);
+					
 					CCSprite* n_case_img = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					n_case_img->setPosition(ccp(n_card_img->getContentSize().width/2.f, n_card_img->getContentSize().height/2.f));
 					n_card_img->addChild(n_case_img);
-					n_card_img->setScale(0.85f);
 					
-					CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card_img->getContentSize().width*0.85f, n_card_img->getContentSize().height*0.85f));
+					CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card_img->getContentSize().width, n_card_img->getContentSize().height));
 					n_node->setOpacity(0);
 					n_card_img->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
 					n_node->addChild(n_card_img);
@@ -624,10 +639,9 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					CCSprite* s_case_img = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					s_case_img->setPosition(ccp(s_card_img->getContentSize().width/2.f, s_card_img->getContentSize().height/2.f));
 					s_card_img->addChild(s_case_img);
-					s_card_img->setScale(0.85f);
 					s_card_img->setColor(ccGRAY);
 					
-					CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card_img->getContentSize().width*0.85f, s_card_img->getContentSize().height*0.85f));
+					CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card_img->getContentSize().width, s_card_img->getContentSize().height));
 					s_node->setOpacity(0);
 					s_card_img->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
 					s_node->addChild(s_card_img);
@@ -645,39 +659,37 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 	}
 	else
 	{
-		for(int i=idx*6;i<idx*6+6 && i<mySGD->getHasGottenCardsSize();i++)
+		for(int i=idx*5;i<idx*5+5 && i<mySGD->getHasGottenCardsSize();i++)
 		{
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
 //			int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
-			CCPoint card_position = ccp(32.f + (i-idx*6)*(68.f+1.f), 43.f);
+			CCPoint card_position = ccp(42.f + (i-idx*5)*(81.f), 50.f);
 			
 			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
 			
 			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
-			n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
+//			n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
 			CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", card_grade)->getCString());
 			n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
 			n_card->addChild(n_case);
-			n_card->setScale(0.85f);
 			
-			CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width*0.85f, n_card->getContentSize().height*0.85f));
+			CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width, n_card->getContentSize().height));
 			n_node->setOpacity(0);
 			n_card->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
 			n_node->addChild(n_card);
 			
 			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
-				s_card->setColor(ccc3(60, 60, 60));
-			else
+//			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
+//				s_card->setColor(ccc3(60, 60, 60));
+//			else
 				s_card->setColor(ccGRAY);
 			CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", card_grade)->getCString());
 			s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
 			s_card->addChild(s_case);
-			s_card->setScale(0.85f);
 			
-			CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width*0.85f, s_card->getContentSize().height*0.85f));
+			CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width, s_card->getContentSize().height));
 			s_node->setOpacity(0);
 			s_card->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
 			s_node->addChild(s_card);
@@ -707,7 +719,6 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			if(recent_selected_card_number == card_number)
 			{
 				CCSprite* select_img = CCSprite::create("card_check.png");
-				select_img->setScale(0.85f);
 				select_img->setPosition(card_position);
 				cell->addChild(select_img);
 			}
@@ -734,7 +745,7 @@ void CardSettingPopup::tableCellTouched( CCTableView* table, CCTableViewCell* ce
 
 CCSize CardSettingPopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake(392, 84);
+	return CCSizeMake(392, 105);
 }
 
 unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )

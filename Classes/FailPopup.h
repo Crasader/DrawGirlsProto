@@ -34,6 +34,7 @@ enum FailFriendCell_Zorder
 
 class TouchSuctionLayer;
 class RankFriendInfo;
+class KSLabelTTF;
 class FailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -58,7 +59,7 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	CCSprite* gray;
-	CCSprite* main_case;
+	CCScale9Sprite* main_case;
 //	CCSprite* top_case;
 	
 	bool is_menu_enable;
@@ -70,9 +71,9 @@ private:
 	CCMenu* replay_menu;
 	//	CCMenu* help_menu;
 	
-	CCLabelTTF* score_label;
-	CCLabelTTF* gold_label;
-	CCLabelTTF* time_label;
+	KSLabelTTF* score_label;
+	KSLabelTTF* gold_label;
+	KSLabelTTF* time_label;
 //
 //	CCSprite* friend_point_popup;
 //	void closeFriendPointPopup();
