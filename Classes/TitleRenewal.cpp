@@ -64,10 +64,17 @@ bool TitleRenewalScene::init()
 	addChild(state_label);
 
 	
+//	Json::Value param;
+//	param["ManualLogin"] = true;
+//
+//	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+	
 	Json::Value param;
-	param["ManualLogin"] = true;
-
-	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+	param["memberID"] = 88899626759589914L;
+	param["error"]["isSuccess"] = true;
+	GraphDog::get()->setKakaoMemberID("88899626759589914");
+	GraphDog::get()->setHSPMemberNo(88899626759589914L);
+	resultLogin(param);
 	
 	
 	

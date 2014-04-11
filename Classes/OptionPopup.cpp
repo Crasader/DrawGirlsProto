@@ -240,14 +240,14 @@ bool OptionPopup::init()
 	main_case->addChild(system_tab, kOP_Z_back);
 	
 	KSLabelTTF* system_label = KSLabelTTF::create("시스템", mySGD->getFont().c_str(), 10);
-	system_label->enableOuterStroke(ccBLACK, 0.5f);
+	system_label->enableOuterStroke(ccc3(92, 4, 0), 0.5f);
 	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.55f));
 	system_tab->addChild(system_label);
 	
 	
 	KSLabelTTF* bgm_label = KSLabelTTF::create("배경음", mySGD->getFont().c_str(), 13);
 	bgm_label->setAnchorPoint(ccp(0,0.5f));
-	bgm_label->enableOuterStroke(ccBLACK, 1.f);
+	bgm_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	bgm_label->setPosition(ccpAdd(getContentPosition(kOP_MT_bgm), ccp(-135,0)));
 	main_case->addChild(bgm_label, kOP_Z_back);
 	
@@ -275,7 +275,7 @@ bool OptionPopup::init()
 	
 	KSLabelTTF* effect_label = KSLabelTTF::create("효과음", mySGD->getFont().c_str(), 13);
 	effect_label->setAnchorPoint(ccp(0,0.5f));
-	effect_label->enableOuterStroke(ccBLACK, 1.f);
+	effect_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	effect_label->setPosition(ccpAdd(getContentPosition(kOP_MT_effect), ccp(-135,0)));
 	main_case->addChild(effect_label, kOP_Z_back);
 	
@@ -302,7 +302,7 @@ bool OptionPopup::init()
 	
 	KSLabelTTF* joystick_position_label = KSLabelTTF::create("조이스틱위치", mySGD->getFont().c_str(), 13);
 	joystick_position_label->setAnchorPoint(ccp(0,0.5f));
-	joystick_position_label->enableOuterStroke(ccBLACK, 1.f);
+	joystick_position_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	joystick_position_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickPositioning), ccp(-135,0)));
 	main_case->addChild(joystick_position_label, kOP_Z_back);
 	
@@ -329,7 +329,7 @@ bool OptionPopup::init()
 	
 	KSLabelTTF* joystick_moving_label = KSLabelTTF::create("조이스틱조작", mySGD->getFont().c_str(), 13);
 	joystick_moving_label->setAnchorPoint(ccp(0,0.5f));
-	joystick_moving_label->enableOuterStroke(ccBLACK, 1.f);
+	joystick_moving_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	joystick_moving_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickMoving), ccp(-135,0)));
 	main_case->addChild(joystick_moving_label, kOP_Z_back);
 	
@@ -356,7 +356,7 @@ bool OptionPopup::init()
 	
 	KSLabelTTF* safety_label = KSLabelTTF::create("안전모드", mySGD->getFont().c_str(), 13);
 	safety_label->setAnchorPoint(ccp(0,0.5f));
-	safety_label->enableOuterStroke(ccBLACK, 1.f);
+	safety_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	safety_label->setPosition(ccpAdd(getContentPosition(kOP_MT_safety), ccp(-135,0)));
 	main_case->addChild(safety_label, kOP_Z_back);
 	
@@ -386,14 +386,14 @@ bool OptionPopup::init()
 	main_case->addChild(alert_tab, kOP_Z_back);
 	
 	KSLabelTTF* alert_label = KSLabelTTF::create("알림", mySGD->getFont().c_str(), 10);
-	alert_label->enableOuterStroke(ccBLACK, 0.5f);
+	alert_label->enableOuterStroke(ccc3(92, 4, 0), 0.5f);
 	alert_label->setPosition(ccp(alert_tab->getContentSize().width*0.45f, alert_tab->getContentSize().height*0.55f));
 	alert_tab->addChild(alert_label);
 	
 	
 	KSLabelTTF* push_label = KSLabelTTF::create("푸쉬알림", mySGD->getFont().c_str(), 13);
 	push_label->setAnchorPoint(ccp(0,0.5f));
-	push_label->enableOuterStroke(ccBLACK, 1.f);
+	push_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	push_label->setPosition(ccpAdd(getContentPosition(kOP_MT_push), ccp(-135,0)));
 	main_case->addChild(push_label, kOP_Z_back);
 	
@@ -420,7 +420,7 @@ bool OptionPopup::init()
 	
 	KSLabelTTF* message_label = KSLabelTTF::create("메세지알림", mySGD->getFont().c_str(), 13);
 	message_label->setAnchorPoint(ccp(0,0.5f));
-	message_label->enableOuterStroke(ccBLACK, 1.f);
+	message_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	message_label->setPosition(ccpAdd(getContentPosition(kOP_MT_message), ccp(-135,0)));
 	main_case->addChild(message_label, kOP_Z_back);
 	
@@ -445,7 +445,7 @@ bool OptionPopup::init()
 	resetMessageMenu();
 	
 	
-	KSLabelTTF* id_label = KSLabelTTF::create("회원ID : ", mySGD->getFont().c_str(), 10);
+	KSLabelTTF* id_label = KSLabelTTF::create("회원ID : ", mySGD->getFont().c_str(), 11);
 	id_label->setAnchorPoint(ccp(0,0.5f));
 	id_label->enableOuterStroke(ccBLACK, 0.5f);
 	id_label->setPosition(ccp(30,45));
@@ -933,7 +933,7 @@ void OptionPopup::resetBgmMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 1);
+	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
 	inner_label->setPosition(ccp(bgm_img->getContentSize().width/2.f, bgm_img->getContentSize().height/2.f));
 	bgm_img->addChild(inner_label);
 	
@@ -965,7 +965,7 @@ void OptionPopup::resetEffectMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 1);
+	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
 	inner_label->setPosition(ccp(effect_img->getContentSize().width/2.f, effect_img->getContentSize().height/2.f));
 	effect_img->addChild(inner_label);
 	
@@ -998,7 +998,7 @@ void OptionPopup::resetJoystickPositioningMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 1);
+	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
 	inner_label->setPosition(ccp(joystick_positioning_img->getContentSize().width/2.f, joystick_positioning_img->getContentSize().height/2.f));
 	joystick_positioning_img->addChild(inner_label);
 	
@@ -1030,7 +1030,7 @@ void OptionPopup::resetJoystickMovingMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 1);
+	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
 	inner_label->setPosition(ccp(joystick_moving_img->getContentSize().width/2.f, joystick_moving_img->getContentSize().height/2.f));
 	joystick_moving_img->addChild(inner_label);
 	
@@ -1062,7 +1062,7 @@ void OptionPopup::resetSafetyMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 1);
+	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
 	inner_label->setPosition(ccp(safety_img->getContentSize().width/2.f, safety_img->getContentSize().height/2.f));
 	safety_img->addChild(inner_label);
 	
@@ -1094,7 +1094,7 @@ void OptionPopup::resetPushMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 1);
+	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
 	inner_label->setPosition(ccp(push_img->getContentSize().width/2.f, push_img->getContentSize().height/2.f));
 	push_img->addChild(inner_label);
 	
@@ -1126,7 +1126,7 @@ void OptionPopup::resetMessageMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 1);
+	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
 	inner_label->setPosition(ccp(message_img->getContentSize().width/2.f, message_img->getContentSize().height/2.f));
 	message_img->addChild(inner_label);
 	

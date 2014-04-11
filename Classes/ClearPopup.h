@@ -34,6 +34,7 @@ enum ClearFriendCell_Zorder
 	kCFC_Z_img
 };
 
+class KSLabelTTF;
 class ClearPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -60,31 +61,26 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	CCSprite* gray;
-	CCSprite* main_case;
+	CCScale9Sprite* main_case;
 	
 	bool is_menu_enable;
 	bool is_saved_user_data;
 //	bool is_loaded_list;
 	bool is_end_popup_animation;
 	
-	CCSprite* bronze_star;
-	CCSprite* silver_star;
-	CCSprite* gold_star;
+	vector<CCSprite*> ani_stars;
 	
 	CCMenu* ok_menu;
 	CCMenu* replay_menu;
 	
-	CCLabelTTF* score_label;
-	CCLabelTTF* gold_label;
-	CCLabelTTF* time_label;
+	KSLabelTTF* score_label;
+	KSLabelTTF* gold_label;
+	KSLabelTTF* time_label;
 	
 	bool is_rank_changed;
 	int before_my_rank;
 	int recent_my_rank;
 //	RankFriendInfo next_rank_info;
-	
-	int take_animation_level;
-	CCSprite* take_star_animation_node;
 	
 //	vector<RankFriendInfo> friend_list;
 	CCTableView* rankTableView;

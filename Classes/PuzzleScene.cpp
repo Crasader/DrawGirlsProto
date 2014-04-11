@@ -1009,7 +1009,7 @@ void PuzzleScene::setPuzzle()
 	change_mode_item->setTag(kPuzzleMenuTag_changeMode);
 	
 	CCMenu* change_mode_menu = CCMenu::createWithItem(change_mode_item);
-	change_mode_menu->setPosition(ccp(puzzle_size.width/2.f-n_change_mode->getContentSize().width/2.f+5, puzzle_size.height/2.f-n_change_mode->getContentSize().height/2.f+8));
+	change_mode_menu->setPosition(ccp(puzzle_size.width/2.f-n_change_mode->getContentSize().width/2.f, puzzle_size.height/2.f-n_change_mode->getContentSize().height/2.f));
 	puzzle_node->addChild(change_mode_menu, kPuzzleNodeZorder_changeMode);
 	change_mode_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 }

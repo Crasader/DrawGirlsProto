@@ -33,6 +33,7 @@
 #include "CardAnimations.h"
 #include "GDWebSprite.h"
 #include "KSLabelTTF.h"
+#include "FormSetter.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -215,26 +216,64 @@ bool ClearPopup::init()
 	
 //	}
     
-	main_case = CCSprite::create("ending_back.png");
-	main_case->setAnchorPoint(ccp(0.5f,0.5f));
+	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kZ_CP_back);
 	
+	CCScale9Sprite* inner_left = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+	inner_left->setContentSize(CCSizeMake(230, 215));
+	inner_left->setPosition(main_case->getContentSize().width*0.26f, main_case->getContentSize().height*0.58f);
+	main_case->addChild(inner_left);
 	
 	
+	CCScale9Sprite* inner_right = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	inner_right->setContentSize(CCSizeMake(230, 215));
+	inner_right->setPosition(main_case->getContentSize().width*0.74f, main_case->getContentSize().height*0.58f);
+	main_case->addChild(inner_right);
+	
+	
+	CCScale9Sprite* star_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	star_back->setContentSize(CCSizeMake(215, 60));
+	star_back->setPosition(ccp(115,140));
+	inner_left->addChild(star_back);
+	
+	
+	CCScale9Sprite* time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	time_back->setContentSize(CCSizeMake(215, 35));
+	time_back->setPosition(ccp(115,93));
+	inner_left->addChild(time_back);
+	
+	
+	CCScale9Sprite* gold_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	gold_back->setContentSize(CCSizeMake(215, 35));
+	gold_back->setPosition(ccp(115,60));
+	inner_left->addChild(gold_back);
+	
+	
+	CCScale9Sprite* score_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	score_back->setContentSize(CCSizeMake(215, 35));
+	score_back->setPosition(ccp(115,27));
+	inner_left->addChild(score_back);
 	
 	
 	CCSprite* title = CCSprite::create("ending_clear.png");
-	title->setPosition(ccp(131,230.5f));
+	title->setPosition(ccp(132,240));
 	main_case->addChild(title, kZ_CP_img);
+	
+	
+	CCSprite* stage_tab = CCSprite::create("ending_tab.png");
+	stage_tab->setPosition(ccp(40,253));
+	main_case->addChild(stage_tab);
 	
 	if(mySGD->is_before_selected_event_stage)
 	{
 		int stage_number = mySD->getSilType();
 		
-		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		stage_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
-		main_case->addChild(stage_number_label, kZ_CP_img);
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 14);
+		stage_number_label->enableOuterStroke(ccBLACK, 1.f);
+		stage_number_label->setPosition(ccp(24, 16));
+		stage_tab->addChild(stage_number_label);
 		
 		mySGD->is_before_selected_event_stage = false;
 	}
@@ -244,90 +283,18 @@ bool ClearPopup::init()
 //		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
-		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 10);
-		piece_number_label->setPosition(ccp(60, main_case->getContentSize().height+40-68));
-		main_case->addChild(piece_number_label, kZ_CP_img);
+		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 14);
+		piece_number_label->enableOuterStroke(ccBLACK, 1.f);
+		piece_number_label->setPosition(ccp(24, 16));
+		stage_tab->addChild(piece_number_label, kZ_CP_img);
 	}
 	
-	
-	///////////////////////////// 딤드 로 팝업 띄움
 	int stage_number = mySD->getSilType();
 	int take_level;
-	if(mySGD->getPercentage() >= 1.f)			take_level = 3;
-	else if(mySGD->getPercentage() >= 0.95f)	take_level = 2;
+	if(mySGD->getPercentage() >= 1.f && mySGD->is_exchanged)			take_level = 4;
+	else if(mySGD->getPercentage() >= 1.f)		take_level = 3;
+	else if(mySGD->is_exchanged)				take_level = 2;
 	else										take_level = 1;
-//	if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
-//	else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
-//	else												take_level = 1;
-	
-//	int take_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level);
-//	
-//	if(mySGD->is_ingame_before_have_stage_cards[take_level-1])
-//	{
-//		// 강화
-//		
-//		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, take_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, take_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number));
-//		CCLog("strength_rate : %.3f", strength_rate);
-//		
-//		random_device rd;
-//		default_random_engine e1(rd());
-//		uniform_real_distribution<float> uniform_dist(0.f, 1.f);
-//		
-//		float result_value = uniform_dist(e1);
-//		CCLog("result value : %.3f", result_value);
-//		
-//		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
-//		CardCase* cardCase = CardCase::create(take_card_number);
-//		card->addChild(cardCase);
-//		
-//		
-//		CCSprite* card2 = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
-//		CardCase* cardCase2 = CardCase::create(take_card_number, 1, NSDS_GS(kSDS_CI_int1_passive_s, take_card_number));
-//		card2->addChild(cardCase2);
-//		
-//		
-//		StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-190);
-//		
-//		b->setCloseFunc([this](){
-//			CCLog("close Func");
-//			this->endTakeCard();
-//		});
-//		
-//		if(result_value <= strength_rate)
-//		{
-//			CCLog("success");
-//			
-//			b->startSuccess("카드레벨 +1");
-//			
-//			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number)+1);
-//			myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, nullptr);
-//		}
-//		else
-//		{
-//			CCLog("fail");
-//			
-//			b->startFail("강화 실패");
-//		}
-//		
-//		addChild(b, kZ_CP_popup);
-//	}
-//	else
-//	{
-//		// 획득
-//		
-//		CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",take_card_number)->getCString());
-//		CardCase* cardCase = CardCase::create(take_card_number);
-//		card->addChild(cardCase);
-//		
-//		TakeCardAnimation* b = TakeCardAnimation::create(card,-190);
-//		b->setCloseFunc([this](){
-//			CCLog("close Func");
-//			this->endTakeCard();
-//		});
-//		b->start();
-//		addChild(b, kZ_CP_popup);
-//	}
-	
 	
 	int start_stage_number = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -360,55 +327,24 @@ bool ClearPopup::init()
 	send_command_list.push_back(myLog->getSendLogCommand(CCString::createWithFormat("clear_%d", stage_number)->getCString()));
 	
 	is_saved_user_data = false;
-	take_animation_level = take_level;
-	take_star_animation_node = NULL;
 	
-	if(take_level == 1)
+	ani_stars.clear();
+	
+	for(int i=0;i<4;i++)
 	{
-		bronze_star = CCSprite::create("ending_star_gold.png");
-		bronze_star->setPosition(ccp(85,179));
-		main_case->addChild(bronze_star, kZ_CP_img);
-		
-		silver_star = NULL;
-		gold_star = NULL;
-		
-		bronze_star->setScale(0);
-		take_star_animation_node = bronze_star;
+		CCSprite* t_star = CCSprite::create("ending_star_empty.png");
+		t_star->setPosition(ccp(53+i*48,195));
+		main_case->addChild(t_star, kZ_CP_img);
 	}
-	else if(take_level == 2)
+	
+	for(int i=0;i<take_level;i++)
 	{
-		bronze_star = CCSprite::create("ending_star_gold.png");
-		bronze_star->setPosition(ccp(85,179));
-		main_case->addChild(bronze_star, kZ_CP_img);
+		CCSprite* t_star = CCSprite::create("ending_star_gold.png");
+		t_star->setPosition(ccp(53+i*48,195));
+		main_case->addChild(t_star, kZ_CP_img);
+		t_star->setScale(0);
 		
-		silver_star = CCSprite::create("ending_star_gold.png");
-		silver_star->setPosition(ccp(132,179));
-		main_case->addChild(silver_star, kZ_CP_img);
-		
-		gold_star = NULL;
-		
-		bronze_star->setScale(0);
-		silver_star->setScale(0);
-		take_star_animation_node = silver_star;
-	}
-	else if(take_level == 3)
-	{
-		bronze_star = CCSprite::create("ending_star_gold.png");
-		bronze_star->setPosition(ccp(85,179));
-		main_case->addChild(bronze_star, kZ_CP_img);
-		
-		silver_star = CCSprite::create("ending_star_gold.png");
-		silver_star->setPosition(ccp(132,179));
-		main_case->addChild(silver_star, kZ_CP_img);
-		
-		gold_star = CCSprite::create("ending_star_gold.png");
-		gold_star->setPosition(ccp(180,179));
-		main_case->addChild(gold_star, kZ_CP_img);
-		
-		bronze_star->setScale(0);
-		silver_star->setScale(0);
-		gold_star->setScale(0);
-		take_star_animation_node = gold_star;
+		ani_stars.push_back(t_star);
 	}
 	
 	ASPopupView* t_popup = ASPopupView::create(-200);
@@ -525,23 +461,10 @@ bool ClearPopup::init()
 																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
 
-//																		 int base_stone_rank = take_level;
-//																		 if(mySGD->is_exchanged)
-//																			 base_stone_rank++;
-//																		 
-//																		 if(base_stone_rank > 3)
-//																			 base_stone_rank = 3;
-//																		 CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
 																		 CCLabelTTF* item_stone = CCLabelTTF::create("300골드", mySGD->getFont().c_str(), 12);
 																		 CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
 																		 t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																		 item_stone->addChild(t_stone_img);
-																		 
-//																		 int beautystone_type = rand()%7;
-//																		 
-//																		 CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
-//																		 beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
-//																		 item_stone->addChild(beautystone_img);
 																		 
 																		 int random_left_right = rand()%2;
 																		 
@@ -578,13 +501,6 @@ bool ClearPopup::init()
 																		 }
 																		 else
 																		 {
-//																			 myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
-//																			 myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
-//																			 myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
-																			 
 																			 mySGD->setGold(mySGD->getGold() + 300);
 																			 
 																			 item_stone->setPosition(ccp(-150,0));
@@ -653,23 +569,10 @@ bool ClearPopup::init()
 																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
 
-//																		 int base_stone_rank = take_level;
-//																		 if(mySGD->is_exchanged)
-//																			 base_stone_rank++;
-//																		 
-//																		 if(base_stone_rank > 3)
-//																			 base_stone_rank = 3;
-//																		 CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
 																		 CCLabelTTF* item_stone = CCLabelTTF::create("300골드", mySGD->getFont().c_str(), 12);
 																		 CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
 																		 t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																		 item_stone->addChild(t_stone_img);
-																		 
-//																		 int beautystone_type = rand()%7;
-//																		 
-//																		 CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
-//																		 beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
-//																		 item_stone->addChild(beautystone_img);
 																		 
 																		 int random_left_right = rand()%2;
 																		 
@@ -706,12 +609,6 @@ bool ClearPopup::init()
 																		 }
 																		 else
 																		 {
-//																			 myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
-//																			 myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
-//																			 myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
 																			 mySGD->setGold(mySGD->getGold() + 300);
 																			 
 																			 item_stone->setPosition(ccp(0,0));
@@ -781,23 +678,10 @@ bool ClearPopup::init()
 																			 t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																			 item_gold_or_item->addChild(t_gold_img2);
 																			 
-//																		 int base_stone_rank = take_level;
-//																		 if(mySGD->is_exchanged)
-//																			 base_stone_rank++;
-//																		 
-//																		 if(base_stone_rank > 3)
-//																			 base_stone_rank = 3;
-//																		 CCLabelTTF* item_stone = CCLabelTTF::create("뷰티스톤", mySGD->getFont().c_str(), 12);
 																		 CCLabelTTF* item_stone = CCLabelTTF::create("300골드", mySGD->getFont().c_str(), 12);
 																		 CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
 																		 t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																		 item_stone->addChild(t_stone_img);
-																		 
-//																		 int beautystone_type = rand()%7;
-//																		 
-//																		 CCSprite* beautystone_img = CCSprite::create(CCString::createWithFormat("beautystone_%d_%d.png", beautystone_type, base_stone_rank)->getCString());
-//																		 beautystone_img->setPosition(ccp(item_stone->getContentSize().width/2.f,-30));
-//																		 item_stone->addChild(beautystone_img);
 																		 
 																		 int random_left_right = rand()%2;
 																		 
@@ -834,12 +718,6 @@ bool ClearPopup::init()
 																		 }
 																		 else
 																		 {
-//																			 myDSH->setIntegerForKey(kDSH_Key_selfBeautyStoneID, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID)+1);
-//																			 myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt)+1);
-//																			 myDSH->setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt), myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID));
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneType_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), beautystone_type);
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneRank_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), base_stone_rank);
-//																			 myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selfBeautyStoneID), 1);
 																			 mySGD->setGold(mySGD->getGold() + 300);
 																			 
 																			 item_stone->setPosition(ccp(150,0));
@@ -872,55 +750,99 @@ bool ClearPopup::init()
 	goldbox_menu->addChild(goldbox3_item);
 	
 	
+	KSLabelTTF* time_ment = KSLabelTTF::create("타임", mySGD->getFont().c_str(), 18);
+	time_ment->enableOuterStroke(ccBLACK, 1.f);
+	time_ment->setPosition(ccp(48,148));
+	main_case->addChild(time_ment, kZ_CP_img);
 	
-	score_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 18); // CCLabelBMFont::create("0", "mb_white_font.fnt");
-	score_label->setColor(ccc3(220, 190, 125));
-	score_label->setAnchorPoint(ccp(1,0.5));
-	score_label->setPosition(ccp(230,78));
-	main_case->addChild(score_label, kZ_CP_img);
+	CCSprite* time_img = CCSprite::create("ending_mark_time.png");
+	time_img->setPosition(ccp(80,148));
+	main_case->addChild(time_img, kZ_CP_img);
 	
-	gold_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 18); // CCLabelBMFont::create("0", "mb_white_font.fnt");
-	gold_label->setColor(ccc3(220, 190, 125));
-	gold_label->setAnchorPoint(ccp(1,0.5));
-	gold_label->setPosition(ccp(230,106));
-	main_case->addChild(gold_label, kZ_CP_img);
-	
-	time_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 18); // CCLabelBMFont::create("0", "mb_white_font.fnt");
-	time_label->setColor(ccc3(220, 190, 125));
+	time_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 18);
+	time_label->enableOuterStroke(ccBLACK, 1.f);
 	time_label->setAnchorPoint(ccp(1,0.5));
-	time_label->setPosition(ccp(230,132));
+	time_label->setPosition(ccp(220,148));
 	main_case->addChild(time_label, kZ_CP_img);
 	
-	string ok_filename;
-	ok_filename = "ending_next.png";
+	KSLabelTTF* gold_ment = KSLabelTTF::create("골드", mySGD->getFont().c_str(), 18);
+	gold_ment->enableOuterStroke(ccBLACK, 1.f);
+	gold_ment->setPosition(ccp(48,115));
+	main_case->addChild(gold_ment, kZ_CP_img);
+	
+	CCSprite* gold_img = CCSprite::create("ending_mark_gold.png");
+	gold_img->setPosition(ccp(80,115));
+	main_case->addChild(gold_img, kZ_CP_img);
+	
+	gold_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 18);
+	gold_label->enableOuterStroke(ccBLACK, 1.f);
+	gold_label->setAnchorPoint(ccp(1,0.5));
+	gold_label->setPosition(ccp(220,115));
+	main_case->addChild(gold_label, kZ_CP_img);
+	
+	KSLabelTTF* score_ment = KSLabelTTF::create("점수", mySGD->getFont().c_str(), 18);
+	score_ment->enableOuterStroke(ccBLACK, 1.f);
+	score_ment->setPosition(ccp(48,82));
+	main_case->addChild(score_ment, kZ_CP_img);
+	
+	CCSprite* score_img = CCSprite::create("ending_mark_score.png");
+	score_img->setPosition(ccp(80,82));
+	main_case->addChild(score_img, kZ_CP_img);
+	
+	score_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 18);
+	score_label->enableOuterStroke(ccBLACK, 1.f);
+	score_label->setAnchorPoint(ccp(1,0.5));
+	score_label->setPosition(ccp(220,82));
+	main_case->addChild(score_label, kZ_CP_img);
 	
 	
-	CCSprite* n_ok = CCSprite::create(ok_filename.c_str());
-	CCSprite* s_ok = CCSprite::create(ok_filename.c_str());
+	
+	CCSprite* n_ok = CCSprite::create("ending_button.png");
+	KSLabelTTF* n_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 20);
+	n_ok_label->setColor(ccBLACK);
+	n_ok_label->enableOuterStroke(ccBLACK, 0.25f);
+	n_ok_label->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-3));
+	n_ok->addChild(n_ok_label);
+	
+	CCSprite* s_ok = CCSprite::create("ending_button.png");
 	s_ok->setColor(ccGRAY);
+	KSLabelTTF* s_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 20);
+	s_ok_label->setColor(ccBLACK);
+	s_ok_label->enableOuterStroke(ccBLACK, 0.25f);
+	s_ok_label->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-3));
+	s_ok->addChild(s_ok_label);
 	
 	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(ClearPopup::menuAction));
 	ok_item->setTag(kMT_CP_ok);
 	
 	ok_menu = CCMenu::createWithItem(ok_item);
 	ok_menu->setVisible(false);
-	ok_menu->setPosition(ccp(348.5f,38));
+	ok_menu->setPosition(ccp(354,36));
 	main_case->addChild(ok_menu, kZ_CP_menu);
 	ok_menu->setTouchPriority(-200);
 	
-	
 //	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 //	{
-		CCSprite* n_replay = CCSprite::create("ending_replay.png");
-		CCSprite* s_replay = CCSprite::create("ending_replay.png");
+		CCSprite* n_replay = CCSprite::create("ending_button.png");
+	KSLabelTTF* n_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 20);
+	n_replay_label->setColor(ccBLACK);
+	n_replay_label->enableOuterStroke(ccBLACK, 0.25f);
+	n_replay_label->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-3));
+	n_replay->addChild(n_replay_label);
+		CCSprite* s_replay = CCSprite::create("ending_button.png");
 		s_replay->setColor(ccGRAY);
+	KSLabelTTF* s_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 20);
+	s_replay_label->setColor(ccBLACK);
+	s_replay_label->enableOuterStroke(ccBLACK, 0.25f);
+	s_replay_label->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-3));
+	s_replay->addChild(s_replay_label);
 		
 		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ClearPopup::menuAction));
 		replay_item->setTag(kMT_CP_replay);
 		
 		replay_menu = CCMenu::createWithItem(replay_item);
 		replay_menu->setVisible(false);
-		replay_menu->setPosition(ccp(130,38));
+		replay_menu->setPosition(ccp(125,36));
 		main_case->addChild(replay_menu, kZ_CP_menu);
 		replay_menu->setTouchPriority(-200);
 //	}
@@ -972,16 +894,20 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		CCSprite* graph_back = CCSprite::create("ending_graph.png");
+		graph_back->setPosition(ccp(355,230));
+		main_case->addChild(graph_back, kZ_CP_img);
+		
 		int alluser = result_data["alluser"].asInt();
 		int myrank = result_data["myrank"].asInt();
 		
 		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
 		all_user_label->setColor(ccc3(255, 50, 50));
 		all_user_label->setAnchorPoint(ccp(1,0.5));
-		all_user_label->setPosition(ccp(main_case->getContentSize().width-40, 183));
+		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 		main_case->addChild(all_user_label, kZ_CP_img);
 		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat("나의 위치 %d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
 		my_rank_label->setAnchorPoint(ccp(1,0.5));
 		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 		main_case->addChild(my_rank_label, kZ_CP_img);
@@ -990,15 +916,15 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(250+196,197));
+		rank_percent_case->setPosition(ccp(257+195,230));
 		main_case->addChild(rank_percent_case, kZ_CP_img);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.1f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 10);
 		percent_label->enableOuterStroke(ccBLACK, 1);
-		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f, rank_percent_case->getContentSize().height/2.f+4));
+		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(250 + 196.f*rank_percent,197));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
 		rank_percent_case->runAction(t_move);
 		
 		Json::Value user_list = result_data["list"];
@@ -1009,16 +935,17 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			string case_name;
 			if(myrank == i+1)
 			{
-				case_name = "gameresult_rank_me.png";
+				case_name = "mainpopup_pupple1.png";
 				limit_count++;
 			}
 			else
 			{
-				case_name = "gameresult_rank_normal.png";
+				case_name = "rank_normal.png";
 			}
 			
-			CCSprite* list_cell_case = CCSprite::create(case_name.c_str());
-			list_cell_case->setPosition(ccp(348,158-i*26));
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+			list_cell_case->setContentSize(CCSizeMake(210, 65));
+			list_cell_case->setPosition(ccp(348,158-i*65));
 			main_case->addChild(list_cell_case, kZ_CP_img);
 			
 			CCPoint rank_position = ccp(13,13);
@@ -1421,53 +1348,24 @@ void ClearPopup::endTakeCard()
 {
 	startCalcAnimation();
 	
-	if(take_star_animation_node)
+	int step_count = ani_stars.size();
+	
+	if(step_count >= 1)
 	{
-		if(take_animation_level == 1)
+		for(int i=0;i<step_count-1;i++)
 		{
-			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
-			CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
-			bronze_star->runAction(t_seq);
-		}
-		else if(take_animation_level == 2)
-		{
-			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+			CCDelayTime* t_delay = CCDelayTime::create(0.5f+i*0.2f);
 			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
 			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
 			CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-			bronze_star->runAction(t_seq);
-			
-			CCDelayTime* t_delay2 = CCDelayTime::create(0.7f);
-			CCScaleTo* t_scale3 = CCScaleTo::create(0.2f, 1.5f);
-			CCScaleTo* t_scale4 = CCScaleTo::create(0.2f, 1.f);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
-			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_scale3, t_scale4, t_call, NULL);
-			silver_star->runAction(t_seq2);
+			ani_stars[i]->runAction(t_seq);
 		}
-		else if(take_animation_level == 3)
-		{
-			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-			CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
-			bronze_star->runAction(t_seq);
-			
-			CCDelayTime* t_delay2 = CCDelayTime::create(0.7f);
-			CCScaleTo* t_scale3 = CCScaleTo::create(0.2f, 1.5f);
-			CCScaleTo* t_scale4 = CCScaleTo::create(0.2f, 1.f);
-			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_scale3, t_scale4, NULL);
-			silver_star->runAction(t_seq2);
-			
-			CCDelayTime* t_delay3 = CCDelayTime::create(0.9f);
-			CCScaleTo* t_scale5 = CCScaleTo::create(0.2f, 1.5f);
-			CCScaleTo* t_scale6 = CCScaleTo::create(0.2f, 1.f);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
-			CCSequence* t_seq3 = CCSequence::create(t_delay3, t_scale5, t_scale6, t_call, NULL);
-			gold_star->runAction(t_seq3);
-		}
+		CCDelayTime* t_delay = CCDelayTime::create(0.5f+(step_count-1)*0.2f);
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
+		ani_stars[step_count-1]->runAction(t_seq);
 	}
 	else
 	{
@@ -1768,7 +1666,7 @@ void ClearPopup::onEnter()
 void ClearPopup::startCalcAnimation()
 {
 	AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
-	startScoreAnimation();
+	startTimeAnimation();
 }
 
 void ClearPopup::startScoreAnimation()
@@ -1811,7 +1709,7 @@ void ClearPopup::stopScoreAnimation()
 {
 	unschedule(schedule_selector(ClearPopup::scoreAnimation));
 	score_label->setString(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString());
-	startGoldAnimation();
+	AudioEngine::sharedInstance()->stopAllEffects();
 }
 
 void ClearPopup::startGoldAnimation()
@@ -1854,7 +1752,7 @@ void ClearPopup::stopGoldAnimation()
 {
 	unschedule(schedule_selector(ClearPopup::goldAnimation));
 	gold_label->setString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
-	startTimeAnimation();
+	startScoreAnimation();
 }
 
 void ClearPopup::startTimeAnimation()
@@ -1897,7 +1795,7 @@ void ClearPopup::stopTimeAnimation()
 {
 	unschedule(schedule_selector(ClearPopup::timeAnimation));
 	time_label->setString(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString());
-	AudioEngine::sharedInstance()->stopAllEffects();
+	startGoldAnimation();
 }
 
 void ClearPopup::menuAction(CCObject* pSender)

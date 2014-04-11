@@ -81,8 +81,9 @@ class FormSetter : public CCNode{
 public:
 	struct FormSetterData{
 		Json::Value data;
-		CCNode* obj;
-		std::function<void(Json::Value)> func;
+	//	CCNode* obj;
+		vector<CCNode*> objects;
+		vector<std::function<void(Json::Value)>> funcs;
 	};
 	
 	bool m_is_sch;
@@ -119,13 +120,13 @@ public:
 		
 		//받아온 데이터와 등록되어있는 오브젝트중 매칭이 되어있으면
 		if(it != m_list.end()){
-			(it->second).obj = obj;
-			(it->second).func = func;
+			(it->second).funcs.push_back(func);
+			(it->second).objects.push_back(obj);
 		}else{
 			FormSetterData newObj;
-			newObj.obj = obj;
-			newObj.func = func;
+			newObj.funcs.push_back(func);
 			newObj.data = 0;
+			newObj.objects.push_back(obj);
 			m_list[name] = newObj;
 		}
 			
@@ -159,10 +160,17 @@ public:
 		return NULL;
 	}
 	
-	//해당이름의 오브젝트를 받아온다.
+	//해당이름의 오브젝트를 받아온다. (하나만)
 	CCNode* getFormObject(string name){
 		if(m_list.find(name)!=m_list.end()){
-			return m_list[name].obj;
+			return *(m_list[name].objects.begin());
+		}
+		return NULL;
+	}
+	
+	FormSetterData* getFormSetterData(string name){
+		if(m_list.find(name)!=m_list.end()){
+			return &m_list[name];
 		}
 		return NULL;
 	}
@@ -221,27 +229,52 @@ public:
 				//포지션과 스케일을 조절해준다.
 				(it->second).data = p[(*iter).c_str()];
 				
-				if((it->second).obj && !(it->second).data["x"].isNull())
-					((it->second).obj)->setPositionX((it->second).data.get("x", 0).asFloat());
 				
-				if((it->second).obj &&!(it->second).data["y"].isNull())
-					((it->second).obj)->setPositionY((it->second).data.get("y", 0).asFloat());
 				
-				if((it->second).obj &&!(it->second).data["scale"].isNull())
-					((it->second).obj)->setScale((it->second).data.get("scale", 1).asFloat());
 				
-				if((it->second).obj && !(it->second).data["anchorX"].isNull())
-					((it->second).obj)->setAnchorPoint(ccp((it->second).data.get("anchorX", 0).asFloat(),(it->second).data.get("anchorY", 0).asFloat()));
+				vector<CCNode*>::iterator it2;
+				for (it2=(it->second).objects.begin();it2!=(it->second).objects.end();it2++) {
+					if((*it2) && !(it->second).data["x"].isNull())
+						(*it2)->setPositionX((it->second).data.get("x", 0).asFloat());
+					
+					if((*it2) &&!(it->second).data["y"].isNull())
+						(*it2)->setPositionY((it->second).data.get("y", 0).asFloat());
+					
+					if((*it2) &&!(it->second).data["scale"].isNull() && (it->second).data["scale"].asFloat()>0)
+						(*it2)->setScale((it->second).data.get("scale", 1).asFloat());
+					
+					if((*it2) && !(it->second).data["anchorX"].isNull())
+						(*it2)->setAnchorPoint(ccp((it->second).data.get("anchorX", 0).asFloat(),(it->second).data.get("anchorY", 0).asFloat()));
+				}
 				
-				//펑션이 등록되어있으면 콜해준다.
-				if((it->second).func)(it->second).func(p[*iter]);
 				
+				vector<std::function<void(Json::Value)>>::iterator it3;
+				for (it3=(it->second).funcs.begin();it3!=(it->second).funcs.end();it3++) {
+					if((*it3))(*it3)(p[*iter]);
+				}
+				
+//				
+//				if((it->second).obj && !(it->second).data["x"].isNull())
+//					((it->second).obj)->setPositionX((it->second).data.get("x", 0).asFloat());
+//				
+//				if((it->second).obj &&!(it->second).data["y"].isNull())
+//					((it->second).obj)->setPositionY((it->second).data.get("y", 0).asFloat());
+//				
+//				if((it->second).obj &&!(it->second).data["scale"].isNull())
+//					((it->second).obj)->setScale((it->second).data.get("scale", 1).asFloat());
+//				
+//				if((it->second).obj && !(it->second).data["anchorX"].isNull())
+//					((it->second).obj)->setAnchorPoint(ccp((it->second).data.get("anchorX", 0).asFloat(),(it->second).data.get("anchorY", 0).asFloat()));
+//				
+				
+				
+
 				//없으면
 			}else{
 				FormSetterData newObj;
 				newObj.data = p[(*iter).c_str()];
-				newObj.func = nullptr;
-				newObj.obj = nullptr;
+			//	newObj.func = nullptr;
+			//	newObj.obj = nullptr;
 				
 				m_list[(*iter).c_str()] = newObj;
 			}
