@@ -28,7 +28,6 @@
 //#include "OpenUDID.h"
 #endif
 #include "BaseXX.h"
-#include "KSDes.h"
 #include "CipherUtils.h"
 #include "EncryptCharsA.h"
 

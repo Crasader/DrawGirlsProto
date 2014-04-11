@@ -1,7 +1,7 @@
 #include "GDLib.h"
 #include <sstream>
 #include "BaseXX.h"
-#include "KSDes.h"
+#include "CipherUtils.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "jni.h"
@@ -56,7 +56,7 @@ std::string GDCreateToken(string auID,string udid,string flag,string lang,string
     msg.append("||");
     msg.append(dInfo);
     msg.append("||");
-	return toBase64(desEncryption(secretKey, msg));
+	return CipherUtils::encryptDESBASE64(secretKey.c_str(), msg.c_str());
 }
     
 void replaceString( std::string & strCallId, const char * pszBefore, const char * pszAfter )

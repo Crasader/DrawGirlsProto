@@ -19,7 +19,7 @@ USING_NS_CC;
 
 class DimmedPopup : public CCLayer {
 	CCSprite* m_gray;
-	CCSprite* m_back;
+	CCNode* m_back;
 	bool m_isEnable;
 	CCObject* m_target_final;
 	SEL_CallFunc m_delegate_final;
@@ -67,6 +67,13 @@ public:
 		return true;
 	}
 
+	void setBackground(CCScale9Sprite* sprite){
+
+		m_back = sprite;
+		m_back->setAnchorPoint(ccp(0.5,0.5));
+		m_back->setPosition(ccp(240,160-450));
+		addChildOnDimmed(m_back, 0);
+	}
 	void setBackground(CCSprite* sprite){
 		this->setBackground(sprite, 0);
 	}

@@ -10,7 +10,7 @@
 #include <sstream>
 //#include "stlencoders/base32.hpp"
 #include "stlencoders/base16.hpp"
-#include "McbDES2.hpp"
+
 #include <vector>
 
 #include "CipherUtils.h"
@@ -28,48 +28,6 @@ string stringDecodeWithAES(std::basic_string<char> encodedText)
 	string retValue =	CipherUtils::decrypt(encryptChars("nonevoidmodebase").c_str(), encodedText.c_str());
 	return retValue;
 }
-
-std::basic_string<char> stringEnc(string plainText)
-{
-	//	return plainText;
-	if(plainText == "")
-		return "";
-	std::basic_string<char> strPlainText = plainText;
-	std::basic_string<char> strCryptogram;
-	
-	/*
-	 *************************************************************************
-	 * Grab 8 bytes keys from somewhere.
-	 *************************************************************************
-	 */
-	unsigned char * lpKey1 = (unsigned char*)"JSHSKSYH";
-	//    unsigned char * lpKey2 = (unsigned char*)"22222222";
-	
-	
-	McbDES des;
-	des.McbSetDES();
-	des.McbSetKey1(lpKey1);
-	
-	unsigned long cbCryptogram =
-	des.McbCalcCryptogramSize(strPlainText.size());
-	
-	strCryptogram.resize(cbCryptogram);
-	
-	des.McbSetOutputBuffer((unsigned char*)strCryptogram.data(),
-												 strCryptogram.size());
-	
-	if (des.McbEncrypt(strPlainText.c_str()))
-	{
-		strCryptogram.resize(des.McbGetCryptogramSize());
-	}
-	
-	ostringstream oss;
-	std::ostreambuf_iterator<char> out(oss);
-	stlencoders::base16<char>::encode(strCryptogram.begin(), strCryptogram.end(), out);
-	return oss.str();
-	//return base64_encode(strCryptogram.c_str(), strCryptogram.size());
-}
-
 //std::basic_string<char> stringEncWithDES(string plainText)
 //{
 //	std::string retValue;
