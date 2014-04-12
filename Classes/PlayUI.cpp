@@ -628,7 +628,10 @@ void TakeSpeedUp::selfRemove ()
 void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 {
 	end_function = t_end_func;
-	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
+	initWithString(CCString::createWithFormat("스피드 %d", t_step)->getCString(), mySGD->getFont().c_str(), 20);
+	setColor(ccBLUE);
+	enableOuterStroke(ccBLACK, 2);
+//	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
 	
 	startFadeOut();
 }

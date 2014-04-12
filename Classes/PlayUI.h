@@ -21,6 +21,7 @@
 #include "hspConnector.h"
 #include "MissileDamageData.h"
 #include "KSProtect.h"
+#include "KSLabelTTF.h"
 #include <map>
 
 using namespace std;
@@ -146,12 +147,12 @@ private:
 	void selfRemove ();
 	void myInit (float t_gp, bool is_item);
 };
-class TakeSpeedUp : public CCSprite
+class TakeSpeedUp : public KSLabelTTF
 {
 public:
 	static TakeSpeedUp * create (int t_step, std::function<void()> t_end_func);
 private:
-	CCSprite * backImg;
+//	CCSprite * backImg;
 	std::function<void()> end_function;
 	void startFadeOut ();
 	void selfRemove ();

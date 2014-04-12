@@ -34,6 +34,11 @@
 #include "NewMainFlowScene.h"
 #include "CommonButton.h"
 #include "StoneMissile.h"
+#include "KSLabelTTF.h"
+#include "FormSetter.h"
+#include "MailPopup.h"
+#include "OptionPopup.h"
+#include "AchievePopup.h"
 
 CCScene* StartSettingScene::scene()
 {
@@ -116,6 +121,9 @@ enum StartSettingMenuTag{
 	kStartSettingMenuTag_rubyShop,
 	kStartSettingMenuTag_goldShop,
 	kStartSettingMenuTag_heartShop,
+	kStartSettingMenuTag_postbox,
+	kStartSettingMenuTag_achieve,
+	kStartSettingMenuTag_option,
 	kStartSettingMenuTag_tip,
 	kStartSettingMenuTag_back,
 	kStartSettingMenuTag_start,
@@ -134,15 +142,40 @@ enum StartSettingItemZorder{
 
 void StartSettingScene::setMain()
 {
-	float screen_height = myDSH->ui_top-320.f;
-	if(screen_height < 0.f)		screen_height = 0.f;
-	screen_height /= 4.f;
-	
-	
-	main_case = CCSprite::create("startsetting_back.png");
-	main_case->setAnchorPoint(ccp(0.5,0));
-	main_case->setPosition(ccp(240,3-screen_height));
+	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_case->setContentSize(CCSizeMake(480, 280));
+	main_case->setPosition(ccp(240,160));
 	addChild(main_case, kStartSettingZorder_main);
+	
+	CCScale9Sprite* left_back = CCScale9Sprite::create("startsetting_left_back.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	left_back->setContentSize(CCSizeMake(152, 232));
+	left_back->setPosition(ccp(main_case->getContentSize().width*0.174f,main_case->getContentSize().height*0.44f));
+	main_case->addChild(left_back);
+	
+	CCScale9Sprite* left_front = CCScale9Sprite::create("startsetting_left_front.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	left_front->setContentSize(CCSizeMake(138, 155));
+	left_front->setPosition(ccp(main_case->getContentSize().width*0.173f,main_case->getContentSize().height*0.56f));
+	main_case->addChild(left_front);
+	
+	CCSprite* left_tab = CCSprite::create("startsetting_tab.png");
+	left_tab->setPosition(ccp(55,225));
+	main_case->addChild(left_tab);
+	
+	CCScale9Sprite* right_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	right_back->setContentSize(CCSizeMake(310, 232));
+	right_back->setPosition(main_case->getContentSize().width*0.66f, main_case->getContentSize().height*0.44f);
+	main_case->addChild(right_back);
+	
+	
+//	float screen_height = myDSH->ui_top-320.f;
+//	if(screen_height < 0.f)		screen_height = 0.f;
+//	screen_height /= 4.f;
+//	
+//	
+//	main_case = CCSprite::create("startsetting_back.png");
+//	main_case->setAnchorPoint(ccp(0.5,0));
+//	main_case->setPosition(ccp(240,3-screen_height));
+//	addChild(main_case, kStartSettingZorder_main);
 	
 	
 	int stage_number;
@@ -151,8 +184,8 @@ void StartSettingScene::setMain()
 	{
 		stage_number = mySD->getSilType();
 		
-		CCLabelTTF* stage_number_label = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		stage_number_label->setPosition(ccp(65, main_case->getContentSize().height+40-65));
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		stage_number_label->setPosition(ccp(65, 256));
 		main_case->addChild(stage_number_label);
 		
 		is_before_selected_event_stage = true;
@@ -164,15 +197,15 @@ void StartSettingScene::setMain()
 //		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
-		CCLabelTTF* piece_number_label = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		piece_number_label->setPosition(ccp(65, main_case->getContentSize().height+40-65));
+		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		piece_number_label->setPosition(ccp(65, 256));
 		main_case->addChild(piece_number_label);
 		
 		is_before_selected_event_stage = false;
 	}
 	
-	CCRect mission_size = CCRectMake(0, 0, 225, 22);
-	CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+90, main_case->getContentSize().height+2-65);
+	CCRect mission_size = CCRectMake(0, 0, 210, 22);
+	CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+90, main_case->getContentSize().height+2-28);
 	
 //	CCSprite* temp_mission = CCSprite::create("whitePaper.png", mission_size);
 //	temp_mission->setOpacity(100);
@@ -196,6 +229,11 @@ void StartSettingScene::setMain()
 		CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 		mission_label->runAction(t_repeat);
 	}
+	
+	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+	mission_img->setPosition(ccp(198,255));
+	main_case->addChild(mission_img);
+	
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
 	{
@@ -267,7 +305,7 @@ void StartSettingScene::setMain()
 	{
 		ITEM_CODE t_ic = item_list[i];
 		
-		CCPoint item_position = ccp(212.f + i*58.f, 163.5);
+		CCPoint item_position = ccp(205.f + i*71.f, 190);
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
 		if(iter == card_options.end()) // not same option card // enable item
@@ -275,7 +313,6 @@ void StartSettingScene::setMain()
 			CCNode* item_parent = CCNode::create();
 			item_parent->setPosition(item_position);
 			main_case->addChild(item_parent, 0, kStartSettingMenuTag_itemBase+i);
-			
 			
 			bool is_before_used_item = mySGD->isBeforeUseItem(t_ic); // 이전에 사용했는지
 			bool is_show_item_popup = false; // 처음 등장한 아이템인지
@@ -300,38 +337,22 @@ void StartSettingScene::setMain()
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				n_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
-				n_mount->setPosition(ccp(n_item_case->getContentSize().width/2.f, n_item_case->getContentSize().height/2.f));
+				n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-6, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-6));
 				n_item_case->addChild(n_mount);
 				
-				CCLabelTTF* n_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
-				n_mount_label->setColor(ccRED);
-				n_mount_label->setAnchorPoint(ccp(1,1));
-				n_mount_label->setPosition(ccp(n_mount->getContentSize().width-6, n_mount->getContentSize().height-6));
-				n_mount->addChild(n_mount_label);
-				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.8);
-				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				s_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
-				s_mount->setPosition(ccp(s_item_case->getContentSize().width/2.f, s_item_case->getContentSize().height/2.f));
+				s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-6, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-6));
 				s_item_case->addChild(s_mount);
 				
-				CCLabelTTF* s_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
-				s_mount_label->setColor(ccRED);
-				s_mount_label->setAnchorPoint(ccp(1,1));
-				s_mount_label->setPosition(ccp(s_mount->getContentSize().width-6, s_mount->getContentSize().height-6));
-				s_mount->addChild(s_mount_label);
-				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
-				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
@@ -356,16 +377,14 @@ void StartSettingScene::setMain()
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.8);
-				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
-				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
@@ -381,15 +400,15 @@ void StartSettingScene::setMain()
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
 			if(item_cnt > 0)
 			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("소지 %d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setColor(ccBLACK);
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 				cnt_label->setPosition(ccp(0, -21.5));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+				
+				FormSetter::get()->addObject("item_count", cnt_label);
 			}
 			else
 			{
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setColor(ccBLACK);
 				cnt_label->setPosition(ccp(5, -21.5));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
 				
@@ -414,20 +433,30 @@ void StartSettingScene::setMain()
 			is_selected_item.push_back(false);
 	}
 	
-	gacha_item = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 35, 35));
-	gacha_item->setPosition(ccp(414,164));
-	main_case->addChild(gacha_item);
+	CCSprite* gacha_mark = CCSprite::create("startsetting_item_gacha.png");
+	gacha_mark->setPosition(ccp(425,190));
+	main_case->addChild(gacha_mark);
 	
+	gacha_item = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 35, 35));
+	gacha_item->setPosition(ccp(425,190));
+	main_case->addChild(gacha_item);
 	
 	CommonButton* item_gacha = CommonButton::create("", CommonButtonGreen);
 	item_gacha->setSize(CCSizeMake(65, 30));
 	item_gacha->setPrice(PriceTypeGold, 1000);
-	item_gacha->setPosition(ccp(414, 138));
+	item_gacha->setPosition(ccp(425, 165));
 	main_case->addChild(item_gacha);
 	item_gacha->setFunction([=](CCObject* sender)
 							{
 								startItemGacha();
 							});
+	
+	CCScale9Sprite* script_box = CCScale9Sprite::create("startsetting_scriptbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	script_box->setContentSize(CCSizeMake(290, 70));
+	script_box->setPosition(ccp(317,117));
+	main_case->addChild(script_box);
+	
+	// 구입 버튼 자리는 400,115
 	
 	
 	CCSprite* n_start = CCSprite::create("startsetting_start.png");
@@ -442,6 +471,11 @@ void StartSettingScene::setMain()
 	main_case->addChild(start_menu);
 	
 	
+	CCSprite* level_case = CCSprite::create("startsetting_levelbox.png");
+	level_case->setPosition(ccp(83,95));
+	main_case->addChild(level_case);
+	
+	
 	StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
 	
 	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
@@ -449,7 +483,7 @@ void StartSettingScene::setMain()
 	if(missile_type_code == kStoneType_guided)
 	{
 		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-		t_gm->setPosition(ccp(94,157));
+		t_gm->setPosition(ccp(83,158));
 		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 		main_case->addChild(t_gm);
 		
@@ -460,10 +494,15 @@ void StartSettingScene::setMain()
 		missile_img = t_gm;
 	}
 	
-	missile_data = CCLabelTTF::create(CCString::createWithFormat("레벨 %d    파워 %d", missile_level, StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
-	missile_data->setPosition(ccp(94,95));
-	main_case->addChild(missile_data);
+	missile_data_level = CCLabelTTF::create(CCString::createWithFormat("레벨 %d", missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_level->setAnchorPoint(ccp(0,0.5f));
+	missile_data_level->setPosition(ccp(30,95));
+	main_case->addChild(missile_data_level);
 	
+	missile_data_power = CCLabelTTF::create(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power->setAnchorPoint(ccp(0,0.5f));
+	missile_data_power->setPosition(ccp(84,95));
+	main_case->addChild(missile_data_power);
 	
 	if(missile_level >= 25)
 	{
@@ -472,34 +511,36 @@ void StartSettingScene::setMain()
 	else
 	{
 		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("레벨%d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 10);
-		n_level->setAnchorPoint(ccp(1,0.5));
-		n_level->setPosition(ccp(60,40));
+		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+		n_level->setColor(ccBLACK);
+		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
 		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
-		n_price_type->setPosition(ccp(33,21));
+		n_price_type->setPosition(ccp(25,22));
 		n_upgrade->addChild(n_price_type);
-		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 10);
-		n_price_label->setPosition(ccp(78,21));
+		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+		n_price_label->setColor(ccBLACK);
+		n_price_label->setPosition(ccp(78,22));
 		n_upgrade->addChild(n_price_label);
 		
 		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 		s_upgrade->setColor(ccGRAY);
-		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("레벨%d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 10);
-		s_level->setAnchorPoint(ccp(1,0.5));
-		s_level->setPosition(ccp(60,40));
+		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+		s_level->setColor(ccBLACK);
+		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
 		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
-		s_price_type->setPosition(ccp(33,21));
+		s_price_type->setPosition(ccp(25,22));
 		s_upgrade->addChild(s_price_type);
-		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 10);
-		s_price_label->setPosition(ccp(78,21));
+		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+		s_price_label->setColor(ccBLACK);
+		s_price_label->setPosition(ccp(78,22));
 		s_upgrade->addChild(s_price_label);
 		
 		CCMenuItem* upgrade_item = CCMenuItemSprite::create(n_upgrade, s_upgrade, this, menu_selector(StartSettingScene::upgradeAction));
 		
 		upgrade_menu = CCMenu::createWithItem(upgrade_item);
-		upgrade_menu->setPosition(ccp(93,46));
+		upgrade_menu->setPosition(ccp(83,46));
 		main_case->addChild(upgrade_menu);
 	}
 }
@@ -580,7 +621,8 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 							   myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, nullptr);
 							   
 							   missile_level++;
-							   missile_data->setString(CCString::createWithFormat("레벨 %d    파워 %d", missile_level, StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
+							   missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
+							   missile_data_power->setString(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
 							   
 							   CCPoint missile_position;
 							   if(missile_img)
@@ -617,28 +659,30 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 							   else
 							   {
 								   CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-								   CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("레벨%d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 10);
-								   n_level->setAnchorPoint(ccp(1,0.5));
-								   n_level->setPosition(ccp(60,40));
+								   CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+								   n_level->setColor(ccBLACK);
+								   n_level->setPosition(ccp(70,47));
 								   n_upgrade->addChild(n_level);
 								   CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
-								   n_price_type->setPosition(ccp(33,21));
+								   n_price_type->setPosition(ccp(25,22));
 								   n_upgrade->addChild(n_price_type);
-								   CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 10);
-								   n_price_label->setPosition(ccp(78,21));
+								   CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+								   n_price_label->setColor(ccBLACK);
+								   n_price_label->setPosition(ccp(78,22));
 								   n_upgrade->addChild(n_price_label);
 								   
 								   CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 								   s_upgrade->setColor(ccGRAY);
-								   CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("레벨%d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 10);
-								   s_level->setAnchorPoint(ccp(1,0.5));
-								   s_level->setPosition(ccp(60,40));
+								   CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+								   s_level->setColor(ccBLACK);
+								   s_level->setPosition(ccp(70,47));
 								   s_upgrade->addChild(s_level);
 								   CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
-								   s_price_type->setPosition(ccp(33,21));
+								   s_price_type->setPosition(ccp(25,22));
 								   s_upgrade->addChild(s_price_type);
-								   CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 10);
-								   s_price_label->setPosition(ccp(78,21));
+								   CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+								   s_price_label->setColor(ccBLACK);
+								   s_price_label->setPosition(ccp(78,22));
 								   s_upgrade->addChild(s_price_label);
 								   
 								   CCMenuItem* upgrade_item = CCMenuItemSprite::create(n_upgrade, s_upgrade, this, menu_selector(StartSettingScene::upgradeAction));
@@ -692,7 +736,6 @@ void StartSettingScene::itemGachaAction()
 		t_item_code = 10;
 	
 	gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", t_item_code)->getCString());
-	gacha_item->setScale(0.8f);
 	gacha_item->setPosition(gacha_item_position);
 	main_case->addChild(gacha_item);
 	
@@ -731,7 +774,6 @@ void StartSettingScene::stopItemGacha()
 	gacha_item->removeFromParent();
 	
 	gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", selected_gacha_item)->getCString());
-	gacha_item->setScale(0.8f);
 	gacha_item->setPosition(gacha_item_position);
 	main_case->addChild(gacha_item);
 	
@@ -1024,16 +1066,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 			
 			CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 			CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			n_img->setScale(0.8);
-			n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+			n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 			n_item_case->addChild(n_img);
 			
 			CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 			s_item_case->setColor(ccGRAY);
 			CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-			s_img->setScale(0.8);
 			s_img->setColor(ccGRAY);
-			s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+			s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 			s_item_case->addChild(s_img);
 			
 			CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
@@ -1047,15 +1087,13 @@ void StartSettingScene::itemAction(CCObject *sender)
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
 			if(item_cnt > 0)
 			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("소지 %d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setColor(ccBLACK);
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 				cnt_label->setPosition(ccp(0, -21.5));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
 			}
 			else
 			{
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setColor(ccBLACK);
 				cnt_label->setPosition(ccp(5, -21.5));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
 				
@@ -1111,38 +1149,22 @@ void StartSettingScene::itemAction(CCObject *sender)
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				n_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
-				n_mount->setPosition(ccp(n_item_case->getContentSize().width/2.f, n_item_case->getContentSize().height/2.f));
+				n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-6, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-6));
 				n_item_case->addChild(n_mount);
 				
-				CCLabelTTF* n_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
-				n_mount_label->setColor(ccRED);
-				n_mount_label->setAnchorPoint(ccp(1,1));
-				n_mount_label->setPosition(ccp(n_mount->getContentSize().width-6, n_mount->getContentSize().height-6));
-				n_mount->addChild(n_mount_label);
-				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.8);
-				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				s_mount->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
-				s_mount->setPosition(ccp(s_item_case->getContentSize().width/2.f, s_item_case->getContentSize().height/2.f));
+				s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-6, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-6));
 				s_item_case->addChild(s_mount);
 				
-				CCLabelTTF* s_mount_label = CCLabelTTF::create("장착", mySGD->getFont().c_str(), 9);
-				s_mount_label->setColor(ccRED);
-				s_mount_label->setAnchorPoint(ccp(1,1));
-				s_mount_label->setPosition(ccp(s_mount->getContentSize().width-6, s_mount->getContentSize().height-6));
-				s_mount->addChild(s_mount_label);
-				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
-				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
@@ -1172,16 +1194,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				n_img->setScale(0.8);
-				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f+6));
+				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_img);
 				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
-				s_img->setScale(0.8);
 				s_img->setColor(ccGRAY);
-				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f+6));
+				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingScene::itemAction));
@@ -1197,15 +1217,13 @@ void StartSettingScene::itemAction(CCObject *sender)
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
 			if(item_cnt > 0)
 			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("소지 %d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setColor(ccBLACK);
+				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 				cnt_label->setPosition(ccp(0, -21.5));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
 			}
 			else
 			{
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setColor(ccBLACK);
 				cnt_label->setPosition(ccp(5, -21.5));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
 				
@@ -1233,8 +1251,8 @@ void StartSettingScene::itemAction(CCObject *sender)
 		if(option_label)
 			option_label->removeFromParent();
 		
-		CCRect title_size = CCRectMake(0, 0, 250, 20);
-		CCPoint title_position = ccp(190, 115);
+		CCRect title_size = CCRectMake(0, 0, 200, 20);
+		CCPoint title_position = ccp(188, 140);
 		
 //		CCSprite* title_rect = CCSprite::create("whitePaper.png", title_size);
 //		title_rect->setOpacity(100);
@@ -1248,8 +1266,8 @@ void StartSettingScene::itemAction(CCObject *sender)
 		item_title_label->setColor(ccORANGE);
 		main_case->addChild(item_title_label);
 		
-		CCRect option_size = CCRectMake(0, 0, 250, 23);
-		CCPoint option_position = ccp(191, 96);
+		CCRect option_size = CCRectMake(0, 0, 200, 25);
+		CCPoint option_position = ccp(188, 113);
 		
 //		CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
 //		option_rect->setOpacity(100);
@@ -1257,7 +1275,7 @@ void StartSettingScene::itemAction(CCObject *sender)
 //		option_rect->setPosition(option_position);
 //		main_case->addChild(option_rect);
 		
-		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		option_label->setAnchorPoint(ccp(0,1));
 		option_label->setPosition(option_position);
 		main_case->addChild(option_label);
@@ -1340,10 +1358,30 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_back)
 		{
-			if(mySD->getSilType() < 10000)
-				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
-			else
+//			if(mySD->getSilType() < 10000)
+//				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+//			else
 				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+		}
+		else if(tag == kStartSettingMenuTag_postbox)
+		{
+			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(StartSettingScene::mailPopupClose), bind(&StartSettingScene::heartRefresh, this));
+			addChild(t_pp, kStartSettingZorder_popup);
+			
+			postbox_count_case->setVisible(false);
+		}
+		else if(tag == kStartSettingMenuTag_option)
+		{
+			OptionPopup* t_popup = OptionPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+			addChild(t_popup, kStartSettingZorder_popup);
+		}
+		else if(tag == kStartSettingMenuTag_achieve)
+		{
+			AchievePopup* t_ap = AchievePopup::create();
+			addChild(t_ap, kStartSettingZorder_popup);
+			
+			t_ap->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
 		}
 		else if(tag == kStartSettingMenuTag_tip)
 		{
@@ -1465,26 +1503,26 @@ void StartSettingScene::menuAction(CCObject* sender)
 
 void StartSettingScene::setTop()
 {
-	CCSprite* top_case = CCSprite::create("mainflow_top.png");
-	top_case->setAnchorPoint(ccp(0.5f,1.f));
-	top_case->setPosition(ccp(258,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
-	addChild(top_case, kStartSettingZorder_top);
-	
-	CCSprite* n_cancel = CCSprite::create("startsetting_home.png");
-	CCSprite* s_cancel = CCSprite::create("startsetting_home.png");
+	CCSprite* n_cancel = CCSprite::create("puzzle_cancel.png");
+	CCSprite* s_cancel = CCSprite::create("puzzle_cancel.png");
 	s_cancel->setColor(ccGRAY);
 	
 	CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(StartSettingScene::menuAction));
 	cancel_item->setTag(kStartSettingMenuTag_cancel);
 	
 	CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
-	cancel_menu->setPosition(ccp(-32,top_case->getContentSize().height/2.f));
-	top_case->addChild(cancel_menu);
+	cancel_menu->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	addChild(cancel_menu, kStartSettingZorder_top);
 	
+	
+	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
+	top_heart->setAnchorPoint(ccp(0.5f,1.f));
+	top_heart->setPosition(ccp(78+35,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	addChild(top_heart, kStartSettingZorder_top);
 	
 	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(16,top_case->getContentSize().height/2.f-0.5f));
-	top_case->addChild(heart_time);
+	heart_time->setPosition(ccp(15,top_heart->getContentSize().height/2.f));
+	top_heart->addChild(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");
 	CCSprite* s_heart = CCSprite::create("mainflow_top_shop.png");
@@ -1494,13 +1532,18 @@ void StartSettingScene::setTop()
 	heart_item->setTag(kStartSettingMenuTag_heartShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(120,top_case->getContentSize().height/2.f));
-	top_case->addChild(heart_menu);
+	heart_menu->setPosition(ccp(top_heart->getContentSize().width-n_heart->getContentSize().width/2.f+5,top_heart->getContentSize().height/2.f));
+	top_heart->addChild(heart_menu);
 	
+	
+	CCSprite* top_gold = CCSprite::create("mainflow_top_gold.png");
+	top_gold->setAnchorPoint(ccp(0.5f,1.f));
+	top_gold->setPosition(ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	addChild(top_gold, kStartSettingZorder_top);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(178,top_case->getContentSize().height/2.f-5));
-	top_case->addChild(gold_label);
+	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-5));
+	top_gold->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
 	
@@ -1512,13 +1555,18 @@ void StartSettingScene::setTop()
 	gold_item->setTag(kStartSettingMenuTag_goldShop);
 	
 	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
-	gold_menu->setPosition(ccp(212,top_case->getContentSize().height/2.f));
-	top_case->addChild(gold_menu);
+	gold_menu->setPosition(ccp(top_gold->getContentSize().width-n_gold->getContentSize().width/2.f+5,top_gold->getContentSize().height/2.f));
+	top_gold->addChild(gold_menu);
 	
+	
+	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
+	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
+	top_ruby->setPosition(ccp(325+10,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	addChild(top_ruby, kStartSettingZorder_top);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(261,top_case->getContentSize().height/2.f-5));
-	top_case->addChild(ruby_label);
+	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-5));
+	top_ruby->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
 	
@@ -1530,20 +1578,120 @@ void StartSettingScene::setTop()
 	ruby_item->setTag(kStartSettingMenuTag_rubyShop);
 	
 	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
-	ruby_menu->setPosition(ccp(287,top_case->getContentSize().height/2.f));
-	top_case->addChild(ruby_menu);
+	ruby_menu->setPosition(ccp(top_ruby->getContentSize().width-n_ruby->getContentSize().width/2.f+5,top_ruby->getContentSize().height/2.f));
+	top_ruby->addChild(ruby_menu);
+	
+	
+	
+	
+	
+	CCSprite* n_postbox = CCSprite::create("mainflow_new_postbox.png");
+	CCSprite* s_postbox = CCSprite::create("mainflow_new_postbox.png");
+	s_postbox->setColor(ccGRAY);
+	
+	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(StartSettingScene::menuAction));
+	postbox_item->setTag(kStartSettingMenuTag_postbox);
+	
+	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
+	postbox_menu->setPosition(ccp(394,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	addChild(postbox_menu, kStartSettingZorder_top);
+	
+	postbox_count_case = CCSprite::create("mainflow_postbox_count.png");
+	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
+	addChild(postbox_count_case, kStartSettingZorder_top);
+	postbox_count_case->setVisible(false);
+	
+	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+	postbox_count_label->setColor(ccc3(95, 60, 30));
+	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
+	postbox_count_case->addChild(postbox_count_label);
+	
+	countingMessage();
+	
+	
+	CCSprite* n_achieve = CCSprite::create("mainflow_new_achievement.png");
+	CCSprite* s_achieve = CCSprite::create("mainflow_new_achievement.png");
+	s_achieve->setColor(ccGRAY);
+	
+	CCMenuItem* achieve_item = CCMenuItemSprite::create(n_achieve, s_achieve, this, menu_selector(StartSettingScene::menuAction));
+	achieve_item->setTag(kStartSettingMenuTag_achieve);
+	
+	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
+	achieve_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	addChild(achieve_menu, kStartSettingZorder_top);
+	
+	
+	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
+	CCSprite* s_option = CCSprite::create("mainflow_new_option.png");
+	s_option->setColor(ccGRAY);
+	
+	CCMenuItem* option_item = CCMenuItemSprite::create(n_option, s_option, this, menu_selector(StartSettingScene::menuAction));
+	option_item->setTag(kStartSettingMenuTag_option);
+	
+	CCMenu* option_menu = CCMenu::createWithItem(option_item);
+	option_menu->setPosition(ccp(460,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	addChild(option_menu, kStartSettingZorder_top);
+	
+}
 
+void StartSettingScene::mailPopupClose()
+{
+	countingMessage();
+	is_menu_enable = true;
+}
+
+void StartSettingScene::heartRefresh()
+{
+	CCPoint heart_position = heart_time->getPosition();
+	CCNode* heart_parent = heart_time->getParent();
 	
-	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
-	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
-	s_tip->setColor(ccGRAY);
+	heart_time->removeFromParent();
 	
-	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip, s_tip, this, menu_selector(StartSettingScene::menuAction));
-	tip_item->setTag(kStartSettingMenuTag_tip);
+	heart_time = HeartTime::create();
+	heart_time->setPosition(heart_position);
+	heart_parent->addChild(heart_time);
+}
+
+void StartSettingScene::countingMessage()
+{
+	Json::Value p;
+	p["memberID"]=hspConnector::get()->getKakaoID();
+	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
+	p["limitDay"] = mySGD->getMsgRemoveDay();
+	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	
-	CCMenu* tip_menu = CCMenu::createWithItem(tip_item);
-	tip_menu->setPosition(ccp(394, top_case->getContentSize().height/2.f));
-	top_case->addChild(tip_menu);
+	hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
+								 {
+									 GraphDogLib::JsonToLog("getmessagelist", r);
+									 if(r["result"]["code"].asInt() != GDSUCCESS)
+										 return;
+									 Json::Value message_list = r["list"];
+									 if(message_list.size() > 0)
+									 {
+										 postbox_count_case->setVisible(true);
+										 
+										 if(message_list.size() < 10)
+										 {
+											 postbox_count_label->setFontSize(10);
+											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+										 }
+										 else if(message_list.size() < 100)
+										 {
+											 postbox_count_label->setFontSize(7);
+											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+										 }
+										 else
+										 {
+											 postbox_count_label->setFontSize(8);
+											 postbox_count_label->setString("...");
+										 }
+									 }
+									 else
+									 {
+										 postbox_count_case->setVisible(false);
+										 postbox_count_label->setString("0");
+									 }
+								 });
 }
 
 void StartSettingScene::callStart()
