@@ -72,6 +72,11 @@ private:
 	
 	void resultLogin(Json::Value result_data);
 	
+	void resultHSLoding(Json::Value result_data);
+	void joinAction();
+	
+	void successLogin();
+	
 	vector<CommandParam> command_list;
 //	bool must_be_load_friends;
 	int receive_cnt;
