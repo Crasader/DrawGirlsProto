@@ -77,7 +77,7 @@ private:
 	CountingBMLabel* gold_label;
 	
 	void setMain();
-	CCSprite* main_case;
+	CCScale9Sprite* main_case;
 	
 	void setStageRank();
 	
@@ -110,9 +110,15 @@ private:
 	void menuAction(CCObject* sender);
 	void setTop();
 	
+	CCSprite* postbox_count_case;
+	CCLabelTTF* postbox_count_label;
+	void countingMessage();
+	void mailPopupClose();
+	void heartRefresh();
 	
 	CCMenu* upgrade_menu;
-	CCLabelTTF* missile_data;
+	CCLabelTTF* missile_data_level;
+	CCLabelTTF* missile_data_power;
 	void upgradeAction(CCObject* sender);
 	
 	

@@ -571,7 +571,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		if(myrank > 3)
 		{
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(210, 65));
+			list_cell_case->setContentSize(CCSizeMake(210, 40));
 			list_cell_case->setPosition(ccp(355,185-3*35));
 			main_case->addChild(list_cell_case, kZ_FP_img);
 			
@@ -710,7 +710,7 @@ void FailPopup::scoreAnimation(float dt)
 				increase_score += decreaseUnit;
 			}
 		}
-		score_label->setString(CCString::createWithFormat("%.0f",increase_score)->getCString());
+		score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f",increase_score)->getCString()).c_str());
 	}
 	else
 		stopScoreAnimation();
@@ -719,7 +719,7 @@ void FailPopup::scoreAnimation(float dt)
 void FailPopup::stopScoreAnimation()
 {
 	unschedule(schedule_selector(FailPopup::scoreAnimation));
-	score_label->setString(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString());
+	score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString()).c_str());
 	AudioEngine::sharedInstance()->stopAllEffects();
 }
 

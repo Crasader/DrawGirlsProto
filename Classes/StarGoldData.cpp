@@ -528,7 +528,9 @@ int StarGoldData::getNextStageCardNumber( int recent_card_number )
 	else
 	{
 		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4)) > 0)
+			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
+		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
 		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
@@ -579,7 +581,9 @@ int StarGoldData::getPreStageCardNumber( int recent_card_number )
 	else
 	{
 		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
+		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4)) > 0)
+			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
+		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
 		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);

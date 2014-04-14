@@ -1591,7 +1591,7 @@ void Jack::takeSpeedUpItem()
 {
 	if(myGD->jack_base_speed + speed_up_value >= 2.f)
 	{
-		myGD->communication("Main_takeSpeedUpEffect", int(roundf((0.8f - (2.f - myGD->jack_base_speed) + speed_up_value)/0.1f)));
+		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
 		
 		string missile_code;
 		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
@@ -1607,7 +1607,7 @@ void Jack::takeSpeedUpItem()
 		speed_up_value += 0.1f;
 		changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 		
-		myGD->communication("Main_takeSpeedUpEffect", int(roundf((0.8f - (2.f - myGD->jack_base_speed) + speed_up_value)/0.1f)));
+		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
 	}
 }
 
