@@ -1532,10 +1532,12 @@ void TitleRenewalScene::joinAction()
 									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)
 									 {
 										 addChild(ASPopupView::getCommonNoti(-999, "닉네임 중복"), 999);
+										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDFAULTYNICK)
 									 {
 										 addChild(ASPopupView::getCommonNoti(-999, "불량 닉네임"), 999);
+										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
 									 {
@@ -1553,10 +1555,12 @@ void TitleRenewalScene::joinAction()
 									 else if(result_data["result"]["code"].asInt() == GDLONGNAME)
 									 {
 										 addChild(ASPopupView::getCommonNoti(-999, "닉네임이 너무 깁니다."), 999);
+										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDSHORTNAME)
 									 {
 										 addChild(ASPopupView::getCommonNoti(-999, "닉네임이 너무 짧습니다."), 999);
+										 is_menu_enable = true;
 									 }
 									 else
 									 {
