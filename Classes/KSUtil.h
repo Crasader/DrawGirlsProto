@@ -345,6 +345,7 @@ protected:
 	T m_s;
 	FromToWithDuration2<T> fromTo;
 	float m_flowTime;
+	bool is_action_time;
 public:
 	virtual ~KSGradualValue(){
 	}
@@ -356,14 +357,14 @@ public:
 //		return newO;
 //	}
 	static KSGradualValue* create(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish,
-																std::function<float(float)> tf = nullptr)
+																std::function<float(float)> tf = nullptr, bool t_is_action_time = false)
 	{
 		KSGradualValue* newO = new KSGradualValue;
-		newO->init(a, b, s, __f, __finish, tf);
+		newO->init(a, b, s, __f, __finish, tf, t_is_action_time);
 		newO->autorelease();
 		return newO;
 	}
-	bool init(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish, std::function<float(float)> tf)
+	bool init(T a, T b, float s, std::function<void(T)> __f, std::function<void(T)> __finish, std::function<float(float)> tf, bool t_is_action_time)
 	{
 		m_flowTime = 0;
 		m_a = a;
@@ -371,6 +372,7 @@ public:
 		m_f = __f;
 		m_timeFunctor = tf;
 		m_fFinish = __finish;
+		is_action_time = t_is_action_time;
 		
 		fromTo.init(m_a, m_b, s, tf);
 		
@@ -383,7 +385,10 @@ public:
 	}
 	void update(float dt)
 	{
-		m_flowTime += 1/60.f;
+		if(is_action_time)
+			m_flowTime += dt;
+		else
+			m_flowTime += 1/60.f;
 		T val = fromTo.getValue();
 		m_f(val);
 		bool result = fromTo.absStep(m_flowTime);

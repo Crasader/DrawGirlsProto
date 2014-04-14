@@ -33,6 +33,10 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 	bossJson = bossJson[0u];
 	reader.parse(juniorInfo, juniorJson);
 	
+	boss_node = CCNode::create();
+	boss_node->setPosition(CCPointZero);
+	addChild(boss_node);
+	
 	std::string bossShape = bossJson.get("shape", "circle").asString();
 	
 	CCPoint boss_position;
@@ -67,7 +71,7 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 		
 		if(m_circleSprite != NULL)
 		{
-			this->addChild(m_circleSprite);
+			boss_node->addChild(m_circleSprite);
 			m_circleSprite->setScale(0.7f);
 			m_circleSprite->setPosition(boss_position);
 		}
@@ -80,7 +84,7 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 			ccbiname2="apple2";
 		}
 		m_snakeNode = KSSnakeBase::create(ccbiname2, false);
-		addChild(m_snakeNode, 1000);
+		boss_node->addChild(m_snakeNode, 1000);
 		m_snakeNode->setScale(0.7f);
 		m_snakeNode->setPosition(boss_position);
 		
@@ -119,6 +123,13 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 //			this->addChild(m_tailImg, lastZ - 1);
 //			reader->release();
 //		}
+	}
+	
+	if(t_code == kCumberShowWindowSceneCode_cardChange)
+	{
+		a_y = 0.2f;
+		v_y = 0;
+		schedule(schedule_selector(CumberShowWindow::floatMoving));
 	}
 	
 	boss_hp = bossJson["hp"].asInt();
@@ -216,4 +227,13 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 
 	
 	return true;
+}
+
+void CumberShowWindow::floatMoving()
+{
+	v_y += a_y;
+	boss_node->setPosition(boss_node->getPosition() + ccp(0,v_y));
+	
+	if(v_y > 2.f || v_y < -2.f)
+		a_y = -a_y;
 }

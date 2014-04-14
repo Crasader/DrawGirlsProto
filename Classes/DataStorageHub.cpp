@@ -160,6 +160,7 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1, int key_val2)
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int val1, bool diskWrite)
 {
 	string c_key = getKey(t_key);
+	
 	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
 	dsh_cache_int[c_key] = val1;
 }

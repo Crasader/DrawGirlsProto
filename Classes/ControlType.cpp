@@ -10,6 +10,7 @@
 #include "Jack.h"
 #include "DataStorageHub.h"
 #include "GameData.h"
+#include "KSUtil.h"
 
 ///////////////////////////////////////////////// Button Side ////////////////////////////////////////////////////////////////////
 //void ControlButtonSide::ingSchedule()
@@ -322,6 +323,9 @@
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
 #define TouchOutWidth		10.f
+
+const float CONTROL_OUT_DISTANCE = 150.f;
+const float CONTROL_IN_TIME = 0.5f;
 
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
@@ -1458,13 +1462,21 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
-			control_ball->setPosition(ccp(480-40-myGD->boarder_value, 40));
+			control_circle->setPosition(ccp(480-40-myGD->boarder_value+CONTROL_OUT_DISTANCE, 40));
+			control_ball->setPosition(ccp(480-40-myGD->boarder_value+CONTROL_OUT_DISTANCE, 40));
+			
+			addChild(KSGradualValue<float>::create(480-40-myGD->boarder_value + CONTROL_OUT_DISTANCE, 480-40-myGD->boarder_value, CONTROL_IN_TIME,
+												   [=](float t){control_circle->setPositionX(t);control_ball->setPositionX(t);},
+												   [=](float t){control_circle->setPositionX(480-40-myGD->boarder_value);control_ball->setPositionX(480-40-myGD->boarder_value);}));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
-			control_ball->setPosition(ccp(40+myGD->boarder_value, 40));
+			control_circle->setPosition(ccp(40+myGD->boarder_value-CONTROL_OUT_DISTANCE, 40));
+			control_ball->setPosition(ccp(40+myGD->boarder_value-CONTROL_OUT_DISTANCE, 40));
+			
+			addChild(KSGradualValue<float>::create(40+myGD->boarder_value - CONTROL_OUT_DISTANCE, 40+myGD->boarder_value, CONTROL_IN_TIME,
+												   [=](float t){control_circle->setPositionX(t);control_ball->setPositionX(t);},
+												   [=](float t){control_circle->setPositionX(40+myGD->boarder_value);control_ball->setPositionX(40+myGD->boarder_value);}));
 		}
 	}
 
@@ -1475,8 +1487,22 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
 		button_ani = reader->getAnimationManager();
 		//		draw_button = CCSprite::create("ui_draw.png");
-		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-40,40));
-		else								draw_button->setPosition(ccp(40,40));
+		if(controlJoystickDirection == kControlJoystickDirection_left)
+		{
+			draw_button->setPosition(ccp(480-40+CONTROL_OUT_DISTANCE,40));
+			
+			addChild(KSGradualValue<float>::create(480-40 - CONTROL_OUT_DISTANCE, 480-40, CONTROL_IN_TIME,
+												   [=](float t){draw_button->setPositionX(t);},
+												   [=](float t){draw_button->setPositionX(480-40);}));
+		}
+		else
+		{
+			draw_button->setPosition(ccp(40-CONTROL_OUT_DISTANCE,40));
+			
+			addChild(KSGradualValue<float>::create(40 - CONTROL_OUT_DISTANCE, 40, CONTROL_IN_TIME,
+												   [=](float t){draw_button->setPositionX(t);},
+												   [=](float t){draw_button->setPositionX(40);}));
+		}
 		addChild(draw_button);
 		reader->release();
 	}

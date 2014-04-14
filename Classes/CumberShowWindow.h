@@ -73,6 +73,8 @@ public:
 	std::vector<CCBAnimationManager*> m_snakeBodiesAnimation;
 	CCBAnimationManager* m_snakeTailAnimation;
 	
+	CCNode* boss_node;
+	
 	CCSprite* m_circleSprite;
 	KSSnakeBase* m_snakeNode;
 	CCSprite* m_juniorSprite;
@@ -80,5 +82,10 @@ public:
 	
 	
 	Well512 m_well512;
+	
+	
+	float a_y;
+	float v_y;
+	void floatMoving();
 };
 #endif /* defined(__DGproto__CumberShowWindow__) */

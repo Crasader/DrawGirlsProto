@@ -268,7 +268,6 @@ private:
 	float keepLife;
 	float maxBossLife;
 	float clearPercentage;
-	CCSprite * ui_case;
 	CCSprite * sand_clock;
 	BossLifeGage * m_bossLifeGage;
 	AreaGage * m_areaGage;
