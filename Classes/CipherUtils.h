@@ -33,8 +33,8 @@ private:
 	
 public:
 	static void removeZerosPadding(std::string& str);
-	static std::string encrypt(const char *keyString, const char* plain); // HEX 변환후 AES
-	static std::string encrypt(const char *keyString, const void* plain, size_t length); // HEX 변환후 AES (데이터 암호화용)
+	static std::string encrypt(const char *keyString, const char* plain); // HEX 변환후 AES 후 HEX
+	static std::string encrypt(const char *keyString, const void* plain, size_t length); // HEX 변환후 AES (데이터 암호화용) 후 HEX
 	static std::string decrypt(const char *keyString, const char* cipher); // AES 풀고 HEX 품.
 	
 	static std::string encryptDESBASE64(const char *keyString, const char* plain);
