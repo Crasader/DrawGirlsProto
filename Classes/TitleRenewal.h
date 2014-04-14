@@ -72,7 +72,7 @@ private:
 	
 	void resultLogin(Json::Value result_data);
 	
-	void resultHSLoding(Json::Value result_data);
+	void resultHSLogin(Json::Value result_data);
 	void joinAction();
 	
 	void successLogin();

@@ -96,7 +96,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	{
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getKakaoID();
-		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
+		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 	}
 	else
 	{
@@ -107,7 +107,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	}
 }
 
-void TitleRenewalScene::resultHSLoding(Json::Value result_data)
+void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
