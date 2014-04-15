@@ -149,8 +149,9 @@ bool MainFlowScene::init()
 		}
 		
 		int take_level;
-		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 3;
-		else if(mySGD->is_exchanged || mySGD->is_showtime)	take_level = 2;
+		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
+		else if(mySGD->is_showtime)							take_level = 3;
+		else if(mySGD->is_exchanged)						take_level = 2;
 		else												take_level = 1;
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
@@ -166,6 +167,12 @@ bool MainFlowScene::init()
 			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GS(kSDS_CI_int1_passive_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
 			
 			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+			
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getKakaoID();
+			param["cardNo"] = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+			
+			hspConnector::get()->command("updateCardHistory", param, nullptr);
 		}
 		else
 		{
