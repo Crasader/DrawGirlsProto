@@ -35,6 +35,15 @@ CCScene* LoadingTipScene::scene()
     return scene;
 }
 
+LoadingTipScene* LoadingTipScene::getLoadingTipSceneLayer()
+{
+	LoadingTipScene *layer = LoadingTipScene::create();
+//	layer->setAnchorPoint(ccp(0.5,0));
+//	layer->setScale(myDSH->screen_convert_rate);
+//	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
+    return layer;
+}
+
 enum LoadingTipZorder{
 	kLoadingTipZorder_back = 1,
 	kLoadingTipZorder_content,
@@ -50,9 +59,6 @@ bool LoadingTipScene::init()
 	
 	setKeypadEnabled(true);
 	
-	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-	
 	next_scene_name = mySGD->getNextSceneName();
 	
 	
@@ -63,20 +69,30 @@ bool LoadingTipScene::init()
 	
 	if(!is_mission_tip)
 	{
-		CCSprite* tip_img = getLoadingTipImage();
+		CCNode* tip_img = getLoadingTipImage();
 		tip_img->setPosition(ccp(240,160));
 		addChild(tip_img, kLoadingTipZorder_back);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::popRootScene));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+		tip_img->runAction(t_seq);
 	}
 	else
 	{
 		CCSprite* tip_img = getMissionTipImage();
 		tip_img->setPosition(ccp(240,160));
 		addChild(tip_img, kLoadingTipZorder_back);
+		
+		readyLoading();
 	}
-	
-	readyLoading();
 		
 	return true;
+}
+
+void LoadingTipScene::popRootScene()
+{
+	readyLoading();
 }
 
 CCSprite* LoadingTipScene::getMissionTipImage()
@@ -314,12 +330,32 @@ CCSprite* LoadingTipScene::getMissionTipImage()
 	return loading_tip_back;
 }
 
-CCSprite* LoadingTipScene::getLoadingTipImage()
+CCNode* LoadingTipScene::getLoadingTipImage()
 {
 	int total_loading_tip = 14;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
-	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
+	CCNode* loading_tip_node = CCNode::create();
+	CCSprite* left_curtain = CCSprite::create("curtain_left.png");
+	left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+	left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
+	left_curtain->setPosition(ccp(-240, 0));
+	loading_tip_node->addChild(left_curtain);
+	
+	CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(0,0));
+	left_curtain->runAction(left_in);
+	
+	CCSprite* right_curtain = CCSprite::create("curtain_left.png");
+	right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+	right_curtain->setFlipX(true);
+	right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
+	right_curtain->setPosition(ccp(240,0));
+	loading_tip_node->addChild(right_curtain);
+	
+	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
+	right_curtain->runAction(right_in);
+	
+//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	string tip_filename = "loading_tip_";
 	if(selected_loading_tip == 0)
 		tip_filename += "achievement";
@@ -355,14 +391,23 @@ CCSprite* LoadingTipScene::getLoadingTipImage()
 	tip_filename += ".png";
 	
 	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
-	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
-	loading_tip_back->addChild(content_img);
+	content_img->setPosition(ccp(0, 0));
+	content_img->setOpacity(0);
+	loading_tip_node->addChild(content_img);
 	
-	return loading_tip_back;
+	CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 255);
+	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, NULL);
+	content_img->runAction(t_seq);
+	
+	return loading_tip_node;
 }
 
 void LoadingTipScene::readyLoading()
 {
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	
 	sil_load_list.clear();
 	default_load_list.clear();
 	
@@ -462,12 +507,7 @@ void LoadingTipScene::onMinimumTime()
 	if(ing_load_img == total_load_img)
 	{
 		is_minimum_time = false;
-		if(next_scene_name == "maingame")
-			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-		else if(next_scene_name == "newmainflow")
-			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
-		else if(next_scene_name == "playtutorial")
-			CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
+		endLoadingTip();
 	}
 }
 
@@ -490,13 +530,18 @@ void LoadingTipScene::countingFunc(CCObject *sender)
 	if(ing_load_img == total_load_img && is_minimum_time)
 	{
 		is_minimum_time = false;
-		if(next_scene_name == "maingame")
-			CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-		else if(next_scene_name == "newmainflow")
-			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
-		else if(next_scene_name == "playtutorial")
-			CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
+		endLoadingTip();
 	}
+}
+
+void LoadingTipScene::endLoadingTip()
+{
+	if(next_scene_name == "maingame")
+		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	else if(next_scene_name == "newmainflow")
+		CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+	else if(next_scene_name == "playtutorial")
+		CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
 }
 
 void LoadingTipScene::alertAction(int t1, int t2)

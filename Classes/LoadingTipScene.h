@@ -26,7 +26,9 @@ public:
 	
     // there's no 'id' in cpp, so we recommend to return the class instance pointer
     static cocos2d::CCScene* scene();
-	static CCSprite* getLoadingTipImage();
+	static CCNode* getLoadingTipImage();
+	
+	static LoadingTipScene* getLoadingTipSceneLayer();
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(LoadingTipScene);
@@ -55,6 +57,10 @@ private:
 	CCSprite* ok_img;
 	CCMenuLambda* ok_menu;
 	CommonButton* no_review;
+	
+	void endLoadingTip();
+	
+	void popRootScene();
 	
 	void showButton();
 	
