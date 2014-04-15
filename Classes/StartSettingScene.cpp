@@ -2179,10 +2179,6 @@ void StartSettingScene::goToGame()
 		mySGD->setNextSceneName("maingame");
 		
 		LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-		loading_tip->setAnchorPoint(ccp(0.5,0));
-		loading_tip->setScale(myDSH->screen_convert_rate);
-		loading_tip->setPosition(ccpAdd(loading_tip->getPosition(), myDSH->ui_zero_point));
-		
 		addChild(loading_tip, kStartSettingZorder_popup);
 		
 //		CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());

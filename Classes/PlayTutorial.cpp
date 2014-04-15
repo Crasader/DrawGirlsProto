@@ -1517,7 +1517,9 @@ void PlayTutorial::nextStep()
 														  {
 															  t_sm->removeFromParent();
 															  mySGD->setNextSceneName("maingame");
-															  CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+															  
+															  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+															  addChild(loading_tip, 999);
 														  });
 										}, CCSizeMake(350,100), ccp(0,0), 12);
 					  });
