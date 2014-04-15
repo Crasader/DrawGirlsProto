@@ -125,13 +125,6 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 //		}
 	}
 	
-	if(t_code == kCumberShowWindowSceneCode_cardChange)
-	{
-		a_y = 0.2f;
-		v_y = 0;
-		schedule(schedule_selector(CumberShowWindow::floatMoving));
-	}
-	
 	boss_hp = bossJson["hp"].asInt();
 	boss_speed = bossJson["speed"]["start"].asDouble();
 	boss_agi = bossJson.get("agi", 0).asDouble();
@@ -229,11 +222,23 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 	return true;
 }
 
+void CumberShowWindow::startFloatMoving()
+{
+	base_position = boss_node->getPosition() + ccp(0,11);
+	a_y = 0.2f;
+	v_y = 0;
+	schedule(schedule_selector(CumberShowWindow::floatMoving));
+}
+
 void CumberShowWindow::floatMoving()
 {
 	v_y += a_y;
 	boss_node->setPosition(boss_node->getPosition() + ccp(0,v_y));
 	
-	if(v_y > 2.f || v_y < -2.f)
+	if(boss_node->getPositionY() > base_position.y)
+		a_y = -0.2f;
+	else if(boss_node->getPositionY() < base_position.y)
+		a_y = 0.2f;
+	else
 		a_y = -a_y;
 }

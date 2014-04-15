@@ -105,6 +105,9 @@ private:
 	int monster_download_version;
 	
 	void resultGetUserData(Json::Value result_data);
+	
+	void resultGetCardHistory(Json::Value result_data);
+	
 	Json::Value friendList;
 	
 	void resultLoadedCardData(Json::Value result_data);

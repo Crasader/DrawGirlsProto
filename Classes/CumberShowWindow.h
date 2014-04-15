@@ -83,7 +83,9 @@ public:
 	
 	Well512 m_well512;
 	
+	void startFloatMoving();
 	
+	CCPoint base_position;
 	float a_y;
 	float v_y;
 	void floatMoving();

@@ -21,7 +21,7 @@ bool DataStorageHub::getBoolForKey (DSH_Key t_key)
 	
 	iter_bool = dsh_cache_bool.find(c_key);
 	if(iter_bool != dsh_cache_bool.end())
-		return iter_bool->second;
+		return iter_bool->second.getV();
 	
 	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
 	if(bool_string == "false")
@@ -41,7 +41,7 @@ bool DataStorageHub::getBoolForKey (DSH_Key t_key, int key_val1)
 	
 	iter_bool = dsh_cache_bool.find(c_key);
 	if(iter_bool != dsh_cache_bool.end())
-		return iter_bool->second;
+		return iter_bool->second.getV();
 	
 	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
 	if(bool_string == "false")
@@ -61,7 +61,7 @@ bool DataStorageHub::getBoolForKey (DSH_Key t_key, int key_val1, int key_val2)
 	
 	iter_bool = dsh_cache_bool.find(c_key);
 	if(iter_bool != dsh_cache_bool.end())
-		return iter_bool->second;
+		return iter_bool->second.getV();
 	
 	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
 	if(bool_string == "false")
@@ -127,7 +127,7 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key)
 	
 	iter_int = dsh_cache_int.find(c_key);
 	if(iter_int != dsh_cache_int.end())
-		return iter_int->second;
+		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
 	dsh_cache_int[c_key] = return_value;
@@ -139,7 +139,7 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1)
 	
 	iter_int = dsh_cache_int.find(c_key);
 	if(iter_int != dsh_cache_int.end())
-		return iter_int->second;
+		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
 	dsh_cache_int[c_key] = return_value;
@@ -151,7 +151,7 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1, int key_val2)
 	
 	iter_int = dsh_cache_int.find(c_key);
 	if(iter_int != dsh_cache_int.end())
-		return iter_int->second;
+		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
 	dsh_cache_int[c_key] = return_value;
@@ -161,13 +161,15 @@ void DataStorageHub::setIntegerForKey (DSH_Key t_key, int val1, bool diskWrite)
 {
 	string c_key = getKey(t_key);
 	
-	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	if(t_key != kDSH_Key_cardDurability_int1 && t_key != kDSH_Key_hasGottenCard_int1 && t_key != kDSH_Key_cardTakeCnt && t_key != kDSH_Key_takeCardNumber_int1)
+		myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
 	dsh_cache_int[c_key] = val1;
 }
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int key_val1, int val1, bool diskWrite)
 {
 	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
-	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	if(t_key != kDSH_Key_cardDurability_int1 && t_key != kDSH_Key_hasGottenCard_int1 && t_key != kDSH_Key_cardTakeCnt && t_key != kDSH_Key_takeCardNumber_int1)
+		myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
 	dsh_cache_int[c_key] = val1;
 }
 string DataStorageHub::getStringForKey (DSH_Key t_key)
@@ -176,7 +178,7 @@ string DataStorageHub::getStringForKey (DSH_Key t_key)
 	
 	iter_string = dsh_cache_string.find(c_key);
 	if(iter_string != dsh_cache_string.end())
-		return iter_string->second;
+		return iter_string->second.getV();
 	
 	string return_value = myDefault->getValue(kSDF_myDSH, c_key, "");
 	dsh_cache_string[c_key] = return_value;
@@ -185,7 +187,8 @@ string DataStorageHub::getStringForKey (DSH_Key t_key)
 void DataStorageHub::setStringForKey (DSH_Key t_key, string val1, bool diskWrite)
 {
 	string c_key = getKey(t_key);
-	myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
+	if(t_key != kDSH_Key_inputTextCard_int1)
+		myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
 	dsh_cache_string[c_key] = val1;
 }
 string DataStorageHub::getStringForKey (DSH_Key t_key, int key_val1)
@@ -194,7 +197,7 @@ string DataStorageHub::getStringForKey (DSH_Key t_key, int key_val1)
 	
 	iter_string = dsh_cache_string.find(c_key);
 	if(iter_string != dsh_cache_string.end())
-		return iter_string->second;
+		return iter_string->second.getV();
 	
 	string return_value = myDefault->getValue(kSDF_myDSH, c_key, "");
 	dsh_cache_string[c_key] = return_value;
@@ -203,13 +206,15 @@ string DataStorageHub::getStringForKey (DSH_Key t_key, int key_val1)
 void DataStorageHub::setStringForKey (DSH_Key t_key, int key_val1, string val1, bool diskWrite)
 {
 	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
-	myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
+	if(t_key != kDSH_Key_inputTextCard_int1)
+		myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
 	dsh_cache_string[c_key] = val1;
 }
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int key_val1, int key_val2, int val1, bool diskWrite)
 {
 	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString();
-	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	if(t_key != kDSH_Key_cardDurability_int1 && t_key != kDSH_Key_hasGottenCard_int1 && t_key != kDSH_Key_cardTakeCnt && t_key != kDSH_Key_takeCardNumber_int1)
+		myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
 	dsh_cache_int[c_key] = val1;
 }
 CCSize DataStorageHub::getDesignResolutionSize ()
@@ -388,7 +393,7 @@ Json::Value DataStorageHub::getSaveAllUserDataParam ()
 	param["nick"] = getStringForKey(kDSH_Key_nick);
 	return param;
 }
-void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & card_data_load_list)
+void DataStorageHub::loadAllUserData (Json::Value result_data)
 {
 	Json::Value data;
 	Json::Reader reader;
@@ -406,31 +411,6 @@ void DataStorageHub::loadAllUserData (Json::Value result_data, vector <int> & ca
 	{
 		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt(), false);
 		setBoolForKey(kDSH_Key_isShowItem_int1, i, data[getKey(kDSH_Key_isShowItem_int1)][i].asBool(), false);
-	}
-	
-	setIntegerForKey(kDSH_Key_cardTakeCnt, data[getKey(kDSH_Key_cardTakeCnt)].asInt(), false);
-	int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
-	
-	for(int i=1;i<=card_take_cnt;i++)
-	{
-		int take_card_number = data[getKey(kDSH_Key_takeCardNumber_int1)][i].asInt();
-		setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, take_card_number, false);
-		setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, data[getKey(kDSH_Key_inputTextCard_int1)][i].asString(), false);
-		setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, data[getKey(kDSH_Key_cardDurability_int1)][i].asInt(), false);
-		setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, data[getKey(kDSH_Key_hasGottenCard_int1)][i].asInt(), false);
-		
-		setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number,
-										 data[getKey(kDSH_Key_cardLevel_int1)].get(i, 1).asInt(),
-										 false);
-		setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number,
-										 data[getKey(kDSH_Key_cardMaxDurability_int1)].get(i, 5).asInt(),
-										 false);
-		setStringForKey(kDSH_Key_cardPassive_int1, take_card_number,
-										data[getKey(kDSH_Key_cardPassive_int1)].get(i, "").asString(),
-										false);
-		
-		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, take_card_number) == "")
-			card_data_load_list.push_back(take_card_number);
 	}
 	
 	setIntegerForKey(kDSH_Key_allHighScore, data[getKey(kDSH_Key_allHighScore)].asInt(), false);
@@ -571,23 +551,6 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 			data[getKey(kDSH_Key_beautyStoneLevel_int1)][i] = getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id);
 		}
 	}
-	else if(t_key == kSaveUserData_Key_cardsInfo)
-	{
-		data[getKey(kDSH_Key_cardTakeCnt)] = getIntegerForKey(kDSH_Key_cardTakeCnt);
-		int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=card_take_cnt;i++)
-		{
-			int take_card_number = getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			data[getKey(kDSH_Key_takeCardNumber_int1)][i] = take_card_number;
-			data[getKey(kDSH_Key_hasGottenCard_int1)][i] = getIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number);
-			data[getKey(kDSH_Key_cardDurability_int1)][i] = getIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number);
-			data[getKey(kDSH_Key_inputTextCard_int1)][i] = getStringForKey(kDSH_Key_inputTextCard_int1, take_card_number);
-			
-			data[getKey(kDSH_Key_cardLevel_int1)][i] = getIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number);
-			data[getKey(kDSH_Key_cardMaxDurability_int1)][i] = getIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number);
-			data[getKey(kDSH_Key_cardPassive_int1)][i] = getStringForKey(kDSH_Key_cardPassive_int1, take_card_number);
-		}
-	}
 	else if(t_key == kSaveUserData_Key_highScore)
 		data[getKey(kDSH_Key_allHighScore)] = getIntegerForKey(kDSH_Key_allHighScore);
 	else if(t_key == kSaveUserData_Key_selectedCard)
@@ -725,22 +688,6 @@ void DataStorageHub::resetDSH ()
 		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0, false);
 		setBoolForKey(kDSH_Key_isShowItem_int1, i, false, false);
 	}
-	
-	int card_take_cnt = getIntegerForKey(kDSH_Key_cardTakeCnt);
-	for(int i=1;i<=card_take_cnt;i++)
-	{
-		int take_card_number = getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-		setIntegerForKey(kDSH_Key_takeCardNumber_int1, i, 0, false);
-		setIntegerForKey(kDSH_Key_hasGottenCard_int1, take_card_number, 0, false);
-		setIntegerForKey(kDSH_Key_cardDurability_int1, take_card_number, 0, false);
-		setStringForKey(kDSH_Key_inputTextCard_int1, take_card_number, "", false);
-		
-		
-		setIntegerForKey(kDSH_Key_cardLevel_int1, take_card_number, 1, false);
-		setIntegerForKey(kDSH_Key_cardMaxDurability_int1, take_card_number, 0, false);
-		setStringForKey(kDSH_Key_cardPassive_int1, take_card_number, "", false);
-	}
-	setIntegerForKey(kDSH_Key_cardTakeCnt, 0, false);
 	
 	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
 	

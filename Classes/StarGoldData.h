@@ -74,9 +74,10 @@ enum CardSortType{
 class CardSortInfo{
 public:
 	int card_number;
-	int take_number;
+	long long int take_number;
 	int grade;
 	int rank;
+	string user_ment;
 };
 
 enum ReplayKey
@@ -227,6 +228,7 @@ public:
 	int isHasGottenCards(int t_stage, int t_grade);
 	
 	void resetHasGottenCards();
+	void initTakeCardInfo(Json::Value card_list, vector<int>& card_data_load_list);
 	
 	
 	void setClearRewardGold(int t_reward)

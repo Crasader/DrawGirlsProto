@@ -9,6 +9,7 @@
 #include "hspConnector.h"
 #include "ServerDataSave.h"
 #include <map>
+#include "KSProtect.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -230,7 +231,7 @@ public:
 	CCPoint wideWidthFixTouch (CCPoint t_p);
 	string getKey (DSH_Key t_name);
 	Json::Value getSaveAllUserDataParam ();
-	void loadAllUserData (Json::Value result_data, vector <int> & card_data_load_list);
+	void loadAllUserData (Json::Value result_data);
 	void writeParamForKey (Json::Value & data, SaveUserData_Key t_key);
 	void saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector);
 	void saveAllUserData (jsonSelType t_saved);
@@ -242,12 +243,12 @@ public:
 	void fFlush ();
 	void removeCache();
 private:
-	map<string, bool> dsh_cache_bool;
-	map<string, bool>::iterator iter_bool;
-	map<string, int> dsh_cache_int;
-	map<string, int>::iterator iter_int;
-	map<string, string> dsh_cache_string;
-	map<string, string>::iterator iter_string;
+	map<string, KSProtectVar<bool>> dsh_cache_bool;
+	map<string, KSProtectVar<bool>>::iterator iter_bool;
+	map<string, KSProtectVar<int>> dsh_cache_int;
+	map<string, KSProtectVar<int>>::iterator iter_int;
+	map<string, KSProtectStr> dsh_cache_string;
+	map<string, KSProtectStr>::iterator iter_string;
 	
 	SaveData * myDefault;
 	float gold_get_rate;

@@ -173,6 +173,10 @@ void TitleRenewalScene::successLogin()
 	userdata_param["memberID"] = hspConnector::get()->getKakaoID();
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 	
+	Json::Value card_param;
+	card_param["memberID"] = hspConnector::get()->getKakaoID();
+	command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
+	
 	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
 	Json::Value character_param;
@@ -662,16 +666,35 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 			myDSH->clear();
 		
 		myDSH->resetDSH();
-		card_data_load_list.clear();
-		myDSH->loadAllUserData(result_data, card_data_load_list);
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard)) <= 0)
-			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+		myDSH->loadAllUserData(result_data);
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
+	}
+	else
+	{
+		is_receive_fail = true;
+		CCLabelTTF* userdata_label = CCLabelTTF::create("fail getuserdata", mySGD->getFont().c_str(), 10);
+		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
+		addChild(userdata_label);
+		Json::Value userdata_param;
+		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		card_data_load_list.clear();
 		
-		mySGD->resetHasGottenCards();
+		mySGD->initTakeCardInfo(result_data["list"], card_data_load_list);
 		
 		if(card_data_load_list.size() > 0)
 		{
@@ -684,12 +707,12 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* userdata_label = CCLabelTTF::create("fail getuserdata", mySGD->getFont().c_str(), 10);
-		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
-		addChild(userdata_label);
-		Json::Value userdata_param;
-		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
-		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+		CCLabelTTF* card_label = CCLabelTTF::create("fail getcardhistory", mySGD->getFont().c_str(), 10);
+		card_label->setPosition(ccp(200, myDSH->ui_top-30));
+		addChild(card_label);
+		Json::Value card_param;
+		card_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
 	}
 	
 	receive_cnt--;
@@ -835,6 +858,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+		
+		mySGD->resetHasGottenCards();
 	}
 	else
 	{
