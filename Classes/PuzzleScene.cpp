@@ -28,7 +28,7 @@
 #include "TouchSuctionLayer.h"
 #include "CommonButton.h"
 #include "MyLocalization.h"
-#include "MailPopup.h"
+#include "SumranMailPopup.h"
 #include "OptionPopup.h"
 #include "AchievePopup.h"
 #include "DiaryZoomPopup.h"
@@ -1385,7 +1385,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_postbox)
 		{
-			MailPopup* t_pp = MailPopup::create(this, callfunc_selector(PuzzleScene::mailPopupClose), bind(&PuzzleScene::heartRefresh, this));
+			SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(PuzzleScene::mailPopupClose), bind(&PuzzleScene::heartRefresh, this));
 			addChild(t_pp, kPuzzleZorder_popup);
 			
 			postbox_count_case->setVisible(false);
