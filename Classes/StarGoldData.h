@@ -389,6 +389,8 @@ public:
 	string getAppType();
 	int getAppVersion();
 	
+	int before_curtain_tip_type;
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;

@@ -250,10 +250,15 @@ void Maingame::onEnterTransitionDidFinish()
 	intro_boss->setScale(1.8f);
 	addChild(intro_boss, introZorder);
 	
+	CCDelayTime* t_delay = CCDelayTime::create(1.f);
 	CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
-	CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
+	CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
 	intro_boss->runAction(t_seq);
+	
+	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
+	curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+	addChild(curtain_node, introZorder);
 }
 
 void Maingame::startStory()
