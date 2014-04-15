@@ -31,13 +31,29 @@ static const GLchar* brightenFrag =
 static const GLchar* silCvtFrag =
 #include "SilhouetteConvertFrag.h"
 
+
+static const GLchar * grayVert =
+#include "GrayVert.h"
+
+static const GLchar * grayFrag =
+#include "GrayFrag.h"
+
+static const GLchar * grayPixelationVert =
+#include "GrayPixelationVert.h"
+
+static const GLchar * grayPixelationFrag =
+#include "GrayPixelationFrag.h"
+
 enum class CurrentMode
 {
 	kNone = 0,
 	kBlur,
 	kPixelation,
 	kBrighten,
-	kSilCvt
+	kSilCvt,
+	kGray,
+	kGrayPixelation,
+	kGrayBlur
 };
 class EffectSprite : public CCSprite
 {
@@ -135,6 +151,44 @@ public:
 			pProgram->release();
 			
 			m_currentMode = CurrentMode::kPixelation;
+			afterEffect(pProgram);
+		}
+		else
+		{
+			getShaderProgram()->use();
+		}
+		
+		getShaderProgram()->setUniformLocationWith1f
+						(glGetUniformLocation(getShaderProgram()->getProgram(), "u_pixelationSize"),
+																		 pixelationSize);
+	}
+	void setGray()
+	{
+		if(m_currentMode != CurrentMode::kGray)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(grayVert, grayFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			
+			m_currentMode = CurrentMode::kGray;
+			afterEffect(pProgram);
+		}
+		else
+		{
+			getShaderProgram()->use();
+		}
+	}
+	void setGrayPixelation(float pixelationSize = 30.f)
+	{
+		if(m_currentMode != CurrentMode::kGrayPixelation)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(grayPixelationVert, grayPixelationFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			
+			m_currentMode = CurrentMode::kGrayPixelation;
 			afterEffect(pProgram);
 		}
 		else

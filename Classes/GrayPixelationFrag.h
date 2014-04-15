@@ -22,8 +22,8 @@ void main()
 	//vec2 coord = uv;
 
   vec4 tc = texture2D(CC_Texture0, coord).rgba;
-
-  gl_FragColor = tc;
+	float gray = dot(tc.rgb, vec3(0.299, 0.587, 0.114));
+  gl_FragColor = vec4(gray, gray, gray, tc.a);
 
 
 }
