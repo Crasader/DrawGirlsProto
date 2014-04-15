@@ -158,9 +158,10 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	ok_menu->setPosition(ccp(mission_back->getContentSize().width*0.7f, mission_back->getContentSize().height*0.18f));
 	mission_back->addChild(ok_menu);
 	ok_menu->setVisible(false);
+	ok_menu->setTouchPriority(-600);
 	
 	
-	no_review = CommonButton::create("다시보지않기", 13, CCSizeMake(100, 50), CommonButtonGreen, -200);
+	no_review = CommonButton::create("다시보지않기", 13, CCSizeMake(100, 50), CommonButtonGreen, -600);
 	no_review->setPosition(ccp(mission_back->getContentSize().width*0.3f, mission_back->getContentSize().height*0.18f));
 	mission_back->addChild(no_review);
 	no_review->setVisible(false);
@@ -371,11 +372,15 @@ CCNode* LoadingTipScene::getMissionTipImage()
 									{
 										mission_back->setScale(1.5f - t/204.f);
 										KS::setOpacity(mission_back, t/0.2f*0.5f);
+										n_ok->setOpacity(0);
+										s_ok->setOpacity(0);
 									}
 								}, [=](int t)
 								{
 									mission_back->setScale(1.f);
 									KS::setOpacity(mission_back, 255);
+									n_ok->setOpacity(0);
+									s_ok->setOpacity(0);
 								}));
 	
 	return loading_tip_node;
