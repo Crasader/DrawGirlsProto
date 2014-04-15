@@ -30,12 +30,13 @@
 #include "StartSettingScene.h"
 #include "KHAlertView.h"
 #include "KSLabelTTF.h"
+#include "FormSetter.h"
 #define LZZ_INLINE inline
 
 using namespace std;
 namespace
 {
-  CCSize mailCellSize = CCSizeMake(188, 39);
+  CCSize mailCellSize = CCSizeMake(215, 50);
 }
 SumranMailPopup * SumranMailPopup::create (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh)
 {
@@ -96,9 +97,9 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	_menu->setTouchPriority(-200);
 
 	
-	CommonButton* allReceive = CommonButton::create("모두받기", 12, CCSizeMake(100,40), CommonButtonGreen, -200);
+	CommonButton* allReceive = CommonButton::create("모두수락", 12, CCSizeMake(100,40), CommonButtonLightPupple, -200);
 	allReceive->setTitleColor(ccc3(20, 0, 0));
-	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
+	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setFunction([=](CCObject*){
 			if(m_mailFilter == SumranMailFilter::kHeart) {
 				std::vector<int> mailNumbers;
@@ -282,7 +283,8 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 				});
 			}
 	});
-	allReceive->setPosition(ccp(240, 32));
+	//FormSetter::get()->addObject("testksoo2", allReceive);
+	allReceive->setPosition(ccp(380, 32));
 	allReceive->setEnabled(false);
 	this->addChild(allReceive, 1);
 	
@@ -479,13 +481,18 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	filterWithMailFilter();
 	//테이블 뷰 생성 시작 /////////////////////////////////////////////////////////////////////////////////////////
 	
+	CCScale9Sprite* barBack = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
+	barBack->setContentSize(CCSizeMake(7, 160.f));
+	FormSetter::get()->addObject("testksoo", barBack);
+	addChild(barBack, kMP_Z_mailTable + -1); 
 	//320x320 테이블 뷰 생성
-	mailTableView = CCTableView::create(this, CCSizeMake(422.5f, 174.f));
+
+	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
 		
 	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2 - 10, NULL, bar);
 	m_scrollBar->setDynamicScrollSize(false);
-	m_scrollBar->setVisible(false);	
+	m_scrollBar->setVisible(true);	
 	mailTableView->setAnchorPoint(CCPointZero);
 	
 	//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
@@ -496,7 +503,8 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	
 	//기준점 0,0
 	// 좌표 수동으로 잡느라 이리 됨
-	mailTableView->setPosition(ccp(37, 56));
+	//FormSetter::get()->addObject("testksoo", mailTableView);
+	mailTableView->setPosition(ccp(20, 56));
 	
 	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 	mailTableView->setDelegate(this);
@@ -550,19 +558,21 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 		CCNode* cell = CCNode::create();
 
-		std::string cellBackFile = "ui_common_cell.png";
+		std::string cellBackFile = "achievement_cellback_normal.png";
 
-
-		CCSprite* bg = CCSprite::create(cellBackFile.c_str());
+		CCScale9Sprite* listCellCase = CCScale9Sprite::create(cellBackFile.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(5, 5, 34, 34));
+		listCellCase->setContentSize(CCSizeMake(200.f, 46.f));
+		
+		CCScale9Sprite* bg = listCellCase;
 		bg->setPosition(CCPointZero);
 		bg->setAnchorPoint(CCPointZero);
 		cell->addChild(bg,0);
 
-		CCSprite* profileImg = GDWebSprite::create((mail)["profile_image_url"].asString(), "ending_noimg.png");
+		CCSprite* profileImg = CCSprite::create("postbox_present.png"); // GDWebSprite::create((mail)["profile_image_url"].asString(), "ending_noimg.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
 		profileImg->setTag(kMP_MT_profileImg);
-		profileImg->setPosition(ccp(20, 20));
-		profileImg->setScale(30.f / profileImg->getContentSize().width);
+		profileImg->setPosition(ccp(23, 23));
+		//profileImg->setScale(30.f / profileImg->getContentSize().width);
 		cell->addChild(profileImg, kMP_Z_profileImg);
 
 
@@ -1400,7 +1410,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		realCell->addChild(cell1);	
 		CCNode* cell2= createCCNodeFromIdx(idx * 2 + 1);	
 		realCell->addChild(cell2);	
-		cell2->setPosition(ccp(200, 0));
+		cell2->setPosition(ccp(215, 0));
 	}
 		
 	return realCell;
