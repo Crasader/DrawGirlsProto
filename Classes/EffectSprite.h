@@ -13,10 +13,10 @@
 
 USING_NS_CC;
 
-static const GLchar * ksVert =
+static const GLchar * pixelationVert =
 #include "PixelationVert.h"
 
-static const GLchar * ksFrag =
+static const GLchar * pixelationFrag =
 #include "PixelationFrag.h"
 
 static const GLchar* blurVert =
@@ -125,12 +125,12 @@ public:
 						(glGetUniformLocation(getShaderProgram()->getProgram(), "u_brighten"),
 																		 b);
 	}
-	void setPixelation()
+	void setPixelation(float pixelationSize = 30.f)
 	{
 		if(m_currentMode != CurrentMode::kPixelation)
 		{
 			CCGLProgram* pProgram = new CCGLProgram();
-			pProgram->initWithVertexShaderByteArray(ksVert, ksFrag);
+			pProgram->initWithVertexShaderByteArray(pixelationVert, pixelationFrag);
 			setShaderProgram(pProgram);
 			pProgram->release();
 			
@@ -142,6 +142,9 @@ public:
 			getShaderProgram()->use();
 		}
 		
+		getShaderProgram()->setUniformLocationWith1f
+						(glGetUniformLocation(getShaderProgram()->getProgram(), "u_pixelationSize"),
+																		 pixelationSize);
 	}
 	
 	void setSilhouetteConvert(int t_type)
