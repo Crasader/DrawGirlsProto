@@ -15,6 +15,7 @@
 #include "EnumDefine.h"
 #include "hspConnector.h"
 #include "KSProtect.h"
+#include "CCMenuLambda.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -30,6 +31,7 @@ enum StartSettingZorder{
 class CountingBMLabel;
 class HeartTime;
 class LoadingLayer;
+class CommonButton;
 //class RankFriendInfo;
 class StartSettingScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
@@ -81,8 +83,8 @@ private:
 	
 	void setStageRank();
 	
-	KSProtectVar<int> use_item_price_gold;
-	KSProtectVar<int> use_item_price_ruby;
+//	KSProtectVar<int> use_item_price_gold;
+//	KSProtectVar<int> use_item_price_ruby;
 	
 	bool is_before_selected_event_stage;
 	
@@ -100,6 +102,7 @@ private:
 	
 	CCLabelTTF* item_title_label;
 	CCLabelTTF* option_label;
+	CommonButton* buy_button;
 	
 	int gacha_item_frame;
 	ITEM_CODE selected_gacha_item;
@@ -121,6 +124,10 @@ private:
 	CCLabelTTF* missile_data_power;
 	void upgradeAction(CCObject* sender);
 	
+	CCMenuLambda* item_gacha_menu;
+	bool is_clicked_gacha_menu;
+	void gachaMenuCreate();
+	CCSprite* gacha_clicked_img;
 	
 	bool was_end_startAction;
 	bool was_end_removeMessage;

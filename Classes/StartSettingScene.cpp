@@ -235,27 +235,26 @@ void StartSettingScene::setMain()
 	main_case->addChild(mission_img);
 	
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
-	{
-		CCSprite* n_back = CCSprite::create("cardchange_cancel.png");
-		CCSprite* s_back = CCSprite::create("cardchange_cancel.png");
-		s_back->setColor(ccGRAY);
-		
-		CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(StartSettingScene::menuAction));
-		back_item->setTag(kStartSettingMenuTag_back);
-		
-		CCMenu* back_menu = CCMenu::createWithItem(back_item);
-		back_menu->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height+40-65));
-		main_case->addChild(back_menu);
-	}
+//	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000)
+//	{
+	CommonButton* back_button = CommonButton::createCloseButton();
+	back_button->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height+40-65));
+	back_button->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kStartSettingMenuTag_back);
+								 menuAction(t_node);
+							 });
+	main_case->addChild(back_button);
+//	}
 	
 	
 	selected_friend_idx = -1;
 	setStageRank();
 	
 	
-	use_item_price_gold = KSProtectVar<int>(0);
-	use_item_price_ruby = KSProtectVar<int>(0);
+//	use_item_price_gold = KSProtectVar<int>(0);
+//	use_item_price_ruby = KSProtectVar<int>(0);
 	
 	item_list = mySD->getStageItemList(stage_number);
 	
@@ -326,11 +325,11 @@ void StartSettingScene::setMain()
 			}
 			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
 			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
-			string item_currency = mySD->getItemCurrency(t_ic);
-			if(item_currency == "gold")
-				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
-			else if(item_currency == "ruby")
-				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
+//			string item_currency = mySD->getItemCurrency(t_ic);
+//			if(item_currency == "gold")
+//				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
+//			else if(item_currency == "ruby")
+//				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
 			
 			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable)
 			{
@@ -364,13 +363,13 @@ void StartSettingScene::setMain()
 				
 				is_selected_item.push_back(true);
 				
-				if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
-				{
-					if(item_currency == "gold")
-						use_item_price_gold = use_item_price_gold.getV() + mySD->getItemPrice(t_ic);
-					else if(item_currency == "ruby")
-						use_item_price_ruby = use_item_price_ruby.getV() + mySD->getItemPrice(t_ic);
-				}
+//				if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
+//				{
+//					if(item_currency == "gold")
+//						use_item_price_gold = use_item_price_gold.getV() + mySD->getItemPrice(t_ic);
+//					else if(item_currency == "ruby")
+//						use_item_price_ruby = use_item_price_ruby.getV() + mySD->getItemPrice(t_ic);
+//				}
 			}
 			else
 			{
@@ -398,31 +397,26 @@ void StartSettingScene::setMain()
 			}
 			
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
-			if(item_cnt > 0)
-			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setPosition(ccp(0, -21.5));
-				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-				
-				FormSetter::get()->addObject("item_count", cnt_label);
-			}
-			else
-			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setPosition(ccp(5, -21.5));
-				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-				
-				string buy_type_filename;
-				if(item_currency == "gold")
-					buy_type_filename = "price_gold_img.png";
-				else if(item_currency == "ruby")
-					buy_type_filename = "price_ruby_img.png";
-				
-				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
-				buy_type->setScale(0.5f);
-				buy_type->setPosition(ccp(-13, -21.5));
-				item_parent->addChild(buy_type);
-			}
+			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+			cnt_label->setPosition(ccp(21, -21));
+			item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+//			else
+//			{
+//				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
+//				cnt_label->setPosition(ccp(5, -21.5));
+//				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+//				
+//				string buy_type_filename;
+//				if(item_currency == "gold")
+//					buy_type_filename = "price_gold_img.png";
+//				else if(item_currency == "ruby")
+//					buy_type_filename = "price_ruby_img.png";
+//				
+//				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
+//				buy_type->setScale(0.5f);
+//				buy_type->setPosition(ccp(-13, -21.5));
+//				item_parent->addChild(buy_type);
+//			}
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
 			clicked_img->setVisible(false);
@@ -433,23 +427,33 @@ void StartSettingScene::setMain()
 			is_selected_item.push_back(false);
 	}
 	
-	CCSprite* gacha_mark = CCSprite::create("startsetting_item_gacha.png");
-	gacha_mark->setPosition(ccp(425,190));
-	main_case->addChild(gacha_mark);
+	item_gacha_menu = NULL;
+	is_clicked_gacha_menu = false;
 	
-	gacha_item = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 35, 35));
+	gacha_clicked_img = CCSprite::create("startsetting_item_clicked.png");
+	gacha_clicked_img->setPosition(ccp(425,190));
+	gacha_clicked_img->setVisible(false);
+	main_case->addChild(gacha_clicked_img, kStartSettingZorder_main+1);
+	
+	gachaMenuCreate();
+	
+//	CCSprite* gacha_mark = CCSprite::create("startsetting_item_gacha.png");
+//	gacha_mark->setPosition(ccp(425,190));
+//	main_case->addChild(gacha_mark);
+	
+	gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
 	gacha_item->setPosition(ccp(425,190));
-	main_case->addChild(gacha_item);
+	main_case->addChild(gacha_item, kStartSettingZorder_main);
 	
-	CommonButton* item_gacha = CommonButton::create("", CommonButtonGreen);
-	item_gacha->setSize(CCSizeMake(65, 30));
-	item_gacha->setPrice(PriceTypeGold, 1000);
-	item_gacha->setPosition(ccp(425, 165));
-	main_case->addChild(item_gacha);
-	item_gacha->setFunction([=](CCObject* sender)
-							{
-								startItemGacha();
-							});
+//	CommonButton* item_gacha = CommonButton::create("", CommonButtonGreen);
+//	item_gacha->setSize(CCSizeMake(65, 30));
+//	item_gacha->setPrice(PriceTypeGold, 1000);
+//	item_gacha->setPosition(ccp(425, 165));
+//	main_case->addChild(item_gacha);
+//	item_gacha->setFunction([=](CCObject* sender)
+//							{
+//								startItemGacha();
+//							});
 	
 	CCScale9Sprite* script_box = CCScale9Sprite::create("startsetting_scriptbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	script_box->setContentSize(CCSizeMake(290, 70));
@@ -545,6 +549,75 @@ void StartSettingScene::setMain()
 	}
 }
 
+void StartSettingScene::gachaMenuCreate()
+{
+	if(item_gacha_menu)
+		item_gacha_menu->removeFromParent();
+	
+	CCSprite* n_gacha = CCSprite::create("startsetting_item_gacha.png");
+	CCSprite* s_gacha = CCSprite::create("startsetting_item_gacha.png");
+	s_gacha->setColor(ccGRAY);
+	
+	CCMenuItemLambda* gacha_item_item = CCMenuItemSpriteLambda::create(n_gacha, s_gacha, [=](CCObject* sender)
+																	   {
+																		   if(!is_menu_enable)
+																			   return;
+																		   
+																		   is_menu_enable = false;
+																		   
+																		   if(clicked_item_idx != -1)
+																		   {
+																			   CCNode* before_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingMenuTag_itemBase+clicked_item_idx);
+																			   CCSprite* before_clicked_img = (CCSprite*)before_item_parent->getChildByTag(kStartSettingItemZorder_clicked);
+																			   before_clicked_img->setVisible(false);
+																		   }
+																		   
+																		   is_clicked_gacha_menu = true;
+																		   
+																		   if(item_title_label)
+																			   item_title_label->removeFromParent();
+																		   if(option_label)
+																			   option_label->removeFromParent();
+																		   if(buy_button)
+																			   buy_button->removeFromParent();
+																		   
+																		   CCRect title_size = CCRectMake(0, 0, 200, 20);
+																		   CCPoint title_position = ccp(188, 140);
+																		   
+																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 14, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+																		   item_title_label->setAnchorPoint(ccp(0,1));
+																		   item_title_label->setPosition(title_position);
+																		   item_title_label->setColor(ccORANGE);
+																		   main_case->addChild(item_title_label);
+																		   
+																		   CCRect option_size = CCRectMake(0, 0, 200, 25);
+																		   CCPoint option_position = ccp(188, 113);
+																		   
+																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+																		   option_label->setAnchorPoint(ccp(0,1));
+																		   option_label->setPosition(option_position);
+																		   main_case->addChild(option_label);
+																		   
+																		   buy_button = CommonButton::create("", CommonButtonYellowUp);
+																		   buy_button->setSize(CCSizeMake(90, 55));
+																		   buy_button->setPrice(PriceTypeGold, 1000);
+																		   buy_button->setFunction([=](CCObject* sender)
+																								   {
+																									   this->startItemGacha();
+																								   });
+																		   buy_button->setPosition(410,117);
+																		   main_case->addChild(buy_button);
+																		   
+																		   gacha_clicked_img->setVisible(true);
+																		   
+																		   is_menu_enable = true;
+																	   });
+	
+	item_gacha_menu = CCMenuLambda::createWithItem(gacha_item_item);
+	item_gacha_menu->setPosition(ccp(425,190));
+	main_case->addChild(item_gacha_menu);
+}
+
 void StartSettingScene::upgradeAction(CCObject *sender)
 {
 	if(!is_menu_enable)
@@ -552,7 +625,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 	
 	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 	upgrade_price*=1000;
-	if(mySGD->getGold() < upgrade_price + use_item_price_gold.getV())
+	if(mySGD->getGold() < upgrade_price)// + use_item_price_gold.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(-300, "골드가 부족합니다."), kStartSettingZorder_popup);
 		return;
@@ -560,60 +633,60 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 	
 	is_menu_enable = false;
 	
-	ASPopupView* t_popup = ASPopupView::create(-300);
-	
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
-	
-	float height_value = 320.f;
-	if(myDSH->screen_convert_rate < 1.f)
-		height_value = 320.f/myDSH->screen_convert_rate;
-	
-	if(height_value < myDSH->ui_top)
-		height_value = myDSH->ui_top;
-	
-	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-	t_popup->setDimmedPosition(ccp(240, 160));
-	t_popup->setBasePosition(ccp(240, 160));
-	
-	CCNode* t_container = CCNode::create();
-	t_popup->setContainerNode(t_container);
-	addChild(t_popup, kStartSettingZorder_popup);
-	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	case_back->setPosition(ccp(0,0));
-	t_container->addChild(case_back);
-	
-	case_back->setContentSize(CCSizeMake(220, 190));
-	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	content_back->setPosition(ccp(0,25));
-	t_container->addChild(content_back);
-	
-	content_back->setContentSize(CCSizeMake(200, 120));
-	
-	CCLabelTTF* ment1_label = CCLabelTTF::create("정말 업그레이드 하시겠습니까?", mySGD->getFont().c_str(), 15);
-	ment1_label->setPosition(ccp(0,25));
-	t_container->addChild(ment1_label);
-	
-	
-	
-	CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	cancel_button->setPosition(ccp(100,85));
-	cancel_button->setFunction([=](CCObject* sender)
-							   {
-								   is_menu_enable = true;
-								   t_popup->removeFromParent();
-							   });
-	t_container->addChild(cancel_button);
-	
-	
-	CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-	ok_button->setPosition(ccp(0,-65));
-	ok_button->setFunction([=](CCObject* sender)
-						   {
+//	ASPopupView* t_popup = ASPopupView::create(-300);
+//	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	float height_value = 320.f;
+//	if(myDSH->screen_convert_rate < 1.f)
+//		height_value = 320.f/myDSH->screen_convert_rate;
+//	
+//	if(height_value < myDSH->ui_top)
+//		height_value = myDSH->ui_top;
+//	
+//	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//	t_popup->setDimmedPosition(ccp(240, 160));
+//	t_popup->setBasePosition(ccp(240, 160));
+//	
+//	CCNode* t_container = CCNode::create();
+//	t_popup->setContainerNode(t_container);
+//	addChild(t_popup, kStartSettingZorder_popup);
+//	
+//	CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//	case_back->setPosition(ccp(0,0));
+//	t_container->addChild(case_back);
+//	
+//	case_back->setContentSize(CCSizeMake(220, 190));
+//	
+//	CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//	content_back->setPosition(ccp(0,25));
+//	t_container->addChild(content_back);
+//	
+//	content_back->setContentSize(CCSizeMake(200, 120));
+//	
+//	CCLabelTTF* ment1_label = CCLabelTTF::create("정말 업그레이드 하시겠습니까?", mySGD->getFont().c_str(), 15);
+//	ment1_label->setPosition(ccp(0,25));
+//	t_container->addChild(ment1_label);
+//	
+//	
+//	
+//	CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//	cancel_button->setPosition(ccp(100,85));
+//	cancel_button->setFunction([=](CCObject* sender)
+//							   {
+//								   is_menu_enable = true;
+//								   t_popup->removeFromParent();
+//							   });
+//	t_container->addChild(cancel_button);
+//	
+//	
+//	CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+//	ok_button->setPosition(ccp(0,-65));
+//	ok_button->setFunction([=](CCObject* sender)
+//						   {
 							   int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 							   mySGD->setGold(mySGD->getGold()-missile_level*1000);
 							   myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
@@ -693,15 +766,15 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 							   }
 							   
 							   is_menu_enable = true;
-							   t_popup->removeFromParent();
-						   });
-	t_container->addChild(ok_button);
+//							   t_popup->removeFromParent();
+//						   });
+//	t_container->addChild(ok_button);
 	
 }
 
 void StartSettingScene::startItemGacha()
 {
-	if(!is_menu_enable || (use_item_price_gold.getV() + 1000) > mySGD->getGold())
+	if(!is_menu_enable || (/*use_item_price_gold.getV() + */1000) > mySGD->getGold())
 		return;
 	
 	is_menu_enable = false;
@@ -737,14 +810,14 @@ void StartSettingScene::itemGachaAction()
 	
 	gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", t_item_code)->getCString());
 	gacha_item->setPosition(gacha_item_position);
-	main_case->addChild(gacha_item);
+	main_case->addChild(gacha_item, kStartSettingZorder_main);
 	
 	if(gacha_item_frame == 25)
 	{
 		gacha_item_cover = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 40, 40));
 		gacha_item_cover->setScale(0.f);
 		gacha_item_cover->setPosition(gacha_item->getPosition());
-		main_case->addChild(gacha_item_cover, 1);
+		main_case->addChild(gacha_item_cover, kStartSettingZorder_main+1);
 		
 		CCScaleTo* t_scale = CCScaleTo::create(0.15f, 1.f);
 		CCDelayTime* t_delay = CCDelayTime::create(0.25f);
@@ -775,7 +848,11 @@ void StartSettingScene::stopItemGacha()
 	
 	gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", selected_gacha_item)->getCString());
 	gacha_item->setPosition(gacha_item_position);
-	main_case->addChild(gacha_item);
+	main_case->addChild(gacha_item, kStartSettingZorder_main);
+	
+	CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
+	mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-6, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-6));
+	gacha_item->addChild(mount_img);
 	
 	unschedule(schedule_selector(StartSettingScene::itemGachaAction));
 }
@@ -1053,6 +1130,12 @@ void StartSettingScene::itemAction(CCObject *sender)
 			before_clicked_img->setVisible(false);
 		}
 		
+		if(is_clicked_gacha_menu)
+		{
+			is_clicked_gacha_menu = false;
+			gacha_clicked_img->setVisible(false);
+		}
+		
 		clicked_item_idx = tag-1;
 		
 		
@@ -1085,30 +1168,30 @@ void StartSettingScene::itemAction(CCObject *sender)
 			
 			
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
-			if(item_cnt > 0)
-			{
+//			if(item_cnt > 0)
+//			{
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setPosition(ccp(0, -21.5));
+				cnt_label->setPosition(ccp(21, -21));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-			}
-			else
-			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setPosition(ccp(5, -21.5));
-				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-				
-				string item_currency = mySD->getItemCurrency(t_ic);
-				string buy_type_filename;
-				if(item_currency == "gold")
-					buy_type_filename = "price_gold_img.png";
-				else if(item_currency == "ruby")
-					buy_type_filename = "price_ruby_img.png";
-				
-				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
-				buy_type->setScale(0.5f);
-				buy_type->setPosition(ccp(-13, -21.5));
-				item_parent->addChild(buy_type);
-			}
+//			}
+//			else
+//			{
+//				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
+//				cnt_label->setPosition(ccp(5, -21.5));
+//				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+//				
+//				string item_currency = mySD->getItemCurrency(t_ic);
+//				string buy_type_filename;
+//				if(item_currency == "gold")
+//					buy_type_filename = "price_gold_img.png";
+//				else if(item_currency == "ruby")
+//					buy_type_filename = "price_ruby_img.png";
+//				
+//				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
+//				buy_type->setScale(0.5f);
+//				buy_type->setPosition(ccp(-13, -21.5));
+//				item_parent->addChild(buy_type);
+//			}
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
 			clicked_img->setVisible(true);
@@ -1116,14 +1199,14 @@ void StartSettingScene::itemAction(CCObject *sender)
 			item_parent->addChild(clicked_img, kStartSettingItemZorder_clicked, kStartSettingItemZorder_clicked);
 			
 			
-			if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
-			{
-				string item_currency = mySD->getItemCurrency(t_ic);
-				if(item_currency == "gold")
-					use_item_price_gold = use_item_price_gold.getV() - mySD->getItemPrice(t_ic);
-				else if(item_currency == "ruby")
-					use_item_price_ruby = use_item_price_ruby.getV() - mySD->getItemPrice(t_ic);
-			}
+//			if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
+//			{
+//				string item_currency = mySD->getItemCurrency(t_ic);
+//				if(item_currency == "gold")
+//					use_item_price_gold = use_item_price_gold.getV() - mySD->getItemPrice(t_ic);
+//				else if(item_currency == "ruby")
+//					use_item_price_ruby = use_item_price_ruby.getV() - mySD->getItemPrice(t_ic);
+//			}
 			
 			
 			is_selected_item[tag-1] = false;
@@ -1138,11 +1221,11 @@ void StartSettingScene::itemAction(CCObject *sender)
 			
 			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
 			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
-			string item_currency = mySD->getItemCurrency(t_ic);
-			if(item_currency == "gold")
-				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
-			else if(item_currency == "ruby")
-				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
+//			string item_currency = mySD->getItemCurrency(t_ic);
+//			if(item_currency == "gold")
+//				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
+//			else if(item_currency == "ruby")
+//				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
 			
 			if(getSelectedItemCount() < 3 && is_price_usable)
 			{
@@ -1176,20 +1259,20 @@ void StartSettingScene::itemAction(CCObject *sender)
 				
 				is_selected_item[tag-1] = true;
 				
-				if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
-				{
-					if(item_currency == "gold")
-						use_item_price_gold = use_item_price_gold.getV() + mySD->getItemPrice(t_ic);
-					else if(item_currency == "ruby")
-						use_item_price_ruby = use_item_price_ruby.getV() + mySD->getItemPrice(t_ic);
-				}
+//				if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) <= 0)
+//				{
+//					if(item_currency == "gold")
+//						use_item_price_gold = use_item_price_gold.getV() + mySD->getItemPrice(t_ic);
+//					else if(item_currency == "ruby")
+//						use_item_price_ruby = use_item_price_ruby.getV() + mySD->getItemPrice(t_ic);
+//				}
 			}
 			else
 			{
 				if(getSelectedItemCount() >= 3)
 					addChild(ASPopupView::getCommonNoti(-210, "아이템은 최대 3개까지\n선택이 가능합니다."), kStartSettingZorder_popup);
-				else if(!is_price_usable)
-					addChild(ASPopupView::getCommonNoti(-210, item_currency + "가 부족합니다."), kStartSettingZorder_popup);
+//				else if(!is_price_usable)
+//					addChild(ASPopupView::getCommonNoti(-210, item_currency + "가 부족합니다."), kStartSettingZorder_popup);
 				
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
@@ -1215,30 +1298,30 @@ void StartSettingScene::itemAction(CCObject *sender)
 			}
 			
 			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
-			if(item_cnt > 0)
-			{
+//			if(item_cnt > 0)
+//			{
 				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setPosition(ccp(0, -21.5));
+				cnt_label->setPosition(ccp(21, -21));
 				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-			}
-			else
-			{
-				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
-				cnt_label->setPosition(ccp(5, -21.5));
-				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-				
-				string item_currency = mySD->getItemCurrency(t_ic);
-				string buy_type_filename;
-				if(item_currency == "gold")
-					buy_type_filename = "price_gold_img.png";
-				else if(item_currency == "ruby")
-					buy_type_filename = "price_ruby_img.png";
-				
-				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
-				buy_type->setScale(0.5f);
-				buy_type->setPosition(ccp(-13, -21.5));
-				item_parent->addChild(buy_type);
-			}
+//			}
+//			else
+//			{
+//				CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 10);
+//				cnt_label->setPosition(ccp(5, -21.5));
+//				item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+//				
+//				string item_currency = mySD->getItemCurrency(t_ic);
+//				string buy_type_filename;
+//				if(item_currency == "gold")
+//					buy_type_filename = "price_gold_img.png";
+//				else if(item_currency == "ruby")
+//					buy_type_filename = "price_ruby_img.png";
+//				
+//				CCSprite* buy_type = CCSprite::create(buy_type_filename.c_str());
+//				buy_type->setScale(0.5f);
+//				buy_type->setPosition(ccp(-13, -21.5));
+//				item_parent->addChild(buy_type);
+//			}
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
 			clicked_img->setVisible(true);
@@ -1250,6 +1333,8 @@ void StartSettingScene::itemAction(CCObject *sender)
 			item_title_label->removeFromParent();
 		if(option_label)
 			option_label->removeFromParent();
+		if(buy_button)
+			buy_button->removeFromParent();
 		
 		CCRect title_size = CCRectMake(0, 0, 200, 20);
 		CCPoint title_position = ccp(188, 140);
@@ -1280,6 +1365,186 @@ void StartSettingScene::itemAction(CCObject *sender)
 		option_label->setPosition(option_position);
 		main_case->addChild(option_label);
 		
+		string item_currency = mySD->getItemCurrency(item_list[tag-1]);
+		string buy_type_filename;
+		PriceType priceType;
+		if(item_currency == "gold")
+			priceType = PriceTypeGold;
+		else if(item_currency == "ruby")
+			priceType = PriceTypeRuby;
+		
+		buy_button = CommonButton::create("", CommonButtonYellowUp);
+		buy_button->setSize(CCSizeMake(90, 55));
+		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));
+		buy_button->setFunction([=](CCObject* sender)
+								{
+									if(!is_menu_enable)
+										return;
+									
+									is_menu_enable = false;
+									
+									string item_currency = mySD->getItemCurrency(item_list[clicked_item_idx]);
+									
+									if(item_currency == "gold")
+									{
+										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGold())
+										{
+											mySGD->setGold(mySGD->getGold()-mySD->getItemPrice(item_list[clicked_item_idx]));
+											buySuccessItem(clicked_item_idx, 1);
+										}
+										else
+										{
+											ASPopupView* t_popup = ASPopupView::create(-500);
+											
+											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+											if(screen_scale_x < 1.f)
+												screen_scale_x = 1.f;
+											
+											float height_value = 320.f;
+											if(myDSH->screen_convert_rate < 1.f)
+												height_value = 320.f/myDSH->screen_convert_rate;
+											
+											if(height_value < myDSH->ui_top)
+												height_value = myDSH->ui_top;
+											
+											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+											t_popup->setDimmedPosition(ccp(240, 160));
+											t_popup->setBasePosition(ccp(240, 160));
+											
+											CCNode* t_container = CCNode::create();
+											t_popup->setContainerNode(t_container);
+											addChild(t_popup, kStartSettingZorder_popup);
+											
+											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+											case_back->setPosition(ccp(0,0));
+											t_container->addChild(case_back);
+											
+											case_back->setContentSize(CCSizeMake(220, 190));
+											
+											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+											content_back->setPosition(ccp(0,25));
+											t_container->addChild(content_back);
+											
+											content_back->setContentSize(CCSizeMake(200, 120));
+											
+											CCLabelTTF* ment1_label = CCLabelTTF::create("골드가 부족합니다.", mySGD->getFont().c_str(), 15);
+											ment1_label->setPosition(ccp(0,35));
+											t_container->addChild(ment1_label);
+											
+											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+											ment2_label->setPosition(ccp(0,15));
+											t_container->addChild(ment2_label);
+											
+											
+											
+											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+											cancel_button->setPosition(ccp(100,85));
+											cancel_button->setFunction([=](CCObject* sender)
+																	   {
+																		   is_menu_enable = true;
+																		   t_popup->removeFromParent();
+																	   });
+											t_container->addChild(cancel_button);
+											
+											
+											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+											ok_button->setPosition(ccp(0,-65));
+											ok_button->setFunction([=](CCObject* sender)
+																   {
+																	   ShopPopup* t_shop = ShopPopup::create();
+																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+																	   t_shop->targetHeartTime(heart_time);
+																	   t_shop->setShopCode(kSC_gold);
+																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+																	   addChild(t_shop, kStartSettingZorder_popup);
+																	   t_popup->removeFromParent();
+																   });
+											t_container->addChild(ok_button);
+										}
+									}
+									else if(item_currency == "ruby")
+									{
+										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getStar())
+										{
+											mySGD->setStar(mySGD->getStar()-mySD->getItemPrice(item_list[clicked_item_idx]));
+											buySuccessItem(clicked_item_idx, 1);
+										}
+										else
+										{
+											ASPopupView* t_popup = ASPopupView::create(-500);
+											
+											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+											if(screen_scale_x < 1.f)
+												screen_scale_x = 1.f;
+											
+											float height_value = 320.f;
+											if(myDSH->screen_convert_rate < 1.f)
+												height_value = 320.f/myDSH->screen_convert_rate;
+											
+											if(height_value < myDSH->ui_top)
+												height_value = myDSH->ui_top;
+											
+											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+											t_popup->setDimmedPosition(ccp(240, 160));
+											t_popup->setBasePosition(ccp(240, 160));
+											
+											CCNode* t_container = CCNode::create();
+											t_popup->setContainerNode(t_container);
+											addChild(t_popup, kStartSettingZorder_popup);
+											
+											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+											case_back->setPosition(ccp(0,0));
+											t_container->addChild(case_back);
+											
+											case_back->setContentSize(CCSizeMake(220, 190));
+											
+											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+											content_back->setPosition(ccp(0,25));
+											t_container->addChild(content_back);
+											
+											content_back->setContentSize(CCSizeMake(200, 120));
+											
+											CCLabelTTF* ment1_label = CCLabelTTF::create("루비가 부족합니다.", mySGD->getFont().c_str(), 15);
+											ment1_label->setPosition(ccp(0,35));
+											t_container->addChild(ment1_label);
+											
+											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+											ment2_label->setPosition(ccp(0,15));
+											t_container->addChild(ment2_label);
+											
+											
+											
+											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+											cancel_button->setPosition(ccp(100,85));
+											cancel_button->setFunction([=](CCObject* sender)
+																	   {
+																		   is_menu_enable = true;
+																		   t_popup->removeFromParent();
+																	   });
+											t_container->addChild(cancel_button);
+											
+											
+											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+											ok_button->setPosition(ccp(0,-65));
+											ok_button->setFunction([=](CCObject* sender)
+																   {
+																	   ShopPopup* t_shop = ShopPopup::create();
+																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+																	   t_shop->targetHeartTime(heart_time);
+																	   t_shop->setShopCode(kSC_ruby);
+																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+																	   addChild(t_shop, kStartSettingZorder_popup);
+																	   t_popup->removeFromParent();
+																   });
+											t_container->addChild(ok_button);
+										}
+									}
+
+								});
+		buy_button->setPosition(410,117);
+		main_case->addChild(buy_button);
 		
 		is_menu_enable = true;
 	}
@@ -1324,10 +1589,10 @@ void StartSettingScene::menuAction(CCObject* sender)
 		
 		if(tag == kStartSettingMenuTag_cancel)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) < 10000)
+//			if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) < 10000)
 				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
-			else
-				CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+//			else
+//				CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 		}
 		else if(tag == kStartSettingMenuTag_rubyShop)
 		{
@@ -1862,8 +2127,8 @@ void StartSettingScene::finalSetting()
 		is_using_item[selected_gacha_item] = true;
 	}
 	
-	mySGD->setGold(mySGD->getGold() - use_item_price_gold.getV());
-	mySGD->setStar(mySGD->getStar() - use_item_price_ruby.getV());
+//	mySGD->setGold(mySGD->getGold() - use_item_price_gold.getV());
+//	mySGD->setStar(mySGD->getStar() - use_item_price_ruby.getV());
 	
 	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
@@ -1939,8 +2204,8 @@ void StartSettingScene::cancelGame()
 			}
 		}
 				   
-		mySGD->setGold(mySGD->getGold() + use_item_price_gold.getV());
-		mySGD->setStar(mySGD->getStar() + use_item_price_ruby.getV());
+//		mySGD->setGold(mySGD->getGold() + use_item_price_gold.getV());
+//		mySGD->setStar(mySGD->getStar() + use_item_price_ruby.getV());
 		
 		mySGD->resetUsingItem();
 		
@@ -2018,27 +2283,25 @@ void StartSettingScene::buySuccessItem(int t_clicked_item_idx, int cnt)
 	CCNode* item_parent = main_case->getChildByTag(kStartSettingMenuTag_itemBase+t_clicked_item_idx);
 	
 	CCLabelTTF* cnt_label = (CCLabelTTF*)item_parent->getChildByTag(kStartSettingItemZorder_cntLabel);
-	if(cnt_label)
-	{
-		cnt_label->setString(CCString::createWithFormat("+%d", item_cnt)->getCString());
-	}
-	else
-	{
-		cnt_label = CCLabelTTF::create(CCString::createWithFormat("+%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-		cnt_label->setPosition(ccp(-15, -15));
-		item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
-	}
+//	if(cnt_label)
+//	{
+		cnt_label->setString(CCString::createWithFormat("%d", item_cnt)->getCString());
+//	}
+//	else
+//	{
+//		cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+//		cnt_label->setPosition(ccp(-15, -15));
+//		item_parent->addChild(cnt_label, kStartSettingItemZorder_cntLabel, kStartSettingItemZorder_cntLabel);
+//	}
 	
 	bool is_selectable = false;
-	if(getSelectedItemCount() > 0)
+	if(getSelectedItemCount() > 3)
 		is_selectable = false;
 	else
 		is_selectable = true;
 	
 	if(is_selectable)
 	{
-		CCSprite* selected_img = (CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_selected);
-		selected_img->setVisible(true);
 		((CCSprite*)item_parent->getChildByTag(kStartSettingItemZorder_clicked))->setVisible(true);
 		is_selected_item[t_clicked_item_idx] = true;
 	}
@@ -2046,6 +2309,7 @@ void StartSettingScene::buySuccessItem(int t_clicked_item_idx, int cnt)
 	vector<SaveUserData_Key> save_userdata_list;
 	
 	save_userdata_list.push_back(kSaveUserData_Key_gold);
+	save_userdata_list.push_back(kSaveUserData_Key_star);
 	save_userdata_list.push_back(kSaveUserData_Key_item);
 	
 	myDSH->saveUserData(save_userdata_list, nullptr);
@@ -2061,10 +2325,11 @@ string StartSettingScene::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_addTime)			return_value = "AddTime";
 	else if(t_code == kIC_fast)				return_value = "Fast";
 	else if(t_code == kIC_subOneDie)		return_value = "SubOneDie";
-	else if(t_code == kIC_doubleItem)		return_value = "DoubleItem";
+	else if(t_code == kIC_doubleItem)		return_value = "더블아이템";
 	else if(t_code == kIC_silence)			return_value = "Silence";
-	else if(t_code == kIC_longTime)			return_value = "LongTime";
-	else if(t_code == kIC_baseSpeedUp)		return_value = "BaseSpeedUp";
+	else if(t_code == kIC_longTime)			return_value = "시간추가";
+	else if(t_code == kIC_baseSpeedUp)		return_value = "기본속도향상";
+	else if(t_code == kIC_itemGacha)		return_value = "아이템 뽑기";
 	
 	return return_value.c_str();
 }

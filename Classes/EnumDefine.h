@@ -226,7 +226,8 @@ typedef enum t_ITEM_CODE{
 //	kIC_randomChange
 	kIC_baseSpeedUp, // 9
 	kIC_heartUp,	 // 10
-	kIC_emptyEnd
+	kIC_emptyEnd,
+	kIC_itemGacha
 }ITEM_CODE;
 
 
