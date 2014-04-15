@@ -40,7 +40,7 @@ private:
 	SEL_CallFunc delegate_success;
 	
 	CCSprite* gray;
-	CCSprite* tip_img;
+	CCNode* tip_img;
 	void changeTipImage();
 	
 	CCLabelTTF* state_ment;

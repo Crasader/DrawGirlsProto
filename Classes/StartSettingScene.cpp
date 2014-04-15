@@ -2171,12 +2171,21 @@ void StartSettingScene::goToGame()
 	{
 		myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
 		mySGD->setNextSceneName("playtutorial");
+		
 		CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
 	}
 	else
 	{
 		mySGD->setNextSceneName("maingame");
-		CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+		
+		LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+		loading_tip->setAnchorPoint(ccp(0.5,0));
+		loading_tip->setScale(myDSH->screen_convert_rate);
+		loading_tip->setPosition(ccpAdd(loading_tip->getPosition(), myDSH->ui_zero_point));
+		
+		addChild(loading_tip, kStartSettingZorder_popup);
+		
+//		CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
 	}
 //	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 }

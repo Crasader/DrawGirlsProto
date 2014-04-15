@@ -246,11 +246,11 @@ void Maingame::onEnterTransitionDidFinish()
 	intro_clipping->addChild(intro_texture);
 	
 	intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
-	intro_boss->setPosition(ccp(240+480,myDSH->ui_center_y));
-	intro_boss->setScale(1.5f);
+	intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
+	intro_boss->setScale(1.8f);
 	addChild(intro_boss, introZorder);
 	
-	CCMoveTo* t_move = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
+	CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
 	CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
 	intro_boss->runAction(t_seq);
