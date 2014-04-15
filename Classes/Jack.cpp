@@ -1655,7 +1655,8 @@ void Jack::initStartPosition( CCPoint t_p )
 			is_found = true;
 			myGD->setJackPoint(checking_point);
 			afterPoint = checking_point;
-			setPosition(ccp((checking_point.x-1)*pixelSize+1, (checking_point.y-1)*pixelSize+1));
+			
+			CCNode::setPosition(checking_point.convertToCCP());
 			break;
 		}
 	}

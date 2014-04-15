@@ -94,40 +94,9 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	
 	if(result_data["error"]["isSuccess"].asBool())
 	{
-		if(myLog->getLogCount() > 0)
-		{
-			myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
-		}
-		
-		receive_cnt = 0;
-		
-		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
-		
-		Json::Value shopdata_param;
-		shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
-		command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
-		
-		Json::Value userdata_param;
-		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
-		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
-		
-		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
-		
-		Json::Value character_param;
-		character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
-		command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
-		
-		Json::Value monster_param;
-		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
-		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
-		
-		Json::Value puzzlelist_param;
-		puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
-		command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
-		
-//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
-		
-		startCommand();
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getKakaoID();
+		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 	}
 	else
 	{
@@ -136,6 +105,95 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	}
+}
+
+void TitleRenewalScene::resultHSLogin(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		successLogin();
+	}
+	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
+	{
+		is_menu_enable = true;
+		
+		state_label->setString("닉네임 입력");
+		
+		nick_back = CCSprite::create("nickname_back.png");
+		nick_back->setPosition(ccp(240,160));
+		addChild(nick_back);
+		
+		CCScale9Sprite* t_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		t_back->setOpacity(0);
+		
+		input_text = CCEditBox::create(CCSizeMake(210, 30), t_back);
+		input_text->setPosition(ccp(195,145));
+		input_text->setPlaceHolder("입력해주세요.");
+		input_text->setReturnType(kKeyboardReturnTypeDone);
+		input_text->setFont(mySGD->getFont().c_str(), 20);
+		input_text->setInputMode(kEditBoxInputModeSingleLine);
+		input_text->setDelegate(this);
+		addChild(input_text);
+		
+		
+		CommonButton* ok_menu = CommonButton::create("확인", 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
+		ok_menu->setPosition(ccp(363,160));
+		ok_menu->setFunction([=](CCObject* sender)
+							 {
+								 CCNode* t_node = CCNode::create();
+								 t_node->setTag(kTitleRenewal_MT_nick);
+								 menuAction(t_node);
+							 });
+		addChild(ok_menu, 0, kTitleRenewal_MT_nick);
+	}
+	else
+	{
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getKakaoID();
+		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
+	}
+}
+
+void TitleRenewalScene::successLogin()
+{
+	if(myLog->getLogCount() > 0)
+	{
+		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
+	}
+	
+	receive_cnt = 0;
+	
+	command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	
+	Json::Value shopdata_param;
+	shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
+	command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
+	
+	Json::Value userdata_param;
+	userdata_param["memberID"] = hspConnector::get()->getKakaoID();
+	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+	
+	Json::Value card_param;
+	card_param["memberID"] = hspConnector::get()->getKakaoID();
+	command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
+	
+	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
+	
+	Json::Value character_param;
+	character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
+	command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
+	
+	Json::Value monster_param;
+	monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
+	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
+	
+	Json::Value puzzlelist_param;
+	puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
+	command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
+	
+	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
+	
+	startCommand();
 }
 
 void TitleRenewalScene::startCommand()
@@ -608,16 +666,35 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 			myDSH->clear();
 		
 		myDSH->resetDSH();
-		card_data_load_list.clear();
-		myDSH->loadAllUserData(result_data, card_data_load_list);
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard)) <= 0)
-			myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
+		myDSH->loadAllUserData(result_data);
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
+	}
+	else
+	{
+		is_receive_fail = true;
+		CCLabelTTF* userdata_label = CCLabelTTF::create("fail getuserdata", mySGD->getFont().c_str(), 10);
+		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
+		addChild(userdata_label);
+		Json::Value userdata_param;
+		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		card_data_load_list.clear();
 		
-		mySGD->resetHasGottenCards();
+		mySGD->initTakeCardInfo(result_data["list"], card_data_load_list);
 		
 		if(card_data_load_list.size() > 0)
 		{
@@ -630,12 +707,12 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* userdata_label = CCLabelTTF::create("fail getuserdata", mySGD->getFont().c_str(), 10);
-		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
-		addChild(userdata_label);
-		Json::Value userdata_param;
-		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
-		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+		CCLabelTTF* card_label = CCLabelTTF::create("fail getcardhistory", mySGD->getFont().c_str(), 10);
+		card_label->setPosition(ccp(200, myDSH->ui_top-30));
+		addChild(card_label);
+		Json::Value card_param;
+		card_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
 	}
 	
 	receive_cnt--;
@@ -781,6 +858,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+		
+		mySGD->resetHasGottenCards();
 	}
 	else
 	{
@@ -1360,46 +1439,7 @@ void TitleRenewalScene::endingCheck()
 	
 	mySDS->fFlush(kSDS_GI_characterCount_i);
 	
-	string nick = myDSH->getStringForKey(kDSH_Key_nick);
-	
-	if(nick == "")
-	{
-//		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, true);
-		
-		state_label->setString("");
-		
-		nick_back = CCSprite::create("nickname_back.png");
-		nick_back->setPosition(ccp(240,160));
-		addChild(nick_back);
-		
-		CCScale9Sprite* t_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		t_back->setOpacity(0);
-		
-		input_text = CCEditBox::create(CCSizeMake(210, 30), t_back);
-		input_text->setPosition(ccp(195,145));
-		input_text->setPlaceHolder("입력해주세요.");
-		input_text->setReturnType(kKeyboardReturnTypeDone);
-		input_text->setFont(mySGD->getFont().c_str(), 20);
-		input_text->setInputMode(kEditBoxInputModeSingleLine);
-		input_text->setDelegate(this);
-		addChild(input_text);
-		
-		
-		CommonButton* ok_menu = CommonButton::create("확인", 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
-		ok_menu->setPosition(ccp(363,160));
-		ok_menu->setFunction([=](CCObject* sender)
-							 {
-								 CCNode* t_node = CCNode::create();
-								 t_node->setTag(kTitleRenewal_MT_nick);
-								 menuAction(t_node);
-							 });
-		addChild(ok_menu, 0, kTitleRenewal_MT_nick);
-
-		
-		is_menu_enable = true;
-	}
-	else
-		endingAction();
+	endingAction();
 }
 
 void TitleRenewalScene::downloadingFileAction()
@@ -1478,16 +1518,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		string comp_not_ok = "";
 		if(input_text->getText() != comp_not_ok)
 		{
-			myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
-			setTouchEnabled(false);
-			is_menu_enable = false;
-			nick_back->removeFromParent();
-			removeChildByTag(kTitleRenewal_MT_nick);
-			input_text->removeFromParent();
-			
-			myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
-			
-			endingAction();
+			joinAction();
 		}
 		else
 		{
@@ -1501,6 +1532,66 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
+}
+
+void TitleRenewalScene::joinAction()
+{
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["nick"] = input_text->getText();
+	hspConnector::get()->command("join", param, [=](Json::Value result_data)
+								 {
+									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									 {
+										 state_label->setString("로그인 성공");
+										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
+										 setTouchEnabled(false);
+										 nick_back->removeFromParent();
+										 removeChildByTag(kTitleRenewal_MT_nick);
+										 input_text->removeFromParent();
+										 
+										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+										 
+										 successLogin();
+									 }
+									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)
+									 {
+										 addChild(ASPopupView::getCommonNoti(-999, "닉네임 중복"), 999);
+										 is_menu_enable = true;
+									 }
+									 else if(result_data["result"]["code"].asInt() == GDFAULTYNICK)
+									 {
+										 addChild(ASPopupView::getCommonNoti(-999, "불량 닉네임"), 999);
+										 is_menu_enable = true;
+									 }
+									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
+									 {
+										 state_label->setString("로그인 성공");
+										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
+										 setTouchEnabled(false);
+										 nick_back->removeFromParent();
+										 removeChildByTag(kTitleRenewal_MT_nick);
+										 input_text->removeFromParent();
+										 
+										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+										 
+										 successLogin();
+									 }
+									 else if(result_data["result"]["code"].asInt() == GDLONGNAME)
+									 {
+										 addChild(ASPopupView::getCommonNoti(-999, "닉네임이 너무 깁니다."), 999);
+										 is_menu_enable = true;
+									 }
+									 else if(result_data["result"]["code"].asInt() == GDSHORTNAME)
+									 {
+										 addChild(ASPopupView::getCommonNoti(-999, "닉네임이 너무 짧습니다."), 999);
+										 is_menu_enable = true;
+									 }
+									 else
+									 {
+										 joinAction();
+									 }
+								 });
 }
 
 void TitleRenewalScene::alertAction(int t1, int t2)

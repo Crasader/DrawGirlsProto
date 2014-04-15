@@ -31,6 +31,13 @@ public:
 	{
 		encrypt(v);
 	}
+	
+	std::string operator=(const std::string& arg)
+	{
+		encrypt(arg);
+		return getV();
+	}
+	
 	KSProtectStr()
 	{
 		encrypt("");

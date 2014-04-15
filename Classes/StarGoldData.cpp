@@ -655,10 +655,11 @@ void StarGoldData::changeSortType( CardSortType t_type )
 
 void StarGoldData::addHasGottenCardNumber( int card_number )
 {
-	int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
+//	int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
+	
 	CardSortInfo t_info;
 	t_info.card_number = card_number;
-	t_info.take_number = take_number;
+	t_info.take_number = has_gotten_cards.size()+1;
 	t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number);
 	t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
 	has_gotten_cards.push_back(t_info);
@@ -741,23 +742,46 @@ int StarGoldData::isHasGottenCards( int t_stage, int t_grade )
 
 void StarGoldData::resetHasGottenCards()
 {
-	has_gotten_cards.clear();
-	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-	for(int i=1;i<=card_take_cnt;i++)
+	for(int i=0;i<has_gotten_cards.size();i++)
 	{
-		int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-		int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
-		if(take_number != 0)
-		{
-			CardSortInfo t_info;
-			t_info.card_number = card_number;
-			t_info.take_number = take_number;
-			t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-			t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
-			has_gotten_cards.push_back(t_info);
-		}
+		int card_number = has_gotten_cards[i].card_number;
+		has_gotten_cards[i].grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+		has_gotten_cards[i].rank = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
 	}
+	
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
+}
+
+void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_data_load_list)
+{
+	has_gotten_cards.clear();
+	
+	int card_cnt = card_list.size();
+	
+	for(int i=0;i<card_cnt;i++)
+	{
+		Json::Value card_info = card_list[i];
+		
+		int card_number = card_info["cardNo"].asInt();
+		
+		CardSortInfo t_info;
+		t_info.card_number = card_number;
+		t_info.take_number = i+1;
+		t_info.grade = 0;
+		t_info.rank = 0;
+		t_info.user_ment = card_info["comment"].asString();
+		has_gotten_cards.push_back(t_info);
+		
+		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, 100, false);
+		myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number, i+1, false);
+		myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, i+1, card_number, false);
+		
+		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
+			card_data_load_list.push_back(card_number);
+	}
+	
+	myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, card_cnt, false);
+	myDSH->fFlush();
 }
 
 bool StarGoldData::isEmptyAchieveNotiQueue()

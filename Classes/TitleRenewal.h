@@ -72,6 +72,11 @@ private:
 	
 	void resultLogin(Json::Value result_data);
 	
+	void resultHSLogin(Json::Value result_data);
+	void joinAction();
+	
+	void successLogin();
+	
 	vector<CommandParam> command_list;
 //	bool must_be_load_friends;
 	int receive_cnt;
@@ -100,6 +105,9 @@ private:
 	int monster_download_version;
 	
 	void resultGetUserData(Json::Value result_data);
+	
+	void resultGetCardHistory(Json::Value result_data);
+	
 	Json::Value friendList;
 	
 	void resultLoadedCardData(Json::Value result_data);

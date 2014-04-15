@@ -27,6 +27,9 @@
 #include "AcceptChallengeAniContent.h"
 #include "NewMainFlowScene.h"
 #include "LoadingTipScene.h"
+#include "CumberShowWindow.h"
+#include "FormSetter.h"
+#include "StoryManager.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -109,6 +112,7 @@ bool Maingame::init()
 	myGD->V_CCP["Main_showThumbWarning"] = std::bind(&Maingame::showThumbWarning, this, _1);
 	myGD->V_V["Main_showScreenSideWarning"] = std::bind(&Maingame::showScreenSideWarning, this);
 	myGD->V_V["Main_hideScreenSideWarning"] = std::bind(&Maingame::hideScreenSideWarning, this);
+	myGD->V_CCP["Main_initJackPosition"] = std::bind(&Maingame::initJackPosition, this, _1);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -216,16 +220,75 @@ void Maingame::onEnterTransitionDidFinish()
 		}
 	}
 	
-//	CCSprite* top_back = CCSprite::create("top_back.png");
-//	top_back->setAnchorPoint(ccp(0.5,1));
-//	top_back->setPosition(ccp(240,myDSH->ui_top));
-//	top_bottom_layer->addChild(top_back, topBottomZorder);
-//	
-//	CCSprite* bottom_back = CCSprite::create("bottom_back.png");
-//	bottom_back->setAnchorPoint(ccp(0.5,0));
-//	bottom_back->setPosition(ccp(240,0));
-//	top_bottom_layer->addChild(bottom_back, topBottomZorder);
+	intro_stencil = CCSprite::create("sight_out.png");
+	intro_stencil->setScale(0.f);
+	intro_stencil->setPosition(ccp(240,myDSH->ui_center_y+5));
 	
+	intro_clipping = CCClippingNode::create(intro_stencil);
+	intro_clipping->setPosition(CCPointZero);
+	addChild(intro_clipping, introZorder);
+	
+	intro_clipping->setInverted(true);
+	intro_clipping->setAlphaThreshold(0.01f);
+	
+	EffectSprite* blur_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
+	blur_img->setBlur();
+	blur_img->setAnchorPoint(ccp(0,0));
+	blur_img->setPosition(ccp(0,0));
+	
+	CCRenderTexture* intro_texture = CCRenderTexture::create(320, 430);
+	intro_texture->beginWithClear(0, 0, 0, 0);
+	blur_img->visit();
+	intro_texture->end();
+	
+	intro_texture->setScale(game_node->getScale());
+	intro_texture->setPosition(ccp(240, 430*game_node->getScale()/2.f));
+	intro_clipping->addChild(intro_texture);
+	
+	intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+	intro_boss->setPosition(ccp(240+480,myDSH->ui_center_y));
+	intro_boss->setScale(1.5f);
+	addChild(intro_boss, introZorder);
+	
+	CCMoveTo* t_move = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
+	CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
+	intro_boss->runAction(t_seq);
+}
+
+void Maingame::startStory()
+{
+	StoryManager* t_sm = StoryManager::create(-500);
+	addChild(t_sm, 100);
+	
+	t_sm->addMent(true, "", "", "애송이 어디 한번 덤벼봐라", [=]()
+				  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
+				  {
+					  CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+					  CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 0);
+					  CCCallFunc* t_call1 = CCCallFunc::create(intro_boss, callfunc_selector(CCNode::removeFromParent));
+					  CCSequence* t_seq1 = CCSequence::create(t_delay1, t_scale1, t_call1, NULL);
+					  
+					  intro_boss->runAction(t_seq1);
+					  
+					  CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 3);
+					  CCDelayTime* t_delay2 = CCDelayTime::create(0.3f);
+					  CCCallFunc* t_call2 = CCCallFunc::create(intro_clipping, callfunc_selector(CCNode::removeFromParent));
+					  CCSequence* t_seq2 = CCSequence::create(t_scale2, t_delay2, t_call2, NULL);
+					  
+					  intro_stencil->runAction(t_seq2);
+					  
+					  CCDelayTime* t_delay3 = CCDelayTime::create(0.8f);
+					  CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(Maingame::endIntro));
+					  CCCallFunc* t_call4 = CCCallFunc::create(t_sm, callfunc_selector(CCNode::removeFromParent));
+					  CCSequence* t_seq3 = CCSequence::create(t_delay3, t_call3, t_call4, NULL);
+					  
+					  t_sm->runAction(t_seq3);
+				  });
+}
+
+void Maingame::endIntro()
+{
 	init_state = kMIS_movingGameNode;
 	
 	setTouchEnabled(true);
@@ -430,7 +493,8 @@ void Maingame::finalSetting()
 	screen_right->setPosition(ccp(screen_data.width/2.f,0));
 	screen_node->addChild(screen_right);
 	
-	myJack->setPosition(myJack->getPosition());
+	myGD->communication("Main_initJackPosition", myJack->getPosition());
+//	myJack->setPosition(myJack->getPosition());
 	
 	
 	screen_side_warning_node = CCNode::create();
@@ -588,6 +652,33 @@ void Maingame::finalSetting()
 			exit_target->getParent()->addChild(t_popup);
 		}
 //	}
+}
+
+void Maingame::initJackPosition(CCPoint jack_position)
+{
+	addChild(KSGradualValue<CCPoint>::create(ccp(160,getGameNodeToObjectPosition(game_node->getPosition()).y), jack_position, 0.5f,
+											 [=](CCPoint t){
+												 myGD->communication("VS_setMoveGamePosition", t);
+											 },
+											 [=](CCPoint t){
+												 myGD->communication("VS_setMoveGamePosition", jack_position);
+											 }, nullptr, false));
+	
+	addChild(KSGradualValue<CCPoint>::create(line_particle->getPosition(), jack_position, 0.5f,
+											 [=](CCPoint t){
+												 line_particle->setPosition(t);
+											 },
+											 [=](CCPoint t){
+												 line_particle->setPosition(jack_position);
+											 }, nullptr, false));
+	
+	addChild(KSGradualValue<CCPoint>::create(game_node->getPosition(), getObjectToGameNodePosition(jack_position), 0.5f,
+											 [=](CCPoint t){
+												 game_node->setPosition(t);
+											 },
+											 [=](CCPoint t){
+												 game_node->setPosition(getObjectToGameNodePosition(jack_position));
+											 }, nullptr, false));
 }
 
 void Maingame::startScene()

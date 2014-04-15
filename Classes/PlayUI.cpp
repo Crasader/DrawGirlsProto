@@ -840,6 +840,8 @@ void ChangeCard::myInit ()
 	
 	schedule(schedule_selector(ChangeCard::startMyAction));
 }
+const float UI_IN_TIME = 0.5f;
+const float UI_OUT_DISTANCE = 100.f;
 PlayUI * PlayUI::create ()
 {
 	PlayUI* t_ui = new PlayUI();
@@ -2129,16 +2131,6 @@ void PlayUI::myInit ()
 		mySGD->draw_button_tutorial_ing = 0;
 	}
 	
-	ui_case = CCSprite::create("ui_back.png");
-	if(myGD->gamescreen_type == kGT_leftUI)			ui_case->setPosition(ccp(25,myDSH->ui_center_y));
-	else if(myGD->gamescreen_type == kGT_rightUI)		ui_case->setPosition(ccp(480-25,myDSH->ui_center_y));
-	else
-	{
-		ui_case->setPosition(ccp(25,myDSH->ui_center_y));
-		ui_case->setOpacity(0);
-	}
-	addChild(ui_case);
-	
 //	gold_label = GoldLabel::create();
 //	addChild(gold_label);
 //	gold_label->setString("0");
@@ -2150,13 +2142,19 @@ void PlayUI::myInit ()
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	((CountingBMLabel*)score_label)->onChangeScale(false);
 	score_label->setAnchorPoint(ccp(1,1));
-	score_label->setPosition(ccp(480-8,myDSH->ui_top-13));
+	score_label->setPosition(ccp(480-8,myDSH->ui_top-13+UI_OUT_DISTANCE));
+	
+	addChild(KSGradualValue<float>::create(myDSH->ui_top-13+UI_OUT_DISTANCE, myDSH->ui_top-13, UI_IN_TIME, [=](float t){score_label->setPositionY(t);}, [=](float t){score_label->setPositionY(myDSH->ui_top-13);}));
+	
 //	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));
 	addChild(score_label);
 	
 	top_center_node = CCNode::create();
+	
+	addChild(KSGradualValue<float>::create(0+UI_OUT_DISTANCE, 0, UI_IN_TIME, [=](float t){top_center_node->setPositionY(t);}, [=](float t){top_center_node->setPositionY(0);}));
+	
 	addChild(top_center_node, 1);
 	
 	m_areaGage = NULL;
@@ -2165,6 +2163,7 @@ void PlayUI::myInit ()
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
 	percentageLabel->setPosition(ccp(185,myDSH->ui_top-22));
+	
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
@@ -2206,8 +2205,10 @@ void PlayUI::myInit ()
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccp(240,35));
+	countingLabel->setPosition(ccp(240,35-UI_OUT_DISTANCE));
 	addChild(countingLabel);
+	
+	addChild(KSGradualValue<float>::create(35-UI_OUT_DISTANCE, 35, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(35);}));
 	
 	isFirst = true;
 	//		beforePercentage = 0;
@@ -2226,7 +2227,10 @@ void PlayUI::myInit ()
 	home_item->setTag(kMenuTagUI_home);
 	
 	home_menu = CCMenu::createWithItem(home_item);
-	home_menu->setPosition(ccp(25, myDSH->ui_top-22));
+	home_menu->setPosition(ccp(25, myDSH->ui_top-22+UI_OUT_DISTANCE));
+	
+	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){home_menu->setPositionY(t);}, [=](float t){home_menu->setPositionY(myDSH->ui_top-22);}));
+	
 //	if(myGD->gamescreen_type == kGT_leftUI)				home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
 //	else												home_menu->setPosition(ccp(25,myDSH->ui_top-25));
@@ -2245,7 +2249,10 @@ void PlayUI::myInit ()
 //		jack_life++;
 	
 	jack_life_node = CCNode::create();
-	jack_life_node->setPosition(ccp(240,myDSH->ui_bottom+20));
+	jack_life_node->setPosition(ccp(240,myDSH->ui_bottom+20-UI_OUT_DISTANCE));
+	
+	addChild(KSGradualValue<float>::create(myDSH->ui_bottom+20-UI_OUT_DISTANCE, myDSH->ui_bottom+20, UI_IN_TIME, [=](float t){jack_life_node->setPositionY(t);}, [=](float t){jack_life_node->setPositionY(myDSH->ui_bottom+20);}));
+	
 	addChild(jack_life_node);
 	
 	CCNode* black_life_node = CCNode::create();
@@ -2289,7 +2296,10 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(64, myDSH->ui_top-22));
+	mission_button->setPosition(ccp(64, myDSH->ui_top-22+UI_OUT_DISTANCE));
+	
+	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_button->setPositionY(t);}, [=](float t){mission_button->setPositionY(myDSH->ui_top-22);}));
+	
 	addChild(mission_button);
 	
 	mission_button->startMarquee();
@@ -2567,6 +2577,10 @@ void PlayUI::myInit ()
 	for(int i=0;i<using_item_vectors.size();i++)
 	{
 		using_item_vectors[i]->setPosition(ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)));
+		using_item_vectors[i]->setPositionX(using_item_vectors[i]->getPositionX()+UI_OUT_DISTANCE);
+		addChild(KSGradualValue<float>::create(ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)).x+UI_OUT_DISTANCE, ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)).x, UI_IN_TIME,
+											   [=](float t){using_item_vectors[i]->setPositionX(t);},
+											   [=](float t){using_item_vectors[i]->setPositionX(ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)).x);}));
 	}
 	
 	
@@ -2600,6 +2614,7 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
 	myGD->V_V["UI_takeSilenceItem"] = std::bind(&PlayUI::takeSilenceItem, this);
 }
+
 bool PlayUI::isExchanged ()
 {
 	return is_exchanged;

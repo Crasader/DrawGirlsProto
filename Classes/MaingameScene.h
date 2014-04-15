@@ -28,6 +28,7 @@ using namespace cocos2d;
 enum Mainzorder{
 	topBottomZorder = 1,
 	myMSZorder,
+	introZorder,
 	myPMZorder,
 	attackItemZorder,
 	myCPZorder,
@@ -59,6 +60,7 @@ enum GameNodeMovingDirection{
 };
 
 class SearchEye;
+class CumberShowWindow;
 class Maingame : public CCLayer
 {
 public:
@@ -295,6 +297,15 @@ private:
 	
 	void showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
 	void continueAction();
+	
+	void initJackPosition(CCPoint jack_position);
+	
+	CCSprite* intro_stencil;
+	CCClippingNode* intro_clipping;
+	CumberShowWindow* intro_boss;
+	
+	void startStory();
+	void endIntro();
 	
 };
 

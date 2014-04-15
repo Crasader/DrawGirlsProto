@@ -1709,5 +1709,6 @@ void VisibleParent::myInit( const char* filename, bool isPattern, string sil_fil
 
 	myGD->V_CCO["VS_setSceneNode"] = std::bind(&VisibleSprite::setSceneNode, myVS, _1);
 	myGD->V_V["VS_setLight"] = std::bind(&VisibleSprite::setLight, myVS);
+	myGD->CCP_V["VS_getMoveGamePosition"] = std::bind(&VisibleSprite::getMoveGamePosition, myVS);
 	
 }

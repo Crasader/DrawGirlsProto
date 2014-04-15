@@ -449,6 +449,7 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	else if(t_code == kIC_silence)			return_value = "획득시 보스 몬스터가 일정시간동안 공격하지 않는다.";
 	else if(t_code == kIC_longTime)			return_value = "게임시간을 증가시킨다.";
 	else if(t_code == kIC_baseSpeedUp)		return_value = "유저 속도가 빠른상태로 시작한다.";
+	else if(t_code == kIC_itemGacha)		return_value = "어떤 아이템이 나올까요?";
 	else									return_value = "아이템을 사용할 수 있습니다.";
 
 	return return_value;
