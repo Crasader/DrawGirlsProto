@@ -571,7 +571,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			stage_ment_label->setPosition(ccp(10,47));
 			cell->addChild(stage_ment_label);
 			
-			int stage_card_count = NSDS_GI(found_stage1, kSDS_SI_cardCount_i);
+			int stage_card_count = 4;//NSDS_GI(found_stage1, kSDS_SI_cardCount_i);
 			for(int i=1;i<=stage_card_count;i++)
 			{
 				int card_number = mySGD->isHasGottenCards(found_stage1, i);

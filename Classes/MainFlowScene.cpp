@@ -829,7 +829,15 @@ CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 }
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
-	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
+	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int open_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1+2;
+	
+	if(puzzle_count < open_count)
+		return puzzle_count;
+	else
+		return open_count;
+	
+//	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
 }
 
 enum MainFlowMenuTag{
