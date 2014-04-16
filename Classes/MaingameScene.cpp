@@ -297,11 +297,11 @@ void Maingame::startStory()
 					  intro_out_line->runAction(t_seq4);
 					  
 					  
-					  t_sm->addMent(true, "", "", "시노비결계!", [=](){});
+					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
 					  
 					  CCDelayTime* t_delay3 = CCDelayTime::create(0.8f);
 					  CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(Maingame::endIntro));
-					  CCCallFunc* t_call4 = CCCallFunc::create(t_sm, callfunc_selector(CCNode::removeFromParent));
+					  CCCallFunc* t_call4 = CCCallFunc::create(t_sm, callfunc_selector(StoryManager::removeFromParent));
 					  CCSequence* t_seq3 = CCSequence::create(t_delay3, t_call3, t_call4, NULL);
 					  
 					  t_sm->runAction(t_seq3);
