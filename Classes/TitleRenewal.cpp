@@ -703,6 +703,10 @@ void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
 				card_param["noList"][i] = card_data_load_list[i];
 			command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
 		}
+		else
+		{
+			mySGD->resetHasGottenCards();
+		}
 	}
 	else
 	{

@@ -439,6 +439,12 @@ void CollectionBookPopup::editBoxEditingDidBegin(CCEditBox* editBox)
 }
 void CollectionBookPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 {
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["cardNo"] = recent_card_number;
+	param["comment"] = editBox->getText();
+	
+	hspConnector::get()->command("updateCardHistory", param, nullptr);
 	myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number, editBox->getText());
 	CCLog("edit end");
 }
@@ -448,6 +454,12 @@ void CollectionBookPopup::editBoxTextChanged(CCEditBox* editBox, const std::stri
 }
 void CollectionBookPopup::editBoxReturn(CCEditBox* editBox)
 {
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["cardNo"] = recent_card_number;
+	param["comment"] = editBox->getText();
+	
+	hspConnector::get()->command("updateCardHistory", param, nullptr);
 	myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number, editBox->getText());
 	CCLog("edit return");
 }

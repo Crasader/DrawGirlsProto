@@ -215,10 +215,36 @@ bool CardSettingPopup::init()
 	
 	
 	KSLabelTTF* take_card_ment = KSLabelTTF::create("획득한 카드 수", mySGD->getFont().c_str(), 12);
-	take_card_ment->setPosition(ccp(125,255));
+	take_card_ment->setPosition(ccp(110,255));
 	main_case->addChild(take_card_ment, kCSS_Z_content);
 	
-	KSLabelTTF* take_card_count = KSLabelTTF::create(CCString::createWithFormat("%d 장", mySGD->getHasGottenCardsSize())->getCString(), mySGD->getFont().c_str(), 12);
+	int open_stage_card_count = 0;
+	int all_stage_card_count = 0;
+	for(int i=1;i<=puzzle_count;i++)
+	{
+		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+		int t_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+		int t_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+		
+		bool is_puzzle_open = myDSH->getBoolForKey(kDSH_Key_openPuzzleCnt)+1 >= i;
+		
+		for(int j=t_start_stage;j<t_start_stage+t_stage_count;j++)
+		{
+			int t_stage_card_count = NSDS_GI(j, kSDS_SI_cardCount_i);
+			
+			int condition_gold = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, j);
+			bool is_on_condition_gold = condition_gold == 0;
+			
+			int condition_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, j);
+			bool is_on_condition_stage = (condition_stage == 0) || (myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, condition_stage));
+			
+			if(is_puzzle_open && ((is_on_condition_gold && is_on_condition_stage) || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, j))) // open stage
+				open_stage_card_count += t_stage_card_count;
+			all_stage_card_count += t_stage_card_count;
+		}
+	}
+	
+	KSLabelTTF* take_card_count = KSLabelTTF::create(CCString::createWithFormat("%d / %d / %d", mySGD->getHasGottenCardsSize(), open_stage_card_count, all_stage_card_count)->getCString(), mySGD->getFont().c_str(), 12);
 	take_card_count->setColor(ccc3(255, 150, 50));
 	take_card_count->setPosition(ccp(185,255));
 	main_case->addChild(take_card_count, kCSS_Z_content);
@@ -636,6 +662,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					
 					
 					CCSprite* s_card_img = CCSprite::create("cardsetting_blank.png");
+					
+					KSLabelTTF* s_condition = KSLabelTTF::create(condition_text.c_str(), mySGD->getFont().c_str(), 14);
+					s_condition->enableOuterStroke(ccBLACK, 1.f);
+					s_condition->setPosition(ccp(s_card_img->getContentSize().width/2.f, s_card_img->getContentSize().height/2.f));
+					s_card_img->addChild(s_condition);
+					
 					CCSprite* s_case_img = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					s_case_img->setPosition(ccp(s_card_img->getContentSize().width/2.f, s_card_img->getContentSize().height/2.f));
 					s_card_img->addChild(s_case_img);
