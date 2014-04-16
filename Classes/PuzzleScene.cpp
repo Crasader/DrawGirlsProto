@@ -18,7 +18,7 @@
 #include "UnknownFriends.h"
 #include "GDWebSprite.h"
 #include "CumberShowWindow.h"
-#include "StartSettingScene.h"
+//#include "StartSettingScene.h"
 #include "ASPopupView.h"
 #include "CCMenuLambda.h"
 #include "ClearPopup.h"
@@ -32,6 +32,7 @@
 #include "OptionPopup.h"
 #include "AchievePopup.h"
 #include "DiaryZoomPopup.h"
+#include "StartSettingPopup.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -1392,7 +1393,10 @@ void PuzzleScene::menuAction(CCObject* sender)
 			
 			mySD->setSilType(selected_stage_number);
 			
-			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+			StartSettingPopup* t_popup = StartSettingPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+			addChild(t_popup, kPuzzleZorder_popup);
+//			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}
 	}
 	
@@ -1464,7 +1468,11 @@ void PuzzleScene::menuAction(CCObject* sender)
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 			
 			mySD->setSilType(selected_stage_number);
-			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+			
+			StartSettingPopup* t_popup = StartSettingPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+			addChild(t_popup, kPuzzleZorder_popup);
+//			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_changeMode)
 		{
