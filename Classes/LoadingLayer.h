@@ -17,13 +17,15 @@ using namespace std;
 class LoadingLayer : public CCLayer
 {
 public:
-	static LoadingLayer* create();
+	static LoadingLayer* create(int t_touch_priority = -500);
 	void startLoading();
 	virtual void onEnter();
 private:
 	CCSprite* gray;
 	CCLabelTTF* loading_label;
-	void myInit();
+	void myInit(int t_touch_priority);
+	
+	int touch_priority;
 	
 	string loading_text;
 	int animation_frame;

@@ -33,6 +33,7 @@
 #include "AchievePopup.h"
 #include "DiaryZoomPopup.h"
 #include "StartSettingPopup.h"
+#include "LoadingLayer.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -368,11 +369,12 @@ bool PuzzleScene::init()
 			
 			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 			
-			Json::Value param;
-			param["memberID"] = hspConnector::get()->getKakaoID();
-			param["cardNo"] = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+			keep_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
 			
-			hspConnector::get()->command("updateCardHistory", param, nullptr);
+			LoadingLayer* t_loading = LoadingLayer::create(-900);
+			addChild(t_loading, kPuzzleZorder_popup+1);
+			
+			updateCardHistory(t_loading);
 		}
 		else
 		{
@@ -488,6 +490,25 @@ bool PuzzleScene::init()
 	}
 	
 	return true;
+}
+
+void PuzzleScene::updateCardHistory(CCNode *t_loading)
+{
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["cardNo"] = keep_card_number;
+	
+	hspConnector::get()->command("updateCardHistory", param, [=](Json::Value result_data)
+								 {
+									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									 {
+										 t_loading->removeFromParent();
+									 }
+									 else
+									 {
+										 updateCardHistory(t_loading);
+									 }
+								 });
 }
 
 void PuzzleScene::startBacking()
@@ -678,7 +699,51 @@ void PuzzleScene::endGetStar()
 void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLog("success puzzle animation");
-	endSuccessPuzzleEffect();
+	
+	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+	
+	for(int i=start_stage;i<start_stage+stage_count;i++)
+	{
+		PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(i);
+		new_piece->simpleView();
+	}
+	
+	CCSprite* light_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 272));
+	light_img->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	light_img->setSkewX(10);
+	light_img->setOpacity(0);
+	light_img->setPosition(ccp(-130, 0));
+	puzzle_node->addChild(light_img, 999);
+	
+	CCMoveTo* t_move1 = CCMoveTo::create(0.7f, ccp(130,0));
+	CCMoveTo* t_move2 = CCMoveTo::create(0.f, ccp(-130,0));
+	CCSequence* t_seq1 = CCSequence::create(t_move1, t_move2, NULL);
+	
+	CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 100);
+	CCDelayTime* t_delay1 = CCDelayTime::create(0.3f);
+	CCFadeTo* t_fade2 = CCFadeTo::create(0.2f, 0);
+	CCSequence* t_seq2 = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
+	
+	CCSpawn* t_spawn = CCSpawn::create(t_seq1, t_seq2, NULL);
+	CCRepeat* t_repeat = CCRepeat::create(t_spawn, 2);
+	
+	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzleScene::pumpPuzzle));
+	CCCallFunc* t_call2 = CCCallFunc::create(light_img, callfunc_selector(CCSprite::removeFromParent));
+	
+	CCSequence* t_seq3 = CCSequence::create(t_repeat, t_call1, t_call2, NULL);
+	
+	light_img->runAction(t_seq3);
+}
+
+void PuzzleScene::pumpPuzzle()
+{
+	CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.05f);
+	CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endSuccessPuzzleEffect));
+	CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, t_call, NULL);
+	
+	puzzle_node->runAction(t_seq);
 }
 
 void PuzzleScene::endSuccessPuzzleEffect()
@@ -694,8 +759,6 @@ void PuzzleScene::showPerfectPuzzleEffect()
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
-	
-	CCLog("start_stage : %d, stage_count : %d", start_stage, stage_count);
 	
 	for(int i=start_stage;i<start_stage+stage_count;i++)
 	{
