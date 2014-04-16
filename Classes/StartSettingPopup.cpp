@@ -1434,7 +1434,8 @@ void StartSettingPopup::goToGame()
 		myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
 		mySGD->setNextSceneName("playtutorial");
 		
-		CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+		LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+		addChild(loading_tip, kStartSettingPopupZorder_popup);
 	}
 	else
 	{
