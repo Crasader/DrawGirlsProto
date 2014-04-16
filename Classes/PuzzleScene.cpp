@@ -409,7 +409,7 @@ bool PuzzleScene::init()
 	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(PuzzleScene::menuAction));
 	ready_item->setTag(kPuzzleMenuTag_start);
 	
-	CCMenu* ready_menu = CCMenu::createWithItem(ready_item);
+	ready_menu = CCMenu::createWithItem(ready_item);
 	ready_menu->setPosition(ccp(480-65-6,28+8));
 	addChild(ready_menu, kPuzzleZorder_top);
 	
@@ -427,6 +427,9 @@ bool PuzzleScene::init()
 	}
 	else
 	{
+		puzzleOpenning();
+		rightOpenning();
+		
 		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		
 		if(recent_step == kTutorialFlowStep_pieceClick)
@@ -484,6 +487,13 @@ bool PuzzleScene::init()
 	}
 	
 	return true;
+}
+
+void PuzzleScene::startBacking()
+{
+	puzzleBacking();
+	rightBacking();
+	topBacking();
 }
 
 void PuzzleScene::showClearPopup()
@@ -673,7 +683,8 @@ void PuzzleScene::showSuccessPuzzleEffect()
 void PuzzleScene::endSuccessPuzzleEffect()
 {
 	mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
-	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+	startBacking();
+//	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 }
 
 void PuzzleScene::showPerfectPuzzleEffect()
@@ -767,6 +778,38 @@ void PuzzleScene::hideFailPopup()
 		}
 	}
 	is_menu_enable = true;
+}
+
+void PuzzleScene::puzzleOpenning()
+{
+	CCPoint original_position = puzzle_node->getPosition();
+	puzzle_node->setPositionX(puzzle_node->getPositionX()-600);
+	KS::setOpacity(puzzle_node, 0);
+	addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+										   {
+											   puzzle_node->setPositionX(original_position.x - t*600.f);
+											   KS::setOpacity(puzzle_node, 255-t*255);
+										   }, [=](float t)
+										   {
+											   puzzle_node->setPositionX(original_position.x);
+											   KS::setOpacity(puzzle_node, 255);
+										   }));
+}
+
+void PuzzleScene::puzzleBacking()
+{
+	CCPoint original_position = puzzle_node->getPosition();
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+										   {
+											   puzzle_node->setPositionX(original_position.x - t*600.f);
+											   KS::setOpacity(puzzle_node, 255-t*255);
+										   }, [=](float t)
+										   {
+											   puzzle_node->setPositionX(original_position.x - 600.f);
+											   KS::setOpacity(puzzle_node, 0);
+											   
+											   CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+										   }));
 }
 
 void PuzzleScene::setPuzzle()
@@ -1327,7 +1370,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 			{
 				is_menu_enable = false;
 				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_cardCollectionClick);
-				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+				startBacking();
+//				CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 			}
 		}
 	}
@@ -1360,7 +1404,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 		
 		if(tag == kPuzzleMenuTag_cancel)
 		{
-			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			startBacking();
+//			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
 		{
@@ -1466,6 +1511,60 @@ void PuzzleScene::heartRefresh()
 	heart_parent->addChild(heart_time);
 }
 
+void PuzzleScene::rightOpenning()
+{
+	CCPoint original_position = right_case->getPosition();
+	right_case->setPositionX(right_case->getPositionX()+300);
+	KS::setOpacity(right_case, 0);
+	addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+										   {
+											   right_case->setPositionX(original_position.x + t*300.f);
+											   KS::setOpacity(right_case, 255-t*255);
+										   }, [=](float t)
+										   {
+											   right_case->setPositionX(original_position.x);
+											   KS::setOpacity(right_case, 255);
+										   }));
+	
+	CCPoint ready_position = ready_menu->getPosition();
+	ready_menu->setPositionX(ready_menu->getPositionX()+300);
+	KS::setOpacity(ready_menu, 0);
+	addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+										   {
+											   ready_menu->setPositionX(ready_position.x + t*300.f);
+											   KS::setOpacity(ready_menu, 255-t*255);
+										   }, [=](float t)
+										   {
+											   ready_menu->setPositionX(ready_position.x);
+											   KS::setOpacity(ready_menu, 255);
+										   }));
+}
+
+void PuzzleScene::rightBacking()
+{
+	CCPoint original_position = right_case->getPosition();
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+										   {
+											   right_case->setPositionX(original_position.x + t*300.f);
+											   KS::setOpacity(right_case, 255-t*255);
+										   }, [=](float t)
+										   {
+											   right_case->setPositionX(original_position.x + 300.f);
+											   KS::setOpacity(right_case, 0);
+										   }));
+	
+	CCPoint ready_position = ready_menu->getPosition();
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+										   {
+											   ready_menu->setPositionX(ready_position.x + t*300.f);
+											   KS::setOpacity(ready_menu, 255-t*255);
+										   }, [=](float t)
+										   {
+											   ready_menu->setPositionX(ready_position.x + 300.f);
+											   KS::setOpacity(ready_menu, 0);
+										   }));
+}
+
 void PuzzleScene::setRight()
 {
 	if(right_case)
@@ -1538,8 +1637,18 @@ void PuzzleScene::setRight()
 	}
 }
 
+void PuzzleScene::topBacking()
+{
+	top_list[0]->runAction(CCMoveTo::create(0.5f, ccpAdd(top_list[0]->getPosition(), ccp(0,100)))); // cancel
+	top_list[1]->runAction(CCMoveTo::create(0.5f, ccp(78,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_heart
+	top_list[2]->runAction(CCMoveTo::create(0.5f, ccp(216,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_gold
+	top_list[3]->runAction(CCMoveTo::create(0.5f, ccp(325,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_ruby
+}
+
 void PuzzleScene::setTop()
 {
+	top_list.clear();
+	
 //	CCSprite* top_case = CCSprite::create("mainflow_top.png");
 //	top_case->setAnchorPoint(ccp(0.5f,1.f));
 //	top_case->setPosition(ccp(258,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
@@ -1556,11 +1665,15 @@ void PuzzleScene::setTop()
 	cancel_menu->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(cancel_menu, kPuzzleZorder_top);
 	
+	top_list.push_back(cancel_menu);
+	
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
 	top_heart->setPosition(ccp(78+35,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_heart, kPuzzleZorder_top);
+	
+	top_list.push_back(top_heart);
 	
 	heart_time = HeartTime::create();
 	heart_time->setPosition(ccp(15,top_heart->getContentSize().height/2.f));
@@ -1582,6 +1695,8 @@ void PuzzleScene::setTop()
 	top_gold->setAnchorPoint(ccp(0.5f,1.f));
 	top_gold->setPosition(ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_gold, kPuzzleZorder_top);
+	
+	top_list.push_back(top_gold);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-5));
@@ -1605,6 +1720,8 @@ void PuzzleScene::setTop()
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
 	top_ruby->setPosition(ccp(325+10,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_ruby, kPuzzleZorder_top);
+	
+	top_list.push_back(top_ruby);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-5));

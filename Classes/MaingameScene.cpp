@@ -297,7 +297,7 @@ void Maingame::startStory()
 					  intro_out_line->runAction(t_seq4);
 					  
 					  
-					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
+//					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
 					  
 					  CCDelayTime* t_delay3 = CCDelayTime::create(0.8f);
 					  CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(Maingame::endIntro));
