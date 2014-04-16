@@ -366,6 +366,12 @@ bool PuzzleScene::init()
 			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GS(kSDS_CI_int1_passive_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
 			
 			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+			
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getKakaoID();
+			param["cardNo"] = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+			
+			hspConnector::get()->command("updateCardHistory", param, nullptr);
 		}
 		else
 		{

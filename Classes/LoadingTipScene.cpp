@@ -95,7 +95,10 @@ bool LoadingTipScene::init()
 		tip_img->setPosition(ccp(240,160));
 		addChild(tip_img, kLoadingTipZorder_back);
 		
-		readyLoading();
+		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::popRootScene));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+		tip_img->runAction(t_seq);
 	}
 		
 	return true;
@@ -155,9 +158,10 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	ok_menu->setPosition(ccp(mission_back->getContentSize().width*0.7f, mission_back->getContentSize().height*0.18f));
 	mission_back->addChild(ok_menu);
 	ok_menu->setVisible(false);
+	ok_menu->setTouchPriority(-600);
 	
 	
-	no_review = CommonButton::create("다시보지않기", 13, CCSizeMake(100, 50), CommonButtonGreen, -200);
+	no_review = CommonButton::create("다시보지않기", 13, CCSizeMake(100, 50), CommonButtonGreen, -600);
 	no_review->setPosition(ccp(mission_back->getContentSize().width*0.3f, mission_back->getContentSize().height*0.18f));
 	mission_back->addChild(no_review);
 	no_review->setVisible(false);
@@ -360,14 +364,23 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	title_img->setPosition(ccp(mission_back->getContentSize().width/2.f+20, mission_back->getContentSize().height/2.f+68));
 	mission_back->addChild(title_img);
 	
+	mission_back->setScale(1.5f);
 	KS::setOpacity(mission_back, 0);
-	loading_tip_node->addChild(KSGradualValue<int>::create(-255, 255, 1.f, [=](int t)
+	loading_tip_node->addChild(KSGradualValue<int>::create(-255, 102, 0.7f, [=](int t)
 								{
 									if(t >= 0)
-										KS::setOpacity(mission_back, t);
+									{
+										mission_back->setScale(1.5f - t/204.f);
+										KS::setOpacity(mission_back, t/0.2f*0.5f);
+										n_ok->setOpacity(0);
+										s_ok->setOpacity(0);
+									}
 								}, [=](int t)
 								{
+									mission_back->setScale(1.f);
 									KS::setOpacity(mission_back, 255);
+									n_ok->setOpacity(0);
+									s_ok->setOpacity(0);
 								}));
 	
 	return loading_tip_node;
@@ -563,11 +576,13 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		title_img->setPosition(ccp(mission_back->getContentSize().width/2.f+20, mission_back->getContentSize().height/2.f+68));
 		mission_back->addChild(title_img);
 		
-		loading_tip_node->addChild(KSGradualValue<int>::create(255, 0, 0.5f, [=](int t)
+		loading_tip_node->addChild(KSGradualValue<int>::create(255, 0, 0.2f, [=](int t)
 															   {
+																   mission_back->setScale(1.f + (255-t)/510.f);
 																   KS::setOpacity(mission_back, t);
 															   }, [=](int t)
 															   {
+																   mission_back->setScale(1.5f);
 																   KS::setOpacity(mission_back, 0);
 															   }));
 	}
@@ -638,8 +653,10 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		content_img->setOpacity(255);
 		loading_tip_node->addChild(content_img);
 		
-		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
-		content_img->runAction(t_fade);
+		CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
+		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.5f);
+		CCSpawn* t_spawn = CCSpawn::create(t_fade, t_scale, NULL);
+		content_img->runAction(t_spawn);
 	}
 	
 	return loading_tip_node;
@@ -710,11 +727,14 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
 	content_img->setPosition(ccp(0, 0));
 	content_img->setOpacity(0);
+	content_img->setScale(1.5f);
 	loading_tip_node->addChild(content_img);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 255);
-	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, NULL);
+	CCFadeTo* t_fade = CCFadeTo::create(0.2f, 255);
+	CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.f);
+	CCSpawn* t_spawn = CCSpawn::create(t_fade, t_scale, NULL);
+	CCSequence* t_seq = CCSequence::create(t_delay, t_spawn, NULL);
 	content_img->runAction(t_seq);
 	
 	return loading_tip_node;
@@ -761,7 +781,7 @@ CCSprite* LoadingTipScene::getLoadingTipImage()
 	tip_filename += ".png";
 	
 	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
-	content_img->setPosition(ccp(0, 0));
+	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
 	loading_tip_back->addChild(content_img);
 	
 	return loading_tip_back;

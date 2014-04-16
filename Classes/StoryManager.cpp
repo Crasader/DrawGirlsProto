@@ -97,7 +97,7 @@ bool StoryManager::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
 	touch_count++;
 	is_boosting = true;
-	if(!is_menting && !is_delaying)
+	if(!is_menting && !is_delaying && end_func)
 		end_func();
 	
 	return true;

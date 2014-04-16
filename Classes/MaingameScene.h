@@ -300,6 +300,7 @@ private:
 	
 	void initJackPosition(CCPoint jack_position);
 	
+	CCSprite* intro_out_line;
 	CCSprite* intro_stencil;
 	CCClippingNode* intro_clipping;
 	CumberShowWindow* intro_boss;
