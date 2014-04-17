@@ -47,6 +47,9 @@ public:
 	CCNode* tutorial_node;
 private:
 	
+	int keep_card_number;
+	void updateCardHistory(CCNode* t_loading);
+	
 	void heartRefresh();
 	
 	bool clear_is_empty_piece;
@@ -72,6 +75,8 @@ private:
 	
 	int next_stage_number;
 	
+	void startBacking();
+	
 	void showClearPopup();
 	void hideClearPopup();
 	void showGetPuzzle();
@@ -92,6 +97,8 @@ private:
 	string before_scene_name;
 	
 	PieceMode piece_mode;
+	void puzzleOpenning();
+	void puzzleBacking();
 	void setPuzzle();
 	CCNode* puzzle_node;
 //	CCSpriteBatchNode* shadow_batchnode;
@@ -103,9 +110,18 @@ private:
 	void lockPieceAction(int t_stage_number);
 	CCSprite* have_card_cnt_case;
 	
+	void pumpPuzzle();
+	
 	void menuAction(CCObject* sender);
+	
+	vector<CCNode*> top_list;
+	void topBacking();
 	void setTop();
 	
+	CCMenu* ready_menu;
+	
+	void rightOpenning();
+	void rightBacking();
 	void setRight();
 	CCNode* right_case;
 	

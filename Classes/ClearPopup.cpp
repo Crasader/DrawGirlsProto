@@ -800,7 +800,7 @@ bool ClearPopup::init()
 	
 	
 	CCSprite* n_ok = CCSprite::create("ending_button.png");
-	KSLabelTTF* n_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_ok_label = KSLabelTTF::create("다음스테이지", mySGD->getFont().c_str(), 22);
 	n_ok_label->setColor(ccc3(50, 30, 5));
 	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_ok_label->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-3));
@@ -808,7 +808,7 @@ bool ClearPopup::init()
 	
 	CCSprite* s_ok = CCSprite::create("ending_button.png");
 	s_ok->setColor(ccGRAY);
-	KSLabelTTF* s_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_ok_label = KSLabelTTF::create("다음스테이지", mySGD->getFont().c_str(), 22);
 	s_ok_label->setColor(ccc3(50, 30, 5));
 	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_ok_label->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-3));

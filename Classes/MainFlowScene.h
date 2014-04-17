@@ -47,6 +47,10 @@ private:
 //	int is_unlock_puzzle;
 //	void endUnlockAnimation();
 	
+	int keep_card_number;
+	
+	void updateCardHistory(CCNode* t_loading);
+	
 	void heartRefresh();
 	
 	CCNode* tutorial_node;
@@ -78,6 +82,9 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
+	void tableEnter();
+	void tableOpenning();
+	
 	void setTable();
 	
 	void menuAction(CCObject* sender);
@@ -87,7 +94,14 @@ private:
 	CCSprite* postbox_count_case;
 	CCLabelTTF* postbox_count_label;
 	
+	vector<CCNode*> top_list;
+	void topOpenning();
+	void topPuzzleMode();
 	void setTop();
+	
+	vector<CCNode*> bottom_list;
+	void bottomOpenning();
+	void bottomPuzzleMode();
 	void setBottom();
 	
 	void popupClose();

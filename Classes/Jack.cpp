@@ -1734,12 +1734,12 @@ IntDirection Jack::reverseDirection( IntDirection t_d )
 void Jack::dieEffect()
 {
 	dieEffectCnt++;
-	if(dieEffectCnt < 45)
+	if(dieEffectCnt < 30)
 	{
 		//			jackImg->setScale(0.2f + dieEffectCnt*0.02f);
 		//			jackImg->setOpacity(255-dieEffectCnt*5);
 	}
-	else if(dieEffectCnt == 45)
+	else if(dieEffectCnt == 30)
 	{
 		unschedule(schedule_selector(Jack::dieEffect));
 
@@ -2238,11 +2238,11 @@ void Jack::startReviveAnimation( CCSprite* t_jack_img )
 	t_jack_img->addChild(animation_node);
 
 	startInnerParticle(animation_node);
-	CCDelayTime* delay1 = CCDelayTime::create(0.2f);
+	CCDelayTime* delay1 = CCDelayTime::create(0.1f);
 	CCCallFuncO* call1 = CCCallFuncO::create(this, callfuncO_selector(Jack::startLightSprite), animation_node);
-	CCDelayTime* delay2 = CCDelayTime::create(0.4f);
+	CCDelayTime* delay2 = CCDelayTime::create(0.2f);
 	CCCallFuncO* call2 = CCCallFuncO::create(this, callfuncO_selector(Jack::startOutterParticle), animation_node);
-	CCDelayTime* delay3 = CCDelayTime::create(1.f);
+	CCDelayTime* delay3 = CCDelayTime::create(0.5f);
 	CCCallFunc* call3 = CCCallFunc::create(this, callfunc_selector(Jack::endReviveJack));
 	CCCallFunc* call4 = CCCallFunc::create(animation_node, callfunc_selector(CCNode::removeFromParent));
 	CCSequence* t_seq = CCSequence::create(delay1, call1, delay2, call2, delay3, call3, call4, NULL);

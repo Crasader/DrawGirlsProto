@@ -1362,9 +1362,15 @@ bool PlayTutorial::init()
 	
 	tutorial_step = 0;
 	
+	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
+	curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+	addChild(curtain_node, 200);
+	
 	StoryManager* t_sm = StoryManager::create(-500);
 	addChild(t_sm, 100);
 	
+	addChild(KSTimer::create(1.f, [=]()
+					{
 	
 	CCSprite* gray = CCSprite::create("back_gray.png");
 	gray->setOpacity(0);
@@ -1387,6 +1393,7 @@ bool PlayTutorial::init()
 			t_sm->removeFromParent();
 		});
 	});
+					}));
 	
 	return true;
 }
@@ -1519,6 +1526,7 @@ void PlayTutorial::nextStep()
 															  mySGD->setNextSceneName("maingame");
 															  
 															  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+															  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
 															  addChild(loading_tip, 999);
 														  });
 										}, CCSizeMake(350,100), ccp(0,0), 12);

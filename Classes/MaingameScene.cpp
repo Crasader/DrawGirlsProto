@@ -220,50 +220,57 @@ void Maingame::onEnterTransitionDidFinish()
 		}
 	}
 	
-	intro_stencil = CCSprite::create("sight_out.png");
-	intro_stencil->setScale(0.f);
-	intro_stencil->setPosition(ccp(240,myDSH->ui_center_y+5));
-	
-	intro_clipping = CCClippingNode::create(intro_stencil);
-	intro_clipping->setPosition(CCPointZero);
-	addChild(intro_clipping, introZorder);
-	
-	intro_clipping->setInverted(true);
-	intro_clipping->setAlphaThreshold(0.01f);
-	
-	EffectSprite* blur_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
-	blur_img->setColor(ccc3(30, 30, 30));
-	blur_img->setAnchorPoint(ccp(0,0));
-	blur_img->setPosition(ccp(0,0));
-	
-	CCRenderTexture* intro_texture = CCRenderTexture::create(320, 430);
-	intro_texture->beginWithClear(0, 0, 0, 0);
-	blur_img->visit();
-	intro_texture->end();
-	
-	intro_texture->setScale(game_node->getScale());
-	intro_texture->setPosition(ccp(240, 430*game_node->getScale()/2.f));
-	intro_clipping->addChild(intro_texture);
-	
-	intro_out_line = CCSprite::create("sight_out.png");
-	intro_out_line->setScale(0.f);
-	intro_out_line->setPosition(ccp(240,myDSH->ui_center_y+5));
-	intro_clipping->addChild(intro_out_line);
-	
-	intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
-	intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
-	intro_boss->setScale(1.8f);
-	addChild(intro_boss, introZorder);
-	
-	CCDelayTime* t_delay = CCDelayTime::create(1.f);
-	CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
-	CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
-	intro_boss->runAction(t_seq);
-	
-	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
-	curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
-	addChild(curtain_node, introZorder);
+	if(mySGD->getStartMapGachaCnt() == 0)
+	{
+		intro_stencil = CCSprite::create("sight_out.png");
+		intro_stencil->setScale(0.f);
+		intro_stencil->setPosition(ccp(240,myDSH->ui_center_y+5));
+		
+		intro_clipping = CCClippingNode::create(intro_stencil);
+		intro_clipping->setPosition(CCPointZero);
+		addChild(intro_clipping, introZorder);
+		
+		intro_clipping->setInverted(true);
+		intro_clipping->setAlphaThreshold(0.01f);
+		
+		EffectSprite* blur_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
+		blur_img->setColor(ccc3(30, 30, 30));
+		blur_img->setAnchorPoint(ccp(0,0));
+		blur_img->setPosition(ccp(0,0));
+		
+		CCRenderTexture* intro_texture = CCRenderTexture::create(320, 430);
+		intro_texture->beginWithClear(0, 0, 0, 0);
+		blur_img->visit();
+		intro_texture->end();
+		
+		intro_texture->setScale(game_node->getScale());
+		intro_texture->setPosition(ccp(240, 430*game_node->getScale()/2.f));
+		intro_clipping->addChild(intro_texture);
+		
+		intro_out_line = CCSprite::create("sight_out.png");
+		intro_out_line->setScale(0.f);
+		intro_out_line->setPosition(ccp(240,myDSH->ui_center_y+5));
+		intro_clipping->addChild(intro_out_line);
+		
+		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
+		intro_boss->setScale(1.8f);
+		addChild(intro_boss, introZorder);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(1.f);
+		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
+		intro_boss->runAction(t_seq);
+		
+		CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
+		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+		addChild(curtain_node, introZorder);
+	}
+	else
+	{
+		endIntro();
+	}
 }
 
 void Maingame::startStory()
@@ -297,7 +304,7 @@ void Maingame::startStory()
 					  intro_out_line->runAction(t_seq4);
 					  
 					  
-					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
+//					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
 					  
 					  CCDelayTime* t_delay3 = CCDelayTime::create(0.8f);
 					  CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(Maingame::endIntro));

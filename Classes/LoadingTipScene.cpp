@@ -69,7 +69,7 @@ bool LoadingTipScene::init()
 	
 	if(!is_mission_tip)
 	{
-		if(next_scene_name == "maingame")
+		if(next_scene_name == "maingame" || next_scene_name == "playtutorial")
 		{
 			CCNode* tip_img = getCurtainTipImage();
 			tip_img->setPosition(ccp(240,160));

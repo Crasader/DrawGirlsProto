@@ -325,7 +325,7 @@ public:
 	}
 	void update(float dt)
 	{
-		m_timer += dt;
+		m_timer += 1.f/60.f;
 		if(m_timer >= m_s)
 		{
 			after();

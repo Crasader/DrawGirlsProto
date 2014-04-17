@@ -36,6 +36,8 @@
 #include "NewMainFlowScene.h"
 #include "RankNewPopup.h"
 #include "SumranMailPopup.h"
+#include "LoadingLayer.h"
+
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -107,6 +109,9 @@ bool MainFlowScene::init()
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
+		topOpenning();
+		bottomOpenning();
+		
 		if(mySGD->getMustBeShowNotice())
 		{
 			ASPopupView* t_popup = ASPopupView::create(-200);
@@ -132,10 +137,12 @@ bool MainFlowScene::init()
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
+	{
+		bottomOpenning();
+	}
 	
 	is_menu_enable = true;
-	
-	
 	
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
@@ -168,11 +175,12 @@ bool MainFlowScene::init()
 			
 			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 			
-			Json::Value param;
-			param["memberID"] = hspConnector::get()->getKakaoID();
-			param["cardNo"] = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+			keep_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
 			
-			hspConnector::get()->command("updateCardHistory", param, nullptr);
+			LoadingLayer* t_loading = LoadingLayer::create(-900);
+			addChild(t_loading, kMainFlowZorder_popup+1);
+			
+			updateCardHistory(t_loading);
 		}
 		else
 		{
@@ -189,10 +197,7 @@ bool MainFlowScene::init()
 				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
 			}
 		}
-	}
-	
-	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
-	{
+		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		showClearPopup();
 	}
@@ -238,6 +243,8 @@ bool MainFlowScene::init()
 			is_menu_enable = false;
 			puzzle_table->setTouchEnabled(false);
 		}
+		
+		tableOpenning();
 	}
 	
 //	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main))
@@ -256,6 +263,71 @@ bool MainFlowScene::init()
 //	}
 	
 	return true;
+}
+
+void MainFlowScene::updateCardHistory(CCNode *t_loading)
+{
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["cardNo"] = keep_card_number;
+	
+	hspConnector::get()->command("updateCardHistory", param, [=](Json::Value result_data)
+								 {
+									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									 {
+										 t_loading->removeFromParent();
+									 }
+									 else
+									 {
+										 updateCardHistory(t_loading);
+									 }
+								 });
+}
+
+void MainFlowScene::tableOpenning()
+{
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int action_cell_count = 0;
+	
+	for(int i=0;i<cell_cnt;i++)
+	{
+		CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
+		
+		if(t_cell)
+		{
+			CCNode* t_node = t_cell->getChildByTag(1);
+			
+			CCNode* t_rate = t_node->getChildByTag(999);
+			if(t_rate)
+				t_rate->setVisible(false);
+			
+			float origin_x = t_node->getPositionX();
+			
+			t_node->setPositionX(origin_x + 70);
+			KS::setOpacity(t_node, 0);
+			
+			float delay_value = action_cell_count*0.1f;
+			
+			t_node->addChild(KSTimer::create(delay_value, [=]()
+											 {
+												 t_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
+																								{
+																									t_node->setPositionX(origin_x + 70-70.f*t);
+																									KS::setOpacity(t_node, 255*t);
+																								}, [=](float t)
+																								{
+																									t_node->setPositionX(origin_x);
+																									KS::setOpacity(t_node, 255);
+																									
+																									CCNode* t_rate = t_node->getChildByTag(999);
+																									if(t_rate)
+																										t_rate->setVisible(true);
+																								}));
+											 }));
+			
+			action_cell_count++;
+		}
+	}
 }
 
 void MainFlowScene::showClearPopup()
@@ -331,7 +403,8 @@ void MainFlowScene::setTable()
 	}
 	float xInitPosition = MAX(puzzle_table->minContainerOffset().x, -cellSizeForTable(puzzle_table).width*myPosition + puzzle_table->getViewSize().width / 2.f);
 	xInitPosition = MIN(0, xInitPosition);
-	puzzle_table->setContentOffsetInDuration(ccp(xInitPosition, 0), 0.3f);
+//	puzzle_table->setContentOffsetInDuration(ccp(xInitPosition, 0), 0.3f);
+	puzzle_table->setContentOffset(ccp(xInitPosition, 0));
 }
 
 enum MainFlowTableCellTag{
@@ -339,6 +412,76 @@ enum MainFlowTableCellTag{
 	kMainFlowTableCellTag_buyBase = 10000,
 	kMainFlowTableCellTag_ticketBase = 20000
 };
+
+void MainFlowScene::tableEnter()
+{
+	topPuzzleMode();
+	bottomPuzzleMode();
+	
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	bool is_found = false;
+	
+	for(int i=0;i<cell_cnt;i++)
+	{
+		int index_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+		CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
+		
+		if(is_found)
+		{
+			if(t_cell)
+			{
+				CCNode* t_node = t_cell->getChildByTag(1);
+				float origin_x = t_node->getPositionX();
+				t_node->addChild(KSGradualValue<float>::create(0.f, 600.f, 1.f, [=](float t)
+															   {
+																   t_node->setPositionX(origin_x + t);
+															   }, [=](float t)
+															   {
+																   t_node->setPositionX(origin_x + 600.f);
+															   }));
+			}
+		}
+		else
+		{
+			if(index_puzzle_number == puzzle_number)
+			{
+				is_found = true;
+				if(t_cell)
+				{
+					CCNode* t_node = t_cell->getChildByTag(1);
+					
+					CCNode* t_rate = t_node->getChildByTag(999);
+					if(t_rate)
+						t_rate->setVisible(false);
+					
+					t_node->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+																   {
+																	   KS::setOpacity(t_node, 255*t);
+																   }, [=](float t)
+																   {
+																	   puzzleLoadSuccess();
+																   }));
+				}
+			}
+			else
+			{
+				if(t_cell)
+				{
+					CCNode* t_node = t_cell->getChildByTag(1);
+					float origin_x = t_node->getPositionX();
+					t_node->addChild(KSGradualValue<float>::create(0.f, -600.f, 1.f, [=](float t)
+																   {
+																	   t_node->setPositionX(origin_x + t);
+																   }, [=](float t)
+																   {
+																	   t_node->setPositionX(origin_x - 600.f);
+																   }));
+				}
+			}
+		}
+	}
+}
 
 void MainFlowScene::puzzleLoadSuccess()
 {
@@ -380,7 +523,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
 			
-			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::puzzleLoadSuccess), puzzle_number);
+			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::tableEnter), puzzle_number);
 			addChild(t_sld, kMainFlowZorder_popup);
 		}
 		else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
@@ -514,6 +657,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell->init();
 	cell->autorelease();
 	
+	CCNode* cell_node = CCNode::create();
+	cell_node->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
+	cell->addChild(cell_node, 1, 1);
+	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -541,32 +688,23 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		open_item->setTag(kMainFlowTableCellTag_openBase + puzzle_number);
 		
 		ScrollMenu* open_menu = ScrollMenu::create(open_item, NULL);
-		open_menu->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
-		cell->addChild(open_menu);
-		
-//		CCLabelTTF* title_label = CCLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 15);
-//		title_label->setColor(ccBLACK);
-//		title_label->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+67));
-//		cell->addChild(title_label);
-		
-//		CCSprite* puzzle_thumbnail = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());
-//		puzzle_thumbnail->setPosition(ccp(cellSizeForTable(table).width/2.f-1, cellSizeForTable(table).height/2.f+13));
-//		cell->addChild(puzzle_thumbnail);
+		open_menu->setPosition(CCPointZero);
+		cell_node->addChild(open_menu);
 		
 		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 		int total_card_cnt = stage_count*3;
 		
 		CCLabelTTF* rate_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", have_card_count_for_puzzle_index[idx], total_card_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-		rate_label->setPosition(ccp(cellSizeForTable(table).width/2.f-25, cellSizeForTable(table).height/2.f-81));
-		cell->addChild(rate_label);
+		rate_label->setPosition(ccp(-25, -81));
+		cell_node->addChild(rate_label);
 		
 		CCProgressTimer* rate_timer = CCProgressTimer::create(CCSprite::create("mainflow_puzzle_bar.png"));
 		rate_timer->setType(kCCProgressTimerTypeBar);
 		rate_timer->setMidpoint(ccp(0,0));
 		rate_timer->setBarChangeRate(ccp(1,0));
 		rate_timer->setPercentage(100.f*have_card_count_for_puzzle_index[idx]/total_card_cnt);
-		rate_timer->setPosition(ccp(cellSizeForTable(table).width/2.f+25, cellSizeForTable(table).height/2.f-80));
-		cell->addChild(rate_timer);
+		rate_timer->setPosition(ccp(25, -80));
+		cell_node->addChild(rate_timer, 0, 999);
 
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
@@ -579,25 +717,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	else
 	{
 		CCSprite* close_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());
-		close_back->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
-		cell->addChild(close_back);
-		
-//		CCLabelTTF* title_label = CCLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 10);
-//		title_label->setColor(ccBLACK);
-//		title_label->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f-57));
-//		cell->addChild(title_label);
+		close_back->setPosition(CCPointZero);
+		cell_node->addChild(close_back);
 		
 		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number-1))
 		{
-//			CCSprite* need_ticket_img = CCSprite::create("mainflow_puzzle_needticket.png");
-//			need_ticket_img->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+36));
-//			cell->addChild(need_ticket_img);
-//			
-//			CCLabelTTF* ticket_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt),
-//																					 NSDS_GI(puzzle_number, kSDS_PZ_ticket_i))->getCString(), mySGD->getFont().c_str(), 13);
-//			ticket_label->setPosition(ccp(cellSizeForTable(table).width/2.f+15, cellSizeForTable(table).height/2.f+27));
-//			cell->addChild(ticket_label);
-			
 			CCSprite* n_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
 			CCSprite* s_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
 			s_buy->setColor(ccGRAY);
@@ -606,25 +730,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			buy_item->setTag(kMainFlowTableCellTag_buyBase + puzzle_number);
 			
 			ScrollMenu* buy_menu = ScrollMenu::create(buy_item, NULL);
-			buy_menu->setPosition(ccp(cellSizeForTable(table).width/2.f-24, cellSizeForTable(table).height/2.f-16));
-			cell->addChild(buy_menu);
-			
-//			CCSprite* n_ticket = CCSprite::create("mainflow_puzzle_open_ticket.png");
-//			CCSprite* s_ticket = CCSprite::create("mainflow_puzzle_open_ticket.png");
-//			s_ticket->setColor(ccGRAY);
-//			
-//			CCMenuItem* ticket_item = CCMenuItemSprite::create(n_ticket, s_ticket, this, menu_selector(MainFlowScene::cellAction));
-//			ticket_item->setTag(kMainFlowTableCellTag_ticketBase + puzzle_number);
-//			
-//			ScrollMenu* ticket_menu = ScrollMenu::create(ticket_item, NULL);
-//			ticket_menu->setPosition(ccp(cellSizeForTable(table).width/2.f+24, cellSizeForTable(table).height/2.f-16));
-//			cell->addChild(ticket_menu);
+			buy_menu->setPosition(ccp(-24, -16));
+			cell_node->addChild(buy_menu);
 		}
 		else
 		{
 			CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base.png");
 			not_clear_img->setPosition(close_back->getPosition());
-			cell->addChild(not_clear_img);
+			cell_node->addChild(not_clear_img);
 		}
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
@@ -637,29 +750,64 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	if(puzzle_number == is_unlock_puzzle)
 	{
-		CCSprite* close_back = CCSprite::create("mainflow_puzzle_lock_back.png");
-		close_back->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
-		cell->addChild(close_back);
+		CCSprite* puzzle_unlock_beam = CCSprite::create("puzzle_unlock_beam.png");
+		puzzle_unlock_beam->setPosition(CCPointZero);
+		cell_node->addChild(puzzle_unlock_beam, -1);
+		puzzle_unlock_beam->setOpacity(0);
 		
-		CCDelayTime* t_delay = CCDelayTime::create(0.25f);
-		CCFadeTo* t_fade1 = CCFadeTo::create(0.4f, 0);
-		CCCallFunc* t_remove_self = CCCallFunc::create(close_back, callfunc_selector(CCNode::removeFromParent));
-		CCSequence* t_seq = CCSequence::create(t_delay, t_fade1, t_remove_self, NULL);
-		close_back->runAction(t_seq);
+		CCScaleTo* beam_scale1 = CCScaleTo::create(0.2f, 1.4f);
+		CCDelayTime* beam_scale_delay = CCDelayTime::create(0.5f);
+		CCScaleTo* beam_scale2 = CCScaleTo::create(0.2f, 1.f);
+		CCSequence* beam_scale_seq = CCSequence::create(beam_scale1, beam_scale_delay, beam_scale2, NULL);
 		
+		CCRotateBy* beam_rotate = CCRotateBy::create(0.9f, 80);
+		
+		CCFadeTo* beam_fade1 = CCFadeTo::create(0.2f, 200);
+		CCDelayTime* beam_fade_delay = CCDelayTime::create(0.5f);
+		CCFadeTo* beam_fade2 = CCFadeTo::create(0.2f, 0);
+		CCSequence* beam_fade_seq = CCSequence::create(beam_fade1, beam_fade_delay, beam_fade2, NULL);
+		
+		CCDelayTime* beam_delay = CCDelayTime::create(0.5f);
+		CCSpawn* beam_spawn = CCSpawn::create(beam_scale_seq, beam_rotate, beam_fade_seq, NULL);
+		CCCallFunc* beam_remove = CCCallFunc::create(puzzle_unlock_beam, callfunc_selector(CCSprite::removeFromParent));
+		CCSequence* beam_seq = CCSequence::create(beam_delay, beam_spawn, beam_remove, NULL);
+		
+		puzzle_unlock_beam->runAction(beam_seq);
 		
 		CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base.png");
-		not_clear_img->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f+33));
-		cell->addChild(not_clear_img);
+		not_clear_img->setPosition(CCPointZero);
+		cell_node->addChild(not_clear_img);
 		
-		CCDelayTime* t_delay1 = CCDelayTime::create(0.25f);
-		CCFadeTo* t_fade2 = CCFadeTo::create(0.4f, 0);
-		CCCallFunc* t_touch_on = CCCallFunc::create(this, callfunc_selector(MainFlowScene::endUnlockAnimation));
-		CCCallFunc* t_remove_self2 = CCCallFunc::create(not_clear_img, callfunc_selector(CCNode::removeFromParent));
-		CCSequence* t_seq2 = CCSequence::create(t_delay1, t_fade2, t_touch_on, t_remove_self2, NULL);
-		not_clear_img->runAction(t_seq2);
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 0);
+		CCCallFunc* t_remove_self1 = CCCallFunc::create(not_clear_img, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, t_remove_self1, NULL);
+		not_clear_img->runAction(t_seq1);
 		
 		is_unlock_puzzle = 0;
+		
+		cell_node->addChild(KSTimer::create(0.7f, [=]()
+											{
+												cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
+																			  {
+																				  if(t < 1.f)
+																				  {
+																					  cell_node->setScale(1.f+0.1f*t);
+																				  }
+																				  else if(t < 2.f)
+																				  {
+																					  cell_node->setScale(1.1f);
+																				  }
+																				  else
+																				  {
+																					  cell_node->setScale(1.1f-0.1f*(t-2.f));
+																				  }
+																			  }, [=](float t)
+																			  {
+																				  cell_node->setScale(1.f);
+																				  endUnlockAnimation();
+																			  }));
+											}));
 	}
 	
 	return cell;
@@ -681,7 +829,15 @@ CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 }
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
-	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
+	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int open_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1+2;
+	
+	if(puzzle_count < open_count)
+		return puzzle_count;
+	else
+		return open_count;
+	
+//	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
 }
 
 enum MainFlowMenuTag{
@@ -901,8 +1057,37 @@ void MainFlowScene::menuAction(CCObject* sender)
 	}
 }
 
+void MainFlowScene::bottomOpenning()
+{
+	for(int i=0;i<bottom_list.size();i++)
+	{
+		CCPoint original_position = bottom_list[i]->getPosition();
+		bottom_list[i]->setPositionY(original_position.y-100);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+		CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+		
+		bottom_list[i]->runAction(t_seq);
+	}
+}
+
+void MainFlowScene::bottomPuzzleMode()
+{
+	for(int i=0;i<bottom_list.size();i++)
+	{
+		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+		CCMoveTo* t_move = CCMoveTo::create(0.2f, ccp(bottom_list[i]->getPositionX(), bottom_list[i]->getPositionY()-100));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+		
+		bottom_list[i]->runAction(t_seq);
+	}
+}
+
 void MainFlowScene::setBottom()
 {
+	bottom_list.clear();
+	
 	CCNode* bottom_case = CCNode::create();
 	bottom_case->setAnchorPoint(ccp(0.5f,0.5f));
 	bottom_case->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+3));
@@ -920,6 +1105,8 @@ void MainFlowScene::setBottom()
 	shop_menu->setPosition(ccp(-200, n_shop->getContentSize().height/2.f));//ccp(-73, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
 	
+	bottom_list.push_back(shop_menu);
+	
 	
 	CCSprite* n_rank = CCSprite::create("mainflow_rank.png");
 	CCSprite* s_rank = CCSprite::create("mainflow_rank.png");
@@ -931,6 +1118,8 @@ void MainFlowScene::setBottom()
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
 	rank_menu->setPosition(ccp(-130, n_rank->getContentSize().height/2.f));//ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
+	
+	bottom_list.push_back(rank_menu);
 	
 //	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
 //	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
@@ -964,6 +1153,8 @@ void MainFlowScene::setBottom()
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
 	cardsetting_menu->setPosition(ccp(-60, n_cardsetting->getContentSize().height/2.f));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
+	
+	bottom_list.push_back(cardsetting_menu);
 	
 //	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
 //	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
@@ -1001,12 +1192,45 @@ void MainFlowScene::heartRefresh()
 	heart_parent->addChild(heart_time);
 }
 
+void MainFlowScene::topOpenning()
+{
+	for(int i=0;i<top_list.size();i++)
+	{
+		CCPoint original_position = top_list[i]->getPosition();
+		top_list[i]->setPositionY(original_position.y+100);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+		CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+		
+		top_list[i]->runAction(t_seq);
+	}
+}
+
+void MainFlowScene::topPuzzleMode()
+{
+	CCSprite* cancel_img = CCSprite::create("puzzle_cancel.png");
+	cancel_img->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15 + 100));
+	addChild(cancel_img, kMainFlowZorder_top);
+	
+	CCMoveTo* cancel_move = CCMoveTo::create(0.5f, ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	cancel_img->runAction(cancel_move);
+	
+	top_list[0]->runAction(CCMoveTo::create(0.5f, ccp(78+35,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_heart
+	top_list[1]->runAction(CCMoveTo::create(0.5f, ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_gold
+	top_list[2]->runAction(CCMoveTo::create(0.5f, ccp(325+10,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_ruby
+}
+
 void MainFlowScene::setTop()
 {
+	top_list.clear();
+	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
 	top_heart->setPosition(ccp(78,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_heart, kMainFlowZorder_top);
+	
+	top_list.push_back(top_heart);
 	
 //	CCSprite* top_case = CCSprite::create("mainflow_top.png");
 //	top_case->setAnchorPoint(ccp(0.f,1.f));
@@ -1039,6 +1263,8 @@ void MainFlowScene::setTop()
 	top_gold->setPosition(ccp(216,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_gold, kMainFlowZorder_top);
 	
+	top_list.push_back(top_gold);
+	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-5));
 	top_gold->addChild(gold_label);
@@ -1061,6 +1287,8 @@ void MainFlowScene::setTop()
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
 	top_ruby->setPosition(ccp(325,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_ruby, kMainFlowZorder_top);
+	
+	top_list.push_back(top_ruby);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-5));
@@ -1109,9 +1337,12 @@ void MainFlowScene::setTop()
 	postbox_menu->setPosition(ccp(394,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(postbox_menu, kMainFlowZorder_top);
 	
+	top_list.push_back(postbox_menu);
+	
 	postbox_count_case = CCSprite::create("mainflow_postbox_count.png");
 	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
 	addChild(postbox_count_case, kMainFlowZorder_top);
+	
 	postbox_count_case->setVisible(false);
 	
 	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
@@ -1132,6 +1363,8 @@ void MainFlowScene::setTop()
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
 	achieve_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(achieve_menu, kMainFlowZorder_top);
+	
+	top_list.push_back(achieve_menu);
 
 	
 	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
@@ -1144,6 +1377,8 @@ void MainFlowScene::setTop()
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
 	option_menu->setPosition(ccp(460,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(option_menu, kMainFlowZorder_top);
+	
+	top_list.push_back(option_menu);
 
 //	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
 //	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
