@@ -655,8 +655,8 @@ void GameItemFire::myInit(bool is_near)
 													 }, [](float t){}));
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
-		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, myDSH->getIntegerForKey(kDSH_Key_selectedCard))*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard))-1)*0.1f+1.f);
-	else
+//		damage = NSDS_GI(kSDS_CI_int1_missile_power_i, myDSH->getIntegerForKey(kDSH_Key_selectedCard))*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard))-1)*0.1f+1.f);
+//	else
 		damage = 1;
 	
 	total_damage = damage*10;

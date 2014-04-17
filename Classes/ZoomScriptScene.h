@@ -62,6 +62,7 @@ private:
 	CCPoint save_position;
 	void moveChecking();
 	
+	void nextScene();
 	
 	CCSprite* zoom_img;
 	

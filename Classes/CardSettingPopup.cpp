@@ -580,7 +580,6 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				{
 					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-					n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
 					CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
 					n_card->addChild(n_case);
@@ -592,10 +591,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					
 					GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-					if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
-						s_card->setColor(ccc3(60, 60, 60));
-					else
-						s_card->setColor(ccGRAY);
+					s_card->setColor(ccGRAY);
 					CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
 					s_card->addChild(s_case);

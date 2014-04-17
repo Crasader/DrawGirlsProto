@@ -81,12 +81,12 @@ bool NewMainFlowScene::init()
 		int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
 		int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
 		
-		int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=card_take_cnt;i++)
+		int card_take_cnt = mySGD->getHasGottenCardsSize();
+		for(int i=0;i<card_take_cnt;i++)
 		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
 			int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
 				have_card_cnt++;
 		}
 		
@@ -117,7 +117,7 @@ bool NewMainFlowScene::init()
 						break;
 					}
 					
-					if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number) <= 0)
+					if(mySGD->isHasGottenCards(t_card_number) <= 0)
 					{
 						is_perfect_puzzle = false;
 						break;
@@ -365,12 +365,6 @@ bool NewMainFlowScene::init()
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(selected_card_number > 0)
-		{
-			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-		}
 		
 		if(mySGD->getIsNotClearedStage())
 		{
@@ -397,34 +391,15 @@ bool NewMainFlowScene::init()
 		clear_star_take_level = take_level;
 		clear_is_empty_star = take_level > mySGD->ingame_before_stage_rank;
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
+		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
 		{
 			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
-			
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), 1);
-			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GS(kSDS_CI_int1_passive_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
 			
 			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 		}
 		else
 		{
-			int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) == 0)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
-				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, card_number, 1);
-				myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
-				myDSH->setStringForKey(kDSH_Key_cardPassive_int1, card_number, NSDS_GS(kSDS_CI_int1_passive_s, card_number));
-			}
-			else
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
-			}
+
 		}
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) == 0)

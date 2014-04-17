@@ -225,6 +225,9 @@ public:
 	
 	void startMapGachaOn();
 	
+	string getCardComment(int t_card_number);
+	void setCardComment(int t_card_number, string comment);
+	int isHasGottenCards(int t_card_number);
 	int isHasGottenCards(int t_stage, int t_grade);
 	
 	void resetHasGottenCards();
@@ -390,6 +393,7 @@ public:
 	int getAppVersion();
 	
 	int before_curtain_tip_type;
+	bool is_clear_diary;
 	
 private:
 	bool is_not_cleared_stage;

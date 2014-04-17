@@ -1057,7 +1057,19 @@ void FailPopup::menuAction(CCObject* pSender)
 		if(mySD->getSilType() >= 10000)
 			mySGD->is_before_selected_event_stage = true;
 		
-		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+		addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+											   {
+												   gray->setOpacity(t*255);
+												   main_case->setPosition(ccp(240,160-(450-450*t)));
+											   }, [=](float t)
+											   {
+												   gray->setOpacity(0);
+												   main_case->setPosition(ccp(240,160-450));
+												   replay_func();
+												   removeFromParent();
+											   }));
+		
+//		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 //		StageSettingPopup* t_popup = StageSettingPopup::create();
 //		t_popup->setHideFinalAction(target_final, delegate_final);
 //		getParent()->addChild(t_popup, kPMS_Z_popup);

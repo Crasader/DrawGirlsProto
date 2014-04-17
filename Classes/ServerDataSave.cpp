@@ -19,7 +19,7 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, string r_key)
 	
 	iter_bool = sds_cache_bool.find(c_key);
 	if(iter_bool != sds_cache_bool.end())
-		return iter_bool->second.getV();
+		return iter_bool->second;//.getV();
 	
 	string bool_string = myDefault->getValue(f_key, r_key, "false");
 	if(bool_string == "false")
@@ -44,7 +44,7 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, string t_key, int key_va
 	
 	iter_bool = sds_cache_bool.find(c_key);
 	if(iter_bool != sds_cache_bool.end())
-		return iter_bool->second.getV();
+		return iter_bool->second;//.getV();
 	
 	string bool_string = myDefault->getValue(f_key, CCString::createWithFormat(t_key.c_str(), key_val1)->getCString(), "false");
 	if(bool_string == "false")
@@ -69,7 +69,7 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string r_key)
 	
 	iter_bool = sds_cache_bool.find(c_key);
 	if(iter_bool != sds_cache_bool.end())
-		return iter_bool->second.getV();
+		return iter_bool->second;//.getV();
 	
 	string bool_string = myDefault->getValue(f_key, i1, r_key, "false");
 	if(bool_string == "false")
@@ -94,7 +94,7 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string t_key, in
 	
 	iter_bool = sds_cache_bool.find(c_key);
 	if(iter_bool != sds_cache_bool.end())
-		return iter_bool->second.getV();
+		return iter_bool->second;//.getV();
 	
 	string bool_string = myDefault->getValue(f_key, i1, CCString::createWithFormat(t_key.c_str(), key_val1)->getCString(), "false");
 	if(bool_string == "false")
@@ -179,7 +179,7 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key)
 	
 	iter_int = sds_cache_int.find(c_key);
 	if(iter_int != sds_cache_int.end())
-		return iter_int->second.getV();
+		return iter_int->second;//.getV();
 	
 	int return_value = myDefault->getValue(f_key, r_key, 0);
 	sds_cache_int[c_key] = return_value;
@@ -196,7 +196,7 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key, int key_
 	
 	iter_int = sds_cache_int.find(c_key);
 	if(iter_int != sds_cache_int.end())
-		return iter_int->second.getV();
+		return iter_int->second;//.getV();
 	
 	int return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);
 	sds_cache_int[c_key] = return_value;
@@ -213,7 +213,7 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key, int key_
 	
 	iter_int = sds_cache_int.find(c_key);
 	if(iter_int != sds_cache_int.end())
-		return iter_int->second.getV();
+		return iter_int->second;//.getV();
 	
 	int return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0);
 	sds_cache_int[c_key] = return_value;
@@ -230,7 +230,7 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key)
 	
 	iter_int = sds_cache_int.find(c_key);
 	if(iter_int != sds_cache_int.end())
-		return iter_int->second.getV();
+		return iter_int->second;//.getV();
 	
 	int return_value = myDefault->getValue(f_key, i1, r_key, 0);
 	sds_cache_int[c_key] = return_value;
@@ -247,7 +247,7 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key, 
 	
 	iter_int = sds_cache_int.find(c_key);
 	if(iter_int != sds_cache_int.end())
-		return iter_int->second.getV();
+		return iter_int->second;//.getV();
 	
 	int return_value = myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);
 	sds_cache_int[c_key] = return_value;
@@ -324,7 +324,7 @@ double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key)
 	
 	iter_double = sds_cache_double.find(c_key);
 	if(iter_double != sds_cache_double.end())
-		return iter_double->second.getV();
+		return iter_double->second;//.getV();
 	
 	double return_value = myDefault->getValue(f_key, r_key, 0.0);
 	sds_cache_double[c_key] = return_value;
@@ -341,7 +341,7 @@ double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key, int ke
 	
 	iter_double = sds_cache_double.find(c_key);
 	if(iter_double != sds_cache_double.end())
-		return iter_double->second.getV();
+		return iter_double->second;//.getV();
 	
 	double return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);
 	sds_cache_double[c_key] = return_value;
@@ -358,7 +358,7 @@ double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key
 	
 	iter_double = sds_cache_double.find(c_key);
 	if(iter_double != sds_cache_double.end())
-		return iter_double->second.getV();
+		return iter_double->second;//.getV();
 	
 	double return_value = myDefault->getValue(f_key, i1, r_key, 0.0);
 	sds_cache_double[c_key] = return_value;
@@ -375,7 +375,7 @@ double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key
 	
 	iter_double = sds_cache_double.find(c_key);
 	if(iter_double != sds_cache_double.end())
-		return iter_double->second.getV();
+		return iter_double->second;//.getV();
 	
 	double return_value = myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);
 	sds_cache_double[c_key] = return_value;
@@ -440,7 +440,7 @@ string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key)
 	
 	iter_string = sds_cache_string.find(c_key);
 	if(iter_string != sds_cache_string.end())
-		return iter_string->second.getV();
+		return iter_string->second;//.getV();
 	
 	string return_value = myDefault->getValue(f_key, r_key, "");
 	sds_cache_string[c_key] = return_value;
@@ -457,7 +457,7 @@ string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key, int ke
 	
 	iter_string = sds_cache_string.find(c_key);
 	if(iter_string != sds_cache_string.end())
-		return iter_string->second.getV();
+		return iter_string->second;//.getV();
 	
 	string return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");
 	sds_cache_string[c_key] = return_value;
@@ -474,7 +474,7 @@ string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key
 	
 	iter_string = sds_cache_string.find(c_key);
 	if(iter_string != sds_cache_string.end())
-		return iter_string->second.getV();
+		return iter_string->second;//.getV();
 	
 	string return_value = myDefault->getValue(f_key, i1, r_key, "");
 	sds_cache_string[c_key] = return_value;
@@ -491,7 +491,7 @@ string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key
 	
 	iter_string = sds_cache_string.find(c_key);
 	if(iter_string != sds_cache_string.end())
-		return iter_string->second.getV();
+		return iter_string->second;//.getV();
 	
 	string return_value = myDefault->getValue(f_key, i1, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");
 	sds_cache_string[c_key] = return_value;

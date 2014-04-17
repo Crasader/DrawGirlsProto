@@ -159,21 +159,21 @@ void StageInfoPopup::setBack()
 	back_img->addChild(step3_reward, kSIP_Z_content);
 	
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step1_card) > 0)
+	if(mySGD->isHasGottenCards(step1_card) > 0)
 	{
 		CCSprite* t_complete = CCSprite::create("stageinfo_complete.png");
 		t_complete->setPosition(ccpAdd(getContentPosition(kSIP_MT_step1Reward), ccp(-15, 5)));
 		back_img->addChild(t_complete, kSIP_Z_content);
 	}
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step2_card) > 0)
+	if(mySGD->isHasGottenCards(step2_card) > 0)
 	{
 		CCSprite* t_complete = CCSprite::create("stageinfo_complete.png");
 		t_complete->setPosition(ccpAdd(getContentPosition(kSIP_MT_step2Reward), ccp(-15, 5)));
 		back_img->addChild(t_complete, kSIP_Z_content);
 	}
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step3_card) > 0)
+	if(mySGD->isHasGottenCards(step3_card) > 0)
 	{
 		CCSprite* t_complete = CCSprite::create("stageinfo_complete.png");
 		t_complete->setPosition(ccpAdd(getContentPosition(kSIP_MT_step3Reward), ccp(-15, 5)));

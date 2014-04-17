@@ -49,6 +49,8 @@ public:
 	
 	virtual void onEnter();
 	
+	std::function<void()> replay_func;
+	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
 	virtual ~ClearPopup();

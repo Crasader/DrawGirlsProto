@@ -25,8 +25,6 @@ typedef enum t_DSH_Key{
 	kDSH_Key_haveItemCnt_int1,
 	kDSH_Key_isShowItem_int1,
 	kDSH_Key_selectedCard,
-	kDSH_Key_selectedCardLevel,
-	kDSH_Key_selectedCardPassive,
 	
 	kDSH_Key_selectedCharacter_int1_weaponSlot_int2, // 0~(n-1)번째 캐릭터의 1~n번째 슬롯에 장착된 뷰티스톤의 id
 	kDSH_Key_selfBeautyStoneID, // 1~n 의 뷰티스톤의 id
@@ -39,15 +37,6 @@ typedef enum t_DSH_Key{
 	kDSH_Key_endPlayedStage,
 	kDSH_Key_stageClearRank_int1,
 	
-	kDSH_Key_cardLevel_int1,
-	kDSH_Key_cardMaxDurability_int1,
-	kDSH_Key_cardPassive_int1,
-	
-	kDSH_Key_cardDurability_int1,
-	kDSH_Key_hasGottenCard_int1,
-	kDSH_Key_inputTextCard_int1,
-	kDSH_Key_cardTakeCnt,
-	kDSH_Key_takeCardNumber_int1,
 	kDSH_Key_cardSortType,
 	kDSH_Key_lastSelectedStageForPuzzle_int1,
 	kDSH_Key_uiType,
@@ -243,12 +232,19 @@ public:
 	void fFlush ();
 	void removeCache();
 private:
-	map<string, KSProtectVar<bool>> dsh_cache_bool;
-	map<string, KSProtectVar<bool>>::iterator iter_bool;
-	map<string, KSProtectVar<int>> dsh_cache_int;
-	map<string, KSProtectVar<int>>::iterator iter_int;
-	map<string, KSProtectStr> dsh_cache_string;
-	map<string, KSProtectStr>::iterator iter_string;
+//	map<string, KSProtectVar<bool>> dsh_cache_bool;
+//	map<string, KSProtectVar<bool>>::iterator iter_bool;
+//	map<string, KSProtectVar<int>> dsh_cache_int;
+//	map<string, KSProtectVar<int>>::iterator iter_int;
+//	map<string, KSProtectStr> dsh_cache_string;
+//	map<string, KSProtectStr>::iterator iter_string;
+	
+	map<string, bool> dsh_cache_bool;
+	map<string, bool>::iterator iter_bool;
+	map<string, int> dsh_cache_int;
+	map<string, int>::iterator iter_int;
+	map<string, string> dsh_cache_string;
+	map<string, string>::iterator iter_string;
 	
 	SaveData * myDefault;
 	float gold_get_rate;

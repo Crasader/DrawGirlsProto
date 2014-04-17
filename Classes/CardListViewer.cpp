@@ -400,9 +400,9 @@ void CLV_Node::setChild()
 {
 	if(is_card_number_setted)
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number) != 0)
+		if(mySGD->isHasGottenCards(card_number) != 0)
 		{
-			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0;
+//			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0;
 
 			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 				card_number)->getCString()));
@@ -410,22 +410,22 @@ void CLV_Node::setChild()
 			t_card->setPosition(CCPointZero);
 			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+card_number);
 
-			if(is_color)		t_card->setGray(false);
-			else				t_card->setGray(true);
+//			if(is_color)		t_card->setGray(false);
+//			else				t_card->setGray(true);
 
 			CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
 			t_no->setPosition(CCPointZero);
 			addChild(t_no, kCSS_Z_content);
 
-			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
-				NSDS_GI(kSDS_CI_int1_durability_i, card_number))->getCString(),
-				mySGD->getFont().c_str(), 10);
-			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
-			t_durability->setColor(ccBLACK);
-			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
-			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f+15, 7));
-			t_card->addChild(t_durability);
+//			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number),
+//				NSDS_GI(kSDS_CI_int1_durability_i, card_number))->getCString(),
+//				mySGD->getFont().c_str(), 10);
+//			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
+//			t_durability->setColor(ccBLACK);
+//			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
+//			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+//			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f+15, 7));
+//			t_card->addChild(t_durability);
 
 			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
 			mini_rank->setPosition(ccp(9,9));
@@ -461,31 +461,31 @@ void CLV_Node::setChild()
 	else
 	{
 		int t_card_number = NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, t_card_number) != 0)
+		if(mySGD->isHasGottenCards(t_card_number) != 0)
 		{
-			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number) > 0;
+//			bool is_color = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number) > 0;
 
 			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", t_card_number)->getCString()));
 			t_card->setScale(0.92f);
 			t_card->setPosition(CCPointZero);
 			addChild(t_card, kCSS_Z_content, kCSS_MT_cardBase+t_card_number);
 
-			if(is_color)		t_card->setGray(false);
-			else				t_card->setGray(true);
+//			if(is_color)		t_card->setGray(false);
+//			else				t_card->setGray(true);
 
 			CCSprite* t_no = CCSprite::create("cardsetting_noimg.png");
 			t_no->setPosition(CCPointZero);
 			addChild(t_no, kCSS_Z_content);
 
-			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number),
-				NSDS_GI(kSDS_CI_int1_durability_i, t_card_number))->getCString(),
-				mySGD->getFont().c_str(), 10);
-			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
-			t_durability->setColor(ccBLACK);
-			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
-			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f+15, 7));
-			t_card->addChild(t_durability);
+//			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d/%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_card_number),
+//				NSDS_GI(kSDS_CI_int1_durability_i, t_card_number))->getCString(),
+//				mySGD->getFont().c_str(), 10);
+//			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
+//			t_durability->setColor(ccBLACK);
+//			t_durability->setHorizontalAlignment(kCCTextAlignmentLeft);
+//			t_durability->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+//			t_durability->setPosition(ccp(t_card->getContentSize().width/2.f+15, 7));
+//			t_card->addChild(t_durability);
 
 			CCSprite* mini_rank = CCSprite::create("cardsetting_mini_rank.png");
 			mini_rank->setPosition(ccp(9,9));
@@ -534,7 +534,7 @@ void CLV_Node::myInit( int t_card_stage, int t_card_level, CCObject* t_menu, SEL
 	my_size = CCSizeMake(60, 78);
 	is_setted = false;
 
-	if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level)) != 0)
+	if(mySGD->isHasGottenCards(card_stage, card_level) != 0)
 		my_tag = kCSS_MT_cardMenuBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level);
 	else
 		my_tag = kCSS_MT_noCardBase+NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, card_level); // if (not loaded stage info) then my_tag = 30000 -> error
@@ -558,7 +558,7 @@ void CLV_Node::myInit( int t_card_number, CCObject* t_menu, SEL_MenuHandler d_me
 	my_size = CCSizeMake(60, 78);
 	is_setted = false;
 
-	if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number) != 0)
+	if(mySGD->isHasGottenCards(card_number) != 0)
 		my_tag = kCSS_MT_cardMenuBase+card_number;
 	else
 		my_tag = kCSS_MT_noCardBase+card_number; // if (not loaded stage info) then my_tag = 30000 -> error

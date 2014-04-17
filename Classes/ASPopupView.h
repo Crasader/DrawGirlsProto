@@ -55,6 +55,11 @@ public:
 		addChild(m_container);
 	}
 	
+	CCSprite* getDimmedSprite()
+	{
+		return dimmed_sprite;
+	}
+	
 	virtual int getTouchPriority()
 	{
 		return touch_priority;

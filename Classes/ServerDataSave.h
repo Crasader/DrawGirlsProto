@@ -286,16 +286,27 @@ public:
 	
 	void removeCache();
 private:
-	map<string, KSProtectVar<bool>> sds_cache_bool;
-	map<string, KSProtectVar<bool>>::iterator iter_bool;
-	map<string, KSProtectVar<int>> sds_cache_int;
-	map<string, KSProtectVar<int>>::iterator iter_int;
-	map<string, KSProtectVar<float>> sds_cache_float;
-	map<string, KSProtectVar<float>>::iterator iter_float;
-	map<string, KSProtectVar<double>> sds_cache_double;
-	map<string, KSProtectVar<double>>::iterator iter_double;
-	map<string, KSProtectStr> sds_cache_string;
-	map<string, KSProtectStr>::iterator iter_string;
+//	map<string, KSProtectVar<bool>> sds_cache_bool;
+//	map<string, KSProtectVar<bool>>::iterator iter_bool;
+//	map<string, KSProtectVar<int>> sds_cache_int;
+//	map<string, KSProtectVar<int>>::iterator iter_int;
+//	map<string, KSProtectVar<float>> sds_cache_float;
+//	map<string, KSProtectVar<float>>::iterator iter_float;
+//	map<string, KSProtectVar<double>> sds_cache_double;
+//	map<string, KSProtectVar<double>>::iterator iter_double;
+//	map<string, KSProtectStr> sds_cache_string;
+//	map<string, KSProtectStr>::iterator iter_string;
+	
+	map<string, bool> sds_cache_bool;
+	map<string, bool>::iterator iter_bool;
+	map<string, int> sds_cache_int;
+	map<string, int>::iterator iter_int;
+	map<string, float> sds_cache_float;
+	map<string, float>::iterator iter_float;
+	map<string, double> sds_cache_double;
+	map<string, double>::iterator iter_double;
+	map<string, string> sds_cache_string;
+	map<string, string>::iterator iter_string;
 	
 	SaveData * myDefault;
 	SDS_SET getKeySet (SDS_KEY t_key);

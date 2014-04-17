@@ -445,17 +445,7 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_failCnt);	}
 	else if(t_code == kAchievementCode_cardCollection1 || t_code == kAchievementCode_cardCollection2 || t_code == kAchievementCode_cardCollection3)
 	{
-		int recent_take_card_number = 0;
-		
-		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=take_card_cnt;i++)
-		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-				recent_take_card_number++;
-		}
-		
-		return_value = recent_take_card_number;
+		return_value = mySGD->getHasGottenCardsSize();
 	}
 	else if(t_code == kAchievementCode_friend1 || t_code == kAchievementCode_friend2 || t_code == kAchievementCode_friend3)
 	{
