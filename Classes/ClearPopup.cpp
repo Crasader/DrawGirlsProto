@@ -75,6 +75,7 @@ bool ClearPopup::init()
 	is_menu_enable = false;
 //	is_loaded_list = false;
 	is_end_popup_animation = false;
+	is_end_take_card = false;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -502,6 +503,8 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		cell_action_list.clear();
+		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
 		graph_back->setPosition(ccp(355,230));
 		main_case->addChild(graph_back, kZ_CP_img);
@@ -538,6 +541,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		Json::Value user_list = result_data["list"];
 		
+		delay_index = 0;
 		int limit_count = 3;
 		for(int i=0;i<user_list.size() && i<limit_count;i++)
 		{
@@ -598,6 +602,17 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 			score_label->setPosition(ccp(168,20));
 			list_cell_case->addChild(score_label);
+			
+			CCPoint original_position = list_cell_case->getPosition();
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			
+			cell_action_list.push_back([=](){
+				CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
+				CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
+				CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+				list_cell_case->runAction(t_seq);
+				delay_index++;
+			});
 		}
 		
 		if(myrank > 3)
@@ -622,10 +637,26 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 			score_label->setPosition(ccp(168,20));
 			list_cell_case->addChild(score_label);
+			
+			CCPoint original_position = list_cell_case->getPosition();
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			
+			cell_action_list.push_back([=](){
+				CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
+				CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
+				CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+				list_cell_case->runAction(t_seq);
+			});
 		}
 		
 		is_saved_user_data = true;
 		endLoad();
+		
+		if(is_end_take_card)
+		{
+			for(int i=0;i<cell_action_list.size();i++)
+				cell_action_list[i]();
+		}
 	}
 	else
 	{
@@ -960,6 +991,13 @@ void ClearPopup::checkChallengeOrHelp()
 
 void ClearPopup::endTakeCard()
 {
+	is_end_take_card = true;
+	if(is_saved_user_data)
+	{
+		for(int i=0;i<cell_action_list.size();i++)
+			cell_action_list[i]();
+	}
+	
 	startCalcAnimation();
 	
 	int step_count = ani_stars.size();

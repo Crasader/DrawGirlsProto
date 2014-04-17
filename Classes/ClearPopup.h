@@ -70,6 +70,11 @@ private:
 //	bool is_loaded_list;
 	bool is_end_popup_animation;
 	
+	bool is_end_take_card;
+	
+	int delay_index;
+	vector<function<void()>> cell_action_list;
+	
 	vector<CCSprite*> ani_stars;
 	
 	CCMenu* ok_menu;
