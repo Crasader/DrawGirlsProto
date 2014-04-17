@@ -1321,17 +1321,43 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCSprite* s_close = CCSprite::create("whitePaper.png");
 				s_close->setOpacity(0);
 				
-				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																					{
-																						exit_target->onEnter();
-																						((Maingame*)exit_target)->controlStunOff();
-																						t_popup->removeFromParent();
-																					});
+				CCMenuLambda* close_menu = CCMenuLambda::create();
 				
-				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
 				close_menu->setPosition(ccp(0,0));
+				close_menu->setVisible(false);
 				t_container->addChild(close_menu);
+				
+				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																					{
+																						close_menu->setVisible(false);
+																						
+																						t_container->addChild(KSTimer::create(0.2f, [=](){
+																							exit_target->onEnter();
+																							((Maingame*)exit_target)->controlStunOff();
+																							t_popup->removeFromParent();
+																						}));
+																						
+																						t_container->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																							t_container->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+																						
+																						t_container->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 0);}));
+																						
+																						
+																					});
+				
+				close_menu->addChild(close_item);
+				
+				
+				
+				t_container->setScaleY(0.f);
+				
+				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
+							close_menu->setVisible(true);}));}));}));
+				
+				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
 			}
 		}
 		else if(die_type == DieType::kDieType_missileToLine)
@@ -1382,17 +1408,41 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCSprite* s_close = CCSprite::create("whitePaper.png");
 				s_close->setOpacity(0);
 				
-				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																					{
-																						exit_target->onEnter();
-																						((Maingame*)exit_target)->controlStunOff();
-																						t_popup->removeFromParent();
-																					});
-				
-				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+				CCMenuLambda* close_menu = CCMenuLambda::create();
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
 				close_menu->setPosition(ccp(0,0));
 				t_container->addChild(close_menu);
+				
+				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																					{
+																						close_menu->setVisible(false);
+																						
+																						t_container->addChild(KSTimer::create(0.2f, [=](){
+																							exit_target->onEnter();
+																							((Maingame*)exit_target)->controlStunOff();
+																							t_popup->removeFromParent();
+																						}));
+																						
+																						t_container->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																							t_container->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+																						
+																						t_container->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 0);}));
+																						
+																						
+																					});
+				
+				close_menu->addChild(close_item);
+				
+				
+				
+				t_container->setScaleY(0.f);
+				
+				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
+							close_menu->setVisible(true);}));}));}));
+				
+				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
 			}
 		}
 		else if(die_type == DieType::kDieType_shockwave)
@@ -1443,17 +1493,41 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCSprite* s_close = CCSprite::create("whitePaper.png");
 				s_close->setOpacity(0);
 				
-				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																					{
-																						exit_target->onEnter();
-																						((Maingame*)exit_target)->controlStunOff();
-																						t_popup->removeFromParent();
-																					});
-				
-				CCMenuLambda* close_menu = CCMenuLambda::createWithItem(close_item);
+				CCMenuLambda* close_menu = CCMenuLambda::create();
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
 				close_menu->setPosition(ccp(0,0));
 				t_container->addChild(close_menu);
+				
+				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+																					{
+																						close_menu->setVisible(false);
+																						
+																						t_container->addChild(KSTimer::create(0.2f, [=](){
+																							exit_target->onEnter();
+																							((Maingame*)exit_target)->controlStunOff();
+																							t_popup->removeFromParent();
+																						}));
+																						
+																						t_container->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																							t_container->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+																						
+																						t_container->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 0);}));
+																						
+																						
+																					});
+				
+				close_menu->addChild(close_item);
+				
+				
+				
+				t_container->setScaleY(0.f);
+				
+				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
+							close_menu->setVisible(true);}));}));}));
+				
+				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
 			}
 		}
 		else if(die_type == DieType::kDieType_timeover)

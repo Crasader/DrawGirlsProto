@@ -673,8 +673,17 @@ void Maingame::finalSetting()
 																					 for(int i=0;i<pattern_code.size();i++)
 																						 myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
 																					 
-																					 exit_target->onEnter();
-																					 t_popup->removeFromParent();
+																					 t_container->addChild(KSTimer::create(0.2f, [=](){
+																						 exit_target->onEnter();
+																						 t_popup->removeFromParent();
+																					 }));
+																					 
+																					 t_container->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																						 t_container->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+																					 
+																					 t_container->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 0);}));
+																					 
+																					 
 																				 }, pattern_code);
 			t_popup->setContainerNode(t_container);
 			exit_target->getParent()->addChild(t_popup);
