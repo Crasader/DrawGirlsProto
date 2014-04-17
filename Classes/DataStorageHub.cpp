@@ -21,7 +21,7 @@ bool DataStorageHub::getBoolForKey (DSH_Key t_key)
 	
 	iter_bool = dsh_cache_bool.find(c_key);
 	if(iter_bool != dsh_cache_bool.end())
-		return iter_bool->second;//.getV();
+		return iter_bool->second.getV();
 	
 	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
 	if(bool_string == "false")
@@ -41,7 +41,7 @@ bool DataStorageHub::getBoolForKey (DSH_Key t_key, int key_val1)
 	
 	iter_bool = dsh_cache_bool.find(c_key);
 	if(iter_bool != dsh_cache_bool.end())
-		return iter_bool->second;//.getV();
+		return iter_bool->second.getV();
 	
 	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
 	if(bool_string == "false")
@@ -61,7 +61,7 @@ bool DataStorageHub::getBoolForKey (DSH_Key t_key, int key_val1, int key_val2)
 	
 	iter_bool = dsh_cache_bool.find(c_key);
 	if(iter_bool != dsh_cache_bool.end())
-		return iter_bool->second;//.getV();
+		return iter_bool->second.getV();
 	
 	string bool_string = myDefault->getValue(kSDF_myDSH, c_key, "false");
 	if(bool_string == "false")
@@ -127,7 +127,7 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key)
 	
 	iter_int = dsh_cache_int.find(c_key);
 	if(iter_int != dsh_cache_int.end())
-		return iter_int->second;//.getV();
+		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
 	dsh_cache_int[c_key] = return_value;
@@ -139,7 +139,7 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1)
 	
 	iter_int = dsh_cache_int.find(c_key);
 	if(iter_int != dsh_cache_int.end())
-		return iter_int->second;//.getV();
+		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
 	dsh_cache_int[c_key] = return_value;
@@ -151,7 +151,7 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1, int key_val2)
 	
 	iter_int = dsh_cache_int.find(c_key);
 	if(iter_int != dsh_cache_int.end())
-		return iter_int->second;//.getV();
+		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(kSDF_myDSH, c_key, 0);
 	dsh_cache_int[c_key] = return_value;
@@ -177,7 +177,7 @@ string DataStorageHub::getStringForKey (DSH_Key t_key)
 	
 	iter_string = dsh_cache_string.find(c_key);
 	if(iter_string != dsh_cache_string.end())
-		return iter_string->second;//.getV();
+		return iter_string->second.getV();
 	
 	string return_value = myDefault->getValue(kSDF_myDSH, c_key, "");
 	dsh_cache_string[c_key] = return_value;
@@ -196,7 +196,7 @@ string DataStorageHub::getStringForKey (DSH_Key t_key, int key_val1)
 	
 	iter_string = dsh_cache_string.find(c_key);
 	if(iter_string != dsh_cache_string.end())
-		return iter_string->second;//.getV();
+		return iter_string->second.getV();
 	
 	string return_value = myDefault->getValue(kSDF_myDSH, c_key, "");
 	dsh_cache_string[c_key] = return_value;

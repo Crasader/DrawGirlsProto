@@ -176,6 +176,7 @@ private:
 							{
 								bool t_safety = !myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 								myDSH->setBoolForKey(kDSH_Key_isSafetyMode, t_safety);
+								mySGD->is_safety_mode = t_safety;
 								if(t_safety)
 									on_off->setTitle("on");
 								else

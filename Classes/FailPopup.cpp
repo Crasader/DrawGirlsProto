@@ -35,6 +35,8 @@
 #include "GDWebSprite.h"
 #include "KSLabelTTF.h"
 
+#include "LoadingTipScene.h"
+
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,
@@ -457,6 +459,10 @@ bool FailPopup::init()
 	is_saved_user_data = false;
 	
 	myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
+	
+	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
+	curtain_node->setPosition(ccp(240,160));
+	addChild(curtain_node, kZ_FP_popup+5);
 	
 	return true;
 }

@@ -232,19 +232,19 @@ public:
 	void fFlush ();
 	void removeCache();
 private:
-//	map<string, KSProtectVar<bool>> dsh_cache_bool;
-//	map<string, KSProtectVar<bool>>::iterator iter_bool;
-//	map<string, KSProtectVar<int>> dsh_cache_int;
-//	map<string, KSProtectVar<int>>::iterator iter_int;
-//	map<string, KSProtectStr> dsh_cache_string;
-//	map<string, KSProtectStr>::iterator iter_string;
+	map<string, KSProtectVar<bool>> dsh_cache_bool;
+	map<string, KSProtectVar<bool>>::iterator iter_bool;
+	map<string, KSProtectVar<int>> dsh_cache_int;
+	map<string, KSProtectVar<int>>::iterator iter_int;
+	map<string, KSProtectStr> dsh_cache_string;
+	map<string, KSProtectStr>::iterator iter_string;
 	
-	map<string, bool> dsh_cache_bool;
-	map<string, bool>::iterator iter_bool;
-	map<string, int> dsh_cache_int;
-	map<string, int>::iterator iter_int;
-	map<string, string> dsh_cache_string;
-	map<string, string>::iterator iter_string;
+//	map<string, bool> dsh_cache_bool;
+//	map<string, bool>::iterator iter_bool;
+//	map<string, int> dsh_cache_int;
+//	map<string, int>::iterator iter_int;
+//	map<string, string> dsh_cache_string;
+//	map<string, string>::iterator iter_string;
 	
 	SaveData * myDefault;
 	float gold_get_rate;

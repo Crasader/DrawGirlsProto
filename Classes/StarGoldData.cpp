@@ -240,6 +240,7 @@ void StarGoldData::setKeepGold( int t_gold )
 void StarGoldData::setGameStart()
 {
 	is_clear_diary = false;
+	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
 		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());

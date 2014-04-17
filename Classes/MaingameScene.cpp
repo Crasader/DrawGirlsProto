@@ -1213,6 +1213,8 @@ void Maingame::gameover()
 	}
 	else
 	{
+		myUI->stopCounting();
+		
 		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
 
@@ -1225,21 +1227,15 @@ void Maingame::gameover()
 		myUI->addChild(result_sprite);
 		reader->release();
 		
-		CCDelayTime* t_delay = CCDelayTime::create(2.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-		
-		CCNode* t_node = CCNode::create();
-		addChild(t_node);
-		
-		t_node->runAction(t_seq);
+		addChild(KSTimer::create(2.f, [=]()
+								 {
+									 failScenario();
+								 }));
 	}
 }
 
 void Maingame::clearScenario()
 {
-	// 1.5초 후 closeShutter
-	
 	intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 	intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
 	intro_boss->setScale(1.8f);
@@ -1752,6 +1748,36 @@ void Maingame::clearScenario3()
 
 void Maingame::failScenario()
 {
+	intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+	intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
+	intro_boss->setScale(1.8f);
+	addChild(intro_boss, introZorder);
+	
+	CCDelayTime* t_delay = CCDelayTime::create(1.f);
+	CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::failScenario2));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
+	intro_boss->runAction(t_seq);
+}
+
+void Maingame::failScenario2()
+{
+	StoryManager* t_sm = StoryManager::create(-500);
+	addChild(t_sm, 100);
+	
+	t_sm->addMent(true, "", "", "가소롭군. 그 실력으로\n나와 겨루려하다니.. 쯧쯧..", [=]()
+				  {
+					  CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
+					  curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+					  addChild(curtain_node, shutterZorder+5);
+					  
+					  CCDelayTime* t_delay = CCDelayTime::create(1.f);
+					  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
+					  CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+					  curtain_node->runAction(t_seq);
+					  
+					  t_sm->removeFromParent();
+				  });
 	
 }
 
@@ -2662,6 +2688,12 @@ void Maingame::refreshReplayPosition(int temp_time)
 
 void Maingame::hideThumb()
 {
+	for(int i=0;i<search_eye_vector.size();i++)
+	{
+		SearchEye* t_search_eye = search_eye_vector[i];
+		t_search_eye->setVisible(false);
+	}
+	
 	mControl->setVisible(false);
 	
 	for(int i=0;i<search_eye_vector.size();i++)
