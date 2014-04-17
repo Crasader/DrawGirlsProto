@@ -1537,6 +1537,7 @@ void KSCumberBase::cumberAttack(float dt)
 				std::string patternData = R"({
 				"atype" : "special",
 				"pattern" : "1007",
+				"castframe" : 30,
 				"percent" : 1,
 				"target" : "no"})";
 				Json::Reader reader;
@@ -1639,7 +1640,7 @@ void KSCumberBase::cumberAttack(float dt)
 	{
 		IntPoint point = ccp2ip(getPosition());
 		IntPoint afterPoint = point;
-		float radius = 40.f;
+		float radius = 30.f;
 		
 		float half_distance = radius*getCumberScale(); // 20.f : radius for base scale 1.f
 		int ip_half_distance = half_distance;
@@ -1680,6 +1681,7 @@ void KSCumberBase::cumberAttack(float dt)
 			"atype" : "special",
 			"pattern" : "1007",
 			"percent" : 1,
+			"castframe" : 30,
 			"target" : "no"})";
 		
 			Json::Reader reader;
@@ -1700,6 +1702,7 @@ void KSCumberBase::cumberAttack(float dt)
 				std::string patternData = R"({
 				"atype" : "special",
 				"pattern" : "1007",
+				"castframe" : 30,
 				"percent" : 1,
 				"target" : "no"})";
 				Json::Reader reader;
@@ -2621,6 +2624,11 @@ void KSCumberBase::applyAutoBalance()
 	
 	//int balPt = clearCount-2;
 	
+	if(autobalanceTry==0){
+		CCLog("############ autobalanceTry : 0, dont autobalance ################");
+		return;
+	}
+	
 	
 	CCLog("#################### autobalance ############################");
 	CCLog("clear : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",clearCount,playCount,autobalanceTry,puzzleNo);
@@ -2634,7 +2642,7 @@ void KSCumberBase::applyAutoBalance()
 			int aiMax = m_aiValue*2;
 			if(aiMax>90)aiMax=90;
 			if(m_aiValue>aiMax)aiMax=m_aiValue;
-			if(aiMax<=70)aiMax=70;
+			if(aiMax<=50)aiMax=50;
 			m_aiValue = m_aiValue + (aiMax-m_aiValue)*per;
 		}
 		//attackterm조절
@@ -2644,6 +2652,8 @@ void KSCumberBase::applyAutoBalance()
 			if(m_attackPercent>aiMax)aiMax=m_attackPercent;
 			if(aiMax<=0.3)aiMax=0.3;
 			m_attackPercent = m_attackPercent + (aiMax-m_attackPercent)*per;
+			
+			if(m_attackPercent>0.4)m_attackPercent=0.4;
 		}
 	
 		CCLog("#################### Change Balnace1 ############################");
