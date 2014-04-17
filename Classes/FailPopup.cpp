@@ -35,6 +35,8 @@
 #include "GDWebSprite.h"
 #include "KSLabelTTF.h"
 
+#include "LoadingTipScene.h"
+
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
 	kMT_FP_replay,
@@ -458,6 +460,10 @@ bool FailPopup::init()
 	
 	myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
 	
+	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
+	curtain_node->setPosition(ccp(240,160));
+	addChild(curtain_node, kZ_FP_popup+5);
+	
 	return true;
 }
 
@@ -506,6 +512,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		
 		Json::Value user_list = result_data["list"];
 		
+		int delay_index = 0;
 		int limit_count = 3;
 		for(int i=0;i<user_list.size() && i<limit_count;i++)
 		{
@@ -566,6 +573,14 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 			score_label->setPosition(ccp(168,20));
 			list_cell_case->addChild(score_label);
+			
+			CCPoint original_position = list_cell_case->getPosition();
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			CCDelayTime* t_delay = CCDelayTime::create(0.5f + delay_index*0.2f);
+			CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
+			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+			list_cell_case->runAction(t_seq);
+			delay_index++;
 		}
 		
 		if(myrank > 3)
@@ -590,6 +605,13 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 			score_label->setPosition(ccp(168,20));
 			list_cell_case->addChild(score_label);
+			
+			CCPoint original_position = list_cell_case->getPosition();
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			CCDelayTime* t_delay = CCDelayTime::create(0.5f + delay_index*0.2f);
+			CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
+			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+			list_cell_case->runAction(t_seq);
 		}
 	}
 	else
@@ -1057,7 +1079,19 @@ void FailPopup::menuAction(CCObject* pSender)
 		if(mySD->getSilType() >= 10000)
 			mySGD->is_before_selected_event_stage = true;
 		
-		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+		addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+											   {
+												   gray->setOpacity(t*255);
+												   main_case->setPosition(ccp(240,160-(450-450*t)));
+											   }, [=](float t)
+											   {
+												   gray->setOpacity(0);
+												   main_case->setPosition(ccp(240,160-450));
+												   replay_func();
+												   removeFromParent();
+											   }));
+		
+//		CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 //		StageSettingPopup* t_popup = StageSettingPopup::create();
 //		t_popup->setHideFinalAction(target_final, delegate_final);
 //		getParent()->addChild(t_popup, kPMS_Z_popup);

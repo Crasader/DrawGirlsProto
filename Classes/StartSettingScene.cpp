@@ -2045,13 +2045,6 @@ void StartSettingScene::callStart()
 
 void StartSettingScene::realStartAction()
 {
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(selected_card_number > 0)
-	{
-		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
-		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-	}
-	
 	finalSetting();
 	
 	myDSH->saveAllUserData(json_selector(this, StartSettingScene::finalStartAction));
@@ -2241,13 +2234,6 @@ void StartSettingScene::finalStartAction(Json::Value result_data)
 	else
 	{
 		heart_time->backHeart();
-		
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(selected_card_number > 0)
-		{
-			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-		}
 		
 		cancelGame();
 	}

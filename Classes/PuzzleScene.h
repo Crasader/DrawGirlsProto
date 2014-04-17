@@ -77,6 +77,8 @@ private:
 	
 	void startBacking();
 	
+	void openSettingPopup();
+	
 	void showClearPopup();
 	void hideClearPopup();
 	void showGetPuzzle();

@@ -95,7 +95,8 @@ bool CardSettingPopup::init()
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kCSS_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("컬렉션", mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create("내카드", mySGD->getFont().c_str(), 17);
+	title_label->setColor(ccc3(255, 150, 50));
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
@@ -178,8 +179,8 @@ bool CardSettingPopup::init()
 //							   });
 	
 	
-	align_default_menu = CommonButton::create("기본정렬", 12, CCSizeMake(75,37), CommonButtonYellowUp, -185);
-	align_default_menu->setPosition(ccp(254,256));
+	align_default_menu = CommonButton::create("기본정렬", 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_default_menu->setPosition(ccp(220,256));
 	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
 	align_default_menu->setFunction([=](CCObject* sender)
 								 {
@@ -190,8 +191,8 @@ bool CardSettingPopup::init()
 	align_default_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
-	align_take_menu = CommonButton::create("획득순", 12, CCSizeMake(75,37), CommonButtonYellowUp, -185);
-	align_take_menu->setPosition(ccp(327,256));
+	align_take_menu = CommonButton::create("획득순", 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_take_menu->setPosition(ccp(280,256));
 	main_case->addChild(align_take_menu, kCSS_Z_alignButton);
 	align_take_menu->setFunction([=](CCObject* sender)
 									{
@@ -202,8 +203,8 @@ bool CardSettingPopup::init()
 	align_take_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
-	align_rank_menu = CommonButton::create("등급순", 12, CCSizeMake(75,37), CommonButtonYellowUp, -185);
-	align_rank_menu->setPosition(ccp(400,256));
+	align_rank_menu = CommonButton::create("등급순", 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_rank_menu->setPosition(ccp(340,256));
 	main_case->addChild(align_rank_menu, kCSS_Z_alignButton);
 	align_rank_menu->setFunction([=](CCObject* sender)
 								 {
@@ -214,11 +215,11 @@ bool CardSettingPopup::init()
 	align_rank_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
-	KSLabelTTF* take_card_ment = KSLabelTTF::create("획득한 카드 수", mySGD->getFont().c_str(), 12);
-	take_card_ment->setPosition(ccp(110,255));
-	main_case->addChild(take_card_ment, kCSS_Z_content);
+//	KSLabelTTF* take_card_ment = KSLabelTTF::create("획득한 카드 수", mySGD->getFont().c_str(), 12);
+//	take_card_ment->setPosition(ccp(110,255));
+//	main_case->addChild(take_card_ment, kCSS_Z_content);
 	
-	int open_stage_card_count = 0;
+//	int open_stage_card_count = 0;
 	int all_stage_card_count = 0;
 	for(int i=1;i<=puzzle_count;i++)
 	{
@@ -226,29 +227,51 @@ bool CardSettingPopup::init()
 		int t_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
 		int t_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
 		
-		bool is_puzzle_open = myDSH->getBoolForKey(kDSH_Key_openPuzzleCnt)+1 >= i;
+//		bool is_puzzle_open = myDSH->getBoolForKey(kDSH_Key_openPuzzleCnt)+1 >= i;
 		
 		for(int j=t_start_stage;j<t_start_stage+t_stage_count;j++)
 		{
 			int t_stage_card_count = NSDS_GI(j, kSDS_SI_cardCount_i);
 			
-			int condition_gold = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, j);
-			bool is_on_condition_gold = condition_gold == 0;
-			
-			int condition_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, j);
-			bool is_on_condition_stage = (condition_stage == 0) || (myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, condition_stage));
-			
-			if(is_puzzle_open && ((is_on_condition_gold && is_on_condition_stage) || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, j))) // open stage
-				open_stage_card_count += t_stage_card_count;
+//			int condition_gold = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, j);
+//			bool is_on_condition_gold = condition_gold == 0;
+//			
+//			int condition_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, j);
+//			bool is_on_condition_stage = (condition_stage == 0) || (myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, condition_stage));
+//			
+//			if(is_puzzle_open && ((is_on_condition_gold && is_on_condition_stage) || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, j))) // open stage
+//				open_stage_card_count += t_stage_card_count;
 			all_stage_card_count += t_stage_card_count;
 		}
 	}
 	
-	KSLabelTTF* take_card_count = KSLabelTTF::create(CCString::createWithFormat("%d / %d / %d", mySGD->getHasGottenCardsSize(), open_stage_card_count, all_stage_card_count)->getCString(), mySGD->getFont().c_str(), 12);
-	take_card_count->setColor(ccc3(255, 150, 50));
-	take_card_count->setPosition(ccp(185,255));
+	KSLabelTTF* take_card_count = KSLabelTTF::create(CCString::createWithFormat("%d/%d", mySGD->getHasGottenCardsSize(), /*open_stage_card_count, */all_stage_card_count)->getCString(), mySGD->getFont().c_str(), 12);
+	take_card_count->setAnchorPoint(ccp(0,0.5f));
+	take_card_count->setPosition(ccp(70,255));
 	main_case->addChild(take_card_count, kCSS_Z_content);
 	
+	CCSprite* n_diary = CCSprite::create("cardsetting_diary.png");
+	CCSprite* s_diary = CCSprite::create("cardsetting_diary.png");
+	s_diary->setColor(ccGRAY);
+	
+	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary, s_diary, this, menu_selector(CardSettingPopup::menuAction));
+	diary_item->setTag(kCSS_MT_diary);
+	
+	CCMenu* diary_menu = CCMenu::createWithItem(diary_item);
+	diary_menu->setPosition(ccp(165, 256));
+	main_case->addChild(diary_menu, kCSS_Z_content);
+	diary_menu->setTouchPriority(-185);
+	
+	
+	CommonButton* event_menu = CommonButton::create("이벤트", 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
+	event_menu->setPosition(ccp(400,256));
+	main_case->addChild(event_menu, kCSS_Z_alignButton);
+	event_menu->setFunction([=](CCObject* sender)
+								 {
+									 CCNode* t_node = CCNode::create();
+									 t_node->setTag(kCSS_MT_event);
+									 menuAction(t_node);
+								 });
 	
 	
 //	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
@@ -453,6 +476,21 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			
 			is_menu_enable = true;
 		}
+		else if(tag == kCSS_MT_diary)
+		{
+			mySGD->selected_collectionbook = mySGD->getHasGottenCardsDataCardNumber(mySGD->getHasGottenCardsSize()-1);
+			
+			CollectionBookPopup* t_popup = CollectionBookPopup::create();
+			t_popup->setHideFinalAction(target_final, delegate_final);
+			getParent()->addChild(t_popup, kMainFlowZorder_popup);
+			
+			target_final = NULL;
+			hidePopup();
+		}
+		else if(tag == kCSS_MT_event)
+		{
+			is_menu_enable = true;
+		}
 		else if(tag == kCSS_MT_strength)
 		{
 			mySGD->setStrengthTargetCardNumber(myDSH->getIntegerForKey(kDSH_Key_selectedCard));
@@ -580,7 +618,6 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				{
 					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-					n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
 					CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
 					n_card->addChild(n_case);
@@ -592,10 +629,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					
 					GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-					if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
-						s_card->setColor(ccc3(60, 60, 60));
-					else
-						s_card->setColor(ccGRAY);
+					s_card->setColor(ccGRAY);
 					CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
 					s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
 					s_card->addChild(s_case);

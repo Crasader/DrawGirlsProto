@@ -297,6 +297,17 @@ private:
 	map<string, KSProtectStr> sds_cache_string;
 	map<string, KSProtectStr>::iterator iter_string;
 	
+//	map<string, bool> sds_cache_bool;
+//	map<string, bool>::iterator iter_bool;
+//	map<string, int> sds_cache_int;
+//	map<string, int>::iterator iter_int;
+//	map<string, float> sds_cache_float;
+//	map<string, float>::iterator iter_float;
+//	map<string, double> sds_cache_double;
+//	map<string, double>::iterator iter_double;
+//	map<string, string> sds_cache_string;
+//	map<string, string>::iterator iter_string;
+	
 	SaveData * myDefault;
 	SDS_SET getKeySet (SDS_KEY t_key);
 	string getRKey (SDS_KEY t_key);

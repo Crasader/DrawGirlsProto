@@ -246,11 +246,7 @@ void SilhouetteData::setSilType( int t1 )
 
 std::string SilhouetteData::getPassiveData()
 {
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(selected_card_number > 0)
-		return myDSH->getStringForKey(kDSH_Key_cardPassive_int1, selected_card_number).c_str();
-	else
-		return "{}";
+	return "{}";
 }
 
 //void SilhouetteData::setAnimationLoop( int t_type )

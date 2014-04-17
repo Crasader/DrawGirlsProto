@@ -60,31 +60,31 @@ protected:
 };
 
 
-class NoChargeNode : public ChargeParent
-{
-public:
-	static NoChargeNode* create(CCPoint t_position, int t_frame,
-								CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-								CCObject* t_a_t, SEL_CallFuncO t_a_d,
-								CCObject* t_c_t, SEL_CallFuncO t_c_d,
-								CCObject* t_rt);
-	bool init(CCPoint t_position, int t_frame,
-			  CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-			  CCObject* t_a_t, SEL_CallFuncO t_a_d,
-			  CCObject* t_c_t, SEL_CallFuncO t_c_d,
-			  CCObject* t_rt);
-	void update(float dt);
-protected:
-	int charge_frame;
-	CCObject* real_target;
-	CCObject* charging_target;
-	CCObject* after_target;
-	CCObject* cancel_target;
-	SEL_CallFuncO charging_delegate;
-	SEL_CallFuncO after_delegate;
-	SEL_CallFuncO cancel_delegate;
-	CCPoint create_position;
-};
+//class NoChargeNode : public ChargeParent
+//{
+//public:
+//	static NoChargeNode* create(CCPoint t_position, int t_frame,
+//								CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//								CCObject* t_a_t, SEL_CallFuncO t_a_d,
+//								CCObject* t_c_t, SEL_CallFuncO t_c_d,
+//								CCObject* t_rt);
+//	bool init(CCPoint t_position, int t_frame,
+//			  CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//			  CCObject* t_a_t, SEL_CallFuncO t_a_d,
+//			  CCObject* t_c_t, SEL_CallFuncO t_c_d,
+//			  CCObject* t_rt);
+//	void update(float dt);
+//protected:
+//	int charge_frame;
+//	CCObject* real_target;
+//	CCObject* charging_target;
+//	CCObject* after_target;
+//	CCObject* cancel_target;
+//	SEL_CallFuncO charging_delegate;
+//	SEL_CallFuncO after_delegate;
+//	SEL_CallFuncO cancel_delegate;
+//	CCPoint create_position;
+//};
 
 
 class ChargeNodeLambda : public ChargeParent
@@ -125,50 +125,50 @@ private:
 };
 
 
-class ChargeNode : public ChargeParent
-{
-public:
-	static ChargeNode* create(CCPoint t_position, int t_frame,
-							  CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-							  CCObject* t_a_t, SEL_CallFuncO t_a_d,
-							  CCObject* t_c_t, SEL_CallFuncO t_c_d,
-							  CCObject* t_rt);
-	
-	void setChargeColor(ccColor4F change_color);
-	
-	void startCharge();
-	
-	void cancelCharge();
-	
-	CCObject* getRealTarget();
-	
-private:
-	
-	
-	CCPoint create_position;
-	int charge_frame;
-	CCObject* real_target;
-	CCObject* charging_target;
-	CCObject* after_target;
-	CCObject* cancel_target;
-	SEL_CallFuncO charging_delegate;
-	SEL_CallFuncO after_delegate;
-	SEL_CallFuncO cancel_delegate;
-	
-	int charge_cnt;
-	
-	CCParticleSystemQuad* particle;
-	
-	void charging();
-	
-	void removeSelf();
-	
-	void myInit(CCPoint t_position, int t_frame,
-				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-				CCObject* t_a_t, SEL_CallFuncO t_a_d,
-				CCObject* t_c_t, SEL_CallFuncO t_c_d,
-				CCObject* t_rt);
-};
+//class ChargeNode : public ChargeParent
+//{
+//public:
+//	static ChargeNode* create(CCPoint t_position, int t_frame,
+//							  CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//							  CCObject* t_a_t, SEL_CallFuncO t_a_d,
+//							  CCObject* t_c_t, SEL_CallFuncO t_c_d,
+//							  CCObject* t_rt);
+//	
+//	void setChargeColor(ccColor4F change_color);
+//	
+//	void startCharge();
+//	
+//	void cancelCharge();
+//	
+//	CCObject* getRealTarget();
+//	
+//private:
+//	
+//	
+//	CCPoint create_position;
+//	int charge_frame;
+//	CCObject* real_target;
+//	CCObject* charging_target;
+//	CCObject* after_target;
+//	CCObject* cancel_target;
+//	SEL_CallFuncO charging_delegate;
+//	SEL_CallFuncO after_delegate;
+//	SEL_CallFuncO cancel_delegate;
+//	
+//	int charge_cnt;
+//	
+//	CCParticleSystemQuad* particle;
+//	
+//	void charging();
+//	
+//	void removeSelf();
+//	
+//	void myInit(CCPoint t_position, int t_frame,
+//				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//				CCObject* t_a_t, SEL_CallFuncO t_a_d,
+//				CCObject* t_c_t, SEL_CallFuncO t_c_d,
+//				CCObject* t_rt);
+//};
 
 class SpecialChargeNodeLambda : public ChargeParent
 {
@@ -206,50 +206,50 @@ private:
 };
 
 
-class SpecialChargeNode : public ChargeParent
-{
-public:
-	static SpecialChargeNode* create(CCPoint t_position, int t_frame,
-									 CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-									 CCObject* t_a_t,	SEL_CallFuncO t_a_d,
-									 CCObject* t_c_t,	SEL_CallFuncO t_c_d,
-									 CCObject* t_rt);
-	
-	void setChargeColor(ccColor4F change_color);
-	
-	void startCharge();
-	
-	void cancelCharge();
-	
-	CCObject* getRealTarget();
-	
-private:
-	CCPoint create_position;
-	int charge_frame;
-	CCObject* real_target;
-	CCObject* charging_target;
-	CCObject* after_target;
-	CCObject* cancel_target;
-	SEL_CallFuncO charging_delegate;
-	SEL_CallFuncO after_delegate;
-	SEL_CallFuncO cancel_delegate;
-	float ing_rps;
-	float chargeRate;
-	
-	int charge_cnt;
-	
-	CCParticleSystemQuad* particle;
-	
-	void charging();
-	
-	void removeSelf();
-	
-	void myInit(CCPoint t_position, int t_frame,
-				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-				CCObject* t_a_t, SEL_CallFuncO t_a_d,
-				CCObject* t_c_t, SEL_CallFuncO t_c_d,
-				CCObject* t_rt);
-};
+//class SpecialChargeNode : public ChargeParent
+//{
+//public:
+//	static SpecialChargeNode* create(CCPoint t_position, int t_frame,
+//									 CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//									 CCObject* t_a_t,	SEL_CallFuncO t_a_d,
+//									 CCObject* t_c_t,	SEL_CallFuncO t_c_d,
+//									 CCObject* t_rt);
+//	
+//	void setChargeColor(ccColor4F change_color);
+//	
+//	void startCharge();
+//	
+//	void cancelCharge();
+//	
+//	CCObject* getRealTarget();
+//	
+//private:
+//	CCPoint create_position;
+//	int charge_frame;
+//	CCObject* real_target;
+//	CCObject* charging_target;
+//	CCObject* after_target;
+//	CCObject* cancel_target;
+//	SEL_CallFuncO charging_delegate;
+//	SEL_CallFuncO after_delegate;
+//	SEL_CallFuncO cancel_delegate;
+//	float ing_rps;
+//	float chargeRate;
+//	
+//	int charge_cnt;
+//	
+//	CCParticleSystemQuad* particle;
+//	
+//	void charging();
+//	
+//	void removeSelf();
+//	
+//	void myInit(CCPoint t_position, int t_frame,
+//				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//				CCObject* t_a_t, SEL_CallFuncO t_a_d,
+//				CCObject* t_c_t, SEL_CallFuncO t_c_d,
+//				CCObject* t_rt);
+//};
 
 class CrashChargeNodeLambda : public ChargeParent
 {
@@ -292,49 +292,49 @@ private:
 							CCObject* t_rt, const std::string& pattern);
 };
 
-class CrashChargeNode : public ChargeParent
-{
-public:
-	static CrashChargeNode* create(CCPoint t_position, int t_frame,
-								   CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-								   CCObject* t_a_t, SEL_CallFuncO t_a_d,
-								   CCObject* t_c_t, SEL_CallFuncO t_c_d,
-								   CCObject* t_rt);
-	
-	void setChargeColor(ccColor4F change_color);
-	
-	void startCharge();
-	
-	void cancelCharge();
-	
-	CCObject* getRealTarget();
-	
-private:
-	
-	
-	CCPoint create_position;
-	int charge_frame;
-	CCObject* real_target;
-	CCObject* charging_target;
-	CCObject* after_target;
-	CCObject* cancel_target;
-	SEL_CallFuncO charging_delegate;
-	SEL_CallFuncO after_delegate;
-	SEL_CallFuncO cancel_delegate;
-	
-	int charge_cnt;
-	
-	ccColor4F myColor;
-	
-	void charging();
-	
-	void removeSelf();
-	
-	void myInit(CCPoint t_position, int t_frame,
-				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
-				CCObject* t_a_t, SEL_CallFuncO t_a_d,
-				CCObject* t_c_t, SEL_CallFuncO t_c_d,
-				CCObject* t_rt);
-};
+//class CrashChargeNode : public ChargeParent
+//{
+//public:
+//	static CrashChargeNode* create(CCPoint t_position, int t_frame,
+//								   CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//								   CCObject* t_a_t, SEL_CallFuncO t_a_d,
+//								   CCObject* t_c_t, SEL_CallFuncO t_c_d,
+//								   CCObject* t_rt);
+//	
+//	void setChargeColor(ccColor4F change_color);
+//	
+//	void startCharge();
+//	
+//	void cancelCharge();
+//	
+//	CCObject* getRealTarget();
+//	
+//private:
+//	
+//	
+//	CCPoint create_position;
+//	int charge_frame;
+//	CCObject* real_target;
+//	CCObject* charging_target;
+//	CCObject* after_target;
+//	CCObject* cancel_target;
+//	SEL_CallFuncO charging_delegate;
+//	SEL_CallFuncO after_delegate;
+//	SEL_CallFuncO cancel_delegate;
+//	
+//	int charge_cnt;
+//	
+//	ccColor4F myColor;
+//	
+//	void charging();
+//	
+//	void removeSelf();
+//	
+//	void myInit(CCPoint t_position, int t_frame,
+//				CCObject* t_ing_t, SEL_CallFuncO t_ing_d,
+//				CCObject* t_a_t, SEL_CallFuncO t_a_d,
+//				CCObject* t_c_t, SEL_CallFuncO t_c_d,
+//				CCObject* t_rt);
+//};
 
 #endif /* defined(__DGproto__Charges__) */

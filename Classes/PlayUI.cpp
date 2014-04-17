@@ -971,32 +971,6 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		{
 			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f);
 			
-			//string missile_code;
-			//if(mySGD->getIsUsingFriendCard())
-				//missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, mySGD->getSelectedFriendCardData().card_number);
-			//else
-				//missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-			//int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
-			
-			//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-			//float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-			
-//			int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
-//
-//			int t_jack_life = jack_life;
-//			if(t_jack_life >= slot_cnt)
-//				t_jack_life = slot_cnt-1;
-//
-//			int beautystone_id = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1, slot_cnt-t_jack_life);
-//			if(beautystone_id > 0)
-//			{
-//				int beautystone_type = myDSH->getIntegerForKey(kDSH_Key_beautyStoneType_int1, beautystone_id);
-//				int beautystone_rank = myDSH->getIntegerForKey(kDSH_Key_beautyStoneRank_int1, beautystone_id);
-//				int beautystone_level = myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beautystone_id);
-//				myGD->createJackMissileWithStoneFunctor((StoneType)beautystone_type, beautystone_rank, beautystone_level, cmCnt, myGD->getJackPoint().convertToCCP());
-//				//myGD->communication("MP_createJackMissile", missile_type, cmCnt, missile_speed, myGD->getJackPoint().convertToCCP());
-//			}
-			
 			int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
 			int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
 			

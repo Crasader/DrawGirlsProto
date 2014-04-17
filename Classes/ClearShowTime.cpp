@@ -78,10 +78,11 @@ void ClearShowTime::addViewHeight()
 			}
 		}
 
-		CCDelayTime* t_delay = CCDelayTime::create(1.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::changeScene));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-		runAction(t_seq);
+		changeScene();
+//		CCDelayTime* t_delay = CCDelayTime::create(1.5f);
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::changeScene));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//		runAction(t_seq);
 	}
 }
 

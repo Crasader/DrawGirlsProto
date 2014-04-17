@@ -61,21 +61,36 @@ enum COLLISION_CODE
 	kCOLLISION_OUTLINE = 4,
 };
 
+// Moving 상태는 Attack/NoDirection/Direction 과 조합이 가능함. 나머지는 ㄴㄴ
+typedef int CUMBER_STATE;
+// 일반적인 상태 돌아다닐 때,
+#define kCumberStateMoving (1 << 1)
+// 공격중일 때, 러시어택과는 좀 다름.
+#define kCumberStateAttack (1 << 3)
 
-enum CUMBER_STATE{
-	CUMBERSTATESTOP = 1,
-	CUMBERSTATEMOVING = 1 << 1,		// 1
-	CUMBERSTATEATTACKREADY = 1 << 2,	// 2
-	CUMBERSTATEATTACK = 1 << 3,		// 3
-	CUMBERSTATECRASHREADY = 1 << 4,	// 4
-	CUMBERSTATECRASH = 1 << 5,		// 5
-	CUMBERSTATEDAMAGING = 1 << 6,    // 6 맞고 있을 때...
-	CUMBERSTATENODIRECTION = 1 << 7,  // 빙글 빙글...
-	CUMBERSTATEDIRECTION = 1 << 8,  //   잭만 바라봐~
-	CUMBERSTATEFURY = 1 << 9, // 분노모드.
-	CUMBERSTATEGAMEOVER = 1 << 10 // 게임오버.
-};
+    // 맞고 있을 때...
+#define kCumberStateDamaging (1 << 6)
+  // 빙글 빙글...
+#define kCumberStateNoDirection (1 << 7)
+  //   잭만 바라봐~
+#define kCumberStateDirection (1 << 8)
+ // 분노모드.
+#define kCumberStateFury (1 << 9)
+ // 게임오버.
+#define kCumberStateGameover (1 << 10)
+//enum CUMBER_STATE{
+//	//kCumberStateStop = 1, // 가만히 있을 때, 무능 상태.
+//	kCumberStateMoving = 1 << 1,		// 일반적인 상태 돌아다닐 때,
+//	kCumberStateAttack = 1 << 3,		// 공격중일 때, 러시어택과는 좀 다름. 
+//	kCumberStateDamaging = 1 << 6,    // 맞고 있을 때...
+//	kCumberStateNoDirection = 1 << 7,  // 빙글 빙글...
+//	kCumberStateDirection = 1 << 8,  //   잭만 바라봐~
+//	kCumberStateFury = 1 << 9, // 분노모드.
+//	kCumberStateGameover = 1 << 10 // 게임오버.
+//};
 
+//inline CUMBER_STATE operator|(CUMBER_STATE a, CUMBER_STATE b)
+//{return static_cast<CUMBER_STATE>(static_cast<int>(a) | static_cast<int>(b));}
 
 
 
@@ -83,11 +98,10 @@ enum MOVEMENT
 {
 	STRAIGHT_TYPE = 1,
 	RANDOM_TYPE = 2,
-	FOLLOW_TYPE = 3,
-	RIGHTANGLE_TYPE = 4,
+	RIGHTANGLE_TYPE = 3,
+	FOLLOW_TYPE = 4,
 	CIRCLE_TYPE = 5,
 	SNAKE_TYPE = 6,
-	
 	RUSH_TYPE = 7
 };
 
@@ -326,6 +340,7 @@ public:
 	MOVEMENT m_originalNormalMovement;  // 평사시 움직임의 백업본.
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
+	CUMBER_STATE m_state; // 몬스터 상태.
 protected:
 	float m_cumberTimer;
 	//선그을때 공격하는걸 제한하는 카운터
@@ -345,7 +360,7 @@ protected:
 
 	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
-	CUMBER_STATE m_state;
+	
 //	Emotion* mEmotion;
 	Well512 m_well512;
 	int m_directionAngleDegree;
