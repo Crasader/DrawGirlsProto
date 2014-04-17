@@ -1704,8 +1704,8 @@ void RankPopup::touchCellIndex(int idx)
 			// 자기 자신을 찍음
 			if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
 			{
-				t_card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-				t_card_passive = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//				t_card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//				t_card_passive = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 			}
 			else
 			{
@@ -1716,8 +1716,8 @@ void RankPopup::touchCellIndex(int idx)
 					{
 						is_found = true;
 						Json::Value t_user_data = i.userData;
-						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
-						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+//						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+//						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
 						break;
 					}
 				}
@@ -1726,8 +1726,8 @@ void RankPopup::touchCellIndex(int idx)
 					if(i.userId == m_scoreList[idx]["user_id"].asString())
 					{
 						Json::Value t_user_data = i.userData;
-						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
-						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
+//						t_card_level = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardLevel), 1).asInt();
+//						t_card_passive = t_user_data.get(myDSH->getKey(kDSH_Key_selectedCardPassive), "").asString();
 						break;
 					}
 				}

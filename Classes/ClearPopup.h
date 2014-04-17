@@ -49,6 +49,8 @@ public:
 	
 	virtual void onEnter();
 	
+	std::function<void()> replay_func;
+	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
 	virtual ~ClearPopup();
@@ -67,6 +69,11 @@ private:
 	bool is_saved_user_data;
 //	bool is_loaded_list;
 	bool is_end_popup_animation;
+	
+	bool is_end_take_card;
+	
+	int delay_index;
+	vector<function<void()>> cell_action_list;
 	
 	vector<CCSprite*> ani_stars;
 	

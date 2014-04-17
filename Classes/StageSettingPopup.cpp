@@ -91,7 +91,7 @@ bool StageSettingPopup::init()
 	main_case->addChild(stage_label, kSSP_Z_content);
 	
 	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard); // 1, 2, 3 / 11, 12, 13 / 14, ...
-	if(selected_card_number > 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) > 0)
+	if(selected_card_number > 0 && mySGD->isHasGottenCards(selected_card_number) > 0)
 	{
 		CCSprite* card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", selected_card_number)->getCString());
 		card_img->setScale(0.45);
@@ -521,42 +521,13 @@ void StageSettingPopup::itemSetting()
 
 void StageSettingPopup::callStart()
 {
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int durability;
-		if(selected_card_number > 0)
-		{
-			durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number)-1;
-		}
-		else
-		{
-			durability = -1;
-		}
-		
 		if(heart_time->isStartable())
 		{
-			if(durability > 0)
-			{
-				if(heart_time->startGame())
-					realStartAction();
-				else
-				{
-					is_menu_enable = true;
-				}
-			}
-			else if(durability == 0)
+			if(heart_time->startGame())
+				realStartAction();
+			else
 			{
 				is_menu_enable = true;
-//				DurabilityNoti* t_popup = DurabilityNoti::create(this, menu_selector(StageSettingPopup::menuAction), this, menu_selector(StageSettingPopup::menuAction));
-//				addChild(t_popup, kSSP_Z_popup, kSSP_MT_noti);
-			}
-			else // not selected card
-			{
-				if(heart_time->startGame())
-					realStartAction();
-				else
-				{
-					is_menu_enable = true;
-				}
 			}
 		}
 		else
@@ -740,13 +711,6 @@ void StageSettingPopup::closeFriendPointPopup()
 
 void StageSettingPopup::realStartAction()
 {
-	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(selected_card_number > 0)
-	{
-		int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) - 1;
-		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-	}
-	
 	finalSetting();
 	
 	myDSH->saveAllUserData(json_selector(this, StageSettingPopup::finalStartAction));
@@ -882,13 +846,6 @@ void StageSettingPopup::finalStartAction(Json::Value result_data)
 	else
 	{
 		heart_time->backHeart();
-		
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(selected_card_number > 0)
-		{
-			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-		}
 		
 		cancelGame();
 	}

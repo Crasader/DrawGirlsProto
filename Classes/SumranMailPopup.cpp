@@ -954,18 +954,10 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 															}
 															// 카드 정보 있음 
 															else {
-																if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt()) == 0) {
-																	myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-																	myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt(), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-																	myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), contentObj["cardnumber"].asInt());
-
+																if(mySGD->isHasGottenCards(contentObj["cardnumber"].asInt()) == 0) {
 																	mySGD->addHasGottenCardNumber(contentObj["cardnumber"].asInt());
 																}
 
-																myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
-																myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
-																myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
-																myDSH->setStringForKey(kDSH_Key_cardPassive_int1, contentObj["cardnumber"].asInt(), NSDS_GS(kSDS_CI_int1_passive_s, contentObj["cardnumber"].asInt()));
 																av->setContentNode(addCardImg(contentObj["cardnumber"].asInt(), -1, "-1"));
 																//							av->addChild();
 															}
@@ -1692,18 +1684,10 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		}
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number) == 0)
+		if(mySGD->isHasGottenCards(download_card_number) == 0)
 		{
-			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), download_card_number);
-			
 			mySGD->addHasGottenCardNumber(download_card_number);
 		}
-		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
-		myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, download_card_number, 1);
-		myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
-		myDSH->setStringForKey(kDSH_Key_cardPassive_int1, download_card_number, NSDS_GS(kSDS_CI_int1_passive_s, download_card_number));
 		
 		(getTarget()->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
 		

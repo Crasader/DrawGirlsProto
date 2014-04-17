@@ -359,10 +359,10 @@ void CardStrengthPopup::setStrengthNode(int t_card_number)
 //		strength_node->addChild(up_dur_label);
 		
 		
-		CCLabelTTF* pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
-		pow_label->setAnchorPoint(ccp(1,0.5));
-		pow_label->setPosition(ccpAdd(minus_content_half, ccp(-10,81)));
-		strength_node->addChild(pow_label);
+//		CCLabelTTF* pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+//		pow_label->setAnchorPoint(ccp(1,0.5));
+//		pow_label->setPosition(ccpAdd(minus_content_half, ccp(-10,81)));
+//		strength_node->addChild(pow_label);
 		
 //		CCLabelTTF* up_pow_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_power_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
 //		up_pow_label->setPosition(ccpAdd(pow_label->getPosition(), ccp(20,3)));
@@ -379,22 +379,22 @@ void CardStrengthPopup::setStrengthNode(int t_card_number)
 //		strength_node->addChild(up_spd_label);
 		
 		
-		CCLabelTTF* dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
-		dex_label->setAnchorPoint(ccp(1,0.5));
-		dex_label->setPosition(ccpAdd(minus_content_half, ccp(-10,68.5f)));
-		strength_node->addChild(dex_label);
+//		CCLabelTTF* dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+//		dex_label->setAnchorPoint(ccp(1,0.5));
+//		dex_label->setPosition(ccpAdd(minus_content_half, ccp(-10,68.5f)));
+//		strength_node->addChild(dex_label);
 		
 //		CCLabelTTF* up_dex_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_dex_i, strength_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
 //		up_dex_label->setPosition(ccpAdd(dex_label->getPosition(), ccp(20,3)));
 //		strength_node->addChild(up_dex_label);
 		
-		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		t_card_level_label->setPosition(ccpAdd(minus_content_half, ccp(65,94)));
-		strength_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
-		
-		CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		t_card_durability_label->setPosition(ccpAdd(minus_content_half, ccp(67,10)));
-		strength_node->addChild(t_card_durability_label, kCardStrengthPopupZorder_content);
+//		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+//		t_card_level_label->setPosition(ccpAdd(minus_content_half, ccp(65,94)));
+//		strength_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
+//		
+//		CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+//		t_card_durability_label->setPosition(ccpAdd(minus_content_half, ccp(67,10)));
+//		strength_node->addChild(t_card_durability_label, kCardStrengthPopupZorder_content);
 		
 		string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, strength_card_number).c_str();
 		int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
@@ -522,10 +522,10 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 //		offering_node->addChild(up_dur_label);
 		
 		
-		CCLabelTTF* pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
-		pow_label->setAnchorPoint(ccp(1,0.5));
-		pow_label->setPosition(ccpAdd(minus_content_half, ccp(155,81)));
-		offering_node->addChild(pow_label);
+//		CCLabelTTF* pow_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+//		pow_label->setAnchorPoint(ccp(1,0.5));
+//		pow_label->setPosition(ccpAdd(minus_content_half, ccp(155,81)));
+//		offering_node->addChild(pow_label);
 		
 //		CCLabelTTF* up_pow_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_power_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_power_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
 //		up_pow_label->setPosition(ccpAdd(pow_label->getPosition(), ccp(20,3)));
@@ -542,22 +542,22 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 //		offering_node->addChild(up_spd_label);
 		
 		
-		CCLabelTTF* dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
-		dex_label->setAnchorPoint(ccp(1,0.5));
-		dex_label->setPosition(ccpAdd(minus_content_half, ccp(155,68.5f)));
-		offering_node->addChild(dex_label);
+//		CCLabelTTF* dex_label = CCLabelTTF::create(CCString::createWithFormat("%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 10);
+//		dex_label->setAnchorPoint(ccp(1,0.5));
+//		dex_label->setPosition(ccpAdd(minus_content_half, ccp(155,68.5f)));
+//		offering_node->addChild(dex_label);
 		
 //		CCLabelTTF* up_dex_label = CCLabelTTF::create(CCString::createWithFormat("+%d", int(NSDS_GI(kSDS_CI_int1_missile_dex_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*0.1f+1.f) - NSDS_GI(kSDS_CI_int1_missile_dex_i, offering_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number)-1)*0.1f+1.f)))->getCString(), mySGD->getFont().c_str(), 14);
 //		up_dex_label->setPosition(ccpAdd(dex_label->getPosition(), ccp(20,3)));
 //		offering_node->addChild(up_dex_label);
 		
-		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		t_card_level_label->setPosition(ccpAdd(minus_content_half, ccp(65,94)));
-		offering_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
-		
-		CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
-		t_card_durability_label->setPosition(ccpAdd(minus_content_half, ccp(67,10)));
-		offering_node->addChild(t_card_durability_label, kCardStrengthPopupZorder_content);
+//		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+//		t_card_level_label->setPosition(ccpAdd(minus_content_half, ccp(65,94)));
+//		offering_node->addChild(t_card_level_label, kCardStrengthPopupZorder_content);
+//		
+//		CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))->getCString(), mySGD->getFont().c_str(), 8);
+//		t_card_durability_label->setPosition(ccpAdd(minus_content_half, ccp(67,10)));
+//		offering_node->addChild(t_card_durability_label, kCardStrengthPopupZorder_content);
 		
 		string missile_type_code = NSDS_GS(kSDS_CI_int1_missile_type_s, offering_card_number).c_str();
 		int missile_type_number = MissileDamageData::getMissileType(missile_type_code.c_str());
@@ -599,7 +599,7 @@ void CardStrengthPopup::setOfferingNode(int t_card_number)
 		strength_probability->setPosition(ccp(198.5,147));
 		main_case->addChild(strength_probability, kCardStrengthPopupZorder_highContent);
 		
-		float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+		float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 		
 		if(strength_rate > 1.f)
 			strength_rate = 1.f;
@@ -616,12 +616,12 @@ void CardStrengthPopup::setOfferingList()
 	int loop_length = mySGD->getHasGottenCardsSize();
 	for(int i=0;i<loop_length;i++)
 	{
-		int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-		{
+//		int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
+//		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+//		{
 			CardSortInfo t_info = mySGD->getHasGottenCardData(i);
 			offering_list.push_back(t_info);
-		}
+//		}
 	}
 	
 	alignOfferingList(kCardStrengthAlign_takeReverse);
@@ -718,13 +718,13 @@ CCTableViewCell* CardStrengthPopup::tableCellAtIndex(CCTableView *table, unsigne
 		offering_card->addChild(card_offering);
 	}
 	
-	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 6);
-	t_card_level_label->setPosition(ccp(45,66));
-	cell->addChild(t_card_level_label);
-	
-	CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 7);
-	t_card_durability_label->setPosition(ccp(48,13));
-	cell->addChild(t_card_durability_label);
+//	CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 6);
+//	t_card_level_label->setPosition(ccp(45,66));
+//	cell->addChild(t_card_level_label);
+//	
+//	CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_list[idx].card_number))->getCString(), mySGD->getFont().c_str(), 7);
+//	t_card_durability_label->setPosition(ccp(48,13));
+//	cell->addChild(t_card_durability_label);
 	
 	return cell;
 }
@@ -988,12 +988,12 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			save_offering_number = offering_card_number;
 			mySGD->setStar(mySGD->getStar() - mySGD->getCardUpgradeRubyFee());
 			
-			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+			float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
 			
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
-			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
-			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, offering_card_number, NSDS_GS(kSDS_CI_int1_passive_s, offering_card_number));
+//			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
+//			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
+//			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, offering_card_number, NSDS_GS(kSDS_CI_int1_passive_s, offering_card_number));
 			
 			for(auto iter = offering_list.begin();iter != offering_list.end();iter++)
 			{
@@ -1022,21 +1022,21 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 					uniform_int_distribution<int> uniform_dist_int(1, 3);
 					int level_up_value = uniform_dist_int(e1);
 					CCLog("level up value : %d", level_up_value);
-					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
+//					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
 					
 					result_string = "카드레벨 +1";
 				}
 				else if(success_type_rate <= 0.7f)
 				{
 					CCLog("max durability up");
-					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
-					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
+//					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
+//					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
 					
 					result_string = "내구도 +1";
 				}
 				else
 				{
-					string passive_string = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, strength_card_number).c_str();
+					string passive_string;// = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, strength_card_number).c_str();
 					
 					if(passive_string == "")
 					{
@@ -1072,7 +1072,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 							data["agi"] = double(passive_up_value);
 						
 						Json::FastWriter data_writer;
-						myDSH->setStringForKey(kDSH_Key_cardPassive_int1, strength_card_number, data_writer.write(data));
+//						myDSH->setStringForKey(kDSH_Key_cardPassive_int1, strength_card_number, data_writer.write(data));
 						
 						result_string = CCString::createWithFormat("패시브 변경 : %s", data_writer.write(data).c_str())->getCString();
 					}
@@ -1101,8 +1101,8 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 							result_string = "내구도 +1";
 							
 							CCLog("max durability up");
-							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
-							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
+//							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
+//							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
 						}
 						else
 						{
@@ -1129,7 +1129,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 							data[empty_data_list[passive_up_type].c_str()] = double(passive_up_value);
 							
 							Json::FastWriter data_writer;
-							myDSH->setStringForKey(kDSH_Key_cardPassive_int1, strength_card_number, data_writer.write(data));
+//							myDSH->setStringForKey(kDSH_Key_cardPassive_int1, strength_card_number, data_writer.write(data));
 							
 							result_string = CCString::createWithFormat("패시브 변경 : %s", data_writer.write(data).c_str())->getCString();
 						}
@@ -1180,12 +1180,12 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			mySGD->setGold(mySGD->getGold() - mySGD->getCardUpgradeGoldFee());
 			
 			save_offering_number = offering_card_number;
-			float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
+			float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
 			
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
-			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
-			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, offering_card_number, NSDS_GS(kSDS_CI_int1_passive_s, offering_card_number));
+//			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
+//			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
+//			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, offering_card_number, NSDS_GS(kSDS_CI_int1_passive_s, offering_card_number));
 			
 			for(auto iter = offering_list.begin();iter != offering_list.end();iter++)
 			{
@@ -1208,7 +1208,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 				CCLog("success");
 				is_success = true;
 				result_string = "카드레벨 +1";
-				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
+//				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
 			}
 			else
 			{

@@ -255,8 +255,8 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 	clicked_card_number = t_card_number;
 	myDSH->setIntegerForKey(kDSH_Key_selectedCard, clicked_card_number);
 	
-	float card_power = NSDS_GI(kSDS_CI_int1_missile_power_i, clicked_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, clicked_card_number)-1)*0.1f+1.f);
-	float card_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, clicked_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, clicked_card_number)-1)*0.1f+1.f);
+	float card_power;// = NSDS_GI(kSDS_CI_int1_missile_power_i, clicked_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, clicked_card_number)-1)*0.1f+1.f);
+	float card_dex;// = NSDS_GI(kSDS_CI_int1_missile_dex_i, clicked_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, clicked_card_number)-1)*0.1f+1.f);
 	float card_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, clicked_card_number);
 	
 	card_power = card_power < 1 ? 1 : card_power;
@@ -349,12 +349,12 @@ void CardChangePopup::setHaveCardList()
 	int loop_length = mySGD->getHasGottenCardsSize();
 	for(int i=0;i<loop_length;i++)
 	{
-		int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-		{
+//		int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
+//		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
+//		{
 			CardSortInfo t_info = mySGD->getHasGottenCardData(i);
 			have_card_list.push_back(t_info);
-		}
+//		}
 	}
 	
 	alignHaveCardList(kCardChangeAlign_take);
@@ -453,14 +453,14 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 		card_case->setPosition(ccp(have_card->getContentSize().width/2.f, have_card->getContentSize().height/2.f));
 		have_card->addChild(card_case);
 		
-		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, have_card_list[idx-1].card_number))->getCString(), mySGD->getFont().c_str(), 6);
-		t_card_level_label->setPosition(ccp(45,61));
-		cell->addChild(t_card_level_label, kCardChangeTableCellZorder_noimg);
-		
-		CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, have_card_list[idx-1].card_number))->getCString(),
-																 mySGD->getFont().c_str(), 7);
-		t_card_durability_label->setPosition(ccp(47,10));
-		cell->addChild(t_card_durability_label, kCardChangeTableCellZorder_noimg);
+//		CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, have_card_list[idx-1].card_number))->getCString(), mySGD->getFont().c_str(), 6);
+//		t_card_level_label->setPosition(ccp(45,61));
+//		cell->addChild(t_card_level_label, kCardChangeTableCellZorder_noimg);
+//		
+//		CCLabelTTF* t_card_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, have_card_list[idx-1].card_number))->getCString(),
+//																 mySGD->getFont().c_str(), 7);
+//		t_card_durability_label->setPosition(ccp(47,10));
+//		cell->addChild(t_card_durability_label, kCardChangeTableCellZorder_noimg);
 		
 		if(have_card_list[idx-1].card_number == myDSH->getIntegerForKey(kDSH_Key_selectedCard))
 		{

@@ -273,16 +273,47 @@ void ZoomScript::menuAction(CCObject *sender)
 		}
 		else
 		{
-			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
-//			CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-			if(mySD->getSilType() < 10000)
+			int take_grade = 1;
+			if(target_node == first_img)
 			{
-				CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+				if(is_exchanged)
+					take_grade = 2;
+				else
+					take_grade = 1;
+			}
+			else if(target_node == second_img)
+			{
+				if(is_exchanged)
+					take_grade = 4;
+				else
+					take_grade = 3;
+			}
+			
+			if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+			{
+				nextScene();
 			}
 			else
-				CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+			{
+				mySGD->is_clear_diary = true;
+				
+				CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+				
+				CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+				CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+				
+				game_node->runAction(t_seq);
+			}
 		}
 	}
+}
+
+void ZoomScript::nextScene()
+{
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
+	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 }
 
 void ZoomScript::showtimeFirstAction()
