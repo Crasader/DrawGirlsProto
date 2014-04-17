@@ -512,7 +512,7 @@ const CCPoint& KSCircleBase::getPosition()
 void KSCircleBase::attackBehavior( Json::Value _pattern )
 {
 	std::string pattern = _pattern["pattern"].asString();
-	bool moving = _pattern.get("movingcast", true).asBool();
+	bool moving = _pattern.get("movingcast", false).asBool();
 	if(pattern == "109")
 	{
 		if(moving)
