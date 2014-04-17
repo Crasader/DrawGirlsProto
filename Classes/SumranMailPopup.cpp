@@ -483,8 +483,8 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	
 	CCScale9Sprite* barBack = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
 	barBack->setContentSize(CCSizeMake(7, 160.f));
-	FormSetter::get()->addObject("testksoo", barBack);
-	addChild(barBack, kMP_Z_mailTable + -1); 
+//	FormSetter::get()->addObject("testksoo", barBack);
+	addChild(barBack, kMP_Z_mailTable + -1);
 	//320x320 테이블 뷰 생성
 
 	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
