@@ -1324,9 +1324,9 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCMenuLambda* close_menu = CCMenuLambda::create();
 				
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-				close_menu->setPosition(ccp(0,0));
+				close_menu->setPosition(ccp(240, myDSH->ui_center_y));
 				close_menu->setVisible(false);
-				t_container->addChild(close_menu);
+				t_popup->addChild(close_menu);
 				
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
@@ -1409,9 +1409,11 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				s_close->setOpacity(0);
 				
 				CCMenuLambda* close_menu = CCMenuLambda::create();
+				
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-				close_menu->setPosition(ccp(0,0));
-				t_container->addChild(close_menu);
+				close_menu->setPosition(ccp(240, myDSH->ui_center_y));
+				close_menu->setVisible(false);
+				t_popup->addChild(close_menu);
 				
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{
@@ -1494,9 +1496,11 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				s_close->setOpacity(0);
 				
 				CCMenuLambda* close_menu = CCMenuLambda::create();
+				
 				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-				close_menu->setPosition(ccp(0,0));
-				t_container->addChild(close_menu);
+				close_menu->setPosition(ccp(240, myDSH->ui_center_y));
+				close_menu->setVisible(false);
+				t_popup->addChild(close_menu);
 				
 				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
 																					{

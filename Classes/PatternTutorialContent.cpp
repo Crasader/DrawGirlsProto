@@ -9,6 +9,7 @@
 #include "PatternTutorialContent.h"
 #include "CCMenuLambda.h"
 #include "KSUtil.h"
+#include "DataStorageHub.h"
 
 PatternTutorialContent* PatternTutorialContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_pattern_list)
 {
@@ -31,23 +32,27 @@ void PatternTutorialContent::menuAction(CCObject* sender)
 			getParent()->removeFromParent();
 		}));
 		
-		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.f);}));}));
+		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(1.2f);
+			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(0.f);}));}));
 		
-		addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(this, t);}, [=](int t){KS::setOpacity(this, 0);}));
+		addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(show_node, t);}, [=](int t){KS::setOpacity(show_node, 0);}));
 	}
 	else
 	{
 		show_content->removeFromParent();
 		show_content = CCSprite::create(CCString::createWithFormat("pattern%d_tutorial.png", pattern_list[ing_close_cnt])->getCString());
 		show_content->setPosition(ccp(0, -9));
-		addChild(show_content);
+		show_node->addChild(show_content);
 	}
 }
 
 void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_pattern_list)
 {
 	is_menu_enable = false;
+	
+	show_node = CCNode::create();
+	show_node->setPosition(CCPointZero);
+	addChild(show_node);
 	
 	touch_priority = t_touch_priority;
 	end_selector = t_selector;
@@ -57,7 +62,7 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	
 	CCSprite* case_back = CCSprite::create("pattern_tutorial_back.png");
 	case_back->setPosition(CCPointZero);
-	addChild(case_back);
+	show_node->addChild(case_back);
 	
 	ing_close_cnt = 0;
 	
@@ -65,7 +70,7 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	if(show_content)
 	{
 		show_content->setPosition(ccp(0, -9));
-		addChild(show_content);
+		show_node->addChild(show_content);
 	}
 	
 	CCSprite* n_close = CCSprite::create("whitePaper.png");
@@ -80,12 +85,12 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	close_menu->setPosition(ccp(0,0));
 	addChild(close_menu);
 	
-	setScaleY(0.f);
+	show_node->setScaleY(0.f);
 	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.f);
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(1.f);
 				is_menu_enable = true;}));}));}));
 	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(this, t);}, [=](int t){KS::setOpacity(this, 255);}));
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(show_node, t);}, [=](int t){KS::setOpacity(show_node, 255);}));
 }

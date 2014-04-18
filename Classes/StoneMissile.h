@@ -12,6 +12,7 @@
 #include "ks19937.h"
 #include "GameItemManager.h"
 #include "StarGoldData.h"
+#include "ASMotionStreak.h"
 
 enum AttackOption
 {
@@ -561,7 +562,7 @@ public:
 	}	
 	void addStreak()
 	{
-		m_streak = CCMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+		m_streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
 		m_streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		addChild(m_streak, -2);
 	}
