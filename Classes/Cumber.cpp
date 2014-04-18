@@ -72,7 +72,7 @@ void CumberParent::allStopSchedule()
 	for(auto i : mainCumbers)
 	{
 		auto mainCumberState = i->getCumberState();
-		if(mainCumberState == CUMBER_STATE::CUMBERSTATEMOVING)
+		if(mainCumberState & kCumberStateMoving)
 		{
 			i->stopMoving();
 		}

@@ -105,7 +105,7 @@ void KSCumberBase::randomMoving(float dt)
 	
 
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -115,7 +115,7 @@ void KSCumberBase::randomMoving(float dt)
 	IntPoint afterPoint;
 	//        int check_loop_cnt = 0;
 	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
 		if(changeDirection == 0)
@@ -147,7 +147,7 @@ void KSCumberBase::randomMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != CUMBERSTATEFURY)
+		if(m_state != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -222,7 +222,7 @@ void KSCumberBase::randomMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -231,7 +231,7 @@ void KSCumberBase::randomMoving(float dt)
 	//        CCLog("cnt outer !! = %d", cnt);
 	
 	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -259,7 +259,7 @@ void KSCumberBase::straightMoving(float dt)
 	m_scale.timer += 1/60.f;
 	
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -270,7 +270,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	int check_loop_cnt = 0;
 
 	// 낮은 확률로 방향 전환...	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
 		if(changeDirection == 0)
@@ -328,7 +328,7 @@ void KSCumberBase::straightMoving(float dt)
 		};
 		
 		
-		if(m_state != CUMBERSTATEFURY)
+		if(m_state != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -403,7 +403,7 @@ void KSCumberBase::straightMoving(float dt)
 		{
 			CCLog("straightMoving cnt !! = %d", cnt);
 		}
-		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -414,7 +414,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	CCLog("cnt outer !! = %d", cnt);
 	
 	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -440,7 +440,7 @@ void KSCumberBase::followMoving(float dt)
 	m_scale.timer += 1/60.f;
 	m_follow.timer += 1 / 60.f;
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -452,17 +452,17 @@ void KSCumberBase::followMoving(float dt)
 	
 	float dx, dy;
 	dx = dy = 0;
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(m_follow.timer - m_follow.lastMapCollisionTime > 1.f)
 		{
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
-			CCLog("aiValue : %d", this->getAiValue());
+//			CCLog("aiValue : %d", this->getAiValue());
 			t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			float goalDegree = rad2Deg(atan2(t.y, t.x));
 			float deltaDegree = (goalDegree - m_follow.followDegree)/1.f;
 			//m_follow.followDegree += deltaDegree;
-			CCLog("%f", deltaDegree);
+//			CCLog("%f", deltaDegree);
 			m_follow.followDegree += clampf(deltaDegree, -5, 5);
 			//m_fo
 			//if(deltaDegree < 0)
@@ -530,7 +530,7 @@ void KSCumberBase::followMoving(float dt)
 			}
 			return m_directionAngleDegree;
 		};
-		if(m_state != CUMBERSTATEFURY)
+		if(m_state != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -603,7 +603,7 @@ void KSCumberBase::followMoving(float dt)
 				validPosition = true;
 			}
 		}
-		else // if(m_state == CUMBERSTATEFURY)
+		else // if(m_state == kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
@@ -628,7 +628,7 @@ void KSCumberBase::followMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -638,7 +638,7 @@ void KSCumberBase::followMoving(float dt)
 	//	CCLog("cnt outer !! = %d", cnt);
 	
 	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -666,7 +666,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	m_scale.timer += 1/60.f;
 	
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -676,7 +676,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		int changeDirection = m_well512.GetValue(3);
 		if(ProbSelector::sel(0.05, 1.0 - 0.05, 0.0) == 0)
@@ -714,7 +714,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != CUMBERSTATEFURY)
+		if(m_state != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -816,7 +816,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -825,7 +825,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	//	CCLog("cnt outer !! = %d", cnt);
 	
 	
- 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+ 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -857,7 +857,7 @@ void KSCumberBase::circleMoving(float dt)
 		m_circle.setRelocation(getPosition(), m_well512);
 	}
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -867,7 +867,7 @@ void KSCumberBase::circleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(ProbSelector::sel(0.003, 1.0 - 0.003, 0.0) == 0)
 		{
@@ -900,7 +900,7 @@ void KSCumberBase::circleMoving(float dt)
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != CUMBERSTATEFURY)
+		if(m_state != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -969,7 +969,7 @@ void KSCumberBase::circleMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -979,7 +979,7 @@ void KSCumberBase::circleMoving(float dt)
 	
 	
 	
- 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+ 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(pathFound)
 		{
@@ -1019,7 +1019,7 @@ void KSCumberBase::snakeMoving(float dt)
 		m_snake.setRelocation(getPosition(), m_well512);
 	}
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -1029,7 +1029,7 @@ void KSCumberBase::snakeMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
 		{
@@ -1062,7 +1062,7 @@ void KSCumberBase::snakeMoving(float dt)
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != CUMBERSTATEFURY)
+		if(m_state != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -1131,7 +1131,7 @@ void KSCumberBase::snakeMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -1141,7 +1141,7 @@ void KSCumberBase::snakeMoving(float dt)
 	
 	
 	
- 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+ 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(pathFound)
 		{
@@ -1180,7 +1180,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //		m_earthwarm.setRelocation(m_well512);
 //	}
 //	
-//	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+//	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 //	{
 //		m_scale.collisionCount = 0;
 //		m_scale.collisionStartTime = m_scale.timer;
@@ -1189,7 +1189,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //	IntPoint afterPoint;
 //	//	int check_loop_cnt = 0;
 //	
-//	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+//	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 //	{
 //		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
 //		{
@@ -1221,7 +1221,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //		afterPoint = ccp2ip(afterPosition);
 //		IntPoint checkPosition;
 //		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-//		if(m_state != CUMBERSTATEFURY)
+//		if(m_state != kCumberStateFury)
 //		{
 //			if(collisionCode == kCOLLISION_JACK)
 //			{
@@ -1290,7 +1290,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //			pathFound = false;
 //			validPosition = true;
 //		}
-//		if(m_state != CUMBERSTATEMOVING && m_state != CUMBERSTATEFURY)
+//		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 //		{
 //			validPosition = true;
 //		}
@@ -1300,7 +1300,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //	
 //	
 //	
-// 	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+// 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 //	{
 //		if(pathFound)
 //		{
@@ -1336,7 +1336,7 @@ void KSCumberBase::rushMoving(float dt)
 	m_scale.timer += 1/60.f;
 
 
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || m_state != CUMBERSTATEMOVING)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -1346,7 +1346,7 @@ void KSCumberBase::rushMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 
-	if(m_state == CUMBERSTATEMOVING || m_state == CUMBERSTATEFURY)
+	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
 		if(m_furyMode.firstMoving == true)
 		{
@@ -1446,7 +1446,7 @@ void KSCumberBase::rushMoving(float dt)
 	//	CCLog("cnt outer !! = %d", cnt);
 
 
-	if(m_state == CUMBERSTATEFURY)
+	if(m_state == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -1537,6 +1537,7 @@ void KSCumberBase::cumberAttack(float dt)
 				std::string patternData = R"({
 				"atype" : "special",
 				"pattern" : "1007",
+				"castframe" : 30,
 				"percent" : 1,
 				"target" : "no"})";
 				Json::Reader reader;
@@ -1639,7 +1640,7 @@ void KSCumberBase::cumberAttack(float dt)
 	{
 		IntPoint point = ccp2ip(getPosition());
 		IntPoint afterPoint = point;
-		float radius = 40.f;
+		float radius = 30.f;
 		
 		float half_distance = radius*getCumberScale(); // 20.f : radius for base scale 1.f
 		int ip_half_distance = half_distance;
@@ -1670,7 +1671,9 @@ void KSCumberBase::cumberAttack(float dt)
 	// 확률로
 	
 	//재공격카운터 0이상일때.
-	if(exeProb == 0 && m_state == CUMBERSTATEMOVING && m_reAttackCnt>=0)
+	bool attackable = (m_state & kCumberStateNoDirection) == 0 && (m_state & kCumberStateDirection) == 0 &&
+			(m_state & kCumberStateAttack) == 0; // 공격이 가능하다면...
+	if(exeProb == 0 && attackable && m_reAttackCnt>=0)
 	{
 		// 부수기 공격이 시행됐는데, 크래시 공격이 없다면포 텔포 해야됨
 		if(crashAttack && selectedAttacks.empty())
@@ -1680,6 +1683,7 @@ void KSCumberBase::cumberAttack(float dt)
 			"atype" : "special",
 			"pattern" : "1007",
 			"percent" : 1,
+			"castframe" : 30,
 			"target" : "no"})";
 		
 			Json::Reader reader;
@@ -1700,6 +1704,7 @@ void KSCumberBase::cumberAttack(float dt)
 				std::string patternData = R"({
 				"atype" : "special",
 				"pattern" : "1007",
+				"castframe" : 30,
 				"percent" : 1,
 				"target" : "no"})";
 				Json::Reader reader;
@@ -1827,7 +1832,7 @@ void KSCumberBase::cumberAttack(float dt)
 					
 					if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
 						searched = false;
-					if(attackCode["pattern"].asString() == "109" && m_state == CUMBERSTATEFURY)
+					if(attackCode["pattern"].asString() == "109" && m_state == kCumberStateFury)
 						searched = false;
 					if(attackCode["pattern"].asString() == "1019" && m_swell.isStartSwell)
 					{
@@ -2174,7 +2179,7 @@ bool KSCumberBase::init()
 
 void KSCumberBase::startMoving()
 {
-	m_state = CUMBERSTATEMOVING;
+	m_state = kCumberStateMoving;
 }
 
 void KSCumberBase::stopMoving()
@@ -2208,7 +2213,7 @@ int KSCumberBase::getCastingCancelCount()
 
 void KSCumberBase::setGameover()
 {
-	m_state = CUMBERSTATEGAMEOVER;
+	m_state = kCumberStateGameover;
 	
 	//		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
 	//		runAction(CCScaleTo::create(2.f, 0.01f));
@@ -2241,7 +2246,7 @@ void KSCumberBase::movingAndCrash( float dt )
 //	}
 	checkConfine(dt);
 	
-	if(m_state == CUMBERSTATEFURY)
+	if(m_state == kCumberStateFury)
 	{
 		m_furyMode.furyFrameCount++;
 	}
@@ -2273,7 +2278,7 @@ void KSCumberBase::movingAndCrash( float dt )
 				break;
 		}
 	};
-	if(m_state == CUMBERSTATEFURY)
+	if(m_state == kCumberStateFury)
 	{
 		movingBranch(m_furyMovement);
 	}
@@ -2384,8 +2389,8 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 	{
 		m_swell.totalFrame = totalFrame;
 //		auto backupState = m_state;
-		m_state = CUMBERSTATESTOP;
-		CCLog("%s %d CUMBERSTATESTOP", __FILE__, __LINE__);
+		m_state = 0;
+		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
 		addChild(KSGradualValue<float>::create(m_swell.scale, scale, 1.3f, 
 																					 [=](float t){
 																						 m_swell.scale = t;
@@ -2397,7 +2402,7 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 																						 myGD->communication("MS_resetRects", false);
 																						 schedule(schedule_selector(KSCumberBase::swelling));
 
-																						 m_state = CUMBERSTATEMOVING;
+																						 m_state = kCumberStateMoving;
 																					 }));
 		m_swell.isStartSwell = true;
 	}
@@ -2621,6 +2626,11 @@ void KSCumberBase::applyAutoBalance()
 	
 	//int balPt = clearCount-2;
 	
+	if(autobalanceTry==0){
+		CCLog("############ autobalanceTry : 0, dont autobalance ################");
+		return;
+	}
+	
 	
 	CCLog("#################### autobalance ############################");
 	CCLog("clear : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",clearCount,playCount,autobalanceTry,puzzleNo);
@@ -2634,7 +2644,7 @@ void KSCumberBase::applyAutoBalance()
 			int aiMax = m_aiValue*2;
 			if(aiMax>90)aiMax=90;
 			if(m_aiValue>aiMax)aiMax=m_aiValue;
-			if(aiMax<=70)aiMax=70;
+			if(aiMax<=50)aiMax=50;
 			m_aiValue = m_aiValue + (aiMax-m_aiValue)*per;
 		}
 		//attackterm조절
@@ -2644,6 +2654,8 @@ void KSCumberBase::applyAutoBalance()
 			if(m_attackPercent>aiMax)aiMax=m_attackPercent;
 			if(aiMax<=0.3)aiMax=0.3;
 			m_attackPercent = m_attackPercent + (aiMax-m_attackPercent)*per;
+			
+			if(m_attackPercent>0.4)m_attackPercent=0.4;
 		}
 	
 		CCLog("#################### Change Balnace1 ############################");
