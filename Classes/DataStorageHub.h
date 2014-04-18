@@ -44,9 +44,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_selectedPuzzleNumber,
 	kDSH_Key_allHighScore,
 	kDSH_Key_jackBaseSpeed,
-	kDSH_Key_openPuzzleCnt,
-	kDSH_Key_isClearedPuzzle_int1,
-	kDSH_Key_isPerfectPuzzle_int1,
+	
 	kDSH_Key_haveTicketCnt,
 	kDSH_Key_ticketUserId_int1,
 	kDSH_Key_openStageCnt,
@@ -161,7 +159,6 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_highScore,
 	kSaveUserData_Key_stageRank,
 	kSaveUserData_Key_selectedCard,
-	kSaveUserData_Key_openPuzzle,
 	kSaveUserData_Key_haveTicket,
 	kSaveUserData_Key_openStage,
 	kSaveUserData_Key_nick,

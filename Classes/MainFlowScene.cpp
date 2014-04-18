@@ -562,13 +562,14 @@ void MainFlowScene::cellAction(CCObject* sender)
 				
 				CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
 					mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
-					myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+					
+					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
+					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
+					t_history.is_open = true;
+					mySGD->setPuzzleHistory(t_history, nullptr);
 					
 					vector<SaveUserData_Key> save_userdata_list;
-					
 					save_userdata_list.push_back(kSaveUserData_Key_star);
-					save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-					
 					myDSH->saveUserData(save_userdata_list, nullptr);
 					
 					int found_idx = -1;
@@ -649,10 +650,15 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	if(puzzle_number == is_unlock_puzzle)
 	{
 		if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) <= 0 || NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) <= 0)
-			myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+		{
+			int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
+			PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
+			t_history.is_open = true;
+			mySGD->setPuzzleHistory(t_history, nullptr);
+		}
 	}
 	
-	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number || (myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number-1) && NSDS_GI(puzzle_number, kSDS_PZ_point_i) == 0))
+	if(puzzle_number == 1 || mySGD->getPuzzleHistory(puzzle_number).is_open || (mySGD->getPuzzleHistory(puzzle_number-1).is_clear && NSDS_GI(puzzle_number, kSDS_PZ_point_i) == 0))
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
 		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
@@ -695,7 +701,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		close_back->setPosition(CCPointZero);
 		cell_node->addChild(close_back);
 		
-		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number-1))
+		if(mySGD->getPuzzleHistory(puzzle_number-1).is_clear)
 		{
 			CCSprite* n_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
 			CCSprite* s_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
@@ -805,12 +811,7 @@ CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-	int open_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1+2;
-	
-	if(puzzle_count < open_count)
-		return puzzle_count;
-	else
-		return open_count;
+	return puzzle_count;
 	
 //	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
 }

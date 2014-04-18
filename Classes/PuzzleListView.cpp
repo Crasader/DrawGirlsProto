@@ -410,9 +410,9 @@ int PLV_Node::getPuzzleNumber()
 void PLV_Node::setChild()
 {
 	int frame_type = 0;
-	if(puzzle_number > 1 && puzzle_number-1 > myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt))
+	if(puzzle_number > 1 && puzzle_number > mySGD->getOpenPuzzleCount())
 	{
-		if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number-1))
+		if(mySGD->getPuzzleHistory(puzzle_number-1).is_clear)
 		{
 			if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) > 0 && NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) > 0)
 				frame_type = 1;

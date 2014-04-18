@@ -92,7 +92,7 @@ bool NewMainFlowScene::init()
 		
 		have_card_count_for_puzzle_index.push_back(have_card_cnt);
 		
-		bool is_perfect_puzzle = !myDSH->getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, t_puzzle_number);
+		bool is_perfect_puzzle = !mySGD->getPuzzleHistory(t_puzzle_number).is_perfect;
 		
 		vector<PuzzlePiecePath> puzzle_path_info;
 		for(int j = start_stage;j<start_stage + stage_count;j++)
@@ -126,10 +126,15 @@ bool NewMainFlowScene::init()
 			}
 		}
 		
+		PuzzleHistory t_history = mySGD->getPuzzleHistory(t_puzzle_number);
+		bool is_changed_history = false;
+		
 		if(is_perfect_puzzle)
 		{
 			clear_is_first_perfect = true;
-			myDSH->setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, t_puzzle_number, true);
+			
+			is_changed_history = true;
+			t_history.is_perfect = true;
 		}
 		
 		struct t_PuzzlePiecePath{
@@ -144,7 +149,7 @@ bool NewMainFlowScene::init()
 		puzzle_piece_mode.push_back((int)kNewPuzzlePieceMode_default);
 		
 		
-		if(!myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, t_puzzle_number))
+		if(!mySGD->getPuzzleHistory(t_puzzle_number).is_clear)
 		{
 			bool is_all_clear_stage = true;
 			for(int j=start_stage;j<start_stage+stage_count && is_all_clear_stage;j++)
@@ -156,11 +161,36 @@ bool NewMainFlowScene::init()
 			if(is_all_clear_stage)
 			{
 				clear_is_first_puzzle_success = true;
-				myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, t_puzzle_number, true);
-				if(NSDS_GI(t_puzzle_number, kSDS_PZ_point_i) == 0 && NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i) == 0)
-					myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+				
+				is_changed_history = true;
+				t_history.is_clear = true;
+				
+				int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+				int next_puzzle_number = -1;
+				for(int k=1;k<=puzzle_count;k++)
+				{
+					int tt_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, k);
+					if(tt_puzzle_number == t_puzzle_number)
+					{
+						if(k+1 <= puzzle_count)
+						{
+							next_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, k+1);
+							break;
+						}
+					}
+				}
+				
+				if(next_puzzle_number != -1 && NSDS_GI(next_puzzle_number, kSDS_PZ_point_i) == 0 && NSDS_GI(next_puzzle_number, kSDS_PZ_ticket_i) == 0)
+				{
+					PuzzleHistory next_history = mySGD->getPuzzleHistory(next_puzzle_number);
+					next_history.is_open = true;
+					mySGD->setPuzzleHistory(next_history, nullptr);
+				}
 			}
 		}
+		
+		if(is_changed_history)
+			mySGD->setPuzzleHistory(t_history, nullptr);
 	}
 	
 	
@@ -176,7 +206,13 @@ bool NewMainFlowScene::init()
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) > 10000 || myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init || is_suitable_stage)
 	{
-		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+		int history_count = mySGD->getPuzzleHistorySize();
+		int open_puzzle_count = 0;
+		for(int i=0;i<history_count;i++)
+			if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+				open_puzzle_count++;
+		
+		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, open_puzzle_count);
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, t_puzzle_number);
 		
 		int t_puzzle_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
@@ -659,7 +695,12 @@ void NewMainFlowScene::hideClearPopup()
 	
 //	is_menu_enable = true;
 	int get_puzzle_number = NSDS_GI(mySD->getSilType(), kSDS_SI_puzzle_i);
-	int open_puzzle_count = myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1;
+	int history_count = mySGD->getPuzzleHistorySize();
+	int open_puzzle_count = 0;
+	for(int i=0;i<history_count;i++)
+		if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+			open_puzzle_count++;
+	
 	if(clear_is_first_puzzle_success)
 		open_puzzle_count--;
 	bool is_found = false;
@@ -1105,12 +1146,21 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 	buy_button->setFunction([=](CCObject* sender)
 							{
 								mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
-								myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+								
+								int history_count = mySGD->getPuzzleHistorySize();
+								int open_puzzle_count = 0;
+								for(int i=0;i<history_count;i++)
+									if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+										open_puzzle_count++;
+								
+								int tt_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, open_puzzle_count+1);
+								PuzzleHistory t_history = mySGD->getPuzzleHistory(tt_puzzle_number);
+								t_history.is_open = true;
+								mySGD->setPuzzleHistory(t_history, nullptr);
 								
 								vector<SaveUserData_Key> save_userdata_list;
 								
 								save_userdata_list.push_back(kSaveUserData_Key_star);
-								save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
 								
 								myDSH->saveUserData(save_userdata_list, nullptr);
 								
@@ -1383,7 +1433,13 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 	}
 	else
 	{
-		if(idx == 0 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= idx+1)
+		int history_count = mySGD->getPuzzleHistorySize();
+		int open_puzzle_count = 0;
+		for(int i=0;i<history_count;i++)
+			if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+				open_puzzle_count++;
+		
+		if(idx == 0 || open_puzzle_count >= idx+1)
 		{
 			int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 			
@@ -1451,7 +1507,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 				end_warp_ccbi.first->setPosition(end_warp_position);
 				t_img->addChild(end_warp_ccbi.first);
 				
-				if(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= idx+2)
+				if(mySGD->getOpenPuzzleCount() >= idx+2)
 				{
 					end_warp_ccbi.second->runAnimationsForSequenceNamed("opened");
 					CCSprite* n_end_warp = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));

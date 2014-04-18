@@ -813,8 +813,91 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
 			card_data_load_list.push_back(card_number);
 	}
+}
+
+int StarGoldData::getOpenPuzzleCount()
+{
+	int history_count = getPuzzleHistorySize();
+	int open_puzzle_count = 0;
+	for(int i=0;i<history_count;i++)
+		if(getPuzzleHistoryForIndex(i).is_open)
+			open_puzzle_count++;
+	return open_puzzle_count;
+}
+
+int StarGoldData::getPuzzleHistorySize()
+{
+	return int(puzzle_historys.size());
+}
+
+PuzzleHistory StarGoldData::getPuzzleHistoryForIndex(int t_index)
+{
+	return puzzle_historys[t_index];
+}
+
+PuzzleHistory StarGoldData::getPuzzleHistory(int puzzle_number)
+{
+	for(int i=0;i<puzzle_historys.size();i++)
+	{
+		if(puzzle_historys[i].puzzle_number == puzzle_number)
+			return puzzle_historys[i];
+	}
 	
-	myDSH->fFlush();
+	PuzzleHistory t_empty;
+	t_empty.puzzle_number = puzzle_number;
+	t_empty.is_open = false;
+	t_empty.is_clear = false;
+	t_empty.is_perfect = false;
+	t_empty.open_type = "";
+	return t_empty;
+}
+
+void StarGoldData::setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_back)
+{
+	bool is_found = false;
+	for(int i=0;i<puzzle_historys.size() && !is_found;i++)
+	{
+		if(puzzle_historys[i].puzzle_number == t_history.puzzle_number)
+		{
+			is_found = true;
+			puzzle_historys[i].is_open = t_history.is_open;
+			puzzle_historys[i].is_clear = t_history.is_clear;
+			puzzle_historys[i].is_perfect = t_history.is_perfect;
+			puzzle_historys[i].open_type = t_history.open_type;
+		}
+	}
+	
+	if(!is_found)
+		puzzle_historys.push_back(t_history);
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["puzzleNo"] = t_history.puzzle_number;
+	param["updateOpenDate"] = t_history.is_open;
+	param["updateClearDate"] = t_history.is_clear;
+	param["updatePerfectDate"] = t_history.is_perfect;
+	param["openType"] = t_history.open_type;
+	hspConnector::get()->command("updatePuzzleHistory", param, call_back);
+}
+
+void StarGoldData::initPuzzleHistory(Json::Value history_list)
+{
+	puzzle_historys.clear();
+	
+	int history_cnt = history_list.size();
+	
+	for(int i=0;i<history_cnt;i++)
+	{
+		Json::Value history_info = history_list[i];
+		
+		PuzzleHistory t_history;
+		t_history.puzzle_number = history_info["puzzleNo"].asInt();
+		t_history.is_open = history_info["openDate"].asInt64() != 0;
+		t_history.is_clear = history_info["clearDate"].asInt64() != 0;
+		t_history.is_perfect = history_info["perfectDate"].asInt64() != 0;
+		t_history.open_type = history_info["openType"].asString();
+		puzzle_historys.push_back(t_history);
+	}
 }
 
 bool StarGoldData::isEmptyAchieveNotiQueue()

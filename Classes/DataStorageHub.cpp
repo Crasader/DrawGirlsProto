@@ -262,10 +262,6 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	
 	else if(t_name == kDSH_Key_jackBaseSpeed)						return_value = "jbs";
 	
-	else if(t_name == kDSH_Key_openPuzzleCnt)						return_value = "opc";
-	else if(t_name == kDSH_Key_isClearedPuzzle_int1)				return_value = "icp%d";
-	else if(t_name == kDSH_Key_isPerfectPuzzle_int1)				return_value = "ipp%d";
-	
 	else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
 	else if(t_name == kDSH_Key_ticketUserId_int1)					return_value = "tui%d";
 	
@@ -403,15 +399,6 @@ void DataStorageHub::loadAllUserData (Json::Value result_data)
 	setIntegerForKey(kDSH_Key_allHighScore, data[getKey(kDSH_Key_allHighScore)].asInt(), false);
 	setIntegerForKey(kDSH_Key_selectedCard, data[getKey(kDSH_Key_selectedCard)].asInt(), false);
 	
-	int open_puzzle_cnt = data[getKey(kDSH_Key_openPuzzleCnt)].asInt();
-	
-	setIntegerForKey(kDSH_Key_openPuzzleCnt, open_puzzle_cnt, false);
-	for(int i=1;i<=open_puzzle_cnt+2 && i < data[getKey(kDSH_Key_isClearedPuzzle_int1)].size();i++)
-	{
-		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool(), false);
-		setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i, data[getKey(kDSH_Key_isPerfectPuzzle_int1)][i].asBool(), false);
-	}
-	
 	int have_ticket_cnt = data[getKey(kDSH_Key_haveTicketCnt)].asInt();
 	setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt, false);
 	for(int i=1;i<=have_ticket_cnt;i++)
@@ -544,16 +531,6 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	{
 		data[getKey(kDSH_Key_selectedCard)] = getIntegerForKey(kDSH_Key_selectedCard);
 	}
-	else if(t_key == kSaveUserData_Key_openPuzzle)
-	{
-		int open_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
-		data[getKey(kDSH_Key_openPuzzleCnt)] = open_puzzle_cnt;
-		for(int i=1;i<=open_puzzle_cnt+2;i++)
-		{
-			data[getKey(kDSH_Key_isClearedPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isClearedPuzzle_int1, i);
-			data[getKey(kDSH_Key_isPerfectPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i);
-		}
-	}
 	else if(t_key == kSaveUserData_Key_haveTicket)
 	{
 		int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
@@ -675,14 +652,6 @@ void DataStorageHub::resetDSH ()
 	}
 	
 	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
-	
-	int opened_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
-	for(int i=1;i<=opened_puzzle_cnt+2;i++)
-	{
-		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, false, false);
-		setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i, false, false);
-	}
-	setIntegerForKey(kDSH_Key_openPuzzleCnt, 0, false);
 	
 	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
 	for(int i=1;i<=have_ticket_cnt;i++)

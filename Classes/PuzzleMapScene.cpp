@@ -613,13 +613,9 @@ void PuzzleMapScene::setMapNode()
 	
 	if(is_puzzle_clear)
 	{
-		myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number, true);
-		
-		vector<SaveUserData_Key> save_userdata_list;
-		
-		save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-		
-		myDSH->saveUserData(save_userdata_list, nullptr);
+		PuzzleHistory t_history = mySGD->getPuzzleHistory(recent_puzzle_number);
+		t_history.is_clear = true;
+		mySGD->setPuzzleHistory(t_history, nullptr);
 	}
 	
 	touched_stage_number = 0;
@@ -3590,7 +3586,12 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 			
 			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
 				mySGD->setStar(mySGD->getStar() - NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i));
-				myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
+				
+				int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
+				PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
+				t_history.is_open = true;
+				mySGD->setPuzzleHistory(t_history, nullptr);
+				
 				map_mode_state = kMMS_changeMode;
 				removeChildByTag(kPMS_MT_buyPuzzle);
 				removeChildByTag(kPMS_MT_callTicket);
@@ -3600,7 +3601,6 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 				vector<SaveUserData_Key> save_userdata_list;
 				
 				save_userdata_list.push_back(kSaveUserData_Key_star);
-				save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
 				
 				myDSH->saveUserData(save_userdata_list, nullptr);
 				
@@ -4011,11 +4011,9 @@ void PuzzleMapScene::creatingPuzzle()
 		
 		if(is_puzzle_clear)
 		{
-			myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number, true);
-			
-			vector<SaveUserData_Key> save_userdata_list;
-			save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-			myDSH->saveUserData(save_userdata_list, nullptr);
+			PuzzleHistory t_history = mySGD->getPuzzleHistory(recent_puzzle_number);
+			t_history.is_clear = true;
+			mySGD->setPuzzleHistory(t_history, nullptr);
 		}
 	}
 
@@ -4150,9 +4148,9 @@ CCNode* PuzzleMapScene::createMapNode()
 	}
 	else
 	{
-		if(recent_puzzle_number-1 > myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt))
+		if(recent_puzzle_number > mySGD->getOpenPuzzleCount())
 		{
-			if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, recent_puzzle_number-1))
+			if(mySGD->getPuzzleHistory(recent_puzzle_number-1).is_clear)
 			{
 				if(NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i) == 0 || NSDS_GI(recent_puzzle_number, kSDS_PZ_ticket_i) == 0)
 				{

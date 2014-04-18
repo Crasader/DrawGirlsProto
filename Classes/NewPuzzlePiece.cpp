@@ -29,7 +29,7 @@ void NewPuzzlePiece::myInit(int t_stage_number, function<void(int)> t_clicked_fu
 	clicked_func = t_clicked_func;
 	
 	int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
-	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+	if(puzzle_number == 1 || mySGD->getOpenPuzzleCount() >= puzzle_number)
 	{
 		is_open_puzzle = true;
 		recent_mode = t_init_mode; // kNewPuzzlePieceMode_default or kNewPuzzlePieceMode_thumbnail or kNewPuzzlePieceMode_ranker

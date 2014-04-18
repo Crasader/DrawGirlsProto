@@ -897,7 +897,7 @@ void PuzzleScene::setPuzzle()
 	
 	unlock_cover = NULL;
 	
-	clear_is_first_perfect = !myDSH->getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number);
+	clear_is_first_perfect = !mySGD->getPuzzleHistory(puzzle_number).is_perfect;
 	
 	for(int i=0;i<20;i++)
 	{
@@ -1032,15 +1032,17 @@ void PuzzleScene::setPuzzle()
 	
 	clear_is_first_puzzle_success = false;
 	
-	if(is_puzzle_clear && !myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number))
+	if(is_puzzle_clear && !mySGD->getPuzzleHistory(puzzle_number).is_clear)
 	{
 		clear_is_first_puzzle_success = true;
 		
-		if(clear_is_first_perfect)
-			myDSH->setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number, true);
+		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
 		
-		myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number, true);
-		myDSH->saveUserData({kSaveUserData_Key_openPuzzle}, nullptr);
+		if(clear_is_first_perfect)
+			t_history.is_perfect = true;
+		
+		t_history.is_clear = true;
+		mySGD->setPuzzleHistory(t_history, nullptr);
 	}
 	
 	if(must_be_change_selected_stage_number && enable_stage_number != -1) // 현재 선택된 스테이지가 선택 불가 스테이지라면

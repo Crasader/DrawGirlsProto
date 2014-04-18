@@ -169,6 +169,10 @@ void TitleRenewalScene::successLogin()
 	shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
 	command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
 	
+	Json::Value puzzlelist_param;
+	puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
+	command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
+	
 	Json::Value userdata_param;
 	userdata_param["memberID"] = hspConnector::get()->getKakaoID();
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
@@ -176,6 +180,10 @@ void TitleRenewalScene::successLogin()
 	Json::Value card_param;
 	card_param["memberID"] = hspConnector::get()->getKakaoID();
 	command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
+	
+	Json::Value puzzle_param;
+	puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+	command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
 	
 	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
@@ -186,10 +194,6 @@ void TitleRenewalScene::successLogin()
 	Json::Value monster_param;
 	monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
 	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
-	
-	Json::Value puzzlelist_param;
-	puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
-	command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
@@ -711,12 +715,71 @@ void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* card_label = CCLabelTTF::create("fail getcardhistory", mySGD->getFont().c_str(), 10);
-		card_label->setPosition(ccp(200, myDSH->ui_top-30));
-		addChild(card_label);
+//		CCLabelTTF* card_label = CCLabelTTF::create("fail getcardhistory", mySGD->getFont().c_str(), 10);
+//		card_label->setPosition(ccp(200, myDSH->ui_top-30));
+//		addChild(card_label);
 		Json::Value card_param;
 		card_param["memberID"] = hspConnector::get()->getKakaoID();
 		command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		if(result_data["list"].size() == 0)
+		{
+			is_receive_fail = true;
+			Json::Value puzzle_param;
+			puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+			puzzle_param["puzzleNo"] = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1);
+			puzzle_param["updateOpenDate"] = true;
+			puzzle_param["openType"] = "무료";
+			command_list.push_back(CommandParam("updatePuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultUpdatePuzzleHistory)));
+		}
+		else
+		{
+			mySGD->initPuzzleHistory(result_data["list"]);
+		}
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value puzzle_param;
+		puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultUpdatePuzzleHistory(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		is_receive_fail = true;
+		Json::Value puzzle_param;
+		puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value puzzle_param;
+		puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+		puzzle_param["puzzleNo"] = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1);
+		puzzle_param["updateOpenDate"] = true;
+		puzzle_param["openType"] = "무료";
+		command_list.push_back(CommandParam("updatePuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultUpdatePuzzleHistory)));
 	}
 	
 	receive_cnt--;
@@ -938,51 +1001,51 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_y_d, start_stage+j, coordinateInfo_list[j]["y"].asInt(), false);
 				}
 				
-				if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
-				{
-					if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != puzzle_list[i]["map"]["image"].asString())
-					{
-						DownloadFile t_df;
-						t_df.size = puzzle_list[i]["map"]["size"].asInt();
-						t_df.img = puzzle_list[i]["map"]["image"].asString().c_str();
-						t_df.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "map")->getCString();
-						t_df.key = "map";
-						puzzle_download_list.push_back(t_df);
-						puzzle_download_list_puzzle_number.push_back(puzzle_number);
-					}
-					if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != puzzle_list[i]["center"]["image"].asString())
-					{
-						// check, after download ----------
-						DownloadFile t_df;
-						t_df.size = puzzle_list[i]["center"]["size"].asInt();
-						t_df.img = puzzle_list[i]["center"]["image"].asString().c_str();
-						t_df.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "center")->getCString();
-						t_df.key = "center";
-						puzzle_download_list.push_back(t_df);
-						puzzle_download_list_puzzle_number.push_back(puzzle_number);
-						// ================================
-					}
-					if(NSDS_GS(puzzle_number, kSDS_PZ_original_s) != puzzle_list[i]["original"]["image"].asString())
-					{
-						DownloadFile t_cut;
-						t_cut.size = puzzle_list[i]["original"]["size"].asInt();
-						t_cut.img = puzzle_list[i]["original"]["image"].asString().c_str();
-						t_cut.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "original")->getCString();
-						t_cut.key = "original";
-						puzzle_download_list.push_back(t_cut);
-						puzzle_download_list_puzzle_number.push_back(puzzle_number);
-					}
-					if(NSDS_GS(puzzle_number, kSDS_PZ_face_s) != puzzle_list[i]["face"]["image"].asString())
-					{
-						DownloadFile t_cut;
-						t_cut.size = puzzle_list[i]["face"]["size"].asInt();
-						t_cut.img = puzzle_list[i]["face"]["image"].asString().c_str();
-						t_cut.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "face")->getCString();
-						t_cut.key = "face";
-						puzzle_download_list.push_back(t_cut);
-						puzzle_download_list_puzzle_number.push_back(puzzle_number);
-					}
-				}
+//				if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+//				{
+//					if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != puzzle_list[i]["map"]["image"].asString())
+//					{
+//						DownloadFile t_df;
+//						t_df.size = puzzle_list[i]["map"]["size"].asInt();
+//						t_df.img = puzzle_list[i]["map"]["image"].asString().c_str();
+//						t_df.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "map")->getCString();
+//						t_df.key = "map";
+//						puzzle_download_list.push_back(t_df);
+//						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+//					}
+//					if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != puzzle_list[i]["center"]["image"].asString())
+//					{
+//						// check, after download ----------
+//						DownloadFile t_df;
+//						t_df.size = puzzle_list[i]["center"]["size"].asInt();
+//						t_df.img = puzzle_list[i]["center"]["image"].asString().c_str();
+//						t_df.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "center")->getCString();
+//						t_df.key = "center";
+//						puzzle_download_list.push_back(t_df);
+//						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+//						// ================================
+//					}
+//					if(NSDS_GS(puzzle_number, kSDS_PZ_original_s) != puzzle_list[i]["original"]["image"].asString())
+//					{
+//						DownloadFile t_cut;
+//						t_cut.size = puzzle_list[i]["original"]["size"].asInt();
+//						t_cut.img = puzzle_list[i]["original"]["image"].asString().c_str();
+//						t_cut.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "original")->getCString();
+//						t_cut.key = "original";
+//						puzzle_download_list.push_back(t_cut);
+//						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+//					}
+//					if(NSDS_GS(puzzle_number, kSDS_PZ_face_s) != puzzle_list[i]["face"]["image"].asString())
+//					{
+//						DownloadFile t_cut;
+//						t_cut.size = puzzle_list[i]["face"]["size"].asInt();
+//						t_cut.img = puzzle_list[i]["face"]["image"].asString().c_str();
+//						t_cut.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, "face")->getCString();
+//						t_cut.key = "face";
+//						puzzle_download_list.push_back(t_cut);
+//						puzzle_download_list_puzzle_number.push_back(puzzle_number);
+//					}
+//				}
 				
 				mySDS->fFlush(puzzle_list[i]["order"].asInt(), kSDS_PZ_base);
 				

@@ -183,7 +183,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 					{
 						string t_friend_id = puzzleTicket[t_i]["friendID"].asString();
 						int t_puzzle_number = puzzleTicket[t_i]["puzzlenumber"].asInt();
-						if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, t_puzzle_number-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == t_puzzle_number) {
+						if(mySGD->getPuzzleHistory(t_puzzle_number-1).is_clear && !mySGD->getPuzzleHistory(t_puzzle_number).is_open) {
 							bool good_ticket = true;
 							int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 							for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
@@ -206,11 +206,6 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 																																				 NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i))->getCString());
 								}
 								if(need_ticket_cnt <= have_ticket_cnt) {
-									// open 퍼즐
-									myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-									vector<SaveUserData_Key> save_userdata_list;
-									save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-									myDSH->saveUserData(save_userdata_list, nullptr);
 									
 									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
 									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_callTicket);
@@ -1389,7 +1384,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
-																						 if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, contentObj["puzzlenumber"].asInt()-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == contentObj["puzzlenumber"].asInt()) {
+																						 if(mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()-1).is_clear && !mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()).is_open) {
 																							 bool good_ticket = true;
 																							 int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 																							 for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
@@ -1412,12 +1407,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																																					NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i))->getCString());
 																								 }
 																								 if(need_ticket_cnt <= have_ticket_cnt) {
-																									 // open 퍼즐
-																									 myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-																									 vector<SaveUserData_Key> save_userdata_list;
-																									 save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-																									 myDSH->saveUserData(save_userdata_list, nullptr);
-
+																									 
 																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
 																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_callTicket);
 																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_ticketCnt);

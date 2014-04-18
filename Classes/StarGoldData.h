@@ -80,6 +80,15 @@ public:
 	string user_ment;
 };
 
+class PuzzleHistory{
+public:
+	int puzzle_number;
+	bool is_open;
+	bool is_clear;
+	bool is_perfect;
+	string open_type;
+};
+
 enum ReplayKey
 {
 	kReplayKey_timeStamp = 0,
@@ -233,6 +242,12 @@ public:
 	void resetHasGottenCards();
 	void initTakeCardInfo(Json::Value card_list, vector<int>& card_data_load_list);
 	
+	int getOpenPuzzleCount();
+	int getPuzzleHistorySize();
+	PuzzleHistory getPuzzleHistoryForIndex(int t_index);
+	PuzzleHistory getPuzzleHistory(int puzzle_number);
+	void setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_back);
+	void initPuzzleHistory(Json::Value history_list);
 	
 	void setClearRewardGold(int t_reward)
 	{
@@ -431,6 +446,7 @@ private:
 	deque<bool> before_use_item;
 	deque<bool> is_using_item;
 	deque<CardSortInfo> has_gotten_cards;
+	deque<PuzzleHistory> puzzle_historys;
 	
 	bool is_tutorial_cleared;
 	ImgType after_loading;
