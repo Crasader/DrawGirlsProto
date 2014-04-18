@@ -495,6 +495,20 @@ void MainFlowScene::cellAction(CCObject* sender)
 		
 		if(tag < kMainFlowTableCellTag_buyBase)
 		{
+			CCSprite* black_img = CCSprite::create("mainflow_puzzle_lock_black.png");
+			black_img->setPosition(CCPointZero);
+			black_img->setOpacity(100);
+			CCNode* cell_node = ((CCNode*)sender)->getParent()->getParent();
+			cell_node->addChild(black_img);
+			
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			CCBReader* reader = new CCBReader(nodeLoader);
+			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+			loading_progress_img->setPosition(ccp(0,0));
+			cell_node->addChild(loading_progress_img);
+			reader->release();
+			
+			
 			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
 			
@@ -716,7 +730,16 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		}
 		else
 		{
-			CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base.png");
+			int before_close_count = 0;
+			int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+			for(int i=1;i<=puzzle_count && before_close_count < 3;i++)
+			{
+				PuzzleHistory t_history = mySGD->getPuzzleHistory(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i));
+				if(t_history.puzzle_number < puzzle_number && !t_history.is_clear)
+					before_close_count++;
+			}
+			
+			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", before_close_count)->getCString());
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 		}

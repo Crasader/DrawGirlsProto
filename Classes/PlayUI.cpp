@@ -1393,6 +1393,8 @@ bool PlayUI::beRevivedJack ()
 			}));
 		}
 		
+		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+		
 		return true;
 	}
 	else
@@ -1411,6 +1413,9 @@ bool PlayUI::beRevivedJack ()
 			item_bonus_label->runAction(t_seq);
 			
 			is_used_heartUpItem = true;
+			
+			AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+			
 			return true;
 		}
 		else

@@ -31,6 +31,7 @@ private:
 	
 	bool is_menu_enable;
 	
+	CCNode* show_node;
 	
 	void menuAction(CCObject* sender);
 	

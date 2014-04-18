@@ -612,7 +612,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int stage_card_count = 4;//NSDS_GI(found_stage1, kSDS_SI_cardCount_i);
 			for(int i=1;i<=stage_card_count;i++)
 			{
-				int card_number = mySGD->isHasGottenCards(found_stage1, i);
+				int card_number = mySGD->isHasGottenCards(NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i));
 				CCPoint card_position = ccp(100.f + (i-1)*(81.f), 50.f);
 				if(card_number > 0)
 				{

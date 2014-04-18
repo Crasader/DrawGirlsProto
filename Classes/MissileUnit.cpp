@@ -107,7 +107,7 @@ void MissileUnit::move ()
 		{
 			is_checking = false;
 			//				if(mySGD->getIsHard() || myGD->getJackState())
-			if(myGD->getJackState())
+			if(myGD->getJackState() && !myGD->getCommunicationBool("PM_isShortLine"))
 			{
 				myGD->communication("CP_jackCrashDie");
 				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -134,13 +134,15 @@ void MissileUnit::move ()
 				IntPoint t = ccp2ip(t2);
 				if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
 				{
-					myGD->communication("PM_addPathBreaking", t);
+					if(!myGD->getCommunicationBool("PM_isShortLine"))
+						myGD->communication("PM_addPathBreaking", t);
 				}
 			}
 			IntPoint t = ccp2ip(p_p);
 			if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
 			{
-				myGD->communication("PM_addPathBreaking", t);
+				if(!myGD->getCommunicationBool("PM_isShortLine"))
+					myGD->communication("PM_addPathBreaking", t);
 			}
 		}
 	}
@@ -234,7 +236,7 @@ void MissileUnit2::move ()
 		if(missile_rect.containsPoint(jackPosition))
 		{
 			is_checking = false;
-			if(myGD->getJackState())
+			if(myGD->getJackState() && !myGD->getCommunicationBool("PM_isShortLine"))
 			{
 				myGD->communication("CP_jackCrashDie");
 				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -4267,7 +4269,7 @@ void MathmaticalMissileUnit::move (float dt)
 		{
 			m_isChecking = false;
 			//				if(mySGD->getIsHard() || myGD->getJackState())
-			if(myGD->getJackState())
+			if(myGD->getJackState() && !myGD->getCommunicationBool("PM_isShortLine"))
 			{
 				myGD->communication("CP_jackCrashDie");
 				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -4293,14 +4295,16 @@ void MathmaticalMissileUnit::move (float dt)
 				CCLog("%d %d", t.x, t.y);
 				if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
 				{
-					myGD->communication("PM_addPathBreaking", t);
+					if(!myGD->getCommunicationBool("PM_isShortLine"))
+						myGD->communication("PM_addPathBreaking", t);
 				}
 				
 			}
 			IntPoint t = ccp2ip(p_p);
 			if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
 			{
-				myGD->communication("PM_addPathBreaking", t);
+				if(!myGD->getCommunicationBool("PM_isShortLine"))
+					myGD->communication("PM_addPathBreaking", t);
 			}
 		}
 		//			//##

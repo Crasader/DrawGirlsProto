@@ -670,8 +670,11 @@ void KSCircleBase::update( float dt )
 							if(IntPoint(x, y).isInnerMap() &&
 								mapState[x][y] == mapType::mapNewline)
 							{
-								myGD->communication("PM_addPathBreaking", IntPoint(x, y));
-								goto end;
+								if(!myGD->getCommunicationBool("PM_isShortLine"))
+								{
+									myGD->communication("PM_addPathBreaking", IntPoint(x, y));
+									goto end;
+								}
 							}
 						}
 					}

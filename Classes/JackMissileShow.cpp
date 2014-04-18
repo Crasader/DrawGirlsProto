@@ -8,6 +8,7 @@
 
 #include "JackMissileShow.h"
 #include "AudioEngine.h"
+#include "ASMotionStreak.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -844,7 +845,7 @@ void JM_BasicMissileShow::realInit (CCNode * t_target, int jm_type, float missil
 	if(directionAngle >= 180.f)
 		directionAngle -= 360.f;
 	
-	streak_img = CCMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+	streak_img = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
 	streak_img->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	streak_img->setPosition(particlePosition);
 	addChild(streak_img);
