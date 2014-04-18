@@ -34,6 +34,7 @@
 #include "DiaryZoomPopup.h"
 #include "StartSettingPopup.h"
 #include "LoadingLayer.h"
+#include "KSLabelTTF.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -383,18 +384,12 @@ bool PuzzleScene::init()
 	
 	setTop();
 	right_case = NULL;
+	right_body = NULL;
+	ready_menu = NULL;
+	right_mode = kPuzzleRightMode_stage;
+	saved_ranking_stage_number = -1;
+	loading_progress_img = NULL;
 	setRight();
-	
-	CCSprite* n_ready = CCSprite::create("puzzle_right_ready.png");
-	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
-	s_ready->setColor(ccGRAY);
-	
-	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(PuzzleScene::menuAction));
-	ready_item->setTag(kPuzzleMenuTag_start);
-	
-	ready_menu = CCMenu::createWithItem(ready_item);
-	ready_menu->setPosition(ccp(480-65-6,28+8));
-	addChild(ready_menu, kPuzzleZorder_top);
 	
 	is_menu_enable = true;
 	
@@ -1584,73 +1579,372 @@ void PuzzleScene::rightBacking()
 
 void PuzzleScene::setRight()
 {
-	if(right_case)
+	if(!right_case)
 	{
-		right_case->removeFromParent();
-		right_case = NULL;
+		right_case = CCNode::create();
+		right_case->setPosition(ccp(480,puzzle_node->getPositionY()));
+		addChild(right_case, kPuzzleZorder_right);
 	}
 	
-	right_case = CCNode::create();
-	right_case->setPosition(ccp(480,puzzle_node->getPositionY()));
-	addChild(right_case, kPuzzleZorder_right);
+	if(right_body)
+	{
+		right_body->removeFromParent();
+		right_body = NULL;
+	}
 	
-	CCSprite* right_body = CCSprite::create("puzzle_right_body.png");
+	right_body = CCScale9Sprite::create("puzzle_right_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	right_body->setContentSize(CCSizeMake(130, 280));
+//	CCSprite* right_body = CCSprite::create("puzzle_right_body.png");
 	right_body->setPosition(ccp(-right_body->getContentSize().width/2.f-6, -1));
 	right_case->addChild(right_body);
 	
-	CCLabelTTF* stage_label = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", selected_stage_number)->getCString(),
-												 mySGD->getFont().c_str(), 12);
-	stage_label->setPosition(ccp(right_body->getContentSize().width/2.f,right_body->getContentSize().height-23));
-	right_body->addChild(stage_label);
-	
-	bool is_have_card_list[4] = {false,};
-	
-	int stage_card_count = NSDS_GI(selected_stage_number, kSDS_SI_cardCount_i);
-	for(int i=1;i<=stage_card_count && i <= 4;i++)
+	if(right_mode == kPuzzleRightMode_stage)
 	{
-		int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
-		is_have_card_list[i-1] = mySGD->isHasGottenCards(step_card_number) > 0;
+		bool is_have_card_list[4] = {false,};
 		
-		CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-62-(i-1)*45);
-		
-		if(is_have_card_list[i-1])
+		int stage_card_count = NSDS_GI(selected_stage_number, kSDS_SI_cardCount_i);
+		for(int i=1;i<=stage_card_count && i <= 4;i++)
 		{
-			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("puzzle_right_sumcrop.png"));
-			t_clipping->setPosition(step_position);
-			right_body->addChild(t_clipping);
+			int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
+			is_have_card_list[i-1] = mySGD->isHasGottenCards(step_card_number) > 0;
 			
-			t_clipping->setAlphaThreshold(0.1f);
+			CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-(i-1)*46.5f);
 			
-			CCSprite* t_inner = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", step_card_number)->getCString()));
-			t_inner->setScale(0.4f);
-			t_clipping->addChild(t_inner);
-			
-			int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
-			for(int j=0;j<card_rank;j++)
+			if(is_have_card_list[i-1])
 			{
-				CCSprite* t_star = CCSprite::create("puzzle_right_staron.png");
-				t_star->setPosition(ccpAdd(step_position, ccp(-43.5f+j*13.5f,9.5f)));
-				right_body->addChild(t_star);
+				CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("puzzle_right_sumcrop.png"));
+				t_clipping->setPosition(step_position);
+				right_body->addChild(t_clipping);
+				
+				t_clipping->setAlphaThreshold(0.1f);
+				
+				CCSprite* t_inner = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", step_card_number)->getCString()));
+				t_inner->setScale(0.4f);
+				t_clipping->addChild(t_inner);
+				
+				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
+				for(int j=0;j<card_rank;j++)
+				{
+					CCSprite* t_star = CCSprite::create("puzzle_right_staron.png");
+					t_star->setPosition(ccpAdd(step_position, ccp(-43.5f+j*13.5f,10)));
+					right_body->addChild(t_star);
+				}
+				
+				CommonButton* show_img = CommonButton::create("보기", 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
+				show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
+				show_img->setFunction([=](CCObject* sender)
+									  {
+										  if(!is_menu_enable)
+											  return;
+										  
+										  is_menu_enable = false;
+										  
+										  mySGD->selected_collectionbook = step_card_number;
+										  
+										  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
+										  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+										  t_popup->is_before_no_diary = true;
+										  addChild(t_popup, kPuzzleZorder_popup);
+									  });
+				right_body->addChild(show_img);
+			}
+			else
+			{
+				CCSprite* t_back = CCSprite::create("puzzle_right_lock.png");
+				t_back->setPosition(step_position);
+				right_body->addChild(t_back);
+				
+				string condition_string;
+				if(i == 1)
+					condition_string = "땅 85%";
+				else if(i == 2)
+					condition_string = "땅 85% + 체인지";
+				else if(i == 3)
+					condition_string = "땅 100%";
+				else
+					condition_string = "땅 100% + 체인지";
+				
+				KSLabelTTF* condition_label = KSLabelTTF::create(condition_string.c_str(), mySGD->getFont().c_str(), 10);
+				condition_label->setAnchorPoint(ccp(0.f,0.5f));
+				condition_label->setPosition(ccp(8,15));
+				t_back->addChild(condition_label);
+				
+				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
+				for(int j=0;j<card_rank;j++)
+				{
+					CCSprite* t_star = CCSprite::create("puzzle_right_staroff.png");
+					t_star->setPosition(ccpAdd(step_position, ccp(-43.5f+j*13.5f,10)));
+					right_body->addChild(t_star);
+				}
+			}
+		}
+	}
+	else if(right_mode == kPuzzleRightMode_ranking)
+	{
+		if(saved_ranking_stage_number == -1 || saved_ranking_stage_number != selected_stage_number)
+		{
+			if(!loading_progress_img)
+			{
+				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+				CCBReader* reader = new CCBReader(nodeLoader);
+				loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+				loading_progress_img->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
+				right_body->addChild(loading_progress_img);
+				reader->release();
 			}
 			
-			CommonButton* show_img = CommonButton::create("보기", 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
-			show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
-			show_img->setFunction([=](CCObject* sender)
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getKakaoID();
+			param["stageNo"] = selected_stage_number;
+			hspConnector::get()->command("getstagerankbyalluser", param, json_selector(this, PuzzleScene::resultGetRank));
+		}
+		else
+		{
+			resultGetRank(saved_ranking_data);
+		}
+	}
+	
+	if(ready_menu)
+	{
+		ready_menu->removeFromParent();
+		ready_menu = NULL;
+	}
+	
+	CCSprite* n_ready = CCSprite::create("puzzle_right_ready.png");
+	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", selected_stage_number)->getCString(),
+												 mySGD->getFont().c_str(), 12);
+	n_stage->setColor(ccBLACK);
+	n_stage->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+13));
+	n_ready->addChild(n_stage);
+	
+	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
+	s_ready->setColor(ccGRAY);
+	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", selected_stage_number)->getCString(),
+												 mySGD->getFont().c_str(), 12);
+	s_stage->setColor(ccBLACK);
+	s_stage->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+13));
+	s_ready->addChild(s_stage);
+	
+	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(PuzzleScene::menuAction));
+	ready_item->setTag(kPuzzleMenuTag_start);
+	
+	ready_menu = CCMenu::createWithItem(ready_item);
+	ready_menu->setPosition(ccp(-65-6,-puzzle_node->getPositionY()+28+8));
+	right_case->addChild(ready_menu);
+	
+	setRightTopButton();
+}
+
+void PuzzleScene::resultGetRank(Json::Value result_data)
+{
+	if(loading_progress_img)
+	{
+		loading_progress_img->removeFromParent();
+		loading_progress_img = NULL;
+	}
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		saved_ranking_data = result_data;
+		saved_ranking_stage_number = result_data["stageNo"].asInt();
+		Json::Value user_list = result_data["list"];
+		
+		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
+		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,220));
+		right_body->addChild(graph_back);
+		
+		int alluser = result_data["alluser"].asInt();
+		int myrank = result_data["myrank"].asInt();
+		
+		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
+		all_user_label->setColor(ccc3(255, 50, 50));
+		all_user_label->setAnchorPoint(ccp(1,0.5));
+		all_user_label->setPosition(ccp(right_body->getContentSize().width-10, 204));
+		right_body->addChild(all_user_label);
+		
+		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat("나의 위치 %d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		my_rank_label->setAnchorPoint(ccp(1,0.5));
+		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
+		right_body->addChild(my_rank_label);
+		
+		float rank_percent = 1.f*myrank/alluser;
+		
+		CCSprite* rank_percent_case = CCSprite::create("puzzle_rank_percent.png");
+		rank_percent_case->setAnchorPoint(ccp(0.5,0));
+		rank_percent_case->setPosition(ccp(10+115,220));
+		right_body->addChild(rank_percent_case);
+		
+		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 11);
+		percent_label->setColor(ccc3(255, 170, 20));
+		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
+		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
+		rank_percent_case->addChild(percent_label);
+		
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,220));
+		rank_percent_case->runAction(t_move);
+		
+//		delay_index = 0;
+		int limit_count = 3;
+		for(int i=0;i<user_list.size() && i<limit_count;i++)
+		{
+			string case_name;
+			if(myrank == i+1)
+			{
+				case_name = "mainpopup_pupple1.png";
+				limit_count++;
+			}
+			else
+			{
+				case_name = "rank_normal.png";
+			}
+			
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+			list_cell_case->setContentSize(CCSizeMake(125, 40));
+			list_cell_case->setPosition(ccp(right_body->getContentSize().width/2.f,180-i*34.5f));
+			right_body->addChild(list_cell_case);
+			
+			CCPoint rank_position = ccp(20,20);
+			if(i == 0)
+			{
+				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
+				gold_medal->setPosition(rank_position);
+				list_cell_case->addChild(gold_medal);
+			}
+			else if(i == 1)
+			{
+				CCSprite* silver_medal = CCSprite::create("rank_silver.png");
+				silver_medal->setPosition(rank_position);
+				list_cell_case->addChild(silver_medal);
+			}
+			else if(i == 2)
+			{
+				CCSprite* bronze_medal = CCSprite::create("rank_bronze.png");
+				bronze_medal->setPosition(rank_position);
+				list_cell_case->addChild(bronze_medal);
+			}
+			else
+			{
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
+				rank_label->enableOuterStroke(ccBLACK, 1);
+				rank_label->setPosition(rank_position);
+				list_cell_case->addChild(rank_label);
+			}
+			
+			Json::Reader reader;
+			Json::Value read_data;
+			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
+			
+			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
+			nick_label->setPosition(ccp(78,28));
+			list_cell_case->addChild(nick_label);
+			
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setColor(ccc3(255, 170, 20));
+			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+			score_label->setPosition(ccp(78,12));
+			list_cell_case->addChild(score_label);
+			
+//			CCPoint original_position = list_cell_case->getPosition();
+//			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+//			
+//			cell_action_list.push_back([=](){
+//				CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
+//				CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
+//				CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+//				list_cell_case->runAction(t_seq);
+//				delay_index++;
+//			});
+		}
+		
+		if(myrank > 3)
+		{
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+			list_cell_case->setContentSize(CCSizeMake(125, 40));
+			list_cell_case->setPosition(ccp(right_body->getContentSize().width/2.f,180-3*34.5f));
+			right_body->addChild(list_cell_case);
+			
+			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 12);
+			rank_label->enableOuterStroke(ccBLACK, 1);
+			rank_label->setPosition(ccp(20,20));
+			list_cell_case->addChild(rank_label);
+			
+			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
+			nick_label->setPosition(ccp(78,28));
+			list_cell_case->addChild(nick_label);
+			
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",result_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setColor(ccc3(255, 170, 20));
+			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+			score_label->setPosition(ccp(78,12));
+			list_cell_case->addChild(score_label);
+			
+//			CCPoint original_position = list_cell_case->getPosition();
+//			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+//			
+//			cell_action_list.push_back([=](){
+//				CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
+//				CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
+//				CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+//				list_cell_case->runAction(t_seq);
+//			});
+		}
+	}
+	else
+	{
+		CCLabelTTF* fail_label = CCLabelTTF::create("랭킹 정보 확인 실패", mySGD->getFont().c_str(), 12);
+		fail_label->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
+		right_body->addChild(fail_label);
+	}
+}
+
+void PuzzleScene::setRightTopButton()
+{
+	if(!stage_button)
+	{
+		stage_button = CommonButton::create("스테이지", 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
+		stage_button->setPosition(ccp(-65-6-29, 118.5f));
+		right_case->addChild(stage_button, 5);
+		stage_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		stage_button->setFunction([=](CCObject* sender)
 								  {
 									  if(!is_menu_enable)
 										  return;
-									  
-									  is_menu_enable = false;
-									  
-									  mySGD->selected_collectionbook = step_card_number;
-									  
-									  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
-									  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-									  t_popup->is_before_no_diary = true;
-									  addChild(t_popup, kPuzzleZorder_popup);
+									  right_mode = kPuzzleRightMode_stage;
+									  setRight();
 								  });
-			right_body->addChild(show_img);
-		}
+	}
+	if(!ranking_button)
+	{
+		ranking_button = CommonButton::create("랭킹", 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
+		ranking_button->setPosition(ccp(-65-6+29, 118.5f));
+		right_case->addChild(ranking_button, 5);
+		ranking_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		ranking_button->setFunction([=](CCObject* sender)
+								  {
+									  if(!is_menu_enable)
+										  return;
+									  right_mode = kPuzzleRightMode_ranking;
+									  setRight();
+								  });
+	}
+	
+	if(right_mode == kPuzzleRightMode_stage)
+	{
+		stage_button->setEnabled(false);
+		ranking_button->setEnabled(true);
+		
+		right_case->reorderChild(stage_button, 6);
+		right_case->reorderChild(ranking_button, 5);
+	}
+	else
+	{
+		ranking_button->setEnabled(false);
+		stage_button->setEnabled(true);
+		
+		right_case->reorderChild(stage_button, 5);
+		right_case->reorderChild(ranking_button, 6);
 	}
 }
 

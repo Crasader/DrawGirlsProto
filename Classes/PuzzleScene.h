@@ -30,7 +30,13 @@ enum PuzzleZorder{
 	kPuzzleZorder_popup
 };
 
+enum PuzzleRightMode{
+	kPuzzleRightMode_stage = 0,
+	kPuzzleRightMode_ranking
+};
+
 class RankFriendInfo;
+class CommonButton;
 class PuzzleScene : public CCLayer
 {
 public:
@@ -45,6 +51,11 @@ public:
 	
 	HeartTime* heart_time;
 	CCNode* tutorial_node;
+	
+	virtual ~PuzzleScene()
+	{
+		hspConnector::get()->removeTarget(this);
+	}
 private:
 	
 	int keep_card_number;
@@ -120,12 +131,25 @@ private:
 	void topBacking();
 	void setTop();
 	
+	CommonButton* stage_button;
+	CommonButton* ranking_button;
+	void setRightTopButton();
+	
 	CCMenu* ready_menu;
 	
 	void rightOpenning();
 	void rightBacking();
 	void setRight();
 	CCNode* right_case;
+	
+	CCSprite* loading_progress_img;
+	void resultGetRank(Json::Value result_data);
+	
+	CCScale9Sprite* right_body;
+	
+	PuzzleRightMode right_mode;
+	int saved_ranking_stage_number;
+	Json::Value saved_ranking_data;
 	
 	void countingMessage();
 	
