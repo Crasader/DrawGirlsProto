@@ -1694,6 +1694,7 @@ void PuzzleScene::setRight()
 			}
 			
 			Json::Value param;
+			param["memberID"] = hspConnector::get()->getKakaoID();
 			param["stageNo"] = selected_stage_number;
 			hspConnector::get()->command("getstagerankbyalluser", param, json_selector(this, PuzzleScene::resultGetRank));
 		}

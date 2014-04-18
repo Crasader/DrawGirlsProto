@@ -157,16 +157,16 @@ bool FailPopup::init()
 //	}
 	
 	
-	Json::Value p;
-	p["memberID"]=hspConnector::get()->getKakaoID();
-	p["score"]=int(mySGD->getScore());
-	p["stageNo"]=mySD->getSilType();
-	Json::Value p_data;
-	p_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-	Json::FastWriter p_data_writer;
-	p["data"] = p_data_writer.write(p_data);
-	
-	send_command_list.push_back(CommandParam("setStageScore",p,nullptr));
+//	Json::Value p;
+//	p["memberID"]=hspConnector::get()->getKakaoID();
+//	p["score"]=int(mySGD->getScore());
+//	p["stageNo"]=mySD->getSilType();
+//	Json::Value p_data;
+//	p_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+//	Json::FastWriter p_data_writer;
+//	p["data"] = p_data_writer.write(p_data);
+//	
+//	send_command_list.push_back(CommandParam("setStageScore",p,nullptr));
 	
 	
 //	int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
@@ -450,6 +450,7 @@ bool FailPopup::init()
 	Json::Value param2;
 	param2["myScore"]=int(mySGD->getScore());
 	param2["stageNo"]=mySD->getSilType();
+	param2["memberID"] = hspConnector::get()->getKakaoID();
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
 	
