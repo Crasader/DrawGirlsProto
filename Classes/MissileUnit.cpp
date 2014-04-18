@@ -1337,7 +1337,7 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 	ingFrame = 0;
 	addChild(KSGradualValue<float>::create(255, 0, fallFrame / 60.f, [=](int t)
 				{
-					KS::setOpacity(m_targetSprite, MIN(255, t + 100) );
+					KS::setOpacity(m_targetSprite, MIN(255, t + 150) );
 //					KS::setColor(m_targetSprite, ccc3(t, t, 255));
 				},
 				[=](float t)

@@ -518,28 +518,20 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 {
 	std::string pattern = _pattern["pattern"].asString();
 	bool moving = _pattern.get("movingcast", false).asInt();
+	if(moving)
+		m_state = kCumberStateMoving;
+	else
+		m_state = 0;
 	if(pattern == "109")
 	{
-		if(moving)
-			m_state = kCumberStateMoving;
-		else
-			m_state = 0;
 		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
 	else if( pattern == "1007")
 	{
-		if(moving)
-			m_state = kCumberStateMoving;
-		else
-			m_state = 0;
 		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
 	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 	{
-		if(moving)
-			m_state = kCumberStateMoving;
-		else
-			m_state = 0;
 		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
 		//			startAnimationNoDirection();
 	}
