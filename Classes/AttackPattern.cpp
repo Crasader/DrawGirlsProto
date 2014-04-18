@@ -30,7 +30,7 @@ void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::stri
 	m_randomDegree = pattern["randomdegree"].asInt(); // 랜덤각.
 	
 	KS::KSLog("%", pattern);
-	m_isCurve = pattern.get("curve", false).asBool();
+	m_isCurve = pattern.get("curve", false).asInt();
 	
 	Json::Value path = pattern["path"];
 	m_havePath = !path.empty();
@@ -1079,7 +1079,7 @@ void MeteorWrapper::myAction()
 		random_sp.x = random_fp.x + 500;
 		random_sp.y = random_fp.y + 500;
 
-		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(crashArea, crashArea), random_sp, random_fp, 220, 20, IntSize(15, 15), this, callfunc_selector(MeteorWrapper::removeEffect)); // imgSize, crashSize
+		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(crashArea, crashArea), random_sp, random_fp, 220, 20, IntSize(12, 12), this, callfunc_selector(MeteorWrapper::removeEffect)); // imgSize, crashSize
 		addChild(t_fm);
 	}
 
@@ -2071,7 +2071,7 @@ void CaromWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& pa
 	this->t_sp = t_sp;
 	t_move_speed = pattern.get("speed", 200.0).asDouble() / 100.f;
 	t_cushion_cnt = pattern.get("cushioncount", 4).asInt();
-	t_is_big_bomb = pattern.get("big", false).asBool();
+	t_is_big_bomb = pattern.get("big", false).asInt();
 	t_tmCnt = pattern.get("number", 10).asInt();
 	m_crashArea = pattern.get("area", 20).asInt();
 	///////////////////////////////////////////
