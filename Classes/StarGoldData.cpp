@@ -239,6 +239,9 @@ void StarGoldData::setKeepGold( int t_gold )
 
 void StarGoldData::setGameStart()
 {
+	is_clear_diary = false;
+	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
+	
 	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
 		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
 	
@@ -253,18 +256,22 @@ void StarGoldData::setGameStart()
 	
 	mySD->startSetting();
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1)) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))
+	if(mySGD->isHasGottenCards(mySD->getSilType(), 1) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))
 		is_ingame_before_have_stage_cards[0] = true;
 	else
 		is_ingame_before_have_stage_cards[0] = false;
-	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2)) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))
+	if(mySGD->isHasGottenCards(mySD->getSilType(), 2) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))
 		is_ingame_before_have_stage_cards[1] = true;
 	else
 		is_ingame_before_have_stage_cards[1] = false;
-	if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3)) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3))
+	if(mySGD->isHasGottenCards(mySD->getSilType(), 3) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3))
 		is_ingame_before_have_stage_cards[2] = true;
 	else
 		is_ingame_before_have_stage_cards[2] = false;
+	if(mySGD->isHasGottenCards(mySD->getSilType(), 4) > 0 || myDSH->getIntegerForKey(kDSH_Key_selectedCard) == NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 4))
+		is_ingame_before_have_stage_cards[3] = true;
+	else
+		is_ingame_before_have_stage_cards[3] = false;
 	
 	is_showtime = false;
 	is_exchanged = false;
@@ -528,11 +535,11 @@ int StarGoldData::getNextStageCardNumber( int recent_card_number )
 	else
 	{
 		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4)) > 0)
+		if(mySGD->isHasGottenCards(ing_card_stage, 4) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
-		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
+		else if(mySGD->isHasGottenCards(ing_card_stage, 3) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
-		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
+		else if(mySGD->isHasGottenCards(ing_card_stage, 2) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
 		else
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
@@ -581,11 +588,11 @@ int StarGoldData::getPreStageCardNumber( int recent_card_number )
 	else
 	{
 		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4)) > 0)
+		if(mySGD->isHasGottenCards(ing_card_stage, 4) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
-		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3)) > 0)
+		else if(mySGD->isHasGottenCards(ing_card_stage, 3) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
-		else if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2)) > 0)
+		else if(mySGD->isHasGottenCards(ing_card_stage, 2) > 0)
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
 		else
 			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
@@ -729,12 +736,43 @@ void StarGoldData::startMapGachaOn()
 	keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 }
 
+string StarGoldData::getCardComment(int t_card_number)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number == t_card_number)
+			return i->user_ment;
+	}
+	
+	return "";
+}
+
+void StarGoldData::setCardComment(int t_card_number, string comment)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number == t_card_number)
+			i->user_ment = comment;
+	}
+}
+
+int StarGoldData::isHasGottenCards(int t_card_number)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number == t_card_number)
+			return i->card_number;
+	}
+	
+	return 0;
+}
+
 int StarGoldData::isHasGottenCards( int t_stage, int t_grade )
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(NSDS_GI(kSDS_CI_int1_stage_i, (*i).card_number) == t_stage && (*i).grade == t_grade)
-			return (*i).card_number;
+		if(NSDS_GI(kSDS_CI_int1_stage_i, i->card_number) == t_stage && i->grade == t_grade)
+			return i->card_number;
 	}
 
 	return 0;
@@ -772,16 +810,94 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		t_info.user_ment = card_info["comment"].asString();
 		has_gotten_cards.push_back(t_info);
 		
-		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, 100, false);
-		myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number, i+1, false);
-		myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, i+1, card_number, false);
-		
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
 			card_data_load_list.push_back(card_number);
 	}
+}
+
+int StarGoldData::getOpenPuzzleCount()
+{
+	int history_count = getPuzzleHistorySize();
+	int open_puzzle_count = 0;
+	for(int i=0;i<history_count;i++)
+		if(getPuzzleHistoryForIndex(i).is_open)
+			open_puzzle_count++;
+	return open_puzzle_count;
+}
+
+int StarGoldData::getPuzzleHistorySize()
+{
+	return int(puzzle_historys.size());
+}
+
+PuzzleHistory StarGoldData::getPuzzleHistoryForIndex(int t_index)
+{
+	return puzzle_historys[t_index];
+}
+
+PuzzleHistory StarGoldData::getPuzzleHistory(int puzzle_number)
+{
+	for(int i=0;i<puzzle_historys.size();i++)
+	{
+		if(puzzle_historys[i].puzzle_number == puzzle_number)
+			return puzzle_historys[i];
+	}
 	
-	myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, card_cnt, false);
-	myDSH->fFlush();
+	PuzzleHistory t_empty;
+	t_empty.puzzle_number = puzzle_number;
+	t_empty.is_open = false;
+	t_empty.is_clear = false;
+	t_empty.is_perfect = false;
+	t_empty.open_type = "";
+	return t_empty;
+}
+
+void StarGoldData::setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_back)
+{
+	bool is_found = false;
+	for(int i=0;i<puzzle_historys.size() && !is_found;i++)
+	{
+		if(puzzle_historys[i].puzzle_number == t_history.puzzle_number)
+		{
+			is_found = true;
+			puzzle_historys[i].is_open = t_history.is_open;
+			puzzle_historys[i].is_clear = t_history.is_clear;
+			puzzle_historys[i].is_perfect = t_history.is_perfect;
+			puzzle_historys[i].open_type = t_history.open_type;
+		}
+	}
+	
+	if(!is_found)
+		puzzle_historys.push_back(t_history);
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["puzzleNo"] = t_history.puzzle_number;
+	param["updateOpenDate"] = t_history.is_open;
+	param["updateClearDate"] = t_history.is_clear;
+	param["updatePerfectDate"] = t_history.is_perfect;
+	param["openType"] = t_history.open_type;
+	hspConnector::get()->command("updatePuzzleHistory", param, call_back);
+}
+
+void StarGoldData::initPuzzleHistory(Json::Value history_list)
+{
+	puzzle_historys.clear();
+	
+	int history_cnt = history_list.size();
+	
+	for(int i=0;i<history_cnt;i++)
+	{
+		Json::Value history_info = history_list[i];
+		
+		PuzzleHistory t_history;
+		t_history.puzzle_number = history_info["puzzleNo"].asInt();
+		t_history.is_open = history_info["openDate"].asInt64() != 0;
+		t_history.is_clear = history_info["clearDate"].asInt64() != 0;
+		t_history.is_perfect = history_info["perfectDate"].asInt64() != 0;
+		t_history.open_type = history_info["openType"].asString();
+		puzzle_historys.push_back(t_history);
+	}
 }
 
 bool StarGoldData::isEmptyAchieveNotiQueue()
@@ -879,6 +995,7 @@ void StarGoldData::myInit()
 	
 	is_unlock_puzzle = 0;
 	strength_target_card_number = 0;
+	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);

@@ -457,13 +457,13 @@ void CardCase::myInit( int t_selected_card_number )
 //	total_durability_label->setPosition(ccp(42,21));
 //	durability_case->addChild(total_durability_label, kCARDCASE_Z_data);
 
-	recent_durability_label = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_selected_card_number))->getCString(), mySGD->getFont().c_str(), 20);
+	recent_durability_label = CCLabelTTF::create(CCString::createWithFormat(""/*%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, t_selected_card_number)*/)->getCString(), mySGD->getFont().c_str(), 20);
 	recent_durability_label->setAnchorPoint(ccp(0.5,0.5));
 	recent_durability_label->setPosition(ccp(293,413));
 	addChild(recent_durability_label, kCARDCASE_Z_data);
 
-	if(card_level == -1)
-		card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number);
+//	if(card_level == -1)
+//		card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, selected_card_number);
 	
 	CCSprite* option_case = CCSprite::create("card_case_option.png");
 	option_case->setPosition(ccp(265,80));
@@ -531,8 +531,8 @@ void CardCase::myInit( int t_selected_card_number )
 	t_card_level_label->setPosition(ccp(113,400));
 	addChild(t_card_level_label, kCARDCASE_Z_data);
 
-	if(original_passive_string == "-1")
-		original_passive_string = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, t_selected_card_number).c_str();
+//	if(original_passive_string == "-1")
+//		original_passive_string = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, t_selected_card_number).c_str();
 
 	if(original_passive_string != "")
 	{

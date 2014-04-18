@@ -1075,7 +1075,7 @@ void VisibleSprite::visit()
 		{
 			glScissor(x,y,w,h);
 			draw();
-			if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+			if(mySGD->is_safety_mode)
 				safety_img->draw();
 		}
 
@@ -1116,7 +1116,7 @@ void VisibleSprite::visitForThumb()
 		
 		glScissor(x,y,w,h);
 		draw();
-		if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+		if(mySGD->is_safety_mode)
 			safety_img->draw();
 	}
 	
@@ -1292,7 +1292,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 		
 		glScissor(x,y,w,h);
 		draw();
-		if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+		if(mySGD->is_safety_mode)
 			safety_img->draw();
 	}
 	

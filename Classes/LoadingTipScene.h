@@ -27,7 +27,7 @@ public:
     // there's no 'id' in cpp, so we recommend to return the class instance pointer
     static cocos2d::CCScene* scene();
 	static CCSprite* getLoadingTipImage();
-	
+	static CCNode* getCurtainTipImage();
 	static CCNode* getOpenCurtainNode();
 	
 	static LoadingTipScene* getLoadingTipSceneLayer();
@@ -66,7 +66,7 @@ private:
 	
 	void showButton();
 	
-	CCNode* getCurtainTipImage();
+	
 	CCNode* getMissionTipImage();
 	
 	void alertAction(int t1, int t2);

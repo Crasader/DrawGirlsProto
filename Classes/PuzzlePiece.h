@@ -69,6 +69,14 @@ public:
 		return true;
 	}
 	
+	void simpleView()
+	{
+		piece_mode = kPieceMode_default;
+		
+		setPieceImg(true);
+		is_menu_enable = false;
+	}
+	
 	void startGetPieceAnimation (CCObject * t_create_particle, SEL_CallFuncCCp d_create_particle)
 	{
 		target_create_particle = t_create_particle;
@@ -213,7 +221,7 @@ private:
 	
 	CCMenu* piece_menu;
 	
-	void setPieceImg()
+	void setPieceImg(bool is_simple = false)
 	{
 		removeAllChildren();
 		star1 = NULL;
@@ -233,13 +241,15 @@ private:
 //				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
 //				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
 //				n_piece->addChild(n_embo);
-				setStageLevel(n_piece, false);
+				if(!is_simple)
+					setStageLevel(n_piece, false);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 //				CCSprite* s_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
 //				s_embo->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f));
 //				s_piece->addChild(s_embo);
-				setStageLevel(s_piece, true);
+				if(!is_simple)
+					setStageLevel(s_piece, true);
 				s_piece->setColor(ccGRAY);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));

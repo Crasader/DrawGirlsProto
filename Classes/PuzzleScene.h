@@ -47,6 +47,9 @@ public:
 	CCNode* tutorial_node;
 private:
 	
+	int keep_card_number;
+	void updateCardHistory(CCNode* t_loading);
+	
 	void heartRefresh();
 	
 	bool clear_is_empty_piece;
@@ -73,6 +76,8 @@ private:
 	int next_stage_number;
 	
 	void startBacking();
+	
+	void openSettingPopup();
 	
 	void showClearPopup();
 	void hideClearPopup();
@@ -106,6 +111,8 @@ private:
 	void buyPieceAction(int t_stage_number);
 	void lockPieceAction(int t_stage_number);
 	CCSprite* have_card_cnt_case;
+	
+	void pumpPuzzle();
 	
 	void menuAction(CCObject* sender);
 	

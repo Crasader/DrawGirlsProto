@@ -143,40 +143,40 @@ void NoChargeNodeLambda::update( float dt )
 	}
 }
 
-NoChargeNode* NoChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	NoChargeNode* n_charge = new NoChargeNode();
-	n_charge->init(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
-
-	n_charge->autorelease();
-	return n_charge;
-}
-
-bool NoChargeNode::init( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	real_target = t_rt;
-	create_position = t_position;
-	charge_frame = t_frame;
-	charging_target = t_ing_t;
-	charging_delegate = t_ing_d;
-	after_target = t_a_t;
-	after_delegate = t_a_d;
-	cancel_target = t_c_t;
-	cancel_delegate = t_c_d;
-
-	return true;
-}
-
-void NoChargeNode::update( float dt )
-{
-	if(getParent())
-	{
-		if(after_target && after_delegate)
-			(after_target->*after_delegate)(real_target);
-
-		removeFromParentAndCleanup(true);
-	}
-}
+//NoChargeNode* NoChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	NoChargeNode* n_charge = new NoChargeNode();
+//	n_charge->init(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
+//
+//	n_charge->autorelease();
+//	return n_charge;
+//}
+//
+//bool NoChargeNode::init( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	real_target = t_rt;
+//	create_position = t_position;
+//	charge_frame = t_frame;
+//	charging_target = t_ing_t;
+//	charging_delegate = t_ing_d;
+//	after_target = t_a_t;
+//	after_delegate = t_a_d;
+//	cancel_target = t_c_t;
+//	cancel_delegate = t_c_d;
+//
+//	return true;
+//}
+//
+//void NoChargeNode::update( float dt )
+//{
+//	if(getParent())
+//	{
+//		if(after_target && after_delegate)
+//			(after_target->*after_delegate)(real_target);
+//
+//		removeFromParentAndCleanup(true);
+//	}
+//}
 
 ChargeNodeLambda* ChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
@@ -217,10 +217,11 @@ CCObject* ChargeNodeLambda::getRealTarget()
 
 void ChargeNodeLambda::charging()
 {
+//	setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 	charge_cnt++;
 
 //	particle->setStartRadius((charge_frame/3.0)*(charge_frame-charge_cnt)/charge_frame);
-
+	particle.first->setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 	if(charge_cnt >= charge_frame)
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
@@ -230,6 +231,8 @@ void ChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			cb->m_state &= kCumberStateMoving; // Moving 정보 빼곤 다 날림.
+			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;
@@ -277,121 +280,121 @@ void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<vo
 	addChild(castImage.first);
 }
 
-ChargeNode* ChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	ChargeNode* n_charge = new ChargeNode();
-	n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
-	n_charge->autorelease();
-	return n_charge;
-}
-
-void ChargeNode::setChargeColor( ccColor4F change_color )
-{
-	particle->setStartColor(change_color);
-	particle->setEndColor(change_color);
-
-	//		charge_img->setColor(change_color);
-}
-
-void ChargeNode::startCharge()
-{
-	//myGD->communication("Main_showWarning", 1);
-	charge_cnt = 0;
-	AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
-	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
-	schedule(schedule_selector(ChargeNode::charging));
-}
-
-void ChargeNode::cancelCharge()
-{
-	AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
-	if(cancel_target && cancel_delegate)
-		(cancel_target->*cancel_delegate)(real_target);
-	removeSelf();
-}
-
-CCObject* ChargeNode::getRealTarget()
-{
-	return real_target;
-}
-
-void ChargeNode::charging()
-{
-	charge_cnt++;
-
-	particle->setStartRadius((charge_frame/3.0)*(charge_frame-charge_cnt)/charge_frame);
-	if(charging_target && charging_delegate)
-		(charging_target->*charging_delegate)(real_target);
-
-	if(charge_cnt >= charge_frame)
-	{
-		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
-		if(after_target && after_delegate)
-			(after_target->*after_delegate)(real_target);
-		removeSelf();
-	}
-}
-
-void ChargeNode::removeSelf()
-{
-	unschedule(schedule_selector(ChargeNode::charging));
-	myGD->communication("MP_removeChargeInArray", this);
-	removeFromParentAndCleanup(true);
-}
-
-void ChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	real_target = t_rt;
-	create_position = t_position;
-	charge_frame = t_frame;
-	charging_target = t_ing_t;
-	charging_delegate = t_ing_d;
-	after_target = t_a_t;
-	after_delegate = t_a_d;
-	cancel_target = t_c_t;
-	cancel_delegate = t_c_d;
-
-	float chargeRate = t_frame/60.f;
-
-	particle = CCParticleSystemQuad::createWithTotalParticles(40 + chargeRate*5);
-	particle->setPositionType(kCCPositionTypeRelative);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("charge_particle.png");
-	particle->setTexture(texture);
-	particle->setEmissionRate(40.00 + chargeRate*5); // inf
-	particle->setAngle(90.0);
-	particle->setAngleVar(360.0);
-	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-	particle->setBlendFunc(blendFunc);
-	particle->setDuration(-1.00);
-	particle->setEmitterMode(kCCParticleModeRadius);
-	ccColor4F startColor = {1.00,1.00,1.00,1.00};
-	particle->setStartColor(startColor);
-	ccColor4F startColorVar = {0.30,0.30,0.30,0.30};
-	particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {0.00,0.00,0.00,1.00};
-	particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(5.00 + chargeRate);
-	particle->setStartSizeVar(2.0);
-	particle->setEndSize(chargeRate);
-	particle->setEndSizeVar(1.0);
-	particle->setRotatePerSecond(20.00);
-	particle->setRotatePerSecondVar(0.00);
-	particle->setStartRadius(charge_frame/3.0);
-	particle->setStartRadiusVar(3.00);
-	particle->setEndRadius(0.00);
-	particle->setTotalParticles(50);
-	particle->setLife(1.00);
-	particle->setLifeVar(0.25);
-	particle->setStartSpin(0.0);
-	particle->setStartSpinVar(50.0);
-	particle->setEndSpin(0.0);
-	particle->setEndSpinVar(0.0);
-	particle->setPosVar(ccp(0,0));
-	particle->setPosition(create_position);
-	addChild(particle);
-}
+//ChargeNode* ChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	ChargeNode* n_charge = new ChargeNode();
+//	n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
+//	n_charge->autorelease();
+//	return n_charge;
+//}
+//
+//void ChargeNode::setChargeColor( ccColor4F change_color )
+//{
+//	particle->setStartColor(change_color);
+//	particle->setEndColor(change_color);
+//
+//	//		charge_img->setColor(change_color);
+//}
+//
+//void ChargeNode::startCharge()
+//{
+//	//myGD->communication("Main_showWarning", 1);
+//	charge_cnt = 0;
+//	AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
+//	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
+//	schedule(schedule_selector(ChargeNode::charging));
+//}
+//
+//void ChargeNode::cancelCharge()
+//{
+//	AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
+//	if(cancel_target && cancel_delegate)
+//		(cancel_target->*cancel_delegate)(real_target);
+//	removeSelf();
+//}
+//
+//CCObject* ChargeNode::getRealTarget()
+//{
+//	return real_target;
+//}
+//
+//void ChargeNode::charging()
+//{
+//	charge_cnt++;
+//
+//	particle->setStartRadius((charge_frame/3.0)*(charge_frame-charge_cnt)/charge_frame);
+//	if(charging_target && charging_delegate)
+//		(charging_target->*charging_delegate)(real_target);
+//
+//	if(charge_cnt >= charge_frame)
+//	{
+//		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
+//		if(after_target && after_delegate)
+//			(after_target->*after_delegate)(real_target);
+//		removeSelf();
+//	}
+//}
+//
+//void ChargeNode::removeSelf()
+//{
+//	unschedule(schedule_selector(ChargeNode::charging));
+//	myGD->communication("MP_removeChargeInArray", this);
+//	removeFromParentAndCleanup(true);
+//}
+//
+//void ChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	real_target = t_rt;
+//	create_position = t_position;
+//	charge_frame = t_frame;
+//	charging_target = t_ing_t;
+//	charging_delegate = t_ing_d;
+//	after_target = t_a_t;
+//	after_delegate = t_a_d;
+//	cancel_target = t_c_t;
+//	cancel_delegate = t_c_d;
+//
+//	float chargeRate = t_frame/60.f;
+//
+//	particle = CCParticleSystemQuad::createWithTotalParticles(40 + chargeRate*5);
+//	particle->setPositionType(kCCPositionTypeRelative);
+//	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("charge_particle.png");
+//	particle->setTexture(texture);
+//	particle->setEmissionRate(40.00 + chargeRate*5); // inf
+//	particle->setAngle(90.0);
+//	particle->setAngleVar(360.0);
+//	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+//	particle->setBlendFunc(blendFunc);
+//	particle->setDuration(-1.00);
+//	particle->setEmitterMode(kCCParticleModeRadius);
+//	ccColor4F startColor = {1.00,1.00,1.00,1.00};
+//	particle->setStartColor(startColor);
+//	ccColor4F startColorVar = {0.30,0.30,0.30,0.30};
+//	particle->setStartColorVar(startColorVar);
+//	ccColor4F endColor = {0.00,0.00,0.00,1.00};
+//	particle->setEndColor(endColor);
+//	ccColor4F endColorVar = {0,0,0,0};
+//	particle->setEndColorVar(endColorVar);
+//	particle->setStartSize(5.00 + chargeRate);
+//	particle->setStartSizeVar(2.0);
+//	particle->setEndSize(chargeRate);
+//	particle->setEndSizeVar(1.0);
+//	particle->setRotatePerSecond(20.00);
+//	particle->setRotatePerSecondVar(0.00);
+//	particle->setStartRadius(charge_frame/3.0);
+//	particle->setStartRadiusVar(3.00);
+//	particle->setEndRadius(0.00);
+//	particle->setTotalParticles(50);
+//	particle->setLife(1.00);
+//	particle->setLifeVar(0.25);
+//	particle->setStartSpin(0.0);
+//	particle->setStartSpinVar(50.0);
+//	particle->setEndSpin(0.0);
+//	particle->setEndSpinVar(0.0);
+//	particle->setPosVar(ccp(0,0));
+//	particle->setPosition(create_position);
+//	addChild(particle);
+//}
 
 SpecialChargeNodeLambda* SpecialChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern)
 {
@@ -437,9 +440,9 @@ CCObject* SpecialChargeNodeLambda::getRealTarget()
 void SpecialChargeNodeLambda::charging()
 {
 	charge_cnt++;
-
+//	setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 //	particle->setRotatePerSecond(particle->getRotatePerSecond() + chargeRate);
-
+	particle.first->setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 	if(charge_cnt >= charge_frame)
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
@@ -449,6 +452,8 @@ void SpecialChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			cb->m_state &= kCumberStateMoving; // Moving 정보 빼곤 다 날림.
+			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;
@@ -493,122 +498,122 @@ void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::func
 	addChild(castImage.first);
 }
 
-SpecialChargeNode* SpecialChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	SpecialChargeNode* n_charge = new SpecialChargeNode();
-	n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
-	n_charge->autorelease();
-	return n_charge;
-}
-
-void SpecialChargeNode::setChargeColor( ccColor4F change_color )
-{
-	particle->setStartColor(change_color);
-	particle->setEndColor(change_color);
-
-	//		charge_img->setColor(change_color);
-}
-
-void SpecialChargeNode::startCharge()
-{
-	charge_cnt = 0;
-	AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
-	schedule(schedule_selector(SpecialChargeNode::charging));
-}
-
-void SpecialChargeNode::cancelCharge()
-{
-	AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
-	if(cancel_target && cancel_delegate)
-		(cancel_target->*cancel_delegate)(real_target);
-	removeSelf();
-}
-
-CCObject* SpecialChargeNode::getRealTarget()
-{
-	return real_target;
-}
-
-void SpecialChargeNode::charging()
-{
-	charge_cnt++;
-
-	particle->setRotatePerSecond(particle->getRotatePerSecond() + chargeRate);
-	if(charging_target && charging_delegate)
-		(charging_target->*charging_delegate)(real_target);
-
-	if(charge_cnt >= charge_frame)
-	{
-		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
-		if(after_target && after_delegate)
-			(after_target->*after_delegate)(real_target);
-		removeSelf();
-	}
-}
-
-void SpecialChargeNode::removeSelf()
-{
-	unschedule(schedule_selector(SpecialChargeNode::charging));
-	myGD->communication("MP_removeChargeInArray", this);
-	removeFromParentAndCleanup(true);
-}
-
-void SpecialChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	real_target = t_rt;
-	create_position = t_position;
-	charge_frame = t_frame;
-	charging_target = t_ing_t;
-	charging_delegate = t_ing_d;
-	after_target = t_a_t;
-	after_delegate = t_a_d;
-	cancel_target = t_c_t;
-	cancel_delegate = t_c_d;
-
-	ing_rps = 0;
-	int second = t_frame/60;
-
-	chargeRate = 21600.f/powf(t_frame, 2.f)*(3.f+second); // 21600 = 360(angle)*60(frameRate),   360/(t_frame/60)/t_frame
-
-	particle = CCParticleSystemQuad::createWithTotalParticles(50);
-	particle->setPositionType(kCCPositionTypeRelative);
-	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("charge_particle.png");
-	particle->setTexture(texture);
-	particle->setEmissionRate(50.00); // inf
-	particle->setAngle(90.0);
-	particle->setAngleVar(0.0);
-	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-	particle->setBlendFunc(blendFunc);
-	particle->setDuration(-1.00);
-	particle->setEmitterMode(kCCParticleModeRadius);
-	ccColor4F startColor = {1.00,1.00,1.00,1.00};
-	particle->setStartColor(startColor);
-	ccColor4F startColorVar = {0.30,0.30,0.30,0.30};
-	particle->setStartColorVar(startColorVar);
-	ccColor4F endColor = {0.00,0.00,0.00,1.00};
-	particle->setEndColor(endColor);
-	ccColor4F endColorVar = {0,0,0,0};
-	particle->setEndColorVar(endColorVar);
-	particle->setStartSize(5+second);
-	particle->setStartSizeVar(3+second);
-	particle->setEndSize(5+second);
-	particle->setEndSizeVar(3+second);
-	particle->setRotatePerSecond(ing_rps);
-	particle->setRotatePerSecondVar(0.00);
-	particle->setStartRadius(12+3*second);
-	particle->setStartRadiusVar(0.00);
-	particle->setEndRadius(12+3*second);
-	particle->setTotalParticles(50);
-	particle->setLife(1.00);
-	particle->setLifeVar(0.0);
-	particle->setStartSpin(0.0);
-	particle->setStartSpinVar(45.0);
-	particle->setEndSpin(0.0);
-	particle->setEndSpinVar(90.0);
-	particle->setPosVar(ccp(0,0));
-	particle->setPosition(create_position);
-	addChild(particle);
-}
+//SpecialChargeNode* SpecialChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	SpecialChargeNode* n_charge = new SpecialChargeNode();
+//	n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
+//	n_charge->autorelease();
+//	return n_charge;
+//}
+//
+//void SpecialChargeNode::setChargeColor( ccColor4F change_color )
+//{
+//	particle->setStartColor(change_color);
+//	particle->setEndColor(change_color);
+//
+//	//		charge_img->setColor(change_color);
+//}
+//
+//void SpecialChargeNode::startCharge()
+//{
+//	charge_cnt = 0;
+//	AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
+//	schedule(schedule_selector(SpecialChargeNode::charging));
+//}
+//
+//void SpecialChargeNode::cancelCharge()
+//{
+//	AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+//	if(cancel_target && cancel_delegate)
+//		(cancel_target->*cancel_delegate)(real_target);
+//	removeSelf();
+//}
+//
+//CCObject* SpecialChargeNode::getRealTarget()
+//{
+//	return real_target;
+//}
+//
+//void SpecialChargeNode::charging()
+//{
+//	charge_cnt++;
+//
+//	particle->setRotatePerSecond(particle->getRotatePerSecond() + chargeRate);
+//	if(charging_target && charging_delegate)
+//		(charging_target->*charging_delegate)(real_target);
+//
+//	if(charge_cnt >= charge_frame)
+//	{
+//		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+//		if(after_target && after_delegate)
+//			(after_target->*after_delegate)(real_target);
+//		removeSelf();
+//	}
+//}
+//
+//void SpecialChargeNode::removeSelf()
+//{
+//	unschedule(schedule_selector(SpecialChargeNode::charging));
+//	myGD->communication("MP_removeChargeInArray", this);
+//	removeFromParentAndCleanup(true);
+//}
+//
+//void SpecialChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	real_target = t_rt;
+//	create_position = t_position;
+//	charge_frame = t_frame;
+//	charging_target = t_ing_t;
+//	charging_delegate = t_ing_d;
+//	after_target = t_a_t;
+//	after_delegate = t_a_d;
+//	cancel_target = t_c_t;
+//	cancel_delegate = t_c_d;
+//
+//	ing_rps = 0;
+//	int second = t_frame/60;
+//
+//	chargeRate = 21600.f/powf(t_frame, 2.f)*(3.f+second); // 21600 = 360(angle)*60(frameRate),   360/(t_frame/60)/t_frame
+//
+//	particle = CCParticleSystemQuad::createWithTotalParticles(50);
+//	particle->setPositionType(kCCPositionTypeRelative);
+//	CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("charge_particle.png");
+//	particle->setTexture(texture);
+//	particle->setEmissionRate(50.00); // inf
+//	particle->setAngle(90.0);
+//	particle->setAngleVar(0.0);
+//	ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+//	particle->setBlendFunc(blendFunc);
+//	particle->setDuration(-1.00);
+//	particle->setEmitterMode(kCCParticleModeRadius);
+//	ccColor4F startColor = {1.00,1.00,1.00,1.00};
+//	particle->setStartColor(startColor);
+//	ccColor4F startColorVar = {0.30,0.30,0.30,0.30};
+//	particle->setStartColorVar(startColorVar);
+//	ccColor4F endColor = {0.00,0.00,0.00,1.00};
+//	particle->setEndColor(endColor);
+//	ccColor4F endColorVar = {0,0,0,0};
+//	particle->setEndColorVar(endColorVar);
+//	particle->setStartSize(5+second);
+//	particle->setStartSizeVar(3+second);
+//	particle->setEndSize(5+second);
+//	particle->setEndSizeVar(3+second);
+//	particle->setRotatePerSecond(ing_rps);
+//	particle->setRotatePerSecondVar(0.00);
+//	particle->setStartRadius(12+3*second);
+//	particle->setStartRadiusVar(0.00);
+//	particle->setEndRadius(12+3*second);
+//	particle->setTotalParticles(50);
+//	particle->setLife(1.00);
+//	particle->setLifeVar(0.0);
+//	particle->setStartSpin(0.0);
+//	particle->setStartSpinVar(45.0);
+//	particle->setEndSpin(0.0);
+//	particle->setEndSpinVar(90.0);
+//	particle->setPosVar(ccp(0,0));
+//	particle->setPosition(create_position);
+//	addChild(particle);
+//}
 
 CrashChargeNodeLambda* CrashChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, const std::string& pattern )
 {
@@ -652,16 +657,17 @@ CCObject* CrashChargeNodeLambda::getRealTarget()
 
 void CrashChargeNodeLambda::charging()
 {
+	
 	charge_cnt++;
 
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)real_target);
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-
-	setPosition(ccpSub(mainCumberPosition, create_position));
-
+//	IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)real_target);
+//	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
+//
+//	setPosition(ccpSub(mainCumberPosition, create_position));
+//dynamic_cast<KSCumberBase*>(real_target)->getPosition()
 	for(int i=0;i<2;i++)
 	{
-		CCN_InnerNode* t_in = CCN_InnerNode::create(create_position, 40*((0.f + charge_frame - charge_cnt)/charge_frame), 10, myColor);
+		CCN_InnerNode* t_in = CCN_InnerNode::create(dynamic_cast<KSCumberBase*>(real_target)->getPosition(), 40*((0.f + charge_frame - charge_cnt)/charge_frame), 10, myColor);
 		addChild(t_in);
 	}
 
@@ -678,6 +684,9 @@ void CrashChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
+			cb->m_state &= kCumberStateMoving; // Moving 정보 빼곤 다 날림.
+			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
+			
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;
@@ -720,89 +729,89 @@ void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::functi
 	myColor = ccc4f(1.0, 1.0, 1.0, 1.0);
 }
 
-CrashChargeNode* CrashChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	CrashChargeNode* n_charge = new CrashChargeNode();
-	n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
-	n_charge->autorelease();
-	return n_charge;
-}
+//CrashChargeNode* CrashChargeNode::create( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	CrashChargeNode* n_charge = new CrashChargeNode();
+//	n_charge->myInit(t_position, t_frame, t_ing_t, t_ing_d, t_a_t, t_a_d, t_c_t, t_c_d, t_rt);
+//	n_charge->autorelease();
+//	return n_charge;
+//}
+//
+//void CrashChargeNode::setChargeColor( ccColor4F change_color )
+//{
+//	myColor = change_color;
+//}
 
-void CrashChargeNode::setChargeColor( ccColor4F change_color )
-{
-	myColor = change_color;
-}
-
-void CrashChargeNode::startCharge()
-{
-	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
-	//myGD->communication("Main_showWarning", 2);
-	charge_cnt = 0;
-	AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
-	schedule(schedule_selector(CrashChargeNode::charging));
-}
-
-void CrashChargeNode::cancelCharge()
-{
-	//		myGD->communication("CP_setCasting", false);
-	AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
-	if(cancel_target && cancel_delegate)
-		(cancel_target->*cancel_delegate)(real_target);
-	removeSelf();
-}
-
-CCObject* CrashChargeNode::getRealTarget()
-{
-	return real_target;
-}
-
-void CrashChargeNode::charging()
-{
-	charge_cnt++;
-
-	IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)real_target);
-	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-
-	setPosition(ccpSub(mainCumberPosition, create_position));
-
-	for(int i=0;i<2;i++)
-	{
-		CCN_InnerNode* t_in = CCN_InnerNode::create(create_position, 40*((0.f + charge_frame - charge_cnt)/charge_frame), 10, myColor);
-		addChild(t_in);
-	}
-
-	if(charging_target && charging_delegate)
-		(charging_target->*charging_delegate)(real_target);
-
-	if(charge_cnt >= charge_frame)
-	{
-		myGD->communication("CP_setCasting", false);
-		AudioEngine::sharedInstance()->stopAllEffects();
-		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
-		if(after_target && after_delegate)
-			(after_target->*after_delegate)(real_target);
-		removeSelf();
-	}
-}
-
-void CrashChargeNode::removeSelf()
-{
-	unschedule(schedule_selector(CrashChargeNode::charging));
-	myGD->communication("MP_removeChargeInArray", this);
-	removeFromParentAndCleanup(true);
-}
-
-void CrashChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
-{
-	real_target = t_rt;
-	create_position = t_position;
-	charge_frame = t_frame;
-	charging_target = t_ing_t;
-	charging_delegate = t_ing_d;
-	after_target = t_a_t;
-	after_delegate = t_a_d;
-	cancel_target = t_c_t;
-	cancel_delegate = t_c_d;
-
-	myColor = ccc4f(1.0, 1.0, 1.0, 1.0);
-}
+//void CrashChargeNode::startCharge()
+//{
+//	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
+//	//myGD->communication("Main_showWarning", 2);
+//	charge_cnt = 0;
+//	AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
+//	schedule(schedule_selector(CrashChargeNode::charging));
+//}
+//
+//void CrashChargeNode::cancelCharge()
+//{
+//	//		myGD->communication("CP_setCasting", false);
+//	AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+//	if(cancel_target && cancel_delegate)
+//		(cancel_target->*cancel_delegate)(real_target);
+//	removeSelf();
+//}
+//
+//CCObject* CrashChargeNode::getRealTarget()
+//{
+//	return real_target;
+//}
+//
+//void CrashChargeNode::charging()
+//{
+//	charge_cnt++;
+//
+//	IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)real_target);
+//	CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
+//
+//	setPosition(ccpSub(mainCumberPosition, create_position));
+//
+//	for(int i=0;i<2;i++)
+//	{
+//		CCN_InnerNode* t_in = CCN_InnerNode::create(create_position, 40*((0.f + charge_frame - charge_cnt)/charge_frame), 10, myColor);
+//		addChild(t_in);
+//	}
+//
+//	if(charging_target && charging_delegate)
+//		(charging_target->*charging_delegate)(real_target);
+//
+//	if(charge_cnt >= charge_frame)
+//	{
+//		myGD->communication("CP_setCasting", false);
+//		AudioEngine::sharedInstance()->stopAllEffects();
+//		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+//		if(after_target && after_delegate)
+//			(after_target->*after_delegate)(real_target);
+//		removeSelf();
+//	}
+//}
+//
+//void CrashChargeNode::removeSelf()
+//{
+//	unschedule(schedule_selector(CrashChargeNode::charging));
+//	myGD->communication("MP_removeChargeInArray", this);
+//	removeFromParentAndCleanup(true);
+//}
+//
+//void CrashChargeNode::myInit( CCPoint t_position, int t_frame, CCObject* t_ing_t, SEL_CallFuncO t_ing_d, CCObject* t_a_t, SEL_CallFuncO t_a_d, CCObject* t_c_t, SEL_CallFuncO t_c_d, CCObject* t_rt )
+//{
+//	real_target = t_rt;
+//	create_position = t_position;
+//	charge_frame = t_frame;
+//	charging_target = t_ing_t;
+//	charging_delegate = t_ing_d;
+//	after_target = t_a_t;
+//	after_delegate = t_a_d;
+//	cancel_target = t_c_t;
+//	cancel_delegate = t_c_d;
+//
+//	myColor = ccc4f(1.0, 1.0, 1.0, 1.0);
+//}

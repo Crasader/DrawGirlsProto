@@ -15,8 +15,8 @@ class KSJuniorBase : public KSCumberBase
 public:
 	KSJuniorBase() : RADIUS(15.f)
 	{
-		m_state = (CUMBERSTATEMOVING);
-		CCLog("%s %d CUMBERSTATEMOVING", __FILE__, __LINE__);
+		m_state = (kCumberStateMoving);
+		CCLog("%s %d kCumberStateMoving", __FILE__, __LINE__);
 	}
 	virtual ~KSJuniorBase(){}
 	

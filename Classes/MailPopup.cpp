@@ -183,7 +183,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 					{
 						string t_friend_id = puzzleTicket[t_i]["friendID"].asString();
 						int t_puzzle_number = puzzleTicket[t_i]["puzzlenumber"].asInt();
-						if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, t_puzzle_number-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == t_puzzle_number) {
+						if(mySGD->getPuzzleHistory(t_puzzle_number-1).is_clear && !mySGD->getPuzzleHistory(t_puzzle_number).is_open) {
 							bool good_ticket = true;
 							int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 							for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
@@ -206,11 +206,6 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 																																				 NSDS_GI(t_puzzle_number, kSDS_PZ_ticket_i))->getCString());
 								}
 								if(need_ticket_cnt <= have_ticket_cnt) {
-									// open 퍼즐
-									myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-									vector<SaveUserData_Key> save_userdata_list;
-									save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-									myDSH->saveUserData(save_userdata_list, nullptr);
 									
 									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
 									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_callTicket);
@@ -1238,18 +1233,10 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 															}
 															// 카드 정보 있음 
 															else {
-																if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt()) == 0) {
-																	myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-																	myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, contentObj["cardnumber"].asInt(), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-																	myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), contentObj["cardnumber"].asInt());
-
+																if(mySGD->isHasGottenCards(contentObj["cardnumber"].asInt()) == 0) {
 																	mySGD->addHasGottenCardNumber(contentObj["cardnumber"].asInt());
 																}
 
-																myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
-																myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, contentObj["cardnumber"].asInt(), NSDS_GI(kSDS_CI_int1_durability_i, contentObj["cardnumber"].asInt()));
-																myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, contentObj["cardnumber"].asInt(), 1);
-																myDSH->setStringForKey(kDSH_Key_cardPassive_int1, contentObj["cardnumber"].asInt(), NSDS_GS(kSDS_CI_int1_passive_s, contentObj["cardnumber"].asInt()));
 																av->setContentNode(addCardImg(contentObj["cardnumber"].asInt(), -1, "-1"));
 																//							av->addChild();
 															}
@@ -1397,7 +1384,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
-																						 if(myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, contentObj["puzzlenumber"].asInt()-1) && myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+2 == contentObj["puzzlenumber"].asInt()) {
+																						 if(mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()-1).is_clear && !mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()).is_open) {
 																							 bool good_ticket = true;
 																							 int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 																							 for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
@@ -1420,12 +1407,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																																					NSDS_GI(contentObj["puzzlenumber"].asInt(), kSDS_PZ_ticket_i))->getCString());
 																								 }
 																								 if(need_ticket_cnt <= have_ticket_cnt) {
-																									 // open 퍼즐
-																									 myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
-																									 vector<SaveUserData_Key> save_userdata_list;
-																									 save_userdata_list.push_back(kSaveUserData_Key_openPuzzle);
-																									 myDSH->saveUserData(save_userdata_list, nullptr);
-
+																									 
 																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
 																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_callTicket);
 																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_ticketCnt);
@@ -1976,18 +1958,10 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		}
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number) == 0)
+		if(mySGD->isHasGottenCards(download_card_number) == 0)
 		{
-			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, download_card_number, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), download_card_number);
-			
 			mySGD->addHasGottenCardNumber(download_card_number);
 		}
-		myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
-		myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, download_card_number, 1);
-		myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, download_card_number, NSDS_GI(kSDS_CI_int1_durability_i, download_card_number));
-		myDSH->setStringForKey(kDSH_Key_cardPassive_int1, download_card_number, NSDS_GS(kSDS_CI_int1_passive_s, download_card_number));
 		
 		(getTarget()->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
 		

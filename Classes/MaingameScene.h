@@ -170,6 +170,11 @@ private:
 	}
 	
 	void gameover();
+	void clearScenario();
+	void clearScenario2();
+	void clearScenario3();
+	void failScenario();
+	void failScenario2();
 	
 	void closeShutter();
 	

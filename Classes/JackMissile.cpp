@@ -6,6 +6,7 @@
 #include "KSCumberBase.h"
 #include "SilhouetteData.h"
 #include "StarGoldData.h"
+#include "ASMotionStreak.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -279,12 +280,12 @@ void JM_UpgradeMissile::realInit (CCNode * t_target, int jm_type, float missile_
 	if(recent_card_number > 0)
 	{
 		float base_missile_damage;
-		base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+//		base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
 		
 		damage = base_missile_damage; // * damage_per
 		
 		int base_missile_dex;
-		base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+//		base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
 		
 		dex = base_missile_dex;
 		
@@ -843,12 +844,12 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	if(recent_card_number > 0)
 	{
 		float base_missile_damage;
-		base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+//		base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
 		
 		damage = base_missile_damage; // * damage_per
 		
 		int base_missile_dex;
-		base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+//		base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
 		
 		dex = base_missile_dex;
 		
@@ -939,7 +940,7 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	if(directionAngle >= 180.f)
 		directionAngle -= 360.f;
 	
-	streak_img = CCMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+	streak_img = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
 	streak_img->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	streak_img->setPosition(particlePosition);
 	addChild(streak_img);

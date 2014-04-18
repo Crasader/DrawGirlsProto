@@ -161,15 +161,14 @@ void DataStorageHub::setIntegerForKey (DSH_Key t_key, int val1, bool diskWrite)
 {
 	string c_key = getKey(t_key);
 	
-	if(t_key != kDSH_Key_cardDurability_int1 && t_key != kDSH_Key_hasGottenCard_int1 && t_key != kDSH_Key_cardTakeCnt && t_key != kDSH_Key_takeCardNumber_int1)
-		myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
 	dsh_cache_int[c_key] = val1;
 }
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int key_val1, int val1, bool diskWrite)
 {
 	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
-	if(t_key != kDSH_Key_cardDurability_int1 && t_key != kDSH_Key_hasGottenCard_int1 && t_key != kDSH_Key_cardTakeCnt && t_key != kDSH_Key_takeCardNumber_int1)
-		myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
 	dsh_cache_int[c_key] = val1;
 }
 string DataStorageHub::getStringForKey (DSH_Key t_key)
@@ -187,8 +186,8 @@ string DataStorageHub::getStringForKey (DSH_Key t_key)
 void DataStorageHub::setStringForKey (DSH_Key t_key, string val1, bool diskWrite)
 {
 	string c_key = getKey(t_key);
-	if(t_key != kDSH_Key_inputTextCard_int1)
-		myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
+
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
 	dsh_cache_string[c_key] = val1;
 }
 string DataStorageHub::getStringForKey (DSH_Key t_key, int key_val1)
@@ -206,15 +205,15 @@ string DataStorageHub::getStringForKey (DSH_Key t_key, int key_val1)
 void DataStorageHub::setStringForKey (DSH_Key t_key, int key_val1, string val1, bool diskWrite)
 {
 	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
-	if(t_key != kDSH_Key_inputTextCard_int1)
-		myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
+	
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1.c_str(), diskWrite);
 	dsh_cache_string[c_key] = val1;
 }
 void DataStorageHub::setIntegerForKey (DSH_Key t_key, int key_val1, int key_val2, int val1, bool diskWrite)
 {
 	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1, key_val2)->getCString();
-	if(t_key != kDSH_Key_cardDurability_int1 && t_key != kDSH_Key_hasGottenCard_int1 && t_key != kDSH_Key_cardTakeCnt && t_key != kDSH_Key_takeCardNumber_int1)
-		myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
+	
+	myDefault->setKeyValue(kSDF_myDSH, c_key, val1, diskWrite);
 	dsh_cache_int[c_key] = val1;
 }
 CCSize DataStorageHub::getDesignResolutionSize ()
@@ -257,27 +256,11 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	
 	
 	else if(t_name == kDSH_Key_selectedCard)						return_value = "scard";
-	else if(t_name == kDSH_Key_selectedCardLevel)					return_value = "scardlevel";
-	else if(t_name == kDSH_Key_selectedCardPassive)					return_value = "scardpassive";
 	else if(t_name == kDSH_Key_cardSortType)						return_value = "cst";
-	else if(t_name == kDSH_Key_inputTextCard_int1)					return_value = "itc%d";
-	
-	else if(t_name == kDSH_Key_cardLevel_int1)						return_value = "cl%d";
-	else if(t_name == kDSH_Key_cardMaxDurability_int1)				return_value = "cmd%d";
-	else if(t_name == kDSH_Key_cardPassive_int1)					return_value = "cp%d";
-	
-	else if(t_name == kDSH_Key_cardDurability_int1)					return_value = "cd%d";	// arg int(card_number) // return usable durability
-	else if(t_name == kDSH_Key_hasGottenCard_int1)					return_value = "hgcard%d";	// arg int(card_number) // return cardTakeCnt_number
-	else if(t_name == kDSH_Key_cardTakeCnt)							return_value = "ctc";	// hasGottenCards count
-	else if(t_name == kDSH_Key_takeCardNumber_int1)					return_value = "tcn%d"; // arg int(loop start 1 ~ cardTakeCnt) // return card_number
-	
+		
 	else if(t_name == kDSH_Key_allHighScore)						return_value = "ahs";
 	
 	else if(t_name == kDSH_Key_jackBaseSpeed)						return_value = "jbs";
-	
-	else if(t_name == kDSH_Key_openPuzzleCnt)						return_value = "opc";
-	else if(t_name == kDSH_Key_isClearedPuzzle_int1)				return_value = "icp%d";
-	else if(t_name == kDSH_Key_isPerfectPuzzle_int1)				return_value = "ipp%d";
 	
 	else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
 	else if(t_name == kDSH_Key_ticketUserId_int1)					return_value = "tui%d";
@@ -416,15 +399,6 @@ void DataStorageHub::loadAllUserData (Json::Value result_data)
 	setIntegerForKey(kDSH_Key_allHighScore, data[getKey(kDSH_Key_allHighScore)].asInt(), false);
 	setIntegerForKey(kDSH_Key_selectedCard, data[getKey(kDSH_Key_selectedCard)].asInt(), false);
 	
-	int open_puzzle_cnt = data[getKey(kDSH_Key_openPuzzleCnt)].asInt();
-	
-	setIntegerForKey(kDSH_Key_openPuzzleCnt, open_puzzle_cnt, false);
-	for(int i=1;i<=open_puzzle_cnt+2 && i < data[getKey(kDSH_Key_isClearedPuzzle_int1)].size();i++)
-	{
-		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, data[getKey(kDSH_Key_isClearedPuzzle_int1)][i].asBool(), false);
-		setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i, data[getKey(kDSH_Key_isPerfectPuzzle_int1)][i].asBool(), false);
-	}
-	
 	int have_ticket_cnt = data[getKey(kDSH_Key_haveTicketCnt)].asInt();
 	setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt, false);
 	for(int i=1;i<=have_ticket_cnt;i++)
@@ -556,18 +530,6 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 	else if(t_key == kSaveUserData_Key_selectedCard)
 	{
 		data[getKey(kDSH_Key_selectedCard)] = getIntegerForKey(kDSH_Key_selectedCard);
-		data[getKey(kDSH_Key_selectedCardLevel)] = getIntegerForKey(kDSH_Key_cardLevel_int1, getIntegerForKey(kDSH_Key_selectedCard));
-		data[getKey(kDSH_Key_selectedCardPassive)] = getStringForKey(kDSH_Key_cardPassive_int1, getIntegerForKey(kDSH_Key_selectedCard));
-	}
-	else if(t_key == kSaveUserData_Key_openPuzzle)
-	{
-		int open_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
-		data[getKey(kDSH_Key_openPuzzleCnt)] = open_puzzle_cnt;
-		for(int i=1;i<=open_puzzle_cnt+2;i++)
-		{
-			data[getKey(kDSH_Key_isClearedPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isClearedPuzzle_int1, i);
-			data[getKey(kDSH_Key_isPerfectPuzzle_int1)][i] = getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i);
-		}
 	}
 	else if(t_key == kSaveUserData_Key_haveTicket)
 	{
@@ -690,14 +652,6 @@ void DataStorageHub::resetDSH ()
 	}
 	
 	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
-	
-	int opened_puzzle_cnt = getIntegerForKey(kDSH_Key_openPuzzleCnt);
-	for(int i=1;i<=opened_puzzle_cnt+2;i++)
-	{
-		setBoolForKey(kDSH_Key_isClearedPuzzle_int1, i, false, false);
-		setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, i, false, false);
-	}
-	setIntegerForKey(kDSH_Key_openPuzzleCnt, 0, false);
 	
 	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
 	for(int i=1;i<=have_ticket_cnt;i++)

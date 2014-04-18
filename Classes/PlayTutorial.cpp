@@ -1526,6 +1526,7 @@ void PlayTutorial::nextStep()
 															  mySGD->setNextSceneName("maingame");
 															  
 															  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+															  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
 															  addChild(loading_tip, 999);
 														  });
 										}, CCSizeMake(350,100), ccp(0,0), 12);

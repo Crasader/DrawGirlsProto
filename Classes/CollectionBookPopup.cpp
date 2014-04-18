@@ -142,7 +142,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			position_value = ccpAdd(getContentPosition(kCBP_MT_forth), ccp(0,uniform_dist(e1)));
 		}
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, check_card_number) != 0)
+		if(mySGD->isHasGottenCards(check_card_number) != 0)
 		{
 			CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
             second_img->setScale(mul_value);
@@ -327,7 +327,7 @@ bool CollectionBookPopup::init()
 	
 	setRightPage(recent_right_img, recent_card_number);
 	
-	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
+	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
         input_data = "입력해주세요.";
     
@@ -439,7 +439,13 @@ void CollectionBookPopup::editBoxEditingDidBegin(CCEditBox* editBox)
 }
 void CollectionBookPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 {
-	myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number, editBox->getText());
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["cardNo"] = recent_card_number;
+	param["comment"] = editBox->getText();
+	
+	hspConnector::get()->command("updateCardHistory", param, nullptr);
+	mySGD->setCardComment(recent_card_number, editBox->getText());
 	CCLog("edit end");
 }
 void CollectionBookPopup::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
@@ -448,7 +454,13 @@ void CollectionBookPopup::editBoxTextChanged(CCEditBox* editBox, const std::stri
 }
 void CollectionBookPopup::editBoxReturn(CCEditBox* editBox)
 {
-	myDSH->setStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number, editBox->getText());
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["cardNo"] = recent_card_number;
+	param["comment"] = editBox->getText();
+	
+	hspConnector::get()->command("updateCardHistory", param, nullptr);
+	mySGD->setCardComment(recent_card_number, editBox->getText());
 	CCLog("edit return");
 }
 
@@ -664,7 +676,7 @@ void CollectionBookPopup::startNextPage()
 	int next_number = mySGD->getNextStageCardNumber(recent_card_number);
 	recent_card_number = next_number;
 	
-	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
+	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
         input_data = "입력해주세요.";
     
@@ -807,7 +819,7 @@ void CollectionBookPopup::startPreSelectedPage()
 	
 	setRightPage(covered_right_img, recent_card_number);
 	
-	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
+	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
         input_data = "입력해주세요.";
     
@@ -912,7 +924,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 	recent_card_number = mySGD->selected_collectionbook;
 	
-	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
+	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
         input_data = "입력해주세요.";
     
@@ -1126,7 +1138,7 @@ void CollectionBookPopup::startPrePage()
 	
 	setRightPage(covered_right_img, recent_card_number);
 	
-	string input_data = myDSH->getStringForKey(kDSH_Key_inputTextCard_int1, recent_card_number).c_str();
+	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
         input_data = "입력해주세요.";
     
@@ -1487,7 +1499,7 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 	{
 		mySGD->setCardStrengthBefore(kCardStrengthBefore_diary);
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, recent_card_number) > 0)
+		if(mySGD->isHasGottenCards(recent_card_number) > 0)
 			mySGD->setStrengthTargetCardNumber(recent_card_number);
 		else
 			mySGD->setStrengthTargetCardNumber(myDSH->getIntegerForKey(kDSH_Key_selectedCard));

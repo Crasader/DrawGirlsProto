@@ -33,6 +33,7 @@
 #include "AchievePopup.h"
 #include "DiaryZoomPopup.h"
 #include "StartSettingPopup.h"
+#include "LoadingLayer.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -91,12 +92,16 @@ bool PuzzleScene::init()
 		
 		for(int i=start_stage;i<start_stage+stage_count;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, 1)) <= 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, 2)) <= 0 && myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, 3)) <= 0)
-//			if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, i))
+			int stage_card_count = 4;//NSDS_GI(i, kSDS_SI_cardCount_i);
+			have_not_cleared_stage = true;
+			for(int j=1;j<=stage_card_count && have_not_cleared_stage;j++)
 			{
-				have_not_cleared_stage = true;
-				not_cleared_stage_list.push_back(i);
+				if(mySGD->isHasGottenCards(i, j) > 0)
+					have_not_cleared_stage = false;
 			}
+			
+			if(have_not_cleared_stage)
+				not_cleared_stage_list.push_back(i);
 			else
 				cleared_stage_list.push_back(i);
 		}
@@ -194,9 +199,10 @@ bool PuzzleScene::init()
 			for(int i=start_stage;i<start_stage+stage_count;i++)
 			{
 				bool is_stage_perfect = true;
-				for(int j=1;j<=3;j++)
+				int stage_card_count = 4;//NSDS_GI(i, kSDS_SI_cardCount_i);
+				for(int j=1;j<=stage_card_count;j++)
 				{
-					if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(i, kSDS_SI_level_int1_card_i, j)) <= 0)
+					if(mySGD->isHasGottenCards(i, j) <= 0)
 					{
 						is_stage_perfect = false;
 						break;
@@ -310,20 +316,15 @@ bool PuzzleScene::init()
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
-		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		if(selected_card_number > 0)
-		{
-			int durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) + 1;
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, durability);
-		}
 		
 		bool is_not_empty_card[3] = {false,};
 		
 		clear_is_empty_piece = true;
 		int played_stage_number = mySD->getSilType();
-		for(int i=1;i<=3;i++)
+		int stage_card_count = 4;//NSDS_GI(played_stage_number, kSDS_SI_cardCount_i);
+		for(int i=1;i<=stage_card_count;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(played_stage_number, kSDS_SI_level_int1_card_i, i)) > 0)
+			if(mySGD->isHasGottenCards(played_stage_number, i) > 0)
 			{
 				clear_is_empty_piece = false;
 				is_not_empty_card[i-1] = true;
@@ -353,41 +354,22 @@ bool PuzzleScene::init()
 		clear_star_take_level = take_level;
 		clear_is_empty_star = !is_not_empty_card[take_level-1];
 		
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)) == 0)
+		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
 		{
 			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-			myDSH->setIntegerForKey(kDSH_Key_cardTakeCnt, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt) + 1);
-			myDSH->setIntegerForKey(kDSH_Key_hasGottenCard_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt));
-			myDSH->setIntegerForKey(kDSH_Key_takeCardNumber_int1, myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt), NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
-			
-			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-			myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), 1);
-			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GI(kSDS_CI_int1_durability_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-			myDSH->setStringForKey(kDSH_Key_cardPassive_int1, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level), NSDS_GS(kSDS_CI_int1_passive_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
 			
 			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 			
-			Json::Value param;
-			param["memberID"] = hspConnector::get()->getKakaoID();
-			param["cardNo"] = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+			keep_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
 			
-			hspConnector::get()->command("updateCardHistory", param, nullptr);
+			LoadingLayer* t_loading = LoadingLayer::create(-900);
+			addChild(t_loading, kPuzzleZorder_popup+1);
+			
+			updateCardHistory(t_loading);
 		}
 		else
 		{
-			int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) == 0)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
-				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, card_number, 1);
-				myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number, NSDS_GI(kSDS_CI_int1_durability_i, card_number));
-				myDSH->setStringForKey(kDSH_Key_cardPassive_int1, card_number, NSDS_GS(kSDS_CI_int1_passive_s, card_number));
-			}
-			else
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, card_number));
-			}
+			
 		}
 	}
 	
@@ -468,14 +450,7 @@ bool PuzzleScene::init()
 		else if(recent_step == kTutorialFlowStep_backClick)
 		{
 			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			int recent_get_card_cnt = 0;
-			int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-			for(int i=1;i<=take_card_cnt;i++)
-			{
-				int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-					recent_get_card_cnt++;
-			}
+			int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
 			if(selected_card_number > 0 && recent_get_card_cnt >= 2)
 			{
 				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
@@ -488,6 +463,25 @@ bool PuzzleScene::init()
 	}
 	
 	return true;
+}
+
+void PuzzleScene::updateCardHistory(CCNode *t_loading)
+{
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["cardNo"] = keep_card_number;
+	
+	hspConnector::get()->command("updateCardHistory", param, [=](Json::Value result_data)
+								 {
+									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									 {
+										 t_loading->removeFromParent();
+									 }
+									 else
+									 {
+										 updateCardHistory(t_loading);
+									 }
+								 });
 }
 
 void PuzzleScene::startBacking()
@@ -503,6 +497,7 @@ void PuzzleScene::showClearPopup()
 	
 	ClearPopup* t_popup = ClearPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideClearPopup));
+	t_popup->replay_func = [=](){openSettingPopup();};
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -526,14 +521,7 @@ void PuzzleScene::hideClearPopup()
 		else if(recent_step == kTutorialFlowStep_backClick)
 		{
 			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			int recent_get_card_cnt = 0;
-			int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-			for(int i=1;i<=take_card_cnt;i++)
-			{
-				int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-					recent_get_card_cnt++;
-			}
+			int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
 			if(selected_card_number > 0 && recent_get_card_cnt >= 2)
 			{
 				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
@@ -678,7 +666,51 @@ void PuzzleScene::endGetStar()
 void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLog("success puzzle animation");
-	endSuccessPuzzleEffect();
+	
+	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+	
+	for(int i=start_stage;i<start_stage+stage_count;i++)
+	{
+		PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(i);
+		new_piece->simpleView();
+	}
+	
+	CCSprite* light_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 272));
+	light_img->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	light_img->setSkewX(10);
+	light_img->setOpacity(0);
+	light_img->setPosition(ccp(-130, 0));
+	puzzle_node->addChild(light_img, 999);
+	
+	CCMoveTo* t_move1 = CCMoveTo::create(0.7f, ccp(130,0));
+	CCMoveTo* t_move2 = CCMoveTo::create(0.f, ccp(-130,0));
+	CCSequence* t_seq1 = CCSequence::create(t_move1, t_move2, NULL);
+	
+	CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 100);
+	CCDelayTime* t_delay1 = CCDelayTime::create(0.3f);
+	CCFadeTo* t_fade2 = CCFadeTo::create(0.2f, 0);
+	CCSequence* t_seq2 = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
+	
+	CCSpawn* t_spawn = CCSpawn::create(t_seq1, t_seq2, NULL);
+	CCRepeat* t_repeat = CCRepeat::create(t_spawn, 2);
+	
+	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzleScene::pumpPuzzle));
+	CCCallFunc* t_call2 = CCCallFunc::create(light_img, callfunc_selector(CCSprite::removeFromParent));
+	
+	CCSequence* t_seq3 = CCSequence::create(t_repeat, t_call1, t_call2, NULL);
+	
+	light_img->runAction(t_seq3);
+}
+
+void PuzzleScene::pumpPuzzle()
+{
+	CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.05f);
+	CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endSuccessPuzzleEffect));
+	CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, t_call, NULL);
+	
+	puzzle_node->runAction(t_seq);
 }
 
 void PuzzleScene::endSuccessPuzzleEffect()
@@ -694,8 +726,6 @@ void PuzzleScene::showPerfectPuzzleEffect()
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
-	
-	CCLog("start_stage : %d, stage_count : %d", start_stage, stage_count);
 	
 	for(int i=start_stage;i<start_stage+stage_count;i++)
 	{
@@ -752,6 +782,7 @@ void PuzzleScene::showFailPopup()
 	
 	FailPopup* t_popup = FailPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideFailPopup));
+	t_popup->replay_func = [=](){openSettingPopup();};
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -761,14 +792,7 @@ void PuzzleScene::hideFailPopup()
 	if(recent_step == kTutorialFlowStep_backClick)
 	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int recent_get_card_cnt = 0;
-		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=take_card_cnt;i++)
-		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-				recent_get_card_cnt++;
-		}
+		int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
 		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
 		{
 			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
@@ -873,7 +897,7 @@ void PuzzleScene::setPuzzle()
 	
 	unlock_cover = NULL;
 	
-	clear_is_first_perfect = !myDSH->getBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number);
+	clear_is_first_perfect = !mySGD->getPuzzleHistory(puzzle_number).is_perfect;
 	
 	for(int i=0;i<20;i++)
 	{
@@ -908,12 +932,10 @@ void PuzzleScene::setPuzzle()
 			{
 				bool is_found = false;
 				int found_number = 0;
-				bool is_have_card[3] = {0,};
-				for(int k=3;k>=1;k--)
+				bool is_have_card[4] = {0,};
+				for(int k=4;k>=1;k--)
 				{
-					int card_number = SDS_GI(kSDF_stageInfo, stage_number, CCString::createWithFormat("level%d_card", k)->getCString());
-					int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
-					if(card_durability > 0)
+					if(mySGD->isHasGottenCards(stage_number, k) > 0)
 					{
 						if(!is_found)
 						{
@@ -924,10 +946,10 @@ void PuzzleScene::setPuzzle()
 					}
 				}
 				
-				if(!is_have_card[0] || !is_have_card[1] || !is_have_card[2])
+				if(!is_have_card[0] || !is_have_card[1] || !is_have_card[2] || !is_have_card[3])
 					clear_is_first_perfect = false;
 				
-				if(found_number >= 1 && found_number <= 3)
+				if(found_number >= 1 && found_number <= 4)
 				{
 					PieceType t_type;
 					if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, stage_number))
@@ -1010,15 +1032,17 @@ void PuzzleScene::setPuzzle()
 	
 	clear_is_first_puzzle_success = false;
 	
-	if(is_puzzle_clear && !myDSH->getBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number))
+	if(is_puzzle_clear && !mySGD->getPuzzleHistory(puzzle_number).is_clear)
 	{
 		clear_is_first_puzzle_success = true;
 		
-		if(clear_is_first_perfect)
-			myDSH->setBoolForKey(kDSH_Key_isPerfectPuzzle_int1, puzzle_number, true);
+		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
 		
-		myDSH->setBoolForKey(kDSH_Key_isClearedPuzzle_int1, puzzle_number, true);
-		myDSH->saveUserData({kSaveUserData_Key_openPuzzle}, nullptr);
+		if(clear_is_first_perfect)
+			t_history.is_perfect = true;
+		
+		t_history.is_clear = true;
+		mySGD->setPuzzleHistory(t_history, nullptr);
 	}
 	
 	if(must_be_change_selected_stage_number && enable_stage_number != -1) // 현재 선택된 스테이지가 선택 불가 스테이지라면
@@ -1034,12 +1058,12 @@ void PuzzleScene::setPuzzle()
 	have_card_cnt_case->setVisible(false);
 	
 	int have_card_cnt = 0;
-	int total_card_cnt = stage_count*3;
+	int total_card_cnt = stage_count*4;
 	
-	int card_take_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-	for(int i=1;i<=card_take_cnt;i++)
+	int card_take_cnt = mySGD->getHasGottenCardsSize();
+	for(int i=0;i<card_take_cnt;i++)
 	{
-		int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
+		int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
 		int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 		if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
 			have_card_cnt++;
@@ -1137,14 +1161,7 @@ void PuzzleScene::pieceAction(int t_stage_number)
 	else if(recent_step == kTutorialFlowStep_backClick)
 	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int recent_get_card_cnt = 0;
-		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=take_card_cnt;i++)
-		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-				recent_get_card_cnt++;
-		}
+		int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
 		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
 		{
 			is_action = false;
@@ -1177,14 +1194,7 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 	else if(recent_step == kTutorialFlowStep_backClick)
 	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int recent_get_card_cnt = 0;
-		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=take_card_cnt;i++)
-		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-				recent_get_card_cnt++;
-		}
+		int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
 		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
 		{
 			is_action = false;
@@ -1355,14 +1365,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 	else if(recent_step == kTutorialFlowStep_backClick)
 	{
 		int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-		int recent_get_card_cnt = 0;
-		int take_card_cnt = myDSH->getIntegerForKey(kDSH_Key_cardTakeCnt);
-		for(int i=1;i<=take_card_cnt;i++)
-		{
-			int card_number = myDSH->getIntegerForKey(kDSH_Key_takeCardNumber_int1, i);
-			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) > 0)
-				recent_get_card_cnt++;
-		}
+		int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
 		if(selected_card_number > 0 && recent_get_card_cnt >= 2)
 		{
 			is_action = false;
@@ -1464,14 +1467,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_start)
 		{
-			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
-			
-			mySD->setSilType(selected_stage_number);
-			
-			StartSettingPopup* t_popup = StartSettingPopup::create();
-			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-			addChild(t_popup, kPuzzleZorder_popup);
+			openSettingPopup();
 //			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_changeMode)
@@ -1499,6 +1495,19 @@ void PuzzleScene::menuAction(CCObject* sender)
 			is_menu_enable = true;
 		}
 	}
+}
+
+void PuzzleScene::openSettingPopup()
+{
+	is_menu_enable = false;
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+	
+	mySD->setSilType(selected_stage_number);
+	
+	StartSettingPopup* t_popup = StartSettingPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	addChild(t_popup, kPuzzleZorder_popup);
 }
 
 void PuzzleScene::mailPopupClose()
@@ -1600,7 +1609,7 @@ void PuzzleScene::setRight()
 	for(int i=1;i<=stage_card_count && i <= 4;i++)
 	{
 		int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
-		is_have_card_list[i-1] = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, step_card_number) > 0;
+		is_have_card_list[i-1] = mySGD->isHasGottenCards(step_card_number) > 0;
 		
 		CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-62-(i-1)*45);
 		

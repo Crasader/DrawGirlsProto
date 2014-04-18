@@ -29,7 +29,7 @@ void NewPuzzlePiece::myInit(int t_stage_number, function<void(int)> t_clicked_fu
 	clicked_func = t_clicked_func;
 	
 	int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
-	if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
+	if(puzzle_number == 1 || mySGD->getOpenPuzzleCount() >= puzzle_number)
 	{
 		is_open_puzzle = true;
 		recent_mode = t_init_mode; // kNewPuzzlePieceMode_default or kNewPuzzlePieceMode_thumbnail or kNewPuzzlePieceMode_ranker
@@ -186,9 +186,9 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 		else
 		{
 			bool is_have[3] = {false,};
-			is_have[0] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1)) > 0;
-			is_have[1] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2)) > 0;
-			is_have[2] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3)) > 0;
+			is_have[0] = mySGD->isHasGottenCards(stage_number, 1) > 0;
+			is_have[1] = mySGD->isHasGottenCards(stage_number, 2) > 0;
+			is_have[2] = mySGD->isHasGottenCards(stage_number, 3) > 0;
 			
 			if(t_mode == kNewPuzzlePieceMode_default)
 			{
@@ -401,9 +401,9 @@ void NewPuzzlePiece::setStageLevel(CCSprite* piece_img)
 	int star_cnt = 0;
 	
 	int card_durability[3] = {0,};
-	card_durability[0] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1));
-	card_durability[1] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 2));
-	card_durability[2] = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 3));
+	card_durability[0] = mySGD->isHasGottenCards(stage_number, 1);
+	card_durability[1] = mySGD->isHasGottenCards(stage_number, 2);
+	card_durability[2] = mySGD->isHasGottenCards(stage_number, 3);
 	
 	if(card_durability[0])		star_cnt++;
 	if(card_durability[1])		star_cnt++;

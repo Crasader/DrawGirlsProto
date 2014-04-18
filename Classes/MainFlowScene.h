@@ -47,6 +47,10 @@ private:
 //	int is_unlock_puzzle;
 //	void endUnlockAnimation();
 	
+	int keep_card_number;
+	
+	void updateCardHistory(CCNode* t_loading);
+	
 	void heartRefresh();
 	
 	CCNode* tutorial_node;

@@ -191,6 +191,8 @@ private:
 	}
 };
 
+const int SHORTLINE_VALUE = 3;
+
 class PathManager : public CCNode
 {
 public:
@@ -405,6 +407,19 @@ private:
 			last_path_node->changeScaleImg(-1);
 	}
 	
+	bool isShortLine()
+	{
+		int length = 0;
+		for(auto i = myList.begin(); i != myList.end() ; i++)
+		{
+			length += (*i)->pathScale;
+		}
+		if(length > SHORTLINE_VALUE)
+			return false;
+		
+		return true;
+	}
+	
 	void myInit()
 	{
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -438,6 +453,7 @@ private:
 		myGD->B_Ip["PM_checkRemoveNewline"] = std::bind(&PathManager::checkRemoveNewline, this, _1);
 		myGD->V_Ipv["PM_checkLastAddPath"] = std::bind(&PathManager::checkLastAddPath, this, _1);
 		myGD->V_V["PM_lastPathRemove"] = std::bind(&PathManager::lastPathRemove, this);
+		myGD->B_V["PM_isShortLine"] = std::bind(&PathManager::isShortLine, this);
 		setTag(pathBreakingStateFalse);
 	}
 };

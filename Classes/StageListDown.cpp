@@ -818,6 +818,7 @@ void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_p
 	gray->setPosition(ccp(240,160));
 	gray->setScaleX(screen_scale_x);
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	gray->setVisible(false);
 	addChild(gray);
 	
 	setTouchEnabled(true);
@@ -831,6 +832,7 @@ void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_p
 	state_ment->setPosition(ccp(240,160));
 	state_ment->setHorizontalAlignment(kCCTextAlignmentCenter);
 	state_ment->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+	state_ment->setVisible(false);
 	addChild(state_ment, kSLD_Z_content);
 
 	is_downloading = false;
