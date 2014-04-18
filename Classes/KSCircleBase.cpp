@@ -30,6 +30,7 @@ bool KSCircleBase::init(const string& ccbiName)
 	//CCNode* p = reader->readNodeGraphFromFile(("boss_" + ccbiname2 + ".ccbi").c_str(), this);
 	CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+ccbiname2+".ccbi").c_str(), this);
 	m_headImg = dynamic_cast<CircleBossCCB*>(p);
+	KS::setPositionType(m_headImg, kCCPositionTypeGrouped);
 	mAnimationManager = reader->getAnimationManager();
 	mAnimationManager->setDelegate(this);
 	reader->release();
@@ -481,17 +482,21 @@ void KSCircleBase::setPosition( const CCPoint& t_sp )
 {
 	//CCLog("setPos %f %f", t_sp.x, t_sp.y);
 	//		KSCumberBase::setPosition(t_sp);
-	m_headImg->setPosition(t_sp);
-	// 돌때랑 분노 모드일 땐 메인포인트 지정하면 안됨.
-	if((m_state & kCumberStateNoDirection) || m_state == kCumberStateFury)
+	
+	auto beforePosition = getPosition();
+	
+	if(t_sp.x - beforePosition.x >= 0)
 	{
-		// black hole!! 
+		// right
 	}
 	else
 	{
-		myGD->setMainCumberPoint(this, ccp2ip(t_sp));
-		m_mapPoint = ccp2ip(t_sp);
+		m_headImg->setFlipX(true);
 	}
+		
+	m_headImg->setPosition(t_sp);
+	myGD->setMainCumberPoint(this, ccp2ip(t_sp));
+	m_mapPoint = ccp2ip(t_sp);
 }
 
 void KSCircleBase::setPositionX( float t_x )
@@ -512,7 +517,7 @@ const CCPoint& KSCircleBase::getPosition()
 void KSCircleBase::attackBehavior( Json::Value _pattern )
 {
 	std::string pattern = _pattern["pattern"].asString();
-	bool moving = _pattern.get("movingcast", false).asBool();
+	bool moving = _pattern.get("movingcast", false).asInt();
 	if(pattern == "109")
 	{
 		if(moving)

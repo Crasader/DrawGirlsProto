@@ -1142,6 +1142,7 @@ void FallMeteor::hidingAnimation (float dt)
 	}
 	else
 	{
+//		KS::setColor(this, ccc3(fadeFromToDuration.getValue(), fadeFromToDuration.getValue(), 255));
 		KS::setOpacity(this, fadeFromToDuration.getValue());
 	}
 }
@@ -1334,7 +1335,8 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 	ingFrame = 0;
 	addChild(KSGradualValue<float>::create(255, 0, fallFrame / 60.f, [=](int t)
 				{
-					KS::setOpacity(m_targetSprite, t);
+					KS::setOpacity(m_targetSprite, MIN(255, t + 100) );
+//					KS::setColor(m_targetSprite, ccc3(t, t, 255));
 				},
 				[=](float t)
 				{

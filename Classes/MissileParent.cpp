@@ -518,7 +518,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			CrashChargeNodeLambda* t_ccn =
 			CrashChargeNodeLambda::create(startPosition, castFrame,
-										  func, cb, pattern);
+										  func, cb, patternData);
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 			cb->getParent()->addChild(t_ccn);
 			t_ccn->startCharge();
@@ -532,7 +532,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			SpecialChargeNodeLambda* t_ccn =
 			SpecialChargeNodeLambda::create(startPosition, castFrame,
-											func, cb, pattern);
+											func, cb, patternData);
 			
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			cb->getParent()->addChild(t_ccn);
@@ -545,7 +545,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		{
 			ChargeNodeLambda* t_ccn =
 			ChargeNodeLambda::create(startPosition, castFrame,
-									 func, cb, pattern);
+									 func, cb, patternData);
 			
 			t_ccn->setChargeColor(ccc4f(0.80, 1.00, 1.00, 1.00));
 			cb->getParent()->addChild(t_ccn);
@@ -1237,7 +1237,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				int totalframe = patternData.get("totalframe", 300).asInt();
 				int shootframe = patternData.get("shootframe", 30).asInt();
 				float speed = patternData.get("speed", 250.f).asDouble() / 100.f;
-				FallingStoneWrapper* t_m9 = FallingStoneWrapper::create(totalframe, (KSCumberBase*)cb, shootframe, speed, CCSizeMake(30, 30), 1);
+				FallingStoneWrapper* t_m9 = FallingStoneWrapper::create(totalframe, (KSCumberBase*)cb, shootframe, speed, CCSizeMake(25, 25), 1);
 				addChild(t_m9);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(t_m9);
@@ -1369,20 +1369,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 
 
 
-//void MissileParent::createSubCumberReplication( CCPoint s_p,
-												 //CCObject* sender, SEL_CallFuncO d_startMoving )
-//{
-	//CreateSubCumberOtherAction* t_cscaa = CreateSubCumberOtherAction::create(IntPoint(int(round((s_p.x-1)/pixelSize+1)), int(round((s_p.y-1)/pixelSize+1))), sender, d_startMoving, sender, d_startMoving);
-	//addChild(t_cscaa);
-	
-	//ChargeNode* t_cn = ChargeNode::create(s_p, 60*3, NULL, NULL,
-											//t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::afterAction),
-											//t_cscaa, callfuncO_selector(CreateSubCumberOtherAction::cancelAction), sender);
-	//addChild(t_cn);
-	//t_cn->startCharge();
-	
-	//chargeArray->addObject(t_cn);
-//}
 
 void MissileParent::explosion( CCPoint bombPosition, ccColor4F t_color, float t_angle )
 {
@@ -1583,35 +1569,6 @@ MissileParent* MissileParent::create( CCNode* boss_eye )
 }
 
 
-//CreateSubCumberOtherAction* CreateSubCumberOtherAction::create( IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel )
-//{
-	//CreateSubCumberOtherAction* t_CSCAA = new CreateSubCumberOtherAction();
-	//t_CSCAA->myInit(c_p, t_after, d_after, t_cancel, d_cancel);
-	//t_CSCAA->autorelease();
-	//return t_CSCAA;
-//}
-
-//void CreateSubCumberOtherAction::afterAction( CCObject* cb )
-//{
-	//myGD->communication("CP_createSubCumber", createPoint);
-	//(after_target->*after_delegate)(cb);
-	//removeFromParentAndCleanup(true);
-//}
-
-//void CreateSubCumberOtherAction::cancelAction( CCObject* cb )
-//{
-	//(cancel_target->*cancel_delegate)(cb);
-	//removeFromParentAndCleanup(true);
-//}
-
-//void CreateSubCumberOtherAction::myInit( IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel )
-//{
-	//createPoint = c_p;
-	//after_target = t_after;
-	//after_delegate = d_after;
-	//cancel_target = t_cancel;
-	//cancel_delegate = d_cancel;
-//}
 
 UM_creator* UM_creator::create( int t_um_tcnt, int t_create_type, float t_missile_speed )
 {

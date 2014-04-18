@@ -98,6 +98,32 @@ namespace KS
 			}
 		}
 	}
+	void setPositionType(CCObject* object, tCCPositionType pt)
+	{
+		CCArray* childs = NULL;
+		CCObject* child = NULL;
+		CCNode* nodeObject = (CCNode*)object;
+		CCParticleSystemQuad* mine = dynamic_cast<CCParticleSystemQuad*>(nodeObject);
+		if(mine)
+			mine->setPositionType(pt);
+		if (nodeObject) {
+			childs = nodeObject->getChildren();
+		}
+		if (childs) {
+			CCARRAY_FOREACH(childs, child){
+				CCParticleSystemQuad *pRGBAProtocol = dynamic_cast<CCParticleSystemQuad*>(child);
+				if (pRGBAProtocol)
+				{
+					pRGBAProtocol->setPositionType(pt);
+					// pRGBAProtocol->setColor(ccc3(opaque, opaque, opaque));
+				}
+				CCNode* singleObject = (CCNode*)child;
+				if (singleObject && singleObject->getChildrenCount()>0) {
+					setPositionType(singleObject, pt);
+				}
+			}
+		}
+	}
 	string longLongToStr(long long t)
 	{
 		int radix = 26;

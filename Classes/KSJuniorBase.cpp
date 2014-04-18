@@ -37,6 +37,7 @@ bool KSJuniorBase::init(const string& ccbiName)
 	CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), this);
 	m_headImg = dynamic_cast<CCSprite*>(p);
 	
+	KS::setPositionType(m_headImg, kCCPositionTypeGrouped);
 	
 	
 	mAnimationManager = reader->getAnimationManager();
@@ -413,6 +414,17 @@ void KSJuniorBase::onStopMoving()
 
 void KSJuniorBase::setPosition( const CCPoint& t_sp )
 {
+	auto beforePosition = getPosition();
+	
+	if(t_sp.x - beforePosition.x >= 0)
+	{
+		// right
+	}
+	else
+	{
+//		m_headImg->setFlipX(true);
+	}
+	
 	m_headImg->setPosition(t_sp);
 	m_mapPoint = ccp2ip(t_sp);
 }

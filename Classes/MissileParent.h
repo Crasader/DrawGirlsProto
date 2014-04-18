@@ -28,27 +28,6 @@ using namespace std;
 
 
 
-//class CreateSubCumberOtherAction : public CCNode
-//{
-//public:
-	//static CreateSubCumberOtherAction* create(IntPoint c_p,
-												//CCObject* t_after, SEL_CallFuncO d_after,
-												//CCObject* t_cancel, SEL_CallFuncO d_cancel);
-	
-	//void afterAction(CCObject* cb);
-	
-	//void cancelAction(CCObject* cb);
-	
-//private:
-	
-	//CCObject* after_target;
-	//SEL_CallFuncO after_delegate;
-	//CCObject* cancel_target;
-	//SEL_CallFuncO cancel_delegate;
-	//IntPoint createPoint;
-	
-	//void myInit(IntPoint c_p, CCObject* t_after, SEL_CallFuncO d_after, CCObject* t_cancel, SEL_CallFuncO d_cancel);
-//};
 
 class UM_creator : public CCNode
 {
