@@ -114,7 +114,7 @@ private:
 	void setTop();
 	
 	CCSprite* postbox_count_case;
-	CCLabelTTF* postbox_count_label;
+//	CCLabelTTF* postbox_count_label;
 	void countingMessage();
 	void mailPopupClose();
 	void heartRefresh();

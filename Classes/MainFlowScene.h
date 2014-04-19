@@ -89,14 +89,17 @@ private:
 	
 	void menuAction(CCObject* sender);
 	
+	CCSprite* total_star;
+	
 	void countingMessage();
 	
 	CCSprite* postbox_count_case;
-	CCLabelTTF* postbox_count_label;
+//	CCLabelTTF* postbox_count_label;
 	
 	vector<CCNode*> top_list;
 	void topOpenning();
 	void topPuzzleMode();
+	void topReturnMode();
 	void setTop();
 	
 	vector<CCNode*> bottom_list;

@@ -1861,15 +1861,15 @@ void StartSettingScene::setTop()
 	postbox_menu->setPosition(ccp(394,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(postbox_menu, kStartSettingZorder_top);
 	
-	postbox_count_case = CCSprite::create("mainflow_postbox_count.png");
+	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
 	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
 	addChild(postbox_count_case, kStartSettingZorder_top);
 	postbox_count_case->setVisible(false);
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
-	postbox_count_label->setColor(ccc3(95, 60, 30));
-	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
-	postbox_count_case->addChild(postbox_count_label);
+//	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+//	postbox_count_label->setColor(ccc3(95, 60, 30));
+//	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
+//	postbox_count_case->addChild(postbox_count_label);
 	
 	countingMessage();
 	
@@ -1935,26 +1935,26 @@ void StartSettingScene::countingMessage()
 									 {
 										 postbox_count_case->setVisible(true);
 										 
-										 if(message_list.size() < 10)
-										 {
-											 postbox_count_label->setFontSize(10);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else if(message_list.size() < 100)
-										 {
-											 postbox_count_label->setFontSize(7);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else
-										 {
-											 postbox_count_label->setFontSize(8);
-											 postbox_count_label->setString("...");
-										 }
+//										 if(message_list.size() < 10)
+//										 {
+//											 postbox_count_label->setFontSize(10);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else if(message_list.size() < 100)
+//										 {
+//											 postbox_count_label->setFontSize(7);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else
+//										 {
+//											 postbox_count_label->setFontSize(8);
+//											 postbox_count_label->setString("...");
+//										 }
 									 }
 									 else
 									 {
 										 postbox_count_case->setVisible(false);
-										 postbox_count_label->setString("0");
+//										 postbox_count_label->setString("0");
 									 }
 								 });
 }

@@ -3590,6 +3590,7 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 				int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 				PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 				t_history.is_open = true;
+				t_history.open_type = "루비소모";
 				mySGD->setPuzzleHistory(t_history, nullptr);
 				
 				map_mode_state = kMMS_changeMode;
