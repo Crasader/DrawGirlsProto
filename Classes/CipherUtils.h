@@ -25,6 +25,10 @@ using CryptoPP::DES;
 #include "cryptopp/base64.h"
 using CryptoPP::Base64Encoder;
 using CryptoPP::Base64Decoder;
+
+#include "cryptopp/base32.h"
+using CryptoPP::Base32Encoder;
+using CryptoPP::Base32Decoder;
 class CipherUtils
 {
 private:

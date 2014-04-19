@@ -2605,6 +2605,7 @@ void CrashLazerWrapper::hidingAnimation( float dt )
 
 void CrashLazerWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
+//	t_sp = ip2ccp(myGD->getMainCumberPoint(m_cumber));
 	lazer_main = t_bead = NULL;
 	m_cumber = cb;
 
@@ -2716,9 +2717,9 @@ void CrashLazerWrapper::myAction()
 		if(ingFrame == chargeFrame)
 		{
 			auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_head.ccbi");
-			KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			KS::setBlendFunc(ret.first, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 			lazer_main = ret.first;
-
+			lazer_main->setScaleY(m_crashSize/8.f);
 			lazer_main->setAnchorPoint(ccp(0,0.5));
 			lazer_main->setRotation(-angle);
 
@@ -2730,29 +2731,31 @@ void CrashLazerWrapper::myAction()
 			addChild(lazer_main);
 
 			
-			//레이저가 자연스럽게 시작하도록 붙여주는것
-			{
-			CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back1.png");
-			//laser3->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			laser3->setPosition(ccp(25, 0));
-			laser3->setScaleY(m_crashSize/12.f);
-			lazer_main->addChild(laser3,-1);
-			}
-			{
-				CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back2.png");
-				//laser3->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-				laser3->setPosition(ccp(20, 0));
-				laser3->setScaleY(m_crashSize/12.f);
-				lazer_main->addChild(laser3,10);
-			}
+//			//레이저가 자연스럽게 시작하도록 붙여주는것
+//			{
+//			CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back1.png");
+//			//laser3->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//			laser3->setPosition(ccp(25, 0));
+//			laser3->setScaleY(m_crashSize/12.f);
+//			lazer_main->addChild(laser3,-1);
+//			}
+//			{
+//				CCSprite* laser3 = CCSprite::create("pattern_laserpuple_back2.png");
+//				//laser3->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//				laser3->setPosition(ccp(20, 0));
+//				laser3->setScaleY(m_crashSize/12.f);
+//				lazer_main->addChild(laser3,10);
+//			}
 			
 			for(int i=1; i<10; i++)
 			{
 				auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_body.ccbi");
+				
 				CCSprite* laser3 = ret2.first;
-				KS::setBlendFunc(laser3, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//				laser3->setContentSize(lazer_main->getContentSize());
+				KS::setBlendFunc(laser3, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 				laser3->setPosition(ccp(20+44 * i, 0));
-				laser3->setScaleY(m_crashSize/12.f);
+				laser3->setScaleY(m_crashSize/8.f);
 				lazer_main->addChild(laser3);
 				//					prev = laser3;
 			}
@@ -2761,7 +2764,8 @@ void CrashLazerWrapper::myAction()
 
 			CCPoint c_sp = ccpMult(dv, 30);
 			c_sp = ccpAdd(sp, c_sp);
-
+//			c_sp = ccpAdd(ip2ccp(myGD->getMainCumberPoint(m_cumber)), c_sp);
+			
 			float t_scale = m_crashSize/30.f;
 
 			crashRect = CCRectMake(-30, (-m_crashSize + 10*t_scale), 460, (m_crashSize + 10*t_scale)); //x좌표에 -30추가, 무조건 1자로 깍도록

@@ -52,7 +52,7 @@ std::string CipherUtils::encrypt(const char *keyString, const char* plain)
 																								) // StreamTransformationFilter
 								 ); // StringSource
 		StringSource( cipher, true,
-								 new Base64Encoder( new StringSink( retValue ) )
+								 new Base32Encoder( new StringSink( retValue ) )
 								 ); // StringSource
 
 	}
@@ -95,7 +95,7 @@ std::string CipherUtils::encrypt(const char *keyString, const void *plain, size_
 																								) // StreamTransformationFilter
 								 ); // StringSource
 		StringSource( cipher, true,
-								 new Base64Encoder( new StringSink( retValue ) )
+								 new Base32Encoder( new StringSink( retValue ) )
 								 ); // StringSource
 	}
 	catch( CryptoPP::Exception& e )
@@ -117,7 +117,7 @@ std::string CipherUtils::decrypt(const char *keyString, const char* cipher)
 	{
 		std::string cipher2;	
 		StringSource ( cipher, true,
-										new Base64Decoder( new StringSink( cipher2 ) ) );
+										new Base32Decoder( new StringSink( cipher2 ) ) );
 		
 		ECB_Mode< AES >::Decryption d;
 		// ECB Mode does not use an IV
