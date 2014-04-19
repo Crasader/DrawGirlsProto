@@ -108,7 +108,8 @@ private:
 	
 	void resultGetCardHistory(Json::Value result_data);
 	void resultGetPuzzleHistory(Json::Value result_data);
-	void resultUpdatePuzzleHistory(Json::Value result_data);
+	
+	void resultGetPieceHistory(Json::Value result_data);
 	
 	Json::Value friendList;
 	

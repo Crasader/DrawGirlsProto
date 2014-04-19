@@ -250,17 +250,20 @@ bool CardSettingPopup::init()
 	take_card_count->setPosition(ccp(70,255));
 	main_case->addChild(take_card_count, kCSS_Z_content);
 	
-	CCSprite* n_diary = CCSprite::create("cardsetting_diary.png");
-	CCSprite* s_diary = CCSprite::create("cardsetting_diary.png");
-	s_diary->setColor(ccGRAY);
-	
-	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary, s_diary, this, menu_selector(CardSettingPopup::menuAction));
-	diary_item->setTag(kCSS_MT_diary);
-	
-	CCMenu* diary_menu = CCMenu::createWithItem(diary_item);
-	diary_menu->setPosition(ccp(165, 256));
-	main_case->addChild(diary_menu, kCSS_Z_content);
-	diary_menu->setTouchPriority(-185);
+	if(mySGD->getHasGottenCardsSize() > 0)
+	{
+		CCSprite* n_diary = CCSprite::create("cardsetting_diary.png");
+		CCSprite* s_diary = CCSprite::create("cardsetting_diary.png");
+		s_diary->setColor(ccGRAY);
+		
+		CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary, s_diary, this, menu_selector(CardSettingPopup::menuAction));
+		diary_item->setTag(kCSS_MT_diary);
+		
+		CCMenu* diary_menu = CCMenu::createWithItem(diary_item);
+		diary_menu->setPosition(ccp(165, 256));
+		main_case->addChild(diary_menu, kCSS_Z_content);
+		diary_menu->setTouchPriority(-185);
+	}
 	
 	
 	CommonButton* event_menu = CommonButton::create("이벤트", 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);

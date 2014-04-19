@@ -173,6 +173,16 @@ void TitleRenewalScene::successLogin()
 	puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
 	command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 	
+	Json::Value character_param;
+	character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
+	command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
+	
+	Json::Value monster_param;
+	monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
+	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
+	
+	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
+	
 	Json::Value userdata_param;
 	userdata_param["memberID"] = hspConnector::get()->getKakaoID();
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
@@ -185,15 +195,9 @@ void TitleRenewalScene::successLogin()
 	puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
 	command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
 	
-	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
-	
-	Json::Value character_param;
-	character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
-	command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
-	
-	Json::Value monster_param;
-	monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
-	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
+	Json::Value piece_param;
+	piece_param["memberID"] = hspConnector::get()->getKakaoID();
+	command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
@@ -727,6 +731,39 @@ void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
 	checkReceive();
 }
 
+void TitleRenewalScene::resultGetPieceHistory(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		if(result_data["list"].size() == 0)
+		{
+//			is_receive_fail = true;
+//			Json::Value puzzle_param;
+//			puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+//			puzzle_param["puzzleNo"] = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1);
+//			puzzle_param["updateOpenDate"] = true;
+//			puzzle_param["openType"] = "무료";
+//			command_list.push_back(CommandParam("updatePuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultUpdatePuzzleHistory)));
+		}
+		else
+		{
+//			mySGD->initPuzzleHistory(result_data["list"]);
+		}
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value piece_param;
+		piece_param["memberID"] = hspConnector::get()->getKakaoID();
+		command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
 void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
 {
 	KS::KSLog("%", result_data);
@@ -735,13 +772,11 @@ void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
 	{
 		if(result_data["list"].size() == 0)
 		{
-			is_receive_fail = true;
-			Json::Value puzzle_param;
-			puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
-			puzzle_param["puzzleNo"] = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1);
-			puzzle_param["updateOpenDate"] = true;
-			puzzle_param["openType"] = "무료";
-			command_list.push_back(CommandParam("updatePuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultUpdatePuzzleHistory)));
+			PuzzleHistory t_history = mySGD->getPuzzleHistory(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1));
+			t_history.is_open = true;
+			t_history.open_type = "무료";
+			
+			mySGD->setPuzzleHistory(t_history, nullptr);
 		}
 		else
 		{
@@ -754,32 +789,6 @@ void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
 		Json::Value puzzle_param;
 		puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
 		command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
-	}
-	
-	receive_cnt--;
-	checkReceive();
-}
-
-void TitleRenewalScene::resultUpdatePuzzleHistory(Json::Value result_data)
-{
-	KS::KSLog("%", result_data);
-	
-	if(result_data["result"]["code"].asInt() == GDSUCCESS)
-	{
-		is_receive_fail = true;
-		Json::Value puzzle_param;
-		puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
-		command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
-	}
-	else
-	{
-		is_receive_fail = true;
-		Json::Value puzzle_param;
-		puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
-		puzzle_param["puzzleNo"] = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1);
-		puzzle_param["updateOpenDate"] = true;
-		puzzle_param["openType"] = "무료";
-		command_list.push_back(CommandParam("updatePuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultUpdatePuzzleHistory)));
 	}
 	
 	receive_cnt--;
@@ -963,8 +972,11 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 //				NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt(), false);
 				NSDS_SI(puzzle_number, kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt(), false);
 				NSDS_SI(puzzle_number, kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt(), false);
-				NSDS_SI(puzzle_number, kSDS_PZ_point_i, puzzle_list[i]["point"].asInt(), false);
-				NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt(), false);
+				
+				NSDS_SS(puzzle_number, kSDS_PZ_condition_s, puzzle_list[i]["condition"].asString(), false);
+				
+//				NSDS_SI(puzzle_number, kSDS_PZ_point_i, puzzle_list[i]["point"].asInt(), false);
+//				NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt(), false);
 				
 				Json::Value path_info = puzzle_list[i]["pathInfo"];
 				Json::Value card_info = puzzle_list[i]["cardInfo"];

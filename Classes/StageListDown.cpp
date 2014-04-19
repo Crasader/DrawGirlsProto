@@ -38,8 +38,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		state_ment->setString("퍼즐 정보를 받아오는ing...");
 		
 		NSDS_SS(puzzle_number, kSDS_PZ_title_s, result_data["title"].asString(), false);
-		NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, result_data["ticket"].asInt(), false);
-		NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt(), false);
+		NSDS_SS(puzzle_number, kSDS_PZ_condition_s, result_data["condition"].asString(), false);
+		
+//		NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, result_data["ticket"].asInt(), false);
+//		NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt(), false);
 		
 		if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != result_data["map"]["image"].asString())
 		{

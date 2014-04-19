@@ -563,6 +563,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	
 	if(t_key == kSDS_PZ_version_i)						rv = "version";
 	else if(t_key == kSDS_PZ_title_s)					rv = "title";
+	else if(t_key == kSDS_PZ_condition_s)				rv = "condition";
 	else if(t_key == kSDS_PZ_ticket_i)					rv = "ticket";
 	else if(t_key == kSDS_PZ_point_i)					rv = "point";
 	else if(t_key == kSDS_PZ_center_s)					rv = "center";

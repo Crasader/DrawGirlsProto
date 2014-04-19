@@ -37,6 +37,7 @@ enum SDS_KEY
 	kSDS_PZ_base = 0,
 	kSDS_PZ_version_i,
 	kSDS_PZ_title_s,
+	kSDS_PZ_condition_s,
 	kSDS_PZ_ticket_i,
 	kSDS_PZ_point_i,
 	kSDS_PZ_center_s,
