@@ -778,7 +778,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		
 		puzzle_unlock_beam->runAction(beam_seq);
 		
-		CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base.png");
+		CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base1.png");
 		not_clear_img->setPosition(CCPointZero);
 		cell_node->addChild(not_clear_img);
 		
