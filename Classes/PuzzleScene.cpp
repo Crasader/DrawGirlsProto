@@ -408,6 +408,11 @@ bool PuzzleScene::init()
 		puzzleOpenning();
 		rightOpenning();
 		topOpenning();
+		if(mySGD->is_before_stage_img_download)
+		{
+			mySGD->is_before_stage_img_download = false;
+			topReopenning();
+		}
 		
 		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		
@@ -1956,6 +1961,21 @@ void PuzzleScene::topOpenning()
 	top_list[0]->runAction(CCMoveTo::create(0.5f, original_position));
 }
 
+void PuzzleScene::topReopenning()
+{
+	for(int i=1;i<top_list.size();i++)
+	{
+		CCPoint original_position = top_list[i]->getPosition();
+		top_list[i]->setPositionY(original_position.y+100);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+		CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+		
+		top_list[i]->runAction(t_seq);
+	}
+}
+
 void PuzzleScene::topBacking()
 {
 	top_list[0]->runAction(CCMoveTo::create(0.5f, ccpAdd(top_list[0]->getPosition(), ccp(-150,0)))); // cancel
@@ -2071,6 +2091,8 @@ void PuzzleScene::setTop()
 	postbox_menu->setPosition(ccp(394,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(postbox_menu, kPuzzleZorder_top);
 	
+	top_list.push_back(postbox_menu);
+	
 	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
 	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
 	addChild(postbox_count_case, kPuzzleZorder_top);
@@ -2095,6 +2117,7 @@ void PuzzleScene::setTop()
 	achieve_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(achieve_menu, kPuzzleZorder_top);
 	
+	top_list.push_back(achieve_menu);
 	
 	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
 	CCSprite* s_option = CCSprite::create("mainflow_new_option.png");
@@ -2106,6 +2129,8 @@ void PuzzleScene::setTop()
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
 	option_menu->setPosition(ccp(460,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(option_menu, kPuzzleZorder_top);
+	
+	top_list.push_back(option_menu);
 }
 
 void PuzzleScene::countingMessage()

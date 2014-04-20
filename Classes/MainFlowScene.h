@@ -82,7 +82,8 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
-	void tableEnter();
+	void basicEnter();
+	void tableEnter(function<void()> end_func);
 	void tableOpenning();
 	
 	void setTable();
@@ -98,6 +99,7 @@ private:
 	
 	vector<CCNode*> top_list;
 	void topOpenning();
+	void topOuting();
 	void topPuzzleMode();
 	void topReturnMode();
 	void setTop();

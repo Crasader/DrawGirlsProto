@@ -129,6 +129,7 @@ private:
 	
 	vector<CCNode*> top_list;
 	void topOpenning();
+	void topReopenning();
 	void topBacking();
 	void setTop();
 	

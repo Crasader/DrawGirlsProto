@@ -395,11 +395,15 @@ enum MainFlowTableCellTag{
 	kMainFlowTableCellTag_ticketBase = 20000
 };
 
-void MainFlowScene::tableEnter()
+void MainFlowScene::basicEnter()
 {
 	topPuzzleMode();
 	bottomPuzzleMode();
-	
+	tableEnter([=](){puzzleLoadSuccess();});
+}
+
+void MainFlowScene::tableEnter(function<void()> end_func)
+{
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	bool is_found = false;
@@ -442,7 +446,7 @@ void MainFlowScene::tableEnter()
 																	   KS::setOpacity(t_node, 255*t);
 																   }, [=](float t)
 																   {
-																	   puzzleLoadSuccess();
+																	   end_func();
 																   }));
 				}
 			}
@@ -519,7 +523,13 @@ void MainFlowScene::cellAction(CCObject* sender)
 			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
 			
-			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::tableEnter), puzzle_number);
+			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+			{
+				mySGD->is_before_stage_img_download = true;
+				topOuting();
+				bottomPuzzleMode();
+				tableEnter(t_func);
+			}, [=](){puzzleLoadSuccess();});
 			addChild(t_sld, kMainFlowZorder_popup);
 		}
 		else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
@@ -1206,12 +1216,51 @@ void MainFlowScene::topOpenning()
 	{
 		CCPoint original_position = top_list[i]->getPosition();
 		top_list[i]->setPositionY(original_position.y+100);
-		
-		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
-		CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
-		
-		top_list[i]->runAction(t_seq);
+		if(i == 0)
+		{
+			top_list[i]->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y+100.f*t);
+																}, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y);
+																}));
+		}
+		else
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+			CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
+			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+			
+			top_list[i]->runAction(t_seq);
+		}
+	}
+}
+
+void MainFlowScene::topOuting()
+{
+	for(int i=0;i<top_list.size();i++)
+	{
+		if(i == 0)
+		{
+			CCPoint original_position = top_list[i]->getPosition();
+			
+			top_list[i]->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y+200.f*t);
+																}, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y+200.f);
+																}));
+		}
+		else
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+			CCMoveTo* t_move = CCMoveTo::create(0.2f, top_list[i]->getPosition() + ccp(0,200));
+			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+			
+			top_list[i]->runAction(t_seq);
+		}
 	}
 }
 
@@ -1219,12 +1268,26 @@ void MainFlowScene::topReturnMode()
 {
 	CCPoint original_position = top_list[0]->getPosition();
 	top_list[0]->setPosition(original_position + ccp(-150,0));
-	top_list[0]->runAction(CCMoveTo::create(0.3f, original_position)); // total_star
+	top_list[0]->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x-150.f*t);
+														}, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x);
+														}));
 }
 
 void MainFlowScene::topPuzzleMode()
 {
-	top_list[0]->runAction(CCMoveTo::create(0.5f, ccp(25-150,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22))); // total_star
+	CCPoint original_position = top_list[0]->getPosition();
+	
+	top_list[0]->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x-150.f*t);
+														}, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x-150.f);
+														}));
 }
 
 void MainFlowScene::setTop()

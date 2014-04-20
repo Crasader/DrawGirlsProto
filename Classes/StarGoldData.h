@@ -410,6 +410,7 @@ public:
 	int before_curtain_tip_type;
 	bool is_clear_diary;
 	bool is_safety_mode;
+	bool is_before_stage_img_download;
 	
 private:
 	bool is_not_cleared_stage;

@@ -10,12 +10,14 @@
 #define __DGproto__StageListDown__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 //#include "GraphDog.h"
 #include "DownloadFile.h"
 #include "hspConnector.h"
 
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 enum SLD_Zorder{
@@ -29,24 +31,38 @@ enum SLD_MenuTag{
 };
 
 class IntPoint;
-
+class CumberShowWindow;
 class StageListDown : public CCLayer
 {
 public:
-	static StageListDown* create(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle);
+	static StageListDown* create(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle, function<void(function<void()>)> t_download_start = nullptr, function<void()> t_success_func = nullptr);
 	
 private:
 	CCObject* target_success;
 	SEL_CallFunc delegate_success;
 	
+	function<void(function<void()>)> download_start;
+	function<void()> success_func;
+	
 	CCSprite* gray;
 	CCNode* tip_img;
 	void changeTipImage();
+	
+	void startOpenning();
+	void endOpenning();
 	
 	int puzzle_number;
 	
 	CCLabelTTF* state_ment;
 	CCLabelBMFont* download_state;
+	
+	CumberShowWindow* loading_character;
+	CCScale9Sprite* talk_box;
+	CCSprite* progress_back;
+	CCProgressTimer* loading_progress;
+	
+	void outOpenning();
+	
 	
 	int ing_download_cnt;
 	float ing_download_per;
@@ -61,7 +77,7 @@ private:
 	
 	vector<IntPoint> save_version_list;
 	
-	void myInit(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle);
+	void myInit(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle, function<void(function<void()>)> t_download_start, function<void()> t_success_func);
 	
 	void successAction();
 	void failAction();

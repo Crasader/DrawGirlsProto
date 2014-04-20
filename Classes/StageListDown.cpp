@@ -16,6 +16,8 @@
 #include "StarGoldData.h"
 #include "ServerDataSave.h"
 #include "StageImgLoader.h"
+#include "CumberShowWindow.h"
+#include "KSLabelTTF.h"
 
 void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 {
@@ -339,35 +341,47 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		
 		if(df_list.size() + sf_list.size() > 0) // need download
 		{
-			tip_img = LoadingTipScene::getLoadingTipImage();
-			tip_img->setPosition(ccp(240,160));
-			addChild(tip_img, kSLD_Z_back);
-			
-			CCDelayTime* t_delay = CCDelayTime::create(7);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StageListDown::changeTipImage));
-			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-			
-			tip_img->runAction(t_seq);
-			
-			gray->removeFromParent();
-			
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-			loading_progress_img->setPosition(ccp(240,38));
-			addChild(loading_progress_img, kSLD_Z_content);
-			reader->release();
-			
-			download_version = result_data["version"].asInt();
-			state_ment->setString("");//퍼즐 이미지를 다운로드 합니다.");
-			state_ment->setPosition(ccp(240,80));
-			ing_download_cnt = 1;
-			ing_download_per = 0;
-			download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "allfont.fnt");
-			download_state->setPosition(ccp(240,38));
-			addChild(download_state, kSLD_Z_content);
-			is_downloading = true;
-			startDownload();
+			if(download_start == nullptr)
+			{
+				tip_img = LoadingTipScene::getLoadingTipImage();
+				tip_img->setPosition(ccp(240,160));
+				addChild(tip_img, kSLD_Z_back);
+				
+				CCDelayTime* t_delay = CCDelayTime::create(7);
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StageListDown::changeTipImage));
+				CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+				
+				tip_img->runAction(t_seq);
+				
+				gray->removeFromParent();
+				
+				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+				CCBReader* reader = new CCBReader(nodeLoader);
+				CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+				loading_progress_img->setPosition(ccp(240,38));
+				addChild(loading_progress_img, kSLD_Z_content);
+				reader->release();
+				
+				download_version = result_data["version"].asInt();
+				state_ment->setString("");//퍼즐 이미지를 다운로드 합니다.");
+				state_ment->setPosition(ccp(240,80));
+				ing_download_cnt = 1;
+				ing_download_per = 0;
+				download_state = CCLabelBMFont::create(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "allfont.fnt");
+				download_state->setPosition(ccp(240,38));
+				addChild(download_state, kSLD_Z_content);
+				is_downloading = true;
+				startDownload();
+			}
+			else
+			{
+				download_version = result_data["version"].asInt();
+				
+				download_start([=]()
+							   {
+								   startOpenning();
+							   });
+			}
 		}
 		else
 		{
@@ -382,15 +396,18 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			}
 			
 			state_ment->setString("퍼즐 정보 갱신 완료.");
-			(target_success->*delegate_success)();
-			removeFromParent();
+			if(success_func == nullptr)
+				(target_success->*delegate_success)();
+			else
+				outOpenning();
+//			removeFromParent();
 		}
 	}
 	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
 	{
 		state_ment->setString("퍼즐 정보 확인 완료.");
 		(target_success->*delegate_success)();
-		removeFromParent();
+//		removeFromParent();
 	}
 	else
 	{
@@ -409,6 +426,101 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 	}
 }
 
+void StageListDown::startOpenning()
+{
+	loading_character = CumberShowWindow::createLoading();
+	loading_character->setPosition(ccp(240,500));
+	addChild(loading_character, kSLD_Z_content);
+	
+	CCSequence* t_seq = CCSequence::createWithTwoActions(CCMoveTo::create(0.5f, ccp(240,160)), CCCallFunc::create(this, callfunc_selector(StageListDown::endOpenning)));
+	loading_character->runAction(t_seq);
+}
+
+void StageListDown::endOpenning()
+{
+	KSLabelTTF* talk_label = KSLabelTTF::create("일일미션을 완료해보세요!\n선물함으로 선물을 드려요! ^^", mySGD->getFont().c_str(), 12);
+	talk_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+	talk_label->setVerticalAlignment(kCCVerticalTextAlignmentTop);
+	talk_label->enableOuterStroke(ccBLACK, 1.f);
+	
+	talk_box = CCScale9Sprite::create("loading_talkbox.png", CCRectMake(0, 0, 150, 64.5f), CCRectMake(50, 21.5f, 50, 21.5f));
+	talk_box->setContentSize(CCSizeMake(100+talk_label->getContentSize().width, 43+talk_label->getContentSize().height));
+	talk_box->setAnchorPoint(ccp(0.5,0));
+	talk_box->setPosition(ccp(240,200));
+	addChild(talk_box, kSLD_Z_content);
+	
+	talk_label->setPosition(ccp(talk_box->getContentSize().width/2.f, talk_box->getContentSize().height/2.f));
+	talk_box->addChild(talk_label);
+	
+	KS::setOpacity(talk_box, 0);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+										   {
+											   KS::setOpacity(talk_box, t*255);
+										   }, [=](float t)
+										   {
+											   KS::setOpacity(talk_box, 255);
+										   }));
+	
+	
+	
+	
+	gray->removeFromParent();
+
+	progress_back = CCSprite::create("loading_progress_back.png");
+	progress_back->setPosition(ccp(240,90));
+	addChild(progress_back);
+	
+	loading_progress = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
+	loading_progress->setType(kCCProgressTimerTypeBar);
+	loading_progress->setMidpoint(ccp(0,0));
+	loading_progress->setBarChangeRate(ccp(1,0));
+	loading_progress->setPercentage(0);
+	loading_progress->setPosition(ccp(240, 90));
+	addChild(loading_progress);
+	
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//	loading_progress_img->setPosition(ccp(240,38));
+//	addChild(loading_progress_img, kSLD_Z_content);
+//	reader->release();
+	
+	state_ment->setString("");//퍼즐 이미지를 다운로드 합니다.");
+	state_ment->setPosition(ccp(240,80));
+	ing_download_cnt = 1;
+	ing_download_per = 0;
+	download_state = CCLabelBMFont::create(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "allfont.fnt");
+	download_state->setPosition(ccp(240,58));
+	addChild(download_state, kSLD_Z_content);
+	is_downloading = true;
+	startDownload();
+}
+
+void StageListDown::outOpenning()
+{
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+										   {
+											   state_ment->setVisible(false);
+											   download_state->setPosition(ccp(240,58-200.f*t));
+											   progress_back->setPosition(ccp(240,90-200.f*t));
+											   loading_progress->setPosition(ccp(240,90-200.f*t));
+											   loading_character->setPosition(ccp(240,160+300.f*t));
+											   talk_box->setPosition(ccp(240,200+300.f*t));
+											   talk_box->setOpacity(255-t*255.f);
+										   }, [=](float t)
+										   {
+											   download_state->setPosition(ccp(240,58-200.f));
+											   progress_back->setPosition(ccp(240,90-200.f));
+											   loading_progress->setPosition(ccp(240,90-200.f));
+											   loading_character->setPosition(ccp(240,160+300.f));
+											   talk_box->setPosition(ccp(240,200+300.f));
+											   talk_box->setOpacity(0);
+											   
+											   success_func();
+										   }));
+}
+
 void StageListDown::menuAction(CCObject *sender)
 {
 	int tag = ((CCNode*)sender)->getTag();
@@ -425,7 +537,7 @@ void StageListDown::menuAction(CCObject *sender)
 		state_ment->setString("퍼즐 이미지를 다운로드 합니다.");
 		ing_download_per = 0;
 		if(int(df_list.size()+sf_list.size()) > 0)
-			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			download_state->setString(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		is_downloading = true;
 		startDownload();
 	}
@@ -441,7 +553,15 @@ void StageListDown::successAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		if(int(df_list.size()+sf_list.size()) > 0)
-			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		{
+			download_state->setString(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			if(loading_progress)
+			{
+				loading_progress->stopAllActions();
+				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
+				loading_progress->runAction(t_fromto);
+			}
+		}
 		startDownload();
 	}
 	else if(ing_download_cnt == df_list.size())
@@ -681,17 +801,36 @@ void StageListDown::successAction()
 			}
 			
 			if(int(df_list.size()+sf_list.size()) > 0)
-				download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			{
+				download_state->setString(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+				if(loading_progress)
+				{
+					loading_progress->stopAllActions();
+					CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
+					loading_progress->runAction(t_fromto);
+				}
+			}
 			state_ment->setString("");//퍼즐 이미지 다운로드 완료.");
-			(target_success->*delegate_success)();
-			removeFromParent();
+			if(success_func == nullptr)
+				(target_success->*delegate_success)();
+			else
+				outOpenning();
+//			removeFromParent();
 		}
 		else
 		{
 			ing_download_cnt++;
 			ing_download_per = 0.f;
 			if(int(df_list.size()+sf_list.size()) > 0)
-				download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			{
+				download_state->setString(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+				if(loading_progress)
+				{
+					loading_progress->stopAllActions();
+					CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
+					loading_progress->runAction(t_fromto);
+				}
+			}
 			startDownload();
 		}
 	}
@@ -701,7 +840,15 @@ void StageListDown::successAction()
 		ing_download_cnt++;
 		ing_download_per = 0.f;
 		if(int(df_list.size()+sf_list.size()) > 0)
-			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		{
+			download_state->setString(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			if(loading_progress)
+			{
+				loading_progress->stopAllActions();
+				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
+				loading_progress->runAction(t_fromto);
+			}
+		}
 		startDownload();
 	}
 	else
@@ -744,10 +891,22 @@ void StageListDown::successAction()
 		}
 		
 		if(int(df_list.size()+sf_list.size()) > 0)
-			download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		{
+			download_state->setString(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			if(loading_progress)
+			{
+				loading_progress->stopAllActions();
+				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
+				loading_progress->runAction(t_fromto);
+			}
+		}
 		state_ment->setString("");//퍼즐 이미지 다운로드 완료.");
-		(target_success->*delegate_success)();
-		removeFromParent();
+		if(success_func == nullptr)
+			(target_success->*delegate_success)();
+		else
+			outOpenning();
+		
+//		removeFromParent();
 	}
 }
 
@@ -779,7 +938,7 @@ void StageListDown::downloadingAction()
 	ing_download_per = t_per;
 	
 	if(int(df_list.size()+sf_list.size()) > 0)
-		download_state->setString(CCSTR_CWF("%.0f", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("이미지 로드중...(%.0f%%)", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 }
 
 void StageListDown::startDownload()
@@ -801,16 +960,21 @@ void StageListDown::startDownload()
 	schedule(schedule_selector(StageListDown::downloadingAction));
 }
 
-StageListDown* StageListDown::create( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle )
+StageListDown* StageListDown::create( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle, function<void(function<void()>)> t_download_start, function<void()> t_success_func )
 {
 	StageListDown* t_sid = new StageListDown();
-	t_sid->myInit(t_success, d_success, t_puzzle);
+	t_sid->myInit(t_success, d_success, t_puzzle, t_download_start, t_success_func);
 	t_sid->autorelease();
 	return t_sid;
 }
 
-void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle )
+void StageListDown::myInit( CCObject* t_success, SEL_CallFunc d_success, int t_puzzle, function<void(function<void()>)> t_download_start, function<void()> t_success_func )
 {
+	download_start = t_download_start;
+	success_func = t_success_func;
+	
+	loading_progress = NULL;
+	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
