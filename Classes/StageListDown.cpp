@@ -396,10 +396,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			}
 			
 			state_ment->setString("퍼즐 정보 갱신 완료.");
-			if(success_func == nullptr)
-				(target_success->*delegate_success)();
-			else
-				outOpenning();
+			(target_success->*delegate_success)();
 //			removeFromParent();
 		}
 	}
