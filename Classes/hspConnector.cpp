@@ -431,6 +431,21 @@ if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "purchasePr
 
 #endif
 }
+
+void hspConnector::openUrl(const std::string& url)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openUrl", "(Ljava/lang/String;)V")) {
+//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	
+#endif
+}
 //
 //void hspConnector::kLoadFriends(CCObject* target,hspSelType selector){
 //#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS

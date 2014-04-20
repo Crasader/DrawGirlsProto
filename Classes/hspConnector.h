@@ -226,6 +226,7 @@ public:
 	
 	void checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	void purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func);
+	void openUrl(const std::string& url);
 	//void loadMyInfo(Json::Value obj);
 	//void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	//void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);

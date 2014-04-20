@@ -112,6 +112,7 @@ namespace KS
 	void setColor(CCObject* object, const ccColor3B& color);
 	void setBlendFunc(CCObject* object, ccBlendFunc bf);
 	void setPositionType(CCObject* object, tCCPositionType pt);
+	void setFlipX(CCObject* object, bool flip);
 	
 	template <typename NodeT>
 	pair<NodeT, CCBAnimationManager*> loadCCBI(CCObject* thiz, const std::string& fn)

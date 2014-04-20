@@ -2532,6 +2532,7 @@ void KSCumberBase::settingScale( float startScale, float minScale, float maxScal
 
 void KSCumberBase::assignBossData(Json::Value boss)
 {
+	KS::KSLog("%", boss);
 	m_properties = boss;
 	float hp = MAX(boss["hp"].asInt(), 0);
 	float minSpeed = MAX(boss["speed"]["min"].asDouble(), 0);
@@ -2565,6 +2566,8 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	m_originalNormalMovement = m_normalMovement;
 	m_drawMovement = (enum MOVEMENT)drawMovement;
 	m_furyMovement = MOVEMENT::RUSH_TYPE;
+	
+	m_flipProperty = boss.get("isflipx", false).asBool();
 }
 
 void KSCumberBase::applyPassiveData(const std::string& passive)

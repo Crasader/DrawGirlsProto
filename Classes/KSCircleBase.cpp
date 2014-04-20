@@ -482,17 +482,22 @@ void KSCircleBase::setPosition( const CCPoint& t_sp )
 {
 	//CCLog("setPos %f %f", t_sp.x, t_sp.y);
 	//		KSCumberBase::setPosition(t_sp);
-	
-	auto beforePosition = getPosition();
-	
-	if(t_sp.x - beforePosition.x >= 0)
+	if(m_flipProperty)
 	{
-		// right
+		auto beforePosition = getPosition();
+		
+		if(t_sp.x - beforePosition.x >= 0)
+		{
+			// right
+			KS::setFlipX(m_headImg, false);
+		}
+		else
+		{
+			KS::setFlipX(m_headImg, true);
+//			m_headImg->setFlipX(true);
+		}
 	}
-	else
-	{
-		m_headImg->setFlipX(true);
-	}
+	
 		
 	m_headImg->setPosition(t_sp);
 	myGD->setMainCumberPoint(this, ccp2ip(t_sp));

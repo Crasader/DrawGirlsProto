@@ -124,6 +124,32 @@ namespace KS
 			}
 		}
 	}
+	void setFlipX(CCObject* object, bool flip)
+	{
+		CCArray* childs = NULL;
+		CCObject* child = NULL;
+		CCNode* nodeObject = (CCNode*)object;
+		CCSprite* mine = dynamic_cast<CCSprite*>(nodeObject);
+		if(mine)
+			mine->setFlipX(flip);
+		if (nodeObject) {
+			childs = nodeObject->getChildren();
+		}
+		if (childs) {
+			CCARRAY_FOREACH(childs, child){
+				CCSprite *pRGBAProtocol = dynamic_cast<CCSprite*>(child);
+				if (pRGBAProtocol)
+				{
+					pRGBAProtocol->setFlipX(flip);
+					// pRGBAProtocol->setColor(ccc3(opaque, opaque, opaque));
+				}
+				CCNode* singleObject = (CCNode*)child;
+				if (singleObject && singleObject->getChildrenCount()>0) {
+					setFlipX(singleObject, flip);
+				}
+			}
+		}
+	}
 	string longLongToStr(long long t)
 	{
 		int radix = 26;
