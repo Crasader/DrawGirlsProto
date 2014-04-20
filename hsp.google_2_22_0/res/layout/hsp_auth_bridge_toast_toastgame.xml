@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.background.transparency"
+    android:layoutAnimation="@anim/hsp_auth_bridge_animation"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/hsp.auth.bridge.toast"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/hsp_auth_bridge_toast_login_bg"
+        android:tag="hsp.auth.bridge.toast" >
+
+        <TextView
+            android:id="@+id/hsp.auth.bridge.toast.description"
+            android:layout_width="fill_parent"
+            android:layout_height="36.67dp"
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:tag="hsp.auth.bridge.toast.description"
+            android:shadowDy="1.0"
+            android:shadowColor="#4d000000"
+            android:textColor="@color/hsp.common.white"
+            android:textStyle="bold"
+            android:textSize="14dp" />
+    </RelativeLayout>
+
+</LinearLayout>

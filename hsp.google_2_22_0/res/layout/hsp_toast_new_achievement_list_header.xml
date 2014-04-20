@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.white"
+    android:orientation="vertical" >
+
+    
+    <RelativeLayout
+        android:id="@+id/hsp.toast.ranking.vs.header.layout"
+        android:layout_width="fill_parent"
+        android:layout_height="102.67dp"
+        android:background="@drawable/hsp_toast_new_profile_top_photo_bg_off"
+        android:tag="hsp.toast.ranking.vs.header.layout" >
+
+        <!-- 내사진 -->
+        <RelativeLayout
+                android:id="@+id/hsp.profile.myprofile.basic.myphoto.set"
+                android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_marginTop="10.67dp"
+		        android:layout_toLeftOf="@+id/hsp.ranking.vs.header.opponent.layout"
+                android:layout_centerHorizontal="true"
+                >
+
+					<ImageView
+		                android:id="@+id/hsp_ranking_vs_header_me_border"
+		                android:layout_width="61.33dp"
+		                android:layout_height="61.33dp"
+		                android:layout_centerHorizontal="true"
+		                android:background="@drawable/hsp_toast_new_cmpr_header_left_border"
+		                android:tag="hsp.toast.profile.myprofile.basic.myphoto.border" />
+                
+            		<ImageView
+		                android:id="@+id/hsp_ranking_vs_header_shdw"
+		                android:layout_width="57.33dp"
+		                android:layout_height="57.33dp"
+		                android:layout_marginTop="2dp"
+		                android:layout_centerHorizontal="true"
+		                android:background="@drawable/hsp_toast_new_cmpr_header_left_shdw"
+		                android:tag="hsp.toast.profile.myprofile.basic.myphoto.shadow" />
+            	
+		            <ImageView
+		                android:id="@+id/hsp_ranking_vs_header_me"
+		                android:layout_width="57.33dp"
+		                android:layout_height="57.33dp"
+		                android:layout_marginTop="2dp"
+		                android:layout_centerHorizontal="true"
+						android:background="@drawable/hsp_toast_new_cmpr_header_dft"   
+		                android:tag="hsp.toast.achievement.header.myphotoview" />
+		                    <!-- 별명 영역 -->
+
+			        <RelativeLayout
+			            android:id="@+id/hsp.toast.ranking.vs.header.nickname.layout"
+			            android:layout_width="fill_parent"
+			            android:layout_height="wrap_content"
+			            android:layout_marginTop="6.67dp"
+			            android:layout_below="@+id/hsp_ranking_vs_header_me_border"
+			            android:layout_centerHorizontal="true"
+			            android:tag="hsp.toast.ranking.vs.header.nickname.layout" >
+			
+			            <!-- 별명 -->
+			
+			            <TextView
+			                android:id="@+id/hsp.ranking.vs.header.nickname.text"
+			                android:layout_width="fill_parent"
+			                android:layout_height="wrap_content"
+			                android:layout_alignParentLeft="true"
+			                android:layout_marginLeft="5.5dp"
+			                android:layout_marginRight="5.5dp"
+			                android:gravity="center"
+			                android:singleLine="true"
+			                android:ellipsize="end"
+			                android:tag="hsp.toast.achievement.header.nickname.textview"
+			                android:textColor="@color/hsp.common.white"
+			                android:includeFontPadding="false"
+			                android:textSize="13.33dp"
+			                android:textStyle="bold"
+			                 />
+			        </RelativeLayout>
+		</RelativeLayout>
+
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/hsp.achievement.header.layout"
+        android:layout_width="fill_parent"
+        android:layout_height="42.6dp"
+        android:background="@drawable/hsp_toast_new_common_title_bg"
+        android:paddingLeft="13.3dp"
+        android:tag="hsp.achievement.header.layout" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="60dp"
+            android:gravity="left|center_vertical"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:tag="hsp.achievement.header.gamename.textview"
+            android:textColor="@color/hsp.common.black"
+            android:textSize="16.6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="13.3dp"
+            android:tag="hsp.achievement.header.totalscore.textview"
+            android:textColor="@color/hsp.common.black"
+            android:textSize="16.6dp" />
+    </RelativeLayout>
+    
+</LinearLayout>

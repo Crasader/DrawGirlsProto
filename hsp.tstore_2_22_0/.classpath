@@ -20,8 +20,8 @@
 	<classpathentry exported="true" kind="lib" path="libs/npushclient_v1.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/HSPPayment-3.14.11.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/iap_plugin-13.01.00.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

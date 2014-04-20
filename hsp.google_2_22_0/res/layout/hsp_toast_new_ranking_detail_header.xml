@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.white"
+    android:fadingEdge="none"
+    android:orientation="vertical" >
+
+    <!-- 랭킹 범의 레이아웃 -->
+
+    <LinearLayout
+        android:id="@+id/hsp.ranking.detail.datetab"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@color/hsp.common.white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:tag="hsp.ranking.detail.datetab" >
+
+        <!-- 일간 버튼 -->
+			        <ToggleButton
+			            android:id="@+id/hsp.ranking.detail.datetab.daily"
+			            android:layout_width="fill_parent"
+			            android:layout_height="30dp"
+			            android:background="@drawable/hsp_toast_new_ranking_tab_left_toggle"
+			            android:checked="true"
+			            android:gravity="center"
+			            android:padding="0dp"
+			            android:layout_weight="1"
+			            android:textColor="@color/hsp.common.white"
+			            android:textOff="@string/hsp.toast.new.ranking.detail.datetab.daily"
+			            android:textOn="@string/hsp.toast.new.ranking.detail.datetab.daily"
+			            android:textSize="16dp"
+			            android:tag="hsp.ranking.detail.datetab.daily"
+			            android:visibility="gone"
+			            />
+			
+			<!-- 			line -->
+			        <RelativeLayout
+				            android:id="@+id/hsp.list.line"
+				            android:layout_width="0.67dp"
+				            android:layout_height="30dp"
+				            android:background="#ffc9c9"
+				            android:gravity="center"
+				            android:tag="hsp.ranking.detail.datetab.daily.line"
+				            android:visibility="gone"
+				            >
+				            	<ImageView
+				                android:layout_width="fill_parent"
+				                android:layout_height="fill_parent"
+				                android:layout_centerVertical="true"
+				                android:background="#ffc9c9"
+				                />
+				            	
+					</RelativeLayout>
+
+		<!-- 주간 버튼 -->
+
+				        <ToggleButton
+				            android:id="@+id/hsp.ranking.detail.datetab.weekly"
+				            android:layout_width="fill_parent"
+				            android:layout_height="30dp"
+				            android:background="@drawable/hsp_toast_new_ranking_tab_middle_toggle"
+				            android:gravity="center"
+				            android:padding="0dp"
+				            android:layout_weight="1"
+				            android:tag="hsp.ranking.detail.datetab.weekly"
+				            android:textColor="@color/hsp.common.white"
+				            android:textOff="@string/hsp.toast.new.ranking.detail.datetab.weekly"
+				            android:textOn="@string/hsp.toast.new.ranking.detail.datetab.weekly"
+				            android:textSize="16dp"
+				            android:visibility="gone"
+				            />
+				
+				<!-- 			line -->
+				        <RelativeLayout
+					            android:id="@+id/hsp.list.line"
+					            android:layout_width="0.67dp"
+					            android:layout_height="30dp"
+					            android:background="#ffc9c9"
+					            android:gravity="center"
+					            android:visibility="gone"
+					            android:tag="hsp.ranking.detail.datetab.weekly.line"
+					            >
+					            	<ImageView
+					                android:layout_width="fill_parent"
+					                android:layout_height="fill_parent"
+					                android:layout_centerVertical="true"
+					                android:background="#ffc9c9"
+					                />
+					            	
+						</RelativeLayout>
+		
+	        <!-- 월간 버튼 -->
+				        <ToggleButton
+				            android:id="@+id/hsp.ranking.detail.datetab.monthly"
+				            android:layout_width="fill_parent"
+				            android:layout_height="30dp"
+				            android:background="@drawable/hsp_toast_new_ranking_tab_middle_toggle"
+				            android:checked="true"
+				            android:gravity="center"
+				            android:padding="0dp"
+				            android:layout_weight="1"
+				            android:tag="hsp.ranking.detail.datetab.monthly"
+				            android:textColor="@color/hsp.common.white"
+				            android:textOff="@string/hsp.toast.new.ranking.detail.datetab.monthly"
+				            android:textOn="@string/hsp.toast.new.ranking.detail.datetab.monthly"
+				            android:textSize="16dp"
+				            android:visibility="gone"
+				             />
+				
+				        <!-- 			line -->
+				        <RelativeLayout
+					            android:id="@+id/hsp.list.line"
+					            android:layout_width="0.67dp"
+					            android:layout_height="30dp"
+					            android:background="#ffc9c9"
+					            android:gravity="center"
+					            android:visibility="gone"
+					            android:tag="hsp.ranking.detail.datetab.monthly.line"
+					            >
+					            	<ImageView
+					                android:layout_width="fill_parent"
+					                android:layout_height="fill_parent"
+					                android:layout_centerVertical="true"
+					                android:background="#ffc9c9"
+					                />
+					            	
+						</RelativeLayout>
+		
+        <!-- 전체 버튼 -->
+
+        <ToggleButton
+            android:id="@+id/hsp.ranking.detail.datetab.alltime"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/hsp_toast_new_ranking_tab_right_toggle"
+            android:gravity="center"
+            android:padding="0dp"
+            android:tag="hsp.ranking.detail.datetab.alltime"
+            android:textColor="@color/hsp.common.white"
+            android:textOff="@string/hsp.toast.new.ranking.detail.datetab.alltime"
+            android:textOn="@string/hsp.toast.new.ranking.detail.datetab.alltime"
+            android:textSize="16dp"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
+    <!-- 내 정보 레이아웃 -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <!-- 내 랭킹 타이틀 -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:background="#e6e6ed"
+            android:orientation="horizontal"
+            android:paddingLeft="13.3dp"
+            android:tag="hsp.ranking.detail.myranking.title" >
+
+
+            <!-- 타이틀 내용 -->
+
+            <TextView
+                android:id="@+id/hsp.ranking.detail.myranking.title.all"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6.6dp"
+                android:tag="hsp.ranking.detail.myranking.title.all"
+                android:text="@string/hsp.toast.new.ranking.detail.myranking.title.all"
+                android:textColor="#565960"
+                android:textSize="16.6dp" />
+        </LinearLayout>
+
+        <include layout="@layout/hsp_toast_new_common_line" >
+        </include>
+        <!-- 내정보 데이터 -->
+
+        <RelativeLayout
+            android:id="@+id/hsp.ranking.detail.myranking.layout"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:paddingLeft="13.3dp"
+            android:paddingRight="13.3dp"
+            android:tag="hsp.ranking.detail.myranking.layout" >
+
+            <!-- 사용자 이미지 -->
+
+            <ImageView
+                android:id="@+id/hsp.ranking.detail.myranking.photo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/hsp_toast_new_cmpr_header_dft"
+                android:tag="hsp.ranking.detail.myranking.photo" />
+
+            <!-- 사용자 순위 -->
+
+            <TextView
+                android:id="@+id/hsp.ranking.detail.myranking.text.grade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10.3dp"
+                android:layout_toRightOf="@id/hsp.ranking.detail.myranking.photo"
+                android:tag="hsp.ranking.detail.myranking.text.grade"
+                android:textColor="@color/hsp.common.black"
+                android:textSize="16.6dp" />
+
+            <!-- 사용자 닉네임 -->
+
+            <TextView
+                android:id="@+id/hsp.ranking.detail.myranking.text.nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10.3dp"
+                android:layout_toRightOf="@id/hsp.ranking.detail.myranking.text.grade"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:tag="hsp.ranking.detail.myranking.text.nickname"
+                android:textColor="@color/hsp_toast_new_profile_myprofile_modify_contents"
+                android:textSize="16.6dp" />
+
+            <!-- 사용자 점수 -->
+
+            <TextView
+                android:id="@+id/hsp.ranking.detail.myranking.text.score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hsp.ranking.detail.myranking.text.nickname"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/hsp.ranking.detail.myranking.photo"
+                android:tag="hsp.ranking.detail.myranking.text.score"
+                android:textColor="#666666"
+                android:textSize="13.3dp" />
+
+            <!-- 주변랭킹 화살표 -->
+
+            <ImageButton
+                android:id="@+id/hsp.ranking.detail.myranking.around.button"
+                android:layout_width="10dp"
+                android:layout_height="14dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/hsp_toast_new_ranking_around_icon"
+                android:tag="hsp.ranking.detail.myranking.around.button"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- 랭킹 리스트 헤더 헤더 -->
+
+    <LinearLayout
+        android:id="@+id/hsp.ranking.detail.rankinglist.title.layout"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:background="#e6e6ed"
+        android:paddingLeft="13.3dp"
+        android:tag="hsp.ranking.detail.rankinglist.title.layout" >
+
+<!--         <ImageView -->
+<!--             android:layout_width="11.3dp" -->
+<!--             android:layout_height="8.6dp" -->
+<!--             android:layout_gravity="center_vertical" -->
+<!--             android:background="@drawable/hsp_common_title_icon" /> -->
+
+        <TextView
+            android:id="@+id/hsp.ranking.detail.rankinglist.title.friend"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6.6dp"
+            android:tag="hsp.ranking.detail.rankinglist.title.friend"
+            android:text="@string/hsp.toast.new.ranking.detail.rankinglist.title.all"
+            android:textColor="#565960"
+            android:textSize="16.6dp" />
+
+        <include layout="@layout/hsp_toast_new_common_line" >
+        </include>
+    </LinearLayout>
+
+    <!-- 이전 보기 버튼 -->
+
+    <Button
+        android:id="@+id/hsp.social.list.header.more.button"
+        android:layout_width="fill_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/hsp_toast_new_list_color_clickable"
+        android:gravity="center"
+        android:tag="hsp.social.list.header.more.button"
+        android:text="@string/hsp.toast.new.social.list.header.more.button"
+        android:textColor="@color/hsp.common.black"
+        android:textSize="16.6dp"
+        android:visibility="gone" />
+
+</LinearLayout>

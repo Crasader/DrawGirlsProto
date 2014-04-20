@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.white"
+    android:fadingEdge="none"
+    android:tag="hsp.profile.myprofile.scroll" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:tag="hsp.profile.myprofile" >
+
+        <!-- 프로필 사진 & 별명 & 오늘한마디 -->
+
+        <RelativeLayout
+            android:id="@+id/hsp.profile.myprofile.basic"
+            android:layout_width="fill_parent"
+            android:layout_height="274dp"
+            android:background="@drawable/hsp_toast_new_profile_top_photo_bg_off"
+            android:tag="hsp.profile.myprofile.basic" >
+
+            <RelativeLayout
+                android:id="@+id/hsp.profile.myprofile.basic.myphoto.set"
+                android:layout_width="142dp"
+                android:layout_height="102dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp" >
+
+                <ImageView
+                    android:id="@+id/hsp.toast.profile.myprofile.basic.myphoto.border"
+                    android:layout_width="102dp"
+                    android:layout_height="102dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/hsp_toast_new_profile_photo_border"
+                    android:tag="hsp.toast.profile.myprofile.basic.myphoto.border" />
+
+                <ImageView
+                    android:id="@+id/hsp.toast.profile.myprofile.basic.myphoto.shadow"
+                    android:layout_width="96.67dp"
+                    android:layout_height="96.67dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2.66dp"
+                    android:background="@drawable/hsp_toast_new_profile_photo_shadow"
+                    android:tag="hsp.toast.profile.myprofile.basic.myphoto.shadow" />
+
+                <ImageView
+                    android:id="@+id/hsp.profile.myprofile.basic.myphoto"
+                    android:layout_width="96.67dp"
+                    android:layout_height="96.67dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2.66dp"
+                    android:background="@drawable/hsp_toast_new_profile_photo_100"
+                    android:tag="hsp.profile.myprofile.basic.myphoto" />
+
+                <ImageView
+                    android:id="@+id/hsp.profile.myprofile.basic.setting"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignLeft="@+id/hsp.toast.profile.myprofile.basic.myphoto.border"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="83.33dp"
+                    android:background="@drawable/hsp_toast_new_profile_chng_btn"
+                    android:tag="hsp.profile.myprofile.basic.detail" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/hsp.profile.myprofile.basic.contents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/hsp.profile.myprofile.basic.myphoto.set"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6.67dp"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/hsp.profile.myprofile.basic.connectstate.image"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="1.33dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/hsp_toast_new_common_user_on"
+                    android:tag="hsp.profile.myprofile.basic.connectstate.image" />
+
+<!--                 별명 -->
+                <TextView
+                    android:id="@+id/hsp.profile.myprofile.basic.nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:padding="0dp"
+                    android:singleLine="true"
+                    android:tag="hsp.profile.myprofile.basic.nickname"
+                    android:textColor="@color/hsp.common.white"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- </RelativeLayout> -->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical" >
+
+                <!-- 도전과제 -->
+
+                <RelativeLayout
+                    android:id="@+id/hsp.profile.myprofile.achievement"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40.67dp"
+                    android:layout_above="@+id/hsp.profile.myprofile.achievement.line"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/hsp_toast_new_profile_status_bar"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="24.67dp"
+                    android:paddingRight="24.67dp"
+                    android:tag="hsp.profile.myprofile.achievement"
+					android:visibility="gone"
+                     >
+                    <TextView
+                        android:layout_width="120dp"
+                        android:layout_height="fill_parent"
+                        android:ellipsize="end"
+                        android:gravity="left|center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/hsp.toast.new.profile.basic.achievement.title"
+                        android:textColor="@color/hsp.common.white"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hsp.profile.myprofile.achievement.score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="120.6dp"
+                        android:layout_toLeftOf="@+id/hsp.profile.myprofile.achievement.scoretxt"
+                        android:gravity="right|center_vertical"
+                        android:tag="hsp.profile.myprofile.achievement.score"
+                        android:text="@string/hsp.toast.new.view.noexist"
+                        android:textColor="@color/hsp.common.white"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+                    
+                    <TextView
+                        android:id="@+id/hsp.profile.myprofile.achievement.scoretxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="0.67dp"
+                        android:layout_toLeftOf="@+id/hsp.profile.myprofile.achievement.link"
+                        android:gravity="right|center_vertical"
+                        android:tag="hsp.profile.myprofile.achievement.score"
+                        android:text="@string/hsp.toast.new.profile.basic.achievement.scoretxt"
+                        android:textColor="@color/hsp.common.white"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/hsp.profile.myprofile.achievement.link"
+                        android:layout_width="8.67dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16.67dp"
+                        android:background="@drawable/hsp_toast_new_profile_arrow"
+                        android:tag="hsp.profile.myprofile.achievement.link" />
+                </RelativeLayout>
+
+                <!-- list 구분 선 -->
+
+                <RelativeLayout
+                    android:id="@+id/hsp.profile.myprofile.achievement.line"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.67dp"
+                    android:layout_above="@+id/hsp.profile.myprofile.ranking"
+                    android:background="@color/hsp_toast_new_listbackground"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:tag="hsp.profile.myprofile.listdivide" >
+
+                    <!-- android:visibility="gone" -->
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_centerVertical="true"
+                        android:background="@color/hsp_toast_new_list_divide" />
+                </RelativeLayout>
+                <!-- 랭킹 -->
+
+                <RelativeLayout
+                    android:id="@+id/hsp.profile.myprofile.ranking"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40.67dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/hsp_toast_new_profile_status_bar"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="24.67dp"
+                    android:paddingRight="24.67dp"
+                    android:tag="hsp.profile.myprofile.ranking"
+                    android:visibility="gone" 
+                    >
+
+                    <TextView
+                        android:layout_width="140dp"
+                        android:layout_height="fill_parent"
+                        android:ellipsize="end"
+                        android:gravity="left|center_vertical"
+                        android:singleLine="true"
+                        android:tag="hsp.profile.myprofile.ranking.name"
+                        android:text="@string/hsp.toast.new.profile.basic.ranking.title"
+                        android:textColor="@color/hsp.common.white"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hsp.profile.myprofile.ranking.grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="25.34dp"
+                        android:gravity="right|center_vertical"
+                        android:tag="hsp.profile.myprofile.ranking.grade"
+                        android:textColor="@color/hsp.common.white"
+                        android:textSize="14dp" />
+
+                    <ImageButton
+                        android:id="@+id/hsp.profile.myprofile.ranking.link"
+                        android:layout_width="8.67dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="16.67dp"
+                        android:background="@drawable/hsp_toast_new_profile_arrow" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/hsp.profile.myprofile.recentplayedgame.list"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="@color/hsp.common.white"
+            android:cacheColorHint="@color/hsp.common.white"
+            android:fadingEdge="none"
+            android:fadingEdgeLength="0dp"
+            android:tag="hsp.profile.myprofile.recentplayedgame.list" />
+    </LinearLayout>
+
+</ScrollView>

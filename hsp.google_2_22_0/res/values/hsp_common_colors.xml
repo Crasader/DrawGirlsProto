@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="hsp.common.black">#000000</color>
+    <color name="hsp.common.white">#FFFFFF</color>
+    <color name="hsp.common.red">#ff0000</color>
+    <color name="hsp.toast.topbar.background">#ff1414</color>
+	<color name="hsp.toast.common.white.red">#ff1414</color>
+    <color name="hsp.common.bright.red">#ff1414</color>
+    <color name="hsp.common.orange">#ffa500</color>
+    <color name="hsp.common.transparent">#00000000</color>
+    <color name="hsp.common.background">#E0E0E0</color>
+    <color name="hsp.common.background.header">#EEEEEE</color>
+    <color name="hsp.common.background.transparency">#00FFFFFF</color>
+    <color name="hsp.common.listbackground">#e8e8e8</color>
+    <color name="hsp.common.emptybackground">#dadada</color>
+    <color name="hsp.common.description">#666666</color>
+    <color name="hsp.common.subdescription">#828282</color>
+    <color name="hsp.common.titlebackground">#252525</color>
+    <color name="hsp.common.text">#B5B5B5</color>
+    <color name="hsp.common.text.disabled">#999999</color>
+    <color name="hsp.common.url">#EF5400</color>
+    <color name="hsp.common.time">#b5b5b5</color>
+    <color name="hsp.common.grouptext">#3b3b3b</color>
+    <color name="hsp.common.button.background">#dadada</color>
+    <color name="hsp.common.bottombutton.background">#515151 </color>
+    <color name="hsp.common.button.disabledtext">#7a7a7a</color>
+    <color name="hsp.common.button.unfocus">#ffc299</color>
+    <color name="hsp.common.searchbutton.text">#666666</color>
+    <color name="hsp.common.searchbutton.text.disable">#bcbcbc</color>
+    <color name="hsp.common.textbackground">#e0e0e0</color>
+    <color name="hsp.common.line">#c1c1c1</color>
+    <color name="hsp.common.subtitle">#999999</color>
+    <color name="hsp.common.tab.unfocus">#c4c4c4</color>
+    <color name="hsp.common.tab.selected">#ffcca9</color>
+    <color name="hsp.common.user.online">#666666</color>
+    <color name="hsp.common.user.offline">#999999</color>
+    <color name="hsp.common.setting.text">#444444</color>
+    <color name="hsp.common.black.bold.text">#222222</color>
+    <color name="hsp.common.gray.description.text">#777777</color>
+    <color name="hsp.topbar.background">#454545</color>
+    <color name="hsp.topbar.closebutton.line1">#000000</color>
+    <color name="hsp.topbar.closebutton.line2">#606060</color>
+    <color name="hsp.topbar.title">#FFFFFF</color>
+    <color name="hsp.topbar.closebutton">#FFFFFF</color>
+    <color name="hsp.topbar.bottomline.hangame">#fb6400</color>
+    <color name="hsp.topbar.bottomline.line">#3EAF0E</color>
+    <color name="hsp.topbar.sendbutton.line">#f57338</color>
+    <color name="hsp.topbar.sendbutton.background">#ec3f00</color>
+    <color name="hsp.topbar.sendbutton.line.disable">#8c4220</color>
+    <color name="hsp.topbar.sendbutton.background.disable">#872400</color>
+    <color name="hsp.topbar.sendbutton.disable">#ab664d</color>
+    <color name="hsp.toast.topbar.bottomline.hangame">#d60000</color>
+    <color name="hsp.toast.topbar.button.pressed">#80ff1414</color>
+
+</resources>

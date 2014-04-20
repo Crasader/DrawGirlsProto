@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.white"
+    android:orientation="vertical" >
+
+    <!-- 랭킹 목록 -->
+
+    <ListView
+        android:id="@+id/hsp.ranking.list.list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:background="@color/hsp.common.white"
+        android:cacheColorHint="@color/hsp.common.white"
+        android:fadingEdge="none"
+        android:fadingEdgeLength="0dp"
+        android:longClickable="true"
+        android:tag="hsp.ranking.list.list" />
+
+</LinearLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.white"
+    android:orientation="vertical" >
+
+    <!-- 랭킹 리스트 탭영역 -->
+
+    <LinearLayout
+        android:id="@+id/hsp.ranking.detail.scopetab"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/hsp_toast_new_common_tab_bg"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:tag="hsp.ranking.detail.scopetab" >
+
+        <!-- 전체 랭킹 버튼 -->
+
+        <ToggleButton
+            android:id="@+id/hsp.ranking.detail.scopetab.all"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/hsp_toast_new_common_tab_left_toggle"
+            android:checked="true"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="0dp"
+            android:tag="hsp.ranking.detail.scopetab.all"
+            android:textColor="@color/hsp_toast_new_common_tab_selected"
+            android:textOff="@string/hsp.toast.new.ranking.detail.scopetab.all"
+            android:textOn="@string/hsp.toast.new.ranking.detail.scopetab.all"
+            android:textSize="16dp" />
+
+        <!-- 친구 랭킹 버튼 -->
+
+        <ToggleButton
+            android:id="@+id/hsp.ranking.detail.scopetab.friend"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/hsp_toast_new_common_tab_left_toggle"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="0dp"
+            android:tag="hsp.ranking.detail.scopetab.friend"
+            android:textColor="@color/hsp_toast_new_common_tab_selected"
+            android:textOff="@string/hsp.toast.new.ranking.detail.scopetab.friend"
+            android:textOn="@string/hsp.toast.new.ranking.detail.scopetab.friend"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <!-- 랭킹 목록 리스트 뷰 -->
+    
+        <ListView
+		        android:id="@+id/hsp.ranking.detail.list"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_weight="1"
+		        android:background="@color/hsp.common.white"
+		        android:cacheColorHint="@color/hsp.common.white"
+		        android:fadingEdge="none"
+		        android:fadingEdgeLength="0dp"
+		        android:longClickable="true"
+		        android:tag="hsp.ranking.detail.list"
+		         />
+
+</LinearLayout>
