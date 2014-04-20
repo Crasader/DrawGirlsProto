@@ -53,11 +53,13 @@ class KSProtectVar
 private:
 	//T m_buff;
 	std::string m_cipher;
+	T m_cipher2;
 private:
 	void encrypt(const T& data)
 	{
 		char *keyString = "drawgirls__jjang";
-		m_cipher = CipherUtils::encrypt(encryptChars(keyString).c_str(), &data, sizeof(data));
+		m_cipher2 = data;
+//		m_cipher = CipherUtils::encrypt(encryptChars(keyString).c_str(), &data, sizeof(data));
 		//m_buff = data;
 		//		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
 //																								 m_bufferLength, key, keyLen);
@@ -94,8 +96,10 @@ public:
 	{
 		std::string decrypted;
 		char *keyString = "drawgirls__jjang";
-		decrypted = CipherUtils::decrypt(encryptChars(keyString).c_str(), m_cipher.c_str());
-		return toVar(decrypted);
+		
+		return m_cipher2;
+//		decrypted = CipherUtils::decrypt(encryptChars(keyString).c_str(), m_cipher.c_str());
+//		return toVar(decrypted);
 	}
 	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v)
 	{

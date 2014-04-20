@@ -30,17 +30,16 @@ std::string CipherUtils::encrypt(const char *keyString, const char* plain)
 	std::string retValue;
 	try
 	{
-		
-		
+		return plain;
 		std::string hexCode;
-		StringSource( plain, true,
-								 new HexEncoder( new StringSink( hexCode ) )
-								 ); // StringSource
 		
+//		StringSource( plain, true,
+//								 new HexEncoder( new StringSink( hexCode ) )
+//								 ); // StringSource
+		hexCode = plain;
 		ECB_Mode< AES >::Encryption e;
 		// ECB Mode does not use an IV
-		e.SetKey( key, sizeof(key) );
-		
+		e.SetKey( key, sizeof(key) );		
 		
 		std::string cipher;
 		// The StreamTransformationFilter adds padding
@@ -52,7 +51,7 @@ std::string CipherUtils::encrypt(const char *keyString, const char* plain)
 																								) // StreamTransformationFilter
 								 ); // StringSource
 		StringSource( cipher, true,
-								 new Base32Encoder( new StringSink( retValue ) )
+								 new HexEncoder( new StringSink( retValue ) )
 								 ); // StringSource
 
 	}
@@ -66,47 +65,47 @@ std::string CipherUtils::encrypt(const char *keyString, const char* plain)
 	
 	return retValue;
 }
-std::string CipherUtils::encrypt(const char *keyString, const void *plain, size_t length)
-{
-	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
-	byte key[ AES::DEFAULT_KEYLENGTH ];
-	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
-	std::string retValue;
-	try
-	{
-		std::string cipher;
-		std::string hexCode;
-		
-		StringSource( (const byte*)plain, length, true,
-								 new HexEncoder( new StringSink( hexCode ) )
-								 ); // StringSource
-		
-		ECB_Mode< AES >::Encryption e;
-		// ECB Mode does not use an IV
-		e.SetKey( key, sizeof(key) );
-		
-		
-		// The StreamTransformationFilter adds padding
-		//  as required. ECB and CBC Mode must be padded
-		//  to the block size of the cipher.
-		StringSource(hexCode, true,
-								 new StreamTransformationFilter( e,
-																								new StringSink( cipher ), StreamTransformationFilter::ZEROS_PADDING
-																								) // StreamTransformationFilter
-								 ); // StringSource
-		StringSource( cipher, true,
-								 new Base32Encoder( new StringSink( retValue ) )
-								 ); // StringSource
-	}
-	catch( CryptoPP::Exception& e )
-	{
-		//cerr << "Caught Exception..." << endl;
-		//cerr << e.what() << endl;
-		//cerr << endl;
-	}
-	
-	return retValue;
-}
+//std::string CipherUtils::encrypt(const char *keyString, const void *plain, size_t length)
+//{
+//	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
+//	byte key[ AES::DEFAULT_KEYLENGTH ];
+//	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
+//	std::string retValue;
+//	try
+//	{
+//		std::string cipher;
+//		std::string hexCode;
+//		
+//		StringSource( (const byte*)plain, length, true,
+//								 new HexEncoder( new StringSink( hexCode ) )
+//								 ); // StringSource
+//		
+//		ECB_Mode< AES >::Encryption e;
+//		// ECB Mode does not use an IV
+//		e.SetKey( key, sizeof(key) );
+//		
+//		
+//		// The StreamTransformationFilter adds padding
+//		//  as required. ECB and CBC Mode must be padded
+//		//  to the block size of the cipher.
+//		StringSource(hexCode, true,
+//								 new StreamTransformationFilter( e,
+//																								new StringSink( cipher ), StreamTransformationFilter::ZEROS_PADDING
+//																								) // StreamTransformationFilter
+//								 ); // StringSource
+//		StringSource( cipher, true,
+//								 new Base32Encoder( new StringSink( retValue ) )
+//								 ); // StringSource
+//	}
+//	catch( CryptoPP::Exception& e )
+//	{
+//		//cerr << "Caught Exception..." << endl;
+//		//cerr << e.what() << endl;
+//		//cerr << endl;
+//	}
+//	
+//	return retValue;
+//}
 std::string CipherUtils::decrypt(const char *keyString, const char* cipher)
 {
 	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
@@ -115,9 +114,10 @@ std::string CipherUtils::decrypt(const char *keyString, const char* cipher)
 	std::string decrypted;	
 	try
 	{
+		return cipher;
 		std::string cipher2;	
 		StringSource ( cipher, true,
-										new Base32Decoder( new StringSink( cipher2 ) ) );
+										new HexDecoder( new StringSink( cipher2 ) ) );
 		
 		ECB_Mode< AES >::Decryption d;
 		// ECB Mode does not use an IV
@@ -129,8 +129,9 @@ std::string CipherUtils::decrypt(const char *keyString, const char* cipher)
 																									) // StreamTransformationFilter
 									 ); // StringSource
 		CipherUtils::removeZerosPadding(decrypted);
-		StringSource s1( hexCode, true,
-										new HexDecoder( new StringSink( decrypted ) ) );
+		decrypted = hexCode;
+//		StringSource s1( hexCode, true,
+//										new HexDecoder( new StringSink( decrypted ) ) );
 		
 		
 	}
