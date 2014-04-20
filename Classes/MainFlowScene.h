@@ -82,21 +82,26 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
-	void tableEnter();
+	void basicEnter();
+	void tableEnter(function<void()> end_func);
 	void tableOpenning();
 	
 	void setTable();
 	
 	void menuAction(CCObject* sender);
 	
+	CCSprite* total_star;
+	
 	void countingMessage();
 	
 	CCSprite* postbox_count_case;
-	CCLabelTTF* postbox_count_label;
+//	CCLabelTTF* postbox_count_label;
 	
 	vector<CCNode*> top_list;
 	void topOpenning();
+	void topOuting();
 	void topPuzzleMode();
+	void topReturnMode();
 	void setTop();
 	
 	vector<CCNode*> bottom_list;

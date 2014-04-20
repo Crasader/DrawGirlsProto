@@ -993,6 +993,8 @@ void StarGoldData::myInit()
 	is_write_replay = false;
 	is_play_replay = false;
 	
+	is_before_stage_img_download = false;
+	
 	is_unlock_puzzle = 0;
 	strength_target_card_number = 0;
 	is_ingame_before_have_stage_cards.push_back(false);

@@ -63,11 +63,21 @@ public:
 		return t_blg;
 	}
 	
+	static CumberShowWindow* createLoading()
+	{
+		CumberShowWindow* t_blg = new CumberShowWindow();
+		t_blg->init();
+		t_blg->autorelease();
+		return t_blg;
+	}
+	
 	int boss_hp;
 	double boss_speed;
 	double boss_agi;
 	
 	bool init(int, CumberShowWindowSceneCode);
+	bool init();
+	
 	CCBAnimationManager* m_circleAnimation;
 	CCBAnimationManager* m_snakeHeadAnimation;
 	std::vector<CCBAnimationManager*> m_snakeBodiesAnimation;

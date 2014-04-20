@@ -17,6 +17,65 @@
 //#include "cocos-ext.h"
 //USING_NS_CC_EXT;
 
+bool CumberShowWindow::init()
+{
+	boss_node = CCNode::create();
+	boss_node->setPosition(CCPointZero);
+	addChild(boss_node);
+	
+	std::string bossShape = "circle";
+	
+	CCPoint boss_position = ccp(0,0);
+	
+	if(bossShape == "circle")
+	{
+		std::string ccbiName = "boss_bee";
+		std::string ccbiname2 = ccbiName;
+		if(ccbiName.length()<3) {
+			ccbiname2="cherry";
+		}
+		////////////////////////////////////////////
+		
+		//		m_directionAngleDegree = m_well512.GetValue(0, 360);
+		
+		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
+		
+		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+		//CCNode* p = reader->readNodeGraphFromFile(("boss_" + ccbiname2 + ".ccbi").c_str(), this);
+		CCNode* p = reader->readNodeGraphFromFile((ccbiname2 + ".ccbi").c_str(), this);// readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+ccbiname2+".ccbi").c_str(), this);
+		//		auto ret = KS::loadCCBIForFullPath<CircleBossCCB*>(this, (mySIL->getDocumentPath()+ccbiname2+".ccbi"));
+		
+		m_circleSprite = dynamic_cast<CircleBossCCB*>(p);//ret.first;
+		m_circleAnimation = reader->getAnimationManager();// ret.second;
+		m_circleAnimation->setDelegate(this);
+		reader->release();
+		
+		if(m_circleSprite != NULL)
+		{
+			boss_node->addChild(m_circleSprite);
+			m_circleSprite->setScale(0.7f);
+			m_circleSprite->setPosition(boss_position);
+		}
+	}
+//	else if(bossShape == "snake")
+//	{
+//		std::string ccbiName = bossJson["type"].asString();
+//		std::string ccbiname2 = ccbiName;
+//		if(ccbiName.length()<3) {
+//			ccbiname2="apple2";
+//		}
+//		m_snakeNode = KSSnakeBase::create(ccbiname2, false);
+//		boss_node->addChild(m_snakeNode, 1000);
+//		m_snakeNode->setScale(0.7f);
+//		m_snakeNode->setPosition(boss_position);
+//		
+//		m_snakeNode->startAnimationNoDirection();
+//	}
+	
+	return true;
+}
+
 bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 {
 	

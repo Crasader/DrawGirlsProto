@@ -774,7 +774,7 @@ void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
 		{
 			PuzzleHistory t_history = mySGD->getPuzzleHistory(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1));
 			t_history.is_open = true;
-			t_history.open_type = "무료";
+			t_history.open_type = "무료(첫퍼즐)";
 			
 			mySGD->setPuzzleHistory(t_history, nullptr);
 		}

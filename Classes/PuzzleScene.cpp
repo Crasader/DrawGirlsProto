@@ -407,6 +407,12 @@ bool PuzzleScene::init()
 	{
 		puzzleOpenning();
 		rightOpenning();
+		topOpenning();
+		if(mySGD->is_before_stage_img_download)
+		{
+			mySGD->is_before_stage_img_download = false;
+			topReopenning();
+		}
 		
 		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		
@@ -1948,12 +1954,34 @@ void PuzzleScene::setRightTopButton()
 	}
 }
 
+void PuzzleScene::topOpenning()
+{
+	CCPoint original_position = top_list[0]->getPosition();
+	top_list[0]->setPosition(original_position + ccp(-150,0));
+	top_list[0]->runAction(CCMoveTo::create(0.5f, original_position));
+}
+
+void PuzzleScene::topReopenning()
+{
+	for(int i=1;i<top_list.size();i++)
+	{
+		CCPoint original_position = top_list[i]->getPosition();
+		top_list[i]->setPositionY(original_position.y+100);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+		CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+		
+		top_list[i]->runAction(t_seq);
+	}
+}
+
 void PuzzleScene::topBacking()
 {
-	top_list[0]->runAction(CCMoveTo::create(0.5f, ccpAdd(top_list[0]->getPosition(), ccp(0,100)))); // cancel
-	top_list[1]->runAction(CCMoveTo::create(0.5f, ccp(78,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_heart
-	top_list[2]->runAction(CCMoveTo::create(0.5f, ccp(216,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_gold
-	top_list[3]->runAction(CCMoveTo::create(0.5f, ccp(325,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_ruby
+	top_list[0]->runAction(CCMoveTo::create(0.5f, ccpAdd(top_list[0]->getPosition(), ccp(-150,0)))); // cancel
+//	top_list[1]->runAction(CCMoveTo::create(0.5f, ccp(78,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_heart
+//	top_list[2]->runAction(CCMoveTo::create(0.5f, ccp(216,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_gold
+//	top_list[3]->runAction(CCMoveTo::create(0.5f, ccp(325,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_ruby
 }
 
 void PuzzleScene::setTop()
@@ -1981,7 +2009,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(78+35,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_heart->setPosition(ccp(78+41,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_heart, kPuzzleZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -2004,7 +2032,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_gold = CCSprite::create("mainflow_top_gold.png");
 	top_gold->setAnchorPoint(ccp(0.5f,1.f));
-	top_gold->setPosition(ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_gold->setPosition(ccp(216+27,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_gold, kPuzzleZorder_top);
 	
 	top_list.push_back(top_gold);
@@ -2029,7 +2057,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
-	top_ruby->setPosition(ccp(325+10,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_ruby->setPosition(ccp(325+12,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_ruby, kPuzzleZorder_top);
 	
 	top_list.push_back(top_ruby);
@@ -2063,15 +2091,17 @@ void PuzzleScene::setTop()
 	postbox_menu->setPosition(ccp(394,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(postbox_menu, kPuzzleZorder_top);
 	
-	postbox_count_case = CCSprite::create("mainflow_postbox_count.png");
+	top_list.push_back(postbox_menu);
+	
+	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
 	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
 	addChild(postbox_count_case, kPuzzleZorder_top);
 	postbox_count_case->setVisible(false);
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
-	postbox_count_label->setColor(ccc3(95, 60, 30));
-	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
-	postbox_count_case->addChild(postbox_count_label);
+//	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+//	postbox_count_label->setColor(ccc3(95, 60, 30));
+//	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
+//	postbox_count_case->addChild(postbox_count_label);
 	
 	countingMessage();
 	
@@ -2087,6 +2117,7 @@ void PuzzleScene::setTop()
 	achieve_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(achieve_menu, kPuzzleZorder_top);
 	
+	top_list.push_back(achieve_menu);
 	
 	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
 	CCSprite* s_option = CCSprite::create("mainflow_new_option.png");
@@ -2098,6 +2129,8 @@ void PuzzleScene::setTop()
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
 	option_menu->setPosition(ccp(460,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
 	addChild(option_menu, kPuzzleZorder_top);
+	
+	top_list.push_back(option_menu);
 }
 
 void PuzzleScene::countingMessage()
@@ -2118,26 +2151,26 @@ void PuzzleScene::countingMessage()
 									 {
 										 postbox_count_case->setVisible(true);
 										 
-										 if(message_list.size() < 10)
-										 {
-											 postbox_count_label->setFontSize(10);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else if(message_list.size() < 100)
-										 {
-											 postbox_count_label->setFontSize(7);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else
-										 {
-											 postbox_count_label->setFontSize(8);
-											 postbox_count_label->setString("...");
-										 }
+//										 if(message_list.size() < 10)
+//										 {
+//											 postbox_count_label->setFontSize(10);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else if(message_list.size() < 100)
+//										 {
+//											 postbox_count_label->setFontSize(7);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else
+//										 {
+//											 postbox_count_label->setFontSize(8);
+//											 postbox_count_label->setString("...");
+//										 }
 									 }
 									 else
 									 {
 										 postbox_count_case->setVisible(false);
-										 postbox_count_label->setString("0");
+//										 postbox_count_label->setString("0");
 									 }
 								 });
 }

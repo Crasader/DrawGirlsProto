@@ -37,6 +37,7 @@
 #include "RankNewPopup.h"
 #include "SumranMailPopup.h"
 #include "LoadingLayer.h"
+#include "KSLabelTTF.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -59,6 +60,8 @@ bool MainFlowScene::init()
     }
 	
 	setKeypadEnabled(true);
+	
+	have_card_count_for_puzzle_index.clear();
 	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_count;i++)
@@ -107,8 +110,10 @@ bool MainFlowScene::init()
 	setTop();
 	setBottom();
 	
+	bool is_openning = false;
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
+		is_openning = true;
 		topOpenning();
 		bottomOpenning();
 		
@@ -220,6 +225,8 @@ bool MainFlowScene::init()
 		}
 		
 		tableOpenning();
+		if(!is_openning)
+			topReturnMode();
 	}
 	
 //	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main))
@@ -388,11 +395,15 @@ enum MainFlowTableCellTag{
 	kMainFlowTableCellTag_ticketBase = 20000
 };
 
-void MainFlowScene::tableEnter()
+void MainFlowScene::basicEnter()
 {
 	topPuzzleMode();
 	bottomPuzzleMode();
-	
+	tableEnter([=](){puzzleLoadSuccess();});
+}
+
+void MainFlowScene::tableEnter(function<void()> end_func)
+{
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	bool is_found = false;
@@ -435,7 +446,7 @@ void MainFlowScene::tableEnter()
 																	   KS::setOpacity(t_node, 255*t);
 																   }, [=](float t)
 																   {
-																	   puzzleLoadSuccess();
+																	   end_func();
 																   }));
 				}
 			}
@@ -512,7 +523,13 @@ void MainFlowScene::cellAction(CCObject* sender)
 			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
 			
-			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::tableEnter), puzzle_number);
+			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+			{
+				mySGD->is_before_stage_img_download = true;
+				topOuting();
+				bottomPuzzleMode();
+				tableEnter(t_func);
+			}, [=](){puzzleLoadSuccess();});
 			addChild(t_sld, kMainFlowZorder_popup);
 		}
 		else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
@@ -580,6 +597,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 					t_history.is_open = true;
+					t_history.open_type = "루비소모";
 					mySGD->setPuzzleHistory(t_history, nullptr);
 					
 					vector<SaveUserData_Key> save_userdata_list;
@@ -668,6 +686,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 			PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 			t_history.is_open = true;
+			t_history.open_type = "무료(이전퍼즐완료)";
 			mySGD->setPuzzleHistory(t_history, nullptr);
 		}
 	}
@@ -1197,36 +1216,98 @@ void MainFlowScene::topOpenning()
 	{
 		CCPoint original_position = top_list[i]->getPosition();
 		top_list[i]->setPositionY(original_position.y+100);
-		
-		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
-		CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
-		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
-		
-		top_list[i]->runAction(t_seq);
+		if(i == 0)
+		{
+			top_list[i]->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y+100.f*t);
+																}, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y);
+																}));
+		}
+		else
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+			CCMoveTo* t_move = CCMoveTo::create(0.2f, original_position);
+			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+			
+			top_list[i]->runAction(t_seq);
+		}
 	}
+}
+
+void MainFlowScene::topOuting()
+{
+	for(int i=0;i<top_list.size();i++)
+	{
+		if(i == 0)
+		{
+			CCPoint original_position = top_list[i]->getPosition();
+			
+			top_list[i]->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y+200.f*t);
+																}, [=](float t)
+																{
+																	top_list[i]->setPositionY(original_position.y+200.f);
+																}));
+		}
+		else
+		{
+			CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
+			CCMoveTo* t_move = CCMoveTo::create(0.2f, top_list[i]->getPosition() + ccp(0,200));
+			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+			
+			top_list[i]->runAction(t_seq);
+		}
+	}
+}
+
+void MainFlowScene::topReturnMode()
+{
+	CCPoint original_position = top_list[0]->getPosition();
+	top_list[0]->setPosition(original_position + ccp(-150,0));
+	top_list[0]->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x-150.f*t);
+														}, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x);
+														}));
 }
 
 void MainFlowScene::topPuzzleMode()
 {
-	CCSprite* cancel_img = CCSprite::create("puzzle_cancel.png");
-	cancel_img->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15 + 100));
-	addChild(cancel_img, kMainFlowZorder_top);
+	CCPoint original_position = top_list[0]->getPosition();
 	
-	CCMoveTo* cancel_move = CCMoveTo::create(0.5f, ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
-	cancel_img->runAction(cancel_move);
-	
-	top_list[0]->runAction(CCMoveTo::create(0.5f, ccp(78+35,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_heart
-	top_list[1]->runAction(CCMoveTo::create(0.5f, ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_gold
-	top_list[2]->runAction(CCMoveTo::create(0.5f, ccp(325+10,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3))); // top_ruby
+	top_list[0]->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x-150.f*t);
+														}, [=](float t)
+														{
+															top_list[0]->setPositionX(original_position.x-150.f);
+														}));
 }
 
 void MainFlowScene::setTop()
 {
 	top_list.clear();
 	
+	total_star = KS::loadCCBI<CCSprite*>(this, "main_star.ccbi").first;
+	total_star->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	addChild(total_star, kMainFlowZorder_top);
+	
+	KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getHasGottenCardsSize())->getCString(), mySGD->getFont().c_str(), 12);
+	star_count->enableOuterStroke(ccBLACK, 0.8f);
+	star_count->setPosition(ccp(0,0));
+	total_star->addChild(star_count);
+	
+	top_list.push_back(total_star);
+	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(78,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_heart->setPosition(ccp(78+41,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_heart, kMainFlowZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -1259,7 +1340,7 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_gold = CCSprite::create("mainflow_top_gold.png");
 	top_gold->setAnchorPoint(ccp(0.5f,1.f));
-	top_gold->setPosition(ccp(216,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_gold->setPosition(ccp(216+27,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_gold, kMainFlowZorder_top);
 	
 	top_list.push_back(top_gold);
@@ -1284,7 +1365,7 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
-	top_ruby->setPosition(ccp(325,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_ruby->setPosition(ccp(325+12,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_ruby, kMainFlowZorder_top);
 	
 	top_list.push_back(top_ruby);
@@ -1338,16 +1419,16 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(postbox_menu);
 	
-	postbox_count_case = CCSprite::create("mainflow_postbox_count.png");
+	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
 	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
 	addChild(postbox_count_case, kMainFlowZorder_top);
 	
 	postbox_count_case->setVisible(false);
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
-	postbox_count_label->setColor(ccc3(95, 60, 30));
-	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
-	postbox_count_case->addChild(postbox_count_label);
+//	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+//	postbox_count_label->setColor(ccc3(95, 60, 30));
+//	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
+//	postbox_count_case->addChild(postbox_count_label);
 	
 	countingMessage();
 
@@ -1409,26 +1490,26 @@ void MainFlowScene::countingMessage()
 									 {
 										 postbox_count_case->setVisible(true);
 										 
-										 if(message_list.size() < 10)
-										 {
-											 postbox_count_label->setFontSize(10);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else if(message_list.size() < 100)
-										 {
-											 postbox_count_label->setFontSize(7);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else
-										 {
-											 postbox_count_label->setFontSize(8);
-											 postbox_count_label->setString("...");
-										 }
+//										 if(message_list.size() < 10)
+//										 {
+//											 postbox_count_label->setFontSize(10);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else if(message_list.size() < 100)
+//										 {
+//											 postbox_count_label->setFontSize(7);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else
+//										 {
+//											 postbox_count_label->setFontSize(8);
+//											 postbox_count_label->setString("...");
+//										 }
 									 }
 									 else
 									 {
 										 postbox_count_case->setVisible(false);
-										 postbox_count_label->setString("0");
+//										 postbox_count_label->setString("0");
 									 }
 								 });
 }

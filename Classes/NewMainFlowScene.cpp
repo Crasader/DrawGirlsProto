@@ -184,6 +184,7 @@ bool NewMainFlowScene::init()
 				{
 					PuzzleHistory next_history = mySGD->getPuzzleHistory(next_puzzle_number);
 					next_history.is_open = true;
+					next_history.open_type = "무료(이전퍼즐완료)";
 					mySGD->setPuzzleHistory(next_history, nullptr);
 				}
 			}
@@ -1156,6 +1157,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 								int tt_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, open_puzzle_count+1);
 								PuzzleHistory t_history = mySGD->getPuzzleHistory(tt_puzzle_number);
 								t_history.is_open = true;
+								t_history.open_type = "루비소모";
 								mySGD->setPuzzleHistory(t_history, nullptr);
 								
 								vector<SaveUserData_Key> save_userdata_list;
@@ -2834,15 +2836,15 @@ void NewMainFlowScene::setTop()
 	postbox_menu->setPosition(ccp(352,top_case->getContentSize().height/2.f));
 	top_case->addChild(postbox_menu);
 	
-	postbox_count_case = CCSprite::create("mainflow_postbox_count.png");
+	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
 	postbox_count_case->setPosition(ccp(364,top_case->getContentSize().height/2.f+6));
 	top_case->addChild(postbox_count_case);
 	postbox_count_case->setVisible(false);
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
-	postbox_count_label->setColor(ccc3(95, 60, 30));
-	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
-	postbox_count_case->addChild(postbox_count_label);
+//	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+//	postbox_count_label->setColor(ccc3(95, 60, 30));
+//	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
+//	postbox_count_case->addChild(postbox_count_label);
 	
 	countingMessage();
 	
@@ -2928,26 +2930,26 @@ void NewMainFlowScene::countingMessage()
 									 {
 										 postbox_count_case->setVisible(true);
 										 
-										 if(message_list.size() < 10)
-										 {
-											 postbox_count_label->setFontSize(10);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else if(message_list.size() < 100)
-										 {
-											 postbox_count_label->setFontSize(7);
-											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-										 }
-										 else
-										 {
-											 postbox_count_label->setFontSize(8);
-											 postbox_count_label->setString("...");
-										 }
+//										 if(message_list.size() < 10)
+//										 {
+//											 postbox_count_label->setFontSize(10);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else if(message_list.size() < 100)
+//										 {
+//											 postbox_count_label->setFontSize(7);
+//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
+//										 }
+//										 else
+//										 {
+//											 postbox_count_label->setFontSize(8);
+//											 postbox_count_label->setString("...");
+//										 }
 									 }
 									 else
 									 {
 										 postbox_count_case->setVisible(false);
-										 postbox_count_label->setString("0");
+//										 postbox_count_label->setString("0");
 									 }
 								 });
 }

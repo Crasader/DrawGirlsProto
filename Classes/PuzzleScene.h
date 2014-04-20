@@ -77,7 +77,7 @@ private:
 	CountingBMLabel* friend_point_label;
 	
 	CCSprite* postbox_count_case;
-	CCLabelTTF* postbox_count_label;
+//	CCLabelTTF* postbox_count_label;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
@@ -128,6 +128,8 @@ private:
 	void menuAction(CCObject* sender);
 	
 	vector<CCNode*> top_list;
+	void topOpenning();
+	void topReopenning();
 	void topBacking();
 	void setTop();
 	

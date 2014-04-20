@@ -198,6 +198,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 									int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 									PuzzleHistory t_history = mySGD->getPuzzleHistory(t_puzzle_number);
 									t_history.is_open = true;
+									t_history.open_type = "티켓소모";
 									mySGD->setPuzzleHistory(t_history, nullptr);
 									
 									((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
@@ -1134,6 +1135,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																									 int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 																									 PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 																									 t_history.is_open = true;
+																									 t_history.open_type = "티켓소모";
 																									 mySGD->setPuzzleHistory(t_history, nullptr);
 
 																									 ((PuzzleMapScene*)getTarget())->removeChildByTag(kPMS_MT_buyPuzzle);
