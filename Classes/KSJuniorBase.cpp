@@ -168,6 +168,17 @@ void KSJuniorBase::checkConfine(float dt)
 void KSJuniorBase::startAnimationNoDirection()
 {
 	CCLog("Lets rotate");
+	if((m_state & kCumberStateNoDirection) == 0)
+	{
+		m_state |= kCumberStateNoDirection;
+		m_noDirection.distance = 0;
+		m_noDirection.rotationDeg = 0;
+		m_noDirection.timer = 0;
+		m_noDirection.startingPoint = getPosition();
+		m_noDirection.rotationCnt = 0;
+		m_noDirection.state = 1;
+		schedule(schedule_selector(KSJuniorBase::animationNoDirection));
+	}
 }
 
 void KSJuniorBase::damageReaction(float)
