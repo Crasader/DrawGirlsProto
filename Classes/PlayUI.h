@@ -274,7 +274,7 @@ private:
 	FeverParent * my_fp;
 	ComboParent * my_combo;
 	int combo_cnt;
-//	GoldLabel * gold_label;
+	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;
 	KSLabelTTF * percentageLabel;

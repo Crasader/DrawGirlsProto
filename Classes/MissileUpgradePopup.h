@@ -1,0 +1,60 @@
+//
+//  MissileUpgradePopup.h
+//  DGproto
+//
+//  Created by 사원3 on 2014. 4. 20..
+//
+//
+
+#ifndef __DGproto__MissileUpgradePopup__
+#define __DGproto__MissileUpgradePopup__
+
+#include "cocos2d.h"
+#include "cocos-ext.h"
+#include "hspConnector.h"
+
+USING_NS_CC;
+USING_NS_CC_EXT;
+using namespace std;
+
+class LoadingLayer;
+class TouchSuctionLayer;
+class KSLabelTTF;
+class MissileUpgradePopup : public CCLayer
+{
+public:
+	static MissileUpgradePopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_upgrade_func);
+	
+private:
+	int touch_priority;
+	function<void()> end_func;
+	function<void()> upgrade_func;
+	
+	bool is_menu_enable;
+	
+	TouchSuctionLayer* suction;
+	
+	CCNode* m_container;
+	CCScale9Sprite* back_case;
+	KSLabelTTF* missile_data_level;
+	KSLabelTTF* missile_data_power;
+	CCNode* missile_img;
+	KSLabelTTF* upgrade_label;
+	CCLabelTTF* price_label;
+	CCControlButton* upgrade_button;
+	LoadingLayer* loading_layer;
+	
+	CCNode* upgrade_action_node;
+	
+	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_upgrade_func);
+
+	int before_gold;
+	int before_level;
+	int before_damage;
+	
+	void upgradeAction(CCObject* sender, CCControlEvent t_event);
+	void resultSaveUserData(Json::Value result_data);
+	void setAfterUpgrade();
+};
+
+#endif /* defined(__DGproto__MissileUpgradePopup__) */

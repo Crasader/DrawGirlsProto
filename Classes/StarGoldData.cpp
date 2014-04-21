@@ -11,6 +11,12 @@
 #include "DataStorageHub.h"
 #include "AchieveNoti.h"
 
+void StarGoldData::withdraw()
+{
+	has_gotten_cards.clear();
+	puzzle_historys.clear();
+}
+
 string StarGoldData::getReplayKey(ReplayKey t_key)
 {
 	string return_value;

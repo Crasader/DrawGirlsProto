@@ -7,6 +7,7 @@
 //
 
 #include "AreaGage.h"
+#include "DataStorageHub.h"
 
 void AreaGage::setPosition( CCPoint t_p )
 {
@@ -127,8 +128,31 @@ void AreaGage::myInit(float t_clear_percent)
 	gage_back->setPosition(CCPointZero);
 	addChild(gage_back);
 	
+	ccColor3B gage_color;
+	
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1;
+	puzzle_number %= 7;
+	puzzle_number++;
+	
+	if(puzzle_number == 1)
+		gage_color = ccc3(0, 0, 255);
+	else if(puzzle_number == 2)
+		gage_color = ccc3(240, 110, 170);
+	else if(puzzle_number == 3)
+		gage_color = ccc3(255, 245, 104);
+	else if(puzzle_number == 4)
+		gage_color = ccc3(57, 181, 74);
+	else if(puzzle_number == 5)
+		gage_color = ccc3(168, 100, 168);
+	else if(puzzle_number == 6)
+		gage_color = ccc3(0, 191, 243);
+	else if(puzzle_number == 7)
+		gage_color = ccc3(242, 101, 34);
+	else
+		gage_color = ccc3(0, 0, 255);
+	
 	gage_bar1 = CCProgressTimer::create(CCSprite::create("star_gage_bar1.png"));
-	gage_bar1->getSprite()->setColor(ccc3(255, 0, 100));
+	gage_bar1->getSprite()->setColor(gage_color);
 	gage_bar1->setType(kCCProgressTimerTypeBar);
 	gage_bar1->setMidpoint(ccp(0,0));
 	gage_bar1->setBarChangeRate(ccp(1,0));
@@ -138,7 +162,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_bar1);
 	
 	gage_bar2 = CCProgressTimer::create(CCSprite::create("star_gage_bar2.png"));
-	gage_bar2->getSprite()->setColor(ccc3(255, 0, 100));
+	gage_bar2->getSprite()->setColor(gage_color);
 	gage_bar2->setType(kCCProgressTimerTypeBar);
 	gage_bar2->setMidpoint(ccp(0,0));
 	gage_bar2->setBarChangeRate(ccp(1,0));
@@ -148,7 +172,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_bar2);
 	
 	gage_bar3 = CCProgressTimer::create(CCSprite::create("star_gage_bar2.png"));
-	gage_bar3->getSprite()->setColor(ccc3(255, 0, 100));
+	gage_bar3->getSprite()->setColor(gage_color);
 	gage_bar3->setType(kCCProgressTimerTypeBar);
 	gage_bar3->setMidpoint(ccp(0,0));
 	gage_bar3->setBarChangeRate(ccp(1,0));
@@ -158,7 +182,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_bar3);
 	
 	gage_bar4 = CCProgressTimer::create(CCSprite::create("star_gage_bar3.png"));
-	gage_bar4->getSprite()->setColor(ccc3(255, 0, 100));
+	gage_bar4->getSprite()->setColor(gage_color);
 	gage_bar4->setType(kCCProgressTimerTypeBar);
 	gage_bar4->setMidpoint(ccp(0,0));
 	gage_bar4->setBarChangeRate(ccp(1,0));

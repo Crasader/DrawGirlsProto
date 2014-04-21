@@ -1490,6 +1490,7 @@ void PlayTutorial::nextStep()
 						  clear_condition->runAction(t_repeat);
 						  
 						  CCLabelBMFont* time_label = CCLabelBMFont::create("100", "timefont.fnt");
+						  time_label->setColor(ccYELLOW);
 						  time_label->setPosition(ccp(240,35));
 						  addChild(time_label, 4);
 						  
