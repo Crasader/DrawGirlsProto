@@ -39,6 +39,7 @@
 #include "MailPopup.h"
 #include "OptionPopup.h"
 #include "AchievePopup.h"
+#include "MissileUpgradePopup.h"
 
 bool StartSettingPopup::init()
 {
@@ -570,96 +571,84 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	if(!is_menu_enable)
 		return;
 	
-	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
-	upgrade_price*=1000;
-	if(mySGD->getGold() < upgrade_price)// + use_item_price_gold.getV())
-	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, "골드가 부족합니다."), kStartSettingPopupZorder_popup);
-		return;
-	}
-	
 	is_menu_enable = false;
 	
-	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
-	mySGD->setGold(mySGD->getGold()-missile_level*1000);
-	myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
-	
-	myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, nullptr);
-	
-	missile_level++;
-	missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
-	missile_data_power->setString(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
-	
-	CCPoint missile_position;
-	if(missile_img)
-	{
-		missile_position = missile_img->getPosition();
-		missile_img->removeFromParent();
-	}
-	
-	StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
-	
-	if(missile_type_code == kStoneType_guided)
-	{
-		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-		t_gm->setPosition(missile_position);
-		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
-		main_case->addChild(t_gm);
+	MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
+		int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 		
-		int grade = (missile_level-1)/5+1;
+		missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
+		missile_data_power->setString(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
 		
-		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+		CCPoint missile_position;
+		if(missile_img)
+		{
+			missile_position = missile_img->getPosition();
+			missile_img->removeFromParent();
+		}
 		
-		missile_img = t_gm;
-	}
-	
-	
-	
-	CCPoint upgrade_position = upgrade_menu->getPosition();
-	upgrade_menu->removeFromParent();
-	
-	if(missile_level >= 25)
-	{
-		upgrade_menu = NULL;
-	}
-	else
-	{
-		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
-		n_level->setColor(ccBLACK);
-		n_level->setPosition(ccp(70,47));
-		n_upgrade->addChild(n_level);
-		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
-		n_price_type->setPosition(ccp(25,22));
-		n_upgrade->addChild(n_price_type);
-		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
-		n_price_label->setColor(ccBLACK);
-		n_price_label->setPosition(ccp(78,22));
-		n_upgrade->addChild(n_price_label);
+		StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
 		
-		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
-		s_upgrade->setColor(ccGRAY);
-		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
-		s_level->setColor(ccBLACK);
-		s_level->setPosition(ccp(70,47));
-		s_upgrade->addChild(s_level);
-		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
-		s_price_type->setPosition(ccp(25,22));
-		s_upgrade->addChild(s_price_type);
-		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
-		s_price_label->setColor(ccBLACK);
-		s_price_label->setPosition(ccp(78,22));
-		s_upgrade->addChild(s_price_label);
+		if(missile_type_code == kStoneType_guided)
+		{
+			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
+			t_gm->setPosition(missile_position);
+			t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+			main_case->addChild(t_gm);
+			
+			int grade = (missile_level-1)/5+1;
+			
+			t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+			
+			missile_img = t_gm;
+		}
 		
-		CCMenuItem* upgrade_item = CCMenuItemSprite::create(n_upgrade, s_upgrade, this, menu_selector(StartSettingPopup::upgradeAction));
 		
-		upgrade_menu = CCMenu::createWithItem(upgrade_item);
-		upgrade_menu->setPosition(upgrade_position);
-		main_case->addChild(upgrade_menu);
-		upgrade_menu->setTouchPriority(touch_priority);
-	}
-	
-	is_menu_enable = true;
+		
+		CCPoint upgrade_position = upgrade_menu->getPosition();
+		upgrade_menu->removeFromParent();
+		
+		if(missile_level >= 25)
+		{
+			upgrade_menu = NULL;
+		}
+		else
+		{
+			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
+			CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+			n_level->setColor(ccBLACK);
+			n_level->setPosition(ccp(70,47));
+			n_upgrade->addChild(n_level);
+			CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
+			n_price_type->setPosition(ccp(25,22));
+			n_upgrade->addChild(n_price_type);
+			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+			n_price_label->setColor(ccBLACK);
+			n_price_label->setPosition(ccp(78,22));
+			n_upgrade->addChild(n_price_label);
+			
+			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
+			s_upgrade->setColor(ccGRAY);
+			CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+			s_level->setColor(ccBLACK);
+			s_level->setPosition(ccp(70,47));
+			s_upgrade->addChild(s_level);
+			CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
+			s_price_type->setPosition(ccp(25,22));
+			s_upgrade->addChild(s_price_type);
+			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+			s_price_label->setColor(ccBLACK);
+			s_price_label->setPosition(ccp(78,22));
+			s_upgrade->addChild(s_price_label);
+			
+			CCMenuItem* upgrade_item = CCMenuItemSprite::create(n_upgrade, s_upgrade, this, menu_selector(StartSettingPopup::upgradeAction));
+			
+			upgrade_menu = CCMenu::createWithItem(upgrade_item);
+			upgrade_menu->setPosition(upgrade_position);
+			main_case->addChild(upgrade_menu);
+			upgrade_menu->setTouchPriority(touch_priority);
+		}
+	});
+	addChild(t_popup, kStartSettingPopupZorder_popup);
 }
 
 void StartSettingPopup::startItemGacha()
