@@ -50,7 +50,7 @@ abstract class KRunnable implements Runnable
 {
 	protected final String totalSource;
 	protected final int delekey;
-	KRunnable(int key,String str)
+	KRunnable(final int key, String str)
 	{
 		totalSource = str;
 		delekey = key;
@@ -111,7 +111,7 @@ public class hspConnector{
 		hspConnector.handler.post(
 				new Runnable(){
 					public void run() {
-						HSPCGP.checkPromotion(hspConnector.sContext, new CheckPromotionCBImpl(_key, mGLView));
+						HSPCGP.checkPromotion(hspConnector.sContext, new CheckPromotionMapCBImpl(_key, mGLView, hspConnector.sContext));
 					}
 				}
 				);
@@ -128,6 +128,16 @@ public class hspConnector{
 				}
 				);
 		return true;
+	}
+	public static void launchPromotion(){
+		
+		hspConnector.handler.post(
+				new Runnable(){
+					public void run() {
+						HSPCGP.launchPromotion((Activity) sContext);	
+					}
+				}
+				);
 	}
 	public static void openUrl(final String url)
 	{

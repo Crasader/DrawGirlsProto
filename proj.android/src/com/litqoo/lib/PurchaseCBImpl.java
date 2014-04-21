@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPResult;
+import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.payment.HSPPayment.PurchaseCB;
 import com.hangame.hsp.payment.core.constant.PaymentErrorCode;
 
@@ -28,7 +29,9 @@ public class PurchaseCBImpl implements PurchaseCB {
         if (hspResult.getCode() == PaymentErrorCode.PURCHASE_SUCCESS) {
             // 결제 성공
         	try {
+        		HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl());
 				r.put("result", 1);
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -189,7 +189,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 	{
 		for(int i=0; i<missileNumbersInt; i++)
 		{
-			string fileName = boost::str(boost::format("me_guide%||.ccbi") % level);
+			string fileName = boost::str(boost::format("jack_missile_%||.png") % ((grade - 1) * 5 + level));
 			KSCumberBase* target = nullptr;
 			std::vector<KSCumberBase*> targets;
 			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
@@ -198,10 +198,13 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 			
 			int random_value = rand()%7 - 3;
 			float random_float = random_value/10.f;
+			bool selfRotation = false;
+			if(grade == 1 || grade == 4)
+				selfRotation = true;
 			GuidedMissile* gm = GuidedMissile::create(target, initPosition,
 																								fileName,
 																								1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
-																								ao
+																								ao, selfRotation
 																							 );
 			gm->beautifier(grade, level);
 			jack_missile_node->addChild(gm);
@@ -1220,6 +1223,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 //				cumber->setAttackPattern(t_m16);
 				
+				cumber->setAttackPattern(t_m16);
 				
 				myGD->communication("MP_endIngActionAP");
 				myGD->communication("CP_onPatternEndOf", cb);
@@ -1320,6 +1324,23 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 				float scale = patternData.get("scale", 2.f).asFloat();
 				((KSCumberBase*)cb)->startSwell(scale, totalFrame);
 				myGD->communication("CP_onPatternEndOf", cb);
+			};
+			castBranch(atype, func, warningFileName);
+			
+		}
+	}
+	else if(pattern == "1020") // 자식들 낳기 공격
+	{
+		if(exe)
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				PutChildWrapper* t = PutChildWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				addChild(t);
+				KSCumberBase* cumber = (KSCumberBase*)cb;
+				cumber->setAttackPattern(t);
+				
 			};
 			castBranch(atype, func, warningFileName);
 			
