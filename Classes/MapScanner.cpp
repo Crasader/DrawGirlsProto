@@ -767,7 +767,7 @@ void MapScanner::setTopBottomBlock()
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(top_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,0));
-		t_line->setPosition(ccp(160,top_y+2));
+		t_line->setPosition(ccp(160,top_y));
 		t_line->setScaleX(320.f/8.f);
 		t_line->setTag(top_cnt*22);
 		top_block_line_manager->addChild(t_line);
@@ -780,14 +780,14 @@ void MapScanner::setTopBottomBlock()
 		float sub_value = (myGD->limited_step_top-1)*pixelSize+2 + 26 - 430;
 		top_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, 59, 26-sub_value));
 		top_block_lock->setAnchorPoint(ccp(0.5,0));
-		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize+2));
+		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
 	}
 	else
 	{
 		top_block_lock = CCSprite::create("temp_block_lock.png");
 		top_block_lock->setAnchorPoint(ccp(0.5,0));
-		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize+2));
+		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
 	}
 
@@ -831,7 +831,7 @@ void MapScanner::setTopBottomBlock()
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(bottom_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,1.f));
-		t_line->setPosition(ccp(160,bottom_y-2));
+		t_line->setPosition(ccp(160,bottom_y));
 		t_line->setScaleX(320.f/8.f);
 		t_line->setTag(bottom_cnt*22);
 		bottom_block_line_manager->addChild(t_line);
@@ -844,14 +844,14 @@ void MapScanner::setTopBottomBlock()
 		float sub_value = -((myGD->limited_step_bottom-1)*pixelSize - 26);
 		bottom_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, 59, 26-sub_value));
 		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
-		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize));
+		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
 	}
 	else
 	{
 		bottom_block_lock = CCSprite::create("temp_block_lock.png");
 		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
-		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize));
+		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
 	}
 
@@ -967,19 +967,17 @@ InvisibleSprite* InvisibleSprite::create( const char* filename, bool isPattern )
 
 void InvisibleSprite::myInit( const char* filename, bool isPattern )
 {
-//	CCSprite* t_back = CCSprite::create("ingame_whiteback.png");
-//	t_back->setColor(ccBLACK);
-//	t_back->setPosition(ccp(160,215));
-//	addChild(t_back);
-	
 	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
 	t_spr->setPosition(ccp(160,215));
-	t_spr->setSilhouetteConvert(0);
+	t_spr->setSilhouetteConvert((myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1)%7+1);
 	addChild(t_spr);
 	
-//	CCSprite* t_spr = mySIL->getLoadedImg(filename);
-//	t_spr->setPosition(ccp(160,215));
-//	addChild(t_spr);
+//	CCRenderTexture* t_render = CCRenderTexture::create(320, 430);
+//	t_render->setPosition(ccp(160,215));
+//	t_render->beginWithClear(0, 0, 0, 0);
+//	t_spr->visit();
+//	t_render->end();
+//	addChild(t_render);
 }
 
 VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
@@ -1338,7 +1336,7 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_dra
 	drawRects = t_drawRects;
 	
 	safety_img = EffectSprite::createWithTexture(mySIL->addImage(sil_filename.c_str()));
-	safety_img->setSilhouetteConvert(1);
+	safety_img->setSilhouetteConvert(0);
 	safety_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 	addChild(safety_img);
 	

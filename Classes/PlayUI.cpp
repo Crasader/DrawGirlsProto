@@ -31,7 +31,7 @@ void ComboView::setPercentage (float t_percent)
 void ComboView::myInit (int combo)
 {
 	initWithFile("combo_back.png");
-	setPosition(ccp(480-30,myDSH->ui_top-100));//78));
+//	setPosition(ccp(480-30,myDSH->ui_top-100));//78));
 	setOpacity(0);
 	
 //	combo_str = CCSprite::create("combo_front.png");
@@ -79,7 +79,7 @@ void ComboParent::showCombo (int t_combo)
 	{
 		ComboView* t_cv = ComboView::create(t_combo);
 		t_cv->setScale(1.f/1.5f);
-		t_cv->setPosition(ccpAdd(score_label->getPosition(), ccp(20,-22)));
+		t_cv->setPosition(ccpAdd(score_label->getPosition(), ccp(20,-45)));
 		addChild(t_cv,0,1);// 1 : ComboView
 	}
 	
@@ -398,7 +398,7 @@ void GoldLabel::myInit ()
 	stopIncreasing();
 	setAnchorPoint(ccp(1.f,0.5));
 	
-	setPosition(ccp(480-52, myDSH->ui_top-50));
+	setPosition(ccp(480-5, myDSH->ui_top-50));
 //	if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											setPosition(ccp((480-myGD->boarder_value*2)*1.1f/4.f,myDSH->ui_top-15));
@@ -2117,7 +2117,7 @@ void PlayUI::myInit ()
 	addChild(KSGradualValue<float>::create(myDSH->ui_top-50+UI_OUT_DISTANCE, myDSH->ui_top-50, UI_IN_TIME, [=](float t){gold_label->setPositionY(t);}, [=](float t){gold_label->setPositionY(myDSH->ui_top-50);}));
 	
 	CCSprite* gold_img = CCSprite::create("ui_gold_img.png");
-	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-15,9)));
+	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-50,9)));
 	addChild(gold_img);
 	
 	addChild(KSGradualValue<float>::create(myDSH->ui_top-50+9+UI_OUT_DISTANCE, myDSH->ui_top-50+9, UI_IN_TIME, [=](float t){gold_img->setPositionY(t);}, [=](float t){gold_img->setPositionY(myDSH->ui_top-50+9);}));
