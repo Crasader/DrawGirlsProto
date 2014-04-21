@@ -17,17 +17,17 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
-class RankNewPopup : public CCLayer
+class RankNewPopup : public CCLayer,public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
-    virtual bool init();
+  virtual bool init();
     
     // a selector callback
-    void menuAction(CCObject* pSender);
+  void menuAction(CCObject* pSender);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
-    CREATE_FUNC(RankNewPopup);
+	CREATE_FUNC(RankNewPopup);
 	
 	virtual void onEnter();
 	
@@ -40,8 +40,13 @@ private:
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
+	
+	CCTableView* rank_table;
 	CCScale9Sprite* main_case;
 	CCSprite* gray;
+	CCNode* rankBack;
+	int delay_index;
+	vector<function<void()>> cell_action_list;
 	
 	void showPopup();
 	void endShowPopup();
@@ -49,13 +54,22 @@ private:
 	void endHidePopup();
 	
 	bool is_menu_enable;
+//	
+//	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
+//	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);
+//	virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
+//	virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
+//	virtual void registerWithTouchDispatcher ();
 	
-	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
-	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);
-	virtual void ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent);
-	virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent);
-	virtual void registerWithTouchDispatcher ();
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
+	virtual CCSize cellSizeForTable(CCTableView *table);
+	virtual unsigned int numberOfCellsInTableView(CCTableView *table);
+	virtual void scrollViewDidScroll(CCScrollView* view);
+	virtual void scrollViewDidZoom(CCScrollView* view);
 	
+//	Json::Value user_list;
+	Json::Value rank_data;
 	CCSprite* loading_img;
 	void resultGetRank(Json::Value result_data);
 };

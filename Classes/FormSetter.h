@@ -234,6 +234,10 @@ public:
 				
 				vector<CCNode*>::iterator it2;
 				for (it2=(it->second).objects.begin();it2!=(it->second).objects.end();it2++) {
+					
+					if((*it2) && !(it->second).data["height"].isNull())
+						(*it2)->setContentSize(ccp((it->second).data.get("width", 0).asFloat(),(it->second).data.get("height", 0).asFloat()));
+					
 					if((*it2) && !(it->second).data["x"].isNull())
 						(*it2)->setPositionX((it->second).data.get("x", 0).asFloat());
 					
