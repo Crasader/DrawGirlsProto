@@ -40,6 +40,7 @@
 #include "OptionPopup.h"
 #include "AchievePopup.h"
 #include "MissileUpgradePopup.h"
+#include "ItemGachaPopup.h"
 
 bool StartSettingPopup::init()
 {
@@ -661,14 +662,55 @@ void StartSettingPopup::startItemGacha()
 	CCLog("start item gacha");
 	
 	mySGD->setGold(mySGD->getGold() - 1000);
-	myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
+	myDSH->saveUserData({kSaveUserData_Key_gold}, json_selector(this, StartSettingPopup::goItemGacha));
+
 	
-	if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
-		selected_gacha_item = kIC_emptyBegin;
 	
-	gacha_item_frame = 0;
-	schedule(schedule_selector(StartSettingPopup::itemGachaAction), 1.f/20.f);
+	
+	
+	
+	
+	
+	
+//	if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+//		selected_gacha_item = kIC_emptyBegin;
+//	
+//	gacha_item_frame = 0;
+//	schedule(schedule_selector(StartSettingPopup::itemGachaAction), 1.f/20.f);
 }
+
+void StartSettingPopup::goItemGacha(Json::Value result_data)
+{
+	CCLog("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		CCLog("save userdata success!!");
+	
+		ItemGachaPopup* t_popup = ItemGachaPopup::create(touch_priority-100, [=](){endItemGacha();}, [=](int item_type){
+			
+			selected_gacha_item = (ITEM_CODE)item_type;
+			
+			CCPoint gacha_item_position = gacha_item->getPosition();
+			gacha_item->removeFromParent();
+			
+			gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", selected_gacha_item)->getCString());
+			gacha_item->setPosition(gacha_item_position);
+			main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+			
+			CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
+			mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-6, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-6));
+			gacha_item->addChild(mount_img);
+		});
+		addChild(t_popup, kStartSettingPopupZorder_popup);
+	}
+	else
+	{
+		CCLog("save userdata fail!!!");
+		mySGD->setGold(mySGD->getGold() + 1000);
+		is_menu_enable = true;
+	}
+}
+
 void StartSettingPopup::itemGachaAction()
 {
 	gacha_item_frame++;

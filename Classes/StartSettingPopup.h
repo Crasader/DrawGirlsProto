@@ -79,6 +79,7 @@ private:
 	int gacha_item_frame;
 	ITEM_CODE selected_gacha_item;
 	void startItemGacha();
+	void goItemGacha(Json::Value result_data);
 	void itemGachaAction();
 	void stopItemGacha();
 	void endItemGacha();

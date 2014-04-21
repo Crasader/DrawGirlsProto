@@ -412,6 +412,8 @@ public:
 	bool is_safety_mode;
 	bool is_before_stage_img_download;
 	
+	void withdraw();
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
