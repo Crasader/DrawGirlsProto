@@ -70,58 +70,99 @@ void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
 
 bool OptionPopup::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !CCLayer::init() )
-    {
-        return false;
-    }
+	//////////////////////////////
+	// 1. super init first
+	if ( !CCLayer::init() )
+	{
+		return false;
+	}
+	CCLog("%s %d", __FILE__, __LINE__);
+	Json::Value param;
+	
+	std::function<void(Json::Value)> pf;
+	pf = [=](Json::Value p){
+		KS::KSLog("zzz %", p);
+		
+		
+		// if( 뭘 뿌려줘야한다 )
+		{
+			// button url 뿌릴 거 들어오죠.
+			
+			// CCSprite::create(p);
+			// Sprite 가 클릭됐을 때, launchPromotion() 하면 마켓 링크가 열리고.
+		}
+//		else // 보상줄게 있다.
+		{
+			// 보상 주고.
+			// hsp 에 통보하고.
+			hspConnector::get()->checkCGP(param, Json::Value(), pf);
+		}
+		
+	};
+	hspConnector::get()->checkCGP(param, Json::Value(), pf);
+//	hspConnector::get()->openUrl("market://details?id=com.litqoo.basketworldcup2");
+	
+//	Json::Value param;
+//	param["productid"] = "g_10289_001";
+//	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+//		KS::KSLog("%", v);
+//	});
+	
+//	myDSH->setBoolForKey(kDSH_Key_isSafetyMode, true, true);
+//	myDSH->getBoolForKey(kDSH_Key_isSafetyMode, false);
+	
+//	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), [=](Json::Value t){
+//		CCLog("%s %d", __FILE__, __LINE__);
+//		KS::KSLog("%", t);
+//	});
+	CCLog("%s %d", __FILE__, __LINE__);
 //	EffectSprite* es = EffectSprite::create("bmTest.png");
 //	es->setPosition(ccp(240, 160));
+//	es->setGray();
 //	addChild(es, 999999);
-//
-//	for(int i=1;i<=50;i++)
-//	{
-//		float t_value;
-//		if(i%2 == 1)
-//		{
-//			t_value = 1.2f;
-//			
-//			addChild(KSTimer::create(0.1f*i, [=]()
-//															 {
-//																 es->setBrighten(t_value);
-//															 }));
-//			addChild(KSTimer::create(0.1f*i+0.01f, [=]()
-//															 {
-//																 es->setBrighten(t_value);
-//															 }));
-//		}
-//		else
-//		{
-//			t_value = 1.f;
-//			
-//			addChild(KSTimer::create(0.1f*i, [=]()
-//															 {
-//																 es->setBrighten(t_value);
-//															 }));
-//		}
-//		
-//		
-//	}
+	//
+	//	for(int i=1;i<=50;i++)
+	//	{
+	//		float t_value;
+	//		if(i%2 == 1)
+	//		{
+	//			t_value = 1.2f;ㅖ
+	//
+	//			addChild(KSTimer::create(0.1f*i, [=]()
+	//															 {
+	//																 es->setBrighten(t_value);
+	//															 }));
+	//			addChild(KSTimer::create(0.1f*i+0.01f, [=]()
+	//															 {
+	//																 es->setBrighten(t_value);
+	//															 }));
+	//		}
+	//		else
+	//		{
+	//			t_value = 1.f;
+	//
+	//			addChild(KSTimer::create(0.1f*i, [=]()
+	//															 {
+	//																 es->setBrighten(t_value);
+	//															 }));
+	//		}
+	//
+	//
+	//	}
 	
-//	es->setBrighten(1.f);
-//	addChild(KSGradualValue<float>::create(1.f, 1.8f, 5.f, [=](float t){
-//		es->setBrighten(t);
-//		return true;
-//	},
-//																				 [=](float t){
-//		es->setBrighten(t);
-//																				 }));
+	//	es->setBrighten(1.f);
+	//	addChild(KSGradualValue<float>::create(1.f, 1.8f, 5.f, [=](float t){
+	//		es->setBrighten(t);
+	//		return true;
+	//	},
+	//																				 [=](float t){
+	//		es->setBrighten(t);
+	//																				 }));
 	setTouchEnabled(true);
 	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
 	//addChild(t_popup, 4);
-
+	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -164,74 +205,74 @@ bool OptionPopup::init()
 		temp_menu->setTouchPriority(-171);
 	}
 	
-//	CCSprite* n_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
-//	n_popcake->setOpacity(100);
-//	CCSprite* s_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
-//	s_popcake->setOpacity(100);
-//	
-//	CCMenuItemLambda* popcake_item = CCMenuItemSpriteLambda::create(n_popcake, s_popcake, [=](CCObject* sender)
-//																	{
-//																		CCDirector::sharedDirector()->replaceScene(PopCake::scene());
-//																	});
-//	
-//	CCMenuLambda* popcake_menu = CCMenuLambda::createWithItem(popcake_item);
-//	popcake_menu->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height+15));
-//	main_case->addChild(popcake_menu, kOP_Z_content);
-//	popcake_menu->setTouchPriority(-171);
+	//	CCSprite* n_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+	//	n_popcake->setOpacity(100);
+	//	CCSprite* s_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
+	//	s_popcake->setOpacity(100);
+	//
+	//	CCMenuItemLambda* popcake_item = CCMenuItemSpriteLambda::create(n_popcake, s_popcake, [=](CCObject* sender)
+	//																	{
+	//																		CCDirector::sharedDirector()->replaceScene(PopCake::scene());
+	//																	});
+	//
+	//	CCMenuLambda* popcake_menu = CCMenuLambda::createWithItem(popcake_item);
+	//	popcake_menu->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height+15));
+	//	main_case->addChild(popcake_menu, kOP_Z_content);
+	//	popcake_menu->setTouchPriority(-171);
 	
 	
 	CommonButton* coupon_button = CommonButton::create("쿠폰등록", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	coupon_button->setPosition(getContentPosition(kOP_MT_coupon));
 	coupon_button->setFunction([=](CCObject* sender)
-							   {
-								   CCNode* t_node = CCNode::create();
-								   t_node->setTag(kOP_MT_coupon);
-								   menuAction(t_node);
-							   });
+														 {
+															 CCNode* t_node = CCNode::create();
+															 t_node->setTag(kOP_MT_coupon);
+															 menuAction(t_node);
+														 });
 	main_case->addChild(coupon_button, kOP_Z_content);
 	
 	
 	CommonButton* community_button = CommonButton::create("커뮤니티", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	community_button->setPosition(getContentPosition(kOP_MT_community));
 	community_button->setFunction([=](CCObject* sender)
-							   {
-								   CCNode* t_node = CCNode::create();
-								   t_node->setTag(kOP_MT_community);
-								   menuAction(t_node);
-							   });
+																{
+																	CCNode* t_node = CCNode::create();
+																	t_node->setTag(kOP_MT_community);
+																	menuAction(t_node);
+																});
 	main_case->addChild(community_button, kOP_Z_content);
 	
 	
 	CommonButton* tip_button = CommonButton::create("게임tip", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
-								  {
-									  CCNode* t_node = CCNode::create();
-									  t_node->setTag(kOP_MT_tip);
-									  menuAction(t_node);
-								  });
+													{
+														CCNode* t_node = CCNode::create();
+														t_node->setTag(kOP_MT_tip);
+														menuAction(t_node);
+													});
 	main_case->addChild(tip_button, kOP_Z_content);
 	
 	
 	CommonButton* tutorial_button = CommonButton::create("튜토리얼", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	tutorial_button->setPosition(getContentPosition(kOP_MT_tutorial));
 	tutorial_button->setFunction([=](CCObject* sender)
-							{
-								CCNode* t_node = CCNode::create();
-								t_node->setTag(kOP_MT_tutorial);
-								menuAction(t_node);
-							});
+															 {
+																 CCNode* t_node = CCNode::create();
+																 t_node->setTag(kOP_MT_tutorial);
+																 menuAction(t_node);
+															 });
 	main_case->addChild(tutorial_button, kOP_Z_content);
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-171);
 	close_menu->setPosition(getContentPosition(kOP_MT_close));
 	close_menu->setFunction([=](CCObject* sender)
-							{
-								CCNode* t_node = CCNode::create();
-								t_node->setTag(kOP_MT_close);
-								menuAction(t_node);
-							});
+													{
+														CCNode* t_node = CCNode::create();
+														t_node->setTag(kOP_MT_close);
+														menuAction(t_node);
+													});
 	main_case->addChild(close_menu, kOP_Z_content);
 	
 	
@@ -468,74 +509,74 @@ bool OptionPopup::init()
 	withdraw_button->setTitleColor(ccc3(172, 167, 175));
 	withdraw_button->setPosition(getContentPosition(kOP_MT_withdraw));
 	withdraw_button->setFunction([=](CCObject* sender)
-								 {
-									 CCNode* t_node = CCNode::create();
-									 t_node->setTag(kOP_MT_withdraw);
-									 menuAction(t_node);
-								 });
+															 {
+																 CCNode* t_node = CCNode::create();
+																 t_node->setTag(kOP_MT_withdraw);
+																 menuAction(t_node);
+															 });
 	main_case->addChild(withdraw_button, kOP_Z_content);
 	
-//	CCSprite* n_withdraw = CCSprite::create("option_withdraw.png");
-//	CCSprite* s_withdraw = CCSprite::create("option_withdraw.png");
-//	s_withdraw->setColor(ccGRAY);
-//	
-//	CCMenuItem* withdraw_item = CCMenuItemSprite::create(n_withdraw, s_withdraw, this, menu_selector(OptionPopup::menuAction));
-//	withdraw_item->setTag(kOP_MT_withdraw);
-//	
-//	CCMenu* withdraw_menu = CCMenu::createWithItem(withdraw_item);
-//	withdraw_menu->setPosition(getContentPosition(kOP_MT_withdraw));
-//	main_case->addChild(withdraw_menu, kOP_Z_content);
-//	withdraw_menu->setTouchPriority(-171);
+	//	CCSprite* n_withdraw = CCSprite::create("option_withdraw.png");
+	//	CCSprite* s_withdraw = CCSprite::create("option_withdraw.png");
+	//	s_withdraw->setColor(ccGRAY);
+	//
+	//	CCMenuItem* withdraw_item = CCMenuItemSprite::create(n_withdraw, s_withdraw, this, menu_selector(OptionPopup::menuAction));
+	//	withdraw_item->setTag(kOP_MT_withdraw);
+	//
+	//	CCMenu* withdraw_menu = CCMenu::createWithItem(withdraw_item);
+	//	withdraw_menu->setPosition(getContentPosition(kOP_MT_withdraw));
+	//	main_case->addChild(withdraw_menu, kOP_Z_content);
+	//	withdraw_menu->setTouchPriority(-171);
 	
 	
-//	CCSprite* n_logout = CCSprite::create("option_logout.png");
-//	CCSprite* s_logout = CCSprite::create("option_logout.png");
-//	s_logout->setColor(ccGRAY);
-//	
-//	CCMenuItem* logout_item = CCMenuItemSprite::create(n_logout, s_logout, this, menu_selector(OptionPopup::menuAction));
-//	logout_item->setTag(kOP_MT_logout);
-//	
-//	CCMenu* logout_menu = CCMenu::createWithItem(logout_item);
-//	logout_menu->setPosition(getContentPosition(kOP_MT_logout));
-//	main_case->addChild(logout_menu, kOP_Z_content);
-//	logout_menu->setTouchPriority(-171);
+	//	CCSprite* n_logout = CCSprite::create("option_logout.png");
+	//	CCSprite* s_logout = CCSprite::create("option_logout.png");
+	//	s_logout->setColor(ccGRAY);
+	//
+	//	CCMenuItem* logout_item = CCMenuItemSprite::create(n_logout, s_logout, this, menu_selector(OptionPopup::menuAction));
+	//	logout_item->setTag(kOP_MT_logout);
+	//
+	//	CCMenu* logout_menu = CCMenu::createWithItem(logout_item);
+	//	logout_menu->setPosition(getContentPosition(kOP_MT_logout));
+	//	main_case->addChild(logout_menu, kOP_Z_content);
+	//	logout_menu->setTouchPriority(-171);
 	
 	
 	CommonButton* help_button = CommonButton::create("고객센터", 12, CCSizeMake(90,40), CommonButtonLightPupple, -171);
 	help_button->setPosition(getContentPosition(kOP_MT_help));
 	help_button->setFunction([=](CCObject* sender)
-							 {
-								 CCNode* t_node = CCNode::create();
-								 t_node->setTag(kOP_MT_help);
-								 menuAction(t_node);
-							 });
+													 {
+														 CCNode* t_node = CCNode::create();
+														 t_node->setTag(kOP_MT_help);
+														 menuAction(t_node);
+													 });
 	main_case->addChild(help_button, kOP_Z_content);
 	
-//	CCSprite* n_help = CCSprite::create("option_help.png");
-//	CCSprite* s_help = CCSprite::create("option_help.png");
-//	s_help->setColor(ccGRAY);
-//	
-//	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(OptionPopup::menuAction));
-//	help_item->setTag(kOP_MT_help);
-//	
-//	CCMenu* help_menu = CCMenu::createWithItem(help_item);
-//	help_menu->setPosition(getContentPosition(kOP_MT_help));
-//	main_case->addChild(help_menu, kOP_Z_content);
-//	help_menu->setTouchPriority(-171);
+	//	CCSprite* n_help = CCSprite::create("option_help.png");
+	//	CCSprite* s_help = CCSprite::create("option_help.png");
+	//	s_help->setColor(ccGRAY);
+	//
+	//	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(OptionPopup::menuAction));
+	//	help_item->setTag(kOP_MT_help);
+	//
+	//	CCMenu* help_menu = CCMenu::createWithItem(help_item);
+	//	help_menu->setPosition(getContentPosition(kOP_MT_help));
+	//	main_case->addChild(help_menu, kOP_Z_content);
+	//	help_menu->setTouchPriority(-171);
 	
 	
 	
-//	CCSprite* n_noti = CCSprite::create("option_noti.png");
-//	CCSprite* s_noti = CCSprite::create("option_noti.png");
-//	s_noti->setColor(ccGRAY);
-//	
-//	CCMenuItem* noti_item = CCMenuItemSprite::create(n_noti, s_noti, this, menu_selector(OptionPopup::menuAction));
-//	noti_item->setTag(kOP_MT_noti);
-//	
-//	CCMenu* noti_menu = CCMenu::createWithItem(noti_item);
-//	noti_menu->setPosition(getContentPosition(kOP_MT_noti));
-//	main_case->addChild(noti_menu, kOP_Z_content);
-//	noti_menu->setTouchPriority(-171);
+	//	CCSprite* n_noti = CCSprite::create("option_noti.png");
+	//	CCSprite* s_noti = CCSprite::create("option_noti.png");
+	//	s_noti->setColor(ccGRAY);
+	//
+	//	CCMenuItem* noti_item = CCMenuItemSprite::create(n_noti, s_noti, this, menu_selector(OptionPopup::menuAction));
+	//	noti_item->setTag(kOP_MT_noti);
+	//
+	//	CCMenu* noti_menu = CCMenu::createWithItem(noti_item);
+	//	noti_menu->setPosition(getContentPosition(kOP_MT_noti));
+	//	main_case->addChild(noti_menu, kOP_Z_content);
+	//	noti_menu->setTouchPriority(-171);
 	
 	
 	is_menu_enable = false;
@@ -646,8 +687,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_logout)
 	{
-//		LogoutPopup* t_lp = LogoutPopup::create(this, callfunc_selector(OptionPopup::popupClose));
-//		addChild(t_lp, kOP_Z_popup);
+		//		LogoutPopup* t_lp = LogoutPopup::create(this, callfunc_selector(OptionPopup::popupClose));
+		//		addChild(t_lp, kOP_Z_popup);
 		
 		ASPopupView* t_popup = ASPopupView::create(-300);
 		
@@ -692,53 +733,53 @@ void OptionPopup::menuAction(CCObject* pSender)
 		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(100, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
 		cancel_button->setPosition(ccp(-55,-75));
 		cancel_button->setFunction([=](CCObject* sender)
-								   {
-									   is_menu_enable = true;
-									   t_popup->removeFromParent();
-								   });
+															 {
+																 is_menu_enable = true;
+																 t_popup->removeFromParent();
+															 });
 		t_container->addChild(cancel_button);
 		
 		
 		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(55,-75));
 		ok_button->setFunction([=](CCObject* sender)
-							   {
-								   cancel_button->setEnabled(false);
-								   ok_button->setEnabled(false);
-								   
-								   cancel_button->setVisible(false);
-								   ok_button->setVisible(false);
-								   
-								   CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-								   CCBReader* reader = new CCBReader(nodeLoader);
-								   CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-								   loading_progress_img->setPosition(ccp(0,-75));
-								   t_container->addChild(loading_progress_img);
-								   reader->release();
-								   
-								   
-								   hspConnector::get()->logout([=](Json::Value result_data)
-															   {
-																   CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-																   if(result_data["error"]["isSuccess"].asBool())
-																   {
-																	   myDSH->clear();
-																	   myDSH->resetDSH();
-																	   CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-																   }
-																   else
-																   {
-																	   loading_progress_img->removeFromParent();
-																	   cancel_button->setEnabled(true);
-																	   ok_button->setEnabled(true);
-																	   
-																	   cancel_button->setVisible(true);
-																	   ok_button->setVisible(true);
-																	   
-																	   CCLog("fail logout");
-																   }
-															   });
-							   });
+													 {
+														 cancel_button->setEnabled(false);
+														 ok_button->setEnabled(false);
+														 
+														 cancel_button->setVisible(false);
+														 ok_button->setVisible(false);
+														 
+														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+														 CCBReader* reader = new CCBReader(nodeLoader);
+														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+														 loading_progress_img->setPosition(ccp(0,-75));
+														 t_container->addChild(loading_progress_img);
+														 reader->release();
+														 
+														 
+														 hspConnector::get()->logout([=](Json::Value result_data)
+																												 {
+																													 CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																													 if(result_data["error"]["isSuccess"].asBool())
+																													 {
+																														 myDSH->clear();
+																														 myDSH->resetDSH();
+																														 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																													 }
+																													 else
+																													 {
+																														 loading_progress_img->removeFromParent();
+																														 cancel_button->setEnabled(true);
+																														 ok_button->setEnabled(true);
+																														 
+																														 cancel_button->setVisible(true);
+																														 ok_button->setVisible(true);
+																														 
+																														 CCLog("fail logout");
+																													 }
+																												 });
+													 });
 		t_container->addChild(ok_button);
 	}
 	else if(tag == kOP_MT_noti)
@@ -748,8 +789,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_withdraw)
 	{
-//		WithdrawPopup* t_wp = WithdrawPopup::create(this, callfunc_selector(OptionPopup::popupClose));
-//		addChild(t_wp, kOP_Z_popup);
+		//		WithdrawPopup* t_wp = WithdrawPopup::create(this, callfunc_selector(OptionPopup::popupClose));
+		//		addChild(t_wp, kOP_Z_popup);
 		
 		ASPopupView* t_popup = ASPopupView::create(-300);
 		
@@ -802,53 +843,53 @@ void OptionPopup::menuAction(CCObject* pSender)
 		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
 		cancel_button->setPosition(ccp(-65,-95));
 		cancel_button->setFunction([=](CCObject* sender)
-								   {
-									   is_menu_enable = true;
-									   t_popup->removeFromParent();
-								   });
+															 {
+																 is_menu_enable = true;
+																 t_popup->removeFromParent();
+															 });
 		t_container->addChild(cancel_button);
 		
 		
 		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(65,-95));
 		ok_button->setFunction([=](CCObject* sender)
-							   {
-								   cancel_button->setEnabled(false);
-								   ok_button->setEnabled(false);
-								   
-								   cancel_button->setVisible(false);
-								   ok_button->setVisible(false);
-								   
-								   CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-								   CCBReader* reader = new CCBReader(nodeLoader);
-								   CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-								   loading_progress_img->setPosition(ccp(0,-95));
-								   t_container->addChild(loading_progress_img);
-								   reader->release();
-								   
-								   Json::Value param;
-								   param["memberID"] = hspConnector::get()->getKakaoID();// hspConnector::get()->myKakaoInfo["user_id"].asString(); 기능 제거한다고 하면서 그래프도그가 수정됨
-								   hspConnector::get()->command("dropoutuser", param, [=](Json::Value result_data)
-																{
-																	if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																	{
-																		myDSH->clear();
-																		myDSH->resetDSH();
-																		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-																	}
-																	else
-																	{
-																		loading_progress_img->removeFromParent();
-																		cancel_button->setEnabled(true);
-																		ok_button->setEnabled(true);
-																		
-																		cancel_button->setVisible(true);
-																		ok_button->setVisible(true);
-																		
-																		CCLog("fail dropoutuser");
-																	}
-																});
-							   });
+													 {
+														 cancel_button->setEnabled(false);
+														 ok_button->setEnabled(false);
+														 
+														 cancel_button->setVisible(false);
+														 ok_button->setVisible(false);
+														 
+														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+														 CCBReader* reader = new CCBReader(nodeLoader);
+														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+														 loading_progress_img->setPosition(ccp(0,-95));
+														 t_container->addChild(loading_progress_img);
+														 reader->release();
+														 
+														 Json::Value param;
+														 param["memberID"] = hspConnector::get()->getKakaoID();// hspConnector::get()->myKakaoInfo["user_id"].asString(); 기능 제거한다고 하면서 그래프도그가 수정됨
+														 hspConnector::get()->command("dropoutuser", param, [=](Json::Value result_data)
+																													{
+																														if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																														{
+																															myDSH->clear();
+																															myDSH->resetDSH();
+																															CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																														}
+																														else
+																														{
+																															loading_progress_img->removeFromParent();
+																															cancel_button->setEnabled(true);
+																															ok_button->setEnabled(true);
+																															
+																															cancel_button->setVisible(true);
+																															ok_button->setVisible(true);
+																															
+																															CCLog("fail dropoutuser");
+																														}
+																													});
+													 });
 		t_container->addChild(ok_button);
 	}
 	else if(tag == kOP_MT_joystickPositioning)
@@ -867,9 +908,9 @@ void OptionPopup::menuAction(CCObject* pSender)
 		resetJoystickMovingMenu();
 		is_menu_enable = true;
 		
-//		myDSH->setBoolForKey(kDSH_Key_isControlJoystickNotFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed));
-//		resetJoystickMovingMenu();
-//		is_menu_enable = true;
+		//		myDSH->setBoolForKey(kDSH_Key_isControlJoystickNotFixed, !myDSH->getBoolForKey(kDSH_Key_isControlJoystickNotFixed));
+		//		resetJoystickMovingMenu();
+		//		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tutorial)
 	{

@@ -3574,6 +3574,37 @@ void CloudWrapper::update( float dt )
 	stopMyAction();
 }
 
+void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
+{
+	Json::Reader reader;
+	Json::Value pattern;
+	reader.parse(patternData, pattern);
+	m_pattern = pattern;
+	m_cumber = cb;
+
+	addChild(KSSchedule::create([=](float dt){
+		int n = MIN(m_pattern.get("maxchilds", 99999).asInt() - myGD->getSubCumberCount(), m_pattern.get("childs", 1).asInt());
+		for(int i=0; i<n; ++i)
+		{
+			myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(cb));
+		}
+		m_cumber->setAttackPattern(nullptr);
+		myGD->communication("CP_onPatternEndOf", m_cumber);
+		return false; // 한번만 실행
+	}));
+}
+
+void PutChildWrapper::stopMyAction()
+{
+	unscheduleUpdate();
+
+
+	startSelfRemoveSchedule();
+}
+
+void PutChildWrapper::update( float dt )
+{
+}
 void KSSpecialAttackPattern19::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 	Json::Reader reader;
