@@ -742,42 +742,43 @@ void MapScanner::setTopBottomBlock()
 	while(top_y < 430)
 	{
 		top_cnt++;
-		if(top_y+32.f >= 430)
+		if(top_y+15.f >= 430)
 		{
-			float sub_value = top_y+32.f-430;
-			for(int i=0;i<10;i++)
+			float sub_value = top_y+15.f-430;
+			for(int i=0;i<22;i++)
 			{
-				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, 0, 32, 32-sub_value));
+				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, 0, 15, 15-sub_value));
 				t_block->setAnchorPoint(ccp(0,0));
-				t_block->setPosition(ccp(i*32, top_y+2));
-				t_block->setTag(top_cnt*10+i);
+				t_block->setPosition(ccp(i*15, top_y+2));
+				t_block->setTag(top_cnt*22+i);
 				top_block_manager->addChild(t_block);
 			}
 		}
 		else
 		{
-			for(int i=0;i<10;i++)
+			for(int i=0;i<22;i++)
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture());
 				t_block->setAnchorPoint(ccp(0,0));
-				t_block->setPosition(ccp(i*32, top_y+2));
-				t_block->setTag(top_cnt*10+i);
+				t_block->setPosition(ccp(i*15, top_y+2));
+				t_block->setTag(top_cnt*22+i);
 				top_block_manager->addChild(t_block);
 			}
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(top_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,0));
 		t_line->setPosition(ccp(160,top_y+2));
-		t_line->setTag(top_cnt*10);
+		t_line->setScaleX(320.f/8.f);
+		t_line->setTag(top_cnt*22);
 		top_block_line_manager->addChild(t_line);
-		top_y += 32.f;
+		top_y += 15.f;
 	}
 	top_block_manager->setTag(top_cnt);
 	
-	if((myGD->limited_step_top-1)*pixelSize+2 + 21 > 430)
+	if((myGD->limited_step_top-1)*pixelSize+2 + 26 > 430)
 	{
-		float sub_value = (myGD->limited_step_top-1)*pixelSize+2 + 21 - 430;
-		top_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, 88, 21-sub_value));
+		float sub_value = (myGD->limited_step_top-1)*pixelSize+2 + 26 - 430;
+		top_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, 59, 26-sub_value));
 		top_block_lock->setAnchorPoint(ccp(0.5,0));
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize+2));
 		addChild(top_block_lock, blockZorder);
@@ -805,42 +806,43 @@ void MapScanner::setTopBottomBlock()
 	{
 		bottom_cnt++;
 		
-		if(bottom_y-32.f <= 0)
+		if(bottom_y-15.f <= 0)
 		{
-			float sub_value = -(bottom_y-32.f);
-			for(int i=0;i<10;i++)
+			float sub_value = -(bottom_y-15.f);
+			for(int i=0;i<22;i++)
 			{
-				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture(), CCRectMake(0, 0, 32, 32-sub_value));
+				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture(), CCRectMake(0, 0, 15, 15-sub_value));
 				t_block->setAnchorPoint(ccp(0,1.f));
-				t_block->setPosition(ccp(i*32, bottom_y-2));
-				t_block->setTag(bottom_cnt*10+i);
+				t_block->setPosition(ccp(i*15, bottom_y-2));
+				t_block->setTag(bottom_cnt*22+i);
 				bottom_block_manager->addChild(t_block);
 			}
 		}
 		else
 		{
-			for(int i=0;i<10;i++)
+			for(int i=0;i<22;i++)
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture());
 				t_block->setAnchorPoint(ccp(0,1.f));
-				t_block->setPosition(ccp(i*32, bottom_y-2));
-				t_block->setTag(bottom_cnt*10+i);
+				t_block->setPosition(ccp(i*15, bottom_y-2));
+				t_block->setTag(bottom_cnt*22+i);
 				bottom_block_manager->addChild(t_block);
 			}
 		}
 		CCSprite* t_line = CCSprite::createWithTexture(bottom_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0.5,1.f));
 		t_line->setPosition(ccp(160,bottom_y-2));
-		t_line->setTag(bottom_cnt*10);
+		t_line->setScaleX(320.f/8.f);
+		t_line->setTag(bottom_cnt*22);
 		bottom_block_line_manager->addChild(t_line);
-		bottom_y -= 32.f;
+		bottom_y -= 15.f;
 	}
 	bottom_block_manager->setTag(bottom_cnt);
 	
-	if((myGD->limited_step_bottom-1)*pixelSize - 21 < 0)
+	if((myGD->limited_step_bottom-1)*pixelSize - 26 < 0)
 	{
-		float sub_value = -((myGD->limited_step_bottom-1)*pixelSize - 21);
-		bottom_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, 88, 21-sub_value));
+		float sub_value = -((myGD->limited_step_bottom-1)*pixelSize - 26);
+		bottom_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, 59, 26-sub_value));
 		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize));
 		addChild(bottom_block_lock, blockZorder);
@@ -887,9 +889,9 @@ void MapScanner::removingBlock()
 			is_removed_top_block = true;
 		else
 		{
-			for(int i=0;i<10;i++)
-				top_block_manager->removeChildByTag(remove_block_cnt*10+i);
-			top_block_line_manager->removeChildByTag(remove_block_cnt*10);
+			for(int i=0;i<22;i++)
+				top_block_manager->removeChildByTag(remove_block_cnt*22+i);
+			top_block_line_manager->removeChildByTag(remove_block_cnt*22);
 		}
 	}
 	if(!is_removed_bottom_block)
@@ -898,9 +900,9 @@ void MapScanner::removingBlock()
 			is_removed_bottom_block = true;
 		else
 		{
-			for(int i=0;i<10;i++)
-				bottom_block_manager->removeChildByTag(remove_block_cnt*10+i);
-			bottom_block_line_manager->removeChildByTag(remove_block_cnt*10);
+			for(int i=0;i<22;i++)
+				bottom_block_manager->removeChildByTag(remove_block_cnt*22+i);
+			bottom_block_line_manager->removeChildByTag(remove_block_cnt*22);
 		}
 	}
 

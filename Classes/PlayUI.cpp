@@ -396,9 +396,9 @@ void GoldLabel::myInit ()
 	is_incresing = false;
 	CCLabelBMFont::initWithString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), "goldfont.fnt", kCCLabelAutomaticWidth, kCCTextAlignmentRight, CCPointZero);
 	stopIncreasing();
-	setAnchorPoint(ccp(0,0.5));
+	setAnchorPoint(ccp(1.f,0.5));
 	
-	setPosition(ccp(52, myDSH->ui_top-50));
+	setPosition(ccp(480-52, myDSH->ui_top-50));
 //	if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											setPosition(ccp((480-myGD->boarder_value*2)*1.1f/4.f,myDSH->ui_top-15));
@@ -1768,7 +1768,7 @@ void PlayUI::counting ()
 			if(countingLabel->getColor().b > 50)
 				countingLabel->setColor(ccRED);
 			else
-				countingLabel->setColor(ccWHITE);
+				countingLabel->setColor(ccYELLOW);
 		}
 		
 		
@@ -1790,7 +1790,7 @@ void PlayUI::counting ()
 			countingLabel->setVisible(true);
 		}
 		
-		countingLabel->setColor(ccWHITE);
+		countingLabel->setColor(ccYELLOW);
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
 		countingLabel->setPosition(ccp(240,35));
@@ -2110,13 +2110,17 @@ void PlayUI::myInit ()
 		mySGD->draw_button_tutorial_ing = 0;
 	}
 	
-//	gold_label = GoldLabel::create();
-//	addChild(gold_label);
-//	gold_label->setString("0");
+	gold_label = GoldLabel::create();
+	addChild(gold_label);
+	gold_label->setString("0");
 	
-//	CCSprite* gold_img = CCSprite::create("ui_gold_img.png");
-//	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-15,9)));
-//	addChild(gold_img);
+	addChild(KSGradualValue<float>::create(myDSH->ui_top-50+UI_OUT_DISTANCE, myDSH->ui_top-50, UI_IN_TIME, [=](float t){gold_label->setPositionY(t);}, [=](float t){gold_label->setPositionY(myDSH->ui_top-50);}));
+	
+	CCSprite* gold_img = CCSprite::create("ui_gold_img.png");
+	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-15,9)));
+	addChild(gold_img);
+	
+	addChild(KSGradualValue<float>::create(myDSH->ui_top-50+9+UI_OUT_DISTANCE, myDSH->ui_top-50+9, UI_IN_TIME, [=](float t){gold_img->setPositionY(t);}, [=](float t){gold_img->setPositionY(myDSH->ui_top-50+9);}));
 	
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	((CountingBMLabel*)score_label)->onChangeScale(false);
@@ -2185,6 +2189,7 @@ void PlayUI::myInit ()
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
 	countingLabel->setPosition(ccp(240,35-UI_OUT_DISTANCE));
+	countingLabel->setColor(ccYELLOW);
 	addChild(countingLabel);
 	
 	addChild(KSGradualValue<float>::create(35-UI_OUT_DISTANCE, 35, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(35);}));

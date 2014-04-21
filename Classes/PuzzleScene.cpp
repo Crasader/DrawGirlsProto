@@ -375,9 +375,26 @@ bool PuzzleScene::init()
 	}
 	
 	
-	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
-	back_img->setPosition(ccp(240,160));
-	addChild(back_img, kPuzzleZorder_back);
+//	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
+//	back_img->setPosition(ccp(240,160));
+//	addChild(back_img, kPuzzleZorder_back);
+	
+	CCSpriteBatchNode* back_batch = CCSpriteBatchNode::create("ingame_side_pattern.png");
+	back_batch->setPosition(ccp(240,160));
+	addChild(back_batch, kPuzzleZorder_back);
+	
+	CCPoint base_position = ccp(-284,-180);
+	
+	for(int i=0;i*26 < 360;i++)
+	{
+		for(int j=0;j*48 < 568;j++)
+		{
+			CCSprite* t_back = CCSprite::createWithTexture(back_batch->getTexture());
+			t_back->setAnchorPoint(ccp(0,0));
+			t_back->setPosition(base_position + ccp(j*48, i*26));
+			back_batch->addChild(t_back);
+		}
+	}
 	
 	piece_mode = kPieceMode_default;//(PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
 	setPuzzle();
