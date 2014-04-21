@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/hsp.common.white"
+    android:fadingEdge="none" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        
+        <!--         프로필 사진 & 별명 & 오늘한마디 -->
+        <RelativeLayout
+            android:id="@+id/hsp.profile.userprofile.basic"
+            android:layout_width="fill_parent"
+            android:layout_height="162.67dp"
+            android:background="@drawable/hsp_toast_new_profile_top_photo_bg_off"
+            android:tag="hsp.profile.userprofile.basic" >
+
+	             <RelativeLayout
+	                android:id="@+id/hsp.profile.userprofile.basic.myphoto.set"
+	                android:layout_width="142dp"
+			        android:layout_height="102dp"
+	                android:layout_centerHorizontal="true"
+			        android:layout_marginTop="30dp"
+			        android:clickable="true"
+			        android:tag="hsp.profile.myprofile.detail.myphoto.area"
+	                >
+	                	<ImageView
+			                android:id="@+id/hsp.profile.myprofile.detail.myphoto.border"
+			                android:layout_width="102dp"
+			                android:layout_height="102dp"
+			                android:layout_centerHorizontal="true"
+			                android:background="@drawable/hsp_toast_new_profile_photo_border"
+			                android:tag="hsp.profile.myprofile.detail.myphoto.border" />
+	                
+	            		<ImageView
+			                android:id="@+id/hsp.profile.myprofile.detail.myphoto.shadow"
+			                android:layout_width="96.67dp"
+			                android:layout_height="96.67dp"
+			                android:layout_centerHorizontal="true"
+			                android:layout_marginTop="2.66dp"
+			                android:background="@drawable/hsp_toast_new_profile_photo_shadow"
+			                android:tag="hsp.profile.myprofile.detail.myphoto.shadow" />
+	            	
+			            <ImageView
+			                android:id="@+id/hsp.profile.myprofile.detail.myphoto"
+			                android:layout_width="96.67dp"
+			                android:layout_height="96.67dp"
+			                android:layout_centerHorizontal="true"
+			                android:layout_marginTop="2.66dp"
+							android:background="@drawable/hsp_toast_new_profile_photo_100"   
+			                android:tag="hsp.profile.myprofile.detail.myphoto" />
+	
+	<!-- 		            설정(편집)		             -->
+			            <ImageView
+			                android:id="@+id/hsp.profile.myprofile.detail.myphoto.caption"
+			                android:layout_width="32dp"
+			                android:layout_height="32dp"
+			                android:layout_centerVertical="true"
+			                android:layout_marginLeft="83.33dp"
+			                android:layout_alignLeft="@+id/hsp.profile.myprofile.detail.myphoto.border"
+							android:background="@drawable/hsp_toast_new_profile_add_photo_btn"   
+							android:tag="hsp.profile.myprofile.detail.myphoto.caption"
+			                 />
+	            	</RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/hsp.common.white"
+            android:orientation="vertical"
+            android:paddingLeft="14.67dp"
+            android:paddingRight="14.67dp"
+            android:paddingTop="18.67dp" >
+
+
+            <!-- 별명 -->
+            <RelativeLayout 
+                	android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:gravity="center_vertical"
+                >
+                
+				<TextView
+			        android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignParentLeft="true"
+	                android:text="@string/hsp.toast.new.profile.myprofile.detail.nickname.title"
+	                android:textColor="@color/hsp_toast_new_profile_myprofile_modify_title"
+	                android:layout_weight="1"
+	                android:textStyle="bold"
+	                android:textSize="12dp"
+				    />
+			
+			   <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:bufferType="spannable"
+		            android:layout_weight="1"
+		            android:layout_alignParentRight="true"
+		            android:textSize="10dp"
+		            android:tag="hsp.profile.myprofile.detail.nickname.lengh"
+		            android:textColor="@color/hsp_toast_new_profile_myprofile_detail_basic_contents" />
+		   </RelativeLayout>
+		
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="42.67dp"
+                android:layout_marginTop="8.67dp"
+                android:clickable="true"
+                android:background="@drawable/hsp_toast_new_textview_border"
+                android:tag="hsp.profile.myprofile.detail.nickname" >
+
+                <EditText
+                    android:id="@+id/hsp.profile.myprofile.detail.nickname.text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="42.67dp"
+                    android:paddingLeft="10.67dp"
+                	android:paddingRight="29.33dp"
+                    android:layout_alignParentBottom="true"
+                    android:focusable="true"
+                    android:layout_alignParentRight="true"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/cursor"
+                    android:background="@drawable/hsp_toast_new_textview_border"
+                    android:tag="hsp.profile.myprofile.detail.nickname.text"
+                    android:hint="@string/hsp.toast.new.profile.myprofile.setting.input.noinput.nickname"
+                    android:textColorHint="@color/hsp_toast_new_profile_myprofile_detail_basic_contents"
+                    android:textColor="@color/hsp_toast_new_profile_myprofile_modify_input_contents"
+                    android:textSize="16.6dp" />
+                
+                <ImageButton
+                    android:id="@+id/hsp.profile.myprofile.detail.nickname.chnage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="9.33dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/hsp_toast_new_profile_detail_textcnsl"
+                    android:tag="hsp.profile.myprofile.detail.nickname.textcnsl" 
+                    android:visibility="gone"/>                
+            </RelativeLayout>
+            
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="24.67dp"
+                >
+	   			<TextView
+			        android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:gravity="left|center_vertical"
+	                android:layout_marginTop="2.67dp"
+	                android:textColor="@color/hsp.toast.common.white.red"
+	                android:textSize="12dp"
+	                android:tag="hsp.profile.myprofile.detail.nickname.alert"
+				    />
+   			</RelativeLayout>
+	   			
+		        <LinearLayout
+		             android:layout_width="fill_parent"
+				     android:layout_height="43.33dp"
+				     android:layout_marginTop="14.67dp"
+				     android:layout_marginBottom="16dp"
+	    	    	 android:background="@drawable/hsp_toast_new_profile_save_btn"
+				     android:tag="hsp.profile.myprofile.setting.input.submit"
+				     android:orientation="horizontal"
+		            >
+		            
+				        <TextView
+						     android:layout_width="fill_parent"
+				             android:layout_height="42.67dp"
+				             android:gravity="center"
+				             android:background="@drawable/hsp_toast_new_profile_save_btn"
+				             android:text="@string/hsp.toast.new.profile.myprofile.detail.save"
+				             android:textColor="@color/hsp.common.white"
+				             android:textStyle="bold"
+				             android:textSize="14.67dp"
+						    />
+				        
+				        <TextView
+						     android:layout_width="fill_parent"
+				             android:layout_height="2dp"
+				             android:gravity="center"
+				             android:background="#d51717"
+						    />
+		            
+		        </LinearLayout>
+		        
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

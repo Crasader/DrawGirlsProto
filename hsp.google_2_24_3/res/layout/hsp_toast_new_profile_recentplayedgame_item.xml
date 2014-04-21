@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="63.33dp"
+    android:orientation="vertical"
+    android:tag="hsp.profile.recentplayedgame" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="28dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/hsp_toast_new_common_bg_group"
+        android:gravity="center_vertical"
+        android:paddingLeft="12dp"
+        android:tag="hsp.profile.recentplayedgame.recommendgame.grouptitle"
+        android:textColor="@color/hsp.common.grouptext"
+        android:textSize="16.6dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:tag="hsp.profile.recentplayedgame.recommendgame.empty"
+        android:text="@string/hsp.toast.new.profile.recentplayedgame.recommendgame.empty"
+        android:textColor="@color/hsp.common.description"
+        android:textSize="13.33dp"
+	    android:visibility="gone"
+         />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10.67dp"
+        android:paddingBottom="10.67dp"
+        android:layout_marginLeft ="12dp"
+    	android:layout_marginRight="12dp"
+    	android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:tag="hsp.profile.recentplayedgame.recommendgame.item" >
+
+        <ImageView
+            android:id="@+id/hsp.profile.recentplayedgame.item.image"
+            android:layout_width="47dp"
+            android:layout_height="47dp"
+            android:background="@drawable/hsp_toast_new_common_icon_game"
+            android:padding="0dp"
+            android:tag="hsp.profile.recentplayedgame.item.image" />
+
+        <Button
+            android:id="@+id/hsp.profile.recentplayedgame.item.playgame"
+            android:layout_width="66dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="9.5dp"
+            android:background="@drawable/hsp_toast_new_common_btn_page"
+            android:gravity="center"
+            android:tag="hsp.profile.recentplayedgame.item.playgame"
+            android:text="@string/hsp.toast.new.profile.recentplayedgame.gamelist.playgame"
+            android:textColor="@color/hsp.common.white"
+            android:textSize="13.33dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:layout_marginLeft="13.33dp"
+            android:layout_marginRight="13.33dp"
+            android:layout_marginTop="6.33dp"
+            android:layout_toLeftOf="@id/hsp.profile.recentplayedgame.item.playgame"
+            android:layout_toRightOf="@id/hsp.profile.recentplayedgame.item.image"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:tag="hsp.profile.recentplayedgame.item.name"
+                android:textColor="@color/hsp.common.black"
+                android:textSize="13.33dp" />
+
+            <LinearLayout 
+                android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+                >
+
+                		<TextView 
+                		    android:layout_width="10.67dp"
+				            android:layout_height="10.67dp"
+				            android:layout_marginRight="3.33dp"
+				            android:layout_gravity="center_vertical"
+				            android:background="@drawable/hsp_toast_new_common_list_user_off"
+				            android:tag="hsp.profile.recentplayedgame.user.onoff"
+                		    />
+            
+				            <TextView
+				                android:layout_width="fill_parent"
+				                android:layout_height="wrap_content"
+				                android:layout_gravity="center_vertical"
+				                android:ellipsize="end"
+				                android:singleLine="true"
+				                android:tag="hsp.profile.recentplayedgame.item.date"
+				                android:textColor="@color/hsp.common.description"
+				                android:textSize="11dp" />
+	            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

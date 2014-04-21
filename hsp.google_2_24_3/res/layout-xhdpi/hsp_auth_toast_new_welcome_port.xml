@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:tag="hsp.welcome.main" >
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/hsp_auth_toast_new_background_port"
+        android:tag="hsp.auth.welcome.bg" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="221.5dp"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:tag="hsp.auth.welcome.btn.area" >
+
+        <!-- guest -->
+
+        <RelativeLayout
+            android:id="@+id/welcome.guestbtn"
+            android:layout_width="92dp"
+            android:layout_height="27dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:addStatesFromChildren="true"
+            android:background="@drawable/hsp_auth_toast_new_guest_button"
+            android:clickable="true"
+            android:gravity="center"
+            android:tag="hsp.auth.welcome.toast.guest.login.btn" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="37dp"
+                android:layout_alignParentTop="true"
+                android:addStatesFromChildren="true"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/device.description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:tag="hsp.auth.welcome.guest.login.textview"
+                    android:text="Guest Login"
+                    android:textColor="@color/hsp.common.white"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/welcome.idpbtn"
+            android:layout_width="fill_parent"
+            android:layout_height="50.5dp"
+            android:layout_below="@+id/welcome.guestbtn"
+            android:layout_marginTop="9dp" >
+
+            <!-- Payco 아이디로 로그인 -->
+
+            <LinearLayout
+                android:layout_width="163dp"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:addStatesFromChildren="true"
+                android:background="@drawable/hsp_auth_toast_new_red_button"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:tag="hsp.auth.welcome.toast.payco.login.btn" >
+
+                <TextView
+                    android:id="@+id/email_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:padding="0dp"
+                    android:shadowColor="#4d000000"
+                    android:shadowDy="1"
+                    android:text="@string/hsp.toastnew.auth.welcome.alert.hid.email.login.title"
+                    android:textColor="@color/hsp.common.white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/email_title"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:padding="0dp"
+                    android:shadowColor="#4d000000"
+                    android:shadowDy="1"
+                    android:text="@string/hsp.toastnew.auth.welcome.alert.hid.email.login"
+                    android:textColor="@color/hsp.common.white"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Facebook 아이디로 로그인 -->
+
+            <LinearLayout
+                android:layout_width="163dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:addStatesFromChildren="true"
+                android:background="@drawable/hsp_auth_toast_new_blue_button"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:tag="hsp.auth.welcome.toast.facebook.login.btn" >
+
+                <TextView
+                    android:id="@+id/idp_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:padding="0dp"
+                    android:shadowColor="#4d000000"
+                    android:shadowDy="1"
+                    android:text="@string/hsp.toastnew.auth.welcome.alert.hid.facebook.login.title"
+                    android:textColor="@color/hsp.common.white"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/welcome.description"
+            android:layout_width="fill_parent"
+            android:layout_height="36dp"
+            android:layout_below="@+id/welcome.idpbtn"
+            android:layout_marginTop="15dp" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:alpha="70"
+                android:gravity="center"
+                android:lines="2"
+                android:shadowColor="#4D000000"
+                android:shadowDy="1.0"
+                android:tag="hsp.toast.auth.welcome.playguide.description"
+                android:text="@string/hsp.toastnew.auth.welcome.alert.hid.description"
+                android:textColor="#B3ffffff"
+                android:textSize="11dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="95dp"
+            android:layout_height="23dp"
+            android:layout_below="@+id/welcome.description"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/hsp_auth_toast_new_welcome_footer" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bac_dim_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#B3000000"
+        android:scaleType="fitXY"
+        android:tag="testTrans"
+        android:visibility="gone" >
+    </RelativeLayout>
+
+</RelativeLayout>

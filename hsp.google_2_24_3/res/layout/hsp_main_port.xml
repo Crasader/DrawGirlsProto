@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.transparent"
+    android:tag="hsp.main" >
+
+    <FrameLayout
+        android:id="@+id/hsp.main.topbar"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:tag="hsp.main.topbar" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/hsp.main.gnb"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:tag="hsp.main.gnb" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/hsp.main.content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/hsp.main.gnb"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@id/hsp.main.topbar"
+        android:tag="hsp.main.content" >
+    </FrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:tag="hsp.welcome.main">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/hsp_auth_toast_new_background_port"
+        android:tag="hsp.auth.welcome.bg" />
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="236.5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:tag="hsp.auth.welcome.btn.area"
+        android:layout_alignParentBottom="true"
+        >
+        
+<!--            guest -->
+	    	<RelativeLayout
+	    	    android:id="@+id/welcome.guestbtn"
+	    	    android:layout_width="92dp"
+	    	     android:layout_height="27dp"
+	    	    android:gravity="center"
+	    	    android:layout_centerHorizontal="true"
+	    	    android:clickable="true"
+	    	    android:addStatesFromChildren="true"
+	    	    android:background="@drawable/hsp_auth_toast_new_guest_button"
+	    	    android:tag="hsp.auth.welcome.toast.guest.login.btn"
+	    	    >
+    	
+	    	    	<LinearLayout
+			    	    	    android:layout_width="fill_parent"
+					            android:layout_height="37dp"
+					            android:layout_alignParentTop="true"
+					            android:gravity="center"
+					            android:addStatesFromChildren="true"
+					            android:orientation="horizontal"
+			    	    	    >
+		    	    	    
+		    	            <TextView
+		    	                	android:id="@+id/device.description"
+						            android:layout_width="wrap_content"
+						            android:layout_height="37dp"
+						            android:gravity="center"
+						            android:singleLine="true"
+						            android:text="Guest Login"
+						            android:textColor="#333333"
+						            android:textStyle="bold"
+						            android:textSize="14dp" 
+						            android:tag="hsp.auth.welcome.device.login.textview"
+						            />
+    	            </LinearLayout>
+    	</RelativeLayout>
+        
+    	<LinearLayout 
+    	        android:id="@+id/welcome.idpbtn"
+    	  		android:layout_below="@+id/welcome.guestbtn"
+    	  		android:layout_marginTop="14dp"
+    	    	android:layout_width="fill_parent"
+    	    	android:layout_height="50.5dp"
+    	    >
+
+<!--     	    Facebook 아이디로 로그인 -->
+			<LinearLayout
+			    android:layout_width="330dp"
+    	     	android:layout_height="fill_parent"
+    	     	android:layout_weight="1"
+    	     	android:gravity="center"
+    	     	android:clickable="true"
+    	     	android:addStatesFromChildren="true"
+    	     	android:background="@drawable/hsp_auth_toast_new_blue_button"
+    	     	android:orientation="vertical"
+    	     	android:tag="hsp.auth.welcome.facebook.login.btn"
+			    >
+			    <TextView 
+			        android:id = "@+id/idp_title"
+			        android:layout_width="wrap_content"
+    	     		android:layout_height="wrap_content"
+    	     		android:textStyle="bold"
+    	     		android:shadowDy="1"
+    	     		android:gravity="center"
+    	     		android:shadowColor="#4d000000"
+    	     		android:textColor="@color/hsp.common.white"
+    	     		android:textSize="15dp"
+    	     		android:padding="0dp"
+    	     		android:includeFontPadding="false"
+    	     		android:text="@string/hsp.toastnew.auth.welcome.alert.hid.facebook.login.title"
+			        />
+			    
+			</LinearLayout>
+    	</LinearLayout>
+    	
+    	<ImageView 
+    	    android:layout_width="95dp"
+    	    android:layout_height="23dp"
+    	    android:layout_marginBottom="15dp"
+    	    android:layout_marginTop ="107dp"
+    	    android:layout_below="@+id/welcome.idpbtn"
+    	    android:layout_centerInParent="true"
+    	    
+    	    android:src="@drawable/hsp_auth_toast_new_welcome_footer"
+    	    />
+    	
+    </RelativeLayout>
+    
+</RelativeLayout>

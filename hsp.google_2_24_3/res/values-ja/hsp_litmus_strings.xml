@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.litmus.find.rooting">お使いのスマートフォン端末が正規の状態ではない場合は、ゲームを起動できません。\n端末の状態にお心当たりが無い場合は、アプリダウンロードページの 問い合わせフォームよりお問い合わせください。</string>
+    <string name="hsp.litmus.find.cheating">不正行為を行うためのツールが検出されました。該当ツールが削除されるまで本サービスは利用できません。</string>
+    <string name="hsp.litmus.find.bluestack">不正行為を行うためのツールが検出されました。該当ツールが削除されるまで本サービスは利用できません。</string>
+    <string name="hsp.litmus.find.integrity">不正行為を行うためのツールが検出されました。該当ツールが削除されるまで本サービスは利用できません。</string>
+    <string name="hsp.litmus.log.agreement.title">ご注意！</string>
+    <string name="hsp.litmus.log.agreement.message">端末内に当社サービスに対する不正行為を行うためのツールがある場合、本サービスをご利用いただけません。また、該当ツールが端末内にある場合、該当ツールのアプリ情報を取得いたします。</string>
+    <string name="hsp.litmus.log.agreement.permit">許可する</string>
+    <string name="hsp.litmus.log.agreement.refuse">許可しない</string>
+
+</resources>
