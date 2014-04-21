@@ -22,7 +22,7 @@
 	<configuration key="HSP_PAYMENT_GAMBLING" value="false"/>
 	
 	<configuration key="HSP_MARKET" value="KS"/>
-	<configuration key="HSP_PAYMENT_STORE_ID" value="TS"/>
+	<configuration key="HSP_PAYMENT_STORE_ID" value="GG"/>
 	<configuration key="HSP_PAYMENT_TSTORE_IS_REAL" value="true"/>
 	
 </configuartion-list>
