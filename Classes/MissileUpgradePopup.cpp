@@ -187,7 +187,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 	before_gold = mySGD->getGold();
 	before_level = missile_level-1;
-	before_damage = StoneAttack::getPower((before_level-1)/5+1, (before_level-1)%5+1);
+	before_damage = StoneAttack::getPower((before_level)/5+1, (before_level)%5+1);
 	mySGD->setGold(before_gold-missile_level*1000);
 	myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
 	

@@ -54,28 +54,28 @@ void StageNode::setViewMode(StageNodeViewMode t_mode)
 		star_back->setPosition(ccpAdd(stage_menu->getPosition(), ccp(-6.5f,16)));
 		addChild(star_back);
 		
-		int stage_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, stage_number);
-		if(stage_clear_rank >= 1)
-		{
-			CCSprite* star1 = CCSprite::create("stage_icon_star.png");
-			star1->setPosition(ccp(6,4));
-			star_back->addChild(star1);
-			star_vector.push_back(star1);
-		}
-		if(stage_clear_rank >= 2)
-		{
-			CCSprite* star2 = CCSprite::create("stage_icon_star.png");
-			star2->setPosition(ccp(15,7));
-			star_back->addChild(star2);
-			star_vector.push_back(star2);
-		}
-		if(stage_clear_rank >= 3)
-		{
-			CCSprite* star3 = CCSprite::create("stage_icon_star.png");
-			star3->setPosition(ccp(24,4));
-			star_back->addChild(star3);
-			star_vector.push_back(star3);
-		}
+//		int stage_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, stage_number);
+//		if(stage_clear_rank >= 1)
+//		{
+//			CCSprite* star1 = CCSprite::create("stage_icon_star.png");
+//			star1->setPosition(ccp(6,4));
+//			star_back->addChild(star1);
+//			star_vector.push_back(star1);
+//		}
+//		if(stage_clear_rank >= 2)
+//		{
+//			CCSprite* star2 = CCSprite::create("stage_icon_star.png");
+//			star2->setPosition(ccp(15,7));
+//			star_back->addChild(star2);
+//			star_vector.push_back(star2);
+//		}
+//		if(stage_clear_rank >= 3)
+//		{
+//			CCSprite* star3 = CCSprite::create("stage_icon_star.png");
+//			star3->setPosition(ccp(24,4));
+//			star_back->addChild(star3);
+//			star_vector.push_back(star3);
+//		}
 	}
 	else if(recent_mode == kStageNodeViewMode_buy)
 	{

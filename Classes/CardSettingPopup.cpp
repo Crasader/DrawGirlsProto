@@ -237,9 +237,9 @@ bool CardSettingPopup::init()
 //			bool is_on_condition_gold = condition_gold == 0;
 //			
 //			int condition_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, j);
-//			bool is_on_condition_stage = (condition_stage == 0) || (myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, condition_stage));
+//			bool is_on_condition_stage = (condition_stage == 0) || (mySGD->isClearPiece(condition_stage));
 //			
-//			if(is_puzzle_open && ((is_on_condition_gold && is_on_condition_stage) || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, j))) // open stage
+//			if(is_puzzle_open && ((is_on_condition_gold && is_on_condition_stage) || mySGD->isClearPiece(j))) // open stage
 //				open_stage_card_count += t_stage_card_count;
 			all_stage_card_count += t_stage_card_count;
 		}

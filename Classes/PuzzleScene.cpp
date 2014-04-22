@@ -118,10 +118,10 @@ bool PuzzleScene::init()
 			for(int i=0;i<not_cleared_stage_list.size();i++)
 			{
 				int stage_number = not_cleared_stage_list[i];
-				if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+				if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
 				   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
 					(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 ||
-					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
+					 mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 				{
 					have_can_enter_stage = true;
 					can_enter_stage_list.push_back(stage_number);
@@ -277,10 +277,10 @@ bool PuzzleScene::init()
 			
 			for(int i=start_stage;i<start_stage+stage_count;i++)
 			{
-				if(i == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i) ||
+				if(i == 1 || mySGD->isClearPiece(i) ||
 				   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 &&
 					(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0 ||
-					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))))
+					 mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))))
 				{
 					can_enter_stage_list.push_back(i);
 					can_enter_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, i));
@@ -765,8 +765,13 @@ void PuzzleScene::endPerfectPuzzleEffect()
 void PuzzleScene::showUnlockEffect()
 {
 	CCLog("unlock piece animation");
+	
 	if(unlock_cover)
 	{
+		PieceHistory t_history = mySGD->getPieceHistory(next_stage_number);
+		t_history.is_open = true;
+		mySGD->setPieceHistory(t_history, nullptr);
+		
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endUnlockEffect));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
@@ -944,33 +949,35 @@ void PuzzleScene::setPuzzle()
 		if(is_stage_piece)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, puzzle_number, CCString::createWithFormat("stage%d_level", stage_number)->getCString());
-			if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+			if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
 			   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-				(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
+				(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 			{
-				bool is_found = false;
-				int found_number = 0;
-				bool is_have_card[4] = {0,};
-				for(int k=4;k>=1;k--)
-				{
-					if(mySGD->isHasGottenCards(stage_number, k) > 0)
-					{
-						if(!is_found)
-						{
-							is_found = true;
-							found_number = k;
-						}
-						is_have_card[k-1] = true;
-					}
-				}
+				PieceHistory t_history = mySGD->getPieceHistory(stage_number);
 				
-				if(!is_have_card[0] || !is_have_card[1] || !is_have_card[2] || !is_have_card[3])
+//				bool is_found = false;
+//				int found_number = 0;
+//				bool is_have_card[4] = {0,};
+//				for(int k=4;k>=1;k--)
+//				{
+//					if(mySGD->isHasGottenCards(stage_number, k) > 0)
+//					{
+//						if(!is_found)
+//						{
+//							is_found = true;
+//							found_number = k;
+//						}
+//						is_have_card[k-1] = true;
+//					}
+//				}
+				
+				if(!t_history.is_clear[0] || !t_history.is_clear[1] || !t_history.is_clear[2] || !t_history.is_clear[3])
 					clear_is_first_perfect = false;
 				
-				if(found_number >= 1 && found_number <= 4)
+				if(mySGD->isClearPiece(stage_number))
 				{
 					PieceType t_type;
-					if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, stage_number))
+					if(mySGD->isClearPiece(stage_number))
 						t_type = kPieceType_color;
 					else
 						t_type = kPieceType_empty;
@@ -978,7 +985,7 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
-					t_piece->setTurnInfo(is_have_card[0], is_have_card[1], is_have_card[2]);
+					t_piece->setTurnInfo(t_history.is_clear[0], t_history.is_clear[1], t_history.is_clear[2]);
 					t_piece->initWithPieceInfo(piece_mode, t_type, piece_type);
 					
 //					addShadow(piece_type, piece_position, stage_number);
@@ -999,7 +1006,7 @@ void PuzzleScene::setPuzzle()
 			{
 				is_puzzle_clear = false;
 				
-				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
+				if(mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
 				{
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::buyPieceAction));
 					t_piece->setPosition(piece_position);
@@ -1288,14 +1295,18 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 			
 			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
 				mySGD->setGold(mySGD->getGold() - NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number));
-				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
-				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), t_stage_number);
-				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, true);
+//				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
+//				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), t_stage_number);
+//				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, true);
+				
+				PieceHistory t_history = mySGD->getPieceHistory(t_stage_number);
+				t_history.is_open = true;
+				mySGD->setPieceHistory(t_history, nullptr);
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
 				save_userdata_list.push_back(kSaveUserData_Key_gold);
-				save_userdata_list.push_back(kSaveUserData_Key_openStage);
+//				save_userdata_list.push_back(kSaveUserData_Key_openStage);
 				
 				myDSH->saveUserData(save_userdata_list, nullptr);
 				
@@ -1623,13 +1634,15 @@ void PuzzleScene::setRight()
 	
 	if(right_mode == kPuzzleRightMode_stage)
 	{
+		PieceHistory t_history = mySGD->getPieceHistory(selected_stage_number);
+		
 		bool is_have_card_list[4] = {false,};
 		
 		int stage_card_count = NSDS_GI(selected_stage_number, kSDS_SI_cardCount_i);
 		for(int i=1;i<=stage_card_count && i <= 4;i++)
 		{
 			int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
-			is_have_card_list[i-1] = mySGD->isHasGottenCards(step_card_number) > 0;
+			is_have_card_list[i-1] = t_history.is_clear[i-1];
 			
 			CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-(i-1)*46.5f);
 			

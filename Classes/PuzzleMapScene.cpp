@@ -497,9 +497,9 @@ void PuzzleMapScene::setMapNode()
 		if(stage_number != 0)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, recent_puzzle_number, CCSTR_CWF("stage%d_level", stage_number)->getCString());
-			if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+			if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
 			   (NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-				(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
+				(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 			{
 				bool is_found = false;
 				int found_number = 0;
@@ -575,7 +575,7 @@ void PuzzleMapScene::setMapNode()
 			else
 			{
 				is_puzzle_clear = false;
-				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
+				if(mySGD->isClearPiece(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
 				{
 					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("piece_buy_%s.png", piece_type.c_str())->getCString(),
 														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
@@ -1068,9 +1068,9 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
-	if(tag == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, tag) ||
+	if(tag == 1 || mySGD->isClearPiece(tag) ||
 	   (NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag) == 0 &&
-		(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag)))))
+		(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag) == 0 || mySGD->isClearPiece(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag)))))
 	{
 		mySD->setSilType(tag);
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
@@ -1078,7 +1078,7 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 		StageInfoDown* t_sid = StageInfoDown::create(this, callfunc_selector(PuzzleMapScene::showStageSettingPopup), this, callfunc_selector(PuzzleMapScene::stageCancel));
 		addChild(t_sid, kPMS_Z_popup);
 	}
-	else if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag)))
+	else if(mySGD->isClearPiece(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, tag)))
 	{
 		ASPopupView* t_popup = ASPopupView::create(-200);
 		
@@ -1143,14 +1143,18 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 			
 			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
 				mySGD->setGold(mySGD->getGold() - NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag));
-				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
-				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), tag);
-				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, tag, true);
+//				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
+//				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), tag);
+//				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, tag, true);
+				
+				PieceHistory t_history = mySGD->getPieceHistory(tag);
+				t_history.is_open = true;
+				mySGD->setPieceHistory(t_history, nullptr);
 				
 				vector<SaveUserData_Key> save_userdata_list;
 				
 				save_userdata_list.push_back(kSaveUserData_Key_gold);
-				save_userdata_list.push_back(kSaveUserData_Key_openStage);
+//				save_userdata_list.push_back(kSaveUserData_Key_openStage);
 				
 				myDSH->saveUserData(save_userdata_list, nullptr);
 				
@@ -3877,9 +3881,9 @@ void PuzzleMapScene::creatingPuzzle()
 		if(stage_number != 0)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, recent_puzzle_number, CCSTR_CWF("stage%d_level", stage_number)->getCString());
-			if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+			if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
 			   (NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-				(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
+				(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 			{
 				bool is_found = false;
 				int found_number = 0;
@@ -3955,7 +3959,7 @@ void PuzzleMapScene::creatingPuzzle()
 			else
 			{
 				is_puzzle_clear = false;
-				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
+				if(mySGD->isClearPiece(NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
 				{
 					StagePiece* t_sp = StagePiece::create(CCSTR_CWF("piece_buy_%s.png", piece_type.c_str())->getCString(),
 														  stage_number, stage_level, sp_position, stage_rect, false, false, piece_type.c_str(),
