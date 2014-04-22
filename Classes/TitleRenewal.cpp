@@ -161,6 +161,8 @@ void TitleRenewalScene::successLogin()
 		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	}
 	
+	is_loaded_server = false;
+	
 	receive_cnt = 0;
 	
 	command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
@@ -202,6 +204,105 @@ void TitleRenewalScene::successLogin()
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
 	startCommand();
+	
+	is_loaded_cgp = false;
+	
+	std::function<void(Json::Value)> pf;
+	pf = [=](Json::Value v){
+		KS::KSLog("CGP : %", v);
+		/* 출력값
+		 typecode : 1 = 버튼, 2 = 배너, 3 = 팝업, 4 = 엔딩, 5 = 무료 충전
+		 버튼일 경우 eventurl, buttonurl, bubbletext 가 유효
+		 배너일 경우 bannerlandurl 과 bannerporturl 이 유효
+		 팝업, 엔딩, 무료충전 일 경우엔 처리모름 무시.
+		 
+		 }
+		 */
+		
+		is_loaded_cgp = true;
+		mySGD->cgp_data = v;
+		
+		endingAction();
+		
+//		std::string pState = v["promotionstate"].asString();
+//		
+//		// 아무것도 하지마!!
+//		if(pState == "CGP_NONE")
+//		{
+//			/* 출력값
+//			 {
+//			 "callback" : null,
+//			 "param" : null,
+//			 "promotionstate" : "CGP_NONE"
+//			 }
+//			 
+//			 */
+//		}
+//		// 홍보해야 될 것이 존재
+//		else if(pState == "CGP_PROMOTION_EXISTS")
+//		{
+//			/* 출력값
+//			 {
+//			 "bubbletext" : "",
+//			 "buttonurl" : "http://images.hangame.co.kr/mobile/cgp/10150_wara/wara_cgp.png",
+//			 "callback" : null,
+//			 "eventurl" : "",
+//			 "param" : null,
+//			 "promotionstate" : "CGP_PROMOTION_EXISTS",
+//			 "typecode" : 1
+//			 }
+//			 
+//			 */
+//			CommonButton* cb = CommonButton::create("cxvlxcvmzxkclvk", 14, CCSizeMake(100, 50), CommonButtonBlue, -300);
+//			cb->setPosition(ccp(240, 160));
+//			addChild(cb, 999999);
+//			cb->setFunction([=](CCObject* t){
+//				hspConnector::get()->launchPromotion();
+//				
+//				cb->removeFromParent();
+//			});
+//		}
+//		// 일반 보상
+//		else if(pState == "CGP_REWARD_REQUIRED")
+//		{
+//			/* 출력값
+//			 {
+//			 "callback" : null,
+//			 "param" : null,
+//			 "promotionstate" : "CGP_REWARD_REQUIRED",
+//			 "rewards" :
+//			 [
+//			 {
+//			 "promotiontype" : 2,
+//			 "rewardcode" : "10289_test",
+//			 "rewardvalue" : 1
+//			 }
+//			 ]
+//			 }
+//			 */
+//			Json::Value rewards = v["rewards"];
+//			for(int i=0; i<rewards.size(); i++)
+//			{
+//				int rewardValue = rewards[i]["rewardvalue"].asInt();
+//				CCLog("reward !!! : %d", rewardValue);
+//			}
+//			
+////			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
+//		}
+//		// 전체 팝업보상
+//		else if(pState == "CGP_PROMOTION_REWARD_EXISTS")
+//		{
+//			Json::Value rewards = v["rewards"];
+//			for(int i=0; i<rewards.size(); i++)
+//			{
+//				int rewardValue = rewards[i]["rewardvalue"].asInt();
+//				CCLog("reward !!! : %d", rewardValue);
+//			}
+//			
+////			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
+//		}
+	};
+	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), this, pf);
 }
 
 void TitleRenewalScene::startCommand()
@@ -739,17 +840,15 @@ void TitleRenewalScene::resultGetPieceHistory(Json::Value result_data)
 	{
 		if(result_data["list"].size() == 0)
 		{
-//			is_receive_fail = true;
-//			Json::Value puzzle_param;
-//			puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
-//			puzzle_param["puzzleNo"] = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1);
-//			puzzle_param["updateOpenDate"] = true;
-//			puzzle_param["openType"] = "무료";
-//			command_list.push_back(CommandParam("updatePuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultUpdatePuzzleHistory)));
+			PieceHistory t_history = mySGD->getPieceHistory(NSDS_GI(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1), kSDS_PZ_startStage_i));
+			t_history.is_open = true;
+			t_history.open_type = "무료(첫스테이지)";
+			
+			mySGD->setPieceHistory(t_history, nullptr);
 		}
 		else
 		{
-//			mySGD->initPuzzleHistory(result_data["list"]);
+			mySGD->initPieceHistory(result_data["list"]);
 		}
 	}
 	else
@@ -1151,6 +1250,8 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::endingAction()
 {
+	if(is_loaded_cgp && is_loaded_server)
+	{
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
@@ -1176,6 +1277,7 @@ void TitleRenewalScene::endingAction()
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 		runAction(t_seq);
 //	}
+	}
 }
 
 void TitleRenewalScene::changeScene()
@@ -1517,6 +1619,8 @@ void TitleRenewalScene::endingCheck()
 		NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);
 	
 	mySDS->fFlush(kSDS_GI_characterCount_i);
+	
+	is_loaded_server = true;
 	
 	endingAction();
 }

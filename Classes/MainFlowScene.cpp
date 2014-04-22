@@ -1213,6 +1213,279 @@ void MainFlowScene::setBottom()
 //	CCMenu* event_menu = CCMenu::createWithItem(event_item);
 //	event_menu->setPosition(ccp(201, n_event->getContentSize().height/2.f-3));
 //	bottom_case->addChild(event_menu);
+	
+	Json::Value v = mySGD->cgp_data;
+	std::string pState = v["promotionstate"].asString();
+	
+	// 아무것도 하지마!!
+	if(pState == "CGP_NONE")
+	{
+		/* 출력값
+		 {
+		 "callback" : null,
+		 "param" : null,
+		 "promotionstate" : "CGP_NONE"
+		 }
+		 
+		 */
+	}
+	// 홍보해야 될 것이 존재
+	else if(pState == "CGP_PROMOTION_EXISTS")
+	{
+		/* 출력값
+		 {
+		 "bubbletext" : "",
+		 "buttonurl" : "http://images.hangame.co.kr/mobile/cgp/10150_wara/wara_cgp.png",
+		 "callback" : null,
+		 "eventurl" : "",
+		 "param" : null,
+		 "promotionstate" : "CGP_PROMOTION_EXISTS",
+		 "typecode" : 1
+		 }
+		 
+		 */
+		
+		CCSprite* n_cgp = CCSprite::create("mainflow_event.png");
+		CCSprite* s_cgp = CCSprite::create("mainflow_event.png");
+		s_cgp->setColor(ccGRAY);
+		
+		CCMenuLambda* cgp_menu = CCMenuLambda::create();
+		cgp_menu->setPosition(ccp(10, n_cgp->getContentSize().height/2.f));
+		bottom_case->addChild(cgp_menu);
+		
+		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
+			if(!is_menu_enable)
+				return;
+			
+			is_menu_enable = false;
+			
+			hspConnector::get()->launchPromotion();
+			
+			cgp_menu->removeFromParent();
+		});
+		
+		cgp_menu->addChild(cgp_item);
+		
+		
+	}
+	// 일반 보상
+	else if(pState == "CGP_REWARD_REQUIRED")
+	{
+		/* 출력값
+		 {
+		 "callback" : null,
+		 "param" : null,
+		 "promotionstate" : "CGP_REWARD_REQUIRED",
+		 "rewards" :
+		 [
+		 {
+		 "promotiontype" : 2,
+		 "rewardcode" : "10289_test",
+		 "rewardvalue" : 1
+		 }
+		 ]
+		 }
+		 */
+		
+		ASPopupView* t_popup = ASPopupView::create(-999);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kMainFlowZorder_popup);
+		
+		t_popup->setBasePosition(ccp(240, 160));
+		
+		CCScale9Sprite* back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		back_case->setContentSize(CCSizeMake(350,280));
+		back_case->setPosition(ccp(0,0));
+		t_container->addChild(back_case);
+		
+		KSLabelTTF* title_label = KSLabelTTF::create("CGP 일반 보상", mySGD->getFont().c_str(), 16);;
+		title_label->setPosition(ccp(0,100));
+		t_container->addChild(title_label);
+		
+		KSLabelTTF* ment_label = KSLabelTTF::create("보상받기를 눌러주세요.", mySGD->getFont().c_str(), 12);
+		ment_label->setPosition(ccp(0,0));
+		t_container->addChild(ment_label);
+		
+		CCLabelTTF* t_label = CCLabelTTF::create();
+		KSLabelTTF* take_label = KSLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+		take_label->setPosition(ccp(0,0));
+		t_label->addChild(take_label);
+		
+		CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+		
+		CCControlButton* take_button = CCControlButton::create(t_label, take_back);
+		take_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::cgpReward), CCControlEventTouchUpInside);
+		take_button->setPreferredSize(CCSizeMake(150,65));
+		take_button->setPosition(ccp(0,-85));
+		t_container->addChild(take_button);
+		
+		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
+		
+		t_container->setScaleY(0.f);
+		
+		t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+				t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+		
+		t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
+		
+//		Json::Value rewards = v["rewards"];
+//		for(int i=0; i<rewards.size(); i++)
+//		{
+//			int rewardValue = rewards[i]["rewardvalue"].asInt();
+//			CCLog("reward !!! : %d", rewardValue);
+//		}
+		
+		//			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
+	}
+	// 전체 팝업보상
+	else if(pState == "CGP_PROMOTION_REWARD_EXISTS")
+	{
+		ASPopupView* t_popup = ASPopupView::create(-999);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kMainFlowZorder_popup);
+		
+		t_popup->setBasePosition(ccp(240, 160));
+		
+		CCScale9Sprite* back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		back_case->setContentSize(CCSizeMake(350,280));
+		back_case->setPosition(ccp(0,0));
+		t_container->addChild(back_case);
+		
+		KSLabelTTF* title_label = KSLabelTTF::create("CGP 전체 팝업 보상", mySGD->getFont().c_str(), 16);;
+		title_label->setPosition(ccp(0,100));
+		t_container->addChild(title_label);
+		
+		KSLabelTTF* ment_label = KSLabelTTF::create("보상받기를 눌러주세요.", mySGD->getFont().c_str(), 12);
+		ment_label->setPosition(ccp(0,0));
+		t_container->addChild(ment_label);
+		
+		CCLabelTTF* t_label = CCLabelTTF::create();
+		KSLabelTTF* take_label = KSLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+		take_label->setPosition(ccp(0,0));
+		t_label->addChild(take_label);
+		
+		CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+		
+		CCControlButton* take_button = CCControlButton::create(t_label, take_back);
+		take_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::cgpAllReward), CCControlEventTouchUpInside);
+		take_button->setPreferredSize(CCSizeMake(150,65));
+		take_button->setPosition(ccp(0,-85));
+		t_container->addChild(take_button);
+		
+		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
+		
+		t_container->setScaleY(0.f);
+		
+		t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+				t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+		
+		t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
+		
+		
+		
+		
+//		Json::Value rewards = v["rewards"];
+//		for(int i=0; i<rewards.size(); i++)
+//		{
+//			int rewardValue = rewards[i]["rewardvalue"].asInt();
+//			CCLog("reward !!! : %d", rewardValue);
+//		}
+		
+		//			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
+	}
+}
+
+void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
+{
+	
+	Json::Value v = mySGD->cgp_data;
+	
+	Json::Value rewards = v["rewards"];
+	for(int i=0; i<rewards.size(); i++)
+	{
+		int rewardValue = rewards[i]["rewardvalue"].asInt();
+		CCLog("reward !!! : %d", rewardValue);
+	}
+	
+	mySGD->setGold(mySGD->getGold() + 10000);
+	myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value result_data){
+		if(result_data["result"]["code"].asInt() == GDSUCCESS)
+		{
+			hspConnector::get()->completePromotion();
+			
+			mySGD->cgp_data.clear();
+			mySGD->cgp_data["promotionstate"] = "CGP_NONE";
+			
+			((CCNode*)sender)->getParent()->getParent()->removeFromParent();
+		}
+		else
+		{
+			mySGD->setGold(mySGD->getGold() - 10000);
+		}
+	});
+}
+
+void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
+{
+	Json::Value v = mySGD->cgp_data;
+	
+	Json::Value rewards = v["rewards"];
+	for(int i=0; i<rewards.size(); i++)
+	{
+		int rewardValue = rewards[i]["rewardvalue"].asInt();
+		CCLog("reward !!! : %d", rewardValue);
+	}
+	
+	mySGD->setGold(mySGD->getGold() + 10000);
+	myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value result_data){
+		if(result_data["result"]["code"].asInt() == GDSUCCESS)
+		{
+			hspConnector::get()->completeInstallPromotion();
+			
+			mySGD->cgp_data.clear();
+			mySGD->cgp_data["promotionstate"] = "CGP_NONE";
+			
+			((CCNode*)sender)->getParent()->getParent()->removeFromParent();
+		}
+		else
+		{
+			mySGD->setGold(mySGD->getGold() - 10000);
+		}
+	});
 }
 
 void MainFlowScene::heartRefresh()

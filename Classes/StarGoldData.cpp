@@ -498,6 +498,11 @@ bool StarGoldData::isBeforeUseItem( ITEM_CODE t_i )
 	return before_use_item[t_i];
 }
 
+void StarGoldData::setBeforeUseItem(ITEM_CODE t_i, bool t_b)
+{
+	before_use_item[t_i] = t_b;
+}
+
 bool StarGoldData::isUsingItem( ITEM_CODE t_i )
 {
 	return is_using_item[t_i];

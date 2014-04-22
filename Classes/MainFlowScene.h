@@ -117,6 +117,9 @@ private:
 	
 	void puzzleLoadSuccess();
 	
+	void cgpReward(CCObject* sender, CCControlEvent t_event);
+	void cgpAllReward(CCObject* sender, CCControlEvent t_event);
+	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked();
 };

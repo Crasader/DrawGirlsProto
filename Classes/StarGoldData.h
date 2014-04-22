@@ -208,6 +208,7 @@ public:
 	FailCode fail_code;
 	
 	bool isBeforeUseItem(ITEM_CODE t_i);
+	void setBeforeUseItem(ITEM_CODE t_i, bool t_b);
 	bool isUsingItem(ITEM_CODE t_i);
 	
 	void setIsUsingItem(ITEM_CODE t_i, bool t_b);
@@ -432,6 +433,7 @@ public:
 	bool is_before_stage_img_download;
 	
 	void withdraw();
+	Json::Value cgp_data;
 	
 private:
 	bool is_not_cleared_stage;

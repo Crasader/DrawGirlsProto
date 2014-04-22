@@ -52,6 +52,9 @@ private:
 	CCLabelTTF* state_label;
 	CCLabelBMFont* download_state;
 	
+	bool is_loaded_cgp;
+	bool is_loaded_server;
+	
 	int ing_download_cnt;
 	float ing_download_per;
 	

@@ -354,6 +354,7 @@ void StartSettingPopup::setMain()
 			}
 			else
 			{
+				mySGD->setBeforeUseItem(t_ic, false);
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
@@ -391,6 +392,20 @@ void StartSettingPopup::setMain()
 		else
 			is_selected_item.push_back(false);
 	}
+	
+	CCRect option_size = CCRectMake(0, 0, 200, 25);
+	CCPoint option_position = ccp(188, 113);
+	
+	//		CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
+	//		option_rect->setOpacity(100);
+	//		option_rect->setAnchorPoint(ccp(0,1));
+	//		option_rect->setPosition(option_position);
+	//		main_case->addChild(option_rect);
+	
+	option_label = CCLabelTTF::create("게임에 사용할 아이템을 선택하세요.", mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+	option_label->setAnchorPoint(ccp(0,1));
+	option_label->setPosition(option_position);
+	main_case->addChild(option_label);
 	
 	item_gacha_menu = NULL;
 	is_clicked_gacha_menu = false;
@@ -845,6 +860,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			
 			ITEM_CODE t_ic = item_list[tag-1];
 			
+			mySGD->setBeforeUseItem(t_ic, false);
+			
 			CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 			CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 			n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
@@ -893,6 +910,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			
 			if(getSelectedItemCount() < 3 && is_price_usable)
 			{
+				mySGD->setBeforeUseItem(t_ic, true);
+				
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
@@ -926,6 +945,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			}
 			else
 			{
+				mySGD->setBeforeUseItem(t_ic, false);
+				
 				if(getSelectedItemCount() >= 3)
 					addChild(ASPopupView::getCommonNoti(-210, "아이템은 최대 3개까지\n선택이 가능합니다."), kStartSettingPopupZorder_popup);
 				
