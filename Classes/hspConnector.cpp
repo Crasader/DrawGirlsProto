@@ -407,6 +407,18 @@ if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "checkCGP",
 
 #endif
 }
+
+void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
+{
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLog("checkDelegator sFunc call");
+		if(GraphDog::get()->cehckTarget(target))
+			func(value);
+	};
+	checkCGP(param, callbackParam, sFunc);
+}
+
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
@@ -431,7 +443,16 @@ if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "purchasePr
 
 #endif
 }
-
+void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
+{
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLog("checkDelegator sFunc call");
+		if(GraphDog::get()->cehckTarget(target))
+			func(value);
+	};
+	purchaseProduct(param, callbackParam, sFunc);
+}
 void hspConnector::openUrl(const std::string& url)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
