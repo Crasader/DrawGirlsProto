@@ -246,7 +246,8 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	jsonTotalCmd["kakaoMemberID"]=getKakaoMemberID();
 	jsonTotalCmd["memberID"]=getKakaoMemberID();
 	jsonTotalCmd["deviceID"]=this->deviceID;
-	jsonTotalCmd["cmdNo"]=lastCmdNo+rand()%10;
+	this->lastCmdNo += (int)(rand()%10)+1;
+	jsonTotalCmd["cmdNo"]=this->lastCmdNo;
 	
 	//ostringstream oss2;
 	//oss2 << jsonTotalCmd;
@@ -375,7 +376,7 @@ void* GraphDog::t_function(void *_insertIndex)
 				
 				resultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
 				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
-
+				
 				
 				CCLog("t_function OK2 %s",resultStr.c_str());
 			}
@@ -506,7 +507,6 @@ void* GraphDog::t_function(void *_insertIndex)
 		resultCode=CURLE_CHUNK_FAILED;
 		resultobj["state"]="error";
 		resultobj["errorMsg"]="hack!!";
-		
 		resultobj["result"]["code"]=GDSECURITY;
 		//@ GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
 		
@@ -595,27 +595,46 @@ void GraphDog::receivedCommand(float dt)
 			
 			Json::Value resultobj = commands.result;
 			
-			if(!resultobj.get("checkDevice", true).asBool()){
+			if(resultobj.get("checkDeviceError", false).asBool()){
+				CCLog("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!!");
+				this->lastCmdNo=0;
 				if(this->duplicateLoginFunc!=nullptr)this->duplicateLoginFunc();
+				
+			}else if(resultobj.get("cmdNoError", false).asBool()){
+				CCLog("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!!");
+				this->lastCmdNo=0;
+				if(this->cmdNoErrorFunc!=nullptr)this->cmdNoErrorFunc();
+				
+			}else if(resultobj.get("longTimeError", false).asBool()){
+				
+				CCLog("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!!");
+				this->lastCmdNo=0;
+				if(this->longTimeErrorFunc!=nullptr)this->longTimeErrorFunc();
+			
 			}else{
-			
-			
-			for(std::map<string, CommandType>::iterator iter2 = commands.commands.begin(); iter2 != commands.commands.end(); ++iter2)
-			{
-				//@ CommandType ct = commandQueueIter->second.commands[iter2->first];
-				CommandType ct = iter2->second;
-				//CommandType ct = commandQueueIter->second.commands[iter2.memberName()];
-				/* //@@ if(ct.target != 0 && ct.selector != 0)
-				 {
-				 //  CCLog("%s,%s", iter2.memberName(),GraphDogLib::JsonObjectToString(commands.result));
-				 //((ct.target)->*(ct.selector))(iter2);
-				 ((ct.target)->*(ct.selector))(resultobj[iter2->first.c_str()]);
-				 }		*/
-				if(ct.action=="login" || ct.action=="join"){
-					this->deviceID=resultobj["deviceID"].asInt();
+				for(std::map<string, CommandType>::iterator iter2 = commands.commands.begin(); iter2 != commands.commands.end(); ++iter2)
+				{
+					//@ CommandType ct = commandQueueIter->second.commands[iter2->first];
+					CommandType ct = iter2->second;
+					//CommandType ct = commandQueueIter->second.commands[iter2.memberName()];
+					/* //@@ if(ct.target != 0 && ct.selector != 0)
+					 {
+					 //  CCLog("%s,%s", iter2.memberName(),GraphDogLib::JsonObjectToString(commands.result));
+					 //((ct.target)->*(ct.selector))(iter2);
+					 ((ct.target)->*(ct.selector))(resultobj[iter2->first.c_str()]);
+					 }		*/
+					if(ct.action=="login"){
+						if(resultobj.get("deviceID", 0).asInt()!=0){
+							this->deviceID=resultobj.get("deviceID", 0).asInt();
+							this->lastCmdNo=0;
+						}
+					}else if(ct.action=="join"){
+						this->deviceID=resultobj.get("deviceID", 0).asInt();
+						this->lastCmdNo=resultobj.get("lastCmdNo", 0).asInt();
+					}
+					
+					if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
 				}
-				if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
-			}
 			}
 			//메모리도 해제
 			if(commands.chunk.memory)
@@ -721,7 +740,7 @@ void GraphDog::receivedCommand(float dt)
 //}
 //std::string	GraphDog::getDeviceInfo()
 //{
-//	
+//
 //	//	if(this->deviceInfo!="")return deviceInfo;
 //	//	string ret = "unknown";
 //	//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -779,7 +798,7 @@ void GraphDog::receivedCommand(float dt)
 //	//	return ret;
 //	//	return toBase64( desEncryption(sKey, ret) );
 //	//	return GraphDogLib::gdkeyEnc(ret, sKey);
-//	
+//
 //	CCAssert(true, "assert");
 //	CCAssert(false, "assert");
 //	return "none";

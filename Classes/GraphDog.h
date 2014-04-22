@@ -42,9 +42,11 @@ enum GDRESULT{
 	GDFAILTRANJACTION = 2013,
 	GDDONTSAVE = 2014,
 	GDPROPERTYISMINUS = 2015,
-	GDHTTPGATEWAYERROR = 3001
+	GDHTTPGATEWAYERROR = 3001,
+	GDCMDNOERROR = 4001,
+	GDDUPLICATEDDEVICE = 4002,
+	GDLONGTIME = 4003
 };
-
 struct GDStruct {
 	char *memory;
 	size_t size;
@@ -203,6 +205,7 @@ public:
 	long long int date;
 	int weekNo;
 	int lastCmdNo;
+	int cmdNo;
 	int deviceID;
 	long long int localTimestamp;
 	
@@ -221,9 +224,20 @@ public:
 	string getKakaoMemberID();
 	
 	std::function<void(void)> duplicateLoginFunc;
+	std::function<void(void)> cmdNoErrorFunc;
+	std::function<void(void)> longTimeErrorFunc;
 	
 	void setDuplicateLoginFunc(std::function<void(void)> func){
 		duplicateLoginFunc = func;
+	}
+	
+	void setCmdNoErrorFunc(std::function<void(void)> func){
+		cmdNoErrorFunc = func;
+	}
+	
+	
+	void setLongTimeErrorFunc(std::function<void(void)> func){
+		longTimeErrorFunc = func;
 	}
 	
 	static GraphDog* get()
@@ -306,7 +320,10 @@ private:
 		this->timestamp = 9;
 		this->localTimestamp = 0;
 		this->lastCmdNo=0;
+		this->cmdNo=0;
 		this->duplicateLoginFunc=nullptr;
+		this->cmdNoErrorFunc=nullptr;
+		this->deviceID=0;
 	}
   
 	~GraphDog(){

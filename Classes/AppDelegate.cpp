@@ -278,6 +278,20 @@ bool AppDelegate::applicationDidFinishLaunching()
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	});
 	
+	
+	GraphDog::get()->setCmdNoErrorFunc([](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다.",[](){
+			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+	});
+	
+	GraphDog::get()->setLongTimeErrorFunc([](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "세션이 종료되었습니다.\n다시 로그인합니다.",[](){
+			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+	});
 	//	CCScene* pScene = TitleScene::scene();
 		CCScene* pScene = TitleRenewalScene::scene();
 	//	CCScene* pScene = Dodge::scene();
