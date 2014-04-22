@@ -4,6 +4,8 @@
 #include "StartMapGacha.h"
 #include "StarGoldData.h"
 #include "CommonButton.h"
+#include "KSLabelTTF.h"
+
 #define LZZ_INLINE inline
 using namespace std;
 StartMapGacha * StartMapGacha::create (CCObject * t_gacha, SEL_CallFunc d_gacha)
@@ -18,36 +20,70 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	target_gacha = t_gacha;
 	delegate_gacha = d_gacha;
 	
-	back = CCSprite::create("start_map_gacha_back.png");
+	back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));// CCSprite::create("start_map_gacha_back.png");
+	back->setContentSize(CCSizeMake(200, 50));
 	back->setAnchorPoint(ccp(0.5f,1.f));
 	back->setPosition(ccp(240,0));
 	addChild(back, kSMG_Z_back);
 	
 	
-	CCSprite* n_gacha = CCSprite::create("start_map_gacha_button.png");
-	CCSprite* n_gacha_price_type = CCSprite::create("price_gold_img.png");
-	n_gacha_price_type->setPosition(ccp(n_gacha->getContentSize().width/2.f+10, n_gacha->getContentSize().height/2.f));
-	n_gacha->addChild(n_gacha_price_type);
-	CCLabelTTF* n_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
-	n_gacha_price_label->setPosition(ccp(n_gacha->getContentSize().width/2.f+35, n_gacha->getContentSize().height/2.f));
-	n_gacha->addChild(n_gacha_price_label);
+	CCLabelTTF* g_label = CCLabelTTF::create();
 	
-	CCSprite* s_gacha = CCSprite::create("start_map_gacha_button.png");
-	s_gacha->setColor(ccGRAY);
-	CCSprite* s_gacha_price_type = CCSprite::create("price_gold_img.png");
-	s_gacha_price_type->setPosition(ccp(s_gacha->getContentSize().width/2.f+10, s_gacha->getContentSize().height/2.f));
-	s_gacha->addChild(s_gacha_price_type);
-	CCLabelTTF* s_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
-	s_gacha_price_label->setPosition(ccp(s_gacha->getContentSize().width/2.f+35, s_gacha->getContentSize().height/2.f));
-	s_gacha->addChild(s_gacha_price_label);
+	KSLabelTTF* gacha_label = KSLabelTTF::create("영역 다시뽑기", mySGD->getFont().c_str(), 11);
+	gacha_label->enableOuterStroke(ccBLACK, 1.f);
+	gacha_label->setPosition(ccp(-35,0));
+	g_label->addChild(gacha_label);
 	
-	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StartMapGacha::menuAction));
-	gacha_item->setTag(kSMG_MT_gacha);
+	CCScale9Sprite* price_back = CCScale9Sprite::create("common_button_yellowdown.png", CCRectMake(0,0,34,34), CCRectMake(16,16,2,2));
+	price_back->setContentSize(CCSizeMake(75, 33));
+	price_back->setPosition(ccp(38, 0));
+	g_label->addChild(price_back);
 	
-	gacha_menu = CCMenu::createWithItem(gacha_item);
-	gacha_menu->setPosition(getContentPosition(kSMG_MT_gacha));
-	back->addChild(gacha_menu, kSMG_Z_content);
-	gacha_menu->setTouchPriority(-170);
+	CCSprite* price_type = CCSprite::create("ui_gold_img.png");
+	price_type->setPosition(ccp(15,15));
+	price_back->addChild(price_type);
+	
+	KSLabelTTF* price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 11);
+	price_label->enableOuterStroke(ccBLACK, 1.f);
+	price_label->setPosition(ccp(47,15));
+	price_back->addChild(price_label);
+	
+	CCScale9Sprite* gacha_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	
+	gacha_button = CCControlButton::create(g_label, gacha_back);
+	gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(StartMapGacha::gachaAction), CCControlEventTouchUpInside);
+	gacha_button->setPreferredSize(CCSizeMake(160,40));
+	gacha_button->setPosition(ccp(85,25));
+	back->addChild(gacha_button);
+	
+	gacha_button->setTouchPriority(-170);
+	
+	
+	
+//	CCSprite* n_gacha = CCSprite::create("start_map_gacha_button.png");
+//	CCSprite* n_gacha_price_type = CCSprite::create("price_gold_img.png");
+//	n_gacha_price_type->setPosition(ccp(n_gacha->getContentSize().width/2.f+10, n_gacha->getContentSize().height/2.f));
+//	n_gacha->addChild(n_gacha_price_type);
+//	CCLabelTTF* n_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
+//	n_gacha_price_label->setPosition(ccp(n_gacha->getContentSize().width/2.f+35, n_gacha->getContentSize().height/2.f));
+//	n_gacha->addChild(n_gacha_price_label);
+//	
+//	CCSprite* s_gacha = CCSprite::create("start_map_gacha_button.png");
+//	s_gacha->setColor(ccGRAY);
+//	CCSprite* s_gacha_price_type = CCSprite::create("price_gold_img.png");
+//	s_gacha_price_type->setPosition(ccp(s_gacha->getContentSize().width/2.f+10, s_gacha->getContentSize().height/2.f));
+//	s_gacha->addChild(s_gacha_price_type);
+//	CCLabelTTF* s_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
+//	s_gacha_price_label->setPosition(ccp(s_gacha->getContentSize().width/2.f+35, s_gacha->getContentSize().height/2.f));
+//	s_gacha->addChild(s_gacha_price_label);
+//	
+//	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StartMapGacha::menuAction));
+//	gacha_item->setTag(kSMG_MT_gacha);
+//	
+//	gacha_menu = CCMenu::createWithItem(gacha_item);
+//	gacha_menu->setPosition(getContentPosition(kSMG_MT_gacha));
+//	back->addChild(gacha_menu, kSMG_Z_content);
+//	gacha_menu->setTouchPriority(-170);
 	
 	
 	cancel_menu = CommonButton::createCloseButton();
@@ -76,10 +112,23 @@ CCPoint StartMapGacha::getContentPosition (int t_tag)
 	CCPoint return_value;
 	
 	if(t_tag == kSMG_MT_gacha)			return_value = ccp(78,29);
-	else if(t_tag == kSMG_MT_cancel)	return_value = ccp(165,29);
+	else if(t_tag == kSMG_MT_cancel)	return_value = ccp(177,25);
 	
 	return return_value;
 }
+void StartMapGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	if(mySGD->is_paused)
+		return;
+	
+	is_menu_enable = false;
+	
+	(target_gacha->*delegate_gacha)();
+	removeFromParent();
+}
+
 void StartMapGacha::menuAction (CCObject * sender)
 {
 	if(!is_menu_enable)
@@ -98,7 +147,8 @@ void StartMapGacha::menuAction (CCObject * sender)
 	}
 	else if(tag == kSMG_MT_cancel)
 	{
-		gacha_menu->setEnabled(false);
+//		gacha_menu->setEnabled(false);
+		gacha_button->setEnabled(false);
 		cancel_menu->setEnabled(false);
 		
 		back->stopAllActions();
