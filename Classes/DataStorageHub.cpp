@@ -243,8 +243,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_selectedPuzzleNumber)				return_value = "spn";
 	else if(t_name == kDSH_Key_lastSelectedStageForPuzzle_int1)		return_value = "lssfp%d";
 	
-	else if(t_name == kDSH_Key_endPlayedStage)						return_value = "eps";
-	else if(t_name == kDSH_Key_stageClearRank_int1)					return_value = "scr%d";
+//	else if(t_name == kDSH_Key_endPlayedStage)						return_value = "eps";
+//	else if(t_name == kDSH_Key_stageClearRank_int1)					return_value = "scr%d";
 	
 	else if(t_name == kDSH_Key_selectedCharacter_int1_weaponSlot_int2)		return_value = "sc%dws%d"; // 0~(n-1)번째 캐릭터의 1~n번째 슬롯에 장착된 뷰티스톤의 id
 	else if(t_name == kDSH_Key_selfBeautyStoneID)					return_value = "sbsid"; // 1~n 의 뷰티스톤의 id
@@ -265,12 +265,12 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
 	else if(t_name == kDSH_Key_ticketUserId_int1)					return_value = "tui%d";
 	
-	else if(t_name == kDSH_Key_openStageCnt)						return_value = "osc";
-	else if(t_name == kDSH_Key_openStageNumber_int1)				return_value = "osn%d";
-	else if(t_name == kDSH_Key_isOpenStage_int1)					return_value = "ios%d";
-	else if(t_name == kDSH_Key_clearStageCnt)						return_value = "csc";
-	else if(t_name == kDSH_Key_clearStageNumber_int1)				return_value = "csn%d";
-	else if(t_name == kDSH_Key_isClearStage_int1)					return_value = "ics%d";
+//	else if(t_name == kDSH_Key_openStageCnt)						return_value = "osc";
+//	else if(t_name == kDSH_Key_openStageNumber_int1)				return_value = "osn%d";
+//	else if(t_name == kDSH_Key_isOpenStage_int1)					return_value = "ios%d";
+//	else if(t_name == kDSH_Key_clearStageCnt)						return_value = "csc";
+//	else if(t_name == kDSH_Key_clearStageNumber_int1)				return_value = "csn%d";
+//	else if(t_name == kDSH_Key_isClearStage_int1)					return_value = "ics%d";
 	
 	else if(t_name == kDSH_Key_nick)								return_value = "nick";
 	
@@ -404,23 +404,23 @@ void DataStorageHub::loadAllUserData (Json::Value result_data)
 	for(int i=1;i<=have_ticket_cnt;i++)
 		setStringForKey(kDSH_Key_ticketUserId_int1, i, data[getKey(kDSH_Key_ticketUserId_int1)][i].asString(), false);
 	
-	int open_stage_cnt = data[getKey(kDSH_Key_openStageCnt)].asInt();
-	setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt, false);
-	for(int i=1;i<=open_stage_cnt;i++)
-	{
-		int t_stage_number = data[getKey(kDSH_Key_openStageNumber_int1)][i].asInt();
-		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, t_stage_number, false);
-		setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, data[getKey(kDSH_Key_isOpenStage_int1)][i].asBool(), false);
-	}
-	
-	int clear_stage_cnt = data[getKey(kDSH_Key_clearStageCnt)].asInt();
-	setIntegerForKey(kDSH_Key_clearStageCnt, clear_stage_cnt, false);
-	for(int i=1;i<=clear_stage_cnt;i++)
-	{
-		int t_stage_number = data[getKey(kDSH_Key_clearStageNumber_int1)][i].asInt();
-		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, t_stage_number, false);
-		setBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number, data[getKey(kDSH_Key_isClearStage_int1)][i].asBool(), false);
-	}
+//	int open_stage_cnt = data[getKey(kDSH_Key_openStageCnt)].asInt();
+//	setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt, false);
+//	for(int i=1;i<=open_stage_cnt;i++)
+//	{
+//		int t_stage_number = data[getKey(kDSH_Key_openStageNumber_int1)][i].asInt();
+//		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, t_stage_number, false);
+//		setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, data[getKey(kDSH_Key_isOpenStage_int1)][i].asBool(), false);
+//	}
+//	
+//	int clear_stage_cnt = data[getKey(kDSH_Key_clearStageCnt)].asInt();
+//	setIntegerForKey(kDSH_Key_clearStageCnt, clear_stage_cnt, false);
+//	for(int i=1;i<=clear_stage_cnt;i++)
+//	{
+//		int t_stage_number = data[getKey(kDSH_Key_clearStageNumber_int1)][i].asInt();
+//		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, t_stage_number, false);
+//		setBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number, data[getKey(kDSH_Key_isClearStage_int1)][i].asBool(), false);
+//	}
 	
 	setStringForKey(kDSH_Key_nick, data[getKey(kDSH_Key_nick)].asString().c_str(), false);
 	
@@ -476,10 +476,10 @@ void DataStorageHub::loadAllUserData (Json::Value result_data)
 	
 	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17, false);//data[getKey(kDSH_Key_tutorial_flowStep)].asInt(), false);
 	
-	int end_played_stage = data[getKey(kDSH_Key_endPlayedStage)].asInt();
-	setIntegerForKey(kDSH_Key_endPlayedStage, end_played_stage, false);
-	for(int i=1;i<=end_played_stage;i++)
-		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, data[getKey(kDSH_Key_stageClearRank_int1)][i].asInt(), false);
+//	int end_played_stage = data[getKey(kDSH_Key_endPlayedStage)].asInt();
+//	setIntegerForKey(kDSH_Key_endPlayedStage, end_played_stage, false);
+//	for(int i=1;i<=end_played_stage;i++)
+//		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, data[getKey(kDSH_Key_stageClearRank_int1)][i].asInt(), false);
 	
 	setIntegerForKey(kDSH_Key_storyReadPoint, data[getKey(kDSH_Key_storyReadPoint)].asInt(), false);
 	
@@ -538,26 +538,26 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 		for(int i=1;i<=have_ticket_cnt;i++)
 			data[getKey(kDSH_Key_ticketUserId_int1)][i] = getStringForKey(kDSH_Key_ticketUserId_int1, i);
 	}
-	else if(t_key == kSaveUserData_Key_openStage)
-	{
-		int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
-		data[getKey(kDSH_Key_openStageCnt)] = open_stage_cnt;
-		for(int i=1;i<=open_stage_cnt;i++)
-		{
-			int t_stage_number = getIntegerForKey(kDSH_Key_openStageNumber_int1, i);
-			data[getKey(kDSH_Key_openStageNumber_int1)][i] = t_stage_number;
-			data[getKey(kDSH_Key_isOpenStage_int1)][i] = getBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number);
-		}
-		
-		int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
-		data[getKey(kDSH_Key_clearStageCnt)] = clear_stage_cnt;
-		for(int i=1;i<=clear_stage_cnt;i++)
-		{
-			int t_stage_number = getIntegerForKey(kDSH_Key_clearStageNumber_int1, i);
-			data[getKey(kDSH_Key_clearStageNumber_int1)][i] = t_stage_number;
-			data[getKey(kDSH_Key_isClearStage_int1)][i] = getBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number);
-		}
-	}
+//	else if(t_key == kSaveUserData_Key_openStage)
+//	{
+//		int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
+//		data[getKey(kDSH_Key_openStageCnt)] = open_stage_cnt;
+//		for(int i=1;i<=open_stage_cnt;i++)
+//		{
+//			int t_stage_number = getIntegerForKey(kDSH_Key_openStageNumber_int1, i);
+//			data[getKey(kDSH_Key_openStageNumber_int1)][i] = t_stage_number;
+//			data[getKey(kDSH_Key_isOpenStage_int1)][i] = getBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number);
+//		}
+//		
+//		int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
+//		data[getKey(kDSH_Key_clearStageCnt)] = clear_stage_cnt;
+//		for(int i=1;i<=clear_stage_cnt;i++)
+//		{
+//			int t_stage_number = getIntegerForKey(kDSH_Key_clearStageNumber_int1, i);
+//			data[getKey(kDSH_Key_clearStageNumber_int1)][i] = t_stage_number;
+//			data[getKey(kDSH_Key_isClearStage_int1)][i] = getBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number);
+//		}
+//	}
 	else if(t_key == kSaveUserData_Key_nick)
 	{
 		data[getKey(kDSH_Key_nick)] = getStringForKey(kDSH_Key_nick);
@@ -600,13 +600,13 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 		data[getKey(kDSH_Key_tutorial_flowStep)] = getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		data[getKey(kDSH_Key_storyReadPoint)] = getIntegerForKey(kDSH_Key_storyReadPoint);
 	}
-	else if(t_key == kSaveUserData_Key_stageRank)
-	{
-		int end_played_stage = getIntegerForKey(kDSH_Key_endPlayedStage);
-		data[getKey(kDSH_Key_endPlayedStage)] = end_played_stage;
-		for(int i=1;i<=end_played_stage;i++)
-			data[getKey(kDSH_Key_stageClearRank_int1)][i] = getIntegerForKey(kDSH_Key_stageClearRank_int1, i);
-	}
+//	else if(t_key == kSaveUserData_Key_stageRank)
+//	{
+//		int end_played_stage = getIntegerForKey(kDSH_Key_endPlayedStage);
+//		data[getKey(kDSH_Key_endPlayedStage)] = end_played_stage;
+//		for(int i=1;i<=end_played_stage;i++)
+//			data[getKey(kDSH_Key_stageClearRank_int1)][i] = getIntegerForKey(kDSH_Key_stageClearRank_int1, i);
+//	}
 }
 void DataStorageHub::saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector)
 {
@@ -658,22 +658,22 @@ void DataStorageHub::resetDSH ()
 		setStringForKey(kDSH_Key_ticketUserId_int1, i, "", false);
 	setIntegerForKey(kDSH_Key_haveTicketCnt, 0, false);
 	
-	int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
-	for(int i=1;i<=open_stage_cnt;i++)
-	{
-		setBoolForKey(kDSH_Key_isOpenStage_int1, getIntegerForKey(kDSH_Key_openStageNumber_int1, i), false, false);
-		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, 0, false);
-	}
-	setIntegerForKey(kDSH_Key_openStageCnt, 1, false);
-	
-	
-	int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
-	for(int i=1;i<=clear_stage_cnt;i++)
-	{
-		setBoolForKey(kDSH_Key_isClearStage_int1, getIntegerForKey(kDSH_Key_clearStageNumber_int1, i), false, false);
-		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, 0, false);
-	}
-	setIntegerForKey(kDSH_Key_clearStageCnt, 0, false);
+//	int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
+//	for(int i=1;i<=open_stage_cnt;i++)
+//	{
+//		setBoolForKey(kDSH_Key_isOpenStage_int1, getIntegerForKey(kDSH_Key_openStageNumber_int1, i), false, false);
+//		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, 0, false);
+//	}
+//	setIntegerForKey(kDSH_Key_openStageCnt, 1, false);
+//	
+//	
+//	int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
+//	for(int i=1;i<=clear_stage_cnt;i++)
+//	{
+//		setBoolForKey(kDSH_Key_isClearStage_int1, getIntegerForKey(kDSH_Key_clearStageNumber_int1, i), false, false);
+//		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, 0, false);
+//	}
+//	setIntegerForKey(kDSH_Key_clearStageCnt, 0, false);
 	
 	setStringForKey(kDSH_Key_nick, "", false);
 	
@@ -726,10 +726,10 @@ void DataStorageHub::resetDSH ()
 	
 	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
 	
-	int end_played_stage = getIntegerForKey(kDSH_Key_endPlayedStage);
-	for(int i=1;i<=end_played_stage;i++)
-		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, 0, false);
-	setIntegerForKey(kDSH_Key_endPlayedStage, 0);
+//	int end_played_stage = getIntegerForKey(kDSH_Key_endPlayedStage);
+//	for(int i=1;i<=end_played_stage;i++)
+//		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, 0, false);
+//	setIntegerForKey(kDSH_Key_endPlayedStage, 0);
 	
 	
 	fFlush();

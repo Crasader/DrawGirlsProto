@@ -2609,7 +2609,7 @@ void KSCumberBase::applyAutoBalance()
 {
 	
 	
-	bool isClear = myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
+	bool isClear = mySGD->isClearPiece(mySD->getSilType());
 	if(isClear){
 		
 		CCLog("############ clear stage, dont autobalance ################");

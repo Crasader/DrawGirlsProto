@@ -34,8 +34,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_beautyStoneRank_int1, // 1~selfBeautyStoneID 의 뷰티스톤 rank
 	kDSH_Key_beautyStoneLevel_int1, // 1~selfBeautyStoneID 의 뷰티스톤 level
 	
-	kDSH_Key_endPlayedStage,
-	kDSH_Key_stageClearRank_int1,
+//	kDSH_Key_endPlayedStage,
+//	kDSH_Key_stageClearRank_int1,
 	
 	kDSH_Key_cardSortType,
 	kDSH_Key_lastSelectedStageForPuzzle_int1,
@@ -47,12 +47,12 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_haveTicketCnt,
 	kDSH_Key_ticketUserId_int1,
-	kDSH_Key_openStageCnt,
-	kDSH_Key_openStageNumber_int1,
-	kDSH_Key_isOpenStage_int1,
-	kDSH_Key_clearStageCnt,
-	kDSH_Key_clearStageNumber_int1,
-	kDSH_Key_isClearStage_int1,
+//	kDSH_Key_openStageCnt,
+//	kDSH_Key_openStageNumber_int1,
+//	kDSH_Key_isOpenStage_int1,
+//	kDSH_Key_clearStageCnt,
+//	kDSH_Key_clearStageNumber_int1,
+//	kDSH_Key_isClearStage_int1,
 	kDSH_Key_nick,
 	kDSH_Key_wasTutorialPopupShockWave,
 	kDSH_Key_wasTutorialPopupMissileTrace,
@@ -157,10 +157,10 @@ enum SaveUserData_Key{
 	kSaveUserData_Key_beautyStone,
 	kSaveUserData_Key_cardsInfo,
 	kSaveUserData_Key_highScore,
-	kSaveUserData_Key_stageRank,
+//	kSaveUserData_Key_stageRank,
 	kSaveUserData_Key_selectedCard,
 	kSaveUserData_Key_haveTicket,
-	kSaveUserData_Key_openStage,
+//	kSaveUserData_Key_openStage,
 	kSaveUserData_Key_nick,
 	kSaveUserData_Key_character,
 	kSaveUserData_Key_achieve,

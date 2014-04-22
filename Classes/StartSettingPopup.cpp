@@ -116,6 +116,13 @@ bool StartSettingPopup::init()
 	t_suction->setTouchEnabled(true);
 	addChild(t_suction);
 	
+	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+	if(!t_history.is_open)
+	{
+		t_history.is_open = true;
+		mySGD->setPieceHistory(t_history, nullptr);
+	}
+	
 	return true;
 }
 
@@ -1346,7 +1353,20 @@ void StartSettingPopup::realStartAction()
 {
 	finalSetting();
 	
-	myDSH->saveAllUserData(json_selector(this, StartSettingPopup::finalStartAction));
+	vector<CommandParam> t_command_list;
+	t_command_list.clear();
+	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingPopup::finalStartAction)));
+	
+	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+	t_history.try_count++;
+	
+	mySGD->setPieceHistoryForNotSave(t_history);
+	
+	t_command_list.push_back(CommandParam("updatePieceHistory", mySGD->getSavePieceHistoryParam(t_history), nullptr));
+	
+	hspConnector::get()->command(t_command_list);
+	
+//	myDSH->saveAllUserData(json_selector(this, StartSettingPopup::finalStartAction));
 }
 
 void StartSettingPopup::acceptStartAction()

@@ -229,7 +229,7 @@ void NewPuzzlePiece::setPieceImg(NewPuzzlePieceMode t_mode)
 				CCSprite* n_piece;
 				CCSprite* s_piece;
 				
-				if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, stage_number))
+				if(mySGD->isClearPiece(stage_number))
 				{
 					n_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());
 					s_piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, "original", piece_no)->getCString());

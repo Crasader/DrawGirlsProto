@@ -15,6 +15,7 @@ void StarGoldData::withdraw()
 {
 	has_gotten_cards.clear();
 	puzzle_historys.clear();
+	piece_historys.clear();
 }
 
 string StarGoldData::getReplayKey(ReplayKey t_key)
@@ -248,8 +249,8 @@ void StarGoldData::setGameStart()
 	is_clear_diary = false;
 	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
-		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
+//	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
+//		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
 	
 	is_write_replay = true;
 	
@@ -257,8 +258,8 @@ void StarGoldData::setGameStart()
 	replay_write_info[getReplayKey(kReplayKey_isChangedMap)] = true;
 	replay_write_info[getReplayKey(kReplayKey_isChangedScore)] = true;
 	
-	ingame_before_stage_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
-	is_not_cleared_stage = !myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType());
+//	ingame_before_stage_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
+	is_not_cleared_stage = !mySGD->isClearPiece(mySD->getSilType());
 	
 	mySD->startSetting();
 	
@@ -331,7 +332,7 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 	game_time = t_game_time;
 	
-	int before_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
+//	int before_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
 	int recent_clear_rank;
 	if(percentage == 1.f)
 		recent_clear_rank = 3;
@@ -340,14 +341,27 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 	else
 		recent_clear_rank = 1;
 	
-	if(before_clear_rank < recent_clear_rank)
-		myDSH->setIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType(), recent_clear_rank);
+//	if(before_clear_rank < recent_clear_rank)
+//		myDSH->setIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType(), recent_clear_rank);
 	
-	if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType()))
+	if(!mySGD->isClearPiece(mySD->getSilType()))
 	{
-		myDSH->setIntegerForKey(kDSH_Key_clearStageCnt, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt)+1);
-		myDSH->setIntegerForKey(kDSH_Key_clearStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt), mySD->getSilType());
-		myDSH->setBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType(), true);
+//		myDSH->setIntegerForKey(kDSH_Key_clearStageCnt, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt)+1);
+//		myDSH->setIntegerForKey(kDSH_Key_clearStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt), mySD->getSilType());
+//		myDSH->setBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType(), true);
+		
+		int clear_grade = 1;
+		
+		if(is_exchanged && percentage >= 1.f)
+			clear_grade = 4;
+		else if(percentage >= 1.f)
+			clear_grade = 3;
+		else if(is_exchanged)
+			clear_grade = 2;
+		
+		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+		t_history.is_clear[clear_grade-1] = true;
+		mySGD->setPieceHistory(t_history, nullptr);
 	}
 	
 	myGD->setIsGameover(true);
@@ -903,6 +917,140 @@ void StarGoldData::initPuzzleHistory(Json::Value history_list)
 		t_history.is_perfect = history_info["perfectDate"].asInt64() != 0;
 		t_history.open_type = history_info["openType"].asString();
 		puzzle_historys.push_back(t_history);
+	}
+}
+
+bool StarGoldData::isClearPiece(int stage_number)
+{
+	for(int i=0;i<piece_historys.size();i++)
+		if(piece_historys[i].stage_number == stage_number)
+			return piece_historys[i].is_clear[0] || piece_historys[i].is_clear[1] || piece_historys[i].is_clear[2] || piece_historys[i].is_clear[3];
+	
+	return false;
+}
+
+int StarGoldData::getPieceHistorySize()
+{
+	return int(piece_historys.size());
+}
+
+PieceHistory StarGoldData::getPieceHistoryForIndex(int t_index)
+{
+	return piece_historys[t_index];
+}
+
+PieceHistory StarGoldData::getPieceHistory(int stage_number)
+{
+	for(int i=0;i<piece_historys.size();i++)
+	{
+		if(piece_historys[i].stage_number == stage_number)
+			return piece_historys[i];
+	}
+	
+	PieceHistory t_empty;
+	t_empty.stage_number = stage_number;
+	t_empty.is_open = false;
+	for(int j=0;j<4;j++)
+		t_empty.is_clear[j] = false;
+	t_empty.try_count = 0;
+	t_empty.clear_count = 0;
+	t_empty.open_type = "";
+	return t_empty;
+}
+
+Json::Value StarGoldData::getSavePieceHistoryParam(PieceHistory t_history)
+{
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["pieceNo"] = t_history.stage_number;
+	param["openDate"] = t_history.is_open;
+	for(int j=0;j<4;j++)
+		param["clearDateList"][j] = t_history.is_clear[j];
+	param["tryCount"] = t_history.try_count;
+	param["clearCount"] = t_history.clear_count;
+	param["openType"] = t_history.open_type;
+	return param;
+}
+
+void StarGoldData::setPieceHistoryForNotSave(PieceHistory t_history)
+{
+	bool is_found = false;
+	for(int i=0;i<piece_historys.size() && !is_found;i++)
+	{
+		if(piece_historys[i].stage_number == t_history.stage_number)
+		{
+			is_found = true;
+			piece_historys[i].stage_number = t_history.stage_number;
+			piece_historys[i].is_open = t_history.is_open;
+			
+			for(int j=0;j<4;j++)
+			{
+				piece_historys[i].is_clear[j] = t_history.is_clear[j];
+			}
+			
+			piece_historys[i].try_count = t_history.try_count;
+			piece_historys[i].clear_count = t_history.clear_count;
+			piece_historys[i].open_type = t_history.open_type;
+		}
+	}
+	
+	if(!is_found)
+	{
+		piece_historys.push_back(t_history);
+	}
+}
+
+void StarGoldData::setPieceHistory(PieceHistory t_history, jsonSelType call_back)
+{
+	bool is_found = false;
+	for(int i=0;i<piece_historys.size() && !is_found;i++)
+	{
+		if(piece_historys[i].stage_number == t_history.stage_number)
+		{
+			is_found = true;
+			piece_historys[i].stage_number = t_history.stage_number;
+			piece_historys[i].is_open = t_history.is_open;
+			
+			for(int j=0;j<4;j++)
+			{
+				piece_historys[i].is_clear[j] = t_history.is_clear[j];
+			}
+			
+			piece_historys[i].try_count = t_history.try_count;
+			piece_historys[i].clear_count = t_history.clear_count;
+			piece_historys[i].open_type = t_history.open_type;
+		}
+	}
+	
+	if(!is_found)
+	{
+		piece_historys.push_back(t_history);
+	}
+	
+	hspConnector::get()->command("updatePieceHistory", getSavePieceHistoryParam(t_history), call_back);
+}
+
+void StarGoldData::initPieceHistory(Json::Value history_list)
+{
+	piece_historys.clear();
+	
+	int history_cnt = history_list.size();
+	
+	for(int i=0;i<history_cnt;i++)
+	{
+		Json::Value history_info = history_list[i];
+		
+		PieceHistory t_history;
+		t_history.stage_number = history_info["pieceNo"].asInt();
+		t_history.is_open = history_info["openDate"].asInt64() != 0;
+		
+		for(int j=0;j<4;j++)
+			t_history.is_clear[j] = history_info["clearDateList"][j].asInt64() != 0;
+		
+		t_history.try_count = history_info["tryCount"].asInt();
+		t_history.clear_count = history_info["clearCount"].asInt();
+		t_history.open_type = history_info["openType"].asString();
+		piece_historys.push_back(t_history);
 	}
 }
 

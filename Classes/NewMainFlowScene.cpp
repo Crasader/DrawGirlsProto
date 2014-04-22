@@ -154,7 +154,7 @@ bool NewMainFlowScene::init()
 			bool is_all_clear_stage = true;
 			for(int j=start_stage;j<start_stage+stage_count && is_all_clear_stage;j++)
 			{
-				if(!myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, j))
+				if(!mySGD->isClearPiece(j))
 					is_all_clear_stage = false;
 			}
 			
@@ -222,13 +222,13 @@ bool NewMainFlowScene::init()
 		for(int i = t_puzzle_start_stage;i<t_puzzle_start_stage+t_puzzle_stage_count && last_stage_number == -1;i++)
 		{
 			int stage_number = i;
-			if((stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+			if((stage_number == 1 || mySGD->getPieceHistory(stage_number).is_open ||
 			   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && (i+1 == t_puzzle_start_stage+t_puzzle_stage_count ||
-					(!((i+1 == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i+1) ||
+				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && (i+1 == t_puzzle_start_stage+t_puzzle_stage_count ||
+					(!((i+1 == 1 || mySGD->getPieceHistory(i+1).is_open ||
 				   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i+1) == 0 &&
 					(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1) == 0 ||
-					 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1)))))))))
+					 mySGD->isClearPiece(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1)))))))))
 			{
 				last_stage_number = stage_number;
 			}
@@ -426,7 +426,7 @@ bool NewMainFlowScene::init()
 		else												take_level = 1;
 		
 		clear_star_take_level = take_level;
-		clear_is_empty_star = take_level > mySGD->ingame_before_stage_rank;
+//		clear_is_empty_star = take_level > mySGD->ingame_before_stage_rank;
 		
 		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
 		{
@@ -1559,17 +1559,17 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					}
 					
 					bool is_buy, is_lock;
-					if(i == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, i) ||
+					if(i == 1 || mySGD->isClearPiece(i) ||
 					   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 &&
 						(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0 ||
-						 myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))))
+						 mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))))
 					{
 						is_buy = false;
 						is_lock = false;
 					}
 					else
 					{
-						if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))
+						if(mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))
 						{
 							is_buy = true;
 							is_lock = false;
@@ -1802,16 +1802,16 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 						if(is_stage)
 						{
 							bool is_buy, is_lock;
-							if(stage_number == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, stage_number) ||
+							if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
 							   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-								(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
+								(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 							{
 								is_buy = false;
 								is_lock = false;
 							}
 							else
 							{
-								if(myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
+								if(mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))
 								{
 									is_buy = true;
 									is_lock = false;
@@ -1859,10 +1859,10 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 							}
 							
 							if(is_last_puzzle && !is_buy && !is_lock && (puzzle_path[puzzle_path_idx-1].next_stage_no == -1 ||
-							   !((puzzle_path[puzzle_path_idx-1].next_stage_no == 1 || myDSH->getBoolForKey(kDSH_Key_isOpenStage_int1, puzzle_path[puzzle_path_idx-1].next_stage_no) ||
+							   !((puzzle_path[puzzle_path_idx-1].next_stage_no == 1 || mySGD->isClearPiece(puzzle_path[puzzle_path_idx-1].next_stage_no) ||
 								(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, puzzle_path[puzzle_path_idx-1].next_stage_no) == 0 &&
 								(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, puzzle_path[puzzle_path_idx-1].next_stage_no) == 0 ||
-								myDSH->getBoolForKey(kDSH_Key_isClearStage_int1, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, puzzle_path[puzzle_path_idx-1].next_stage_no))))))))
+								mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, puzzle_path[puzzle_path_idx-1].next_stage_no))))))))
 							{
 								CCSprite* my_profile = GDWebSprite::create(hspConnector::get()->getKakaoProfileURL(), "temp_piece_frame_noimg.png");
 								my_profile->setAnchorPoint(ccp(0.5,0.5));

@@ -89,6 +89,16 @@ public:
 	string open_type;
 };
 
+class PieceHistory{
+public:
+	int stage_number;
+	bool is_open;
+	bool is_clear[4];
+	int try_count;
+	int clear_count;
+	string open_type;
+};
+
 enum ReplayKey
 {
 	kReplayKey_timeStamp = 0,
@@ -249,6 +259,15 @@ public:
 	void setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_back);
 	void initPuzzleHistory(Json::Value history_list);
 	
+	Json::Value getSavePieceHistoryParam(PieceHistory t_history);
+	bool isClearPiece(int stage_number);
+	int getPieceHistorySize();
+	PieceHistory getPieceHistoryForIndex(int t_index);
+	PieceHistory getPieceHistory(int stage_number);
+	void setPieceHistoryForNotSave(PieceHistory t_history);
+	void setPieceHistory(PieceHistory t_history, jsonSelType call_back);
+	void initPieceHistory(Json::Value history_list);
+	
 	void setClearRewardGold(int t_reward)
 	{
 		clear_reward_gold = t_reward;
@@ -369,7 +388,7 @@ public:
 	string getNextSceneName();
 	
 	deque<bool> is_ingame_before_have_stage_cards;
-	int ingame_before_stage_rank;
+//	int ingame_before_stage_rank;
 	bool getIsNotClearedStage();
 	int getIsUnlockPuzzle();
 	void setIsUnlockPuzzle(int t_i);
@@ -450,6 +469,7 @@ private:
 	deque<bool> is_using_item;
 	deque<CardSortInfo> has_gotten_cards;
 	deque<PuzzleHistory> puzzle_historys;
+	deque<PieceHistory> piece_historys;
 	
 	bool is_tutorial_cleared;
 	ImgType after_loading;
