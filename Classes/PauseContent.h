@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "CCMenuLambda.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -37,6 +38,12 @@ private:
 	bool is_menu_enable;
 	
 	void menuAction(CCObject* sender);
+	void resumeAction(CCObject* sender, CCControlEvent t_event);
+	void gohomeAction(CCObject* sender, CCControlEvent t_event);
+	void replayAction(CCObject* sender, CCControlEvent t_event);
+	
+	CCMenuItemLambda* on_item;
+	CCMenuItemLambda* off_item;
 	
 	void endShow()
 	{

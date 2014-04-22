@@ -4,12 +4,14 @@
 #ifndef LZZ_OnePercentGacha_h
 #define LZZ_OnePercentGacha_h
 #include "cocos2d.h"
+#include "cocos-ext.h"
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
 #include "CountingBMLabel.h"
 #include "LogData.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 #define LZZ_INLINE inline
 enum OnePercentGachaZorder
 {
@@ -31,20 +33,25 @@ public:
 private:
 	bool is_menu_enable;
 	int touched_number;
+	CCNode* m_container;
+	CCSprite* gray;
 	CommonButton * cancel_menu;
-	CommonButton * ok_menu;
+//	CommonButton * ok_menu;
+	CCControlButton* gacha_button;
+	CCControlButton* stop_button;
 	CCObject * target_cancel;
 	SEL_CallFunc delegate_cancel;
 	CCObject * target_ok;
 	SEL_CallFuncF delegate_ok;
-	CCSprite* title_img;
-	CCSprite * back_img;
+	CCScale9Sprite* back_img;
 	float recent_percent;
 	void myInit (CCObject * t_cancel, SEL_CallFunc d_cancel, CCObject * t_ok, SEL_CallFuncF d_ok, float t_recent_percent);
 	void startShow();
 	void endShow();
 	void gachaOn ();
 	void repeatAction ();
+	void gachaAction(CCObject* sender, CCControlEvent t_event);
+	void gachaStopAction(CCObject* sender, CCControlEvent t_event);
 	void menuAction (CCObject * sender);
 	void endAction ();
 	void changePercentLabel ();

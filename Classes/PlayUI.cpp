@@ -1633,7 +1633,6 @@ void PlayUI::counting ()
 	bool t_is_die = false;
 	if(detail_counting_cnt >= 60)
 	{
-		home_menu->setEnabled(true);
 		detail_counting_cnt = 0;
 		countingCnt++;
 		use_time++;
@@ -2212,13 +2211,13 @@ void PlayUI::myInit ()
 	
 	home_menu = CCMenu::createWithItem(home_item);
 	home_menu->setPosition(ccp(25, myDSH->ui_top-22+UI_OUT_DISTANCE));
+	home_menu->setEnabled(false);
 	
-	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){home_menu->setPositionY(t);}, [=](float t){home_menu->setPositionY(myDSH->ui_top-22);}));
+	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){home_menu->setPositionY(t);}, [=](float t){home_menu->setPositionY(myDSH->ui_top-22);home_menu->setEnabled(true);}));
 	
 //	if(myGD->gamescreen_type == kGT_leftUI)				home_menu->setPosition(ccp(25,myDSH->ui_top-25));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		home_menu->setPosition(ccp(480-25,myDSH->ui_top-25));
 //	else												home_menu->setPosition(ccp(25,myDSH->ui_top-25));
-	home_menu->setEnabled(false);
 	addChild(home_menu);
 	
 	
