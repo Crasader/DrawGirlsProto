@@ -385,6 +385,8 @@ if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [=](Json::Value obj){
 		int delekey = dkey;
@@ -393,22 +395,56 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelT
 			delsel.func(obj);
 		}
 		jsonDelegator::get()->remove(delekey);
-
+		
 	};
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-JniMethodInfo t;
-if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "checkCGP", "(I)Z")) {
-	int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-	t.env->CallStaticObjectMethod(t.classID, t.methodID, _key);
-	t.env->DeleteLocalRef(t.classID);
-}
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "checkCGP", "(I)Z")) {
+		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key);
+		t.env->DeleteLocalRef(t.classID);
+	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 // not implementation
+	Json::Value dummy;
+	dummy["promotionstate"] = "CGP_NONE";
+	func(dummy);
+#endif
+}
 
+void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
+{
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLog("checkDelegator sFunc call");
+		if(GraphDog::get()->cehckTarget(target))
+			func(value);
+	};
+	checkCGP(param, callbackParam, sFunc);
+}
+void hspConnector::completePromotion()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "completePromotion", "()V")) {
+		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
+}
+void hspConnector::completeInstallPromotion()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "completeInstallPromotion", "()V")) {
+		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		t.env->DeleteLocalRef(t.classID);
+	}
 #endif
 }
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [=](Json::Value obj){
 		int delekey = dkey;
@@ -417,21 +453,30 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,j
 			delsel.func(obj);
 		}
 		jsonDelegator::get()->remove(delekey);
-
 	};
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-JniMethodInfo t;
-if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "purchaseProduct", "(ILjava/lang/String;)Z")) {
-	int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-	t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, t.env->NewStringUTF(param.get("productid", "").asString().c_str()));
-	t.env->DeleteLocalRef(t.classID);
-}
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "purchaseProduct", "(ILjava/lang/String;)Z")) {
+		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, t.env->NewStringUTF(param.get("productid", "").asString().c_str()));
+		t.env->DeleteLocalRef(t.classID);
+	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 // not implementation
-
+	Json::Value dummy;
+	dummy["issuccess"] = 1;
+	func(dummy);
 #endif
 }
-
+void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
+{
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLog("checkDelegator sFunc call");
+		if(GraphDog::get()->cehckTarget(target))
+			func(value);
+	};
+	purchaseProduct(param, callbackParam, sFunc);
+}
 void hspConnector::openUrl(const std::string& url)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
