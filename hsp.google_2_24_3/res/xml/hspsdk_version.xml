@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<version-list>
+  <module name="HSPSDK" version="2.24.3" />
+  <module name="HSPJavadoc" version="2.21.0" /> 
+  <module name="HSPGuide" version="2.16.0" /> 
+  <module name="HSPRelease_Merging" version="2.18.1.10526" /> 
+  <module name="HSPSampleApp" version="2.24.1.11943" /> 
+  <module name="HSPCore" version="2.24.3.12000" />
+  <module name="HSPCore_Hangame" version="2.22.0.11509" />
+  <module name="HSPCore_Linegame" version="2.16.0.10857" />
+  <module name="HSPCore_Kakaogame" version="2.24.3.12002" />
+  <module name="HSPCore_Bandgame" version="2.24.3.11996" />
+  <module name="HSPCore_Globalgame" version="2.21.2.11701" />
+  <module name="HSPCore_Greegame" version="2.21.2.11687" />
+  <module name="HSPCore_Toastgame" version="2.21.2.11688" />
+  <module name="HSPCore_Hangame_Toast" version="2.20.0.11543" />
+  <module name="HSPCore_Qihoo" version="" />
+  <module name="HSPCore_Globalcngame_Facebook" version="2.18.2.11163" />
+  <module name="HSPCore_Globalcngame_Jiuhao" version="2.24.1.11944" />
+  <module name="HSPCore_Negame" version="2.20.0.11515" />
+  <module name="FacebookSDK" version="2.14.0.10653" />
+  <module name="HSPView_Global" version="2.17.3.10984" />
+  <module name="HSPView_Toast" version="2.21.1.11611" />
+  <module name="HSPView_Toast_New" version="2.20.0.11504" />
+  <module name="HSPView_JP" version="2.22.0.11739" />
+  <module name="HSPPayment" version="3.15.2.11982" />
+  <module name="HSPPromotion" version="2.24.1.11960" />
+  <module name="HSPItemDelivery" version="2.21.1.11643" />
+  <module name="HSPCoin" version="2.5.0.8826" />
+  <module name="HSPSns" version="2.23.0.11847" />
+  <module name="HSPNPush_Hangame" version="12" />
+  <module name="HSPNPush_Line" version="12" />
+  <module name="HSPNPush_Global" version="2.24.0.11902" />
+  <module name="HSPPayment_Google" version="3.3.0" />
+  <module name="HSPPayment_TStore" version="13.01.00" />
+  <module name="HSPPayment_Naver" version="1.0" />
+  <module name="HSPPayment_Gree" version="2.3.0" />
+  <module name="HSPPayment_Mycard" version="1.0.0" />
+  <module name="HSPPayment_ToastStore" version="0.5" />
+</version-list>

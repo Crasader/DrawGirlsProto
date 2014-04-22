@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.litmus.find.rooting">해당 디바이스의 비정상적인 이용으로 더 이상 서비스를 이용할 수 없습니다.</string>
+    <string name="hsp.litmus.find.cheating">정상적인 게임 이용을 방해하는 툴이 탐지되었습니다. 해당 툴을 삭제하지 않으시면 본 서비스를 이용하실 수 없습니다.</string>
+    <string name="hsp.litmus.find.bluestack">정상적인 게임 이용을 방해하는 툴이 탐지되었습니다. 해당 툴을 삭제하지 않으시면 본 서비스를 이용하실 수 없습니다.</string>
+    <string name="hsp.litmus.find.integrity">정상적인 게임 이용을 방해하는 툴이 탐지되었습니다. 해당 툴을 삭제하지 않으시면 본 서비스를 이용하실 수 없습니다.</string>
+    <string name="hsp.litmus.log.agreement.title">주의사항!</string>
+    <string name="hsp.litmus.log.agreement.message">당사 서비스에 대한 부정행위에 사용되는 툴이 단말기 내에 존재할 경우, 본 서비스를 이용하실 수 없습니다. 또한 해당 툴이 단말기 내에 존재할 경우, 툴에 관한 정보를 취득합니다.</string>
+    <string name="hsp.litmus.log.agreement.permit">허가</string>
+    <string name="hsp.litmus.log.agreement.refuse">거절</string>
+
+</resources>

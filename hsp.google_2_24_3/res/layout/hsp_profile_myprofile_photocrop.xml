@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#FF000000"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <!-- image view -->
+    <view
+        class="com.hangame.hsp.ui.view.profile.CropImageView"
+        android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_x="0dp"
+		android:layout_y="0dp"
+		android:tag="hsp.profile.myprofile.photocrop.imageview">
+    </view>
+
+    <!-- button layer -->
+    <LinearLayout
+        android:baselineAligned="false"
+        android:layout_height="wrap_content"
+    	android:layout_width="fill_parent"
+    	android:layout_gravity="bottom"
+    	android:orientation="horizontal">
+        
+        <LinearLayout
+            android:background="@drawable/hsp_profile_photocrop_button"
+            android:clickable="true"
+            android:layout_height="wrap_content"
+    		android:layout_width="fill_parent"
+    		android:layout_weight="1"
+    		android:gravity="center"
+    		android:orientation="horizontal"
+    		android:tag="hsp.profile.myprofile.photocrop.button.save">
+    		
+			<ImageView
+			    android:background="@drawable/hsp_profile_photocrop_icon_crop"
+			    android:layout_height="34dp"
+    			android:layout_width="34dp">
+			</ImageView>
+			
+			<TextView
+			    android:ellipsize="end"
+			    android:text="@string/hsp.profile.myprofile.photocrop.button.save"
+			    android:textSize="24dp"
+			    android:layout_height="wrap_content"
+			    android:layout_width="wrap_content">
+			</TextView>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:background="@drawable/hsp_profile_photocrop_button"
+            android:clickable="true"
+            android:layout_height="wrap_content"
+    		android:layout_width="fill_parent"
+    		android:layout_weight="1"
+    		android:gravity="center"
+    		android:orientation="horizontal"
+    		android:tag="hsp.profile.myprofile.photocrop.button.cancel">
+			
+            <ImageView
+			    android:background="@drawable/hsp_profile_photocrop_icon_cancel"
+			    android:layout_height="34dp"
+    			android:layout_width="34dp">
+			</ImageView>
+			
+            <TextView
+			    android:ellipsize="end"
+			    android:text="@string/hsp.profile.myprofile.photocrop.button.cancel"
+			    android:textSize="24dp"
+			    android:layout_height="wrap_content"
+			    android:layout_width="wrap_content">
+			</TextView>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

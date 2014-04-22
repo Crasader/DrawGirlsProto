@@ -1,42 +1,27 @@
 package com.litqoo.lib;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-//import com.litqoo.DGproto.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.RemoteException;
 import android.os.Vibrator;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+
+import com.hangame.hsp.payment.HSPPayment;
+//import com.litqoo.DGproto.R;
 
 
 @SuppressWarnings("unused")
@@ -460,5 +445,12 @@ public class KSActivityBase extends Cocos2dxActivity{
 				}
 			}
 		});
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		HSPPayment.closePaymentService();
+		super.onDestroy();
 	}
 }

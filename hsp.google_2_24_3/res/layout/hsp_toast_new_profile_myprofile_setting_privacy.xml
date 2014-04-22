@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:background="@color/hsp.common.white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/hsp.common.white"
+        android:orientation="vertical" >
+
+        <!-- 게임푸쉬 알림 타이틀 내용 -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:tag="hsp.profile.myprofile.setting.push.header" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="28dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/hsp_toast_new_common_title_bg"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:tag="hsp.profile.myprofile.setting.push.title"
+                android:text="@string/hsp.toast.new.profile.myprofile.setting.push.title"
+                android:textColor="@color/hsp.common.black"
+                android:textSize="16.75dp" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:tag="hsp.profile.myprofile.setting.push.item" >
+
+                <!-- 게임 아이콘 -->
+
+                <ImageView
+                    android:id="@+id/hsp.profile.myprofile.setting.push.item.image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/hsp_toast_new_common_icon_game"
+                    android:padding="0dp"
+                    android:scaleType="fitCenter"
+                    android:tag="hsp.profile.myprofile.setting.push.item.image" />
+
+                <!-- 게임 이름 -->
+
+                <TextView
+                    android:id="@+id/hsp.profile.myprofile.setting.push.item.title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="13.3dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_toRightOf="@id/hsp.profile.myprofile.setting.push.item.image"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:tag="hsp.profile.myprofile.setting.push.item.title"
+                    android:textColor="@color/hsp.common.setting.text"
+                    android:textSize="16.6dp" />
+
+                <!-- push 설정 버튼 -->
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:button="@drawable/hsp_toast_new_check"
+                    android:tag="hsp.profile.myprofile.setting.push.item.checkbox" />
+            </RelativeLayout>
+	        
+	        <include layout="@layout/hsp_toast_new_common_line" />
+	        
+        </LinearLayout>
+
+
+		<LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical"
+		    android:tag="hsp.profile.myprofile.setting.account.layout"
+		    >
+								        
+					        <!-- 타이틀 내용 -->
+				        <TextView
+				            android:id="@+id/hsp.toast.profile.myprofile.setting.account.title"
+				            android:layout_width="fill_parent"
+				            android:layout_height="28dp"
+				            android:layout_gravity="center_vertical"
+				            android:background="@drawable/hsp_toast_new_common_title_bg"
+				            android:gravity="left"
+				            android:paddingLeft="12dp"
+				            android:paddingRight="12dp"
+				            android:tag="hsp.profile.myprofile.setting.account.title"
+				            android:text="@string/hsp.toast.new.profile.myprofile.setting.account.title"
+				            android:textColor="@color/hsp.common.black"
+				            android:textSize="16.75dp" />
+				
+				        
+				        <!-- 연결된 한게임 아이디 -->
+				
+				        <RelativeLayout
+				            android:layout_width="fill_parent"
+				            android:layout_height="47.57dp"
+				            android:gravity="center_vertical"
+				            android:paddingLeft="12dp"
+				            android:paddingRight="12dp" >
+				
+				            <TextView
+				                android:id="@+id/hsp.profile.myprofile.accountinfo.hangameid.title"
+				                android:layout_width="wrap_content"
+				                android:layout_height="fill_parent"
+				                android:gravity="center_vertical"
+				                android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.hangameid.title2"
+				                android:tag="hsp.toast.new.profile.myprofile.accountinfo.name.tag"
+				                android:textColor="@color/hsp.common.description"
+				                android:textSize="15dp" />
+				
+				            
+				            <LinearLayout 
+				                android:layout_width="wrap_content"
+						        android:layout_height="fill_parent"
+						        android:layout_marginLeft="160dp"
+						        android:gravity="center_vertical"
+				                >
+				                
+				                	<TextView
+				                	     android:layout_width="wrap_content"
+						                android:layout_height="wrap_content"
+						                android:background="@drawable/hsp_toast_new_profile_setting_facebook_icon"
+						                android:layout_marginRight="5dp"
+						                android:visibility="gone"
+						                android:tag="hsp.profile.myprofile.accountinfo.hangameid.icon"
+				                	    />
+				                	
+						            <TextView
+						                android:layout_width="wrap_content"
+						                android:layout_height="fill_parent"
+						                android:gravity="center_vertical"
+						                android:tag="hsp.profile.myprofile.accountinfo.hangameid.text"
+						                android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.hangameid.noconnect"
+						                android:textColor="@color/hsp.common.black"
+						                android:textSize="15dp" />
+				            </LinearLayout>
+				
+				        </RelativeLayout>
+				        
+				        <include layout="@layout/hsp_toast_new_common_line" />
+				        
+				        <!-- 회원번호 -->
+				
+				        <RelativeLayout
+				            android:layout_width="fill_parent"
+				            android:layout_height="47.57dp"
+				            android:gravity="center_vertical"
+				            android:paddingLeft="12dp"
+				            android:paddingRight="12dp" >
+				
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="fill_parent"
+				                android:gravity="center_vertical"
+				                android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.memberno.title"
+				                android:textColor="@color/hsp.common.description"
+				                android:textSize="15dp" />
+				
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="fill_parent"
+				                android:layout_marginLeft="160dp"
+				                android:gravity="left|center_vertical"
+				                android:tag="hsp.profile.myprofile.accountinfo.memberno.text"
+				                android:textColor="@color/hsp.common.black"
+				                android:textSize="15dp" />
+				        </RelativeLayout>
+				        
+				        <include layout="@layout/hsp_toast_new_common_line" />
+				        <!-- password -->
+				
+				        <RelativeLayout
+				            android:layout_width="fill_parent"
+				            android:layout_height="47.57dp"
+				            android:gravity="center_vertical"
+				            android:paddingLeft="12dp"
+				            android:paddingRight="12dp" 
+				            android:visibility="gone"
+				            android:tag="hsp.profile.myprofile.accountinfo.modify.password.layout">
+				
+				            <TextView
+				                android:layout_width="wrap_content"
+				                android:layout_height="fill_parent"
+				                android:gravity="center_vertical"
+				                android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.password.title"
+				                android:textColor="@color/hsp.common.description"
+				                android:textSize="15dp" />
+				
+				           <Button
+				                android:id="@+id/hsp.profile.myprofile.accountinfo.hangameid.connect"
+				                android:layout_width="67dp"
+				                android:layout_height="32dp"
+				                android:layout_alignParentRight="true"
+				                android:layout_centerVertical="true"
+				                android:background="@drawable/hsp_toast_new_common_btn_page_off"
+				                android:gravity="center"
+				                android:padding="0dp"
+				                android:tag="hsp.profile.myprofile.accountinfo.modify.password"
+				                android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.password.btn.title"
+				                android:textColor="@color/hsp.common.white"
+				                android:textSize="15dp" />
+				        	
+				        
+				        	<include layout="@layout/hsp_toast_new_common_line" />
+				        </RelativeLayout>
+				        
+				
+				
+				        <Button
+				            android:id="@+id/hsp.profile.myprofile.accountinfo.hangameid.reconnect"
+				            android:layout_width="fill_parent"
+				            android:layout_height="42.67dp"
+				            android:layout_marginTop="12dp"
+				            android:layout_marginLeft="12dp"
+				            android:layout_marginRight="12dp"
+				            android:background="@drawable/hsp_toast_new_profile_save_btn"
+				            android:clickable="true"
+				            android:gravity="center"
+				            android:visibility="gone"
+				            android:tag="hsp.profile.myprofile.accountinfo.hangameid.reconnect"
+				            android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.hangameid.reconnect"
+				            android:textColor="@color/hsp.common.white"
+				            android:textSize="18dp" />
+				        
+				        <Button
+				            android:id="@+id/hsp.toast.profile.myprofile.accountinfo.payco.login"
+				            android:layout_width="fill_parent"
+				            android:layout_height="42.67dp"
+				            android:layout_marginTop="12dp"
+				            android:layout_marginBottom="12dp"
+				            android:layout_marginLeft="12dp"
+				            android:layout_marginRight="12dp"
+				            android:background="@drawable/hsp_toast_new_btn_more"
+				            android:clickable="true"
+				            android:gravity="center"
+				            android:visibility="gone"
+				            android:tag="hsp.profile.myprofile.accountinfo.payco.login"
+				            android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.payco.login"
+				            android:textColor="@color/hsp.common.black"
+				            android:textSize="18dp" />
+				        
+				        <Button
+				            android:id="@+id/hsp.toast.profile.myprofile.accountinfo.facebook.login"
+				            android:layout_width="fill_parent"
+				            android:layout_height="42.67dp"
+				            android:layout_marginTop="12dp"
+				            android:layout_marginBottom="12dp"
+				            android:layout_marginLeft="12dp"
+				            android:layout_marginRight="12dp"
+				            android:background="@drawable/hsp_toast_new_btn_more"
+				            android:clickable="true"
+				            android:gravity="center"
+				            android:visibility="gone"
+				            android:tag="hsp.profile.myprofile.accountinfo.facebook.login"
+				            android:text="@string/hsp.toast.new.profile.myprofile.accountinfo.facebook.login"
+				            android:textColor="@color/hsp.common.black"
+				            android:textSize="18dp" />
+        				<include layout="@layout/hsp_toast_new_common_line" />
+        				
+			</LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

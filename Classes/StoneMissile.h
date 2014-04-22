@@ -446,25 +446,25 @@ class GuidedMissile : public StoneAttack
 {
 public:
 	static GuidedMissile* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, 
-															 float initSpeed, int power, int range, AttackOption ao)
+															 float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
 	{
 		GuidedMissile* object = new GuidedMissile();
-		object->init(targetNode, initPosition, fileName, initSpeed, power, range, ao);
+		object->init(targetNode, initPosition, fileName, initSpeed, power, range, ao, selfRotation);
 
 		object->autorelease();
 		
 
 		return object;
 	}
-	static GuidedMissile* createForShowWindow(const string& fileName)
+	static GuidedMissile* createForShowWindow(const string& fileName, bool selfRotation)
 	{
 		GuidedMissile* object = new GuidedMissile();
-		object->initForShowWindow(fileName);
+		object->initForShowWindow(fileName, selfRotation);
 		object->autorelease();
 		return object;
 	}
 	
-	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao)
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
 	{
 		StoneAttack::init();
 		
@@ -477,7 +477,8 @@ public:
 		m_targetNode = targetNode;	
 		m_guided = false;
 		m_range = range;
-		m_missileSprite = KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_selfRotation = selfRotation;
+		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
 			//m_missileSprite->setRotationY(t);
 			//m_missileSprite->setRotationX(t);
@@ -501,13 +502,14 @@ public:
 		return true;
 	}
 	
-	bool initForShowWindow(const string& fileName)
+	bool initForShowWindow(const string& fileName, bool selfRotation)
 	{
 		StoneAttack::init();
 		
 		m_particle = NULL;
 		m_streak = NULL;
-		m_missileSprite = KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_selfRotation = selfRotation;
+		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
 		//m_missileSprite->setRotationY(t);
 		//m_missileSprite->setRotationX(t);
@@ -679,8 +681,16 @@ public:
 			{
 				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_initRad) * m_initSpeed,
 																																				sin(m_initRad) * m_initSpeed));
-
-				m_missileSprite->setRotation(-rad2Deg(m_initRad));
+				
+				if(m_selfRotation)
+				{
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
+				}
+				else
+				{
+					m_missileSprite->setRotation(-rad2Deg(m_initRad) - 90);
+				}
+				
 				for(auto bosses : myGD->getMainCumberVector())
 				{
 					if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= m_range)
@@ -707,7 +717,16 @@ public:
 				m_currentRad += (tt - m_currentRad); // , deg2Rad(-15), deg2Rad(15));
 				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * m_initSpeed * 2,
 																																					sin(m_currentRad) * m_initSpeed * 2));
-				m_missileSprite->setRotation(-rad2Deg(m_currentRad));
+				
+				if(m_selfRotation)
+				{
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
+				}
+				else
+				{
+					m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+				}
+//				m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
 		 	}
 			
 			if(m_particle)
@@ -734,7 +753,7 @@ protected:
 
 	bool m_guided; // 유도 모드인지 여부.
 	int m_range; // 유도 범위.
-	
+	bool m_selfRotation; // 스스로 도는지 여부.
 	CCNode* m_targetNode;
 	CCSprite* m_missileSprite; // 미사일 객체.
 	CCParticleSystemQuad* m_particle;

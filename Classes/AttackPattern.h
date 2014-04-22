@@ -1018,6 +1018,16 @@ protected:
 	Well512 m_well512;
 };
 
+class PutChildWrapper : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(PutChildWrapper);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
+	virtual void stopMyAction();
+	void update(float dt);
+protected:
+	Json::Value m_pattern;
+};
 class KSSpecialAttackPattern19 : public AttackPattern
 {
 public:
@@ -1144,18 +1154,7 @@ protected:
 	Well512 m_well512;
 	Json::Value m_pattern;
 };
-//class SawWrapper : public AttackPattern
-//{
-//public:
-	//CREATE_FUNC_CCP(SawWrapper);
-	//void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	
-	//void update(float dt);
-	//virtual void stopMyAction();
-	
-//protected:
-	//float speed;
-	//float crashsize;
-	//Well512 m_well512;
-//};
+
+
+
 #endif
