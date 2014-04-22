@@ -200,12 +200,10 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			lefttimestr=CCString::createWithFormat("%d분후 리셋", lefttime/60+1)->getCString();
 		}
 		
-		{
-			CCLabelTTF* my_rank_label = CCLabelTTF::create(lefttimestr.c_str(),mySGD->getFont().c_str(), 10);
-			my_rank_label->setAnchorPoint(ccp(1,0.5));
-			my_rank_label->setPosition(ccp(main_case->getContentSize().width-175, 210));
-			rankBack->addChild(my_rank_label, kZ_CP_img);
-		}
+		CCLabelTTF* lefttime_label = CCLabelTTF::create(lefttimestr.c_str(),mySGD->getFont().c_str(), 10);
+		lefttime_label->setAnchorPoint(ccp(1,0.5));
+		lefttime_label->setPosition(ccp(main_case->getContentSize().width-175, 210));
+		rankBack->addChild(lefttime_label, kZ_CP_img);
 		
 		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
 		all_user_label->setColor(ccc3(255, 50, 50));
