@@ -25,33 +25,29 @@ public class PurchaseCBImpl implements PurchaseCB {
         if (hspResult == null) {
             return;
         }
-        JSONObject r = new JSONObject();
         if (hspResult.getCode() == PaymentErrorCode.PURCHASE_SUCCESS) {
             // 결제 성공
-        	try {
-        		HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl());
-				r.put("result", 1);
-				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        	Log.d("litqoo", "결제 성공");
+        	HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl(m_key, m_glView));
         } else {
+        	
+        	JSONObject r = new JSONObject();
             // 결제 실패
+        	Log.d("litqoo", "결제 실패" + Integer.toString(hspResult.getCode()));
         	try {
-				r.put("result", 0);
+				r.put("issuccess", 0);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        }
-		m_glView.queueEvent(new KRunnable(m_key,r.toString()) {
-			public void run() {
+        	m_glView.queueEvent(new KRunnable(m_key,r.toString()) {
+        		public void run() {
 
-				Log.d("litqoo", "login id:"+HSPCore.getInstance().getMemberID()+"/no:"+HSPCore.getInstance().getMemberNo());
-				Log.d("litqoo", "SendResult"+this.totalSource);
-				hspConnector.SendResult(this.delekey,this.totalSource);
-			}
-		});
+        			Log.d("litqoo", "login id:"+HSPCore.getInstance().getMemberID()+"/no:"+HSPCore.getInstance().getMemberNo());
+        			Log.d("litqoo", "SendResult"+this.totalSource);
+        			hspConnector.SendResult(this.delekey,this.totalSource);
+        		}
+        	});
+        }
     }
 }

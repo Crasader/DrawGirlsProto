@@ -129,6 +129,12 @@ public class hspConnector{
 				);
 		return true;
 	}
+	public static void completePromotion(){
+		HSPCGP.completePromotion(sContext);
+	}
+	public static void completeInstallPromotion(){
+		HSPCGP.completeInstallPromotion(sContext);
+	}
 	public static void launchPromotion(){
 		
 		hspConnector.handler.post(

@@ -421,7 +421,26 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObjec
 	};
 	checkCGP(param, callbackParam, sFunc);
 }
-
+void hspConnector::completePromotion()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "completePromotion", "()V")) {
+		t.env->CallStaticObjectMethod(t.classID, t.methodID));
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
+}
+void hspConnector::completeInstallPromotion()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "completeInstallPromotion", "()V")) {
+		t.env->CallStaticObjectMethod(t.classID, t.methodID));
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
+}
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
 	
