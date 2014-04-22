@@ -12,6 +12,7 @@
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
 #include "FormSetter.h"
+#include "LabelTTFMarquee.h"
 
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -56,7 +57,7 @@ bool RankNewPopup::init()
 	
 	KSLabelTTF* title_label = KSLabelTTF::create("주간누적랭킹", mySGD->getFont().c_str(), 17);
 	title_label->setColor(ccc3(255, 150, 50));
-	title_label->setPosition(ccp(75,253));
+	title_label->setPosition(ccp(70,253));
 	main_case->addChild(title_label);
 	
 	CCScale9Sprite* main_inner_left = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
@@ -138,7 +139,7 @@ bool RankNewPopup::init()
 	
 	
 	rankBack = CCNode::create();
-	rankBack->setPosition(-11,-30);
+	rankBack->setPosition(-13,-30);
 	main_case->addChild(rankBack);
 	
 	
@@ -147,6 +148,8 @@ bool RankNewPopup::init()
 	rank_table->setDelegate(this);
 	
 	main_inner_right->addChild(rank_table);
+	
+	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-185);
 	close_menu->setPosition(ccp(main_case->getContentSize().width-29,main_case->getContentSize().height-27));
@@ -186,7 +189,21 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		rankBack->addChild(graph_back, kZ_CP_img);
 		
 		int alluser = result_data["alluser"].asInt();
+		int lefttime = result_data["remainTime"].asInt();
 		int myrank = result_data["myrank"].asInt();
+		string lefttimestr;
+		if(lefttime>60*60*24){
+			lefttimestr=CCString::createWithFormat("%d일후 리셋", lefttime/(60*60*24)+1)->getCString();
+		}else if(lefttime>60*60){
+			lefttimestr=CCString::createWithFormat("%d시간후 리셋", lefttime/(60*60)+1)->getCString();
+		}else{
+			lefttimestr=CCString::createWithFormat("%d분후 리셋", lefttime/60+1)->getCString();
+		}
+		
+		CCLabelTTF* lefttime_label = CCLabelTTF::create(lefttimestr.c_str(),mySGD->getFont().c_str(), 10);
+		lefttime_label->setAnchorPoint(ccp(1,0.5));
+		lefttime_label->setPosition(ccp(main_case->getContentSize().width-175, 210));
+		rankBack->addChild(lefttime_label, kZ_CP_img);
 		
 		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
 		all_user_label->setColor(ccc3(255, 50, 50));
@@ -232,7 +249,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 			list_cell_case->setAnchorPoint(ccp(0,0));
 			list_cell_case->setContentSize(CCSizeMake(225, 37));
-			list_cell_case->setPosition(ccp(239,45));
+			list_cell_case->setPosition(ccp(241,45));
 			rankBack->addChild(list_cell_case, kZ_CP_img);
 			
 			CCPoint rank_position = ccp(20,18);
@@ -242,21 +259,18 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			if(i == 0)
 			{
 				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
-				gold_medal->setScale(0.75f);
 				gold_medal->setPosition(rank_position);
 				list_cell_case->addChild(gold_medal);
 			}
 			else if(i == 1)
 			{
 				CCSprite* silver_medal = CCSprite::create("rank_silver.png");
-				silver_medal->setScale(0.75f);
 				silver_medal->setPosition(rank_position);
 				list_cell_case->addChild(silver_medal);
 			}
 			else if(i == 2)
 			{
 				CCSprite* bronze_medal = CCSprite::create("rank_bronze.png");
-				bronze_medal->setScale(0.75f);
 				bronze_medal->setPosition(rank_position);
 				list_cell_case->addChild(bronze_medal);
 			}
