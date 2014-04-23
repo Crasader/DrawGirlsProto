@@ -402,9 +402,10 @@ public:
 			ccColor4B rgb = movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			if(rgb.g <= 5)
+			float waveValue = rgb.g + (rgb.b >= 10 ? 40 : 0);
+			if(waveValue <= 5)
 				continue;
-			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * rgb.g  / -9.f;
+			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / -9.f;
 			//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
 			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.1f,
 																							 [=](CCPoint t){
@@ -425,6 +426,7 @@ public:
 																								 //}
 																							 },
 																							 nullptr));
+//																							 expoIn));
 		}
 
 	/*	
@@ -557,8 +559,10 @@ public:
 		{
 			Vertex3D original = m_2xVertices[i];
 			ccColor4B color = m_silColors[original.y][original.x];
-			// color.r 가 클 수록 그만큼 반대로 움직여야 됨.
-			CCPoint against = t * (float)color.g / 10.f / 12.f;// / 12.f; //  / 50.f; // / 30.f;
+			float waveValue = color.g + (color.b >= 10 ? 10 : 0);
+
+			// waveValue 가 클 수록 그만큼 반대로 움직여야 됨.
+			CCPoint against = t * (float)waveValue / 10.f / 12.f;// / 12.f; //  / 50.f; // / 30.f;
 			if( !(against.x == 0.f && against.y == 0.f) )
 			{
 				m_vertices[i].x = m_backupVertices[&m_vertices[i]].x - against.x;
@@ -664,16 +668,14 @@ public:
 			}
 		}
 		int j = 0;
-		for(auto& point : m_points)
-		{
-			int i = ((height - 1 - point.y) * width + (point.x))*4;
-			//			CCLog("2. i = %d", i);
-			auto tt = (float)oData[i];
-			point.z = tt / 255.f * 50.f;
-			// 기본적으로 실루엣은 나와있도록.
-			if(oData[i + 2] >= 10)
-				point.z += 10;
-		}
+		// z 값을 주석처리 해놈.
+//		for(auto& point : m_points)
+//		{
+//			int i = ((height - 1 - point.y) * width + (point.x))*4;
+//			//			CCLog("2. i = %d", i);
+//			auto tt = (float)oData[i];
+//			point.z = tt / 255.f * 50.f;
+//		}
 		img->release();
 		/////////////////////
 #endif

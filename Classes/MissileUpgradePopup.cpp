@@ -96,14 +96,16 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	if(missile_type_code == kStoneType_guided)
 	{
+		int grade = (missile_level-1)/5+1;
+		bool rotation = false;
+		if(grade == 1 || grade == 4)
+			rotation = true;
 		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
-																														 false);
-//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
+																														 rotation);
 		t_gm->setPosition(ccp(0,0));
 		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 		upgrade_action_node->addChild(t_gm);
 		
-		int grade = (missile_level-1)/5+1;
 		
 		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
 		
@@ -313,14 +315,19 @@ void MissileUpgradePopup::setAfterUpgrade()
 	
 	if(missile_type_code == kStoneType_guided)
 	{
+
+		int grade = (missile_level-1)/5+1;
+		bool rotation = false;
+		if(grade == 1 || grade == 4)
+			rotation = true;
+
 		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
-																															false);
+																															rotation);
 //		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 		t_gm->setPosition(missile_position);
 		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 		upgrade_action_node->addChild(t_gm);
 		
-		int grade = (missile_level-1)/5+1;
 		
 		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
 		

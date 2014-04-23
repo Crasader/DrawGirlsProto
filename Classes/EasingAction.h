@@ -11,6 +11,7 @@
 float getTime(float t);
 float elasticOut(float time);
 float bounceOut(float time);
-
+float easeOut(float time);
+float expoIn(float time);
 
 #endif

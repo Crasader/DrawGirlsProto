@@ -1058,8 +1058,14 @@ public:
 	{
 		float r = m_showWindow.rotationRadius;
 		m_missileSprite->setPosition(m_showWindow.initPosition + ccp(cos(m_showWindow.rotationRad) * r, sin(m_showWindow.rotationRad) * r));
-
-		m_missileSprite->setRotation(-rad2Deg(m_showWindow.rotationRad) - 90);
+		if(m_selfRotation)
+		{
+			m_missileSprite->setRotation(m_missileSprite->getRotation() + m_showWindow.rotationVelocityRad);
+		}
+		else
+		{
+			m_missileSprite->setRotation(-rad2Deg(m_showWindow.rotationRad) + 180);
+		}
 
 		if(m_particle)
 			m_particle->setPosition(m_missileSprite->getPosition());
