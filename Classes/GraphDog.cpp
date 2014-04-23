@@ -807,4 +807,4 @@ void GraphDog::receivedCommand(float dt)
 //	return "none";
 //}
 
-GraphDog* graphdog = GraphDog::get();
+GraphDog* graphdog; // = GraphDog::get();

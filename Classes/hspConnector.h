@@ -177,7 +177,7 @@ public:
 	void setup(string pHSPID, int pHSPNo, string pGraphdogVersion){
 		hspID = pHSPID;
 		hspNo = pHSPNo;
-		graphdog->setup("drawgirls_tstore", "12345678","", pGraphdogVersion);
+		GraphDog::get()->setup("drawgirls_tstore", "12345678","", pGraphdogVersion);
 	}
 	
 	bool command(const std::vector<CommandParam>& params){
