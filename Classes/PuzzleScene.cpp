@@ -1761,6 +1761,12 @@ void PuzzleScene::setRight()
 	n_stage->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+13));
 	n_ready->addChild(n_stage);
 	
+	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
+	n_ready_label->setColor(ccc3(47, 30, 6));
+	n_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f));
+	n_ready->addChild(n_ready_label);
+	
 	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
 	s_ready->setColor(ccGRAY);
 	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
@@ -1768,6 +1774,12 @@ void PuzzleScene::setRight()
 	s_stage->setColor(ccBLACK);
 	s_stage->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+13));
 	s_ready->addChild(s_stage);
+	
+	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
+	s_ready_label->setColor(ccc3(47, 30, 6));
+	s_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f));
+	s_ready->addChild(s_ready_label);
 	
 	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(PuzzleScene::menuAction));
 	ready_item->setTag(kPuzzleMenuTag_start);
@@ -1796,6 +1808,26 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
 		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,220));
 		right_body->addChild(graph_back);
+		
+		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+		t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+		t_rank_a->setPosition(ccp(16,8));
+		graph_back->addChild(t_rank_a);
+		
+		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+		t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+		t_rank_b->setPosition(ccp(16+28,8));
+		graph_back->addChild(t_rank_b);
+		
+		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+		t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+		t_rank_c->setPosition(ccp(17+56,8));
+		graph_back->addChild(t_rank_c);
+		
+		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+		t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+		t_rank_d->setPosition(ccp(17+84,8));
+		graph_back->addChild(t_rank_d);
 		
 		int alluser = result_data["alluser"].asInt();
 		int myrank = result_data["myrank"].asInt();

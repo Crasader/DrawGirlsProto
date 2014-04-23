@@ -13,6 +13,7 @@
 #include "CommonButton.h"
 #include "LoadingLayer.h"
 #include "KSLabelTTF.h"
+#include "MyLocalization.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,
@@ -496,6 +497,12 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			reward_type_str = "price_gold_img.png";
 		
 		CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
+		
+		KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+		n_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+		n_reward_label->setPosition(ccp(n_reward_img->getContentSize().width/2.f, n_reward_img->getContentSize().height*0.65f));
+		n_reward_img->addChild(n_reward_label);
+		
 		CCSprite* n_reward_type_img = CCSprite::create(reward_type_str.c_str());
 		n_reward_type_img->setScale(0.5f);
 		n_reward_type_img->setPosition(ccp(n_reward_img->getContentSize().width/2.f-12, n_reward_img->getContentSize().height/2.f-6.5f));
@@ -507,6 +514,12 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		
 		CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
 		s_reward_img->setColor(ccGRAY);
+		
+		KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+		s_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+		s_reward_label->setPosition(ccp(s_reward_img->getContentSize().width/2.f, s_reward_img->getContentSize().height*0.65f));
+		s_reward_img->addChild(s_reward_label);
+		
 		CCSprite* s_reward_type_img = CCSprite::create(reward_type_str.c_str());
 		s_reward_type_img->setScale(0.5f);
 		s_reward_type_img->setPosition(ccp(s_reward_img->getContentSize().width/2.f-12, s_reward_img->getContentSize().height/2.f-6.5f));
@@ -534,6 +547,12 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			reward_type_str = "price_gold_img.png";
 		
 		CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
+		
+		KSLabelTTF* ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont2().c_str(), 11);
+		ing_label->enableOuterStroke(ccc3(60, 45, 25), 1.f);
+		ing_label->setPosition(ccp(ing_back->getContentSize().width/2.f, ing_back->getContentSize().height*0.65f));
+		ing_back->addChild(ing_label);
+		
 		ing_back->setPosition(img_position);
 		cell_back->addChild(ing_back);
 		CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
@@ -595,6 +614,12 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				reward_type_str = "price_gold_img.png";
 			
 			CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
+			
+			KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+			n_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+			n_reward_label->setPosition(ccp(n_reward_img->getContentSize().width/2.f, n_reward_img->getContentSize().height*0.65f));
+			n_reward_img->addChild(n_reward_label);
+			
 			CCSprite* n_reward_type_img = CCSprite::create(reward_type_str.c_str());
 			n_reward_type_img->setScale(0.5f);
 			n_reward_type_img->setPosition(ccp(n_reward_img->getContentSize().width/2.f-12, n_reward_img->getContentSize().height/2.f-6.5f));
@@ -606,6 +631,12 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			
 			CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
 			s_reward_img->setColor(ccGRAY);
+			
+			KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+			s_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+			s_reward_label->setPosition(ccp(s_reward_img->getContentSize().width/2.f, s_reward_img->getContentSize().height*0.65f));
+			s_reward_img->addChild(s_reward_label);
+			
 			CCSprite* s_reward_type_img = CCSprite::create(reward_type_str.c_str());
 			s_reward_type_img->setScale(0.5f);
 			s_reward_type_img->setPosition(ccp(s_reward_img->getContentSize().width/2.f-12, s_reward_img->getContentSize().height/2.f-6.5f));
@@ -633,6 +664,12 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				reward_type_str = "price_gold_img.png";
 			
 			CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
+			
+			KSLabelTTF* ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont2().c_str(), 11);
+			ing_label->enableOuterStroke(ccc3(60, 45, 25), 1.f);
+			ing_label->setPosition(ccp(ing_back->getContentSize().width/2.f, ing_back->getContentSize().height*0.65f));
+			ing_back->addChild(ing_label);
+			
 			ing_back->setPosition(img_position);
 			cell_back->addChild(ing_back);
 			CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
