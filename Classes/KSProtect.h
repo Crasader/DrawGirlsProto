@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include "CipherUtils.h"
 #include "EncryptCharsA.h"
+
+#include "ks19937.h"
 class KSProtectStr
 {
 	
@@ -53,53 +55,33 @@ class KSProtectVar
 private:
 	//T m_buff;
 	std::string m_cipher;
-	T m_cipher2;
+	T m_savedValue;
+	
 private:
 	void encrypt(const T& data)
 	{
-		char *keyString = "drawgirls__jjang";
-		m_cipher2 = data;
-//		m_cipher = CipherUtils::encrypt(encryptChars(keyString).c_str(), &data, sizeof(data));
-		//m_buff = data;
-		//		m_cipherTextLength = CCCrypto::encryptAES256(&data, m_plainTextLength, m_buff,
-//																								 m_bufferLength, key, keyLen);
+		m_salt = ks19937::getIntValue(5, 50);
+		m_savedValue = data;
+		char* pt = (char*)&m_savedValue;
+		char* saltPointer = (char*)&m_salt;
+		for(int i=0; i<sizeof(T); i++)
+		{
+			pt[i] ^= saltPointer[i];
+		}
 	}
 	
 public:
-	
-	std::string toString(T arg) const
-	{
-		int varSizeInByte = sizeof(arg);
-		std::string retValue;
-		retValue.resize(varSizeInByte);
-		char* pV = (char*)&arg;
-		for(int i=0; i<varSizeInByte; i++)
-		{
-			retValue[i] = pV[i];
-		}
-
-		return retValue;
-	}
-	T toVar(const std::string& str) const
-	{
-		T retValue;
-		char* pV = (char*)&retValue;
-		int varSizeInByte = sizeof(T);
-
-		for(int i=0; i<varSizeInByte; i++)
-		{
-			pV[i] = str[i];
-		}
-		return retValue;
-	}
+	T m_salt;
 	T getV() const
 	{
-		std::string decrypted;
-		char *keyString = "drawgirls__jjang";
-		
-		return m_cipher2;
-//		decrypted = CipherUtils::decrypt(encryptChars(keyString).c_str(), m_cipher.c_str());
-//		return toVar(decrypted);
+		T copySavedValue = m_savedValue;
+		char* pt = (char*)&copySavedValue;
+		char* saltPointer = (char*)&m_salt;
+		for(int i=0; i<sizeof(T); i++)
+		{
+			pt[i] ^= saltPointer[i];
+		}
+		return copySavedValue;
 	}
 	explicit KSProtectVar(typename std::enable_if<std::is_scalar<T>::value, const T&>::type v)
 	{

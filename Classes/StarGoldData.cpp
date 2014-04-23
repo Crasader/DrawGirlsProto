@@ -150,6 +150,18 @@ string StarGoldData::getFont()
 	return font_name;
 }
 
+string StarGoldData::getFont2() // Jrnaver
+{
+	string font_name;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	font_name = "RixJGoB";
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+#endif
+	
+	return font_name;
+}
+
 StarGoldData* StarGoldData::sharedInstance()
 {
 	static StarGoldData* t_sg = NULL;

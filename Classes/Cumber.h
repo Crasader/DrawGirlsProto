@@ -72,6 +72,7 @@ public:
 	void onJackRevived();
 	bool startDamageReaction(CCObject* cb, float damage, float angle, bool castCancel, bool stiffen);
 	void changePassiveData(const std::string& passive_data);
+	void hideBosses();
 //	float getNumberFromJsonValue(JsonBox::Value v)
 //	{
 //		if(v.getType() == JsonBox::Value::DOUBLE)

@@ -14,6 +14,7 @@
 #include "FormSetter.h"
 #include "LabelTTFMarquee.h"
 #include "MyLocalization.h"
+#include "TouchSuctionLayer.h"
 
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -36,7 +37,9 @@ bool RankNewPopup::init()
 	
 	is_menu_enable = false;
 	
-	setTouchEnabled(true);
+	TouchSuctionLayer* suction = TouchSuctionLayer::create(-180);
+	addChild(suction);
+	suction->setTouchEnabled(true);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -149,6 +152,8 @@ bool RankNewPopup::init()
 	rank_table->setDelegate(this);
 	
 	main_inner_right->addChild(rank_table);
+	
+	rank_table->setTouchPriority(-184);
 	
 	
 	

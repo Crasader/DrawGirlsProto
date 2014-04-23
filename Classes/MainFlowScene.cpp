@@ -778,6 +778,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", before_close_count)->getCString());
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
+			
+			KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
+			not_clear_label->enableOuterStroke(ccBLACK, 1.f);
+			not_clear_label->setPosition(ccp(67.5f,138.5f));
+			not_clear_img->addChild(not_clear_label);
 		}
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
@@ -817,6 +822,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base1.png");
 		not_clear_img->setPosition(CCPointZero);
 		cell_node->addChild(not_clear_img);
+		
+		KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
+		not_clear_label->enableOuterStroke(ccBLACK, 1.f);
+		not_clear_label->setPosition(ccp(67.5f,138.5f));
+		not_clear_img->addChild(not_clear_label);
 		
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
 		CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 0);

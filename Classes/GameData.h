@@ -124,6 +124,7 @@ public:
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	
 	std::function<void(StoneType, int grade, int level, float percent, CCPoint initPosition)> createJackMissileWithStoneFunctor;
+	std::function<void(void)> hideBosses;
 	vector<CCNode*> getMainCumberCCNodeVector()
 	{
 		vector<KSCumberBase*> t_vector = getMainCumberVector();
