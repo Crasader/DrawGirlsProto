@@ -2805,7 +2805,7 @@ void Maingame::goReplay ()
 	myGD->resetGameData();
 	
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
-	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 }
 void Maingame::cancelHome ()
 {

@@ -181,7 +181,7 @@ bool OptionPopup::init()
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kOP_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("설정", mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_option), mySGD->getFont().c_str(), 17);
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
@@ -221,7 +221,7 @@ bool OptionPopup::init()
 	//	popcake_menu->setTouchPriority(-171);
 	
 	
-	CommonButton* coupon_button = CommonButton::create("쿠폰등록", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	CommonButton* coupon_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	coupon_button->setPosition(getContentPosition(kOP_MT_coupon));
 	coupon_button->setFunction([=](CCObject* sender)
 														 {
@@ -232,7 +232,7 @@ bool OptionPopup::init()
 	main_case->addChild(coupon_button, kOP_Z_content);
 	
 	
-	CommonButton* community_button = CommonButton::create("커뮤니티", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	CommonButton* community_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_community), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	community_button->setPosition(getContentPosition(kOP_MT_community));
 	community_button->setFunction([=](CCObject* sender)
 																{
@@ -243,7 +243,7 @@ bool OptionPopup::init()
 	main_case->addChild(community_button, kOP_Z_content);
 	
 	
-	CommonButton* tip_button = CommonButton::create("게임tip", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	CommonButton* tip_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gametip), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
 													{
@@ -254,7 +254,7 @@ bool OptionPopup::init()
 	main_case->addChild(tip_button, kOP_Z_content);
 	
 	
-	CommonButton* tutorial_button = CommonButton::create("튜토리얼", 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	CommonButton* tutorial_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_tutorial), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
 	tutorial_button->setPosition(getContentPosition(kOP_MT_tutorial));
 	tutorial_button->setFunction([=](CCObject* sender)
 															 {
@@ -280,13 +280,13 @@ bool OptionPopup::init()
 	system_tab->setPosition(ccp(41, 215));
 	main_case->addChild(system_tab, kOP_Z_back);
 	
-	KSLabelTTF* system_label = KSLabelTTF::create("시스템", mySGD->getFont().c_str(), 10);
+	KSLabelTTF* system_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_system), mySGD->getFont().c_str(), 10);
 	system_label->enableOuterStroke(ccc3(92, 4, 0), 0.5f);
 	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.55f));
 	system_tab->addChild(system_label);
 	
 	
-	KSLabelTTF* bgm_label = KSLabelTTF::create("배경음", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* bgm_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 13);
 	bgm_label->setAnchorPoint(ccp(0,0.5f));
 	bgm_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	bgm_label->setPosition(ccpAdd(getContentPosition(kOP_MT_bgm), ccp(-135,0)));
@@ -314,7 +314,7 @@ bool OptionPopup::init()
 	
 	
 	
-	KSLabelTTF* effect_label = KSLabelTTF::create("효과음", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 13);
 	effect_label->setAnchorPoint(ccp(0,0.5f));
 	effect_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	effect_label->setPosition(ccpAdd(getContentPosition(kOP_MT_effect), ccp(-135,0)));
@@ -341,7 +341,7 @@ bool OptionPopup::init()
 	resetEffectMenu();
 	
 	
-	KSLabelTTF* joystick_position_label = KSLabelTTF::create("조이스틱위치", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* joystick_position_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickPosition), mySGD->getFont().c_str(), 13);
 	joystick_position_label->setAnchorPoint(ccp(0,0.5f));
 	joystick_position_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	joystick_position_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickPositioning), ccp(-135,0)));
@@ -368,7 +368,7 @@ bool OptionPopup::init()
 	resetJoystickPositioningMenu();
 	
 	
-	KSLabelTTF* joystick_moving_label = KSLabelTTF::create("조이스틱조작", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* joystick_moving_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickControl), mySGD->getFont().c_str(), 13);
 	joystick_moving_label->setAnchorPoint(ccp(0,0.5f));
 	joystick_moving_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	joystick_moving_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickMoving), ccp(-135,0)));
@@ -395,7 +395,7 @@ bool OptionPopup::init()
 	resetJoystickMovingMenu();
 	
 	
-	KSLabelTTF* safety_label = KSLabelTTF::create("안전모드", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 13);
 	safety_label->setAnchorPoint(ccp(0,0.5f));
 	safety_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	safety_label->setPosition(ccpAdd(getContentPosition(kOP_MT_safety), ccp(-135,0)));
@@ -426,13 +426,13 @@ bool OptionPopup::init()
 	alert_tab->setPosition(ccp(41, 95));
 	main_case->addChild(alert_tab, kOP_Z_back);
 	
-	KSLabelTTF* alert_label = KSLabelTTF::create("알림", mySGD->getFont().c_str(), 10);
+	KSLabelTTF* alert_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noti), mySGD->getFont().c_str(), 10);
 	alert_label->enableOuterStroke(ccc3(92, 4, 0), 0.5f);
 	alert_label->setPosition(ccp(alert_tab->getContentSize().width*0.45f, alert_tab->getContentSize().height*0.55f));
 	alert_tab->addChild(alert_label);
 	
 	
-	KSLabelTTF* push_label = KSLabelTTF::create("푸쉬알림", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* push_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pushNoti), mySGD->getFont().c_str(), 13);
 	push_label->setAnchorPoint(ccp(0,0.5f));
 	push_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	push_label->setPosition(ccpAdd(getContentPosition(kOP_MT_push), ccp(-135,0)));
@@ -459,7 +459,7 @@ bool OptionPopup::init()
 	resetPushMenu();
 	
 	
-	KSLabelTTF* message_label = KSLabelTTF::create("메세지알림", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* message_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_messageNoti), mySGD->getFont().c_str(), 13);
 	message_label->setAnchorPoint(ccp(0,0.5f));
 	message_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
 	message_label->setPosition(ccpAdd(getContentPosition(kOP_MT_message), ccp(-135,0)));
@@ -486,7 +486,7 @@ bool OptionPopup::init()
 	resetMessageMenu();
 	
 	
-	KSLabelTTF* id_label = KSLabelTTF::create("회원ID : ", mySGD->getFont().c_str(), 11);
+	KSLabelTTF* id_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_memberID), mySGD->getFont().c_str(), 11);
 	id_label->setAnchorPoint(ccp(0,0.5f));
 	id_label->enableOuterStroke(ccBLACK, 0.5f);
 	id_label->setPosition(ccp(30,45));
@@ -498,14 +498,14 @@ bool OptionPopup::init()
 	main_case->addChild(my_id_label, kOP_Z_content);
 	
 	
-	KSLabelTTF* version_label = KSLabelTTF::create("게임버전 : ", mySGD->getFont().c_str(), 10);
+	KSLabelTTF* version_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gameversion), mySGD->getFont().c_str(), 10);
 	version_label->setAnchorPoint(ccp(0,0.5f));
 	version_label->enableOuterStroke(ccBLACK, 0.5f);
 	version_label->setPosition(ccp(30,27));
 	main_case->addChild(version_label, kOP_Z_back);
 	
 	
-	CommonButton* withdraw_button = CommonButton::create("게임탈퇴", 12, CCSizeMake(90,40), CommonButtonDarkPupple, -171);
+	CommonButton* withdraw_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), 12, CCSizeMake(90,40), CommonButtonDarkPupple, -171);
 	withdraw_button->setTitleColor(ccc3(172, 167, 175));
 	withdraw_button->setPosition(getContentPosition(kOP_MT_withdraw));
 	withdraw_button->setFunction([=](CCObject* sender)
@@ -542,7 +542,7 @@ bool OptionPopup::init()
 	//	logout_menu->setTouchPriority(-171);
 	
 	
-	CommonButton* help_button = CommonButton::create("고객센터", 12, CCSizeMake(90,40), CommonButtonLightPupple, -171);
+	CommonButton* help_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), 12, CCSizeMake(90,40), CommonButtonLightPupple, -171);
 	help_button->setPosition(getContentPosition(kOP_MT_help));
 	help_button->setFunction([=](CCObject* sender)
 													 {
@@ -724,13 +724,13 @@ void OptionPopup::menuAction(CCObject* pSender)
 		
 		content_back->setContentSize(CCSizeMake(220, 140));
 		
-		CCLabelTTF* ment_label = CCLabelTTF::create("로그아웃 하시겠습니까?",	mySGD->getFont().c_str(), 15);
+		CCLabelTTF* ment_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkLogout),	mySGD->getFont().c_str(), 15);
 		ment_label->setPosition(ccp(0,25));
 		t_container->addChild(ment_label);
 		
 		
 		
-		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(100, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+		CommonButton* cancel_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cancel), 15, CCSizeMake(100, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
 		cancel_button->setPosition(ccp(-55,-75));
 		cancel_button->setFunction([=](CCObject* sender)
 															 {
@@ -740,7 +740,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(cancel_button);
 		
 		
-		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(55,-75));
 		ok_button->setFunction([=](CCObject* sender)
 													 {
@@ -826,21 +826,21 @@ void OptionPopup::menuAction(CCObject* pSender)
 		
 		content_back->setContentSize(CCSizeMake(260, 180));
 		
-		CCLabelTTF* ment1_label = CCLabelTTF::create("탈퇴시 게임을 이용하실 수 없으며",	mySGD->getFont().c_str(), 15);
+		CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent1),	mySGD->getFont().c_str(), 15);
 		ment1_label->setPosition(ccp(0,70));
 		t_container->addChild(ment1_label);
 		
-		CCLabelTTF* ment2_label = CCLabelTTF::create("모든 데이터가 영구적으로 삭제됩니다.",	mySGD->getFont().c_str(), 15);
+		CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent2),	mySGD->getFont().c_str(), 15);
 		ment2_label->setPosition(ccp(0,35));
 		t_container->addChild(ment2_label);
 		
-		CCLabelTTF* ment3_label = CCLabelTTF::create("정말 탈퇴하시겠습니까?",	mySGD->getFont().c_str(), 15);
+		CCLabelTTF* ment3_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent3),	mySGD->getFont().c_str(), 15);
 		ment3_label->setPosition(ccp(0,-15));
 		t_container->addChild(ment3_label);
 		
 		
 		
-		CommonButton* cancel_button = CommonButton::create("취소", 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+		CommonButton* cancel_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cancel), 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
 		cancel_button->setPosition(ccp(-65,-95));
 		cancel_button->setFunction([=](CCObject* sender)
 															 {
@@ -850,7 +850,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(cancel_button);
 		
 		
-		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(65,-95));
 		ok_button->setFunction([=](CCObject* sender)
 													 {
@@ -964,12 +964,12 @@ void OptionPopup::resetBgmMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_bgmOff))
 	{
-		inner_text = "꺼짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = "켜짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -996,12 +996,12 @@ void OptionPopup::resetEffectMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_effectOff))
 	{
-		inner_text = "꺼짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = "켜짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1029,12 +1029,12 @@ void OptionPopup::resetJoystickPositioningMenu()
 	CCPoint img_position;
 	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
 	{
-		inner_text = "오른쪽";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_right);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = "왼쪽";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_left);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1061,12 +1061,12 @@ void OptionPopup::resetJoystickMovingMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))//ControlJoystickNotFixed))
 	{
-		inner_text = "고정";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_fix);
 		img_position = ccp(-28,0);
 	}
 	else
 	{
-		inner_text = "이동";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_move);
 		img_position = ccp(28,0);
 	}
 	
@@ -1093,12 +1093,12 @@ void OptionPopup::resetSafetyMenu()
 	CCPoint img_position;
 	if(!myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
 	{
-		inner_text = "꺼짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = "켜짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1125,12 +1125,12 @@ void OptionPopup::resetPushMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isPushOff))
 	{
-		inner_text = "꺼짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = "켜짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1157,12 +1157,12 @@ void OptionPopup::resetMessageMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isMessageOff))
 	{
-		inner_text = "꺼짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = "켜짐";
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	

@@ -15,6 +15,7 @@
 #include "DataStorageHub.h"
 #include "ASPopupView.h"
 #include "LoadingLayer.h"
+#include "MyLocalization.h"
 
 ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
 {
@@ -207,7 +208,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
-	KSLabelTTF* regacha_label = KSLabelTTF::create("다시 뽑기", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* regacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemRegacha), mySGD->getFont().c_str(), 13);
 	regacha_label->setPosition(ccp(20,10));
 	CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
 	price_back->setContentSize(CCSizeMake(80, 30));
@@ -222,7 +223,9 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	stamp_back->setRotation(-27);
 	regacha_label->addChild(stamp_back);
 	
-	KSLabelTTF* stamp_label = KSLabelTTF::create("50% 할인", mySGD->getFont().c_str(), 9);
+	float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
+	
+	KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
 	stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
 	stamp_label->setColor(ccc3(255,222,0));
 	stamp_back->addChild(stamp_label);
@@ -231,7 +234,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	CCSprite* price_type = CCSprite::create("common_button_gold.png");
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create("500", mySGD->getFont().c_str(), 12);
+	CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getItemGachaReplayGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
@@ -251,7 +254,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	regacha_button->setTouchPriority(touch_priority);
 	
 	
-	KSLabelTTF* use_label = KSLabelTTF::create("이 아이템 사용", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* use_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_thisItemUse), mySGD->getFont().c_str(), 13);
 	CCScale9Sprite* use_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	use_button = CCControlButton::create(use_label, use_back);
 	use_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::useAction), CCControlEventTouchUpInside);
@@ -298,9 +301,9 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
-	if(mySGD->getGold() < 500)
+	if(mySGD->getGold() < mySGD->getItemGachaReplayGoldFee())
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, "골드가 부족합니다."));
+		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
 		is_menu_enable = true;
 		return;
 	}
@@ -308,7 +311,7 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	loading_layer = LoadingLayer::create(touch_priority-100);
 	addChild(loading_layer);
 	
-	mySGD->setGold(mySGD->getGold()-500);
+	mySGD->setGold(mySGD->getGold()-mySGD->getItemGachaReplayGoldFee());
 	
 	myDSH->saveUserData({kSaveUserData_Key_gold}, json_selector(this, ItemGachaPopup::resultSaveUserData));
 }
@@ -333,7 +336,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("missile upgrade fail!!");
 		
-		mySGD->setGold(mySGD->getGold() + 500);
+		mySGD->setGold(mySGD->getGold() + mySGD->getItemGachaReplayGoldFee());
 		is_menu_enable = true;
 	}
 	loading_layer->removeFromParent();

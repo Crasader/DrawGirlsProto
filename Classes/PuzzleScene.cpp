@@ -422,9 +422,17 @@ bool PuzzleScene::init()
 	}
 	else
 	{
-		puzzleOpenning();
-		rightOpenning();
-		topOpenning();
+		if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stageSetting)
+		{
+			openSettingPopup();
+		}
+		else
+		{
+			puzzleOpenning();
+			rightOpenning();
+			topOpenning();
+		}
+		
 		if(mySGD->is_before_stage_img_download)
 		{
 			mySGD->is_before_stage_img_download = false;
@@ -1264,11 +1272,11 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 		
 		content_back->setContentSize(CCSizeMake(202, 146));
 		
-		CCLabelTTF* title_label = CCLabelTTF::create("스테이지 열기", mySGD->getFont().c_str(), 20);
+		CCLabelTTF* title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openStage), mySGD->getFont().c_str(), 20);
 		title_label->setPosition(ccp(0, 102));
 		t_container->addChild(title_label);
 		
-		CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d gold 로 오픈", NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))->getCString(), mySGD->getFont().c_str(), 18);
+		CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_openGoldValue), NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))->getCString(), mySGD->getFont().c_str(), 18);
 		content_label->setPosition(CCPointZero);
 		t_container->addChild(content_label);
 		
@@ -1326,11 +1334,11 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 				
 				open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
 				
-				CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("스테이지 오픈", mySGD->getFont().c_str(), 20);
+				CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageOpenTitle), mySGD->getFont().c_str(), 20);
 				open_puzzle_title_label->setPosition(ccp(0, 102));
 				open_puzzle_container->addChild(open_puzzle_title_label);
 				
-				CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 스테이지가\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+				CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageOpenContent), mySGD->getFont().c_str(), 18);
 				open_puzzle_content_label->setPosition(CCPointZero);
 				open_puzzle_container->addChild(open_puzzle_content_label);
 				
@@ -1666,7 +1674,7 @@ void PuzzleScene::setRight()
 					right_body->addChild(t_star);
 				}
 				
-				CommonButton* show_img = CommonButton::create("보기", 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
+				CommonButton* show_img = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_view), 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
 				show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
 				show_img->setFunction([=](CCObject* sender)
 									  {
@@ -1692,13 +1700,13 @@ void PuzzleScene::setRight()
 				
 				string condition_string;
 				if(i == 1)
-					condition_string = "땅 85%";
+					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition1);
 				else if(i == 2)
-					condition_string = "땅 85% + 체인지";
+					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition2);
 				else if(i == 3)
-					condition_string = "땅 100%";
+					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition3);
 				else
-					condition_string = "땅 100% + 체인지";
+					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition4);
 				
 				KSLabelTTF* condition_label = KSLabelTTF::create(condition_string.c_str(), mySGD->getFont().c_str(), 10);
 				condition_label->setAnchorPoint(ccp(0.f,0.5f));
@@ -1747,7 +1755,7 @@ void PuzzleScene::setRight()
 	}
 	
 	CCSprite* n_ready = CCSprite::create("puzzle_right_ready.png");
-	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", selected_stage_number)->getCString(),
+	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 12);
 	n_stage->setColor(ccBLACK);
 	n_stage->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+13));
@@ -1755,7 +1763,7 @@ void PuzzleScene::setRight()
 	
 	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
 	s_ready->setColor(ccGRAY);
-	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat("%d 스테이지", selected_stage_number)->getCString(),
+	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 12);
 	s_stage->setColor(ccBLACK);
 	s_stage->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+13));
@@ -1798,7 +1806,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		all_user_label->setPosition(ccp(right_body->getContentSize().width-10, 204));
 		right_body->addChild(all_user_label);
 		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat("나의 위치 %d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 		my_rank_label->setAnchorPoint(ccp(1,0.5));
 		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 		right_body->addChild(my_rank_label);
@@ -1929,7 +1937,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
-		CCLabelTTF* fail_label = CCLabelTTF::create("랭킹 정보 확인 실패", mySGD->getFont().c_str(), 12);
+		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
 		right_body->addChild(fail_label);
 	}
@@ -1939,7 +1947,7 @@ void PuzzleScene::setRightTopButton()
 {
 	if(!stage_button)
 	{
-		stage_button = CommonButton::create("스테이지", 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
+		stage_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_stage), 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
 		stage_button->setPosition(ccp(-65-6-29, 118.5f));
 		right_case->addChild(stage_button, 5);
 		stage_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
@@ -1953,7 +1961,7 @@ void PuzzleScene::setRightTopButton()
 	}
 	if(!ranking_button)
 	{
-		ranking_button = CommonButton::create("랭킹", 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
+		ranking_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ranking), 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
 		ranking_button->setPosition(ccp(-65-6+29, 118.5f));
 		right_case->addChild(ranking_button, 5);
 		ranking_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);

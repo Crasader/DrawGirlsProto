@@ -16,6 +16,7 @@
 #include "CommonButton.h"
 #include "TouchSwallowManagement.h"
 #include "bustMorphing.h"
+#include "MyLocalization.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -100,15 +101,15 @@ bool DiaryZoomPopup::init()
 	
 	is_spin_mode = false;
 	
-	mode_button = CommonButton::create("이동", 10, CCSizeMake(40, 30), CommonButtonOrange, -252);
+	mode_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_move), 10, CCSizeMake(40, 30), CommonButtonOrange, -252);
 	mode_button->setPosition(ccp(480-60,290));
 	mode_button->setFunction([=](CCObject* sender)
 							{
 								is_spin_mode = !is_spin_mode;
 								if(is_spin_mode)
-									mode_button->setTitle("회전");
+									mode_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_rotation));
 								else
-									mode_button->setTitle("이동");
+									mode_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_move));
 							});
 	mode_button->setVisible(false);
 	addChild(mode_button, kDZP_Z_next_button);
@@ -179,7 +180,7 @@ void DiaryZoomPopup::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
-	mode_button->setVisible(true);
+//	mode_button->setVisible(true);
 //	first_img->setTouchEnabled(true);
 	
 	is_scrolling = false;
