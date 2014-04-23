@@ -81,6 +81,7 @@ bool KSLabelTTF::updateTexture()
 		label->setColor(oColor);
 		label->setBlendFunc(originalBlendFunc);
 		m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
+		m_outerSprite->setOpacity(getOpacity());
 		addChild(m_outerSprite, -1);
 		m_outerSprite->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
 		label->setPosition(oPosition);
@@ -101,7 +102,11 @@ void KSLabelTTF::setDisableItalic()
 {
 	this->setSkewX(0.f);
 }
-
+void KSLabelTTF::setOpacity(GLubyte opacity)
+{
+	CCLabelTTF::setOpacity(opacity);
+	updateTexture();
+}
 void KSLabelTTF::setString(const char *string)
 {
     CCAssert(string != NULL, "Invalid string");
