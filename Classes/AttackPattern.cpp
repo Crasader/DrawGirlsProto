@@ -2719,7 +2719,7 @@ void CrashLazerWrapper::myAction()
 			auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_head.ccbi");
 			KS::setBlendFunc(ret.first, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 			lazer_main = ret.first;
-			lazer_main->setScaleY(m_crashSize/8.f);
+			lazer_main->setScale(m_crashSize/8.f);
 			lazer_main->setAnchorPoint(ccp(0,0.5));
 			lazer_main->setRotation(-angle);
 
@@ -2755,7 +2755,8 @@ void CrashLazerWrapper::myAction()
 //				laser3->setContentSize(lazer_main->getContentSize());
 				KS::setBlendFunc(laser3, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 				laser3->setPosition(ccp(20+44 * i, 0));
-				laser3->setScaleY(m_crashSize/8.f);
+				//laser3->setScaleY(m_crashSize/8.f);
+				//laser3->setScaleY(2.f);
 				lazer_main->addChild(laser3);
 				//					prev = laser3;
 			}

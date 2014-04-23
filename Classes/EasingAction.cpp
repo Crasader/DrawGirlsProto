@@ -21,6 +21,10 @@ float getTime(float time)
 	return -1 * cosf(time * (float)M_PI_2) + 1;
 }
 
+float easeOut(float time)
+{
+	return powf(time, 1 / 3.f);
+}
 float elasticOut(float time)
 {
 	float m_fPeriod = 0.3f;
@@ -59,4 +63,9 @@ float bounceOut(float time)
 	
 	time -= 2.625f / 2.75f;
 	return temp * time * time + 0.984375f;
+}
+
+float expoIn(float time)
+{
+	return time == 0 ? 0 : powf(2, 10 * (time/1 - 1)) - 1 * 0.001f;
 }

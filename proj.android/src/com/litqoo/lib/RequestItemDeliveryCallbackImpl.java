@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,15 +45,21 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 				//                                                    applyItems(itemInfoList); //게임에서 자체 구현함
 				// 아이템 적용 완료후 finishItemDelivery 호출
 				ArrayList<Long> itemSeq = new ArrayList<Long>();
-
+				JSONArray jsonItemSeq = new JSONArray();
+				
 				for(ItemInfo i : itemInfoList)
 				{
 					itemSeq.add(i.getItemSequence());
+					jsonItemSeq.put(i.getItemSequence());
 				}
-//				HSPItemDelivery.finishItemDelivery(transactionId, itemSequenceList)
+				try {
+					r.put("itemsequence", jsonItemSeq);
+					r.put("transactionid", transactionId);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				HSPItemDelivery.finishItemDelivery(transactionId, itemSeq);
-//				HSPItemDelivery.finishItemDelivery(transactionId, itemSequenceList)
-//				finishItemDelivery(transactionId, itemInfoList);
 			}
 			else {
 				// 배송할 상품이 없음
@@ -73,6 +80,7 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 			}
 			// 요청 실패
 		}
+		Log.d("graphdog", "@@" + r.toString());
 		m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
 
 			@Override
