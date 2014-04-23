@@ -54,7 +54,7 @@
 //		std::string recvId = user_id;
 //		p["receiverMemberID"] = recvId;
 //		
-//		p["senderMemberID"] = hspConnector::get()->getKakaoID();
+//		p["senderMemberID"] = hspConnector::get()->getSocialID();
 //		
 //		p["type"] = kChallengeRequest;
 //		hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
@@ -119,7 +119,7 @@
 //		contentJson["score"] = score;
 //		contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 //		p["receiverMemberID"] = user_id;
-//		p["senderMemberID"] = hspConnector::get()->getKakaoID();
+//		p["senderMemberID"] = hspConnector::get()->getSocialID();
 //		p["type"] = kChallengeResult;
 //		if(mySGD->getAcceptChallengeScore() <= score)
 //		{

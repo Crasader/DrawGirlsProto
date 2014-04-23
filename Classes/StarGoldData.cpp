@@ -896,7 +896,7 @@ void StarGoldData::setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_ba
 		puzzle_historys.push_back(t_history);
 	
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["puzzleNo"] = t_history.puzzle_number;
 	param["updateOpenDate"] = t_history.is_open;
 	param["updateClearDate"] = t_history.is_clear;
@@ -966,7 +966,7 @@ PieceHistory StarGoldData::getPieceHistory(int stage_number)
 Json::Value StarGoldData::getSavePieceHistoryParam(PieceHistory t_history)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["pieceNo"] = t_history.stage_number;
 	param["openDate"] = t_history.is_open;
 	for(int j=0;j<4;j++)

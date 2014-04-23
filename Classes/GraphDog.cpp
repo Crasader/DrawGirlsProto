@@ -30,6 +30,8 @@
 #include "BaseXX.h"
 #include "CipherUtils.h"
 #include "EncryptCharsA.h"
+#include "KSUtil.h"
+
 
 int AutoIncrease::cnt = 0;
 size_t GraphDog::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp){
@@ -64,20 +66,20 @@ string GraphDog::getGraphDogVersion(){
 	return this->gdVersion;
 }
 
-void GraphDog::setHSPMemberNo(long long int _hspMemberNo){
-	hspMemberNo =_hspMemberNo;
+void GraphDog::setMemberID(long long int _memberID){
+	memberID = _memberID;
 }
 
-long long int GraphDog::getHSPMemberNo(){
-	return this->hspMemberNo;
+long long int GraphDog::getMemberID(){
+	return memberID.getV();
 }
 
-void GraphDog::setKakaoMemberID(string _kakaoID){
-	kakaoMemberID=_kakaoID;
+void GraphDog::setSocialID(string _kakaoID){
+	socialID=_kakaoID;
 }
 
-string GraphDog::getKakaoMemberID(){
-	return kakaoMemberID;
+string GraphDog::getSocialID(){
+	return socialID.getV();
 }
 
 void GraphDog::setup(string secretKey,string _appVersion){
@@ -196,6 +198,7 @@ void GraphDog::setLanguage(string lang){
 }
 
 string GraphDog::getLanguage(){
+	
 	string lang = CCUserDefault::sharedUserDefault()->getStringForKey("GRAPHDOG_LANG");
 	if(lang=="")lang="en";
 	return lang;
@@ -242,10 +245,10 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	
 	
 	
-	jsonTotalCmd["hspMemberNo"]=getHSPMemberNo();
-	jsonTotalCmd["kakaoMemberID"]=getKakaoMemberID();
-	jsonTotalCmd["memberID"]=getKakaoMemberID();
+	jsonTotalCmd["memberID"]=getMemberID();
+	jsonTotalCmd["socialID"]=getSocialID();
 	jsonTotalCmd["deviceID"]=this->deviceID;
+	jsonTotalCmd["lang"]=KS::getLocalCode();
 	this->lastCmdNo += (int)(rand()%10)+1;
 	jsonTotalCmd["cmdNo"]=this->lastCmdNo;
 	

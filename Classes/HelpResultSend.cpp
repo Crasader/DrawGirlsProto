@@ -61,7 +61,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 		contentJson["result"] = "success";
 		contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 		p["receiverMemberID"] = corp_id;
-		p["senderMemberID"] = hspConnector::get()->getKakaoID();
+		p["senderMemberID"] = hspConnector::get()->getSocialID();
 		p["type"] = kHelpResult;
 		p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 		hspConnector::get()->command

@@ -105,7 +105,7 @@ bool ClearPopup::init()
 	}
 	
 	Json::Value p1;
-	p1["memberID"] = hspConnector::get()->getKakaoID();
+	p1["memberID"] = hspConnector::get()->getSocialID();
 	p1["score"]=int(mySGD->getScore());
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
@@ -121,7 +121,7 @@ bool ClearPopup::init()
 //	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
 //	{
 //		// 받아왔던 rank list 사용
-//		string my_id = hspConnector::get()->getKakaoID();
+//		string my_id = hspConnector::get()->getSocialID();
 //		
 //		vector<RankFriendInfo>::iterator iter = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
 //		if(iter != mySGD->save_stage_rank_list.end())
@@ -130,7 +130,7 @@ bool ClearPopup::init()
 //			if((*iter).score < mySGD->getScore())
 //			{
 //				Json::Value p;
-//				p["memberID"]=hspConnector::get()->getKakaoID();
+//				p["memberID"]=hspConnector::get()->getSocialID();
 //				p["score"]=int(mySGD->getScore());
 //				p["stageNo"]=mySD->getSilType();
 //				hspConnector::get()->command("setStageScore",p,NULL);
@@ -164,7 +164,7 @@ bool ClearPopup::init()
 //			CCLog("not found myKakaoID");
 //			
 //			Json::Value p;
-//			p["memberID"]=hspConnector::get()->getKakaoID();
+//			p["memberID"]=hspConnector::get()->getSocialID();
 //			p["score"]=int(mySGD->getScore());
 //			p["stageNo"]=mySD->getSilType();
 //			hspConnector::get()->command("setStageScore",p,NULL);
@@ -206,7 +206,7 @@ bool ClearPopup::init()
 //	else
 //	{
 //		Json::Value p;
-//		p["memberID"]=hspConnector::get()->getKakaoID();
+//		p["memberID"]=hspConnector::get()->getSocialID();
 //		p["score"]=int(mySGD->getScore());
 //		p["stageNo"]=mySD->getSilType();
 //	Json::Value p_data;
@@ -505,7 +505,7 @@ bool ClearPopup::init()
 	Json::Value param2;
 	param2["myScore"]=int(mySGD->getScore());
 	param2["stageNo"]=mySD->getSilType();
-	param2["memberID"] = hspConnector::get()->getKakaoID();
+	param2["memberID"] = hspConnector::get()->getSocialID();
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, ClearPopup::resultGetRank)));
 	
@@ -788,7 +788,7 @@ void ClearPopup::checkChallengeOrHelp()
 //				std::string recvId = mySGD->getMeChallengeTarget();
 //				p["receiverMemberID"] = recvId;
 //				
-//				p["senderMemberID"] = hspConnector::get()->getKakaoID();
+//				p["senderMemberID"] = hspConnector::get()->getSocialID();
 //				
 //				p["type"] = kChallengeRequest;
 //				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
@@ -876,7 +876,7 @@ void ClearPopup::checkChallengeOrHelp()
 //				std::string recvId = mySGD->getAcceptChallengeId();
 //				p["receiverMemberID"] = recvId;
 //				
-//				p["senderMemberID"] = hspConnector::get()->getKakaoID();
+//				p["senderMemberID"] = hspConnector::get()->getSocialID();
 //				
 //				p["type"] = kChallengeRequest;
 //				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
@@ -954,7 +954,7 @@ void ClearPopup::checkChallengeOrHelp()
 //				std::string recvId = next_rank_info.user_id;
 //				p["receiverMemberID"] = recvId;
 //				
-//				p["senderMemberID"] = hspConnector::get()->getKakaoID();
+//				p["senderMemberID"] = hspConnector::get()->getSocialID();
 //				
 //				p["type"] = kChallengeRequest;
 //				hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
@@ -1171,7 +1171,7 @@ void ClearPopup::checkRentCard()
 //											contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 //											p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 //											p["receiverMemberID"] = mySGD->getSelectedFriendCardData().userId;
-//											p["senderMemberID"]=hspConnector::get()->getKakaoID();
+//											p["senderMemberID"]=hspConnector::get()->getSocialID();
 //											p["type"]=kHeart;
 //											p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 //
@@ -1211,7 +1211,7 @@ void ClearPopup::checkRentCard()
 //		Json::Value score_list = result_data["list"];
 //		for(int i=0;i<score_list.size();i++)
 //		{
-//			if(score_list[i]["memberID"].asString() == hspConnector::get()->getKakaoID())
+//			if(score_list[i]["memberID"].asString() == hspConnector::get()->getSocialID())
 //			{
 //				if(mySGD->getScore() > score_list[i]["score"].asFloat())
 //				{
@@ -1271,7 +1271,7 @@ void ClearPopup::checkRentCard()
 //		//		int myPosition = rankTableView->minContainerOffset().y;
 //		//		for(int i=0; i<friend_list.size(); i++)
 //		//		{
-//		//			if(friend_list[i].user_id == hspConnector::get()->getKakaoID())
+//		//			if(friend_list[i].user_id == hspConnector::get()->getSocialID())
 //		//			{
 //		//				myPosition = friend_list.size() - i - 1;
 //		//				break;
@@ -1567,7 +1567,7 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 //	}
 //	
 //	CCSprite* bg;
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
+//	if((*member).user_id == hspConnector::get()->getSocialID())
 //	{
 //		bg = CCSprite::create("ending_cell_me.png");
 //		bg->setPosition(CCPointZero);

@@ -494,7 +494,7 @@ bool PuzzleScene::init()
 void PuzzleScene::updateCardHistory(CCNode *t_loading)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = keep_card_number;
 	
 	hspConnector::get()->command("updateCardHistory", param, [=](Json::Value result_data)
@@ -1738,7 +1738,7 @@ void PuzzleScene::setRight()
 			}
 			
 			Json::Value param;
-			param["memberID"] = hspConnector::get()->getKakaoID();
+			param["memberID"] = hspConnector::get()->getSocialID();
 			param["stageNo"] = selected_stage_number;
 			hspConnector::get()->command("getstagerankbyalluser", param, json_selector(this, PuzzleScene::resultGetRank));
 		}
@@ -2174,7 +2174,7 @@ void PuzzleScene::setTop()
 void PuzzleScene::countingMessage()
 {
 	Json::Value p;
-	p["memberID"]=hspConnector::get()->getKakaoID();
+	p["memberID"]=hspConnector::get()->getSocialID();
 	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
 	p["limitDay"] = mySGD->getMsgRemoveDay();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.

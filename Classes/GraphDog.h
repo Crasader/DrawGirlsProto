@@ -17,6 +17,7 @@
 #include <list>
 #define GRAPHDOG_VERSION    "2"
 #include "jsoncpp/json.h"
+#include "KSProtect.h"
 
 enum GDRESULT{
 	GDUNKNOWNRESULT = 0,
@@ -191,10 +192,14 @@ public:
 	//언어저장
 	void setLanguage(string lang);
 	//hspmemberno저장
-	void setHSPMemberNo(long long int _hspMemberNo);
+	void setMemberID(long long int _hspMemberNo);
 	
 	//kakaomemberno저장
-	void setKakaoMemberID(string _kakaomemberID);
+	void setSocialID(string _kakaomemberID);
+	
+	
+	long long int getMemberID();
+	string getSocialID();
 	
 	//graphdog 버전설정 - 평소엔 필요없음
 	void setGraphDogVersion(int version);
@@ -218,10 +223,9 @@ public:
 	int getAppVersion();
 	string getAppVersionString();
 	string getGraphDogVersion();
-	//string getDeviceID();
-	//string getDeviceInfo();
-	long long int getHSPMemberNo();
-	string getKakaoMemberID();
+	
+	
+	
 	
 	std::function<void(void)> duplicateLoginFunc;
 	std::function<void(void)> cmdNoErrorFunc;
@@ -282,8 +286,17 @@ private:
 	string packageName;
 	string appVersion;
 	string deviceInfo;
-	long long int hspMemberNo;
-	string kakaoMemberID;
+	
+	
+//	long long int hspMemberNo;
+//	string kakaoMemberID;
+	
+	KSProtectVar<long long int> memberID;
+	KSProtectStr socialID;
+	
+	
+	
+	
 	CURL* getCURL();
 	string getToken();
 	string getUdid();

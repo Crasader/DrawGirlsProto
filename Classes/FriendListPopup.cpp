@@ -210,7 +210,7 @@ void FriendListPopup::drawRank()
 	//		int myPosition = rankTableView->minContainerOffset().y;
 	//		for(int i=0; i<m_scoreList.size(); i++)
 	//		{
-	//			if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getKakaoID())
+	//			if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getSocialID())
 	//			{
 	//				myPosition = m_scoreList.size() - i - 1;
 	//				break;
@@ -313,7 +313,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 						 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 						 //			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 						 p["receiverMemberID"] = recvId;
-						 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+						 p["senderMemberID"] = hspConnector::get()->getSocialID();
 						 p["type"] = kHeart;
 
 						 hspConnector::get()->command("sendMessage", p, this,[=](Json::Value r) {
@@ -389,7 +389,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 //			 int idx = (int)obj->getUserData();
 			 Json::Value param;
 			 
-			 param["memberID"] = hspConnector::get()->getKakaoID();
+			 param["memberID"] = hspConnector::get()->getSocialID();
 			 param["friendID"] = (*member).userId;
 			 KHAlertView* av = KHAlertView::create(); 
 			 av->setCloseOnPress(false);
@@ -499,7 +499,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	//sendBtn->setUserData((void *)&member);
 	ostringstream oss2;
 	oss2 << (*member).userId;
-	if(oss2.str() == hspConnector::get()->getKakaoID()){
+	if(oss2.str() == hspConnector::get()->getSocialID()){
 		sendBtn->setVisible(false);
 	}else{
 		sendBtn->setVisible(true);

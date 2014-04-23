@@ -81,7 +81,7 @@ bool TitleRenewalScene::init()
 //	Json::Value t_result_data;
 //	hspConnector::get()->myKakaoInfo["user_id"] = 88741857374149376L;
 //	hspConnector::get()->myKakaoInfo["nickname"] = "YH";
-//	graphdog->setKakaoMemberID(hspConnector::get()->getKakaoID());
+//	graphdog->setKakaoMemberID(hspConnector::get()->getSocialID());
 //	t_result_data["error"]["isSuccess"] = true;
 //	resultLogin(t_result_data);
 	
@@ -95,7 +95,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	if(result_data["error"]["isSuccess"].asBool())
 	{
 		Json::Value param;
-		param["memberID"] = hspConnector::get()->getKakaoID();
+		param["memberID"] = hspConnector::get()->getSocialID();
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 	}
 	else
@@ -149,7 +149,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	else
 	{
 		Json::Value param;
-		param["memberID"] = hspConnector::get()->getKakaoID();
+		param["memberID"] = hspConnector::get()->getSocialID();
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
 	}
 }
@@ -186,19 +186,19 @@ void TitleRenewalScene::successLogin()
 	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
 	Json::Value userdata_param;
-	userdata_param["memberID"] = hspConnector::get()->getKakaoID();
+	userdata_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 	
 	Json::Value card_param;
-	card_param["memberID"] = hspConnector::get()->getKakaoID();
+	card_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
 	
 	Json::Value puzzle_param;
-	puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+	puzzle_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
 	
 	Json::Value piece_param;
-	piece_param["memberID"] = hspConnector::get()->getKakaoID();
+	piece_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
@@ -772,7 +772,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 	{
 		is_receive_fail = true;
 		Json::Value userdata_param;
-		userdata_param["memberID"] = hspConnector::get()->getKakaoID();
+		userdata_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 	}
 	
@@ -806,7 +806,7 @@ void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
 	{
 		is_receive_fail = true;
 		Json::Value card_param;
-		card_param["memberID"] = hspConnector::get()->getKakaoID();
+		card_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
 	}
 	
@@ -837,7 +837,7 @@ void TitleRenewalScene::resultGetPieceHistory(Json::Value result_data)
 	{
 		is_receive_fail = true;
 		Json::Value piece_param;
-		piece_param["memberID"] = hspConnector::get()->getKakaoID();
+		piece_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
 	}
 	
@@ -868,7 +868,7 @@ void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
 	{
 		is_receive_fail = true;
 		Json::Value puzzle_param;
-		puzzle_param["memberID"] = hspConnector::get()->getKakaoID();
+		puzzle_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
 	}
 	
@@ -1703,7 +1703,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 void TitleRenewalScene::joinAction()
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["nick"] = input_text->getText();
 	hspConnector::get()->command("join", param, [=](Json::Value result_data)
 								 {

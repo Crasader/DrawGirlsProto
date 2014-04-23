@@ -33,6 +33,8 @@ USING_NS_CC;
 #include "ASPopupView.h"
 #include "TitleRenewal.h"
 #include "GraphDog.h"
+#include "KSUtil.h"
+
 //#include <boost/graph/graphviz.hpp>
 /*
  메테오 : AP_Missile16
@@ -58,6 +60,8 @@ AppDelegate::AppDelegate()
 	
 	KSProtectStr testStr("testtest");
 	CCLog("%s", testStr.getV().c_str());
+	
+	
 	//	std::random_device rd;
 	//	std::mt19937 rEngine(rd());
 	//	uniform_int_distribution<long long> dist(1000000000000000000L, 2000000000000000000L);
