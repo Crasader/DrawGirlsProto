@@ -195,6 +195,7 @@ public:
 	bool is_paused;
 	
 	string getFont();
+	string getFont2();
 	
 	void setCollectionStarter(CollectionStarterType t_type);
 	

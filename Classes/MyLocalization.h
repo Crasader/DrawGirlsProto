@@ -240,7 +240,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_nextStage,
 	kMyLocalKey_regame,
 	kMyLocalKey_toMain,
-	kMyLocalKey_beforeNotClearPuzzle
+	kMyLocalKey_beforeNotClearPuzzle,
+	kMyLocalKey_diaryNoImg
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

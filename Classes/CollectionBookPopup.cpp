@@ -21,6 +21,7 @@
 #include "MainFlowScene.h"
 #include "StageImgLoader.h"
 #include <random>
+#include "KSLabelTTF.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -191,6 +192,13 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		else
 		{
 			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
+			no_label->setColor(ccc3(60, 60, 60));
+			no_label->enableOuterStroke(ccBLACK, 0.5f);
+			no_label->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f));
+			no_img->addChild(no_label);
+			
 			no_img->setScale(mul_value);
 			no_img->setRotation(rotation_value);
             no_img->setPosition(position_value);
