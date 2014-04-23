@@ -10,6 +10,8 @@
 #include <chrono>
 #include <ctime>
 #include "DataStorageHub.h"
+#include "KSLabelTTF.h"
+#include "MyLocalization.h"
 
 void MapScanner::scanMap()
 {
@@ -782,6 +784,11 @@ void MapScanner::setTopBottomBlock()
 		top_block_lock->setAnchorPoint(ccp(0.5,0));
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
+		
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+		lock_label->enableOuterStroke(ccBLACK, 1.f);
+		lock_label->setPosition(ccp(29.5f,13));
+		top_block_lock->addChild(lock_label);
 	}
 	else
 	{
@@ -789,6 +796,11 @@ void MapScanner::setTopBottomBlock()
 		top_block_lock->setAnchorPoint(ccp(0.5,0));
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
+		
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+		lock_label->enableOuterStroke(ccBLACK, 1.f);
+		lock_label->setPosition(ccp(29.5f,13));
+		top_block_lock->addChild(lock_label);
 	}
 
 	
@@ -846,6 +858,11 @@ void MapScanner::setTopBottomBlock()
 		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
+		
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+		lock_label->enableOuterStroke(ccBLACK, 1.f);
+		lock_label->setPosition(ccp(29.5f,13));
+		top_block_lock->addChild(lock_label);
 	}
 	else
 	{
@@ -853,6 +870,11 @@ void MapScanner::setTopBottomBlock()
 		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
+		
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+		lock_label->enableOuterStroke(ccBLACK, 1.f);
+		lock_label->setPosition(ccp(29.5f,13));
+		top_block_lock->addChild(lock_label);
 	}
 
 	random_device rd;

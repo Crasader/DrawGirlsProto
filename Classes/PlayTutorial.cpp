@@ -1199,7 +1199,7 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 		addChild(draw_button);
 		reader->release();
 		
-		KSLabelTTF* click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 15);
+		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 15);
 		click_label->setColor(ccc3(120, 60, 0));
 		click_label->enableOuterStroke(ccc3(255, 231, 133), 1.f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
@@ -1210,13 +1210,23 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 void TutoControler::onButton()
 {
 	if(button_ani)
+	{
 		button_ani->runAnimationsForSequenceNamed("cast1start");
+		click_label->stopAllActions();
+		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
+		click_label->runAction(t_fade);
+	}
 }
 
 void TutoControler::offButton()
 {
 	if(button_ani)
+	{
 		button_ani->runAnimationsForSequenceNamed("cast1stop");
+		click_label->stopAllActions();
+		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
+		click_label->runAction(t_fade);
+	}
 }
 
 void BackImg::visit()

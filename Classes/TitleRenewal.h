@@ -36,6 +36,8 @@ enum ReceiveState{
 	kReceiveState_Received
 };
 
+class KSLabelTTF;
+
 class TitleRenewalScene : public cocos2d::CCLayer, public CCEditBoxDelegate//, public CCTextFieldDelegate
 {
 public:
@@ -49,8 +51,13 @@ public:
 	CREATE_FUNC(TitleRenewalScene);
 	
 private:
-	CCLabelTTF* state_label;
+	KSLabelTTF* state_label;
+	CCSprite* title_img;
+	CCSprite* title_name;
 	CCLabelBMFont* download_state;
+	CCSprite* black_img;
+	vector<string> tip_list;
+	int recent_tip_index;
 	
 	bool is_loaded_cgp;
 	bool is_loaded_server;
@@ -72,6 +79,7 @@ private:
     virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);
     virtual void editBoxReturn(CCEditBox* editBox);
 	
+	void changeTipMent();
 	
 	void resultLogin(Json::Value result_data);
 	

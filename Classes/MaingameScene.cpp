@@ -1283,8 +1283,14 @@ void Maingame::clearScenario2()
 					  t_popup->setContainerNode(t_container);
 					  addChild(t_popup, shutterZorder+5);
 					  
-					  CCLabelTTF* title_label = CCLabelTTF::create("클리어 보상", mySGD->getFont().c_str(), 18);
-					  title_label->setPosition(ccp(0,107));
+					  CCSprite* title_img = CCSprite::create(CCString::createWithFormat("ending_reward_%s.png", myLoc->getSupportLocalCode())->getCString());
+					  title_img->setPosition(ccp(0,105));
+					  title_img->setOpacity(0);
+					  t_container->addChild(title_img);
+					  
+					  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectClearBox), mySGD->getFont().c_str(), 18);
+					  title_label->enableOuterStroke(ccBLACK, 1.f);
+					  title_label->setPosition(ccp(0,70));
 					  title_label->setOpacity(0);
 					  t_container->addChild(title_label);
 					  
@@ -1670,6 +1676,7 @@ void Maingame::clearScenario2()
 																			  
 																			  t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																  {
+																																	  title_img->setOpacity(t*255);
 																																	  title_label->setOpacity(t*255);
 																																	  goldbox1->setOpacity(t*255);
 																																	  goldbox2->setOpacity(t*255);
@@ -1679,6 +1686,7 @@ void Maingame::clearScenario2()
 																																  }, [=](float t)
 																																  {
 																																	  falling_box->removeFromParent();
+																																	  title_img->setOpacity(255);
 																																	  title_label->setOpacity(255);
 																																	  goldbox1->setOpacity(255);
 																																	  goldbox2->setOpacity(255);

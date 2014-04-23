@@ -19,6 +19,8 @@
 #include "ASPopupView.h"
 #include "AlertEngine.h"
 #include "MyLocalization.h"
+#include "KSLabelTTF.h"
+#include <random>
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -49,20 +51,33 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	
-	CCSprite* title_img = CCSprite::create("temp_title_back.png");
+	title_img = CCSprite::create("temp_title_back.png");
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
 	
-	CCSprite* title_name = CCSprite::create("temp_title_name.png");
+	title_name = CCSprite::create("temp_title_name.png");
 	title_name->setAnchorPoint(ccp(0.5,0));
 	title_name->setPosition(ccp(240,10));//240,210));
-	addChild(title_name);
+	addChild(title_name, 1);
 	
-	state_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20);
-	state_label->setColor(ccBLACK);
+	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	state_label->enableOuterStroke(ccBLACK, 1.f);
 	state_label->setPosition(ccp(240,130));
-	addChild(state_label);
-
+	addChild(state_label, 2);
+	
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	black_img = CCSprite::create("whitePaper.png");
+	black_img->setColor(ccBLACK);
+	black_img->setOpacity(0);
+	black_img->setPosition(ccp(240,160));
+	black_img->setScaleX(screen_scale_x);
+	black_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(black_img, 3);
 	
 	Json::Value param;
 	param["ManualLogin"] = true;
@@ -320,19 +335,74 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
-			state_label->setString(myLoc->getLocalForKey(kMyLocalKey_downImgInfo));
-			ing_download_cnt = 1;
-			ing_download_per = 0;
-			is_downloading = true;
-			
-			if(!download_state)
-			{
-				download_state = CCLabelBMFont::create("", "allfont.fnt");
-				download_state->setPosition(ccp(240,110));
-				addChild(download_state);
-			}
-			
-			startFileDownload();
+			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.8f, [=](float t){
+				black_img->setOpacity(t*255);
+			}, [=](float t){
+				black_img->setOpacity(255);
+				
+				title_img->removeFromParent();
+				title_img = CCSprite::create("temp_title_back2.png");
+				title_img->setPosition(ccp(240,160));
+				addChild(title_img);
+				
+				title_name->setPosition(ccp(240,160));
+				
+				CCSprite* logo_img = CCSprite::create("temp_title_sumlanlogo.png");
+				logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
+				addChild(logo_img, 1);
+				
+				CCSprite* progress_back = CCSprite::create("temp_title_loading_back.png");
+				progress_back->setPosition(ccp(240,80));
+				addChild(progress_back, 1);
+				
+				CCProgressTimer* progress_timer = CCProgressTimer::create(CCSprite::create("temp_title_loading_center.png"));
+				progress_timer->setType(kCCProgressTimerTypeBar);
+				progress_timer->setMidpoint(ccp(0,0));
+				progress_timer->setBarChangeRate(ccp(1,0));
+				progress_timer->setPercentage(0);
+				progress_timer->setPosition(ccp(240, 80));
+				addChild(progress_timer, 1);
+				
+				CCSprite* progress_top = CCSprite::create("temp_title_loading_front.png");
+				progress_top->setPosition(ccp(240,80));
+				addChild(progress_top, 1);
+				
+				
+				addChild(KSGradualValue<float>::create(1.f, 0.f, 0.8f, [=](float t){
+					black_img->setOpacity(t*255);
+				}, [=](float t){
+					black_img->setOpacity(0);
+					black_img->removeFromParent();
+					
+					tip_list.clear();
+					
+					for(int i=kMyLocalKey_titleLoadingBegin+1;i<kMyLocalKey_titleLoadingEnd;i++)
+					{
+						tip_list.push_back(myLoc->getLocalForKey((MyLocalKey)i));
+					}
+					
+					random_shuffle(tip_list.begin(), tip_list.end());
+					
+					recent_tip_index = 0;
+					
+					state_label->setString(tip_list[recent_tip_index].c_str());
+					
+					addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
+					
+					ing_download_cnt = 1;
+					ing_download_per = 0;
+					is_downloading = true;
+					
+					if(!download_state)
+					{
+						download_state = CCLabelBMFont::create("", "allfont.fnt");
+						download_state->setPosition(ccp(240,80));
+						addChild(download_state, 2);
+					}
+					
+					startFileDownload();
+				}));
+			}));
 		}
 		else if(is_receive_fail)
 		{
@@ -356,6 +426,16 @@ void TitleRenewalScene::checkReceive()
 			startCommand();
 		}
 	}
+}
+
+void TitleRenewalScene::changeTipMent()
+{
+	recent_tip_index++;
+	recent_tip_index %= int(tip_list.size());
+	
+	state_label->setString(tip_list[recent_tip_index].c_str());
+	
+	addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
 }
 
 void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
@@ -1323,8 +1403,7 @@ void TitleRenewalScene::successDownloadAction()
 		SDS_SS(kSDF_gameInfo, character_download_list[ing_download_cnt-1].key, character_download_list[ing_download_cnt-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size())
@@ -1335,8 +1414,7 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size())
@@ -1344,8 +1422,7 @@ void TitleRenewalScene::successDownloadAction()
 		SDS_SS(kSDF_gameInfo, monster_download_list[ing_download_cnt-character_download_list.size()-1].key, monster_download_list[ing_download_cnt-character_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size())
@@ -1356,8 +1433,7 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size())
@@ -1366,8 +1442,7 @@ void TitleRenewalScene::successDownloadAction()
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size())
@@ -1402,8 +1477,7 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), 1.f*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
@@ -1412,8 +1486,7 @@ void TitleRenewalScene::successDownloadAction()
 			   puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
@@ -1424,8 +1497,7 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_per = 0.f;
 		
 		if(ing_download_cnt <= int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))
-		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		
 		
 		for(int j=0;j<puzzle_download_list.size() && j < puzzle_download_list_puzzle_number.size();j++)
@@ -1617,8 +1689,7 @@ void TitleRenewalScene::downloadingFileAction()
 	
 	ing_download_per = t_per;
 	
-	download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
-										int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+	download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 }
 
 void TitleRenewalScene::failDownloadAction()
