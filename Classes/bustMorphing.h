@@ -670,6 +670,9 @@ public:
 			//			CCLog("2. i = %d", i);
 			auto tt = (float)oData[i];
 			point.z = tt / 255.f * 50.f;
+			// 기본적으로 실루엣은 나와있도록.
+			if(oData[i + 2] >= 10)
+				point.z += 10;
 		}
 		img->release();
 		/////////////////////

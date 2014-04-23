@@ -69,6 +69,11 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
+	m_nothingMessage = CCLabelTTF::create("받은 메세지가 하나도 없습니다.", mySGD->getFont().c_str(), 14);
+	m_nothingMessage->setPosition(ccp(170, 256));
+	main_case->addChild(m_nothingMessage, 1);
+	m_nothingMessage->setVisible(false);	
+
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_inner->setContentSize(CCSizeMake(460, 232));
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);
@@ -1950,5 +1955,6 @@ void SumranMailPopup::filterWithMailFilter()
 	{
 		KS::KSLog("%", m_mailList);
 	}
+	m_nothingMessage->setVisible(m_filteredMailList.size() == 0);
 }
 #undef LZZ_INLINE
