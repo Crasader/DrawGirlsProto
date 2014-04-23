@@ -441,6 +441,9 @@ protected:
 	AttackOption m_option;
 };
 
+// 옛날 GuidedMissile
+#if 0
+
 
 class GuidedMissile : public StoneAttack
 {
@@ -497,8 +500,6 @@ public:
 			m_initRad = atan2f(diff.y, diff.x) * random_float;
 			scheduleUpdate();
 		}
-
-
 		return true;
 	}
 	
@@ -519,6 +520,111 @@ public:
 		m_missileSprite->setPosition(ccp(0, 0));
 		schedule(schedule_selector(GuidedMissile::showWindow));
 		return true;
+	}
+	void update(float dt)
+	{
+		bool isEnable = true;
+		bool emptyMonster = !myGD->isValidMainCumber(m_targetNode) && !myGD->isValidSubCumber(m_targetNode);
+		IntPoint missilePoint = ccp2ip(m_missileSprite->getPosition());
+		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+											 missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		if(
+			 myGD->getIsGameover() ||
+			 emptyMonster ||
+			 invalidRange
+			 )
+		{
+			isEnable = false;
+		}
+
+		if(!isEnable)
+		{
+			removeFromParentAndCleanup(true);
+			return;
+		}
+
+		CCPoint targetPosition = m_targetNode->getPosition();
+		CCPoint subDistance = ccpSub(targetPosition, m_missileSprite->getPosition());
+		float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
+
+		// 몬스터가 맞는 조건
+		if(distance <= 2)
+		{
+			CCPoint effectPosition = m_missileSprite->getPosition();
+			effectPosition.x += rand()%21 - 10;
+			effectPosition.y += rand()%21 - 10;
+			
+			float damage = m_power;
+			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
+			
+			removeFromParentAndCleanup(true);
+		}
+		else  // 거리가 멀면 몬스터 쪽으로 유도함.
+		{
+			CCPoint missilePosition = m_missileSprite->getPosition();
+			CCPoint cumberPosition;
+			cumberPosition = m_targetNode->getPosition();		
+			CCPoint diffPosition = cumberPosition - missilePosition;
+			if(m_guided == false)
+			{
+				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_initRad) * m_initSpeed,
+																																				sin(m_initRad) * m_initSpeed));
+				
+				if(m_selfRotation)
+				{
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
+				}
+				else
+				{
+					m_missileSprite->setRotation(-rad2Deg(m_initRad) - 90);
+				}
+				
+				for(auto bosses : myGD->getMainCumberVector())
+				{
+					if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= m_range)
+					{
+						m_targetNode = bosses; // 목표 설정
+						m_guided = true;
+						break;
+					}
+				}
+				for(auto mob : myGD->getSubCumberVector())
+				{
+					if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= m_range)
+					{
+						m_targetNode = mob; // 목표 설정
+						m_guided = true;
+						break;
+					}
+				}
+			}
+			else // 그냥 진행중.
+			{
+				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도 
+				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
+				float tempTt = tt - m_currentRad;
+				bool sign = tt - m_currentRad > 0  ? 1 : -1;
+				m_currentRad += (tt - m_currentRad); // , deg2Rad(-15), deg2Rad(15));
+				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * m_initSpeed * 2,
+																																					sin(m_currentRad) * m_initSpeed * 2));
+				
+				if(m_selfRotation)
+				{
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
+				}
+				else
+				{
+					m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+				}
+//				m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+		 	}
+			
+			if(m_particle)
+				m_particle->setPosition(m_missileSprite->getPosition());
+			
+			if(m_streak)
+				m_streak->setPosition(m_missileSprite->getPosition());
+		}
 	}
 	void beautifier(int grade, int level)
 	{
@@ -633,6 +739,123 @@ public:
 		
 		m_showWindow.rotationRad += m_showWindow.rotationVelocityRad;
 	}	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		m_showWindow.rotationRadius = r;
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		m_showWindow.rotationVelocityRad = r;
+	}
+protected:
+	float m_initSpeed; // 초기 속도.
+	float m_initRad; // 처음에 날아가는 각도.
+	float m_currentRad; // 범위내 들어왔을 때 현재 각도.
+
+	bool m_guided; // 유도 모드인지 여부.
+	int m_range; // 유도 범위.
+	bool m_selfRotation; // 스스로 도는지 여부.
+	CCNode* m_targetNode;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	CCMotionStreak* m_streak;
+	struct ShowWindow
+	{
+		ShowWindow()
+		{
+			rotationRad = rand()%314 / 100.f;
+			rotationRadius = 30.f;
+			rotationVelocityRad = M_PI / 60.f;
+		}
+		float rotationRad;
+		float rotationRadius;
+		float rotationVelocityRad;
+		CCPoint initPosition;
+	}m_showWindow;
+	
+	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+};
+
+#endif
+class GuidedMissile : public StoneAttack
+{
+public:
+	static GuidedMissile* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, 
+															 float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+	{
+		GuidedMissile* object = new GuidedMissile();
+		object->init(targetNode, initPosition, fileName, initSpeed, power, range, ao, selfRotation);
+
+		object->autorelease();
+		
+
+		return object;
+	}
+	static GuidedMissile* createForShowWindow(const string& fileName, bool selfRotation)
+	{
+		GuidedMissile* object = new GuidedMissile();
+		object->initForShowWindow(fileName, selfRotation);
+		object->autorelease();
+		return object;
+	}
+	
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+	{
+		StoneAttack::init();
+		
+		m_particle = NULL;
+		m_streak = NULL;
+		
+		m_initSpeed = initSpeed;
+		m_option = ao;
+		m_power = power;
+		m_targetNode = targetNode;	
+		m_guided = false;
+		m_range = range;
+		m_selfRotation = selfRotation;
+		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+			//m_missileSprite->setRotationY(t);
+			//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(initPosition);
+		m_showWindow.initPosition = initPosition;
+		if(targetNode)
+		{
+			CCPoint diff = m_targetNode->getPosition() - initPosition;
+			
+			int random_value = rand()%21 - 10; // -10~10
+			float random_float = 1.f + random_value/100.f;
+			
+			m_initRad = atan2f(diff.y, diff.x) * random_float;
+			m_currentRad = m_initRad + deg2Rad(180);
+			scheduleUpdate();
+		}
+		return true;
+	}
+	
+	bool initForShowWindow(const string& fileName, bool selfRotation)
+	{
+		StoneAttack::init();
+		
+		m_particle = NULL;
+		m_streak = NULL;
+		m_selfRotation = selfRotation;
+		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite);
+		//		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(ccp(0, 0));
+		schedule(schedule_selector(GuidedMissile::showWindow));
+		return true;
+	}
 	void update(float dt)
 	{
 		bool isEnable = true;
@@ -677,46 +900,18 @@ public:
 			CCPoint cumberPosition;
 			cumberPosition = m_targetNode->getPosition();		
 			CCPoint diffPosition = cumberPosition - missilePosition;
-			if(m_guided == false)
 			{
-				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_initRad) * m_initSpeed,
-																																				sin(m_initRad) * m_initSpeed));
+				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
+				KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
+//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
 				
-				if(m_selfRotation)
-				{
-					m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
-				}
-				else
-				{
-					m_missileSprite->setRotation(-rad2Deg(m_initRad) - 90);
-				}
-				
-				for(auto bosses : myGD->getMainCumberVector())
-				{
-					if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= m_range)
-					{
-						m_targetNode = bosses; // 목표 설정
-						m_guided = true;
-						break;
-					}
-				}
-				for(auto mob : myGD->getSubCumberVector())
-				{
-					if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= m_range)
-					{
-						m_targetNode = mob; // 목표 설정
-						m_guided = true;
-						break;
-					}
-				}
-			}
-			else
-			{
-				float tt = atan2f(diffPosition.y, diffPosition.x);
 				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
-				m_currentRad += (tt - m_currentRad); // , deg2Rad(-15), deg2Rad(15));
-				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * m_initSpeed * 2,
-																																					sin(m_currentRad) * m_initSpeed * 2));
+				float tempTt = tt - m_currentRad;
+				bool sign = tt - m_currentRad > 0  ? 1 : -1;
+				m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2), deg2Rad(2)); // , deg2Rad(-15), deg2Rad(15));
+//				m_currentRad = m_currentRad + tt - m_currentRad;
+				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * m_initSpeed,
+																																					sin(m_currentRad) * m_initSpeed));
 				
 				if(m_selfRotation)
 				{
@@ -736,6 +931,119 @@ public:
 				m_streak->setPosition(m_missileSprite->getPosition());
 		}
 	}
+	void beautifier(int grade, int level)
+	{
+		if(grade >= 3)
+			addStreak();
+
+		if(grade == 2)
+		{
+			if(level <= 2)
+				addParticle(0);
+			else if(level <= 4)
+				addParticle(2);
+			else
+				addParticle(3);
+		}
+		else if(grade == 3)
+		{
+			if(level <= 2)
+				addParticle(8);
+			else if(level <= 4)
+				addParticle(10);
+			else
+				addParticle(11);
+		}
+		else if(grade == 4)
+		{
+			if(level <= 2)
+				addParticle(12);
+			else if(level <= 4)
+				addParticle(14);
+			else
+				addParticle(15);
+		}
+		else if(grade == 5)
+		{
+			if(level <= 2)
+				addParticle(16);
+			else if(level <= 4)
+				addParticle(18);
+			else
+				addParticle(19);
+		}
+	}	
+	void addStreak()
+	{
+		m_streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+		m_streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		addChild(m_streak, -2);
+	}
+	
+	void addParticle(int particle_type)
+	{
+		string plist_name = "jm_particle1_empty.plist";
+		if(particle_type == 0)
+			plist_name = "jm_particle1_empty.plist"; // 노랑 불
+		else if(particle_type == 1)
+			plist_name = "jm_particle1_fire.plist"; // 붉은 불(주황)
+		else if(particle_type == 2)
+			plist_name = "jm_particle1_life.plist"; // 초록 불(노랑)
+		else if(particle_type == 3)
+			plist_name = "jm_particle1_water.plist"; // 파란 불(하양)
+		else if(particle_type == 4)
+			plist_name = "jm_particle2_empty.plist"; // 가시
+		else if(particle_type == 5)
+			plist_name = "jm_particle2_fire.plist";
+		else if(particle_type == 6)
+			plist_name = "jm_particle2_life.plist";
+		else if(particle_type == 7)
+			plist_name = "jm_particle2_water.plist";
+		else if(particle_type == 8)
+			plist_name = "jm_particle3_empty.plist"; // 반사빛/뽀샤시빛
+		else if(particle_type == 9)
+			plist_name = "jm_particle3_fire.plist";
+		else if(particle_type == 10)
+			plist_name = "jm_particle3_life.plist";
+		else if(particle_type == 11)
+			plist_name = "jm_particle3_water.plist";
+		else if(particle_type == 12)
+			plist_name = "jm_particle4_empty.plist"; // 심한 반짝임
+		else if(particle_type == 13)
+			plist_name = "jm_particle4_fire.plist";
+		else if(particle_type == 14)
+			plist_name = "jm_particle4_life.plist";
+		else if(particle_type == 15)
+			plist_name = "jm_particle4_water.plist";
+		else if(particle_type == 16)
+			plist_name = "jm_particle5_empty.plist"; // 둥근 파장까지
+		else if(particle_type == 17)
+			plist_name = "jm_particle5_fire.plist";
+		else if(particle_type == 18)
+			plist_name = "jm_particle5_life.plist";
+		else if(particle_type == 19)
+			plist_name = "jm_particle5_water.plist";
+		
+		m_particle = CCParticleSystemQuad::create(plist_name.c_str());
+		m_particle->setPositionType(kCCPositionTypeRelative);
+		addChild(m_particle, -1);
+	}
+	void showWindow(float dt)
+	{
+		float r = m_showWindow.rotationRadius;
+		m_missileSprite->setPosition(m_showWindow.initPosition + ccp(cos(m_showWindow.rotationRad) * r, sin(m_showWindow.rotationRad) * r));
+
+		m_missileSprite->setRotation(-rad2Deg(m_showWindow.rotationRad) - 90);
+
+		if(m_particle)
+			m_particle->setPosition(m_missileSprite->getPosition());
+
+		if(m_streak)
+			m_streak->setPosition(m_missileSprite->getPosition());
+
+		
+		m_showWindow.rotationRad += m_showWindow.rotationVelocityRad;
+	}	
 	// 반지름 설정
 	void setShowWindowRotationRadius(float r)
 	{
