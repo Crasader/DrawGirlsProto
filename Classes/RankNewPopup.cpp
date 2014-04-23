@@ -168,7 +168,7 @@ bool RankNewPopup::init()
 	reader->release();
 	
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["start"]=1;
 	param["limit"]=50;
 	

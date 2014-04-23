@@ -332,7 +332,7 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 			 std::string recvId = member["memberID"].asString();
 			 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 			 p["receiverMemberID"] = recvId;
-			 p["senderMemberID"]=hspConnector::get()->getKakaoID();
+			 p["senderMemberID"]=hspConnector::get()->getSocialID();
 			 p["type"] = kUnknownFriendRequest;
 			 
 			 hspConnector::get()->command("sendMessage", p,this, [=](Json::Value r)
@@ -483,7 +483,7 @@ void JoinGameFriendPopup::searchByIndex(int64_t userIndex)
 																 std::string recvId = t["memberID"].asString();
 																 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 																 p["receiverMemberID"] = recvId;
-																 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+																 p["senderMemberID"] = hspConnector::get()->getSocialID();
 																 p["type"] = kUnknownFriendRequest;
 																 hspConnector::get()->command
 																	 ("sendMessage", p, [=](Json::Value r) {

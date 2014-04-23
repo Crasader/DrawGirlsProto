@@ -362,7 +362,7 @@ string DataStorageHub::getKey (DSH_Key t_name)
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	
 	Json::Value data;
 	
@@ -611,7 +611,7 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 void DataStorageHub::saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	
 	Json::Value data;
 	

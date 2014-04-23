@@ -101,7 +101,7 @@ void Java_com_litqoo_lib_hspConnector_SendResultNative(JNIEnv *env, jobject thiz
 #endif
 
 
-long long int hspConnector::getHSPMemberNo(){
+long long int hspConnector::getMemberID(){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	return [HSPCore sharedHSPCore].memberNo;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -132,8 +132,8 @@ void hspConnector::sendPushMessage(){
 #endif
 }
 
-string hspConnector::getKakaoID(){
-	return graphdog->getKakaoMemberID();
+string hspConnector::getSocialID(){
+	return graphdog->getSocialID();
 	//return this->myKakaoInfo.get("user_id", "").asString();
 }
 
@@ -346,11 +346,11 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
 
 		int delekey = dkey;
-		graphdog->setHSPMemberNo(hspConnector::get()->getHSPMemberNo());
+		graphdog->setMemberID(hspConnector::get()->getMemberID());
 
-		string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getHSPMemberNo())->getCString();
+		string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString();
 		CCLog("member id is %s",hspids.c_str());
-		graphdog->setKakaoMemberID(hspids);
+		graphdog->setSocialID(hspids);
 
 		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
 		if(delsel.func)delsel.func(obj);

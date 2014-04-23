@@ -1589,7 +1589,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									
 									
 									Json::Value param;
-									param["memberID"] = hspConnector::get()->getKakaoID();
+									param["memberID"] = hspConnector::get()->getSocialID();
 									
 									Json::Value data;
 									data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
@@ -1690,7 +1690,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									
 									
 									Json::Value param;
-									param["memberID"] = hspConnector::get()->getKakaoID();
+									param["memberID"] = hspConnector::get()->getSocialID();
 									
 									Json::Value data;
 									data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
@@ -1793,7 +1793,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //									
 //									
 //									Json::Value param;
-//									param["memberID"] = hspConnector::get()->getKakaoID();
+//									param["memberID"] = hspConnector::get()->getSocialID();
 //									
 //									Json::Value data;
 //									data[myDSH->getKey(kDSH_Key_savedFriendPoint)] = myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);

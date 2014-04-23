@@ -440,7 +440,7 @@ void CollectionBookPopup::editBoxEditingDidBegin(CCEditBox* editBox)
 void CollectionBookPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = recent_card_number;
 	param["comment"] = editBox->getText();
 	
@@ -455,7 +455,7 @@ void CollectionBookPopup::editBoxTextChanged(CCEditBox* editBox, const std::stri
 void CollectionBookPopup::editBoxReturn(CCEditBox* editBox)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = recent_card_number;
 	param["comment"] = editBox->getText();
 	

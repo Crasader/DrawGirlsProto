@@ -53,7 +53,7 @@ void LogData::sendLog (string t_category)
         {
 		Json::Value param;
 		
-		param["memberID"] = hspConnector::get()->getKakaoID();
+		param["memberID"] = hspConnector::get()->getSocialID();
 		
 		Json::Value contents;
 		int loop_cnt = getLogCount();
@@ -72,7 +72,7 @@ CommandParam LogData::getSendLogCommand(string t_category)
 {
 	Json::Value param;
 	
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	
 	Json::Value contents;
 	int loop_cnt = getLogCount();
