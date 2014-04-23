@@ -144,12 +144,12 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("이 아이템 사용"), kMyLocalKey_thisItemUse);
 	ko->setObject(CCString::create("타임"), kMyLocalKey_time);
 	ko->setObject(CCString::create("골드"), kMyLocalKey_gold);
-	ko->setObject(CCString::create("점수"), kMyLocalKey_time);
+	ko->setObject(CCString::create("점수"), kMyLocalKey_score);
 	ko->setObject(CCString::create("다음스테이지"), kMyLocalKey_nextStage);
 	ko->setObject(CCString::create("다시하기"), kMyLocalKey_regame);
 	ko->setObject(CCString::create("메인으로"), kMyLocalKey_toMain);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("이전 스테이지를\n클리어 해주세요!"), kMyLocalKey_beforeNotClearPuzzle);
+	ko->setObject(CCString::create("기다릴게요!\n제 사진\n모아주세요!"), kMyLocalKey_diaryNoImg);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
