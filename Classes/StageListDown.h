@@ -32,6 +32,7 @@ enum SLD_MenuTag{
 
 class IntPoint;
 class CumberShowWindow;
+class KSLabelTTF;
 class StageListDown : public CCLayer
 {
 public:
@@ -53,7 +54,7 @@ private:
 	
 	int puzzle_number;
 	
-	CCLabelTTF* state_ment;
+	KSLabelTTF* state_ment;
 	CCLabelBMFont* download_state;
 	
 	CumberShowWindow* loading_character;
@@ -63,6 +64,10 @@ private:
 	
 	void outOpenning();
 	
+	int recent_tip_index;
+	vector<string> tip_list;
+	
+	void changeTipMent();
 	
 	int ing_download_cnt;
 	float ing_download_per;

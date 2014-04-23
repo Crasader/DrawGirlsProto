@@ -130,6 +130,8 @@ bool MainFlowScene::init()
 	bool is_openning = false;
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
+		AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
+		
 		is_openning = true;
 		topOpenning();
 		bottomOpenning();
