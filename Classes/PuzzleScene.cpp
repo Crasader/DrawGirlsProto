@@ -372,6 +372,26 @@ bool PuzzleScene::init()
 		{
 			
 		}
+		
+		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+		bool is_change_history = false;
+		
+		if(!mySGD->isClearPiece(mySD->getSilType()))
+		{
+			t_history.is_clear[take_level-1] = true;
+			t_history.clear_count = t_history.try_count;
+			
+			is_change_history = true;
+		}
+		else if(!t_history.is_clear[take_level-1])
+		{
+			t_history.is_clear[take_level-1] = true;
+			
+			is_change_history = true;
+		}
+		
+		if(is_change_history)
+			mySGD->setPieceHistory(t_history, nullptr);
 	}
 	
 	
@@ -984,17 +1004,11 @@ void PuzzleScene::setPuzzle()
 				
 				if(mySGD->isClearPiece(stage_number))
 				{
-					PieceType t_type;
-					if(mySGD->isClearPiece(stage_number))
-						t_type = kPieceType_color;
-					else
-						t_type = kPieceType_empty;
-					
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
-					t_piece->setTurnInfo(t_history.is_clear[0], t_history.is_clear[1], t_history.is_clear[2]);
-					t_piece->initWithPieceInfo(piece_mode, t_type, piece_type);
+					t_piece->setTurnInfo(t_history.is_clear[0], t_history.is_clear[1], t_history.is_clear[2], t_history.is_clear[3]);
+					t_piece->initWithPieceInfo(piece_mode, kPieceType_color, piece_type);
 					
 //					addShadow(piece_type, piece_position, stage_number);
 				}
@@ -1005,7 +1019,7 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
-					t_piece->setTurnInfo(false, false, false);
+					t_piece->setTurnInfo(false, false, false, false);
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_empty, piece_type);
 				}
 				enable_stage_number = stage_number;
@@ -1019,7 +1033,7 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::buyPieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
-					t_piece->setTurnInfo(false, false, false);
+					t_piece->setTurnInfo(false, false, false, false);
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_buy, piece_type);
 					
 //					addShadow(piece_type, piece_position, stage_number);
@@ -1029,7 +1043,7 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::lockPieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
-					t_piece->setTurnInfo(false, false, false);
+					t_piece->setTurnInfo(false, false, false, false);
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_lock, piece_type);
 					
 //					addShadow(piece_type, piece_position, stage_number);
@@ -1763,7 +1777,7 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	n_ready_label->setColor(ccc3(47, 30, 6));
-	n_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+//	n_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f));
 	n_ready->addChild(n_ready_label);
 	
@@ -1777,7 +1791,7 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	s_ready_label->setColor(ccc3(47, 30, 6));
-	s_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+//	s_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f));
 	s_ready->addChild(s_ready_label);
 	

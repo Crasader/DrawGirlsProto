@@ -292,19 +292,19 @@ bool FailPopup::init()
 	
 	if(fail_code == kFC_timeover)
 	{
-		CCSprite* title = CCSprite::create("ending_timeover.png");
+		CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_timeover_%s.png", myLoc->getSupportLocalCode())->getCString());
 		title->setPosition(ccp(132,240));
 		main_case->addChild(title, kZ_FP_img);
 	}
 	else if(fail_code == kFC_missionfail)
 	{
-		CCSprite* title = CCSprite::create("ending_missionfail.png");
+		CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_missionfail_%s.png", myLoc->getSupportLocalCode())->getCString());
 		title->setPosition(ccp(132,240));
 		main_case->addChild(title, kZ_FP_img);
 	}
 	else
 	{
-		CCSprite* title = CCSprite::create("ending_gameover.png");
+		CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_gameover_%s.png", myLoc->getSupportLocalCode())->getCString());
 		title->setPosition(ccp(132,240));
 		main_case->addChild(title, kZ_FP_img);
 	}

@@ -14,6 +14,8 @@
 #include "StoryManager.h"
 #include "StarGoldData.h"
 #include "LoadingTipScene.h"
+#include "KSLabelTTF.h"
+#include "MyLocalization.h"
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
@@ -1196,6 +1198,12 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 		else								draw_button->setPosition(ccp(40,40));
 		addChild(draw_button);
 		reader->release();
+		
+		KSLabelTTF* click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 15);
+		click_label->setColor(ccc3(120, 60, 0));
+		click_label->enableOuterStroke(ccc3(255, 231, 133), 1.f);
+		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
+		draw_button->addChild(click_label);
 	}
 }
 

@@ -259,7 +259,7 @@ bool ClearPopup::init()
 	inner_left->addChild(score_back);
 	
 	
-	CCSprite* title = CCSprite::create("ending_clear.png");
+	CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
 	title->setPosition(ccp(132,240));
 	main_case->addChild(title, kZ_CP_img);
 	
@@ -357,26 +357,6 @@ bool ClearPopup::init()
 	}
 	else
 		endTakeCard();
-	
-	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-	bool is_change_history = false;
-	
-	if(!mySGD->isClearPiece(mySD->getSilType()))
-	{
-		t_history.is_clear[take_level-1] = true;
-		t_history.clear_count = t_history.try_count;
-		
-		is_change_history = true;
-	}
-	else if(!t_history.is_clear[take_level-1])
-	{
-		t_history.is_clear[take_level-1] = true;
-		
-		is_change_history = true;
-	}
-	
-	if(is_change_history)
-		mySGD->setPieceHistory(t_history, nullptr);
 	
 	KSLabelTTF* time_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 15);
 	time_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);

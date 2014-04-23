@@ -249,7 +249,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rankB,
 	kMyLocalKey_rankC,
 	kMyLocalKey_rankD,
-	kMyLocalKey_buy
+	kMyLocalKey_buy,
+	kMyLocalKey_controlClick
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

@@ -570,6 +570,8 @@ void StartSettingPopup::gachaMenuCreate()
 																		   main_case->addChild(option_label);
 																		   
 																		   buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
+																		   buy_button->setTitleColor(ccBLACK);
+																		   buy_button->setTitleSize(13);
 																		   buy_button->setTouchPriority(touch_priority);
 																		   buy_button->setSize(CCSizeMake(90, 55));
 																		   buy_button->setPrice(PriceTypeGold, 1000);
@@ -1033,6 +1035,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
 		buy_button->setTitleColor(ccBLACK);
+		buy_button->setTitleSize(13);
 		buy_button->setTouchPriority(touch_priority);
 		buy_button->setSize(CCSizeMake(90, 55));
 		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));

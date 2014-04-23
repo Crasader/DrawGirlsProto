@@ -158,7 +158,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("평민"), kMyLocalKey_rankC);
 	ko->setObject(CCString::create("하수"), kMyLocalKey_rankD);
 	ko->setObject(CCString::create("구입"), kMyLocalKey_buy);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("꾸욱"), kMyLocalKey_controlClick);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);

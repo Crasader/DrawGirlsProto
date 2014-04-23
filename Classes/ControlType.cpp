@@ -11,6 +11,8 @@
 #include "DataStorageHub.h"
 #include "GameData.h"
 #include "KSUtil.h"
+#include "KSLabelTTF.h"
+#include "MyLocalization.h"
 
 ///////////////////////////////////////////////// Button Side ////////////////////////////////////////////////////////////////////
 //void ControlButtonSide::ingSchedule()
@@ -1504,6 +1506,13 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 												   [=](float t){draw_button->setPositionX(40);}));
 		}
 		addChild(draw_button);
+		
+		KSLabelTTF* click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 15);
+		click_label->setColor(ccc3(120, 60, 0));
+		click_label->enableOuterStroke(ccc3(255, 231, 133), 1.f);
+		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
+		draw_button->addChild(click_label);
+		
 		reader->release();
 	}
 	else
