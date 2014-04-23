@@ -394,20 +394,6 @@ void StartSettingPopup::setMain()
 			is_selected_item.push_back(false);
 	}
 	
-	CCRect option_size = CCRectMake(0, 0, 200, 25);
-	CCPoint option_position = ccp(188, 113);
-	
-	//		CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
-	//		option_rect->setOpacity(100);
-	//		option_rect->setAnchorPoint(ccp(0,1));
-	//		option_rect->setPosition(option_position);
-	//		main_case->addChild(option_rect);
-	
-	option_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectUseItem), mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
-	option_label->setAnchorPoint(ccp(0,1));
-	option_label->setPosition(option_position);
-	main_case->addChild(option_label);
-	
 	item_gacha_menu = NULL;
 	is_clicked_gacha_menu = false;
 	
@@ -518,6 +504,20 @@ void StartSettingPopup::setMain()
 		
 		upgrade_menu->setTouchPriority(touch_priority);
 	}
+	
+	CCRect option_size = CCRectMake(0, 0, 200, 25);
+	CCPoint option_position = ccp(220, 125);
+	
+	//		CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
+	//		option_rect->setOpacity(100);
+	//		option_rect->setAnchorPoint(ccp(0,1));
+	//		option_rect->setPosition(option_position);
+	//		main_case->addChild(option_rect);
+	
+	option_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectUseItem), mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+	option_label->setAnchorPoint(ccp(0,1));
+	option_label->setPosition(option_position);
+	main_case->addChild(option_label);
 }
 
 void StartSettingPopup::gachaMenuCreate()
@@ -569,7 +569,7 @@ void StartSettingPopup::gachaMenuCreate()
 																		   option_label->setPosition(option_position);
 																		   main_case->addChild(option_label);
 																		   
-																		   buy_button = CommonButton::create("", CommonButtonYellowUp);
+																		   buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
 																		   buy_button->setTouchPriority(touch_priority);
 																		   buy_button->setSize(CCSizeMake(90, 55));
 																		   buy_button->setPrice(PriceTypeGold, 1000);
@@ -1031,7 +1031,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		else if(item_currency == "ruby")
 			priceType = PriceTypeRuby;
 		
-		buy_button = CommonButton::create("", CommonButtonYellowUp);
+		buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
+		buy_button->setTitleColor(ccBLACK);
 		buy_button->setTouchPriority(touch_priority);
 		buy_button->setSize(CCSizeMake(90, 55));
 		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));

@@ -26,6 +26,7 @@ public:
 	virtual bool updateTexture();
 	virtual void setEnableItalic(float value = 30.f);
 	virtual void setDisableItalic();
+	virtual void setOpacity(GLubyte opacity);
 	//virtual void setString(const char *label);
 	static KSLabelTTF * create()
 	{

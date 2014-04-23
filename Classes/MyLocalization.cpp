@@ -150,6 +150,26 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("메인으로"), kMyLocalKey_toMain);
 	ko->setObject(CCString::create("이전 스테이지를\n클리어 해주세요!"), kMyLocalKey_beforeNotClearPuzzle);
 	ko->setObject(CCString::create("기다릴게요!\n제 사진\n모아주세요!"), kMyLocalKey_diaryNoImg);
+	ko->setObject(CCString::create("보상"), kMyLocalKey_reward);
+	ko->setObject(CCString::create("스피드"), kMyLocalKey_speed);
+	ko->setObject(CCString::create("준비하기"), kMyLocalKey_ready);
+	ko->setObject(CCString::create("지존"), kMyLocalKey_rankA);
+	ko->setObject(CCString::create("영웅"), kMyLocalKey_rankB);
+	ko->setObject(CCString::create("평민"), kMyLocalKey_rankC);
+	ko->setObject(CCString::create("하수"), kMyLocalKey_rankD);
+	ko->setObject(CCString::create("구입"), kMyLocalKey_buy);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -950,6 +970,28 @@ CCString* MyLocal::getLocalCode()
 #endif
 	
 	return CCString::create(tempCode);
+}
+
+const char* MyLocal::getSupportLocalCode()
+{
+	languageType = getLocalCode();
+	CCArray* allkeys_ = this->allKeys();
+	bool supportable = false;
+	for(int i=0;i<allkeys_->count();i++)
+	{
+		CCString* key = (CCString*)allkeys_->objectAtIndex(i);
+		if(languageType->isEqual(key))
+		{
+			supportable = true;
+			break;
+		}
+	}
+	if(!supportable)
+	{
+		languageType = CCString::create("en");
+	}
+	
+	return languageType->getCString();
 }
 
 const char* MyLocal::getLocalForKey( MyLocalKey key )

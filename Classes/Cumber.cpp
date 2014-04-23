@@ -487,7 +487,7 @@ void CumberParent::myInit()
 	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
 	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
 	myGD->V_Str["CP_chagePassiveData"] = std::bind(&CumberParent::changePassiveData, this, _1);
-	
+	myGD->hideBosses = std::bind(&CumberParent::hideBosses, this);
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
@@ -606,3 +606,10 @@ void CumberParent::myInit()
 //	addChild(myEP);
 }
 
+void CumberParent::hideBosses()
+{
+	for(auto mainCumber : mainCumbers)
+	{
+		mainCumber->setVisible(false);
+	}
+}

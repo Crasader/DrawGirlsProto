@@ -832,7 +832,7 @@ public:
 			float random_float = 1.f + random_value/100.f;
 			
 			m_initRad = atan2f(diff.y, diff.x) * random_float;
-			m_currentRad = m_initRad + deg2Rad(180);
+			m_currentRad = m_initRad + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
 			scheduleUpdate();
 		}
 		return true;
@@ -883,7 +883,7 @@ public:
 		float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
 
 		// 몬스터가 맞는 조건
-		if(distance <= 2)
+		if(distance <= 4)
 		{
 			CCPoint effectPosition = m_missileSprite->getPosition();
 			effectPosition.x += rand()%21 - 10;
@@ -900,6 +900,24 @@ public:
 			CCPoint cumberPosition;
 			cumberPosition = m_targetNode->getPosition();		
 			CCPoint diffPosition = cumberPosition - missilePosition;
+
+			bool isNearMonster = false;
+			for(auto bosses : myGD->getMainCumberVector())
+			{
+				if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= m_range)
+				{
+					isNearMonster = true;
+					break;
+				}
+			}
+			for(auto mob : myGD->getSubCumberVector())
+			{
+				if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= m_range)
+				{
+					isNearMonster = true;
+					break;
+				}
+			}
 			{
 				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
 				KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
@@ -908,10 +926,18 @@ public:
 				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
 				float tempTt = tt - m_currentRad;
 				bool sign = tt - m_currentRad > 0  ? 1 : -1;
-				m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2), deg2Rad(2)); // , deg2Rad(-15), deg2Rad(15));
+				float missileSpeed = m_initSpeed * 1.3f;
+				if(isNearMonster)
+				{
+					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.f), deg2Rad(2.f));
+				}
+				else 
+				{
+					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
+				}
 //				m_currentRad = m_currentRad + tt - m_currentRad;
-				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * m_initSpeed,
-																																					sin(m_currentRad) * m_initSpeed));
+				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
+																																					sin(m_currentRad) * missileSpeed));
 				
 				if(m_selfRotation)
 				{
