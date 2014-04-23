@@ -1478,6 +1478,7 @@ void Maingame::clearScenario2()
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
+																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
 																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																						   item_gold->addChild(t_gold_img);

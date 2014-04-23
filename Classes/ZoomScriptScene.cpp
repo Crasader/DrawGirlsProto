@@ -17,6 +17,7 @@
 #include "CommonButton.h"
 #include "NewMainFlowScene.h"
 #include "bustMorphing.h"
+#include "MyLocalization.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -108,7 +109,7 @@ bool ZoomScript::init()
 	addChild(script_case, kZS_Z_script_case);
 	
 	
-	next_button = CommonButton::create("확 인",15,CCSizeMake(80,50), CommonButtonYellow, -160);
+	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(80,50), CommonButtonYellow, -160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
 	next_button->setPosition(ccp(480-50,30));
 	next_button->setVisible(false);
@@ -193,7 +194,7 @@ void ZoomScript::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
-	mode_button->setVisible(true);
+//	mode_button->setVisible(true);
 	
 //	target_node->setTouchEnabled(true);
 	
@@ -409,7 +410,7 @@ void ZoomScript::showtimeForthAction()
 	is_showtime = false;
 //	is_touched_menu = false;
 	next_button->setVisible(true);
-	mode_button->setVisible(true);
+//	mode_button->setVisible(true);
 	setTouchEnabled(true);
 }
 
