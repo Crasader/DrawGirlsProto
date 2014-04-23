@@ -241,7 +241,15 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_regame,
 	kMyLocalKey_toMain,
 	kMyLocalKey_beforeNotClearPuzzle,
-	kMyLocalKey_diaryNoImg
+	kMyLocalKey_diaryNoImg,
+	kMyLocalKey_reward,
+	kMyLocalKey_speed,
+	kMyLocalKey_ready,
+	kMyLocalKey_rankA,
+	kMyLocalKey_rankB,
+	kMyLocalKey_rankC,
+	kMyLocalKey_rankD,
+	kMyLocalKey_buy
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()
@@ -259,12 +267,13 @@ public:
 	}
 	
 	const char* getLocalForKey(MyLocalKey key);
-	
+	const char* getSupportLocalCode();
 	CCString* getLocalCode();
 	
 private:
 	MyLocal() : CCDictionary()
 	{
+		languageType = NULL;
 		this->initLocal();
 	}
 	void initLocal();

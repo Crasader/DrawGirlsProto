@@ -15,7 +15,6 @@
 #include "LabelTTFMarquee.h"
 #include "KSUtil.h"
 #include "CommonButton.h"
-
 using namespace cocos2d;
 using namespace std;
 using namespace cocos2d::extension;
@@ -60,10 +59,16 @@ public:
 		this->m_closeStdFunc = NULL;
 		this->m_openTarget = NULL;
 		this->m_closeTarget = NULL;
-			
+		
+		
+		
 		m_openBtn = CCMenuItemImage::create("ui_mission_button_open.png", "ui_mission_button_open.png", this, menu_selector(RollingButton::doOpen));
 		
 		m_openBtn->setPosition(ccp(0,0));
+		
+		CCSprite* missionStr = CCSprite::create("ui_mission_button_font_ko.png");
+		missionStr->setPosition(ccp(30,19));
+		m_openBtn->addChild(missionStr);
 		
 		m_closeBtn = CCMenuItemImage::create("ui_mission_button_close.png", "ui_mission_button_close.png", this, menu_selector(RollingButton::doClose));
 		m_closeBtn->setPosition(ccp(0,0));
@@ -78,13 +83,13 @@ public:
 		
 		m_menu = CCMenu::create(m_openBtn,m_closeBtn,NULL);
 		m_menu->setPosition(ccp(0,0));
-		this->addChild(m_menu,3);
+		this->addChild(m_menu,13);
 		
 		
 		m_black = CommonButton::getBackgroundByType(CommonButtonGray2);
 		m_black->setAnchorPoint(ccp(0.5f,0.5f));
 		m_black->setPosition(ccp(0,0));
-		m_black->setContentSize(CCSizeMake(15,15));
+		m_black->setContentSize(CCSizeMake(15,14));
 		this->addChild(m_black,1);
 		
 //		m_black_left = CCSprite::create("ui_mission_back_left.png");
@@ -190,7 +195,7 @@ public:
 		if(m_isOpened==true)return;
 		
 		this->addChild(KSGradualValue<float>::create(38,218,0.3f,[=](float t){
-			m_black->setContentSize(ccp(t,30));
+			m_black->setContentSize(ccp(t,28));
 		}, nullptr));
 
 //		{

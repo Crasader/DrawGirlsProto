@@ -1228,7 +1228,7 @@ void Maingame::gameover()
 		
 		addChild(KSTimer::create(2.f, [=]()
 								 {
-//									 myGD->communication("보스 사라지게 하는 함수");
+									 myGD->hideBosses();
 									 failScenario();
 								 }));
 	}

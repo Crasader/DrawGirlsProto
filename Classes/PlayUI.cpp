@@ -628,7 +628,7 @@ void TakeSpeedUp::selfRemove ()
 void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 {
 	end_function = t_end_func;
-	initWithString(CCString::createWithFormat("스피드 %d", t_step)->getCString(), mySGD->getFont().c_str(), 20);
+	initWithString(CCString::createWithFormat("%s %d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step)->getCString(), mySGD->getFont().c_str(), 20);
 	setColor(ccBLUE);
 	enableOuterStroke(ccBLACK, 2);
 //	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
@@ -2279,21 +2279,21 @@ void PlayUI::myInit ()
 	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
-	mission_button->setPosition(ccp(64, myDSH->ui_top-22+UI_OUT_DISTANCE));
+	mission_button->setPosition(ccp(68, myDSH->ui_top-22+UI_OUT_DISTANCE));
 	
 	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_button->setPositionY(t);}, [=](float t){mission_button->setPositionY(myDSH->ui_top-22);}));
 	
-	addChild(mission_button);
+	addChild(mission_button,2);
 	
 	mission_button->startMarquee();
 	
 	mission_button->setOpenFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(176,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(174,0)));
 		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
-		mission_button->runAction(CCMoveBy::create(0.3,ccp(-176,0)));
+		mission_button->runAction(CCMoveBy::create(0.3,ccp(-174,0)));
 		top_center_node->setVisible(true);
 	});
 	

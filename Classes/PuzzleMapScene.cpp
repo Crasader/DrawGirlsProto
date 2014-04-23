@@ -1316,7 +1316,7 @@ void PuzzleMapScene::hideClearPopup()
 
 void PuzzleMapScene::showGetPuzzle()
 {
-	CCSprite* get_piece_title = CCSprite::create("get_piece_title.png");
+	CCSprite* get_piece_title = CCSprite::create(CCString::createWithFormat("get_piece_title_%s.png", myLoc->getSupportLocalCode())->getCString());
 	StagePiece* new_piece = (StagePiece*)map_node->getChildByTag(mySD->getSilType());
 	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
 	map_node->addChild(get_piece_title, kPMS_Z_popup);
