@@ -24,6 +24,7 @@
 #include "CommonButton.h"
 #include "ScrollMenu.h"
 #include "KSLabelTTF.h"
+#include "MyLocalization.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -68,17 +69,17 @@ string ShopPopup::getPriceData(string t_code)
 	else if(t_code == "wonToRuby6")
 		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopRuby_int1_price_i, 5))->getCString();
 	else if(t_code == "rubyFromWon1")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 0) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 0);
 	else if(t_code == "rubyFromWon2")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 1) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 1);
 	else if(t_code == "rubyFromWon3")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 2) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 2);
 	else if(t_code == "rubyFromWon4")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 3) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 3);
 	else if(t_code == "rubyFromWon5")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 4) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 4);
 	else if(t_code == "rubyFromWon6")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 5) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 5);
 	else if(t_code == "rubyToGold1")
 		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 0))->getCString();
 	else if(t_code == "rubyToGold2")
@@ -92,17 +93,17 @@ string ShopPopup::getPriceData(string t_code)
 	else if(t_code == "rubyToGold6")
 		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 5))->getCString();
 	else if(t_code == "goldFromRuby1")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 0) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 0);
 	else if(t_code == "goldFromRuby2")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 1) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 1);
 	else if(t_code == "goldFromRuby3")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 2) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 2);
 	else if(t_code == "goldFromRuby4")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 3) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 3);
 	else if(t_code == "goldFromRuby5")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 4) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 4);
 	else if(t_code == "goldFromRuby6")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 5) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 5);
 	else if(t_code == "rubyToHeart1")
 		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 0))->getCString();
 	else if(t_code == "rubyToHeart2")
@@ -116,17 +117,17 @@ string ShopPopup::getPriceData(string t_code)
 	else if(t_code == "rubyToHeart6")
 		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 5))->getCString();
 	else if(t_code == "heartFromRuby1")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 0) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 0);
 	else if(t_code == "heartFromRuby2")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 1) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 1);
 	else if(t_code == "heartFromRuby3")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 2) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 2);
 	else if(t_code == "heartFromRuby4")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 3) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 3);
 	else if(t_code == "heartFromRuby5")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 4) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 4);
 	else if(t_code == "heartFromRuby6")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 5) + " 구입";
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 5);
 	
 	return return_value;
 }
@@ -463,9 +464,9 @@ void ShopPopup::cellAction(CCObject* sender)
 		else
 		{
 			if(condition_type == "gold")
-				addChild(ASPopupView::getCommonNoti(-310, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 			else if(condition_type == "ruby")
-				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 			CCLog("not enough condition");
 		}
 	}
@@ -628,7 +629,7 @@ bool ShopPopup::init()
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kSP_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("상점", mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 17);
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
@@ -676,7 +677,7 @@ bool ShopPopup::init()
 	main_case->addChild(card_menu, kSP_Z_content);
 	card_menu->setVisible(false);
 	
-	ruby_menu = CommonButton::create("루비상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	ruby_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	ruby_menu->setTitleColor(ccWHITE);
 	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	ruby_menu->setTitleColorForDisable(ccBLACK);
@@ -689,7 +690,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(ruby_menu, kSP_Z_content);
 	
-	gold_menu = CommonButton::create("골드상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	gold_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	gold_menu->setTitleColor(ccWHITE);
 	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	gold_menu->setTitleColorForDisable(ccBLACK);
@@ -702,7 +703,7 @@ bool ShopPopup::init()
 						   });
 	main_case->addChild(gold_menu, kSP_Z_content);
 	
-	heart_menu = CommonButton::create("하트상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	heart_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
 	heart_menu->setTitleColor(ccWHITE);
 	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	heart_menu->setTitleColorForDisable(ccBLACK);
@@ -970,7 +971,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				}
 				else
 				{
-					addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+					addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 					CCLog("not enough ruby!!!");
 				}
 			}
@@ -1035,7 +1036,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				}
 				else
 				{
-					addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+					addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 					CCLog("not enough ruby!!!");
 				}
 			}
@@ -1075,7 +1076,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 				}
 				else
 				{
-					addChild(ASPopupView::getCommonNoti(-310, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+					addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 					CCLog("not enough gold!!!");
 				}
 			}
@@ -1589,7 +1590,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									
 									
 									Json::Value param;
-									param["memberID"] = hspConnector::get()->getKakaoID();
+									param["memberID"] = hspConnector::get()->getSocialID();
 									
 									Json::Value data;
 									data[myDSH->getKey(kDSH_Key_savedStar)] = myDSH->getIntegerForKey(kDSH_Key_savedStar);
@@ -1690,7 +1691,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									
 									
 									Json::Value param;
-									param["memberID"] = hspConnector::get()->getKakaoID();
+									param["memberID"] = hspConnector::get()->getSocialID();
 									
 									Json::Value data;
 									data[myDSH->getKey(kDSH_Key_savedGold)] = myDSH->getIntegerForKey(kDSH_Key_savedGold);
@@ -1793,7 +1794,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //									
 //									
 //									Json::Value param;
-//									param["memberID"] = hspConnector::get()->getKakaoID();
+//									param["memberID"] = hspConnector::get()->getSocialID();
 //									
 //									Json::Value data;
 //									data[myDSH->getKey(kDSH_Key_savedFriendPoint)] = myDSH->getIntegerForKey(kDSH_Key_savedFriendPoint);
@@ -1875,7 +1876,7 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 	
 	content_back->setContentSize(CCSizeMake(200, 120));
 	
-	CCLabelTTF* ment_label = CCLabelTTF::create("구매하시겠습니까?",	mySGD->getFont().c_str(), 15);
+	CCLabelTTF* ment_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy),	mySGD->getFont().c_str(), 15);
 	ment_label->setPosition(ccp(0,25));
 	t_container->addChild(ment_label);
 	
@@ -1891,7 +1892,7 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 	t_container->addChild(cancel_button);
 	
 	
-	CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+	CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 	ok_button->setPosition(ccp(0,-65));
 	ok_button->setFunction([=](CCObject* sender)
 						   {
@@ -2162,7 +2163,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 	}
 	else
 	{
-		replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -350);
+		replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -350);
 		replay_menu->setPosition(ccp(240,100));
 		replay_menu->setFunction([=](CCObject* sender)
 								 {
@@ -2303,7 +2304,7 @@ void ShopPopup::failAction()
 {
 	is_downloading = false;
 	
-	replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, -350);
+	replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -350);
 	replay_menu->setPosition(ccp(240,100));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {

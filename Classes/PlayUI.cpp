@@ -1971,7 +1971,7 @@ void PlayUI::endGame (bool is_show_reason)
 void PlayUI::showGachaOnePercent ()
 {
 	OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), keep_percentage.getV());
-	addChild(t_popup);
+	getParent()->addChild(t_popup, 9999);
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
 {

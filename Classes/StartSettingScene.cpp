@@ -1920,7 +1920,7 @@ void StartSettingScene::heartRefresh()
 void StartSettingScene::countingMessage()
 {
 	Json::Value p;
-	p["memberID"]=hspConnector::get()->getKakaoID();
+	p["memberID"]=hspConnector::get()->getSocialID();
 	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
 	p["limitDay"] = mySGD->getMsgRemoveDay();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.

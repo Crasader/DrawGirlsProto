@@ -33,8 +33,7 @@ USING_NS_CC;
 #include "ASPopupView.h"
 #include "TitleRenewal.h"
 #include "GraphDog.h"
-
-#include "StringCodec.h"
+#include "KSUtil.h"
 
 //#include <boost/graph/graphviz.hpp>
 /*
@@ -49,16 +48,20 @@ USING_NS_CC;
  */
 AppDelegate::AppDelegate()
 {
-//	for(float i=0; i<99999.f; i+=0.01f)
-//	{
-//		KSProtectVar<float> it = KSProtectVar<float>(i);
-//		if(it.getV() != i)
-//		{
-//			CCLog("zz");
-//			it.getV();
-//		}
-//		assert(it.getV() == i);
-//	}
+	KSProtectVar<float> testVar(15.f);
+	KSProtectVar<float> testVar2(20.f);
+	testVar += 3.f;
+	testVar -= 5.f;
+	
+	CCLog("%f", testVar.getV()); // 값 얻기.
+	CCLog("%f", testVar + testVar2); // 보호된 변수끼리 연산가능.
+	CCLog("%d", testVar < testVar2); // 비교가능.
+	CCLog("%d", testVar < 3.f); // 상수값 비교 가능.
+	
+	KSProtectStr testStr("testtest");
+	CCLog("%s", testStr.getV().c_str());
+	
+	
 	//	std::random_device rd;
 	//	std::mt19937 rEngine(rd());
 	//	uniform_int_distribution<long long> dist(1000000000000000000L, 2000000000000000000L);

@@ -9,6 +9,7 @@
 #include "SilhouetteData.h"
 #include "StageImgLoader.h"
 #include "DataStorageHub.h"
+#include "MyLocalization.h"
 
 void SilhouetteData::startSetting()
 {
@@ -441,11 +442,11 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	else if(t_code == kIC_addTime)			return_value = "획득시 남은 시간이 일정량 증가한다.";
 	else if(t_code == kIC_fast)				return_value = "획득시 일시적으로 빠르게 움직인다.";
 	else if(t_code == kIC_subOneDie)		return_value = "획득시 부하 몬스터 1마리를 제거한다.";
-	else if(t_code == kIC_doubleItem)		return_value = "아이템을 빠르게 생성한다.";
+	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemContent);
 	else if(t_code == kIC_silence)			return_value = "획득시 보스 몬스터가 일정시간동안 공격하지 않는다.";
-	else if(t_code == kIC_longTime)			return_value = "게임시간을 증가시킨다.";
-	else if(t_code == kIC_baseSpeedUp)		return_value = "유저 속도가 빠른상태로 시작한다.";
-	else if(t_code == kIC_itemGacha)		return_value = "부활,무적아이템에 도전하세요!";
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeContent);
+	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpContent);
+	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaContent);
 	else									return_value = "아이템을 사용할 수 있습니다.";
 
 	return return_value;

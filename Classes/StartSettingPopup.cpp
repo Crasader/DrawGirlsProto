@@ -41,6 +41,7 @@
 #include "AchievePopup.h"
 #include "MissileUpgradePopup.h"
 #include "ItemGachaPopup.h"
+#include "MyLocalization.h"
 
 bool StartSettingPopup::init()
 {
@@ -189,7 +190,7 @@ void StartSettingPopup::setMain()
 	{
 		stage_number = mySD->getSilType();
 		
-		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 		stage_number_label->setPosition(ccp(65, 256));
 		main_case->addChild(stage_number_label);
 		
@@ -200,7 +201,7 @@ void StartSettingPopup::setMain()
 	{
 		stage_number = mySD->getSilType();
 		
-		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("%d 스테이지", stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 		piece_number_label->setPosition(ccp(65, 256));
 		main_case->addChild(piece_number_label);
 		
@@ -402,7 +403,7 @@ void StartSettingPopup::setMain()
 	//		option_rect->setPosition(option_position);
 	//		main_case->addChild(option_rect);
 	
-	option_label = CCLabelTTF::create("게임에 사용할 아이템을 선택하세요.", mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+	option_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectUseItem), mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 	option_label->setAnchorPoint(ccp(0,1));
 	option_label->setPosition(option_position);
 	main_case->addChild(option_label);
@@ -466,12 +467,12 @@ void StartSettingPopup::setMain()
 		missile_img = t_gm;
 	}
 	
-	missile_data_level = CCLabelTTF::create(CCString::createWithFormat("레벨 %d", missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_level->setAnchorPoint(ccp(0,0.5f));
 	missile_data_level->setPosition(ccp(30,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_power->setAnchorPoint(ccp(0,0.5f));
 	missile_data_power->setPosition(ccp(84,95));
 	main_case->addChild(missile_data_power);
@@ -483,7 +484,7 @@ void StartSettingPopup::setMain()
 	else
 	{
 		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
 		n_level->setColor(ccBLACK);
 		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
@@ -497,7 +498,7 @@ void StartSettingPopup::setMain()
 		
 		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 		s_upgrade->setColor(ccGRAY);
-		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
 		s_level->setColor(ccBLACK);
 		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
@@ -601,8 +602,8 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
 		int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 		
-		missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
-		missile_data_power->setString(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
+		missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
+		missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
 		
 		CCPoint missile_position;
 		if(missile_img)
@@ -641,7 +642,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		else
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-			CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+			CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
 			n_level->setColor(ccBLACK);
 			n_level->setPosition(ccp(70,47));
 			n_upgrade->addChild(n_level);
@@ -655,7 +656,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			
 			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 			s_upgrade->setColor(ccGRAY);
-			CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat("업그레이드 레벨 %d", missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
+			CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
 			s_level->setColor(ccBLACK);
 			s_level->setPosition(ccp(70,47));
 			s_upgrade->addChild(s_level);
@@ -680,14 +681,14 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 
 void StartSettingPopup::startItemGacha()
 {
-	if(!is_menu_enable || 1000 > mySGD->getGold())
+	if(!is_menu_enable || mySGD->getItemGachaGoldFee() > mySGD->getGold())
 		return;
 	
 	is_menu_enable = false;
 	
 	CCLog("start item gacha");
 	
-	mySGD->setGold(mySGD->getGold() - 1000);
+	mySGD->setGold(mySGD->getGold() - mySGD->getItemGachaGoldFee());
 	myDSH->saveUserData({kSaveUserData_Key_gold}, json_selector(this, StartSettingPopup::goItemGacha));
 
 	
@@ -732,7 +733,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 	else
 	{
 		CCLog("save userdata fail!!!");
-		mySGD->setGold(mySGD->getGold() + 1000);
+		mySGD->setGold(mySGD->getGold() + mySGD->getItemGachaGoldFee());
 		is_menu_enable = true;
 	}
 }
@@ -948,7 +949,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				mySGD->setBeforeUseItem(t_ic, false);
 				
 				if(getSelectedItemCount() >= 3)
-					addChild(ASPopupView::getCommonNoti(-210, "아이템은 최대 3개까지\n선택이 가능합니다."), kStartSettingPopupZorder_popup);
+					addChild(ASPopupView::getCommonNoti(-210, myLoc->getLocalForKey(kMyLocalKey_totalItemSelectCount3)), kStartSettingPopupZorder_popup);
 				
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
@@ -1086,11 +1087,11 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											
 											content_back->setContentSize(CCSizeMake(200, 120));
 											
-											CCLabelTTF* ment1_label = CCLabelTTF::create("골드가 부족합니다.", mySGD->getFont().c_str(), 15);
+											CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), mySGD->getFont().c_str(), 15);
 											ment1_label->setPosition(ccp(0,35));
 											t_container->addChild(ment1_label);
 											
-											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+											CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goToShop), mySGD->getFont().c_str(), 15);
 											ment2_label->setPosition(ccp(0,15));
 											t_container->addChild(ment2_label);
 											
@@ -1106,7 +1107,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											t_container->addChild(cancel_button);
 											
 											
-											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+											CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 											ok_button->setPosition(ccp(0,-65));
 											ok_button->setFunction([=](CCObject* sender)
 																   {
@@ -1114,7 +1115,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
 																	   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																	   t_shop->setShopCode(kSC_gold);
-																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+																	   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																	   addChild(t_shop, kStartSettingPopupZorder_popup);
 																	   t_popup->removeFromParent();
 																   });
@@ -1164,11 +1165,11 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											
 											content_back->setContentSize(CCSizeMake(200, 120));
 											
-											CCLabelTTF* ment1_label = CCLabelTTF::create("루비가 부족합니다.", mySGD->getFont().c_str(), 15);
+											CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), mySGD->getFont().c_str(), 15);
 											ment1_label->setPosition(ccp(0,35));
 											t_container->addChild(ment1_label);
 											
-											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+											CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goToShop), mySGD->getFont().c_str(), 15);
 											ment2_label->setPosition(ccp(0,15));
 											t_container->addChild(ment2_label);
 											
@@ -1184,7 +1185,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											t_container->addChild(cancel_button);
 											
 											
-											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+											CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 											ok_button->setPosition(ccp(0,-65));
 											ok_button->setFunction([=](CCObject* sender)
 																   {
@@ -1192,7 +1193,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
 																	   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																	   t_shop->setShopCode(kSC_ruby);
-																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+																	   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																	   addChild(t_shop, kStartSettingPopupZorder_popup);
 																	   t_popup->removeFromParent();
 																   });
@@ -1333,11 +1334,11 @@ void StartSettingPopup::callStart()
 		
 		content_back->setContentSize(CCSizeMake(200, 120));
 		
-		CCLabelTTF* ment1_label = CCLabelTTF::create("하트가 부족합니다.", mySGD->getFont().c_str(), 15);
+		CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartNotEnought), mySGD->getFont().c_str(), 15);
 		ment1_label->setPosition(ccp(0,35));
 		t_container->addChild(ment1_label);
 		
-		CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+		CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goToShop), mySGD->getFont().c_str(), 15);
 		ment2_label->setPosition(ccp(0,15));
 		t_container->addChild(ment2_label);
 		
@@ -1353,7 +1354,7 @@ void StartSettingPopup::callStart()
 		t_container->addChild(cancel_button);
 		
 		
-		CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(0,-65));
 		ok_button->setFunction([=](CCObject* sender)
 							   {
@@ -1361,7 +1362,7 @@ void StartSettingPopup::callStart()
 								   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
 								   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 								   t_shop->setShopCode(kSC_heart);
-								   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+								   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 								   addChild(t_shop, kStartSettingPopupZorder_popup);
 								   t_popup->removeFromParent();
 							   });
@@ -1627,11 +1628,11 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_addTime)			return_value = "AddTime";
 	else if(t_code == kIC_fast)				return_value = "Fast";
 	else if(t_code == kIC_subOneDie)		return_value = "SubOneDie";
-	else if(t_code == kIC_doubleItem)		return_value = "더블아이템";
+	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemTitle);
 	else if(t_code == kIC_silence)			return_value = "Silence";
-	else if(t_code == kIC_longTime)			return_value = "시간추가";
-	else if(t_code == kIC_baseSpeedUp)		return_value = "기본속도향상";
-	else if(t_code == kIC_itemGacha)		return_value = "아이템 뽑기";
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
+	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
+	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
 	
 	return return_value.c_str();
 }

@@ -21,6 +21,7 @@
 #include "MainFlowScene.h"
 #include "StageImgLoader.h"
 #include <random>
+#include "KSLabelTTF.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -191,6 +192,13 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		else
 		{
 			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
+			no_label->setColor(ccc3(60, 60, 60));
+			no_label->enableOuterStroke(ccBLACK, 0.5f);
+			no_label->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f));
+			no_img->addChild(no_label);
+			
 			no_img->setScale(mul_value);
 			no_img->setRotation(rotation_value);
             no_img->setPosition(position_value);
@@ -228,7 +236,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		position_index++;
 	}
 	
-	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d", stage_number)->getCString(), mySGD->getFont().c_str(), 8);
+	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
 	r_stage_label->setAnchorPoint(ccp(0,0.5f));
 	r_stage_label->setPosition(ccp(138, 287));
 	r_stage_label->setColor(ccBLACK);
@@ -329,7 +337,7 @@ bool CollectionBookPopup::init()
 	
 	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
-        input_data = "입력해주세요.";
+        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
     
     input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -342,7 +350,7 @@ bool CollectionBookPopup::init()
 	
     recent_right_img->addChild(input_text, kCBP_Z_cover);
 	
-    if(input_data != "입력해주세요.")
+    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
         input_text->setText(input_data.c_str());
 	
 	if(is_enable_pageturn)
@@ -440,7 +448,7 @@ void CollectionBookPopup::editBoxEditingDidBegin(CCEditBox* editBox)
 void CollectionBookPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = recent_card_number;
 	param["comment"] = editBox->getText();
 	
@@ -455,7 +463,7 @@ void CollectionBookPopup::editBoxTextChanged(CCEditBox* editBox, const std::stri
 void CollectionBookPopup::editBoxReturn(CCEditBox* editBox)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = recent_card_number;
 	param["comment"] = editBox->getText();
 	
@@ -678,7 +686,7 @@ void CollectionBookPopup::startNextPage()
 	
 	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
-        input_data = "입력해주세요.";
+        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
     
     input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -690,7 +698,7 @@ void CollectionBookPopup::startNextPage()
 	recent_right_img->addChild(input_text, kCBP_Z_cover);
 	input_text->setTouchPriority(-191);
     
-    if(input_data != "입력해주세요.")
+    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
         input_text->setText(input_data.c_str());
 	
 	setLeftPage(covered_left_img, next_number);
@@ -821,7 +829,7 @@ void CollectionBookPopup::startPreSelectedPage()
 	
 	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
-        input_data = "입력해주세요.";
+        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
     
     input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -833,7 +841,7 @@ void CollectionBookPopup::startPreSelectedPage()
 	covered_right_img->addChild(input_text, kCBP_Z_cover);
 	input_text->setTouchPriority(-191);
     
-    if(input_data != "입력해주세요.")
+    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
         input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
@@ -926,7 +934,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
-        input_data = "입력해주세요.";
+        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
     
     input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -938,7 +946,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	recent_right_img->addChild(input_text, kCBP_Z_cover);
 	input_text->setTouchPriority(-191);
     
-    if(input_data != "입력해주세요.")
+    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
         input_text->setText(input_data.c_str());
 	
 	setLeftPage(covered_left_img, recent_card_number);
@@ -1140,7 +1148,7 @@ void CollectionBookPopup::startPrePage()
 	
 	string input_data = mySGD->getCardComment(recent_card_number);
     if(input_data == "")
-        input_data = "입력해주세요.";
+        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
     
     input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -1152,7 +1160,7 @@ void CollectionBookPopup::startPrePage()
 	covered_right_img->addChild(input_text, kCBP_Z_cover);
 	input_text->setTouchPriority(-191);
     
-    if(input_data != "입력해주세요.")
+    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
         input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);

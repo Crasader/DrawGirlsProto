@@ -195,6 +195,7 @@ public:
 	bool is_paused;
 	
 	string getFont();
+	string getFont2();
 	
 	void setCollectionStarter(CollectionStarterType t_type);
 	
@@ -370,6 +371,11 @@ public:
 	float getFuryPercent();
 	int getSPRentCardThanks();
 	
+	void setItemGachaGoldFee(int t_i);
+	int getItemGachaGoldFee();
+	void setItemGachaReplayGoldFee(int t_i);
+	int getItemGachaReplayGoldFee();
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -529,6 +535,9 @@ private:
 	KSProtectVar<float> ai_adder_on_drew_or_damaged; //
 	KSProtectVar<float> fury_percent; //
 	KSProtectVar<int> SP_rent_card_thanks; // 소셜포인트 획득량-카드빌리고 보답할때
+	
+	KSProtectVar<int> item_gacha_gold_fee; // 아이템 가챠 가격
+	KSProtectVar<int> item_gacha_replay_gold_fee; // 아이템 가챠 다시뽑기 가격
 	
 	
 	

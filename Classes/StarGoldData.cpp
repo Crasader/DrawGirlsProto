@@ -150,6 +150,18 @@ string StarGoldData::getFont()
 	return font_name;
 }
 
+string StarGoldData::getFont2() // Jrnaver
+{
+	string font_name;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	font_name = "RixJGoB";
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+#endif
+	
+	return font_name;
+}
+
 StarGoldData* StarGoldData::sharedInstance()
 {
 	static StarGoldData* t_sg = NULL;
@@ -896,7 +908,7 @@ void StarGoldData::setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_ba
 		puzzle_historys.push_back(t_history);
 	
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["puzzleNo"] = t_history.puzzle_number;
 	param["updateOpenDate"] = t_history.is_open;
 	param["updateClearDate"] = t_history.is_clear;
@@ -966,7 +978,7 @@ PieceHistory StarGoldData::getPieceHistory(int stage_number)
 Json::Value StarGoldData::getSavePieceHistoryParam(PieceHistory t_history)
 {
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["pieceNo"] = t_history.stage_number;
 	param["openDate"] = t_history.is_open;
 	for(int j=0;j<4;j++)
@@ -1510,4 +1522,22 @@ float StarGoldData::getFuryPercent()
 int StarGoldData::getSPRentCardThanks()
 {
 	return SP_rent_card_thanks.getV();
+}
+
+
+void StarGoldData::setItemGachaGoldFee(int t_i)
+{
+	item_gacha_gold_fee = t_i;
+}
+int StarGoldData::getItemGachaGoldFee()
+{
+	return item_gacha_gold_fee.getV();
+}
+void StarGoldData::setItemGachaReplayGoldFee(int t_i)
+{
+	item_gacha_replay_gold_fee = t_i;
+}
+int StarGoldData::getItemGachaReplayGoldFee()
+{
+	return item_gacha_replay_gold_fee.getV();
 }

@@ -214,8 +214,8 @@ public:
 		return graphdog->getTime();
 	}
 	
-	long long int getHSPMemberNo();
-	string getKakaoID();
+	long long int getMemberID();
+	string getSocialID();
 	string getKakaoProfileURL();
 	string getKakaoNickname();
 	bool setupHSPonIOS(int hspGameNo,string hspGameID,string hspGameVersion,void* launchOptions);

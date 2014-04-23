@@ -91,7 +91,7 @@ bool FailPopup::init()
 		myDSH->setIntegerForKey(kDSH_Key_allHighScore, int(mySGD->getScore()));
 	}
 	Json::Value p1;
-	p1["memberID"] = hspConnector::get()->getKakaoID();
+	p1["memberID"] = hspConnector::get()->getSocialID();
 	p1["score"] = int(mySGD->getScore());
 	Json::Value p1_data;
 	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
@@ -106,7 +106,7 @@ bool FailPopup::init()
 	
 //	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
 //	{
-//		string my_id = hspConnector::get()->getKakaoID();
+//		string my_id = hspConnector::get()->getSocialID();
 //		
 //		vector<RankFriendInfo>::iterator iter = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
 //		if(iter != mySGD->save_stage_rank_list.end())
@@ -158,7 +158,7 @@ bool FailPopup::init()
 	
 	
 //	Json::Value p;
-//	p["memberID"]=hspConnector::get()->getKakaoID();
+//	p["memberID"]=hspConnector::get()->getSocialID();
 //	p["score"]=int(mySGD->getScore());
 //	p["stageNo"]=mySD->getSilType();
 //	Json::Value p_data;
@@ -345,7 +345,7 @@ bool FailPopup::init()
 		main_case->addChild(t_star, kZ_FP_img);
 	}
 	
-	KSLabelTTF* time_ment = KSLabelTTF::create("타임", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* time_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 15);
 	time_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	time_ment->setPosition(ccp(48,148));
 	main_case->addChild(time_ment, kZ_FP_img);
@@ -360,7 +360,7 @@ bool FailPopup::init()
 	time_label->setPosition(ccp(220,148));
 	main_case->addChild(time_label, kZ_FP_img);
 	
-	KSLabelTTF* gold_ment = KSLabelTTF::create("골드", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* gold_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 15);
 	gold_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	gold_ment->setPosition(ccp(48,115));
 	main_case->addChild(gold_ment, kZ_FP_img);
@@ -375,7 +375,7 @@ bool FailPopup::init()
 	gold_label->setPosition(ccp(220,115));
 	main_case->addChild(gold_label, kZ_FP_img);
 	
-	KSLabelTTF* score_ment = KSLabelTTF::create("점수", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* score_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 15);
 	score_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	score_ment->setPosition(ccp(48,82));
 	main_case->addChild(score_ment, kZ_FP_img);
@@ -392,7 +392,7 @@ bool FailPopup::init()
 	
 	
 	CCSprite* n_ok = CCSprite::create("ending_button.png");
-	KSLabelTTF* n_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	n_ok_label->setColor(ccc3(50, 30, 5));
 	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_ok_label->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-3));
@@ -400,7 +400,7 @@ bool FailPopup::init()
 	
 	CCSprite* s_ok = CCSprite::create("ending_button.png");
 	s_ok->setColor(ccGRAY);
-	KSLabelTTF* s_ok_label = KSLabelTTF::create("메인으로", mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	s_ok_label->setColor(ccc3(50, 30, 5));
 	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_ok_label->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-3));
@@ -417,14 +417,14 @@ bool FailPopup::init()
 	
 	
 	CCSprite* n_replay = CCSprite::create("ending_button.png");
-	KSLabelTTF* n_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	n_replay_label->setColor(ccc3(50, 30, 5));
 	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_replay_label->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-3));
 	n_replay->addChild(n_replay_label);
 	CCSprite* s_replay = CCSprite::create("ending_button.png");
 	s_replay->setColor(ccGRAY);
-	KSLabelTTF* s_replay_label = KSLabelTTF::create("다시하기", mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	s_replay_label->setColor(ccc3(50, 30, 5));
 	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_replay_label->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-3));
@@ -450,7 +450,7 @@ bool FailPopup::init()
 	Json::Value param2;
 	param2["myScore"]=int(mySGD->getScore());
 	param2["stageNo"]=mySD->getSilType();
-	param2["memberID"] = hspConnector::get()->getKakaoID();
+	param2["memberID"] = hspConnector::get()->getSocialID();
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
 	
@@ -490,7 +490,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 		main_case->addChild(all_user_label, kZ_FP_img);
 		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat("나의 위치 %d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 		my_rank_label->setAnchorPoint(ccp(1,0.5));
 		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 		main_case->addChild(my_rank_label, kZ_FP_img);
@@ -617,7 +617,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
-		CCLabelTTF* fail_label = CCLabelTTF::create("랭킹 정보 확인 실패", mySGD->getFont().c_str(), 12);
+		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(loading_img->getPosition());
 		main_case->addChild(fail_label, kZ_FP_img);
 	}
@@ -944,7 +944,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 //		Json::Value score_list = result_data["list"];
 //		for(int i=0;i<score_list.size();i++)
 //		{
-//			if(score_list[i]["memberID"].asString() == hspConnector::get()->getKakaoID())
+//			if(score_list[i]["memberID"].asString() == hspConnector::get()->getSocialID())
 //			{
 //				if(mySGD->getScore() > score_list[i]["score"].asFloat())
 //				{
@@ -1004,7 +1004,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 //		//		int myPosition = rankTableView->minContainerOffset().y;
 //		//		for(int i=0; i<friend_list.size(); i++)
 //		//		{
-//		//			if(friend_list[i].user_id == hspConnector::get()->getKakaoID())
+//		//			if(friend_list[i].user_id == hspConnector::get()->getSocialID())
 //		//			{
 //		//				myPosition = friend_list.size() - i - 1;
 //		//				break;
@@ -1152,7 +1152,7 @@ void FailPopup::cellAction( CCObject* sender )
 //									std::string recvId = user_id;
 //									recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 //									p["receiverMemberID"] = recvId;
-//									p["senderMemberID"] = hspConnector::get()->getKakaoID();
+//									p["senderMemberID"] = hspConnector::get()->getSocialID();
 //									p["type"] = kHelpRequest;
 //									hspConnector::get()->command("sendMessage", p, [=](Json::Value r)
 //																							 {
@@ -1241,7 +1241,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 //	}
 //	
 //	CCSprite* bg;
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
+//	if((*member).user_id == hspConnector::get()->getSocialID())
 //	{
 //		bg = CCSprite::create("ending_cell_me.png");
 //		bg->setPosition(CCPointZero);
@@ -1339,7 +1339,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 //	cell->addChild(score_label,kFFC_Z_img);
 //	
 //	
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
+//	if((*member).user_id == hspConnector::get()->getSocialID())
 //	{
 //		
 //	}

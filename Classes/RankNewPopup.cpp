@@ -13,6 +13,8 @@
 #include "KSLabelTTF.h"
 #include "FormSetter.h"
 #include "LabelTTFMarquee.h"
+#include "MyLocalization.h"
+#include "TouchSuctionLayer.h"
 
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -35,7 +37,9 @@ bool RankNewPopup::init()
 	
 	is_menu_enable = false;
 	
-	setTouchEnabled(true);
+	TouchSuctionLayer* suction = TouchSuctionLayer::create(-180);
+	addChild(suction);
+	suction->setTouchEnabled(true);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -55,7 +59,7 @@ bool RankNewPopup::init()
 	addChild(main_case, 1);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("주간누적랭킹", mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 17);
 	title_label->setColor(ccc3(255, 150, 50));
 	title_label->setPosition(ccp(70,253));
 	main_case->addChild(title_label);
@@ -149,6 +153,8 @@ bool RankNewPopup::init()
 	
 	main_inner_right->addChild(rank_table);
 	
+	rank_table->setTouchPriority(-184);
+	
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-185);
@@ -168,7 +174,7 @@ bool RankNewPopup::init()
 	reader->release();
 	
 	Json::Value param;
-	param["memberID"] = hspConnector::get()->getKakaoID();
+	param["memberID"] = hspConnector::get()->getSocialID();
 	param["start"]=1;
 	param["limit"]=50;
 	
@@ -194,11 +200,11 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		int myrank = result_data["myrank"].asInt();
 		string lefttimestr;
 		if(lefttime>60*60*24){
-			lefttimestr=CCString::createWithFormat("%d일후 리셋", lefttime/(60*60*24)+1)->getCString();
+			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_dayAfterReset), lefttime/(60*60*24)+1)->getCString();
 		}else if(lefttime>60*60){
-			lefttimestr=CCString::createWithFormat("%d시간후 리셋", lefttime/(60*60)+1)->getCString();
+			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_hourAfterReset), lefttime/(60*60)+1)->getCString();
 		}else{
-			lefttimestr=CCString::createWithFormat("%d분후 리셋", lefttime/60+1)->getCString();
+			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_secondAfterReset), lefttime/60+1)->getCString();
 		}
 		
 		CCLabelTTF* lefttime_label = CCLabelTTF::create(lefttimestr.c_str(),mySGD->getFont().c_str(), 10);
@@ -212,7 +218,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 		rankBack->addChild(all_user_label, kZ_CP_img);
 		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat("나의 위치 %d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 		my_rank_label->setAnchorPoint(ccp(1,0.5));
 		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 		rankBack->addChild(my_rank_label, kZ_CP_img);
@@ -313,7 +319,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
-		CCLabelTTF* fail_label = CCLabelTTF::create("랭킹 정보 확인 실패", mySGD->getFont().c_str(), 12);
+		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(loading_img->getPosition());
 		rankBack->addChild(fail_label, kZ_CP_img);
 	}
