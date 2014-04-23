@@ -1447,7 +1447,6 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	isDisableLineOver = myDSH->getBoolForKey(kDSH_Key_isDisableLineOver);
 	isJoystickCenterNotFixed = myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed);
 	
-	
 	ControlCommon::myInit(t_main, d_readyBack, t_jack);
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
@@ -1507,7 +1506,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		}
 		addChild(draw_button);
 		
-		KSLabelTTF* click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 15);
+		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 15);
 		click_label->setColor(ccc3(120, 60, 0));
 		click_label->enableOuterStroke(ccc3(255, 231, 133), 1.f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
@@ -1527,13 +1526,23 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 void ControlJoystickButton::onButton()
 {
 	if(button_ani)
+	{
 		button_ani->runAnimationsForSequenceNamed("cast1start");
+		click_label->stopAllActions();
+		CCFadeTo* t_fade = CCFadeTo::create(2.f, 50);
+		click_label->runAction(t_fade);
+	}
 }
 
 void ControlJoystickButton::offButton()
 {
 	if(button_ani)
+	{
 		button_ani->runAnimationsForSequenceNamed("cast1stop");
+		click_label->stopAllActions();
+		CCFadeTo* t_fade = CCFadeTo::create(0.8f, 255);
+		click_label->runAction(t_fade);
+	}
 }
 
 void ControlJoystickButton::showDrawButtonTutorial()

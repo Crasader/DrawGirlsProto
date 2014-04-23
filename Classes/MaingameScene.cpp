@@ -1229,6 +1229,7 @@ void Maingame::gameover()
 		addChild(KSTimer::create(2.f, [=]()
 								 {
 									 myGD->hideBosses();
+									 hideThumb();
 									 failScenario();
 								 }));
 	}
