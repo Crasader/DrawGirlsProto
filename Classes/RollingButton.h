@@ -15,6 +15,7 @@
 #include "LabelTTFMarquee.h"
 #include "KSUtil.h"
 #include "CommonButton.h"
+#include "MyLocalization.h"
 using namespace cocos2d;
 using namespace std;
 using namespace cocos2d::extension;
@@ -66,7 +67,7 @@ public:
 		
 		m_openBtn->setPosition(ccp(0,0));
 		
-		CCSprite* missionStr = CCSprite::create("ui_mission_button_font_ko.png");
+		CCSprite* missionStr = CCSprite::create(CCString::createWithFormat("ui_mission_button_font_%s.png", myLoc->getSupportLocalCode())->getCString());
 		missionStr->setPosition(ccp(30,19));
 		m_openBtn->addChild(missionStr);
 		

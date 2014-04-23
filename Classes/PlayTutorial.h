@@ -323,7 +323,7 @@ private:
 	
 	void myInit(function<TutoMapType(IntPoint)> t_getMapData, function<void(IntPoint, TutoMapType)> t_setMapData, int t_height, function<void(IntPointVector)> t_addPath, function<void(void)> t_cleanPath, function<void(void)> t_scanMap, function<int(void)> t_getRecentStep, function<void(void)> t_nextStep);
 };
-
+class KSLabelTTF;
 class TutoControler : public CCLayer
 {
 public:
@@ -358,6 +358,7 @@ private:
 	CCSprite* control_ball;
 	
 	CCSprite* draw_button;
+	KSLabelTTF* click_label;
 	
 	CCTouch* button_touch;
 	CCTouch* joystick_touch;

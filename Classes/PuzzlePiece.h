@@ -59,24 +59,40 @@ public:
 	
 	bool turnPiece(PieceMode t_pm)
 	{
-		if((!is_turnable && t_pm == kPieceMode_thumb) || piece_mode == t_pm)
+		if(!is_turnable && t_pm == kPieceMode_thumb)
 			return false;
+		
+		is_menu_enable = false;
 		
 		piece_mode = t_pm;
 		
-		setPieceImg();
+		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.2f, 1.f, 0, 0, 90, 0, 0);
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::setPieceImg));
+		CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.2f, 1.f, 0, -90, 90, 0, 0);
+		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::endTurnPiece));
+		CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
+		runAction(t_seq);
 		
-		is_menu_enable = false;
-		endTurnPiece();
 		return true;
 	}
 	
 	void simpleView()
 	{
+		is_menu_enable = false;
+		
 		piece_mode = kPieceMode_default;
 		
+		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.2f, 1.f, 0, 0, 90, 0, 0);
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::setPieceImgSimple));
+		CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.2f, 1.f, 0, -90, 90, 0, 0);
+		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::endTurnPiece));
+		CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
+		runAction(t_seq);
+	}
+	
+	void setPieceImgSimple()
+	{
 		setPieceImg(true);
-		is_menu_enable = false;
 	}
 	
 	void startGetPieceAnimation (CCObject * t_create_particle, SEL_CallFuncCCp d_create_particle)
@@ -178,6 +194,8 @@ public:
 		setPieceImg();
 	}
 	
+	bool is_simple;
+	
 private:
 	
 	CCObject* target_create_particle;
@@ -228,8 +246,10 @@ private:
 	
 	CCMenu* piece_menu;
 	
-	void setPieceImg(bool is_simple = false)
+	void setPieceImg(bool t_simple = false)
 	{
+		is_simple = t_simple;
+		
 		removeAllChildren();
 		star1 = NULL;
 		star2 = NULL;
@@ -520,7 +540,7 @@ private:
 			for(int i=0;i<2;i++)
 			{
 				CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-				star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((0.f+180.f*i)/180.f*M_PI)*15.f, sinf((0.f+180.f*i)/180.f*M_PI)*10.f)));
+				star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((0.f+180.f*i)/180.f*M_PI)*10.f, sinf((0.f+180.f*i)/180.f*M_PI)*10.f)));
 				piece_img->addChild(star_img);
 			}
 		}

@@ -1529,7 +1529,7 @@ void ControlJoystickButton::onButton()
 	{
 		button_ani->runAnimationsForSequenceNamed("cast1start");
 		click_label->stopAllActions();
-		CCFadeTo* t_fade = CCFadeTo::create(2.f, 50);
+		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
 		click_label->runAction(t_fade);
 	}
 }
@@ -1540,7 +1540,7 @@ void ControlJoystickButton::offButton()
 	{
 		button_ani->runAnimationsForSequenceNamed("cast1stop");
 		click_label->stopAllActions();
-		CCFadeTo* t_fade = CCFadeTo::create(0.8f, 255);
+		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
 		click_label->runAction(t_fade);
 	}
 }
