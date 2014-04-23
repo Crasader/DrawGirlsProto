@@ -34,7 +34,7 @@ public:
 //	CCSprite* m_black_center;
 //	CCSprite* m_black_right;
 	CCSprite* m_btnBackRight;
-	
+	CCSprite* m_missionStr;
 	CCScale9Sprite* m_black;
 	LabelTTFMarquee* m_maqueeLbl;
 	
@@ -67,16 +67,17 @@ public:
 		
 		m_openBtn->setPosition(ccp(0,0));
 		
-		CCSprite* missionStr = CCSprite::create(CCString::createWithFormat("ui_mission_button_font_%s.png", myLoc->getSupportLocalCode())->getCString());
-		missionStr->setPosition(ccp(30,19));
-		m_openBtn->addChild(missionStr);
+		m_missionStr = CCSprite::create(CCString::createWithFormat("ui_mission_button_font_%s.png", myLoc->getSupportLocalCode())->getCString());
+		m_missionStr->setPosition(ccp(30,19));
+		m_openBtn->addChild(m_missionStr);
 		
 		m_closeBtn = CCMenuItemImage::create("ui_mission_button_close.png", "ui_mission_button_close.png", this, menu_selector(RollingButton::doClose));
 		m_closeBtn->setPosition(ccp(0,0));
 		m_closeBtn->setOpacity(0);
 		m_closeBtn->setVisible(false);
 		
-		m_success = CCSprite::create("ui_mission_clear.png");
+		m_success = CCSprite::create(CCString::createWithFormat("ui_mission_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
+		
 		m_success->setAnchorPoint(ccp(0,0));
 		m_success->setPosition(ccp(0,0));
 		m_success->setVisible(false);
@@ -187,8 +188,10 @@ public:
 	void isSuccessed(bool isSuccessed){
 		if(isSuccessed){
 			m_success->setVisible(true);
+			m_missionStr->setVisible(false);
 		}else{
 			m_success->setVisible(false);
+			m_missionStr->setVisible(true);
 		}
 	}
 	
