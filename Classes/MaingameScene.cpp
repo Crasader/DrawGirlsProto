@@ -365,7 +365,8 @@ void Maingame::randomingRectView()
 	
 	if(ignore_cnt >= 10 && ignore_cnt <= 15)
 	{
-		setTouchEnabled(true);
+		if(!isTouchEnabled())
+			setTouchEnabled(true);
 		ignore_cnt = 20;
 	}
 }
