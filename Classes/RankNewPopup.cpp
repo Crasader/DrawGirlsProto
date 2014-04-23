@@ -169,7 +169,8 @@ bool RankNewPopup::init()
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getKakaoID();
-	
+	param["start"]=1;
+	param["limit"]=50;
 	
 	hspConnector::get()->command("getweeklyrankbyalluser", param, json_selector(this, RankNewPopup::resultGetRank));
 	
@@ -240,8 +241,6 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		rank_table->reloadData();
 		
 		
-		for(int i=0;i<cell_action_list.size();i++)
-			cell_action_list[i]();
 		
 		
 		{
@@ -293,7 +292,23 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 			score_label->setPosition(ccp(180,18));
 			list_cell_case->addChild(score_label);
-
+			
+			if(rankBack->getTag()!=1){
+				CCPoint original_position = list_cell_case->getPosition();
+				list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
+				cell_action_list.push_back([=](){
+					delay_index = 5;
+					CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
+					CCMoveTo* t_move = CCMoveTo::create(0.5f, original_position);
+					CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
+					list_cell_case->runAction(t_seq);
+					rankBack->setTag(1);
+				});
+			}
+			
+			
+			for(int i=0;i<cell_action_list.size();i++)
+				cell_action_list[i]();
 		}
 	}
 	else
@@ -451,8 +466,9 @@ CCTableViewCell* RankNewPopup::tableCellAtIndex(CCTableView *table, unsigned int
 	
 	if(rankBack->getTag()!=1){
 		CCPoint original_position = list_cell_case->getPosition();
-		list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -300)));
+		list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
 		cell_action_list.push_back([=](){
+			delay_index = i;
 			CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
 			CCMoveTo* t_move = CCMoveTo::create(0.5f, original_position);
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);

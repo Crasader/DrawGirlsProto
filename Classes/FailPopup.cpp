@@ -576,7 +576,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();
-			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
 			CCDelayTime* t_delay = CCDelayTime::create(0.5f + delay_index*0.2f);
 			CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
@@ -608,7 +608,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();
-			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
 			CCDelayTime* t_delay = CCDelayTime::create(0.5f + delay_index*0.2f);
 			CCMoveTo* t_move = CCMoveTo::create(0.4f, original_position);
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
