@@ -95,7 +95,7 @@ bool CardSettingPopup::init()
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kCSS_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("내카드", mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 17);
 	title_label->setColor(ccc3(255, 150, 50));
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
@@ -179,7 +179,7 @@ bool CardSettingPopup::init()
 //							   });
 	
 	
-	align_default_menu = CommonButton::create("기본정렬", 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_default_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
 	align_default_menu->setPosition(ccp(220,256));
 	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
 	align_default_menu->setFunction([=](CCObject* sender)
@@ -191,7 +191,7 @@ bool CardSettingPopup::init()
 	align_default_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
-	align_take_menu = CommonButton::create("획득순", 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_take_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_takeOrder), 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
 	align_take_menu->setPosition(ccp(280,256));
 	main_case->addChild(align_take_menu, kCSS_Z_alignButton);
 	align_take_menu->setFunction([=](CCObject* sender)
@@ -203,7 +203,7 @@ bool CardSettingPopup::init()
 	align_take_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
-	align_rank_menu = CommonButton::create("등급순", 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_rank_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gradeOrder), 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
 	align_rank_menu->setPosition(ccp(340,256));
 	main_case->addChild(align_rank_menu, kCSS_Z_alignButton);
 	align_rank_menu->setFunction([=](CCObject* sender)
@@ -266,7 +266,7 @@ bool CardSettingPopup::init()
 	}
 	
 	
-	CommonButton* event_menu = CommonButton::create("이벤트", 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
+	CommonButton* event_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_event), 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
 	event_menu->setPosition(ccp(400,256));
 	main_case->addChild(event_menu, kCSS_Z_alignButton);
 	event_menu->setFunction([=](CCObject* sender)
@@ -606,7 +606,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			stage_number_label->setPosition(ccp(10,67));
 			cell->addChild(stage_number_label);
 			
-			KSLabelTTF* stage_ment_label = KSLabelTTF::create("스테이지", mySGD->getFont().c_str(), 13);
+			KSLabelTTF* stage_ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 13);
 			stage_ment_label->enableOuterStroke(ccBLACK, 1.f);
 			stage_ment_label->setAnchorPoint(ccp(0,0.5));
 			stage_ment_label->setPosition(ccp(10,47));
@@ -675,13 +675,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					
 					string condition_text;
 					if(i == 1)
-						condition_text = "85%";
+						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine1);
 					else if(i == 2)
-						condition_text = "85%\n+ 체인지";
+						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine2);
 					else if(i == 3)
-						condition_text = "100%";
+						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine3);
 					else
-						condition_text = "100%\n+ 체인지";
+						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine4);
 					
 					KSLabelTTF* n_condition = KSLabelTTF::create(condition_text.c_str(), mySGD->getFont().c_str(), 14);
 					n_condition->enableOuterStroke(ccBLACK, 1.f);

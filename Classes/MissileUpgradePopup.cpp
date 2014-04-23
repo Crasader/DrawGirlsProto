@@ -16,6 +16,7 @@
 #include "StoneMissile.h"
 #include "ASPopupView.h"
 #include "LoadingLayer.h"
+#include "MyLocalization.h"
 
 MissileUpgradePopup* MissileUpgradePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_upgrade_func)
 {
@@ -75,7 +76,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	title_label->setPosition(ccp(0,100));
 	m_container->addChild(title_label);
 	
-	KSLabelTTF* sub_label = KSLabelTTF::create("레벨을 올리면 보스를 좀 더 쉽게 물리칠 수 있어요!", mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_upgradeSubMent), mySGD->getFont().c_str(), 12);
 	sub_label->enableOuterStroke(ccBLACK, 1.f);
 	sub_label->setPosition(ccp(0,80));
 	m_container->addChild(sub_label);
@@ -109,14 +110,14 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		missile_img = t_gm;
 	}
 	
-	missile_data_level = KSLabelTTF::create(CCString::createWithFormat("레벨 %d", missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_level->setColor(ccc3(255, 222, 0));
 	missile_data_level->enableOuterStroke(ccBLACK, 1.f);
 	missile_data_level->setAnchorPoint(ccp(0,0.5f));
 	missile_data_level->setPosition(ccp(-53,60));
 	upgrade_action_node->addChild(missile_data_level);
 	
-	missile_data_power = KSLabelTTF::create(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_power->setColor(ccc3(255, 222, 0));
 	missile_data_power->enableOuterStroke(ccBLACK, 1.f);
 	missile_data_power->setAnchorPoint(ccp(0,0.5f));
@@ -126,7 +127,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	upgrade_label = KSLabelTTF::create(CCString::createWithFormat("레벨 %d 업그레이드", missile_level+1)->getCString(), mySGD->getFont().c_str(), 13);
+	upgrade_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 13);
 	upgrade_label->setPosition(ccp(0,10));
 	CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
 	price_back->setContentSize(CCSizeMake(80, 30));
@@ -176,7 +177,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	upgrade_price*=1000;
 	if(mySGD->getGold() < upgrade_price)// + use_item_price_gold.getV())
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, "골드가 부족합니다."));
+		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
 		is_menu_enable = true;
 		return;
 	}
@@ -298,8 +299,8 @@ void MissileUpgradePopup::setAfterUpgrade()
 	
 	int after_damage = StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1);
 	
-	missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
-	missile_data_power->setString(CCString::createWithFormat("파워 %d", after_damage)->getCString());
+	missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
+	missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), after_damage)->getCString());
 	
 	CCPoint missile_position;
 	if(missile_img)
@@ -333,7 +334,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	}
 	else
 	{
-		upgrade_label->setString(CCString::createWithFormat("레벨 %d 업그레이드", missile_level+1)->getCString());
+		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString());
 		price_label->setString(CCString::createWithFormat("%d", missile_level*1000)->getCString());
 	}
 	

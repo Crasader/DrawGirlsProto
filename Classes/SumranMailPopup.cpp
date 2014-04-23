@@ -31,6 +31,7 @@
 #include "KHAlertView.h"
 #include "KSLabelTTF.h"
 #include "FormSetter.h"
+#include "MyLocalization.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -64,7 +65,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	main_case->setPosition(ccp(240,160-450));
 //	addChild(main_case, 0);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("선물함", mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 17);
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
@@ -97,7 +98,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	_menu->setTouchPriority(-200);
 
 	
-	CommonButton* allReceive = CommonButton::create("모두수락", 12, CCSizeMake(100,40), CommonButtonLightPupple, -200);
+	CommonButton* allReceive = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), 12, CCSizeMake(100,40), CommonButtonLightPupple, -200);
 	allReceive->setTitleColor(ccc3(20, 0, 0));
 	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setFunction([=](CCObject*){
@@ -243,11 +244,11 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 										
 										open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
 										
-										CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("퍼즐 오픈", mySGD->getFont().c_str(), 20);
+										CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleOpenTitle), mySGD->getFont().c_str(), 20);
 										open_puzzle_title_label->setPosition(ccp(0, 102));
 										open_puzzle_container->addChild(open_puzzle_title_label);
 										
-										CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 퍼즐이\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+										CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleOpenContent), mySGD->getFont().c_str(), 18);
 										open_puzzle_content_label->setPosition(CCPointZero);
 										open_puzzle_container->addChild(open_puzzle_content_label);
 										
@@ -292,12 +293,12 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 
 	
-	CommonButton* giftFilter = CommonButton::create("티켓함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* helpFilter = CommonButton::create("도움함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* ticketFilter = CommonButton::create("티켓함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* challengeFilter = CommonButton::create("도전함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* coinFilter = CommonButton::create("하트함", 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* totalFilter = CommonButton::create("전체보기", 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* giftFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, -200); // ? 티켓함?이 맞음? From YH To KS
+	CommonButton* helpFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_helpBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* ticketFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* challengeFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_challengeBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* coinFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* totalFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allView), 12, CCSizeMake(65,38), CommonButtonGray, -200);
 	
 	// 모든 필터를 감춤. 섬란 버전에서는.
 	giftFilter->setVisible(false);
@@ -586,7 +587,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 
-		title = CCLabelTTF::create((contentObj["nick"].asString() + "님의").c_str(), mySGD->getFont().c_str(),12);
+		title = CCLabelTTF::create((contentObj["nick"].asString() + " ").c_str(), mySGD->getFont().c_str(),12); // "님의"
 		title->setPosition(ccp(38,20));
 		title->setColor(ccc3(20, 0, 0));
 		title->setAnchorPoint(CCPointZero);
@@ -597,7 +598,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		switch(type)
 		{
 			case kHeart:
-				comment = "하트가 도착했어요.";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveHeart);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_cell_receive.png", "postbox_cell_receive.png",
 					 [=](CCObject* sender)
@@ -633,7 +634,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 				break;
 			case kChallengeRequest:
-				comment = "도전장이 도착했어요.";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveChallenge);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject* sender) {
@@ -648,7 +649,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("도전을 받아들이시겠습니까?", mySGD->getFont().c_str(), 14.f); 
+						 auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkAcceptChallenge), mySGD->getFont().c_str(), 14.f);
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -659,7 +660,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 emptyNode
 								 );
 						 av->setContentSize(ttf->getDimensions());
-						 av->addButton(CommonButton::create("도망가기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ttt), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
@@ -704,7 +705,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																											av->setCenterY(150);
 
 																											CCNode* emptyNode = CCNode::create();
-																											auto ttf = CCLabelTTF::create("도전에 임하는 자세를 가집시다!!\n 도망으로간주, 패하셨습니다.", mySGD->getFont().c_str(), 14.f); 
+																											auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_tttContent), mySGD->getFont().c_str(), 14.f);
 																											ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 																											//	con->setAnchorPoint(ccp(0, 0));
 																											//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -715,7 +716,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																													emptyNode
 																													);
 																											av->setContentSize(ttf->getDimensions());
-																											av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																											av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																																		[=](CCObject* e) {
 																																			CCLog("ok!!");
 																																		});
@@ -735,7 +736,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																										});
 																									});
 													 });
-						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 int mailNo = mail["no"].asInt();
@@ -764,7 +765,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				_menu->addChild(sendBtn,2);
 				break;
 			case kChallengeResult:
-				comment = "도전결과!!";
+				comment = myLoc->getLocalForKey(kMyLocalKey_resultChallenge);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*) {
@@ -811,7 +812,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 av->setCenterY(150);
 
 								 CCNode* emptyNode = CCNode::create();
-								 auto ttf = CCLabelTTF::create("졌습니다. 브레이크 포인트 필요함. 위에 contentObj", mySGD->getFont().c_str(), 14.f); 
+								 auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_loseContent), mySGD->getFont().c_str(), 14.f);
 								 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 								 //	con->setAnchorPoint(ccp(0, 0));
 								 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -822,7 +823,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 										 emptyNode
 										 );
 								 av->setContentSize(ttf->getDimensions());
-								 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+								 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 															 [=](CCObject* e) {
 																 CCLog("ok");
 															 });
@@ -842,7 +843,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				break;
 
 			case kHelpRequest:
-				comment = "도움요청이 도착했어요.";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveHelp);
 
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
@@ -859,7 +860,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("상대방을 도와줍니다.", mySGD->getFont().c_str(), 14.f); 
+						 auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_acceptHelp), mySGD->getFont().c_str(), 14.f);
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -870,7 +871,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 emptyNode
 								 );
 						 av->setContentSize(ttf->getDimensions());
-						 av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_deny), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																			 [=](CCObject* e) {
 																				 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																											 [=](Json::Value r)
@@ -879,7 +880,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																											 });
 																				 CCLog("ok!!");
 																			 });
-						av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accept), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																															 [=](CCObject* e) {
 //																																 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 																																 int mailNo = mail["no"].asInt();
@@ -914,7 +915,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				_menu->addChild(sendBtn,2);
 				break;
 			case kHelpResult:
-				comment = "상대방의 도움이 왔어요!";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveHelped);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*) {
@@ -944,7 +945,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 																loading_card_img = card_img;
 
-																CCLabelTTF* t_label = CCLabelTTF::create("카드 정보 로딩", mySGD->getFont().c_str(), 20);
+																CCLabelTTF* t_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardInfoLoading), mySGD->getFont().c_str(), 20);
 																t_label->setColor(ccBLACK);
 																t_label->setPosition(ccp(160,215));
 																card_img->addChild(t_label);
@@ -973,7 +974,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 															av->setCenterY(150);
 
 															CCNode* emptyNode = CCNode::create();
-															auto ttf = CCLabelTTF::create("도움을 받았습니다!!", mySGD->getFont().c_str(), 14.f); 
+															auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_iHelped), mySGD->getFont().c_str(), 14.f);
 															ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 															//	con->setAnchorPoint(ccp(0, 0));
 															//ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -984,7 +985,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																	emptyNode
 																	);
 															av->setContentSize(ttf->getDimensions());
-															av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+															av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																						[=](CCObject* e) {
 																							CCLog("ok!!");
 																						});
@@ -999,7 +1000,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				_menu->addChild(sendBtn,2);
 				break;
 			case kTicketRequest:
-				comment = "티켓요청이 도착했어요.";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveNeedTicket);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*) {
@@ -1014,7 +1015,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("티켓요청이 도착. 티켓은 퍼즐을 열 때 필요합니다. 친구를 도와주세요!!", mySGD->getFont().c_str(), 14.f); 
+						 auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_arriveNeedTicketContent), mySGD->getFont().c_str(), 14.f);
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -1025,7 +1026,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 emptyNode
 								 );
 						 av->setContentSize(ttf->getDimensions());
-						 av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_deny), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
@@ -1033,7 +1034,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																					 });
 														 CCLog("ok!!");
 													 });
-						 av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_send), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
@@ -1075,7 +1076,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				_menu->addChild(sendBtn,2);
 				break;
 			case kTicketResult:
-				comment = "티켓이 왔네요 어서 받으세요.";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveTicket);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*) {
@@ -1090,7 +1091,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 						 av->setCenterY(150);
 
 						 CCNode* emptyNode = CCNode::create();
-						 auto ttf = CCLabelTTF::create("티켓이 도착했습니다. 티켓을 받으세요.", mySGD->getFont().c_str(), 12.f); 
+						 auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_arriveTicketContent), mySGD->getFont().c_str(), 12.f);
 						 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 						 //	con->setAnchorPoint(ccp(0, 0));
 						 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -1101,7 +1102,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 emptyNode
 								 );
 						 av->setContentSize(ttf->getDimensions());
-						 av->addButton(CommonButton::create("티켓 받기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_takeTicket), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
@@ -1180,11 +1181,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 																										 open_puzzle_content_back->setContentSize(CCSizeMake(202, 146));
 
-																										 CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create("퍼즐 오픈", mySGD->getFont().c_str(), 20);
+																										 CCLabelTTF* open_puzzle_title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleOpenTitle), mySGD->getFont().c_str(), 20);
 																										 open_puzzle_title_label->setPosition(ccp(0, 102));
 																										 open_puzzle_container->addChild(open_puzzle_title_label);
 
-																										 CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create("새로운 퍼즐이\n오픈 되었습니다.", mySGD->getFont().c_str(), 18);
+																										 CCLabelTTF* open_puzzle_content_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleOpenContent), mySGD->getFont().c_str(), 18);
 																										 open_puzzle_content_label->setPosition(CCPointZero);
 																										 open_puzzle_container->addChild(open_puzzle_content_label);
 
@@ -1227,7 +1228,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				_menu->addChild(sendBtn,2);
 				break;
 			case kUnknownFriendRequest:
-				comment = "친구추가 요청이 왔습니다.";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveAddFriend);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*)
@@ -1257,7 +1258,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 emptyNode
 								 );
 						 av->setContentSize(ttf->getDimensions());
-						 av->addButton(CommonButton::create("거절", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_deny), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r)
@@ -1266,7 +1267,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																					 });
 														 CCLog("ok!!");
 													 });
-						 av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accept), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
 														 CCLog("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
@@ -1304,7 +1305,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																																							 exceptionPopup->setCenterY(150);
 
 																																							 CCNode* emptyNode = CCNode::create();
-																																							 auto ttf = CCLabelTTF::create("오류가 발생했습니다.", mySGD->getFont().c_str(), 14.f); 
+																																							 auto ttf = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_whatError), mySGD->getFont().c_str(), 14.f);
 																																							 ttf->setHorizontalAlignment(kCCTextAlignmentCenter);
 																																							 //	con->setAnchorPoint(ccp(0, 0));
 																																							 //ttf->setAnchorPoint(ccp(0.5f, 0.5f));
@@ -1315,7 +1316,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																																									 emptyNode
 																																									 );
 																																							 exceptionPopup->setContentSize(ttf->getDimensions());
-																																							 exceptionPopup->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
+																																							 exceptionPopup->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																																														 [=](CCObject* e) {
 																																															 CCLog("ok!!");
 																																														 });
@@ -1347,7 +1348,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				_menu->addChild(sendBtn,2);
 				break;
 			default:
-				comment = "알 수 없는 요청이 도착했어요.";
+				comment = myLoc->getLocalForKey(kMyLocalKey_arriveWhatError);
 				sendBtn = CCMenuItemImageLambda::create
 					("postbox_challenge_ok.png", "postbox_challenge_ok.png",
 					 [=](CCObject*)
@@ -1780,7 +1781,7 @@ void SumranMailPopup::failAction ()
 	card_img->setScale(0.34f);
 	card_img->setPosition(ccp(99.f,156.f));
 	
-	CCLabelTTF* t_label = CCLabelTTF::create("정보 로드 실패", mySGD->getFont().c_str(), 20);
+	CCLabelTTF* t_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failLoadInfo), mySGD->getFont().c_str(), 20);
 	t_label->setColor(ccBLACK);
 	t_label->setPosition(ccp(160,215));
 	card_img->addChild(t_label);
