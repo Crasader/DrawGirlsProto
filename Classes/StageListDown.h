@@ -54,6 +54,7 @@ private:
 	
 	int puzzle_number;
 	
+	KSLabelTTF* talk_label;
 	KSLabelTTF* state_ment;
 	CCLabelBMFont* download_state;
 	

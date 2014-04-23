@@ -62,7 +62,7 @@ bool TitleRenewalScene::init()
 	
 	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
-	state_label->setPosition(ccp(240,130));
+	state_label->setPosition(ccp(240,190));
 	addChild(state_label, 2);
 	
 	
@@ -346,6 +346,8 @@ void TitleRenewalScene::checkReceive()
 				}, [=](float t){
 					black_img->setOpacity(255);
 					
+					state_label->setPosition(ccp(240,130));
+					
 					title_img->removeFromParent();
 					title_img = CCSprite::create("temp_title_back2.png");
 					title_img->setPosition(ccp(240,160));
@@ -361,7 +363,7 @@ void TitleRenewalScene::checkReceive()
 					progress_back->setPosition(ccp(240,80));
 					addChild(progress_back, 1);
 					
-					CCProgressTimer* progress_timer = CCProgressTimer::create(CCSprite::create("temp_title_loading_center.png"));
+					progress_timer = CCProgressTimer::create(CCSprite::create("temp_title_loading_center.png"));
 					progress_timer->setType(kCCProgressTimerTypeBar);
 					progress_timer->setMidpoint(ccp(0,0));
 					progress_timer->setBarChangeRate(ccp(1,0));
@@ -1673,6 +1675,15 @@ void TitleRenewalScene::successDownloadAction()
 		
 		endingCheck();
 	}
+	
+	float rate = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+	if(rate > 100.f)
+		rate = 100.f;
+	else if(rate < 0.f)
+		rate = 0.f;
+	
+	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, progress_timer->getPercentage(), rate);
+	progress_timer->runAction(t_to);
 }
 
 void TitleRenewalScene::endingCheck()

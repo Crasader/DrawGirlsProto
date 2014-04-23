@@ -81,6 +81,8 @@ private:
 	
 	void changeTipMent();
 	
+	CCProgressTimer* progress_timer;
+	
 	void resultLogin(Json::Value result_data);
 	
 	void resultHSLogin(Json::Value result_data);

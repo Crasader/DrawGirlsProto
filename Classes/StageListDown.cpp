@@ -429,9 +429,9 @@ void StageListDown::startOpenning()
 
 void StageListDown::endOpenning()
 {
-	KSLabelTTF* talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12);
-	talk_label->setHorizontalAlignment(kCCTextAlignmentLeft);
-	talk_label->setVerticalAlignment(kCCVerticalTextAlignmentTop);
+	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(250, 70), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+//	talk_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+//	talk_label->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	talk_label->enableOuterStroke(ccBLACK, 1.f);
 	
 	talk_box = CCScale9Sprite::create("loading_talkbox.png", CCRectMake(0, 0, 150, 64.5f), CCRectMake(50, 21.5f, 50, 21.5f));
@@ -488,7 +488,8 @@ void StageListDown::endOpenning()
 	
 	recent_tip_index = 0;
 	
-	state_ment->setString(tip_list[recent_tip_index].c_str());
+	talk_label->setString(tip_list[recent_tip_index].c_str());
+	talk_box->setContentSize(CCSizeMake(100+talk_label->getContentSize().width, 43+talk_label->getContentSize().height));
 	
 	addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
 	
@@ -496,7 +497,7 @@ void StageListDown::endOpenning()
 	ing_download_cnt = 1;
 	ing_download_per = 0;
 	download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "allfont.fnt");
-	download_state->setPosition(ccp(240,58));
+	download_state->setPosition(ccp(240,90));
 	addChild(download_state, kSLD_Z_content);
 	is_downloading = true;
 	startDownload();
@@ -507,7 +508,8 @@ void StageListDown::changeTipMent()
 	recent_tip_index++;
 	recent_tip_index %= int(tip_list.size());
 	
-	state_ment->setString(tip_list[recent_tip_index].c_str());
+	talk_label->setString(tip_list[recent_tip_index].c_str());
+	talk_box->setContentSize(CCSizeMake(100+talk_label->getContentSize().width, 43+talk_label->getContentSize().height));
 	
 	addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
 }

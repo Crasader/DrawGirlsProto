@@ -1366,18 +1366,21 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
-																						   CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
+																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
 																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																						   item_gold->addChild(t_gold_img);
 																						   
-																						   CCLabelTTF* item_gold_or_item;
-																						   item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_gold_or_item;
+																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
+																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
 																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																						   item_gold_or_item->addChild(t_gold_img2);
 																						   
-																						   CCLabelTTF* item_stone = CCLabelTTF::create("300골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
+																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
 																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																						   item_stone->addChild(t_stone_img);
@@ -1474,18 +1477,20 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
-																						   CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
 																						   CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
 																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																						   item_gold->addChild(t_gold_img);
 																						   
-																						   CCLabelTTF* item_gold_or_item;
-																						   item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_gold_or_item;
+																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
+																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
 																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																						   item_gold_or_item->addChild(t_gold_img2);
 																						   
-																						   CCLabelTTF* item_stone = CCLabelTTF::create("300골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
+																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
 																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																						   item_stone->addChild(t_stone_img);
@@ -1547,7 +1552,7 @@ void Maingame::clearScenario2()
 																						   
 																						   myDSH->saveAllUserData(nullptr);
 																						   
-																						   CCFadeTo* dimmed_fade = CCFadeTo::create(0.5f, 0);
+																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
 																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
@@ -1582,19 +1587,22 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
-																						   CCLabelTTF* item_gold = CCLabelTTF::create("100골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
+																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
 																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																						   item_gold->addChild(t_gold_img);
 																						   
-																						   CCLabelTTF* item_gold_or_item;
+																						   KSLabelTTF* item_gold_or_item;
 																						   
-																						   item_gold_or_item = CCLabelTTF::create("200골드", mySGD->getFont().c_str(), 12);
+																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
+																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
 																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																						   item_gold_or_item->addChild(t_gold_img2);
 																						   
-																						   CCLabelTTF* item_stone = CCLabelTTF::create("300골드", mySGD->getFont().c_str(), 12);
+																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
+																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
 																						   CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
 																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																						   item_stone->addChild(t_stone_img);
@@ -1656,7 +1664,7 @@ void Maingame::clearScenario2()
 																						   
 																						   myDSH->saveAllUserData(nullptr);
 																						   
-																						   CCFadeTo* dimmed_fade = CCFadeTo::create(0.5f, 0);
+																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
 																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
