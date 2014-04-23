@@ -508,6 +508,8 @@ bool PuzzleScene::init()
 		}
 	}
 	
+	addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+	
 	return true;
 }
 
@@ -1543,9 +1545,81 @@ void PuzzleScene::menuAction(CCObject* sender)
 			for(int i=start_stage;i<start_stage+stage_count;i++)
 				((PuzzlePiece*)puzzle_node->getChildByTag(i))->turnPiece(piece_mode);
 			
+			stopAutoTurnPiece();
+			addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+//			is_auto_turn = false;
+//			auto_turn_piece_frame = 0;
+			
 			is_menu_enable = true;
 		}
 	}
+}
+
+void PuzzleScene::startAutoTurnPiece()
+{
+	is_auto_turn = false;
+	auto_turn_piece_frame = 0;
+	schedule(schedule_selector(PuzzleScene::autoTurnPiece), 1.f/5.f);
+}
+void PuzzleScene::autoTurnPiece()
+{
+	if(!is_menu_enable)
+		return;
+	
+	
+	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+	
+	PuzzlePiece* t_piece = (PuzzlePiece*)puzzle_node->getChildByTag(start_stage+auto_turn_piece_frame);
+	if(t_piece->is_simple)
+		t_piece->turnPiece(piece_mode);
+	else
+		t_piece->simpleView();
+	
+	auto_turn_piece_frame++;
+	
+	if(auto_turn_piece_frame == stage_count)
+	{
+		stopAutoTurnPiece();
+		addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+	}
+	
+//	if(is_auto_turn)
+//	{
+//		if(auto_turn_piece_frame >= 60*3)
+//		{
+//			is_auto_turn = false;
+//			auto_turn_piece_frame = 0;
+//			
+//			int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+//			int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+//
+//			for(int i=start_stage;i<start_stage+stage_count;i++)
+//				((PuzzlePiece*)puzzle_node->getChildByTag(i))->turnPiece(piece_mode);
+//		}
+//	}
+//	else
+//	{
+//		if(auto_turn_piece_frame >= 60*5)
+//		{
+//			is_auto_turn = true;
+//			auto_turn_piece_frame = 0;
+//			
+//			int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
+//			int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
+//			
+//			for(int i=start_stage;i<start_stage+stage_count;i++)
+//			{
+//				PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(i);
+//				new_piece->simpleView();
+//			}
+//		}
+//	}
+	
+}
+void PuzzleScene::stopAutoTurnPiece()
+{
+	unschedule(schedule_selector(PuzzleScene::autoTurnPiece));
 }
 
 void PuzzleScene::openSettingPopup()

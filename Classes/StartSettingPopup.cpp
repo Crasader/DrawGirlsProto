@@ -178,6 +178,12 @@ void StartSettingPopup::setMain()
 	left_tab->setPosition(ccp(55,225));
 	main_case->addChild(left_tab);
 	
+	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 11);
+	tab_label->setColor(ccc3(54, 35, 12));
+	tab_label->enableOuterStroke(ccc3(54, 35, 12), 0.25f);
+	tab_label->setPosition(ccp(36.5f,12.5f));
+	left_tab->addChild(tab_label);
+	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	right_back->setContentSize(CCSizeMake(310, 232));
 	right_back->setPosition(main_case->getContentSize().width*0.66f, main_case->getContentSize().height*0.44f);
@@ -408,6 +414,11 @@ void StartSettingPopup::setMain()
 	gacha_item->setPosition(ccp(425,190));
 	main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 	
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 15);
+	gacha_label->enableOuterStroke(ccBLACK, 1.f);
+	gacha_label->setPosition(ccp(37.5f, 23.5f));
+	gacha_item->addChild(gacha_label);
+	
 	
 	CCScale9Sprite* script_box = CCScale9Sprite::create("startsetting_scriptbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	script_box->setContentSize(CCSizeMake(290, 70));
@@ -416,8 +427,19 @@ void StartSettingPopup::setMain()
 	
 	
 	CCSprite* n_start = CCSprite::create("startsetting_start.png");
+	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
+	n_start_label->setColor(ccc3(47, 30, 6));
+	n_start_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+	n_start_label->setPosition(ccp(147.5f,40.5f));
+	n_start->addChild(n_start_label);
+	
 	CCSprite* s_start = CCSprite::create("startsetting_start.png");
 	s_start->setColor(ccGRAY);
+	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
+	s_start_label->setColor(ccc3(47, 30, 6));
+	s_start_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+	s_start_label->setPosition(ccp(147.5f,40.5f));
+	s_start->addChild(s_start_label);
 	
 	CCMenuItem* start_item = CCMenuItemSprite::create(n_start, s_start, this, menu_selector(StartSettingPopup::menuAction));
 	start_item->setTag(kStartSettingPopupMenuTag_start);

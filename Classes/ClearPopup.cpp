@@ -501,6 +501,8 @@ ClearPopup::~ClearPopup()
 
 void ClearPopup::resultGetRank(Json::Value result_data)
 {
+	rank_data = result_data;
+	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		cell_action_list.clear();

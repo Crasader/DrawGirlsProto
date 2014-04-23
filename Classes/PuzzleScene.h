@@ -107,6 +107,12 @@ private:
 	void showFailPopup();
 	void hideFailPopup();
 	
+	bool is_auto_turn;
+	int auto_turn_piece_frame;
+	void startAutoTurnPiece();
+	void autoTurnPiece();
+	void stopAutoTurnPiece();
+	
 	string before_scene_name;
 	
 	PieceMode piece_mode;

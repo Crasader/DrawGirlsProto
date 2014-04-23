@@ -273,7 +273,11 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_titleLoading17,
 	kMyLocalKey_titleLoading18,
 	kMyLocalKey_titleLoading19,
-	kMyLocalKey_titleLoadingEnd
+	kMyLocalKey_titleLoadingEnd,
+	kMyLocalKey_gamestart,
+	kMyLocalKey_mymissile,
+	kMyLocalKey_power,
+	kMyLocalKey_gacha
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

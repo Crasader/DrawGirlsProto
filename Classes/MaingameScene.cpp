@@ -2700,15 +2700,13 @@ void Maingame::hideThumb()
 	for(int i=0;i<search_eye_vector.size();i++)
 	{
 		SearchEye* t_search_eye = search_eye_vector[i];
-		t_search_eye->setVisible(false);
+//		t_search_eye->setVisible(false);
+		t_search_eye->removeFromParent();
 	}
+	search_eye_vector.clear();
 	
 	mControl->setVisible(false);
 	
-	for(int i=0;i<search_eye_vector.size();i++)
-	{
-		search_eye_vector[i]->setVisible(false);
-	}
 	thumb_texture->setVisible(false);
 	character_thumb->setVisible(false);
 	

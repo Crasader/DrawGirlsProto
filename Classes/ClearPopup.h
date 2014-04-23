@@ -65,6 +65,8 @@ private:
 	CCSprite* gray;
 	CCScale9Sprite* main_case;
 	
+	Json::Value rank_data;
+	
 	bool is_menu_enable;
 	bool is_saved_user_data;
 //	bool is_loaded_list;

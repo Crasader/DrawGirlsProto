@@ -335,74 +335,81 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
-			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.8f, [=](float t){
-				black_img->setOpacity(t*255);
-			}, [=](float t){
-				black_img->setOpacity(255);
-				
-				title_img->removeFromParent();
-				title_img = CCSprite::create("temp_title_back2.png");
-				title_img->setPosition(ccp(240,160));
-				addChild(title_img);
-				
-				title_name->setPosition(ccp(240,160));
-				
-				CCSprite* logo_img = CCSprite::create("temp_title_sumlanlogo.png");
-				logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
-				addChild(logo_img, 1);
-				
-				CCSprite* progress_back = CCSprite::create("temp_title_loading_back.png");
-				progress_back->setPosition(ccp(240,80));
-				addChild(progress_back, 1);
-				
-				CCProgressTimer* progress_timer = CCProgressTimer::create(CCSprite::create("temp_title_loading_center.png"));
-				progress_timer->setType(kCCProgressTimerTypeBar);
-				progress_timer->setMidpoint(ccp(0,0));
-				progress_timer->setBarChangeRate(ccp(1,0));
-				progress_timer->setPercentage(0);
-				progress_timer->setPosition(ccp(240, 80));
-				addChild(progress_timer, 1);
-				
-				CCSprite* progress_top = CCSprite::create("temp_title_loading_front.png");
-				progress_top->setPosition(ccp(240,80));
-				addChild(progress_top, 1);
-				
-				
-				addChild(KSGradualValue<float>::create(1.f, 0.f, 0.8f, [=](float t){
+			if(0 >= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
+			{
+				endingCheck();
+			}
+			else
+			{
+				addChild(KSGradualValue<float>::create(0.f, 1.f, 0.8f, [=](float t){
 					black_img->setOpacity(t*255);
 				}, [=](float t){
-					black_img->setOpacity(0);
-					black_img->removeFromParent();
+					black_img->setOpacity(255);
 					
-					tip_list.clear();
+					title_img->removeFromParent();
+					title_img = CCSprite::create("temp_title_back2.png");
+					title_img->setPosition(ccp(240,160));
+					addChild(title_img);
 					
-					for(int i=kMyLocalKey_titleLoadingBegin+1;i<kMyLocalKey_titleLoadingEnd;i++)
-					{
-						tip_list.push_back(myLoc->getLocalForKey((MyLocalKey)i));
-					}
+					title_name->setPosition(ccp(240,160));
 					
-					random_shuffle(tip_list.begin(), tip_list.end());
+					CCSprite* logo_img = CCSprite::create("temp_title_sumlanlogo.png");
+					logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
+					addChild(logo_img, 1);
 					
-					recent_tip_index = 0;
+					CCSprite* progress_back = CCSprite::create("temp_title_loading_back.png");
+					progress_back->setPosition(ccp(240,80));
+					addChild(progress_back, 1);
 					
-					state_label->setString(tip_list[recent_tip_index].c_str());
+					CCProgressTimer* progress_timer = CCProgressTimer::create(CCSprite::create("temp_title_loading_center.png"));
+					progress_timer->setType(kCCProgressTimerTypeBar);
+					progress_timer->setMidpoint(ccp(0,0));
+					progress_timer->setBarChangeRate(ccp(1,0));
+					progress_timer->setPercentage(0);
+					progress_timer->setPosition(ccp(240, 80));
+					addChild(progress_timer, 1);
 					
-					addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
+					CCSprite* progress_top = CCSprite::create("temp_title_loading_front.png");
+					progress_top->setPosition(ccp(240,80));
+					addChild(progress_top, 1);
 					
-					ing_download_cnt = 1;
-					ing_download_per = 0;
-					is_downloading = true;
 					
-					if(!download_state)
-					{
-						download_state = CCLabelBMFont::create("", "allfont.fnt");
-						download_state->setPosition(ccp(240,80));
-						addChild(download_state, 2);
-					}
-					
-					startFileDownload();
+					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.8f, [=](float t){
+						black_img->setOpacity(t*255);
+					}, [=](float t){
+						black_img->setOpacity(0);
+						black_img->removeFromParent();
+						
+						tip_list.clear();
+						
+						for(int i=kMyLocalKey_titleLoadingBegin+1;i<kMyLocalKey_titleLoadingEnd;i++)
+						{
+							tip_list.push_back(myLoc->getLocalForKey((MyLocalKey)i));
+						}
+						
+						random_shuffle(tip_list.begin(), tip_list.end());
+						
+						recent_tip_index = 0;
+						
+						state_label->setString(tip_list[recent_tip_index].c_str());
+						
+						addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
+						
+						ing_download_cnt = 1;
+						ing_download_per = 0;
+						is_downloading = true;
+						
+						if(!download_state)
+						{
+							download_state = CCLabelBMFont::create("", "allfont.fnt");
+							download_state->setPosition(ccp(240,80));
+							addChild(download_state, 2);
+						}
+						
+						startFileDownload();
+					}));
 				}));
-			}));
+			}
 		}
 		else if(is_receive_fail)
 		{
