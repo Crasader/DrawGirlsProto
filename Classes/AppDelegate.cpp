@@ -48,18 +48,19 @@ USING_NS_CC;
  */
 AppDelegate::AppDelegate()
 {
-	KSProtectVar<float> testVar(15.f);
-	KSProtectVar<float> testVar2(20.f);
-	testVar += 3.f;
-	testVar -= 5.f;
-	
-	CCLog("%f", testVar.getV()); // 값 얻기.
-	CCLog("%f", testVar + testVar2); // 보호된 변수끼리 연산가능.
-	CCLog("%d", testVar < testVar2); // 비교가능.
-	CCLog("%d", testVar < 3.f); // 상수값 비교 가능.
-	
-	KSProtectStr testStr("testtest");
-	CCLog("%s", testStr.getV().c_str());
+	CCLog("!!!");
+//	KSProtectVar<float> testVar(15.f);
+//	KSProtectVar<float> testVar2(20.f);
+//	testVar += 3.f;
+//	testVar -= 5.f;
+//	
+//	CCLog("%f", testVar.getV()); // 값 얻기.
+//	CCLog("%f", testVar + testVar2); // 보호된 변수끼리 연산가능.
+//	CCLog("%d", testVar < testVar2); // 비교가능.
+//	CCLog("%d", testVar < 3.f); // 상수값 비교 가능.
+//	
+//	KSProtectStr testStr("testtest");
+//	CCLog("%s", testStr.getV().c_str());
 	
 	
 	//	std::random_device rd;
@@ -94,7 +95,8 @@ struct AA
 };
 bool AppDelegate::applicationDidFinishLaunching()
 {
-	
+	CCLog("finish l");
+	graphdog = GraphDog::get();
 	ks19937::seed(std::random_device()());
 	// initialize director
 	CCDirector *pDirector = CCDirector::sharedDirector();
