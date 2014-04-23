@@ -710,7 +710,7 @@ void Maingame::initJackPosition(CCPoint jack_position)
 
 void Maingame::startScene()
 {
-	AudioEngine::sharedInstance()->playSound("sound_back_maingame.mp3", true);
+	AudioEngine::sharedInstance()->playSound("sound_back_maingame.ogg", true);
 	AudioEngine::sharedInstance()->preloadEffectScene("Maingame");
 	
 	startCounting();
@@ -1198,6 +1198,8 @@ void Maingame::gameover()
 	mControl->setVisible(false);
 
 	AudioEngine::sharedInstance()->stopSound();
+	
+	AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
 
 	if(mySGD->getIsCleared())
 	{
@@ -2792,6 +2794,9 @@ void Maingame::goHome ()
 	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
+	
+	AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
+	
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 	
 	mySGD->is_paused = false;
@@ -2806,6 +2811,8 @@ void Maingame::goReplay ()
 	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
+	
+	AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
 	
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();

@@ -32,6 +32,7 @@ enum SLD_MenuTag{
 
 class IntPoint;
 class CumberShowWindow;
+class KSLabelTTF;
 class StageListDown : public CCLayer
 {
 public:
