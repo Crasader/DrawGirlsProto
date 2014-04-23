@@ -1678,6 +1678,9 @@ void PuzzleScene::setRight()
 				
 				CCSprite* t_inner = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", step_card_number)->getCString()));
 				t_inner->setScale(0.4f);
+				
+				t_inner->setPositionY(rand()%120-60);
+				
 				t_clipping->addChild(t_inner);
 				
 				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
@@ -1777,7 +1780,7 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	n_ready_label->setColor(ccc3(47, 30, 6));
-//	n_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+	n_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f));
 	n_ready->addChild(n_ready_label);
 	
@@ -1791,7 +1794,7 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	s_ready_label->setColor(ccc3(47, 30, 6));
-//	s_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
+	s_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f));
 	s_ready->addChild(s_ready_label);
 	

@@ -193,7 +193,7 @@ enum CBS_Touch{
 //	
 //	virtual void registerWithTouchDispatcher(void);
 //};
-
+class KSLabelTTF;
 class ControlJoystickButton : public ControlCommon
 {
 public:
@@ -229,6 +229,7 @@ private:
 	CCSprite* control_ball;
 	
 	CCSprite* draw_button;
+	KSLabelTTF* click_label;
 	
 	CCTouch* button_touch;
 	CCTouch* joystick_touch;
