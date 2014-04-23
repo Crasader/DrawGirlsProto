@@ -579,11 +579,11 @@ void MainFlowScene::cellAction(CCObject* sender)
 			
 			content_back->setContentSize(CCSizeMake(202, 146));
 			
-			CCLabelTTF* title_label = CCLabelTTF::create("지금 열기", mySGD->getFont().c_str(), 20);
+			CCLabelTTF* title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openRightNow), mySGD->getFont().c_str(), 20);
 			title_label->setPosition(ccp(0, 102));
 			t_container->addChild(title_label);
 			
-			CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat("%d Ruby 로 오픈", NSDS_GI(puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 18);
+			CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_openRubyValue), NSDS_GI(puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 18);
 			content_label->setPosition(CCPointZero);
 			t_container->addChild(content_label);
 			
@@ -886,6 +886,7 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_rank,
 	kMainFlowMenuTag_shop,
 	kMainFlowMenuTag_cardSetting,
+	kMainFlowMenuTag_mission,
 	kMainFlowMenuTag_friendManagement,
 	kMainFlowMenuTag_gacha,
 	kMainFlowMenuTag_achievement,
@@ -1055,6 +1056,10 @@ void MainFlowScene::menuAction(CCObject* sender)
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
 			addChild(t_popup, kMainFlowZorder_popup);
 		}
+		else if(tag == kMainFlowMenuTag_mission)
+		{
+			is_menu_enable = true;
+		}
 		else if(tag == kMainFlowMenuTag_friendManagement)
 		{
 			is_menu_enable = true;
@@ -1128,33 +1133,59 @@ void MainFlowScene::setBottom()
 	bottom_case->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+3));
 	addChild(bottom_case, kMainFlowZorder_uiButton);
 	
-	
-	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
-	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
-	s_shop->setColor(ccGRAY);
-	
-	CCMenuItem* shop_item = CCMenuItemSprite::create(n_shop, s_shop, this, menu_selector(MainFlowScene::menuAction));
-	shop_item->setTag(kMainFlowMenuTag_shop);
-	
-	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
-	shop_menu->setPosition(ccp(-200, n_shop->getContentSize().height/2.f));//ccp(-73, n_shop->getContentSize().height/2.f));
-	bottom_case->addChild(shop_menu);
-	
-	bottom_list.push_back(shop_menu);
+	bottom_list.push_back(bottom_case);
 	
 	
 	CCSprite* n_rank = CCSprite::create("mainflow_rank.png");
+	KSLabelTTF* n_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
+	n_rank_label->enableOuterStroke(ccBLACK, 1.f);
+	n_rank_label->setPosition(ccp(n_rank->getContentSize().width/2.f, 15));
+	n_rank->addChild(n_rank_label);
 	CCSprite* s_rank = CCSprite::create("mainflow_rank.png");
 	s_rank->setColor(ccGRAY);
+	KSLabelTTF* s_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
+	s_rank_label->enableOuterStroke(ccBLACK, 1.f);
+	s_rank_label->setPosition(ccp(s_rank->getContentSize().width/2.f, 15));
+	s_rank->addChild(s_rank_label);
 	
 	CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(MainFlowScene::menuAction));
 	rank_item->setTag(kMainFlowMenuTag_rank);
 	
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-	rank_menu->setPosition(ccp(-130, n_rank->getContentSize().height/2.f));//ccp(-205, n_rank->getContentSize().height/2.f));
+	rank_menu->setPosition(ccp(43-240, n_rank->getContentSize().height/2.f));//ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
-	bottom_list.push_back(rank_menu);
+	{
+		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
+		t_bar->setPosition(ccp(43-240+214.f/8.f, n_rank->getContentSize().height/2.f-4));
+		bottom_case->addChild(t_bar, -1);
+	}
+	
+	
+	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
+	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+	n_shop_label->enableOuterStroke(ccBLACK, 1.f);
+	n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 15));
+	n_shop->addChild(n_shop_label);
+	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
+	s_shop->setColor(ccGRAY);
+	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+	s_shop_label->enableOuterStroke(ccBLACK, 1.f);
+	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 15));
+	s_shop->addChild(s_shop_label);
+	
+	CCMenuItem* shop_item = CCMenuItemSprite::create(n_shop, s_shop, this, menu_selector(MainFlowScene::menuAction));
+	shop_item->setTag(kMainFlowMenuTag_shop);
+	
+	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
+	shop_menu->setPosition(ccp(43-240+214.f/4.f, n_shop->getContentSize().height/2.f));//ccp(-73, n_shop->getContentSize().height/2.f));
+	bottom_case->addChild(shop_menu);
+	
+	{
+		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
+		t_bar->setPosition(ccp(43-240+214.f/8.f*3.f, n_rank->getContentSize().height/2.f-4));
+		bottom_case->addChild(t_bar, -1);
+	}
 	
 //	CCSprite* n_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
 //	CCSprite* s_friendmanagement = CCSprite::create("mainflow_friendmanagement.png");
@@ -1179,17 +1210,50 @@ void MainFlowScene::setBottom()
 //	bottom_case->addChild(achievement_menu);
 	
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
+	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	n_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
+	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 15));
+	n_cardsetting->addChild(n_cardsetting_label);
 	CCSprite* s_cardsetting = CCSprite::create("mainflow_cardsetting.png");
 	s_cardsetting->setColor(ccGRAY);
+	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	s_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
+	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 15));
+	s_cardsetting->addChild(s_cardsetting_label);
 	
 	CCMenuItem* cardsetting_item = CCMenuItemSprite::create(n_cardsetting, s_cardsetting, this, menu_selector(MainFlowScene::menuAction));
 	cardsetting_item->setTag(kMainFlowMenuTag_cardSetting);
 	
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
-	cardsetting_menu->setPosition(ccp(-60, n_cardsetting->getContentSize().height/2.f));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
+	cardsetting_menu->setPosition(ccp(43-240+214.f/4.f*2.f, n_cardsetting->getContentSize().height/2.f));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
 	
-	bottom_list.push_back(cardsetting_menu);
+	{
+		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
+		t_bar->setPosition(ccp(43-240+214.f/8.f*5.f, n_rank->getContentSize().height/2.f-4));
+		bottom_case->addChild(t_bar, -1);
+	}
+	
+	
+	CCSprite* n_mission = CCSprite::create("mainflow_mission.png");
+	KSLabelTTF* n_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
+	n_mission_label->enableOuterStroke(ccBLACK, 1.f);
+	n_mission_label->setPosition(ccp(n_mission->getContentSize().width/2.f, 15));
+	n_mission->addChild(n_mission_label);
+	CCSprite* s_mission = CCSprite::create("mainflow_mission.png");
+	s_mission->setColor(ccGRAY);
+	KSLabelTTF* s_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
+	s_mission_label->enableOuterStroke(ccBLACK, 1.f);
+	s_mission_label->setPosition(ccp(s_mission->getContentSize().width/2.f, 15));
+	s_mission->addChild(s_mission_label);
+	
+	CCMenuItem* mission_item = CCMenuItemSprite::create(n_mission, s_mission, this, menu_selector(MainFlowScene::menuAction));
+	mission_item->setTag(kMainFlowMenuTag_mission);
+	
+	CCMenu* mission_menu = CCMenu::createWithItem(mission_item);
+	mission_menu->setPosition(ccp(43-240+214.f/4.f*3.f, n_mission->getContentSize().height/2.f));
+	bottom_case->addChild(mission_menu);
+
 	
 //	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
 //	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
@@ -1213,6 +1277,20 @@ void MainFlowScene::setBottom()
 //	CCMenu* event_menu = CCMenu::createWithItem(event_item);
 //	event_menu->setPosition(ccp(201, n_event->getContentSize().height/2.f-3));
 //	bottom_case->addChild(event_menu);
+	
+	CCSprite* left_back = CCSprite::create("mainflow_bottom_case_left.png");
+	left_back->setPosition(ccp(39-240,left_back->getContentSize().height/2.f));
+	bottom_case->addChild(left_back, -1);
+	
+	CCSprite* right_back = CCSprite::create("mainflow_bottom_case_right.png");
+	right_back->setPosition(ccp(207.5f-240,right_back->getContentSize().height/2.f)); // 207.5 // 262
+	bottom_case->addChild(right_back, -1);
+	
+	CCSprite* center_back = CCSprite::create("mainflow_bottom_case_center.png");
+	center_back->setAnchorPoint(ccp(0,0.5));
+	center_back->setPosition(ccp(39-240+left_back->getContentSize().width/2.f,center_back->getContentSize().height/2.f));
+	center_back->setScaleX(0.662f);
+	bottom_case->addChild(center_back, -1);
 	
 	Json::Value v = mySGD->cgp_data;
 	std::string pState = v["promotionstate"].asString();
@@ -1245,12 +1323,27 @@ void MainFlowScene::setBottom()
 		 
 		 */
 		
+		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
+		t_bar->setPosition(ccp(43-240+214.f/8.f*7.f, n_rank->getContentSize().height/2.f-4));
+		bottom_case->addChild(t_bar, -1);
+		
+		center_back->setScaleX(1.f);
+		right_back->setPosition(ccp(262-240,right_back->getContentSize().height/2.f));
+		
 		CCSprite* n_cgp = CCSprite::create("mainflow_event.png");
+		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+		n_cgp_label->enableOuterStroke(ccBLACK, 1.f);
+		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 15));
+		n_cgp->addChild(n_cgp_label);
 		CCSprite* s_cgp = CCSprite::create("mainflow_event.png");
 		s_cgp->setColor(ccGRAY);
+		KSLabelTTF* s_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+		s_cgp_label->enableOuterStroke(ccBLACK, 1.f);
+		s_cgp_label->setPosition(ccp(s_cgp->getContentSize().width/2.f, 15));
+		s_cgp->addChild(s_cgp_label);
 		
 		CCMenuLambda* cgp_menu = CCMenuLambda::create();
-		cgp_menu->setPosition(ccp(10, n_cgp->getContentSize().height/2.f));
+		cgp_menu->setPosition(ccp(43-240+214.f, n_cgp->getContentSize().height/2.f));
 		bottom_case->addChild(cgp_menu);
 		
 		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
@@ -1261,12 +1354,14 @@ void MainFlowScene::setBottom()
 			
 			hspConnector::get()->launchPromotion();
 			
+			t_bar->removeFromParent();
+			center_back->setScaleX(0.662f);
+			right_back->setPosition(ccp(207.5f-240,right_back->getContentSize().height/2.f));
+			
 			cgp_menu->removeFromParent();
 		});
 		
 		cgp_menu->addChild(cgp_item);
-		
-		
 	}
 	// 일반 보상
 	else if(pState == "CGP_REWARD_REQUIRED")
@@ -1314,16 +1409,16 @@ void MainFlowScene::setBottom()
 		back_case->setPosition(ccp(0,0));
 		t_container->addChild(back_case);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create("CGP 일반 보상", mySGD->getFont().c_str(), 16);;
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpNormalTitle), mySGD->getFont().c_str(), 16);;
 		title_label->setPosition(ccp(0,100));
 		t_container->addChild(title_label);
 		
-		KSLabelTTF* ment_label = KSLabelTTF::create("보상받기를 눌러주세요.", mySGD->getFont().c_str(), 12);
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
 		ment_label->setPosition(ccp(0,0));
 		t_container->addChild(ment_label);
 		
 		CCLabelTTF* t_label = CCLabelTTF::create();
-		KSLabelTTF* take_label = KSLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
 		take_label->setPosition(ccp(0,0));
 		t_label->addChild(take_label);
 		
@@ -1384,16 +1479,16 @@ void MainFlowScene::setBottom()
 		back_case->setPosition(ccp(0,0));
 		t_container->addChild(back_case);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create("CGP 전체 팝업 보상", mySGD->getFont().c_str(), 16);;
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpAllPopupTitle), mySGD->getFont().c_str(), 16);;
 		title_label->setPosition(ccp(0,100));
 		t_container->addChild(title_label);
 		
-		KSLabelTTF* ment_label = KSLabelTTF::create("보상받기를 눌러주세요.", mySGD->getFont().c_str(), 12);
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
 		ment_label->setPosition(ccp(0,0));
 		t_container->addChild(ment_label);
 		
 		CCLabelTTF* t_label = CCLabelTTF::create();
-		KSLabelTTF* take_label = KSLabelTTF::create("보상받기", mySGD->getFont().c_str(), 13);
+		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
 		take_label->setPosition(ccp(0,0));
 		t_label->addChild(take_label);
 		
@@ -1427,6 +1522,13 @@ void MainFlowScene::setBottom()
 		
 		//			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
 	}
+	
+	CCSprite* etc_event = CCSprite::create("mainflow_etc_event.png");
+	etc_event->setAnchorPoint(ccp(0.5,0));
+	etc_event->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+4));
+	addChild(etc_event, kMainFlowZorder_uiButton);
+	
+	bottom_list.push_back(etc_event);
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)

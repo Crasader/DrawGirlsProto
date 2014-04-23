@@ -365,7 +365,8 @@ void Maingame::randomingRectView()
 	
 	if(ignore_cnt >= 10 && ignore_cnt <= 15)
 	{
-		setTouchEnabled(true);
+		if(!isTouchEnabled())
+			setTouchEnabled(true);
 		ignore_cnt = 20;
 	}
 }
@@ -2805,7 +2806,7 @@ void Maingame::goReplay ()
 	myGD->resetGameData();
 	
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
-	CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
+	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 }
 void Maingame::cancelHome ()
 {

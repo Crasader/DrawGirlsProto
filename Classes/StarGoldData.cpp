@@ -1511,3 +1511,21 @@ int StarGoldData::getSPRentCardThanks()
 {
 	return SP_rent_card_thanks.getV();
 }
+
+
+void StarGoldData::setItemGachaGoldFee(int t_i)
+{
+	item_gacha_gold_fee = t_i;
+}
+int StarGoldData::getItemGachaGoldFee()
+{
+	return item_gacha_gold_fee.getV();
+}
+void StarGoldData::setItemGachaReplayGoldFee(int t_i)
+{
+	item_gacha_replay_gold_fee = t_i;
+}
+int StarGoldData::getItemGachaReplayGoldFee()
+{
+	return item_gacha_replay_gold_fee.getV();
+}

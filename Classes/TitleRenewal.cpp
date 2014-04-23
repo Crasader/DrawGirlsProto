@@ -58,7 +58,7 @@ bool TitleRenewalScene::init()
 	title_name->setPosition(ccp(240,10));//240,210));
 	addChild(title_name);
 	
-	state_label = CCLabelTTF::create("카카오 서버 접속중", mySGD->getFont().c_str(), 20);
+	state_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20);
 	state_label->setColor(ccBLACK);
 	state_label->setPosition(ccp(240,130));
 	addChild(state_label);
@@ -117,7 +117,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	{
 		is_menu_enable = true;
 		
-		state_label->setString("닉네임 입력");
+		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_inputNick));
 		
 		nick_back = CCSprite::create("nickname_back.png");
 		nick_back->setPosition(ccp(240,160));
@@ -128,7 +128,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		input_text = CCEditBox::create(CCSizeMake(210, 30), t_back);
 		input_text->setPosition(ccp(195,145));
-		input_text->setPlaceHolder("입력해주세요.");
+		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
 		input_text->setFont(mySGD->getFont().c_str(), 20);
 		input_text->setInputMode(kEditBoxInputModeSingleLine);
@@ -136,7 +136,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		addChild(input_text);
 		
 		
-		CommonButton* ok_menu = CommonButton::create("확인", 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
+		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
 		ok_menu->setPosition(ccp(363,160));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
@@ -320,7 +320,7 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
-			state_label->setString("이미지 정보를 받아옵니다.");
+			state_label->setString(myLoc->getLocalForKey(kMyLocalKey_downImgInfo));
 			ing_download_cnt = 1;
 			ing_download_per = 0;
 			is_downloading = true;
@@ -336,9 +336,9 @@ void TitleRenewalScene::checkReceive()
 		}
 		else if(is_receive_fail)
 		{
-			state_label->setString("정보 불러오기 실패");
+			state_label->setString(myLoc->getLocalForKey(kMyLocalKey_failLoadInfo));
 			
-			CommonButton* replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
+			CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
 			replay_menu->setPosition(ccp(240,160));
 			replay_menu->setFunction([=](CCObject* sender)
 									 {
@@ -406,13 +406,13 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
 		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
 		mySGD->setSPRentCardThanks(result_data["SPRentCardThanks"].asInt());
+		
+		mySGD->setItemGachaGoldFee(result_data["itemGachaGoldFee"].asInt());
+		mySGD->setItemGachaReplayGoldFee(result_data["itemGachaReplayGoldFee"].asInt());
 	}
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* common_setting_label = CCLabelTTF::create("fail getcommonsetting", mySGD->getFont().c_str(), 10);
-		common_setting_label->setPosition(ccp(40, myDSH->ui_top-60));
-		addChild(common_setting_label);
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	}
 	
@@ -465,9 +465,6 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* shop_label = CCLabelTTF::create("fail getshoplist", mySGD->getFont().c_str(), 10);
-		shop_label->setPosition(ccp(240, myDSH->ui_top-60));
-		addChild(shop_label);
 		Json::Value shop_param;
 		shop_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
 		command_list.push_back(CommandParam("getshoplist", shop_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
@@ -486,9 +483,6 @@ void TitleRenewalScene::resultGetNoticeList(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* common_setting_label = CCLabelTTF::create("fail getnoticelist", mySGD->getFont().c_str(), 10);
-		common_setting_label->setPosition(ccp(440, myDSH->ui_top-60));
-		addChild(common_setting_label);
 		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	}
 	
@@ -575,9 +569,6 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* character_label = CCLabelTTF::create("fail getcharacterlist", mySGD->getFont().c_str(), 10);
-		character_label->setPosition(ccp(120, myDSH->ui_top-60));
-		addChild(character_label);
 		Json::Value character_param;
 		character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
 		command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
@@ -748,9 +739,6 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* monster_label = CCLabelTTF::create("fail getmonsterlist", mySGD->getFont().c_str(), 10);
-		monster_label->setPosition(ccp(240, myDSH->ui_top-90));
-		addChild(monster_label);
 		Json::Value monster_param;
 		monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
 		command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
@@ -783,9 +771,6 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 	else
 	{
 		is_receive_fail = true;
-		CCLabelTTF* userdata_label = CCLabelTTF::create("fail getuserdata", mySGD->getFont().c_str(), 10);
-		userdata_label->setPosition(ccp(200, myDSH->ui_top-30));
-		addChild(userdata_label);
 		Json::Value userdata_param;
 		userdata_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
@@ -820,9 +805,6 @@ void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-//		CCLabelTTF* card_label = CCLabelTTF::create("fail getcardhistory", mySGD->getFont().c_str(), 10);
-//		card_label->setPosition(ccp(200, myDSH->ui_top-30));
-//		addChild(card_label);
 		Json::Value card_param;
 		card_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
@@ -1341,7 +1323,7 @@ void TitleRenewalScene::successDownloadAction()
 		SDS_SS(kSDF_gameInfo, character_download_list[ing_download_cnt-1].key, character_download_list[ing_download_cnt-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
@@ -1353,7 +1335,7 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
@@ -1362,7 +1344,7 @@ void TitleRenewalScene::successDownloadAction()
 		SDS_SS(kSDF_gameInfo, monster_download_list[ing_download_cnt-character_download_list.size()-1].key, monster_download_list[ing_download_cnt-character_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
@@ -1374,7 +1356,7 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
@@ -1384,7 +1366,7 @@ void TitleRenewalScene::successDownloadAction()
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
@@ -1392,7 +1374,6 @@ void TitleRenewalScene::successDownloadAction()
 	{
 		SDS_SS(kSDF_cardInfo, card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].key,
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
-		state_label->setString("카드 섬네일 만드는 중...");
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
 			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
@@ -1421,7 +1402,7 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", 1.f*100.f, ing_download_cnt,
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), 1.f*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
@@ -1431,7 +1412,7 @@ void TitleRenewalScene::successDownloadAction()
 			   puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		startFileDownload();
 	}
@@ -1441,7 +1422,9 @@ void TitleRenewalScene::successDownloadAction()
 			   puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+		
+		if(ing_download_cnt <= int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))
+		download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 											int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 		
 		
@@ -1634,15 +1617,15 @@ void TitleRenewalScene::downloadingFileAction()
 	
 	ing_download_per = t_per;
 	
-	download_state->setString(CCSTR_CWF("%.0f        %d  %d", ing_download_per*100.f, ing_download_cnt,
+	download_state->setString(CCSTR_CWF(myLoc->getLocalForKey(kMyLocalKey_downloadingProgress), ing_download_per*100.f, ing_download_cnt,
 										int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
 }
 
 void TitleRenewalScene::failDownloadAction()
 {
-	state_label->setString("이미지 받아오기 실패");
+	state_label->setString(myLoc->getLocalForKey(kMyLocalKey_downImgFail));
 	
-	CommonButton* replay_menu = CommonButton::create("재시도", 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
+	CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
 	replay_menu->setPosition(ccp(240,160));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {
@@ -1690,7 +1673,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	else if(tag == kTitleRenewal_MT_redown)
 	{
 		removeChildByTag(kTitleRenewal_MT_redown);
-		state_label->setString("이미지 정보를 받아옵니다.");
+		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_downImgInfo));
 		ing_download_cnt = 1;
 		ing_download_per = 0;
 		is_downloading = true;
@@ -1726,7 +1709,7 @@ void TitleRenewalScene::joinAction()
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
-										 state_label->setString("로그인 성공");
+										 state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
 										 setTouchEnabled(false);
 										 nick_back->removeFromParent();
@@ -1739,17 +1722,17 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, "닉네임 중복"), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_sameNick)), 999);
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDFAULTYNICK)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, "불량 닉네임"), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_invalidNick)), 999);
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
 									 {
-										 state_label->setString("로그인 성공");
+										 state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
 										 setTouchEnabled(false);
 										 nick_back->removeFromParent();
@@ -1762,12 +1745,12 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDLONGNAME)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, "닉네임이 너무 깁니다."), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_longNick)), 999);
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDSHORTNAME)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, "닉네임이 너무 짧습니다."), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_shortNick)), 999);
 										 is_menu_enable = true;
 									 }
 									 else
