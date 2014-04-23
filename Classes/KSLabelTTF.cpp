@@ -105,7 +105,11 @@ void KSLabelTTF::setDisableItalic()
 void KSLabelTTF::setOpacity(GLubyte opacity)
 {
 	CCLabelTTF::setOpacity(opacity);
-	updateTexture();
+	if(m_outerSprite)
+	{
+		m_outerSprite->setOpacity(opacity);
+	}
+//	updateTexture();
 }
 void KSLabelTTF::setString(const char *string)
 {
