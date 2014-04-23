@@ -242,7 +242,7 @@ void InviteEventPopup::drawRank( Json::Value obj )
 	//		int myPosition = rankTableView->minContainerOffset().y;
 	//		for(int i=0; i<m_scoreList.size(); i++)
 	//		{
-	//			if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getKakaoID())
+	//			if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getSocialID())
 	//			{
 	//				myPosition = m_scoreList.size() - i - 1;
 	//				break;
@@ -314,7 +314,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 				std::string recvId = m_scoreList[idx]["user_id"].asString();
 				recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' ¡¶∞≈
 				p["receiverMemberID"] = recvId;
-				p["senderMemberID"]=hspConnector::get()->getKakaoID();
+				p["senderMemberID"]=hspConnector::get()->getSocialID();
 				p["type"]=kInvite;
 				p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 
@@ -388,7 +388,7 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	cell->addChild(rank,2);
 
 	sendBtn->setUserData((void *)idx);
-	if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID()){
+	if((*member)["user_id"].asString()==hspConnector::get()->getSocialID()){
 		sendBtn->setVisible(false);
 	}else{
 		sendBtn->setVisible(true);

@@ -45,7 +45,7 @@ public:
 
 				
 		Json::Value p;
-		p["memberID"]=hspConnector::get()->getKakaoID();
+		p["memberID"]=hspConnector::get()->getSocialID();
 		p["type"] = 10; // 비지인 친구만 받겠다.
 		p["limitDay"] = mySGD->getMsgRemoveDay();
 		// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
@@ -135,7 +135,7 @@ public:
 				 //						memberID : string or number, 내카카오아이디
 				 //						-> friendID : string or number, 추가할 게임친구 카카오아이디
 				 //						-> friendMax :
-				 param["memberID"] = hspConnector::get()->getKakaoID();
+				 param["memberID"] = hspConnector::get()->getSocialID();
 				 param["friendID"] = mail["friendID"].asString();
 				 param["friendMax"] = mySGD->getGameFriendMax(); // magic number
 				 hspConnector::get()->command ("addfriendeach", param,

@@ -327,7 +327,7 @@ void RankPopup::myInit (CCObject * t_close, SEL_CallFunc d_close)
 														 for(int i=0; i<m_scoreList.size(); i++)
 														 {
 															 
-															 if(m_scoreList[i]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+															 if(m_scoreList[i]["user_id"].asString().c_str() == hspConnector::get()->getSocialID())
 																 
 															 {
 																 touchCellIndex(i);
@@ -357,7 +357,7 @@ void RankPopup::loadRank ()
 	if(m_rankCategory == RankCategory::kRealTotalFriend)
 	{
 		Json::Value p;
-		p["memberID"] = hspConnector::get()->getKakaoID();
+		p["memberID"] = hspConnector::get()->getSocialID();
 		hspConnector::get()->command("getallweeklyscorelist",p,this,[=](Json::Value obj) {
 			if(obj["result"]["code"].asInt() != GDSUCCESS){
 				return;
@@ -492,7 +492,7 @@ void RankPopup::loadRank ()
 		}
 
 
-		p["memberIDList"].append(hspConnector::get()->getKakaoID());
+		p["memberIDList"].append(hspConnector::get()->getSocialID());
 		//step2 위클리스코어 목록 읽어옴
 		hspConnector::get()->command("getweeklyscorelist",p,this,[p1,appfriends,this](Json::Value obj) {
 			// 남은 초.... obj["remainTime"].asInt();
@@ -588,7 +588,7 @@ void RankPopup::drawRank (Json::Value obj)
 	int myPosition = rankTableView->minContainerOffset().y;
 	for(int i=0; i<m_scoreList.size(); i++)
 	{
-		if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getKakaoID())
+		if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getSocialID())
 		{
 			myPosition = m_scoreList.size() - i - 1;
 			break;
@@ -639,7 +639,7 @@ void RankPopup::drawTotalRank (Json::Value obj)
 	int myPosition = rankTableView->minContainerOffset().y;
 	for(int i=0; i<m_scoreList.size(); i++)
 	{
-		if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getKakaoID())
+		if(m_scoreList[i]["user_id"].asString() == hspConnector::get()->getSocialID())
 		{
 			myPosition = m_scoreList.size() - i - 1;
 			break;
@@ -679,7 +679,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	cell->autorelease();
 	std::string cellBackFile;
 	
-	if((*member)["user_id"].asString()==hspConnector::get()->getKakaoID())
+	if((*member)["user_id"].asString()==hspConnector::get()->getSocialID())
 	{
 		cellBackFile = "rank_list_me.png";
 	}
@@ -811,7 +811,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 std::string recvId = m_scoreList[idx]["user_id"].asString();
 						 recvId.erase(std::remove(recvId.begin(), recvId.end(), '-'), recvId.end()); // '-' 제거
 						 p["receiverMemberID"] = recvId;
-						 p["senderMemberID"]=hspConnector::get()->getKakaoID();
+						 p["senderMemberID"]=hspConnector::get()->getSocialID();
 						 p["type"]=kHeart;
 						 p["nickname"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 
@@ -901,7 +901,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	
 	
 	sendBtn->setUserData((void *)idx);
-	if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID()){
+	if((*member)["user_id"].asString() == hspConnector::get()->getSocialID()){
 		if(1)
 		{
 			sendBtn->setVisible(false);
@@ -1638,7 +1638,7 @@ void RankPopup::touchCellIndex(int idx)
 	int highScore = 0;
 	int highStage = 0;
 	// 나를 클릭함.
-	if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+	if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getSocialID())
 	{
 		Json::Reader reader;
 		Json::Value data;
@@ -1702,7 +1702,7 @@ void RankPopup::touchCellIndex(int idx)
 			string t_card_passive;
 			
 			// 자기 자신을 찍음
-			if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getKakaoID())
+			if(m_scoreList[idx]["user_id"].asString().c_str() == hspConnector::get()->getSocialID())
 			{
 //				t_card_level = myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
 //				t_card_passive = myDSH->getStringForKey(kDSH_Key_cardPassive_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
@@ -1780,7 +1780,7 @@ void RankPopup::touchCellIndex(int idx)
 	}
 	
 	
-	//		if((*member)["user_id"].asString() == hspConnector::get()->getKakaoID())
+	//		if((*member)["user_id"].asString() == hspConnector::get()->getSocialID())
 	{
 		m_currentSelectSprite = CCSprite::create("rank_cell_select.png");
 		m_currentSelectSprite->setPosition(CCPointZero - ccp(3, 1));

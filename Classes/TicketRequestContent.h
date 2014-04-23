@@ -106,7 +106,7 @@ private:
 			contentJson["puzzlenumber"] = puzzle_number;
 			contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 			p["receiverMemberIDList"] = arr;
-			p["senderMemberID"] = hspConnector::get()->getKakaoID();
+			p["senderMemberID"] = hspConnector::get()->getSocialID();
 			p["type"] = kTicketRequest;
 			p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 			// 성공이든 실패든 콜백 받은 후에 remove_selector(); // popup 닫기임

@@ -85,7 +85,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 #if 0 // 싹 지우는 루틴..
 	Json::Value p;
-	p["memberID"] = hspConnector::get()->getKakaoID();
+	p["memberID"] = hspConnector::get()->getSocialID();
 	p["type"] = 0;
 	hspConnector::get()->command("removeallmessage",p,this,[](Json::Value r){});
 #endif
@@ -447,7 +447,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 void SumranMailPopup::loadMail ()
 {
 	Json::Value p;
-	p["memberID"]=hspConnector::get()->getKakaoID();
+	p["memberID"]=hspConnector::get()->getSocialID();
 	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
 	p["limitDay"] = mySGD->getMsgRemoveDay();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
@@ -679,7 +679,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																										contentJson["challengestage"] = contentObj["challengestage"].asInt();
 																										contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 																										p["receiverMemberID"] = mail["friendID"].asString();
-																										p["senderMemberID"] = hspConnector::get()->getKakaoID();
+																										p["senderMemberID"] = hspConnector::get()->getSocialID();
 																										p["type"] = kChallengeResult;
 																										contentJson["result"] = "win"; // 상대방을 win 으로 세링~
 																										p["content"] = GraphDogLib::JsonObjectToString(contentJson);
@@ -1046,7 +1046,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																						 contentJson["puzzlenumber"] = contentObj["puzzlenumber"].asInt(); // 받은거 그대로 넣음. puzzlenumber 들어감.
 																						 contentJson["nick"] = hspConnector::get()->myKakaoInfo["nickname"].asString();
 																						 p["receiverMemberID"] = mail["friendID"].asString();
-																						 p["senderMemberID"] = hspConnector::get()->getKakaoID();
+																						 p["senderMemberID"] = hspConnector::get()->getSocialID();
 																						 p["type"] = kTicketResult;
 																						 p["content"] = GraphDogLib::JsonObjectToString(contentJson);
 																						 hspConnector::get()->command
@@ -1275,7 +1275,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 														 //						memberID : string or number, 내카카오아이디
 														 //						-> friendID : string or number, 추가할 게임친구 카카오아이디
 														 //						-> friendMax :
-														 param["memberID"] = hspConnector::get()->getKakaoID();
+														 param["memberID"] = hspConnector::get()->getSocialID();
 														 param["friendID"] = mail["friendID"].asString();
 														 param["friendMax"] = mySGD->getGameFriendMax(); // magic number
 														 hspConnector::get()->command ("addfriendeach", param,

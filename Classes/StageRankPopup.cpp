@@ -224,7 +224,7 @@
 //		//		int myPosition = rankTableView->minContainerOffset().y;
 //		//		for(int i=0; i<friend_list.size(); i++)
 //		//		{
-//		//			if(friend_list[i].user_id == hspConnector::get()->getKakaoID())
+//		//			if(friend_list[i].user_id == hspConnector::get()->getSocialID())
 //		//			{
 //		//				myPosition = friend_list.size() - i - 1;
 //		//				break;
@@ -291,7 +291,7 @@
 //	rank_label->setTag(kSRFC_T_rank);
 //	cell->addChild(rank_label,kSRFC_Z_img);
 //	
-//	if((*member).user_id == hspConnector::get()->getKakaoID())
+//	if((*member).user_id == hspConnector::get()->getSocialID())
 //	{
 //		
 //	}

@@ -76,88 +76,6 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
-	CCLog("%s %d", __FILE__, __LINE__);
-	Json::Value param;
-	
-	std::function<void(Json::Value)> pf;
-	pf = [=](Json::Value p){
-		KS::KSLog("zzz %", p);
-		
-		
-		// if( 뭘 뿌려줘야한다 )
-		{
-			// button url 뿌릴 거 들어오죠.
-			
-			// CCSprite::create(p);
-			// Sprite 가 클릭됐을 때, launchPromotion() 하면 마켓 링크가 열리고.
-		}
-//		else // 보상줄게 있다.
-		{
-			// 보상 주고.
-			// hsp 에 통보하고.
-			hspConnector::get()->checkCGP(param, Json::Value(), pf);
-		}
-		
-	};
-	hspConnector::get()->checkCGP(param, Json::Value(), pf);
-//	hspConnector::get()->openUrl("market://details?id=com.litqoo.basketworldcup2");
-	
-//	Json::Value param;
-//	param["productid"] = "g_10289_001";
-//	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
-//		KS::KSLog("%", v);
-//	});
-	
-//	myDSH->setBoolForKey(kDSH_Key_isSafetyMode, true, true);
-//	myDSH->getBoolForKey(kDSH_Key_isSafetyMode, false);
-	
-//	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), [=](Json::Value t){
-//		CCLog("%s %d", __FILE__, __LINE__);
-//		KS::KSLog("%", t);
-//	});
-	CCLog("%s %d", __FILE__, __LINE__);
-//	EffectSprite* es = EffectSprite::create("bmTest.png");
-//	es->setPosition(ccp(240, 160));
-//	es->setGray();
-//	addChild(es, 999999);
-	//
-	//	for(int i=1;i<=50;i++)
-	//	{
-	//		float t_value;
-	//		if(i%2 == 1)
-	//		{
-	//			t_value = 1.2f;ㅖ
-	//
-	//			addChild(KSTimer::create(0.1f*i, [=]()
-	//															 {
-	//																 es->setBrighten(t_value);
-	//															 }));
-	//			addChild(KSTimer::create(0.1f*i+0.01f, [=]()
-	//															 {
-	//																 es->setBrighten(t_value);
-	//															 }));
-	//		}
-	//		else
-	//		{
-	//			t_value = 1.f;
-	//
-	//			addChild(KSTimer::create(0.1f*i, [=]()
-	//															 {
-	//																 es->setBrighten(t_value);
-	//															 }));
-	//		}
-	//
-	//
-	//	}
-	
-	//	es->setBrighten(1.f);
-	//	addChild(KSGradualValue<float>::create(1.f, 1.8f, 5.f, [=](float t){
-	//		es->setBrighten(t);
-	//		return true;
-	//	},
-	//																				 [=](float t){
-	//		es->setBrighten(t);
-	//																				 }));
 	setTouchEnabled(true);
 	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
@@ -868,7 +786,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 reader->release();
 														 
 														 Json::Value param;
-														 param["memberID"] = hspConnector::get()->getKakaoID();// hspConnector::get()->myKakaoInfo["user_id"].asString(); 기능 제거한다고 하면서 그래프도그가 수정됨
+														 param["memberID"] = hspConnector::get()->getSocialID();// hspConnector::get()->myKakaoInfo["user_id"].asString(); 기능 제거한다고 하면서 그래프도그가 수정됨
 														 hspConnector::get()->command("dropoutuser", param, [=](Json::Value result_data)
 																													{
 																														if(result_data["result"]["code"].asInt() == GDSUCCESS)
