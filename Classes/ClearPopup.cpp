@@ -624,7 +624,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();
-			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
 			
 			cell_action_list.push_back([=](){
 				CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
@@ -659,7 +659,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();
-			list_cell_case->setPosition(ccpAdd(original_position, ccp(0, -500)));
+			list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
 			
 			cell_action_list.push_back([=](){
 				CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
