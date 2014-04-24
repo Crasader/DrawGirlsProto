@@ -744,26 +744,26 @@ void MapScanner::setTopBottomBlock()
 	while(top_y < 430)
 	{
 		top_cnt++;
-		if(top_y+15.f >= 430)
+		if(top_y+16.f >= 430)
 		{
-			float sub_value = top_y+15.f-430;
-			for(int i=0;i<22;i++)
+			float sub_value = top_y+16.f-430;
+			for(int i=0;i<20;i++)
 			{
-				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, 0, 15, 15-sub_value));
+				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, 0, 16, 16-sub_value));
 				t_block->setAnchorPoint(ccp(0,0));
-				t_block->setPosition(ccp(i*15, top_y+2));
-				t_block->setTag(top_cnt*22+i);
+				t_block->setPosition(ccp(i*16, top_y+2));
+				t_block->setTag(top_cnt*20+i);
 				top_block_manager->addChild(t_block);
 			}
 		}
 		else
 		{
-			for(int i=0;i<22;i++)
+			for(int i=0;i<20;i++)
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture());
 				t_block->setAnchorPoint(ccp(0,0));
-				t_block->setPosition(ccp(i*15, top_y+2));
-				t_block->setTag(top_cnt*22+i);
+				t_block->setPosition(ccp(i*16, top_y+2));
+				t_block->setTag(top_cnt*20+i);
 				top_block_manager->addChild(t_block);
 			}
 		}
@@ -771,15 +771,15 @@ void MapScanner::setTopBottomBlock()
 		t_line->setAnchorPoint(ccp(0.5,0));
 		t_line->setPosition(ccp(160,top_y));
 		t_line->setScaleX(320.f/8.f);
-		t_line->setTag(top_cnt*22);
+		t_line->setTag(top_cnt*20);
 		top_block_line_manager->addChild(t_line);
-		top_y += 15.f;
+		top_y += 16.f;
 	}
 	top_block_manager->setTag(top_cnt);
 	
-	if((myGD->limited_step_top-1)*pixelSize+2 + 26 > 430)
+	if((myGD->limited_step_top-1)*pixelSize + 26 > 430)
 	{
-		float sub_value = (myGD->limited_step_top-1)*pixelSize+2 + 26 - 430;
+		float sub_value = (myGD->limited_step_top-1)*pixelSize + 26 - 430;
 		top_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, 59, 26-sub_value));
 		top_block_lock->setAnchorPoint(ccp(0.5,0));
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
@@ -787,7 +787,7 @@ void MapScanner::setTopBottomBlock()
 		
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
 		lock_label->enableOuterStroke(ccBLACK, 1.f);
-		lock_label->setPosition(ccp(29.5f,13));
+		lock_label->setPosition(ccp(29.5f,2));
 		top_block_lock->addChild(lock_label);
 	}
 	else
@@ -818,26 +818,26 @@ void MapScanner::setTopBottomBlock()
 	{
 		bottom_cnt++;
 		
-		if(bottom_y-15.f <= 0)
+		if(bottom_y-16.f <= 0)
 		{
-			float sub_value = -(bottom_y-15.f);
-			for(int i=0;i<22;i++)
+			float sub_value = -(bottom_y-16.f);
+			for(int i=0;i<20;i++)
 			{
-				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture(), CCRectMake(0, 0, 15, 15-sub_value));
+				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture(), CCRectMake(0, 0, 16, 16-sub_value));
 				t_block->setAnchorPoint(ccp(0,1.f));
-				t_block->setPosition(ccp(i*15, bottom_y-2));
-				t_block->setTag(bottom_cnt*22+i);
+				t_block->setPosition(ccp(i*16, bottom_y-2));
+				t_block->setTag(bottom_cnt*20+i);
 				bottom_block_manager->addChild(t_block);
 			}
 		}
 		else
 		{
-			for(int i=0;i<22;i++)
+			for(int i=0;i<20;i++)
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture());
 				t_block->setAnchorPoint(ccp(0,1.f));
-				t_block->setPosition(ccp(i*15, bottom_y-2));
-				t_block->setTag(bottom_cnt*22+i);
+				t_block->setPosition(ccp(i*16, bottom_y-2));
+				t_block->setTag(bottom_cnt*20+i);
 				bottom_block_manager->addChild(t_block);
 			}
 		}
@@ -845,23 +845,24 @@ void MapScanner::setTopBottomBlock()
 		t_line->setAnchorPoint(ccp(0.5,1.f));
 		t_line->setPosition(ccp(160,bottom_y));
 		t_line->setScaleX(320.f/8.f);
-		t_line->setTag(bottom_cnt*22);
+		t_line->setTag(bottom_cnt*20);
 		bottom_block_line_manager->addChild(t_line);
-		bottom_y -= 15.f;
+		bottom_y -= 16.f;
 	}
 	bottom_block_manager->setTag(bottom_cnt);
 	
-	if((myGD->limited_step_bottom-1)*pixelSize - 26 < 0)
+	if((myGD->limited_step_bottom-1)*pixelSize+2 - 26 < 0)
 	{
-		float sub_value = -((myGD->limited_step_bottom-1)*pixelSize - 26);
+		float sub_value = -((myGD->limited_step_bottom-1)*pixelSize+2 - 26);
 		bottom_block_lock = CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, 59, 26-sub_value));
 		bottom_block_lock->setAnchorPoint(ccp(0.5,1.f));
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
 		
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+		lock_label->setAnchorPoint(ccp(0.5f,1.f));
 		lock_label->enableOuterStroke(ccBLACK, 1.f);
-		lock_label->setPosition(ccp(29.5f,13));
+		lock_label->setPosition(ccp(29.5f,26-sub_value-2));
 		bottom_block_lock->addChild(lock_label);
 	}
 	else
