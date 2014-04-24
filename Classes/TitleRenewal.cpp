@@ -134,7 +134,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	{
 		is_menu_enable = true;
 		
-		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_inputNick));
+		state_label->setString("");
 		
 		nick_back = CCSprite::create("nickname_back.png");
 		nick_back->setPosition(ccp(240,160));
