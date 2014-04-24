@@ -912,9 +912,9 @@ void MapScanner::removingBlock()
 			is_removed_top_block = true;
 		else
 		{
-			for(int i=0;i<22;i++)
-				top_block_manager->removeChildByTag(remove_block_cnt*22+i);
-			top_block_line_manager->removeChildByTag(remove_block_cnt*22);
+			for(int i=0;i<20;i++)
+				top_block_manager->removeChildByTag(remove_block_cnt*20+i);
+			top_block_line_manager->removeChildByTag(remove_block_cnt*20);
 		}
 	}
 	if(!is_removed_bottom_block)
@@ -923,9 +923,9 @@ void MapScanner::removingBlock()
 			is_removed_bottom_block = true;
 		else
 		{
-			for(int i=0;i<22;i++)
-				bottom_block_manager->removeChildByTag(remove_block_cnt*22+i);
-			bottom_block_line_manager->removeChildByTag(remove_block_cnt*22);
+			for(int i=0;i<20;i++)
+				bottom_block_manager->removeChildByTag(remove_block_cnt*20+i);
+			bottom_block_line_manager->removeChildByTag(remove_block_cnt*20);
 		}
 	}
 
