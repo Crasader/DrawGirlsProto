@@ -21,6 +21,11 @@ PatternTutorialContent* PatternTutorialContent::create(int t_touch_priority, fun
 
 void PatternTutorialContent::menuAction(CCObject* sender)
 {
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
 	ing_close_cnt++;
 	
 	if(ing_close_cnt >= pattern_list.size())
@@ -43,6 +48,8 @@ void PatternTutorialContent::menuAction(CCObject* sender)
 		show_content = CCSprite::create(CCString::createWithFormat("pattern%d_tutorial.png", pattern_list[ing_close_cnt])->getCString());
 		show_content->setPosition(ccp(0, -9));
 		show_node->addChild(show_content);
+		
+		addChild(KSTimer::create(0.5f, [=](){is_menu_enable = true;}));
 	}
 }
 
