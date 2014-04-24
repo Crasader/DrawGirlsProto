@@ -58,7 +58,7 @@ public:
 	{
 		if(t_b)
 		{
-			mySAE->setBackgroundMusicVolume(1.0);
+			mySAE->setBackgroundMusicVolume(0.7);
 		}
 		else
 		{
