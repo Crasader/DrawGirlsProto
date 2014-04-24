@@ -887,6 +887,8 @@ void LoadingTipScene::showButton()
 
 void LoadingTipScene::onMinimumTime()
 {
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
 	is_minimum_time = true;
 	if(ing_load_img == total_load_img)
 	{

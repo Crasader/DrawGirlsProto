@@ -2663,6 +2663,9 @@ void PlayUI::menuAction (CCObject * sender)
 {
 	AudioEngine::sharedInstance()->playEffect("sound_buttonClick_Low.mp3", false);
 	int tag = ((CCNode*)sender)->getTag();
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	
 	if(tag == kMenuTagUI_home && !isGameover)
 	{
 		showPause();

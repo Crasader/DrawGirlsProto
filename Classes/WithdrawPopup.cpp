@@ -85,6 +85,8 @@ void WithdrawPopup::menuAction (CCObject * sender)
 	if(!is_menu_enable)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
 	is_menu_enable = false;
 	
 	int tag = ((CCNode*)sender)->getTag();

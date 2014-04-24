@@ -1527,6 +1527,8 @@ void ControlJoystickButton::onButton()
 {
 	if(button_ani)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+		
 		button_ani->runAnimationsForSequenceNamed("cast1start");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
@@ -1538,6 +1540,8 @@ void ControlJoystickButton::offButton()
 {
 	if(button_ani)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+		
 		button_ani->runAnimationsForSequenceNamed("cast1stop");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);

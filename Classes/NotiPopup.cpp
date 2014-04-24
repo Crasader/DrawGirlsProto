@@ -2,6 +2,7 @@
 //
 
 #include "NotiPopup.h"
+#include "AudioEngine.h"
 #define LZZ_INLINE inline
 using namespace std;
 NotiPopup * NotiPopup::create (CCObject * t_close, SEL_CallFunc d_close)
@@ -70,6 +71,8 @@ void NotiPopup::menuAction (CCObject * sender)
 		if(!is_menu_enable)
 			return;
 		
+			AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+			
 		is_menu_enable = false;
 		
 		int tag = ((CCNode*)sender)->getTag();

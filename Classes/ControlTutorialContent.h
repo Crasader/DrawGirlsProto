@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "KSUtil.h"
 #include "CCMenuLambda.h"
+#include "AudioEngine.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -141,6 +142,8 @@ private:
 	
 	void menuAction(CCObject* sender)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+		
 		if(state_number == 1)
 		{
 			click_animaition->setVisible(false);

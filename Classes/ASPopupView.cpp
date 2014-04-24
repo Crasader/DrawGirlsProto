@@ -11,6 +11,7 @@
 #include "CCMenuLambda.h"
 #include "DataStorageHub.h"
 #include "CommonButton.h"
+#include "AudioEngine.h"
 
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 {
@@ -60,6 +61,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 								  case_back->getContentSize().height/2.f-10));
 	close_button->setFunction([=](CCObject* sender)
 							  {
+								  AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
 								  close_func();
 								  t_popup->removeFromParent();
 							  });

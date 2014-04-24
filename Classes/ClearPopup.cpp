@@ -1488,6 +1488,8 @@ void ClearPopup::menuAction(CCObject* pSender)
 	
 	AudioEngine::sharedInstance()->stopAllEffects();
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
 	if(recent_step == kTutorialFlowStep_homeClick)

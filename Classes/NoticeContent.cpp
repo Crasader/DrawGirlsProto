@@ -18,6 +18,8 @@ void NoticeContent::menuAction(CCObject* sender)
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	
 	int tag = ((CCNode*)sender)->getTag();
 	
 	if(tag == kNoticeContentMenuTag_ok)
