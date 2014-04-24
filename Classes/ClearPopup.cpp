@@ -1505,6 +1505,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 		if(tag == kMT_CP_ok)
 		{
 			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+			AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
 			//		mySGD->resetLabels();
 			hidePopup();
 		}

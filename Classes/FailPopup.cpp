@@ -1089,6 +1089,7 @@ void FailPopup::menuAction(CCObject* pSender)
 	if(tag == kMT_FP_main)
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+		AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
 //		mySGD->resetLabels();
 		hidePopup();
 	}

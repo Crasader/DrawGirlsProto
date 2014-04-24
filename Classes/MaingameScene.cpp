@@ -470,6 +470,8 @@ void Maingame::finalSetting()
 		addChild(t_search_eye, searchEyeZorder);
 		
 		t_search_eye->startSearch();
+		
+		search_eye_vector.push_back(t_search_eye);
 	}
 	
 	startScene();
@@ -1198,8 +1200,6 @@ void Maingame::gameover()
 	mControl->setVisible(false);
 
 	AudioEngine::sharedInstance()->stopSound();
-	
-	AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
 
 	if(mySGD->getIsCleared())
 	{
@@ -2803,8 +2803,6 @@ void Maingame::goHome ()
 	myLog->sendLog(CCString::createWithFormat("home_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
-	
-	AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
 	
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 	

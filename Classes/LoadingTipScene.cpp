@@ -399,7 +399,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		loading_tip_node->addChild(left_curtain);
 		
 		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-240,0));
+		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
 		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
 		left_curtain->runAction(left_seq);
 		
@@ -411,7 +411,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		loading_tip_node->addChild(right_curtain);
 		
 		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(240,0));
+		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
 		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
 		right_curtain->runAction(right_seq);
 		
@@ -597,7 +597,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		loading_tip_node->addChild(left_curtain);
 		
 		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-240,0));
+		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
 		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
 		left_curtain->runAction(left_seq);
 		
@@ -609,7 +609,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		loading_tip_node->addChild(right_curtain);
 		
 		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(240,0));
+		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
 		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
 		right_curtain->runAction(right_seq);
 		

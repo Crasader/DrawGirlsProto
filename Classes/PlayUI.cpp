@@ -629,7 +629,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 {
 	end_function = t_end_func;
 	initWithString(CCString::createWithFormat("%s %d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step)->getCString(), mySGD->getFont().c_str(), 20);
-	setColor(ccBLUE);
+	setColor(ccc3(0, 245, 255));
 	enableOuterStroke(ccBLACK, 2);
 //	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
 	

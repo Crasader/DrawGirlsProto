@@ -1533,6 +1533,8 @@ void StartSettingPopup::goToGame()
 	
 	mySGD->setGameStart();
 	
+	AudioEngine::sharedInstance()->stopSound();
+	
 	if(mySD->getSilType() == 1 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
 	{
 		myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
