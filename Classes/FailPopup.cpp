@@ -660,7 +660,10 @@ void FailPopup::onEnter()
 
 void FailPopup::showPopup()
 {
-	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
+	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)-2;
+	if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
+	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
+	
 	gray->setOpacity(255);
 //	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 //	gray->runAction(gray_fade);

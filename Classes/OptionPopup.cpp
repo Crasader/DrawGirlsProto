@@ -793,9 +793,12 @@ void OptionPopup::menuAction(CCObject* pSender)
 																													{
 																														if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																														{
-																															myDSH->clear();
-																															myDSH->resetDSH();
-																															CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																															hspConnector::get()->logout([](Json::Value p){
+																																myDSH->clear();
+																																myDSH->resetDSH();
+																																CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																															});
+																															
 																														}
 																														else
 																														{
