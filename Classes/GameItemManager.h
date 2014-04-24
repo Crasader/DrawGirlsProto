@@ -54,7 +54,7 @@ public:
 protected:
 	CCObject* target_effect;
 	SEL_CallFuncCCp delegate_effect;
-	virtual void acting() = 0;
+	virtual void acting();
 	
 	int holding_time;
 	int frame_cnt;

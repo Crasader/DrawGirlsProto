@@ -49,6 +49,8 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+	AudioEngine::sharedInstance()->preloadEffectScene("Title");
+	
 	is_menu_enable = false;
 	
 	title_img = CCSprite::create("temp_title_back.png");

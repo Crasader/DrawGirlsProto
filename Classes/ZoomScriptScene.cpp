@@ -49,6 +49,8 @@ bool ZoomScript::init()
         return false;
     }
 	
+	AudioEngine::sharedInstance()->playSound("bgm_normalshow.ogg", true);
+	
 	CCLayer* top_bottom_layer = CCLayer::create();
 	top_bottom_layer->setPosition(ccp(0, 0));
 	addChild(top_bottom_layer, kZS_Z_back);
@@ -274,6 +276,8 @@ void ZoomScript::menuAction(CCObject *sender)
 		}
 		else
 		{
+			AudioEngine::sharedInstance()->stopSound();
+			
 			int take_grade = 1;
 			if(target_node == first_img)
 			{

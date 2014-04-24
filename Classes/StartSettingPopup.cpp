@@ -744,6 +744,8 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		CCLog("save userdata success!!");
+		
+		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
 	
 		ItemGachaPopup* t_popup = ItemGachaPopup::create(touch_priority-100, [=](){endItemGacha();}, [=](int item_type){
 			
@@ -1083,6 +1085,9 @@ void StartSettingPopup::itemAction(CCObject *sender)
 										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGold())
 										{
 											mySGD->setGold(mySGD->getGold()-mySD->getItemPrice(item_list[clicked_item_idx]));
+											
+											AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+											
 											buySuccessItem(clicked_item_idx, 1);
 										}
 										else
@@ -1161,6 +1166,9 @@ void StartSettingPopup::itemAction(CCObject *sender)
 										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getStar())
 										{
 											mySGD->setStar(mySGD->getStar()-mySD->getItemPrice(item_list[clicked_item_idx]));
+											
+											AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+											
 											buySuccessItem(clicked_item_idx, 1);
 										}
 										else
@@ -1532,6 +1540,8 @@ void StartSettingPopup::goToGame()
 	myGD->resetGameData();
 	
 	mySGD->setGameStart();
+	
+	AudioEngine::sharedInstance()->playEffect("se_heartuse.ogg", false);
 	
 	AudioEngine::sharedInstance()->stopSound();
 	

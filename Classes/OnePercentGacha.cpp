@@ -95,6 +95,8 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		myLog->addLog(kLOG_gacha_onePercent, -1);
 		mySGD->setStar(mySGD->getStar() - mySGD->getGachaOnePercentFee());
 		
+		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		
 		gacha_button->removeFromParent();
 		
 		CCLabelTTF* t_label = CCLabelTTF::create();
@@ -211,7 +213,10 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 																	{
 																		CCLog("buy!");
-																		mySGD->setStar(mySGD->getStar()+10);
+																		mySGD->setStar(mySGD->getStar()+NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0));
+																		
+																		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+																		
 																		is_menu_enable = true;
 																		
 																		gachaAction(NULL, NULL);

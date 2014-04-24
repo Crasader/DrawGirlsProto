@@ -82,9 +82,40 @@ public:
 //			mySAE->preloadEffect("sound_shutter_closed.m4a");
 			
 			mySAE->preloadEffect("sound_gamestart.mp3");
+			
+			mySAE->preloadEffect("se_itemgacha.ogg");
+			mySAE->preloadEffect("se_heartuse.ogg");
+			mySAE->preloadEffect("se_pageturn.ogg");
+			mySAE->preloadEffect("se_resultstar.ogg");
+			mySAE->preloadEffect("se_clearreward.ogg");
+			mySAE->preloadEffect("se_mapgacha.ogg");
+			mySAE->preloadEffect("se_mapgacha_end.ogg");
+			mySAE->preloadEffect("se_pieceget.ogg");
+			mySAE->preloadEffect("se_pieceopen.ogg");
+			mySAE->preloadEffect("se_puzzleopen_1.ogg");
+			mySAE->preloadEffect("se_puzzleopen_2.ogg");
+			mySAE->preloadEffect("se_lock.ogg");
+			mySAE->preloadEffect("se_clock.ogg");
+			mySAE->preloadEffect("se_cardget.ogg");
+			mySAE->preloadEffect("se_piece.ogg");
+			mySAE->preloadEffect("se_buy.ogg");
+//			mySAE->preloadEffect("se_.ogg");
+			
 		}
 		else if(scenename == "Maingame")
 		{
+			mySAE->preloadEffect("se_area.ogg");
+			mySAE->preloadEffect("se_item.ogg");
+			mySAE->preloadEffect("se_drawcancel.ogg");
+			mySAE->preloadEffect("se_monattacked.ogg");
+			mySAE->preloadEffect("se_energywave.ogg");
+			mySAE->preloadEffect("se_castmissile.ogg");
+			mySAE->preloadEffect("se_castspecial.ogg");
+			mySAE->preloadEffect("se_castmap.ogg");
+			mySAE->preloadEffect("se_subdie.ogg");
+			
+			
+			
 			mySAE->preloadEffect("sound_ready.mp3");
 			mySAE->preloadEffect("sound_go.mp3");
 			mySAE->preloadEffect("sound_get_coin.mp3");
@@ -164,6 +195,17 @@ public:
 		}
 		else if(scenename == "Maingame")
 		{
+			mySAE->unloadEffect("se_area.ogg");
+			mySAE->unloadEffect("se_item.ogg");
+			mySAE->unloadEffect("se_drawcancel.ogg");
+			mySAE->unloadEffect("se_monattacked.ogg");
+			mySAE->unloadEffect("se_energywave.ogg");
+			mySAE->unloadEffect("se_castmissile.ogg");
+			mySAE->unloadEffect("se_castspecial.ogg");
+			mySAE->unloadEffect("se_castmap.ogg");
+			mySAE->unloadEffect("se_subdie.ogg");
+			
+			
 			mySAE->unloadEffect("sound_ready.mp3");
 			mySAE->unloadEffect("sound_go.mp3");
 			mySAE->unloadEffect("sound_get_coin.mp3");

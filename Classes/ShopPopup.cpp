@@ -870,11 +870,13 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
 		CCLog("userdata was save to server");
 	}
 	else
 	{
 		CCLog("fail!! save userdata to server");
+		fail_func();
 	}
 }
 
@@ -942,6 +944,18 @@ void ShopPopup::menuAction(CCObject* pSender)
 									
 									mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 									
+									fail_func = [=]()
+									{
+										if(price_type == "money")
+										{
+											CCLog("%dwon!!!", index_to_ruby[tag-kSP_MT_content1].getV());
+										}
+										else if(price_type == "gold")
+										{
+											mySGD->setGold(mySGD->getGold() + index_to_ruby[tag-kSP_MT_content1].getV());
+											mySGD->setStar(mySGD->getStar() - cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
+										}
+									};
 									
 									save_userdata_list.push_back(kSaveUserData_Key_star);
 									myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
@@ -962,6 +976,12 @@ void ShopPopup::menuAction(CCObject* pSender)
 											
 											mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
 											mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+											
+											fail_func = [=]()
+											{
+												mySGD->setStar(mySGD->getStar() + index_to_gold[tag-kSP_MT_content1].getV());
+												mySGD->setGold(mySGD->getGold() - ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+											};
 											
 											vector<SaveUserData_Key> save_userdata_list;
 											save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -985,6 +1005,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 										CCLog("%dwon!!!", index_to_gold[tag-kSP_MT_content1].getV());
 										
 										mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+										
+										fail_func = [=]()
+										{
+											mySGD->setGold(mySGD->getGold() - ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+										};
 										
 										vector<SaveUserData_Key> save_userdata_list;
 										save_userdata_list.push_back(kSaveUserData_Key_gold);
@@ -1029,6 +1054,29 @@ void ShopPopup::menuAction(CCObject* pSender)
 											else if(before_code == kShopBeforeCode_startsetting)
 												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 											
+											fail_func = [=]()
+											{
+												mySGD->setStar(mySGD->getStar() + index_to_heart[tag-kSP_MT_content1].getV());
+												myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
+												
+												CCNode* target_parent = target_heartTime->getParent();
+												CCPoint heart_time_position = target_heartTime->getPosition();
+												int heart_time_tag = target_heartTime->getTag();
+												
+												target_heartTime->removeFromParent();
+												target_heartTime = HeartTime::create();
+												target_heartTime->setPosition(heart_time_position);
+												target_parent->addChild(target_heartTime, 0, heart_time_tag);
+												if(before_code == kShopBeforeCode_stagesetting)
+													((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_mainflow)
+													((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_puzzle)
+													((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_startsetting)
+													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+											};
+											
 											vector<SaveUserData_Key> save_userdata_list;
 											save_userdata_list.push_back(kSaveUserData_Key_star);
 											myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
@@ -1069,6 +1117,29 @@ void ShopPopup::menuAction(CCObject* pSender)
 											else if(before_code == kShopBeforeCode_startsetting)
 												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 											
+											fail_func = [=]()
+											{
+												mySGD->setGold(mySGD->getGold() + index_to_heart[tag-kSP_MT_content1].getV());
+												myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
+												
+												CCNode* target_parent = target_heartTime->getParent();
+												CCPoint heart_time_position = target_heartTime->getPosition();
+												int heart_time_tag = target_heartTime->getTag();
+												
+												target_heartTime->removeFromParent();
+												target_heartTime = HeartTime::create();
+												target_heartTime->setPosition(heart_time_position);
+												target_parent->addChild(target_heartTime, 0, heart_time_tag);
+												if(before_code == kShopBeforeCode_stagesetting)
+													((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_mainflow)
+													((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_puzzle)
+													((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_startsetting)
+													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+											};
+											
 											vector<SaveUserData_Key> save_userdata_list;
 											save_userdata_list.push_back(kSaveUserData_Key_gold);
 											myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
@@ -1106,6 +1177,28 @@ void ShopPopup::menuAction(CCObject* pSender)
 											((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 										else if(before_code == kShopBeforeCode_startsetting)
 											((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+										
+										fail_func = [=]()
+										{
+											myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
+											
+											CCNode* target_parent = target_heartTime->getParent();
+											CCPoint heart_time_position = target_heartTime->getPosition();
+											int heart_time_tag = target_heartTime->getTag();
+											
+											target_heartTime->removeFromParent();
+											target_heartTime = HeartTime::create();
+											target_heartTime->setPosition(heart_time_position);
+											target_parent->addChild(target_heartTime, 0, heart_time_tag);
+											if(before_code == kShopBeforeCode_stagesetting)
+												((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
+											else if(before_code == kShopBeforeCode_mainflow)
+												((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+											else if(before_code == kShopBeforeCode_puzzle)
+												((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+											else if(before_code == kShopBeforeCode_startsetting)
+												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+										};
 										
 										vector<SaveUserData_Key> save_userdata_list;
 										save_userdata_list.push_back(kSaveUserData_Key_star);

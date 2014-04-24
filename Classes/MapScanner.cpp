@@ -535,8 +535,8 @@ void MapScanner::exchangeMS()
 
 void MapScanner::randomingRectView( CCPoint t_p )
 {
-	if(my_tic_toc)
-		AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", false);
+//	if(my_tic_toc)
+//		AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", false);
 
 	my_tic_toc = !my_tic_toc;
 
@@ -786,6 +786,7 @@ void MapScanner::setTopBottomBlock()
 		addChild(top_block_lock, blockZorder);
 		
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+		lock_label->setAnchorPoint(ccp(0.5f,0.f));
 		lock_label->enableOuterStroke(ccBLACK, 1.f);
 		lock_label->setPosition(ccp(29.5f,2));
 		top_block_lock->addChild(lock_label);

@@ -925,7 +925,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
 		if(t_b)
 		{
-			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+			AudioEngine::sharedInstance()->playEffect("se_area.ogg", false);
+			
+//			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
 			if(t_p >= t_beforePercentage + 0.001f)
@@ -1351,7 +1353,8 @@ void PlayUI::addGameTime30Sec ()
 {
 	if(countingCnt >= 130)
 	{
-		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+		AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+//		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	}
 	
 	countingCnt -= 30;
@@ -1393,7 +1396,8 @@ bool PlayUI::beRevivedJack ()
 			}));
 		}
 		
-		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+		AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+//		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 		
 		return true;
 	}
@@ -1414,7 +1418,8 @@ bool PlayUI::beRevivedJack ()
 			
 			is_used_heartUpItem = true;
 			
-			AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+			AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+//			AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 			
 			return true;
 		}
@@ -1687,17 +1692,20 @@ void PlayUI::counting ()
 		
 		if(countingCnt-1 == playtime_limit/3)
 		{
-			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
+			AudioEngine::sharedInstance()->playEffect("se_clock.ogg", false);
+//			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 			if(myGD->game_step == kGS_limited)
 				myGD->communication("Main_setUnlimitMap");
 		}
 		else if(countingCnt-1 == playtime_limit-50)
 		{
-			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
+			AudioEngine::sharedInstance()->playEffect("se_clock.ogg", false);
+//			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 		}
 		else if(countingCnt-1 == playtime_limit-30)
 		{
-			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
+			AudioEngine::sharedInstance()->playEffect("se_clock.ogg", true);
+//			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}
 		
 		if(countingCnt-1 >= playtime_limit)
@@ -1891,7 +1899,8 @@ void PlayUI::createBonusScore ()
 }
 void PlayUI::endGame (bool is_show_reason)
 {
-	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+	AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+//	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	//		myGD->communication("CP_setGameover");
 	if(myGD->getIsGameover())
 	{
@@ -2610,8 +2619,8 @@ void PlayUI::continueAction ()
 	
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
-	
-	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
+	AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+//	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	
 	total_time += countingCnt;
 	

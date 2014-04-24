@@ -81,6 +81,8 @@ private:
 	KSProtectVar<int> card_price_mid; // gold
 	KSProtectVar<int> card_price_low; // friend point
 	
+	function<void()> fail_func;
+	
 	CCScale9Sprite* main_case;
 	int server_character_count;
 	CCTableView* character_table;

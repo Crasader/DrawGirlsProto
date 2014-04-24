@@ -204,6 +204,8 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("missile upgrade success!!");
 		
+		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		
 		addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t){
 			upgrade_action_node->setScaleX(t/2.f + 0.5f);
 			upgrade_action_node->setScaleY(t);

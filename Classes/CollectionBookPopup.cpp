@@ -1485,10 +1485,12 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCBP_MT_pre)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_pageturn.ogg", false);
 		startPrePageFull();
 	}
 	else if(tag == kCBP_MT_next)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_pageturn.ogg", false);
 		startNextPageFull();
 	}
 	else if(tag >= kCBP_MT_cardBase)

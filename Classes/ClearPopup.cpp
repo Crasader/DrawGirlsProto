@@ -1029,22 +1029,29 @@ void ClearPopup::endTakeCard()
 		for(int i=0;i<step_count-1;i++)
 		{
 			CCDelayTime* t_delay = CCDelayTime::create(0.5f+i*0.2f);
+			CCCallFunc* t_sound = CCCallFunc::create(this, callfunc_selector(ClearPopup::starSound));
 			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
 			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-			CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, NULL);
+			CCSequence* t_seq = CCSequence::create(t_delay, t_sound, t_scale1, t_scale2, NULL);
 			ani_stars[i]->runAction(t_seq);
 		}
 		CCDelayTime* t_delay = CCDelayTime::create(0.5f+(step_count-1)*0.2f);
+		CCCallFunc* t_sound = CCCallFunc::create(this, callfunc_selector(ClearPopup::starSound));
 		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
 		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
-		CCSequence* t_seq = CCSequence::create(t_delay, t_scale1, t_scale2, t_call, NULL);
+		CCSequence* t_seq = CCSequence::create(t_delay, t_sound, t_scale1, t_scale2, t_call, NULL);
 		ani_stars[step_count-1]->runAction(t_seq);
 	}
 	else
 	{
 		checkRentCard();
 	}
+}
+
+void ClearPopup::starSound()
+{
+	AudioEngine::sharedInstance()->playEffect("se_resultstar.ogg", false);
 }
 
 void ClearPopup::checkMiniGame()

@@ -553,6 +553,8 @@ void MainFlowScene::cellAction(CCObject* sender)
 		}
 		else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
 		{
+			AudioEngine::sharedInstance()->playEffect("se_lock.ogg", false);
+			
 			int puzzle_number = tag - kMainFlowTableCellTag_buyBase;
 			CCLog("puzzle_number : %d", puzzle_number);
 			
@@ -613,6 +615,8 @@ void MainFlowScene::cellAction(CCObject* sender)
 				CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
 					mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
 					
+					AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+					
 					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 					t_history.is_open = true;
@@ -656,6 +660,8 @@ void MainFlowScene::cellAction(CCObject* sender)
 		}
 		else // ticketBase
 		{
+			AudioEngine::sharedInstance()->playEffect("se_lock.ogg", false);
+			
 			int puzzle_number = tag - kMainFlowTableCellTag_ticketBase;
 			
 			ASPopupView* t_popup = ASPopupView::create(-200);
@@ -840,6 +846,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		
 		cell_node->addChild(KSTimer::create(0.7f, [=]()
 											{
+												AudioEngine::sharedInstance()->playEffect("se_puzzleopen_2.ogg", false);
 												cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
 																			  {
 																				  if(t < 1.f)
@@ -1561,6 +1568,8 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 		{
 			hspConnector::get()->completePromotion();
 			
+			AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+			
 			mySGD->cgp_data.clear();
 			mySGD->cgp_data["promotionstate"] = "CGP_NONE";
 			
@@ -1589,6 +1598,8 @@ void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 		if(result_data["result"]["code"].asInt() == GDSUCCESS)
 		{
 			hspConnector::get()->completeInstallPromotion();
+			
+			AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
 			
 			mySGD->cgp_data.clear();
 			mySGD->cgp_data["promotionstate"] = "CGP_NONE";

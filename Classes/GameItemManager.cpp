@@ -54,6 +54,11 @@ void GameItemBase::framing()
 	}
 }
 
+void GameItemBase::acting()
+{
+	AudioEngine::sharedInstance()->playEffect("se_item.ogg", false);
+}
+
 void GameItemBase::setTakeEffectFunc(CCObject* t_effect, SEL_CallFuncCCp d_effect)
 {
 	target_effect = t_effect;
@@ -197,7 +202,9 @@ void GameItemAddTime::selfRemove()
 
 void GameItemAddTime::acting()
 {
+	GameItemBase::acting();
 	myGD->communication("UI_takeAddTimeItem");
+	
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "addTime");
 	
 	GameItemAddTime* recreate = GameItemAddTime::create(false);
@@ -254,6 +261,7 @@ GameItemSpeedUp* GameItemSpeedUp::create(bool is_near)
 
 void GameItemSpeedUp::acting()
 {
+	GameItemBase::acting();
 	myGD->communication("Jack_takeSpeedUpItem");
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "speedUp");
 	removeFromParent();
@@ -306,6 +314,7 @@ GameItemFast* GameItemFast::create(bool is_near)
 
 void GameItemFast::acting()
 {
+	GameItemBase::acting();
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "Fast");
 	
 	myGD->setAlphaSpeed(myGD->getAlphaSpeed() + 1.9f);
@@ -370,6 +379,7 @@ GameItemAttack* GameItemAttack::create(bool is_near)
 
 void GameItemAttack::acting()
 {
+	GameItemBase::acting();
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "attack");
 	
 	int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
@@ -441,6 +451,7 @@ GameItemSubOneDie* GameItemSubOneDie::create(bool is_near)
 
 void GameItemSubOneDie::acting()
 {
+	GameItemBase::acting();
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "subOneDie");
 	myGD->communication("MP_subOneDie");
 	removeFromParent();
@@ -491,6 +502,7 @@ GameItemSilence* GameItemSilence::create(bool is_near)
 
 void GameItemSilence::acting()
 {
+	GameItemBase::acting();
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "silence");
 	myGD->communication("UI_takeSilenceItem");
 	myGD->communication("CP_silenceItem", true);
@@ -553,6 +565,7 @@ GameItemFire* GameItemFire::create(bool is_near)
 
 void GameItemFire::acting()
 {
+	GameItemBase::acting();
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "fire");
 	//		myGD->communication("EP_addJackAttack");
 	AudioEngine::sharedInstance()->playEffect("sound_pil_fire.mp3",false);

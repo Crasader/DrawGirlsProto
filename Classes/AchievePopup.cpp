@@ -413,6 +413,8 @@ void AchievePopup::cellAction( CCObject* sender )
 	else if(reward_type == kAchieveRewardType_gold)
 		mySGD->setGold(mySGD->getGold() + reward_value);
 	
+	AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+	
 	keep_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag]);
 	myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag], -1);
 	myDSH->saveUserData({kSaveUserData_Key_achieve, kSaveUserData_Key_gold, kSaveUserData_Key_star}, json_selector(this, AchievePopup::resultSaveUserData));
@@ -852,6 +854,9 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	
 	mySGD->setStar(mySGD->getStar() + keep_take_ruby);
 	mySGD->setGold(mySGD->getGold() + keep_take_gold);
+	
+	if(keep_take_ruby > 0 || keep_take_gold > 0)
+		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
 	
 	myDSH->saveUserData({kSaveUserData_Key_achieve, kSaveUserData_Key_gold, kSaveUserData_Key_star}, json_selector(this, AchievePopup::resultSaveUserData));
 }

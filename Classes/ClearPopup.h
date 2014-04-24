@@ -141,6 +141,8 @@ private:
 	
 	void startCalcAnimation();
 	
+	void starSound();
+	
 	void closePopup();
 	void endLoad();
 	

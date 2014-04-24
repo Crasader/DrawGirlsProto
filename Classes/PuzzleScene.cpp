@@ -612,6 +612,9 @@ enum PuzzleNodeZorder{
 void PuzzleScene::showGetPuzzle()
 {
 	CCLog("get piece animation");
+	
+	AudioEngine::sharedInstance()->playEffect("se_pieceget.ogg", false);
+	
 	CCSprite* get_piece_title = CCSprite::create(CCString::createWithFormat("get_piece_title_%s.png", myLoc->getSupportLocalCode())->getCString());
 	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
 	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
@@ -715,6 +718,8 @@ void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLog("success puzzle animation");
 	
+	AudioEngine::sharedInstance()->playEffect("se_puzzleopen_1.ogg", false);
+	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
 	
@@ -775,6 +780,8 @@ void PuzzleScene::showPerfectPuzzleEffect()
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
 	
+	AudioEngine::sharedInstance()->playEffect("se_pieceget.ogg", false);
+	
 	for(int i=start_stage;i<start_stage+stage_count;i++)
 	{
 		PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(i);
@@ -798,6 +805,8 @@ void PuzzleScene::showUnlockEffect()
 	
 	if(unlock_cover)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_pieceopen.ogg", false);
+		
 		PieceHistory t_history = mySGD->getPieceHistory(next_stage_number);
 		t_history.is_open = true;
 		mySGD->setPieceHistory(t_history, nullptr);
@@ -1219,6 +1228,8 @@ void PuzzleScene::pieceAction(int t_stage_number)
 	
 	if(is_action)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_piece.ogg", false);
+		
 		selected_stage_number = t_stage_number;
 		setPieceClick(selected_stage_number);
 		
@@ -1253,6 +1264,8 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 	if(is_action)
 	{
 		is_menu_enable = false;
+		
+		AudioEngine::sharedInstance()->playEffect("se_lock.ogg", false);
 		
 		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 		
@@ -1319,6 +1332,9 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 			
 			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
 				mySGD->setGold(mySGD->getGold() - NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number));
+				
+				AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+				
 //				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
 //				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), t_stage_number);
 //				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, true);
@@ -1404,6 +1420,8 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 void PuzzleScene::lockPieceAction(int t_stage_number)
 {
 	CCLog("lockPieceAction : %d", t_stage_number);
+	
+	AudioEngine::sharedInstance()->playEffect("se_lock.ogg", false);
 }
 
 void PuzzleScene::menuAction(CCObject* sender)

@@ -16,6 +16,7 @@
 #include "ASPopupView.h"
 #include "LoadingLayer.h"
 #include "MyLocalization.h"
+#include "AudioEngine.h"
 
 ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
 {
@@ -278,6 +279,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 										 {
 											 KS::setOpacity(m_container, 255);
 											 question_manager->runAnimationsForSequenceNamed("Default Timeline");
+											 AudioEngine::sharedInstance()->playEffect("se_itemgacha.ogg", false);
 										 }));
 }
 
@@ -323,6 +325,8 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("save userdata success!!");
 		
+		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		
 		KS::setOpacity(question_img, 255);
 		item_img->removeFromParent();
 		regacha_button->setPosition(ccp(-70,-85-100));
@@ -331,6 +335,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		use_button->setVisible(false);
 		
 		question_manager->runAnimationsForSequenceNamed("Default Timeline");
+		AudioEngine::sharedInstance()->playEffect("se_itemgacha.ogg", false);
 	}
 	else
 	{

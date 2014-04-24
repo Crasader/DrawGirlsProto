@@ -92,6 +92,8 @@ private:
 		text_case->setPosition(ccp(112,95));
 		recent_right_img->addChild(text_case);
 		
+		AudioEngine::sharedInstance()->playEffect("se_cardget.ogg", false);
+		
 		CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.57f);
 		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(129,161));
 		CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);

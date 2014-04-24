@@ -847,6 +847,9 @@ void Maingame::gachaOn()
 	
 	myLog->addLog(kLOG_gacha_startMap, -1);
 	mySGD->setGold(mySGD->getGold() - mySGD->getGachaMapFee());
+	
+	AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+	
 	myGD->resetGameData();
 	mySGD->startMapGachaOn();
 	
@@ -884,6 +887,7 @@ bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 		setTouchEnabled(false);
 		init_state = kMIS_randomRectView;
 		ignore_cnt = 0;
+		AudioEngine::sharedInstance()->playEffect("se_mapgacha.ogg", true);
 		randomingRectView();
 		schedule(schedule_selector(Maingame::randomingRectView), 1.f/30.f);
 		
@@ -894,6 +898,10 @@ bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 		unschedule(schedule_selector(Maingame::randomingRectView));
 		myMS->stopRandomingRectView();
 		touch_img->removeFromParent();
+		
+		AudioEngine::sharedInstance()->stopEffect("se_mapgacha.ogg");
+		AudioEngine::sharedInstance()->playEffect("se_mapgacha_end.ogg", false);
+		
 		init_state = kMIS_startGame;
 		setTouchEnabled(false);
 		finalSetting();
@@ -1095,7 +1103,8 @@ void Maingame::stunBackTracking()
 	if(!myJack->isMoving)
 	{
 		isCheckingBacking = true;
-		AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
+		AudioEngine::sharedInstance()->playEffect("se_drawcancel.ogg", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
 		schedule(schedule_selector(Maingame::stunBacking));
 	}
 }
@@ -1143,7 +1152,8 @@ void Maingame::readyBackTracking()
 
 void Maingame::startBackTracking()
 {
-	AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
+	AudioEngine::sharedInstance()->playEffect("se_drawcancel.ogg", false);
+//	AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
 	((ControlJoystickButton*)mControl)->isBacking = true;
 	schedule(schedule_selector(Maingame::backTracking));
 }
@@ -1348,6 +1358,8 @@ void Maingame::clearScenario2()
 					  
 					  CCMenuItemLambda* goldbox1_item = CCMenuItemSpriteLambda::create(n_goldbox1, s_goldbox1, [=](CCObject* sender)
 																					   {
+																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.ogg", false);
+																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
 																						   goldbox4->setPosition(ccp(-150,0));
@@ -1459,6 +1471,8 @@ void Maingame::clearScenario2()
 					  
 					  CCMenuItemLambda* goldbox2_item = CCMenuItemSpriteLambda::create(n_goldbox2, s_goldbox2, [=](CCObject* sender)
 																					   {
+																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.ogg", false);
+																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
 																						   goldbox4->setPosition(ccp(-150,0));
@@ -1570,6 +1584,8 @@ void Maingame::clearScenario2()
 					  
 					  CCMenuItemLambda* goldbox3_item = CCMenuItemSpriteLambda::create(n_goldbox3, s_goldbox3, [=](CCObject* sender)
 																					   {
+																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.ogg", false);
+																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
 																						   goldbox4->setPosition(ccp(-150,0));

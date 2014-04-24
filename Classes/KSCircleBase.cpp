@@ -399,15 +399,18 @@ void KSCircleBase::completedAnimationSequenceNamed( const char *name_ )
 
 		if(m_atype == "crash")
 		{
-			AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+			AudioEngine::sharedInstance()->stopEffect("se_castmap.ogg");
+//			AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		}
 		else if(m_atype == "special")
 		{
-			AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+			AudioEngine::sharedInstance()->stopEffect("se_castspecial.ogg");
+//			AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 		}
 		else // normal
 		{
-			AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
+			AudioEngine::sharedInstance()->stopEffect("se_castmissile.ogg");
+//			AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		}
 
 		if(m_attackCanceled) // 맞아서 캔슬이 되었다면
