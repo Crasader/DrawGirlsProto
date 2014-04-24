@@ -46,7 +46,7 @@ void ComboView::myInit (int combo)
 //	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
 //	addChild(combo_timer);
 	
-	KSLabelTTF* combo_ment = KSLabelTTF::create("콤보", mySGD->getFont().c_str(), 18);
+	KSLabelTTF* combo_ment = KSLabelTTF::create("콤보", mySGD->getFont2().c_str(), 18);
 	combo_ment->setColor(ccc3(50,215,0));
 	combo_ment->setAnchorPoint(ccp(1,0.5));
 	combo_ment->enableOuterStroke(ccBLACK, 1.f);
@@ -629,7 +629,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 {
 	end_function = t_end_func;
 	initWithString(CCString::createWithFormat("%s %d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step)->getCString(), mySGD->getFont().c_str(), 20);
-	setColor(ccBLUE);
+	setColor(ccc3(0, 245, 255));
 	enableOuterStroke(ccBLACK, 2);
 //	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
 	
@@ -1377,8 +1377,8 @@ bool PlayUI::beRevivedJack ()
 		jack_life_node->removeChild((CCNode*)jack_array->lastObject(), true);
 		jack_array->removeLastObject();
 		
-		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
-		jack_life_node->runAction(t_move);
+//		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
+//		jack_life_node->runAction(t_move);
 		jack_life_hide_count = 0;
 		
 		if(jack_life <= 0)
@@ -2232,9 +2232,9 @@ void PlayUI::myInit ()
 //		jack_life++;
 	
 	jack_life_node = CCNode::create();
-	jack_life_node->setPosition(ccp(240,myDSH->ui_bottom+20-UI_OUT_DISTANCE));
+	jack_life_node->setPosition(ccp(240,myDSH->ui_bottom-70-UI_OUT_DISTANCE));
 	
-	addChild(KSGradualValue<float>::create(myDSH->ui_bottom+20-UI_OUT_DISTANCE, myDSH->ui_bottom+20, UI_IN_TIME, [=](float t){jack_life_node->setPositionY(t);}, [=](float t){jack_life_node->setPositionY(myDSH->ui_bottom+20);}));
+	addChild(KSGradualValue<float>::create(myDSH->ui_bottom-70-UI_OUT_DISTANCE, myDSH->ui_bottom-70, UI_IN_TIME, [=](float t){jack_life_node->setPositionY(t);}, [=](float t){jack_life_node->setPositionY(myDSH->ui_bottom-70);}));
 	
 	addChild(jack_life_node);
 	
@@ -2640,8 +2640,8 @@ void PlayUI::continueAction ()
 		jack_array->addObject(jack_img);
 	}
 	
-	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
-	jack_life_node->runAction(t_move);
+//	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
+//	jack_life_node->runAction(t_move);
 	
 	jack_life_hide_count = 0;
 	

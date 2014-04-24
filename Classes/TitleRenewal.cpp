@@ -136,7 +136,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		nick_back = CCSprite::create("nickname_back.png");
 		nick_back->setPosition(ccp(240,160));
-		addChild(nick_back);
+		addChild(nick_back,3);
 		
 		CCScale9Sprite* t_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
 		t_back->setOpacity(0);
@@ -148,7 +148,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		input_text->setFont(mySGD->getFont().c_str(), 20);
 		input_text->setInputMode(kEditBoxInputModeSingleLine);
 		input_text->setDelegate(this);
-		addChild(input_text);
+		addChild(input_text,3);
 		
 		
 		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
@@ -159,7 +159,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 								 t_node->setTag(kTitleRenewal_MT_nick);
 								 menuAction(t_node);
 							 });
-		addChild(ok_menu, 0, kTitleRenewal_MT_nick);
+		addChild(ok_menu, 3, kTitleRenewal_MT_nick);
 	}
 	else
 	{
