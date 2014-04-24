@@ -226,6 +226,9 @@ void ZoomScript::moveChecking()
 
 void ZoomScript::menuAction(CCObject *sender)
 {
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
+	
 	if(!is_actioned)
 	{
 		unschedule(schedule_selector(ZoomScript::moveChecking));

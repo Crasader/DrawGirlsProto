@@ -187,6 +187,8 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		CCMenuItemLambda* cancel_item = CCMenuItemSpriteLambda::create(n_cancel, s_cancel, [=](CCObject* sender)
 																	   {
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
 																		   t_popup->removeFromParent();
 																		   is_menu_enable = true;
 																	   });
@@ -270,6 +272,8 @@ void OnePercentGacha::menuAction (CCObject * sender)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
 	
 	int tag = ((CCNode*)sender)->getTag();
 	

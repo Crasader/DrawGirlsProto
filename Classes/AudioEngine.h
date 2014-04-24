@@ -99,7 +99,7 @@ public:
 			mySAE->preloadEffect("se_cardget.ogg");
 			mySAE->preloadEffect("se_piece.ogg");
 			mySAE->preloadEffect("se_buy.ogg");
-//			mySAE->preloadEffect("se_.ogg");
+			mySAE->preloadEffect("se_button1.ogg");
 			
 		}
 		else if(scenename == "Maingame")

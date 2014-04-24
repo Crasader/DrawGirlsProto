@@ -1429,6 +1429,9 @@ void PuzzleScene::menuAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
+	
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	bool is_action = true;
 	if(recent_step == kTutorialFlowStep_pieceClick || recent_step == kTutorialFlowStep_pieceType || recent_step == kTutorialFlowStep_pieceClick2)

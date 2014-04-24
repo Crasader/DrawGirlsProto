@@ -1457,6 +1457,8 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	
 	int tag = ((CCNode*)pSender)->getTag();
 	
 	if(tag == kCBP_MT_close)

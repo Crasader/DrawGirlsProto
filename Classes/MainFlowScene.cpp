@@ -498,6 +498,8 @@ void MainFlowScene::cellAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	
 	int tag = ((CCNode*)sender)->getTag();
 //	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 //	
@@ -916,6 +918,8 @@ void MainFlowScene::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
 		return;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
 	
 	int tag = ((CCNode*)sender)->getTag();
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
@@ -1552,6 +1556,7 @@ void MainFlowScene::setBottom()
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 {
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
 	
 	Json::Value v = mySGD->cgp_data;
 	
@@ -1584,6 +1589,8 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 
 void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 {
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	
 	Json::Value v = mySGD->cgp_data;
 	
 	Json::Value rewards = v["rewards"];

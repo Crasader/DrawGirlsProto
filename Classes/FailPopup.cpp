@@ -1087,6 +1087,9 @@ void FailPopup::menuAction(CCObject* pSender)
 	
 	int tag = ((CCNode*)pSender)->getTag();
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
+	
 	is_menu_enable = false;
 	
 	if(tag == kMT_FP_main)

@@ -41,6 +41,8 @@ void PauseContent::menuAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
 	is_menu_enable = false;
 	
 	int tag = ((CCNode*)sender)->getTag();
@@ -64,6 +66,8 @@ void PauseContent::resumeAction(CCObject* sender, CCControlEvent t_event)
 	if(!is_menu_enable)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
 	is_menu_enable = false;
 	
 	startHide();
@@ -73,6 +77,8 @@ void PauseContent::gohomeAction(CCObject* sender, CCControlEvent t_event)
 	if(!is_menu_enable)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
 	is_menu_enable = false;
 	
 	gohome_selector();
@@ -82,6 +88,8 @@ void PauseContent::replayAction(CCObject* sender, CCControlEvent t_event)
 	if(!is_menu_enable)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+
 	is_menu_enable = false;
 	
 	replay_selector();
