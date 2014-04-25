@@ -8,7 +8,7 @@
 	<configuration key="HSP_TIMEOUT_HTTP" value="20"/>
 	<configuration key="HSP_LAUNCHING_REFRESH_TIMEINTERVAL" value="120"/>
 	<configuration key="HSP_HEARTBEAT_TIMEINTERVAL" value="120"/>
-	<configuration key="HSP_SHOW_UI_WELCOMEMESSAGE" value="true"/>
+	<configuration key="HSP_SHOW_UI_WELCOMEMESSAGE" value="false"/>
 	<configuration key="HSP_SHOW_UI_VERSIONCHECK" value="true"/>
 	<configuration key="HSP_SHOW_UI_MAINTENANCE" value="true"/>
 	<configuration key="HSP_SUSPEND_DELAY_TIME" value="120"/>

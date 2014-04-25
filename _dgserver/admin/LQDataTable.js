@@ -1,3 +1,45 @@
+/*
+
+1.basic-editor  "datatype":"int","default":"defaultvalue"
+a.text
+{"type":"text"}
+
+b.textarea
+{"type":"textarea"}
+
+c.select
+{"type":"select","element":["gold","ruby","social","coin"]}
+
+d.bool
+{"type":"bool"}
+
+
+2.multi-editor
+f.array
+{"type":"array","element":ANOTHEREDITOR}              , ANOTHEREDITOR ex {"type":"text","datatype":"int"}
+
+g.dictionary
+{"type":"dictionary","element":[ANOTHEREDITOR,ANOTHEREDITOR... ]}   , ANOTHEREDITOR ex {"field":"max","type":"text","datatype":"int"}, add field
+
+e.table
+{"type":"table","element":[ANOTHEREDITOR,ANOTHEREDITOR... ]} , ANOTHEREDITOR ex {"field":"shape","title":"모양","type":"select","list":["circle","snake"]}
+
+
+3.viewer   option["cut"]
+
+
+
+
+
+*/
+
+
+
+
+
+
+
+
 			// 테이블 만들때 기억해야할 상수
 			/*
 				VARIABLEKEY - dictionary에서 key명은 유저가 정하면서 형식이 정해진 필드를 추가할경우, dictionary 옵션의 field에 사용
@@ -58,7 +100,7 @@
 			var openDataSelector = function(obj,func,mode){
 				func = eval(func);
 				delkey = addDelegate(obj,func);
-				window.open('./dataSelector.php?delkey='+delkey+'&mode='+mode,'LQDataselector'+delkey,'width=500 height=500 menubar=no status=no');
+				window.open('./dataSelector.php?gid='+gid+'&delkey='+delkey+'&mode='+mode,'LQDataselector'+delkey,'width=500 height=500 menubar=no status=no');
 			}
 			
 			var getFieldInfo = function(obj){
@@ -67,8 +109,9 @@
 				var selectedObj = obj;
 				
 				while(1){
-					if(selectedObj.attr("class")=="LQDataTable"){
+					if(selectedObj.attr("class")=="LQDataTable" || selectedObj.attr("class")=="LQDataView"){
 						result["table"]=selectedObj;
+						result["row"]=selectedObj;
 						break;
 					}else if(selectedObj.attr("class")=="LQDataRow" || selectedObj.attr("class")=="LQDataAddRow"){
 						result["row"]=selectedObj;
@@ -95,12 +138,27 @@
 					result["dbSort"] = result["table"].attr("dbSort");
 					result["dbWhere"] = result["table"].attr("dbWhere");
 					result["dbLimit"] = result["table"].attr("dbLimit");
+					
+					dbFunc = s2j(result["table"].attr("dbFunc"));
+
+					if(dbFunc){
+						result["selectFunc"] = dbFunc["select"];
+						result["writeFunc"] = dbFunc["write"];
+						result["updateFunc"] = dbFunc["update"];
+						result["deleteFunc"] = dbFunc["delete"];
+					}
+					result["dbClass"] = result["table"].attr("dbClass");
 					result["primaryKey"] = result["table"].find("th[primary]").attr("field");
+					if(typeof(result["primaryKey"])=="undefined")result["primaryKey"]=result["table"].find("td[primary]").attr("field");
+
 					result["manageHeader"]= result["table"].find("th[manage]:first");
 					result["manage"]= result["manageHeader"].attr("manage");
 				}
 				if(result["row"]){
 					result["rowData"]=s2j(result["row"].attr("data"));
+
+					if(typeof(result["rowData"])=="undefined")result["rowData"]=s2j(result["table"].attr("data"));
+
 					try{
 					result["primaryValue"]=result["rowData"][result["primaryKey"]];
 					}catch(e){
@@ -109,7 +167,7 @@
 				
 				if(result["cell"]){
 					result["field"]=result["cell"].attr("field");
-					result["editor"] = result["cell"].children(".LQEditor:first");
+					result["editorObj"] = result["cell"].children(".LQEditor:first");
 					result["fieldHeader"]=result["table"].find("th[field="+result["field"]+"]:first");
 					try{
 						result["isPrimary"]=(type(result["fieldHeader"].attr("primary"))=="undefined")?false:true;
@@ -117,15 +175,18 @@
 						result["isPrimary"]=false;
 					}
 					result["class"]=result["cell"].attr("class");
-					result["editorName"]=result["fieldHeader"].attr("editor");
-					result["editorOption"]=s2j(result["fieldHeader"].attr("editorOption"));
-					result["viewerName"]=result["fieldHeader"].attr("viewer");
-					result["viewerOption"]=s2j(result["fieldHeader"].attr("viewerOption"));
-					result["editorValue"]=getObjValue(result["editor"]);
+					result["editor"]=result["fieldHeader"].attr("editor");
+					if(typeof(result["editor"])=="undefined")result["editor"]=result["cell"].attr("editor");
+					result["viewer"]=result["fieldHeader"].attr("viewer");
+					
+					log("getFieldInfo, editorValue "+result["editorObj"].attr("editor"))
+					result["editorValue"]=getObjValue(result["editorObj"]);
+
+
 					try{
-						result["value"]=result["rowData"][result["field"]];				
+						result["data"]=result["rowData"][result["field"]];				
 					}catch(e){
-						result["value"]=undefined;		
+						result["data"]=undefined;		
 					}
 				}
 				
@@ -169,27 +230,43 @@
 			
 			
 			var getObjValue = function(obj){
-				var editorName = obj.attr("editor");
+				//obj = s2j(obj);
+
+				log("getObjValue --------------------------------------- start ---------------");
+				log("getObjValue, obj is "+j2s(obj));
+				var editor = s2j(obj.attr("editor"));
+				log("getObjValue, obj.attr(editor) is "+j2s(editor));
+				var editorName = undefined;
+				if(editor){
+					editorName = editor["type"];
+					log("getObjValue, ok set editorName "+editorName);
+				}
+
 				var vFunc = undefined;
-				var r;
+				var r=undefined;
 				
 				if(editorName != undefined){
 					eval("if(typeof editorFunc_"+editorName+"_value != 'undefined') vFunc=editorFunc_"+editorName+"_value;");
 				}
 				
+				log("getObjValue, editorName is "+editorName);
 				if(typeof(vFunc)=="function"){
 					r=vFunc(obj);
 				}
 				else{
 					r=j2s(obj.val());
 				}
+				var datatype = "";
+				if(typeof(editor)!="undefined" && typeof(editor["datatype"])!="undefined")datatype = editor["datatype"];
 				
-				var datatype = obj.attr("datatype");
 				
-				if(datatype=="int"){
+				if(datatype=="int" || datatype=="bool"){
 					//log("s to number!!");
 					r=Number(r);
 				}
+				log("getObjValue return is "+r+" and datatype is"+datatype);
+
+				log("getObjValue --------------------------------------- end ---------------");
 				return r;
 				
 				
@@ -215,12 +292,12 @@
 			/// viewer ////////////////////////////////////////////////////////////////////////////
 			
 			var viewerFunc_url = function(value,option){
-				return "<a href='"+value+"' "+option+">"+value+"</a>";
+				return "<a href='"+value+"' "+option["option"]+">"+value+"</a>";
 			}
 			
 			var viewerFunc_image = function(value,option){
 				if(!value)return"nothing";
-				return "<img src='"+value+"' "+option+">"+value+"</a>";
+				return "<img src='"+value+"' "+option["option"]+">"+value+"</a>";
 			}
 			
 			var viewerFunc_json = function(value,option){
@@ -236,7 +313,7 @@
 			var viewerFunc_text = function(value,option){
 				if(typeof(value)=="object")value = j2s(value);
 				if(typeof(value)=="undefined")value="";
-				if(typeof(option)=="string")option=s2j(option);
+				if(typeof(option)=="string")option=s2j(option["option"]);
 				if(typeof(option)=="object" && option["cut"]>0) return value.substring(0,option["cut"]);
 				else return nl2br(value);
 			}
@@ -261,12 +338,12 @@
 				if(typeof(value)=="number")
 					datatype="int";
 				
-				return "<input type='text' value='"+value+"' datatype='"+datatype+"' class='LQEditor' editor='text'>";
+				return "<input type='text' value='"+value+"' class='LQEditor' editor='"+j2s(option)+"'>";
 			}
 			
 
 			var editorFunc_textarea = function(value,option){
-				return "<textarea class='LQEditor' editor='textarea' cols=50 rows=8>"+j2s(value)+"</textarea>";
+				return "<textarea class='LQEditor' editor='"+j2s(option)+"' cols=30 rows=2>"+j2s(value)+"</textarea>";
 			}
 			var editorFunc_select = function(value,option){
 				var _option = option;
@@ -279,22 +356,30 @@
 				}
 				if(typeof(value)=="number")
 					datatype="int";
+				
 				var sList = [];
-				if(typeof(_option) == "object")sList=_option;				
-				var et = "<select class='LQEditor' datatype='"+datatype+"' editor='select'>";
-				var op;
-				for(var i in sList){
-					if(value==sList[i])op = "selected";
+				var vist = [];
+
+				if(typeof(_option) == "object" && typeof(_option["element"]) == "object")sList=_option["element"];				
+				var et = "<select class='LQEditor' editor='"+j2s(option)+"'>";
+				var op="";
+				
+				if(_option["value"])vList=_option["value"];
+				else vList=_option["element"];
+
+				for(i in sList){
+					if(value==vList[i])op = "selected";
 					else op="";
-					et+="<option value='"+sList[i]+"' "+op+">"+sList[i]+"</option>";
+					et+="<option value='"+vList[i]+"' "+op+">"+sList[i]+"</option>";
 				}
 				et += "</select>";
 				return et;
 			}
 			var editorFunc_bool =function(value,option){
 				var sList = [1,0];				
-				var sListName = ["true","false"];				
-				var et = "<select class='LQEditor' editor='bool'>";
+				var sListName = ["true","false"];	
+				option["datatype"]="bool";			
+				var et = "<select class='LQEditor' editor='"+j2s(option)+"'>";
 				for(var i in sList){
 					if(value==sList[i])op = "selected";
 					else op="";
@@ -307,14 +392,16 @@
 			var editorFunc_array = function(value,option){
 				var _option = s2j(option);
 				var _value = s2j(value);
+
+
 				if(!_value)_value=[];
 				
 				if(typeof(_value)!="object")_value=[_value];
 				
-				log(_value);
-				log(_option);
+				log("editorFunc_array value is "+ j2s(_value));
+				log("editorFunc_array option is "+j2s(_option));
 				
-				var _result = "<table border=1 value='"+j2s(_value)+"' editorOption='"+j2s(_option)+"' class='LQEditor' editor='array'><tbody>";
+				 var _result = "<table border=1 value='"+j2s(_value)+"' editor='"+j2s(_option)+"' class='LQEditor' editor='array'><tbody>";
 				
 				//타이틀
 				_result+="<tr>";
@@ -322,14 +409,17 @@
 				_result+="<input type='button' value='add' class='LQJSONArrayEditorAdd'></td>";
 				_result+="</tr>";
 				
-				for(var j in _value){
+				log("-----------start-------------");
+				for(j in _value){
 					_result+="<tr datarow>";
 					_result+="<td datafield>";	
-					_result+= editorSelector(_option["editor"],_value[j],_option["editorOption"]);
+					log("editroFunc_array in for "+j2s(_value[j])+" in "+j+" element "+j2s(_option["element"])+" fullsource "+j2s(_value));
+					_result+= editorSelector(_option["element"],_value[j]);
 					_result+="</td>";
 					_result+="<td><input type='button' value='delete' class='LQJSONArrayEditorDelete'></td>";
 					_result+="</tr>";
 				}
+				log("-----------end-------------");
 				_result+="</tbody></table>";
 				
 				return _result;
@@ -339,30 +429,32 @@
 			
 			var editorFunc_array_value = function(obj){
 				
-				var fieldname = [];
-				var dataTable = obj;
-				var result=[];
+				 var fieldname = [];
+				 var dataTable = obj;
+				 var eavresult=[];
 				
 				dataTable.children('tbody').children("tr[datarow]").each(function(index,item){
-					var dtfield = $(this).children('td[datafield]');
-					var editor = dtfield.children(".LQEditor:first");
-					var vvalue = getObjValue(editor);
+					 dtfield = $(this).children('td[datafield]');
+					 editor = dtfield.children(".LQEditor:first");
+					 vvalue = getObjValue(editor);
 					
-					result.push(vvalue);
+					eavresult.push(vvalue);
 				});
-				return result;
+
+				log("result is."+j2s(eavresult));
+				return eavresult;
 
 			}
 			
 			var editorFunc_table = function(value,option){
-				var _option = s2j(option);
+				var _option = s2j(option["element"]);
 				var _value = s2j(value);
 				if(!_value)_value=[];
-				var _result = "<table border=1 value='"+j2s(_value)+"' editorOption='"+j2s(_option)+"' class='LQEditor' editor='table'><tbody>";
+				var _result = "<table border=1 value='"+j2s(_value)+"' editor='"+j2s(option)+"' class='LQEditor'><tbody>";
 					
 				//타이틀
 				_result+="<tr>";
-				for(var i in _option){
+				for(i in _option){
 					_result+="<td field='"+_option[i]["field"]+"'>";
 					_result+=_option[i]["title"];
 					_result+="</td>";
@@ -374,15 +466,16 @@
 					
 					if(_option.length>1){
 						for(var i in _option){
-							var fieldname = _option[i]["field"];
+							fieldname = _option[i]["field"];
 						 	_result+="<td field='"+fieldname+"' datafield>";	
-						 	_result+= editorSelector(_option[i]["editor"],_value[j][fieldname],_option[i]["editorOption"]);
+						 	log("editorFunc_table in for, editor is "+j2s(_option[i])+" value["+j+"]["+fieldname+"] is "+j2s(_value));
+						 	_result+= editorSelector(_option[i],_value[j][fieldname]);
 						 	_result+="</td>";
 	
 						}
 					}else{
 						_result+="<td field='LQTABLESINGLE' datafield>";	
-						_result+= editorSelector(_option[0]["editor"],_value[j],_option[0]["editorOption"]);
+						_result+= editorSelector(_option[0],_value[j]);
 						_result+="</td>";
 					}
 					 	_result+="<td><input type='button' value='delete' class='LQJSONTableEditorDelete'></td>";
@@ -421,18 +514,18 @@
 
 			var editorFunc_dictionary = function(value,option){
 				log("dict option is"+j2s(option));
-				var _option = s2j(option);
+				var _option = s2j(option["element"]);
 				var _value = s2j(value);
 				if(!_value)_value={};
-				var keyEditor;
-				var keyEditorOption;
+				var keyEditor=undefined;
+				var keyEditorOption=undefined;
 				
 				var isInVKey = false;
 				//option 이랑 value랑 비교하여 value 에 없는 option  집어넣기
 	
-				
+				var check=false;
 				for(var key in _option){
-					var check=true;
+					check=true;
 					if(!keyEditor){
 						keyEditor = _option[key]["keyEditor"];
 						keyEditorOption = s2j(_option[key]["keyEditorOption"]);
@@ -444,7 +537,7 @@
 					
 					if(_option[key]["field"]=="VARIABLEKEY")isInVKey=true;
 					
-					for(var key2 in _value){
+					for(key2 in _value){
 						log("check"+key2+"==="+_option[key]["field"]);
 						if(_option[key]["field"] == key2){
 							check=false;
@@ -467,7 +560,7 @@
 				log(_value);
 				log("value is"+j2s(_value));
 				
-				var _result = "<table border=1 value='"+j2s(_value)+"' editorOption='"+j2s(_option)+"' class='LQEditor' editor='dictionary' keyEditor='"+j2s(keyEditor)+"' keyEditorOption='"+j2s(keyEditorOption)+"'><tbody>";
+				var _result = "<table border=1 value='"+j2s(_value)+"' editor='"+j2s(option)+"' class='LQEditor' keyEditor='"+j2s(keyEditor)+"' keyEditorOption='"+j2s(keyEditorOption)+"'><tbody>";
 
 
 				
@@ -478,14 +571,14 @@
 				//옵션이랑 같은 필드 추가
 				if(isInVKey)_result+="<option value='VARIABLEKEY'>VARIABLE FIELD</option>";
 				
-				_result+="<option value='text(number)'>text(number)</option><option value='text(string)'>text(string)</option><option value='textarea'>textarea</option><option value='dictionary'>dictionary</option><option value='array(number)'>array(number)</option><option value='array(string)'>array(string)</option></select>";
+				_result+="<option value='text(number)'>text(number)</option><option value='text(string)'>text(string)</option><option value='textarea'>textarea</option><option value='dictionary'>dictionary</option><option value='array(number)'>array(number)</option><option value='array(string)'>array(string)</option><option value='array(dict)'>array(dict)</option></select>";
 				
 				_result+="<input type='button' value='add' class='LQJSONDictionaryEditorAdd'></td></tr>";
 				
 				
 				_result+="<tr><td>key</td><td>value</td><td></td></tr>";
 				
-				for(var j in _value){
+				for(j in _value){
 					_result+="<tr datarow><td>";
 					
 					_result+="<input type='text' value='"+j+"' class='LQDictFieldName'>";
@@ -498,28 +591,28 @@
 					
 					_result+="</td><td field='"+j+"' datafield>";
 					
-					var _op2="";
-					for(var k in _option){
-						if(_option[k]["field"]==j)_op2=_option[k]["editorOption"];
+					_op2="";
+					for(k in _option){
+						if(_option[k]["field"]==j)_op2=_option[k];
 					}
 							
 					if(_op2=="")
-						if(typeof(_option[0])!="undefined" && _option[0]["field"]=="VARIABLEKEY")_op2 = _option[0]["editorOption"];
+						if(typeof(_option) != "undefined" && typeof(_option[0])!="undefined" && _option[0]["field"]=="VARIABLEKEY")_op2 = _option[0];
 						
 						
-					var _op1="";
-					for(var k in _option)
-						if(_option[k]["field"]==j)_op1=_option[k]["editor"];
+					_op1="";
+					for(k in _option)
+						if(_option[k]["field"]==j)_op1=_option[k];
 
 				
 					if(_op1=="")
-					if(typeof(_option[0])!="undefined" && _option[0]["field"]=="VARIABLEKEY")_op1 = _option[0]["editor"];
+					if(typeof(_option) != "undefined" && typeof(_option[0])!="undefined" && _option[0]["field"]=="VARIABLEKEY")_op1 = _option[0];
 						
 					//if(_op1=="")_op1="text";
 
 					
-					
-					_result+= editorSelector(_op1,_value[j],_op2);
+					log("editorFunc_dictionary _op1 is " + j2s(_op1));
+					_result+= editorSelector(_op1,_value[j]);
 
 					 _result+="</td><td><input type='button' value='delete' class='LQJSONTableEditorDelete'></td>";
 					_result+="</tr>";
@@ -544,53 +637,64 @@
 					vdictresult[fieldname] = vvalue;
 
 				});
+				log("editorFunc_dictionary_value value is "+j2s(vdictresult));
 				return vdictresult;
 			
 			}			
 			///// selector  //////////////////////////////////////////////////////////////////////////////////////
 			
-			var viewerSelector = function(viewer,value,option){
+			var viewerSelector = function(viewer,value){
 				var viewValue="";
-				switch(viewer){
-					case "url": viewValue = viewerFunc_url(value,option); break;
-					case "json": viewValue = viewerFunc_json(value,option); break;
-					case "image": viewValue = viewerFunc_image(value,option); break;
-					case "text": viewValue = viewerFunc_text(value,option); break;
-					case "custom": viewValue = eval(option+"(value,option);");break;
+				viewer=s2j(viewer);
+				if(typeof(viewer)=="undefined" || typeof(viewer["type"])=="undefined")viewer={"type":"text"};
+
+				switch(viewer["type"]){
+					case "url": viewValue = viewerFunc_url(value,viewer); break;
+					case "json": viewValue = viewerFunc_json(value,viewer); break;
+					case "image": viewValue = viewerFunc_image(value,viewer); break;
+					case "text": viewValue = viewerFunc_text(value,viewer); break;
+					case "custom": viewValue = eval(viewer["func"]+"(value,viewer);");break;
 					default: viewValue = value; break; 
 				}
 				
 				return viewValue;
 			}
 			
-			var editorSelector = function(editor,value,option){
+			var editorSelector = function(editor,value){
 				value = s2j(value);
-				log("editor is "+editor);
+				editor = s2j(editor);
+				log("editor is "+j2s(editor));
 				if(!editor || typeof(editor)=="undefined"){
-					if(typeof(value)=="number"){ editor="text"; option=[]; option["datatype"]="int";}
-					if(typeof(value)=="string" && value.length<100) editor="text";
-					if(typeof(value)=="string" && value.length>100) editor="textarea";
-					if(typeof(value)=="object" && value[0]!=undefined) editor="array";
-					else if(typeof(value)=="object") editor="dictionary";
+					editor = {};
+
+					if(typeof(value)=="number"){ editor["type"]="text"; editor["datatype"]="int";}
+					if(typeof(value)=="string" && value.length<100) editor["type"]="text";
+					if(typeof(value)=="string" && value.length>100) editor["type"]="textarea";
+					if(typeof(value)=="object" && value[0]!=undefined) editor["type"]="array";
+					else if(typeof(value)=="object") editor["type"]="dictionary";
 					
 					
-					log("sleectedfajsdflkasdlfk "+typeof(value)+"editor is "+editor);
+					log("editorSelector, valuse is "+typeof(value)+" editor is "+editor);
 				}
+
+
 				var pushEditor="";
-				switch(editor){
-					case "custom": pushEditor = eval(option+"(value,option);");break;
-					case "textarea": pushEditor = editorFunc_textarea(value,option);break;
-					case "dataSelector":pushEditor=editorFunc_dataSelector(value,option);break;
-					case "text":pushEditor=editorFunc_text(value,option);break;
-					case "select":pushEditor=editorFunc_select(value,option);break;
-					case "bool":pushEditor=editorFunc_bool(value,option);break;
-					case "table":pushEditor=editorFunc_table(value,option);break;
-					case "array":pushEditor=editorFunc_array(value,option);break;
-					case "dictionary":pushEditor=editorFunc_dictionary(value,option);break;
+				var editortype = editor["type"];
+				log("editortype is " + editortype);
+				switch(editortype){
+					case "custom": pushEditor = eval(editor["func"]+"(value,editor);");break;
+					case "textarea": pushEditor = editorFunc_textarea(value,editor);break;
+					case "dataSelector":pushEditor=editorFunc_dataSelector(value,editor);break;
+					case "text":pushEditor=editorFunc_text(value,editor);break;
+					case "select":pushEditor=editorFunc_select(value,editor);break;
+					case "bool":pushEditor=editorFunc_bool(value,editor);break;
+					case "table":pushEditor=editorFunc_table(value,editor);break;
+					case "array":pushEditor=editorFunc_array(value,editor);break;
+					case "dictionary":pushEditor=editorFunc_dictionary(value,editor);break;
 					case "NONE":pushEditor=j2s(value);break;
 					default:
 					
-					pushEditor=editorFunc_text(value,option);
+					pushEditor=editorFunc_text(value,editor);
 					log("selected default editor");
 					break;
 
@@ -612,18 +716,79 @@
 				return pushData;
 			}
 			
-			$(document).ready(function(){
-				$('.LQDataTable').each(function(index,item){
-					tInfo = gf($(this));
+			var getLQEditorValue = function(name){
+				var obj = $("td[field='"+name+"']").children(".LQEditor:first");
+				return getObjValue(obj);
+			}
+			var getLQDataObject = function(name){
+				return $("table[name='"+name+"']");
+			}
+			var getDataView = function(name){
+				return $("table[name='"+name+"']");
+			}
+
+
+			var getDataTable = function(name){
+				return $("table[name='"+name+"']");
+			}
+
+			var loadDataForm = function(obj){
+				obj.find("td[field]").each(function(index){
+					var pushEditor = editorSelector($(this).attr("editor"),"");	
+					$(this).html(pushEditor);
+				});
+			}
+			var loadDataView = function(obj){
+				if(typeof(obj)=="string")obj = $("table[name="+obj+"]");
+
+				var tInfo = gf(obj);
+					var dbParam = {"gid":gid,"dbFunc":tInfo["selectFunc"],"dbClass":tInfo["dbClass"],"param":tInfo["dbWhere"]};
+					
+					log("loadDataView param is"+j2s(dbParam));
+					$.ajax({
+				    url : tInfo["dbSource"], 
+				    data : dbParam,
+				    dataType : "json", 
+				    type : "post",
+				    success : function(data){
+				    	log("lqdataview "+j2s(data));
+						//받아온 data와 표시할정보 비교해서 뿌릴데이터모으기
+						tInfo["table"].attr("data",j2s(data["data"]));
+						var rowdata = data["data"];
+						for(var i in rowdata){
+							tInfo["table"].find("td[field="+i+"]").html(rowdata[i]);
+							tInfo["table"].find("td[field="+i+"]").addClass("LQDataCell");
+						}
+					}
+					,
+					error: function(e) {
+					    	alert("error : " + j2s(e));
+					    }
+					});
+
+			}
+
+			var loadDataTable = function(obj,addMode){
+					var tInfo = gf(obj);
 /*
 					var LQDataTable = $(this);
 					var dbSource = LQDataTable.attr('dbSource');
 					var dbTable = LQDataTable.attr('dbTable');
 					var dbSort = LQDataTable.attr('dbSort'); 
 */					
-					var dbParam = {"table":tInfo["dbTable"],"sort":tInfo["dbSort"],"limit":tInfo["dbLimit"],"where":tInfo["dbWhere"]};
+					var dbParam = "";
 					
-					log(j2s(dbParam));
+					if(addMode=="reload" || !addMode){
+						tInfo["table"].find("tbody[datazone]").html("");
+					}
+
+					if(typeof(tInfo["dbClass"])!="undefined"){
+						dbParam = {"gid":gid,"dbFunc":tInfo["selectFunc"],"dbClass":tInfo["dbClass"],"param":tInfo["dbWhere"]};
+					}else{
+						dbParam = {"gid":gid,"table":tInfo["dbTable"],"sort":tInfo["dbSort"],"limit":tInfo["dbLimit"],"where":tInfo["dbWhere"]};
+					}
+
+					log("loadDataTable"+j2s(dbParam));
 				
 					//추가폼 만들기
 					var addForm="<tr class='LQDataAddRow'>";
@@ -631,14 +796,16 @@
 								var field = $(this).attr('field');
 								var manageOption = $(this).attr('manage');
 								var editor = $(this).attr('editor');
-								var editorOption = $(this).attr('editorOption');
+								var editorOption = $(this).attr('editor');
 								if($(this).attr('manage')==undefined){
 									//viewer 적용
-									var editorView = editorSelector(editor,"",editorOption);
-									
+									var editorView = editorSelector(editor,"");
 									//primary key 속성 넣어주기
-									addForm+="<td class='LQDataAddCell' field='"+field+"'>"+editorView+"</td>";
-								
+									if(editor){
+										addForm+="<td class='LQDataAddCell' field='"+field+"'>"+editorView+"</td>";
+									}else{
+										addForm+="<td class='LQDataAddCell' field='"+field+"'></td>";
+									}
 								//메니저필드
 								}else{
 									addForm+="<td class='LQAddManageCell' manage='"+manageOption+"'>";
@@ -658,12 +825,18 @@
 				    data : dbParam,
 				    dataType : "json", 
 				    type : "post",
-				    success : function(data){
+				    success : function(resultData){
+
+				    	var data = resultData["data"];
+				    	log("getData "+j2s(resultData));
 						//받아온 data와 표시할정보 비교해서 뿌릴데이터모으기
 						var pushData="";
 						for(var i in data){
 							var rowData = data[i];
-							pushData+="<tr data='"+j2s(rowData)+"' class='LQDataRow'>";
+							//rColor = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+							if(i%2==0)bgcolor="eeeeee";
+							else bgcolor="ffffff";
+							pushData+="<tr data='"+j2s(rowData)+"' class='LQDataRow' bgcolor='"+bgcolor+"'>";
 	
 							tInfo["table"].find("thead > tr > th").each(function(index,item){
 								var field = $(this).attr('field');
@@ -676,7 +849,7 @@
 								if(manage==undefined){
 									//viewer 적용
 									
-									var viewValue = viewerSelector(viewer,value,viewerOption);
+									var viewValue = viewerSelector(viewer,value);
 									
 									//primary key 속성 넣어주기
 									pushData+="<td class='LQDataCell' field='"+field+"'>"+viewValue+"</td>";
@@ -696,15 +869,37 @@
 						
 						//데이터 테이블에 집어넣기
 						tInfo["table"].find('tbody[datazone]:last').append(pushData);
+						
+						var dbWhere = s2j(tInfo["table"].attr("dbWhere"));
+						
+						if("nextInfo" in resultData)dbWhere["nextInfo"]=resultData["nextInfo"];
+						
+						tInfo["table"].attr("dbWhere",j2s(dbWhere));
+
+						log("set nextInfo is"+j2s(resultData["nextInfo"]));
 					
 					}
-				,
-				error: function(e) {
+					,
+					error: function(e) {
 				    	alert("error : " + j2s(e));
 				    }
 				});
+			}
+
+			$(document).ready(function(){
+
+				$('.LQDataForm').each(function(index,item){
+					loadDataForm($(this));
+				});
+
+				$('.LQDataView').each(function(index,item){
+					loadDataView($(this));
+				});
+
+				$('.LQDataTable').each(function(index,item){
+					loadDataTable($(this),"reload");
 			
-			});
+				});
 				
 				
 				
@@ -734,7 +929,7 @@
 					var fieldname = $(this).parent().children(".LQDictFieldNameText").val();
 					var fieldeditor = $(this).parent().children(".LQDictEditorSelect").val();
 					
-					var option = dataTable.attr("editorOption");
+					var option = dataTable.attr("editor");
 					log("editor option is"+option);
 					
 					if(option != undefined)option=s2j(option);
@@ -752,9 +947,9 @@
 					
 					result+="<input type='text' class='LQDictFieldName'>";
 					
-					if(keyEditor){
-						result+="<input type=button value=선택 func='"+keyEditorOption["func"]+"' mode='"+keyEditorOption["mode"]+"' class='LQDataSelectorButton'>";
-					}
+					// if(keyEditor){
+					// 	result+="<input type=button value=선택 func='"+keyEditorOption["func"]+"' mode='"+keyEditorOption["mode"]+"' class='LQDataSelectorButton'>";
+					// }
 					
 					result+="</td><td datafield>";
 					
@@ -762,23 +957,24 @@
 					
 					
 					if(fieldeditor=="array(number)"){
-						result+= editorSelector("array","",{"editor":"text","editorOption":{"datatype":"int"}});	
+						result+= editorSelector({"type":"array","element":{"type":"text","datatype":"int"}},"");	
 					}else if(fieldeditor=="array(string)"){
-						result+= editorSelector("array","","");	
+						result+= editorSelector({"type":"array"},"");	
+					}else if(fieldeditor=="array(dict)"){
+						result+= editorSelector({"type":"array","element":{"type":"dictionary"}},"");	
+
 					}else if(fieldeditor=="text(number)"){
-						result+= editorSelector("text","",{"datatype":"int"});	
+						result+= editorSelector({"type":"text","datatype":"int"},"");	
 					}else if(fieldeditor=="text(string)"){
-						result+= editorSelector("text","","");
+						result+= editorSelector({"type":"text"},"");
 					}else if(fieldeditor=="VARIABLEKEY"){
 						var vk;
 						for(k in option){
 							if(option[k]["field"]=="VARIABLEKEY")vk=k;
 						}
-						result+= editorSelector("dictionary","",option[vk]["editorOption"]);
-					}else if(fieldeditor=="table"){
-						result+= editorSelector(fieldeditor,"",[{"title":"카드번호","field":"type","editor":"text","editorOption":{"datatype":"int"}}]);	
+						result+= editorSelector(option[vk]["editor"],"");
 					}else{
-						result+= editorSelector(fieldeditor,"","");	
+						result+= editorSelector({"type":fieldeditor},"");	
 					}
 					result+="</td><td><input type='button' value='delete' class='LQJSONTableEditorDelete'></td>";
 			//	}
@@ -802,20 +998,21 @@
 				//var tInfo = gf($(this));
  				var dataTable = $(this).parent().parent().parent().parent();
  				var result="<tr datarow>";
-				var option = dataTable.attr("editorOption");
-				if(option)
-					if(typeof(option)=="string")
-						option = s2j(option);
-					if(option.length>1){
-						for(var i in option){
-							var fieldname = option[i]["field"];
+				var option = s2j(dataTable.attr("editor"));
+				var element = option["element"];
+				if(element)
+					if(typeof(element)=="string")
+						element = s2j(element);
+					if(element.length>1){
+						for(var i in element){
+							var fieldname = element[i]["field"];
 						 	result+="<td field='"+fieldname+"' datafield>";	
-						 	result+= editorSelector(option[i]["editor"],"",option[i]["editorOption"]);
+						 	result+= editorSelector(element[i],"");
 						 	result+="</td>";
 						}
 					}else{
 						result+="<td field='LQTableSINGLE' datafield>";	
-						result+= editorSelector(option[0]["editor"],"",option[0]["editorOption"]);
+						result+= editorSelector(option["element"],"");
 						result+="</td>";
 					}
 				
@@ -829,18 +1026,16 @@
  				var dataTable = $(this).parent().parent().parent().parent();
 				var fieldeditor = $(this).parent().children(".LQArrayEditorSelect").val();
  				var result="<tr datarow>";
-				var option = dataTable.attr("editorOption");
+				var option = dataTable.attr("editor");
 				if(option)
 					if(typeof(option)=="string")
 						option = s2j(option);
 						
-
-				var fieldname = option["field"];
-			 	result+="<td field='"+fieldname+"' datafield>";	
+			 	result+="<td datafield>";	
 			 	
-			 	log("editor is"+fieldeditor);
+			 	//log("editor is"+fieldeditor);
 			 	
-			 	result+= editorSelector(option["editor"],"",option["editorOption"]);	
+			 	result+= editorSelector(option["element"],"");	
 			 	result+="</td>";
 
 				
@@ -894,8 +1089,8 @@
 					var fInfo=gf($(this));
 					
 						
-					if(fInfo["class"]=="LQDataCell" && fInfo["editorName"]!=undefined){
-						var viewValue = editorSelector(fInfo["editorName"],fInfo["rowData"][fInfo["field"]],fInfo["editorOption"]);//editorSelector(fInfo["viewerName"],fInfo["rowData"][fInfo["field"]],fInfo["viewerOption"]);
+					if(fInfo["class"]=="LQDataCell" && fInfo["editor"]!=undefined){
+						var viewValue = editorSelector(fInfo["editor"],fInfo["rowData"][fInfo["field"]]);//editorSelector(fInfo["viewerName"],fInfo["rowData"][fInfo["field"]],fInfo["viewerOption"]);
 						$(this).html(viewValue);
 					}else if(fInfo["class"]=="LQManageCell"){
 						var viewValue = makeManageButton(fInfo["manage"],true);	
@@ -906,6 +1101,35 @@
 			
 			
 			$('body').on('dblclick','.LQDataCell',function(){
+				if($(this).children(".LQModifyApply").length>0)return;
+				
+				log("dblclick test");
+
+				var fInfo = gf($(this));
+				
+				log("get finfo ok");
+/*
+				var selectedRow = $(this).parent();
+				var dataTable = selectedRow.parent().parent();
+				var rowData = s2j(selectedRow.attr("data"));
+					var field = $(this).attr("field");
+					var fieldHeader = dataTable.find("th[field="+field+"]");
+					var editorOption = fieldHeader.attr("editorOption");
+					var clsType = $(this).attr("class");
+					var editor = fieldHeader.attr("editor");
+					
+					
+*/
+					if(fInfo["editor"]==undefined)return;
+
+					log("modify by dbclick "+j2s(fInfo["editor"]));
+
+					var pushEditor = editorSelector(fInfo["editor"],fInfo["rowData"][fInfo["field"]]);
+					pushEditor+=makeManageButton(fInfo["manage"],true);	
+					$(this).html(pushEditor);
+		   });
+
+			$('body').on('contextmenu','.LQDataCell',function(){
 				if($(this).children(".LQModifyApply").length>0)return;
 				
 				var fInfo = gf($(this));
@@ -922,10 +1146,14 @@
 					
 					
 */
-					if(fInfo["editorName"]==undefined)return;
-					var pushEditor = editorSelector(fInfo["editorName"],fInfo["rowData"][fInfo["field"]],fInfo["editorOption"]);
+					if(fInfo["editor"]==undefined)return;
+					var pushEditor = editorSelector({"type":"textarea"},fInfo["rowData"][fInfo["field"]]);
 					pushEditor+=makeManageButton(fInfo["manage"],true);	
 					$(this).html(pushEditor);
+
+					$(this).blur();
+					return false;
+
 		   });
 			//수정취소/////////////////////////////////////////////////////////////////////////////////////////////
 			$('body').on('click','.LQModifyCancel',function(){
@@ -936,10 +1164,14 @@
 */
 
 				var tInfo = gf($(this));
-				
+									var rowpos = tInfo["row"].position();
+					$('html, body').animate({scrollTop:rowpos.top-100}, 'fast');
+					//tInfo["row"].attr("bgcolor","cccccc"); 
+
 				tInfo["row"].find("td").each(function(index,item){
 					
 					var fInfo = gf($(this));
+
 					/*
 
 					
@@ -954,7 +1186,7 @@
 					if(fInfo){
 						if(fInfo["class"]=="LQDataCell"){
 							//viewer 적용
-							var viewValue = viewerSelector(fInfo["viewerName"],fInfo["rowData"][fInfo["field"]],fInfo["viewerOption"]);
+							var viewValue = viewerSelector(fInfo["viewer"],fInfo["rowData"][fInfo["field"]]);
 							$(this).html(viewValue);
 						}else if(fInfo["class"]=="LQManageCell"){
 							var viewValue = makeManageButton(fInfo["manage"],false);
@@ -969,37 +1201,33 @@
 			$('body').on('click','.LQModifyApply',function(){
 			
 				var tInfo = gf($(this));
-				
-/*
-				var selectedRow = $(this).parent().parent();
-				var rowData = s2j(selectedRow.attr("data"));
-				var _dataTable = selectedRow.parent().parent();
-*/
-				
+
+				if(typeof(tInfo["dbClass"]) != "undefined" && !tInfo["updateFunc"]){
+					alert("updateFunc is Null");
+					return;
+				}
 				//셀들찾기
 				tInfo["row"].children("td").each(function(index,item){
 				
 					// ##################  셋벨류 하기~~~
 					
 					var fInfo = gf($(this));
-/*
-					var field = $(this).attr("field");
-					var fieldHeader = _dataTable.find("th[field="+field+"]");
-					var editor = fieldHeader.attr("editor");
-					var clsType = $(this).attr("class");
-					var viewerOption = fieldHeader.attr("viewerOption");
-					var viewer = fieldHeader.attr('viewer');
-*/				
+					
+					log("click LQModifyApply editor is "+j2s(fInfo["editor"])+" and field is "+j2s(fInfo["field"]));
+	
 					//값찾기
-					if(fInfo["editorName"]!=undefined){
+					if(fInfo["editor"]!=undefined){
 						var newValue=fInfo["editorValue"];
 						//getObjValue($(this).find(".LQEditor:first"),0);
+
+						log("click LQModifyApply newvalue is "+j2s(newValue)+" in Finfo is"+fInfo["editorValue"]);
 						if(newValue != undefined && newValue !=fInfo["value"]){
 							tInfo["rowData"][fInfo["field"]]=j2s(newValue);
 						}
 					}
 				});
 				
+				log("click LQModifyApply rowData is "+j2s(tInfo["rowData"]));
 				//수정사항 디비로보내기
 				/*
 var dbSource=_dataTable.attr("dbSource");
@@ -1010,9 +1238,18 @@ var dbSource=_dataTable.attr("dbSource");
 */
 				if(tInfo["primaryValue"] == undefined)log("don't find primaryvalue");
 				
-				param={"mode":"update","table":tInfo["dbTable"],"primaryKey":tInfo["primaryKey"],"primaryValue":tInfo["primaryValue"],"data":j2s(tInfo["rowData"])};
+				if(typeof(tInfo["dbClass"]) == "undefined")
+				{
+					param={"mode":"update","table":tInfo["dbTable"],"primaryValue":tInfo["primaryValue"],"data":j2s(tInfo["rowData"])};
+				}else{
+					param={"dbClass":tInfo["dbClass"],"dbFunc":tInfo["updateFunc"],"param":j2s({"data":tInfo["rowData"]})};
+				}
+				param["primaryKey"]=tInfo["primaryKey"];
+
+				log("param is "+j2s(param));
 				
-				
+				log("testtesttest log");
+
 				$.ajax({
 				    url : tInfo["dbSource"], 
 				    data : param,
@@ -1042,15 +1279,25 @@ var dbSource=_dataTable.attr("dbSource");
 					//view모드로 복구					
 					if(fInfo["class"]=="LQDataCell" && fInfo["isPrimary"]==false){
 						//viewer 적용
-						var viewValue = viewerSelector(fInfo["viewerName"],fInfo["rowData"][fInfo["field"]],fInfo["viewerOption"]);
+						var viewValue = viewerSelector(fInfo["viewer"],fInfo["rowData"][fInfo["field"]]);
 						$(this).html(viewValue);
+
 					}else if(fInfo["class"]=="LQManageCell"){
 						//버튼만들기
 						var viewValue = makeManageButton(fInfo["manage"],false);
 						$(this).html(viewValue);
 					}
+
+
+
+
 				});
 				
+
+					var rowpos = tInfo["row"].position();
+					$('html, body').animate({scrollTop:rowpos.top-100}, 'fast');
+					tInfo["row"].attr("bgcolor","cccccc"); 
+
 		   			}else{
 			   			alert("error:"+j2s(data));
 		   			}
@@ -1067,9 +1314,15 @@ var dbSource=_dataTable.attr("dbSource");
 			//삭제/////////////////////////////////////////////////////////////////////////////////////////////
 			$('body').on('click','.LQDelete',function(){
 				//수정사항 디비로보내기
-				if(!confirm("really?"))return;
 				
 				var tInfo = gf($(this));
+
+				if(typeof(tInfo["dbClass"]) != "undefined" && !tInfo["deleteFunc"]){
+					alert("deleteFunc is Null");
+					return;
+				}
+
+				if(!confirm("really?"))return;
 /*				
 				var selectedRow = $(this).parent().parent();
 				var dataTable = selectedRow.parent().parent();
@@ -1081,6 +1334,12 @@ var dbSource=_dataTable.attr("dbSource");
 */
 				var param={"mode":"delete","table":tInfo["dbTable"],"primaryKey":tInfo["primaryKey"],"primaryValue":tInfo["primaryValue"]};
 				
+
+				if(typeof(tInfo["dbClass"]) != "undefined")
+				{
+					param={"dbClass":tInfo["dbClass"],"dbFunc":tInfo["deleteFunc"],"param":j2s({"data":tInfo["rowData"]})};
+				}
+
 				log(param);
 				
 				
@@ -1090,12 +1349,13 @@ var dbSource=_dataTable.attr("dbSource");
 				    dataType : "json", 
 				    type : "post",
 				    success : function(data){ 
+				    log(j2s(data));
 		   			if(data['result']=="ok"){
 			   			//값재설정
 			   			tInfo["row"].remove();
 						log("delete success");
 		   			}else{
-			   			alert("error:"+data['result']);
+			   			alert("error:"+data['msg']);
 		   			}
 		   		},
 		   		error: function(e) {
@@ -1111,6 +1371,11 @@ var dbSource=_dataTable.attr("dbSource");
 				
 				var tInfo = gf($(this));
 				
+
+				if(typeof(tInfo["dbClass"]) != "undefined" && !tInfo["writeFunc"]){
+					alert("writeFunc is Null");
+					return;
+				}
 /*
 				var selectedRow = $(this).parent().parent();
 				var dataTable = selectedRow.parent().parent();
@@ -1148,7 +1413,7 @@ var dbSource=_dataTable.attr("dbSource");
 							rowData[fInfo["field"]]="";
 						}
 						//viewer 적용
-						var viewValue = viewerSelector(fInfo["viewer"],j2s(newValue),fInfo["viewerOption"]);
+						var viewValue = viewerSelector(fInfo["viewer"],rowData[fInfo["field"]]);
 						//primary key 속성 넣어주기
 						pushData+="<td class='LQDataCell' field='"+fInfo["field"]+"'>"+viewValue+"</td>";
 					
@@ -1165,29 +1430,49 @@ var dbSource=_dataTable.attr("dbSource");
 				
 				pushData+="</tr>";
 				
-				pushData="<tr data='"+j2s(rowData)+"' class='LQDataRow'>"+pushData;
-				
-				//데이터 테이블에 집어넣기
-				tInfo["table"].find('tbody[datazone]:last').append(pushData);
-				
-				var param={"mode":"insert","table":tInfo["dbTable"],"data":j2s(rowData)};
+				log("pushData="+pushData);
+				var param={"gid":gid,"mode":"insert","table":tInfo["dbTable"],"data":j2s(rowData),"primaryKey":tInfo["primaryKey"],"primaryValue":tInfo["primaryValue"]};
 				//서버로보내기
+
+				if(typeof(tInfo["dbClass"]) != "undefined")
+				{
+					param={"gid":gid,"dbClass":tInfo["dbClass"],"dbFunc":tInfo["writeFunc"],"param":j2s({"data":rowData})};
+				}
+
 				log(j2s(param));
 				$.ajax({
 				    url : tInfo["dbSource"], 
 				    data : param,
 				    dataType : "json", 
 				    type : "post",
-				    success :function(data){ 
+				    success :function(resultData){ 
 				    
-				    log(data);
-		   			if(data['result']=="ok"){
+				    log("add result data :"+j2s(resultData));
+
+				    var data = resultData["data"];
+
+		   			if(resultData['result']=="ok"){
 			   			//값재설정
 						log("add success");
-						
+
+						log("pushData2="+pushData);
+						if(resultData["no"])rowData[tInfo["primaryKey"]]=resultData["no"];
+
+						pushData="<tr data='"+j2s(rowData)+"' class='LQDataRow' bgcolor=yellow>"+pushData;
+				
+						//데이터 테이블에 집어넣기
+						tInfo["table"].find('tbody[datazone]:last > tr:first').after(pushData);
+							
+						// rowData[tInfo["primaryKey"]] = data["data"]
+
+
+						// mydata = s2j(tInfo["table"].find('tbody[datazone]:last > tr:first').after().attr("data"));
+						// tInfo["rowData"] = data["data"];
+						// tInfo["row"].attr("data",j2s(tInfo["rowData"]));
+
 		   			}else{
-			   			alert("error :"+data['result']);
-			   			tInfo["table"].find('tr:last').remove();
+			   			alert("error :"+resultData['msg']);
+			   			//tInfo["table"].find('tr:last').remove();
 		   			}
 		   			return true;
 		   			},
@@ -1197,6 +1482,13 @@ var dbSource=_dataTable.attr("dbSource");
 				}
 		   		});
 			
+			});
+
+
+			$('body').on('click','.LQLoadNext',function(){		
+				var tInfo = gf($(this));
+				log("next dbwehre->"+tInfo["dbWhere"]);	
+				loadDataTable($(this),"after");
 			});
 			////////////////////////////////// init ////////////////////////
 

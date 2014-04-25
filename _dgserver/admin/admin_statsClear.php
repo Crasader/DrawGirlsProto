@@ -6,7 +6,7 @@ include "header.php";
 if(!$_GET[where])$where = "puzzle=1 order by no asc";
 else $where = $_GET[where];
 
-$result = mysql_query("select * from $TABLE_STAGE where $where",DBManager::get()->getMainConnection());
+$result = mysql_query("select * from ".DBManager::get()->getMT("stage")." where $where",DBManager::get()->getMainConnection());
 
 ?>
 <center>
@@ -15,9 +15,11 @@ $result = mysql_query("select * from $TABLE_STAGE where $where",DBManager::get()
 </form>
 
 </center><?php
+
 echo"<table border=1 align=center><tr><td>스테이지</td><td>레벨</td><td>시도</td><td>성공</td><td>실패</td><td>???</td><td>성공율</td></tr>";
 
 $lData = array();
+
 while($stageInfo=mysql_fetch_array($result)){
 	$stage = $stageInfo[no];
 	$level = $stageInfo[level];

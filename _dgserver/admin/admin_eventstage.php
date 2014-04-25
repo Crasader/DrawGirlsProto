@@ -38,14 +38,14 @@ var selectedMonster = function(obj,value){
 }
 </script>
 
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_EVENTSTAGE?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("eventstage")?>" border=1 align=center>
 	<thead>
 		<tr>
-			<th field="no" viewer="text" primary editor="text">no</th>
-			<th field="theme" viewer="text" editor="text">theme</th>
+			<th field="no" viewer='{"type":"text"}' primary editor='{"type":"text"}'>no</th>
+			<th field="theme" viewer='{"type":"text"}' editor='{"type":"text"}'>theme</th>
 			
-			<th field="scale" viewer="text" editor="text" editorOption='{"datatype":"int"}'>scale</th>
-			<th field="boss" viewer="json" editor="table" editorOption='[
+			<th field="scale" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>scale</th>
+			<th field="boss" viewer='{"type":"json"}' editor="table" editorOption='[
 			{"field":"shape","title":"모양","editor":"select","editorOption":["circle","snake"]},
 			{"field":"type","title":"몬스터번호","editor":"dataSelector","editorOption":{"func":"selectedMonster","mode":"monster"}},
 
@@ -59,7 +59,7 @@ var selectedMonster = function(obj,value){
 									{"field":"pattern","editor":"dataSelector","editorOption":{"func":"selectedPattern","mode":"pattern"}},
 									{"field":"target","editor":"select","editorOption":["no","yes"]},
 									{"field":"atype","editor":"select","editorOption":["normal","special","crash"]},
-									{"field":"percent","editor":"text","editorOption":{"datatype":"int"}}
+									{"field":"percent","type":"text","datatype":"int"}
 					
 				]}			
 			},			
@@ -68,83 +68,83 @@ var selectedMonster = function(obj,value){
 			    "title":"속도",
 				"field":"speed","editor":"dictionary",
 				"editorOption":[
-									{"field":"max","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"start","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"min","editor":"text","editorOption":{"datatype":"int"}}
+									{"field":"max","type":"text","datatype":"int"},
+									{"field":"start","type":"text","datatype":"int"},
+									{"field":"min","type":"text","datatype":"int"}
 								]
 			},
 			{
 			    "title":"스케일",
 				"field":"scale","editor":"dictionary",
 				"editorOption":[
-									{"field":"max","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"start","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"min","editor":"text","editorOption":{"datatype":"int"}}
+									{"field":"max","type":"text","datatype":"int"},
+									{"field":"start","type":"text","datatype":"int"},
+									{"field":"min","type":"text","datatype":"int"}
 								]
 			},
 			{
 			    "title":"움직임",
 				"field":"movement","editor":"dictionary",
 				"editorOption":[
-									{"field":"normal","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"draw","editor":"text","editorOption":{"datatype":"int"}}
+									{"field":"normal","type":"text","datatype":"int"},
+									{"field":"draw","type":"text","datatype":"int"}
 								]
 			},
-			{"title":"공격주기","field":"attackpercent","editor":"text","editorOption":{"datatype":"int"}},
-			{"title":"에너지","field":"hp","editor":"text","editorOption":{"datatype":"int"}}	,
-			{"title":"민첩","field":"agi","editor":"text","editorOption":{"datatype":"int"}}	,
-			{"title":"AI","field":"ai","editor":"text","editorOption":{"datatype":"int"}}	
+			{"title":"공격주기","field":"attackpercent","type":"text","datatype":"int"},
+			{"title":"에너지","field":"hp","type":"text","datatype":"int"}	,
+			{"title":"민첩","field":"agi","type":"text","datatype":"int"}	,
+			{"title":"AI","field":"ai","type":"text","datatype":"int"}	
 						
 			]'>boss</th>
-			<th field="junior"  viewer="json" editor="table" editorOption='[
+			<th field="junior"  viewer='{"type":"json"}' editor="table" editorOption='[
 			
 			{"field":"type","title":"몬스터번호","editor":"dataSelector","editorOption":{"func":"selectedMonster","mode":"monster"}},			
 			{   
 			    "title":"속도",
 				"field":"speed","editor":"dictionary",
 				"editorOption":[
-									{"field":"max","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"start","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"min","editor":"text","editorOption":{"datatype":"int"}}
+									{"field":"max","type":"text","datatype":"int"},
+									{"field":"start","type":"text","datatype":"int"},
+									{"field":"min","type":"text","datatype":"int"}
 								]
 			},
 			{
 			    "title":"스케일",
 				"field":"scale","editor":"dictionary",
 				"editorOption":[
-									{"field":"max","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"start","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"min","editor":"text","editorOption":{"datatype":"int"}}
+									{"field":"max","type":"text","datatype":"int"},
+									{"field":"start","type":"text","datatype":"int"},
+									{"field":"min","type":"text","datatype":"int"}
 								]
 			},
 			{
 			    "title":"움직임",
 				"field":"movement","editor":"dictionary",
 				"editorOption":[
-									{"field":"normal","editor":"text","editorOption":{"datatype":"int"}},
-									{"field":"draw","editor":"text","editorOption":{"datatype":"int"}}
+									{"field":"normal","type":"text","datatype":"int"},
+									{"field":"draw","type":"text","datatype":"int"}
 								]
 			},
-			{"title":"에너지","field":"hp","editor":"text","editorOption":{"datatype":"int"}}	,
-			{"title":"민첩","field":"agi","editor":"text","editorOption":{"datatype":"int"}}	,
-			{"title":"AI","field":"ai","editor":"text","editorOption":{"datatype":"int"}}	
+			{"title":"에너지","field":"hp","type":"text","datatype":"int"}	,
+			{"title":"민첩","field":"agi","type":"text","datatype":"int"}	,
+			{"title":"AI","field":"ai","type":"text","datatype":"int"}	
 						
 			]'>junior</td>
 			
-			<th field="playtime" viewer="text" editor="text">playtime</th>
-			<th field="scoreRate" viewer="text" editor="text" editorOption='{"datatype":"int"}'>scoreRate</th>
-			<th field="shopItems" viewer="json" editor="table" editorOption='
+			<th field="playtime" viewer='{"type":"text"}' editor='{"type":"text"}'>playtime</th>
+			<th field="scoreRate" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>scoreRate</th>
+			<th field="shopItems" viewer='{"type":"json"}' editor="table" editorOption='
 			[
 				{
 					"title":"아이템번호",
 					"field":"type",
-					"editor":"text",
+					"type":"text",
 					"editorOption":{"datatype":"int"}
 				},
 				{
 					"title":"가격",
 					"field":"price",
-					"editor":"text",
+					"type":"text",
 					"editorOption":{"datatype":"int"}
 				},
 				{
@@ -155,11 +155,11 @@ var selectedMonster = function(obj,value){
 				}
 
 			]'>shopItems</th>
-			<th field="defItems"  viewer="json" editor="table" editorOption='[
+			<th field="defItems"  viewer='{"type":"json"}' editor="table" editorOption='[
 				{
 					"title":"아이템번호",
 					"field":"type",
-					"editor":"text",
+					"type":"text",
 					"editorOption":{"datatype":"int"}
 				},
 				{
@@ -170,11 +170,11 @@ var selectedMonster = function(obj,value){
 				}
 
 			]'>defItems</th>
-			<th field="cards"  viewer="json" editor="array" editorOption='{"title":"카드번호","field":"type","editor":"text","editorOption":{"datatype":"int"}}'>cards</th>
+			<th field="cards"  viewer='{"type":"json"}' editor="array" editorOption='{"title":"카드번호","field":"type","type":"text","datatype":"int"}'>cards</th>
 			
-			<th field="mission" viewer="json" editor="dictionary" editorOption='
+			<th field="mission" viewer='{"type":"json"}' editor="dictionary" editorOption='
 			[
-				{"field":"type","editor":"text","editorOption":{"datatype":"int"}},
+				{"field":"type","type":"text","datatype":"int"},
 				{
 				 "field":"option",
 				 "editor":"dictionary",
@@ -183,18 +183,18 @@ var selectedMonster = function(obj,value){
 			]
 			'>mission</th>
 			
-			<!--th field="thumbnail" viewer="json" editor="dictionary" editorOption='
+			<!--th field="thumbnail" viewer='{"type":"json"}' editor="dictionary" editorOption='
 			[
 				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}},
+				{"field":"size","type":"text","datatype":"int"},
 				{
 				 "field":"x",
-				 "editor":"text",
+				 "type":"text",
 				 "editorOption":{"datatype":"int"}
 				},
 				{
 				 "field":"y",
-				 "editor":"text",
+				 "type":"text",
 				 "editorOption":{"datatype":"int"}
 				}
 				,
@@ -202,13 +202,13 @@ var selectedMonster = function(obj,value){
 				 "field":"path",
 				 "editor":"table",
 				 "editorOption":[
-				 				{"title":"방향","field":"d", "editor":"text"},
-				 				{"title":"위치","field":"c", "editor":"text", "editorOption":{"datatype":"int"}}
+				 				{"title":"방향","field":"d", "type":"text"},
+				 				{"title":"위치","field":"c", "type":"text", "editorOption":{"datatype":"int"}}
 				 ]
 				}
 			]
 			'>thumbnail</th-->
-			<th field="version" viewer="text" editor="text" editorOption='{"datatype":"int"}'>version</th>
+			<th field="version" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>version</th>
 			<th manage="delete update insert">manage</th>
 		</tr>
 	</thead>

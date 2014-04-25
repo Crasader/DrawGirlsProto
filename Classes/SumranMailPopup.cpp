@@ -69,8 +69,8 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
-	m_nothingMessage = CCLabelTTF::create("받은 메세지가 하나도 없습니다.", mySGD->getFont().c_str(), 14);
-	m_nothingMessage->setPosition(ccp(170, 256));
+	m_nothingMessage = CCLabelTTF::create("받은 메세지가 없습니다.", mySGD->getFont().c_str(), 14);
+	m_nothingMessage->setPosition(ccpMult(main_case->getContentSize(),0.5));
 	main_case->addChild(m_nothingMessage, 1);
 	m_nothingMessage->setVisible(false);	
 

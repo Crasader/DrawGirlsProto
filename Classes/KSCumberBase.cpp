@@ -2613,25 +2613,40 @@ void KSCumberBase::applyAutoBalance()
 	if(isClear){
 		
 		CCLog("############ clear stage, dont autobalance ################");
-		return;
+		//return;
 	}
 	
 	
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	//int balanceN = 5;
-	//float downLimit = 0.5f;
 	
-	int clearCount = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);
+	int vCount = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);
 	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	
-	
 	
 	ostringstream oss;
 	oss << mySD->getSilType();
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
+	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
+	CCLog("#################### autobalance ############################");
+	CCLog("vicetory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
+	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+
+	if(vCount>0){
+		m_aiValue = m_aiValue+10*vCount;
+		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.1;
+		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.1;
+	}
 	
+	
+	CCLog("#################### Change Balnace1 ############################");
+	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+	
+	return;
+	
+	
+	
+	autobalanceTry = playCount;
 	
 	//int balPt = clearCount-2;
 	
@@ -2642,7 +2657,7 @@ void KSCumberBase::applyAutoBalance()
 	
 	
 	CCLog("#################### autobalance ############################");
-	CCLog("clear : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",clearCount,playCount,autobalanceTry,puzzleNo);
+	CCLog("vicetory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	
 	//오토벨런싱트라이 값까지는 어렵게

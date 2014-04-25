@@ -28,14 +28,14 @@ include "header.php";
 <?php
 if($_GET[mode]=="pattern"){
 ?>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_PATTERN?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("pattern")?>" border=1 align=center>
 	<thead>
 		<tr>
-			<th field="type" viewer="text" primary>no</th>
-			<th field="category" viewer="text">name</th>
-			<th field="name" viewer="custom" viewerOption="nameViewer">name</th>
-			<th field="image" viewer="custom" viewerOption="imageViewer">image</th>
-			<th field="comment" viewer="textarea">comment</th>
+			<th field="type" viewer='{"type":"text"}' primary>no</th>
+			<th field="category" viewer='{"type":"text"}'>name</th>
+			<th field="name" viewer='{"type":"custom","func":"nameViewer"}'>name</th>
+			<th field="image" viewer='{"type":"custom","func":"imageViewer"}'>image</th>
+			<th field="comment" viewer='{"type":"textarea"}'>comment</th>
 		</tr>
 	</thead>
 	<tbody datazone>
@@ -44,13 +44,13 @@ if($_GET[mode]=="pattern"){
 
 <?php }else if($_GET[mode]=="monster"){?>
 
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_MONSTER?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("monster")?>" border=1 align=center>
 	<thead>
 		<tr>
-			<th field="no" viewer="text">no</th>
-			<th field="name" viewer="custom" viewerOption="nameViewer" primary>name</th>
-			<th field="image" viewer="custom" viewerOption="imageViewer">image</th>
-			<th field="comment" viewer="textarea">comment</th>
+			<th field="no" viewer='{"type":"text"}'>no</th>
+			<th field="name" viewer='{"type":"custom","func":"nameViewer"}' primary>name</th>
+			<th field="image" viewer='{"type":"custom","func":"imageViewer"}'>image</th>
+			<th field="comment" viewer='{"type":"textarea"}'>comment</th>
 		</tr>
 	</thead>
 	<tbody datazone>
