@@ -963,7 +963,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		mySGD->is_draw_button_tutorial = false;
 		myGD->communication("Main_offDrawButtonTutorial");
 		
-		if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage)
+		if(t_p >= t_beforePercentage + 0.01f && t_p < clearPercentage.getV())
 		{
 			int up_count = (t_p - t_beforePercentage)/0.01f;
 			my_fp->addFeverGage(up_count);
@@ -982,7 +982,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, cmCnt, myGD->getJackPoint().convertToCCP());
 		}
 		
-		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage)
+		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage.getV())
 		{
 			if(t_p >= t_beforePercentage + 0.15f) // 0.2
 			{
@@ -1013,7 +1013,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		beforePercentage = (int(t_p*1000))^t_tta;
 	}
 	
-	if(t_p > 0.35f && !is_show_exchange_coin && t_p < clearPercentage)
+	if(t_p > 0.35f && !is_show_exchange_coin && t_p < clearPercentage.getV())
 	{
 		takeCoinModeOn();
 	}
@@ -1028,13 +1028,13 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
-	if(!isGameover && t_p > clearPercentage) // clear 80%
+	if(!isGameover && t_p > clearPercentage.getV()) // clear 80%
 	{
 		myGD->communication("GIM_stopCoin");
 		
 		if(clr_cdt_type == kCLEAR_timeLimit)
 		{
-			if(playtime_limit - countingCnt >= ing_cdt_cnt)
+			if(playtime_limit.getV() - countingCnt.getV() >= ing_cdt_cnt.getV())
 				conditionClear();
 			else
 				conditionFail();
@@ -1142,7 +1142,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	if(clr_cdt_type == kCLEAR_sequenceChange && !isGameover)
 	{
-		if(t_coin_number != ing_cdt_cnt)
+		if(t_coin_number != ing_cdt_cnt.getV())
 		{
 			conditionFail();
 			
@@ -1232,7 +1232,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	exchange_dic->setObject(new_coin_spr, t_coin_number);
 	
-	if(taked_coin_cnt >= 6 && !isGameover && getPercentage() < clearPercentage)
+	if(taked_coin_cnt >= 6 && !isGameover && getPercentage() < clearPercentage.getV())
 	{
 		if(clr_cdt_type == kCLEAR_sequenceChange)
 		{
@@ -1283,7 +1283,7 @@ void PlayUI::setMaxBossLife (float t_life)
 void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
-	m_areaGage = AreaGage::create(clearPercentage);
+	m_areaGage = AreaGage::create(clearPercentage.getV());
 	m_areaGage->setPosition(ccp(240,myDSH->ui_top-22));
 	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
@@ -1321,7 +1321,7 @@ void PlayUI::checkBossLife ()
 }
 int PlayUI::getGameTime ()
 {
-	return countingCnt;
+	return countingCnt.getV();
 }
 //void PlayUI::setControlTD (CCObject * t_main, SEL_CallFunc d_gesture, SEL_CallFunc d_button, SEL_CallFunc d_joystick, SEL_CallFunc d_startControl)
 //{
@@ -1708,7 +1708,7 @@ void PlayUI::counting ()
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}
 		
-		if(countingCnt-1 >= playtime_limit)
+		if(countingCnt.getV()-1 >= playtime_limit.getV())
 		{
 			if(!is_used_longTimeItem && mySGD->isUsingItem(kIC_longTime))
 			{
@@ -1867,7 +1867,7 @@ void PlayUI::lifeBonus ()
 		else if(keep_percentage.getV() >= 1.f)				grade_value = 3;
 		else if(is_exchanged)								grade_value = 2;
 		
-		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt.getV(), use_time, total_time);
 		CCDelayTime* n_d = CCDelayTime::create(2.5f);
 		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 		
@@ -1924,7 +1924,7 @@ void PlayUI::endGame (bool is_show_reason)
 				else if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value = 3;
 				else if(is_exchanged)											grade_value = 2;
 				
-				mySGD->gameClear(grade_value, int(getScore()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+				mySGD->gameClear(grade_value, int(getScore()), (beforePercentage^t_tta)/1000.f, countingCnt.getV(), use_time, total_time);
 				CCDelayTime* n_d = CCDelayTime::create(4.5f);
 				CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 				
@@ -1987,7 +1987,7 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 		else if(t_percent >= 1.f)					grade_value = 3;
 		else if(is_exchanged)						grade_value = 2;
 		
-		mySGD->gameClear(grade_value, int(getScore()), t_percent, countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, int(getScore()), t_percent, countingCnt.getV(), use_time, total_time);
 		nextScene();
 	}
 }
@@ -2024,7 +2024,7 @@ void PlayUI::cancelOnePercentGacha ()
 		else if(keep_percentage.getV() >= 1.f)					grade_value = 3;
 		else if(is_exchanged)									grade_value = 2;
 		
-		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt.getV(), use_time, total_time);
 		nextScene();
 	}
 }
@@ -2048,7 +2048,7 @@ void PlayUI::catchSubCumber ()
 	
 	ing_cdt_cnt++;
 	
-	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
+	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -2059,7 +2059,7 @@ void PlayUI::takeBigArea ()
 	
 	ing_cdt_cnt++;
 	
-	mission_button->setTextAtIndex(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
+	mission_button->setTextAtIndex(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -2070,7 +2070,7 @@ void PlayUI::takeItemCollect ()
 	
 	ing_cdt_cnt++;
 	
-	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), 1);
+	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString(), 1);
 //	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
@@ -2164,7 +2164,7 @@ void PlayUI::myInit ()
 	is_urgent = false;
 	use_time = 0;
 	playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime");
-	total_time = playtime_limit;
+	total_time = playtime_limit.getV();
 	
 //	CCSprite* time_back = CCSprite::create("ui_time_back.png");
 //	time_back->setPosition(ccp(240-25,myDSH->ui_top-25));
@@ -2233,7 +2233,7 @@ void PlayUI::myInit ()
 	
 	CCPoint life_base_position = ccpMult(ccp(-50,0), (jack_life-1)/2.f);
 	
-	for(int i=0;i<jack_life;i++)
+	for(int i=0;i<jack_life.getV();i++)
 	{
 		CCSprite* black_img = CCSprite::create("ingame_life.png");
 		black_img->setColor(ccBLACK);
@@ -2342,7 +2342,7 @@ void PlayUI::myInit ()
 		ing_cdt_cnt = 0;
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString());
 		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -2370,7 +2370,7 @@ void PlayUI::myInit ()
 		ing_cdt_cnt = 0;
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		mission_button->addText(CCString::createWithFormat("%2.0f%%:%d/%d", clr_cdt_per*100.f, ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString());
 //		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%2.0f%%:%d/%d", (clr_cdt_per-item_value/100.f)*100.f, ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -2397,7 +2397,7 @@ void PlayUI::myInit ()
 		ing_cdt_cnt = 0;
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString());
 		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -2450,7 +2450,7 @@ void PlayUI::myInit ()
 		ing_cdt_cnt = 1;
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
+		mission_button->addText(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt.getV())->getCString());
 		
 //		CCSprite* clr_cdt_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", ing_cdt_cnt)->getCString());
 //		clr_cdt_img->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -2476,7 +2476,7 @@ void PlayUI::myInit ()
 		ing_cdt_cnt = mySD->getClearConditionTimeLimit();
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("%d", ing_cdt_cnt)->getCString());
+		mission_button->addText(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString());
 		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
@@ -2602,7 +2602,7 @@ void PlayUI::continueAction ()
 	AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
 //	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	
-	total_time += countingCnt;
+	total_time += countingCnt.getV();
 	
 //	if(mySGD->isUsingItem(kIC_longTime))
 //	{
@@ -2617,7 +2617,7 @@ void PlayUI::continueAction ()
 	
 	CCPoint life_base_position = ccpMult(ccp(-50,0), (jack_life-1)/2.f);
 	
-	for(int i=0;i<jack_life;i++)
+	for(int i=0;i<jack_life.getV();i++)
 	{
 		CCSprite* jack_img = CCSprite::create("ingame_life.png");
 		jack_img->setPosition(ccpAdd(life_base_position, ccp(i*50, 0)));

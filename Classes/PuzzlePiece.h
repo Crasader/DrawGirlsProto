@@ -196,6 +196,8 @@ public:
 	
 	bool is_simple;
 	
+	PieceMode piece_mode;
+	
 private:
 	
 	CCObject* target_create_particle;
@@ -241,7 +243,6 @@ private:
 	
 	bool is_clicked;
 	
-	PieceMode piece_mode;
 	PieceType piece_type;
 	
 	CCMenu* piece_menu;

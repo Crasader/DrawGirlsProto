@@ -508,9 +508,9 @@ bool PuzzleScene::init()
 				tutorial_node = t_tutorial;
 			}
 		}
+		
+		addChild(KSTimer::create(7.f, [=](){startAutoTurnPiece();}));
 	}
-	
-	addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
 	
 	return true;
 }
@@ -594,7 +594,10 @@ void PuzzleScene::hideClearPopup()
 				if(clear_is_stage_unlock)
 					showUnlockEffect();
 				else
+				{
+					addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
 					is_menu_enable = true;
+				}
 			}
 		}
 //	}
@@ -712,7 +715,10 @@ void PuzzleScene::endGetStar()
 				showUnlockEffect();
 			}
 			else
+			{
+				addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
 				is_menu_enable = true;
+			}
 		}
 	}
 }
@@ -838,6 +844,7 @@ void PuzzleScene::endUnlockEffect()
 	setPieceClick(selected_stage_number);
 	setRight();
 	
+	addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
 	is_menu_enable = true;
 }
 
@@ -867,6 +874,8 @@ void PuzzleScene::hideFailPopup()
 			tutorial_node = t_tutorial;
 		}
 	}
+	
+	addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
 	is_menu_enable = true;
 }
 
@@ -1595,10 +1604,16 @@ void PuzzleScene::autoTurnPiece()
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
 	
 	PuzzlePiece* t_piece = (PuzzlePiece*)puzzle_node->getChildByTag(start_stage+auto_turn_piece_frame);
+	
 	if(t_piece->is_simple)
-		t_piece->turnPiece(piece_mode);
+		t_piece->turnPiece(kPieceMode_thumb);
 	else
-		t_piece->simpleView();
+	{
+		if(t_piece->piece_mode == kPieceMode_default)
+			t_piece->simpleView();
+		else if(t_piece->piece_mode == kPieceMode_thumb)
+			t_piece->turnPiece(kPieceMode_default);
+	}
 	
 	auto_turn_piece_frame++;
 	
