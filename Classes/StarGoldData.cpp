@@ -267,7 +267,7 @@ void StarGoldData::setGold( int t_gold , bool is_write/* = true */)
 
 int StarGoldData::getKeepGold()
 {
-	return keep_gold;
+	return keep_gold.getV();
 }
 
 void StarGoldData::setKeepGold( int t_gold )
@@ -315,6 +315,7 @@ void StarGoldData::setGameStart()
 	is_exchanged = false;
 	is_cleared = false;
 	score = 0.f;
+	base_score = 0.f;
 	percentage = 0.f;
 	keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 	stage_grade = 0;
@@ -359,21 +360,13 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 	stage_grade = t_grade;
 	percentage = t_percentage;
 
-	score = t_score + t_score*(stage_grade-1.f)*0.5f + t_score*(1.f-(t_use_time*1.f)/t_total_time);
+	base_score = t_score;
+	
+	float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
+	
+	score = t_score + t_score*stage_grade.getV()*0.5f + t_score*((play_limit_time-t_game_time)/play_limit_time);
 
 	game_time = t_game_time;
-	
-//	int before_clear_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
-	int recent_clear_rank;
-	if(percentage == 1.f)
-		recent_clear_rank = 3;
-	else if(percentage >= 0.95f)
-		recent_clear_rank = 2;
-	else
-		recent_clear_rank = 1;
-	
-//	if(before_clear_rank < recent_clear_rank)
-//		myDSH->setIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType(), recent_clear_rank);
 	
 	if(!mySGD->isClearPiece(mySD->getSilType()))
 	{
@@ -381,17 +374,8 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 //		myDSH->setIntegerForKey(kDSH_Key_clearStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt), mySD->getSilType());
 //		myDSH->setBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType(), true);
 		
-		int clear_grade = 1;
-		
-		if(is_exchanged && percentage >= 1.f)
-			clear_grade = 4;
-		else if(percentage >= 1.f)
-			clear_grade = 3;
-		else if(is_exchanged)
-			clear_grade = 2;
-		
 		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-		t_history.is_clear[clear_grade-1] = true;
+		t_history.is_clear[t_grade-1] = true;
 		mySGD->setPieceHistory(t_history, nullptr);
 	}
 	
@@ -406,6 +390,7 @@ void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time 
 		is_using_item[i] = false;
 	}
 
+	base_score = t_score;
 	score = t_score;
 	percentage = t_percentage;
 	game_time = t_game_time;
@@ -414,27 +399,32 @@ void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time 
 
 bool StarGoldData::getIsCleared()
 {
-	return is_cleared;
+	return is_cleared.getV();
 }
 
 float StarGoldData::getScore()
 {
-	return score;
+	return score.getV();
+}
+
+float StarGoldData::getBaseScore()
+{
+	return base_score.getV();
 }
 
 float StarGoldData::getPercentage()
 {
-	return percentage;
+	return percentage.getV();
 }
 
 int StarGoldData::getStageGrade()
 {
-	return stage_grade;
+	return stage_grade.getV();
 }
 
 int StarGoldData::getStageGold()
 {
-	return myDSH->getIntegerForKey(kDSH_Key_savedGold)-keep_gold;
+	return myDSH->getIntegerForKey(kDSH_Key_savedGold)-keep_gold.getV();
 }
 
 bool StarGoldData::getIsAfterSceneChapter()
@@ -499,7 +489,7 @@ void StarGoldData::setTargetDelegate( CCObject* t_t, SEL_CallFuncB t_d )
 
 int StarGoldData::getGameTime()
 {
-	return game_time;
+	return game_time.getV();
 }
 
 void StarGoldData::setStartRequestsData( Json::Value result_data )
@@ -1088,6 +1078,21 @@ void StarGoldData::initPieceHistory(Json::Value history_list)
 		t_history.open_type = history_info["openType"].asString();
 		piece_historys.push_back(t_history);
 	}
+}
+
+int StarGoldData::getClearStarCount()
+{
+	int return_value = 0;
+	for(int i=0;i<piece_historys.size();i++)
+	{
+		for(int j=0;j<4;j++)
+		{
+			if(piece_historys[i].is_clear[j])
+				return_value += j+1;
+		}
+	}
+	
+	return return_value;
 }
 
 bool StarGoldData::isEmptyAchieveNotiQueue()

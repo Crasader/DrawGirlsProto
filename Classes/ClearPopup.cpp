@@ -69,6 +69,8 @@ bool ClearPopup::init()
 	
 	AudioEngine::sharedInstance()->preloadEffectScene("Ending");
 	
+	is_take_star_effect = false;
+	
 	if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
 		myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_homeClick);
 	
@@ -91,7 +93,6 @@ bool ClearPopup::init()
 	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
-	vector<CommandParam> send_command_list;
 	send_command_list.clear();
 	
 	Json::Value param;
@@ -259,19 +260,20 @@ bool ClearPopup::init()
 	inner_left->addChild(score_back);
 	
 	
-	CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
+	title = CCSprite::create(CCString::createWithFormat("ending_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
+	title->setScale(0);
 	title->setPosition(ccp(132,240));
-	main_case->addChild(title, kZ_CP_img);
+	main_case->addChild(title, kZ_CP_menu);
 	
 	
 	CCSprite* stage_tab = CCSprite::create("ending_tab.png");
 	stage_tab->setPosition(ccp(40,253));
 	main_case->addChild(stage_tab);
 	
+	int stage_number = mySD->getSilType();
+	
 	if(mySGD->is_before_selected_event_stage)
 	{
-		int stage_number = mySD->getSilType();
-		
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 14);
 		stage_number_label->setColor(ccc3(255, 170, 20));
 		stage_number_label->enableOuterStroke(ccc3(95, 65, 130), 1.f);
@@ -282,7 +284,6 @@ bool ClearPopup::init()
 	}
 	else
 	{
-		int stage_number = mySD->getSilType();
 //		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
@@ -293,7 +294,6 @@ bool ClearPopup::init()
 		stage_tab->addChild(piece_number_label);
 	}
 	
-	int stage_number = mySD->getSilType();
 	int take_level;
 	if(mySGD->is_showtime && mySGD->is_exchanged)	take_level = 4;
 	else if(mySGD->is_showtime)					take_level = 3;
@@ -344,10 +344,18 @@ bool ClearPopup::init()
 	{
 		CCSprite* t_star = CCSprite::create("ending_star_gold.png");
 		t_star->setPosition(ccp(53+i*48,195));
-		main_case->addChild(t_star, kZ_CP_img);
-		t_star->setScale(0);
+		main_case->addChild(t_star, kZ_CP_table);
+		t_star->setScale(2.f);
+		t_star->setOpacity(0);
+		t_star->setRotation(-200);
 		
 		ani_stars.push_back(t_star);
+		
+		CCSprite* t_star_ani = CCSprite::create("ending_star_gold.png");
+		t_star_ani->setScale(2.f);
+		t_star_ani->setOpacity(0);
+		t_star_ani->setPosition(ccp(t_star->getContentSize().width/2.f, t_star->getContentSize().height/2.f));
+		t_star->addChild(t_star_ani, 1, 1);
 	}
 	
 	if(mySGD->is_clear_diary)
@@ -367,7 +375,7 @@ bool ClearPopup::init()
 	time_img->setPosition(ccp(80,148));
 	main_case->addChild(time_img, kZ_CP_img);
 	
-	time_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+	time_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString(), mySGD->getFont().c_str(), 15);
 	time_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	time_label->setAnchorPoint(ccp(1,0.5));
 	time_label->setPosition(ccp(220,148));
@@ -382,7 +390,7 @@ bool ClearPopup::init()
 	gold_img->setPosition(ccp(80,115));
 	main_case->addChild(gold_img, kZ_CP_img);
 	
-	gold_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+	gold_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), mySGD->getFont().c_str(), 15);
 	gold_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	gold_label->setAnchorPoint(ccp(1,0.5));
 	gold_label->setPosition(ccp(220,115));
@@ -397,7 +405,7 @@ bool ClearPopup::init()
 	score_img->setPosition(ccp(80,82));
 	main_case->addChild(score_img, kZ_CP_img);
 	
-	score_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+	score_label = KSLabelTTF::create(CCString::createWithFormat("%.0f", mySGD->getBaseScore())->getCString(), mySGD->getFont().c_str(), 15);
 	score_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
 	score_label->setAnchorPoint(ccp(1,0.5));
 	score_label->setPosition(ccp(220,82));
@@ -501,12 +509,10 @@ ClearPopup::~ClearPopup()
 
 void ClearPopup::resultGetRank(Json::Value result_data)
 {
-	rank_data = result_data;
+	cell_action_list.clear();
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		cell_action_list.clear();
-		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
 		graph_back->setPosition(ccp(355,230));
 		main_case->addChild(graph_back, kZ_CP_img);
@@ -544,6 +550,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		my_rank_label->setAnchorPoint(ccp(1,0.5));
 		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 		main_case->addChild(my_rank_label, kZ_CP_img);
+		my_rank_label->setOpacity(0);
 		
 		float rank_percent = 1.f*myrank/alluser;
 		
@@ -557,9 +564,23 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
+		percent_label->setOpacity(0);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
-		rank_percent_case->runAction(t_move);
+		
+		cell_action_list.push_back([=](){
+			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
+			rank_percent_case->runAction(t_move);
+			
+			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
+			CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 255);
+			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
+			my_rank_label->runAction(t_seq1);
+			
+			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
+			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
+			percent_label->runAction(t_seq2);
+		});
 		
 		Json::Value user_list = result_data["list"];
 		
@@ -674,20 +695,22 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		is_saved_user_data = true;
 		endLoad();
 		
-		if(is_end_take_card)
+		if(is_end_popup_animation)
 		{
 			for(int i=0;i<cell_action_list.size();i++)
 				cell_action_list[i]();
 		}
+		
+		loading_img->removeFromParent();
 	}
 	else
 	{
-		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
-		fail_label->setPosition(loading_img->getPosition());
-		main_case->addChild(fail_label, kZ_CP_img);
+		hspConnector::get()->command(send_command_list);
+		
+//		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+//		fail_label->setPosition(loading_img->getPosition());
+//		main_case->addChild(fail_label, kZ_CP_img);
 	}
-	
-	loading_img->removeFromParent();
 }
 
 void ClearPopup::showPopup()
@@ -1021,13 +1044,16 @@ void ClearPopup::checkChallengeOrHelp()
 void ClearPopup::endTakeCard()
 {
 	is_end_take_card = true;
-	if(is_saved_user_data)
-	{
-		for(int i=0;i<cell_action_list.size();i++)
-			cell_action_list[i]();
-	}
+//	if(is_saved_user_data)
+//	{
+//		for(int i=0;i<cell_action_list.size();i++)
+//			cell_action_list[i]();
+//	}
 	
-	startCalcAnimation();
+	CCScaleTo* title_scale1 = CCScaleTo::create(1.f/6.f, 1.1f);
+	CCScaleTo* title_scale2 = CCScaleTo::create(1.f/12.f, 1.f);
+	CCSequence* title_seq = CCSequence::create(title_scale1, title_scale2, NULL);
+	title->runAction(title_seq);
 	
 	int step_count = ani_stars.size();
 	
@@ -1035,24 +1061,70 @@ void ClearPopup::endTakeCard()
 	{
 		for(int i=0;i<step_count-1;i++)
 		{
-			CCDelayTime* t_delay = CCDelayTime::create(0.5f+i*0.2f);
-			CCCallFunc* t_sound = CCCallFunc::create(this, callfunc_selector(ClearPopup::starSound));
-			CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-			CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-			CCSequence* t_seq = CCSequence::create(t_delay, t_sound, t_scale1, t_scale2, NULL);
-			ani_stars[i]->runAction(t_seq);
+			ani_stars[i]->addChild(KSTimer::create(0.5f+i*0.2f, [=](){
+				starSound();
+				ani_stars[i]->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
+					ani_stars[i]->setScale(2.f-t);
+					ani_stars[i]->setRotation(-200+t*200);
+					ani_stars[i]->setOpacity(t*255);
+				}, [=](float t){
+					ani_stars[i]->setScale(1.f);
+					ani_stars[i]->setRotation(0);
+					ani_stars[i]->setOpacity(255);
+					
+					CCSprite* t_star_ani = (CCSprite*)ani_stars[i]->getChildByTag(1);
+					t_star_ani->setOpacity(255);
+					
+					ani_stars[i]->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+						t_star_ani->setScale(2.f-t);
+						t_star_ani->setOpacity(255-t*55);
+					}, [=](float t){
+						addStarParticle(ani_stars[i]);
+						t_star_ani->setOpacity(0);
+						
+						CCSprite* back_star = CCSprite::create("ending_star_gold.png");
+						back_star->setPosition(ani_stars[i]->getPosition());
+						main_case->addChild(back_star, kZ_CP_img);
+					}));
+				}));
+			}));
 		}
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f+(step_count-1)*0.2f);
-		CCCallFunc* t_sound = CCCallFunc::create(this, callfunc_selector(ClearPopup::starSound));
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::checkRentCard));
-		CCSequence* t_seq = CCSequence::create(t_delay, t_sound, t_scale1, t_scale2, t_call, NULL);
-		ani_stars[step_count-1]->runAction(t_seq);
+		
+		ani_stars[step_count-1]->addChild(KSTimer::create(0.5f+(step_count-1)*0.2f, [=](){
+			starSound();
+			ani_stars[step_count-1]->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
+				ani_stars[step_count-1]->setScale(2.f-t);
+				ani_stars[step_count-1]->setRotation(-200+t*200);
+				ani_stars[step_count-1]->setOpacity(t*255);
+			}, [=](float t){
+				ani_stars[step_count-1]->setScale(1.f);
+				ani_stars[step_count-1]->setRotation(0);
+				ani_stars[step_count-1]->setOpacity(255);
+				
+				CCSprite* t_star_ani = (CCSprite*)ani_stars[step_count-1]->getChildByTag(1);
+				t_star_ani->setOpacity(255);
+				
+				ani_stars[step_count-1]->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+					t_star_ani->setScale(2.f-t);
+					t_star_ani->setOpacity(255-t*55);
+				}, [=](float t){
+					addStarParticle(ani_stars[step_count-1]);
+					t_star_ani->setOpacity(0);
+					
+					CCSprite* back_star = CCSprite::create("ending_star_gold.png");
+					back_star->setPosition(ani_stars[step_count-1]->getPosition());
+					main_case->addChild(back_star, kZ_CP_img);
+					
+					startCalcAnimation();
+//					checkRentCard();
+				}));
+			}));
+		}));
 	}
 	else
 	{
-		checkRentCard();
+		closePopup();
+//		checkRentCard();
 	}
 }
 
@@ -1063,22 +1135,22 @@ void ClearPopup::starSound()
 
 void ClearPopup::checkMiniGame()
 {
-	bool is_minigame_stage = NSDS_GB(mySD->getSilType(), kSDS_SI_minigame_b);
-	if(is_minigame_stage && !myDSH->getBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType()))
-	{
-		int minigame_played_cnt = myDSH->getIntegerForKey(kDSH_Key_minigame_playedCnt)+1;
-		myDSH->setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
-		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
-		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
-		myDSH->fFlush();
-		myDSH->saveUserData({kSaveUserData_Key_minigame}, nullptr);
-		MiniGamePopup* t_popup = MiniGamePopup::create(kMiniGameCode_touchtouch, bind(&ClearPopup::closePopup, this));
-		addChild(t_popup, kZ_CP_popup);
-	}
-	else
-	{
+//	bool is_minigame_stage = NSDS_GB(mySD->getSilType(), kSDS_SI_minigame_b);
+//	if(is_minigame_stage && !myDSH->getBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType()))
+//	{
+//		int minigame_played_cnt = myDSH->getIntegerForKey(kDSH_Key_minigame_playedCnt)+1;
+//		myDSH->setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
+//		myDSH->setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, minigame_played_cnt, mySD->getSilType(), false);
+//		myDSH->setBoolForKey(kDSH_Key_minigame_int1_isPlayed, mySD->getSilType(), true, false);
+//		myDSH->fFlush();
+//		myDSH->saveUserData({kSaveUserData_Key_minigame}, nullptr);
+//		MiniGamePopup* t_popup = MiniGamePopup::create(kMiniGameCode_touchtouch, bind(&ClearPopup::closePopup, this));
+//		addChild(t_popup, kZ_CP_popup);
+//	}
+//	else
+//	{
 		closePopup();
-	}
+//	}
 }
 
 void ClearPopup::closePopup()
@@ -1086,10 +1158,6 @@ void ClearPopup::closePopup()
 	is_end_popup_animation = true;
 	if(is_end_popup_animation && is_saved_user_data)// && is_loaded_list)
 	{
-		ok_menu->setVisible(true);
-		if(replay_menu)
-			replay_menu->setVisible(true);
-		
 		is_menu_enable = true;
 	}
 }
@@ -1337,10 +1405,6 @@ void ClearPopup::endLoad()
 {
 	if(is_end_popup_animation && is_saved_user_data)// && is_loaded_list)
 	{
-		ok_menu->setVisible(true);
-		if(replay_menu)
-			replay_menu->setVisible(true);
-		
 		is_menu_enable = true;
 	}
 }
@@ -1353,94 +1417,130 @@ void ClearPopup::onEnter()
 
 void ClearPopup::startCalcAnimation()
 {
-	AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
-	startTimeAnimation();
-}
-
-void ClearPopup::startScoreAnimation()
-{
-	keep_score = mySGD->getScore();
-	decrease_score = keep_score;
-	increase_score = 0.f;
-	schedule(schedule_selector(ClearPopup::scoreAnimation));
-}
-
-void ClearPopup::scoreAnimation(float dt)
-{
-	if(decrease_score > 0)
-	{
-		int decreaseUnit = keep_score / 1.f * dt;
+//	startTimeAnimation();
+//	startGoldAnimation();
+	
+	KSLabelTTF* star_bonus_label = KSLabelTTF::create(CCString::createWithFormat("별보너스 x%.1f", mySGD->getStageGrade()*0.5f+1.f)->getCString(), mySGD->getFont().c_str(), 15);
+	star_bonus_label->setColor(ccBLUE);
+	star_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+	star_bonus_label->setPosition(ccp(53+48+24,195));
+	main_case->addChild(star_bonus_label, kZ_CP_table);
+	
+	star_bonus_label->setScale(0.5f);
+	star_bonus_label->setOpacity(0);
+	
+	main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t){
+		star_bonus_label->setScale(0.5f + t*0.8f);
+		star_bonus_label->setOpacity(t*255);
+	}, [=](float t){
+		star_bonus_label->setScale(1.3f);
+		star_bonus_label->setOpacity(255);
 		
-		if(decrease_score < decreaseUnit)
-		{
-			increase_score += decrease_score;
-			decrease_score = 0;
-		}
-		else {
-			if(decreaseUnit <= 0)
-			{
-				increase_score += decrease_score;
-				decrease_score = 0;
-			}
-			else {
-				decrease_score -= decreaseUnit;
-				increase_score += decreaseUnit;
-			}
-		}
-		score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f",increase_score)->getCString()).c_str());
-	}
-	else
-		stopScoreAnimation();
-}
-
-void ClearPopup::stopScoreAnimation()
-{
-	unschedule(schedule_selector(ClearPopup::scoreAnimation));
-	score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString()).c_str());
-	AudioEngine::sharedInstance()->stopAllEffects();
-}
-
-void ClearPopup::startGoldAnimation()
-{
-	keep_gold = mySGD->getStageGold();
-	decrease_gold = keep_gold;
-	increase_gold = 0.f;
-	schedule(schedule_selector(ClearPopup::goldAnimation));
-}
-
-void ClearPopup::goldAnimation(float dt)
-{
-	if(decrease_gold > 0)
-	{
-		int decreaseUnit = keep_gold / 0.5f * dt;
+		main_case->addChild(KSTimer::create(5.f/30.f, [=](){
+			main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
+				star_bonus_label->setScale(1.3f-t*0.8f);
+				star_bonus_label->setPosition(ccpAdd(ccp(125,195), ccpMult(ccp(65,-113), t)));
+				
+			}, [=](float t){
+				star_bonus_label->setScale(0.5f);
+				star_bonus_label->setPosition(ccp(190,82));
+			}));
+		}));
 		
-		if(decrease_gold < decreaseUnit)
-		{
-			increase_gold += decrease_gold;
-			decrease_gold = 0;
-		}
-		else {
-			if(decreaseUnit <= 0)
-			{
-				increase_gold += decrease_gold;
-				decrease_gold = 0;
-			}
-			else {
-				decrease_gold -= decreaseUnit;
-				increase_gold	+= decreaseUnit;
-			}
-		}
-		gold_label->setString(CCString::createWithFormat("%.0f",increase_gold)->getCString());
-	}
-	else
-		stopGoldAnimation();
-}
-
-void ClearPopup::stopGoldAnimation()
-{
-	unschedule(schedule_selector(ClearPopup::goldAnimation));
-	gold_label->setString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
-	startScoreAnimation();
+		main_case->addChild(KSTimer::create(9.f/30.f, [=](){
+			main_case->addChild(KSGradualValue<float>::create(1.f, 0.f, 4.f/30.f, [=](float t){
+				star_bonus_label->setOpacity(t*255);
+			}, [=](float t){
+				star_bonus_label->setOpacity(0);
+				is_end_call_score_calc = true;
+				end_score_calc_func = [=]()
+				{
+					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 15);
+					time_bonus_label->setColor(ccBLUE);
+					time_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+					time_bonus_label->setPosition(ccp(170,148)); // 170 148
+					main_case->addChild(time_bonus_label, kZ_CP_table);
+					
+					time_bonus_label->setScale(0.5f);
+					time_bonus_label->setOpacity(0);
+					
+					main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t){
+						time_bonus_label->setScale(0.5f + t*0.8f);
+						time_bonus_label->setOpacity(t*255);
+					}, [=](float t){
+						time_bonus_label->setScale(1.3f);
+						time_bonus_label->setOpacity(255);
+						
+						main_case->addChild(KSTimer::create(5.f/30.f, [=](){
+							main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
+								time_bonus_label->setScale(1.3f-t*0.8f);
+								time_bonus_label->setPosition(ccpAdd(ccp(170,148), ccpMult(ccp(20,-66), t)));
+								
+							}, [=](float t){
+								time_bonus_label->setScale(0.5f);
+								time_bonus_label->setPosition(ccp(190,82));
+							}));
+						}));
+						
+						main_case->addChild(KSTimer::create(9.f/30.f, [=](){
+							main_case->addChild(KSGradualValue<float>::create(1.f, 0.f, 4.f/30.f, [=](float t){
+								time_bonus_label->setOpacity(t*255);
+							}, [=](float t){
+								time_bonus_label->setOpacity(0);
+								is_end_popup_animation = true;
+								is_end_call_score_calc = true;
+								end_score_calc_func = [=]()
+								{
+									float delay_time = 0;
+									if(is_saved_user_data)
+									{
+										delay_time = 0.5f;
+										for(int i=0;i<cell_action_list.size();i++)
+											cell_action_list[i]();
+									}
+									
+									KS::setOpacity(replay_menu, 0);
+									KS::setOpacity(ok_menu, 0);
+									
+									replay_menu->setVisible(true);
+									ok_menu->setVisible(true);
+									
+									CCPoint replay_origin_position = replay_menu->getPosition();
+									replay_menu->setPosition(replay_origin_position + ccp(0,-12));
+									main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 7.f/30.f, [=](float t){
+										replay_menu->setPosition(replay_origin_position + ccpMult(ccp(0,-12), 1.f-t));
+										KS::setOpacity(replay_menu, t*255);
+									}, [=](float t){
+										replay_menu->setPosition(replay_origin_position);
+										KS::setOpacity(replay_menu, 255);
+									}));
+									
+									CCPoint ok_origin_position = ok_menu->getPosition();
+									ok_menu->setPosition(ok_origin_position + ccp(0,-12));
+									main_case->addChild(KSTimer::create(4.f/30.f, [=](){
+										main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 7.f/30.f, [=](float t){
+											ok_menu->setPosition(ok_origin_position + ccpMult(ccp(0,-12), 1.f-t));
+											KS::setOpacity(ok_menu, t*255);
+										}, [=](float t){
+											ok_menu->setPosition(ok_origin_position);
+											KS::setOpacity(ok_menu, 255);
+											closePopup();
+										}));
+									}));
+								};
+								
+								float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
+								base_score = mySGD->getBaseScore() + mySGD->getBaseScore()*(mySGD->getStageGrade()*0.5f);
+								startScoreAnimation(mySGD->getBaseScore()*((play_limit_time-mySGD->getGameTime())/play_limit_time));
+							}));
+						}));
+					}));
+				};
+				base_score = mySGD->getBaseScore();
+				startScoreAnimation(mySGD->getBaseScore()*(mySGD->getStageGrade()*0.5f));
+			}));
+		}));
+	}));
 }
 
 void ClearPopup::startTimeAnimation()
@@ -1483,7 +1583,95 @@ void ClearPopup::stopTimeAnimation()
 {
 	unschedule(schedule_selector(ClearPopup::timeAnimation));
 	time_label->setString(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString());
-	startGoldAnimation();
+}
+
+void ClearPopup::startGoldAnimation()
+{
+	keep_gold = mySGD->getStageGold();
+	decrease_gold = keep_gold;
+	increase_gold = 0.f;
+	schedule(schedule_selector(ClearPopup::goldAnimation));
+}
+
+void ClearPopup::goldAnimation(float dt)
+{
+	if(decrease_gold > 0)
+	{
+		int decreaseUnit = keep_gold / 1.f * dt;
+		
+		if(decrease_gold < decreaseUnit)
+		{
+			increase_gold += decrease_gold;
+			decrease_gold = 0;
+		}
+		else {
+			if(decreaseUnit <= 0)
+			{
+				increase_gold += decrease_gold;
+				decrease_gold = 0;
+			}
+			else {
+				decrease_gold -= decreaseUnit;
+				increase_gold	+= decreaseUnit;
+			}
+		}
+		gold_label->setString(CCString::createWithFormat("%.0f",increase_gold)->getCString());
+	}
+	else
+		stopGoldAnimation();
+}
+
+void ClearPopup::stopGoldAnimation()
+{
+	unschedule(schedule_selector(ClearPopup::goldAnimation));
+	gold_label->setString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
+}
+
+void ClearPopup::startScoreAnimation(float t_score)
+{
+	AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
+	keep_score = t_score;
+	decrease_score = keep_score;
+	increase_score = 0.f;
+	schedule(schedule_selector(ClearPopup::scoreAnimation));
+}
+
+void ClearPopup::scoreAnimation(float dt)
+{
+	if(decrease_score > 0)
+	{
+		int decreaseUnit = keep_score / 1.f * dt;
+		
+		if(decrease_score < decreaseUnit)
+		{
+			increase_score += decrease_score;
+			decrease_score = 0;
+		}
+		else {
+			if(decreaseUnit <= 0)
+			{
+				increase_score += decrease_score;
+				decrease_score = 0;
+			}
+			else {
+				decrease_score -= decreaseUnit;
+				increase_score += decreaseUnit;
+			}
+		}
+		score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f",base_score + increase_score)->getCString()).c_str());
+	}
+	else
+		stopScoreAnimation();
+}
+
+void ClearPopup::stopScoreAnimation()
+{
+	unschedule(schedule_selector(ClearPopup::scoreAnimation));
+	score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f", base_score + keep_score)->getCString()).c_str());
+	AudioEngine::sharedInstance()->stopAllEffects();
+	
+	if(is_end_call_score_calc)
+		end_score_calc_func();
 }
 
 void ClearPopup::menuAction(CCObject* pSender)
@@ -1523,7 +1711,139 @@ void ClearPopup::menuAction(CCObject* pSender)
 			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 			AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
 			//		mySGD->resetLabels();
-			hidePopup();
+			
+			if(is_take_star_effect)
+			{
+				CCPoint star_origin_position = ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22);
+				
+				CCSprite* total_star = KS::loadCCBI<CCSprite*>(this, "main_star.ccbi").first;
+				total_star->setPosition(star_origin_position + ccp(0,150));
+				addChild(total_star, kZ_CP_popup);
+				
+				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade())->getCString(), mySGD->getFont().c_str(), 12);
+				star_count->enableOuterStroke(ccBLACK, 0.8f);
+				star_count->setPosition(ccp(0,0));
+				total_star->addChild(star_count);
+				
+				addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
+					total_star->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
+				}, [=](float t){
+					total_star->setPosition(star_origin_position);
+					
+					float delay_time = 0.f;
+					if(ani_stars.size() > 0)
+						delay_time = 13.f + (ani_stars.size()-1)*19.f;
+					else
+						delay_time = 19.f;
+					
+					addChild(KSTimer::create(delay_time/30.f, [=]()
+					{
+						addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t){
+							total_star->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
+						}, [=](float t){
+							total_star->setPosition(star_origin_position + ccp(0,150));
+							hidePopup();
+						}));
+					}));
+					
+					for(int i=0;i<ani_stars.size();i++)
+					{
+						ani_stars[i]->setOpacity(0);
+						CCSprite* t_star_ani = (CCSprite*)ani_stars[i]->getChildByTag(1);
+						t_star_ani->setOpacity(255);
+						t_star_ani->setScale(1.f);
+						
+						CCPoint origin_position = ani_stars[i]->getPosition();
+						CCPoint sub_position = ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42) - ani_stars[i]->getPosition();
+						CCPoint dis_position;
+						
+						if(i == 0)
+						{
+							dis_position = ccp(-20,0);
+							
+							addChild(KSGradualValue<float>::create(-1.f, 1.f, 6.f/30.f, [=](float t){
+								t_star_ani->setScale(1.2f-fabsf(t)*0.2f);
+							}, [=](float t){
+								t_star_ani->setScale(1.f);
+								
+								addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t){
+									if(t < 0.5f)
+										ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, t*2.f));
+									else
+										ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, (1.f-t)*2.f));
+//									ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t));
+								}, [=](float t){
+									ani_stars[i]->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42));
+									addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+										t_star_ani->setScale(1.f + t*0.3f);
+										t_star_ani->setOpacity(255-t*255);
+									}, [=](float t){
+										t_star_ani->setScale(1.3f);
+										t_star_ani->setOpacity(0);
+										star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
+									}));
+								}));
+								
+								addChild(KSGradualValue<float>::create(0.f, 300, 15.f/30.f, [=](float t){
+									t_star_ani->setRotation(t);
+								}, [=](float t){
+									t_star_ani->removeFromParent();
+								}));
+								
+								
+							}));
+						}
+						else
+						{
+							if(i == 1)
+								dis_position = ccp(-10,10);
+							else if(i == 2)
+								dis_position = ccp(10,10);
+							else if(i == 3)
+								dis_position = ccp(20,20);
+							
+							addChild(KSTimer::create(13.f/30.f + (i-1)*19.f/30.f, [=](){
+								addChild(KSGradualValue<float>::create(-1.f, 1.f, 6.f/30.f, [=](float t){
+									t_star_ani->setScale(1.2f-fabsf(t)*0.2f);
+								}, [=](float t){
+									t_star_ani->setScale(1.f);
+									
+									addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t){
+										if(t < 0.5f)
+											ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, t*2.f));
+										else
+											ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, (1.f-t)*2.f));
+//										ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t));
+									}, [=](float t){
+										ani_stars[i]->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42));
+										addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+											t_star_ani->setScale(1.f + t*0.3f);
+											t_star_ani->setOpacity(255-t*255);
+										}, [=](float t){
+											t_star_ani->setScale(1.3f);
+											t_star_ani->setOpacity(0);
+											star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
+										}));
+									}));
+									
+									addChild(KSGradualValue<float>::create(0.f, 300, 15.f/30.f, [=](float t){
+										t_star_ani->setRotation(t);
+									}, [=](float t){
+										t_star_ani->removeFromParent();
+									}));
+									
+									
+								}));
+							}));
+						}
+					}
+					
+				}));
+			}
+			else
+			{
+				hidePopup();
+			}
 		}
 		else if(tag == kMT_CP_replay)
 		{
@@ -1709,4 +2029,51 @@ CCSize ClearPopup::cellSizeForTable( CCTableView *table )
 unsigned int ClearPopup::numberOfCellsInTableView( CCTableView *table )
 {
 	return 0;//friend_list.size();
+}
+
+CCParticleSystemQuad* ClearPopup::getStarParticle()
+{
+	CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
+	particle->setPositionType(kCCPositionTypeRelative);
+	//particle->setAutoRemoveOnFinish(true);
+	particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+	particle->setEmissionRate(25);
+	particle->setAngle(90.0);
+	particle->setAngleVar(120.0);
+	ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+	particle->setBlendFunc(blendFunc);
+	particle->setDuration(-1);
+	particle->setEmitterMode(kCCParticleModeGravity);
+	particle->setStartColor(ccc4f(1.f, 0.81f, 0.15f, 1.f));
+	particle->setStartColorVar(ccc4f(0,0,0,0.f));
+	particle->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+	particle->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+	particle->setStartSize(10.0);
+	particle->setStartSizeVar(5.0);
+	particle->setEndSize(0.0);
+	particle->setEndSizeVar(0.0);
+	particle->setGravity(ccp(0,0));
+	particle->setRadialAccel(0.0);
+	particle->setRadialAccelVar(0.0);
+	particle->setSpeed(0);
+	particle->setSpeedVar(0.0);
+	particle->setTangentialAccel(0);
+	particle->setTangentialAccelVar(0);
+	particle->setTotalParticles(50);
+	particle->setLife(1.0);
+	particle->setLifeVar(1.0);
+	particle->setStartSpin(0.0);
+	particle->setStartSpinVar(0.f);
+	particle->setEndSpin(0.0);
+	particle->setEndSpinVar(0.f);
+	particle->setPosVar(ccp(20,20));
+	particle->setPosition(ccp(0,0));
+	return particle;
+}
+
+void ClearPopup::addStarParticle(CCNode* t_node)
+{
+	CCParticleSystemQuad* t_particle = getStarParticle();
+	t_particle->setPosition(t_node->getContentSize().width/2.f, t_node->getContentSize().height/2.f);
+	t_node->addChild(t_particle, 1, 2);
 }

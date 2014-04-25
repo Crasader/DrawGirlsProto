@@ -575,8 +575,8 @@ void StartSettingPopup::gachaMenuCreate()
 																			   item_title_label->removeFromParent();
 																		   if(option_label)
 																			   option_label->removeFromParent();
-																		   if(buy_button)
-																			   buy_button->removeFromParent();
+//																		   if(buy_button)
+//																			   buy_button->removeFromParent();
 																		   
 																		   CCRect title_size = CCRectMake(0, 0, 200, 20);
 																		   CCPoint title_position = ccp(188, 140);
@@ -595,18 +595,22 @@ void StartSettingPopup::gachaMenuCreate()
 																		   option_label->setPosition(option_position);
 																		   main_case->addChild(option_label);
 																		   
-																		   buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
-																		   buy_button->setTitleColor(ccBLACK);
-																		   buy_button->setTitleSize(13);
-																		   buy_button->setTouchPriority(touch_priority);
-																		   buy_button->setSize(CCSizeMake(90, 55));
-																		   buy_button->setPrice(PriceTypeGold, 1000);
+																		   if(!buy_button)
+																			{
+																				buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
+																				buy_button->setTitleColor(ccBLACK);
+																				buy_button->setTitleSize(13);
+																				buy_button->setTouchPriority(touch_priority);
+																				buy_button->setSize(CCSizeMake(90, 55));
+																				buy_button->setPosition(410,117);
+																				main_case->addChild(buy_button);
+																			}
+																		   
+																		   buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaGoldFee());
 																		   buy_button->setFunction([=](CCObject* sender)
 																								   {
 																									   this->startItemGacha();
 																								   });
-																		   buy_button->setPosition(410,117);
-																		   main_case->addChild(buy_button);
 																		   
 																		   gacha_clicked_img->setVisible(true);
 																		   
@@ -1025,8 +1029,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			item_title_label->removeFromParent();
 		if(option_label)
 			option_label->removeFromParent();
-		if(buy_button)
-			buy_button->removeFromParent();
+//		if(buy_button)
+//			buy_button->removeFromParent();
 		
 		CCRect title_size = CCRectMake(0, 0, 200, 20);
 		CCPoint title_position = ccp(188, 140);
@@ -1056,6 +1060,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		option_label->setAnchorPoint(ccp(0,1));
 		option_label->setPosition(option_position);
 		main_case->addChild(option_label);
+
 		
 		string item_currency = mySD->getItemCurrency(item_list[tag-1]);
 		string buy_type_filename;
@@ -1065,11 +1070,17 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		else if(item_currency == "ruby")
 			priceType = PriceTypeRuby;
 		
-		buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
-		buy_button->setTitleColor(ccBLACK);
-		buy_button->setTitleSize(13);
-		buy_button->setTouchPriority(touch_priority);
-		buy_button->setSize(CCSizeMake(90, 55));
+		if(!buy_button)
+		{
+			buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
+			buy_button->setTitleColor(ccBLACK);
+			buy_button->setTitleSize(13);
+			buy_button->setTouchPriority(touch_priority);
+			buy_button->setSize(CCSizeMake(90, 55));
+			buy_button->setPosition(410,117);
+			main_case->addChild(buy_button);
+		}
+		
 		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));
 		buy_button->setFunction([=](CCObject* sender)
 								{
@@ -1244,8 +1255,6 @@ void StartSettingPopup::itemAction(CCObject *sender)
 									}
 									
 								});
-		buy_button->setPosition(410,117);
-		main_case->addChild(buy_button);
 		
 		is_menu_enable = true;
 	}

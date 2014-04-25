@@ -77,7 +77,7 @@ bool MainFlowScene::init()
 			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
 			int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
-				have_card_cnt++;
+				have_card_cnt += NSDS_GI(kSDS_CI_int1_grade_i, card_number);
 		}
 		
 		have_card_count_for_puzzle_index.push_back(have_card_cnt);
@@ -733,7 +733,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		cell_node->addChild(open_menu);
 		
 		int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
-		int total_card_cnt = stage_count*3;
+		int total_card_cnt = stage_count*10;
 		
 		CCLabelTTF* rate_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", have_card_count_for_puzzle_index[idx], total_card_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 		rate_label->setPosition(ccp(-25, -81));
@@ -1720,7 +1720,7 @@ void MainFlowScene::setTop()
 	total_star->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(total_star, kMainFlowZorder_top);
 	
-	KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getHasGottenCardsSize())->getCString(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount())->getCString(), mySGD->getFont().c_str(), 12);
 	star_count->enableOuterStroke(ccBLACK, 0.8f);
 	star_count->setPosition(ccp(0,0));
 	total_star->addChild(star_count);

@@ -56,6 +56,7 @@ void HeartTime::backHeart ()
 	CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 	t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 	addChild(t_heart);
+	heart_list.push_back(t_heart);
 }
 bool HeartTime::isStartable ()
 {

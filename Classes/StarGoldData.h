@@ -157,7 +157,7 @@ public:
 	bool getIsCleared();
 	
 	float getScore();
-	
+	float getBaseScore();
 	float getPercentage();
 	
 	int getStageGrade();
@@ -269,6 +269,8 @@ public:
 	void setPieceHistoryForNotSave(PieceHistory t_history);
 	void setPieceHistory(PieceHistory t_history, jsonSelType call_back);
 	void initPieceHistory(Json::Value history_list);
+	
+	int getClearStarCount();
 	
 	void setClearRewardGold(int t_reward)
 	{
@@ -460,12 +462,14 @@ private:
 	int clear_reward_gold;
 	
 	bool is_after_scene_chapter;
-	bool is_cleared;
-	float score;
-	float percentage;
-	int stage_grade;
-	int keep_gold;
-	int game_time;
+	
+	KSProtectVar<bool> is_cleared;
+	KSProtectVar<float> base_score;
+	KSProtectVar<float> score;
+	KSProtectVar<float> percentage;
+	KSProtectVar<int> stage_grade;
+	KSProtectVar<int> keep_gold;
+	KSProtectVar<int> game_time;
 	
 	int start_map_gacha_cnt;
 		   
