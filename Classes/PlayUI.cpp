@@ -905,7 +905,7 @@ void PlayUI::decreasePercentage ()
 }
 float PlayUI::getScore ()
 {
-	return atoi(score_label->getString());
+	return score_value.getV();
 }
 float PlayUI::getPercentage ()
 {
@@ -1863,10 +1863,11 @@ void PlayUI::lifeBonus ()
 	else
 	{
 		int grade_value = 1;
-		if(is_exchanged)				grade_value++;
-		if(keep_percentage.getV() >= 1.f)					grade_value++;
+		if(is_exchanged && keep_percentage.getV() >= 1.f)	grade_value = 4;
+		else if(keep_percentage.getV() >= 1.f)				grade_value = 3;
+		else if(is_exchanged)								grade_value = 2;
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), keep_percentage.getV(), countingCnt, use_time, total_time);
+		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt, use_time, total_time);
 		CCDelayTime* n_d = CCDelayTime::create(2.5f);
 		CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 		
@@ -1917,12 +1918,13 @@ void PlayUI::endGame (bool is_show_reason)
 			}
 			else
 			{
-				
 				int grade_value = 1;
-				if(is_exchanged)				grade_value++;
-				if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
 				
-				mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
+				if(is_exchanged && (beforePercentage^t_tta)/1000.f >= 1.f)		grade_value = 4;
+				else if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value = 3;
+				else if(is_exchanged)											grade_value = 2;
+				
+				mySGD->gameClear(grade_value, int(getScore()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
 				CCDelayTime* n_d = CCDelayTime::create(4.5f);
 				CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
 				
@@ -1939,28 +1941,8 @@ void PlayUI::endGame (bool is_show_reason)
 			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
 			CCFiniteTimeAction* nextScene2;
-//			if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
-//			{
-				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
-//			}
-//			else
-//			{
-//				if(jack_life > 0)
-//				{
-//					CCDelayTime* t_delay = CCDelayTime::create(2.f);
-//					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
-//					nextScene2 = CCSequence::createWithTwoActions(t_delay, t_call);
-//				}
-//				else
-//				{
-//					int grade_value = 1;
-//					if(is_exchanged)				grade_value++;
-//					if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value++;
-//					
-//					mySGD->gameClear(grade_value, atoi(score_label->getString()), (beforePercentage^t_tta)/1000.f, countingCnt, use_time, total_time);
-//					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
-//				}
-//			}
+			
+			nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
 			
 			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
 			
@@ -2000,16 +1982,12 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 	else
 	{
 		int grade_value = 1;
-		if(is_exchanged && t_percent >= 1.f)		grade_value+=2;
-		else
-		{
-			if(t_percent >= 1.f)
-			{
-				grade_value++;
-			}
-		}
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), t_percent, countingCnt, use_time, total_time);
+		if(is_exchanged && t_percent >= 1.f)		grade_value = 4;
+		else if(t_percent >= 1.f)					grade_value = 3;
+		else if(is_exchanged)						grade_value = 2;
+		
+		mySGD->gameClear(grade_value, int(getScore()), t_percent, countingCnt, use_time, total_time);
 		nextScene();
 	}
 }
@@ -2041,10 +2019,12 @@ void PlayUI::cancelOnePercentGacha ()
 	else
 	{
 		int grade_value = 1;
-		if(is_exchanged)				grade_value++;
-		if(keep_percentage.getV() >= 1.f)					grade_value++;
 		
-		mySGD->gameClear(grade_value, atoi(score_label->getString()), keep_percentage.getV(), countingCnt, use_time, total_time);
+		if(is_exchanged && keep_percentage.getV() >= 1.f)		grade_value = 4;
+		else if(keep_percentage.getV() >= 1.f)					grade_value = 3;
+		else if(is_exchanged)									grade_value = 2;
+		
+		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt, use_time, total_time);
 		nextScene();
 	}
 }

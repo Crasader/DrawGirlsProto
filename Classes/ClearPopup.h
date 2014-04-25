@@ -49,6 +49,7 @@ public:
 	
 	virtual void onEnter();
 	
+	bool is_take_star_effect;
 	std::function<void()> replay_func;
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
@@ -65,6 +66,8 @@ private:
 	CCSprite* gray;
 	CCScale9Sprite* main_case;
 	
+	CCSprite* title;
+	
 	Json::Value rank_data;
 	
 	bool is_menu_enable;
@@ -76,6 +79,7 @@ private:
 	
 	int delay_index;
 	vector<function<void()>> cell_action_list;
+	vector<CommandParam> send_command_list;
 	
 	vector<CCSprite*> ani_stars;
 	
@@ -125,10 +129,14 @@ private:
 	void goldAnimation(float dt);
 	void stopGoldAnimation();
 	
+	bool is_end_call_score_calc;
+	function<void()> end_score_calc_func;
+	
+	float base_score;
 	float keep_score;
 	float decrease_score;
 	float increase_score;
-	void startScoreAnimation();
+	void startScoreAnimation(float t_score);
 	void scoreAnimation(float dt);
 	void stopScoreAnimation();
 	
@@ -151,6 +159,9 @@ private:
 	void resultSavedUserData(Json::Value result_data);
 	
 	CCSprite* loading_img;
+	
+	CCParticleSystemQuad* getStarParticle();
+	void addStarParticle(CCNode* t_node);
 	
 	void resultGetRank(Json::Value result_data);
 };

@@ -316,6 +316,8 @@ bool PuzzleScene::init()
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
+		keep_card_number = 0;
+		
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
 		bool is_not_empty_card[3] = {false,};
@@ -546,6 +548,7 @@ void PuzzleScene::showClearPopup()
 	ClearPopup* t_popup = ClearPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideClearPopup));
 	t_popup->replay_func = [=](){openSettingPopup();};
+	t_popup->is_take_star_effect = true;
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
