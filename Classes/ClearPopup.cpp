@@ -692,8 +692,15 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 
 void ClearPopup::showPopup()
 {
+	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)+1;
-	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
+	
+	if(autobalanceTry>0){
+		myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
+		CCLog("up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
+	}else{
+		CCLog("no up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
+	}
 	
 	AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
 	

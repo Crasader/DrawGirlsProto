@@ -210,7 +210,6 @@ public:
 	long long int date;
 	int weekNo;
 	int lastCmdNo;
-	int cmdNo;
 	int deviceID;
 	long long int localTimestamp;
 	
@@ -333,7 +332,6 @@ private:
 		this->timestamp = 9;
 		this->localTimestamp = 0;
 		this->lastCmdNo=0;
-		this->cmdNo=0;
 		this->duplicateLoginFunc=nullptr;
 		this->cmdNoErrorFunc=nullptr;
 		this->deviceID=0;

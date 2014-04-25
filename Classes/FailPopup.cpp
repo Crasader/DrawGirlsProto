@@ -660,7 +660,8 @@ void FailPopup::onEnter()
 
 void FailPopup::showPopup()
 {
-	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)-2;
+	
+	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)-1;
 	if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
 	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
 	

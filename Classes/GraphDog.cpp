@@ -369,7 +369,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	{
 		//CCLog("t_function OK1");
 		resultStr = command.chunk.memory;// gdchunk.memory;
-		//CCLog("get str %s",resultStr.c_str());
+		CCLog("get str %s",resultStr.c_str());
 		if(*resultStr.rbegin() == '#') // success
 		{
 			try
@@ -379,9 +379,7 @@ void* GraphDog::t_function(void *_insertIndex)
 				
 				resultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
 				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
-				
-				
-				CCLog("t_function OK2 %s",resultStr.c_str());
+				//CCLog("t_function OK2 %s",resultStr.c_str());
 			}
 			catch(const std::string& msg)
 			{
@@ -599,18 +597,18 @@ void GraphDog::receivedCommand(float dt)
 			Json::Value resultobj = commands.result;
 			
 			if(resultobj.get("checkDeviceError", false).asBool()){
-				CCLog("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!!");
+				CCLog("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->lastCmdNo=0;
 				if(this->duplicateLoginFunc!=nullptr)this->duplicateLoginFunc();
 				
 			}else if(resultobj.get("cmdNoError", false).asBool()){
-				CCLog("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!!");
+				CCLog("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->lastCmdNo=0;
 				if(this->cmdNoErrorFunc!=nullptr)this->cmdNoErrorFunc();
 				
 			}else if(resultobj.get("longTimeError", false).asBool()){
 				
-				CCLog("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!!");
+				CCLog("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->lastCmdNo=0;
 				if(this->longTimeErrorFunc!=nullptr)this->longTimeErrorFunc();
 			
@@ -629,13 +627,39 @@ void GraphDog::receivedCommand(float dt)
 					if(ct.action=="login"){
 						if(resultobj.get("deviceID", 0).asInt()!=0){
 							this->deviceID=resultobj.get("deviceID", 0).asInt();
-							this->lastCmdNo=0;
+							//this->lastCmdNo=1;
+							CCLog("getDevice ID login is %d",this->deviceID);
+						}else{
+							this->deviceID=0;
+							CCLog("fail login");
 						}
 					}else if(ct.action=="join"){
 						this->deviceID=resultobj.get("deviceID", 0).asInt();
-						this->lastCmdNo=resultobj.get("lastCmdNo", 0).asInt();
+						//this->lastCmdNo=1;
+						CCLog("getDevice ID join is %d",this->deviceID);
+					}else if(ct.action=="dropoutuser"){
+						this->deviceID=0;
+						this->lastCmdNo=0;
 					}
 					
+					if(resultobj[iter2->first.c_str()]["log"].isArray()){
+						CCLog("###################################[START for %s ]##########################################",ct.action.c_str());
+						for(int i=0;i<resultobj[iter2->first.c_str()]["log"].size();i++){
+									string log = resultobj[iter2->first.c_str()]["log"][i].asString();
+									CCLog("%s",log.c_str());
+									
+						}
+						resultobj[iter2->first.c_str()]["log"].clear();
+						Json::StyledStreamWriter w;
+						
+						CCLog("=====================================[ Result ]=============================================");
+						CCLog("Name : %s, Code : %d, Message: %s",resultobj[iter2->first.c_str()]["result"].get("name", "None").asString().c_str(),resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt(),resultobj[iter2->first.c_str()]["result"].get("message", "message is nothing").asString().c_str());
+						
+						
+						Json::StyledWriter wr;
+						CCLog("%s",wr.write(resultobj[iter2->first.c_str()]).c_str());
+						CCLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[END for %s ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",ct.action.c_str());
+					}
 					if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
 				}
 			}
