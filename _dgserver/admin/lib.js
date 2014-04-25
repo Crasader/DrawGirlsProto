@@ -77,12 +77,12 @@
 	$(document).ready(function(){
 		$('body').on('click','.imageSelector',function(){
 			var delkey = addDelegate2($(this));
-			window.open('./admin_images.php?delkey='+delkey,'imageselector','width=1000 height=800 menubar=no status=no');
+			window.open('./admin_images.php?gid=nothing&delkey='+delkey,'imageselector','width=1000 height=800 menubar=no status=no');
 		});
 		
 		$('body').on('click','.resourceSelectorBtn',function(){
 			var obj = $(this).parent().children(".LQEditor");
 			var delkey = addDelegate2(obj);
-			window.open('./admin_resources.php?delkey='+delkey,'resourceselector','width=1000 height=800 menubar=no status=no');
+			window.open('./admin_resources.php?gid=nothing&delkey='+delkey,'resourceselector','width=1000 height=800 menubar=no status=no');
 		});
 	});

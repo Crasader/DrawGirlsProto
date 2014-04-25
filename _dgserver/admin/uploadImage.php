@@ -407,7 +407,7 @@ class UploadHandler
 
     protected function upcount_name($name) {
         return preg_replace_callback(
-            '/(?:(?:_ver([\d]+))?(\.[^.]+))?$/',
+            '/(?:(?:_ver([\d]+))?(\.[a-z]+))/',//'/(?:(?:_ver([\d]+))?(\.[^\.]+))?$/',
             array($this, 'upcount_name_callback'),
             $name,
             1

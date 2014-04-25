@@ -12,7 +12,7 @@ for($c=0;$c<count($param);$c++){
 	//////////////////////////////////////////////////////////////////////////////////////////
 	
 	if($a == "getstageinfo"){
-		$stageInfo =  mysql_fetch_array(mysql_query("select * from $TABLE_STAGE where no=$p[no]"));
+		$stageInfo =  mysql_fetch_array(mysql_query("select * from ".DBManager::get()->getMT("stage")." where no=$p[no]"));
 		for($i=0;$i<count($stageInfo);$i++){
 					unset($stageInfo[$i]);
 		}
@@ -34,7 +34,7 @@ for($c=0;$c<count($param);$c++){
 		
 			$card = array();
 			for($i=0;$i<count($stageInfo[cards]);$i++){
-				$cardInfo = mysql_fetch_array(mysql_query("select * from $TABLE_CARD where no=".$stageInfo[cards][$i]));
+				$cardInfo = mysql_fetch_array(mysql_query("select * from ".DBManager::get()->getMT("card")." where no=".$stageInfo[cards][$i]));
 				
 				for($j=0;$j<count($cardInfo);$j++){
 						unset($cardInfo[$j]);
@@ -90,7 +90,7 @@ for($c=0;$c<count($param);$c++){
 		//혹은 받아올 테마
 		
 		//where theme=$theme
-		$query = mysql_query("select no,thumbnail from $TABLE_STAGE");
+		$query = mysql_query("select no,thumbnail from ".DBManager::get()->getMT("stage"));
 		
 		$list="";
 		$cnt=0;

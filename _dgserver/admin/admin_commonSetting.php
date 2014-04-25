@@ -1,13 +1,13 @@
 <?php
 include "header.php";
 ?>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_COMMONSETTING?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("commonsetting")?>" border=1 align=center>
 	<thead>
 		<tr>
-			<th field="no" viewer="text" primary>no</th>
-			<th field="key" viewer="text" editor="text">key</th>
-			<th field="value" viewer="text" editor="textarea">value</th>
-			<th field="comment" viewer="text" editor="textarea">comment</th>
+			<th field="no" viewer='{"type":"text"}' primary>no</th>
+			<th field="key" viewer='{"type":"text"}' editor='{"type":"text"}'>key</th>
+			<th field="value" viewer='{"type":"text"}' editor='{"type":"dictionary"}'>value</th>
+			<th field="comment" viewer='{"type":"text"}' editor='{"type":"textarea"}'>comment</th>
 			<th manage="delete update insert">manage</th>
 		</tr>
 	</thead>
@@ -15,7 +15,6 @@ include "header.php";
 
 	</tbody>
 </table>
-
 
 <?php
 include "footer.php";

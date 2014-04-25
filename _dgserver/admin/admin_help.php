@@ -56,6 +56,13 @@ foreach ($class_methods as $method_name) {
 		    echo "<tr><td>".$mInfo["result"][$i]["code"]."</td><td>".$mInfo["result"][$i]["name"]."</td><td>".$mInfo["result"][$i]["message"]."</td></tr>";
 	    }
 	    echo "</table><br>";
+
+	    if($mInfo["comment"]){
+		    echo"* comment<br>";
+		    echo "<table border=1><tr><td>".nl2br($mInfo["comment"])."</td></tr>";
+
+		    echo "</table><br><br>";
+		}
     }
 }
 

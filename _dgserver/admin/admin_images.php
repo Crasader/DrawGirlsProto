@@ -102,10 +102,10 @@ include "jqueryupload/uploader.html";
 <tr>
 <?php
 
-echo"<td><a href=".$_SERVER["PHP_SELF"].">all</a></td>";
+echo"<td><a href=".$_SERVER["PHP_SELF"]."?gid=$gid>all</a></td>";
 	
 for($i=0;$i<count($categorys);$i++){
-	echo"<td><a href=".$_SERVER["PHP_SELF"]."?category=".$categorys[$i]."&delkey=".$_GET[delkey].">".$categorys[$i]."</a></td>";
+	echo"<td><a href=".$_SERVER["PHP_SELF"]."?gid=$gid&category=".$categorys[$i]."&delkey=".$_GET[delkey].">".$categorys[$i]."</a></td>";
 }
 
 ?>

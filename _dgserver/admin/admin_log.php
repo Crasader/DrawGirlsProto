@@ -20,218 +20,10 @@ for($i=0;$i<count($memberlist);$i++){
 echo json_encode($newmemberlist,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 */
 ?>
-<?php
-      
 
-$fdata = <<<FINPUT
-
-[
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "Apwu-_sunAI",
-         "message_blocked" : false,
-         "nickname" : "경수.",
-         "profile_image_url" : "http://th-p36.talk.kakao.co.kr/th/talkp/wkdfBY15Mx/spuGTCihLD15qkTGHPQGi0/jhgwmy_110x110_c.jpg",
-         "user_id" : "88767958848811872"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "ArhOw8NOuAI",
-         "message_blocked" : false,
-         "nickname" : "김민수",
-         "profile_image_url" : "",
-         "user_id" : "88697300754383536"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AcMeRkYewwE",
-         "message_blocked" : false,
-         "nickname" : "김재욱",
-         "profile_image_url" : "http://th-p18.talk.kakao.co.kr/th/talkp/wkemOJwbXQ/5Ax5wowHmYfKq34hkFVRuk/u0wh76_110x110_c.jpg",
-         "user_id" : "88592979295370305"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "APQ2-fk29AA",
-         "message_blocked" : false,
-         "nickname" : "남희",
-         "profile_image_url" : "http://th-p3.talk.kakao.co.kr/th/talkp/wkavUz2xvS/QtDh0DkEIP2lDhpXCz9PMK/qu1lae_110x110_c.jpg",
-         "user_id" : "88102520461944721"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AL86XFw6vwA",
-         "message_blocked" : false,
-         "nickname" : "노군~",
-         "profile_image_url" : "http://th-p3.talk.kakao.co.kr/th/talkp/wketlNUuvy/iO5onnTFmKS1McbDtzM3qk/efrp8a_110x110_c.jpg",
-         "user_id" : "88248153110374017"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AI2IiYmIjQA",
-         "message_blocked" : false,
-         "nickname" : "민진Kang",
-         "profile_image_url" : "http://th-p8.talk.kakao.co.kr/th/talkp/wketJuzxtI/5HSRTV2MrW2Cxi7uW4NOiK/smhxsi_110x110_c.jpg",
-         "user_id" : "88579068457973232"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AWLWSkrWYgE",
-         "message_blocked" : false,
-         "nickname" : "박세홍",
-         "profile_image_url" : "http://th-p30.talk.kakao.co.kr/th/talkp/wkcozOc3cA/MSO1ajX8ObJEGVoqurkmA0/oxifwf_110x110_c.jpg",
-         "user_id" : "88333251651372544"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AWgmw8MmaAE",
-         "message_blocked" : false,
-         "nickname" : "박신애",
-         "profile_image_url" : "http://th-p19.talk.kakao.co.kr/th/talkp/wkeuHcsRgX/xhT6kJTrEC714hedqkS9ik/f4gcut_110x110_c.jpg",
-         "user_id" : "88398676708496993"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "Ah7bSUnbHgI",
-         "message_blocked" : false,
-         "nickname" : "쑤니",
-         "profile_image_url" : "",
-         "user_id" : "88299785660236528"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AM1JWVlJzQA",
-         "message_blocked" : false,
-         "nickname" : "영호",
-         "profile_image_url" : "",
-         "user_id" : "88741857374149376"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AsGIWlqIwQI",
-         "message_blocked" : true,
-         "nickname" : "우승우",
-         "profile_image_url" : "http://th-p42.talk.kakao.co.kr/th/talkp/wkd9OiI9xO/nwr3vQWDeFeVES6vnIBsJ0/n9vbgz_110x110_c.jpg",
-         "user_id" : "88266648091257217"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AO9i6Ohi7wA",
-         "message_blocked" : false,
-         "nickname" : "유동석",
-         "profile_image_url" : "http://th-p6.talk.kakao.co.kr/th/talkp/wkeuiD1fkm/wra9IAAGfkSpfoMXot7pKk/vd4w1z_110x110_c.jpg",
-         "user_id" : "88522231136183777"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "BAoQsLAQCgQ",
-         "message_blocked" : false,
-         "nickname" : "이상욱",
-         "profile_image_url" : "http://th-p.talk.kakao.co.kr/th/talkp/wkete2jo6D/8zLkO08vm93C9QjRTS5xb1/6aq5b_110x110_c.jpg",
-         "user_id" : "88983171018219025"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AI2AXl6AjQA",
-         "message_blocked" : false,
-         "nickname" : "이현준",
-         "profile_image_url" : "http://th-p8.talk.kakao.co.kr/th/talkp/wkeb0XLiuC/al4DKgmBc1s79hh1FAYhEk/6f45ct_110x110_c.jpg",
-         "user_id" : "88441953679638465"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AP8dyckd_wA",
-         "message_blocked" : false,
-         "nickname" : "장동효",
-         "profile_image_url" : "http://th-p1.talk.kakao.co.kr/th/talkp/wkaQVMstHt/xJmnmMPefGRi62GdiUHBJ1/qna8tv_110x110_c.jpg",
-         "user_id" : "88264624333911041"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AFADGBgDUAA",
-         "message_blocked" : false,
-         "nickname" : "조현식",
-         "profile_image_url" : "http://th-p0.talk.kakao.co.kr/th/talkp/wkcdt8LHLM/0gyUonCm43zvfBmpAC6o60/y4kv79_110x110_c.jpg",
-         "user_id" : "88480438565517696"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AWm53d25aQE",
-         "message_blocked" : false,
-         "nickname" : "진승호",
-         "profile_image_url" : "http://th-p28.talk.kakao.co.kr/th/talkp/wkcL3ocRpB/lOOXUVCz25ZmogTY0gOkkK/bhuv10_110x110_c.jpg",
-         "user_id" : "88232238617592113"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AcPulpbuwwE",
-         "message_blocked" : false,
-         "nickname" : "최상민",
-         "profile_image_url" : "",
-         "user_id" : "88062243713659616"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AS16Li56LQE",
-         "message_blocked" : false,
-         "nickname" : "최재영",
-         "profile_image_url" : "http://th-p24.talk.kakao.co.kr/th/talkp/wkemFe10Ls/BG8ojObPMEo3RGvSRae8f0/832stf_110x110_c.jpg",
-         "user_id" : "88103245040756768"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "ACXp-fnpJQA",
-         "message_blocked" : false,
-         "nickname" : "최준화",
-         "profile_image_url" : "http://th-p15.talk.kakao.co.kr/th/talkp/wketGY3Dps/3lR0IN3Dp8NQKCWB9DSqLk/ufb5ph_110x110_c.jpg",
-         "user_id" : "88338742430864433"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "BC6Ejo6ELgQ",
-         "message_blocked" : false,
-         "nickname" : "최홍근",
-         "profile_image_url" : "",
-         "user_id" : "88199257885372224"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AtF2S0t20QI",
-         "message_blocked" : false,
-         "nickname" : "허주영",
-         "profile_image_url" : "http://th-p41.talk.kakao.co.kr/th/talkp/wkdj4UqYSs/UMnCZOHhVCiGDTrOF5GE41/ikhdty_110x110_c.jpg",
-         "user_id" : "88332760379024209"
-      },
-      {
-         "friend_nickname" : "",
-         "hashed_talk_user_id" : "AMCukJCuwAA",
-         "message_blocked" : false,
-         "nickname" : "安閑良",
-         "profile_image_url" : "http://th-p11.talk.kakao.co.kr/th/talkp/wker8BgnJ7/Kzv2xPH8H0TXbSUcsUx9u0/3cbda0_110x110_c.jpg",
-         "user_id" : "88249254705558272"
-      }]
-      
-FINPUT;
-
-
-?>
-<script>
-	var memberdata = '<?=str_replace("\n", "", $fdata)?>';
-	var memberlist = JSON.parse(memberdata);
-	
-	var showDate = function(data,option){
-		return timeToDate(data,"%Y/%M/%d %H:%m:%s");
-	}
-	
-	var showNick = function(data,option){
-		for(var i=0;i<memberlist.length;i++){
-			if(memberlist[i]["user_id"]==data)return memberlist[i]["nickname"]+"<br>"+data;
-		}
-		return data;
-	}
-</script>
 <center>
 <form action=<?=$_SERVER["PHP_SELF"]?>>
+	<input name="gid" value="<?=$gid?>" type="hidden">
 where : <input name='where' size="50" value='<?=$_GET['where']?>'><br>
 sort : <input name='sort' size="50" value='<?=$_GET['sort']?>'><br>
 limit : <input name='limit' size="50" value='<?=$_GET['limit']?>'><br>
@@ -242,19 +34,20 @@ echo TimeManager::get()->getCurrentDateString();
  ?>
 </form>
 </center>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_LOG?>" dbSort="<?=$_GET["sort"]?>" dbLimit='<?=$_GET["limit"]?>' dbWhere='<?=$_GET["where"]?>' border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getST("userlog")?>" dbSort="<?=$_GET["sort"]?>" dbLimit='<?=$_GET["limit"]?>' dbWhere='<?=$_GET["where"]?>' border=1 align=center>
 	<thead>
 		<tr>
-			<th field="no" viewer="text" primary>no</th>
-			<th field="ip" viewer="text">ip</th>
-         <th field="nick" viewer="text">nick</th>
-			<th field="memberID" viewer="text">memberID</th>
-			<th field="header" viewer="text" viewerOption='{"cut":100}' editor="textarea">header</th>
-			<th field="category" viewer="text">category</th>
-			<th field="input" viewer="text" viewerOption='{"cut":100}' editor="textarea">input</th>
-			<th field="output" viewer="text" viewerOption='{"cut":100}' editor="textarea">output</th>
-         <th field="execTime" viewer="text">execTime</th>
-			<th field="regDate" viewer="text">regDate</th>
+			<th field="no" viewer='{"type":"text"}' primary>no</th>
+			<th field="ip" viewer='{"type":"text"}'>ip</th>
+         	<th field="nick" viewer='{"type":"text"}'>nick</th>
+			<th field="memberID" viewer='{"type":"text"}'>memberID</th>
+			<th field="header" viewer='{"type":"text","cut":100}' editor='{"type":"textarea"}'>header</th>
+			<th field="category" viewer='{"type":"text"}'>category</th>
+			<th field="input" viewer='{"type":"text","cut":100}' editor='{"type":"textarea"}'>input</th>
+			<th field="output" viewer='{"type":"text","cut":100}' editor='{"type":"textarea"}'>output</th>
+        	<th field="execTime" viewer='{"type":"text"}'>execTime</th>
+			<th field="regDate" viewer='{"type":"text"}'>regDate</th>
+			<th field="regTime" viewer='{"type":"text"}'>regTime</th>
 		</tr>
 	</thead>
 	<tbody datazone>

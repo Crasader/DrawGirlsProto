@@ -1,70 +1,77 @@
 <?php
 include "header.php";
+
 ?>
 <script>
 var showPuzzleImg = function(value,option){
 	data = s2j(value);
+	if(!data)return "";
+	if(!data["image"]) return "";
 	return '<img src=../images/'+data["image"]+' width=300>';
 }
 </script>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=$TABLE_PUZZLE?>" dbSort="puzzleNo asc" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("puzzle")?>" dbSort="`order` asc" border=1 align=center>
 	<thead>
 		<tr>
-			<th field="no" viewer="text" primary>no</th>
-			<th field="puzzleNo" viewer="text" editor="text">puzzleNo</th>
-			<th field="title" viewer="text" editor="text">title</th>
-			<th field="thumbnail" viewer="custom" viewerOption="showPuzzleImg" editor="dictionary" editorOption='
-			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
-			'>thumbnail</th>
-			<!--th field="top" viewer="json" editor="dictionary" editorOption='
-			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
-			'>top</th>
-			<th field="bottom" viewer="json" editor="dictionary" editorOption='
-			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
-			'>bottom</th>
-			<th field="left" viewer="json" editor="dictionary" editorOption='
-			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
-			'>left</th>
+			<th field="no" viewer='{"type":"text"}' primary>no</th>
+			<th field="order" viewer='{"type":"text"}' editor='{"type":"text"}'>order</th>
+			<th field="isEvent" viewer='{"type":"text"}' editor='{"type":"select","element":["일반","이벤트","미노출"],"value":[0,1,2]}'>isEvent</th>
+			<th field="title" viewer='{"type":"text"}' editor='{"type":"text"}'>title</th>
+			<th field="thumbnail" viewer='{"type":"custom","func":"showPuzzleImg"}' editor='{"type":"dictionary","element":[
+				{"field":"image","type":"custom","func":"imageSelector","viewer":{"type":"custom","func":"imageViewer"}},
+				{"field":"size","type":"text","datatype":"int"}			
+			]}'>thumbnail</th>
 			
-			<th field="right" viewer="json" editor="dictionary" editorOption='
+			<th field="center" viewer='{"type":"json"}' editor='{"type":"dictionary","element":
 			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
-			'>right</th-->
-			<th field="center" viewer="json" editor="dictionary" editorOption='
-			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
+				{"field":"image","type":"custom","func":"imageSelector","viewer":{"type":"custom","func":"imageViewer"}},
+				{"field":"size","type":"text","datatype":"int"}			
+			]}
 			'>center</th>
-			<th field="original" viewer="json" editor="dictionary" editorOption='
+			<th field="original" viewer='{"type":"json"}' editor='{"type":"dictionary","element":
 			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
+				{"field":"image","type":"custom","func":"imageSelector","viewer":{"type":"custom","func":"imageViewer"}},
+				{"field":"size","type":"text","datatype":"int"}			
+			]}
 			'>original</th>
-			<th field="face" viewer="json" editor="dictionary" editorOption='
+			<th field="face" viewer='{"type":"json"}'  editor='{"type":"dictionary","element":
 			[
-				{"field":"image","editor":"custom","editorOption":"imageSelector","viewer":"custom","viewerOption":"imageViewer"},
-				{"field":"size","editor":"text","editorOption":{"datatype":"int"}}			
-			]
+				{"field":"image","type":"custom","func":"imageSelector","viewer":{"type":"custom","func":"imageViewer"}},
+				{"field":"size","type":"text","datatype":"int"}			
+			]}
 			'>face</th>
-			<th field="ticket" viewer="text" editor="text" editorOption='{"datatype":"int"}'>ticket</th>
-			<th field="point" viewer="text" editor="text" editorOption='{"datatype":"int"}'>point</th>
-			<th field="version" viewer="text" editor="text" editorOption='{"datatype":"int"}'>version</th>
+			<th field="map" viewer='{"type":"custom","func":"showPuzzleImg"}' editor='{"type":"dictionary","element":
+			[
+				{"field":"image","type":"custom","func":"imageSelector","viewer":{"type":"custom","func":"imageViewer"}},
+				{"field":"size","type":"text","datatype":"int"}			
+			]}
+			'>map</th>
+			<th field="coordinateInfo" viewer='{"type":"json"}' editor='{"type":"table","element":[
+			{"title":"x","field":"x","type":"text","datatype":"int"},
+			{"title":"y","field":"y","type":"text","datatype":"int"}					
+			]}'>coordinateInfo</th>
+
+			<th field="startPosition" viewer='{"type":"json"}' editor='{"type":"dictionary","element":[
+				{"field":"x","type":"text","datatype":"int"},
+				{"field":"y","type":"text","datatype":"int"}			
+			]}
+			'>startPosition</th>
+
+			<th field="endPosition" viewer='{"type":"json"}' editor='{"type":"dictionary","element":[
+				{"field":"x","type":"text","datatype":"int"},
+				{"field":"y","type":"text","datatype":"int"}		
+			]}
+			'>endPosition</th>
+			<th field="point" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>point</th>
+			<th field="pathInfo" viewer='{"type":"json"}' editor='{"type":"array","element":{"type":"text","datatype":"int"}}'>pathInfo</th>
+			<th field="cardInfo" viewer='{"type":"json"}' editor='{"type":"array","element":{"type":"array","element":{"type":"text","datatype":"int"}}}'>cardInfo</th>
+			<th field="rewardInfo" viewer='{"type":"json"}'>rewardInfo (자동갱신)</th>
+			<th field="levelInfo" viewer='{"type":"json"}'>levelInfo (자동갱신)</th>
+			<th field="conditionInfo" viewer='{"type":"json"}'>conditionInfo (자동갱신)</th>
+			<th field="ticket" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>ticket(사용안함)</th>
+			<th field="point" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>point(사용안함)</th>
+			<th field="condition"  viewer='{"type":"text"}' editor='{"type":"array","element":{"type":"array","element":{"type":"dictionary","element":[{"type":"text","field":"type"},{"type":"text","field":"value","datatype":"int"}]}}}'>condition</th>
+			<th field="version" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>version</th>
 			<th manage="delete update insert">manage</th>
 		</tr>
 	</thead>

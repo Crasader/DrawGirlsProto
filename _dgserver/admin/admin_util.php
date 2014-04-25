@@ -96,6 +96,7 @@ $(document).ready(function() {
 <br><br>
 
 <form action=admin_util.php>
+	<input name="gid" value="<?=$gid?>" type="hidden">
 <input type=hidden name=mode value=addStage>
 <b><font color=red>퍼즐 생성기 - 1번 퍼즐의 스테이지들을 복사합니다.</font></b><br>
 복사할 퍼즐번호 <input type=text name=originalPuzzleNo> 생성할 퍼즐번호 <input type=text name=puzzleNo> 비번(asdf) <input type=text name=pass size=4> <input type=submit value=생성>
@@ -107,8 +108,8 @@ if($_GET[mode]=="addStage" && $_GET[puzzleNo] && $_GET[pass]=="asdf"){
 	$i=1;
 	$puzzleNo = $_GET[puzzleNo];
 	$originalPuzzleNo = $_GET[originalPuzzleNo]; 
-	echo "select * from $TABLE_STAGE where `puzzle`=$originalPuzzleNo \n";
-	$query = mysql_query("select * from $TABLE_STAGE where `puzzle`=$originalPuzzleNo",DBManager::get()->getMainConnection());
+	echo "select * from ".DBManager::get()->getMT("stage")." where `puzzle`=$originalPuzzleNo \n";
+	$query = mysql_query("select * from ".DBManager::get()->getMT("stage")." where `puzzle`=$originalPuzzleNo",DBManager::get()->getMainConnection());
 	while($data = mysql_fetch_array($query)){
 		for($j=0;$j<count($data);$j++){
 				unset($data[$j]);
@@ -122,10 +123,10 @@ if($_GET[mode]=="addStage" && $_GET[puzzleNo] && $_GET[pass]=="asdf"){
 		$sCard = $stageNo*10;
 		$data[cards]="[".($sCard).",".($sCard+1).",".($sCard+2)."]";
 		
-		$query2 = lq_query_insert($data,$TABLE_STAGE);
+		$query2 = lq_query_insert($data,DBManager::get()->getMT("stage"));
 		if(mysql_query($query2,DBManager::get()->getMainConnection())){
 			echo $data[no]."스테이지 추가 완료 $query2 \n";
-			$cQuery = mysql_query("select * from $TABLE_CARD where `stage`=$i",DBManager::get()->getMainConnection());
+			$cQuery = mysql_query("select * from ".DBManager::get()->getMT("card")." where `stage`=$i",DBManager::get()->getMainConnection());
 			while($cData = mysql_fetch_array($cQuery)){
 				for($j=0;$j<count($cData);$j++){
 						unset($cData[$j]);
@@ -133,7 +134,7 @@ if($_GET[mode]=="addStage" && $_GET[puzzleNo] && $_GET[pass]=="asdf"){
 				
 				$cData[stage]=$stageNo;
 				$cData[no]=$stageNo*10+$cData[rank]-1;
-				$query3 = lq_query_insert($cData,$TABLE_CARD);
+				$query3 = lq_query_insert($cData,DBManager::get()->getMT("card"));
 				if(mysql_query($query3,DBManager::get()->getMainConnection())){
 					echo $cData[no]."카드 추가 완료 $query3 \n";
 					
@@ -178,6 +179,7 @@ function showAutoBalanceUpdateMode($name,$count=3){
 <br>
 
 <form action=admin_util.php>
+	<input name="gid" value="<?=$gid?>" type="hidden">
 <input type=hidden name=mode value=autoBalance>
 <b><font color=red>슈퍼오토벨런싱</font></b>
 <br>
@@ -348,7 +350,7 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 		
 		$w_puzzle=null;
 		if(is_numeric($_GET['puzzle'])){
-			$r = mysql_fetch_assoc(mysql_query("select * from $TABLE_PUZZLE where puzzleNo=".$_GET['puzzle'],DBManager::get()->getMainConnection()));
+			$r = mysql_fetch_assoc(mysql_query("select * from ".DBManager::get()->getMT("puzzle")." where `order`=".$_GET['puzzle'],DBManager::get()->getMainConnection()));
 			$w_puzzle = $r[no];
 		}
 
@@ -358,7 +360,7 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 			if($w_level=="*")$w_level_where = "";
 			if(!is_numeric($w_puzzle))$w_puzzle_where = "1=1";
 			else $w_puzzle_where = "puzzle=".$w_puzzle;
-			$result = mysql_query("select * from $TABLE_STAGE where ".$w_puzzle_where.$w_level_where,DBManager::get()->getMainConnection());
+			$result = mysql_query("select * from ".DBManager::get()->getMT("stage")." where ".$w_puzzle_where.$w_level_where,DBManager::get()->getMainConnection());
 			
 			while($stageInfo = mysql_fetch_array($result)){
 				unset($uData);
@@ -568,7 +570,7 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 				}
 				$ns = $stageInfo[no];
 				
-				$query = lq_query_update($uData,$TABLE_STAGE,", version=version+1 where no = $ns");
+				$query = lq_query_update($uData,DBManager::get()->getMT("stage"),", version=version+1 where no = $ns");
 				
 				if($_GET['pass'] == "asdf"){
 					kvManager::increase("stageVer_".$ns);
@@ -600,7 +602,7 @@ if($_GET["autoConfig"]=="true")$autoConfigChecked="checked";
 if($_GET["mode"]=="imagechange"){
 	
 	echo "<textarea>";
-		$result = mysql_query("select * from $TABLE_STAGE");
+		$result = mysql_query("select * from ".DBManager::get()->getMT("stage"));
 		
 		while($cdata = mysql_fetch_array($result)){
 			
@@ -614,7 +616,7 @@ if($_GET["mode"]=="imagechange"){
 				echo $aa[image];
 				$sd[thumbnail]=json_encode($aa,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 				$sd[thumbnail] = str_replace("\\","",$sd[thumbnail]);
-				$nq = lq_query_update($sd,$TABLE_STAGE,"where no = ".$cdata[no]);
+				$nq = lq_query_update($sd,DBManager::get()->getMT("stage"),"where no = ".$cdata[no]);
 				echo $nq;
 				mysql_query($nq);
 			}	
@@ -630,7 +632,7 @@ if($_GET["mode"]=="imagechange"){
 
 <br><br>
 
-<form action=admin_util.php>
+<form action=admin_util.php><input name="gid" value="<?=$gid?>" type="hidden">
 <input type=hidden name=mode value=autoMissile>
 <b><font color=red>카드미사일속성 세팅기</font></b>
 
@@ -640,7 +642,7 @@ if($_GET["mode"]=="imagechange"){
 if($_GET['mode']=="autoMissile"){
 	srand(1);
 	echo "<textarea cols=200 rows=5>";
-	$result = mysql_query("select * from $TABLE_CARD where no<100000",DBManager::get()->getMainConnection());
+	$result = mysql_query("select * from ".DBManager::get()->getMT("card")." where no<100000",DBManager::get()->getMainConnection());
 	$alpabat = array("A","B","C","D","E","F","G","H","I","J","K","L","m","n","o");
 	$oldstage=0;
 	while($cardInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
@@ -648,7 +650,7 @@ if($_GET['mode']=="autoMissile"){
 		
 		//카드 속성정하기~~
 		if($oldstage!=$cardInfo[stage]){
-			$stageInfo = mysql_fetch_array(mysql_query("select * from $TABLE_STAGE where no = $cardInfo[stage]",DBManager::get()->getMainConnection()),MYSQL_ASSOC);
+			$stageInfo = mysql_fetch_array(mysql_query("select * from ".DBManager::get()->getMT("stage")." where no = $cardInfo[stage]",DBManager::get()->getMainConnection()),MYSQL_ASSOC);
 			$stageLevel = $stageInfo[level];
 			
 		
@@ -708,7 +710,7 @@ if($_GET['mode']=="autoMissile"){
 		
 		$uData["missile"]=json_encode($ms,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		
-		$query = lq_query_update($uData,$TABLE_CARD,"where no = $cardInfo[no]");
+		$query = lq_query_update($uData,DBManager::get()->getMT("card"),"where no = $cardInfo[no]");
 
 			echo $query."\n\n";
 		mysql_query($query,DBManager::get()->getMainConnection());
