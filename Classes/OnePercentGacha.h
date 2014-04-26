@@ -26,6 +26,8 @@ enum OnePercentGachaMenuTag
 	kOnePercentGacha_MT_stop
 };
 class CommonButton;
+class LoadingLayer;
+class ASPopupView;
 class OnePercentGacha : public CCLayer
 {
 public:
@@ -44,6 +46,10 @@ private:
 	CCObject * target_ok;
 	SEL_CallFuncF delegate_ok;
 	CCScale9Sprite* back_img;
+	
+	LoadingLayer* inapp_loading;
+	ASPopupView* t_popup;
+	
 	float recent_percent;
 	void myInit (CCObject * t_cancel, SEL_CallFunc d_cancel, CCObject * t_ok, SEL_CallFuncF d_ok, float t_recent_percent);
 	void startShow();
@@ -55,6 +61,9 @@ private:
 	void menuAction (CCObject * sender);
 	void endAction ();
 	void changePercentLabel ();
+	
+	void requestItemDelivery();
+	
 	CountingBMLabel * percent_label;
 	CCProgressTimer * progress_img;
 	CCSprite * arrow_img;

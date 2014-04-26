@@ -2464,7 +2464,8 @@ void KSCumberBase::endTeleport()
 void KSCumberBase::startTeleport()
 {
 	smaller();
-	AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
+	AudioEngine::sharedInstance()->playEffect("se_instantmove.mp3");
+//	AudioEngine::sharedInstance()->playEffect("sound_teleport.mp3",false);
 }
 
 void KSCumberBase::smaller()

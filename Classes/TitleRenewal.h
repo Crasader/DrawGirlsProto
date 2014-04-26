@@ -124,6 +124,8 @@ private:
 	
 	void resultGetPieceHistory(Json::Value result_data);
 	
+	void resultGetUserProperties(Json::Value result_data);
+	
 	Json::Value friendList;
 	
 	void resultLoadedCardData(Json::Value result_data);

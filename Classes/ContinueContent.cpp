@@ -10,6 +10,10 @@
 #include "CCMenuLambda.h"
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
+#include "LoadingLayer.h"
+#include "ASPopupView.h"
+#include "MyLocalization.h"
+#include "KSUtil.h"
 
 void ContinueContent::menuAction(CCObject* sender)
 {
@@ -29,39 +33,57 @@ void ContinueContent::menuAction(CCObject* sender)
 	}
 	else if(tag == kContinueContentMenuTag_continue)
 	{
-		if(mySGD->getStar() >= mySGD->getPlayContinueFee())
+		if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getPlayContinueFee())
 		{
-			is_continue = true;
-			mySGD->setStar(mySGD->getStar()-mySGD->getPlayContinueFee());
-			CCSprite* price_type = CCSprite::create("price_ruby_img.png");
-			price_type->setOpacity(0);
-			price_type->setPosition(ccpAdd(ccp(52,-48), ccp(-15, 0)));
-			addChild(price_type);
+			LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200);
+			addChild(t_popup, 9999);
 			
-			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("-%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 16);
-			price_label->setOpacity(0);
-			price_label->setAnchorPoint(ccp(0,0.5f));
-			price_label->setPosition(ccp(price_type->getContentSize().width/2.f+15,price_type->getContentSize().height/2.f));
-			price_type->addChild(price_label);
-			
-			CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 255);
-			CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
-			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
-			CCSequence* t_seq = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
-			
-			CCMoveBy* t_move1 = CCMoveBy::create(0.9f, ccp(0,50));
-			
-			CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_seq, t_move1);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::startHide));
-			CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-			
-			price_type->runAction(t_seq2);
-			
-			CCFadeTo* t_fade3 = CCFadeTo::create(0.2f, 255);
-			CCDelayTime* t_delay3 = CCDelayTime::create(0.2f);
-			CCFadeTo* t_fade4 = CCFadeTo::create(0.5f, 0);
-			CCSequence* t_seq3 = CCSequence::create(t_fade3, t_delay3, t_fade4, NULL);
-			price_label->runAction(t_seq3);
+			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getPlayContinueFee(), "이어하기");
+			mySGD->changeGoods([=](Json::Value result_data)
+			{
+				t_popup->removeFromParent();
+				if(result_data["result"]["code"].asInt() == GDSUCCESS)
+				{
+					is_continue = true;
+					
+					CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+					price_type->setOpacity(0);
+					price_type->setPosition(ccpAdd(ccp(52,-48), ccp(-15, 0)));
+					addChild(price_type);
+					
+					CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("-%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 16);
+					price_label->setOpacity(0);
+					price_label->setAnchorPoint(ccp(0,0.5f));
+					price_label->setPosition(ccp(price_type->getContentSize().width/2.f+15,price_type->getContentSize().height/2.f));
+					price_type->addChild(price_label);
+					
+					CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 255);
+					CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+					CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
+					CCSequence* t_seq = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
+					
+					CCMoveBy* t_move1 = CCMoveBy::create(0.9f, ccp(0,50));
+					
+					CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_seq, t_move1);
+					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::startHide));
+					CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+					
+					price_type->runAction(t_seq2);
+					
+					CCFadeTo* t_fade3 = CCFadeTo::create(0.2f, 255);
+					CCDelayTime* t_delay3 = CCDelayTime::create(0.2f);
+					CCFadeTo* t_fade4 = CCFadeTo::create(0.5f, 0);
+					CCSequence* t_seq3 = CCSequence::create(t_fade3, t_delay3, t_fade4, NULL);
+					price_label->runAction(t_seq3);
+				}
+				else
+				{
+					mySGD->clearChangeGoods();
+					addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+					
+					is_menu_enable = true;
+				}
+			});
 		}
 		else
 		{
@@ -128,38 +150,81 @@ void ContinueContent::menuAction(CCObject* sender)
 			
 			CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 																		{
-																			is_continue = true;
-																			case_back->removeFromParent();
-																			mySGD->setStar(mySGD->getStar()+10-mySGD->getPlayContinueFee());
-																			CCSprite* price_type = CCSprite::create("price_ruby_img.png");
-																			price_type->setOpacity(0);
-																			price_type->setPosition(ccpAdd(ccp(52,-48), ccp(-15, 0)));
-																			addChild(price_type);
+																			inapp_loading = LoadingLayer::create(-9999);
+																			addChild(inapp_loading);
 																			
-																			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("-%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 16);
-																			price_label->setOpacity(0);
-																			price_label->setAnchorPoint(ccp(0,0.5f));
-																			price_label->setPosition(ccp(price_type->getContentSize().width/2.f+15,price_type->getContentSize().height/2.f));
-																			price_type->addChild(price_label);
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+																			mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "이어하기(IOS-인앱결재)", "", "", true);
+																			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getPlayContinueFee(), "이어하기(IOS-소모)");
 																			
-																			CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 255);
-																			CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
-																			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
-																			CCSequence* t_seq = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
+																			mySGD->changeGoods([=](Json::Value result_data){
+																				inapp_loading->removeFromParent();
+																				if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																				{
+																					is_continue = true;
+																					case_back->removeFromParent();
+																					
+																					CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+																					price_type->setOpacity(0);
+																					price_type->setPosition(ccpAdd(ccp(52,-48), ccp(-15, 0)));
+																					addChild(price_type);
+																					
+																					CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("-%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 16);
+																					price_label->setOpacity(0);
+																					price_label->setAnchorPoint(ccp(0,0.5f));
+																					price_label->setPosition(ccp(price_type->getContentSize().width/2.f+15,price_type->getContentSize().height/2.f));
+																					price_type->addChild(price_label);
+																					
+																					CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 255);
+																					CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+																					CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
+																					CCSequence* t_seq = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
+																					
+																					CCMoveBy* t_move1 = CCMoveBy::create(0.9f, ccp(0,50));
+																					
+																					CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_seq, t_move1);
+																					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::startHide));
+																					CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+																					
+																					price_type->runAction(t_seq2);
+																					
+																					CCFadeTo* t_fade3 = CCFadeTo::create(0.2f, 255);
+																					CCDelayTime* t_delay3 = CCDelayTime::create(0.2f);
+																					CCFadeTo* t_fade4 = CCFadeTo::create(0.5f, 0);
+																					CCSequence* t_seq3 = CCSequence::create(t_fade3, t_delay3, t_fade4, NULL);
+																					price_label->runAction(t_seq3);
+																				}
+																				else
+																				{
+																					mySGD->clearChangeGoods();
+																					
+																					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																					
+																					is_menu_enable = true;
+																				}
+																			});
 																			
-																			CCMoveBy* t_move1 = CCMoveBy::create(0.9f, ccp(0,50));
 																			
-																			CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_seq, t_move1);
-																			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::startHide));
-																			CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-																			
-																			price_type->runAction(t_seq2);
-																			
-																			CCFadeTo* t_fade3 = CCFadeTo::create(0.2f, 255);
-																			CCDelayTime* t_delay3 = CCDelayTime::create(0.2f);
-																			CCFadeTo* t_fade4 = CCFadeTo::create(0.5f, 0);
-																			CCSequence* t_seq3 = CCSequence::create(t_fade3, t_delay3, t_fade4, NULL);
-																			price_label->runAction(t_seq3);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+																			Json::Value param;
+																			param["productid"] = mySGD->getInappProduct(0);
+																			hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+//																				KS::KSLog("in-app test \n%", v);
+																				if(v["issuccess"].asInt())
+																				{
+																					mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getPlayContinueFee(), "이어하기");
+																					requestItemDelivery();
+																				}
+																				else
+																				{
+																					inapp_loading->removeFromParent();
+																					
+																					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																					
+																					is_menu_enable = true;
+																				}
+																			});
+#endif
 																		});
 			
 			CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
@@ -173,6 +238,67 @@ void ContinueContent::menuAction(CCObject* sender)
 		}
 	}
 }
+
+void ContinueContent::requestItemDelivery()
+{
+	vector<CommandParam> command_list;
+	
+	Json::Value transaction_param;
+	transaction_param["memberID"] = hspConnector::get()->getMemberID();
+	command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
+										{
+											if(result_data["result"]["code"].asInt() == GDSUCCESS)
+											{
+												inapp_loading->removeFromParent();
+												
+												is_continue = true;
+												case_back->removeFromParent();
+												
+												CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+												price_type->setOpacity(0);
+												price_type->setPosition(ccpAdd(ccp(52,-48), ccp(-15, 0)));
+												addChild(price_type);
+												
+												CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("-%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 16);
+												price_label->setOpacity(0);
+												price_label->setAnchorPoint(ccp(0,0.5f));
+												price_label->setPosition(ccp(price_type->getContentSize().width/2.f+15,price_type->getContentSize().height/2.f));
+												price_type->addChild(price_label);
+												
+												CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 255);
+												CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+												CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
+												CCSequence* t_seq = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
+												
+												CCMoveBy* t_move1 = CCMoveBy::create(0.9f, ccp(0,50));
+												
+												CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_seq, t_move1);
+												CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::startHide));
+												CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+												
+												price_type->runAction(t_seq2);
+												
+												CCFadeTo* t_fade3 = CCFadeTo::create(0.2f, 255);
+												CCDelayTime* t_delay3 = CCDelayTime::create(0.2f);
+												CCFadeTo* t_fade4 = CCFadeTo::create(0.5f, 0);
+												CCSequence* t_seq3 = CCSequence::create(t_fade3, t_delay3, t_fade4, NULL);
+												price_label->runAction(t_seq3);
+											}
+											else
+											{
+												addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+											}
+										}));
+	
+	Json::Value request_param;
+	request_param["memberID"] = hspConnector::get()->getSocialID();
+	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
+	
+	command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
+	
+	hspConnector::get()->command(command_list);
+}
+
 
 void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, function<void(void)> t_continue)
 {

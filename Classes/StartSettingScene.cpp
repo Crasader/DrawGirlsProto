@@ -333,9 +333,9 @@ void StartSettingScene::setMain()
 			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
 //			string item_currency = mySD->getItemCurrency(t_ic);
 //			if(item_currency == "gold")
-//				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
+//				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGoodsValue(kGoodsType_gold));
 //			else if(item_currency == "ruby")
-//				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
+//				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGoodsValue(kGoodsType_ruby));
 			
 			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable)
 			{
@@ -650,7 +650,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 	
 	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 	upgrade_price*=1000;
-	if(mySGD->getGold() < upgrade_price)// + use_item_price_gold.getV())
+	if(mySGD->getGoodsValue(kGoodsType_gold) < upgrade_price)// + use_item_price_gold.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(-300, "골드가 부족합니다."), kStartSettingZorder_popup);
 		return;
@@ -713,7 +713,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 //	ok_button->setFunction([=](CCObject* sender)
 //						   {
 							   int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
-							   mySGD->setGold(mySGD->getGold()-missile_level*1000);
+//							   mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold)-missile_level*1000);
 							   myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
 							   
 							   myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, nullptr);
@@ -802,14 +802,14 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 
 void StartSettingScene::startItemGacha()
 {
-	if(!is_menu_enable || (/*use_item_price_gold.getV() + */1000) > mySGD->getGold())
+	if(!is_menu_enable || (/*use_item_price_gold.getV() + */1000) > mySGD->getGoodsValue(kGoodsType_gold))
 		return;
 	
 	is_menu_enable = false;
 	
 	CCLog("start item gacha");
 	
-	mySGD->setGold(mySGD->getGold() - 1000);
+//	mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - 1000);
 	myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
 	
 	if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
@@ -1251,9 +1251,9 @@ void StartSettingScene::itemAction(CCObject *sender)
 			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
 //			string item_currency = mySD->getItemCurrency(t_ic);
 //			if(item_currency == "gold")
-//				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGold());
+//				is_price_usable = is_price_usable || ((use_item_price_gold.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGoodsValue(kGoodsType_gold));
 //			else if(item_currency == "ruby")
-//				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getStar());
+//				is_price_usable = is_price_usable || ((use_item_price_ruby.getV() + mySD->getItemPrice(t_ic)) <= mySGD->getGoodsValue(kGoodsType_ruby));
 			
 			if(getSelectedItemCount() < 3 && is_price_usable)
 			{
@@ -1415,9 +1415,9 @@ void StartSettingScene::itemAction(CCObject *sender)
 									
 									if(item_currency == "gold")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGold())
+										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_gold))
 										{
-											mySGD->setGold(mySGD->getGold()-mySD->getItemPrice(item_list[clicked_item_idx]));
+//											mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold)-mySD->getItemPrice(item_list[clicked_item_idx]));
 											buySuccessItem(clicked_item_idx, 1);
 										}
 										else
@@ -1493,9 +1493,9 @@ void StartSettingScene::itemAction(CCObject *sender)
 									}
 									else if(item_currency == "ruby")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getStar())
+										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_ruby))
 										{
-											mySGD->setStar(mySGD->getStar()-mySD->getItemPrice(item_list[clicked_item_idx]));
+//											mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby)-mySD->getItemPrice(item_list[clicked_item_idx]));
 											buySuccessItem(clicked_item_idx, 1);
 										}
 										else
@@ -1834,7 +1834,7 @@ void StartSettingScene::setTop()
 	top_gold->setPosition(ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_gold, kStartSettingZorder_top);
 	
-	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-5));
 	top_gold->addChild(gold_label);
 	
@@ -1857,7 +1857,7 @@ void StartSettingScene::setTop()
 	top_ruby->setPosition(ccp(325+10,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 	addChild(top_ruby, kStartSettingZorder_top);
 	
-	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-5));
 	top_ruby->addChild(ruby_label);
 	
@@ -2148,8 +2148,8 @@ void StartSettingScene::finalSetting()
 		is_using_item[selected_gacha_item] = true;
 	}
 	
-//	mySGD->setGold(mySGD->getGold() - use_item_price_gold.getV());
-//	mySGD->setStar(mySGD->getStar() - use_item_price_ruby.getV());
+//	mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - use_item_price_gold.getV());
+//	mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - use_item_price_ruby.getV());
 	
 	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 		mySGD->setIsUsingItem(ITEM_CODE(i), is_using_item[i]);
@@ -2230,8 +2230,8 @@ void StartSettingScene::cancelGame()
 			}
 		}
 				   
-//		mySGD->setGold(mySGD->getGold() + use_item_price_gold.getV());
-//		mySGD->setStar(mySGD->getStar() + use_item_price_ruby.getV());
+//		mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + use_item_price_gold.getV());
+//		mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + use_item_price_ruby.getV());
 		
 		mySGD->resetUsingItem();
 		

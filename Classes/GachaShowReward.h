@@ -51,16 +51,16 @@ public:
 			int selectedItemValue = value;
 			switch(kind) {
 				case RewardKind::kRuby:
-					mySGD->setStar(mySGD->getStar() + selectedItemValue);
-					myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
+//					mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + selectedItemValue);
+//					myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
 
-					});
+//					});
 					break;
 				case RewardKind::kGold:
-					mySGD->setGold(mySGD->getGold() + selectedItemValue);
-					myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v) {
+//					mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + selectedItemValue);
+//					myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v) {
 
-					});
+//					});
 					break;
 //				case RewardKind::kSpecialAttack:
 //					{

@@ -142,16 +142,16 @@ public:
 
 			setTouchEnabled(false);
 //			m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent), m_obtainRuby, m_obtainGold, m_obtainSocial);
-			mySGD->setStar(mySGD->getStar() + m_obtainRuby);
-			mySGD->setGold(mySGD->getGold() + m_obtainGold);
+//			mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + m_obtainRuby);
+//			mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + m_obtainGold);
 //			mySGD->setFriendPoint(mySGD->getFriendPoint() + m_obtainSocial);
-			myDSH->saveUserData({kSaveUserData_Key_star, kSaveUserData_Key_gold}, [=](Json::Value v)
-					{
+//			myDSH->saveUserData({kSaveUserData_Key_star, kSaveUserData_Key_gold}, [=](Json::Value v)
+//					{
 						addChild(KSTimer::create(3.f, [=](){
 							m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent), m_obtainRuby, m_obtainGold);
 							//m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 						}));
-					});
+//					});
 		}
 	}
 	virtual void registerWithTouchDispatcher();
