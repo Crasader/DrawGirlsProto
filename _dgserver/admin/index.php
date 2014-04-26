@@ -20,7 +20,69 @@ echo"</center>";
 	<?php
 }
 
+echo "start make card";
 
+if($_GET["mode"]!="card")exit;
+
+
+$cards[]="1_chihaya_1.png";
+$cards[]="1_kanzaki_1.png";
+$cards[]="1_kisaragi_1.png";
+$cards[]="1_kochou_1.png";
+$cards[]="1_ranmaru_1.png";
+$cards[]="2_asuka_1.png";
+$cards[]="2_ayame_1.png";
+$cards[]="2_hibari_1.png";
+$cards[]="2_katsuragi_1.png";
+$cards[]="2_seimei_1.png";
+$cards[]="3_josui_1.png";
+$cards[]="3_kagari_1.png";
+$cards[]="3_mai_1.png";
+$cards[]="3_tamaki_1.png";
+$cards[]="3_yugiri_1.png";
+$cards[]="4_chitose_1.png";
+$cards[]="4_haruka_1.png";
+$cards[]="4_ibuki_1.png";
+$cards[]="4_souji_1.png";
+$cards[]="4_yomi_1.png";
+$cards[]="5_minori_1.png";
+$cards[]="5_murakumo_1.png";
+$cards[]="5_siki_1.png";
+$cards[]="5_yozakura_1.png";
+$cards[]="5_yumi_1.png";
+
+$school=0;
+$sc=1;
+for($set=0;$set<count($cards);$set++){
+	echo "test";
+	$cardinfo = explode("_",$cards[$set]);
+	$puzzleNo = $cardinfo[0];
+	$cardname = $cardinfo[1];
+	for($rank=1;$rank<=4;$rank++){
+		$cardNo = 12000+$school*100+$sc*10+$rank;
+		$nCard = new Card($cardNo);
+		$nCard->no = $cardNo;
+		$nCard->rank = $rank;
+		$nCard->durability=5;
+		$nCard->ability="[]";
+		$nCard->language="kr";
+		$imagename = "p".$puzzleNo."_".$cardname."_".$rank;
+		$nCard->imgInfo='{"img":"card/'.$imagename.'.png","size":200}';
+		$nCard->silImgInfo='{"isSil":"1","img":"card/'.$imagename.'s.png","size":15}';
+		$nCard->aniInfo='{"isAni":0}';
+		$nCard->reward=$rank*250;
+		$nCard->grade=$rank;
+		$nCard->script="この部分にキャラクターのセリフが入る予定です。";
+		$nCard->name = $cardname;
+		$nCard->version = $nCard->version + 1;
+		if($nCard->save(true))echo"true<br>";
+		else echo"false<br>";
+	}
+	$sc++;
+	if($sc>5){$sc=1; $school+=1;}
+}
+
+exit;
 
 if($_GET["mode"]!="balance")exit;
 

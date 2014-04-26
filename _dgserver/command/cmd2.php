@@ -124,8 +124,10 @@ function help_requestitemdelivery(){
 	//$r["return"]
 	
 	$r["result"][]=ResultState::toArray(3001,"httpgateway 접속실패");
+	$r["result"][]=ResultState::toArray(2002,"memberID를 안넣음");
+	$r["result"][]=ResultState::toArray(2016,"처리할내용이 없음");
 	$r["result"][]=ResultState::toArray(1,"success");
-	
+
 	//$r["example"]
 	
 	return $r;
@@ -133,12 +135,57 @@ function help_requestitemdelivery(){
 
 
 function requestitemdelivery($p){
+	$memberID = $p["memberID"];
+
+	if(!$memberID) return ResultState::makeReturn(2002,"memberID");
+
 	$pp["headerGameNo"] = DBManager::$m_gameNo;
 	$pp["api"]="RequestItemDelivery2";
 	$pp["deliveryMaxCount"]=10;
-	$pp["deliveryHeader"]="memberNo-".$p["memberID"];
+	$pp["deliveryHeader"]="memberNo-".$p["memberID"].",gameNo-".DBManager::$m_gameNo;
 	$result = $this->httpgateway($pp);
-	return $result;
+	LogManager::get()->addLog("RequestItemDelivery2-->".json_encode($result));
+	if(!ResultState::successCheck($result["result"]))return $result;
+	
+	$r = array();
+
+	$ppp=array();
+	$ppp["memberID"]=$p["memberID"];
+	$ppp["list"]=array();
+	$itemSeq=array();
+	for($i=0;$i<count($result["data"]["deliveryResponse"]["itemIds"]);$i++){
+		LogManager::get()->addLog("item id is ".$result["data"]["deliveryResponse"]["itemIds"][$i]);
+		$item = new Shop($result["data"]["deliveryResponse"]["itemIds"][$i]);
+	
+		if(!$item->isLoaded())continue;
+		
+		$ppp["list"][] = array("type"=>$item->type,"count"=>$item->count,"statsID"=>"purchase","statsValue"=>"","content"=>"루비구매","isPurchase"=>true);
+		$r["list"][]=$item->getArrayData();
+		$itemSeq[]=$result["data"]["deliveryResponse"]["itemDeliverySequences"][$i];
+	}
+	
+	if(count($result["data"]["deliveryResponse"]["itemIds"])>0){
+		$result2 = $this->changeuserproperties($ppp);
+		
+		if(ResultState::successCheck($result2["result"])){
+			$pppp=array();
+			$pppp["headerGameNo"] = DBManager::$m_gameNo;
+			$pppp["api"]="FinishItemDelivery2";
+			$pppp["itemDeliverySequences"]=implode(",",$itemSeq);
+			$pppp["deliveryHeader"]="memberNo-".$p["memberID"].",gameNo-".DBManager::$m_gameNo;
+			$result3 = $this->httpgateway($pppp);
+			LogManager::get()->addLog("-->".json_encode($result3));
+			if(ResultState::successCheck($result3["result"])){
+				return $result2;
+			}
+			return $result3;
+		}
+		return $result2;
+
+	}
+
+	return ResultState::makeReturn(2016,"nothingwork");
+	
 }
 
 ////////////////////////////////////////
@@ -1449,7 +1496,6 @@ function writelog($p){
 	$result["state"]="ok";
 	$result["result"]=ResultState::successToArray();
 
-	LogManager::get()->addLog("write log");
 	return $result;
 
 
@@ -1649,7 +1695,7 @@ function join($p){
 
             LogManager::get()->addLog("join user DeviceID s2 ".$user->deviceID);
 			
-			$itemType = array("fRuby","gold","money","pRuby","heart","item9","item6","item8","pass1","pass2","pass3","pass4");
+			$itemType = array("fr","g","m","pr","h","i9","i6","i8","p1","p2","p3","p4");
 			$itemValue = array(10,5000,0,0,5,1,1,1,1,1,1,1);
 
 			for($i=0;$i<count($itemType);$i++){
@@ -3112,18 +3158,16 @@ function updatepuzzlehistory($p){
 	
 	//보내기
 	$obj = new PuzzleHistory($memberID,$puzzleNo);
-	if($p["updateOpenDate"])$obj->m_openDate=TimeManager::get()->getCurrentDateString();
-	if($p["updateClearDate"])$obj->m_clearDate=TimeManager::get()->getCurrentDateString();
-	if($p["updatePerfectDate"])$obj->m_perfectDate=TimeManager::get()->getCurrentDateString();
-	if($p["openType"])$obj->m_openType=$p["openType"];
+	if($p["updateOpenDate"] && !$obj->openDate)$obj->openDate=TimeManager::get()->getCurrentDateString();
+	if($p["updateClearDate"] && !$obj->clearDate)$obj->clearDate=TimeManager::get()->getCurrentDateString();
+	if($p["updatePerfectDate"] && !$obj->perfectDate)$obj->perfectDate=TimeManager::get()->getCurrentDateString();
+	if($p["openType"])$obj->openType=$p["openType"];
 
 	if($obj->save()){
-		$r["write"]="success";
+		$r["result"]=ResultState::successToArray();
 	}else{
-		$r["write"]="fail";
+		$r["result"]=ResultState::toArray(2014,"dont save");
 	}
-	
-	$r["result"]=ResultState::successToArray();
 	return $r;
 }
 
@@ -3294,6 +3338,7 @@ function help_updatecardhistory(){
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID or cardNo");
+	$r["result"][]=ResultState::toArray(2014,"Dont save");
 	
 	return $r;
 }
@@ -3310,18 +3355,16 @@ function updatecardhistory($p){
 	//보내기
 	$obj = new CardHistory($memberID,$cardNo);
 	
-	if($p["updateTakeDate"] || !$obj->isLoaded())$obj->m_takeDate=TimeManager::get()->getCurrentDateString();
-	if($p["comment"])$obj->m_comment=addslashes($p["comment"]);
+	if($p["updateTakeDate"] || !$obj->isLoaded())$obj->takeDate=TimeManager::get()->getCurrentDateString();
+	if($p["comment"])$obj->comment=addslashes($p["comment"]);
 
-	LogManager::get()->addLog($obj->m_comment);
+	LogManager::get()->addLog($obj->comment);
 	LogManager::get()->addLog($obj->getArrayData(true));
 
-	if($obj->save()){
-		$r["write"]="success";
-	}else{
-		$r["write"]="fail";
-	}
-	
+	if(!$obj->save())return ResultState::makeReturn(2014,"dont save");
+
+
+	$r["write"]="success";	
 	$r["result"]=ResultState::successToArray();
 	return $r;
 }
@@ -3417,14 +3460,17 @@ function addproperty($p){
 
 	$r["data"]=$userProp->getArrayData(true);	
 
-	if($userHistory->count<0){
-		return ResultState::toArray(2015);
+	if($userProp->count<0){
+		$r["result"] = ResultState::toArray(2015);
+		$r["minusType"]=$userProp->type;
+		$r["minusCount"]=$userProp->count-$count;
+		return $r;
 	}
 
 	if(!$userProp->save() or !$userHistory->save()){
 		CommitManager::get()->rollback($memberID);
-
-		return ResultState::toArray(2014,"Dont Save gold");
+		$r["result"] = ResultState::toArray(2014,"Dont Save gold");
+		return $r;
 	}
 
 	CommitManager::get()->commit($memberID);
@@ -3452,17 +3498,18 @@ function help_changeuserproperties(){
 	
 	$r["comment"] = '
 *type
-money(실제돈)
-gold (골드)
-ruby (루비)
-heart (하트)
-item1 (스피드업)
-item2 (아이템두배)
-item3 (타임)
-pass1 (이어하기 이용권)
-pass2 (맵가챠 이용권)
-pass3 (업그레이드 이용권)
-pass4 (아이템뽑기 이용권)
+m(실제돈)
+g (골드)
+r (루비)
+h (하트)
+i6 (스피드업)
+i8 (아이템두배)
+i9 (타임)
+p1 (이어하기 이용권)
+p2 (맵가챠 이용권)
+p3 (업그레이드 이용권)
+p4 (아이템뽑기 이용권)
+p5 (99프로 이용권)
 
 *statsID / statsValue
 stage / 스테이지번호
@@ -3485,20 +3532,21 @@ function changeuserproperties($p){
 	$r=array();
 	$rs=array();
 
-
+	$minusProperty = "";
+	$minusPropertyValue = 0;
 	CommitManager::get()->begin($memberID);
 
 	foreach ($list as $key => $value) {
 		$param=array();
 
 		//루비인경우 특수처리
-		if($value["type"]=="ruby"){
+		if($value["type"]=="r"){
 			//take
 			if($value["count"]>=0){
 				if($value["isPurchase"]){
-					$value["type"]="pRuby";
+					$value["type"]="pr";
 				}else{
-					$value["type"]="fRuby";
+					$value["type"]="fr";
 				}
 				$param["memberID"]=$memberID;
 				$param["type"]=$value["type"];
@@ -3516,19 +3564,21 @@ function changeuserproperties($p){
 					CommitManager::get()->setSuccess($memberID,false);
 				}
 
-				$fRuby = new UserProperty($memberID,"fRuby");
-				$pRuby = new UserProperty($memberID,"pRuby");
-				$rs[]=array("type"=>"ruby","count"=>($fRuby->count+$pRuby->count));
+				$fRuby = new UserProperty($memberID,"fr");
+				$pRuby = new UserProperty($memberID,"pr");
+				$rs[]=array("type"=>"r","count"=>($fRuby->count+$pRuby->count));
 
 			//use
 			}else if($value["count"]<0){
 				//fRuby와 pRuby읽어옴
-				$fRuby = new UserProperty($memberID,"fRuby");
-				$pRuby = new UserProperty($memberID,"pRuby");
+				$fRuby = new UserProperty($memberID,"fr");
+				$pRuby = new UserProperty($memberID,"pr");
 				//fRuby먼저 깍고 fRuby모자를 경우 pRuby깍음. 근데 둘중하나라도 마이너스면 에러
 				if($fRuby->count+$pRuby->count+$value["count"]<0){
 					$r["result"]=ResultState::toArray(2015);
-					$rs[]=array("type"=>"ruby","count"=>($fRuby->count+$pRuby->count));
+					$rs[]=array("type"=>"r","count"=>($fRuby->count+$pRuby->count));
+					$minusProperty="r";
+					$minusPropertyValue = $fRuby->count+$pRuby->count;
 					CommitManager::get()->setSuccess($memberID,false);
 				}else{
 					//무료루비가 충분하다면 무료루비만 사용
@@ -3538,7 +3588,7 @@ function changeuserproperties($p){
 						$userHistory = new UserPropertyHistory($memberID);
 						$userHistory->memberID = $memberID;
 						$userHistory->count = $value["count"];
-						$userHistory->type = "fRuby";
+						$userHistory->type = "fr";
 						$userHistory->statsID = $value["statsID"];
 						$userHistory->statsValue = $value["statsValue"];
 						$userHistory->total = $fRuby->count;
@@ -3553,7 +3603,7 @@ function changeuserproperties($p){
 							$userHistory1 = new UserPropertyHistory($memberID);
 							$userHistory1->memberID = $memberID;
 							$userHistory1->count = $fRuby->count;
-							$userHistory1->type = "fRuby";
+							$userHistory1->type = "fr";
 							$userHistory1->statsID = $value["statsID"];
 							$userHistory1->statsValue = $value["statsValue"];
 							$userHistory1->total = 0;
@@ -3570,7 +3620,7 @@ function changeuserproperties($p){
 							$userHistory2 = new UserPropertyHistory($memberID);
 							$userHistory2->memberID = $memberID;
 							$userHistory2->count = $fRuby->count+$value["count"];
-							$userHistory2->type = "fRuby";
+							$userHistory2->type = "pr";
 							$userHistory2->statsID = $value["statsID"];
 							$userHistory2->statsValue = $value["statsValue"];
 							$userHistory2->total = $pRuby->count;
@@ -3583,7 +3633,7 @@ function changeuserproperties($p){
 						CommitManager::get()->setSuccess($memberID,$fRuby->save() && $pRuby->save());
 					}
 
-					$rs[]=array("type"=>"ruby","count"=>($fRuby->count+$pRuby->count));
+					$rs[]=array("type"=>"r","count"=>($fRuby->count+$pRuby->count));
 				}
 
 				//아니면 적용
@@ -3604,24 +3654,35 @@ function changeuserproperties($p){
 			if(!ResultState::successCheck($result["result"])){
 				if($result["result"]["code"]==2015){
 					$r["result"]=ResultState::toArray(2015);
+					$minusProperty=$result["minusType"];
+					$minusPropertyValue = $result["minusCount"];
+
 				}
 				CommitManager::get()->setSuccess($memberID,false);
+				$rs[]=array("type"=>$result["data"]["type"],"count"=>$result["data"]["count"]);
+			}else{
+				$rs[]=array("type"=>$result["data"]["type"],"count"=>$result["data"]["count"]);
 			}
-
-			$rs[]=$result;
 		}
 	}
 
 	$r["list"]=$rs;
 
+	if($minusProperty){$r["minusType"]=$minusProperty; $r["minusCount"]=$minusPropertyValue;}
 	if(!CommitManager::get()->isSuccess($memberID)){
 		CommitManager::get()->rollback($memberID);
-		if(!$r["result"])$r["result"]=ResultState::toArray(2013,"dont success");
+		$r["result"]=ResultState::toArray(2013,"dont success");
+		
 	}else{
 		if(CommitManager::get()->commit($memberID))$r["result"]=ResultState::successToArray();
-		else $r["result"]=ResultState::toArray(2013,"dont success");
+		else ResultState::toArray(2013,"dont success");
 	}
 
+	if($minusProperty)
+	{
+		$r["result"]=ResultState::toArray(2015,"dont success");
+		unset($r["list"]);
+	}
 	return $r;
 
 	
@@ -3650,12 +3711,25 @@ function getuserproperties($p){
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
 	$dataList = array();
+	$checkRuby = false;
+	$fRuby=array();
+	$pRuby=array();
     while($rData = UserProperty::getRowByQuery("where memberID='".$memberID."'")){
     	unset($rData["memberID"]);
     	unset($rData["no"]);
+    	if($rData["type"]=="fr"){
+    		$fRuby = $rData;
+    		continue;
+    	}
+    	if($rData["type"]=="pr"){
+    		$pRuby = $rData;
+    		continue;
+    	}
 		$dataList[]=$rData;
     }
-
+    $pRuby["type"]="r";
+    $pRuby["count"]=$pRuby["count"]+$fRuby["count"];
+    $dataList[]=$pRuby;
 	$r["list"]=$dataList;
 	$r["result"]=ResultState::successToArray();
 	return $r;

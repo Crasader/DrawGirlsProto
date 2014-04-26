@@ -571,7 +571,7 @@ e.table
 				//옵션이랑 같은 필드 추가
 				if(isInVKey)_result+="<option value='VARIABLEKEY'>VARIABLE FIELD</option>";
 				
-				_result+="<option value='text(number)'>text(number)</option><option value='text(string)'>text(string)</option><option value='textarea'>textarea</option><option value='dictionary'>dictionary</option><option value='array(number)'>array(number)</option><option value='array(string)'>array(string)</option><option value='array(dict)'>array(dict)</option></select>";
+				_result+="<option value='text(string)'>text(string)</option><option value='text(number)'>text(number)</option><option value='textarea'>textarea</option><option value='dictionary'>dictionary</option><option value='array(number)'>array(number)</option><option value='array(string)'>array(string)</option><option value='array(dict)'>array(dict)</option></select>";
 				
 				_result+="<input type='button' value='add' class='LQJSONDictionaryEditorAdd'></td></tr>";
 				
