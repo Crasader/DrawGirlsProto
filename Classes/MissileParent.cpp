@@ -1354,24 +1354,27 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		
 		if(atype == "crash")
 		{
-			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
+//			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
+			AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3");
 			myGD->communication("Main_showWarning", 2);
 			
-			AudioEngine::sharedInstance()->playEffect("se_castmap.ogg", true);
+			AudioEngine::sharedInstance()->playEffect("se_castmap.mp3", true);
 //			AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
 			
 		}
 		else if(atype == "special")
 		{
-			AudioEngine::sharedInstance()->playEffect("se_castspecial.ogg", true);
+			AudioEngine::sharedInstance()->playEffect("se_castspecial.mp3", true);
+			AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3");
 //			AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
 		}
 		else // normal
 		{
 			myGD->communication("Main_showWarning", 1);
-			AudioEngine::sharedInstance()->playEffect("se_castmissile.ogg", true);
+			AudioEngine::sharedInstance()->playEffect("se_castmissile.mp3", true);
 //			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
-			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
+//			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
+			AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3");
 		}
 		ccbPiece->runTimeline(patternData); // "at" 같은게 넘어감.
 	}

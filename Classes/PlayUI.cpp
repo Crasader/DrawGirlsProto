@@ -925,7 +925,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
 		if(t_b)
 		{
-			AudioEngine::sharedInstance()->playEffect("se_area.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_area.mp3", false);
 			
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
@@ -971,6 +971,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f)
 		{
+			AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
+			
 			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)/100.f);
 			
 			int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
@@ -1081,6 +1083,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
 			addResultCCB("ui_missonfair.ccbi");
+			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3");
 			
 			endGame(false);
 		}
@@ -1090,6 +1093,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 void PlayUI::addResultClearCCB()
 {
 	addResultCCB("ui_stageclear.ccbi");
+	AudioEngine::sharedInstance()->playEffect("ment_stageclear1.mp3");
 }
 
 void PlayUI::addResultCCB(string ccb_filename)
@@ -1121,6 +1125,8 @@ void PlayUI::conditionClear ()
 	
 	CCSprite* success_ccb = KS::loadCCBI<CCSprite*>(this, "ui_missonsuccess.ccbi").first;
 	success_node->addChild(success_ccb);
+	
+	AudioEngine::sharedInstance()->playEffect("ment_mission_success.mp3");
 	
 	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 	CCCallFunc* t_call = CCCallFunc::create(success_node, callfunc_selector(CCNode::removeFromParent));
@@ -1155,6 +1161,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
 			addResultCCB("ui_missonfair.ccbi");
+			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3");
 			
 			endGame(false);
 			return;
@@ -1353,7 +1360,7 @@ void PlayUI::addGameTime30Sec ()
 {
 	if(countingCnt >= 130)
 	{
-		AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	}
 	
@@ -1396,7 +1403,7 @@ bool PlayUI::beRevivedJack ()
 			}));
 		}
 		
-		AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 		
 		return true;
@@ -1418,7 +1425,7 @@ bool PlayUI::beRevivedJack ()
 			
 			is_used_heartUpItem = true;
 			
-			AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+			AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //			AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 			
 			return true;
@@ -1692,19 +1699,20 @@ void PlayUI::counting ()
 		
 		if(countingCnt-1 == playtime_limit/3)
 		{
-			AudioEngine::sharedInstance()->playEffect("se_clock.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", false);
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 			if(myGD->game_step == kGS_limited)
 				myGD->communication("Main_setUnlimitMap");
 		}
 		else if(countingCnt-1 == playtime_limit-50)
 		{
-			AudioEngine::sharedInstance()->playEffect("se_clock.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", false);
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 		}
 		else if(countingCnt-1 == playtime_limit-30)
 		{
-			AudioEngine::sharedInstance()->playEffect("se_clock.ogg", true);
+			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", true);
+			AudioEngine::sharedInstance()->playEffect("ment_30second.mp3");
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}
 		
@@ -1728,6 +1736,8 @@ void PlayUI::counting ()
 			}
 			else
 			{
+				AudioEngine::sharedInstance()->playEffect("ment_timeover.mp3");
+				
 				t_is_die = true;
 				//			if(jack_life > 0)
 				//			{
@@ -1900,7 +1910,7 @@ void PlayUI::createBonusScore ()
 }
 void PlayUI::endGame (bool is_show_reason)
 {
-	AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+	AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	//		myGD->communication("CP_setGameover");
 	if(myGD->getIsGameover())
@@ -1993,6 +2003,8 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 }
 void PlayUI::searchEmptyPosition ()
 {
+	AudioEngine::sharedInstance()->playEffect("ment_99percent.mp3");
+	
 	CCPoint found_empty_position;
 	bool break_flag = false;
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd && !break_flag;i++)
@@ -2599,7 +2611,7 @@ void PlayUI::continueAction ()
 	
 	myDSH->saveUserData(save_userdata_list, nullptr);
 	
-	AudioEngine::sharedInstance()->stopEffect("se_clock.ogg");
+	AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	
 	total_time += countingCnt.getV();
@@ -2644,7 +2656,7 @@ void PlayUI::menuAction (CCObject * sender)
 	AudioEngine::sharedInstance()->playEffect("sound_buttonClick_Low.mp3", false);
 	int tag = ((CCNode*)sender)->getTag();
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	if(tag == kMenuTagUI_home && !isGameover)
 	{

@@ -92,7 +92,7 @@ private:
 		text_case->setPosition(ccp(112,95));
 		recent_right_img->addChild(text_case);
 		
-		AudioEngine::sharedInstance()->playEffect("se_cardget.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_cardget.mp3", false);
 		
 		CCScaleTo* t_scale = CCScaleTo::create(0.5f, 0.57f);
 		CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(129,161));

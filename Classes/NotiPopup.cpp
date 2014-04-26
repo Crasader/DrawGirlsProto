@@ -71,7 +71,7 @@ void NotiPopup::menuAction (CCObject * sender)
 		if(!is_menu_enable)
 			return;
 		
-			AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			
 		is_menu_enable = false;
 		

@@ -139,7 +139,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	CCSprite* price_type = CCSprite::create("common_button_gold.png");
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_type);
-	price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+	price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
@@ -176,7 +176,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	is_menu_enable = false;
 	
 	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
-	upgrade_price*=1000;
+	upgrade_price*=mySGD->getUpgradeGoldFee();
 	if(mySGD->getGold() < upgrade_price)// + use_item_price_gold.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
@@ -191,7 +191,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	before_gold = mySGD->getGold();
 	before_level = missile_level-1;
 	before_damage = StoneAttack::getPower((before_level)/5+1, (before_level)%5+1);
-	mySGD->setGold(before_gold-missile_level*1000);
+	mySGD->setGold(before_gold-missile_level*mySGD->getUpgradeGoldFee());
 	myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
 	
 	myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, json_selector(this, MissileUpgradePopup::resultSaveUserData));
@@ -204,7 +204,8 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("missile upgrade success!!");
 		
-		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+		AudioEngine::sharedInstance()->playEffect("se_upgrade.mp3", false);
 		
 		addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t){
 			upgrade_action_node->setScaleX(t/2.f + 0.5f);
@@ -344,7 +345,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	else
 	{
 		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString());
-		price_label->setString(CCString::createWithFormat("%d", missile_level*1000)->getCString());
+		price_label->setString(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString());
 	}
 	
 	upgrade_func();

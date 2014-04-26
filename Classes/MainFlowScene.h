@@ -89,6 +89,7 @@ private:
 	void setTable();
 	
 	void menuAction(CCObject* sender);
+	void detailCondition(CCObject* sender, CCControlEvent t_event);
 	
 	CCSprite* total_star;
 	

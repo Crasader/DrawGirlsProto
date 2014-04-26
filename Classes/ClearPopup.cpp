@@ -1130,7 +1130,7 @@ void ClearPopup::endTakeCard()
 
 void ClearPopup::starSound()
 {
-	AudioEngine::sharedInstance()->playEffect("se_resultstar.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_resultstar.mp3", false);
 }
 
 void ClearPopup::checkMiniGame()
@@ -1683,7 +1683,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 	
 	AudioEngine::sharedInstance()->stopAllEffects();
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
@@ -1709,7 +1709,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 		if(tag == kMT_CP_ok)
 		{
 			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
-			AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
+			AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 			//		mySGD->resetLabels();
 			
 			if(is_take_star_effect)
@@ -1734,15 +1734,25 @@ void ClearPopup::menuAction(CCObject* pSender)
 					if(ani_stars.size() > 0)
 						delay_time = 13.f + (ani_stars.size()-1)*19.f;
 					else
-						delay_time = 19.f;
+						delay_time = 30.f;
 					
 					addChild(KSTimer::create(delay_time/30.f, [=]()
 					{
-						addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t){
-							total_star->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
+						addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
+							total_star->setScale(1.f+t*0.2f);
 						}, [=](float t){
-							total_star->setPosition(star_origin_position + ccp(0,150));
-							hidePopup();
+							total_star->setScale(1.2f);
+							addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
+								total_star->setScale(1.2f - t*0.2f);
+							}, [=](float t){
+								total_star->setScale(1.f);
+								addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t){
+									total_star->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
+								}, [=](float t){
+									total_star->setPosition(star_origin_position + ccp(0,150));
+									hidePopup();
+								}));
+							}));
 						}));
 					}));
 					

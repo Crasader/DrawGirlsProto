@@ -1088,7 +1088,7 @@ void FailPopup::menuAction(CCObject* pSender)
 	
 	int tag = ((CCNode*)pSender)->getTag();
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 
 	
 	is_menu_enable = false;
@@ -1096,7 +1096,7 @@ void FailPopup::menuAction(CCObject* pSender)
 	if(tag == kMT_FP_main)
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
-		AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
+		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 //		mySGD->resetLabels();
 		hidePopup();
 	}

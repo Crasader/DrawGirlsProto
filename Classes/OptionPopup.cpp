@@ -562,7 +562,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		return;
 	}
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	is_menu_enable = false;
 	int tag = ((CCNode*)pSender)->getTag();

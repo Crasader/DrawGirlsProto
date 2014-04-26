@@ -378,6 +378,9 @@ public:
 	void setItemGachaReplayGoldFee(int t_i);
 	int getItemGachaReplayGoldFee();
 	
+	void setUpgradeGoldFee(int t_i);
+	int getUpgradeGoldFee();
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -542,6 +545,8 @@ private:
 	
 	KSProtectVar<int> item_gacha_gold_fee; // 아이템 가챠 가격
 	KSProtectVar<int> item_gacha_replay_gold_fee; // 아이템 가챠 다시뽑기 가격
+	
+	KSProtectVar<int> upgrade_gold_fee;
 	
 	
 	

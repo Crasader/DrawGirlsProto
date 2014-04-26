@@ -893,6 +893,8 @@ void MapScanner::setTopBottomBlock()
 
 void MapScanner::startRemoveBlock()
 {
+	AudioEngine::sharedInstance()->playEffect("ment_unlockmap.mp3");
+	
 	is_removed_top_block = false;
 	is_removed_bottom_block = false;
 	remove_block_cnt = 0;

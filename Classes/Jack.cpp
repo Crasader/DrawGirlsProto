@@ -1269,6 +1269,8 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	//		return;
 	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString());
+		
 		myGD->communication("UI_writeDie");
 		
 		myGD->communication("CP_onJackDie");
@@ -1559,7 +1561,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 
 		myGD->communication("Main_startSpecialAttack");
 		//			AudioEngine::sharedInstance()->playEffect("sound_jack_die.mp3", false);
-		AudioEngine::sharedInstance()->playEffect("sound_die_jack.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_die_jack.mp3", false);
 		isDie = true;
 		dieEffectCnt = 0;
 		
@@ -1670,15 +1672,25 @@ void Jack::takeSpeedUpItem()
 	if(myGD->jack_base_speed + speed_up_value >= 2.f)
 	{
 		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
+
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
 		
-		string missile_code;
-		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+		int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
+		int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
 		
-		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		int weapon_rank = weapon_level/5 + 1;
+		weapon_level = weapon_level%5 + 1;
 		
-		myGD->communication("MP_createJackMissile", missile_type, 1, missile_speed, getPosition());
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, 1, getPosition());
+		
+//		string missile_code;
+//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+//		
+//		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+//		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+//		
+//		myGD->communication("MP_createJackMissile", missile_type, 1, missile_speed, getPosition());
 	}
 	else
 	{
@@ -1836,6 +1848,8 @@ void Jack::dieEffect()
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 				
+				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString());
+				
 				startReviveAnimation(jackImg);
 			}
 			else if(myGD->getCommunicationBool("UI_beRevivedJack"))
@@ -1850,7 +1864,9 @@ void Jack::dieEffect()
 //				jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
 //				jackImg->setScale(0.8f);
 //				addChild(jackImg, kJackZ_main);
-
+				
+				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString());
+				
 				startReviveAnimation(jackImg);
 			}
 			else

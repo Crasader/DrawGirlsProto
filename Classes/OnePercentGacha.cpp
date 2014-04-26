@@ -95,7 +95,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		myLog->addLog(kLOG_gacha_onePercent, -1);
 		mySGD->setStar(mySGD->getStar() - mySGD->getGachaOnePercentFee());
 		
-		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
 		gacha_button->removeFromParent();
 		
@@ -187,7 +187,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		CCMenuItemLambda* cancel_item = CCMenuItemSpriteLambda::create(n_cancel, s_cancel, [=](CCObject* sender)
 																	   {
-																		   AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 
 																		   t_popup->removeFromParent();
 																		   is_menu_enable = true;
@@ -217,7 +217,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 																		CCLog("buy!");
 																		mySGD->setStar(mySGD->getStar()+NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0));
 																		
-																		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+																		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 																		
 																		is_menu_enable = true;
 																		
@@ -273,7 +273,7 @@ void OnePercentGacha::menuAction (CCObject * sender)
 	
 	is_menu_enable = false;
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	int tag = ((CCNode*)sender)->getTag();
 	

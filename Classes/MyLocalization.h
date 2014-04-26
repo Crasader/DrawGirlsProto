@@ -278,7 +278,16 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_mymissile,
 	kMyLocalKey_power,
 	kMyLocalKey_gacha,
-	kMyLocalKey_stageListDown
+	kMyLocalKey_stageListDown,
+	kMyLocalKey_frameOpenConditionTitle,
+	kMyLocalKey_frameOpenConditionContent,
+	kMyLocalKey_detailView,
+	kMyLocalKey_detailConditionPopupTitle,
+	kMyLocalKey_detailConditionPopupContent1,
+	kMyLocalKey_detailConditionPopupContent2,
+	kMyLocalKey_detailConditionPopupContent3,
+	kMyLocalKey_detailConditionPopupContent4,
+	kMyLocalKey_detailConditionPopupContent5
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()
