@@ -922,7 +922,7 @@ public:
 			}
 			{
 				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
-				KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
+				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
 //				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
 				
 				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));

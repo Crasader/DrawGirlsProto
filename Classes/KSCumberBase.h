@@ -287,6 +287,7 @@ public:
 		int collisionCount;
 		float timer;
 		float followDegree;
+		float stopTimer; //멈춤카운터
 	}m_follow;
 	struct Scale
 	{

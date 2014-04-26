@@ -439,8 +439,18 @@ void KSCumberBase::straightMoving(float dt)
 
 void KSCumberBase::followMoving(float dt)
 {
+
+	
 	m_scale.timer += 1/60.f;
 	m_follow.timer += 1 / 60.f;
+	
+	
+	if(myGD->getJackState() == jackStateNormal){
+		m_follow.stopTimer+=1/60.f;
+		if(getAiValue()/20.f<=m_follow.stopTimer){
+			unAggroExec();
+		}
+	}
 	
 	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
@@ -1537,7 +1547,7 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 		else if(bossIsClosed() && gainPercent <= 80.f)
 		{
-			ProbSelector teleportProb = {1,1};
+			ProbSelector teleportProb = {static_cast<double>((int)getAiValue())+1,600};	//보스가 빠져나올 확률. AI 0 일떄 0, 100일때 1초안에 50%
 			if(teleportProb.getResult() == 0 && 0) // 무조건 안하기.
 			{
 				std::string patternData = R"({
@@ -1557,6 +1567,8 @@ void KSCumberBase::cumberAttack(float dt)
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
 				m_furyCnt = -300;
 				outlineCountRatio.clear();
+			
+				//myGD->communication("Main_showTextMessage", std::string("갇힘 순간이동"));
 				return;
 			}
 			else
@@ -1614,29 +1626,33 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	else
 	{
-		const float originalAttackProb = m_attackPercent / 100;
+		const float originalAttackProb = m_attackPercent/100.f;
+		
 		float attackProb = originalAttackProb;
 		
 		// 선을 긋고 있을 땐 공격확률 높임
 		if(myGD->getJackState()==jackStateDrawing){
 			
 			m_adderCnt++;
-			float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
+			//float distance = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 			
-			//선긋기 시작한지 3초이후 && 멀리떨어지면 공격확률을 높임
-			if(m_adderCnt > 180 && distance > m_furyRule.userDistance / 2.f){
-				attackProb += 0.1;
-			}
+
+			//선긋고 있으면 공격확률을 점차 높힘
+			attackProb += (m_adderCnt/60.f*attackProb*0.2f); // 1초에 20%
+//			//선긋기 시작한지 3초이후 && 멀리떨어지면 공격확률을 높임
+//			if(m_adderCnt > MAX(240-(getAiValue()/100.f*120.f),60)){ // && distance > m_furyRule.userDistance / 2.f // 거리룰 빼고, 선긋기시간 ai와 연동
+//				attackProb += 0.1;
+//			}
 		}else{
 			//안그을땐 초기화
 			m_adderCnt = 0;
 		}
 		
-		// 많이 맞았으면 공격확률 높임.
-		if(getLife() / getTotalLife() <= 0.3f)
-		{
-			attackProb += aiProbAdder();
-		}
+//		// 많이 맞았으면 공격확률 높임.
+//		if(getLife() / getTotalLife() <= 0.3f)
+//		{
+//			attackProb += aiProbAdder();
+//		}
 		
 		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
 		
@@ -2241,15 +2257,15 @@ void KSCumberBase::setGameover()
 void KSCumberBase::movingAndCrash( float dt )
 {
 	bool bossIsClosed_ = bossIsClosed();
-//	if(bossIsClosed_)
-//	{
-//		KS::setColor(this, ccc3(0, 255, 0));
-//		//myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
-//	}
-//	else
-//	{
-//		KS::setColor(this, ccc3(255, 255, 255));
-//	}
+	if(bossIsClosed_)
+	{
+		//KS::setColor(this, ccc3(0, 255, 0));
+		//myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
+	}
+	else
+	{
+		//KS::setColor(this, ccc3(255, 255, 255));
+	}
 	checkConfine(dt);
 	
 	if(m_state == kCumberStateFury)
@@ -2315,7 +2331,7 @@ void KSCumberBase::followProcess(float dt)
 			if(mainCumber->m_normalMovement == MOVEMENT::FOLLOW_TYPE &&
 				 mainCumber->m_drawMovement == MOVEMENT::FOLLOW_TYPE)
 			{
-				aggroCount++;
+				aggroCount=99;
 			}
 
 			for(auto i : myGD->getSubCumberVector())
@@ -2327,7 +2343,7 @@ void KSCumberBase::followProcess(float dt)
 				}
 
 			}
-			if(aggroCount < 2)
+			if(aggroCount < getAiValue()/30+1) //AI에 따라 따라갈놈 갯수를 설정함
 			{
 				aggroExec();
 			}
@@ -2550,7 +2566,6 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	float agi = MAX(boss.get("agi", 0).asDouble(), 0);
 	float ai = MAX(0, boss.get("ai", 0).asInt() );
 	
-	settingFuryRule();
 	m_totalHp = m_remainHp = hp;
 	m_agility = agi;
 	m_aiValue = ai;
@@ -2599,9 +2614,9 @@ void KSCumberBase::applyPassiveData(const std::string& passive)
 }
 void KSCumberBase::settingFuryRule()
 {
-	m_furyRule.gainPercent = 40;
-	m_furyRule.userDistance = 300;
-	m_furyRule.percent = mySGD->getFuryPercent() * getAiValue() / 10000.f;
+	m_furyRule.gainPercent = 40.f;
+	m_furyRule.userDistance = 300+((100-getAiValue())/100.f*200); // ai에 따라 분노 거리를 변경 500~300
+	m_furyRule.percent = 0.005f;
 	//		m_furyRule
 }
 
@@ -2633,9 +2648,9 @@ void KSCumberBase::applyAutoBalance()
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 
 	if(vCount>0){
-		m_aiValue = m_aiValue+10*vCount;
-		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.1;
-		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.1;
+		m_aiValue = m_aiValue+5*vCount;
+		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.05;
+		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.05;
 	}
 	
 	
@@ -2940,17 +2955,22 @@ void KSCumberBase::setAgility( float ag )
 
 void KSCumberBase::aggroExec()
 {
+	
+//	myGD->communication("Main_showTextMessage", std::string("팔로우..!!!"));
+	
 	m_drawMovement = FOLLOW_TYPE;
 	m_normalMovement = FOLLOW_TYPE;
-	//KS::setColor(this, ccc3(255, 0, 0));
+	//KS::setColor(this, ccc3(255, 255, 0));
 	CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 	m_follow.timer = 1.1f;
 	m_follow.collisionCount = 0;
 	m_follow.lastMapCollisionTime = 0.f;
+	m_follow.stopTimer=0;//멈춤카운터 초기화
 	m_follow.followDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetPlusMinus() * m_well512.GetFloatValue(60, 120);	
 }
 void KSCumberBase::unAggroExec()
 {
+	//myGD->communication("Main_showTextMessage", std::string("어그로풀림"));
 	m_normalMovement = m_originalNormalMovement;
 	m_drawMovement = m_normalMovement;
 	//KS::setColor(this, ccc3(255, 255, 255));
