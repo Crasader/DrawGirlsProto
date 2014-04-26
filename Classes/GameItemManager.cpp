@@ -56,7 +56,7 @@ void GameItemBase::framing()
 
 void GameItemBase::acting()
 {
-	AudioEngine::sharedInstance()->playEffect("se_item.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_item.mp3", false);
 }
 
 void GameItemBase::setTakeEffectFunc(CCObject* t_effect, SEL_CallFuncCCp d_effect)
@@ -381,6 +381,8 @@ void GameItemAttack::acting()
 {
 	GameItemBase::acting();
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "attack");
+	
+	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
 	
 	int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
 	int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));

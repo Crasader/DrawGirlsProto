@@ -38,6 +38,7 @@
 #include "SumranMailPopup.h"
 #include "LoadingLayer.h"
 #include "KSLabelTTF.h"
+#include "DetailConditionPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -130,7 +131,7 @@ bool MainFlowScene::init()
 	bool is_openning = false;
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
-		AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
+		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 		
 		is_openning = true;
 		topOpenning();
@@ -396,7 +397,7 @@ void MainFlowScene::setTable()
 	int myPosition = puzzle_table->minContainerOffset().x;
 	for(int i=0; i<numberOfCellsInTableView(puzzle_table); i++)
 	{
-		if(puzzle_number == NSDS_GI(kSDS_GI_eventList_int1_no_i, i+1))
+		if(puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
 		{
 			myPosition = i+1;
 			break;
@@ -498,7 +499,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	int tag = ((CCNode*)sender)->getTag();
 //	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
@@ -555,7 +556,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 		}
 		else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
 		{
-			AudioEngine::sharedInstance()->playEffect("se_lock.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_lock.mp3", false);
 			
 			int puzzle_number = tag - kMainFlowTableCellTag_buyBase;
 			CCLog("puzzle_number : %d", puzzle_number);
@@ -617,7 +618,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 				CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
 					mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
 					
-					AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+					AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 					
 					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
@@ -662,7 +663,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 		}
 		else // ticketBase
 		{
-			AudioEngine::sharedInstance()->playEffect("se_lock.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_lock.mp3", false);
 			
 			int puzzle_number = tag - kMainFlowTableCellTag_ticketBase;
 			
@@ -789,10 +790,37 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 			
-			KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
-			not_clear_label->enableOuterStroke(ccBLACK, 1.f);
-			not_clear_label->setPosition(ccp(67.5f,138.5f));
-			not_clear_img->addChild(not_clear_label);
+			if(before_close_count == 1)
+			{
+				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
+				condition_title->setColor(ccc3(255, 177, 38));
+				condition_title->setPosition(ccp(67.5f, 143.5f));
+				not_clear_img->addChild(condition_title);
+				
+				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), 0)->getCString(), mySGD->getFont().c_str(), 9);
+				condition_content->setPosition(ccp(67.5f, 122.5f));
+				not_clear_img->addChild(condition_content);
+				
+				CCLabelTTF* c_label = CCLabelTTF::create();
+				KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 10);
+				detail_label->setPosition(ccp(0,0));
+				c_label->addChild(detail_label);
+				
+				CCScale9Sprite* detail_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+				
+				CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
+				detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
+				detail_button->setPreferredSize(CCSizeMake(75,35));
+				detail_button->setPosition(ccp(67.5f,94.5f));
+				not_clear_img->addChild(detail_button);
+			}
+			else
+			{
+				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
+				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
+				not_clear_label->setPosition(ccp(67.5f,138.5f));
+				not_clear_img->addChild(not_clear_label);
+			}
 		}
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
@@ -848,7 +876,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		
 		cell_node->addChild(KSTimer::create(0.7f, [=]()
 											{
-												AudioEngine::sharedInstance()->playEffect("se_puzzleopen_2.ogg", false);
+												AudioEngine::sharedInstance()->playEffect("se_puzzleopen_2.mp3", false);
 												cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
 																			  {
 																				  if(t < 1.f)
@@ -872,6 +900,17 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	}
 	
 	return cell;
+}
+
+void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
+	addChild(t_popup, kMainFlowZorder_popup);
 }
 
 void MainFlowScene::endUnlockAnimation()
@@ -919,7 +958,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 	if(!is_menu_enable)
 		return;
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	int tag = ((CCNode*)sender)->getTag();
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
@@ -1556,7 +1595,7 @@ void MainFlowScene::setBottom()
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 {
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	Json::Value v = mySGD->cgp_data;
 	
@@ -1573,7 +1612,7 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 		{
 			hspConnector::get()->completePromotion();
 			
-			AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 			
 			mySGD->cgp_data.clear();
 			mySGD->cgp_data["promotionstate"] = "CGP_NONE";
@@ -1589,7 +1628,7 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 
 void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 {
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	Json::Value v = mySGD->cgp_data;
 	
@@ -1606,7 +1645,7 @@ void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 		{
 			hspConnector::get()->completeInstallPromotion();
 			
-			AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 			
 			mySGD->cgp_data.clear();
 			mySGD->cgp_data["promotionstate"] = "CGP_NONE";

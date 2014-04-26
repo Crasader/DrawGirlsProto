@@ -98,7 +98,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 	
 	if(m_remainHp <= 0)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_subdie.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_subdie.mp3", false);
 		
 		myGD->communication("CP_removeSubCumber", this);
 		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");

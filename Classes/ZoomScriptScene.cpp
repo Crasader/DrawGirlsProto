@@ -49,7 +49,7 @@ bool ZoomScript::init()
         return false;
     }
 	
-	AudioEngine::sharedInstance()->playSound("bgm_normalshow.ogg", true);
+	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
 	
 	CCLayer* top_bottom_layer = CCLayer::create();
 	top_bottom_layer->setPosition(ccp(0, 0));
@@ -226,7 +226,7 @@ void ZoomScript::moveChecking()
 
 void ZoomScript::menuAction(CCObject *sender)
 {
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 
 	
 	if(!is_actioned)
@@ -242,6 +242,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		
 		if(is_showtime)
 		{
+			AudioEngine::sharedInstance()->playEffect("bgm_gameclear.mp3");
 			showtime_back = CCSprite::create("showtime_back.png");
 			showtime_back->setScale(10.f);
 			showtime_back->setPosition(ccp(240,myDSH->ui_center_y));

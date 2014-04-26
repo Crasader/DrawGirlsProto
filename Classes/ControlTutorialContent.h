@@ -142,7 +142,7 @@ private:
 	
 	void menuAction(CCObject* sender)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
 		if(state_number == 1)
 		{

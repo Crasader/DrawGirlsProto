@@ -1538,7 +1538,7 @@ void PlayTutorial::nextStep()
 											
 											mySGD->setGold(mySGD->getGold() + 5000);
 											
-											AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 											
 											t_sm->addMent(true, "", "", "基本チュートリアルが終わりました。\n5000ゴールドをプレゼントします。\n本ゲームに戻ります。", [=]()
 														  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()

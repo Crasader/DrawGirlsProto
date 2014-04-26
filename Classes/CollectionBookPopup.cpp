@@ -1457,7 +1457,7 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 	
 	is_menu_enable = false;
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	int tag = ((CCNode*)pSender)->getTag();
 	
@@ -1487,12 +1487,12 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCBP_MT_pre)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_pageturn.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_pageturn.mp3", false);
 		startPrePageFull();
 	}
 	else if(tag == kCBP_MT_next)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_pageturn.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_pageturn.mp3", false);
 		startNextPageFull();
 	}
 	else if(tag >= kCBP_MT_cardBase)

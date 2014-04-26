@@ -37,6 +37,8 @@ $(document).ready(function(){
 			<th field="openDate" viewer='{"type":"text"}'>최초오픈일시</th>
 			<th field="openType" viewer='{"type":"text"}'>오픈유형</th>
 			<th field="state" viewer='{"type":"text"}'>진행상태</th>
+			<th field="clearDate" viewer='{"type":"text"}'>클리어시각</th>
+			<th field="perfectDate" viewer='{"type":"text"}'>퍼펙트클리어시각</th>
 			<th field="reward" viewer='{"type":"text"}'>보상</th>
 		</tr>
 	</thead>

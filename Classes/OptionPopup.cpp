@@ -76,6 +76,24 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
+	
+	Json::Value param;
+	param["productid"] = "g_10289_001";
+	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+		if(v["issuccess"].asInt())
+		{
+//			reqItemDelivery(); // ;
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getMemberID();
+			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
+				// 여기서 진짜 갱신.
+				KS::KSLog("refresh !!!!", t);
+			});
+		}
+		KS::KSLog("in-app test \n%", v);
+	});
+	
+	
 	setTouchEnabled(true);
 	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
@@ -562,7 +580,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		return;
 	}
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	is_menu_enable = false;
 	int tag = ((CCNode*)pSender)->getTag();

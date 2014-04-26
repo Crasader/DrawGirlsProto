@@ -128,14 +128,16 @@ if(!$stopCommand){
             $p2["memberID"]= $param["memberID"];
             if(!$p2["memberID"])$p2["memberID"]= $param["hspMemberNo"];
             if(!$p2["memberID"])$p2["memberID"]= $param["memberNo"];
-    
+        
+
+            $r["log"] = LogManager::get()->getLog();
+
             $p2["category"]=$a;
             $p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
             $p2["output"]=$r;
             $p2["execTime"]=$endTime-$startTime;
             if($a!="writelog")$command->writelog($p2);
-            
-            $r["log"] = LogManager::get()->getLogAndClear();
+            LogManager::get()->getLogAndClear();
             $allResult[$cmd]= $r;
         }else if($a=="help"){
             $class_methods = get_class_methods('commandClass');

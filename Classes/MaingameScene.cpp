@@ -712,7 +712,7 @@ void Maingame::initJackPosition(CCPoint jack_position)
 
 void Maingame::startScene()
 {
-	AudioEngine::sharedInstance()->playSound("sound_back_maingame.ogg", true);
+	AudioEngine::sharedInstance()->playSound("sound_back_maingame.mp3", true);
 	AudioEngine::sharedInstance()->preloadEffectScene("Maingame");
 	
 	startCounting();
@@ -792,6 +792,7 @@ void Maingame::startCounting()
 	addChild(condition_spr, conditionLabelZorder);
 	reader->release();
 	
+	
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y));
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.1f);
@@ -830,6 +831,7 @@ void Maingame::counting()
 		
 		if(countingCnt/60 == 1)
 		{
+			AudioEngine::sharedInstance()->playEffect("ment_go.mp3");
 			setTag(1);
 			myJack->isStun = false;
 			myCP->onStartGame();
@@ -848,7 +850,7 @@ void Maingame::gachaOn()
 	myLog->addLog(kLOG_gacha_startMap, -1);
 	mySGD->setGold(mySGD->getGold() - mySGD->getGachaMapFee());
 	
-	AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
 	myGD->resetGameData();
 	mySGD->startMapGachaOn();
@@ -887,7 +889,7 @@ bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 		setTouchEnabled(false);
 		init_state = kMIS_randomRectView;
 		ignore_cnt = 0;
-		AudioEngine::sharedInstance()->playEffect("se_mapgacha.ogg", true);
+		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		randomingRectView();
 		schedule(schedule_selector(Maingame::randomingRectView), 1.f/30.f);
 		
@@ -899,8 +901,8 @@ bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 		myMS->stopRandomingRectView();
 		touch_img->removeFromParent();
 		
-		AudioEngine::sharedInstance()->stopEffect("se_mapgacha.ogg");
-		AudioEngine::sharedInstance()->playEffect("se_mapgacha_end.ogg", false);
+		AudioEngine::sharedInstance()->stopEffect("se_mapgacha.mp3");
+		AudioEngine::sharedInstance()->playEffect("se_mapgacha_end.mp3", false);
 		
 		init_state = kMIS_startGame;
 		setTouchEnabled(false);
@@ -1073,7 +1075,9 @@ void Maingame::startControl()
 void Maingame::removeConditionLabel()
 {
 	//		AudioEngine::sharedInstance()->playEffect("sound_ready.mp3", false);
-	AudioEngine::sharedInstance()->playEffect("sound_gamestart.mp3", false);
+//	AudioEngine::sharedInstance()->playEffect("sound_gamestart.mp3", false);
+	
+	AudioEngine::sharedInstance()->playEffect("ment_ready.mp3");
 
 	myGIM->startItemSetting();
 	myGIM->startCounting();
@@ -1103,7 +1107,7 @@ void Maingame::stunBackTracking()
 	if(!myJack->isMoving)
 	{
 		isCheckingBacking = true;
-		AudioEngine::sharedInstance()->playEffect("se_drawcancel.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_drawcancel.mp3", false);
 //		AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
 		schedule(schedule_selector(Maingame::stunBacking));
 	}
@@ -1152,7 +1156,7 @@ void Maingame::readyBackTracking()
 
 void Maingame::startBackTracking()
 {
-	AudioEngine::sharedInstance()->playEffect("se_drawcancel.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_drawcancel.mp3", false);
 //	AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
 	((ControlJoystickButton*)mControl)->isBacking = true;
 	schedule(schedule_selector(Maingame::backTracking));
@@ -1213,8 +1217,10 @@ void Maingame::gameover()
 
 	if(mySGD->getIsCleared())
 	{
-		AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
-		AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
+		AudioEngine::sharedInstance()->playEffect("bgm_result.mp3");
+//		AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString());
 		ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 1.f, game_node, this, callfunc_selector(Maingame::clearScenario));
 		game_node->addChild(t_cst, clearshowtimeZorder);
 
@@ -1226,8 +1232,10 @@ void Maingame::gameover()
 	{
 		myUI->stopCounting();
 		
-		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
-		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
+		AudioEngine::sharedInstance()->playEffect("bgm_gameover.mp3");
+//		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString());
 
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
@@ -1358,7 +1366,7 @@ void Maingame::clearScenario2()
 					  
 					  CCMenuItemLambda* goldbox1_item = CCMenuItemSpriteLambda::create(n_goldbox1, s_goldbox1, [=](CCObject* sender)
 																					   {
-																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.ogg", false);
+																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
 																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
@@ -1471,7 +1479,7 @@ void Maingame::clearScenario2()
 					  
 					  CCMenuItemLambda* goldbox2_item = CCMenuItemSpriteLambda::create(n_goldbox2, s_goldbox2, [=](CCObject* sender)
 																					   {
-																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.ogg", false);
+																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
 																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
@@ -1584,7 +1592,7 @@ void Maingame::clearScenario2()
 					  
 					  CCMenuItemLambda* goldbox3_item = CCMenuItemSpriteLambda::create(n_goldbox3, s_goldbox3, [=](CCObject* sender)
 																					   {
-																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.ogg", false);
+																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
 																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
@@ -1732,6 +1740,8 @@ void Maingame::clearScenario3()
 {
 	if(myUI->getPercentage() >= 1.f)
 	{
+		AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3");
+		
 		CCSprite* spin_light = CCSprite::create("showtime_spin_light.png");
 		spin_light->setOpacity(0);
 		spin_light->setPosition(ccp(240,myDSH->ui_center_y));
@@ -2188,6 +2198,8 @@ void Maingame::showTextMessage(const std::string& text)
 }
 void Maingame::showTakeCoin()
 {
+	AudioEngine::sharedInstance()->playEffect("ment_spread_change.mp3");
+	
 	TakeCoin* t_w = TakeCoin::create();
 	addChild(t_w, goldZorder);
 }
@@ -2215,6 +2227,8 @@ void Maingame::takeExchangeCoin( CCPoint t_start_position, int t_coin_number )
 
 void Maingame::startExchange()
 {
+	AudioEngine::sharedInstance()->playEffect("ment_change_success.mp3");
+	
 	mySD->exchangeSilhouette();
 	myMS->exchangeMS();
 	
@@ -2835,7 +2849,7 @@ void Maingame::goReplay ()
 	AudioEngine::sharedInstance()->stopAllEffects();
 	AudioEngine::sharedInstance()->stopSound();
 	
-	AudioEngine::sharedInstance()->playSound("bgm_ui.ogg", true);
+	AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 	
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();

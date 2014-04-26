@@ -885,7 +885,7 @@ public:
 		// 몬스터가 맞는 조건
 		if(distance <= 4)
 		{
-			AudioEngine::sharedInstance()->playEffect("se_monattacked.ogg", false);
+			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
 			
 			CCPoint effectPosition = m_missileSprite->getPosition();
 			effectPosition.x += rand()%21 - 10;

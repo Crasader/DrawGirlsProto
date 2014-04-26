@@ -1565,3 +1565,12 @@ int StarGoldData::getItemGachaReplayGoldFee()
 {
 	return item_gacha_replay_gold_fee.getV();
 }
+
+void StarGoldData::setUpgradeGoldFee(int t_i)
+{
+	upgrade_gold_fee = t_i;
+}
+int StarGoldData::getUpgradeGoldFee()
+{
+	return upgrade_gold_fee.getV();
+}

@@ -1527,7 +1527,7 @@ void ControlJoystickButton::onButton()
 {
 	if(button_ani)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+//		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
 		button_ani->runAnimationsForSequenceNamed("cast1start");
 		click_label->stopAllActions();
@@ -1540,7 +1540,7 @@ void ControlJoystickButton::offButton()
 {
 	if(button_ani)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+//		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
 		button_ani->runAnimationsForSequenceNamed("cast1stop");
 		click_label->stopAllActions();

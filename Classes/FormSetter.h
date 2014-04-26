@@ -249,6 +249,12 @@ public:
 					
 					if((*it2) && !(it->second).data["anchorX"].isNull())
 						(*it2)->setAnchorPoint(ccp((it->second).data.get("anchorX", 0).asFloat(),(it->second).data.get("anchorY", 0).asFloat()));
+					
+					if((*it2) && !(it->second).data["w"].isNull())
+						(*it2)->setContentSize(CCSizeMake((it->second).data.get("w", 0).asFloat(),(*it2)->getContentSize().height));
+											   
+					if((*it2) && !(it->second).data["h"].isNull())
+						(*it2)->setContentSize(CCSizeMake((*it2)->getContentSize().width, (it->second).data.get("h", 0).asFloat()));
 				}
 				
 				

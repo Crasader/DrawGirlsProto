@@ -14,6 +14,12 @@
         android:hardwareAccelerated="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
+        <meta-data
+            android:name="adbrix_app_key"
+            android:value="58229468" />
+        <meta-data
+            android:name="adbrix_hash_key"
+            android:value="03c0b0579dd4470b" />
 
         <!-- facebook -->
         <activity
@@ -41,7 +47,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- [HSP SDK] NPush Global begin -->
+        <receiver
+            android:name="com.igaworks.adbrixtracersdk.cores.ADBrixReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <meta-data android:name="adbrix_market_info" android:value="Google" />
+<!-- [HSP SDK] NPush Global begin -->
         <receiver android:name="com.hangame.hsp.push.NPushBroadcastReceiver" >
             <intent-filter>
 
@@ -131,7 +145,13 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 알림에서 사용. 앱이 절전모드에서 빠져나올수 있도록함 -->
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" /><uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- HSP permission end -->
 
 

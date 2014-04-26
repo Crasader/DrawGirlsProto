@@ -21,6 +21,7 @@
 #include "MyLocalization.h"
 #include "KSLabelTTF.h"
 #include <random>
+#include "AudioEngine.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -177,6 +178,8 @@ void TitleRenewalScene::successLogin()
 	{
 		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
 	}
+	
+	AudioEngine::sharedInstance()->playEffect("ment_title.mp3");
 	
 	is_loaded_server = false;
 	
@@ -500,6 +503,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setItemGachaGoldFee(result_data["itemGachaGoldFee"].asInt());
 		mySGD->setItemGachaReplayGoldFee(result_data["itemGachaReplayGoldFee"].asInt());
+		mySGD->setUpgradeGoldFee(result_data["upgradeGoldFee"].asInt());
 	}
 	else
 	{
@@ -981,8 +985,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 			
 			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
-			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["stage"].asInt(), false);
-			NSDS_SI(t_card["stage"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			Json::Value t_card_missile = t_card["missile"];
 			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
@@ -1753,7 +1757,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	
 	is_menu_enable = false;
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	int tag = ((CCNode*)sender)->getTag();
 	

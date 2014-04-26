@@ -503,7 +503,7 @@ void StartSettingPopup::setMain()
 		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
 		n_price_type->setPosition(ccp(25,22));
 		n_upgrade->addChild(n_price_type);
-		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
 		n_price_label->setColor(ccBLACK);
 		n_price_label->setPosition(ccp(78,22));
 		n_upgrade->addChild(n_price_label);
@@ -517,7 +517,7 @@ void StartSettingPopup::setMain()
 		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
 		s_price_type->setPosition(ccp(25,22));
 		s_upgrade->addChild(s_price_type);
-		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
 		s_price_label->setColor(ccBLACK);
 		s_price_label->setPosition(ccp(78,22));
 		s_upgrade->addChild(s_price_label);
@@ -685,7 +685,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
 			n_price_type->setPosition(ccp(25,22));
 			n_upgrade->addChild(n_price_type);
-			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
 			n_price_label->setColor(ccBLACK);
 			n_price_label->setPosition(ccp(78,22));
 			n_upgrade->addChild(n_price_label);
@@ -699,7 +699,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
 			s_price_type->setPosition(ccp(25,22));
 			s_upgrade->addChild(s_price_type);
-			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
+			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
 			s_price_label->setColor(ccBLACK);
 			s_price_label->setPosition(ccp(78,22));
 			s_upgrade->addChild(s_price_label);
@@ -749,7 +749,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 	{
 		CCLog("save userdata success!!");
 		
-		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
 		ItemGachaPopup* t_popup = ItemGachaPopup::create(touch_priority-100, [=](){endItemGacha();}, [=](int item_type){
 			
@@ -1097,7 +1097,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 										{
 											mySGD->setGold(mySGD->getGold()-mySD->getItemPrice(item_list[clicked_item_idx]));
 											
-											AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 											
 											buySuccessItem(clicked_item_idx, 1);
 										}
@@ -1178,7 +1178,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 										{
 											mySGD->setStar(mySGD->getStar()-mySD->getItemPrice(item_list[clicked_item_idx]));
 											
-											AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 											
 											buySuccessItem(clicked_item_idx, 1);
 										}
@@ -1550,7 +1550,7 @@ void StartSettingPopup::goToGame()
 	
 	mySGD->setGameStart();
 	
-	AudioEngine::sharedInstance()->playEffect("se_heartuse.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_heartuse.mp3", false);
 	
 	AudioEngine::sharedInstance()->stopSound();
 	

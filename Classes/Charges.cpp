@@ -163,9 +163,10 @@ void ChargeNodeLambda::startCharge()
 {
 	//myGD->communication("Main_showWarning", 1);
 	charge_cnt = 0;
-	AudioEngine::sharedInstance()->playEffect("se_castmissile.ogg", true);
+	AudioEngine::sharedInstance()->playEffect("se_castmissile.mp3", true);
 //	AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
-	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
+//	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
+	AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3");
 	schedule(schedule_selector(ChargeNodeLambda::charging));
 }
 
@@ -173,7 +174,7 @@ void ChargeNodeLambda::cancelCharge()
 {
 	auto p = dynamic_cast<KSCumberBase*>(real_target);
 	if(p) p->onCanceledCasting();
-	AudioEngine::sharedInstance()->stopEffect("se_castmissile.ogg");
+	AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 	removeSelf();
 }
@@ -192,7 +193,7 @@ void ChargeNodeLambda::charging()
 	particle.first->setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 	if(charge_cnt >= charge_frame)
 	{
-		AudioEngine::sharedInstance()->stopEffect("se_castmissile.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		actionFunction(real_target);
 		removeSelf();
@@ -272,7 +273,8 @@ void SpecialChargeNodeLambda::setChargeColor( ccColor4F change_color )
 void SpecialChargeNodeLambda::startCharge()
 {
 	charge_cnt = 0;
-	AudioEngine::sharedInstance()->playEffect("se_castspecial.ogg", true);
+	AudioEngine::sharedInstance()->playEffect("se_castspecial.mp3", true);
+	AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3");
 //	AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
 	//myGD->communication("Main_showWarning", 3);
 	schedule(schedule_selector(SpecialChargeNodeLambda::charging));
@@ -283,7 +285,7 @@ void SpecialChargeNodeLambda::cancelCharge()
 	auto p = dynamic_cast<KSCumberBase*>(real_target);
 	if(p) 
 		p->onCanceledCasting();
-	AudioEngine::sharedInstance()->stopEffect("se_castspecial.ogg");
+	AudioEngine::sharedInstance()->stopEffect("se_castspecial.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 	//		if(cancel_target && cancel_delegate)
 	//			(cancel_target->*cancel_delegate)(real_target);
@@ -303,7 +305,7 @@ void SpecialChargeNodeLambda::charging()
 	particle.first->setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 	if(charge_cnt >= charge_frame)
 	{
-		AudioEngine::sharedInstance()->stopEffect("se_castspecial.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_castspecial.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 		actionFunction(real_target);
 		removeSelf();
@@ -375,10 +377,11 @@ void CrashChargeNodeLambda::setChargeColor( ccColor4F change_color )
 
 void CrashChargeNodeLambda::startCharge()
 {
-	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
+//	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
+	AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3");
 	//myGD->communication("Main_showWarning", 2);
 	charge_cnt = 0;
-	AudioEngine::sharedInstance()->playEffect("se_castmap.ogg", true);
+	AudioEngine::sharedInstance()->playEffect("se_castmap.mp3", true);
 //	AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
 	schedule(schedule_selector(CrashChargeNodeLambda::charging));
 }
@@ -389,7 +392,7 @@ void CrashChargeNodeLambda::cancelCharge()
 	if(p) p->onCanceledCasting();
 
 	//		myGD->communication("CP_setCasting", false);
-	AudioEngine::sharedInstance()->stopEffect("se_castmap.ogg");
+	AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 	//		if(cancel_target && cancel_delegate)
 	//			(cancel_target->*cancel_delegate)(real_target);
@@ -423,7 +426,7 @@ void CrashChargeNodeLambda::charging()
 	{
 		//			myGD->communication("CP_setCasting", false);
 		AudioEngine::sharedInstance()->stopAllEffects();
-		AudioEngine::sharedInstance()->stopEffect("se_castmap.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		actionFunction(real_target);
 		CCLog("removeSelf call");

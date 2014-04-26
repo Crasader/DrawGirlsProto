@@ -279,7 +279,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 										 {
 											 KS::setOpacity(m_container, 255);
 											 question_manager->runAnimationsForSequenceNamed("Default Timeline");
-											 AudioEngine::sharedInstance()->playEffect("se_itemgacha.ogg", false);
+											 AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
 										 }));
 }
 
@@ -325,7 +325,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("save userdata success!!");
 		
-		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
 		KS::setOpacity(question_img, 255);
 		item_img->removeFromParent();
@@ -335,7 +335,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		use_button->setVisible(false);
 		
 		question_manager->runAnimationsForSequenceNamed("Default Timeline");
-		AudioEngine::sharedInstance()->playEffect("se_itemgacha.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
 	}
 	else
 	{

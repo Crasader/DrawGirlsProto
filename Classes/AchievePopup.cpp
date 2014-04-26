@@ -202,7 +202,7 @@ void AchievePopup::menuAction(CCObject* pSender)
 	}
 	is_menu_enable = false;
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 
 	
 	int tag = ((CCNode*)pSender)->getTag();
@@ -416,7 +416,7 @@ void AchievePopup::cellAction( CCObject* sender )
 	else if(reward_type == kAchieveRewardType_gold)
 		mySGD->setGold(mySGD->getGold() + reward_value);
 	
-	AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
 	keep_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag]);
 	myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag], -1);
@@ -859,7 +859,7 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	mySGD->setGold(mySGD->getGold() + keep_take_gold);
 	
 	if(keep_take_ruby > 0 || keep_take_gold > 0)
-		AudioEngine::sharedInstance()->playEffect("se_buy.ogg", false);
+		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
 	myDSH->saveUserData({kSaveUserData_Key_achieve, kSaveUserData_Key_gold, kSaveUserData_Key_star}, json_selector(this, AchievePopup::resultSaveUserData));
 }

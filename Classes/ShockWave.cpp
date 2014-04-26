@@ -15,7 +15,7 @@ void ShockWave::stopSW ()
 	unschedule(schedule_selector(ShockWave::ingSW));
 	if(!is_removing)
 	{
-		AudioEngine::sharedInstance()->stopEffect("se_energywave.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_energywave.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_bomb_wave.mp3");
 		is_removing = true;
 		ing_frame = 0;
@@ -37,7 +37,7 @@ void ShockWave::removeProcess ()
 	if(ing_frame > 35)
 	{
 		unschedule(schedule_selector(ShockWave::removeProcess));
-		AudioEngine::sharedInstance()->stopEffect("se_energywave.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_energywave.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_bomb_wave.mp3");
 		removeFromParentAndCleanup(true);
 	}
@@ -107,7 +107,7 @@ void SW_Parent::createSW (IntPoint t_create_point)
 {
 	if(getChildrenCount() == 0)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_energywave.ogg", true);
+		AudioEngine::sharedInstance()->playEffect("se_energywave.mp3", true);
 //		AudioEngine::sharedInstance()->playEffect("sound_bomb_wave.mp3", true);
 		ShockWave* t_sw = ShockWave::create(t_create_point);
 		addChild(t_sw);
@@ -123,7 +123,7 @@ void SW_Parent::stopAllSW ()
 	if(!is_justDie)
 	{
 		CCArray* my_child = getChildren();
-		AudioEngine::sharedInstance()->stopEffect("se_energywave.ogg");
+		AudioEngine::sharedInstance()->stopEffect("se_energywave.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_bomb_wave.mp3");
 		for(int i=0;i<getChildrenCount();i++)
 		{
