@@ -376,9 +376,9 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	int return_value;
 	
 	if(t_code == kAchievementCode_gold1 || t_code == kAchievementCode_gold2 || t_code == kAchievementCode_gold3)
-	{	return_value = mySGD->getGold();	}
+	{	return_value = mySGD->getGoodsValue(kGoodsType_gold);	}
 	else if(t_code == kAchievementCode_ruby1 || t_code == kAchievementCode_ruby2 || t_code == kAchievementCode_ruby3)
-	{	return_value = mySGD->getStar();	}
+	{	return_value = mySGD->getGoodsValue(kGoodsType_ruby);	}
 	else if(t_code == kAchievementCode_heart1 || t_code == kAchievementCode_heart2 || t_code == kAchievementCode_heart3)
 	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_sendHeartCnt);	}
 	else if(t_code == kAchievementCode_bonusGame1 || t_code == kAchievementCode_bonusGame2 || t_code == kAchievementCode_bonusGame3)

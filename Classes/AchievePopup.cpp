@@ -404,6 +404,8 @@ void AchievePopup::cellAction( CCObject* sender )
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
+	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+	
 	loading_layer = LoadingLayer::create();
 	addChild(loading_layer, kAchievePopupZorder_popup);
 	
@@ -412,15 +414,15 @@ void AchievePopup::cellAction( CCObject* sender )
 	int reward_value = AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[keep_tag]);
 	
 	if(reward_type == kAchieveRewardType_ruby)
-		mySGD->setStar(mySGD->getStar() + reward_value);
+		mySGD->addChangeGoods(kGoodsType_ruby, reward_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString(), "", false);
 	else if(reward_type == kAchieveRewardType_gold)
-		mySGD->setGold(mySGD->getGold() + reward_value);
-	
-	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+		mySGD->addChangeGoods(kGoodsType_gold, reward_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString());
 	
 	keep_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag]);
 	myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag], -1);
-	myDSH->saveUserData({kSaveUserData_Key_achieve, kSaveUserData_Key_gold, kSaveUserData_Key_star}, json_selector(this, AchievePopup::resultSaveUserData));
+	myDSH->saveUserData({kSaveUserData_Key_achieve}, nullptr);
+	
+	mySGD->changeGoods(json_selector(this, AchievePopup::resultSaveUserData));
 }
 
 void AchievePopup::resultSaveUserData(Json::Value result_data)
@@ -436,13 +438,7 @@ void AchievePopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("reward get fail!!");
 		
-		AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[keep_tag]);
-		int reward_value = AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[keep_tag]);
-		
-		if(reward_type == kAchieveRewardType_ruby)
-			mySGD->setStar(mySGD->getStar() - reward_value);
-		else if(reward_type == kAchieveRewardType_gold)
-			mySGD->setGold(mySGD->getGold() - reward_value);
+		mySGD->clearChangeGoods();
 		
 		myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, keep_value);
 	}
@@ -837,6 +833,9 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	keep_take_gold = 0;
 	keep_take_ruby = 0;
 	
+	string ruby_stats_value = "";
+	string gold_stats_value = "";
+	
 	for(int i=0;i<achieve_list.size();i++)
 	{
 		if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[i]))
@@ -845,9 +844,15 @@ void AchievePopup::takeAllReward(CCObject* sender)
 			int reward_value = AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[i]);
 			
 			if(reward_type == kAchieveRewardType_ruby)
+			{
 				keep_take_ruby += reward_value;
+				ruby_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
+			}
 			else if(reward_type == kAchieveRewardType_gold)
+			{
 				keep_take_gold += reward_value;
+				gold_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
+			}
 			
 			keep_value_list.push_back(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[i]));
 			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[i], -1, false);
@@ -855,13 +860,19 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	}
 	myDSH->fFlush();
 	
-	mySGD->setStar(mySGD->getStar() + keep_take_ruby);
-	mySGD->setGold(mySGD->getGold() + keep_take_gold);
+	if(keep_take_ruby > 0)
+		mySGD->addChangeGoods(kGoodsType_ruby, keep_take_ruby, "업적", ruby_stats_value);
+	if(keep_take_gold > 0)
+		mySGD->addChangeGoods(kGoodsType_gold, keep_take_gold, "업적", gold_stats_value);
+	
+	
+	myDSH->saveUserData({kSaveUserData_Key_achieve}, nullptr);
 	
 	if(keep_take_ruby > 0 || keep_take_gold > 0)
+	{
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-	
-	myDSH->saveUserData({kSaveUserData_Key_achieve, kSaveUserData_Key_gold, kSaveUserData_Key_star}, json_selector(this, AchievePopup::resultSaveUserData));
+		mySGD->changeGoods(json_selector(this, AchievePopup::resultAllTakeSaveUserData));
+	}
 }
 
 void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
@@ -877,12 +888,11 @@ void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 	{
 		CCLog("reward get fail!!");
 		
+		mySGD->clearChangeGoods();
+		
 		for(int i=0;i<keep_value_list.size();i++)
 			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, keep_value_list[i], false);
 		myDSH->fFlush();
-		
-		mySGD->setStar(mySGD->getStar() - keep_take_ruby);
-		mySGD->setGold(mySGD->getGold() - keep_take_gold);
 	}
 	loading_layer->removeFromParent();
 	is_menu_enable = true;

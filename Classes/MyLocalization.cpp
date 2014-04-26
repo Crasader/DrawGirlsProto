@@ -198,7 +198,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -498,6 +498,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
+	en->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -790,6 +791,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
+	ja->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);

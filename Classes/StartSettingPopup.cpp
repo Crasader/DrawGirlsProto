@@ -717,18 +717,16 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 
 void StartSettingPopup::startItemGacha()
 {
-	if(!is_menu_enable || mySGD->getItemGachaGoldFee() > mySGD->getGold())
+	if(!is_menu_enable || mySGD->getItemGachaGoldFee() > mySGD->getGoodsValue(kGoodsType_gold))
 		return;
 	
 	is_menu_enable = false;
 	
 	CCLog("start item gacha");
 	
-	mySGD->setGold(mySGD->getGold() - mySGD->getItemGachaGoldFee());
-	myDSH->saveUserData({kSaveUserData_Key_gold}, json_selector(this, StartSettingPopup::goItemGacha));
-
+	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaGoldFee(), "아이템뽑기");
 	
-	
+	mySGD->changeGoods(json_selector(this, StartSettingPopup::goItemGacha));
 	
 	
 	
@@ -771,7 +769,10 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 	else
 	{
 		CCLog("save userdata fail!!!");
-		mySGD->setGold(mySGD->getGold() + mySGD->getItemGachaGoldFee());
+		mySGD->clearChangeGoods();
+		
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		
 		is_menu_enable = true;
 	}
 }
@@ -1093,13 +1094,28 @@ void StartSettingPopup::itemAction(CCObject *sender)
 									
 									if(item_currency == "gold")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGold())
+										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_gold))
 										{
-											mySGD->setGold(mySGD->getGold()-mySD->getItemPrice(item_list[clicked_item_idx]));
-											
 											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 											
-											buySuccessItem(clicked_item_idx, 1);
+											LoadingLayer* t_loading = LoadingLayer::create(-9999);
+											addChild(t_loading, 9999);
+											
+											mySGD->addChangeGoods(kGoodsType_gold, -mySD->getItemPrice(item_list[clicked_item_idx]), "아이템구매", CCString::createWithFormat("%d", item_list[clicked_item_idx])->getCString());
+											
+											mySGD->changeGoods([=](Json::Value result_data){
+												t_loading->removeFromParent();
+												if(result_data["result"]["code"] == GDSUCCESS)
+												{
+													buySuccessItem(clicked_item_idx, 1);
+												}
+												else
+												{
+													mySGD->clearChangeGoods();
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													is_menu_enable = true;
+												}
+											});
 										}
 										else
 										{
@@ -1174,13 +1190,28 @@ void StartSettingPopup::itemAction(CCObject *sender)
 									}
 									else if(item_currency == "ruby")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getStar())
+										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_ruby))
 										{
-											mySGD->setStar(mySGD->getStar()-mySD->getItemPrice(item_list[clicked_item_idx]));
-											
 											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 											
-											buySuccessItem(clicked_item_idx, 1);
+											LoadingLayer* t_loading = LoadingLayer::create(-9999);
+											addChild(t_loading, 9999);
+											
+											mySGD->addChangeGoods(kGoodsType_ruby, -mySD->getItemPrice(item_list[clicked_item_idx]), "아이템구매", CCString::createWithFormat("%d", item_list[clicked_item_idx])->getCString());
+											
+											mySGD->changeGoods([=](Json::Value result_data){
+												t_loading->removeFromParent();
+												if(result_data["result"]["code"] == GDSUCCESS)
+												{
+													buySuccessItem(clicked_item_idx, 1);
+												}
+												else
+												{
+													mySGD->clearChangeGoods();
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													is_menu_enable = true;
+												}
+											});
 										}
 										else
 										{

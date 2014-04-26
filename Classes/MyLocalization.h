@@ -287,7 +287,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_detailConditionPopupContent2,
 	kMyLocalKey_detailConditionPopupContent3,
 	kMyLocalKey_detailConditionPopupContent4,
-	kMyLocalKey_detailConditionPopupContent5
+	kMyLocalKey_detailConditionPopupContent5,
+	kMyLocalKey_failPurchase
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

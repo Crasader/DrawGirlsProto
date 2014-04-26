@@ -138,13 +138,13 @@ void Dodge::update(float dt)
 		reward->setPosition(ccp(205, 133));
 		addChild(reward);
 		reward->setScale(2.f);
-		mySGD->setStar(mySGD->getStar() + 1);
-		myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
-												{
+//		mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);
+//		myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+//												{
 													addChild(KSTimer::create(3.f, [=](){
 														m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 													}));
-												});
+//												});
 	}
 	m_flowTimeFnt->setString(CCString::createWithFormat("%.1f", MAX(0, m_remainTime - m_timer))->getCString());
 	m_bulletCountGoal = 10 + m_timer / 1.f;

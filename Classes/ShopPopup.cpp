@@ -437,22 +437,22 @@ void ShopPopup::cellAction(CCObject* sender)
 		int condition_value = NSDS_GI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, unlock_idx+1);
 		
 		if(condition_type == "gold")
-			is_unlock_enable = mySGD->getGold() >= condition_value;
+			is_unlock_enable = mySGD->getGoodsValue(kGoodsType_gold) >= condition_value;
 		else if(condition_type == "ruby")
-			is_unlock_enable = mySGD->getStar() >= condition_value;
+			is_unlock_enable = mySGD->getGoodsValue(kGoodsType_ruby) >= condition_value;
 		
 		if(is_unlock_enable)
 		{
 			createCheckBuyPopup([=]()
 								{
-									if(condition_type == "gold")
-										mySGD->setGold(mySGD->getGold() - condition_value);
-									else if(condition_type == "ruby")
-										mySGD->setStar(mySGD->getStar() - condition_value);
-									
-									myDSH->setIntegerForKey(kDSH_Key_selectedCharacter, tag-kSP_MT_characterUnlockBase);
-									myDSH->setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, tag-kSP_MT_characterUnlockBase, true);
-									myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_star, kSaveUserData_Key_character}, nullptr);
+//									if(condition_type == "gold")
+//										mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - condition_value);
+//									else if(condition_type == "ruby")
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - condition_value);
+//									
+//									myDSH->setIntegerForKey(kDSH_Key_selectedCharacter, tag-kSP_MT_characterUnlockBase);
+//									myDSH->setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, tag-kSP_MT_characterUnlockBase, true);
+//									myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_star, kSaveUserData_Key_character}, nullptr);
 									
 									if(last_select_idx != -1)
 										character_table->updateCellAtIndex(last_select_idx);
@@ -931,236 +931,61 @@ void ShopPopup::menuAction(CCObject* pSender)
 									loading_layer = LoadingLayer::create();
 									addChild(loading_layer, kSP_Z_popup);
 									
-									vector<SaveUserData_Key> save_userdata_list;
+									CCLog("%dwon!!!", index_to_ruby[tag-kSP_MT_content1].getV());
 									
-									string price_type = NSDS_GS(kSDS_GI_shopRuby_int1_priceType_s, tag-kSP_MT_content1);
-									if(price_type == "money")
-									{
-										CCLog("%dwon!!!", index_to_ruby[tag-kSP_MT_content1].getV());
-									}
-									else if(price_type == "gold")
-									{
-										mySGD->setGold(mySGD->getGold() - index_to_ruby[tag-kSP_MT_content1].getV());
-										save_userdata_list.push_back(kSaveUserData_Key_gold);
-									}
-									
-									mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
+									mySGD->addChangeGoods(kGoodsType_ruby, cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV(), "결재", "", "", true);
 									
 									fail_func = [=]()
 									{
-										if(price_type == "money")
-										{
-											CCLog("%dwon!!!", index_to_ruby[tag-kSP_MT_content1].getV());
-										}
-										else if(price_type == "gold")
-										{
-											mySGD->setGold(mySGD->getGold() + index_to_ruby[tag-kSP_MT_content1].getV());
-											mySGD->setStar(mySGD->getStar() - cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
-										}
+										CCLog("%dwon!!!", index_to_ruby[tag-kSP_MT_content1].getV());
+										mySGD->clearChangeGoods();
 									};
 									
-									save_userdata_list.push_back(kSaveUserData_Key_star);
-									myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
+									mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
 								});
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
-			string price_type = NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, tag-kSP_MT_content1);
+//			string price_type = NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, tag-kSP_MT_content1);
 			
-			if(price_type == "ruby")
-			{
-				if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
-				{
-					createCheckBuyPopup([=]()
-										{
-											loading_layer = LoadingLayer::create();
-											addChild(loading_layer, kSP_Z_popup);
-											
-											mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
-											mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
-											
-											fail_func = [=]()
-											{
-												mySGD->setStar(mySGD->getStar() + index_to_gold[tag-kSP_MT_content1].getV());
-												mySGD->setGold(mySGD->getGold() - ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
-											};
-											
-											vector<SaveUserData_Key> save_userdata_list;
-											save_userdata_list.push_back(kSaveUserData_Key_star);
-											save_userdata_list.push_back(kSaveUserData_Key_gold);
-											myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
-										});
-				}
-				else
-				{
-					addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
-					CCLog("not enough ruby!!!");
-				}
-			}
-			else if(price_type == "money")
+			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_gold[tag-kSP_MT_content1].getV())
 			{
 				createCheckBuyPopup([=]()
 									{
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										CCLog("%dwon!!!", index_to_gold[tag-kSP_MT_content1].getV());
-										
-										mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+										mySGD->addChangeGoods(kGoodsType_ruby, -index_to_gold[tag-kSP_MT_content1].getV(), "골드구매");
+										mySGD->addChangeGoods(kGoodsType_gold, ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV(), "루비로구매");
 										
 										fail_func = [=]()
 										{
-											mySGD->setGold(mySGD->getGold() - ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+											mySGD->clearChangeGoods();
 										};
 										
-										vector<SaveUserData_Key> save_userdata_list;
-										save_userdata_list.push_back(kSaveUserData_Key_gold);
-										myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
+										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
 									});
 			}
 			else
 			{
-				is_menu_enable = true;
+				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				CCLog("not enough ruby!!!");
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
 		{
-			string price_type = NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, tag-kSP_MT_content1);
+//			string price_type = NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, tag-kSP_MT_content1);
 			
-			if(price_type == "ruby")
-			{
-				if(mySGD->getStar() >= index_to_heart[tag-kSP_MT_content1].getV())
-				{
-					createCheckBuyPopup([=]()
-										{
-											loading_layer = LoadingLayer::create();
-											addChild(loading_layer, kSP_Z_popup);
-											
-											mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
-											myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
-											
-											CCNode* target_parent = target_heartTime->getParent();
-											CCPoint heart_time_position = target_heartTime->getPosition();
-											int heart_time_tag = target_heartTime->getTag();
-											
-											target_heartTime->removeFromParent();
-											target_heartTime = HeartTime::create();
-											target_heartTime->setPosition(heart_time_position);
-											target_parent->addChild(target_heartTime, 0, heart_time_tag);
-											if(before_code == kShopBeforeCode_stagesetting)
-												((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_mainflow)
-												((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_puzzle)
-												((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_startsetting)
-												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											
-											fail_func = [=]()
-											{
-												mySGD->setStar(mySGD->getStar() + index_to_heart[tag-kSP_MT_content1].getV());
-												myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
-												
-												CCNode* target_parent = target_heartTime->getParent();
-												CCPoint heart_time_position = target_heartTime->getPosition();
-												int heart_time_tag = target_heartTime->getTag();
-												
-												target_heartTime->removeFromParent();
-												target_heartTime = HeartTime::create();
-												target_heartTime->setPosition(heart_time_position);
-												target_parent->addChild(target_heartTime, 0, heart_time_tag);
-												if(before_code == kShopBeforeCode_stagesetting)
-													((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_mainflow)
-													((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_puzzle)
-													((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_startsetting)
-													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											};
-											
-											vector<SaveUserData_Key> save_userdata_list;
-											save_userdata_list.push_back(kSaveUserData_Key_star);
-											myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
-										});
-				}
-				else
-				{
-					addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
-					CCLog("not enough ruby!!!");
-				}
-			}
-			else if(price_type == "gold")
-			{
-				if(mySGD->getGold() >= index_to_heart[tag-kSP_MT_content1].getV())
-				{
-					createCheckBuyPopup([=]()
-										{
-											loading_layer = LoadingLayer::create();
-											addChild(loading_layer, kSP_Z_popup);
-											
-											mySGD->setGold(mySGD->getGold() - index_to_heart[tag-kSP_MT_content1].getV());
-											myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
-											
-											CCNode* target_parent = target_heartTime->getParent();
-											CCPoint heart_time_position = target_heartTime->getPosition();
-											int heart_time_tag = target_heartTime->getTag();
-											
-											target_heartTime->removeFromParent();
-											target_heartTime = HeartTime::create();
-											target_heartTime->setPosition(heart_time_position);
-											target_parent->addChild(target_heartTime, 0, heart_time_tag);
-											if(before_code == kShopBeforeCode_stagesetting)
-												((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_mainflow)
-												((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_puzzle)
-												((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_startsetting)
-												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											
-											fail_func = [=]()
-											{
-												mySGD->setGold(mySGD->getGold() + index_to_heart[tag-kSP_MT_content1].getV());
-												myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
-												
-												CCNode* target_parent = target_heartTime->getParent();
-												CCPoint heart_time_position = target_heartTime->getPosition();
-												int heart_time_tag = target_heartTime->getTag();
-												
-												target_heartTime->removeFromParent();
-												target_heartTime = HeartTime::create();
-												target_heartTime->setPosition(heart_time_position);
-												target_parent->addChild(target_heartTime, 0, heart_time_tag);
-												if(before_code == kShopBeforeCode_stagesetting)
-													((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_mainflow)
-													((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_puzzle)
-													((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_startsetting)
-													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											};
-											
-											vector<SaveUserData_Key> save_userdata_list;
-											save_userdata_list.push_back(kSaveUserData_Key_gold);
-											myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
-										});
-				}
-				else
-				{
-					addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
-					CCLog("not enough gold!!!");
-				}
-			}
-			else if(price_type == "money")
+			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_heart[tag-kSP_MT_content1].getV())
 			{
 				createCheckBuyPopup([=]()
 									{
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										CCLog("%dwon!!!", index_to_heart[tag-kSP_MT_content1].getV());
+										mySGD->addChangeGoods(kGoodsType_ruby, -index_to_heart[tag-kSP_MT_content1].getV(), "하트구매");
+										
+										
 										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 										
 										CCNode* target_parent = target_heartTime->getParent();
@@ -1182,6 +1007,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										
 										fail_func = [=]()
 										{
+											mySGD->clearChangeGoods();
 											myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 											
 											CCNode* target_parent = target_heartTime->getParent();
@@ -1202,14 +1028,13 @@ void ShopPopup::menuAction(CCObject* pSender)
 												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 										};
 										
-										vector<SaveUserData_Key> save_userdata_list;
-										save_userdata_list.push_back(kSaveUserData_Key_star);
-										myDSH->saveUserData(save_userdata_list, json_selector(this, ShopPopup::resultSetUserData));
+										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
 									});
 			}
 			else
 			{
-				is_menu_enable = true;
+				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				CCLog("not enough ruby!!!");
 			}
 		}
 	}
@@ -1224,7 +1049,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
 //									
-//									mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
+//									mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 //									
 //									vector<SaveUserData_Key> save_userdata_list;
 //									save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1233,15 +1058,15 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_gold)
 //		{
-//			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_gold[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
-//										mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_gold[tag-kSP_MT_content1].getV());
+//										mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 //										
 //										vector<SaveUserData_Key> save_userdata_list;
 //										save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1257,14 +1082,14 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_heart)
 //		{
-//			if(mySGD->getStar() >= index_to_heart[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_heart[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_heart[tag-kSP_MT_content1].getV());
 //										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 //										
 //										CCNode* target_parent = target_heartTime->getParent();
@@ -1307,7 +1132,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
 //									
-//									mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
+//									mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 //									
 //									vector<SaveUserData_Key> save_userdata_list;
 //									save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1316,15 +1141,15 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_gold)
 //		{
-//			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_gold[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
-//										mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_gold[tag-kSP_MT_content1].getV());
+//										mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 //										
 //										vector<SaveUserData_Key> save_userdata_list;
 //										save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1340,14 +1165,14 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_heart)
 //		{
-//			if(mySGD->getStar() >= index_to_heart[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_heart[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_heart[tag-kSP_MT_content1].getV());
 //										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 //										
 //										CCNode* target_parent = target_heartTime->getParent();
@@ -1390,7 +1215,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
 //									
-//									mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
+//									mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 //									
 //									vector<SaveUserData_Key> save_userdata_list;
 //									save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1399,15 +1224,15 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_gold)
 //		{
-//			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_gold[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
-//										mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_gold[tag-kSP_MT_content1].getV());
+//										mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 //										
 //										vector<SaveUserData_Key> save_userdata_list;
 //										save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1423,14 +1248,14 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_heart)
 //		{
-//			if(mySGD->getStar() >= index_to_heart[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_heart[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_heart[tag-kSP_MT_content1].getV());
 //										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 //										
 //										CCNode* target_parent = target_heartTime->getParent();
@@ -1473,7 +1298,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
 //									
-//									mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
+//									mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 //									
 //									vector<SaveUserData_Key> save_userdata_list;
 //									save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1482,15 +1307,15 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_gold)
 //		{
-//			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_gold[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
-//										mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_gold[tag-kSP_MT_content1].getV());
+//										mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 //										
 //										vector<SaveUserData_Key> save_userdata_list;
 //										save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1506,14 +1331,14 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_heart)
 //		{
-//			if(mySGD->getStar() >= index_to_heart[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_heart[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_heart[tag-kSP_MT_content1].getV());
 //										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 //										
 //										CCNode* target_parent = target_heartTime->getParent();
@@ -1556,7 +1381,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
 //									
-//									mySGD->setStar(mySGD->getStar() + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
+//									mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV());
 //									
 //									vector<SaveUserData_Key> save_userdata_list;
 //									save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1565,15 +1390,15 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_gold)
 //		{
-//			if(mySGD->getStar() >= index_to_gold[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_gold[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_gold[tag-kSP_MT_content1].getV());
-//										mySGD->setGold(mySGD->getGold() + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_gold[tag-kSP_MT_content1].getV());
+//										mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV());
 //										
 //										vector<SaveUserData_Key> save_userdata_list;
 //										save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -1589,14 +1414,14 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		}
 //		else if(recent_shop_code == kSC_heart)
 //		{
-//			if(mySGD->getStar() >= index_to_heart[tag-kSP_MT_content1].getV())
+//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_heart[tag-kSP_MT_content1].getV())
 //			{
 //				createCheckBuyPopup([=]()
 //									{
 //										loading_layer = LoadingLayer::create();
 //										addChild(loading_layer, kSP_Z_popup);
 //										
-//										mySGD->setStar(mySGD->getStar() - index_to_heart[tag-kSP_MT_content1].getV());
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - index_to_heart[tag-kSP_MT_content1].getV());
 //										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 //										
 //										CCNode* target_parent = target_heartTime->getParent();
@@ -1630,11 +1455,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 //	}
 	else if(tag == kSP_MT_cardHigh)
 	{
-		if(mySGD->getStar() >= card_price_high.getV())
+		if(mySGD->getGoodsValue(kGoodsType_ruby) >= card_price_high.getV())
 		{
 			createCheckBuyPopup([=]()
 								{
-									mySGD->setStar(mySGD->getStar()-card_price_high.getV());
+//									mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby)-card_price_high.getV());
 									
 									int have_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
 									have_stone_cnt++;
@@ -1731,11 +1556,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_cardMid)
 	{
-		if(mySGD->getGold() >= card_price_mid.getV())
+		if(mySGD->getGoodsValue(kGoodsType_gold) >= card_price_mid.getV())
 		{
 			createCheckBuyPopup([=]()
 								{
-									mySGD->setGold(mySGD->getGold()-card_price_mid.getV());
+//									mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold)-card_price_mid.getV());
 									
 									int have_stone_cnt = myDSH->getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
 									have_stone_cnt++;

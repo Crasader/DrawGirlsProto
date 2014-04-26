@@ -30,6 +30,7 @@
 #include "CumberShowWindow.h"
 #include "FormSetter.h"
 #include "StoryManager.h"
+#include "LoadingLayer.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -823,7 +824,7 @@ void Maingame::counting()
 	else if(countingCnt/60 >= 1 && countingCnt%60 == 0)
 	{
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
-		if(mySGD->getGold() >= mySGD->getGachaMapFee())
+		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
 		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
 			addChild(t_smg, startGachaZorder);
@@ -848,37 +849,65 @@ void Maingame::gachaOn()
 		return;
 	
 	myLog->addLog(kLOG_gacha_startMap, -1);
-	mySGD->setGold(mySGD->getGold() - mySGD->getGachaMapFee());
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
-	myGD->resetGameData();
-	mySGD->startMapGachaOn();
+	bool t_jack_stun = myJack->isStun;
 	
-	int map_gacha_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_mapGachaCnt)+1;
-	myDSH->setIntegerForKey(kDSH_Key_achieve_mapGachaCnt, map_gacha_cnt);
+	CCNode* exit_target = this;
+	mControl->setTouchEnabled(false);
+	exit_target->onExit();
 	
-	AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+	LoadingLayer* t_loading = LoadingLayer::create(-9999);
+	addChild(t_loading, 9999);
 	
-	for(int i=kAchievementCode_mapGacha1;i<=kAchievementCode_mapGacha3;i++)
-	{
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-		   map_gacha_cnt >= shared_acr->getCondition((AchievementCode)i))
-		{
-			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
-			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-		}
-	}
+	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");
 	
-	vector<SaveUserData_Key> save_userdata_list;
-	
-	save_userdata_list.push_back(kSaveUserData_Key_gold);
-	save_userdata_list.push_back(kSaveUserData_Key_achieve);
-	
-	myDSH->saveUserData(save_userdata_list, nullptr);
-	
-	CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+	mySGD->changeGoods([=](Json::Value result_data)
+					   {
+						   t_loading->removeFromParent();
+						    if(result_data["result"]["code"].asInt() == GDSUCCESS)
+							{
+								mControl->isStun = false;
+								myJack->isStun = t_jack_stun;
+								exit_target->onEnter();
+								
+								myGD->resetGameData();
+								mySGD->startMapGachaOn();
+								
+								int map_gacha_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_mapGachaCnt)+1;
+								myDSH->setIntegerForKey(kDSH_Key_achieve_mapGachaCnt, map_gacha_cnt);
+								
+								AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+								
+								for(int i=kAchievementCode_mapGacha1;i<=kAchievementCode_mapGacha3;i++)
+								{
+									if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+									   map_gacha_cnt >= shared_acr->getCondition((AchievementCode)i))
+									{
+										myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+										AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+										CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+									}
+								}
+								
+								vector<SaveUserData_Key> save_userdata_list;
+								save_userdata_list.push_back(kSaveUserData_Key_achieve);
+								myDSH->saveUserData(save_userdata_list, nullptr);
+								
+								CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+							}
+						    else
+							{
+								mySGD->clearChangeGoods();
+								addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
+									mControl->isStun = false;
+									myJack->isStun = t_jack_stun;
+									exit_target->onEnter();
+								}), 9999);
+							}
+						   
+					   });
 }
 
 bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -1409,7 +1438,7 @@ void Maingame::clearScenario2()
 																						   
 																						   if(reward_type == 1)
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 100);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 100);
 																							   item_gold->setPosition(ccp(-150,0));
 																							   if(random_left_right == 0)
 																							   {
@@ -1424,7 +1453,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else if(reward_type == 2)
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 200);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 200);
 																							   
 																							   item_gold_or_item->setPosition(ccp(-150,0));
 																							   if(random_left_right == 0)
@@ -1440,7 +1469,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 300);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 300);
 																							   
 																							   item_stone->setPosition(ccp(-150,0));
 																							   if(random_left_right == 0)
@@ -1522,7 +1551,7 @@ void Maingame::clearScenario2()
 																						   
 																						   if(reward_type == 1)
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 100);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 100);
 																							   item_gold->setPosition(ccp(0,0));
 																							   if(random_left_right == 0)
 																							   {
@@ -1537,7 +1566,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else if(reward_type == 2)
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 200);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 200);
 																							   
 																							   item_gold_or_item->setPosition(ccp(0,0));
 																							   if(random_left_right == 0)
@@ -1553,7 +1582,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 300);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 300);
 																							   
 																							   item_stone->setPosition(ccp(0,0));
 																							   if(random_left_right == 0)
@@ -1636,7 +1665,7 @@ void Maingame::clearScenario2()
 																						   
 																						   if(reward_type == 1)
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 100);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 100);
 																							   item_gold->setPosition(ccp(150,0));
 																							   if(random_left_right == 0)
 																							   {
@@ -1651,7 +1680,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else if(reward_type == 2)
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 200);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 200);
 																							   
 																							   item_gold_or_item->setPosition(ccp(150,0));
 																							   if(random_left_right == 0)
@@ -1667,7 +1696,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else
 																						   {
-																							   mySGD->setGold(mySGD->getGold() + 300);
+																							   mySGD->addChangeGoods(kGoodsType_gold, 300);
 																							   
 																							   item_stone->setPosition(ccp(150,0));
 																							   if(random_left_right == 0)

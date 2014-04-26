@@ -16,6 +16,7 @@
 #include "LoadingTipScene.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "LoadingLayer.h"
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
@@ -1527,29 +1528,42 @@ void PlayTutorial::nextStep()
 						  t_sm->addMent(true, "", "", "時間制限内に領域を85％以上獲得したらクリア！", [=]()
 										//"제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
 										{
-											clear_condition->stopAllActions();
-											clear_condition->setVisible(true);
+											LoadingLayer* t_loading = LoadingLayer::create(-9999);
+											addChild(t_loading, 9999);
 											
-											time_label->stopAllActions();
-											time_label->setVisible(true);
-											
-											time_case->stopAllActions();
-											time_case->setVisible(true);
-											
-											mySGD->setGold(mySGD->getGold() + 5000);
-											
-											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-											
-											t_sm->addMent(true, "", "", "基本チュートリアルが終わりました。\n5000ゴールドをプレゼントします。\n本ゲームに戻ります。", [=]()
-														  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
-														  {
-															  t_sm->removeFromParent();
-															  mySGD->setNextSceneName("maingame");
-															  
-															  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-															  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
-															  addChild(loading_tip, 999);
-														  });
+											mySGD->addChangeGoods(kGoodsType_gold, mySGD->getIngameTutorialRewardGold(), "컨트롤튜토리얼보상");
+											mySGD->changeGoods([=](Json::Value result_data){
+												t_loading->removeFromParent();
+												if(result_data["result"]["code"].asInt() == GDSUCCESS)
+												{
+													clear_condition->stopAllActions();
+													clear_condition->setVisible(true);
+													
+													time_label->stopAllActions();
+													time_label->setVisible(true);
+													
+													time_case->stopAllActions();
+													time_case->setVisible(true);
+													
+													
+													AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+													
+													t_sm->addMent(true, "", "", "基本チュートリアルが終わりました。\n5000ゴールドをプレゼントします。\n本ゲームに戻ります。", [=]()
+																  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
+																  {
+																	  t_sm->removeFromParent();
+																	  mySGD->setNextSceneName("maingame");
+																	  
+																	  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+																	  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
+																	  addChild(loading_tip, 999);
+																  });
+												}
+												else
+												{
+													
+												}
+											});
 										}, CCSizeMake(350,100), ccp(0,0), 12);
 					  });
 	}

@@ -303,7 +303,7 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
-	if(mySGD->getGold() < mySGD->getItemGachaReplayGoldFee())
+	if(mySGD->getGoodsValue(kGoodsType_gold) < mySGD->getItemGachaReplayGoldFee())
 	{
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
 		is_menu_enable = true;
@@ -313,9 +313,8 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	loading_layer = LoadingLayer::create(touch_priority-100);
 	addChild(loading_layer);
 	
-	mySGD->setGold(mySGD->getGold()-mySGD->getItemGachaReplayGoldFee());
-	
-	myDSH->saveUserData({kSaveUserData_Key_gold}, json_selector(this, ItemGachaPopup::resultSaveUserData));
+	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaReplayGoldFee(), "아이템뽑기");
+	mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
 }
 
 void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
@@ -341,7 +340,9 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("missile upgrade fail!!");
 		
-		mySGD->setGold(mySGD->getGold() + mySGD->getItemGachaReplayGoldFee());
+		mySGD->clearChangeGoods();
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		
 		is_menu_enable = true;
 	}
 	loading_layer->removeFromParent();

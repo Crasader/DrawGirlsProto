@@ -184,11 +184,11 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 												// 선택으로 들어온 거라면 다시 하기가 가능함.
 												if(m_gachaCategory == GachaCategory::kRubyGacha)
 												{
-													if(mySGD->getStar() >= mySGD->getGachaRubyFeeRetry()) {
-														mySGD->setStar(mySGD->getStar() - mySGD->getGachaRubyFeeRetry());
-														myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
-
-														});
+													if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaRubyFeeRetry()) {
+//														mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - mySGD->getGachaRubyFeeRetry());
+//														myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v) {
+//
+//														});
 														retryGame();
 													}
 													else {
@@ -197,11 +197,11 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 												}
 												else if(m_gachaCategory == GachaCategory::kGoldGacha)
 												{
-													if(mySGD->getGold() >= mySGD->getGachaGoldFeeRetry()) {
-														mySGD->setGold(mySGD->getGold() - mySGD->getGachaGoldFeeRetry());
-														myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v) {
-
-														});
+													if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaGoldFeeRetry()) {
+//														mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - mySGD->getGachaGoldFeeRetry());
+//														myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value v) {
+//
+//														});
 														retryGame();
 													}
 													else {
