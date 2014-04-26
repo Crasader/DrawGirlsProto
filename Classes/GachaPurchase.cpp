@@ -340,14 +340,14 @@ void GachaPurchase::menuAction(CCObject *pSender)
 	{
 		bool is_gacha_enable = false;
 		
-		if(mySGD->getStar() >= mySGD->getGachaRubyFee())
+		if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaRubyFee())
 			is_gacha_enable = true;
 		
 		if(is_gacha_enable)
 		{
 			keep_price_type = 1;
-			mySGD->setStar(mySGD->getStar() - mySGD->getGachaRubyFee());
-			myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
+//			mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - mySGD->getGachaRubyFee());
+//			myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 			
 			if(target_out)
 				(target_out->*delegate_out)();
@@ -360,14 +360,14 @@ void GachaPurchase::menuAction(CCObject *pSender)
 	{
 		bool is_gacha_enable = false;
 		
-		if(mySGD->getGold() >= mySGD->getGachaGoldFee())
+		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaGoldFee())
 			is_gacha_enable = true;
 		
 		if(is_gacha_enable)
 		{
 			keep_price_type = 2;
-			mySGD->setGold(mySGD->getGold() - mySGD->getGachaGoldFee());
-			myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
+//			mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - mySGD->getGachaGoldFee());
+//			myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
 			
 			if(target_out)
 				(target_out->*delegate_out)();

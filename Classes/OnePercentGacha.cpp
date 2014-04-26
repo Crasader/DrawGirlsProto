@@ -7,6 +7,8 @@
 #include "CCMenuLambda.h"
 #include "KSLabelTTF.h"
 #include "FormSetter.h"
+#include "LoadingLayer.h"
+#include "MyLocalization.h"
 
 #define LZZ_INLINE inline
 using namespace std;
@@ -90,42 +92,57 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
-	if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
+	if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
 	{
 		myLog->addLog(kLOG_gacha_onePercent, -1);
-		mySGD->setStar(mySGD->getStar() - mySGD->getGachaOnePercentFee());
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
-		gacha_button->removeFromParent();
+		LoadingLayer* t_loading = LoadingLayer::create(-9999);
+		addChild(t_loading, 9999);
 		
-		CCLabelTTF* t_label = CCLabelTTF::create();
+		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠");
 		
-		KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
-		stop_label->setColor(ccBLACK);
-		stop_label->setPosition(ccp(0,15));
-		t_label->addChild(stop_label);
-		
-		KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
-		stop_label2->setColor(ccBLACK);
-		stop_label2->setPosition(ccp(0,-12));
-		t_label->addChild(stop_label2);
-		
-		
-		CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-		
-		stop_button = CCControlButton::create(t_label, stop_back);
-		stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
-		stop_button->setPreferredSize(CCSizeMake(170,65));
-		stop_button->setPosition(ccp(0,-70));
-		m_container->addChild(stop_button, kOnePercentGacha_Z_content);
-		
-		stop_button->setTouchPriority(-180);
-		
-		stop_button->setEnabled(false);
-		cancel_menu->setEnabled(false);
-		
-		gachaOn();
+		mySGD->changeGoods([=](Json::Value result_data){
+			if(result_data["result"]["code"] == GDSUCCESS)
+			{
+				gacha_button->removeFromParent();
+				
+				CCLabelTTF* t_label = CCLabelTTF::create();
+				
+				KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+				stop_label->setColor(ccBLACK);
+				stop_label->setPosition(ccp(0,15));
+				t_label->addChild(stop_label);
+				
+				KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+				stop_label2->setColor(ccBLACK);
+				stop_label2->setPosition(ccp(0,-12));
+				t_label->addChild(stop_label2);
+				
+				
+				CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+				
+				stop_button = CCControlButton::create(t_label, stop_back);
+				stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
+				stop_button->setPreferredSize(CCSizeMake(170,65));
+				stop_button->setPosition(ccp(0,-70));
+				m_container->addChild(stop_button, kOnePercentGacha_Z_content);
+				
+				stop_button->setTouchPriority(-180);
+				
+				stop_button->setEnabled(false);
+				cancel_menu->setEnabled(false);
+				
+				gachaOn();
+			}
+			else
+			{
+				mySGD->clearChangeGoods();
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+				is_menu_enable = true;
+			}
+		});
 	}
 	else
 	{
@@ -215,7 +232,8 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 																	{
 																		CCLog("buy!");
-																		mySGD->setStar(mySGD->getStar()+NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0));
+																		// 인앱 결재
+//																		mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby)+NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0));
 																		
 																		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 																		

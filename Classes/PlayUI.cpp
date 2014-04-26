@@ -540,7 +540,7 @@ void GetGold::myInit (CCPoint t_sp, int t_duration_frame)
 {
 	AudioEngine::sharedInstance()->playEffect("sound_get_coin.mp3", false);
 	duration_frame = t_duration_frame;
-	mySGD->setGold(mySGD->getGold() + duration_frame);
+	mySGD->addChangeGoods(kGoodsType_gold, duration_frame);
 	
 	create_frame = duration_frame/60 + 1;
 	

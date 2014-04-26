@@ -266,13 +266,13 @@ bool StageSettingPopup::init()
 	top_case->setPosition(ccp(240,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f + 33.f));
 	addChild(top_case, kSSP_Z_top);
 	
-	CountingBMLabel* ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "allfont.fnt", 0.3f, "%d");
+	CountingBMLabel* ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "allfont.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(94,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
 	
-	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "allfont.fnt", 0.3f, "%d");
+	CountingBMLabel* gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "allfont.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(185,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	

@@ -35,6 +35,7 @@
 #include "KSLabelTTF.h"
 #include "FormSetter.h"
 #include "TakeCardToDiary.h"
+#include "LoadingLayer.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -95,10 +96,10 @@ bool ClearPopup::init()
 	
 	send_command_list.clear();
 	
-	Json::Value param;
-	param["key"] = CCSTR_CWF("stage_clear_%d", mySD->getSilType())->getCString();
-	
-	send_command_list.push_back(CommandParam("increaseStats", param, nullptr));
+//	Json::Value param;
+//	param["key"] = CCSTR_CWF("stage_clear_%d", mySD->getSilType())->getCString();
+//	
+//	send_command_list.push_back(CommandParam("increaseStats", param, nullptr));
 	
 	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
 	{
@@ -497,7 +498,30 @@ bool ClearPopup::init()
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, ClearPopup::resultGetRank)));
 	
-	hspConnector::get()->command(send_command_list);
+	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
+								  {
+									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+										{
+											
+										}
+									  else
+										{
+											LoadingLayer* t_loading = LoadingLayer::create(-9999);
+											addChild(t_loading, 9999);
+											mySGD->changeGoods([=](Json::Value result_data)
+															   {
+																   t_loading->removeFromParent();
+																   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																	{
+																		
+																	}
+																   else
+																	{
+																		CCLog("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+																	}
+															   });
+										}
+								  });
 	
     return true;
 }

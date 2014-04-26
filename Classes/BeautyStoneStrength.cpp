@@ -684,9 +684,9 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kBeautyStoneStrengthPopupMenuTag_highStrength)
 	{
-		if(mySGD->getStar() >= mySGD->getCardUpgradeRubyFee() && offering_stone_idx > -1)
+		if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getCardUpgradeRubyFee() && offering_stone_idx > -1)
 		{
-			mySGD->setStar(mySGD->getStar() - mySGD->getCardUpgradeRubyFee());
+//			mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - mySGD->getCardUpgradeRubyFee());
 			float strength_rate = 1.f;
 			
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
@@ -837,9 +837,9 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kBeautyStoneStrengthPopupMenuTag_normalStrength)
 	{
-		if(mySGD->getGold() >= mySGD->getCardUpgradeGoldFee() && offering_stone_idx > -1)
+		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getCardUpgradeGoldFee() && offering_stone_idx > -1)
 		{
-			mySGD->setGold(mySGD->getGold() - mySGD->getCardUpgradeGoldFee());
+//			mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - mySGD->getCardUpgradeGoldFee());
 			float strength_rate = 1.f;
 			
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);

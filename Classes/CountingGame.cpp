@@ -192,9 +192,9 @@ void CountingGame::createObject(float dt)
 																			CCLog("correct!!");
 																			m_menu->setTouchEnabled(false);
 																			unscheduleUpdate();
-																			mySGD->setStar(mySGD->getStar() + 1);
-																			myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
-																													{
+//																			mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);
+//																			myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+//																													{
 																														addChild(KSTimer::create(1.f, [=](){
 																															m_menu->setVisible(false);
 																															quiz->setVisible(false);
@@ -221,7 +221,7 @@ void CountingGame::createObject(float dt)
 																																																									}));
 																																											 }));
 																														}));
-																													});
+//																													});
 																		}
 																		else
 																		{

@@ -221,6 +221,10 @@ void TitleRenewalScene::successLogin()
 	piece_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
 	
+	Json::Value properties_param;
+	properties_param["memberID"] = hspConnector::get()->getSocialID();
+	command_list.push_back(CommandParam("getuserproperties", properties_param, json_selector(this, TitleRenewalScene::resultGetUserProperties)));
+	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
 	startCommand();
@@ -504,6 +508,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setItemGachaGoldFee(result_data["itemGachaGoldFee"].asInt());
 		mySGD->setItemGachaReplayGoldFee(result_data["itemGachaReplayGoldFee"].asInt());
 		mySGD->setUpgradeGoldFee(result_data["upgradeGoldFee"].asInt());
+		mySGD->setIngameTutorialRewardGold(result_data["ingameTutorialRewardGold"].asInt());
 	}
 	else
 	{
@@ -965,6 +970,26 @@ void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
 		Json::Value puzzle_param;
 		puzzle_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetUserProperties(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->initProperties(result_data["list"]);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value properties_param;
+		properties_param["memberID"] = hspConnector::get()->getSocialID();
+		command_list.push_back(CommandParam("getuserproperties", properties_param, json_selector(this, TitleRenewalScene::resultGetUserProperties)));
 	}
 	
 	receive_cnt--;
