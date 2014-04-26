@@ -575,28 +575,7 @@ class Message extends DBRow{
 ////////////////////////////////////////////////////////////////////////////////////////
 //	퍼즐정보
 ////////////////////////////////////////////////////////////////////////////////////////
-class Puzzle extends DBRow{
-	public $m_no;
-	public $m_order;
-	public $m_center;
-	public $m_ticket;
-	public $m_point;
-	public $m_title;
-	public $m_version;
-	public $m_thumbnail;
-	public $m_original;
-	public $m_face;
-	public $m_isEvent;
-	public $m_pathInfo;
-	public $m_cardInfo;
-	public $m_rewardInfo;
-	public $m_levelInfo;
-	public $m_condition;
-	public $m_conditionInfo;
-	public $m_coordinateInfo;
-	public $m_map;
-	public $m_startPosition;
-	public $m_endPosition;
+class Puzzle extends DBTable{
 
 	public function __construct($puzzleNo=null,$order=null){
 		
@@ -606,16 +585,14 @@ class Puzzle extends DBRow{
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		
 
-		if($puzzleNo)$this->m_no=$puzzleNo;
-		if($order)$this->m_order=$order;
+		if($puzzleNo)$this->no=$puzzleNo;
+		if($order)$this->order=$order;
 
 		if($puzzleNo || $order){
 			$query = "`order`=".$order;
 			if($puzzleNo)$query = "no=".$puzzleNo;
 
-			if(parent::load($query)){
-				$this->autoMatching($this->m__result);
-			}
+			parent::load($query);
 		}
 	}
 }
@@ -624,30 +601,8 @@ class Puzzle extends DBRow{
 ////////////////////////////////////////////////////////////////////////////////////////
 //	피스정보
 ////////////////////////////////////////////////////////////////////////////////////////
-class Piece extends DBRow{
+class Piece extends DBTable{
 
-	public $m_no;
-	public $m_theme;
-	public $m_playtime;
-	public $m_shopItems;
-	public $m_defItems;
-	public $m_cards;
-	public $m_boss;
-	public $m_junior;
-	public $m_mission;
-	public $m_version;
-	public $m_level;
-	public $m_point;
-	public $m_puzzle;
-	public $m_book;
-	public $m_pieceType;
-	public $m_scoreRate;
-	public $m_pieceNo;
-	public $m_condition;
-	public $m_autoBalanceTry;
-	public $m_scale;
-	public $m_minigame;
-	public $m_rewardInfo;
 
 	public function __construct($pieceNo=null){
 		
@@ -657,38 +612,19 @@ class Piece extends DBRow{
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		
 
-		if($pieceNo)$this->m_no=$pieceNo;
+		if($pieceNo)$this->no=$pieceNo;
 
 		if($pieceNo){
 			$query = "no=".$pieceNo;
-			if(parent::load($query)){
-				$this->autoMatching($this->m__result);
-			}
+			parent::load($query);
 		}
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //	카드정보
 ////////////////////////////////////////////////////////////////////////////////////////
-class Card extends DBRow{
+class Card extends DBTable{
 
-	public $m_no;
-	public $m_rank;
-	public $m_durability;
-	public $m_ability;
-	public $m_language;
-	public $m_imgInfo;
-	public $m_thumbnailInfo;
-	public $m_aniInfo;
-	public $m_script;
-	public $m_silImgInfo;
-	public $m_passive;
-	public $m_missile;
-	public $m_reward;
-	public $m_stage;
-	public $m_piece;
-	public $m_grade;
-	public $m_name;
 
 	public function __construct($cardNo=null){
 		
@@ -702,9 +638,7 @@ class Card extends DBRow{
 
 		if($cardNo){
 			$query = "no=".$cardNo;
-			if(parent::load($query)){
-				$this->autoMatching($this->m__result);
-			}
+			parent::load($query);
 		}
 	}
 }
@@ -712,12 +646,7 @@ class Card extends DBRow{
 //	카드히스토리
 ////////////////////////////////////////////////////////////////////////////////////////
 
-class CardHistory extends DBRow{
-	public $m_no;
-	public $m_memberID;
-	public $m_cardNo;
-	public $m_takeDate;
-	public $m_comment;
+class CardHistory extends DBTable{
 	public $m__userIndex;
 	public function __construct($memberID=null,$cardNo=null){
 		
@@ -728,16 +657,14 @@ class CardHistory extends DBRow{
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
 			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-			$this->m_memberID = $memberID;
+			$this->memberID = $memberID;
 		}
 
 
-		if($cardNo)$this->m_cardNo=$cardNo;
+		if($cardNo)$this->cardNo=$cardNo;
 
 		if($memberID && $cardNo){
-			if(parent::load("memberID=".$memberID." and cardNo=".$cardNo)){
-				$this->autoMatching($this->m__result);
-			}
+			parent::load("memberID=".$memberID." and cardNo=".$cardNo);
 		}
 	}
 
@@ -746,12 +673,12 @@ class CardHistory extends DBRow{
 
 	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
 	    	$cardInfo = new Card($rData["cardNo"]);
-	    	$pieceInfo = new Piece($cardInfo->m_stage);
-	    	$puzzleInfo = new Puzzle($pieceInfo->m_puzzle);
+	    	$pieceInfo = new Piece($cardInfo->stage);
+	    	$puzzleInfo = new Puzzle($pieceInfo->puzzle);
 
-	    	$rData["cardName"]=$cardInfo->m_name;
-	    	$rData["cardImg"]=json_decode($cardInfo->m_imgInfo,true);
-	    	$rData["puzzleInfo"]=$puzzleInfo->m_no."-".$puzzleInfo->m_title;
+	    	$rData["cardName"]=$cardInfo->name;
+	    	$rData["cardImg"]=json_decode($cardInfo->imgInfo,true);
+	    	$rData["puzzleInfo"]=$puzzleInfo->no."-".$puzzleInfo->title;
 
 			$dataList[]=$rData;
 	    }
@@ -770,14 +697,7 @@ class CardHistory extends DBRow{
 //	퍼즐히스토리
 ////////////////////////////////////////////////////////////////////////////////////////
 
-class PuzzleHistory extends DBRow{
-	public $m_no;
-	public $m_memberID;
-	public $m_puzzleNo;
-	public $m_openDate;
-	public $m_openType;
-	public $m_clearDate;
-	public $m_perfectDate;
+class PuzzleHistory extends DBTable{
 	public $m__userIndex;
 
 	public function __construct($memberID=null,$puzzleNo=null){
@@ -790,15 +710,13 @@ class PuzzleHistory extends DBRow{
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
 			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-			$this->m_memberID = $memberID;
+			$this->memberID = $memberID;
 		}
 
-		if($puzzleNo)$this->m_puzzleNo=$puzzleNo;
+		if($puzzleNo)$this->puzzleNo=$puzzleNo;
 
 		if($memberID && $puzzleNo){
-			if(parent::load("memberID=".$memberID." and puzzleNo=".$puzzleNo)){
-				$this->autoMatching($this->m__result);
-			}
+			parent::load("memberID=".$memberID." and puzzleNo=".$puzzleNo);
 		}
 	}
 
@@ -808,7 +726,7 @@ class PuzzleHistory extends DBRow{
 	    while($rData = self ::getRowByQuery("where memberID='".$param["id"]."'")){
 			
 	    	$puzzle = new Puzzle($rData["puzzleNo"]);
-			$rData["title"]=$puzzle->m_title;
+			$rData["title"]=$puzzle->title;
 			$dataList[]=$rData;
 
 	    }
@@ -839,10 +757,10 @@ class PieceHistory extends DBTable{
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
 			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-			$this->m_memberID = $memberID;
+			$this->memberID = $memberID;
 		}
 
-		if($pieceNo)$this->m_pieceNo=$pieceNo;
+		if($pieceNo)$this->pieceNo=$pieceNo;
 
 		if($memberID && $pieceNo){
 			parent::load("memberID=".$memberID." and pieceNo=".$pieceNo);
@@ -909,7 +827,7 @@ class Archivement extends DBTable{
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		
 
-		if($no)$this->m_no=$no;
+		if($no)$this->no=$no;
 
 		if($no){
 			$query = "no=".$no;
@@ -1160,16 +1078,14 @@ class GiftBoxHistory extends DBTable{
 ////////////////////////////////////////////////////////////////////////////////////////
 
 class UserProperty extends DBTable{
-	const TypeGold = "gold";
-	const TypeRuby = "ruby";
-	const TypeFreeRuby = "fRuby";
-	const TypePurchaseRuby = "pRuby";
-	const TypeHeart = "heart";
-	const TypeItem1 = "item1";
-	const TypeItem2 = "item2";
-	const TypeItem3 = "item3";
-	const TypeItem4 = "item4";
-	const TypeItem5 = "item5";
+	const TypeGold = "g";
+	const TypeRuby = "r";
+	const TypeFreeRuby = "fr";
+	const TypePurchaseRuby = "pr";
+	const TypeHeart = "h";
+	const TypeItem6 = "i6";
+	const TypeItem9 = "i9";
+	const TypeItem8 = "i8";
 
 	public $m__userIndex;
 
@@ -1629,7 +1545,13 @@ class StageScore extends DBTable{
 			parent::load($q_where);
 		}
 	}
-
+	public function save($p=null){
+		if(!$this->regDate){
+			$this->regDate=TimeManager::get()->getCurrentDateString();
+			$this->regDate=TimeManager::get()->getTime();
+		}
+		return parent::save($p);
+	}
 	public function getTop4(){
 		$topquery = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4",$this->getDBConnection());
 		
@@ -1822,6 +1744,30 @@ class Notice extends DBTable{
 		return $r;
 
 
+	}
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//	샵
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+class Shop extends DBTable{
+public function __construct($pID=null){
+
+		parent::__construct();
+		
+		$this->setPrimarykey("no",true);
+
+
+		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		
+		if($pID){
+			$q_where = "pID='".$pID."'";
+			parent::load($q_where);
+		}
 	}
 }
 ?>

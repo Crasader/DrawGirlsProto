@@ -44,9 +44,11 @@ $(document).ready(function(){
 			<th field="type" viewer='{"type":"text"}'>type</th>
 			<th field="count" viewer='{"type":"text"}'>count</th>
 			<th field="total" viewer='{"type":"text"}'>total</th>
-			<th field="eventID" viewer='{"type":"text"}'>eventID</th>
+			<th field="statsID" viewer='{"type":"text"}'>statsID</th>
+			<th field="statsValue" viewer='{"type":"text"}'>statsValue</th>
 			<th field="content" viewer='{"type":"text"}'>content</th>
 			<th field="sender" viewer='{"type":"text"}'>sender</th>
+			<th field="regDate" viewer='{"type":"text"}'>regDate</th>
 		</tr>
 	</thead>
 	<tbody datazone>

@@ -88,7 +88,7 @@ class LogManager{
 	}
 	
 	public function getLog(){
-		return $this->m_logList;
+		return unserialize(serialize($this->m_logList));
 	}
 	
 	public function getLogAndClear(){
@@ -145,6 +145,7 @@ class ResultState{
 			ResultState::addResultCode(2013,"GDFAILTRANJACTION");
 			ResultState::addResultCode(2014,"GDDONTSAVE");
 			ResultState::addResultCode(2015,"GDPROPERTYISMINUS");
+			ResultState::addResultCode(2016,"GDNOTINGWORK");
 
 
 			//3000 httpgateway
@@ -310,7 +311,7 @@ class DBManager{
 	public static $m_secretKey;
 	private static $m_instance;
 	
-	//초기화
+	//초기화 
 	public function __construct(){
 
 
@@ -376,7 +377,7 @@ class DBManager{
 	
 	public function setDataBase($gameid=null){
 		self::$m_gameID = $gameid;
-		self::$m_gameNo = 10226;
+		self::$m_gameNo = 10289;
 		self::$m_httpgateway["URL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/nomad.json";
 		self::$m_httpgateway["helpURL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/help.json";
 		self::$m_httpgateway["version"]="1.3";
