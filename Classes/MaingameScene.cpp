@@ -1438,7 +1438,7 @@ void Maingame::clearScenario2()
 																						   
 																						   if(reward_type == 1)
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 100);
+																							   mySGD->addChangeGoodsIngameGold(100);
 																							   item_gold->setPosition(ccp(-150,0));
 																							   if(random_left_right == 0)
 																							   {
@@ -1453,7 +1453,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else if(reward_type == 2)
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 200);
+																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
 																							   item_gold_or_item->setPosition(ccp(-150,0));
 																							   if(random_left_right == 0)
@@ -1469,7 +1469,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 300);
+																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
 																							   item_stone->setPosition(ccp(-150,0));
 																							   if(random_left_right == 0)
@@ -1551,7 +1551,7 @@ void Maingame::clearScenario2()
 																						   
 																						   if(reward_type == 1)
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 100);
+																							   mySGD->addChangeGoodsIngameGold(100);
 																							   item_gold->setPosition(ccp(0,0));
 																							   if(random_left_right == 0)
 																							   {
@@ -1566,7 +1566,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else if(reward_type == 2)
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 200);
+																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
 																							   item_gold_or_item->setPosition(ccp(0,0));
 																							   if(random_left_right == 0)
@@ -1582,7 +1582,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 300);
+																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
 																							   item_stone->setPosition(ccp(0,0));
 																							   if(random_left_right == 0)
@@ -1665,7 +1665,7 @@ void Maingame::clearScenario2()
 																						   
 																						   if(reward_type == 1)
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 100);
+																							   mySGD->addChangeGoodsIngameGold(100);
 																							   item_gold->setPosition(ccp(150,0));
 																							   if(random_left_right == 0)
 																							   {
@@ -1680,7 +1680,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else if(reward_type == 2)
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 200);
+																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
 																							   item_gold_or_item->setPosition(ccp(150,0));
 																							   if(random_left_right == 0)
@@ -1696,7 +1696,7 @@ void Maingame::clearScenario2()
 																						   }
 																						   else
 																						   {
-																							   mySGD->addChangeGoods(kGoodsType_gold, 300);
+																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
 																							   item_stone->setPosition(ccp(150,0));
 																							   if(random_left_right == 0)

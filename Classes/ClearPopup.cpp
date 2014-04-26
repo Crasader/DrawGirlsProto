@@ -502,10 +502,12 @@ bool ClearPopup::init()
 								  {
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 										{
-											
+											CCLog("ClearPopup transaction success");
 										}
 									  else
 										{
+											CCLog("ClearPopup transaction fail");
+											
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
 											addChild(t_loading, 9999);
 											mySGD->changeGoods([=](Json::Value result_data)

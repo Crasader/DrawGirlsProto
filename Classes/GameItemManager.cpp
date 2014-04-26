@@ -1093,7 +1093,7 @@ void FeverCoinParent::removing()
 	remove_target->startRemove();
 	remove_target_list.pop_front();
 	
-	mySGD->addChangeGoods(kGoodsType_gold, int(10.f*weight_value));
+	mySGD->addChangeGoodsIngameGold(int(10.f*weight_value));
 //	mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + int(10.f*weight_value), false);
 	
 	if(remove_target_list.empty())

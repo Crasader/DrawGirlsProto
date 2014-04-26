@@ -459,10 +459,12 @@ bool FailPopup::init()
 								  {
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
-										  
+										  CCLog("FailPopup transaction success");
 									  }
 									  else
 									  {
+										  CCLog("FailPopup transaction fail");
+										  
 										  LoadingLayer* t_loading = LoadingLayer::create(-9999);
 										  addChild(t_loading, 9999);
 										  mySGD->changeGoods([=](Json::Value result_data)

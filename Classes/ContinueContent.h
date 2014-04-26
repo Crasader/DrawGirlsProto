@@ -21,6 +21,7 @@ enum ContinueContentMenuTag{
 	kContinueContentMenuTag_end = 0,
 	kContinueContentMenuTag_continue
 };
+class LoadingLayer;
 class ContinueContent : public CCNode
 {
 public:
@@ -51,7 +52,11 @@ private:
 	bool is_menu_enable;
 	bool is_continue;
 	
+	CCScale9Sprite* case_back;
+	
 	void menuAction(CCObject* sender);
+	
+	LoadingLayer* inapp_loading;
 	
 	void endShow()
 	{
@@ -72,6 +77,8 @@ private:
 		else
 			end_selector();
 	}
+	
+	void requestItemDelivery();
 	
 	void myInit(int t_touch_priority, function<void(void)> t_end, function<void(void)> t_continue);
 };

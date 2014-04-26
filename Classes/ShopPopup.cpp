@@ -321,13 +321,13 @@ void ShopPopup::setShopCode(ShopCode t_code)
 				tab->addChild(sale_label);
 			}
 			
-			if(price_type == "money")
+			if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
 			{
 				CCLabelTTF* won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 				won_label->setPosition(ccp(0, -33));
 				content_node->addChild(won_label, 3);
 			}
-			else if(price_type == "ruby")
+			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 			{
 				CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
 				ruby_img->setPosition(ccp(-30, -33));
@@ -337,7 +337,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 				ruby_label->setPosition(ccp(10, -33));
 				content_node->addChild(ruby_label, 3);
 			}
-			else if(price_type == "gold")
+			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
 			{
 				CCSprite* gold_img = CCSprite::create("price_gold_img.png");
 				gold_img->setPosition(ccp(-30, -33));
@@ -436,9 +436,9 @@ void ShopPopup::cellAction(CCObject* sender)
 		string condition_type = NSDS_GS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, unlock_idx+1);
 		int condition_value = NSDS_GI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, unlock_idx+1);
 		
-		if(condition_type == "gold")
+		if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
 			is_unlock_enable = mySGD->getGoodsValue(kGoodsType_gold) >= condition_value;
-		else if(condition_type == "ruby")
+		else if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 			is_unlock_enable = mySGD->getGoodsValue(kGoodsType_ruby) >= condition_value;
 		
 		if(is_unlock_enable)
@@ -463,9 +463,9 @@ void ShopPopup::cellAction(CCObject* sender)
 		}
 		else
 		{
-			if(condition_type == "gold")
+			if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
 				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
-			else if(condition_type == "ruby")
+			else if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 			CCLog("not enough condition");
 		}
@@ -525,12 +525,12 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		int condition_value = NSDS_GI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, idx+1);
 		
 		string type_filename;
-		if(condition_type == "ruby")
+		if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 			type_filename = "price_ruby_img.png";
-		else if(condition_type == "gold")
+		else if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
 			type_filename = "price_gold_img.png";
-		else if(condition_type == "social")
-			type_filename = "price_candy_img.png";
+//		else if(condition_type == "social")
+//			type_filename = "price_candy_img.png";
 		
 		CCSprite* n_unlock = CCSprite::create("buy_button.png");
 		CCSprite* n_t_type = CCSprite::create(type_filename.c_str());
@@ -931,17 +931,44 @@ void ShopPopup::menuAction(CCObject* pSender)
 									loading_layer = LoadingLayer::create();
 									addChild(loading_layer, kSP_Z_popup);
 									
-									CCLog("%dwon!!!", index_to_ruby[tag-kSP_MT_content1].getV());
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+									mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, tag-kSP_MT_content1), "루비구매(IOS-인앱결재)", "", "", true);
 									
-									mySGD->addChangeGoods(kGoodsType_ruby, cash_to_ruby[index_to_ruby[tag-kSP_MT_content1].getV()].getV(), "결재", "", "", true);
+									mySGD->changeGoods([=](Json::Value result_data){
+										loading_layer->removeFromParent();
+										
+										if(result_data["result"]["code"].asInt() == GDSUCCESS)
+										{
+											
+										}
+										else
+										{
+											mySGD->clearChangeGoods();
+											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+										}
+										is_menu_enable = true;
+									});
 									
-									fail_func = [=]()
-									{
-										CCLog("%dwon!!!", index_to_ruby[tag-kSP_MT_content1].getV());
-										mySGD->clearChangeGoods();
-									};
 									
-									mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+									Json::Value param;
+									param["productid"] = mySGD->getInappProduct(tag-kSP_MT_content1);
+									hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+										KS::KSLog("in-app test \n%", v);
+										if(v["issuccess"].asInt())
+										{
+											requestItemDelivery();
+										}
+										else
+										{
+											loading_layer->removeFromParent();
+											
+											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+											
+											is_menu_enable = true;
+										}
+									});
+#endif
 								});
 		}
 		else if(recent_shop_code == kSC_gold)
@@ -2275,4 +2302,29 @@ void ShopPopup::registerWithTouchDispatcher()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 	pDispatcher->addTargetedDelegate(this, -300, true);
+}
+
+void ShopPopup::requestItemDelivery()
+{
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
+		if(t["result"]["code"].asInt() == GDSUCCESS)
+		{
+			CCLog("inapp success!! refresh!!!");
+			
+			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
+			
+			loading_layer->removeFromParent();
+			is_menu_enable = true;
+		}
+		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
+		{
+			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+		}
+		else
+		{
+			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+		}
+	});
 }

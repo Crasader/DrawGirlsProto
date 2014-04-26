@@ -392,7 +392,7 @@ public:
 			CCLog("%x getParent", this);
 			getParent()->addChild(t_fc, 5);
 			t_fc->startRemove();
-			mySGD->addChangeGoods(kGoodsType_gold, 1);
+			mySGD->addChangeGoodsIngameGold(1);
 		}
 		if(m_option & AttackOption::kMonsterSpeedDown)
 		{

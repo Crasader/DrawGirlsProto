@@ -403,7 +403,7 @@ void GoldLabel::myInit ()
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											setPosition(ccp((480-myGD->boarder_value*2)*1.1f/4.f,myDSH->ui_top-15));
 	
-	mySGD->setGoldLabel(this);
+	mySGD->setIngameGoldLabel(this);
 }
 MyGold * MyGold::create ()
 {
@@ -540,7 +540,7 @@ void GetGold::myInit (CCPoint t_sp, int t_duration_frame)
 {
 	AudioEngine::sharedInstance()->playEffect("sound_get_coin.mp3", false);
 	duration_frame = t_duration_frame;
-	mySGD->addChangeGoods(kGoodsType_gold, duration_frame);
+	mySGD->addChangeGoodsIngameGold(duration_frame);
 	
 	create_frame = duration_frame/60 + 1;
 	

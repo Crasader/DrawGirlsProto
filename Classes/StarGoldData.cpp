@@ -197,11 +197,17 @@ void StarGoldData::resetLabels()
 	star_label = NULL;
 	gold_label = NULL;
 	friend_point_label = NULL;
+	ingame_gold_label = NULL;
 }
 
 void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
 {
 	star_label = t_label;
+}
+
+void StarGoldData::setIngameGoldLabel( CCLabelBMFont* t_label )
+{
+	ingame_gold_label = t_label;
 }
 
 //int StarGoldData::getStar()
@@ -279,6 +285,8 @@ void StarGoldData::setGameStart()
 {
 	is_clear_diary = false;
 	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
+	
+	ingame_gold = 0;
 	
 //	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
 //		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
@@ -424,7 +432,7 @@ int StarGoldData::getStageGrade()
 
 int StarGoldData::getStageGold()
 {
-	return myDSH->getIntegerForKey(kDSH_Key_savedGold)-keep_gold.getV();
+	return ingame_gold.getV();
 }
 
 bool StarGoldData::getIsAfterSceneChapter()
@@ -1189,7 +1197,9 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 {
 	string return_value;
 	
-	if(t_type == kGoodsType_ruby)
+	if(t_type == kGoodsType_money)
+		return_value = "m";
+	else if(t_type == kGoodsType_ruby)
 		return_value = "r";
 	else if(t_type == kGoodsType_gold)
 		return_value = "g";
@@ -1244,6 +1254,14 @@ int StarGoldData::getGoodsValue(GoodsType t_type)
 		return 0;
 	else
 		return iter->second.getV();
+}
+
+void StarGoldData::addChangeGoodsIngameGold(int t_value)
+{
+	ingame_gold = ingame_gold.getV() + t_value;
+	
+	if(ingame_gold_label)
+		ingame_gold_label->setString(CCString::createWithFormat("%d", ingame_gold.getV())->getCString());
 }
 
 void StarGoldData::addChangeGoods(GoodsType t_type, int t_value, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
@@ -1318,6 +1336,8 @@ void StarGoldData::changeGoods(jsonSelType t_callback)
 
 void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback)
 {
+	addChangeGoods(kGoodsType_gold, ingame_gold.getV(), "인게임", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	
 	vector<CommandParam> transaction_list;
 	
 	Json::Value transaction_param;
@@ -1372,6 +1392,17 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 	{
 		
 	}
+}
+
+void StarGoldData::refreshGoodsData(string t_key, int t_count)
+{
+	GoodsType t_type = getGoodsKeyToType(t_key);
+	goods_data[t_type] = t_count;
+	
+	if(t_type == kGoodsType_ruby && star_label)
+		star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+	else if(t_type == kGoodsType_gold && gold_label)
+		gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
 }
 
 CommandParam StarGoldData::getChangeGoodsParam(jsonSelType t_callback)
@@ -1888,4 +1919,14 @@ void StarGoldData::setIngameTutorialRewardGold(int t_i)
 int StarGoldData::getIngameTutorialRewardGold()
 {
 	return ingame_tutorial_reward_gold.getV();
+}
+
+void StarGoldData::initInappProduct(int t_index, string t_product)
+{
+	inapp_products[t_index] = t_product;
+}
+
+string StarGoldData::getInappProduct(int t_index)
+{
+	return inapp_products[t_index].getV();
 }

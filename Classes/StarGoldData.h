@@ -128,6 +128,7 @@ enum ReplayKey
 enum GoodsType
 {
 	kGoodsType_begin = 0,
+	kGoodsType_money,
 	kGoodsType_ruby,
 	kGoodsType_gold,
 	kGoodsType_item9,
@@ -164,6 +165,7 @@ public:
 	void resetLabels();
 	
 	void setStarLabel(CCLabelBMFont* t_label);
+	void setIngameGoldLabel( CCLabelBMFont* t_label );
 //	int getStar();
 //	void setStar(int t_star);
 	
@@ -414,6 +416,9 @@ public:
 	void setIngameTutorialRewardGold(int t_i);
 	int getIngameTutorialRewardGold();
 	
+	string getInappProduct(int t_index);
+	void initInappProduct(int t_index, string t_product);
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -482,11 +487,15 @@ public:
 	void initProperties(Json::Value t_list);
 	string getGoodsTypeToKey(GoodsType t_type);
 	GoodsType getGoodsKeyToType(string t_key);
+	void addChangeGoodsIngameGold(int t_value);
 	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void clearChangeGoods();
 	void changeGoods(jsonSelType t_callback);
 	void changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback);
+	void refreshGoodsData(string t_key, int t_count);
+	CommandParam getChangeGoodsParam(jsonSelType t_callback);
+	void saveChangeGoodsTransaction(Json::Value result_data);
 	
 	int getGoodsValue(GoodsType t_type);
 	
@@ -503,6 +512,7 @@ private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* friend_point_label;
+	CCLabelBMFont* ingame_gold_label;
 	
 	vector<KSProtectVar<int>> bonus_item_cnt;
 
@@ -517,6 +527,7 @@ private:
 	KSProtectVar<int> stage_grade;
 	KSProtectVar<int> keep_gold;
 	KSProtectVar<int> game_time;
+	KSProtectVar<int> ingame_gold;
 	
 	int start_map_gacha_cnt;
 		   
@@ -593,12 +604,12 @@ private:
 	KSProtectVar<int> upgrade_gold_fee;
 	KSProtectVar<int> ingame_tutorial_reward_gold;
 	
+	KSProtectStr inapp_products[6];
+	
 	map<GoodsType, KSProtectVar<int>> goods_data;
 	vector<ChangeGoodsData> change_goods_list;
 	jsonSelType change_goods_callback;
 	void resultChangeGoods(Json::Value result_data);
-	CommandParam getChangeGoodsParam(jsonSelType t_callback);
-	void saveChangeGoodsTransaction(Json::Value result_data);
 	void retryChangeGoods();
 	
 	
