@@ -1,7 +1,6 @@
 package com.litqoo.lib;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -14,22 +13,19 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
-import android.text.TextUtils;
-import android.util.Base64;
+import android.os.Handler;
 import android.util.Log;
 
+import com.hangame.hsp.HSPCore;
+import com.hangame.hsp.HSPMessage;
+import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.cgp.HSPCGP;
-import com.hangame.hsp.cgp.HSPCGP.CheckPromotionCB;
-
+import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.payment.HSPPayment;
-import com.hangame.hsp.payment.HSPPayment.PurchaseCB;
-
-
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
 //import com.kakao.api.Logger;
@@ -37,13 +33,6 @@ import com.hangame.hsp.payment.HSPPayment.PurchaseCB;
 //import com.kakao.api.Kakao.KakaoTokenListener;
 //import com.kakao.api.Kakao.LogLevel;
 //import com.kakao.api.KakaoLeaderboard;
-import android.os.Handler;
-
-import com.hangame.hsp.HSPCore;
-import com.hangame.hsp.HSPMessage;
-import com.hangame.hsp.HSPResult;
-import com.hangame.hsp.HSPMyProfile;
-import com.hangame.hsp.HSPServiceProperties;
 
 
 abstract class KRunnable implements Runnable
@@ -162,6 +151,31 @@ public class hspConnector{
 				}
 				);
 		
+	}
+	public static void finishItemDelivery(final int _key, final String datas)
+	{
+		try {
+			Log.d("finishItemDelivery", datas);
+			JSONObject json = new JSONObject(datas);
+			JSONArray itemSeqArray = json.getJSONArray("itemsequence");
+			ArrayList<Long> itemList = new ArrayList<Long>();
+			for(int i=0; i<itemSeqArray.length(); i++)
+			{
+				itemList.add(itemSeqArray.getLong(i));
+			}
+			boolean result = HSPItemDelivery.finishItemDelivery(json.getLong("transactionid"), itemList);
+			
+			JSONObject sendMessage = new JSONObject();
+			sendMessage.put("issuccess", result == true ? 1 : 0);
+			mGLView.queueEvent(new KRunnable(_key, sendMessage.toString()) {
+				public void run() {
+					hspConnector.SendResult(this.delekey,this.totalSource);
+				}
+			});
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public static void SendResult(int _key,String datas){
 		int size = datas.length();

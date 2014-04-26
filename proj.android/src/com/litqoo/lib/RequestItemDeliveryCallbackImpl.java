@@ -27,6 +27,7 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 	public void onRequestItemDelivery(HSPResult hspResult, long transactionId, List<ItemInfo> itemInfoList, String receipt)
 	{
 		JSONObject r = new JSONObject();
+		
 		if (hspResult.isSuccess()) {
 			Log.d("litqoo", "success on RequestItemDeli");
 			try {
@@ -44,12 +45,12 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 
 				//                                                    applyItems(itemInfoList); //게임에서 자체 구현함
 				// 아이템 적용 완료후 finishItemDelivery 호출
-				ArrayList<Long> itemSeq = new ArrayList<Long>();
+//				ArrayList<Long> itemSeq = new ArrayList<Long>();
 				JSONArray jsonItemSeq = new JSONArray();
 				
 				for(ItemInfo i : itemInfoList)
 				{
-					itemSeq.add(i.getItemSequence());
+//					itemSeq.add(i.getItemSequence());
 					jsonItemSeq.put(i.getItemSequence());
 				}
 				try {
@@ -59,7 +60,7 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				HSPItemDelivery.finishItemDelivery(transactionId, itemSeq);
+//				HSPItemDelivery.finishItemDelivery(transactionId, itemSeq); // finishItemDelivery 는 C++ 에게 맡김. 
 			}
 			else {
 				// 배송할 상품이 없음
@@ -82,11 +83,9 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 		}
 		Log.d("graphdog", "@@" + r.toString());
 		m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
-
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-
 				hspConnector.SendResult(this.delekey, this.totalSource);
 			}
 		});

@@ -25,15 +25,9 @@ package com.nhnent.SKDRAWGIRLSA;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.cocos2dx.lib.Cocos2dxActivity;
-import org.cocos2dx.lib.Cocos2dxEditText;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
-import org.cocos2dx.lib.Cocos2dxRenderer;
-
-import com.litqoo.lib.KSActivityBase;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -43,6 +37,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
+
+import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
+import com.litqoo.lib.KSActivityBase;
 
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onCreate(Bundle savedInstanceState){
@@ -98,7 +95,20 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     	
     	return glSurfaceView;
     }
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    @Override
+    protected void onResume()
+    {
+         super.onResume();     
+         ADBrixManager.startSession(this); // getApplicationContext()에서 activity를 넣어주는 것으로 변경 되었습니다. - 2013-11-13
+    }
+    @Override
+    protected void onPause()
+    {
+         super.onPause();
+         //ADBrixManager.endSession() 은 홈버튼, 전원버튼 등으로 앱을 이탈 및 종료할 때 예외 없이 호출되어야 합니다.
+         ADBrixManager.endSession();
+    }
+    //    protected void onActivityResult(int requestCode, int resultCode, Intent data){
 //    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
 //    }
 }
