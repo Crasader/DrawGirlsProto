@@ -63,7 +63,7 @@ void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::stri
 		
 	batchNode->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(batchNode);
-	
+	AudioEngine::sharedInstance()->playEffect("se_missile.mp3", true);
 	scheduleUpdate();
 }
 
@@ -194,6 +194,7 @@ void CommonBulletPattern::stopMyAction()
 	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
+	AudioEngine::sharedInstance()->stopEffect("se_missile.mp3");
 }
 
 void CommonBulletPattern::initGuns()
@@ -437,7 +438,10 @@ void FallingStoneWrapper::selfRemove()
 
 void FallingStoneWrapper::startMyAction()
 {
-	AudioEngine::sharedInstance()->playEffect("sound_rock_falling.mp3", true);
+	
+	// 운석 떨어질때
+	AudioEngine::sharedInstance()->playEffect("se_meteor.mp3");
+//	AudioEngine::sharedInstance()->playEffect("sound_rock_falling.mp3", true);
 	ingFrame = 0;
 	schedule(schedule_selector(FallingStoneWrapper::myAction));
 }
@@ -1294,6 +1298,7 @@ void FreezeAttack::stopFrame()
 
 void FreezeAttack::startFrame()
 {
+	AudioEngine::sharedInstance()->playEffect("se_sun.mp3");
 	ingFrame = 0;
 	schedule(schedule_selector(FreezeAttack::framing));
 }
@@ -2562,7 +2567,8 @@ void CrashLazerWrapper::stopMyAction()
 
 	m_cumber->setAttackPattern(nullptr);
 	myGD->communication("CP_onPatternEndOf", m_cumber);
-
+	AudioEngine::sharedInstance()->stopEffect("se_destructionlaser_1.mp3");
+	AudioEngine::sharedInstance()->stopEffect("se_destructionlaser_2.mp3");
 
 
 	startSelfRemoveSchedule();
@@ -2683,7 +2689,8 @@ void CrashLazerWrapper::selfRemoveSchedule()
 
 void CrashLazerWrapper::startMyAction()
 {
-	AudioEngine::sharedInstance()->playEffect("sound_angle_beem.mp3", false);
+	AudioEngine::sharedInstance()->playEffect("se_destructionlaser_1.mp3", true);
+//	AudioEngine::sharedInstance()->playEffect("sound_angle_beem.mp3", false);
 	ingFrame = 0;
 	schedule(schedule_selector(ThisClassType::myAction));
 }
@@ -2716,6 +2723,9 @@ void CrashLazerWrapper::myAction()
 
 		if(ingFrame == chargeFrame)
 		{
+			AudioEngine::sharedInstance()->stopEffect("se_destructionlaser_1.mp3");
+			AudioEngine::sharedInstance()->playEffect("se_destructionlaser_2.mp3", true);
+			
 			auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_head.ccbi");
 			KS::setBlendFunc(ret.first, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 			lazer_main = ret.first;
@@ -2788,12 +2798,14 @@ void CrashLazerWrapper::myAction()
 			myGD->communication("CP_jackCrashDie");
 			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			//				stopMySchedule();
+//			AudioEngine::sharedInstance()->stopEffect("se_destructionlaser_2.mp3");
 			stopMyAction();
 		}
 	}
 
 	if(ingFrame >= chargeFrame+crashFrame)
 	{
+//		AudioEngine::sharedInstance()->stopEffect("se_destructionlaser_2.mp3");
 		stopMyAction();
 	}
 	ingFrame++;
@@ -3700,6 +3712,7 @@ void CobWeb::updateCobWeb()
 
 void CobWeb::startFrame()
 {
+	AudioEngine::sharedInstance()->playEffect("se_slowzone.mp3");
 	ingFrame = 0;
 	schedule(schedule_selector(CobWeb::framing));
 }
@@ -3812,7 +3825,7 @@ void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternD
 	//		cobwebImg->runAction(t_scale); // 나중에 수동으로 구현해야함.
 
 	//		myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
-
+	
 	startFrame();
 }
 
@@ -3885,6 +3898,7 @@ void PrisonPattern::myInit( CCPoint t_sp, float radius, int totalFrame ) /* crea
 	//KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	m_prisonSprite = ret.first;
 	m_prisonSprite->setPosition(m_initialJackPosition);
+	AudioEngine::sharedInstance()->playEffect("se_prison.mp3");
 	addChild(m_prisonSprite);
 }
 

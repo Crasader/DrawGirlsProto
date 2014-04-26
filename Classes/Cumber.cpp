@@ -31,7 +31,10 @@ void CumberParent::onStartGame()
 }
 void CumberParent::onPatternEndOf(CCObject* cb)
 {
+	
 	((KSCumberBase*)cb)->onPatternEnd();
+	
+	
 }
 void CumberParent::onPatternEnd()
 {
