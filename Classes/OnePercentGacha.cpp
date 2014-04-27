@@ -98,7 +98,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
-		LoadingLayer* t_loading = LoadingLayer::create(-9999);
+		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);
 		
 		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠");
@@ -106,6 +106,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		mySGD->changeGoods([=](Json::Value result_data){
 			if(result_data["result"]["code"] == GDSUCCESS)
 			{
+				t_loading->removeFromParent();
 				gacha_button->removeFromParent();
 				
 				CCLabelTTF* t_label = CCLabelTTF::create();
@@ -235,7 +236,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 																		
 																		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 																		
-																		inapp_loading = LoadingLayer::create(-9999);
+																		inapp_loading = LoadingLayer::create(-9999, true);
 																		addChild(inapp_loading);
 																		
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS

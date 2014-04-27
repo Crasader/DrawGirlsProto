@@ -35,7 +35,8 @@ void ContinueContent::menuAction(CCObject* sender)
 	{
 		if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getPlayContinueFee())
 		{
-			LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200);
+			LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+			t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 			addChild(t_popup, 9999);
 			
 			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getPlayContinueFee(), "이어하기");
@@ -150,7 +151,8 @@ void ContinueContent::menuAction(CCObject* sender)
 			
 			CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 																		{
-																			inapp_loading = LoadingLayer::create(-9999);
+																			inapp_loading = LoadingLayer::create(-9999, true);
+																			inapp_loading->setPosition(ccp(-240, -myDSH->ui_center_y));
 																			addChild(inapp_loading);
 																			
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
