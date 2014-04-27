@@ -860,9 +860,6 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		Json::Reader reader1;
 		reader1.parse(result_data["data"].asString(), data1);
 		
-		if(data1[myDSH->getKey(kDSH_Key_nick)].asString() == "")
-			myDSH->clear();
-		
 		myDSH->resetDSH();
 		myDSH->loadAllUserData(result_data);
 		

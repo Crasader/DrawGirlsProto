@@ -85,7 +85,7 @@ private:
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
 	
-	int selected_stage_number;
+//	int selected_stage_number;
 	
 	int next_stage_number;
 	
