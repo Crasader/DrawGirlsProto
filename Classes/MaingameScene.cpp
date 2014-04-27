@@ -858,7 +858,7 @@ void Maingame::gachaOn()
 	mControl->setTouchEnabled(false);
 	exit_target->onExit();
 	
-	LoadingLayer* t_loading = LoadingLayer::create(-9999);
+	LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 	addChild(t_loading, 9999);
 	
 	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");

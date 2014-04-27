@@ -106,21 +106,9 @@ public:
 			mySAE->preloadEffect("bgm_result.mp3");
 			mySAE->preloadEffect("ment_rankup.mp3");
 			mySAE->preloadEffect("ment_title.mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
 			
-		}
-		else if(scenename == "Maingame")
-		{
+			
+			
 			mySAE->preloadEffect("se_area.mp3");
 			mySAE->preloadEffect("se_item.mp3");
 			mySAE->preloadEffect("se_drawcancel.mp3");
@@ -175,28 +163,6 @@ public:
 			mySAE->preloadEffect("ment_stageclear3.mp3");
 			mySAE->preloadEffect("ment_timeover.mp3");
 			mySAE->preloadEffect("ment_unlockmap.mp3");
-//			mySAE->preloadEffect("ment_.mp3");
-			
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-//			mySAE->preloadEffect(".mp3");
-			
-			
 			
 			mySAE->preloadEffect("sound_ready.mp3");
 			mySAE->preloadEffect("sound_go.mp3");
@@ -248,13 +214,57 @@ public:
 			mySAE->preloadEffect("sound_gameover_ment.mp3");
 			mySAE->preloadEffect("sound_showtime_bgm.mp3");
 			mySAE->preloadEffect("sound_showtime_ment.mp3");
-		}
-		else if(scenename == "Ending")
-		{
+			
+			
 			mySAE->preloadEffect("sound_ending_clear.mp3");
 			mySAE->preloadEffect("sound_ending_fail.mp3");
 			mySAE->preloadEffect("sound_star_visible.mp3");
 			mySAE->preloadEffect("sound_calc.mp3");
+			
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+			
+		}
+		else if(scenename == "Maingame")
+		{
+			
+//			mySAE->preloadEffect("ment_.mp3");
+			
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+//			mySAE->preloadEffect(".mp3");
+			
+			
+			
+			
+		}
+		else if(scenename == "Ending")
+		{
+			
 		}
 	}
 	void unloadEffectScene(string scenename)
@@ -272,118 +282,118 @@ public:
 		}
 		else if(scenename == "Maingame")
 		{
-			mySAE->unloadEffect("se_area.mp3");
-			mySAE->unloadEffect("se_item.mp3");
-			mySAE->unloadEffect("se_drawcancel.mp3");
-			mySAE->unloadEffect("se_monattacked.mp3");
-			mySAE->unloadEffect("se_energywave.mp3");
-			mySAE->unloadEffect("se_castmissile.mp3");
-			mySAE->unloadEffect("se_castspecial.mp3");
-			mySAE->unloadEffect("se_castmap.mp3");
-			mySAE->unloadEffect("se_subdie.mp3");
-			
-			mySAE->unloadEffect("se_destructionlaser_1.mp3");
-			mySAE->unloadEffect("se_destructionlaser_2.mp3");
-			mySAE->unloadEffect("se_missile.mp3");
-			mySAE->unloadEffect("se_sun.mp3");
-			mySAE->unloadEffect("se_slowzone.mp3");
-			mySAE->unloadEffect("se_prison.mp3");
-			mySAE->unloadEffect("se_instantmove.mp3");
-			mySAE->unloadEffect("se_meteo_1.mp3");
-			mySAE->unloadEffect("se_meteo_2.mp3");
-			mySAE->unloadEffect("se_meteo_3.mp3");
-			mySAE->unloadEffect("se_meteor.mp3");
-			
-			mySAE->unloadEffect("ment_30second.mp3");
-			mySAE->unloadEffect("ment_99percent.mp3");
-			mySAE->unloadEffect("ment_attack1.mp3");
-			mySAE->unloadEffect("ment_attack2.mp3");
-			mySAE->unloadEffect("ment_attack3.mp3");
-			mySAE->unloadEffect("ment_attack4.mp3");
-			mySAE->unloadEffect("ment_cast_crash.mp3");
-			mySAE->unloadEffect("ment_cast_missile.mp3");
-			mySAE->unloadEffect("ment_cast_special.mp3");
-			mySAE->unloadEffect("ment_change_success.mp3");
-			mySAE->unloadEffect("ment_die1.mp3");
-			mySAE->unloadEffect("ment_die2.mp3");
-			mySAE->unloadEffect("ment_die3.mp3");
-			mySAE->unloadEffect("ment_gameover1.mp3");
-			mySAE->unloadEffect("ment_gameover2.mp3");
-			mySAE->unloadEffect("ment_gameover3.mp3");
-			mySAE->unloadEffect("ment_go.mp3");
-			mySAE->unloadEffect("ment_mission_fail.mp3");
-			mySAE->unloadEffect("ment_mission_success.mp3");
-			mySAE->unloadEffect("ment_pattern_cancel1.mp3");
-			mySAE->unloadEffect("ment_pattern_cancel2.mp3");
-			mySAE->unloadEffect("ment_pattern_cancel3.mp3");
-			mySAE->unloadEffect("ment_pattern_cancel4.mp3");
-			mySAE->unloadEffect("ment_ready.mp3");
-			mySAE->unloadEffect("ment_resurrection1.mp3");
-			mySAE->unloadEffect("ment_resurrection2.mp3");
-			mySAE->unloadEffect("ment_spread_change.mp3");
-			mySAE->unloadEffect("ment_stageclear1.mp3");
-			mySAE->unloadEffect("ment_stageclear2.mp3");
-			mySAE->unloadEffect("ment_stageclear3.mp3");
-			mySAE->unloadEffect("ment_timeover.mp3");
-			mySAE->unloadEffect("ment_unlockmap.mp3");
-			
-			mySAE->unloadEffect("sound_ready.mp3");
-			mySAE->unloadEffect("sound_go.mp3");
-			mySAE->unloadEffect("sound_get_coin.mp3");
-			mySAE->unloadEffect("sound_basic_missile_shoot.mp3");
-			mySAE->unloadEffect("sound_spin_missile.mp3");
-			mySAE->unloadEffect("sound_jack_die.mp3");
-			mySAE->unloadEffect("sound_jack_drawing.mp3");
-			mySAE->unloadEffect("sound_casting_attack.mp3");
-			mySAE->unloadEffect("sound_casting_crash.mp3");
-			mySAE->unloadEffect("sound_casting_option.mp3");
-			mySAE->unloadEffect("sound_stamp.mp3");
-			mySAE->unloadEffect("sound_jack_basic_missile_shoot.mp3");
-			mySAE->unloadEffect("sound_jack_special_missile.mp3");
-			mySAE->unloadEffect("sound_jack_missile_bomb.mp3");
-			mySAE->unloadEffect("sound_crashed_map.mp3");
-			mySAE->unloadEffect("sound_pilsalgi.mp3");
-			mySAE->unloadEffect("sound_bomb_wave.mp3");
-			mySAE->unloadEffect("sound_throw_obj_shot.mp3");
-			mySAE->unloadEffect("sound_threecusion_bomb.mp3");
-			mySAE->unloadEffect("sound_rock_falling.mp3");
-			mySAE->unloadEffect("sound_fire_shot.mp3");
-			mySAE->unloadEffect("sound_stun_hit.mp3");
-			mySAE->unloadEffect("sound_teleport.mp3");
-			mySAE->unloadEffect("sound_time_noti.mp3");
-			mySAE->unloadEffect("sound_ice_hold.mp3");
-			mySAE->unloadEffect("sound_returntojack.mp3");
-			mySAE->unloadEffect("sound_sleep.mp3");
-			mySAE->unloadEffect("sound_pil_life.mp3");
-			mySAE->unloadEffect("sound_pil_plasma.mp3");
-			mySAE->unloadEffect("sound_pil_fire.mp3");
-			mySAE->unloadEffect("sound_pil_ice.mp3");
-			mySAE->unloadEffect("sound_pil_lightning.mp3");
-			mySAE->unloadEffect("sound_pil_wind.mp3");
-			mySAE->unloadEffect("sound_barrier_pass.mp3");
-			mySAE->unloadEffect("sound_angle_beem.mp3");
-			mySAE->unloadEffect("sound_tickingTimeBomb.mp3");
-			mySAE->unloadEffect("sound_meteor.mp3");
-			mySAE->unloadEffect("sound_TGshoot.mp3");
-			mySAE->unloadEffect("sound_satellitebeam.mp3");
-			
-			mySAE->unloadEffect("sound_attackpattern_base.mp3");
-			mySAE->unloadEffect("sound_attackpattern_crash.mp3");
-			mySAE->unloadEffect("sound_bomb_common.mp3");
-//			mySAE->unloadEffect("sound_clear_bgm.mp3");
-			mySAE->unloadEffect("sound_clear_ment.mp3");
-			mySAE->unloadEffect("sound_die_jack.mp3");
-			mySAE->unloadEffect("sound_gameover_bgm.mp3");
-			mySAE->unloadEffect("sound_gameover_ment.mp3");
-			mySAE->unloadEffect("sound_showtime_bgm.mp3");
-			mySAE->unloadEffect("sound_showtime_ment.mp3");
+//			mySAE->unloadEffect("se_area.mp3");
+//			mySAE->unloadEffect("se_item.mp3");
+//			mySAE->unloadEffect("se_drawcancel.mp3");
+//			mySAE->unloadEffect("se_monattacked.mp3");
+//			mySAE->unloadEffect("se_energywave.mp3");
+//			mySAE->unloadEffect("se_castmissile.mp3");
+//			mySAE->unloadEffect("se_castspecial.mp3");
+//			mySAE->unloadEffect("se_castmap.mp3");
+//			mySAE->unloadEffect("se_subdie.mp3");
+//			
+//			mySAE->unloadEffect("se_destructionlaser_1.mp3");
+//			mySAE->unloadEffect("se_destructionlaser_2.mp3");
+//			mySAE->unloadEffect("se_missile.mp3");
+//			mySAE->unloadEffect("se_sun.mp3");
+//			mySAE->unloadEffect("se_slowzone.mp3");
+//			mySAE->unloadEffect("se_prison.mp3");
+//			mySAE->unloadEffect("se_instantmove.mp3");
+//			mySAE->unloadEffect("se_meteo_1.mp3");
+//			mySAE->unloadEffect("se_meteo_2.mp3");
+//			mySAE->unloadEffect("se_meteo_3.mp3");
+//			mySAE->unloadEffect("se_meteor.mp3");
+//			
+//			mySAE->unloadEffect("ment_30second.mp3");
+//			mySAE->unloadEffect("ment_99percent.mp3");
+//			mySAE->unloadEffect("ment_attack1.mp3");
+//			mySAE->unloadEffect("ment_attack2.mp3");
+//			mySAE->unloadEffect("ment_attack3.mp3");
+//			mySAE->unloadEffect("ment_attack4.mp3");
+//			mySAE->unloadEffect("ment_cast_crash.mp3");
+//			mySAE->unloadEffect("ment_cast_missile.mp3");
+//			mySAE->unloadEffect("ment_cast_special.mp3");
+//			mySAE->unloadEffect("ment_change_success.mp3");
+//			mySAE->unloadEffect("ment_die1.mp3");
+//			mySAE->unloadEffect("ment_die2.mp3");
+//			mySAE->unloadEffect("ment_die3.mp3");
+//			mySAE->unloadEffect("ment_gameover1.mp3");
+//			mySAE->unloadEffect("ment_gameover2.mp3");
+//			mySAE->unloadEffect("ment_gameover3.mp3");
+//			mySAE->unloadEffect("ment_go.mp3");
+//			mySAE->unloadEffect("ment_mission_fail.mp3");
+//			mySAE->unloadEffect("ment_mission_success.mp3");
+//			mySAE->unloadEffect("ment_pattern_cancel1.mp3");
+//			mySAE->unloadEffect("ment_pattern_cancel2.mp3");
+//			mySAE->unloadEffect("ment_pattern_cancel3.mp3");
+//			mySAE->unloadEffect("ment_pattern_cancel4.mp3");
+//			mySAE->unloadEffect("ment_ready.mp3");
+//			mySAE->unloadEffect("ment_resurrection1.mp3");
+//			mySAE->unloadEffect("ment_resurrection2.mp3");
+//			mySAE->unloadEffect("ment_spread_change.mp3");
+//			mySAE->unloadEffect("ment_stageclear1.mp3");
+//			mySAE->unloadEffect("ment_stageclear2.mp3");
+//			mySAE->unloadEffect("ment_stageclear3.mp3");
+//			mySAE->unloadEffect("ment_timeover.mp3");
+//			mySAE->unloadEffect("ment_unlockmap.mp3");
+//			
+//			mySAE->unloadEffect("sound_ready.mp3");
+//			mySAE->unloadEffect("sound_go.mp3");
+//			mySAE->unloadEffect("sound_get_coin.mp3");
+//			mySAE->unloadEffect("sound_basic_missile_shoot.mp3");
+//			mySAE->unloadEffect("sound_spin_missile.mp3");
+//			mySAE->unloadEffect("sound_jack_die.mp3");
+//			mySAE->unloadEffect("sound_jack_drawing.mp3");
+//			mySAE->unloadEffect("sound_casting_attack.mp3");
+//			mySAE->unloadEffect("sound_casting_crash.mp3");
+//			mySAE->unloadEffect("sound_casting_option.mp3");
+//			mySAE->unloadEffect("sound_stamp.mp3");
+//			mySAE->unloadEffect("sound_jack_basic_missile_shoot.mp3");
+//			mySAE->unloadEffect("sound_jack_special_missile.mp3");
+//			mySAE->unloadEffect("sound_jack_missile_bomb.mp3");
+//			mySAE->unloadEffect("sound_crashed_map.mp3");
+//			mySAE->unloadEffect("sound_pilsalgi.mp3");
+//			mySAE->unloadEffect("sound_bomb_wave.mp3");
+//			mySAE->unloadEffect("sound_throw_obj_shot.mp3");
+//			mySAE->unloadEffect("sound_threecusion_bomb.mp3");
+//			mySAE->unloadEffect("sound_rock_falling.mp3");
+//			mySAE->unloadEffect("sound_fire_shot.mp3");
+//			mySAE->unloadEffect("sound_stun_hit.mp3");
+//			mySAE->unloadEffect("sound_teleport.mp3");
+//			mySAE->unloadEffect("sound_time_noti.mp3");
+//			mySAE->unloadEffect("sound_ice_hold.mp3");
+//			mySAE->unloadEffect("sound_returntojack.mp3");
+//			mySAE->unloadEffect("sound_sleep.mp3");
+//			mySAE->unloadEffect("sound_pil_life.mp3");
+//			mySAE->unloadEffect("sound_pil_plasma.mp3");
+//			mySAE->unloadEffect("sound_pil_fire.mp3");
+//			mySAE->unloadEffect("sound_pil_ice.mp3");
+//			mySAE->unloadEffect("sound_pil_lightning.mp3");
+//			mySAE->unloadEffect("sound_pil_wind.mp3");
+//			mySAE->unloadEffect("sound_barrier_pass.mp3");
+//			mySAE->unloadEffect("sound_angle_beem.mp3");
+//			mySAE->unloadEffect("sound_tickingTimeBomb.mp3");
+//			mySAE->unloadEffect("sound_meteor.mp3");
+//			mySAE->unloadEffect("sound_TGshoot.mp3");
+//			mySAE->unloadEffect("sound_satellitebeam.mp3");
+//			
+//			mySAE->unloadEffect("sound_attackpattern_base.mp3");
+//			mySAE->unloadEffect("sound_attackpattern_crash.mp3");
+//			mySAE->unloadEffect("sound_bomb_common.mp3");
+////			mySAE->unloadEffect("sound_clear_bgm.mp3");
+//			mySAE->unloadEffect("sound_clear_ment.mp3");
+//			mySAE->unloadEffect("sound_die_jack.mp3");
+//			mySAE->unloadEffect("sound_gameover_bgm.mp3");
+//			mySAE->unloadEffect("sound_gameover_ment.mp3");
+//			mySAE->unloadEffect("sound_showtime_bgm.mp3");
+//			mySAE->unloadEffect("sound_showtime_ment.mp3");
 		}
 		else if(scenename == "Ending")
 		{
-			mySAE->unloadEffect("sound_ending_clear.mp3");
-			mySAE->unloadEffect("sound_ending_fail.mp3");
-			mySAE->unloadEffect("sound_star_visible.mp3");
-			mySAE->unloadEffect("sound_calc.mp3");
+//			mySAE->unloadEffect("sound_ending_clear.mp3");
+//			mySAE->unloadEffect("sound_ending_fail.mp3");
+//			mySAE->unloadEffect("sound_star_visible.mp3");
+//			mySAE->unloadEffect("sound_calc.mp3");
 		}
 	}
 	void startGame()
