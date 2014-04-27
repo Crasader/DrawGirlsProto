@@ -383,6 +383,7 @@ private:
 		CCSprite* left_top_paper = CCSprite::create("diary_paper.png");
 		left_top_paper->setPosition(ccp(46,277));
 		target->addChild(left_top_paper);
+		left_top_paper->setOpacity(0);
 		
 		top_cover = left_top_paper;
 		
@@ -391,6 +392,7 @@ private:
 		right_bottom_paper->setPosition(ccp(213,44));
 		target->addChild(right_bottom_paper);
 		bottom_cover = right_bottom_paper;
+		right_bottom_paper->setOpacity(0);
 	}
 };
 
