@@ -2645,11 +2645,13 @@ void KSCumberBase::applyAutoBalance()
 	
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
 	CCLog("#################### autobalance ############################");
-	CCLog("vicetory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
+	CCLog("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-
+	
+	
 	if(vCount>0){
-		m_aiValue = m_aiValue+5*vCount;
+		if(m_attackPercent>0)m_aiValue = m_aiValue+5*vCount;
+		else m_aiValue = m_aiValue+2.5f*vCount;
 		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.05;
 		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.05;
 	}

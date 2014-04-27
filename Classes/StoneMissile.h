@@ -832,7 +832,7 @@ public:
 			float random_float = 1.f + random_value/100.f;
 			
 			m_initRad = atan2f(diff.y, diff.x) * random_float;
-			m_currentRad = m_initRad + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
+			m_currentRad = m_initRad; // + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
 			scheduleUpdate();
 		}
 		return true;
@@ -935,7 +935,7 @@ public:
 				}
 				else 
 				{
-					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
+					//m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
 				}
 //				m_currentRad = m_currentRad + tt - m_currentRad;
 				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
@@ -943,7 +943,7 @@ public:
 				
 				if(m_selfRotation)
 				{
-					m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 20);
 				}
 				else
 				{

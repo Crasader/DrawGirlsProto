@@ -428,7 +428,8 @@ bool OptionPopup::init()
 	id_label->setPosition(ccp(30,45));
 	main_case->addChild(id_label, kOP_Z_back);
 	
-	CCLabelTTF* my_id_label = CCLabelTTF::create(KS::longLongToStr(hspConnector::get()->myKakaoInfo.get("userIndex", 0).asInt64() + 1000).c_str(), mySGD->getFont().c_str(), 11);
+	
+	CCLabelTTF* my_id_label = CCLabelTTF::create(CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString(), mySGD->getFont().c_str(), 11);
 	my_id_label->setAnchorPoint(ccp(0,0.5));
 	my_id_label->setPosition(ccp(78,45));
 	main_case->addChild(my_id_label, kOP_Z_content);
