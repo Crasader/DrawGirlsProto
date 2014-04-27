@@ -17,6 +17,7 @@
 #include "LoadingLayer.h"
 #include "MyLocalization.h"
 #include "AudioEngine.h"
+#include "PuzzleScene.h"
 
 ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
 {
@@ -305,7 +306,10 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	if(mySGD->getGoodsValue(kGoodsType_gold) < mySGD->getItemGachaReplayGoldFee())
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
+		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
+		{
+			((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+		}), 9999);
 		is_menu_enable = true;
 		return;
 	}
