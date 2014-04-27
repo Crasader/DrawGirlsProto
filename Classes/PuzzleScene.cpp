@@ -1464,30 +1464,15 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_ruby);
-			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-			addChild(t_shop, kPuzzleZorder_popup);
+			showShopPopup(kSC_ruby);
 		}
 		else if(tag == kPuzzleMenuTag_goldShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_gold);
-			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-			addChild(t_shop, kPuzzleZorder_popup);
+			showShopPopup(kSC_gold);
 		}
 		else if(tag == kPuzzleMenuTag_heartShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_heart);
-			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-			addChild(t_shop, kPuzzleZorder_popup);
+			showShopPopup(kSC_heart);
 		}
 		else if(tag == kPuzzleMenuTag_postbox)
 		{
@@ -1548,6 +1533,16 @@ void PuzzleScene::menuAction(CCObject* sender)
 			is_menu_enable = true;
 		}
 	}
+}
+
+void PuzzleScene::showShopPopup(ShopCode t_code)
+{
+	ShopPopup* t_shop = ShopPopup::create();
+	t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	t_shop->targetHeartTime(heart_time);
+	t_shop->setShopCode(t_code);
+	t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+	addChild(t_shop, kPuzzleZorder_popup+100);
 }
 
 void PuzzleScene::startAutoTurnPiece()

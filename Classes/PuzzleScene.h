@@ -14,6 +14,7 @@
 #include "jsoncpp/json.h"
 #include "KnownFriend.h"
 #include "PuzzlePiece.h"
+#include "ShopPopup.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -51,6 +52,8 @@ public:
 	
 	HeartTime* heart_time;
 	CCNode* tutorial_node;
+	
+	void showShopPopup(ShopCode t_code);
 	
 	virtual ~PuzzleScene()
 	{

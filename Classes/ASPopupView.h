@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -68,6 +69,11 @@ public:
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment);
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func);
 	
+	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func);
+	
+	bool is_menu_enable;
+	vector<function<void()>> button_func_list;
+	
 protected:
 	CCSprite* dimmed_sprite;
 	CCPoint base_position;
@@ -76,6 +82,7 @@ protected:
 	
 	void myInit(int t_touch_priority)
 	{
+		is_menu_enable = false;
 		touch_priority = t_touch_priority;
 		setTouchEnabled(true);
 		
@@ -115,6 +122,8 @@ protected:
 	{
 		
 	}
+	
+	void buttonAction(CCObject* sender, CCControlEvent t_event);
 };
 
 #endif /* defined(__DGproto__ASPopupView__) */
