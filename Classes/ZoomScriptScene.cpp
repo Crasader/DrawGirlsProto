@@ -144,12 +144,17 @@ bool ZoomScript::init()
 
 void ZoomScript::onEnterTransitionDidFinish()
 {
-	CCMoveTo* move1 = CCMoveTo::create(1.3f, ccp(0,0));
+	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
 	CCDelayTime* delay1 = CCDelayTime::create(1.f);
-	CCMoveTo* move2 = CCMoveTo::create(1.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+	
+	CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
+	CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
+	CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+	
+//	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	CCDelayTime* delay2 = CCDelayTime::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::startScript));
-	game_node->runAction(CCSequence::create(move1, delay1, move2, delay2, t_call, NULL));
+	game_node->runAction(CCSequence::create(move1, delay1, t_spawn, delay2, t_call, NULL));
 }
 
 void ZoomScript::startScript()
@@ -180,12 +185,24 @@ void ZoomScript::typingAnimation()
 		
 		if(typing_frame == text_length)
 		{
+			CCTouch* t_touch = new CCTouch();
+			t_touch->setTouchInfo(0, 0, 0);
+			t_touch->autorelease();
+			
+			target_node->ccTouchEnded(t_touch, NULL);
+			
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			(this->*delegate_typing_after)();
 		}
 	}
 	else
 	{
+		CCTouch* t_touch = new CCTouch();
+		t_touch->setTouchInfo(0, 0, 0);
+		t_touch->autorelease();
+		
+		target_node->ccTouchEnded(t_touch, NULL);
+		
 		unschedule(schedule_selector(ZoomScript::typingAnimation));
 		(this->*delegate_typing_after)();
 	}
@@ -382,13 +399,18 @@ void ZoomScript::showtimeSecondAction()
 	white_paper->removeFromParent();
 	
 	CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-	CCMoveTo* move1 = CCMoveTo::create(1.3f, ccp(0,0));
+	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
 	CCDelayTime* delay2 = CCDelayTime::create(1.f);
-	CCMoveTo* move2 = CCMoveTo::create(1.3f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+	
+	CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
+	CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
+	CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+	
+//	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	CCDelayTime* delay3 = CCDelayTime::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeThirdAction));
 	
-	CCAction* t_seq = CCSequence::create(delay1, move1, delay2, move2, delay3, t_call, NULL);
+	CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
 	
 	game_node->runAction(t_seq);
 }

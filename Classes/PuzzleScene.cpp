@@ -921,10 +921,6 @@ void PuzzleScene::setPuzzle()
 	
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
-//	CCSprite* center = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_center.png", puzzle_number)->getCString());
-//	center->setPosition(CCPointZero);
-//	puzzle_node->addChild(center, kPuzzleNodeZorder_center);
-	
 	CCSprite* top = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString());
 	top->setAnchorPoint(ccp(0.5, 1));
 	top->setPosition(ccp(0, puzzle_size.height/2.f));
@@ -945,27 +941,10 @@ void PuzzleScene::setPuzzle()
 	right->setPosition(ccp(puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(right, kPuzzleNodeZorder_puzzle);
 	
-//	CCSprite* embo_top = CCSprite::create("puzzle_embo_top.png");
-//	embo_top->setPosition(top->getPosition());
-//	puzzle_node->addChild(embo_top, kPuzzleNodeZorder_puzzle);
-//	
-//	CCSprite* embo_bottom = CCSprite::create("puzzle_embo_bottom.png");
-//	embo_bottom->setPosition(bottom->getPosition());
-//	puzzle_node->addChild(embo_bottom, kPuzzleNodeZorder_puzzle);
-//	
-//	CCSprite* embo_left = CCSprite::create("puzzle_embo_left.png");
-//	embo_left->setPosition(left->getPosition());
-//	puzzle_node->addChild(embo_left, kPuzzleNodeZorder_puzzle);
-//	
-//	CCSprite* embo_right = CCSprite::create("puzzle_embo_right.png");
-//	embo_right->setPosition(right->getPosition());
-//	puzzle_node->addChild(embo_right, kPuzzleNodeZorder_puzzle);
-	
 	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
 	
 	bool is_puzzle_clear = true;
-	
 	bool must_be_change_selected_stage_number = false;
 	int enable_stage_number = -1;
 	
@@ -1006,22 +985,6 @@ void PuzzleScene::setPuzzle()
 			{
 				PieceHistory t_history = mySGD->getPieceHistory(stage_number);
 				
-//				bool is_found = false;
-//				int found_number = 0;
-//				bool is_have_card[4] = {0,};
-//				for(int k=4;k>=1;k--)
-//				{
-//					if(mySGD->isHasGottenCards(stage_number, k) > 0)
-//					{
-//						if(!is_found)
-//						{
-//							is_found = true;
-//							found_number = k;
-//						}
-//						is_have_card[k-1] = true;
-//					}
-//				}
-				
 				if(!t_history.is_clear[0] || !t_history.is_clear[1] || !t_history.is_clear[2] || !t_history.is_clear[3])
 					clear_is_first_perfect = false;
 				
@@ -1032,8 +995,6 @@ void PuzzleScene::setPuzzle()
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
 					t_piece->setTurnInfo(t_history.is_clear[0], t_history.is_clear[1], t_history.is_clear[2], t_history.is_clear[3]);
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_color, piece_type);
-					
-//					addShadow(piece_type, piece_position, stage_number);
 				}
 				else // empty
 				{
@@ -1058,8 +1019,6 @@ void PuzzleScene::setPuzzle()
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
 					t_piece->setTurnInfo(false, false, false, false);
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_buy, piece_type);
-					
-//					addShadow(piece_type, piece_position, stage_number);
 				}
 				else // lock
 				{
@@ -1068,8 +1027,6 @@ void PuzzleScene::setPuzzle()
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_strokePiece, stage_number);
 					t_piece->setTurnInfo(false, false, false, false);
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_lock, piece_type);
-					
-//					addShadow(piece_type, piece_position, stage_number);
 				}
 				
 				if(selected_stage_number == stage_number)
@@ -1089,14 +1046,6 @@ void PuzzleScene::setPuzzle()
 			piece->setAnchorPoint(ccp(0.5,0.5));
 			piece->setPosition(piece_position);
 			puzzle_node->addChild(piece, kPuzzleNodeZorder_puzzle);
-			
-			CCSprite* embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", piece_type.c_str())->getCString());
-			embo->setPosition(ccp(piece->getContentSize().width/2.f, piece->getContentSize().height/2.f));
-			piece->addChild(embo);
-			
-//			CCSprite* t_shadow = CCSprite::create("puzzle_shadow_1_piece.png", CCRectMake(piece_type == "h" ? 0 : 92, 0, 92, 92));
-//			t_shadow->setPosition(piece_position);
-//			shadow_batchnode->addChild(t_shadow);
 		}
 	}
 	

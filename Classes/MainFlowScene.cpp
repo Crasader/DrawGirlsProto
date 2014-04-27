@@ -416,9 +416,29 @@ void MainFlowScene::basicEnter()
 	tableEnter([=](){puzzleLoadSuccess();});
 }
 
+void MainFlowScene::loadTempFunc(CCObject* sender)
+{
+	
+}
+
 void MainFlowScene::tableEnter(function<void()> end_func)
 {
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_botton.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_left.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_right.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	
+//	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+//	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+//	
+//	for(int i=start_stage;i<start_stage+stage_count;i++)
+//	{
+//		mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i)-1)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	}
+	
+	
 	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	bool is_found = false;
 	
@@ -433,12 +453,12 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 			{
 				CCNode* t_node = t_cell->getChildByTag(1);
 				float origin_x = t_node->getPositionX();
-				t_node->addChild(KSGradualValue<float>::create(0.f, 600.f, 1.f, [=](float t)
+				t_node->addChild(KSGradualValue<float>::create(0.f, 800.f, 1.f, [=](float t)
 															   {
 																   t_node->setPositionX(origin_x + t);
 															   }, [=](float t)
 															   {
-																   t_node->setPositionX(origin_x + 600.f);
+																   t_node->setPositionX(origin_x + 800.f);
 															   }));
 			}
 		}
@@ -455,9 +475,12 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 					if(t_rate)
 						t_rate->setVisible(false);
 					
-					t_node->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+					t_node->addChild(KSGradualValue<float>::create(1.f, -0.2f, 0.6f, [=](float t)
 																   {
-																	   KS::setOpacity(t_node, 255*t);
+																	   if(t >= 0.f)
+																		   KS::setOpacity(t_node, 255*t);
+																	   else
+																		   KS::setOpacity(t_node, 0);
 																   }, [=](float t)
 																   {
 																	   end_func();
@@ -470,12 +493,12 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 				{
 					CCNode* t_node = t_cell->getChildByTag(1);
 					float origin_x = t_node->getPositionX();
-					t_node->addChild(KSGradualValue<float>::create(0.f, -600.f, 1.f, [=](float t)
+					t_node->addChild(KSGradualValue<float>::create(0.f, -800.f, 1.f, [=](float t)
 																   {
 																	   t_node->setPositionX(origin_x + t);
 																   }, [=](float t)
 																   {
-																	   t_node->setPositionX(origin_x - 600.f);
+																	   t_node->setPositionX(origin_x - 800.f);
 																   }));
 				}
 			}
