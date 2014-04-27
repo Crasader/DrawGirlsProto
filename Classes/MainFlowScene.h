@@ -91,6 +91,8 @@ private:
 	void menuAction(CCObject* sender);
 	void detailCondition(CCObject* sender, CCControlEvent t_event);
 	
+	void loadTempFunc(CCObject* sender);
+	
 	CCSprite* total_star;
 	
 	void countingMessage();
