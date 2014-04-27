@@ -2313,7 +2313,8 @@ void ShopPopup::requestItemDelivery()
 		{
 			CCLog("inapp success!! refresh!!!");
 			
-			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
+			mySGD->initProperties(t["list"]);
+//			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
 			loading_layer->removeFromParent();
 			is_menu_enable = true;
