@@ -983,10 +983,10 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCardStrengthPopupMenuTag_highStrength)
 	{
-		if(mySGD->getStar() >= mySGD->getCardUpgradeRubyFee() && offering_card_number > 0)
+		if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getCardUpgradeRubyFee() && offering_card_number > 0)
 		{
 			save_offering_number = offering_card_number;
-			mySGD->setStar(mySGD->getStar() - mySGD->getCardUpgradeRubyFee());
+//			mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - mySGD->getCardUpgradeRubyFee());
 			
 			float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
 			CCLog("strength_rate : %.3f", strength_rate);
@@ -1175,9 +1175,9 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kCardStrengthPopupMenuTag_normalStrength)
 	{
-		if(mySGD->getGold() >= mySGD->getCardUpgradeGoldFee() && offering_card_number > 0)
+		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getCardUpgradeGoldFee() && offering_card_number > 0)
 		{
-			mySGD->setGold(mySGD->getGold() - mySGD->getCardUpgradeGoldFee());
+//			mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - mySGD->getCardUpgradeGoldFee());
 			
 			save_offering_number = offering_card_number;
 			float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));

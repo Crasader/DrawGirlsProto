@@ -96,17 +96,17 @@ void ItemBuyPopup::menuAction (CCObject * sender)
 		
 		if(item_currency == "gold")
 		{
-			if(mySD->getItemPrice(item_type) <= mySGD->getGold())
+			if(mySD->getItemPrice(item_type) <= mySGD->getGoodsValue(kGoodsType_gold))
 			{
-				mySGD->setGold(mySGD->getGold()-mySD->getItemPrice(item_type));
+//				mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold)-mySD->getItemPrice(item_type));
 				(target_buy->*delegate_buy)(clicked_item_number, 1);
 			}
 		}
 		else if(item_currency == "ruby")
 		{
-			if(mySD->getItemPrice(item_type) <= mySGD->getStar())
+			if(mySD->getItemPrice(item_type) <= mySGD->getGoodsValue(kGoodsType_ruby))
 			{
-				mySGD->setStar(mySGD->getStar()-mySD->getItemPrice(item_type));
+//				mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby)-mySD->getItemPrice(item_type));
 				(target_buy->*delegate_buy)(clicked_item_number, 1);
 			}
 		}

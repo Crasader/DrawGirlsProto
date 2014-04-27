@@ -696,13 +696,13 @@ void PuzzleMapScene::setUIs()
 	top_case->setPosition(getUiButtonPosition(kPMS_MT_top));
 	addChild(top_case, kPMS_Z_ui_button, kPMS_MT_top);
 	
-	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "allfont.fnt", 0.3f, "%d");
+	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "allfont.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(94,top_case->getContentSize().height/2.f));
 	top_case->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
 	
-	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "allfont.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "allfont.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(185,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_label);
 	
@@ -1135,14 +1135,14 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 		close_menu->setPosition(ccp(92,105));
 		t_container->addChild(close_menu);
 		
-		if(mySGD->getGold() >= NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag))
+		if(mySGD->getGoodsValue(kGoodsType_gold) >= NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag))
 		{
 			CCSprite* n_buy = CCSprite::create("popup2_buy.png");
 			CCSprite* s_buy = CCSprite::create("popup2_buy.png");
 			s_buy->setColor(ccGRAY);
 			
 			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
-				mySGD->setGold(mySGD->getGold() - NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag));
+//				mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - NSDS_GI(recent_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, tag));
 //				myDSH->setIntegerForKey(kDSH_Key_openStageCnt, myDSH->getIntegerForKey(kDSH_Key_openStageCnt)+1);
 //				myDSH->setIntegerForKey(kDSH_Key_openStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_openStageCnt), tag);
 //				myDSH->setBoolForKey(kDSH_Key_isOpenStage_int1, tag, true);
@@ -1151,12 +1151,12 @@ void PuzzleMapScene::stageAction(CCObject* sender)
 				t_history.is_open = true;
 				mySGD->setPieceHistory(t_history, nullptr);
 				
-				vector<SaveUserData_Key> save_userdata_list;
-				
-				save_userdata_list.push_back(kSaveUserData_Key_gold);
+//				vector<SaveUserData_Key> save_userdata_list;
+//				
+//				save_userdata_list.push_back(kSaveUserData_Key_gold);
 //				save_userdata_list.push_back(kSaveUserData_Key_openStage);
 				
-				myDSH->saveUserData(save_userdata_list, nullptr);
+//				myDSH->saveUserData(save_userdata_list, nullptr);
 				
 				
 				CCNode* open_puzzle_container = CCNode::create();
@@ -3582,14 +3582,14 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 		close_menu->setPosition(ccp(92,105));
 		t_container->addChild(close_menu);
 		
-		if(mySGD->getStar() >= NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))
+		if(mySGD->getGoodsValue(kGoodsType_ruby) >= NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))
 		{
 			CCSprite* n_buy = CCSprite::create("popup2_buy.png");
 			CCSprite* s_buy = CCSprite::create("popup2_buy.png");
 			s_buy->setColor(ccGRAY);
 			
 			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
-				mySGD->setStar(mySGD->getStar() - NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i));
+//				mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i));
 				
 				int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 				PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
@@ -3603,11 +3603,11 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 				removeChildByTag(kPMS_MT_puzzleOpenTitle);
 				removeChildByTag(kPMS_MT_ticketCnt);
 				
-				vector<SaveUserData_Key> save_userdata_list;
-				
-				save_userdata_list.push_back(kSaveUserData_Key_star);
-				
-				myDSH->saveUserData(save_userdata_list, nullptr);
+//				vector<SaveUserData_Key> save_userdata_list;
+//				
+//				save_userdata_list.push_back(kSaveUserData_Key_star);
+//				
+//				myDSH->saveUserData(save_userdata_list, nullptr);
 				
 				
 				CCNode* open_puzzle_container = CCNode::create();

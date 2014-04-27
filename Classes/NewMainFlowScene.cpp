@@ -1146,7 +1146,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 	buy_button->setPrice(PriceTypeRuby, NSDS_GI(puzzle_number, kSDS_PZ_point_i));
 	buy_button->setFunction([=](CCObject* sender)
 							{
-								mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
+//								mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
 								
 								int history_count = mySGD->getPuzzleHistorySize();
 								int open_puzzle_count = 0;
@@ -1175,7 +1175,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 	
 	t_container->addChild(buy_button);
 	
-	if(mySGD->getStar() < NSDS_GI(puzzle_number, kSDS_PZ_point_i))
+	if(mySGD->getGoodsValue(kGoodsType_ruby) < NSDS_GI(puzzle_number, kSDS_PZ_point_i))
 		buy_button->setEnabled(false);
 	
 	CommonButton* ticket_button = CommonButton::create("티켓 요청", CommonButtonYellow);
@@ -1188,7 +1188,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 								is_menu_enable = true;
 								t_popup->removeFromParent();
 								
-//								mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
+//								mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
 //								myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
 //								
 //								vector<SaveUserData_Key> save_userdata_list;
@@ -1280,14 +1280,14 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 //		close_menu->setPosition(ccp(92,105));
 //		t_container->addChild(close_menu);
 //		
-//		if(mySGD->getStar() >= NSDS_GI(puzzle_number, kSDS_PZ_point_i))
+//		if(mySGD->getGoodsValue(kGoodsType_ruby) >= NSDS_GI(puzzle_number, kSDS_PZ_point_i))
 //		{
 //			CCSprite* n_buy = CCSprite::create("popup2_buy.png");
 //			CCSprite* s_buy = CCSprite::create("popup2_buy.png");
 //			s_buy->setColor(ccGRAY);
 //			
 //			CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
-//				mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
+//				mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
 //				myDSH->setIntegerForKey(kDSH_Key_openPuzzleCnt, myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1);
 //				
 //				vector<SaveUserData_Key> save_userdata_list;
@@ -2774,7 +2774,7 @@ void NewMainFlowScene::setTop()
 	heart_menu->setPosition(ccp(91,top_case->getContentSize().height/2.f));
 	top_case->addChild(heart_menu);
 	
-	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(147,top_case->getContentSize().height/2.f-5));
 	top_case->addChild(gold_label);
 	
@@ -2791,7 +2791,7 @@ void NewMainFlowScene::setTop()
 	gold_menu->setPosition(ccp(175,top_case->getContentSize().height/2.f));
 	top_case->addChild(gold_menu);
 	
-	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(223,top_case->getContentSize().height/2.f-5));
 	top_case->addChild(ruby_label);
 	

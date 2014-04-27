@@ -19,6 +19,7 @@
 void MissileParent::bombCumber( CCObject* target )
 {
 	KSCumberBase* cumber = (KSCumberBase*)target;
+	bool cancelSound = false;
 	if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 	{
 		bool canceled = false;
@@ -26,6 +27,8 @@ void MissileParent::bombCumber( CCObject* target )
 		{
 			i->cancelCharge();
 			canceled = true;
+			
+			cancelSound = true;
 		}
 		
 		if(canceled)
@@ -48,6 +51,14 @@ void MissileParent::bombCumber( CCObject* target )
 	{
 		cumber->getAttackPattern()->stopMyAction();
 		cumber->setAttackPattern(nullptr);
+		cancelSound = true;
+	}
+	
+	
+	if(cancelSound)
+	{
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", ks19937::getIntValue(1, 4))->getCString());
+//		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", rand()%4+1)->getCString());
 	}
 	//if(target == myGD->getCommunicationNode("CP_getMainCumberPointer") && saveAP)
 	//{

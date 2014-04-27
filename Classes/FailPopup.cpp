@@ -36,6 +36,7 @@
 #include "KSLabelTTF.h"
 
 #include "LoadingTipScene.h"
+#include "LoadingLayer.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -79,10 +80,10 @@ bool FailPopup::init()
 	vector<CommandParam> send_command_list;
 	send_command_list.clear();
 	
-	Json::Value param;
-	param["key"] = CCSTR_CWF("stage_over_%d", mySD->getSilType())->getCString();
-	
-	send_command_list.push_back(CommandParam("increaseStats", param, nullptr));
+//	Json::Value param;
+//	param["key"] = CCSTR_CWF("stage_over_%d", mySD->getSilType())->getCString();
+//	
+//	send_command_list.push_back(CommandParam("increaseStats", param, nullptr));
 	
 	send_command_list.push_back(myLog->getSendLogCommand(CCString::createWithFormat("fail_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString()));
 	
@@ -189,9 +190,9 @@ bool FailPopup::init()
 //			b->setRepairFunc([=](){
 //				CCLog("repair Func");
 //				
-//				if(mySGD->getStar() >= mySGD->getCardDurabilityUpFee())
+//				if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getCardDurabilityUpFee())
 //				{
-//					mySGD->setStar(mySGD->getStar() - mySGD->getCardDurabilityUpFee());
+//					mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - mySGD->getCardDurabilityUpFee());
 //					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, selected_card_number));
 //					
 //					myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
@@ -454,7 +455,32 @@ bool FailPopup::init()
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
 	
-	hspConnector::get()->command(send_command_list);
+	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
+								  {
+									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									  {
+										  CCLog("FailPopup transaction success");
+									  }
+									  else
+									  {
+										  CCLog("FailPopup transaction fail");
+										  
+										  LoadingLayer* t_loading = LoadingLayer::create(-9999);
+										  addChild(t_loading, 9999);
+										  mySGD->changeGoods([=](Json::Value result_data)
+															 {
+																 t_loading->removeFromParent();
+																 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																 {
+																	 
+																 }
+																 else
+																 {
+																	 CCLog("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+																 }
+															 });
+									  }
+								  });
 	
 	
 	is_saved_user_data = false;

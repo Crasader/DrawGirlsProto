@@ -7,6 +7,8 @@
 #include "CCMenuLambda.h"
 #include "KSLabelTTF.h"
 #include "FormSetter.h"
+#include "LoadingLayer.h"
+#include "MyLocalization.h"
 
 #define LZZ_INLINE inline
 using namespace std;
@@ -90,46 +92,61 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
-	if(mySGD->getStar() >= mySGD->getGachaOnePercentFee())
+	if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
 	{
 		myLog->addLog(kLOG_gacha_onePercent, -1);
-		mySGD->setStar(mySGD->getStar() - mySGD->getGachaOnePercentFee());
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
-		gacha_button->removeFromParent();
+		LoadingLayer* t_loading = LoadingLayer::create(-9999);
+		addChild(t_loading, 9999);
 		
-		CCLabelTTF* t_label = CCLabelTTF::create();
+		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠");
 		
-		KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
-		stop_label->setColor(ccBLACK);
-		stop_label->setPosition(ccp(0,15));
-		t_label->addChild(stop_label);
-		
-		KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
-		stop_label2->setColor(ccBLACK);
-		stop_label2->setPosition(ccp(0,-12));
-		t_label->addChild(stop_label2);
-		
-		
-		CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-		
-		stop_button = CCControlButton::create(t_label, stop_back);
-		stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
-		stop_button->setPreferredSize(CCSizeMake(170,65));
-		stop_button->setPosition(ccp(0,-70));
-		m_container->addChild(stop_button, kOnePercentGacha_Z_content);
-		
-		stop_button->setTouchPriority(-180);
-		
-		stop_button->setEnabled(false);
-		cancel_menu->setEnabled(false);
-		
-		gachaOn();
+		mySGD->changeGoods([=](Json::Value result_data){
+			if(result_data["result"]["code"] == GDSUCCESS)
+			{
+				gacha_button->removeFromParent();
+				
+				CCLabelTTF* t_label = CCLabelTTF::create();
+				
+				KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+				stop_label->setColor(ccBLACK);
+				stop_label->setPosition(ccp(0,15));
+				t_label->addChild(stop_label);
+				
+				KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+				stop_label2->setColor(ccBLACK);
+				stop_label2->setPosition(ccp(0,-12));
+				t_label->addChild(stop_label2);
+				
+				
+				CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+				
+				stop_button = CCControlButton::create(t_label, stop_back);
+				stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
+				stop_button->setPreferredSize(CCSizeMake(170,65));
+				stop_button->setPosition(ccp(0,-70));
+				m_container->addChild(stop_button, kOnePercentGacha_Z_content);
+				
+				stop_button->setTouchPriority(-180);
+				
+				stop_button->setEnabled(false);
+				cancel_menu->setEnabled(false);
+				
+				gachaOn();
+			}
+			else
+			{
+				mySGD->clearChangeGoods();
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+				is_menu_enable = true;
+			}
+		});
 	}
 	else
 	{
-		ASPopupView* t_popup = ASPopupView::create(-200);
+		t_popup = ASPopupView::create(-200);
 		
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -215,14 +232,83 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 																	{
 																		CCLog("buy!");
-																		mySGD->setStar(mySGD->getStar()+NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0));
 																		
 																		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 																		
-																		is_menu_enable = true;
+																		inapp_loading = LoadingLayer::create(-9999);
+																		addChild(inapp_loading);
 																		
-																		gachaAction(NULL, NULL);
-																		t_popup->removeFromParent();
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+																		mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "99프로가챠(IOS-인앱결재)", "", "", true);
+																		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠(IOS-소모)");
+																		
+																		mySGD->changeGoods([=](Json::Value result_data){
+																			inapp_loading->removeFromParent();
+																			if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																			{
+																				t_popup->removeFromParent();
+																				
+																				gacha_button->removeFromParent();
+																				
+																				CCLabelTTF* t_label = CCLabelTTF::create();
+																				
+																				KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+																				stop_label->setColor(ccBLACK);
+																				stop_label->setPosition(ccp(0,15));
+																				t_label->addChild(stop_label);
+																				
+																				KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+																				stop_label2->setColor(ccBLACK);
+																				stop_label2->setPosition(ccp(0,-12));
+																				t_label->addChild(stop_label2);
+																				
+																				
+																				CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+																				
+																				stop_button = CCControlButton::create(t_label, stop_back);
+																				stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
+																				stop_button->setPreferredSize(CCSizeMake(170,65));
+																				stop_button->setPosition(ccp(0,-70));
+																				m_container->addChild(stop_button, kOnePercentGacha_Z_content);
+																				
+																				stop_button->setTouchPriority(-180);
+																				
+																				stop_button->setEnabled(false);
+																				cancel_menu->setEnabled(false);
+																				
+																				gachaOn();
+																			}
+																			else
+																			{
+																				mySGD->clearChangeGoods();
+																				
+																				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																				
+																				is_menu_enable = true;
+																			}
+																		});
+																		
+																		
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+																		Json::Value param;
+																		param["productid"] = mySGD->getInappProduct(0);
+																		hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+																			//																				KS::KSLog("in-app test \n%", v);
+																			if(v["issuccess"].asInt())
+																			{
+																				mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠");
+																				requestItemDelivery();
+																			}
+																			else
+																			{
+																				inapp_loading->removeFromParent();
+																				
+																				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																				
+																				is_menu_enable = true;
+																			}
+																		});
+#endif
 																	});
 		
 		CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
@@ -234,6 +320,65 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.f);
 		t_container->runAction(t_scale);
 	}
+}
+
+void OnePercentGacha::requestItemDelivery()
+{
+	vector<CommandParam> command_list;
+	
+	Json::Value transaction_param;
+	transaction_param["memberID"] = hspConnector::get()->getMemberID();
+	command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
+										{
+											if(result_data["result"]["code"].asInt() == GDSUCCESS)
+											{
+												inapp_loading->removeFromParent();
+												
+												t_popup->removeFromParent();
+												
+												gacha_button->removeFromParent();
+												
+												CCLabelTTF* t_label = CCLabelTTF::create();
+												
+												KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+												stop_label->setColor(ccBLACK);
+												stop_label->setPosition(ccp(0,15));
+												t_label->addChild(stop_label);
+												
+												KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+												stop_label2->setColor(ccBLACK);
+												stop_label2->setPosition(ccp(0,-12));
+												t_label->addChild(stop_label2);
+												
+												
+												CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+												
+												stop_button = CCControlButton::create(t_label, stop_back);
+												stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
+												stop_button->setPreferredSize(CCSizeMake(170,65));
+												stop_button->setPosition(ccp(0,-70));
+												m_container->addChild(stop_button, kOnePercentGacha_Z_content);
+												
+												stop_button->setTouchPriority(-180);
+												
+												stop_button->setEnabled(false);
+												cancel_menu->setEnabled(false);
+												
+												gachaOn();
+											}
+											else
+											{
+												addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+											}
+										}));
+	
+	Json::Value request_param;
+	request_param["memberID"] = hspConnector::get()->getSocialID();
+	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
+	
+	command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
+	
+	hspConnector::get()->command(command_list);
 }
 
 void OnePercentGacha::gachaStopAction(CCObject *sender, CCControlEvent t_event)

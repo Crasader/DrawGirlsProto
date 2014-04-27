@@ -191,13 +191,13 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 										CCLog("correct!!");
 										m_menu->setTouchEnabled(false);
 										unscheduleUpdate();
-										mySGD->setStar(mySGD->getStar() + 1);
-										myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
-																				{
+//										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);
+//										myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
+//																				{
 																					addChild(KSTimer::create(3.f, [=](){
 																						m_hideFunction(this, callfunc_selector(ThisClassType::removeFromParent));
 																					}));
-																				});
+//																				});
 									}
 								});
 						 }
@@ -247,7 +247,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 //								CCLog("correct!!");
 //								m_menu->setTouchEnabled(false);
 //								unscheduleUpdate();
-//								mySGD->setStar(mySGD->getStar() + 1);
+//								mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);
 //								myDSH->saveUserData({kSaveUserData_Key_star}, [=](Json::Value v)
 //																		{
 //																			addChild(KSTimer::create(3.f, [=](){

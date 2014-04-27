@@ -177,7 +177,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	
 	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
 	upgrade_price*=mySGD->getUpgradeGoldFee();
-	if(mySGD->getGold() < upgrade_price)// + use_item_price_gold.getV())
+	if(mySGD->getGoodsValue(kGoodsType_gold) < upgrade_price)// + use_item_price_gold.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
 		is_menu_enable = true;
@@ -188,13 +188,16 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	addChild(loading_layer);
 	
 	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
-	before_gold = mySGD->getGold();
+	before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 	before_level = missile_level-1;
 	before_damage = StoneAttack::getPower((before_level)/5+1, (before_level)%5+1);
-	mySGD->setGold(before_gold-missile_level*mySGD->getUpgradeGoldFee());
+	mySGD->addChangeGoods(kGoodsType_gold, -missile_level*mySGD->getUpgradeGoldFee(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
+	
 	myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
 	
-	myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, json_selector(this, MissileUpgradePopup::resultSaveUserData));
+	myDSH->saveUserData({kSaveUserData_Key_character}, nullptr);
+	
+	mySGD->changeGoods(json_selector(this, MissileUpgradePopup::resultSaveUserData));
 }
 
 void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
@@ -290,7 +293,10 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLog("missile upgrade fail!!");
 		
-		mySGD->setGold(before_gold);
+		mySGD->clearChangeGoods();
+		
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		
 		myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), before_level);
 	}
 	loading_layer->removeFromParent();

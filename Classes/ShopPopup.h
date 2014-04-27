@@ -152,6 +152,8 @@ private:
     virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent);
 	
 	virtual void registerWithTouchDispatcher();
+	
+	void requestItemDelivery();
 };
 
 #endif /* defined(__DGproto__ShopPopup__) */

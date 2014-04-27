@@ -1123,6 +1123,8 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	guideLine->setPosition(t_sp);
 	guideLine->setRotation(-inDegree);
 	addChild(guideLine);
+	
+	AudioEngine::sharedInstance()->playEffect("se_meteo_1.mp3");
 }
 FallMeteor * FallMeteor::create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
@@ -1225,7 +1227,8 @@ void FallMeteor::fall ()
 //	}
 	if(!notFinish)
 	{
-		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
+		AudioEngine::sharedInstance()->playEffect("se_meteo_3.mp3");
+//		AudioEngine::sharedInstance()->playEffect("sound_meteor.mp3", false);
 		for(int i=0;i<11;i++)
 		{
 			crashMapForIntPoint(IntPoint(leftDownPoint.x-1, leftDownPoint.y+2+i));
@@ -1342,6 +1345,7 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 				},
 				[=](float t)
 				{
+					AudioEngine::sharedInstance()->playEffect("se_meteo_2.mp3");
 					schedule(schedule_selector(FallMeteor::fall));
 				}));	
 }

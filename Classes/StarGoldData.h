@@ -125,6 +125,34 @@ enum ReplayKey
 	kReplayKey_playIndex
 };
 
+enum GoodsType
+{
+	kGoodsType_begin = 0,
+	kGoodsType_money,
+	kGoodsType_ruby,
+	kGoodsType_gold,
+	kGoodsType_item9,
+	kGoodsType_item6,
+	kGoodsType_item8,
+	kGoodsType_pass1,
+	kGoodsType_pass2,
+	kGoodsType_pass3,
+	kGoodsType_pass4,
+	kGoodsType_pass5,
+	kGoodsType_end
+};
+
+class ChangeGoodsData
+{
+public:
+	GoodsType m_type;
+	KSProtectVar<int> m_value;
+	string m_statsID;
+	string m_statsValue;
+	string m_content;
+	bool m_isPurchase;
+};
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -137,12 +165,13 @@ public:
 	void resetLabels();
 	
 	void setStarLabel(CCLabelBMFont* t_label);
-	int getStar();
-	void setStar(int t_star);
+	void setIngameGoldLabel( CCLabelBMFont* t_label );
+//	int getStar();
+//	void setStar(int t_star);
 	
 	void setGoldLabel(CCLabelBMFont* t_label);
-	int getGold();
-	void setGold(int t_gold, bool is_write = true);
+//	int getGold();
+//	void setGold(int t_gold, bool is_write = true);
 	
 	int getKeepGold();
 	
@@ -254,13 +283,16 @@ public:
 	void resetHasGottenCards();
 	void initTakeCardInfo(Json::Value card_list, vector<int>& card_data_load_list);
 	
+	CommandParam getUpdatePuzzleHistoryParam(PuzzleHistory t_history, jsonSelType call_back);
 	int getOpenPuzzleCount();
 	int getPuzzleHistorySize();
 	PuzzleHistory getPuzzleHistoryForIndex(int t_index);
 	PuzzleHistory getPuzzleHistory(int puzzle_number);
 	void setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_back);
+	void setPuzzleHistoryForNotSave(PuzzleHistory t_history);
 	void initPuzzleHistory(Json::Value history_list);
 	
+	CommandParam getUpdatePieceHistoryParam(PieceHistory t_history, jsonSelType call_back);
 	Json::Value getSavePieceHistoryParam(PieceHistory t_history);
 	bool isClearPiece(int stage_number);
 	int getPieceHistorySize();
@@ -381,6 +413,12 @@ public:
 	void setUpgradeGoldFee(int t_i);
 	int getUpgradeGoldFee();
 	
+	void setIngameTutorialRewardGold(int t_i);
+	int getIngameTutorialRewardGold();
+	
+	string getInappProduct(int t_index);
+	void initInappProduct(int t_index, string t_product);
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -446,6 +484,21 @@ public:
 	void withdraw();
 	Json::Value cgp_data;
 	
+	void initProperties(Json::Value t_list);
+	string getGoodsTypeToKey(GoodsType t_type);
+	GoodsType getGoodsKeyToType(string t_key);
+	void addChangeGoodsIngameGold(int t_value);
+	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+	void clearChangeGoods();
+	void changeGoods(jsonSelType t_callback);
+	void changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback);
+	void refreshGoodsData(string t_key, int t_count);
+	CommandParam getChangeGoodsParam(jsonSelType t_callback);
+	void saveChangeGoodsTransaction(Json::Value result_data);
+	
+	int getGoodsValue(GoodsType t_type);
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -459,6 +512,7 @@ private:
 	CCLabelBMFont* star_label;
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* friend_point_label;
+	CCLabelBMFont* ingame_gold_label;
 	
 	vector<KSProtectVar<int>> bonus_item_cnt;
 
@@ -473,6 +527,7 @@ private:
 	KSProtectVar<int> stage_grade;
 	KSProtectVar<int> keep_gold;
 	KSProtectVar<int> game_time;
+	KSProtectVar<int> ingame_gold;
 	
 	int start_map_gacha_cnt;
 		   
@@ -547,7 +602,15 @@ private:
 	KSProtectVar<int> item_gacha_replay_gold_fee; // 아이템 가챠 다시뽑기 가격
 	
 	KSProtectVar<int> upgrade_gold_fee;
+	KSProtectVar<int> ingame_tutorial_reward_gold;
 	
+	KSProtectStr inapp_products[6];
+	
+	map<GoodsType, KSProtectVar<int>> goods_data;
+	vector<ChangeGoodsData> change_goods_list;
+	jsonSelType change_goods_callback;
+	void resultChangeGoods(Json::Value result_data);
+	void retryChangeGoods();
 	
 	
 	string app_type;

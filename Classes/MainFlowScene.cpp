@@ -212,12 +212,6 @@ bool MainFlowScene::init()
 		
 		if(recent_step == kTutorialFlowStep_puzzleClick)
 		{
-			if(mySGD->getStar() == 0 && mySGD->getGold() == 0)
-			{
-				mySGD->setStar(myDSH->getDefaultRuby());
-				mySGD->setGold(myDSH->getDefaultGold());
-			}
-			
 			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
 			t_tutorial->initStep(kTutorialFlowStep_puzzleClick);
 			addChild(t_tutorial, kMainFlowZorder_popup);
@@ -422,9 +416,29 @@ void MainFlowScene::basicEnter()
 	tableEnter([=](){puzzleLoadSuccess();});
 }
 
+void MainFlowScene::loadTempFunc(CCObject* sender)
+{
+	
+}
+
 void MainFlowScene::tableEnter(function<void()> end_func)
 {
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_botton.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_left.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_right.png", puzzle_number)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	
+//	int start_stage = NSDS_GI(puzzle_number, kSDS_PZ_startStage_i);
+//	int stage_count = NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i);
+//	
+//	for(int i=start_stage;i<start_stage+stage_count;i++)
+//	{
+//		mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i)-1)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
+//	}
+	
+	
 	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	bool is_found = false;
 	
@@ -439,12 +453,12 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 			{
 				CCNode* t_node = t_cell->getChildByTag(1);
 				float origin_x = t_node->getPositionX();
-				t_node->addChild(KSGradualValue<float>::create(0.f, 600.f, 1.f, [=](float t)
+				t_node->addChild(KSGradualValue<float>::create(0.f, 800.f, 1.f, [=](float t)
 															   {
 																   t_node->setPositionX(origin_x + t);
 															   }, [=](float t)
 															   {
-																   t_node->setPositionX(origin_x + 600.f);
+																   t_node->setPositionX(origin_x + 800.f);
 															   }));
 			}
 		}
@@ -461,9 +475,12 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 					if(t_rate)
 						t_rate->setVisible(false);
 					
-					t_node->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+					t_node->addChild(KSGradualValue<float>::create(1.f, -0.2f, 0.6f, [=](float t)
 																   {
-																	   KS::setOpacity(t_node, 255*t);
+																	   if(t >= 0.f)
+																		   KS::setOpacity(t_node, 255*t);
+																	   else
+																		   KS::setOpacity(t_node, 0);
 																   }, [=](float t)
 																   {
 																	   end_func();
@@ -476,12 +493,12 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 				{
 					CCNode* t_node = t_cell->getChildByTag(1);
 					float origin_x = t_node->getPositionX();
-					t_node->addChild(KSGradualValue<float>::create(0.f, -600.f, 1.f, [=](float t)
+					t_node->addChild(KSGradualValue<float>::create(0.f, -800.f, 1.f, [=](float t)
 																   {
 																	   t_node->setPositionX(origin_x + t);
 																   }, [=](float t)
 																   {
-																	   t_node->setPositionX(origin_x - 600.f);
+																	   t_node->setPositionX(origin_x - 800.f);
 																   }));
 				}
 			}
@@ -609,43 +626,63 @@ void MainFlowScene::cellAction(CCObject* sender)
 			close_menu->setPosition(ccp(92,105));
 			t_container->addChild(close_menu);
 			
-			if(mySGD->getStar() >= NSDS_GI(puzzle_number, kSDS_PZ_point_i))
+			if(mySGD->getGoodsValue(kGoodsType_ruby) >= NSDS_GI(puzzle_number, kSDS_PZ_point_i))
 			{
 				CCSprite* n_buy = CCSprite::create("popup2_buy.png");
 				CCSprite* s_buy = CCSprite::create("popup2_buy.png");
 				s_buy->setColor(ccGRAY);
 				
 				CCMenuItemSpriteLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender){
-					mySGD->setStar(mySGD->getStar() - NSDS_GI(puzzle_number, kSDS_PZ_point_i));
 					
 					AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+					
+					LoadingLayer* t_loading = LoadingLayer::create(-9999);
+					addChild(t_loading, 9999);
+					
+					mySGD->addChangeGoods(kGoodsType_ruby, -NSDS_GI(puzzle_number, kSDS_PZ_point_i), "퍼즐오픈", CCString::createWithFormat("%d", puzzle_number)->getCString());
 					
 					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 					t_history.is_open = true;
 					t_history.open_type = "루비소모";
-					mySGD->setPuzzleHistory(t_history, nullptr);
 					
-					vector<SaveUserData_Key> save_userdata_list;
-					save_userdata_list.push_back(kSaveUserData_Key_star);
-					myDSH->saveUserData(save_userdata_list, nullptr);
-					
-					int found_idx = -1;
-					for(int i=0;i<numberOfCellsInTableView(puzzle_table) && found_idx == -1;i++)
-					{
-						CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
-						if(t_cell)
-						{
-							int cell_card_number = t_cell->getTag();
-							if(cell_card_number == puzzle_number)
-								found_idx = i;
-						}
-					}
-					if(found_idx != -1)
-						puzzle_table->updateCellAtIndex(found_idx);
-					
-					is_menu_enable = true;
-					t_popup->removeFromParent();
+					mySGD->changeGoodsTransaction({mySGD->getUpdatePuzzleHistoryParam(t_history, [=](Json::Value result_data)
+																					  {
+																						  if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																						  {
+																							  PuzzleHistory r_history = mySGD->getPuzzleHistory(open_puzzle_number);
+																							  r_history.is_open = false;
+																							  r_history.open_type = "";
+																							  mySGD->setPuzzleHistoryForNotSave(r_history);
+																						  }
+																					  })}, [=](Json::Value result_data)
+												  {
+													  t_loading->removeFromParent();
+													  if(result_data["result"]["code"].asInt() != GDSUCCESS)
+														{
+															mySGD->clearChangeGoods();
+															addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+														}
+													  else
+														{
+															int found_idx = -1;
+															for(int i=0;i<numberOfCellsInTableView(puzzle_table) && found_idx == -1;i++)
+															{
+																CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
+																if(t_cell)
+																{
+																	int cell_card_number = t_cell->getTag();
+																	if(cell_card_number == puzzle_number)
+																		found_idx = i;
+																}
+															}
+															if(found_idx != -1)
+																puzzle_table->updateCellAtIndex(found_idx);
+															
+															is_menu_enable = true;
+															t_popup->removeFromParent();
+														}
+												  });
 				});
 				
 				CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
@@ -1606,8 +1643,12 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 		CCLog("reward !!! : %d", rewardValue);
 	}
 	
-	mySGD->setGold(mySGD->getGold() + 10000);
-	myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value result_data){
+	LoadingLayer* t_loading = LoadingLayer::create(-9999);
+	addChild(t_loading, 9999);
+	
+	mySGD->addChangeGoods(kGoodsType_gold, 10000, "CGP일반보상");
+	mySGD->changeGoods([=](Json::Value result_data){
+		t_loading->removeFromParent();
 		if(result_data["result"]["code"].asInt() == GDSUCCESS)
 		{
 			hspConnector::get()->completePromotion();
@@ -1621,7 +1662,7 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 		}
 		else
 		{
-			mySGD->setGold(mySGD->getGold() - 10000);
+			
 		}
 	});
 }
@@ -1639,8 +1680,12 @@ void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 		CCLog("reward !!! : %d", rewardValue);
 	}
 	
-	mySGD->setGold(mySGD->getGold() + 10000);
-	myDSH->saveUserData({kSaveUserData_Key_gold}, [=](Json::Value result_data){
+	LoadingLayer* t_loading = LoadingLayer::create(-9999);
+	addChild(t_loading, 9999);
+	
+	mySGD->addChangeGoods(kGoodsType_gold, 10000, "CGP전체팝업보상");
+	mySGD->changeGoods([=](Json::Value result_data){
+		t_loading->removeFromParent();
 		if(result_data["result"]["code"].asInt() == GDSUCCESS)
 		{
 			hspConnector::get()->completeInstallPromotion();
@@ -1654,7 +1699,7 @@ void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 		}
 		else
 		{
-			mySGD->setGold(mySGD->getGold() - 10000);
+			
 		}
 	});
 }
@@ -1806,7 +1851,7 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(top_gold);
 	
-	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGold())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-5));
 	top_gold->addChild(gold_label);
 	
@@ -1831,7 +1876,7 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(top_ruby);
 	
-	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getStar())->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
+	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-5));
 	top_ruby->addChild(ruby_label);
 	

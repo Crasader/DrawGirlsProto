@@ -221,6 +221,10 @@ void TitleRenewalScene::successLogin()
 	piece_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
 	
+	Json::Value properties_param;
+	properties_param["memberID"] = hspConnector::get()->getSocialID();
+	command_list.push_back(CommandParam("getuserproperties", properties_param, json_selector(this, TitleRenewalScene::resultGetUserProperties)));
+	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
 	startCommand();
@@ -504,6 +508,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setItemGachaGoldFee(result_data["itemGachaGoldFee"].asInt());
 		mySGD->setItemGachaReplayGoldFee(result_data["itemGachaReplayGoldFee"].asInt());
 		mySGD->setUpgradeGoldFee(result_data["upgradeGoldFee"].asInt());
+		mySGD->setIngameTutorialRewardGold(result_data["ingameTutorialRewardGold"].asInt());
 	}
 	else
 	{
@@ -521,7 +526,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 	{
 		Json::Value result_list = result_data["list"];
 		
-		Json::Value list_ruby = result_list["ruby"];
+		Json::Value list_ruby = result_list["r"];
 		for(int i=0;i<list_ruby.size();i++)
 		{
 			NSDS_SI(kSDS_GI_shopRuby_int1_count_i, i, list_ruby[i]["count"].asInt(), false);
@@ -529,9 +534,10 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SI(kSDS_GI_shopRuby_int1_price_i, i, list_ruby[i]["price"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_priceType_s, i, list_ruby[i]["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i, list_ruby[i]["sale"].asString(), false);
+			mySGD->initInappProduct(i, list_ruby[i]["pID"].asString());
 		}
 		
-		Json::Value list_gold = result_list["gold"];
+		Json::Value list_gold = result_list["g"];
 		for(int i=0;i<list_gold.size();i++)
 		{
 			NSDS_SI(kSDS_GI_shopGold_int1_count_i, i, list_gold[i]["count"].asInt(), false);
@@ -541,7 +547,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopGold_int1_sale_s, i, list_gold[i]["sale"].asString(), false);
 		}
 		
-		Json::Value list_coin = result_list["coin"];
+		Json::Value list_coin = result_list["h"];
 		for(int i=0;i<list_coin.size();i++)
 		{
 			NSDS_SI(kSDS_GI_shopCoin_int1_count_i, i, list_coin[i]["count"].asInt(), false);
@@ -965,6 +971,26 @@ void TitleRenewalScene::resultGetPuzzleHistory(Json::Value result_data)
 		Json::Value puzzle_param;
 		puzzle_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetUserProperties(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->initProperties(result_data["list"]);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value properties_param;
+		properties_param["memberID"] = hspConnector::get()->getSocialID();
+		command_list.push_back(CommandParam("getuserproperties", properties_param, json_selector(this, TitleRenewalScene::resultGetUserProperties)));
 	}
 	
 	receive_cnt--;

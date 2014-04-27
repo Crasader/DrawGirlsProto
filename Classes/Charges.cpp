@@ -8,6 +8,7 @@
 
 #include "Charges.h"
 #include "KSCumberBase.h"
+#include "ks19937.h"
 
 CCN_InnerNode* CCN_InnerNode::create( CCPoint t_fp, float t_distance, int t_moveFrame, ccColor4F t_color )
 {
@@ -174,7 +175,8 @@ void ChargeNodeLambda::cancelCharge()
 {
 	auto p = dynamic_cast<KSCumberBase*>(real_target);
 	if(p) p->onCanceledCasting();
-	AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
+//	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", ks19937::getIntValue(1, 4))->getCString());
+//	AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 	removeSelf();
 }
@@ -285,7 +287,8 @@ void SpecialChargeNodeLambda::cancelCharge()
 	auto p = dynamic_cast<KSCumberBase*>(real_target);
 	if(p) 
 		p->onCanceledCasting();
-	AudioEngine::sharedInstance()->stopEffect("se_castspecial.mp3");
+//	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", ks19937::getIntValue(1, 4))->getCString());
+//	AudioEngine::sharedInstance()->stopEffect("se_castspecial.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 	//		if(cancel_target && cancel_delegate)
 	//			(cancel_target->*cancel_delegate)(real_target);
@@ -392,7 +395,8 @@ void CrashChargeNodeLambda::cancelCharge()
 	if(p) p->onCanceledCasting();
 
 	//		myGD->communication("CP_setCasting", false);
-	AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
+//	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", ks19937::getIntValue(1, 4))->getCString());
+//	AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 	//		if(cancel_target && cancel_delegate)
 	//			(cancel_target->*cancel_delegate)(real_target);
