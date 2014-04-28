@@ -801,7 +801,7 @@ void StageSettingPopup::cancelGame()
 	{
 		start_loading->removeFromParent();
 		
-		CCLog("Fail : user data save");
+		CCLOG("Fail : user data save");
 		
 		deque<bool> is_using_item;
 		is_using_item.push_back(false);

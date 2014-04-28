@@ -725,12 +725,12 @@ public:
 	}
 	
 	void doRepair(){
-		//CCLog("doRepair");
+		//CCLOG("doRepair");
 		close();
 	}
 	
 	void doRemoveCard(){
-		//CCLog("doRemoveCard");
+		//CCLOG("doRemoveCard");
 		close();
 	}
 	

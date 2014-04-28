@@ -613,7 +613,7 @@ enum PuzzleNodeZorder{
 
 void PuzzleScene::showGetPuzzle()
 {
-	CCLog("get piece animation");
+	CCLOG("get piece animation");
 	
 	AudioEngine::sharedInstance()->playEffect("se_pieceget.mp3", false);
 	
@@ -687,7 +687,7 @@ void PuzzleScene::endGetPuzzle()
 
 void PuzzleScene::showGetStar()
 {
-	CCLog("get star animation : %d", mySD->getSilType());
+	CCLOG("get star animation : %d", mySD->getSilType());
 	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
 	new_piece->startGetStarAnimation(clear_star_take_level, this, callfunc_selector(PuzzleScene::endGetStar));
 }
@@ -721,7 +721,7 @@ void PuzzleScene::endGetStar()
 
 void PuzzleScene::showSuccessPuzzleEffect()
 {
-	CCLog("success puzzle animation");
+	CCLOG("success puzzle animation");
 	
 	AudioEngine::sharedInstance()->playEffect("se_puzzleopen_1.mp3", false);
 	
@@ -780,7 +780,7 @@ void PuzzleScene::endSuccessPuzzleEffect()
 
 void PuzzleScene::showPerfectPuzzleEffect()
 {
-	CCLog("perfect puzzle animation");
+	CCLOG("perfect puzzle animation");
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -806,7 +806,7 @@ void PuzzleScene::endPerfectPuzzleEffect()
 
 void PuzzleScene::showUnlockEffect()
 {
-	CCLog("unlock piece animation");
+	CCLOG("unlock piece animation");
 	
 	if(unlock_cover)
 	{
@@ -1127,7 +1127,7 @@ void PuzzleScene::setPieceClick(int t_stage_number)
 
 void PuzzleScene::pieceAction(int t_stage_number)
 {
-	CCLog("pieceAction : %d", t_stage_number);
+	CCLOG("pieceAction : %d", t_stage_number);
 	
 	if(!is_menu_enable)
 		return;
@@ -1197,7 +1197,7 @@ void PuzzleScene::pieceAction(int t_stage_number)
 
 void PuzzleScene::buyPieceAction(int t_stage_number)
 {
-	CCLog("buyPieceAction : %d", t_stage_number);
+	CCLOG("buyPieceAction : %d", t_stage_number);
 	
 	if(!is_menu_enable)
 		return;
@@ -1390,7 +1390,7 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 
 void PuzzleScene::lockPieceAction(int t_stage_number)
 {
-	CCLog("lockPieceAction : %d", t_stage_number);
+	CCLOG("lockPieceAction : %d", t_stage_number);
 	
 	AudioEngine::sharedInstance()->playEffect("se_lock.mp3", false);
 }

@@ -61,7 +61,7 @@ public:
 		}
 		else
 		{
-			//CCLog("not found!!!");
+			//CCLOG("not found!!!");
 			DeleSel _t;
 			_t.target = 0;
 			_t.selector = 0;

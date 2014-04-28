@@ -54,7 +54,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 		i->setVisible(false);
 	}
 	m_alreadyDeterminantOrder = ps.getResult(); // 순서
-	CCLog("my order %d", m_alreadyDeterminantOrder);
+	CCLOG("my order %d", m_alreadyDeterminantOrder);
 
 	uniform_int_distribution<> dist(0, 2);
 
@@ -93,7 +93,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 		addChild(KSSchedule::create([=](float dt)
 				{
 					float regexDegree = fmod(m_rotationBoard->getRotation(), 360.f);
-					CCLog("goal %f, cur %f", fmod(m_rewards[m_alreadyDeterminantOrder].first, 360.f),
+					CCLOG("goal %f, cur %f", fmod(m_rewards[m_alreadyDeterminantOrder].first, 360.f),
 						regexDegree);
 					uniform_int_distribution<> dist(-120, -68);
 					if(this->diffDegree(360 - m_rewards[m_alreadyDeterminantOrder].first + dist(m_rEngine), regexDegree) < 3.f)
@@ -155,7 +155,7 @@ bool RouletteSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 		degreeCount++;
 	}
 
-	CCLog("goal Degree : %f, %s", m_rewards[m_alreadyDeterminantOrder].first, m_rewards[m_alreadyDeterminantOrder].second->m_spriteStr.c_str());
+	CCLOG("goal Degree : %f, %s", m_rewards[m_alreadyDeterminantOrder].first, m_rewards[m_alreadyDeterminantOrder].second->m_spriteStr.c_str());
 	m_state = RouletteState::kRotation;
 
 	stopBtn->setVisible(false);
@@ -195,7 +195,7 @@ void RouletteSub::update(float dt)
 			tempDegree -= 360;
 		}
 		tempDegree += 360;
-		//		CCLog("degree = %f", tempDegree);
+		//		CCLOG("degree = %f", tempDegree);
 	}
 	else if(m_state == RouletteState::kStopping)
 	{
@@ -206,7 +206,7 @@ void RouletteSub::update(float dt)
 		m_state = RouletteState::kQuestion;
 		addChild(KSTimer::create(2.f, [=]() {
 			float tempDegree = fmod(m_rotationBoard->getRotation(), 360.f);
-			CCLog("degree = %f", tempDegree);
+			CCLOG("degree = %f", tempDegree);
 
 			m_rotationBoard->setRotation(tempDegree);
 			float minDiffDegree = std::numeric_limits<float>::max();
@@ -247,7 +247,7 @@ void RouletteSub::update(float dt)
 							retryGame();
 						}
 						else {
-							CCLog("돈 없음");
+							CCLOG("돈 없음");
 						}
 					}
 					else if(m_gachaCategory == GachaCategory::kGoldGacha)
@@ -260,7 +260,7 @@ void RouletteSub::update(float dt)
 							retryGame();
 						}
 						else {
-							CCLog("돈 없음");
+							CCLOG("돈 없음");
 						}
 					}
 
@@ -304,7 +304,7 @@ float RouletteSub::diffDegree(float a, float b) //
 
 //Roulette::~Roulette()
 //{
-//CCLog("~hatgacha");
+//CCLOG("~hatgacha");
 //}
 ////void HatGacha::registerWithTouchDispatcher()
 ////{

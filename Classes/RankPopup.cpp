@@ -502,7 +502,7 @@ void RankPopup::loadRank ()
 			CCLabelTTF* remainFnt = CCLabelTTF::create(remainStr.c_str(), mySGD->getFont().c_str(), 12.f);
 			remainFnt->setPosition(ccp(408, 219));
 			this->addChild(remainFnt, kRP_Z_rankTable);
-			CCLog("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
+			CCLOG("step2 %s",GraphDogLib::JsonObjectToString(obj).c_str());
 
 
 			//step1에서 받아온 카카오친구정보와 step2에서 받아온 점수정보를 scolrelist에 합침
@@ -793,7 +793,7 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 			 av->setContentSize(ttf->getDimensions());
 			 av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 					 [=](CCObject* e) {
-						 CCLog("ok!!");
+						 CCLOG("ok!!");
 						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 						 int idx = (int)obj->getUserData();
 						 ////////////////////////////////
@@ -1231,13 +1231,13 @@ void RankPopup::failAction ()
 }
 void RankPopup::startDownloadCardImage ()
 {
-	CCLog("start download card img");
+	CCLOG("start download card img");
 	ing_download_cnt = 1;
 	startDownload();
 }
 void RankPopup::startDownload ()
 {
-	CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+	CCLOG("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
 	
 	StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
 												  this, callfunc_selector(RankPopup::successAction), this, callfunc_selector(RankPopup::failAction));
@@ -1659,7 +1659,7 @@ void RankPopup::touchCellIndex(int idx)
 		highScore = data.get("allhighscore", 0).asInt();
 		highStage = data.get("highstage", 0).asInt();
 	}
-	CCLog("card Number %d", selectedCardIndex);
+	CCLOG("card Number %d", selectedCardIndex);
 	auto retStr = NSDS_GS(kSDS_CI_int1_imgInfo_s, selectedCardIndex);
 	KS::KSLog("retStr %", retStr);
 	

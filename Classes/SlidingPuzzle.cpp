@@ -162,7 +162,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 								[=](Coord prevEmptyCoord) // 다 움직였을 때 올바른가 검사.
 								{
 									m_state = SlidingState::kNormal;
-									CCLog("com");
+									CCLOG("com");
 									Coord coord(-1, -1);
 									
 									bool valid = true;
@@ -188,7 +188,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 										reward->setPosition(ccp(205, 133));
 										addChild(reward);
 										reward->setScale(2.f);
-										CCLog("correct!!");
+										CCLOG("correct!!");
 										m_menu->setTouchEnabled(false);
 										unscheduleUpdate();
 //										mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);
@@ -210,7 +210,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 					 }
 				 }
 			 }
-//			 CCLog("%f ", coord.length(m_emptyCoord));
+//			 CCLOG("%f ", coord.length(m_emptyCoord));
 //			 if(0.9f <= coord.length(m_emptyCoord) &&
 //					coord.length(m_emptyCoord) <= 1.1f)
 //			 {
@@ -222,7 +222,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 //						[=](Coord prevEmptyCoord) // 다 움직였을 때 올바른가 검사.
 //						{
 //							m_state = SlidingState::kNormal;
-//							CCLog("com");
+//							CCLOG("com");
 //							Coord coord(-1, -1);
 //							
 //							bool valid = true;
@@ -244,7 +244,7 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 //								CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
 //								successSprite->setPosition(ccp(240, 160));
 //								addChild(successSprite);
-//								CCLog("correct!!");
+//								CCLOG("correct!!");
 //								m_menu->setTouchEnabled(false);
 //								unscheduleUpdate();
 //								mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);
@@ -415,10 +415,10 @@ bool SlidingPuzzle::init(int priority, const std::function<void(CCObject*, SEL_C
 	shufflePieces(15, movingPiece);
 //	movePiece(Coord(3, 0), [=]()
 //						{
-//							CCLog("%d %d", m_emptyCoord.x, m_emptyCoord.y);
+//							CCLOG("%d %d", m_emptyCoord.x, m_emptyCoord.y);
 //							movePiece(Coord(4, 0), [=]()
 //												{
-//													CCLog("%d %d", m_emptyCoord.x, m_emptyCoord.y);
+//													CCLOG("%d %d", m_emptyCoord.x, m_emptyCoord.y);
 //												});
 //						});
 	

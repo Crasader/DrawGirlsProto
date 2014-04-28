@@ -418,7 +418,7 @@ public:
 //					}
 //#endif
 					
-					CCLog("PlayEffect loop : %s", filename);
+					CCLOG("PlayEffect loop : %s", filename);
 					
 					LoopEffect* t_effect = new LoopEffect();
 					t_effect->autorelease();
@@ -437,7 +437,7 @@ public:
 	
 	void stopEffect(const char* filename)
 	{
-		CCLog("StopEffect loop check start : %s", filename);
+		CCLOG("StopEffect loop check start : %s", filename);
 		bool is_found;
 		do
 		{
@@ -447,7 +447,7 @@ public:
 				LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(i);
 				if(target->filename == filename)
 				{
-					CCLog("StopEffect loop find : %s", filename);
+					CCLOG("StopEffect loop find : %s", filename);
 					is_found = true;
 					mySAE->stopEffect(target->effectCode);
 					loopEffects->removeObject(target);
@@ -462,12 +462,12 @@ public:
 		while(loopEffects->count() > 0)
 		{
 			LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(0);
-			CCLog("StopEffect loop find : %s", target->filename.c_str());
+			CCLOG("StopEffect loop find : %s", target->filename.c_str());
 			mySAE->stopEffect(target->effectCode);
 			loopEffects->removeObject(target);
 		}
 		
-		CCLog("StopAllEffect loop");
+		CCLOG("StopAllEffect loop");
 		mySAE->stopAllEffects();
 	}
 	

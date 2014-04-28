@@ -813,7 +813,7 @@ void BeautyStoneSynthesisPopup::menuAction(CCObject* pSender)
 
 bool BeautyStoneSynthesisPopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 {
-	CCLog("touch swallow!!");
+	CCLOG("touch swallow!!");
 	
 	return true;
 }

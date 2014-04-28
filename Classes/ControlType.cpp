@@ -353,7 +353,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	{
 		if(distanceValue > minimumDistanceJ && (t_p.x > 480.f-TouchOutWidth || t_p.x < TouchOutWidth || t_p.y > myDSH->ui_top-TouchOutWidth || t_p.y < TouchOutWidth))
 		{
-			CCLog("Touch Out Action!!!");
+			CCLOG("Touch Out Action!!!");
 			IntPoint jackPoint = myGD->getJackPoint();
 			
 			if(angle < -180.f+regular_spectrum/2.f)
@@ -783,7 +783,7 @@ void ControlJoystickButton::directionKeeping()
 	myJack->changeDirection(beforeDirection, beforeSecondDirection);
 	
 //	end = chrono::system_clock::now();
-//	CCLog("directionKeeping time : %.8f", chrono::duration<double>(end - start).count());
+//	CCLOG("directionKeeping time : %.8f", chrono::duration<double>(end - start).count());
 }
 
 void ControlJoystickButton::stopMySchedule()

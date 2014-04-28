@@ -168,8 +168,8 @@ string GraphDog::getToken(){
 	string cTime=getCTime();
 	string dInfo="";//getDeviceInfo();
 	string token=GraphDogLib::GDCreateToken(auid,udid,flag,lang,nick,email,platform,cTime,sKey,dInfo);
-	//	CCLog("%s", token.c_str());
-	//	CCLog("%s", unBase64NextUnDes("GDSK3388", token).c_str());
+	//	CCLOG("%s", token.c_str());
+	//	CCLOG("%s", unBase64NextUnDes("GDSK3388", token).c_str());
 	return token;
 }
 
@@ -331,19 +331,19 @@ void* GraphDog::t_function(void *_insertIndex)
 {
 	int insertIndex = (int)_insertIndex;
 	
-	//   CCLog("t_function1");
+	//   CCLOG("t_function1");
 	//	std::map<int, CommandType>& commands = graphdog->commands;
 	//	pthread_mutex_lock(&graphdog->cmdsMutex);
 	CommandsType& command = graphdog->commandQueue[insertIndex];
 	pthread_mutex_lock(&command.caller->t_functionMutex);
-	//CCLog("t_function2");
+	//CCLOG("t_function2");
 	string token="";
-	//CCLog("t_function2");
+	//CCLOG("t_function2");
 	string paramStr =  CipherUtils::encryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), command.commandStr.c_str()); //toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	
-	CCLog("request %s",command.commandStr.c_str());
+	CCLOG("request %s",command.commandStr.c_str());
 	string dataset = "&gid="+GraphDog::get()->aID+"&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
-	CCLog("t_function3");
+	CCLOG("t_function3");
 	//string commandurl = "http://litqoo.com/dgserver/data.php";
 	string commandurl = "http://182.162.201.147:10010/command.php"; //"http://182.162.201.147:10010/data.php"; //
 	//commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
@@ -356,20 +356,20 @@ void* GraphDog::t_function(void *_insertIndex)
 	curl_easy_setopt(handle, CURLOPT_URL, commandurl.c_str());
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS,dataset.c_str());
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&command.chunk);
-	//CCLog("t_function4");
+	//CCLOG("t_function4");
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 	//	pthread_mutex_unlock(&graphdog->cmdsMutex);
 	CURLcode resultCode = curl_easy_perform(handle);
-	CCLog("result code is %d",resultCode);
+	CCLOG("result code is %d",resultCode);
 	//##
 	//@ JsonBox::Object resultobj;
 	Json::Value resultobj;
 	string resultStr;
 	if(resultCode == CURLE_OK)
 	{
-		//CCLog("t_function OK1");
+		//CCLOG("t_function OK1");
 		resultStr = command.chunk.memory;// gdchunk.memory;
-		CCLog("get str %s",resultStr.c_str());
+		CCLOG("get str %s",resultStr.c_str());
 		if(*resultStr.rbegin() == '#') // success
 		{
 			try
@@ -379,18 +379,18 @@ void* GraphDog::t_function(void *_insertIndex)
 				
 				resultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
 				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
-				//CCLog("t_function OK2 %s",resultStr.c_str());
+				//CCLOG("t_function OK2 %s",resultStr.c_str());
 			}
 			catch(const std::string& msg)
 			{
 				
-				//CCLog("t_function FAILED1");
+				//CCLOG("t_function FAILED1");
 				resultCode = CURLE_CHUNK_FAILED;
 			}
 		}
 		else
 		{
-			//CCLog("t_function FAILED2");
+			//CCLOG("t_function FAILED2");
 			
 			resultCode = CURLE_CHUNK_FAILED;
 		}
@@ -446,11 +446,11 @@ void* GraphDog::t_function(void *_insertIndex)
 	//		newToken = true;
 	//	}
 	
-	//CCLog("t_function 11");
+	//CCLOG("t_function 11");
 	
 	//@ if(resultobj["errorcode"].getInt()==9999){
 	if(resultobj["errorcode"].asInt()==9999){
-		//CCLog("t_function errorcode");
+		//CCLOG("t_function errorcode");
 		command.caller->setCTime("9999");
 		command.caller->errorCount++;
 		if(command.caller->errorCount<5){
@@ -487,24 +487,24 @@ void* GraphDog::t_function(void *_insertIndex)
 	//		for(auto iter = command.commands.begin(); iter != command.commands.end(); ++iter)
 	//		{
 	//			CommandType test = iter->second;
-	//			CCLog("dummy");
+	//			CCLOG("dummy");
 	//		}
 	
 	
-	//CCLog("t_function 12");
+	//CCLOG("t_function 12");
 	//@if(resultobj["state"].getString()=="ok"){
 	if(resultobj["state"].asString()=="ok"){
 		
-		//CCLog("t_function 13");
+		//CCLOG("t_function 13");
 		command.caller->errorCount=0;
 	}
 	
 	
-	//CCLog("t_function 14");
+	//CCLOG("t_function 14");
 	//@ if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
 	if(resultobj["timestamp"].asInt64()<GraphDog::get()->timestamp){
 		
-		CCLog("t_function error hack!!! %lld,%lld",resultobj["timestamp"].asInt64(),GraphDog::get()->timestamp);
+		CCLOG("t_function error hack!!! %lld,%lld",resultobj["timestamp"].asInt64(),GraphDog::get()->timestamp);
 		resultCode=CURLE_CHUNK_FAILED;
 		resultobj["state"]="error";
 		resultobj["errorMsg"]="hack!!";
@@ -569,7 +569,7 @@ void GraphDog::receivedCommand(float dt)
 			{
 				for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
 				{
-					CCLog("receivedCommand error");
+					CCLOG("receivedCommand error");
 					//@ JsonBox::Object resultobj;
 					Json::Value resultobj;
 					CommandType command = commandTypeIter->second;
@@ -597,18 +597,18 @@ void GraphDog::receivedCommand(float dt)
 			Json::Value resultobj = commands.result;
 			
 			if(resultobj.get("checkDeviceError", false).asBool()){
-				CCLog("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				CCLOG("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->lastCmdNo=0;
 				if(this->duplicateLoginFunc!=nullptr)this->duplicateLoginFunc();
 				
 			}else if(resultobj.get("cmdNoError", false).asBool()){
-				CCLog("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				CCLOG("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->lastCmdNo=0;
 				if(this->cmdNoErrorFunc!=nullptr)this->cmdNoErrorFunc();
 				
 			}else if(resultobj.get("longTimeError", false).asBool()){
 				
-				CCLog("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				CCLOG("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->lastCmdNo=0;
 				if(this->longTimeErrorFunc!=nullptr)this->longTimeErrorFunc();
 			
@@ -620,7 +620,7 @@ void GraphDog::receivedCommand(float dt)
 					//CommandType ct = commandQueueIter->second.commands[iter2.memberName()];
 					/* //@@ if(ct.target != 0 && ct.selector != 0)
 					 {
-					 //  CCLog("%s,%s", iter2.memberName(),GraphDogLib::JsonObjectToString(commands.result));
+					 //  CCLOG("%s,%s", iter2.memberName(),GraphDogLib::JsonObjectToString(commands.result));
 					 //((ct.target)->*(ct.selector))(iter2);
 					 ((ct.target)->*(ct.selector))(resultobj[iter2->first.c_str()]);
 					 }		*/
@@ -628,37 +628,37 @@ void GraphDog::receivedCommand(float dt)
 						if(resultobj.get("deviceID", 0).asInt()!=0){
 							this->deviceID=resultobj.get("deviceID", 0).asInt();
 							//this->lastCmdNo=1;
-							CCLog("getDevice ID login is %d",this->deviceID);
+							CCLOG("getDevice ID login is %d",this->deviceID);
 						}else{
 							this->deviceID=0;
-							CCLog("fail login");
+							CCLOG("fail login");
 						}
 					}else if(ct.action=="join"){
 						this->deviceID=resultobj.get("deviceID", 0).asInt();
 						//this->lastCmdNo=1;
-						CCLog("getDevice ID join is %d",this->deviceID);
+						CCLOG("getDevice ID join is %d",this->deviceID);
 					}else if(ct.action=="dropoutuser"){
 						this->deviceID=0;
 						this->lastCmdNo=0;
 					}
 					
 					if(resultobj[iter2->first.c_str()]["log"].isArray()){
-						CCLog("###################################[START for %s ]##########################################",ct.action.c_str());
+						CCLOG("###################################[START for %s ]##########################################",ct.action.c_str());
 						for(int i=0;i<resultobj[iter2->first.c_str()]["log"].size();i++){
 									string log = resultobj[iter2->first.c_str()]["log"][i].asString();
-									CCLog("%s",log.c_str());
+									CCLOG("%s",log.c_str());
 									
 						}
 						resultobj[iter2->first.c_str()]["log"].clear();
 						Json::StyledStreamWriter w;
 						
-						CCLog("=====================================[ Result ]=============================================");
-						CCLog("Name : %s, Code : %d, Message: %s",resultobj[iter2->first.c_str()]["result"].get("name", "None").asString().c_str(),resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt(),resultobj[iter2->first.c_str()]["result"].get("message", "message is nothing").asString().c_str());
+						CCLOG("=====================================[ Result ]=============================================");
+						CCLOG("Name : %s, Code : %d, Message: %s",resultobj[iter2->first.c_str()]["result"].get("name", "None").asString().c_str(),resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt(),resultobj[iter2->first.c_str()]["result"].get("message", "message is nothing").asString().c_str());
 						
 						
 						Json::StyledWriter wr;
-						CCLog("%s",wr.write(resultobj[iter2->first.c_str()]).c_str());
-						CCLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[END for %s ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",ct.action.c_str());
+						CCLOG("%s",wr.write(resultobj[iter2->first.c_str()]).c_str());
+						CCLOG("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[END for %s ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",ct.action.c_str());
 					}
 					if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
 				}
@@ -729,7 +729,7 @@ void GraphDog::receivedCommand(float dt)
 //	//	JniMethodInfo minfo;
 //	//	jobject jobj;
 //	//
-//	//	CCLog("call getdeviceid");
+//	//	CCLOG("call getdeviceid");
 //	//
 //	//	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
 //	//	{
@@ -792,7 +792,7 @@ void GraphDog::receivedCommand(float dt)
 //	//	JniMethodInfo minfo;
 //	//	jobject jobj;
 //	//
-//	//	CCLog("call getdeviceinfo");
+//	//	CCLOG("call getdeviceinfo");
 //	//
 //	//	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
 //	//	{

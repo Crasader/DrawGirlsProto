@@ -727,10 +727,10 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
 
-	CCLog("input %d, sort", card_number);
+	CCLOG("input %d, sort", card_number);
 	for(int i=0;i<has_gotten_cards.size();i++)
 	{
-		CCLog("%d", has_gotten_cards[i].card_number);
+		CCLOG("%d", has_gotten_cards[i].card_number);
 	}
 }
 

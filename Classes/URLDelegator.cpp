@@ -7,7 +7,7 @@ extern "C" {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	void Java_com_litqoo_lib_FBConnectorBase_sendWebViewData(JNIEnv *env, jobject thiz, jstring datas, int delekey) // 자바에서 데이터 받음!!
 	{
-		CCLog("call urldelegator");
+		CCLOG("call urldelegator");
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy); // UTF-8 문자를 얻어옴.
 		string throwData = revStr;
@@ -22,7 +22,7 @@ extern "C" {
 	}
 	void Java_com_litqoo_lib_FBConnectorBase_sendInAppData(JNIEnv *env, jobject thiz, jstring datas, int resultcode, int delekey) // 자바에서 데이터 받음!!
 	{
-		CCLog("call urldelegator");
+		CCLOG("call urldelegator");
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy); // UTF-8 문자를 얻어옴.
 		string throwData = revStr;
@@ -37,10 +37,10 @@ extern "C" {
 	}
 	void Java_com_litqoo_lib_FBConnectorBase_sendDataFromURL(JNIEnv *env, jobject thiz, jstring datas, int delekey) // 자바에서 데이터 받음!!
 	{
-		CCLog("call urldelegator");
+		CCLOG("call urldelegator");
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy); // UTF-8 문자를 얻어옴.
-		//CCLog("nativeCall!! urldata" );
+		//CCLOG("nativeCall!! urldata" );
 		string throwData = revStr;
 		URLDelegator::DeleSel delesel = URLDelegator::getInstance()->getDeleSel(delekey);
 		URLDelegator::getInstance()->removeDeleSel(delekey);

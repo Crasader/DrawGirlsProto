@@ -294,7 +294,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 					 [=](CCObject* e)
 					 {
-						 CCLog("ok!!");
+						 CCLOG("ok!!");
 						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 //						 int idx = (int)obj->getUserData();
 						 ////////////////////////////////
@@ -365,7 +365,7 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	{
 		sendBtn = CCMenuItemImageLambda::create("friendlist_coinsend.png", "friendlist_coinsend.png",
 																						[](CCObject*){
-																							CCLog("not send");
+																							CCLOG("not send");
 																						});
 		sendBtn->setColor(ccc3(100, 100, 100));
 		sendBtn->setVisible(false);
@@ -420,12 +420,12 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 			 av->setContentSize(ttf->getDimensions());
 			 //av->addButton(CommonButton::create("취소", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 										 //[=](CCObject* e) {
-											 //CCLog("ok!!");
+											 //CCLOG("ok!!");
 											 //av->removeFromParent();
 										 //});
 			 av->addButton(CommonButton::create("친구 삭제", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 										 [=](CCObject* e) {
-											 CCLog("ok!!");
+											 CCLOG("ok!!");
 											 hspConnector::get()->command ("removefriendeach", param, 
 																										 [=](Json::Value r) {
 																											 if(r["result"]["code"].asInt() != GDSUCCESS) {

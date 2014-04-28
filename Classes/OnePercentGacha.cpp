@@ -231,7 +231,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 																	{
-																		CCLog("buy!");
+																		CCLOG("buy!");
 																		
 																		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 																		

@@ -140,7 +140,7 @@ public:
 		int nTri = mTriangles2.size(); 
 		for(int i=0; i<nTri; i++){
 			for(int j=0; j<3; j++){
-				CCLog("(%f, %f)", mVertices[mTriangles2[i].vt[j]].x, mVertices[mTriangles2[i].vt[j]].y);
+				CCLOG("(%f, %f)", mVertices[mTriangles2[i].vt[j]].x, mVertices[mTriangles2[i].vt[j]].y);
 				//cout<<"("<<mVertices[mTriangles2[i].vt[j]].x<<","<<mVertices[mTriangles2[i].vt[j]].y<<")  ";
 			}
 			cout<<endl;
@@ -303,7 +303,7 @@ public:
 		{
 			m_validTouch = false;
 			local = m_validTouchPosition;
-			CCLog("%f %f", local.x, local.y);
+			CCLOG("%f %f", local.x, local.y);
 			
 			vector<Vertex3D*> movingVertices;
 			map<Vertex3D*, float> distance;
@@ -378,7 +378,7 @@ public:
 		
 		m_validTouch = false;
 		//			local = m_validTouchPosition;
-		CCLog("%f %f", local.x, local.y);
+		CCLOG("%f %f", local.x, local.y);
 		m_waveRange = 1000;
 		vector<Vertex3D*> movingVertices;
 		map<Vertex3D*, ccColor4B> movingVertexColors; // 움직일 좌표의 rgb 임.
@@ -549,7 +549,7 @@ public:
 	}
 	void movingDistance(CCPoint t) // 영호.
 	{
-//		CCLog("%f %f", t.x, t.y);
+//		CCLOG("%f %f", t.x, t.y);
 		if(m_isLoadedRGB == false)
 			return;
 
@@ -663,7 +663,7 @@ public:
 		for(int y=0;y<height;y++){
 			for(int x=0;x<width;x++){
 				int i = ((height - 1 - y)*width+x)*4;
-//				CCLog("i = %d", i);
+//				CCLOG("i = %d", i);
 				m_silColors[y][x] = ccc4(oData[i], oData[i + 1], oData[i + 2], oData[i + 3]);
 			}
 		}
@@ -672,7 +672,7 @@ public:
 //		for(auto& point : m_points)
 //		{
 //			int i = ((height - 1 - point.y) * width + (point.x))*4;
-//			//			CCLog("2. i = %d", i);
+//			//			CCLOG("2. i = %d", i);
 //			auto tt = (float)oData[i];
 //			point.z = tt / 255.f * 50.f;
 //		}

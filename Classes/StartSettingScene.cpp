@@ -807,7 +807,7 @@ void StartSettingScene::startItemGacha()
 	
 	is_menu_enable = false;
 	
-	CCLog("start item gacha");
+	CCLOG("start item gacha");
 	
 //	mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - 1000);
 	myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
@@ -965,7 +965,7 @@ void StartSettingScene::setStageRank()
 //				(*iter).is_play = true;
 //			}
 //			else
-//				CCLog("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
+//				CCLOG("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
 //		}
 //		
 //		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
@@ -1096,7 +1096,7 @@ CCTableViewCell* StartSettingScene::tableCellAtIndex( CCTableView *table, unsign
 
 void StartSettingScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
-//	CCLog("touched cell idx : %d", cell->getIdx());
+//	CCLOG("touched cell idx : %d", cell->getIdx());
 //	
 //	string touched_id = friend_list[cell->getIdx()].user_id;
 //	string touched_nick = friend_list[cell->getIdx()].nickname;
@@ -2213,7 +2213,7 @@ void StartSettingScene::cancelGame()
 	{
 		start_loading->removeFromParent();
 		
-		CCLog("Fail : user data save");
+		CCLOG("Fail : user data save");
 		
 		deque<bool> is_using_item;
 		is_using_item.push_back(false);

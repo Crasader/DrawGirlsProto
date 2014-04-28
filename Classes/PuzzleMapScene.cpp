@@ -95,7 +95,7 @@ void PuzzleMapScene::resultLogin(Json::Value result_data)
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, recent_puzzle_number);
 	}
 	
-	CCLog("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	
 	//	hspConnector::get()->kLoadFriends(std::bind(&WorldMapScene::resultFriendList, this, std::placeholders::_1));
 	
@@ -641,7 +641,7 @@ void PuzzleMapScene::puzzleAction(CCObject *sender)
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
-	CCLog("touched puzzle number : %d", tag);
+	CCLOG("touched puzzle number : %d", tag);
 	
 	setPuzzle(tag);
 	
@@ -1820,7 +1820,7 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	
 	is_menu_enable = false;
 	int tag = ((CCNode*)pSender)->getTag();
-	CCLog("menu %d", tag);
+	CCLOG("menu %d", tag);
 	
 	if(tag == kPMS_MT_event)
 	{
@@ -1992,7 +1992,7 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			CCLog("nothing pre puzzle!!!");
+			CCLOG("nothing pre puzzle!!!");
 			
 			original_mms = map_mode_state;
 			
@@ -2097,7 +2097,7 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			CCLog("nothing next puzzle!!!");
+			CCLOG("nothing next puzzle!!!");
 			
 			original_mms = map_mode_state;
 			
@@ -2461,7 +2461,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						}
 						else
 						{
-							CCLog("nothing next puzzle!!!");
+							CCLOG("nothing next puzzle!!!");
 							
 							original_mms = kMMS_uiMode;
 							
@@ -2560,7 +2560,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						}
 						else
 						{
-							CCLog("nothing pre puzzle!!!");
+							CCLOG("nothing pre puzzle!!!");
 							
 							original_mms = kMMS_uiMode;
 							
@@ -2744,7 +2744,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						}
 						else
 						{
-							CCLog("nothing next puzzle!!!");
+							CCLOG("nothing next puzzle!!!");
 							
 							original_mms = kMMS_notLoadMode;
 							
@@ -2848,7 +2848,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						}
 						else
 						{
-							CCLog("nothing pre puzzle!!!");
+							CCLOG("nothing pre puzzle!!!");
 							
 							original_mms = kMMS_notLoadMode;
 							
@@ -3001,7 +3001,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							{
 								((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 								
-								CCLog("nothing next puzzle!!!");
+								CCLOG("nothing next puzzle!!!");
 								
 								original_mms = kMMS_firstTouchDefault;
 								
@@ -3111,7 +3111,7 @@ void PuzzleMapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							{
 								((CCMenu*)getChildByTag(kPMS_MT_showui))->setVisible(true);
 								
-								CCLog("nothing pre puzzle!!!");
+								CCLOG("nothing pre puzzle!!!");
 								
 								original_mms = kMMS_firstTouchDefault;
 								
@@ -4004,7 +4004,7 @@ void PuzzleMapScene::creatingPuzzle()
 			else if(map_mode_state == kMMS_changeMode)
 				map_mode_state = kMMS_loadChangingMode;
 			else
-				CCLog("map_mode_state : %d", map_mode_state);
+				CCLOG("map_mode_state : %d", map_mode_state);
 		}
 		else
 		{
@@ -4054,7 +4054,7 @@ void PuzzleMapScene::cachingPuzzleImg2()
 			return;
 		else if(t_img->getPuzzleKey().find("thumbnail") != -1)
 		{
-			//																	CCLog("key : %s, find : %ld", t_img->getPuzzleKey().c_str(), t_img->getPuzzleKey().find("piece"));
+			//																	CCLOG("key : %s, find : %ld", t_img->getPuzzleKey().c_str(), t_img->getPuzzleKey().find("piece"));
 			return;
 		}
 		else if(t_img->getPuzzleKey() == CCString::createWithFormat("puzzle%d_bottom", recent_puzzle_number)->getCString())

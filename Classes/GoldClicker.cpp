@@ -59,7 +59,7 @@ bool GoldClicker::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
 			m_obtainSocialFnt->setString(CCString::createWithFormat("%d", m_obtainSocial)->getCString());
 		}
 
-		CCLog("mine!");
+		CCLOG("mine!");
 	}
 	return true;
 }

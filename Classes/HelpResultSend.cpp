@@ -14,7 +14,7 @@ HelpResultSend::HelpResultSend()
 }
 HelpResultSend::~HelpResultSend()
 {
-	CCLog("help end!!");
+	CCLOG("help end!!");
 }
 //void HelpResult::registerWithTouchDispatcher()
 //{
@@ -125,7 +125,7 @@ bool HelpResultSend::init(const std::string& corp_id, bool isSuccess, std::funct
 		av->setContentSize(ttf->getDimensions());
 		av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 									[=](CCObject* e) {
-										CCLog("ok!!");
+										CCLOG("ok!!");
 									});
 
 

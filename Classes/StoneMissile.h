@@ -389,7 +389,7 @@ public:
 		if((m_option & AttackOption::kGold))
 		{
 			FeverCoin* t_fc = FeverCoin::create(ccp2ip(cumberPosition), nullptr, nullptr);
-			CCLog("%x getParent", this);
+			CCLOG("%x getParent", this);
 			getParent()->addChild(t_fc, 5);
 			t_fc->startRemove();
 			mySGD->addChangeGoodsIngameGold(1);
@@ -1242,7 +1242,7 @@ public:
 	}
 	virtual ~SpreadMissile()
 	{
-		CCLog("Spread ~");
+		CCLOG("Spread ~");
 	}
 	bool init(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int directions, AttackOption ao)
 	{
@@ -1613,7 +1613,7 @@ public:
 				}
 				else
 				{
-					CCLog("what!?");
+					CCLOG("what!?");
 					validPosition = true;
 				}
 
@@ -1662,7 +1662,7 @@ public:
 	}
 	virtual ~RangeAttack()
 	{
-		CCLog("~RangeAttack");
+		CCLOG("~RangeAttack");
 	}
 	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int jiggleInterval, AttackOption ao)
 	{

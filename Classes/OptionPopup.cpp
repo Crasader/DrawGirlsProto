@@ -698,7 +698,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 
 														 hspConnector::get()->logout([=](Json::Value result_data)
 																												 {
-																													 CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																													 CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 																													 if(result_data["error"]["isSuccess"].asBool())
 																													 {
 																														 myDSH->clear();
@@ -714,7 +714,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 																														 cancel_button->setVisible(true);
 																														 ok_button->setVisible(true);
 																														 
-																														 CCLog("fail logout");
+																														 CCLOG("fail logout");
 																													 }
 																												 });
 													 });
@@ -827,7 +827,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 																															cancel_button->setVisible(true);
 																															ok_button->setVisible(true);
 																															
-																															CCLog("fail dropoutuser");
+																															CCLOG("fail dropoutuser");
 																														}
 																													});
 													 });

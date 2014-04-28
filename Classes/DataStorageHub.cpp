@@ -382,7 +382,7 @@ void DataStorageHub::loadAllUserData (Json::Value result_data)
 	Json::Reader reader;
 	reader.parse(result_data["data"].asString(), data);
 	
-	CCLog("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
+	CCLOG("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
 	
 	setIntegerForKey(kDSH_Key_savedStar, data.get(getKey(kDSH_Key_savedStar), default_ruby).asInt(), false);
 	setIntegerForKey(kDSH_Key_savedGold, data.get(getKey(kDSH_Key_savedGold), default_gold).asInt(), false);

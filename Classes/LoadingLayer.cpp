@@ -78,7 +78,7 @@ void LoadingLayer::loadingAnimation()
 
 bool LoadingLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
-	CCLog("touch swallow : LoadingLayer");
+	CCLOG("touch swallow : LoadingLayer");
 	return true;
 }
 

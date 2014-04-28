@@ -246,7 +246,7 @@ void THIS::setBarRefresh() {
 	
 	
 	//	bar->setPosition(ccp(offset, 0));
-	//	CCLog("%f / %f .. %f", offset, total, bar->getPosition().x);
+	//	CCLOG("%f / %f .. %f", offset, total, bar->getPosition().x);
 	
 	
 }

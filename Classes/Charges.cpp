@@ -343,7 +343,7 @@ void SpecialChargeNodeLambda::removeSelf()
 	if(iter != cumber->getCharges().end())
 	{
 		cumber->getCharges().erase(iter);
-//		CCLog("%x remove", this);
+//		CCLOG("%x remove", this);
 	}
 	myGD->communication("MP_removeChargeInArray", this);
 }
@@ -400,7 +400,7 @@ void CrashChargeNodeLambda::cancelCharge()
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 	//		if(cancel_target && cancel_delegate)
 	//			(cancel_target->*cancel_delegate)(real_target);
-	CCLog("crash cancelCharge");
+	CCLOG("crash cancelCharge");
 	removeSelf();
 }
 
@@ -433,7 +433,7 @@ void CrashChargeNodeLambda::charging()
 		AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		actionFunction(real_target);
-		CCLog("removeSelf call");
+		CCLOG("removeSelf call");
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
 		if(cb)
@@ -468,11 +468,11 @@ void CrashChargeNodeLambda::removeSelf()
 	if(iter != cumber->getCharges().end())
 	{
 		cumber->getCharges().erase(iter);
-//		CCLog("%x remove", this);
+//		CCLOG("%x remove", this);
 	}
 	myGD->communication("MP_removeChargeInArray", this);
 	
-	CCLog("crash removeFromParent1");
+	CCLOG("crash removeFromParent1");
 }
 
 void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )

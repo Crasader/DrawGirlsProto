@@ -206,10 +206,10 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 
 void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 {
-	CCLog("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("missile upgrade success!!");
+		CCLOG("missile upgrade success!!");
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("se_upgrade.mp3", false);
@@ -295,7 +295,7 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	}
 	else
 	{
-		CCLog("missile upgrade fail!!");
+		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
 		

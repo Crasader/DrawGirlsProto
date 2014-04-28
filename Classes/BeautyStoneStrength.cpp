@@ -727,12 +727,12 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
 
 			float result_value = uniform_dist(e1);
-			CCLog("result value : %.3f", result_value);
+			CCLOG("result value : %.3f", result_value);
 
 			
 			if(result_value <= strength_rate)
 			{
-				CCLog("success");
+				CCLOG("success");
 				myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, strength_stone_idx, myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, strength_stone_idx)+1);
 				vector<BeautyStoneInfo>::iterator iter2;
 				for(iter2 = offering_list.begin();iter2 != offering_list.end();iter2++)
@@ -785,7 +785,7 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				CCLog("fail");
+				CCLOG("fail");
 				
 				TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-250);
 				addChild(t_suction, kBeautyStoneStrengthPopupZorder_popup);
@@ -883,12 +883,12 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
 			
 			float result_value = uniform_dist(e1);
-			CCLog("result value : %.3f", result_value);
+			CCLOG("result value : %.3f", result_value);
 			
 			
 			if(result_value <= strength_rate)
 			{
-				CCLog("success");
+				CCLOG("success");
 				myDSH->setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, strength_stone_idx, myDSH->getIntegerForKey(kDSH_Key_beautyStoneLevel_int1, strength_stone_idx)+1);
 				vector<BeautyStoneInfo>::iterator iter2;
 				for(iter2 = offering_list.begin();iter2 != offering_list.end();iter2++)
@@ -941,7 +941,7 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				CCLog("fail");
+				CCLOG("fail");
 				
 				TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-250);
 				addChild(t_suction, kBeautyStoneStrengthPopupZorder_popup);
@@ -1028,7 +1028,7 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 
 bool BeautyStoneStrengthPopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 {
-	CCLog("touch swallow!!");
+	CCLOG("touch swallow!!");
 	
 	return true;
 }

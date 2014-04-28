@@ -273,7 +273,7 @@ void TutoCharacter::escapeCharacter()
 	}
 	else // escape point not found
 	{
-		CCLog("escape point not found!");
+		CCLOG("escape point not found!");
 	}
 }
 
@@ -1609,7 +1609,7 @@ void PlayTutorial::setMapData(int x, int y, TutoMapType value)
 
 void PlayTutorial::startBackTracking()
 {
-	CCLog("start backtracking");
+	CCLOG("start backtracking");
 	controler->isBacking = true;
 	schedule(schedule_selector(PlayTutorial::backTracking));
 }
@@ -1653,7 +1653,7 @@ void PlayTutorial::backTracking()
 }
 void PlayTutorial::stopBackTracking()
 {
-	CCLog("stop backtracking");
+	CCLOG("stop backtracking");
 	unschedule(schedule_selector(PlayTutorial::backTracking));
 	controler->isBacking = false;
 }
@@ -1916,7 +1916,7 @@ IntRect* PlayTutorial::newRectChecking(IntMoveState start)
 		}
 	}
 	
-	//	CCLog("loop count : %d", loopCnt);
+	//	CCLOG("loop count : %d", loopCnt);
 	
 	IntRect* r_rect = new IntRect(origin.x*pixelSize, origin.y*pixelSize, size.width*pixelSize, size.height*pixelSize);
 	r_rect->autorelease();

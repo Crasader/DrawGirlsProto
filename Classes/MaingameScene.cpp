@@ -1901,7 +1901,7 @@ void Maingame::startMoveToCCPoint( CCPoint t_point )
 	move_to_boss_position_frame = 0;
 	CCPoint after_position = getObjectToGameNodePosition(t_point);
 	CCPoint sub_position = ccpSub(after_position, game_node->getPosition());
-	CCLog("boss : %.2f\t recent : %.2f", after_position.y, game_node->getPositionY());
+	CCLOG("boss : %.2f\t recent : %.2f", after_position.y, game_node->getPositionY());
 	move_to_boss_position_ds = ccpMult(sub_position, 1.f/30.f);
 	schedule(schedule_selector(Maingame::moveToBossPosition));
 }

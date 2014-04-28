@@ -989,7 +989,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 //			mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) - mySGD->getCardUpgradeRubyFee());
 			
 			float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
-			CCLog("strength_rate : %.3f", strength_rate);
+			CCLOG("strength_rate : %.3f", strength_rate);
 			
 //			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
 //			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
@@ -1009,26 +1009,26 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
 			
 			float result_value = uniform_dist(e1);
-			CCLog("result value : %.3f", result_value);
+			CCLOG("result value : %.3f", result_value);
 			
 			
 			if(result_value <= strength_rate)
 			{
-				CCLog("success");
+				CCLOG("success");
 				is_success = true;
 				float success_type_rate = uniform_dist(e1);
 				if(success_type_rate <= 0.5f)
 				{
 					uniform_int_distribution<int> uniform_dist_int(1, 3);
 					int level_up_value = uniform_dist_int(e1);
-					CCLog("level up value : %d", level_up_value);
+					CCLOG("level up value : %d", level_up_value);
 //					myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
 					
 					result_string = "카드레벨 +1";
 				}
 				else if(success_type_rate <= 0.7f)
 				{
-					CCLog("max durability up");
+					CCLOG("max durability up");
 //					myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
 //					myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
 					
@@ -1040,7 +1040,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 					
 					if(passive_string == "")
 					{
-						CCLog("passive up");
+						CCLOG("passive up");
 						
 						Json::Value data;
 						
@@ -1100,13 +1100,13 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 						{
 							result_string = "내구도 +1";
 							
-							CCLog("max durability up");
+							CCLOG("max durability up");
 //							myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number)+1);
 //							myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, strength_card_number)+1);
 						}
 						else
 						{
-							CCLog("passive up");
+							CCLOG("passive up");
 							
 							Json::Value data;
 							
@@ -1139,7 +1139,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			else
 			{
 				is_success = false;
-				CCLog("fail");
+				CCLOG("fail");
 				
 				result_string = "강화 실패";
 			}
@@ -1181,7 +1181,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			
 			save_offering_number = offering_card_number;
 			float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, offering_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, offering_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, strength_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, strength_card_number));
-			CCLog("strength_rate : %.3f", strength_rate);
+			CCLOG("strength_rate : %.3f", strength_rate);
 			
 //			myDSH->setIntegerForKey(kDSH_Key_cardDurability_int1, offering_card_number, 0);
 //			myDSH->setIntegerForKey(kDSH_Key_cardMaxDurability_int1, offering_card_number, NSDS_GI(kSDS_CI_int1_durability_i, offering_card_number));
@@ -1201,11 +1201,11 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
 			
 			float result_value = uniform_dist(e1);
-			CCLog("result value : %.3f", result_value);
+			CCLOG("result value : %.3f", result_value);
 			
 			if(result_value <= strength_rate)
 			{
-				CCLog("success");
+				CCLOG("success");
 				is_success = true;
 				result_string = "카드레벨 +1";
 //				myDSH->setIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number, myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, strength_card_number)+1);
@@ -1215,7 +1215,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 				is_success = false;
 				result_string = "강화 실패";
 				
-				CCLog("fail");
+				CCLOG("fail");
 			}
 			
 			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -1293,7 +1293,7 @@ void CardStrengthPopup::resultStrength(Json::Value result_data)
 		result_popup = StrengthCardAnimation::create(card,card2,-190);
 		
 		result_popup->setCloseFunc([this](){
-			CCLog("close Func");
+			CCLOG("close Func");
 			this->is_menu_enable = true;
 		});
 		
@@ -1320,7 +1320,7 @@ void CardStrengthPopup::resultStrength(Json::Value result_data)
 
 bool CardStrengthPopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 {
-	CCLog("touch swallow!!");
+	CCLOG("touch swallow!!");
 	
 	return true;
 }

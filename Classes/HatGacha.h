@@ -228,7 +228,7 @@ public:
 			{
 				m_untouchableCount = 0;
 			}
-			//			CCLog("ros%f", m_rotationSpeed.getValue());
+			//			CCLOG("ros%f", m_rotationSpeed.getValue());
 			m_rotationSpeed.step(1/60.f);
 			repositionHat();
 		}
