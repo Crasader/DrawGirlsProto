@@ -452,6 +452,11 @@ void KSCumberBase::followMoving(float dt)
 		}
 	}
 	
+	//보스는 0.5초만 따라가자
+	if((m_attackPercent>0.01 && m_follow.timer>30) || myGD->getJackState() == jackStateNormal){
+		unAggroExec();
+	}
+	
 	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
@@ -1547,8 +1552,8 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 		else if(bossIsClosed() && gainPercent <= 80.f)
 		{
-			ProbSelector teleportProb = {static_cast<double>((int)getAiValue())+1,600};	//보스가 빠져나올 확률. AI 0 일떄 0, 100일때 1초안에 50%
-			if(teleportProb.getResult() == 0 && 0) // 무조건 안하기.
+			ProbSelector teleportProb = {1,1};	//보스가 빠져나올 확률. AI 0 일떄 0, 100일때 1초안에 50%
+			if(teleportProb.getResult() == 0) // 50%확률로 순간이동 OR 부수기
 			{
 				std::string patternData = R"({
 				"atype" : "special",
@@ -1662,7 +1667,7 @@ void KSCumberBase::cumberAttack(float dt)
 	{
 		IntPoint point = ccp2ip(getPosition());
 		IntPoint afterPoint = point;
-		float radius = 30.f;
+		float radius = 40;
 		
 		float half_distance = radius*getCumberScale(); // 20.f : radius for base scale 1.f
 		int ip_half_distance = half_distance;
@@ -1684,7 +1689,7 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 		int s = m_closeRule.conditionSeconds; // s초 동안
 		outlineCountRatio.push_back(outlineCount);
-		if(outlineCountRatio.size() > 60 * s)
+		if(outlineCountRatio.size() > 30 * s)
 		{
 			outlineCountRatio.pop_front();
 		}
@@ -2343,7 +2348,7 @@ void KSCumberBase::followProcess(float dt)
 				}
 
 			}
-			if(aggroCount < getAiValue()/30+1) //AI에 따라 따라갈놈 갯수를 설정함
+			if(aggroCount < (getAiValue()-1)/50+1) //AI에 따라 따라갈놈 갯수를 설정함
 			{
 				aggroExec();
 			}
@@ -2618,6 +2623,7 @@ void KSCumberBase::settingFuryRule()
 	m_furyRule.gainPercent = 40.f;
 	m_furyRule.userDistance = 300+((100-getAiValue())/100.f*200); // ai에 따라 분노 거리를 변경 500~300
 	m_furyRule.percent = 0.005f;
+	//CCLog("setting m_furyRule.userDistance %f",m_furyRule.userDistance);
 	//		m_furyRule
 }
 
@@ -2652,10 +2658,12 @@ void KSCumberBase::applyAutoBalance()
 	if(vCount>0){
 		if(m_attackPercent>0)m_aiValue = m_aiValue+5*vCount;
 		else m_aiValue = m_aiValue+2.5f*vCount;
-		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.05;
+		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.025;
 		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.05;
 	}
 	
+	
+	settingFuryRule();
 	
 	CCLog("#################### Change Balnace1 ############################");
 	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
@@ -2918,10 +2926,10 @@ void KSCumberBase::caughtAnimation()
 
 bool KSCumberBase::bossIsClosed()
 {
-	int greaterNumber = count_if(outlineCountRatio.begin(), outlineCountRatio.end(), [](int i){return i >= 20;} );
+	int greaterNumber = count_if(outlineCountRatio.begin(), outlineCountRatio.end(), [](int i){return i >= 60;} );
 	bool closedBoss = false;
 	int s = m_closeRule.conditionSeconds - 1;
-	if((float)greaterNumber / (float)outlineCountRatio.size() >= 0.8f && outlineCountRatio.size() > 60 * s)
+	if((float)greaterNumber / (float)outlineCountRatio.size() >= 0.8f && outlineCountRatio.size() > 30 * s)
 	{
 		closedBoss = true;
 	}

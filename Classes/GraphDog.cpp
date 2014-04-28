@@ -310,6 +310,7 @@ bool GraphDog::command(string action, const Json::Value param,function<void(Json
 	return true;
 }
 
+
 //@ bool GraphDog::test(string action, const JsonBox::Object* const param,CCObject *target, GDSelType selector, JsonBox::Object result){
 bool GraphDog::test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result){
 	//@ result["param"] = *param;
@@ -325,6 +326,7 @@ bool GraphDog::test(string action, const Json::Value param,CCObject *target, GDS
 	this->test(action,param,target,selector,resultObj);
 	return true;
 }
+
 
 //쓰레드펑션
 void* GraphDog::t_function(void *_insertIndex)

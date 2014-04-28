@@ -93,6 +93,10 @@ bool OptionPopup::init()
 //		KS::KSLog("in-app test \n%", v);
 //	});
 	
+	vector<CommandParam> send_command_list;
+	send_command_list.push_back(CommandParam("gettimeinfo", nullptr,"{'test':'test'}"));
+	GraphDog::get()->command(send_command_list);
+	
 	
 	setTouchEnabled(true);
 	
