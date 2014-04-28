@@ -197,8 +197,10 @@ public:
 	
 	float getScore();
 	float getBaseScore();
+	void setPercentage(float t_f);
 	float getPercentage();
 	
+	void setStageGrade(int t_i);
 	int getStageGrade();
 	
 	int getStageGold();
@@ -419,12 +421,21 @@ public:
 	int getItemGachaGoldFee();
 	void setItemGachaReplayGoldFee(int t_i);
 	int getItemGachaReplayGoldFee();
-	
 	void setUpgradeGoldFee(int t_i);
 	int getUpgradeGoldFee();
-	
 	void setIngameTutorialRewardGold(int t_i);
 	int getIngameTutorialRewardGold();
+	
+	void setRankUpConditionCount(int t_i);
+	int getRankUpConditionCount();
+	void setRankUpBaseRate(float t_f);
+	float getRankUpBaseRate();
+	void setRankUpRateDistance(float t_f);
+	float getRankUpRateDistance();
+	void setRankUpRubyFee(int t_i);
+	int getRankUpRubyFee();
+	void setRankUpAddRate(float t_f);
+	float getRankUpAddRate();
 	
 	string getInappProduct(int t_index);
 	void initInappProduct(int t_index, string t_product);
@@ -616,6 +627,13 @@ private:
 	
 	KSProtectVar<int> upgrade_gold_fee;
 	KSProtectVar<int> ingame_tutorial_reward_gold;
+	
+	KSProtectVar<int> rank_up_condition_count;
+	KSProtectVar<float> rank_up_base_rate;
+	KSProtectVar<float> rank_up_rate_distance;
+	KSProtectVar<int> rank_up_ruby_fee;
+	
+	KSProtectVar<float> rank_up_add_rate;
 	
 	KSProtectStr inapp_products[6];
 	

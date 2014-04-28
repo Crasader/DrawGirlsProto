@@ -18,6 +18,7 @@
 #include "NewMainFlowScene.h"
 #include "bustMorphing.h"
 #include "MyLocalization.h"
+#include "RankUpPopup.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -50,6 +51,8 @@ bool ZoomScript::init()
     }
 	
 	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
+	
+	is_rankup = false;
 	
 	CCLayer* top_bottom_layer = CCLayer::create();
 	top_bottom_layer->setPosition(ccp(0, 0));
@@ -315,22 +318,132 @@ void ZoomScript::menuAction(CCObject *sender)
 					take_grade = 3;
 			}
 			
-			if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+			if(!is_rankup)
 			{
-				nextScene();
+				is_rankup = true;
+				
+				bool is_rank_up_chance = false;
+				PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+				if(t_history.try_count >= 5 && ((take_grade == 2 && !t_history.is_clear[2]) || (take_grade == 3 && !t_history.is_clear[3])))
+				{
+					is_rank_up_chance = true;
+				}
+				
+				if(is_rank_up_chance)
+				{
+					RankUpPopup* t_popup = RankUpPopup::create(-999, [=]()
+															   {
+																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+																   {
+																	   nextScene();
+																   }
+																   else
+																   {
+																	   mySGD->is_clear_diary = true;
+																	   
+																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   
+																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+																	   CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+																	   
+																	   game_node->runAction(t_seq);
+																   }
+															   }, [=](){
+																   target_node->removeFromParent();
+																   
+																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
+																   
+																   target_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+																   target_node->putBasicInfomation();	// 기본정보 들어가게.
+																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
+																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+																   target_node->triangulationWithPoints();
+																   
+																   target_node->setPosition(ccp(160,215));
+																   target_node->setTouchEnabled(false);
+																   game_node->addChild(target_node, kZS_Z_second_img);
+																   
+																   game_node->setScale(1.5f);
+																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+															   }, [=](){
+																   CCDelayTime* delay1 = CCDelayTime::create(0.5f);
+																   CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
+																   CCDelayTime* delay2 = CCDelayTime::create(1.f);
+																   
+																   CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
+																   CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
+																   CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+																   
+																   //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+																   CCDelayTime* delay3 = CCDelayTime::create(1.f);
+																   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::rankupAction));
+																   
+																   CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
+																   
+																   game_node->runAction(t_seq);
+															   }, [=](){
+																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+																   {
+																	   nextScene();
+																   }
+																   else
+																   {
+																	   mySGD->is_clear_diary = true;
+																	   
+																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   
+																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+																	   CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+																	   
+																	   game_node->runAction(t_seq);
+																   }
+															   });
+					addChild(t_popup, kZS_Z_whitePaper+1);
+				}
+				else
+				{
+					if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+					{
+						nextScene();
+					}
+					else
+					{
+						mySGD->is_clear_diary = true;
+						
+						CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+						CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+						
+						CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+						CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+						CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+						
+						game_node->runAction(t_seq);
+					}
+				}
 			}
 			else
 			{
-				mySGD->is_clear_diary = true;
-				
-				CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
-				
-				CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
-				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
-				CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
-				
-				game_node->runAction(t_seq);
+				if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+				{
+					nextScene();
+				}
+				else
+				{
+					mySGD->is_clear_diary = true;
+					
+					CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+					CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+					
+					CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+					CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+					
+					game_node->runAction(t_seq);
+				}
 			}
 		}
 	}
@@ -413,6 +526,21 @@ void ZoomScript::showtimeSecondAction()
 	CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
 	
 	game_node->runAction(t_seq);
+}
+
+void ZoomScript::rankupAction()
+{
+	script_label->setVisible(true);
+	script_case->setVisible(true);
+	
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
+	
+	basic_string<wchar_t> result;
+	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
+	text_length = result.length();
+	typing_frame = 0;
+	delegate_typing_after = callfunc_selector(ZoomScript::showtimeForthAction);
+	schedule(schedule_selector(ZoomScript::typingAnimation), 1.f/10.f);
 }
 
 void ZoomScript::showtimeThirdAction()
