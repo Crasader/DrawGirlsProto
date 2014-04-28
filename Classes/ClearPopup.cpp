@@ -163,7 +163,7 @@ bool ClearPopup::init()
 //		}
 //		else
 //		{
-//			CCLog("not found myKakaoID");
+//			CCLOG("not found myKakaoID");
 //			
 //			Json::Value p;
 //			p["memberID"]=hspConnector::get()->getSocialID();
@@ -502,11 +502,11 @@ bool ClearPopup::init()
 								  {
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 										{
-											CCLog("ClearPopup transaction success");
+											CCLOG("ClearPopup transaction success");
 										}
 									  else
 										{
-											CCLog("ClearPopup transaction fail");
+											CCLOG("ClearPopup transaction fail");
 											
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
 											addChild(t_loading, 9999);
@@ -519,7 +519,7 @@ bool ClearPopup::init()
 																	}
 																   else
 																	{
-																		CCLog("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+																		CCLOG("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 																	}
 															   });
 										}
@@ -742,13 +742,13 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 void ClearPopup::showPopup()
 {
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)+1;
+	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)+2;
 	
 	if(autobalanceTry>0){
 		myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
-		CCLog("up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
+		CCLOG("up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
 	}else{
-		CCLog("no up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
+		CCLOG("no up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
 	}
 	
 	AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
@@ -809,7 +809,7 @@ void ClearPopup::checkChallengeOrHelp()
 //	if(mySGD->getIsAcceptHelp())
 //	{
 //		////////////////// ksks
-//		CCLog("zzzz");
+//		CCLOG("zzzz");
 //		addChild(HelpResultSend::create(mySGD->getAcceptHelpId(), true, [=](){closePopup();}), kZ_CP_popup);
 //	}
 //	else if(mySGD->getIsMeChallenge())
@@ -820,10 +820,10 @@ void ClearPopup::checkChallengeOrHelp()
 //															   mySGD->getMeChallengeTargetProfile(),mySGD->getMeChallengeTargetScore(),mySGD->getMeChallengeTargetNick(),
 //															   -200);
 //		b->setCancelFunc([](){
-//			CCLog("닫기눌렀을때");
+//			CCLOG("닫기눌렀을때");
 //		});
 //		b->setCloseFunc([=](){
-//			CCLog("창 다닫혔을때");
+//			CCLOG("창 다닫혔을때");
 //			checkMiniGame();
 //		});
 //		
@@ -832,7 +832,7 @@ void ClearPopup::checkChallengeOrHelp()
 //		if(mySGD->getScore() > mySGD->getMeChallengeTargetScore())
 //		{
 //			b->setSendFunc([=](){
-//				CCLog("승리시 확인눌렀을때->메세지전송");
+//				CCLOG("승리시 확인눌렀을때->메세지전송");
 //			
 //				Json::Value p;
 //				Json::Value contentJson;
@@ -885,7 +885,7 @@ void ClearPopup::checkChallengeOrHelp()
 //		else
 //		{
 //			b->setConfirmFunc([](){
-//				CCLog("패배시 확인눌렀을때");
+//				CCLOG("패배시 확인눌렀을때");
 //			});
 //			
 //			b->startLose(); //내가졌을때
@@ -908,10 +908,10 @@ void ClearPopup::checkChallengeOrHelp()
 //															   mySGD->getAcceptChallengeProfile(),mySGD->getAcceptChallengeScore(),mySGD->getAcceptChallengeNick(),
 //															   -200);
 //		b->setCancelFunc([](){
-//			CCLog("닫기눌렀을때");
+//			CCLOG("닫기눌렀을때");
 //		});
 //		b->setCloseFunc([=](){
-//			CCLog("창 다닫혔을때");
+//			CCLOG("창 다닫혔을때");
 //			checkMiniGame();
 //		});
 //		
@@ -920,7 +920,7 @@ void ClearPopup::checkChallengeOrHelp()
 //		if(mySGD->getAcceptChallengeScore() < mySGD->getScore())
 //		{
 //			b->setSendFunc([=](){
-//				CCLog("승리시 확인눌렀을때->메세지전송");
+//				CCLOG("승리시 확인눌렀을때->메세지전송");
 //				
 //				Json::Value p;
 //				Json::Value contentJson;
@@ -974,7 +974,7 @@ void ClearPopup::checkChallengeOrHelp()
 //		else
 //		{
 //			b->setConfirmFunc([](){
-//				CCLog("패배시 확인눌렀을때");
+//				CCLOG("패배시 확인눌렀을때");
 //			});
 //			
 //			b->startLose(); //내가졌을때
@@ -992,14 +992,14 @@ void ClearPopup::checkChallengeOrHelp()
 //			
 //			
 //			b->setCancelFunc([](){
-//				CCLog("닫기눌렀을때");
+//				CCLOG("닫기눌렀을때");
 //			});
 //			b->setCloseFunc([=](){
-//				CCLog("창 다닫혔을때");
+//				CCLOG("창 다닫혔을때");
 //				checkMiniGame();
 //			});
 //			b->setSendFunc([=](){
-//				CCLog("확인버튼눌렀을때->메세지전송");
+//				CCLOG("확인버튼눌렀을때->메세지전송");
 //				Json::Value p;
 //				Json::Value contentJson;
 //				contentJson["msg"] = (next_rank_info.nickname + "님에게 도전!");
@@ -1338,7 +1338,7 @@ void ClearPopup::checkRentCard()
 //				(*iter).is_play = true;
 //			}
 //			else
-//				CCLog("not found friend memberID");
+//				CCLOG("not found friend memberID");
 //		}
 //		
 //		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
@@ -2054,7 +2054,7 @@ void ClearPopup::scrollViewDidZoom( CCScrollView* view )
 
 void ClearPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
-	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
+	//		CCLOG("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 
 CCSize ClearPopup::cellSizeForTable( CCTableView *table )

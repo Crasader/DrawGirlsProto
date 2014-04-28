@@ -66,7 +66,7 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 			if(target_touch_began && delegate_touch_began)
 				(target_touch_began->*delegate_touch_began)();
 			else
-				CCLog("%s : %d", swallow_ment.c_str(), touch_priority);
+				CCLOG("%s : %d", swallow_ment.c_str(), touch_priority);
 		}
 	}
 	else if(is_setted_swallow_rect)
@@ -81,7 +81,7 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 			if(target_touch_began && delegate_touch_began)
 				(target_touch_began->*delegate_touch_began)();
 			else
-				CCLog("%s : %d", swallow_ment.c_str(), touch_priority);
+				CCLOG("%s : %d", swallow_ment.c_str(), touch_priority);
 		}
 	}
 	else
@@ -89,7 +89,7 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 		if(target_touch_began && delegate_touch_began)
 			(target_touch_began->*delegate_touch_began)();
 		else
-			CCLog("%s : %d", swallow_ment.c_str(), touch_priority);
+			CCLOG("%s : %d", swallow_ment.c_str(), touch_priority);
 	}
 	return true;
 }

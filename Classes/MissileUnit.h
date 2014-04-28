@@ -154,7 +154,7 @@ class ThrowObject : public CrashMapObject
 public:
 	virtual ~ThrowObject()
 	{
-		CCLog("ThrowObject Destroy");
+		CCLOG("ThrowObject Destroy");
 	}
 	static ThrowObject * create (CCPoint t_sp, int t_type, float t_speed, float t_angle, IntSize t_mSize);
 	void startMyAction ();
@@ -210,7 +210,7 @@ public:
 	static FM_Targeting * create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree);
 	virtual ~FM_Targeting()
 	{
-		CCLog("FM_Targeting destroy");
+		CCLOG("FM_Targeting destroy");
 	}
 	void startAction ();
 private:
@@ -226,7 +226,7 @@ public:
 	static FallMeteor * create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 	virtual ~FallMeteor()
 	{
-		CCLog("FallMeteor~");
+		CCLOG("FallMeteor~");
 	}
 	void removeEffect ();
 	void hidingAnimation (float dt);
@@ -302,7 +302,7 @@ public:
 	IntPoint getSettedPoint ();
 	virtual ~TickingTimeBomb()
 	{
-		CCLog("z");
+		CCLOG("z");
 	}
 private:
 	IntPoint setPoint;
@@ -511,7 +511,7 @@ public:
 	static ReaverScarab * create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern);
 	virtual ~ReaverScarab()
 	{
-		CCLog("ReaverScarab destory");
+		CCLOG("ReaverScarab destory");
 	}
 	void crashMapForPoint (IntPoint point, int radius);
 	void selfRemove (float dt);
@@ -717,7 +717,7 @@ class RunDownSaw : public CrashMapObject
 public:
 	virtual ~RunDownSaw()
 	{
-		CCLog("RunDownSaw Destroy");
+		CCLOG("RunDownSaw Destroy");
 	}
 	static RunDownSaw * create (CCPoint startPosition, float speed, float angleDegree, IntSize mSize, int runDown);
 	void startMyAction ();

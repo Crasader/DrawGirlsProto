@@ -67,7 +67,7 @@ void MissileUnit::move ()
 	
 	
 	CCPoint beforePosition = getPosition() + getParent()->getPosition();
-	//		CCLog("%x -- prev collision %f %f", this, beforePosition.x, beforePosition.y);
+	//		CCLOG("%x -- prev collision %f %f", this, beforePosition.x, beforePosition.y);
 	CCPoint r_p = getPosition(); // recent
 	CCPoint dv;
 	
@@ -84,7 +84,7 @@ void MissileUnit::move ()
 	CCPoint p_p = getParent()->getPosition(); // parent
 	p_p = ccpAdd(r_p, p_p);
 	
-	//		CCLog("%x -- collision %f %f", this, p_p.x, p_p.y);
+	//		CCLOG("%x -- collision %f %f", this, p_p.x, p_p.y);
 	if(p_p.x < 0.f - 40.f || p_p.x > 320.f + 40.f || p_p.y < -60.f - 40.f || p_p.y > 490.f + 40.f) // fixed 40.f
 	{
 		stopMove();
@@ -351,7 +351,7 @@ void MissileUnit3::move ()
 																																			}));
 														 }));
 		
-		CCLog("warning!!");
+		CCLOG("warning!!");
 	}
 	if(afterPosition.y < -mSize.height-60.f)
 	{
@@ -2147,10 +2147,10 @@ BurnFragment * BurnFragment::create (IntPoint t_sp, int t_life, CCNode * t_paren
 void BurnFragment::jackDie ()
 {
 	unschedule(schedule_selector(BurnFragment::myAction));
-	CCLog("call %x", target_removeEffect);
+	CCLOG("call %x", target_removeEffect);
 	(target_removeEffect->*delegate_removeEffect)();
 	removeFromParentAndCleanup(true);
-	CCLog("%x dest", this);
+	CCLOG("%x dest", this);
 }
 void BurnFragment::lineDie (IntPoint t_p)
 {
@@ -2319,7 +2319,7 @@ CCSequence * KSSequenceAndRemove::create (CCNode * thiz, std::initializer_list <
 }
 Firework::~ Firework ()
 {
-	CCLog("exit firework");
+	CCLOG("exit firework");
 }
 Firework * Firework::create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
@@ -2380,12 +2380,12 @@ void Firework::setTwoStep ()
 	addChild(KSGradualValue<float>::create(1, 0, 2.f,
 																				 [=](float t)
 																				 {
-																					 CCLog("scale = %f", t);
+																					 CCLOG("scale = %f", t);
 																					 m_parentMissile->setScale(t);
 																				 },
 																				 [=](float t)
 																				 {
-																					 CCLog("scale finish");
+																					 CCLOG("scale finish");
 																					 m_step = 2;
 																					 m_1TO2 = false;
 																					 m_frame = 0;
@@ -2432,7 +2432,7 @@ void Firework::lineDie (IntPoint t_p)
 }
 void Firework::update (float dt)
 {
-	//		CCLog("pokjuk %d", m_frame);
+	//		CCLOG("pokjuk %d", m_frame);
 	
 	bool r = m_parentMissileGoal.step(1.f / 60.f);
 	if(m_step == 1)
@@ -2487,7 +2487,7 @@ void Firework::update (float dt)
 }
 MovingSunflower * MovingSunflower::create (CCPoint cumberPosition, CCPoint jackPosition, Json::Value pattern)
 {
-	CCLog("%f %f", cumberPosition.x, cumberPosition.y);
+	CCLOG("%f %f", cumberPosition.x, cumberPosition.y);
 	MovingSunflower* t_bf = new MovingSunflower();
 	t_bf->myInit(cumberPosition, jackPosition, pattern);
 	t_bf->autorelease();
@@ -2580,7 +2580,7 @@ void MovingSunflower::lineDie (IntPoint t_p)
 }
 void MovingSunflower::update (float dt)
 {
-	//		CCLog("pokjuk %d", m_frame);
+	//		CCLOG("pokjuk %d", m_frame);
 	
 	bool r = m_parentMissileGoal.step(1.f / 60.f);
 	if(m_step == 1)
@@ -2655,7 +2655,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 				{
 					auto path = bfs.front();
 					bfs.pop();
-					CCLog("path == %d %d, %d %d", path.point.x, path.point.y, ip.x, ip.y);
+					CCLOG("path == %d %d, %d %d", path.point.x, path.point.y, ip.x, ip.y);
 					IntPoint left(-1, 0);
 					if(path.direction == IntPoint(-1, 0))
 					{
@@ -2711,7 +2711,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 							break;
 					}
 				}
-				CCLog("end while");
+				CCLOG("end while");
 			}
 		}
 	}
@@ -2871,7 +2871,7 @@ void AlongOfTheLine::update (float dt)
 				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				unschedule(schedule_selector(ThisClassType::update));
 				m_scaleTo.init(1.f, 0.f, 0.5f);
-				CCLog("abc");
+				CCLOG("abc");
 				schedule(schedule_selector(ThisClassType::hidingAnimation));
 				break;
 			}
@@ -2988,7 +2988,7 @@ void ThrowBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Valu
 }
 void ThrowBomb::update (float dt)
 {
-	//		CCLog("pokjuk %d", m_frame);
+	//		CCLOG("pokjuk %d", m_frame);
 	if(m_step == 1)
 	{
 		m_frame++;
@@ -3098,7 +3098,7 @@ void ReaverScarab::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::V
 	m_insertCount = 0;
 	m_step = 1;
 	m_jackPoint = ccp2ip(jackPosition);
-	CCLog("init %d %d", m_jackPoint.x, m_jackPoint.y);
+	CCLOG("init %d %d", m_jackPoint.x, m_jackPoint.y);
 	m_parentMissile = CCParticleSystemQuad::create("throwbomb.plist");
 	m_parentMissile->setPositionType(kCCPositionTypeRelative);
 	
@@ -3216,7 +3216,7 @@ void ReaverScarab::aStar (IntPoint endPt)
 		m_openList.erase(m_openList.begin());
 		//		m_openList.erase(fminIndex);
 		
-		//		CCLog("%d %d -> %d %d", fminIndex.x, fminIndex.y, endPoint.x, endPoint.y);
+		//		CCLOG("%d %d -> %d %d", fminIndex.x, fminIndex.y, endPoint.x, endPoint.y);
 		if(fminIndex == endPt)
 			break;
 		
@@ -3432,7 +3432,7 @@ void CloudBomb::selfRemove (float dt)
 }
 void CloudBomb::update (float dt)
 {
-	//		CCLog("pokjuk %d", m_frame);
+	//		CCLOG("pokjuk %d", m_frame);
 	if(m_step == 1)
 	{
 		m_frame++;
@@ -3495,7 +3495,7 @@ void Burn::removeEffect ()
 	unschedule(schedule_selector(Burn::myAction));
 	(target_removeEffect->*delegate_removeEffect)();
 	removeFromParentAndCleanup(true);
-	CCLog("%x destroy", this);
+	CCLOG("%x destroy", this);
 }
 void Burn::myAction ()
 {
@@ -3636,7 +3636,7 @@ void Burn::searchAndMoveOldline (IntMoveState searchFirstMoveState)
 	}
 	else // escape point not found
 	{
-		CCLog("escape point not found!");
+		CCLOG("escape point not found!");
 	}
 }
 void Burn::stopMyAction ()
@@ -4224,7 +4224,7 @@ void MathmaticalMissileUnit::move (float dt)
 	}
 	
 	
-	//		CCLog("dis %f - %d, len = %f, u %f", ccpLength(prevPosition - dv), m_catmullIndex, len, m_catmullvar);
+	//		CCLOG("dis %f - %d, len = %f, u %f", ccpLength(prevPosition - dv), m_catmullIndex, len, m_catmullvar);
 	
 	m_catmullvar += m_speed / len;
 	if(m_catmullvar > 1.0)
@@ -4248,7 +4248,7 @@ void MathmaticalMissileUnit::move (float dt)
 	//		if(ccpLength(dv) != 0)
 	//			dv = dv / ccpLength(dv);
 	//		dv = dv * m_speed;
-	//		CCLog("Dv = %f %f", dv.x, dv.y);
+	//		CCLOG("Dv = %f %f", dv.x, dv.y);
 	r_p = firePosition + dv;
 	CCPoint p_p = getParent()->getPosition() + r_p; // parent
 	
@@ -4296,7 +4296,7 @@ void MathmaticalMissileUnit::move (float dt)
 				t2.y += 1.414f * sin(angle);
 				
 				IntPoint t = ccp2ip(t2);
-				CCLog("%d %d", t.x, t.y);
+				CCLOG("%d %d", t.x, t.y);
 				if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
 				{
 					if(!myGD->getCommunicationBool("PM_isShortLine"))

@@ -108,7 +108,7 @@ bool TitleRenewalScene::init()
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
 {
-	CCLog("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	
 	if(result_data["error"]["isSuccess"].asBool())
 	{
@@ -308,7 +308,7 @@ void TitleRenewalScene::successLogin()
 //			for(int i=0; i<rewards.size(); i++)
 //			{
 //				int rewardValue = rewards[i]["rewardvalue"].asInt();
-//				CCLog("reward !!! : %d", rewardValue);
+//				CCLOG("reward !!! : %d", rewardValue);
 //			}
 //			
 ////			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
@@ -320,7 +320,7 @@ void TitleRenewalScene::successLogin()
 //			for(int i=0; i<rewards.size(); i++)
 //			{
 //				int rewardValue = rewards[i]["rewardvalue"].asInt();
-//				CCLog("reward !!! : %d", rewardValue);
+//				CCLOG("reward !!! : %d", rewardValue);
 //			}
 //			
 ////			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
@@ -339,7 +339,7 @@ void TitleRenewalScene::startCommand()
 
 void TitleRenewalScene::checkReceive()
 {
-	CCLog("receive_cnt : %d", receive_cnt);
+	CCLOG("receive_cnt : %d", receive_cnt);
 	if(receive_cnt == 0)
 	{
 		if(command_list.empty())
@@ -681,7 +681,7 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 
 void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 {
-	CCLog("result getmonsterlist : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("result getmonsterlist : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		Json::Value monster_list = result_data["list"];
@@ -859,9 +859,6 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		Json::Value data1;
 		Json::Reader reader1;
 		reader1.parse(result_data["data"].asString(), data1);
-		
-		if(data1[myDSH->getKey(kDSH_Key_nick)].asString() == "")
-			myDSH->clear();
 		
 		myDSH->resetDSH();
 		myDSH->loadAllUserData(result_data);
@@ -1396,7 +1393,7 @@ void TitleRenewalScene::startFileDownload()
 {
 	if(character_download_list.size() > 0 && ing_download_cnt <= character_download_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, character_download_list[ing_download_cnt-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, character_download_list[ing_download_cnt-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(character_download_list[ing_download_cnt-1].img,
 													  character_download_list[ing_download_cnt-1].size,
 													  character_download_list[ing_download_cnt-1].filename,
@@ -1404,7 +1401,7 @@ void TitleRenewalScene::startFileDownload()
 	}
 	else if(monster_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, monster_download_list[ing_download_cnt-character_download_list.size()-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, monster_download_list[ing_download_cnt-character_download_list.size()-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(monster_download_list[ing_download_cnt-character_download_list.size()-1].img,
 													  monster_download_list[ing_download_cnt-character_download_list.size()-1].size,
 													  monster_download_list[ing_download_cnt-character_download_list.size()-1].filename,
@@ -1412,7 +1409,7 @@ void TitleRenewalScene::startFileDownload()
 	}
 	else if(card_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img,
 													  card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].size,
 													  card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].filename,
@@ -1422,7 +1419,7 @@ void TitleRenewalScene::startFileDownload()
 	}
 	else if(puzzle_download_list.size() > 0 && ing_download_cnt <= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img,
 													  puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].size,
 													  puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].filename,
@@ -1762,19 +1759,19 @@ void TitleRenewalScene::failDownloadAction()
 
 void TitleRenewalScene::editBoxEditingDidBegin(CCEditBox* editBox)
 {
-	CCLog("edit begin");
+	CCLOG("edit begin");
 }
 void TitleRenewalScene::editBoxEditingDidEnd(CCEditBox* editBox)
 {
-	CCLog("edit end");
+	CCLOG("edit end");
 }
 void TitleRenewalScene::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
 {
-	CCLog("edit changed : %s", text.c_str());
+	CCLOG("edit changed : %s", text.c_str());
 }
 void TitleRenewalScene::editBoxReturn(CCEditBox* editBox)
 {
-	CCLog("edit return");
+	CCLOG("edit return");
 }
 
 void TitleRenewalScene::menuAction( CCObject* sender )

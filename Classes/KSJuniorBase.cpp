@@ -71,8 +71,8 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 {
 	KSCumberBase::startDamageReaction(damage, angle, castCancel, stiffen);
 	m_remainHp -= damage;
-	CCLog("KSJuniorBase Hp %f", m_remainHp);
-	CCLog("damaga!!!");
+	CCLOG("KSJuniorBase Hp %f", m_remainHp);
+	CCLOG("damaga!!!");
 	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -80,11 +80,11 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 
 	if(((m_state & kCumberStateMoving) || m_state == kCumberStateDamaging) && stiffen)
 	{
-		CCLog("(m_state & kCumberStateMoving)");
+		CCLOG("(m_state & kCumberStateMoving)");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
+		//	CCLOG("%f %f", dx, dy);
 		
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
@@ -169,7 +169,7 @@ void KSJuniorBase::checkConfine(float dt)
 }
 void KSJuniorBase::startAnimationNoDirection()
 {
-	CCLog("Lets rotate");
+	CCLOG("Lets rotate");
 	if((m_state & kCumberStateNoDirection) == 0)
 	{
 		m_state |= kCumberStateNoDirection;
@@ -223,14 +223,14 @@ void KSJuniorBase::animationNoDirection(float dt)
 
 void KSJuniorBase::onPatternEnd()
 {
-	CCLog("onPatternEnd!!");
+	CCLOG("onPatternEnd!!");
 	m_noDirection.state = 2;
 }
 
 void KSJuniorBase::onStartGame()
 {
 	m_noDirection.state = 2;
-	CCLog("onStartGame!!");
+	CCLOG("onStartGame!!");
 }
 
 
@@ -402,7 +402,7 @@ void KSJuniorBase::scaleAdjustment(float dt)
 	
 	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && (m_state & kCumberStateNoDirection) == 0)
 	{
-		CCLog("upSize!");
+		CCLOG("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
 		setCumberScale(MIN(m_maxScale, getCumberScale() + m_scale.SCALE_ADDER));
 	}
@@ -422,7 +422,7 @@ void KSJuniorBase::onStartMoving()
 void KSJuniorBase::onStopMoving()
 {
 	m_state = 0;
-	CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+	CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 }
 
 void KSJuniorBase::setPosition( const CCPoint& t_sp )

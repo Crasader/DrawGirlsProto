@@ -257,9 +257,9 @@ void ShopPopup::setShopCode(ShopCode t_code)
 		
 		character_table->setDelegate(this);
 		main_case->addChild(character_table, kSP_Z_content);
-		character_table->setTouchPriority(-300-3);
+		character_table->setTouchPriority(-400-3);
 		
-		suction = TouchSuctionLayer::create(-302);
+		suction = TouchSuctionLayer::create(-402);
 		suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
 		suction->setTouchEnabled(true);
 		addChild(suction);
@@ -355,7 +355,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			content_menu->setPosition(CCPointZero);
 			content_node->addChild(content_menu, 1);
 			
-			content_menu->setTouchPriority(-300-4);
+			content_menu->setTouchPriority(-400-4);
 		}
 	}
 	else
@@ -403,7 +403,7 @@ void ShopPopup::setCardBuyMenu(CCPoint t_point, int t_tag, string inner_filename
 	CCMenu* t_buy_menu = CCMenu::createWithItem(t_buy_item);
 	t_buy_menu->setPosition(ccp(t_buy_back->getContentSize().width/2.f, t_buy_back->getContentSize().height/2.f-79));
 	t_buy_back->addChild(t_buy_menu);
-	t_buy_menu->setTouchPriority(-300-4);
+	t_buy_menu->setTouchPriority(-400-4);
 }
 
 enum CharacterCellZorder
@@ -464,10 +464,10 @@ void ShopPopup::cellAction(CCObject* sender)
 		else
 		{
 			if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
-				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 			else if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
-				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
-			CCLog("not enough condition");
+				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+			CCLOG("not enough condition");
 		}
 	}
 	else // select
@@ -558,7 +558,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		unlock_menu->setPosition(ccp(62,23));
 		cell->addChild(unlock_menu, kCharacterCellZorder_buy);
 		
-		unlock_menu->setTouchPriority(-300-1);
+		unlock_menu->setTouchPriority(-400-1);
 	}
 	else
 	{
@@ -582,7 +582,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 			select_menu->setPosition(ccp(62,23));
 			cell->addChild(select_menu, kCharacterCellZorder_selected);
 			
-			select_menu->setTouchPriority(-300-1);
+			select_menu->setTouchPriority(-400-1);
 		}
 	}
 	
@@ -598,7 +598,7 @@ void ShopPopup::scrollViewDidZoom(CCScrollView* view)
 }
 void ShopPopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
-	CCLog("cell touched!!");
+	CCLOG("cell touched!!");
 }
 CCSize ShopPopup::cellSizeForTable(CCTableView *table)
 {
@@ -638,7 +638,7 @@ bool ShopPopup::init()
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f);
 	main_case->addChild(main_inner);
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-300-4);
+	CommonButton* close_menu = CommonButton::createCloseButton(-400-4);
 	close_menu->setPosition(getContentPosition(kSP_MT_close));
 	close_menu->setFunction([=](CCObject* sender)
 							{
@@ -649,7 +649,7 @@ bool ShopPopup::init()
 	main_case->addChild(close_menu, kSP_Z_content);
 
 	
-	character_menu = CommonButton::create("무기상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	character_menu = CommonButton::create("무기상점", 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
 	character_menu->setTitleColor(ccWHITE);
 	character_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	character_menu->setTitleColorForDisable(ccBLACK);
@@ -663,7 +663,7 @@ bool ShopPopup::init()
 	character_menu->setVisible(false);
 	main_case->addChild(character_menu, kSP_Z_content);
 	
-	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
 	card_menu->setTitleColor(ccWHITE);
 	card_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	card_menu->setTitleColorForDisable(ccBLACK);
@@ -677,7 +677,7 @@ bool ShopPopup::init()
 	main_case->addChild(card_menu, kSP_Z_content);
 	card_menu->setVisible(false);
 	
-	ruby_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	ruby_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
 	ruby_menu->setTitleColor(ccWHITE);
 	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	ruby_menu->setTitleColorForDisable(ccBLACK);
@@ -690,7 +690,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(ruby_menu, kSP_Z_content);
 	
-	gold_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	gold_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
 	gold_menu->setTitleColor(ccWHITE);
 	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	gold_menu->setTitleColorForDisable(ccBLACK);
@@ -703,7 +703,7 @@ bool ShopPopup::init()
 						   });
 	main_case->addChild(gold_menu, kSP_Z_content);
 	
-	heart_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), 12, CCSizeMake(83,38), CommonButtonPupple, -300-4);
+	heart_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
 	heart_menu->setTitleColor(ccWHITE);
 	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	heart_menu->setTitleColorForDisable(ccBLACK);
@@ -871,11 +871,11 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-		CCLog("userdata was save to server");
+		CCLOG("userdata was save to server");
 	}
 	else
 	{
-		CCLog("fail!! save userdata to server");
+		CCLOG("fail!! save userdata to server");
 		fail_func();
 	}
 }
@@ -995,8 +995,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
-				CCLog("not enough ruby!!!");
+				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				CCLOG("not enough ruby!!!");
 			}
 		}
 		else if(recent_shop_code == kSC_heart)
@@ -1060,8 +1060,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-310, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
-				CCLog("not enough ruby!!!");
+				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				CCLOG("not enough ruby!!!");
 			}
 		}
 	}
@@ -1071,7 +1071,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		{
 //			createCheckBuyPopup([=]()
 //								{
-//									CCLog("4900won!!!");
+//									CCLOG("4900won!!!");
 //									
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
@@ -1104,7 +1104,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //		else if(recent_shop_code == kSC_heart)
@@ -1144,7 +1144,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //	}
@@ -1154,7 +1154,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		{
 //			createCheckBuyPopup([=]()
 //								{
-//									CCLog("9800won!!!");
+//									CCLOG("9800won!!!");
 //									
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
@@ -1187,7 +1187,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //		else if(recent_shop_code == kSC_heart)
@@ -1227,7 +1227,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //	}
@@ -1237,7 +1237,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		{
 //			createCheckBuyPopup([=]()
 //								{
-//									CCLog("29800won!!!");
+//									CCLOG("29800won!!!");
 //									
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
@@ -1270,7 +1270,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //		else if(recent_shop_code == kSC_heart)
@@ -1310,7 +1310,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //	}
@@ -1320,7 +1320,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		{
 //			createCheckBuyPopup([=]()
 //								{
-//									CCLog("49800won!!!");
+//									CCLOG("49800won!!!");
 //									
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
@@ -1353,7 +1353,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //		else if(recent_shop_code == kSC_heart)
@@ -1393,7 +1393,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //	}
@@ -1403,7 +1403,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //		{
 //			createCheckBuyPopup([=]()
 //								{
-//									CCLog("99800won!!!");
+//									CCLOG("99800won!!!");
 //									
 //									loading_layer = LoadingLayer::create();
 //									addChild(loading_layer, kSP_Z_popup);
@@ -1436,7 +1436,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //		else if(recent_shop_code == kSC_heart)
@@ -1476,7 +1476,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			else
 //			{
 //				addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
-//				CCLog("not enough ruby!!!");
+//				CCLOG("not enough ruby!!!");
 //			}
 //		}
 //	}
@@ -1578,7 +1578,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-310, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+			addChild(ASPopupView::getCommonNoti(-410, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardMid)
@@ -1679,7 +1679,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-310, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+			addChild(ASPopupView::getCommonNoti(-410, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardLow)
@@ -1789,7 +1789,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 
 void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 {
-	ASPopupView* t_popup = ASPopupView::create(-300);
+	ASPopupView* t_popup = ASPopupView::create(-400);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -1859,7 +1859,7 @@ void ShopPopup::startCardGacha()
 
 void ShopPopup::resultCardGacha(Json::Value result_data)
 {
-	CCLog("resultCardGacha : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultCardGacha : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
@@ -2026,14 +2026,14 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 //				
 //				// 강화
 //				float strength_rate = ((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
-//				CCLog("strength_rate : %.3f", strength_rate);
+//				CCLOG("strength_rate : %.3f", strength_rate);
 //				
 //				random_device rd;
 //				default_random_engine e1(rd());
 //				uniform_real_distribution<float> uniform_dist(0.f, 1.f);
 //				
 //				float result_value = uniform_dist(e1);
-//				CCLog("result value : %.3f", result_value);
+//				CCLOG("result value : %.3f", result_value);
 //				
 //				CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
 //				CardCase* cardCase = CardCase::create(gacha_card_number);
@@ -2048,13 +2048,13 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 //				StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-350);
 //				
 //				b->setCloseFunc([this](){
-//					CCLog("close Func");
+//					CCLOG("close Func");
 //					this->is_menu_enable = true;
 //				});
 //				
 //				if(result_value <= strength_rate)
 //				{
-//					CCLog("success");
+//					CCLOG("success");
 //					
 //					b->startSuccess("카드레벨 +1");
 //					
@@ -2063,7 +2063,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 //				}
 //				else
 //				{
-//					CCLog("fail");
+//					CCLOG("fail");
 //					
 //					b->startFail("강화 실패");
 //				}
@@ -2100,7 +2100,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 //				
 //				TakeCardAnimation* b = TakeCardAnimation::create(card,-350);
 //				b->setCloseFunc([this](){
-//					CCLog("close Func");
+//					CCLOG("close Func");
 //					this->is_menu_enable = true;
 //				});
 //				b->start();
@@ -2110,7 +2110,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 	}
 	else
 	{
-		replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -350);
+		replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -450);
 		replay_menu->setPosition(ccp(240,100));
 		replay_menu->setFunction([=](CCObject* sender)
 								 {
@@ -2127,7 +2127,7 @@ void ShopPopup::startDownload()
 {
 	if(ing_download_cnt <= df_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
 													  this, callfunc_selector(ShopPopup::successAction), this, callfunc_selector(ShopPopup::failAction));
 	}
@@ -2176,14 +2176,14 @@ void ShopPopup::successAction()
 			
 			// 강화
 			float strength_rate;// = ((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + 1)*NSDS_GI(kSDS_CI_int1_durability_i, gacha_card_number))/((NSDS_GI(kSDS_CI_int1_rank_i, gacha_card_number)*10.f + myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, gacha_card_number))*myDSH->getIntegerForKey(kDSH_Key_cardMaxDurability_int1, gacha_card_number));
-			CCLog("strength_rate : %.3f", strength_rate);
+			CCLOG("strength_rate : %.3f", strength_rate);
 			
 			random_device rd;
 			default_random_engine e1(rd());
 			uniform_real_distribution<float> uniform_dist(0.f, 1.f);
 			
 			float result_value = uniform_dist(e1);
-			CCLog("result value : %.3f", result_value);
+			CCLOG("result value : %.3f", result_value);
 			
 			CCSprite* card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",gacha_card_number)->getCString());
 			CardCase* cardCase = CardCase::create(gacha_card_number);
@@ -2198,13 +2198,13 @@ void ShopPopup::successAction()
 			StrengthCardAnimation* b = StrengthCardAnimation::create(card,card2,-350);
 			
 			b->setCloseFunc([this](){
-				CCLog("close Func");
+				CCLOG("close Func");
 				this->is_menu_enable = true;
 			});
 			
 			if(result_value <= strength_rate)
 			{
-				CCLog("success");
+				CCLOG("success");
 				
 				b->startSuccess("카드레벨 +1");
 				
@@ -2213,7 +2213,7 @@ void ShopPopup::successAction()
 			}
 			else
 			{
-				CCLog("fail");
+				CCLOG("fail");
 				
 				b->startFail("강화 실패");
 			}
@@ -2238,7 +2238,7 @@ void ShopPopup::successAction()
 			
 			TakeCardAnimation* b = TakeCardAnimation::create(card,-350);
 			b->setCloseFunc([this](){
-				CCLog("close Func");
+				CCLOG("close Func");
 				this->is_menu_enable = true;
 			});
 			b->start();
@@ -2251,7 +2251,7 @@ void ShopPopup::failAction()
 {
 	is_downloading = false;
 	
-	replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -350);
+	replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -450);
 	replay_menu->setPosition(ccp(240,100));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {
@@ -2301,7 +2301,7 @@ void ShopPopup::ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
 void ShopPopup::registerWithTouchDispatcher()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-	pDispatcher->addTargetedDelegate(this, -300, true);
+	pDispatcher->addTargetedDelegate(this, -400, true);
 }
 
 void ShopPopup::requestItemDelivery()
@@ -2311,9 +2311,10 @@ void ShopPopup::requestItemDelivery()
 	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
-			CCLog("inapp success!! refresh!!!");
+			CCLOG("inapp success!! refresh!!!");
 			
-			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
+			mySGD->initProperties(t["list"]);
+//			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
 			loading_layer->removeFromParent();
 			is_menu_enable = true;

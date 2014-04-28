@@ -938,7 +938,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->setContentSize(ttf->getDimensions());
 						 av->addButton(CommonButton::create("도망가기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 // 도망에 대한 처리
 														 Json::Value p;
@@ -994,7 +994,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																											av->setContentSize(ttf->getDimensions());
 																											av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																																		[=](CCObject* e) {
-																																			CCLog("ok!!");
+																																			CCLOG("ok!!");
 																																		});
 																											addChild(av, kMP_Z_helpAccept);
 																											av->show();
@@ -1028,7 +1028,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																			(this,
 																			 callfunc_selector(ThisClassType::onReceiveStageSuccess),
 																			 this, callfunc_selector(ThisClassType::onReceiveStageFail)), kMP_Z_popup);
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 													 });
 
 						 addChild(av, kMP_Z_helpAccept);
@@ -1056,7 +1056,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 
 															 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 																															[=](){
-																																CCLog("hat close");
+																																CCLOG("hat close");
 																															}
 																														 ), kMP_Z_helpAccept);
 														 });
@@ -1101,7 +1101,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 								 av->setContentSize(ttf->getDimensions());
 								 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 															 [=](CCObject* e) {
-																 CCLog("ok");
+																 CCLOG("ok");
 															 });
 
 								 addChild(av, kMP_Z_helpAccept);
@@ -1154,7 +1154,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																											 {
 																												 av->removeFromParent();
 																											 });
-																				 CCLog("ok!!");
+																				 CCLOG("ok!!");
 																			 });
 						av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																															 [=](CCObject* e) {
@@ -1179,7 +1179,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																 //																									 iHelpYou(contentObj.get("helpstage", 0).asInt(),
 																																 //																														mail["friendID"].asInt64(), mail["nickname"].asString(),
 																																 //																														p);
-																																 CCLog("ok!!");
+																																 CCLOG("ok!!");
 																															 });
 
 						 addChild(av, kMP_Z_helpAccept);
@@ -1263,7 +1263,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 															av->setContentSize(ttf->getDimensions());
 															av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																						[=](CCObject* e) {
-																							CCLog("ok!!");
+																							CCLOG("ok!!");
 																						});
 
 															addChild(av, kMP_Z_helpAccept);
@@ -1308,11 +1308,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
 																					 });
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 													 });
 						 av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
@@ -1380,7 +1380,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 						 av->setContentSize(ttf->getDimensions());
 						 av->addButton(CommonButton::create("티켓 받기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
@@ -1534,11 +1534,11 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																					 {
 																						 av->removeFromParent();
 																					 });
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 													 });
 						 av->addButton(CommonButton::create("수락", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 Json::Value param;
 														 //						memberID : string or number, 내카카오아이디
@@ -1587,7 +1587,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 																																							 exceptionPopup->setContentSize(ttf->getDimensions());
 																																							 exceptionPopup->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																																														 [=](CCObject* e) {
-																																															 CCLog("ok!!");
+																																															 CCLOG("ok!!");
 																																														 });
 
 																																							 addChild(exceptionPopup, kMP_Z_helpAccept);
@@ -1695,7 +1695,7 @@ void MailPopup::scrollViewDidZoom (CCScrollView * view)
 void MailPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 {
 	
-	CCLog("touch!!");
+	CCLOG("touch!!");
 	
 }
 CCSize MailPopup::cellSizeForTable (CCTableView * table)
@@ -1751,7 +1751,7 @@ void MailPopup::registerWithTouchDispatcher ()
 void MailPopup::onReceiveStageSuccess()
 {
 	// 성공시 게임창...
-	CCLog("sec");
+	CCLOG("sec");
 //	PuzzleMapScene* pms = dynamic_cast<PuzzleMapScene*>(target_close);
 //	CCAssert(pms, "!!");
 //	(target_close->*delegate_close)();
@@ -1768,7 +1768,7 @@ void MailPopup::onReceiveStageFail()
 	mySGD->setRemoveMessageMemberId(0);
 	mySGD->setRemoveMessageMailNo(0);
 //	removeFromParent();
-	CCLog("fail");
+	CCLOG("fail");
 }
 // 도움 수락을 누른 상태.
 void MailPopup::iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo)
@@ -2059,13 +2059,13 @@ void MailPopup::failAction ()
 }
 void MailPopup::startDownloadCardImage ()
 {
-	CCLog("start download card img");
+	CCLOG("start download card img");
 	ing_download_cnt = 1;
 	startDownload();
 }
 void MailPopup::startDownload ()
 {
-	CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+	CCLOG("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
 	
 	StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
 												  this, callfunc_selector(MailPopup::successAction), this, callfunc_selector(MailPopup::failAction));

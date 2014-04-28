@@ -28,7 +28,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 		ps.pushProb(i->m_weight);
 	}
 	m_alreadyDeterminantOrder = ps.getResult(); // 등수를 미리 지정.
-	CCLog("my order %d", m_alreadyDeterminantOrder);
+	CCLOG("my order %d", m_alreadyDeterminantOrder);
 	m_gachaMode = gsm;
 	setTouchEnabled(true);
 //	CCSprite* back = CCSprite::create("table12.png");
@@ -189,7 +189,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 		ccp(143, 105), ccp(248, 105), ccp(353, 105)};
 	auto retFunction = [=](int index)
 	{
-		CCLog("mal index = %d", index);
+		CCLOG("mal index = %d", index);
 		m_selectedHorseIndex = index;
 		thiz->removeFromParent();
 		startBtn->setVisible(true);
@@ -220,7 +220,7 @@ bool HorseGachaSub::init(KSAlertView* av, std::function<void(void)> callback, co
 
 	//
 	}));
-	CCLog("reward start");
+	CCLOG("reward start");
 
 	
 	scheduleUpdate();
@@ -288,7 +288,7 @@ void HorseGachaSub::update(float dt)
 						retryGame();
 					}
 					else {
-						CCLog("돈 없음");
+						CCLOG("돈 없음");
 					}
 				}
 				else if(m_gachaCategory == GachaCategory::kGoldGacha)
@@ -301,7 +301,7 @@ void HorseGachaSub::update(float dt)
 						retryGame();
 					}
 					else {
-						CCLog("돈 없음");
+						CCLOG("돈 없음");
 					}
 				}
 			};
@@ -335,7 +335,7 @@ void HorseGachaSub::update(float dt)
 //}
 //HorseGacha::~HorseGacha()
 //{
-	//CCLog("~hatgacha");
+	//CCLOG("~hatgacha");
 //}
 ////void HatGacha::registerWithTouchDispatcher()
 ////{

@@ -17,6 +17,7 @@
 #include "ASPopupView.h"
 #include "LoadingLayer.h"
 #include "MyLocalization.h"
+#include "PuzzleScene.h"
 
 MissileUpgradePopup* MissileUpgradePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_upgrade_func)
 {
@@ -179,7 +180,10 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	upgrade_price*=mySGD->getUpgradeGoldFee();
 	if(mySGD->getGoodsValue(kGoodsType_gold) < upgrade_price)// + use_item_price_gold.getV())
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
+		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
+															{
+																((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+															}), 9999);
 		is_menu_enable = true;
 		return;
 	}
@@ -202,10 +206,10 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 
 void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 {
-	CCLog("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("missile upgrade success!!");
+		CCLOG("missile upgrade success!!");
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("se_upgrade.mp3", false);
@@ -291,7 +295,7 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	}
 	else
 	{
-		CCLog("missile upgrade fail!!");
+		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
 		

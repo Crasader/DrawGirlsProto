@@ -147,12 +147,11 @@ bool PuzzleScene::init()
 					}
 				}
 				
-				selected_stage_number = can_enter_stage_list[minimum_index];
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, can_enter_stage_list[minimum_index]);
 			}
 			else // 못 깬 스테이지 중에 입장가능한 스테이지가 없다
 			{
-				selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+				int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
 				if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
 				{
 					// 깬 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
@@ -181,8 +180,7 @@ bool PuzzleScene::init()
 						}
 					}
 					
-					selected_stage_number = cleared_stage_list[minimum_index];
-					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, cleared_stage_list[minimum_index]);
 				}
 			}
 		}
@@ -239,8 +237,7 @@ bool PuzzleScene::init()
 					}
 				}
 				
-				selected_stage_number = perfect_stage_list[minimum_index];
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, perfect_stage_list[minimum_index]);
 			}
 			else // 퍼펙트 아닌 상태이다
 			{
@@ -259,14 +256,13 @@ bool PuzzleScene::init()
 					}
 				}
 				
-				selected_stage_number = not_perfect_stage_list[minimum_index];
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, not_perfect_stage_list[minimum_index]);
 			}
 		}
 	}
 	else if(before_scene_name == "fail" || before_scene_name == "clear")
 	{
-		selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+		int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
 		if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
 		{
 			// 입장 가능한 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
@@ -617,7 +613,7 @@ enum PuzzleNodeZorder{
 
 void PuzzleScene::showGetPuzzle()
 {
-	CCLog("get piece animation");
+	CCLOG("get piece animation");
 	
 	AudioEngine::sharedInstance()->playEffect("se_pieceget.mp3", false);
 	
@@ -691,7 +687,7 @@ void PuzzleScene::endGetPuzzle()
 
 void PuzzleScene::showGetStar()
 {
-	CCLog("get star animation : %d", mySD->getSilType());
+	CCLOG("get star animation : %d", mySD->getSilType());
 	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
 	new_piece->startGetStarAnimation(clear_star_take_level, this, callfunc_selector(PuzzleScene::endGetStar));
 }
@@ -725,7 +721,7 @@ void PuzzleScene::endGetStar()
 
 void PuzzleScene::showSuccessPuzzleEffect()
 {
-	CCLog("success puzzle animation");
+	CCLOG("success puzzle animation");
 	
 	AudioEngine::sharedInstance()->playEffect("se_puzzleopen_1.mp3", false);
 	
@@ -784,7 +780,7 @@ void PuzzleScene::endSuccessPuzzleEffect()
 
 void PuzzleScene::showPerfectPuzzleEffect()
 {
-	CCLog("perfect puzzle animation");
+	CCLOG("perfect puzzle animation");
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -810,7 +806,7 @@ void PuzzleScene::endPerfectPuzzleEffect()
 
 void PuzzleScene::showUnlockEffect()
 {
-	CCLog("unlock piece animation");
+	CCLOG("unlock piece animation");
 	
 	if(unlock_cover)
 	{
@@ -840,8 +836,7 @@ void PuzzleScene::endUnlockEffect()
 		unlock_cover = NULL;
 	}
 	
-	selected_stage_number = next_stage_number;
-	setPieceClick(selected_stage_number);
+	setPieceClick(next_stage_number);
 	setRight();
 	
 	addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
@@ -951,6 +946,8 @@ void PuzzleScene::setPuzzle()
 	unlock_cover = NULL;
 	
 	clear_is_first_perfect = !mySGD->getPuzzleHistory(puzzle_number).is_perfect;
+	
+	int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
 	
 	for(int i=0;i<20;i++)
 	{
@@ -1121,7 +1118,7 @@ void PuzzleScene::setPieceClick(int t_stage_number)
 	if(selected_piece_img)
 		selected_piece_img->removeFromParent();
 	
-	PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(selected_stage_number);
+	PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 	string WorH = target_piece->getWorH();
 	selected_piece_img = CCSprite::create(("piece_selected_" + WorH + ".png").c_str());
 	selected_piece_img->setPosition(target_piece->getPosition());
@@ -1130,7 +1127,7 @@ void PuzzleScene::setPieceClick(int t_stage_number)
 
 void PuzzleScene::pieceAction(int t_stage_number)
 {
-	CCLog("pieceAction : %d", t_stage_number);
+	CCLOG("pieceAction : %d", t_stage_number);
 	
 	if(!is_menu_enable)
 		return;
@@ -1191,8 +1188,8 @@ void PuzzleScene::pieceAction(int t_stage_number)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_piece.mp3", false);
 		
-		selected_stage_number = t_stage_number;
-		setPieceClick(selected_stage_number);
+		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), t_stage_number);
+		setPieceClick(t_stage_number);
 		
 		setRight();
 	}
@@ -1200,7 +1197,7 @@ void PuzzleScene::pieceAction(int t_stage_number)
 
 void PuzzleScene::buyPieceAction(int t_stage_number)
 {
-	CCLog("buyPieceAction : %d", t_stage_number);
+	CCLOG("buyPieceAction : %d", t_stage_number);
 	
 	if(!is_menu_enable)
 		return;
@@ -1393,7 +1390,7 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 
 void PuzzleScene::lockPieceAction(int t_stage_number)
 {
-	CCLog("lockPieceAction : %d", t_stage_number);
+	CCLOG("lockPieceAction : %d", t_stage_number);
 	
 	AudioEngine::sharedInstance()->playEffect("se_lock.mp3", false);
 }
@@ -1440,9 +1437,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 				myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_emptyCardClick);
 			
 			int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 			
-			mySD->setSilType(selected_stage_number);
+			mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 			
 			StartSettingPopup* t_popup = StartSettingPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
@@ -1464,30 +1460,15 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_ruby);
-			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-			addChild(t_shop, kPuzzleZorder_popup);
+			showShopPopup(kSC_ruby);
 		}
 		else if(tag == kPuzzleMenuTag_goldShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_gold);
-			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-			addChild(t_shop, kPuzzleZorder_popup);
+			showShopPopup(kSC_gold);
 		}
 		else if(tag == kPuzzleMenuTag_heartShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_heart);
-			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-			addChild(t_shop, kPuzzleZorder_popup);
+			showShopPopup(kSC_heart);
 		}
 		else if(tag == kPuzzleMenuTag_postbox)
 		{
@@ -1548,6 +1529,16 @@ void PuzzleScene::menuAction(CCObject* sender)
 			is_menu_enable = true;
 		}
 	}
+}
+
+void PuzzleScene::showShopPopup(ShopCode t_code)
+{
+	ShopPopup* t_shop = ShopPopup::create();
+	t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	t_shop->targetHeartTime(heart_time);
+	t_shop->setShopCode(t_code);
+	t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+	addChild(t_shop, kPuzzleZorder_popup+100);
 }
 
 void PuzzleScene::startAutoTurnPiece()
@@ -1627,9 +1618,8 @@ void PuzzleScene::openSettingPopup()
 {
 	is_menu_enable = false;
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 	
-	mySD->setSilType(selected_stage_number);
+	mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 	
 	StartSettingPopup* t_popup = StartSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
@@ -1728,6 +1718,8 @@ void PuzzleScene::setRight()
 //	CCSprite* right_body = CCSprite::create("puzzle_right_body.png");
 	right_body->setPosition(ccp(-right_body->getContentSize().width/2.f-6, -1));
 	right_case->addChild(right_body);
+	
+	int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber));
 	
 	if(right_mode == kPuzzleRightMode_stage)
 	{

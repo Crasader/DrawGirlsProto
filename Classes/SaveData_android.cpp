@@ -68,7 +68,7 @@
 //	FILE* fp = fopen( path.c_str(), "w" );
 //	if(!fp)
 //	{
-//		CCLog("file failure");
+//		CCLOG("file failure");
 //	}
 //	fprintf(fp, "%s", tt.c_str());
 //	fclose(fp);
@@ -94,7 +94,7 @@
 //	}
 //	else
 //	{
-//		CCLog("read fail");
+//		CCLOG("read fail");
 //		return "";
 //	}
 //	
@@ -107,7 +107,7 @@ void testF(string filePath, string tt)
 	FILE* fp = fopen( path.c_str(), "w" );
 	if(!fp)
 	{
-		CCLog("file failure");
+		CCLOG("file failure");
 	}
 	fprintf(fp, "%s", tt.c_str());
 	fclose(fp);
@@ -133,7 +133,7 @@ string readF(string filePath)
 	}
 	else
 	{
-		CCLog("read fail");
+		CCLOG("read fail");
 		return "";
 	}
 	
@@ -145,7 +145,7 @@ void addF(string filePath, string tt)
 	FILE* fp = fopen( path.c_str(), "a" );
 	if(!fp)
 	{
-		CCLog("file failure");
+		CCLOG("file failure");
 	}
 	fprintf(fp, "%s", tt.c_str());
 	fclose(fp);

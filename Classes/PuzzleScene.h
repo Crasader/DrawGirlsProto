@@ -14,6 +14,7 @@
 #include "jsoncpp/json.h"
 #include "KnownFriend.h"
 #include "PuzzlePiece.h"
+#include "ShopPopup.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -52,6 +53,8 @@ public:
 	HeartTime* heart_time;
 	CCNode* tutorial_node;
 	
+	void showShopPopup(ShopCode t_code);
+	
 	virtual ~PuzzleScene()
 	{
 		hspConnector::get()->removeTarget(this);
@@ -82,7 +85,7 @@ private:
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
 	
-	int selected_stage_number;
+//	int selected_stage_number;
 	
 	int next_stage_number;
 	

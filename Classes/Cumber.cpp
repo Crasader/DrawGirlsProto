@@ -577,7 +577,6 @@ void CumberParent::myInit()
 			t_SC->assignBossData(root[i]); // 주니어 정보 대입.
 			t_SC->applyPassiveData(mySD->getPassiveData());
 			t_SC->applyAutoBalance();
-			
 			IntPoint mapPoint;
 			bool finded;
 			t_SC->getRandomPosition(&mapPoint, &finded);

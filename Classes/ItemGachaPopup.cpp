@@ -17,6 +17,7 @@
 #include "LoadingLayer.h"
 #include "MyLocalization.h"
 #include "AudioEngine.h"
+#include "PuzzleScene.h"
 
 ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
 {
@@ -305,7 +306,10 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	if(mySGD->getGoodsValue(kGoodsType_gold) < mySGD->getItemGachaReplayGoldFee())
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)));
+		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
+		{
+			((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+		}), 9999);
 		is_menu_enable = true;
 		return;
 	}
@@ -319,10 +323,10 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 
 void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 {
-	CCLog("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("save userdata success!!");
+		CCLOG("save userdata success!!");
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
@@ -338,7 +342,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 	}
 	else
 	{
-		CCLog("missile upgrade fail!!");
+		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
 		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);

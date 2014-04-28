@@ -171,7 +171,7 @@ public:
 	std::function<void(string)> m_func;
 	
 	PuzzleCache(){
-		CCLog("klasdfjlksadfaslkdfjlsakdjflkasjdfklajsdlkfjaskldfjsalkdfjlkasdf");
+		CCLOG("klasdfjlksadfaslkdfjlsakdjflkasjdfklajsdlkfjaskldfjsalkdfjlkasdf");
 		isLockedLoadingPuzzleList=false;
 		m_useTread=false;
 		m_documentPath = mySIL->getDocumentPath();
@@ -207,11 +207,11 @@ public:
 		return;
 //		if(m_currentLoadPuzzleNo>0){
 //			
-//			CCLog("puzzlecache : cancel schedule");
+//			CCLOG("puzzlecache : cancel schedule");
 //			//CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(schedule_selector(PuzzleCache::loadingPuzzle), PuzzleCache::getInstance());
 //			
 //			
-//			CCLog("puzzlecache : m_loadingPuzzleList before size is %luu",m_loadingPuzzleList.size());
+//			CCLOG("puzzlecache : m_loadingPuzzleList before size is %luu",m_loadingPuzzleList.size());
 //			waitForLoadingPuzzleList(true);
 //			list<PuzzleImage*>::iterator it;
 //			for (it=m_loadingPuzzleList.begin();it!=m_loadingPuzzleList.end();it++) {
@@ -221,7 +221,7 @@ public:
 //			
 //			m_loadingPuzzleList.clear();
 //			setLockedLoadingPuzzleList(false);
-//			CCLog("puzzlecache : m_loadingPuzzleList after size is %luu",m_loadingPuzzleList.size());
+//			CCLOG("puzzlecache : m_loadingPuzzleList after size is %luu",m_loadingPuzzleList.size());
 //			
 //			//m_currentLoadPuzzleNo=0;
 //		}
@@ -232,7 +232,7 @@ public:
 	//	}
 	
 	void setLockedLoadingPuzzleList(bool locked){
-		//CCLog("setLockedLoadingPuzzleList %d",locked);
+		//CCLOG("setLockedLoadingPuzzleList %d",locked);
 		isLockedLoadingPuzzleList = locked;
 	}
 	
@@ -242,7 +242,7 @@ public:
 	//	}
 	
 	void waitForLoadingPuzzleList(bool locked){
-		//CCLog("waitForLoadPuzzleList %d",locked);
+		//CCLOG("waitForLoadPuzzleList %d",locked);
 		while(isLockedLoadingPuzzleList==true){}
 		setLockedLoadingPuzzleList(locked);
 	}
@@ -254,7 +254,7 @@ public:
 	
 	
 	void addLoadingPuzzleList(PuzzleImage* image){
-		CCLog("add image puzzlekey is %s",image->getPuzzleKey().c_str());
+		CCLOG("add image puzzlekey is %s",image->getPuzzleKey().c_str());
 		if(PuzzleCache::getInstance()->m_useTread){
 			image->retain();
 			waitForLoadingPuzzleList(true);
@@ -292,16 +292,16 @@ public:
 			PuzzleImage* texture = (*it);
 			if(m_loadingPuzzleList.size()==0)break;
 			if(texture->getPuzzleKey()=="COMPLETE"){
-				//CCLog("loadingPuzzle:COMPLETE");
+				//CCLOG("loadingPuzzle:COMPLETE");
 				//퍼즐상태에 완료표시 할것
 				texture->release();
 				//if(m_loadingPuzzleList.size()==itCnt){
-				CCLog("puzzlecache : load complete stop schedule %lu",m_loadingPuzzleList.size());
+				CCLOG("puzzlecache : load complete stop schedule %lu",m_loadingPuzzleList.size());
 				//CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(schedule_selector(PuzzleCache::loadingPuzzle), PuzzleCache::getInstance());
 				//}
 				
 			}else if(texture->getPuzzleKey()!=""){
-				//CCLog("loadingPuzzle:callfunc");
+				//CCLOG("loadingPuzzle:callfunc");
 				map<string,PuzzleImage*>::iterator it2;
 				it2 = m_textureList.find(texture->getPuzzleKey());
 				
@@ -313,10 +313,10 @@ public:
 				if(func)func(texture);
 				
 //				if(m_callbackfunc && (m_puzzleState[pNo]=="loaded" || m_puzzleState[pNo]=="loading")){
-//					CCLog("callfunc %d",pNo);
+//					CCLOG("callfunc %d",pNo);
 //					m_callbackfunc(texture);
 //				}else{
-//					CCLog("callfunc cancel %d",pNo);
+//					CCLOG("callfunc cancel %d",pNo);
 //				}
 				
 				
@@ -328,7 +328,7 @@ public:
 				
 				
 			}else{
-				//CCLog("loadingPuzzle:else");
+				//CCLOG("loadingPuzzle:else");
 			}
 		}
 		
@@ -344,7 +344,7 @@ public:
 		//m_callbackfunc = func;
 		//여기서 m_loadingPuzzleList에 complete있으면 지워주기
 		
-		CCLog("puzzlecache : start schedule!!!!!!!!!!!!%d",puzzleNo);
+		CCLOG("puzzlecache : start schedule!!!!!!!!!!!!%d",puzzleNo);
 		//CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(PuzzleCache::loadingPuzzle), PuzzleCache::getInstance(), 0.f, kCCRepeatForever, 0.f, false);
 		
 		std::thread puzzleThread( [puzzleNo,func, this] ()
@@ -353,7 +353,7 @@ public:
 									 PuzzleCache::getInstance()->m_useTread = true;
 									 
 									 if(PuzzleCache::getInstance()->loadImageOnThread(puzzleNo)){
-										 CCLog("puzzlecache : add complete %d",puzzleNo);
+										 CCLOG("puzzlecache : add complete %d",puzzleNo);
 										 PuzzleImage* complete = new PuzzleImage();
 										 complete->setPuzzleKey("COMPLETE");
 										 PuzzleCache::getInstance()->addLoadingPuzzleList(complete);
@@ -362,7 +362,7 @@ public:
 									 }
 									 CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(PuzzleCache::loadingPuzzle), PuzzleCache::getInstance(), 0.1f, 1, 0.1f, false);
 									 
-									 CCLog("puzzlecache : thread complete %d",puzzleNo);
+									 CCLOG("puzzlecache : thread complete %d",puzzleNo);
 									 PuzzleCache::getInstance()->m_useTread = false;
 								 } );
 		puzzleThread.detach();
@@ -387,13 +387,13 @@ public:
 //			m_loadingPuzzleList.clear();
 //			setLockedLoadingPuzzleList(false);
 //			
-//			CCLog("checkCancel true %d,%d",loadingPuzzleNo,thread);
+//			CCLOG("checkCancel true %d,%d",loadingPuzzleNo,thread);
 //			return true;
 //		}
 //		
 //
 //		
-//		CCLog("checkCancel false %d,%d",loadingPuzzleNo,thread);
+//		CCLOG("checkCancel false %d,%d",loadingPuzzleNo,thread);
 //		return false;
 	}
 	
@@ -418,7 +418,7 @@ public:
 		
 		b++;
 		
-		CCLog("puzzlecache : call startToLoadImage %d",puzzleNo);
+		CCLOG("puzzlecache : call startToLoadImage %d",puzzleNo);
 		//퍼즐 원본 로드
 		CCString *pFilename = new CCString();
 		pFilename->initWithFormat((m_documentPath+"puzzle%d_original.png").c_str(), puzzleNo);
@@ -442,13 +442,13 @@ public:
 		//중복검사
 		
 //		if(m_puzzleState[puzzleNo]=="loaded" || m_puzzleState[puzzleNo]=="loading"){
-//			CCLog("puzzlecache : start schedule by cache, puzzle No is %d,%d",m_currentLoadPuzzleNo,b);
+//			CCLOG("puzzlecache : start schedule by cache, puzzle No is %d,%d",m_currentLoadPuzzleNo,b);
 //			callbackLoadedImage(puzzleNo);
 //			//m_currentLoadPuzzleNo=0;
 //			return true;
 //		}
 		
-		CCLog("puzzlecache : start schedule, puzzle No is %d,%d",puzzleNo,b);
+		CCLOG("puzzlecache : start schedule, puzzle No is %d,%d",puzzleNo,b);
 		
 		m_puzzleState[puzzleNo]="loading";
 		
@@ -629,7 +629,7 @@ public:
 		//	hPiece->release();
 		
 		m_puzzleState[puzzleNo]="loaded";
-		CCLog("puzzlecache : load complete, puzzle No is %d",puzzleNo);
+		CCLOG("puzzlecache : load complete, puzzle No is %d",puzzleNo);
 		//m_currentLoadPuzzleNo=0;
 		
 		return true;
@@ -679,7 +679,7 @@ public:
 		{ // texture
 			map<string,PuzzleImage*>::iterator it;
 			for (it=m_textureList.begin();it!=m_textureList.end();it++) {
-				CCLog("PuzzleCache key : %s",((string)(it->first)).c_str());
+				CCLOG("PuzzleCache key : %s",((string)(it->first)).c_str());
 			}
 		}
 	}

@@ -470,7 +470,7 @@ void JoinGameFriendPopup::searchByIndex(int64_t userIndex)
 																	 av->setContentSize(ttf->getDimensions());
 																	 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																								 [=](CCObject* e) {
-																									 CCLog("ok!!");
+																									 CCLOG("ok!!");
 																								 });
 			
 
@@ -513,7 +513,7 @@ void JoinGameFriendPopup::searchByIndex(int64_t userIndex)
 																		 av->setContentSize(ttf->getDimensions());
 																		 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																									 [=](CCObject* e) {
-																										 CCLog("ok!!");
+																										 CCLOG("ok!!");
 																									 });
 
 																		 addChild(av, kZorderPopup);

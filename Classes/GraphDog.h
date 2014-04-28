@@ -18,7 +18,7 @@
 #define GRAPHDOG_VERSION    "2"
 #include "jsoncpp/json.h"
 #include "KSProtect.h"
-
+#include "KSUtil.h"
 enum GDRESULT{
 	GDUNKNOWNRESULT = 0,
 	GDSUCCESS = 1,
@@ -100,6 +100,19 @@ struct CommandParam
 		func=_func;
 	}
 	CommandParam(){}
+	
+	template<typename... Args>
+	CommandParam(string _action,function<void(Json::Value)> _func,const char* _jsonString, Args... _args){
+		ostringstream oss;
+		KS::__KSLogCore(oss,_jsonString,_args...);
+		Json::Reader r;
+		Json::Value v;
+		r.parse(oss.str().c_str(),v);
+		
+		action = _action;
+		param = v;
+		func = _func;
+	}
 	//	CommandParam(string a, const JsonBox::Object* p, const CCObject* t, GDSelType& s) : action(a),
 	//		param(p), target(t), selector(s) {}
 };
@@ -126,6 +139,15 @@ public:
   
 	
 	
+	template<typename... Args>
+	void command(string action,function<void(Json::Value)> func,const char* jsonString, Args... args){
+		ostringstream oss;
+		KS::__KSLogCore(oss,jsonString,args...);
+		Json::Reader r;
+		Json::Value v;
+		r.parse(oss.str().c_str(),v);
+		this->command(action,v,func);
+	}
 	
 	
 	
@@ -133,38 +155,38 @@ public:
 	std::vector<CCObject*> deleList;
 	
 	void addTarget(CCObject *obj){
-		CCLog("checkDelegator addTarget");
+		CCLOG("checkDelegator addTarget");
 		vector<CCObject*>::iterator it;
 		for (it=deleList.begin();it!=deleList.end();it++) {
 			if((*it)==obj)return;
 		}
 		
-		CCLog("checkDelegator addTarget ok");
+		CCLOG("checkDelegator addTarget ok");
 		deleList.push_back(obj);
 	}
 	
 	bool cehckTarget(CCObject *obj){
-		CCLog("checkDelegator");
+		CCLOG("checkDelegator");
 		if(obj==NULL)return false;
 		vector<CCObject*>::iterator it;
 		for (it=deleList.begin();it!=deleList.end();it++) {
 			if((*it)==obj){
-				CCLog("checkDelegator find ok");
+				CCLOG("checkDelegator find ok");
 				return true;
 			}
 		}
-		CCLog("checkDelegator don't find");
+		CCLOG("checkDelegator don't find");
 		return false;
 	}
 	
 	void removeTarget(CCObject *obj){
-		CCLog("checkDelegator removeTarget");
+		CCLOG("checkDelegator removeTarget");
 		vector<CCObject*>::iterator it;
 		
 		for (it=deleList.begin();it!=deleList.end();it++) {
 			if((*it)==obj){
 				deleList.erase(it);
-				CCLog("checkDelegator remove Target success");
+				CCLOG("checkDelegator remove Target success");
 				return;
 			}
 		}
@@ -177,7 +199,7 @@ public:
 	bool command(string action, const Json::Value param,CCObject *target,function<void(Json::Value)> func){
 		addTarget(target);
 		function<void(Json::Value)> sFunc = [=](Json::Value value){
-			CCLog("checkDelegator sFunc call");
+			CCLOG("checkDelegator sFunc call");
 			if(GraphDog::get()->cehckTarget(target))func(value);
 		};
 		

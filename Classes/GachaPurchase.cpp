@@ -441,7 +441,7 @@ void GachaPurchase::visibling()
 		auto delegate = delegate_in;
 		auto finalFunction = [=]()
 		{
-			CCLog("gacha close");
+			CCLOG("gacha close");
 			
 			CCMoveTo* left_in_move = CCMoveTo::create(0.3f, ccp(240,160));
 			CCDelayTime* left_delay = CCDelayTime::create(0.3f);

@@ -73,7 +73,7 @@
 	Json::Value v =  FormSetter::get()->getFormData("bustmorphing");
 	Json::FastWriter fw;
 	string a = fw.write(v);
-	CCLog("ttt data is %s",a.c_str());
+	CCLOG("ttt data is %s",a.c_str());
  });
  
 */

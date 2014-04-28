@@ -46,7 +46,7 @@ void SilhouetteData::startSetting()
 				//xprint+="0";
 			}
 		}
-		//CCLog("%d : %s",y,xprint.c_str());
+		//CCLOG("%d : %s",y,xprint.c_str());
 	}
 	
 	tx->release();
@@ -61,7 +61,7 @@ void SilhouetteData::startSetting()
 //			}
 //		}
 //		
-//		CCLog("%s",xprint.c_str());
+//		CCLOG("%s",xprint.c_str());
 //	}
 	
 //	string t_sil = NSDS_GS(kSDS_CI_int1_silImgInfoSilData_s, NSDS_GI(myType, kSDS_SI_level_int1_card_i, 1));
@@ -155,7 +155,7 @@ void SilhouetteData::exchangeSilhouette()
 				//xprint+="0";
 			}
 		}
-		//CCLog("%d : %s",y,xprint.c_str());
+		//CCLOG("%d : %s",y,xprint.c_str());
 	}
 	
 	tx->release();
