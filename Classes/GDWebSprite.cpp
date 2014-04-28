@@ -33,7 +33,7 @@ size_t GDWebSprite::WriteMemoryCallback(void *contents, size_t size, size_t nmem
     
     if (mem->memory == NULL) {
         /* out of memory! */
-        CCLog("not enough memory (realloc returned NULL)");
+        CCLOG("not enough memory (realloc returned NULL)");
         exit(EXIT_FAILURE);
     }
     memcpy(&(mem->memory[mem->size]), contents, realsize);
@@ -63,7 +63,7 @@ void* GDWebSprite::t_function(void * _caller)
             pURL=((GDWebSprite *)GDWebSpriteManager::get()->webImages->objectAtIndex(GDWebSpriteManager::get()->downloadIndex))->imageUrl;
         }
         
-        //CCLog("start downloadIndex : %d", GDWebSpriteManager::get()->downloadIndex);
+        //CCLOG("start downloadIndex : %d", GDWebSpriteManager::get()->downloadIndex);
         
         GDWebSpriteMemoryStruct chunk = {(char*)malloc(1), 0};
         int downI = GDWebSpriteManager::get()->downloadIndex;
@@ -73,7 +73,7 @@ void* GDWebSprite::t_function(void * _caller)
         curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
         curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
         if(curl_easy_perform(curl_handle) == CURLE_OK){
-            //CCLog("finish downloadIndex : %d", GDWebSpriteManager::get()->downloadIndex);
+            //CCLOG("finish downloadIndex : %d", GDWebSpriteManager::get()->downloadIndex);
             GDWebSpriteManager::get()->chunks.push(pair<GDWebSpriteMemoryStruct, int>(chunk, downI));
             CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GDWebSprite::finishDownload), (GDWebSprite *)(GDWebSpriteManager::get()->webImages->objectAtIndex(GDWebSpriteManager::get()->downloadIndex)), 0, false, 0, 0);
             GDWebSpriteManager::get()->downloadIndex++;
@@ -217,7 +217,7 @@ void GDWebSprite::finishDownload(){
             if(texture->initWithImage(img) == false)
                 throw "..";
             
-            //CCLog("showing downimage %d",chunk_index.second);
+            //CCLOG("showing downimage %d",chunk_index.second);
             
             GDWebSprite *_sprite = (GDWebSprite *)GDWebSpriteManager::get()->webImages->objectAtIndex(chunk_index.second);
             

@@ -323,10 +323,10 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 
 void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 {
-	CCLog("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("save userdata success!!");
+		CCLOG("save userdata success!!");
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
@@ -342,7 +342,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 	}
 	else
 	{
-		CCLog("missile upgrade fail!!");
+		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
 		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);

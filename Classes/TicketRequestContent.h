@@ -214,7 +214,7 @@ private:
 	
 	void resultLoadFriends(Json::Value result_data)
 	{
-		CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		CCLOG("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		if(result_data["status"].asInt() == 0)
 		{
 			Json::Value appfriends = result_data["app_friends_info"];

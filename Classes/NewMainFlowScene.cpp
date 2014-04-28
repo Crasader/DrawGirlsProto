@@ -731,7 +731,7 @@ void NewMainFlowScene::hideClearPopup()
 
 //void NewMainFlowScene::showGetPuzzle()
 //{
-//	CCLog("get piece animation");
+//	CCLOG("get piece animation");
 //	CCTableViewCell* t_cell = puzzle_table->cellAtIndex(clear_found_puzzle_idx);
 //	
 //	if(t_cell)
@@ -816,7 +816,7 @@ void NewMainFlowScene::hideClearPopup()
 
 void NewMainFlowScene::showGetStar()
 {
-	CCLog("get star animation : %d", mySD->getSilType());
+	CCLOG("get star animation : %d", mySD->getSilType());
 	
 	map<int, CCNode*>::iterator iter = stage_node_manager.find(mySD->getSilType());
 	if(iter == stage_node_manager.end() || iter->second == NULL)
@@ -876,7 +876,7 @@ void NewMainFlowScene::endGetStar()
 void NewMainFlowScene::showSuccessPuzzleEffect()
 {
 	int t_puzzle_number = NSDS_GI(mySD->getSilType(), kSDS_SI_puzzle_i);
-	CCLog("success puzzle animation : %d", t_puzzle_number);
+	CCLOG("success puzzle animation : %d", t_puzzle_number);
 	
 	map<int, CCBAnimationManager*>::iterator iter = warp_ani_manager.find(t_puzzle_number);
 	if(iter != warp_ani_manager.end())
@@ -908,7 +908,7 @@ void NewMainFlowScene::endSuccessPuzzleEffect()
 
 void NewMainFlowScene::showPerfectPuzzleEffect()
 {
-	CCLog("perfect puzzle animation");
+	CCLOG("perfect puzzle animation");
 	
 //	CCTableViewCell* t_cell = puzzle_table->cellAtIndex(clear_found_puzzle_idx);
 //	
@@ -921,7 +921,7 @@ void NewMainFlowScene::showPerfectPuzzleEffect()
 //		int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
 //		int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
 //		
-//		CCLog("start_stage : %d, stage_count : %d", start_stage, stage_count);
+//		CCLOG("start_stage : %d, stage_count : %d", start_stage, stage_count);
 //		
 //		for(int i=start_stage;i<start_stage+stage_count;i++)
 //		{
@@ -951,7 +951,7 @@ void NewMainFlowScene::endPerfectPuzzleEffect()
 
 void NewMainFlowScene::showUnlockEffect()
 {
-	CCLog("unlock piece animation : %d", next_stage_number);
+	CCLOG("unlock piece animation : %d", next_stage_number);
 	
 	map<int, CCNode*>::iterator iter = stage_node_manager.find(next_stage_number);
 	if(iter == stage_node_manager.end() || iter->second == NULL)
@@ -1079,7 +1079,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 	is_menu_enable = false;
 	
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, tag);
-	CCLog("open puzzle : %d", puzzle_number);
+	CCLOG("open puzzle : %d", puzzle_number);
 	
 	
 	ASPopupView* t_popup = ASPopupView::create(-200);
@@ -1230,7 +1230,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 //	else if(tag < kMainFlowTableCellTag_ticketBase) // buyBase
 //	{
 //		int puzzle_number = tag - kMainFlowTableCellTag_buyBase;
-//		CCLog("puzzle_number : %d", puzzle_number);
+//		CCLOG("puzzle_number : %d", puzzle_number);
 //		
 //		ASPopupView* t_popup = ASPopupView::create(-200);
 //		
@@ -1494,8 +1494,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					
 					CCMenuItemLambda* start_warp_item = CCMenuItemSpriteLambda::create(n_start_warp, s_start_warp, [=](CCObject* sender)
 																					   {
-																						   CCLog("idx : %d", idx);
-																						   CCLog("go to x : %.1f", -(idx-1.f)*480.f);
+																						   CCLOG("idx : %d", idx);
+																						   CCLOG("go to x : %.1f", -(idx-1.f)*480.f);
 																						   puzzle_table->setContentOffsetInDuration(ccp(-(idx-1.f)*480.f,0), 0.3f);
 																					   });
 					
@@ -1519,8 +1519,8 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 					
 					CCMenuItemLambda* end_warp_item = CCMenuItemSpriteLambda::create(n_end_warp, s_end_warp, [=](CCObject* sender)
 																					   {
-																						   CCLog("idx : %d", idx);
-																						   CCLog("go to x : %.1f", -(idx+1.f)*480.f);
+																						   CCLOG("idx : %d", idx);
+																						   CCLOG("go to x : %.1f", -(idx+1.f)*480.f);
 																						   puzzle_table->setContentOffsetInDuration(ccp(-(idx+1.f)*480.f,0), 0.3f);
 																					   });
 					
@@ -2205,7 +2205,7 @@ void NewMainFlowScene::puzzleLoadSuccess()
 
 void NewMainFlowScene::pieceAction(int t_stage_number)
 {
-	CCLog("pieceAction : %d", t_stage_number);
+	CCLOG("pieceAction : %d", t_stage_number);
 	
 //	new_stage_info_view->setClickedStage(t_stage_number);
 	
@@ -2283,12 +2283,12 @@ void NewMainFlowScene::changeButtonChallenge(bool t_b, int t_stage)
 
 void NewMainFlowScene::buyPieceAction(int t_stage_number)
 {
-	CCLog("buyPieceAction : %d", t_stage_number);
+	CCLOG("buyPieceAction : %d", t_stage_number);
 //	new_stage_info_view->setClickedStage(t_stage_number);
 }
 void NewMainFlowScene::lockPieceAction(int t_stage_number)
 {
-	CCLog("lockPieceAction : %d", t_stage_number);
+	CCLOG("lockPieceAction : %d", t_stage_number);
 //	new_stage_info_view->setClickedStage(t_stage_number);
 }
 

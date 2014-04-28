@@ -36,6 +36,8 @@ public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
     virtual bool init();
     
+	std::function<void()> goToMainFlow_func;
+	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
     // preprocessor macro for "static create()" constructor ( node() deprecated )
@@ -117,6 +119,8 @@ private:
 	void buySuccessItem(int t_clicked_item_idx, int cnt);
 	
 	string convertToItemCodeToItemName(ITEM_CODE t_code);
+	
+	bool is_go_to_mainflow;
 };
 
 #endif /* defined(__DGproto__StartSettingPopup__) */

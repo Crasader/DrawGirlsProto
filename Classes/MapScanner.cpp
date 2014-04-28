@@ -36,7 +36,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 1 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -49,7 +49,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 2 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	vector<CCNode*> main_cumber_vector = myGD->getMainCumberCCNodeVector();
@@ -126,7 +126,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 3 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	// new inside check
@@ -141,7 +141,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 4 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	// outside recovery and new inside add show
@@ -193,7 +193,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 5 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -213,7 +213,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 6 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
 	
 	if(myGD->game_step == kGS_limited)
 	{
@@ -272,7 +272,7 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("reset rects : %f", elapsed_seconds.count());
+//	CCLOG("reset rects : %f", elapsed_seconds.count());
 	
 	visibleImg->setDrawRects(rects);
 	
@@ -397,7 +397,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 		}
 	}
 	
-//	CCLog("loop count : %d", loopCnt);
+//	CCLOG("loop count : %d", loopCnt);
 	
 	IntRect* r_rect = new IntRect((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
 	r_rect->autorelease();
@@ -785,11 +785,38 @@ void MapScanner::setTopBottomBlock()
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
 		
+		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, 59, 26-sub_value)));
+		
+//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//		if(screen_scale_x < 1.f)
+//			screen_scale_x = 1.f;
+//		
+//		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//		
+//		float change_scale = 1.f;
+//		CCPoint change_origin = ccp(0,0);
+//		if(screen_scale_x > 1.f)
+//		{
+//			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+//			change_scale = screen_scale_x;
+//		}
+//		if(screen_scale_y > 1.f)
+//			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+//		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+//		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		
+		t_clipping->getStencil()->setAnchorPoint(ccp(0.5,0));
+		t_clipping->setPosition(ccp(29.5f,0));
+		top_block_lock->addChild(t_clipping);
+		
+		t_clipping->setAlphaThreshold(0.1f);
+		
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
 		lock_label->setAnchorPoint(ccp(0.5f,0.f));
 		lock_label->enableOuterStroke(ccBLACK, 1.f);
-		lock_label->setPosition(ccp(29.5f,5));
-		top_block_lock->addChild(lock_label);
+		lock_label->setPosition(ccp(0,5));
+		t_clipping->addChild(lock_label);
 	}
 	else
 	{
@@ -860,11 +887,45 @@ void MapScanner::setTopBottomBlock()
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
 		
+		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, 59, 26-sub_value)));
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+
+		float change_scale = 1.f;
+		CCPoint change_origin = ccp(0,0);
+		if(screen_scale_x > 1.f)
+		{
+			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+			change_scale = screen_scale_x;
+		}
+		if(screen_scale_y > 1.f)
+			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		
+		t_clipping->getStencil()->setAnchorPoint(ccp(0.5,1.f));
+		t_clipping->setPosition(ccp(29.5f,26-sub_value));
+		bottom_block_lock->addChild(t_clipping);
+		
+		t_clipping->setAlphaThreshold(0.1f);
+		
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
 		lock_label->setAnchorPoint(ccp(0.5f,1.f));
 		lock_label->enableOuterStroke(ccBLACK, 1.f);
-		lock_label->setPosition(ccp(29.5f,26-sub_value-5));
-		bottom_block_lock->addChild(lock_label);
+		lock_label->setPosition(ccp(0,-5));
+		t_clipping->addChild(lock_label);
+		
+		
+//		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+//		lock_label->setAnchorPoint(ccp(0.5f,1.f));
+//		lock_label->enableOuterStroke(ccBLACK, 1.f);
+//		lock_label->setPosition(ccp(29.5f,26-sub_value-5));
+//		bottom_block_lock->addChild(lock_label);
 	}
 	else
 	{
@@ -1390,7 +1451,7 @@ CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 	CCImage* img = new CCImage();
 	img->initWithImageFileThreadSafe(fullpath.c_str());
 	
-//	CCLog("fuckfuckfuck android %d,%d,%d,%d",newImg->getDataLen(), newImg->getWidth(), newImg->getHeight(), newImg->getBitsPerComponent());
+//	CCLOG("fuckfuckfuck android %d,%d,%d,%d",newImg->getDataLen(), newImg->getWidth(), newImg->getHeight(), newImg->getBitsPerComponent());
 	
 //	CCImage* img = new CCImage();
 //	

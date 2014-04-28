@@ -36,13 +36,13 @@ public:
 	void removeFromParent()
 	{
 		KSCumberBase::removeFromParent();
-		CCLog("nonono1");
+		CCLOG("nonono1");
 	}
 	
 	void removeFromParentAndCleanup(bool cleanup)
 	{
 		KSCumberBase::removeFromParentAndCleanup(cleanup);
-		CCLog("nonono2");
+		CCLOG("nonono2");
 	}
 	
 	virtual ~KSSnakeBase();

@@ -179,7 +179,7 @@ void EventListDown::startDownload()
 {
 	if(ing_download_cnt <= df_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size,
 													  df_list[ing_download_cnt-1].filename, this, callfunc_selector(EventListDown::successAction),
 													  this, callfunc_selector(EventListDown::failAction));

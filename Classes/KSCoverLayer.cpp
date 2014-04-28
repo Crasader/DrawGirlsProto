@@ -11,7 +11,7 @@ void KSCoverLayer::registerWithTouchDispatcher()
 
 bool KSCoverLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
-	CCLog("kscoverlayer swallow");
+	CCLOG("kscoverlayer swallow");
 	return true; // swallow;
 }
 

@@ -36,7 +36,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("getPuzzleInfo : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		CCLOG("getPuzzleInfo : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		
 		NSDS_SS(puzzle_number, kSDS_PZ_title_s, result_data["title"].asString(), false);
 		NSDS_SS(puzzle_number, kSDS_PZ_condition_s, result_data["condition"].asString(), false);
@@ -101,7 +101,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number, stage_list[i]["condition"]["no"].asInt(), false);
 			}
 			
-			CCLog("saved version : %d", NSDS_GI(stage_number, kSDS_SI_version_i));
+			CCLOG("saved version : %d", NSDS_GI(stage_number, kSDS_SI_version_i));
 			if(NSDS_GI(stage_number, kSDS_SI_version_i) < stage_list[i]["version"].asInt())
 			{
 				save_version_list.push_back(IntPoint(stage_number, stage_list[i]["version"].asInt()));
@@ -956,14 +956,14 @@ void StageListDown::startDownload()
 {
 	if(ing_download_cnt > df_list.size())
 	{
-		CCLog("%d : %s", ing_download_cnt, sf_list[ing_download_cnt-df_list.size()-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, sf_list[ing_download_cnt-df_list.size()-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(sf_list[ing_download_cnt-df_list.size()-1].img, sf_list[ing_download_cnt-df_list.size()-1].size,
 													  sf_list[ing_download_cnt-df_list.size()-1].filename, this, callfunc_selector(StageListDown::successAction),
 													  this, callfunc_selector(StageListDown::failAction));
 	}
 	else
 	{
-		CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+		CCLOG("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
 		StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
 													  this, callfunc_selector(StageListDown::successAction), this, callfunc_selector(StageListDown::failAction));
 	}
@@ -1063,6 +1063,6 @@ void StageListDown::startGetStageList()
 
 void StageListDown::resultGetStageRankList(Json::Value result_data)
 {
-//	CCLog("resultGetStageRankList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+//	CCLOG("resultGetStageRankList : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 //	mySGD->temp_stage_ranker_list = result_data;
 }

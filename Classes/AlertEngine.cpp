@@ -30,7 +30,7 @@ void AlertEngine::addDoubleAlert(const char *t_title, const char *t_message, con
 		[dlg show];
 		[dlg release];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	CCLog("double dialog in cocos2d-x");
+	CCLOG("double dialog in cocos2d-x");
 		JniMethodInfo __minfo;
 		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "addDoubleDialog", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V"))
 		{
@@ -73,9 +73,9 @@ void AlertEngine::addSingleAlert(const char* t_title, const char* t_message, con
 void AlertEngine::doAction(int t_alertNumber, int t_buttonNumber)
 {
 //	addable = true;
-	CCLog("seo reaction");
+	CCLOG("seo reaction");
 	(target->*selector)(t_alertNumber, t_buttonNumber);
-	CCLog("seo reaction end");
+	CCLOG("seo reaction end");
 }
 
 AlertEngine* AlertEngine::sharedInstance()

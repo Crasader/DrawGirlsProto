@@ -14,14 +14,14 @@ extern "C" {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	void Java_com_litqoo_lib_KSInAppBase_sendInAppData(JNIEnv *env, jobject thiz, jstring datas, int resultcode, int delekey) // ¿⁄πŸø°º≠ µ•¿Ã≈Õ πﬁ¿Ω!!
 	{
-		CCLog("call inappdelegator");
+		CCLOG("call inappdelegator");
 		
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy); // UTF-8
 		string throwData = revStr;
 		InAppDelegator::DeleSel delesel = InAppDelegator::getInstance()->getDeleSel(delekey);
 		InAppDelegator::getInstance()->removeDeleSel(delekey);
-		CCLog("sendInAppData!!! %s", throwData.c_str());
+		CCLOG("sendInAppData!!! %s", throwData.c_str());
 		if(delesel.target != 0 && delesel.selector != 0)
 		{
 			((delesel.target)->*(delesel.selector))(throwData, resultcode);

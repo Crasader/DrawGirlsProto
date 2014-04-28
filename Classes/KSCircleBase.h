@@ -60,15 +60,15 @@ public:
 	void removeFromParent()
 	{
 		CircleCCBPieceBase::removeFromParent();
-		CCLog("nonono1");
+		CCLOG("nonono1");
 	}
 	void removeFromParentAndCleanup(bool cleanup)
 	{
 		CircleCCBPieceBase::removeFromParentAndCleanup(cleanup);
-		CCLog("nonono2");
+		CCLOG("nonono2");
 	}
 	virtual ~KSCircleBase(){
-		CCLog("~KSCircle");
+		CCLOG("~KSCircle");
 	}
 	virtual void checkConfine(float dt){}
 	virtual void onStartMoving();

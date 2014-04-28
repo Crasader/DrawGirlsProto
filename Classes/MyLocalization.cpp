@@ -191,6 +191,9 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("일일미션을 완료해보세요!\n선물함으로 선물을 드려요! ^^"), kMyLocalKey_stageListDown);
 	ko->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
 	ko->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
+	ko->setObject(CCString::create("루비로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ko->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
+	ko->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ko->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	ko->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	ko->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
@@ -199,12 +202,12 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	ko->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
-	
 	ko->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ko->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ko->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	
+	ko->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
+	ko->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
 	
@@ -492,6 +495,9 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
 	en->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
 	en->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
+	en->setObject(CCString::create("루비로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	en->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
+	en->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	en->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	en->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	en->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
@@ -500,10 +506,12 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	en->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
-	
 	en->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	en->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	en->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
+	
+	en->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
+	en->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -789,6 +797,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
 	ja->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
 	ja->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
+	ja->setObject(CCString::create("루비로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ja->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
+	ja->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ja->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	ja->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	ja->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
@@ -797,10 +808,12 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	ja->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
-	
 	ja->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ja->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ja->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
+	
+	ja->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
+	ja->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);

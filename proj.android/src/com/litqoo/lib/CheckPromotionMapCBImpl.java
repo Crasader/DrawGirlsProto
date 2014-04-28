@@ -127,8 +127,6 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 				}
 				jsonArray.put(temp);
 			}
-//			for (int i = 0; i < promoList.size(); i++) {
-//			}
 			try {
 				r.put("rewards", jsonArray);
 			} catch (JSONException e) {

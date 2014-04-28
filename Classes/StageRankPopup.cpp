@@ -184,7 +184,7 @@
 //				(*iter).is_play = true;
 //			}
 //			else
-//				CCLog("not found friend memberID");
+//				CCLOG("not found friend memberID");
 //		}
 //		
 ////		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](StageRankFriendInfo t_info)
@@ -244,7 +244,7 @@
 //	int tag = ((CCNode*)sender)->getTag();
 //	tag -= kSRFC_T_menuBase;
 //	
-//	CCLog("challenge memberID : %s", friend_list[tag].user_id.c_str());
+//	CCLOG("challenge memberID : %s", friend_list[tag].user_id.c_str());
 ////	::setChallengeSendTime(friend_list[tag].user_id);
 //		mySGD->setIsMeChallenge(true);
 //	mySGD->setMeChallengeTarget(friend_list[tag].user_id, friend_list[tag].nickname, friend_list[tag].score, friend_list[tag].img_url);
@@ -353,7 +353,7 @@
 //
 //void StageRankPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 //{
-//	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
+//	//		CCLOG("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 //}
 //
 //CCSize StageRankPopup::cellSizeForTable( CCTableView *table )

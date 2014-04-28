@@ -727,10 +727,10 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
 
-	CCLog("input %d, sort", card_number);
+	CCLOG("input %d, sort", card_number);
 	for(int i=0;i<has_gotten_cards.size();i++)
 	{
-		CCLog("%d", has_gotten_cards[i].card_number);
+		CCLOG("%d", has_gotten_cards[i].card_number);
 	}
 }
 
@@ -1236,6 +1236,18 @@ GoodsType StarGoldData::getGoodsKeyToType(string t_key)
 	return return_value;
 }
 
+GoodsType StarGoldData::getItemCodeToGoodsType(ITEM_CODE t_code)
+{
+	GoodsType return_value;
+	if(t_code == kIC_baseSpeedUp)
+		return_value = kGoodsType_item9;
+	else if(t_code == kIC_doubleItem)
+		return_value = kGoodsType_item6;
+	else if(t_code == kIC_longTime)
+		return_value = kGoodsType_item8;
+	return return_value;
+}
+
 void StarGoldData::initProperties(Json::Value t_list)
 {
 	for(int i=0;i<t_list.size();i++)
@@ -1516,6 +1528,8 @@ void StarGoldData::myInit()
 	app_version = 1;
 	
 	suitable_stage = -1;
+	
+	keep_time_info.is_loaded = false;
 	
 	goods_data.clear();
 	change_goods_list.clear();

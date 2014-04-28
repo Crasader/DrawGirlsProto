@@ -104,7 +104,7 @@ bool PopCake::init()
 		cb->setVisible(false);
 	});
 	
-	CCLog("cb2");
+	CCLOG("cb2");
 	cb2 = CommonButton::create("load RGB 11 ", 20, CCSizeMake(100, 35), CommonButtonOrange,
 																					 0);
 	addChild(cb2, 1);

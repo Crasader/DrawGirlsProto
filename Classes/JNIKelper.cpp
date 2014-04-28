@@ -4,24 +4,24 @@
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 void JNIKelper::setJNI(string _className)
 {
-	CCLog("call getActivity");
+	CCLOG("call getActivity");
 	className = _className;
 	if(JniHelper::getStaticMethodInfo(minfo, className.c_str(), "getActivity", "()Ljava/lang/Object;"))
 	{
 		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
 		minfo.env->DeleteLocalRef(minfo.classID);
 	}
-	CCLog("call getActivity end");
+	CCLOG("call getActivity end");
 }
 void JNIKelper::releaseJNI()
 {
-	//CCLog("nonono");
+	//CCLOG("nonono");
 	minfo.env->DeleteGlobalRef(jobj);
 }
 
 void JNIKelper::callJava_buyItem(string itemID, CCObject* target, RecvInAppSelType selector)
 {
-	CCLog("call jnikelper");
+	CCLOG("call jnikelper");
 	JniMethodInfo __minfo;
 	__minfo.classID = 0;
 	__minfo.env = 0;
@@ -36,7 +36,7 @@ void JNIKelper::callJava_buyItem(string itemID, CCObject* target, RecvInAppSelTy
 
 string JNIKelper::callJava_getPrice(string itemID)
 {
-	CCLog("call jnikelper");
+	CCLOG("call jnikelper");
 	JniMethodInfo __minfo;
 	__minfo.classID = 0;
 	__minfo.env = 0;
@@ -69,7 +69,7 @@ string JNIKelper::callJava_getPrice(string itemID)
 void JNIKelper::callJava_addWebView(string utf8url, int x, int y, int sx, int sy, 
 	CCObject* target, RecvSelType selector)
 {
-	CCLog("call jnikelper");
+	CCLOG("call jnikelper");
 	JniMethodInfo __minfo;
 	__minfo.classID = 0;
 	__minfo.env = 0;
@@ -84,7 +84,7 @@ void JNIKelper::callJava_addWebView(string utf8url, int x, int y, int sx, int sy
 }
 void JNIKelper::callJava_simple(string functionName)
 {
-	CCLog("call jnikelper");
+	CCLOG("call jnikelper");
 	JniMethodInfo __minfo;
 	__minfo.classID = 0;
 	__minfo.env = 0;
@@ -97,7 +97,7 @@ void JNIKelper::callJava_simple(string functionName)
 }
 void JNIKelper::callJava_moveWebView(int x, int y)
 {
-	CCLog("call jnikelper");
+	CCLOG("call jnikelper");
 	JniMethodInfo __minfo;
 
 	if(JniHelper::getMethodInfo(__minfo, className.c_str(), "moveWebView", "(II)V"))
@@ -109,7 +109,7 @@ void JNIKelper::callJava_moveWebView(int x, int y)
 
 void JNIKelper::callJava_getDataFromURL(string utf8url, CCObject* target, RecvSelType selector)
 {
-	CCLog("call jnikelper");
+	CCLOG("call jnikelper");
 	JniMethodInfo __minfo;
 
 	if(JniHelper::getMethodInfo(__minfo, className.c_str(), "getDataFromURL", "(Ljava/lang/String;I)V"))
@@ -123,7 +123,7 @@ void JNIKelper::callJava_getDataFromURL(string utf8url, CCObject* target, RecvSe
 
 void JNIKelper::callJava_openApp(string app_name)
 {
-	CCLog("call jnikelper");
+	CCLOG("call jnikelper");
 	JniMethodInfo __minfo;
 	
 	if(JniHelper::getMethodInfo(__minfo, className.c_str(), "openApp", "(Ljava/lang/String;)V"))

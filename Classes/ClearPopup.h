@@ -51,6 +51,7 @@ public:
 	
 	bool is_take_star_effect;
 	std::function<void()> replay_func;
+	std::function<void()> goToMainFlow_func;
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
@@ -164,6 +165,8 @@ private:
 	void addStarParticle(CCNode* t_node);
 	
 	void resultGetRank(Json::Value result_data);
+	void resultGetTime(Json::Value result_data);
+	bool is_go_to_mainflow;
 };
 
 #endif /* defined(__DGproto__ClearPopup__) */

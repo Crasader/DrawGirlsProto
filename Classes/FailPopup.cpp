@@ -185,10 +185,10 @@ bool FailPopup::init()
 //			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-210);
 //			
 //			b->setSkipFunc([this](){
-//				CCLog("skip Func");
+//				CCLOG("skip Func");
 //			});
 //			b->setRepairFunc([=](){
-//				CCLog("repair Func");
+//				CCLOG("repair Func");
 //				
 //				if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getCardDurabilityUpFee())
 //				{
@@ -206,7 +206,7 @@ bool FailPopup::init()
 //				}
 //			});
 //			b->setCloseFunc([=](){
-//				CCLog("close Func");
+//				CCLOG("close Func");
 //				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
 //					myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
 //				this->endDecreaseCardDuration();
@@ -454,16 +454,18 @@ bool FailPopup::init()
 	param2["memberID"] = hspConnector::get()->getSocialID();
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
+	mySGD->keep_time_info.is_loaded = false;
+	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
 	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
 								  {
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
-										  CCLog("FailPopup transaction success");
+										  CCLOG("FailPopup transaction success");
 									  }
 									  else
 									  {
-										  CCLog("FailPopup transaction fail");
+										  CCLOG("FailPopup transaction fail");
 										  
 										  LoadingLayer* t_loading = LoadingLayer::create(-9999);
 										  addChild(t_loading, 9999);
@@ -476,7 +478,7 @@ bool FailPopup::init()
 																 }
 																 else
 																 {
-																	 CCLog("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+																	 CCLOG("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 																 }
 															 });
 									  }
@@ -497,6 +499,110 @@ bool FailPopup::init()
 FailPopup::~FailPopup()
 {
 	hspConnector::get()->removeTarget(this);
+}
+
+void FailPopup::resultGetTime(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->keep_time_info.timestamp = result_data["timestamp"].asUInt();
+		mySGD->keep_time_info.weekNo = result_data["weekNo"].asUInt();
+		mySGD->keep_time_info.weekday = result_data["weekday"].asInt();
+		mySGD->keep_time_info.date = result_data["date"].asInt64();
+		mySGD->keep_time_info.hour = result_data["hour"].asInt();
+		mySGD->keep_time_info.is_loaded = true;
+		
+		is_go_to_mainflow = false;
+		
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open;
+		
+		if(!is_open)
+		{
+			string puzzle_condition = NSDS_GS(puzzle_number, kSDS_PZ_condition_s);
+			
+			Json::Value condition_list;
+			Json::Reader reader;
+			reader.parse(puzzle_condition, condition_list);
+			
+			if(condition_list.size() <= 0)
+				is_open = true;
+			
+			bool is_base_condition_success = true;
+			
+			for(int i=0;!is_open && i<condition_list.size();i++)
+			{
+				Json::Value t_condition_and = condition_list[i];
+				
+				bool and_open = true;
+				//				bool is_time_condition = false;
+				
+				for(int j=0;and_open && j<t_condition_and.size();j++)
+				{
+					Json::Value t_condition = t_condition_and[j];
+					string t_type = t_condition["type"].asString();
+					if(t_type == "p")
+					{
+						if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+						{
+							and_open = false;
+							is_base_condition_success = false;
+						}
+					}
+					else if(t_type == "s")
+					{
+						if(mySGD->getClearStarCount() < t_condition["value"].asInt())
+						{
+							and_open = false;
+							is_base_condition_success = false;
+						}
+					}
+					else if(t_type == "r")
+					{
+						and_open = false;
+					}
+					else if(t_type == "w")
+					{
+						//						is_time_condition = true;
+						if(!mySGD->keep_time_info.is_loaded)
+							and_open = false;
+						else
+						{
+							int weekday = t_condition["weekday"].asInt();
+							if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+								and_open = false;
+							if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+								and_open = false;
+						}
+					}
+					else if(t_type == "d")
+					{
+						//						is_time_condition = true;
+						if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+							and_open = false;
+					}
+				}
+				
+				if(and_open)
+				{
+					is_open = true;
+					//					if(!is_time_condition)
+					//					{
+					//						PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+					//						t_history.is_open = true;
+					//						t_history.open_type = "무료";
+					//						mySGD->setPuzzleHistory(t_history, nullptr);
+					//					}
+				}
+			}
+			
+			if(!is_open)
+			{
+				is_go_to_mainflow = true;
+				replay_menu->setEnabled(false);
+			}
+		}
+	}
 }
 
 void FailPopup::resultGetRank(Json::Value result_data)
@@ -728,6 +834,8 @@ void FailPopup::endHidePopup()
 	
 	if(target_final)
 		(target_final->*delegate_final)();
+	if(is_go_to_mainflow)
+		goToMainFlow_func();
 	removeFromParent();
 }
 
@@ -916,7 +1024,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 
 //void FailPopup::resultLoadFriends(Json::Value result_data)
 //{
-////	CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+////	CCLOG("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 ////	if(result_data["status"].asInt() == 0)
 ////	{
 ////		Json::Value appfriends = result_data["app_friends_info"];
@@ -1011,7 +1119,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 //				(*iter).is_play = true;
 //			}
 //			else
-//				CCLog("not found friend memberID");
+//				CCLOG("not found friend memberID");
 //		}
 //		
 //		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
@@ -1121,6 +1229,11 @@ void FailPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_FP_main)
 	{
+		if(is_go_to_mainflow)
+		{
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_timeOutFrame)), 9999);
+		}
+		
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 //		mySGD->resetLabels();
@@ -1159,7 +1272,7 @@ void FailPopup::menuAction(CCObject* pSender)
 void FailPopup::cellAction( CCObject* sender )
 {
 //	int tag = (int)((CCNode*)sender)->getUserData();
-//	CCLog("help memberID : %s", friend_list[tag].user_id.c_str());
+//	CCLOG("help memberID : %s", friend_list[tag].user_id.c_str());
 //	//김현수 89987036974054944
 //	std::string user_id = friend_list[tag].user_id;
 //	KS::KSLog("% %" , friend_list[tag].nickname, friend_list[tag].user_id);
@@ -1192,7 +1305,7 @@ void FailPopup::cellAction( CCObject* sender )
 //	av->setContentSize(ttf->getDimensions());
 //	av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 //								[=](CCObject* e) {
-//									CCLog("ok!!");
+//									CCLOG("ok!!");
 //									Json::Value p;
 //									Json::Value contentJson;
 //
@@ -1245,7 +1358,7 @@ void FailPopup::cellAction( CCObject* sender )
 //						 av->setContentSize(ttf->getDimensions());
 //						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 //													 [=](CCObject* e) {
-//														 CCLog("ok!!");
+//														 CCLOG("ok!!");
 //													 });
 //
 //						 addChild(av, kPMS_Z_helpRequest);
@@ -1450,7 +1563,7 @@ void FailPopup::scrollViewDidZoom( CCScrollView* view )
 void FailPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
 
-	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
+	//		CCLOG("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 
 CCSize FailPopup::cellSizeForTable( CCTableView *table )

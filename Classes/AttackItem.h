@@ -1443,7 +1443,7 @@ private:
 //		if(myGD->getCommunication("CP_getMainCumberSheild") == 0)
 //		{
 //			myGD->communication("UI_subBossLife", t_damage);
-//			CCLog("ice : %.1f", t_damage);
+//			CCLOG("ice : %.1f", t_damage);
 //			myGD->communication("CP_startDamageReaction", rand()%360-180.f);
 //		}
 //		
