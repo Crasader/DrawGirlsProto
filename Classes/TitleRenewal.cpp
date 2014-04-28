@@ -514,6 +514,11 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setItemGachaReplayGoldFee(result_data["itemGachaReplayGoldFee"].asInt());
 		mySGD->setUpgradeGoldFee(result_data["upgradeGoldFee"].asInt());
 		mySGD->setIngameTutorialRewardGold(result_data["ingameTutorialRewardGold"].asInt());
+		
+		mySGD->setRankUpConditionCount(result_data["rankUpConditionCount"].asInt());
+		mySGD->setRankUpBaseRate(result_data["rankUpBaseRate"].asFloat());
+		mySGD->setRankUpRateDistance(result_data["rankUpRateDistance"].asFloat());
+		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
 	}
 	else
 	{
@@ -555,6 +560,8 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 		Json::Value list_coin = result_list["h"];
 		for(int i=0;i<list_coin.size();i++)
 		{
+			CCLog("index : %d / count : %d", i, list_coin[i]["count"].asInt());
+			
 			NSDS_SI(kSDS_GI_shopCoin_int1_count_i, i, list_coin[i]["count"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_countName_s, i, list_coin[i]["countName"].asString(), false);
 			NSDS_SI(kSDS_GI_shopCoin_int1_price_i, i, list_coin[i]["price"].asInt(), false);

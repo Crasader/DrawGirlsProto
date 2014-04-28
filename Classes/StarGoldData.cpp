@@ -420,11 +420,19 @@ float StarGoldData::getBaseScore()
 	return base_score.getV();
 }
 
+void StarGoldData::setPercentage(float t_f)
+{
+	percentage = t_f;
+}
 float StarGoldData::getPercentage()
 {
 	return percentage.getV();
 }
 
+void StarGoldData::setStageGrade(int t_i)
+{
+	stage_grade = t_i;
+}
 int StarGoldData::getStageGrade()
 {
 	return stage_grade.getV();
@@ -1520,6 +1528,7 @@ void StarGoldData::myInit()
 	
 	suitable_stage = -1;
 	
+	rank_up_add_rate = 0;
 	keep_time_info.is_loaded = false;
 	
 	goods_data.clear();
@@ -1930,8 +1939,50 @@ void StarGoldData::initInappProduct(int t_index, string t_product)
 {
 	inapp_products[t_index] = t_product;
 }
-
 string StarGoldData::getInappProduct(int t_index)
 {
 	return inapp_products[t_index].getV();
+}
+
+void StarGoldData::setRankUpConditionCount(int t_i)
+{
+	rank_up_condition_count = t_i;
+}
+int StarGoldData::getRankUpConditionCount()
+{
+	return rank_up_condition_count.getV();
+}
+void StarGoldData::setRankUpBaseRate(float t_f)
+{
+	rank_up_base_rate = t_f;
+}
+float StarGoldData::getRankUpBaseRate()
+{
+	return rank_up_base_rate.getV();
+}
+void StarGoldData::setRankUpRateDistance(float t_f)
+{
+	rank_up_rate_distance = t_f;
+}
+float StarGoldData::getRankUpRateDistance()
+{
+	return rank_up_rate_distance.getV();
+}
+
+void StarGoldData::setRankUpRubyFee(int t_i)
+{
+	rank_up_ruby_fee = t_i;
+}
+int StarGoldData::getRankUpRubyFee()
+{
+	return rank_up_ruby_fee.getV();
+}
+
+void StarGoldData::setRankUpAddRate(float t_f)
+{
+	rank_up_add_rate = t_f;
+}
+float StarGoldData::getRankUpAddRate()
+{
+	return rank_up_add_rate.getV();
 }
