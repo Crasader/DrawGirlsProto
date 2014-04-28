@@ -23,17 +23,17 @@ av->setHScroll(CCScale9Sprite::create("popup_bar_h.png", CCRectMake(0, 0, 53, 23
 									  CCRectMake(10, 7, 53 - 10*2, 23 - 7*2)));
 auto m1 = CCMenuItemImageLambda::create("ui_common_ok.png", "ui_common_ok.png",
 										[](CCObject* e){
-											CCLog("press!!");
+											CCLOG("press!!");
 										});
 av->addButton(m1);
 av->addButton(CCMenuItemImageLambda::create("ticket_send.png", "ticket_send.png",
 											[](CCObject* e){
-												CCLog("press!!");
+												CCLOG("press!!");
 											}));
 addChild(av, kPMS_Z_helpRequest);
 av->setCloseButton(CCMenuItemImageLambda::create("tutorial_common_cancel.png", "tutorial_common_cancel.png",
 												 [=](CCObject* sender){
-													 CCLog("close!!");
+													 CCLOG("close!!");
 												 }));
 av->show();
 #endif

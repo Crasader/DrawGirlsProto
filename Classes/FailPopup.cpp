@@ -185,10 +185,10 @@ bool FailPopup::init()
 //			RemoveCardAnimation* b = RemoveCardAnimation::create(card,-210);
 //			
 //			b->setSkipFunc([this](){
-//				CCLog("skip Func");
+//				CCLOG("skip Func");
 //			});
 //			b->setRepairFunc([=](){
-//				CCLog("repair Func");
+//				CCLOG("repair Func");
 //				
 //				if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getCardDurabilityUpFee())
 //				{
@@ -206,7 +206,7 @@ bool FailPopup::init()
 //				}
 //			});
 //			b->setCloseFunc([=](){
-//				CCLog("close Func");
+//				CCLOG("close Func");
 //				if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, selected_card_number) <= 0)
 //					myDSH->setIntegerForKey(kDSH_Key_selectedCard, 0);
 //				this->endDecreaseCardDuration();
@@ -461,11 +461,11 @@ bool FailPopup::init()
 								  {
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
-										  CCLog("FailPopup transaction success");
+										  CCLOG("FailPopup transaction success");
 									  }
 									  else
 									  {
-										  CCLog("FailPopup transaction fail");
+										  CCLOG("FailPopup transaction fail");
 										  
 										  LoadingLayer* t_loading = LoadingLayer::create(-9999);
 										  addChild(t_loading, 9999);
@@ -478,7 +478,7 @@ bool FailPopup::init()
 																 }
 																 else
 																 {
-																	 CCLog("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+																	 CCLOG("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 																 }
 															 });
 									  }
@@ -1024,7 +1024,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 
 //void FailPopup::resultLoadFriends(Json::Value result_data)
 //{
-////	CCLog("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+////	CCLOG("resultLoadFriends : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 ////	if(result_data["status"].asInt() == 0)
 ////	{
 ////		Json::Value appfriends = result_data["app_friends_info"];
@@ -1119,7 +1119,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 //				(*iter).is_play = true;
 //			}
 //			else
-//				CCLog("not found friend memberID");
+//				CCLOG("not found friend memberID");
 //		}
 //		
 //		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
@@ -1272,7 +1272,7 @@ void FailPopup::menuAction(CCObject* pSender)
 void FailPopup::cellAction( CCObject* sender )
 {
 //	int tag = (int)((CCNode*)sender)->getUserData();
-//	CCLog("help memberID : %s", friend_list[tag].user_id.c_str());
+//	CCLOG("help memberID : %s", friend_list[tag].user_id.c_str());
 //	//김현수 89987036974054944
 //	std::string user_id = friend_list[tag].user_id;
 //	KS::KSLog("% %" , friend_list[tag].nickname, friend_list[tag].user_id);
@@ -1305,7 +1305,7 @@ void FailPopup::cellAction( CCObject* sender )
 //	av->setContentSize(ttf->getDimensions());
 //	av->addButton(CommonButton::create("보내기", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 //								[=](CCObject* e) {
-//									CCLog("ok!!");
+//									CCLOG("ok!!");
 //									Json::Value p;
 //									Json::Value contentJson;
 //
@@ -1358,7 +1358,7 @@ void FailPopup::cellAction( CCObject* sender )
 //						 av->setContentSize(ttf->getDimensions());
 //						 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 //													 [=](CCObject* e) {
-//														 CCLog("ok!!");
+//														 CCLOG("ok!!");
 //													 });
 //
 //						 addChild(av, kPMS_Z_helpRequest);
@@ -1563,7 +1563,7 @@ void FailPopup::scrollViewDidZoom( CCScrollView* view )
 void FailPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
 
-	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
+	//		CCLOG("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 
 CCSize FailPopup::cellSizeForTable( CCTableView *table )

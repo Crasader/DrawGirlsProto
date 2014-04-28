@@ -32,8 +32,12 @@ GaBaBo::~GaBaBo()
 bool GaBaBo::init()
 {
 	CCLayer::init();
+	
+	
+	
+	
 	CCSprite* bg = CCSprite::create("gababo_bg.png");
-
+	m_winCount = m_drawCount = m_loseCount = 0;
 	m_step = 1;
 	m_stepSprite = nullptr;
 	bg->setPosition(ccp(240, 160));
@@ -130,15 +134,21 @@ void GaBaBo::loadImage(int step)
 	if(m_stepSprite != nullptr)
 		m_stepSprite->removeFromParent();
 	m_stepSprite = CCSprite::create(boost::str(boost::format("ga%||.png") % step).c_str());
+	m_stepSprite->setScale(320.f / m_stepSprite->getContentSize().height);
 	m_stepSprite->setPosition(ccp(240, 160));
 	addChild(m_stepSprite);
 }
 
+
 void GaBaBo::update(float dt)
 {
+	m_remainTime -= dt;
 	ProbSelector ps;
 	ps.pushProb(1);
-	ps.pushProb(100);
+	if(m_remainTime >= 4)
+		ps.pushProb(50);
+	else
+		ps.pushProb(100);
 	if(ps.getResult() == 0 && m_lastChangeTime + 1 < getCurrentTimeStamp())
 	{
 		m_lastChangeTime = getCurrentTimeStamp();
@@ -157,7 +167,8 @@ void GaBaBo::update(float dt)
 		m_computerThinkSprites[m_computerThink]->setVisible(true);
 	}
 
-	m_remainTime -= dt;
+	
+
 	m_remainTimeFnt->setString(boost::str(boost::format("%||") % m_remainTime).c_str());
 	if(m_remainTime <= 0 && m_resultShowing == false)
 	{
@@ -182,27 +193,36 @@ void GaBaBo::update(float dt)
 		int D = mySelect - m_computerThink % 3;
 		std::string resultString;
 		int gameResult = 1;
+		
+		
+		CCSprite* result;
 		if(mySelect == m_computerThink) // Draw
 		{
 			resultString = "Draw";
 			gameResult = 1;
+			result = KS::loadCCBI<CCSprite*>(this, "e_draw.ccbi").first;
+			result->setPosition(ccp(240, 180));
+			addChild(result, 1);
+			m_drawCount++;
 		}
 		else if(D == 1) // Win
 		{
 			resultString = "You Win";
 			gameResult = 2;
+			result = KS::loadCCBI<CCSprite*>(this, "e_win.ccbi").first;
+			result->setPosition(ccp(240, 180));
+			addChild(result, 1);
+			m_winCount++;
 		}
 		else // Lose
 		{
 			resultString = "You Lose";
 			gameResult = 3;
+			result = KS::loadCCBI<CCSprite*>(this, "e_lose.ccbi").first;
+			result->setPosition(ccp(240, 180));
+			addChild(result, 1);
+			m_loseCount++;
 		}
-		KSLabelTTF* result = KSLabelTTF::create(resultString.c_str(), mySGD->getFont().c_str(), 60.f);
-		result->setPosition(ccp(240, 180));
-		addChild(result, 1);
-		result->setRotation(30);
-		result->CCLabelTTF::setFontFillColor(ccc3(255, 0, 0));
-		result->enableStroke(ccc3(255, 255, 0), 2.f);
 
 		addChild(KSTimer::create(3.f, [=](){
 			
@@ -220,10 +240,11 @@ void GaBaBo::update(float dt)
 			// Win
 			else if(gameResult == 2)
 			{
+//				result->removeFromParent();
 				CCSprite* light = KS::loadCCBI<CCSprite*>(this, "e_1.ccbi").first;
 				light->setPosition(ccp(240, 160));
 				addChild(light, 100);
-				addChild(KSTimer::create(1.2f, [=](){
+				addChild(KSTimer::create(0.9f, [=](){
 					m_ba->setEnabled(true);
 					m_ga->setEnabled(true);
 					m_bo->setEnabled(true);
@@ -240,7 +261,53 @@ void GaBaBo::update(float dt)
 			else
 			{
 				CCScale9Sprite* main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-				main_case->setContentSize(CCSizeMake(480, 280));
+				
+				main_case->setContentSize(CCSizeMake(300, 250));
+				main_case->setPosition(ccp(240,160));
+				addChild(main_case, 2);
+				
+				CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+				main_inner->setContentSize(CCSizeMake(270, 200));
+				main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);
+				main_case->addChild(main_inner);
+				
+				
+				CommonButton* closeBtn = CommonButton::createCloseButton(-200);
+				closeBtn->setFunction([=](CCObject*){
+					//		hspConnector::get()->removeTarget(this);
+					//		this->hidePopup();
+				});
+				closeBtn->setPosition(ccp(275, 225));
+				main_case->addChild(closeBtn);
+				
+				KSLabelTTF* title_label = KSLabelTTF::create("게임결과", mySGD->getFont().c_str(), 17);
+				title_label->setPosition(ccp(45,227));
+				main_case->addChild(title_label);
+				
+				KSLabelTTF* winLabel = KSLabelTTF::create(boost::str(boost::format("%|11|") % "WIN : ").c_str(), mySGD->getFont().c_str(), 15.f);
+				winLabel->setPosition(ccp(50, 190));
+				main_case->addChild(winLabel);
+				
+				CCLabelBMFont* winCountFnt = CCLabelBMFont::create(boost::str(boost::format("%|#|") % m_winCount).c_str(), "allfont.fnt");
+				winCountFnt->setPosition(ccp(200, 190));
+				main_case->addChild(winCountFnt);
+				
+				KSLabelTTF* drawLabel = KSLabelTTF::create(boost::str(boost::format("%|11|") % "DRAW : ").c_str(), mySGD->getFont().c_str(), 15.f);
+				drawLabel->setPosition(ccp(50, 160));
+				main_case->addChild(drawLabel);
+				
+				CCLabelBMFont* drawCountFnt = CCLabelBMFont::create(boost::str(boost::format("%|#|") % m_drawCount).c_str(), "allfont.fnt");
+				drawCountFnt->setPosition(ccp(200, 160));
+				main_case->addChild(drawCountFnt);
+				
+				KSLabelTTF* loseLabel = KSLabelTTF::create(boost::str(boost::format("%|11|") % "LOSE : ").c_str(), mySGD->getFont().c_str(), 15.f);
+				loseLabel->setPosition(ccp(50, 130));
+				main_case->addChild(loseLabel);
+				
+				CCLabelBMFont* loseCountFnt = CCLabelBMFont::create(boost::str(boost::format("%|#|") % m_loseCount).c_str(), "allfont.fnt");
+				loseCountFnt->setPosition(ccp(200, 130));
+				main_case->addChild(loseCountFnt);
+
 			}
 		}));
 		unscheduleUpdate();

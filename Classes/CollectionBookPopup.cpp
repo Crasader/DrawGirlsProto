@@ -442,7 +442,7 @@ bool CollectionBookPopup::init()
 
 void CollectionBookPopup::editBoxEditingDidBegin(CCEditBox* editBox)
 {
-	CCLog("edit begin");
+	CCLOG("edit begin");
 }
 void CollectionBookPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 {
@@ -453,11 +453,11 @@ void CollectionBookPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 	
 	hspConnector::get()->command("updateCardHistory", param, nullptr);
 	mySGD->setCardComment(recent_card_number, editBox->getText());
-	CCLog("edit end");
+	CCLOG("edit end");
 }
 void CollectionBookPopup::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
 {
-	CCLog("edit changed : %s", text.c_str());
+	CCLOG("edit changed : %s", text.c_str());
 }
 void CollectionBookPopup::editBoxReturn(CCEditBox* editBox)
 {
@@ -468,7 +468,7 @@ void CollectionBookPopup::editBoxReturn(CCEditBox* editBox)
 	
 	hspConnector::get()->command("updateCardHistory", param, nullptr);
 	mySGD->setCardComment(recent_card_number, editBox->getText());
-	CCLog("edit return");
+	CCLOG("edit return");
 }
 
 void CollectionBookPopup::onEnter()

@@ -36,7 +36,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 1 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -49,7 +49,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 2 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	vector<CCNode*> main_cumber_vector = myGD->getMainCumberCCNodeVector();
@@ -126,7 +126,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 3 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	// new inside check
@@ -141,7 +141,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 4 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	// outside recovery and new inside add show
@@ -193,7 +193,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 5 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
 //	start = chrono::system_clock::now();
 	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -213,7 +213,7 @@ void MapScanner::scanMap()
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("process step 6 / time : %f", elapsed_seconds.count());
+//	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
 	
 	if(myGD->game_step == kGS_limited)
 	{
@@ -272,7 +272,7 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	
 //	end = chrono::system_clock::now();
 //	elapsed_seconds = end-start;
-//	CCLog("reset rects : %f", elapsed_seconds.count());
+//	CCLOG("reset rects : %f", elapsed_seconds.count());
 	
 	visibleImg->setDrawRects(rects);
 	
@@ -397,7 +397,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 		}
 	}
 	
-//	CCLog("loop count : %d", loopCnt);
+//	CCLOG("loop count : %d", loopCnt);
 	
 	IntRect* r_rect = new IntRect((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
 	r_rect->autorelease();
@@ -1390,7 +1390,7 @@ CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 	CCImage* img = new CCImage();
 	img->initWithImageFileThreadSafe(fullpath.c_str());
 	
-//	CCLog("fuckfuckfuck android %d,%d,%d,%d",newImg->getDataLen(), newImg->getWidth(), newImg->getHeight(), newImg->getBitsPerComponent());
+//	CCLOG("fuckfuckfuck android %d,%d,%d,%d",newImg->getDataLen(), newImg->getWidth(), newImg->getHeight(), newImg->getBitsPerComponent());
 	
 //	CCImage* img = new CCImage();
 //	

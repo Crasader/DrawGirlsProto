@@ -389,7 +389,7 @@ public:
 		if((m_option & AttackOption::kGold))
 		{
 			FeverCoin* t_fc = FeverCoin::create(ccp2ip(cumberPosition), nullptr, nullptr);
-			CCLog("%x getParent", this);
+			CCLOG("%x getParent", this);
 			getParent()->addChild(t_fc, 5);
 			t_fc->startRemove();
 			mySGD->addChangeGoodsIngameGold(1);
@@ -832,7 +832,7 @@ public:
 			float random_float = 1.f + random_value/100.f;
 			
 			m_initRad = atan2f(diff.y, diff.x) * random_float;
-			m_currentRad = m_initRad + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
+			m_currentRad = m_initRad; // + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
 			scheduleUpdate();
 		}
 		return true;
@@ -922,7 +922,7 @@ public:
 			}
 			{
 				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
-				KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
+				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
 //				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
 				
 				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
@@ -935,7 +935,7 @@ public:
 				}
 				else 
 				{
-					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
+					//m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
 				}
 //				m_currentRad = m_currentRad + tt - m_currentRad;
 				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
@@ -943,7 +943,7 @@ public:
 				
 				if(m_selfRotation)
 				{
-					m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 20);
 				}
 				else
 				{
@@ -1242,7 +1242,7 @@ public:
 	}
 	virtual ~SpreadMissile()
 	{
-		CCLog("Spread ~");
+		CCLOG("Spread ~");
 	}
 	bool init(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int directions, AttackOption ao)
 	{
@@ -1613,7 +1613,7 @@ public:
 				}
 				else
 				{
-					CCLog("what!?");
+					CCLOG("what!?");
 					validPosition = true;
 				}
 
@@ -1662,7 +1662,7 @@ public:
 	}
 	virtual ~RangeAttack()
 	{
-		CCLog("~RangeAttack");
+		CCLOG("~RangeAttack");
 	}
 	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int jiggleInterval, AttackOption ao)
 	{

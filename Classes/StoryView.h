@@ -92,7 +92,7 @@ public:
 					}));
 					return;
 				}
-				CCLog("play next %s",nextAni.c_str());
+				CCLOG("play next %s",nextAni.c_str());
 				mAnimationManager1->runAnimationsForSequenceNamed(nextAni.c_str());
 				this->nextBtn->setVisible(false);
 			
@@ -183,24 +183,24 @@ public:
 			nextAni="end";
 		}
 		
-		CCLog("completedAnimationSequenceNamed %s",name);
+		CCLOG("completedAnimationSequenceNamed %s",name);
 	}
 	
 //	virtual SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, const char* pSelectorName)
 //	{
-//		CCLog("SEL_MenuHandler");
+//		CCLOG("SEL_MenuHandler");
 //		return NULL;
 //	}
 //	virtual SEL_CallFuncN onResolveCCBCCCallFuncSelector(CCObject * pTarget, const char* pSelectorName)
 //	{
-//		CCLog("SEL_CallFuncN");
+//		CCLOG("SEL_CallFuncN");
 //		CCB_SELECTORRESOLVER_CALLFUNC_GLUE(this, "step", StoryView::step);
 //		return NULL;
 //	}
 //	
 //	virtual SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, const char* pSelectorName)
 //	{
-//		CCLog("SEL_CCControlHandler");
+//		CCLOG("SEL_CCControlHandler");
 //		return NULL;
 //	}
 	

@@ -108,7 +108,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 		 [=](CCObject* _item) {
 			 m_menu->setTouchEnabled(false);
 			 CCMenuItemToggleWithTopHatLambda* item = dynamic_cast<CCMenuItemToggleWithTopHatLambda*>(_item);
-			 CCLog("%d", item->getSelectedIndex());
+			 CCLOG("%d", item->getSelectedIndex());
 			 if(m_state == SceneState::kStopHat) {
 				 m_selectComment->removeFromParent();
 				 item->m_hatTop->setSelectedIndex(0);
@@ -150,7 +150,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 										i.first->m_reward->setScale(t);
 									},
 									[=](float t) {
-										CCLog("end!!");
+										CCLOG("end!!");
 
 										m_state = SceneState::kShowReward2;
 
@@ -192,7 +192,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 														retryGame();
 													}
 													else {
-														CCLog("돈 없음");
+														CCLOG("돈 없음");
 													}
 												}
 												else if(m_gachaCategory == GachaCategory::kGoldGacha)
@@ -205,7 +205,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 														retryGame();
 													}
 													else {
-														CCLog("돈 없음");
+														CCLOG("돈 없음");
 													}
 												}
 
@@ -250,7 +250,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 							},
 							[=](float t)
 							{
-								CCLog("qq");
+								CCLOG("qq");
 							}));
 						 }
 						 topFollowBottom(); // 모자 위가 모자 밑둥을 따라감
@@ -269,7 +269,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 			 //					 item->m_reward->setVisible(true);
 			 //				 }
 
-			 CCLog("open!!");
+			 CCLOG("open!!");
 		 },
 		 hatBottomClose,
 		 hatBottomOpen, 0);
@@ -412,7 +412,7 @@ bool HatGachaSub::init(KSAlertView* av, std::function<void(void)> callback, cons
 //}
 //HatGacha::~HatGacha()
 //{
-	//CCLog("~hatgacha");
+	//CCLOG("~hatgacha");
 //}
 ////void HatGacha::registerWithTouchDispatcher()
 ////{

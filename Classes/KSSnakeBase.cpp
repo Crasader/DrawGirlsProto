@@ -22,7 +22,7 @@
 
 KSSnakeBase::~KSSnakeBase()
 {
-	CCLog("~KSSnakeBase");
+	CCLOG("~KSSnakeBase");
 }
 
 
@@ -98,7 +98,7 @@ void KSSnakeBase::setHeadAndBodies()
 {
 	SnakeTrace lastTrace = m_cumberTrace.back();
 //	float tt = rad2Deg( lastTrace.directionRad );
-	//	CCLog("deg %f", tt);
+	//	CCLOG("deg %f", tt);
 	//	m_headImg->setVisible(false);
 	m_headImg->setRotation(-rad2Deg( lastTrace.directionRad ));
 	
@@ -158,7 +158,7 @@ void KSSnakeBase::setHeadAndBodies()
 void KSSnakeBase::startAnimationNoDirection()
 {
 	// 돌자...
-	CCLog("Lets rotate");
+	CCLOG("Lets rotate");
 	if((m_state & kCumberStateNoDirection) == 0)
 	{
 		m_state |= kCumberStateNoDirection;
@@ -174,7 +174,7 @@ void KSSnakeBase::startAnimationNoDirection()
 
 void KSSnakeBase::animationNoDirection(float dt)
 {
-	//	CCLog("animationNoDirection");
+	//	CCLOG("animationNoDirection");
 	m_noDirection.timer += 1.f/60.f;
 	
 	if(m_noDirection.state == 1)
@@ -259,7 +259,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 	KSCumberBase::startDamageReaction(damage, angle, castCancel, stiffen);
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
-	CCLog("remain hp %f", m_remainHp);
+	CCLOG("remain hp %f", m_remainHp);
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -268,7 +268,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 	// 방사형으로 돌아가고 있는 중이라면
 	if((m_state & kCumberStateNoDirection) && castCancel)
 	{
-		CCLog("(m_state & kCumberStateNoDirection)");
+		CCLOG("(m_state & kCumberStateNoDirection)");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 	}
 	if((m_state & kCumberStateMoving) == 0 && castCancel)
@@ -277,18 +277,18 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 	}
 	if((m_state & kCumberStateDirection) && stiffen)
 	{
-		CCLog("(m_state & kCumberStateDirection)");
+		CCLOG("(m_state & kCumberStateDirection)");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
 		m_state = kCumberStateMoving; //#!
 		
 	}
 	if(((m_state & kCumberStateMoving) || m_state == kCumberStateDamaging) && stiffen)
 	{
-		CCLog("(m_state & kCumberStateMoving)");
+		CCLOG("(m_state & kCumberStateMoving)");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
+		//	CCLOG("%f %f", dx, dy);
 		
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
@@ -299,11 +299,11 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 	}
 	if((m_state & kCumberStateMoving) == 0 && stiffen)
 	{
-		CCLog("m_state == kCumberStateStop");
+		CCLOG("m_state == kCumberStateStop");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
-		//	CCLog("%f %f", dx, dy);
+		//	CCLOG("%f %f", dx, dy);
 		
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
@@ -421,7 +421,7 @@ void KSSnakeBase::scaleAdjustment(float dt)
 	
 	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && (m_state & kCumberStateNoDirection) == 0)
 	{
-		CCLog("upSize!");
+		CCLOG("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
 		setCumberScale(MIN(m_maxScale, getCumberScale() + m_scale.SCALE_ADDER));
 	}
@@ -575,13 +575,13 @@ void KSSnakeBase::onStartMoving()
 void KSSnakeBase::onStopMoving()
 {
 	m_state = 0;
-	CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
-	CCLog("stop!!");
+	CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
+	CCLOG("stop!!");
 }
 
 void KSSnakeBase::onPatternEnd()
 {
-	CCLog("onPatternEnd!!");
+	CCLOG("onPatternEnd!!");
 	m_noDirection.state = 2;
 	if(m_direction.state == 1)
 	{
@@ -606,13 +606,13 @@ void KSSnakeBase::stopCasting()
 	// 방사형으로 돌아가고 있는 중이라면
 	if((m_state & kCumberStateNoDirection))
 	{
-		CCLog("(m_state & kCumberStateNoDirection)");
+		CCLOG("(m_state & kCumberStateNoDirection)");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 
 	}
 	else if((m_state & kCumberStateDirection))
 	{
-		CCLog("(m_state & kCumberStateDirection)");
+		CCLOG("(m_state & kCumberStateDirection)");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
 		m_state = kCumberStateMoving; //#!
 
@@ -624,7 +624,7 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	CCPoint prevPosition = getPosition();
 	if(isnan(prevPosition.x))
 	{
-		CCLog("hg!!!!");
+		CCLOG("hg!!!!");
 	}
 	SnakeTrace tr;
 	tr.position = t_sp;
@@ -667,7 +667,7 @@ void KSSnakeBase::setPositionY( float t_y )
 
 const CCPoint& KSSnakeBase::getPosition()
 {
-	//		CCLog("snake position : %.2f, %.2f", m_headImg->getPositionX(), m_headImg->getPositionY());
+	//		CCLOG("snake position : %.2f, %.2f", m_headImg->getPositionX(), m_headImg->getPositionY());
 
 	return m_headImg->getPosition();
 }
@@ -687,12 +687,12 @@ void KSSnakeBase::attackBehavior( Json::Value pattern )
 	if(pattern["pattern"].asString() == "109")
 	{
 		m_state = 0;
-		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
 	else if( pattern["pattern"].asString() == "1007")
 	{
 		m_state = 0;
-		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
 	else
 	{

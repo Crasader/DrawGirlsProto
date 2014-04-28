@@ -185,11 +185,11 @@ void CountingGame::createObject(float dt)
 																			resultMark->setPosition(item->getPosition());
 																			addChild(resultMark, 10);
 																			
-																			CCLog("answer");
+																			CCLOG("answer");
 																			CCLabelBMFont* result = CCLabelBMFont::create("ANSWER", "allfont.fnt");
 																			result->setPosition(ccp(240, 160));
 																			addChild(result);
-																			CCLog("correct!!");
+																			CCLOG("correct!!");
 																			m_menu->setTouchEnabled(false);
 																			unscheduleUpdate();
 //																			mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);

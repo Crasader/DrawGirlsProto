@@ -126,7 +126,7 @@ void CommonBulletPattern::update(float dt)
 				
 				gun.degree.step();
 				m_cumber->onTargetingJack(jackPoint);
-//				CCLog("gun degree %f", gun.degree.getValue());
+//				CCLOG("gun degree %f", gun.degree.getValue());
 			}
 		}
 		for(auto& gun : pan)
@@ -323,7 +323,7 @@ void AttackPattern::selfRemoveSchedule()
 	if(getChildrenCount() == m_baseChildCount)
 	{
 		removeFromParentAndCleanup(true);
-		CCLog("self remove!!");
+		CCLOG("self remove!!");
 	}
 }
 
@@ -3518,7 +3518,7 @@ void DynamiteWrapper::update( float dt )
 
 AlongOfTheLineWrapper::~AlongOfTheLineWrapper()
 {
-	CCLog("remove s 17");
+	CCLOG("remove s 17");
 }
 
 void AlongOfTheLineWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
@@ -3732,7 +3732,7 @@ void CobWeb::framing()
 			if(cobwebPosition.x - 100 <= jackPosition.x && jackPosition.x <= cobwebPosition.x + 100 &&
 				cobwebPosition.y - 100 <= jackPosition.y && jackPosition.y <= cobwebPosition.y + 100)
 			{
-				//					CCLog("-0.5");
+				//					CCLOG("-0.5");
 				myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 0.5f);
 				state = kInner;
 			}
@@ -3751,7 +3751,7 @@ void CobWeb::framing()
 				if(state == kOuter)
 				{
 					myGD->setAlphaSpeed(myGD->getAlphaSpeed() - decreaseSpeed);
-					CCLog("-0.5");
+					CCLOG("-0.5");
 					state = kInner;
 				}
 			}
@@ -3761,7 +3761,7 @@ void CobWeb::framing()
 				if(state == kInner)
 				{
 					myGD->setAlphaSpeed(myGD->getAlphaSpeed() + decreaseSpeed);
-					CCLog("+0.5");
+					CCLOG("+0.5");
 					state = kOuter;
 				}
 			}

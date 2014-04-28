@@ -427,16 +427,16 @@ void AchievePopup::cellAction( CCObject* sender )
 
 void AchievePopup::resultSaveUserData(Json::Value result_data)
 {
-	CCLog("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("reward get success!!");
+		CCLOG("reward get success!!");
 		
 		setAchieveTable();
 	}
 	else
 	{
-		CCLog("reward get fail!!");
+		CCLOG("reward get fail!!");
 		
 		mySGD->clearChangeGoods();
 		
@@ -693,7 +693,7 @@ void AchievePopup::scrollViewDidZoom( CCScrollView* view ){}
 
 void AchievePopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 {
-	//		CCLog("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
+	//		CCLOG("%s", m_scoreList[cell->getIdx()]["user_id"].asString().c_str());
 }
 
 CCSize AchievePopup::cellSizeForTable( CCTableView *table )
@@ -711,7 +711,7 @@ unsigned int AchievePopup::numberOfCellsInTableView( CCTableView *table )
 
 bool AchievePopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 {
-	CCLog("touch swallow!!!");
+	CCLOG("touch swallow!!!");
 	
 	return true;
 }
@@ -877,16 +877,16 @@ void AchievePopup::takeAllReward(CCObject* sender)
 
 void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 {
-	CCLog("resultAllTakeSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultAllTakeSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("reward get success!!");
+		CCLOG("reward get success!!");
 		
 		setAchieveTable();
 	}
 	else
 	{
-		CCLog("reward get fail!!");
+		CCLOG("reward get fail!!");
 		
 		mySGD->clearChangeGoods();
 		

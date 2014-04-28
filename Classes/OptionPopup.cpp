@@ -93,6 +93,10 @@ bool OptionPopup::init()
 //		KS::KSLog("in-app test \n%", v);
 //	});
 	
+	vector<CommandParam> send_command_list;
+	send_command_list.push_back(CommandParam("gettimeinfo", nullptr,"{'test':'test'}"));
+	GraphDog::get()->command(send_command_list);
+	
 	
 	setTouchEnabled(true);
 	
@@ -428,7 +432,8 @@ bool OptionPopup::init()
 	id_label->setPosition(ccp(30,45));
 	main_case->addChild(id_label, kOP_Z_back);
 	
-	CCLabelTTF* my_id_label = CCLabelTTF::create(KS::longLongToStr(hspConnector::get()->myKakaoInfo.get("userIndex", 0).asInt64() + 1000).c_str(), mySGD->getFont().c_str(), 11);
+	
+	CCLabelTTF* my_id_label = CCLabelTTF::create(CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString(), mySGD->getFont().c_str(), 11);
 	my_id_label->setAnchorPoint(ccp(0,0.5));
 	my_id_label->setPosition(ccp(78,45));
 	main_case->addChild(my_id_label, kOP_Z_content);
@@ -698,7 +703,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 
 														 hspConnector::get()->logout([=](Json::Value result_data)
 																												 {
-																													 CCLog("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																													 CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 																													 if(result_data["error"]["isSuccess"].asBool())
 																													 {
 																														 myDSH->clear();
@@ -714,7 +719,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 																														 cancel_button->setVisible(true);
 																														 ok_button->setVisible(true);
 																														 
-																														 CCLog("fail logout");
+																														 CCLOG("fail logout");
 																													 }
 																												 });
 													 });
@@ -827,7 +832,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 																															cancel_button->setVisible(true);
 																															ok_button->setVisible(true);
 																															
-																															CCLog("fail dropoutuser");
+																															CCLOG("fail dropoutuser");
 																														}
 																													});
 													 });

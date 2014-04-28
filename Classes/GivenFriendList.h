@@ -128,7 +128,7 @@ public:
 			("friendsearch_ok.png", "friendsearch_ok.png",
 			 [=](CCObject*)
 			 {
-				 CCLog("accept");
+				 CCLOG("accept");
 				 KS::KSLog("%", mail);
 				 // 여기는 mailpopup 쪽 알아봄.
 				 Json::Value param;
@@ -177,7 +177,7 @@ public:
 																													 exceptionPopup->setContentSize(ttf->getDimensions());
 																													 exceptionPopup->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																																										 [=](CCObject* e) {
-																																											 CCLog("ok!!");
+																																											 CCLOG("ok!!");
 																																										 });
 																													 addChild(exceptionPopup, 1);
 																													 exceptionPopup->show();																																									
@@ -201,7 +201,7 @@ public:
 		CCMenuItemLambda* reject = CCMenuItemImageLambda::create("friendsearch_no.png", "friendsearch_no.png",
 																														 [=](CCObject*)
 																														 {
-																															 CCLog("accept");
+																															 CCLOG("accept");
 																															 KS::KSLog("%", mail);
 																															 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																																						 [=](Json::Value r)
@@ -231,7 +231,7 @@ public:
 	}
 	virtual void tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 	{
-		CCLog("touch!!");
+		CCLOG("touch!!");
 	}
 	virtual CCSize cellSizeForTable (CCTableView * table)
 	{

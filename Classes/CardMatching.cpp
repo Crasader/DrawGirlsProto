@@ -152,7 +152,7 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 //								 CCMenuItemSpriteLambda::create(pps, pps2,
 //																																							 [=](CCObject* s)
 //																																							 {
-//																																								 CCLog("c!");
+//																																								 CCLOG("c!");
 //																																							 });
 								 item->setOpacity(0);
 								 item->setUserData((void*)loop); // 짝.
@@ -220,7 +220,7 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 																																										 m_correctCount++;
 																																										 if(m_correctCount == PUZZLE_ROWS * PUZZLE_COLS / 2)
 																																										 {
-																																											 CCLog("END!!");
+																																											 CCLOG("END!!");
 																																											 CCSprite* successSprite = CCSprite::create("bonusgame_succes.png");
 																																											 successSprite->setPosition(ccp(240, 160));
 																																											 addChild(successSprite);
@@ -228,7 +228,7 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 																																											 reward->setPosition(ccp(205, 133));
 																																											 addChild(reward);
 																																											 reward->setScale(2.f);
-																																											 CCLog("correct!!");
+																																											 CCLOG("correct!!");
 																																											 m_menu->setTouchEnabled(false);
 																																											 unscheduleUpdate();
 //																																											 mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby) + 1);
@@ -254,7 +254,7 @@ bool CardMatching::init(int priority, const std::function<void(CCObject*, SEL_Ca
 																																									 }
 																																									 break;
 																																								 case MatchingState::kDiff:
-																																									 CCLog("no click!");
+																																									 CCLOG("no click!");
 																																									 break;
 																																							 }
 																																								 

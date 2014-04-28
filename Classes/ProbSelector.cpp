@@ -22,7 +22,7 @@ int ProbSelector::sel(double args, ...)
 		
 		
 		ps.push_back(f);
-		//			cocos2d::CCLog("%f", f);
+		//			cocos2d::CCLOG("%f", f);
 	}
 	
 	
@@ -33,7 +33,7 @@ int ProbSelector::sel(double args, ...)
 	assert(sum > 0.9f && sum <= 1.1f);
 	
 	float _01 = well512.GetFloatValue();
-//	cocos2d::CCLog("%f", _01);
+//	cocos2d::CCLOG("%f", _01);
 	float t = 0;
 	int _index = 0;
 	bool finded = false;

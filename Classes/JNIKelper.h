@@ -33,7 +33,7 @@ public:
 	
 	string callJava_getUTF8String(string _strkey)
 	{
-		CCLog("call jnikelper");
+		CCLOG("call jnikelper");
 		JniMethodInfo __minfo;
 		
 		if(JniHelper::getMethodInfo(__minfo, className.c_str(), "getUTF8String", "(Ljava/lang/String;)Ljava/lang/String;"))

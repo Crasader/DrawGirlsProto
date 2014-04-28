@@ -588,7 +588,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 			AudioEngine::sharedInstance()->playEffect("se_lock.mp3", false);
 			
 			int puzzle_number = tag - kMainFlowTableCellTag_buyBase;
-			CCLog("puzzle_number : %d", puzzle_number);
+			CCLOG("puzzle_number : %d", puzzle_number);
 			
 			ASPopupView* t_popup = ASPopupView::create(-200);
 			
@@ -1826,7 +1826,7 @@ void MainFlowScene::setBottom()
 //		for(int i=0; i<rewards.size(); i++)
 //		{
 //			int rewardValue = rewards[i]["rewardvalue"].asInt();
-//			CCLog("reward !!! : %d", rewardValue);
+//			CCLOG("reward !!! : %d", rewardValue);
 //		}
 		
 		//			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
@@ -1899,7 +1899,7 @@ void MainFlowScene::setBottom()
 //		for(int i=0; i<rewards.size(); i++)
 //		{
 //			int rewardValue = rewards[i]["rewardvalue"].asInt();
-//			CCLog("reward !!! : %d", rewardValue);
+//			CCLOG("reward !!! : %d", rewardValue);
 //		}
 		
 		//			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
@@ -1923,7 +1923,7 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 	for(int i=0; i<rewards.size(); i++)
 	{
 		int rewardValue = rewards[i]["rewardvalue"].asInt();
-		CCLog("reward !!! : %d", rewardValue);
+		CCLOG("reward !!! : %d", rewardValue);
 	}
 	
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
@@ -1960,7 +1960,7 @@ void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 	for(int i=0; i<rewards.size(); i++)
 	{
 		int rewardValue = rewards[i]["rewardvalue"].asInt();
-		CCLog("reward !!! : %d", rewardValue);
+		CCLOG("reward !!! : %d", rewardValue);
 	}
 	
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);

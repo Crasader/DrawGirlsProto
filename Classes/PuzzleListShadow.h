@@ -46,7 +46,7 @@ private:
 	{
 		if(getParent() && getParent()->getParent())
 		{
-			//CCLog("puzzle : %d ,  position x : %.1f", puzzle_number, getPositionX()+getParent()->getPositionX()+getParent()->getParent()->getPositionX());
+			//CCLOG("puzzle : %d ,  position x : %.1f", puzzle_number, getPositionX()+getParent()->getPositionX()+getParent()->getParent()->getPositionX());
 			float position_x = getPositionX()+getParent()->getPositionX()+getParent()->getParent()->getPositionX();
 			position_x -= 240.f;
 			position_x = fabsf(position_x);

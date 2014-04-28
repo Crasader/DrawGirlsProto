@@ -837,7 +837,7 @@ public:
 	CREATE_FUNC_CCP(ThrowBombWrapper);
 	virtual ~ThrowBombWrapper()
 	{
-		CCLog("bomb throw destroy");
+		CCLOG("bomb throw destroy");
 	}
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	virtual void stopMyAction();

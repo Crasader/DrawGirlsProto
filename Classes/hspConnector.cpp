@@ -119,12 +119,12 @@ void hspConnector::sendPushMessage(){
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-	CCLog("call sendPushMessage");
+	CCLOG("call sendPushMessage");
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "sendPushMessage", "()V")) {
 		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
-		CCLog("result sendPushMessage");
+		CCLOG("result sendPushMessage");
 		//		jlong result = t.env->CallStaticLongMethod(t.classID, t.methodID);
 		//		t.env->DeleteLocalRef(t.classID);
 		//		return (long long int)result;
@@ -163,7 +163,7 @@ bool hspConnector::setupHSPonIOS(int hspGameNo,string hspGameID,string hspGameVe
 
 void jsonLog(string tag,Json::Value value){
 	Json::StyledWriter wr;
-	CCLog("%s -- %s",tag.c_str(),wr.write(value).c_str());
+	CCLOG("%s -- %s",tag.c_str(),wr.write(value).c_str());
 }
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -233,7 +233,7 @@ void addErrorInResult(void*resultDict,void*error){
 
 void* jsonToDict(Json::Value param){
 	Json::FastWriter wr;
-	CCLog("loadprofile param string %s",wr.write(param).c_str());
+	CCLOG("loadprofile param string %s",wr.write(param).c_str());
 	NSString *jsonString = [NSString stringWithUTF8String:wr.write(param).c_str()];
 	NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
 	NSDictionary *parameters = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:nil];
@@ -349,7 +349,7 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 		graphdog->setMemberID(hspConnector::get()->getMemberID());
 
 		string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString();
-		CCLog("member id is %s",hspids.c_str());
+		CCLOG("member id is %s",hspids.c_str());
 		graphdog->setSocialID(hspids);
 
 		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
@@ -415,7 +415,7 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObjec
 {
 	GraphDog::get()->addTarget(target);
 	function<void(Json::Value)> sFunc = [=](Json::Value value){
-		CCLog("checkDelegator sFunc call");
+		CCLOG("checkDelegator sFunc call");
 		if(GraphDog::get()->cehckTarget(target))
 			func(value);
 	};
@@ -471,7 +471,7 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam, 
 {
 	GraphDog::get()->addTarget(target);
 	function<void(Json::Value)> sFunc = [=](Json::Value value){
-		CCLog("checkDelegator sFunc call");
+		CCLOG("checkDelegator sFunc call");
 		if(GraphDog::get()->cehckTarget(target))
 			func(value);
 	};
@@ -546,7 +546,7 @@ void hspConnector::launchPromotion()
 //        }
 //        
 //        Json::StyledWriter wr;
-//        CCLog("step1 %s", wr.write(appFriends).c_str());
+//        CCLOG("step1 %s", wr.write(appFriends).c_str());
 //        param["delekey"]=_key;
 //        this->queryHSPMemberNos(param, 0, this, hsp_selector(hspConnector::kLoadFriendsStep2));
 //        
@@ -571,8 +571,8 @@ void hspConnector::launchPromotion()
 //    }
 //    
 //    Json::StyledWriter wr;
-//    CCLog("step0 %s", wr.write(obj).c_str());
-//    CCLog("step2 %s", wr.write(appFriends).c_str());
+//    CCLOG("step0 %s", wr.write(obj).c_str());
+//    CCLOG("step2 %s", wr.write(appFriends).c_str());
 //    
 //    param["delekey"]=obj["param"]["delekey"].asInt();
 //    
@@ -609,7 +609,7 @@ void hspConnector::launchPromotion()
 
 // kakao only
 //void hspConnector::kLoadLocalUser(Json::Value callbackParam, jsonSelType func){
-//    CCLog("kLoadLocalUser function");
+//    CCLOG("kLoadLocalUser function");
 //    Json::Value param;
 //#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 //    [[KALocalUser localUser] loadLocalUserWithCompletionHandler:^(NSDictionary *response, NSError *error) {

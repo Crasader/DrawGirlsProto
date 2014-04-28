@@ -137,7 +137,7 @@ public:
 	}
 	virtual ~KSCumberBase()
 	{
-		CCLog("huk hide.dfkfdjgfdsjgldfsjgldfjgldf!!!!!!!");
+		CCLOG("huk hide.dfkfdjgfdsjgldfsjgldfjgldf!!!!!!!");
 	}
 	virtual void checkConfine(float dt) = 0;
 	virtual bool init();
@@ -287,6 +287,7 @@ public:
 		int collisionCount;
 		float timer;
 		float followDegree;
+		float stopTimer; //멈춤카운터
 	}m_follow;
 	struct Scale
 	{

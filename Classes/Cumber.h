@@ -39,7 +39,7 @@ public:
 	
 	virtual ~CumberParent()
 	{
-		CCLog("~CumberParent");
+		CCLOG("~CumberParent");
 	}
 	
 	void setMainCumberState(int t_cs); // no used

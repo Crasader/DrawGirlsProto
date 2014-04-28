@@ -59,7 +59,7 @@ bool KSCircleBase::init(const string& ccbiName)
 bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCancel, bool stiffen)
 {
 	KSCumberBase::startDamageReaction(damage, angle, castCancel, stiffen);
-	CCLog("damaga!!!");
+	CCLOG("damaga!!!");
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
@@ -70,7 +70,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 
 	if((m_state & kCumberStateNoDirection) && castCancel)
 	{
-		CCLog("(m_state & kCumberStateNoDirection)");
+		CCLOG("(m_state & kCumberStateNoDirection)");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 	}
 	if( ((m_state & kCumberStateMoving) || m_state == kCumberStateDamaging) && stiffen )
@@ -112,7 +112,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 
 void KSCircleBase::startAnimationNoDirection()
 {
-	CCLog("Lets rotate");
+	CCLOG("Lets rotate");
 	if((m_state & kCumberStateNoDirection) == 0)
 	{
 		m_state |= kCumberStateNoDirection;
@@ -168,7 +168,7 @@ void KSCircleBase::animationNoDirection(float dt)
 
 void KSCircleBase::onPatternEnd()
 {
-	CCLog("onPatternEnd!!");
+	CCLOG("onPatternEnd!!");
 	m_noDirection.state = 2;
 }
 
@@ -176,7 +176,7 @@ void KSCircleBase::onStartGame()
 {
 	KSCumberBase::onStartGame();
 	m_noDirection.state = 2;
-	CCLog("onStartGame!!");
+	CCLOG("onStartGame!!");
 }
 
 COLLISION_CODE KSCircleBase::crashLooper(const set<IntPoint>& v, IntPoint* cp)
@@ -339,7 +339,7 @@ void KSCircleBase::scaleAdjustment(float dt)
 	
 	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && (m_state & kCumberStateNoDirection) == 0)
 	{
-		CCLog("upSize!");
+		CCLOG("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
 		setCumberScale(MIN(m_maxScale, getCumberScale() + m_scale.SCALE_ADDER));
 	}
@@ -352,19 +352,19 @@ void KSCircleBase::scaleAdjustment(float dt)
 
 SEL_MenuHandler KSCircleBase::onResolveCCBCCMenuItemSelector( CCObject * pTarget, const char* pSelectorName )
 {
-	CCLog("%s", pSelectorName);
+	CCLOG("%s", pSelectorName);
 	return NULL;
 }
 
 SEL_CallFuncN KSCircleBase::onResolveCCBCCCallFuncSelector( CCObject * pTarget, const char* pSelectorName )
 {
-	CCLog("%s", pSelectorName);
+	CCLOG("%s", pSelectorName);
 	return NULL;
 }
 
 SEL_CCControlHandler KSCircleBase::onResolveCCBCCControlSelector( CCObject * pTarget, const char* pSelectorName )
 {
-	CCLog("%s", pSelectorName);
+	CCLOG("%s", pSelectorName);
 	return NULL;
 }
 
@@ -467,7 +467,7 @@ void KSCircleBase::onStartMoving()
 void KSCircleBase::onStopMoving()
 {
 	m_state = 0;
-	CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+	CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 }
 
 void KSCircleBase::stopCasting()
@@ -476,14 +476,14 @@ void KSCircleBase::stopCasting()
 	// 방사형으로 돌아가고 있는 중이라면
 	if((m_state & kCumberStateNoDirection))
 	{
-		CCLog("(m_state & kCumberStateNoDirection)");
+		CCLOG("(m_state & kCumberStateNoDirection)");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 	}
 }
 
 void KSCircleBase::setPosition( const CCPoint& t_sp )
 {
-	//CCLog("setPos %f %f", t_sp.x, t_sp.y);
+	//CCLOG("setPos %f %f", t_sp.x, t_sp.y);
 	//		KSCumberBase::setPosition(t_sp);
 	if(m_flipProperty)
 	{
@@ -532,15 +532,15 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 		m_state = 0;
 	if(pattern == "109")
 	{
-		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
 	else if( pattern == "1007")
 	{
-		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
 	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 	{
-		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 		//			startAnimationNoDirection();
 	}
 	else
@@ -666,7 +666,7 @@ void KSCircleBase::update( float dt )
 					{
 						for(int x = bulletPoint.x - sizex; x<=bulletPoint.x + sizex; x++)
 						{
-							//CCLog("\t %d %d", x, y);
+							//CCLOG("\t %d %d", x, y);
 							if(IntPoint(x, y).isInnerMap() &&
 								mapState[x][y] == mapType::mapNewline)
 							{
