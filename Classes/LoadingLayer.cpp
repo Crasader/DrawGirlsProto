@@ -10,17 +10,23 @@
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
 
-LoadingLayer* LoadingLayer::create(int t_touch_priority)
+LoadingLayer* LoadingLayer::create(int t_touch_priority, bool is_ingame)
 {
 	LoadingLayer* t_tnp = new LoadingLayer();
-	t_tnp->myInit(t_touch_priority);
+	t_tnp->myInit(t_touch_priority, is_ingame);
 	t_tnp->autorelease();
 	return t_tnp;
 }
 
-void LoadingLayer::myInit(int t_touch_priority)
+void LoadingLayer::myInit(int t_touch_priority, bool is_ingame)
 {
 	touch_priority = t_touch_priority;
+	
+	float y_value;
+	if(is_ingame)
+		y_value = myDSH->ui_center_y;
+	else
+		y_value = 160;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -29,14 +35,15 @@ void LoadingLayer::myInit(int t_touch_priority)
 	
 	gray = CCSprite::create("back_gray.png");
 	gray->setOpacity(0);
-	gray->setPosition(ccp(240,160));
+	gray->setPosition(ccp(240,y_value));
 	gray->setScaleX(screen_scale_x);
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray);
 	
 	loading_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 30);
 	loading_label->setOpacity(0);
-	loading_label->setPosition(ccp(240,160));
+	
+	loading_label->setPosition(ccp(240,y_value));
 	addChild(loading_label);
 	
 	loading_text = "Loading...";
