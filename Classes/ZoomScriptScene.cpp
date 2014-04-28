@@ -324,7 +324,7 @@ void ZoomScript::menuAction(CCObject *sender)
 				
 				bool is_rank_up_chance = false;
 				PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-				if(t_history.try_count >= 5 && ((take_grade == 2 && !t_history.is_clear[2]) || (take_grade == 3 && !t_history.is_clear[3])))
+				if(t_history.try_count >= mySGD->getRankUpConditionCount() && ((take_grade == 2 && !t_history.is_clear[2]) || (take_grade == 3 && !t_history.is_clear[3])))
 				{
 					is_rank_up_chance = true;
 				}
