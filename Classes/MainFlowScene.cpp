@@ -871,12 +871,19 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //	if(puzzle_number == 1 || mySGD->getPuzzleHistory(puzzle_number).is_open || (mySGD->getPuzzleHistory(puzzle_number-1).is_clear && NSDS_GI(puzzle_number, kSDS_PZ_point_i) == 0))
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
+		
+		CCSprite* mainTwinkle = KS::loadCCBI<CCSprite*>(this, "main_twinkle.ccbi").first;
+		
 		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
 		CCSprite* s_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
 		s_open_back->setColor(ccGRAY);
 		
+		
 		CCMenuItem* open_item = CCMenuItemSprite::create(n_open_back, s_open_back, this, menu_selector(MainFlowScene::cellAction));
 		open_item->setTag(kMainFlowTableCellTag_openBase + puzzle_number);
+		mainTwinkle->setAnchorPoint(ccp(0,0));
+		mainTwinkle->setPosition(ccp(mainTwinkle->getContentSize().width/2,mainTwinkle->getContentSize().height/2));
+		cell_node->addChild(mainTwinkle,100);
 		
 		ScrollMenu* open_menu = ScrollMenu::create(open_item, NULL);
 		open_menu->setPosition(CCPointZero);

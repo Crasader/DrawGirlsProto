@@ -37,14 +37,15 @@ public:
 	
 private:
 	int touch_priority;
-	CCMenu* close_menu;
+	//CCMenu* close_menu;
 	Json::Value notice_list;
 	function<void(CCObject*)> end_selector;
 	CCSprite* show_content;
 	CCScale9Sprite* case_back;
 	CCLabelTTF* title_label;
-	CCMenu* check_menu;
-	CCSprite* check_img;
+	CCLabelTTF* content_label;
+	//CCMenu* check_menu;
+	//CCSprite* check_img;
 	
 	bool is_not_show_three_day;
 	
@@ -52,12 +53,13 @@ private:
 	
 	bool is_menu_enable;
 	
-	
+	void loadNotice();
 	void menuAction(CCObject* sender);
 	
 	void loadedAction()
 	{
-		show_content->setPosition(ccp(-show_content->getContentSize().width/2.f, -show_content->getContentSize().height/2.f-16));
+		is_menu_enable=true;
+		//show_content->setPosition(ccp(-show_content->getContentSize().width/2.f, -show_content->getContentSize().height/2.f-16));
 	}
 	
 	void myInit(int t_touch_priority, function<void(CCObject*)> t_selector, Json::Value t_noti_list);
