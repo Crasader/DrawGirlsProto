@@ -785,11 +785,38 @@ void MapScanner::setTopBottomBlock()
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
 		
+		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, 59, 26-sub_value)));
+		
+//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//		if(screen_scale_x < 1.f)
+//			screen_scale_x = 1.f;
+//		
+//		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//		
+//		float change_scale = 1.f;
+//		CCPoint change_origin = ccp(0,0);
+//		if(screen_scale_x > 1.f)
+//		{
+//			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+//			change_scale = screen_scale_x;
+//		}
+//		if(screen_scale_y > 1.f)
+//			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+//		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+//		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		
+		t_clipping->getStencil()->setAnchorPoint(ccp(0.5,0));
+		t_clipping->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
+		addChild(t_clipping, blockZorder);
+		
+		t_clipping->setAlphaThreshold(0.1f);
+		
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
 		lock_label->setAnchorPoint(ccp(0.5f,0.f));
 		lock_label->enableOuterStroke(ccBLACK, 1.f);
-		lock_label->setPosition(ccp(29.5f,5));
-		top_block_lock->addChild(lock_label);
+		lock_label->setPosition(ccp(0,5));
+		t_clipping->addChild(lock_label);
 	}
 	else
 	{
@@ -860,11 +887,45 @@ void MapScanner::setTopBottomBlock()
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
 		
+		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, 59, 26-sub_value)));
+		
+		//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		//		if(screen_scale_x < 1.f)
+		//			screen_scale_x = 1.f;
+		//
+		//		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		//
+		//		float change_scale = 1.f;
+		//		CCPoint change_origin = ccp(0,0);
+		//		if(screen_scale_x > 1.f)
+		//		{
+		//			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+		//			change_scale = screen_scale_x;
+		//		}
+		//		if(screen_scale_y > 1.f)
+		//			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+		//		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+		//		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		
+		t_clipping->getStencil()->setAnchorPoint(ccp(0.5,1.f));
+		t_clipping->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
+		addChild(t_clipping, blockZorder);
+		
+		t_clipping->setAlphaThreshold(0.1f);
+		
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
 		lock_label->setAnchorPoint(ccp(0.5f,1.f));
 		lock_label->enableOuterStroke(ccBLACK, 1.f);
-		lock_label->setPosition(ccp(29.5f,26-sub_value-5));
-		bottom_block_lock->addChild(lock_label);
+		lock_label->setPosition(ccp(0,-5));
+		t_clipping->addChild(lock_label);
+		
+		
+//		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 13);
+//		lock_label->setAnchorPoint(ccp(0.5f,1.f));
+//		lock_label->enableOuterStroke(ccBLACK, 1.f);
+//		lock_label->setPosition(ccp(29.5f,26-sub_value-5));
+//		bottom_block_lock->addChild(lock_label);
 	}
 	else
 	{
