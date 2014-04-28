@@ -59,7 +59,7 @@ void SaveData::createJSON(string filename)
 		Json::Reader reader;
 		reader.parse("{}", file_sync[key]);
 //		.loadFromString("{}");
-		cocos2d::CCLOG("create json : %s", filename.c_str());
+		CCLOG("create json : %s", filename.c_str());
 	}
 	else
 	{
