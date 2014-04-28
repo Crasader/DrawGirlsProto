@@ -99,6 +99,16 @@ public:
 	string open_type;
 };
 
+class TimeInfo{
+public:
+	bool is_loaded;
+	KSProtectVar<unsigned int> timestamp;
+	KSProtectVar<unsigned int> weekNo;
+	KSProtectVar<int> weekday;
+	KSProtectVar<long long int> date;
+	KSProtectVar<int> hour;
+};
+
 enum ReplayKey
 {
 	kReplayKey_timeStamp = 0,
@@ -487,6 +497,7 @@ public:
 	void initProperties(Json::Value t_list);
 	string getGoodsTypeToKey(GoodsType t_type);
 	GoodsType getGoodsKeyToType(string t_key);
+	GoodsType getItemCodeToGoodsType(ITEM_CODE t_code);
 	void addChangeGoodsIngameGold(int t_value);
 	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
@@ -498,6 +509,8 @@ public:
 	void saveChangeGoodsTransaction(Json::Value result_data);
 	
 	int getGoodsValue(GoodsType t_type);
+	
+	TimeInfo keep_time_info;
 	
 private:
 	bool is_not_cleared_stage;

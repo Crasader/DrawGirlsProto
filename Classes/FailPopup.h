@@ -50,6 +50,7 @@ public:
 	virtual void onEnter();
 	
 	std::function<void()> replay_func;
+	std::function<void()> goToMainFlow_func;
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
@@ -144,6 +145,8 @@ private:
 	CCSprite* loading_img;
 	
 	void resultGetRank(Json::Value result_data);
+	bool is_go_to_mainflow;
+	void resultGetTime(Json::Value result_data);
 };
 
 #endif /* defined(__DGproto__FailPopup__) */

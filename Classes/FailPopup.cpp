@@ -454,6 +454,8 @@ bool FailPopup::init()
 	param2["memberID"] = hspConnector::get()->getSocialID();
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
+	mySGD->keep_time_info.is_loaded = false;
+	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
 	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
 								  {
@@ -497,6 +499,110 @@ bool FailPopup::init()
 FailPopup::~FailPopup()
 {
 	hspConnector::get()->removeTarget(this);
+}
+
+void FailPopup::resultGetTime(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->keep_time_info.timestamp = result_data["timestamp"].asUInt();
+		mySGD->keep_time_info.weekNo = result_data["weekNo"].asUInt();
+		mySGD->keep_time_info.weekday = result_data["weekday"].asInt();
+		mySGD->keep_time_info.date = result_data["date"].asInt64();
+		mySGD->keep_time_info.hour = result_data["hour"].asInt();
+		mySGD->keep_time_info.is_loaded = true;
+		
+		is_go_to_mainflow = false;
+		
+		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open;
+		
+		if(!is_open)
+		{
+			string puzzle_condition = NSDS_GS(puzzle_number, kSDS_PZ_condition_s);
+			
+			Json::Value condition_list;
+			Json::Reader reader;
+			reader.parse(puzzle_condition, condition_list);
+			
+			if(condition_list.size() <= 0)
+				is_open = true;
+			
+			bool is_base_condition_success = true;
+			
+			for(int i=0;!is_open && i<condition_list.size();i++)
+			{
+				Json::Value t_condition_and = condition_list[i];
+				
+				bool and_open = true;
+				//				bool is_time_condition = false;
+				
+				for(int j=0;and_open && j<t_condition_and.size();j++)
+				{
+					Json::Value t_condition = t_condition_and[j];
+					string t_type = t_condition["type"].asString();
+					if(t_type == "p")
+					{
+						if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+						{
+							and_open = false;
+							is_base_condition_success = false;
+						}
+					}
+					else if(t_type == "s")
+					{
+						if(mySGD->getClearStarCount() < t_condition["value"].asInt())
+						{
+							and_open = false;
+							is_base_condition_success = false;
+						}
+					}
+					else if(t_type == "r")
+					{
+						and_open = false;
+					}
+					else if(t_type == "w")
+					{
+						//						is_time_condition = true;
+						if(!mySGD->keep_time_info.is_loaded)
+							and_open = false;
+						else
+						{
+							int weekday = t_condition["weekday"].asInt();
+							if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+								and_open = false;
+							if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+								and_open = false;
+						}
+					}
+					else if(t_type == "d")
+					{
+						//						is_time_condition = true;
+						if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+							and_open = false;
+					}
+				}
+				
+				if(and_open)
+				{
+					is_open = true;
+					//					if(!is_time_condition)
+					//					{
+					//						PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+					//						t_history.is_open = true;
+					//						t_history.open_type = "무료";
+					//						mySGD->setPuzzleHistory(t_history, nullptr);
+					//					}
+				}
+			}
+			
+			if(!is_open)
+			{
+				is_go_to_mainflow = true;
+				replay_menu->setEnabled(false);
+			}
+		}
+	}
 }
 
 void FailPopup::resultGetRank(Json::Value result_data)
@@ -728,6 +834,8 @@ void FailPopup::endHidePopup()
 	
 	if(target_final)
 		(target_final->*delegate_final)();
+	if(is_go_to_mainflow)
+		goToMainFlow_func();
 	removeFromParent();
 }
 
@@ -1121,6 +1229,11 @@ void FailPopup::menuAction(CCObject* pSender)
 	
 	if(tag == kMT_FP_main)
 	{
+		if(is_go_to_mainflow)
+		{
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_timeOutFrame)), 9999);
+		}
+		
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 //		mySGD->resetLabels();

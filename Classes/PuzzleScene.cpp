@@ -544,6 +544,7 @@ void PuzzleScene::showClearPopup()
 	ClearPopup* t_popup = ClearPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideClearPopup));
 	t_popup->replay_func = [=](){openSettingPopup();};
+	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	t_popup->is_take_star_effect = true;
 	addChild(t_popup, kPuzzleZorder_popup);
 }
@@ -850,6 +851,7 @@ void PuzzleScene::showFailPopup()
 	FailPopup* t_popup = FailPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideFailPopup));
 	t_popup->replay_func = [=](){openSettingPopup();};
+	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -1442,6 +1444,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 			
 			StartSettingPopup* t_popup = StartSettingPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+			t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 			addChild(t_popup, kPuzzleZorder_popup);
 //			CCDirector::sharedDirector()->replaceScene(StartSettingScene::scene());
 		}

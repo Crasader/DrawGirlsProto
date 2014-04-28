@@ -264,11 +264,20 @@ void StartSettingPopup::setMain()
 		if(!myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
-			myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, t_code, myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_code)+mySGD->getBonusItemCnt(t_code));
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+			
+			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
 		}
 	}
-	myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+	mySGD->changeGoods([=](Json::Value result_data)
+					   {
+						   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+							{
+								myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+							}
+					   });
+	
+	
 	
 	if(!show_item_popup.empty())
 	{
@@ -324,7 +333,7 @@ void StartSettingPopup::setMain()
 				}
 			}
 			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
-			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
+			is_price_usable = is_price_usable || (mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic)) > 0); // 소지하고 있는지
 			
 			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable)
 			{
@@ -386,7 +395,7 @@ void StartSettingPopup::setMain()
 				is_selected_item.push_back(false);
 			}
 			
-			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
+			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 			cnt_label->setPosition(ccp(21, -21));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
@@ -937,7 +946,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			item_menu->setTouchPriority(touch_priority);
 			
 			
-			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
+			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 			cnt_label->setPosition(ccp(21, -21));
@@ -960,7 +969,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			ITEM_CODE t_ic = item_list[tag-1];
 			
 			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
-			is_price_usable = is_price_usable || (myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic) > 0); // 소지하고 있는지
+			is_price_usable = is_price_usable || (mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic)) > 0); // 소지하고 있는지
 			
 			if(getSelectedItemCount() < 3 && is_price_usable)
 			{
@@ -1028,7 +1037,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				is_selected_item[tag-1] = false;
 			}
 			
-			int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, t_ic);
+			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 			cnt_label->setPosition(ccp(21, -21));
@@ -1116,6 +1125,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											addChild(t_loading, 9999);
 											
 											mySGD->addChangeGoods(kGoodsType_gold, -mySD->getItemPrice(item_list[clicked_item_idx]), "아이템구매", CCString::createWithFormat("%d", item_list[clicked_item_idx])->getCString());
+											mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(item_list[clicked_item_idx]), 1, "아이템구매");
 											
 											mySGD->changeGoods([=](Json::Value result_data){
 												t_loading->removeFromParent();
@@ -1144,74 +1154,6 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																								}), 9999);
 											
 											is_menu_enable = true;
-											
-//											ASPopupView* t_popup = ASPopupView::create(-500);
-//											
-//											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-//											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-//											if(screen_scale_x < 1.f)
-//												screen_scale_x = 1.f;
-//											
-//											float height_value = 320.f;
-//											if(myDSH->screen_convert_rate < 1.f)
-//												height_value = 320.f/myDSH->screen_convert_rate;
-//											
-//											if(height_value < myDSH->ui_top)
-//												height_value = myDSH->ui_top;
-//											
-//											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-//											t_popup->setDimmedPosition(ccp(240, 160));
-//											t_popup->setBasePosition(ccp(240, 160));
-//											
-//											CCNode* t_container = CCNode::create();
-//											t_popup->setContainerNode(t_container);
-//											addChild(t_popup, kStartSettingPopupZorder_popup);
-//											
-//											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-//											case_back->setPosition(ccp(0,0));
-//											t_container->addChild(case_back);
-//											
-//											case_back->setContentSize(CCSizeMake(220, 190));
-//											
-//											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-//											content_back->setPosition(ccp(0,25));
-//											t_container->addChild(content_back);
-//											
-//											content_back->setContentSize(CCSizeMake(200, 120));
-//											
-//											CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), mySGD->getFont().c_str(), 15);
-//											ment1_label->setPosition(ccp(0,35));
-//											t_container->addChild(ment1_label);
-//											
-//											CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goToShop), mySGD->getFont().c_str(), 15);
-//											ment2_label->setPosition(ccp(0,15));
-//											t_container->addChild(ment2_label);
-//											
-//											
-//											
-//											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-//											cancel_button->setPosition(ccp(100,85));
-//											cancel_button->setFunction([=](CCObject* sender)
-//																	   {
-//																		   is_menu_enable = true;
-//																		   t_popup->removeFromParent();
-//																	   });
-//											t_container->addChild(cancel_button);
-//											
-//											
-//											CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-//											ok_button->setPosition(ccp(0,-65));
-//											ok_button->setFunction([=](CCObject* sender)
-//																   {
-//																	   ShopPopup* t_shop = ShopPopup::create();
-//																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-//																	   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-//																	   t_shop->setShopCode(kSC_gold);
-//																	   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-//																	   addChild(t_shop, kStartSettingPopupZorder_popup);
-//																	   t_popup->removeFromParent();
-//																   });
-//											t_container->addChild(ok_button);
 										}
 									}
 									else if(item_currency == "ruby")
@@ -1224,6 +1166,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											addChild(t_loading, 9999);
 											
 											mySGD->addChangeGoods(kGoodsType_ruby, -mySD->getItemPrice(item_list[clicked_item_idx]), "아이템구매", CCString::createWithFormat("%d", item_list[clicked_item_idx])->getCString());
+											mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(item_list[clicked_item_idx]), 1, "아이템구매");
 											
 											mySGD->changeGoods([=](Json::Value result_data){
 												t_loading->removeFromParent();
@@ -1241,7 +1184,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 										}
 										else
 										{
-											addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
+											addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_ruby, [=]()
 																								{
 																									ShopPopup* t_shop = ShopPopup::create();
 																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
@@ -1252,74 +1195,6 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																								}), 9999);
 											
 											is_menu_enable = true;
-											
-//											ASPopupView* t_popup = ASPopupView::create(-500);
-//											
-//											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-//											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-//											if(screen_scale_x < 1.f)
-//												screen_scale_x = 1.f;
-//											
-//											float height_value = 320.f;
-//											if(myDSH->screen_convert_rate < 1.f)
-//												height_value = 320.f/myDSH->screen_convert_rate;
-//											
-//											if(height_value < myDSH->ui_top)
-//												height_value = myDSH->ui_top;
-//											
-//											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-//											t_popup->setDimmedPosition(ccp(240, 160));
-//											t_popup->setBasePosition(ccp(240, 160));
-//											
-//											CCNode* t_container = CCNode::create();
-//											t_popup->setContainerNode(t_container);
-//											addChild(t_popup, kStartSettingPopupZorder_popup);
-//											
-//											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-//											case_back->setPosition(ccp(0,0));
-//											t_container->addChild(case_back);
-//											
-//											case_back->setContentSize(CCSizeMake(220, 190));
-//											
-//											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-//											content_back->setPosition(ccp(0,25));
-//											t_container->addChild(content_back);
-//											
-//											content_back->setContentSize(CCSizeMake(200, 120));
-//											
-//											CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), mySGD->getFont().c_str(), 15);
-//											ment1_label->setPosition(ccp(0,35));
-//											t_container->addChild(ment1_label);
-//											
-//											CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goToShop), mySGD->getFont().c_str(), 15);
-//											ment2_label->setPosition(ccp(0,15));
-//											t_container->addChild(ment2_label);
-//											
-//											
-//											
-//											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-//											cancel_button->setPosition(ccp(100,85));
-//											cancel_button->setFunction([=](CCObject* sender)
-//																	   {
-//																		   is_menu_enable = true;
-//																		   t_popup->removeFromParent();
-//																	   });
-//											t_container->addChild(cancel_button);
-//											
-//											
-//											CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-//											ok_button->setPosition(ccp(0,-65));
-//											ok_button->setFunction([=](CCObject* sender)
-//																   {
-//																	   ShopPopup* t_shop = ShopPopup::create();
-//																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-//																	   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-//																	   t_shop->setShopCode(kSC_ruby);
-//																	   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-//																	   addChild(t_shop, kStartSettingPopupZorder_popup);
-//																	   t_popup->removeFromParent();
-//																   });
-//											t_container->addChild(ok_button);
 										}
 									}
 									
@@ -1398,6 +1273,8 @@ void StartSettingPopup::closeAction()
 											   gray->setOpacity(0);
 											   if(target_final && delegate_final)
 												   (target_final->*delegate_final)();
+											   if(is_go_to_mainflow)
+												   goToMainFlow_func();
 											   removeFromParent();
 										   }));
 	
@@ -1409,6 +1286,100 @@ void StartSettingPopup::closeAction()
 
 void StartSettingPopup::callStart()
 {
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open;
+	
+	is_go_to_mainflow = false;
+	
+	if(!is_open)
+	{
+		string puzzle_condition = NSDS_GS(puzzle_number, kSDS_PZ_condition_s);
+		
+		Json::Value condition_list;
+		Json::Reader reader;
+		reader.parse(puzzle_condition, condition_list);
+		
+		if(condition_list.size() <= 0)
+			is_open = true;
+		
+		bool is_base_condition_success = true;
+		
+		for(int i=0;!is_open && i<condition_list.size();i++)
+		{
+			Json::Value t_condition_and = condition_list[i];
+			
+			bool and_open = true;
+			//				bool is_time_condition = false;
+			
+			for(int j=0;and_open && j<t_condition_and.size();j++)
+			{
+				Json::Value t_condition = t_condition_and[j];
+				string t_type = t_condition["type"].asString();
+				if(t_type == "p")
+				{
+					if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+					{
+						and_open = false;
+						is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "s")
+				{
+					if(mySGD->getClearStarCount() < t_condition["value"].asInt())
+					{
+						and_open = false;
+						is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "r")
+				{
+					and_open = false;
+				}
+				else if(t_type == "w")
+				{
+					//						is_time_condition = true;
+					if(!mySGD->keep_time_info.is_loaded)
+						and_open = false;
+					else
+					{
+						int weekday = t_condition["weekday"].asInt();
+						if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+							and_open = false;
+						if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+							and_open = false;
+					}
+				}
+				else if(t_type == "d")
+				{
+					//						is_time_condition = true;
+					if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+						and_open = false;
+				}
+			}
+			
+			if(and_open)
+			{
+				is_open = true;
+				//					if(!is_time_condition)
+				//					{
+				//						PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+				//						t_history.is_open = true;
+				//						t_history.open_type = "무료";
+				//						mySGD->setPuzzleHistory(t_history, nullptr);
+				//					}
+			}
+		}
+		
+		if(!is_open)
+		{
+			is_go_to_mainflow = true;
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_timeOutFrame)), 9999);
+			closeAction();
+			
+			return;
+		}
+	}
+	
 	if(((PuzzleScene*)getParent())->heart_time->isStartable())
 	{
 		if(((PuzzleScene*)getParent())->heart_time->startGame())
@@ -1497,7 +1468,7 @@ void StartSettingPopup::realStartAction()
 	
 	vector<CommandParam> t_command_list;
 	t_command_list.clear();
-	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingPopup::finalStartAction)));
+	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
 	
 	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
 	t_history.try_count++;
@@ -1506,9 +1477,7 @@ void StartSettingPopup::realStartAction()
 	
 	t_command_list.push_back(CommandParam("updatePieceHistory", mySGD->getSavePieceHistoryParam(t_history), nullptr));
 	
-	hspConnector::get()->command(t_command_list);
-	
-//	myDSH->saveAllUserData(json_selector(this, StartSettingPopup::finalStartAction));
+	mySGD->changeGoodsTransaction(t_command_list, json_selector(this, StartSettingPopup::finalStartAction));
 }
 
 void StartSettingPopup::acceptStartAction()
@@ -1566,9 +1535,9 @@ void StartSettingPopup::finalSetting()
 	{
 		if(is_selected_item[i])
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i]) > 0)
+			if(mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[i])) > 0)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])-1);
+				mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(item_list[i]), -1, "사용");
 				is_have_item[i] = true;
 			}
 			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());
@@ -1612,7 +1581,7 @@ void StartSettingPopup::goToGame()
 	Json::Value param;
 	param["key"] = CCString::createWithFormat("stage_start_%d", mySD->getSilType())->getCString();
 	
-	hspConnector::get()->command("increaseStats", param, NULL);
+	hspConnector::get()->command("increaseStats", param, nullptr);
 	
 	mySGD->resetLabels();
 	myGD->resetGameData();
@@ -1657,8 +1626,7 @@ void StartSettingPopup::cancelGame()
 		{
 			if(is_selected_item[i])
 			{
-				if(is_have_item[i])
-					myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[i])+1);
+				mySGD->clearChangeGoods();
 				is_using_item[item_list[i]] = true;
 			}
 		}
@@ -1710,15 +1678,14 @@ void StartSettingPopup::popupCloseCardSetting()
 
 void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 {
-	myDSH->setIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_idx], myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_idx])+cnt);
-	int item_cnt = myDSH->getIntegerForKey(kDSH_Key_haveItemCnt_int1, item_list[t_clicked_item_idx]);
+	int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[t_clicked_item_idx]));
 	
 	myLog->addLog(kLOG_buyItem_s, -1, convertToItemCodeToItemName(item_list[t_clicked_item_idx]).c_str());
 	
 	CCNode* item_parent = main_case->getChildByTag(kStartSettingPopupMenuTag_itemBase+t_clicked_item_idx);
 	
 	CCLabelTTF* cnt_label = (CCLabelTTF*)item_parent->getChildByTag(kStartSettingPopupItemZorder_cntLabel);
-
+	
 	cnt_label->setString(CCString::createWithFormat("%d", item_cnt)->getCString());
 	
 	bool is_selectable = false;
@@ -1732,14 +1699,6 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 		((CCSprite*)item_parent->getChildByTag(kStartSettingPopupItemZorder_clicked))->setVisible(true);
 		is_selected_item[t_clicked_item_idx] = true;
 	}
-	
-	vector<SaveUserData_Key> save_userdata_list;
-	
-	save_userdata_list.push_back(kSaveUserData_Key_gold);
-	save_userdata_list.push_back(kSaveUserData_Key_star);
-	save_userdata_list.push_back(kSaveUserData_Key_item);
-	
-	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	is_menu_enable = true;
 }
