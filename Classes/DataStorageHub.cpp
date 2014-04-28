@@ -423,6 +423,7 @@ void DataStorageHub::loadAllUserData (Json::Value result_data)
 //	}
 	
 	setStringForKey(kDSH_Key_nick, result_data["nick"].asString(), false);
+	setStringForKey(kDSH_Key_flag, result_data["flag"].asString(), false);
 	
 	setIntegerForKey(kDSH_Key_selectedCharacter, data[getKey(kDSH_Key_selectedCharacter)].asInt(), false);
 	for(int i=1;i<NSDS_GI(kSDS_GI_characterCount_i);i++)

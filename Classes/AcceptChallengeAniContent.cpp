@@ -14,6 +14,7 @@
 
 void AcceptChallengeAniContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector, string t_profile1, string t_nick1, string t_profile2, string t_nick2)
 {
+	
 	touch_priority = t_touch_priority;
 	end_selector = t_selector;
 	
