@@ -85,7 +85,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.4333332777023315</real>
+									<real>1.2999999523162842</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -100,11 +100,41 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.6333333253860474</real>
+									<real>1.4666666984558105</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>170</integer>
+									<integer>200</integer>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>opacity</string>
+									<key>time</key>
+									<real>1.7666666507720947</real>
+									<key>type</key>
+									<integer>5</integer>
+									<key>value</key>
+									<integer>50</integer>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>opacity</string>
+									<key>time</key>
+									<real>2.1666667461395264</real>
+									<key>type</key>
+									<integer>5</integer>
+									<key>value</key>
+									<integer>100</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -238,7 +268,7 @@
 									<key>value</key>
 									<array>
 										<real>-53.455730438232422</real>
-										<real>65.892036437988281</real>
+										<real>75.151298522949219</real>
 									</array>
 								</dict>
 							</array>
@@ -261,6 +291,21 @@
 									<string>rotation</string>
 									<key>time</key>
 									<real>0.0</real>
+									<key>type</key>
+									<integer>2</integer>
+									<key>value</key>
+									<real>-90</real>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>0</integer>
+									</dict>
+									<key>name</key>
+									<string>rotation</string>
+									<key>time</key>
+									<real>1.1666666269302368</real>
 									<key>type</key>
 									<integer>2</integer>
 									<key>value</key>
@@ -361,7 +406,7 @@
 						<key>value</key>
 						<array>
 							<real>-53.455730438232422</real>
-							<real>65.892036437988281</real>
+							<real>75.151298522949219</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -1677,13 +1722,13 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>0.89846038818359375</real>
 			<key>position</key>
-			<real>2.9666666984558105</real>
+			<real>3.5999999046325684</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>119.17696380615234</real>
+			<real>329.07162475585938</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>
