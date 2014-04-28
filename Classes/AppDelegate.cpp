@@ -300,8 +300,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	});
 	//	CCScene* pScene = TitleScene::scene();
-	CCScene* pScene = GaBaBo::scene();
-//		CCScene* pScene = TitleRenewalScene::scene();
+//	CCScene* pScene = GaBaBo::scene();
+		CCScene* pScene = TitleRenewalScene::scene();
 	//	CCScene* pScene = Dodge::scene();
 	//	CCScene* pScene = CountingGame::scene();
 	//	CCScene* pScene = SlidingPuzzle::scene();
