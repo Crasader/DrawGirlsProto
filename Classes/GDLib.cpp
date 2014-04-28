@@ -95,7 +95,7 @@ string JsonObjectToString(Json::Value _obj){
 	
 void JsonToLog(string tag,Json::Value _obj){
 	Json::StyledWriter writer;
-	CCLog("%s - %s",tag.c_str(),writer.write(_obj).c_str());
+	CCLOG("%s - %s",tag.c_str(),writer.write(_obj).c_str());
 }
     
 Json::Value StringToJsonObject(string _str){
@@ -109,7 +109,7 @@ Json::Value StringToJsonObject(string _str){
 	
 string getLocalCode()
 {
-	CCLog("call getLocalCode");
+	CCLOG("call getLocalCode");
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	{

@@ -166,7 +166,7 @@ void KSCumberBase::randomMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
-				//                        CCLog("collision!!");
+				//                        CCLOG("collision!!");
 				onceOutlineAndMapCollision = true;
 				m_directionAngleDegree += m_well512.GetValue(90, 270);
 				
@@ -175,7 +175,7 @@ void KSCumberBase::randomMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				//                        CCLog("collision!!");
+				//                        CCLOG("collision!!");
 				//                        myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
@@ -191,7 +191,7 @@ void KSCumberBase::randomMoving(float dt)
 			}
 			else
 			{
-				CCLog("what!?");
+				CCLOG("what!?");
 				validPosition = true;
 			}
 		}
@@ -199,7 +199,7 @@ void KSCumberBase::randomMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
-				//                        CCLog("collision!!");
+				//                        CCLOG("collision!!");
 				m_directionAngleDegree += m_well512.GetValue(90, 270);
 				
 				if(m_directionAngleDegree < 0)                        m_directionAngleDegree += 360;
@@ -216,7 +216,7 @@ void KSCumberBase::randomMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLog("random cnt !! = %d", cnt);
+			CCLOG("random cnt !! = %d", cnt);
 		}
 		if(cnt >= 30)
 		{
@@ -229,7 +229,7 @@ void KSCumberBase::randomMoving(float dt)
 		}
 	}
 	
-	//        CCLog("cnt outer !! = %d", cnt);
+	//        CCLOG("cnt outer !! = %d", cnt);
 	
 	
 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
@@ -248,7 +248,7 @@ void KSCumberBase::randomMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLog("decrese Size !!");
+			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -256,7 +256,7 @@ void KSCumberBase::randomMoving(float dt)
 
 void KSCumberBase::straightMoving(float dt)
 {
-	//	CCLog("%f %f", getPosition().x, getPosition().y);
+	//	CCLOG("%f %f", getPosition().x, getPosition().y);
 	m_scale.timer += 1/60.f;
 	
 	
@@ -350,7 +350,7 @@ void KSCumberBase::straightMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				
@@ -362,7 +362,7 @@ void KSCumberBase::straightMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
@@ -378,7 +378,7 @@ void KSCumberBase::straightMoving(float dt)
 			}
 			else
 			{
-				CCLog("what!?");
+				CCLOG("what!?");
 				validPosition = true;
 			}
 		}
@@ -403,7 +403,7 @@ void KSCumberBase::straightMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLog("straightMoving cnt !! = %d", cnt);
+			CCLOG("straightMoving cnt !! = %d", cnt);
 		}
 		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
 		{
@@ -413,7 +413,7 @@ void KSCumberBase::straightMoving(float dt)
 	
 	m_directionAngleDegree = degree;
 	
-	//	CCLog("cnt outer !! = %d", cnt);
+	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
@@ -431,7 +431,7 @@ void KSCumberBase::straightMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLog("decrese Size !!");
+			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -474,12 +474,12 @@ void KSCumberBase::followMoving(float dt)
 		if(m_follow.timer - m_follow.lastMapCollisionTime > 1.f)
 		{
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
-//			CCLog("aiValue : %d", this->getAiValue());
+//			CCLOG("aiValue : %d", this->getAiValue());
 			t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			float goalDegree = rad2Deg(atan2(t.y, t.x));
 			float deltaDegree = (goalDegree - m_follow.followDegree)/1.f;
 			//m_follow.followDegree += deltaDegree;
-//			CCLog("%f", deltaDegree);
+//			CCLOG("%f", deltaDegree);
 			m_follow.followDegree += clampf(deltaDegree, -5, 5);
 			//m_fo
 			//if(deltaDegree < 0)
@@ -583,7 +583,7 @@ void KSCumberBase::followMoving(float dt)
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
 				m_crashCount++;
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				onceOutlineAndMapCollision = true;
 				m_follow.lastMapCollisionTime = m_follow.timer;
 				m_follow.collisionCount++;
@@ -603,7 +603,7 @@ void KSCumberBase::followMoving(float dt)
 				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 								
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
@@ -617,7 +617,7 @@ void KSCumberBase::followMoving(float dt)
 			}
 			else
 			{
-				CCLog("what!?");
+				CCLOG("what!?");
 				validPosition = true;
 			}
 		}
@@ -626,7 +626,7 @@ void KSCumberBase::followMoving(float dt)
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
 				m_crashCount++;
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 			}
 			else
 			{
@@ -639,7 +639,7 @@ void KSCumberBase::followMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLog("followMoving cnt !! = %d", cnt);
+			CCLOG("followMoving cnt !! = %d", cnt);
 		}
 		if(cnt >= 30)
 		{
@@ -653,7 +653,7 @@ void KSCumberBase::followMoving(float dt)
 	}
 	
 	
-	//	CCLog("cnt outer !! = %d", cnt);
+	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
@@ -672,7 +672,7 @@ void KSCumberBase::followMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLog("decrese Size !!");
+			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -766,7 +766,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				m_directionAngleDegree += 180;
@@ -774,7 +774,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
@@ -813,7 +813,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				m_crashCount++;
 				m_directionAngleDegree += 180;
 			}
@@ -828,7 +828,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLog("rightAngleMoving cnt !! = %d", cnt);
+			CCLOG("rightAngleMoving cnt !! = %d", cnt);
 		}
 		if(cnt >= 30)
 		{
@@ -841,7 +841,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		}
 	}
 	
-	//	CCLog("cnt outer !! = %d", cnt);
+	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
  	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
@@ -860,7 +860,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLog("decrese Size !!");
+			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -937,7 +937,7 @@ void KSCumberBase::circleMoving(float dt)
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
 				m_crashCount++;
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				onceOutlineAndMapCollision = true;
 				// m_circle 변수를 재지정 ...
 				m_circle.setRelocation(getPosition(), m_well512);
@@ -945,7 +945,7 @@ void KSCumberBase::circleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
@@ -983,7 +983,7 @@ void KSCumberBase::circleMoving(float dt)
 			}
 		}
 		if(cnt >= 3)
-			CCLog("circleMoving cnt !! = %d", cnt);
+			CCLOG("circleMoving cnt !! = %d", cnt);
 		if(cnt >= 30)
 		{
 			pathFound = false;
@@ -995,7 +995,7 @@ void KSCumberBase::circleMoving(float dt)
 		}
 	}
 	
-	//	CCLog("cnt outer !! = %d", cnt);
+	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
 	
@@ -1007,7 +1007,7 @@ void KSCumberBase::circleMoving(float dt)
 																pow((m_circle.centerPosition.y - m_circle.relocationPosition.y), 2));
 			m_circle.angleRad += getSpeed() * m_circle.sign / circleRadius;
 			
-			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
+			//		CCLOG("%f %f", afterPosition.x, afterPosition.y);
 			setPosition(afterPosition);
 		}
 		
@@ -1023,7 +1023,7 @@ void KSCumberBase::circleMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLog("decrese Size !!");
+			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -1100,7 +1100,7 @@ void KSCumberBase::snakeMoving(float dt)
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
 				m_crashCount++;
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				onceOutlineAndMapCollision = true;
 				// m_snake 변수를 재지정 ...
 				m_snake.setRelocation(getPosition(), m_well512);
@@ -1108,7 +1108,7 @@ void KSCumberBase::snakeMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				//			CCLog("collision!!");
+				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
@@ -1146,7 +1146,7 @@ void KSCumberBase::snakeMoving(float dt)
 			}
 		}
 		if(cnt >= 3)
-			CCLog("snakeMoving cnt !! = %d", cnt);
+			CCLOG("snakeMoving cnt !! = %d", cnt);
 		if(cnt >= 30)
 		{
 			pathFound = false;
@@ -1158,7 +1158,7 @@ void KSCumberBase::snakeMoving(float dt)
 		}
 	}
 	
-	//	CCLog("cnt outer !! = %d", cnt);
+	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
 	
@@ -1170,7 +1170,7 @@ void KSCumberBase::snakeMoving(float dt)
 																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
 			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
 			
-			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
+			//		CCLOG("%f %f", afterPosition.x, afterPosition.y);
 			setPosition(afterPosition);
 		}
 		
@@ -1185,7 +1185,7 @@ void KSCumberBase::snakeMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLog("decrese Size !!");
+			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -1260,7 +1260,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //			else if(collisionCode == kCOLLISION_OUTLINE)
 //			{
 //				m_crashCount++;
-//				//			CCLog("collision!!");
+//				//			CCLOG("collision!!");
 //				onceOutlineAndMapCollision = true;
 //				// m_snake 변수를 재지정 ...
 //				m_snake.setRelocation(getPosition(), m_well512);
@@ -1268,7 +1268,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //			}
 //			else if(collisionCode == kCOLLISION_NEWLINE)
 //			{
-//				//			CCLog("collision!!");
+//				//			CCLOG("collision!!");
 //				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 //				myGD->communication("SW_createSW", checkPosition);
 //				//									callfuncI_selector(MetalSnake::showEmotion)); //##
@@ -1305,7 +1305,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //			}
 //		}
 //		if(cnt >= 3)
-//			CCLog("snakeMoving cnt !! = %d", cnt);
+//			CCLOG("snakeMoving cnt !! = %d", cnt);
 //		if(cnt >= 30)
 //		{
 //			pathFound = false;
@@ -1317,7 +1317,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //		}
 //	}
 //	
-//	//	CCLog("cnt outer !! = %d", cnt);
+//	//	CCLOG("cnt outer !! = %d", cnt);
 //	
 //	
 //	
@@ -1329,7 +1329,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
 //			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
 //			
-//			//		CCLog("%f %f", afterPosition.x, afterPosition.y);
+//			//		CCLOG("%f %f", afterPosition.x, afterPosition.y);
 //			setPosition(afterPosition);
 //		}
 //		
@@ -1344,7 +1344,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 //		m_scale.collisionCount++;
 //		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 //		{
-//			CCLog("decrese Size !!");
+//			CCLOG("decrese Size !!");
 //			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 //		}
 //	}
@@ -1353,7 +1353,7 @@ void KSCumberBase::earthwarmMoving(float dt)
 }
 void KSCumberBase::rushMoving(float dt)
 {
-	//	CCLog("%f %f", getPosition().x, getPosition().y);
+	//	CCLOG("%f %f", getPosition().x, getPosition().y);
 	m_scale.timer += 1/60.f;
 
 
@@ -1371,7 +1371,7 @@ void KSCumberBase::rushMoving(float dt)
 	{
 		if(m_furyMode.firstMoving == true)
 		{
-			CCLog("firstRush");
+			CCLOG("firstRush");
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			m_directionAngleDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetValue(-10, +10);
 			m_furyMode.firstMoving = false;
@@ -1458,13 +1458,13 @@ void KSCumberBase::rushMoving(float dt)
 
 		if(cnt >= 2)
 		{
-			CCLog("rushMoving cnt !! = %d", cnt);
+			CCLOG("rushMoving cnt !! = %d", cnt);
 		}
 	}
 
 	m_directionAngleDegree = degree;
 
-	//	CCLog("cnt outer !! = %d", cnt);
+	//	CCLOG("cnt outer !! = %d", cnt);
 
 
 	if(m_state == kCumberStateFury)
@@ -1483,7 +1483,7 @@ void KSCumberBase::rushMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLog("decrese Size !!");
+			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -1525,7 +1525,7 @@ void KSCumberBase::cumberAttack(float dt)
 	{
 		return;
 	}
-	//	CCLog("%f %f %d", distance, gainPercent, m_crashCount);
+	//	CCLOG("%f %f %d", distance, gainPercent, m_crashCount);
 	bool crashAttack = false;
 	bool distanceFury = false; // 거리로 인한 분노인가.
 	
@@ -1842,7 +1842,7 @@ void KSCumberBase::cumberAttack(float dt)
 						probSel.pushProb(i["percent"].asFloat());
 					}
 				}
-				CCLog("externalCnt %d", externalOutlineCount);
+				CCLOG("externalCnt %d", externalOutlineCount);
 				while(!searched)
 				{
 					searchCount++;
@@ -2176,9 +2176,9 @@ void KSCumberBase::onJackDrawLine()
 	//ProbSelector ps({getAiValue(), 100.f - getAiValue()});
 	//int r = ps.getResult();
 	//r = 0;
-	//CCLog("%d %d", myGD->getJackPoint().x, myGD->getJackPoint().y);
-	//CCLog("%f %f", getPosition().x, getPosition().y);
-	//CCLog("distance = %f", ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition()));
+	//CCLOG("%d %d", myGD->getJackPoint().x, myGD->getJackPoint().y);
+	//CCLOG("%f %f", getPosition().x, getPosition().y);
+	//CCLOG("distance = %f", ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition()));
 	//float dis = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
 	//dis = 100.f;
 	//if(r == 0 && dis >= 55.f) // 너무 가까우면 안따라가게 함.
@@ -2220,7 +2220,7 @@ void KSCumberBase::stopMoving()
 void KSCumberBase::setCumberState( int e )
 {
 	m_state = (CUMBER_STATE)e;
-	CCLog("%s %d ???", __FILE__, __LINE__);
+	CCLOG("%s %d ???", __FILE__, __LINE__);
 }
 
 CUMBER_STATE KSCumberBase::getCumberState()
@@ -2329,7 +2329,7 @@ void KSCumberBase::followProcess(float dt)
 		ProbSelector ps = {this->getAiValue() / 25.f, 125.f};
 		if(ps.getResult() == 0)
 		{
-			CCLog("follow!!!");
+			CCLOG("follow!!!");
 			KSCumberBase* mainCumber = this;
 
 			int aggroCount = 0;
@@ -2417,7 +2417,7 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 		m_swell.totalFrame = totalFrame;
 //		auto backupState = m_state;
 		m_state = 0;
-		CCLog("%s %d kCumberStateStop", __FILE__, __LINE__);
+		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 		addChild(KSGradualValue<float>::create(m_swell.scale, scale, 1.3f, 
 																					 [=](float t){
 																						 m_swell.scale = t;
@@ -2634,7 +2634,7 @@ void KSCumberBase::applyAutoBalance()
 	bool isClear = mySGD->isClearPiece(mySD->getSilType());
 	if(isClear){
 		
-		CCLog("############ clear stage, dont autobalance ################");
+		CCLOG("############ clear stage, dont autobalance ################");
 		//return;
 	}
 	
@@ -2650,11 +2650,11 @@ void KSCumberBase::applyAutoBalance()
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
-	CCLog("#################### autobalance ############################");
-	CCLog("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
-	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-	
-	
+
+	CCLOG("#################### autobalance ############################");
+	CCLOG("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
+	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+
 	if(vCount>0){
 		if(m_attackPercent>0)m_aiValue = m_aiValue+5*vCount;
 		else m_aiValue = m_aiValue+2.5f*vCount;
@@ -2663,11 +2663,12 @@ void KSCumberBase::applyAutoBalance()
 	}
 	
 	
+
 	settingFuryRule();
 	
-	CCLog("#################### Change Balnace1 ############################");
-	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-	
+	CCLOG("#################### Change Balnace1 ############################");
+	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+
 	return;
 	
 	
@@ -2677,14 +2678,14 @@ void KSCumberBase::applyAutoBalance()
 	//int balPt = clearCount-2;
 	
 	if(autobalanceTry==0){
-		CCLog("############ autobalanceTry : 0, dont autobalance ################");
+		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
 		return;
 	}
 	
 	
-	CCLog("#################### autobalance ############################");
-	CCLog("vicetory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
-	CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+	CCLOG("#################### autobalance ############################");
+	CCLOG("vicetory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
+	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	
 	//오토벨런싱트라이 값까지는 어렵게
 	if(playCount<=autobalanceTry){
@@ -2708,8 +2709,8 @@ void KSCumberBase::applyAutoBalance()
 			if(m_attackPercent>0.4)m_attackPercent=0.4;
 		}
 	
-		CCLog("#################### Change Balnace1 ############################");
-		CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+		CCLOG("#################### Change Balnace1 ############################");
+		CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	//오토벨런싱+2 판까지는 원래 벨런스로 플레이
 	}else if(playCount>autobalanceTry && playCount<=autobalanceTry*2){
 		
@@ -2729,17 +2730,17 @@ void KSCumberBase::applyAutoBalance()
 			m_attackPercent = m_attackPercent*per;
 		}
 		
-		CCLog("#################### Change Balnace2 ############################");
-		CCLog("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+		CCLOG("#################### Change Balnace2 ############################");
+		CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 	}
 					 
 	
-	CCLog("#################### autobalance ############################");
+	CCLOG("#################### autobalance ############################");
 					 
 	
 //	if(clearCount>1 && puzzleNo!=1){
 //		
-//		CCLog("UP monster abillity");
+//		CCLOG("UP monster abillity");
 //		
 //		if(balPt>10)balPt=10;
 //		m_aiValue += balPt*10;
@@ -2753,10 +2754,10 @@ void KSCumberBase::applyAutoBalance()
 //		m_minSpeed = MIN(1, m_minSpeed);
 //		m_maxSpeed = MIN(3, m_maxSpeed);
 //		
-//		CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
-//		CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+//		CCLOG("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+//		CCLOG("speed : %f~%f",m_minSpeed,m_maxSpeed);
 //		
-//		CCLog("#################### autobalance ############################");
+//		CCLOG("#################### autobalance ############################");
 //		//m_aiValue , m_attackPercent, m_maxSpeed , m_minSpeed
 //	
 //	// 계속 실패할경우 능력치 하향하기
@@ -2769,20 +2770,20 @@ void KSCumberBase::applyAutoBalance()
 //			m_aiValue = MAX(m_aiValue * downLimit, m_aiValue * (1 - autoRate));
 //			m_attackPercent = MAX(m_attackPercent * downLimit, m_attackPercent * (1 - autoRate));
 //			
-//			CCLog("DOWN monster abillity");
-//			CCLog("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
+//			CCLOG("DOWN monster abillity");
+//			CCLOG("AI : %d, attackPercent : %f",m_aiValue,m_attackPercent);
 //			if(autobalanceTry*2 < playCount){
 //				float autoRate2 = downLimit * (playCount - autobalanceTry*2) / balanceN;
 //				m_maxSpeed = MAX(m_maxSpeed*downLimit,m_maxSpeed * (1-autoRate2));
 //				m_minSpeed = MAX(m_minSpeed*downLimit,m_minSpeed * (1-autoRate2));
 //				
-//				CCLog("speed : %f~%f",m_minSpeed,m_maxSpeed);
+//				CCLOG("speed : %f~%f",m_minSpeed,m_maxSpeed);
 //			}
 //			
 //			
 //		}
 //		
-//		CCLog("#################### autobalance ############################");
+//		CCLOG("#################### autobalance ############################");
 //	}
 }
 void KSCumberBase::settingAI( int ai )
@@ -2846,7 +2847,7 @@ void KSCumberBase::settingHp( float hp )
 void KSCumberBase::settingAttackPercent( float ap )
 {
 	
-	CCLog("!!!settingAttackPercent!!! %f",ap);
+	CCLOG("!!!settingAttackPercent!!! %f",ap);
 	
 //	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 //	int balanceN = 10;
@@ -2865,7 +2866,7 @@ void KSCumberBase::settingAttackPercent( float ap )
 	
 	
 	
-	//CCLog("!!!settingAttackPercent!!! %f",ap);
+	//CCLOG("!!!settingAttackPercent!!! %f",ap);
 	
 	m_attackPercent = ap;
 }

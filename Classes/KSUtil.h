@@ -102,7 +102,7 @@ namespace KS
 	void KSLog(const char* s, Args... args) {
 		ostringstream oss;
 		__KSLogCore(oss, s, args...);
-		CCLog("%s", oss.str().c_str());
+		CCLOG("%s", oss.str().c_str());
 	}
 	
 	void setAllVisible(CCNode* n, bool b);
@@ -232,7 +232,7 @@ public:
 	static string ansi2UTF8(const string& str)
 	{
 		//return string("daf");
-		//CCLog(str.c_str());
+		//CCLOG(str.c_str());
 		wstring str2 = ansi2utf16(str);
 		//wstring str3(L"a???");
 		string result;
@@ -250,11 +250,11 @@ public:
 					CCNode* node = dynamic_cast<CCNode*>(n);
 					if (node) {
 						int p = getNumberOfChild(node);
-						//						CCLog("%d %x -- %d", node->getZOrder(),node, p);
+						//						CCLOG("%d %x -- %d", node->getZOrder(),node, p);
 						total += 1 + p;
 					}
 				}
-				//				CCLog("%d..", total);
+				//				CCLOG("%d..", total);
 				return total;
 			}
 		} else {

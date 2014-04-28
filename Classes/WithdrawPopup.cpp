@@ -66,7 +66,7 @@ void WithdrawPopup::resultDropoutuser(Json::Value result_data)
 	}
 	else
 	{
-		CCLog("fail dropoutuser");
+		CCLOG("fail dropoutuser");
 		touched_number = 0;
 	}
 }

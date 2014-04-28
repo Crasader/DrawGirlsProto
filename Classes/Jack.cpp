@@ -217,7 +217,7 @@ void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 	}
 	else // escape point not found
 	{
-		CCLog("escape point not found!");
+		CCLOG("escape point not found!");
 		endGame();
 	}
 }
@@ -372,7 +372,7 @@ void Jack::moveTest()
 			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 			}
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
@@ -412,7 +412,7 @@ void Jack::moveTest()
 			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 			}
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
@@ -443,7 +443,7 @@ void Jack::moveTest()
 			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 			}
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_s_dv.dx,t_speed*c_s_dv.dy));
@@ -491,7 +491,7 @@ void Jack::moveTest()
 			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 			{
-				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+				CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 			}
 			
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*dv.dx,t_speed*dv.dy));
@@ -532,7 +532,7 @@ void Jack::moveTest()
 				CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 				if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 				{
-					CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+					CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 				}
 				
 				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*dv.dx,t_speed*dv.dy));
@@ -576,7 +576,7 @@ void Jack::moveTest()
 				CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 				if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 				{
-					CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+					CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 				}
 				
 				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv.dx,t_speed*s_dv.dy));
@@ -615,7 +615,7 @@ void Jack::moveTest()
 				CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 				if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 				{
-					CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+					CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 				}
 				
 				CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*s_dv_reverse.dx,t_speed*s_dv_reverse.dy));
@@ -654,7 +654,7 @@ void Jack::moveTest()
 		CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 		if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 		{
-			CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+			CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 			afterPoint = IntPoint::convertToIntPoint(getPosition());
 		}
 		myGD->setJackPoint(afterPoint);
@@ -681,7 +681,7 @@ void Jack::moveTest()
 			if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
 				myGD->communication("PM_checkBeforeNewline", afterPoint);
 			myGD->mapState[afterPoint.x][afterPoint.y] = mapNewline;
-//			CCLog("draw after point x : %d, y : %d", afterPoint.x, afterPoint.y);
+//			CCLOG("draw after point x : %d, y : %d", afterPoint.x, afterPoint.y);
 		}
 		else if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver) && myGD->mapState[afterPoint.x][afterPoint.y] == mapNewline)
 		{
@@ -694,7 +694,7 @@ void Jack::moveTest()
 //			CCPoint t_ap = ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1);
 //			if(sqrtf(powf(t_ap.x-getPositionX(), 2.f)+powf(t_ap.y-getPositionY(), 2.f)) > 5.f)
 //			{
-//				CCLog("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
+//				CCLOG("line %d, gPx %.1f, gPy %.1f, aPx %.1f, aPy %.1f", __LINE__, getPositionX(), getPositionY(), t_ap.x, t_ap.y);
 //				afterPoint = IntPoint::convertToIntPoint(getPosition());
 //			}
 			setPosition(ccp((afterPoint.x-1)*pixelSize+1, (afterPoint.y-1)*pixelSize+1));
@@ -802,7 +802,7 @@ void Jack::moveTest()
 				check_turn_cnt = 0;
 				IntPoint a_jp = afterPoint;
 				setPosition(ccp((a_jp.x-1)*pixelSize+1, (a_jp.y-1)*pixelSize+1));
-//				CCLog("change direction x : %d , y : %d , before : %d , after : %d", a_jp.x, a_jp.y, direction, afterDirection);
+//				CCLOG("change direction x : %d , y : %d , before : %d , after : %d", a_jp.x, a_jp.y, direction, afterDirection);
 //				myGD->communication("PM_lastPathRemove");
 				IntVector t_vector = IntVector::directionVector(afterDirection);
 				IntPointVector t_pv = IntPointVector(afterPoint.x, afterPoint.y, t_vector.dx, t_vector.dy);
@@ -862,7 +862,7 @@ void Jack::setPosition( CCPoint t_sp )
 //	float t_distance = sqrtf(powf(t_sp.x-getPositionX(), 2.f) + powf(t_sp.y-getPositionY(), 2.f));
 //	if(t_distance > 5.f)
 //	{
-//		CCLog("what?!");
+//		CCLOG("what?!");
 //	}
 	CCNode::setPosition(t_sp);
 	myGD->communication("Main_moveGamePosition", t_sp);
@@ -1753,7 +1753,7 @@ void Jack::initStartPosition( CCPoint t_p )
 
 	if(!is_found)
 	{
-		CCLog("faskdhfn;asjbfv;kjqdhbf;kvuhqasdk;cn");
+		CCLOG("faskdhfn;asjbfv;kjqdhbf;kvuhqasdk;cn");
 	}
 }
 

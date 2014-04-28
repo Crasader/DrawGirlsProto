@@ -736,7 +736,7 @@ void StartSettingPopup::startItemGacha()
 	
 	is_menu_enable = false;
 	
-	CCLog("start item gacha");
+	CCLOG("start item gacha");
 	
 	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaGoldFee(), "아이템뽑기");
 	
@@ -756,10 +756,10 @@ void StartSettingPopup::startItemGacha()
 
 void StartSettingPopup::goItemGacha(Json::Value result_data)
 {
-	CCLog("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("save userdata success!!");
+		CCLOG("save userdata success!!");
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
@@ -782,7 +782,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 	}
 	else
 	{
-		CCLog("save userdata fail!!!");
+		CCLOG("save userdata fail!!!");
 		mySGD->clearChangeGoods();
 		
 		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
@@ -1646,7 +1646,7 @@ void StartSettingPopup::cancelGame()
 	{
 		start_loading->removeFromParent();
 		
-		CCLog("Fail : user data save");
+		CCLOG("Fail : user data save");
 		
 		deque<bool> is_using_item;
 		is_using_item.push_back(false);

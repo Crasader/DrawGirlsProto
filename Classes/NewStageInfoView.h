@@ -247,7 +247,7 @@
 //		}
 //		else
 //		{
-//			CCLog("what?"); // 이럴 일이 있나?
+//			CCLOG("what?"); // 이럴 일이 있나?
 //		}
 //	}
 //	virtual void ccTouchCancelled (CCTouch * pTouch, CCEvent * pEvent)
@@ -270,7 +270,7 @@
 //		}
 //		else
 //		{
-//			CCLog("what?"); // 이럴 일이 있나?
+//			CCLOG("what?"); // 이럴 일이 있나?
 //		}
 //	}
 //	virtual void registerWithTouchDispatcher ()

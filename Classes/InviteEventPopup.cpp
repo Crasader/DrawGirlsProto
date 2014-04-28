@@ -197,7 +197,7 @@ void InviteEventPopup::loadRank()
 	//	//step1 ƒ´ƒ´ø¿ƒ£±∏∏Ò∑œ ∑ŒµÂ
 //	hspConnector::get()->kLoadFriends(Json::Value(),[p1](Json::Value fInfo)
 //																		{
-//																			CCLog("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
+//																			CCLOG("step1 %s",GraphDogLib::JsonObjectToString(fInfo).c_str());
 //																			
 //																			
 //																			

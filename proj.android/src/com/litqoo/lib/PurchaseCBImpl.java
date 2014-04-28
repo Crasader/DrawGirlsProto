@@ -29,7 +29,7 @@ public class PurchaseCBImpl implements PurchaseCB {
         JSONObject r = new JSONObject();
         if (hspResult.getCode() == PaymentErrorCode.PURCHASE_SUCCESS) {
             // 결제 성공
-        	Log.d("litqoo", "결제 성공");
+//        	Log.d("litqoo", "결제 성공");
 //        	hspResult.
         	try {
 				r.put("issuccess", 1);
@@ -40,7 +40,7 @@ public class PurchaseCBImpl implements PurchaseCB {
 //        	HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl(m_key, m_glView));
         } else {
             // 결제 실패
-        	Log.d("litqoo", "결제 실패" + Integer.toString(hspResult.getCode()));
+//        	Log.d("litqoo", "결제 실패" + Integer.toString(hspResult.getCode()));
         	try {
 				r.put("issuccess", 0);
 			} catch (JSONException e) {

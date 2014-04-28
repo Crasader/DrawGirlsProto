@@ -293,7 +293,7 @@
 //				(*iter).is_play = true;
 //			}
 //			else
-//				CCLog("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
+//				CCLOG("not found friend memberID : %s", score_list[i]["memberID"].asString().c_str());
 //		}
 //		
 //		auto beginIter = std::remove_if(friend_list.begin(), friend_list.end(), [=](RankFriendInfo t_info)
@@ -423,7 +423,7 @@
 //
 //void NewStageInfoView::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 //{
-//	CCLog("touched cell idx : %d", cell->getIdx());
+//	CCLOG("touched cell idx : %d", cell->getIdx());
 //	
 //	string touched_id = friend_list[cell->getIdx()].user_id;
 //	string my_id = hspConnector::get()->myKakaoInfo["user_id"].asString();

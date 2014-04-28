@@ -667,7 +667,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 						 av->setContentSize(ttf->getDimensions());
 						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ttt), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 // 도망에 대한 처리
 														 Json::Value p;
@@ -723,7 +723,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																											av->setContentSize(ttf->getDimensions());
 																											av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																																		[=](CCObject* e) {
-																																			CCLog("ok!!");
+																																			CCLOG("ok!!");
 																																		});
 																											addChild(av, kMP_Z_helpAccept);
 																											av->show();
@@ -757,7 +757,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																			(this,
 																			 callfunc_selector(ThisClassType::onReceiveStageSuccess),
 																			 this, callfunc_selector(ThisClassType::onReceiveStageFail)), kMP_Z_popup);
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 													 });
 
 						 addChild(av, kMP_Z_helpAccept);
@@ -785,7 +785,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 															 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 																															[=](){
-																																CCLog("hat close");
+																																CCLOG("hat close");
 																															}
 																														 ), kMP_Z_helpAccept);
 														 });
@@ -813,7 +813,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 av->setWidth(240);
 								 av->setHeight(240);
 								 av->setTitleHeight(10);
-								 av->setContentBorder(CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
+								 av->setContentBorder(CCScale9Sprite::create("w", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6)));
 								 av->setCenterY(150);
 
 								 CCNode* emptyNode = CCNode::create();
@@ -830,7 +830,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 								 av->setContentSize(ttf->getDimensions());
 								 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 															 [=](CCObject* e) {
-																 CCLog("ok");
+																 CCLOG("ok");
 															 });
 
 								 addChild(av, kMP_Z_helpAccept);
@@ -883,7 +883,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																											 {
 																												 av->removeFromParent();
 																											 });
-																				 CCLog("ok!!");
+																				 CCLOG("ok!!");
 																			 });
 						av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accept), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																															 [=](CCObject* e) {
@@ -908,7 +908,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																																 //																									 iHelpYou(contentObj.get("helpstage", 0).asInt(),
 																																 //																														mail["friendID"].asInt64(), mail["nickname"].asString(),
 																																 //																														p);
-																																 CCLog("ok!!");
+																																 CCLOG("ok!!");
 																															 });
 
 						 addChild(av, kMP_Z_helpAccept);
@@ -992,7 +992,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 															av->setContentSize(ttf->getDimensions());
 															av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																						[=](CCObject* e) {
-																							CCLog("ok!!");
+																							CCLOG("ok!!");
 																						});
 
 															addChild(av, kMP_Z_helpAccept);
@@ -1037,11 +1037,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
 																					 });
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 													 });
 						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_send), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
@@ -1109,7 +1109,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 						 av->setContentSize(ttf->getDimensions());
 						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_takeTicket), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
@@ -1270,11 +1270,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																					 {
 																						 av->removeFromParent();
 																					 });
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 													 });
 						 av->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accept), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 													 [=](CCObject* e) {
-														 CCLog("ok!!");
+														 CCLOG("ok!!");
 //														 CCMenuLambda* sender = dynamic_cast<CCMenuLambda*>(e);
 														 Json::Value param;
 														 //						memberID : string or number, 내카카오아이디
@@ -1323,7 +1323,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																																							 exceptionPopup->setContentSize(ttf->getDimensions());
 																																							 exceptionPopup->addButton(CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 																																														 [=](CCObject* e) {
-																																															 CCLog("ok!!");
+																																															 CCLOG("ok!!");
 																																														 });
 
 																																							 addChild(exceptionPopup, kMP_Z_helpAccept);
@@ -1431,7 +1431,7 @@ void SumranMailPopup::scrollViewDidZoom (CCScrollView * view)
 void SumranMailPopup::tableCellTouched (CCTableView * table, CCTableViewCell * cell)
 {
 	
-	CCLog("touch!!");
+	CCLOG("touch!!");
 	
 }
 CCSize SumranMailPopup::cellSizeForTable (CCTableView * table)
@@ -1487,7 +1487,7 @@ void SumranMailPopup::registerWithTouchDispatcher ()
 void SumranMailPopup::onReceiveStageSuccess()
 {
 	// 성공시 게임창...
-	CCLog("sec");
+	CCLOG("sec");
 //	PuzzleMapScene* pms = dynamic_cast<PuzzleMapScene*>(target_close);
 //	CCAssert(pms, "!!");
 //	(target_close->*delegate_close)();
@@ -1504,7 +1504,7 @@ void SumranMailPopup::onReceiveStageFail()
 	mySGD->setRemoveMessageMemberId(0);
 	mySGD->setRemoveMessageMailNo(0);
 //	removeFromParent();
-	CCLog("fail");
+	CCLOG("fail");
 }
 // 도움 수락을 누른 상태.
 void SumranMailPopup::iHelpYou(int stage, long long user_id, const std::string& nick, Json::Value removeInfo)
@@ -1795,13 +1795,13 @@ void SumranMailPopup::failAction ()
 }
 void SumranMailPopup::startDownloadCardImage ()
 {
-	CCLog("start download card img");
+	CCLOG("start download card img");
 	ing_download_cnt = 1;
 	startDownload();
 }
 void SumranMailPopup::startDownload ()
 {
-	CCLog("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
+	CCLOG("%d : %s", ing_download_cnt, df_list[ing_download_cnt-1].filename.c_str());
 	
 	StageImgLoader::sharedInstance()->downloadImg(df_list[ing_download_cnt-1].img, df_list[ing_download_cnt-1].size, df_list[ing_download_cnt-1].filename,
 												  this, callfunc_selector(SumranMailPopup::successAction), this, callfunc_selector(SumranMailPopup::failAction));

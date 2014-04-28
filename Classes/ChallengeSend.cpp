@@ -16,7 +16,7 @@
 //}
 //ChallengeSend::~ChallengeSend()
 //{
-//	CCLog("ChallengeSend Destroy");
+//	CCLOG("ChallengeSend Destroy");
 //}
 ////void ChallengeSend::registerWithTouchDispatcher()
 ////{
@@ -100,7 +100,7 @@
 //																	 av->setContentSize(ttf->getDimensions());
 //																	 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 //																								 [=](CCObject* e) {
-//																									 CCLog("ok!!");
+//																									 CCLOG("ok!!");
 //																									 endFunction();
 //																								 });
 //
@@ -149,7 +149,7 @@
 //																		 //																		obj->removeFromParent();
 //																		 addChild(GachaPurchase::create(kGachaPurchaseStartMode_reward,
 //																																		[=](){
-//																																			CCLog("hat close");
+//																																			CCLOG("hat close");
 //																																			endFunction();
 //																																		}
 //																																		), 1);
@@ -215,7 +215,7 @@
 //																		 av->setContentSize(ttf->getDimensions());
 //																		 av->addButton(CommonButton::create("ok", 14.f, CCSizeMake(90, 54), CommonButtonType::CommonButtonBlue, INT_MIN),
 //																									 [=](CCObject* e) {
-//																										 CCLog("ok!!");
+//																										 CCLOG("ok!!");
 //																										 endFunction();
 //																									 });
 //

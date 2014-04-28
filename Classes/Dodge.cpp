@@ -17,7 +17,7 @@ void BulletContainer::update(float dt)
 {
 	auto childs = getChildren();
 	vector<CCNode*> eraseList;
-	//		CCLog("children count %d", getChildrenCount());
+	//		CCLOG("children count %d", getChildrenCount());
 	for(int i=0; i<getChildrenCount(); i++)
 	{
 		DodgeBullet* child = dynamic_cast<DodgeBullet*>(childs->objectAtIndex(i));
@@ -195,7 +195,7 @@ void Dodge::checkCollision(float dt)
 {
 	auto childs = m_bulletContainer->getChildren();
 
-	//		CCLog("children count %d", getChildrenCount());
+	//		CCLOG("children count %d", getChildrenCount());
 	for(int i=0; i<m_bulletContainer->getChildrenCount(); i++)
 	{
 		DodgeBullet* child = dynamic_cast<DodgeBullet*>(childs->objectAtIndex(i));

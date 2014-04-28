@@ -1453,7 +1453,7 @@ void PlayUI::takeAddTimeItem ()
 	countingCnt -= change_time;
 	total_time += change_time;
 	
-	CCLog("addtime value : %d", change_time);
+	CCLOG("addtime value : %d", change_time);
 //	if(mySGD->isUsingItem(kIC_longTime))
 //	{
 //		if(countingCnt < -mySGD->getLongTimeValue())

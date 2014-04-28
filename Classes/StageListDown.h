@@ -108,7 +108,7 @@ private:
 	
 	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
-		CCLog("touch swallow popup");
+		CCLOG("touch swallow popup");
 		return true;
 	}
     virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)

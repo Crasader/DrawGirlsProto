@@ -731,7 +731,7 @@ void BeautyStoneSettingPopup::menuAction(CCObject* pSender)
 
 bool BeautyStoneSettingPopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 {
-	CCLog("touch swallow!!");
+	CCLOG("touch swallow!!");
 	
 	return true;
 }

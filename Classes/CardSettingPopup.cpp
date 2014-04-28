@@ -596,7 +596,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 //			if(t_idx >= selected_cnt && t_idx < selected_cnt+event_stage_count)
 //				found_stage1 = t_idx-selected_cnt+event_stage_count;
 //			else
-//				CCLog("not found stage");
+//				CCLOG("not found stage");
 //		}
 		
 		if(found_stage1 != -1)
@@ -836,7 +836,7 @@ unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )
 
 bool CardSettingPopup::ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent)
 {
-	CCLog("touch swallow!!");
+	CCLOG("touch swallow!!");
 	
 	return true;
 }

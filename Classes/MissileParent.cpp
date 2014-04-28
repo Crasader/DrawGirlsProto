@@ -71,7 +71,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 {
 
 	return;
-	CCLog("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
+	CCLOG("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
 	
 	int card_number;
 	card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
@@ -80,7 +80,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	{
 		if(jm_type%10 >= 0 && jm_type%10 <= 3)
 		{
-			CCLog("base JackMissile");
+			CCLOG("base JackMissile");
 			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
 			int cumberCnt = subCumberArray.size();
 			int random_value;
@@ -138,7 +138,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		}
 		else if(jm_type%10 >= 4 && jm_type%10 <= 6)
 		{
-			CCLog("Upgrade JackMissile");
+			CCLOG("Upgrade JackMissile");
 			UM_creator* t_c = UM_creator::create(cmCnt, jm_type, missile_speed, missile_position);
 			jack_missile_node->addChild(t_c);
 			t_c->startPetCreate();
@@ -507,7 +507,7 @@ void MissileParent::subOneDie()
 
 void MissileParent::endIngActionAP()
 {
-	CCLog("saveAP = null");
+	CCLOG("saveAP = null");
 //	saveAP = NULL;
 }
 
@@ -536,7 +536,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 			cb->getParent()->addChild(t_ccn);
 			t_ccn->startCharge();
-			CCLog("%x", t_ccn);
+			CCLOG("%x", t_ccn);
 			
 			cb->getCharges().push_back(t_ccn);
 //			m_charges.push_back(t_ccn);

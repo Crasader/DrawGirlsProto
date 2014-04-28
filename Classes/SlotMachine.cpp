@@ -52,7 +52,7 @@ void SlotMachineSub::update(float dt)
 						retryGame();
 					}
 					else {
-						CCLog("돈 없음");
+						CCLOG("돈 없음");
 					}
 				}
 				else if(m_gachaCategory == GachaCategory::kGoldGacha)
@@ -65,7 +65,7 @@ void SlotMachineSub::update(float dt)
 						retryGame();
 					}
 					else {
-						CCLog("돈 없음");
+						CCLOG("돈 없음");
 					}
 				}
 
@@ -126,7 +126,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 		i->setVisible(false);
 	}
 	m_alreadyDeterminantOrder = ps.getResult(); // 순서
-	CCLog("my order %d", m_alreadyDeterminantOrder);
+	CCLOG("my order %d", m_alreadyDeterminantOrder);
 
 	uniform_int_distribution<> dist(0, 2);
 	switch(m_alreadyDeterminantOrder)
@@ -204,7 +204,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 	//	m_determinantSlotItems[2] = 2;
 	for(auto i : m_determinantSlotItems)
 	{
-		CCLog("-- %d", i);
+		CCLOG("-- %d", i);
 	}
 	m_gachaMode = gsm;
 
@@ -296,7 +296,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 				{
 					int prevSlotIndex = m_prevSlotIndex[currentSlot];
 					auto indexs = this->rotationSlot({currentSlot}, -15);
-					CCLog("current Index : %d", indexs[currentSlot]);
+					CCLOG("current Index : %d", indexs[currentSlot]);
 					int ii = (indexs[currentSlot] + 1) % 4 ;
 
 					if(prevSlotIndex != indexs[currentSlot] && m_determinantSlotItems[currentSlot] == ii && !m_firstSlotStopFirst)
@@ -326,7 +326,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 								{
 									int prevSlotIndex = m_prevSlotIndex[currentSlot];
 									auto indexs = this->rotationSlot({currentSlot}, -15);
-									CCLog("current Index : %d", indexs[currentSlot]);
+									CCLOG("current Index : %d", indexs[currentSlot]);
 									int ii = (indexs[currentSlot] + 1) % 4 ;
 
 									if(prevSlotIndex != indexs[currentSlot] && m_determinantSlotItems[currentSlot] == ii && !m_firstSlotStopSecond)
@@ -356,7 +356,7 @@ bool SlotMachineSub::init(KSAlertView* av, std::function<void(void)> callback, c
 								{
 									int prevSlotIndex = m_prevSlotIndex[currentSlot];
 									auto indexs = this->rotationSlot({currentSlot}, -15);
-									CCLog("current Index : %d", indexs[currentSlot]);
+									CCLOG("current Index : %d", indexs[currentSlot]);
 									int ii = (indexs[currentSlot] + 1) % 4 ;
 
 									if(prevSlotIndex != indexs[currentSlot] && m_determinantSlotItems[currentSlot] == ii && !m_firstSlotStopThird)
@@ -435,7 +435,7 @@ std::vector<int> SlotMachineSub::rotationSlot(const std::vector<int>& slots, flo
 
 //SlotMachine::~SlotMachine()
 //{
-//CCLog("~hatgacha");
+//CCLOG("~hatgacha");
 //}
 ////void HatGacha::registerWithTouchDispatcher()
 ////{
