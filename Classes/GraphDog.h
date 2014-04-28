@@ -101,18 +101,18 @@ struct CommandParam
 	}
 	CommandParam(){}
 	
-	template<typename... Args>
-	CommandParam(string _action,function<void(Json::Value)> _func,const char* _jsonString, Args... _args){
-		ostringstream oss;
-		KS::__KSLogCore(oss,_jsonString,_args...);
-		Json::Reader r;
-		Json::Value v;
-		r.parse(oss.str().c_str(),v);
-		
-		action = _action;
-		param = v;
-		func = _func;
-	}
+//	template<typename... Args>
+//	CommandParam(string _action,function<void(Json::Value)> _func,const char* _jsonString, Args... _args){
+//		ostringstream oss;
+//		KS::__KSLogCore(oss,_jsonString,_args...);
+//		Json::Reader r;
+//		Json::Value v;
+//		r.parse(oss.str().c_str(),v);
+//		
+//		action = _action;
+//		param = v;
+//		func = _func;
+//	}
 	//	CommandParam(string a, const JsonBox::Object* p, const CCObject* t, GDSelType& s) : action(a),
 	//		param(p), target(t), selector(s) {}
 };
@@ -235,6 +235,9 @@ public:
 	int deviceID;
 	long long int localTimestamp;
 	
+	long long int getDate(){
+		return date;
+	}
 	string getNick();
 	string getFlag();
 	string getAuID();

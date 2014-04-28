@@ -124,7 +124,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.5</real>
+									<real>0.66666668653488159</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -164,7 +164,7 @@
 									<key>name</key>
 									<string>rotation</string>
 									<key>time</key>
-									<real>0.5</real>
+									<real>0.66666668653488159</real>
 									<key>type</key>
 									<integer>2</integer>
 									<key>value</key>
@@ -194,8 +194,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>3</real>
-										<real>3</real>
+										<real>5</real>
+										<real>5</real>
 									</array>
 								</dict>
 								<dict>
@@ -207,13 +207,13 @@
 									<key>name</key>
 									<string>scale</string>
 									<key>time</key>
-									<real>0.5</real>
+									<real>0.66666668653488159</real>
 									<key>type</key>
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1</real>
-										<real>1</real>
+										<real>1.2999999523162842</real>
+										<real>1.2999999523162842</real>
 									</array>
 								</dict>
 							</array>
@@ -261,8 +261,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>5</real>
+							<real>5</real>
 							<true/>
 							<integer>0</integer>
 						</array>
@@ -275,7 +275,7 @@
 						<key>type</key>
 						<string>Degrees</string>
 						<key>value</key>
-						<real>360</real>
+						<real>0.0</real>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -304,9 +304,11 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>225</integer>
+						<integer>0</integer>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -400,13 +402,13 @@
 			<key>chainedSequenceId</key>
 			<integer>-1</integer>
 			<key>length</key>
-			<real>0.5</real>
+			<real>0.66666668653488159</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.5</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

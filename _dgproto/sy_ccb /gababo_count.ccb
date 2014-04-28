@@ -734,7 +734,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>4</real>
+									<real>4.3333334922790527</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -1426,13 +1426,13 @@
 			<key>chainedSequenceId</key>
 			<integer>-1</integer>
 			<key>length</key>
-			<real>4</real>
+			<real>4.3333334922790527</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>1.9201159477233887</real>
+			<real>2.0556900501251221</real>
 			<key>position</key>
-			<real>4</real>
+			<real>4.3333334922790527</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
