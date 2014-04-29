@@ -139,7 +139,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.8333333730697632</real>
+									<real>2.1666667461395264</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -154,7 +154,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>2.3666665554046631</real>
+									<real>2.5666666030883789</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -843,7 +843,7 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.3890233039855957</real>
+			<real>1.0391291379928589</real>
 			<key>position</key>
 			<real>2.6666667461395264</real>
 			<key>resolution</key>
