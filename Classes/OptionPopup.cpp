@@ -27,6 +27,10 @@
 #include "hspConnector.h"
 #include "TitleRenewal.h"
 
+#include "FirstPurchasePopup.h"
+#include "EmptyItemSalePopup.h"
+#include "MileagePopup.h"
+
 #include "KSLabelTTF.h"
 #include "PopCake.h"
 #include "EffectSprite.h"
@@ -77,6 +81,11 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
+	
+//	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-999, [=](){}, [=](){});
+//	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});
+//	MileagePopup* t_popup = MileagePopup::create(-999, [=](){}, 5);
+//	addChild(t_popup, 999);
 	
 //	Json::Value param;
 //	param["productid"] = "g_10289_001";
