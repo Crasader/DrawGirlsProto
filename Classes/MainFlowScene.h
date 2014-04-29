@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include <deque>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -22,6 +23,39 @@ enum MainFlowZorder{
 	kMainFlowZorder_top,
 	kMainFlowZorder_uiButton,
 	kMainFlowZorder_popup
+};
+
+class PuzzleOpenInfo
+{
+public:
+	bool is_open;
+	bool is_base_condition_success;
+	bool is_have_week_condition;
+	int keep_weekday;
+	int keep_week_start;
+	int keep_week_end;
+	bool is_have_date_condition;
+	string keep_date_start;
+	bool is_have_ruby_condition;
+	int need_ruby_value;
+	int need_star_count;
+	int before_locked_puzzle_count;
+	
+	PuzzleOpenInfo()
+	{
+		is_open = false;
+		is_base_condition_success = false;
+		is_have_week_condition = false;
+		keep_weekday = 0;
+		keep_week_start = 0;
+		keep_week_end = 0;
+		is_have_date_condition = false;
+		keep_date_start = "";
+		is_have_ruby_condition = false;
+		need_ruby_value = 0;
+		need_star_count = 0;
+		before_locked_puzzle_count = 0;
+	}
 };
 
 class CountingBMLabel;
@@ -73,6 +107,7 @@ private:
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	vector<int> have_card_count_for_puzzle_index;
+	vector<PuzzleOpenInfo> is_puzzle_enter_list;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();

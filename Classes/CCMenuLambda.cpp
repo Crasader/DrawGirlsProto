@@ -256,11 +256,11 @@ void CCMenuLambda::ccTouchEnded(CCTouch *touch, CCEvent* event)
 	
 	CCPoint difference = ccpSub(m_touchesEnd, m_touchesStart);
 	
-	if (difference.x > 8.0f || difference.y > 8.0f )
+	if (difference.x > 12.0f || difference.y > 12.0f )
 	{
 		CCMenuLambda::ccTouchCancelled(touch, event);
 	}
-	else if (difference.x < -8.0f || difference.y < -8.0f)
+	else if (difference.x < -12.0f || difference.y < -12.0f)
 	{
 		CCMenuLambda::ccTouchCancelled(touch, event);
 	}

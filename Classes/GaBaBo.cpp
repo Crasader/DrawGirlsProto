@@ -5,6 +5,8 @@
 #include "ProbSelector.h"
 #include "KSLabelTTF.h"
 #include <boost/format.hpp>
+#include "KSUtil.h"
+#include "StyledLabelTTF.h"
 
 GaBaBo::GaBaBo()
 {
@@ -32,7 +34,70 @@ GaBaBo::~GaBaBo()
 bool GaBaBo::init()
 {
 	CCLayer::init();
+	Json::Value value1, value2, value3, value4, value5, value6;
+	value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
+	value1["font"] = mySGD->getFont().c_str();
+	value1["size"] = 15.f;
+	value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
+	value2["font"] = mySGD->getFont().c_str();
+	value2["size"] = 15.f;
+
+	value3["linebreak"] = true;
+	value3["linespacing"] = 30.f;
 	
+	value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
+	value4["font"] = mySGD->getFont2();
+	value4["size"] = 20.f;
+	
+	value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
+	value5["font"] = mySGD->getFont2();
+	value5["size"] = 25.f;
+	
+	
+	StyledLabelTTF* slttf = StyledLabelTTF::create({
+		{"가을하늘공활한데", value1.toStyledString()},
+		{"높고구름없이", value2.toStyledString()},
+		{"", value3.toStyledString()},
+		{"밝은달은우리가슴", value4.toStyledString()},
+		{"일편단심일세", value5.toStyledString()},
+		{"", value3.toStyledString()}
+	}, StyledAlignment::kCenterAlignment);
+	slttf->setPosition(ccp(240, 240));
+	addChild(slttf);
+	{
+		Json::Value value1, value2, value3, value4, value5, value6;
+		value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
+		value1["font"] = mySGD->getFont().c_str();
+		value1["size"] = 15.f;
+		value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
+		value2["font"] = mySGD->getFont().c_str();
+		value2["size"] = 15.f;
+		
+		value3["linebreak"] = true;
+		value3["linespacing"] = 30.f;
+		
+		value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
+		value4["font"] = mySGD->getFont2();
+		value4["size"] = 20.f;
+		
+		value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
+		value5["font"] = mySGD->getFont2();
+		value5["size"] = 25.f;
+		
+		
+		StyledLabelTTF* slttf = StyledLabelTTF::create({
+			{"동해물과백두산이", value1.toStyledString()},
+			{"마르고닳도록", value2.toStyledString()},
+			{"", value3.toStyledString()},
+			{"하느님이보우하사", value4.toStyledString()},
+			{"우리나라만세", value5.toStyledString()},
+			{"", value3.toStyledString()}
+		}, StyledAlignment::kLeftAlignment);
+		slttf->setPosition(ccp(0, 160));
+		addChild(slttf);
+	}
+	return true;
+	m_gababoCountShowing = false;
 	
 	
 	
@@ -53,11 +118,11 @@ bool GaBaBo::init()
 
 	loadImage(m_step);
 
-	CCSprite* think = CCSprite::create("gababo_think.png");
-	addChild(think, 1);
-	think->setPosition(ccp(330, 220));
+	m_thinkSprite = CCSprite::create("gababo_think.png");
+	addChild(m_thinkSprite, 1);
 
 	CCMenuLambda* gababo = CCMenuLambda::create();
+	gababo->setPropaOnBegan(true);
 	gababo->setPosition(CCPointZero);
 	addChild(gababo, 1);
 	
@@ -66,14 +131,13 @@ bool GaBaBo::init()
 		m_ga->setSelectedIndex(0);
 		m_bo->setSelectedIndex(0);
 	};
+	
 	m_ba = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
 		allInActiver();
 		m_ba->setSelectedIndex(1);
 	}, CCMenuItemImageLambda::create("ba_inactive.png", "ba_inactive.png", nullptr),
 		CCMenuItemImageLambda::create("ba_active.png", "ba_active.png", nullptr));
 	gababo->addChild(m_ba, 1);
-	m_ba->setPosition(ccp(140, 50));
-
 
 	m_ga = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
 		allInActiver();
@@ -81,8 +145,6 @@ bool GaBaBo::init()
 	}, CCMenuItemImageLambda::create("ga_inactive.png", "ga_inactive.png", nullptr),
 		CCMenuItemImageLambda::create("ga_active.png", "ga_active.png", nullptr));
 	gababo->addChild(m_ga, 1);
-	m_ga->setPosition(ccp(240, 50));
-
 
 	m_bo = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
 		allInActiver();
@@ -90,8 +152,8 @@ bool GaBaBo::init()
 	}, CCMenuItemImageLambda::create("bo_inactive.png", "bo_inactive.png", nullptr),
 		CCMenuItemImageLambda::create("bo_active.png", "bo_active.png", nullptr));
 	gababo->addChild(m_bo, 1);
-	m_bo->setPosition(ccp(340, 50));
 
+	initAnimation();
 
 	m_ba->setSelectedIndex(1);
 	
@@ -100,8 +162,7 @@ bool GaBaBo::init()
 	m_computerThinkSprites[kAttackBo] = CCSprite::create("bo.png");
 	for(auto i : m_computerThinkSprites)
 	{
-		addChild(i.second, 1); // 일단 붙임.
-		i.second->setPosition(ccp(350, 230));
+		m_thinkSprite->addChild(i.second, 1); // 일단 붙임.
 		i.second->setVisible(false);
 	}
 	m_computerThink = 1; // 가위로 세팅	
@@ -149,6 +210,13 @@ void GaBaBo::update(float dt)
 		ps.pushProb(50);
 	else
 		ps.pushProb(100);
+	if(m_remainTime <= 3.5f && m_gababoCountShowing == false)
+	{
+		CCSprite* gababoCount = KS::loadCCBI<CCSprite*>(this, "gababo_count.ccbi").first;
+		gababoCount->setPosition(ccp(240, 160));
+		addChild(gababoCount, 4);
+		m_gababoCountShowing = true;
+	}
 	if(ps.getResult() == 0 && m_lastChangeTime + 1 < getCurrentTimeStamp())
 	{
 		m_lastChangeTime = getCurrentTimeStamp();
@@ -166,8 +234,6 @@ void GaBaBo::update(float dt)
 		}
 		m_computerThinkSprites[m_computerThink]->setVisible(true);
 	}
-
-	
 
 	m_remainTimeFnt->setString(boost::str(boost::format("%||") % m_remainTime).c_str());
 	if(m_remainTime <= 0 && m_resultShowing == false)
@@ -200,7 +266,11 @@ void GaBaBo::update(float dt)
 		{
 			resultString = "Draw";
 			gameResult = 1;
-			result = KS::loadCCBI<CCSprite*>(this, "e_draw.ccbi").first;
+			auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_draw.ccbi");
+			resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+				resultPair.first->removeFromParent();
+			});
+			result = resultPair.first;
 			result->setPosition(ccp(240, 180));
 			addChild(result, 1);
 			m_drawCount++;
@@ -209,7 +279,11 @@ void GaBaBo::update(float dt)
 		{
 			resultString = "You Win";
 			gameResult = 2;
-			result = KS::loadCCBI<CCSprite*>(this, "e_win.ccbi").first;
+			auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_win.ccbi");
+			resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+				resultPair.first->removeFromParent();
+			});
+			result = resultPair.first;
 			result->setPosition(ccp(240, 180));
 			addChild(result, 1);
 			m_winCount++;
@@ -218,37 +292,62 @@ void GaBaBo::update(float dt)
 		{
 			resultString = "You Lose";
 			gameResult = 3;
-			result = KS::loadCCBI<CCSprite*>(this, "e_lose.ccbi").first;
+			auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_lose.ccbi");
+			resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+				resultPair.first->removeFromParent();
+			});
+			result = resultPair.first;
 			result->setPosition(ccp(240, 180));
 			addChild(result, 1);
 			m_loseCount++;
 		}
-
-		addChild(KSTimer::create(3.f, [=](){
+		
+		if(gameResult == 2)
+		{
+			addChild(KSTimer::create(3.0f, [=](){
+				hidingAnimation();
+			}));
+		}
+		addChild(KSTimer::create(4.f, [=](){
 			
 			// Draw
 			if(gameResult == 1)
 			{
-				result->removeFromParent();
 				initGameTime();
 				m_resultShowing = false;
 				m_ba->setEnabled(true);
 				m_ga->setEnabled(true);
 				m_bo->setEnabled(true);
 				scheduleUpdate();
+				
 			}
 			// Win
 			else if(gameResult == 2)
 			{
 //				result->removeFromParent();
-				CCSprite* light = KS::loadCCBI<CCSprite*>(this, "e_1.ccbi").first;
+				auto lightPair = KS::loadCCBI<CCSprite*>(this, "gabaao_effect.ccbi");
+				CCSprite* light = lightPair.first;
+				lightPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+					light->removeFromParent();
+				});
+//				lightPair.second->setAnimationCompletedCallback(this, callfunc_selector(GaBaBo::test));
 				light->setPosition(ccp(240, 160));
 				addChild(light, 100);
+
+//				setVisibleInterface(false);
+//				for(auto i : m_computerThinkSprites)
+//				{
+//					i.second->setVisible(false);
+//				}
 				addChild(KSTimer::create(0.9f, [=](){
+					addChild(KSTimer::create(1.3f, [=](){
+						initAnimation();
+					}));
+					
+//					setVisibleInterface(true);
 					m_ba->setEnabled(true);
 					m_ga->setEnabled(true);
 					m_bo->setEnabled(true);
-					result->removeFromParent();
 					initGameTime();
 					m_resultShowing = false;
 					m_step++;
@@ -312,4 +411,85 @@ void GaBaBo::update(float dt)
 		}));
 		unscheduleUpdate();
 	}
+}
+
+void GaBaBo::setVisibleInterface(bool r)
+{
+	m_thinkSprite->setVisible(r);
+	m_ga->setVisible(r);
+	m_ba->setVisible(r);
+	m_bo->setVisible(r);
+}
+void GaBaBo::initAnimation()
+{
+	m_thinkSprite->setPosition(ccp(330, 220 + 170));
+
+	m_ba->setPosition(ccp(140, 50 - 170));
+	m_ga->setPosition(ccp(240, 50 - 170));
+	m_bo->setPosition(ccp(340, 50 - 170));
+	addChild(KSTimer::create(0.3f, [=](){
+		addChild(KSTimer::create(0.1f, [=](){
+			addChild(KSGradualValue<CCPoint>::create(m_thinkSprite->getPosition(), m_thinkSprite->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+				m_thinkSprite->setPosition(t);
+			}, [=](CCPoint t){
+				m_thinkSprite->setPosition(t);
+			}));
+			addChild(KSGradualValue<CCPoint>::create(m_ba->getPosition(), m_ba->getPosition() + ccp(0, 170), 0.4f, [=](CCPoint t){
+				m_ba->setPosition(t);
+			}, [=](CCPoint t){
+				m_ba->setPosition(t);
+			}));
+			addChild(KSTimer::create(0.1f, [=](){
+				addChild(KSGradualValue<CCPoint>::create(m_ga->getPosition(), m_ga->getPosition() + ccp(0, 170), 0.4f, [=](CCPoint t){
+					m_ga->setPosition(t);
+				}, [=](CCPoint t){
+					m_ga->setPosition(t);
+				}));
+				addChild(KSTimer::create(0.1f, [=](){
+					addChild(KSGradualValue<CCPoint>::create(m_bo->getPosition(), m_bo->getPosition() + ccp(0, 170), 0.4f, [=](CCPoint t){
+						m_bo->setPosition(t);
+					}, [=](CCPoint t){
+						m_bo->setPosition(t);
+					}));
+				}));
+			}));
+		}));
+	}));
+}
+
+void GaBaBo::hidingAnimation()
+{
+//	m_thinkSprite->setPosition(ccp(330, 220));
+//	
+//	m_ba->setPosition(ccp(140, 50 - 170));
+//	m_ga->setPosition(ccp(240, 50 - 170));
+//	m_bo->setPosition(ccp(340, 50 - 170));
+	addChild(KSTimer::create(0.3f, [=](){
+		addChild(KSTimer::create(0.1f, [=](){
+			addChild(KSGradualValue<CCPoint>::create(m_thinkSprite->getPosition(), m_thinkSprite->getPosition() + ccp(0, 170), 0.4f, [=](CCPoint t){
+				m_thinkSprite->setPosition(t);
+			}, [=](CCPoint t){
+				m_thinkSprite->setPosition(t);
+			}));
+			addChild(KSGradualValue<CCPoint>::create(m_ba->getPosition(), m_ba->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+				m_ba->setPosition(t);
+			}, [=](CCPoint t){
+				m_ba->setPosition(t);
+			}));
+			addChild(KSTimer::create(0.1f, [=](){
+				addChild(KSGradualValue<CCPoint>::create(m_ga->getPosition(), m_ga->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+					m_ga->setPosition(t);
+				}, [=](CCPoint t){
+					m_ga->setPosition(t);
+				}));
+				addChild(KSTimer::create(0.1f, [=](){
+					addChild(KSGradualValue<CCPoint>::create(m_bo->getPosition(), m_bo->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+						m_bo->setPosition(t);
+					}, [=](CCPoint t){
+						m_bo->setPosition(t);
+					}));
+				}));
+			}));
+		}));
+	}));
 }

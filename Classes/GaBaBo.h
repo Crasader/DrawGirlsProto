@@ -1,4 +1,4 @@
-#ifndef GABABO_H
+ #ifndef GABABO_H
 #define GABABO_H
 
 #include "cocos2d.h"
@@ -44,9 +44,13 @@ public:
 	void initGameTime()
 	{
 		m_remainTime = 9.f;
+		m_gababoCountShowing = false;
 	}
 	void loadImage(int step);
 	int getCurrentTimeStamp();
+	void setVisibleInterface(bool r);
+	void initAnimation();
+	void hidingAnimation();
 	//virtual void registerWithTouchDispatcher();
 protected:
 	CCMenuItemToggleLambda* m_ba, *m_ga, *m_bo;
@@ -54,8 +58,10 @@ protected:
 	std::map<int, CCSprite*> m_computerThinkSprites;
 	float m_remainTime;
 	bool m_resultShowing;
+	bool m_gababoCountShowing;
 	CCLabelBMFont* m_remainTimeFnt;
 	CCSprite* m_stepSprite;
+	CCSprite* m_thinkSprite;
 	int m_step;
 	long long m_lastChangeTime;
 	int m_winCount, m_drawCount, m_loseCount;

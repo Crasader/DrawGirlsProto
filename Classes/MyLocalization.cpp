@@ -533,6 +533,18 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
 	en->setObject(CCString::create("승급하기"), kMyLocalKey_rankup);
 	
+	en->setObject(CCString::create("구매하기"), kMyLocalKey_purchase);
+	en->setObject(CCString::create("첫구매시 할인"), kMyLocalKey_firstPurchaseSale);
+	en->setObject(CCString::create("%s할인은 첫 구매 회원님께만"), kMyLocalKey_firstPurchaseMent1);
+	en->setObject(CCString::create(" 적용됩니다."), kMyLocalKey_firstPurchaseMent2);
+	en->setObject(CCString::create("이 창을 닫으면 %s 할인 기회는 사라집니다."), kMyLocalKey_firstPurchaseMent3);
+	en->setObject(CCString::create("지금 묶음 아이템을 구매하시면"), kMyLocalKey_emptyItemSaleMent1);
+	en->setObject(CCString::create("%s 할인해 드립니다."), kMyLocalKey_emptyItemSaleMent2);
+	en->setObject(CCString::create("묶음아이템 할인"), kMyLocalKey_packageItemSale);
+	en->setObject(CCString::create("5번째 구매시"), kMyLocalKey_mileageMent1);
+	en->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
+	en->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
+	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
 	
@@ -838,6 +850,18 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
 	ja->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
 	ja->setObject(CCString::create("승급하기"), kMyLocalKey_rankup);
+	
+	ja->setObject(CCString::create("구매하기"), kMyLocalKey_purchase);
+	ja->setObject(CCString::create("첫구매시 할인"), kMyLocalKey_firstPurchaseSale);
+	ja->setObject(CCString::create("%s할인은 첫 구매 회원님께만"), kMyLocalKey_firstPurchaseMent1);
+	ja->setObject(CCString::create(" 적용됩니다."), kMyLocalKey_firstPurchaseMent2);
+	ja->setObject(CCString::create("이 창을 닫으면 %s 할인 기회는 사라집니다."), kMyLocalKey_firstPurchaseMent3);
+	ja->setObject(CCString::create("지금 묶음 아이템을 구매하시면"), kMyLocalKey_emptyItemSaleMent1);
+	ja->setObject(CCString::create("%s 할인해 드립니다."), kMyLocalKey_emptyItemSaleMent2);
+	ja->setObject(CCString::create("묶음아이템 할인"), kMyLocalKey_packageItemSale);
+	ja->setObject(CCString::create("5번째 구매시"), kMyLocalKey_mileageMent1);
+	ja->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
+	ja->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);
