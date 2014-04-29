@@ -18,6 +18,7 @@
 #include "LogData.h"
 #include "StageImgLoader.h"
 #include "cocos-ext.h"
+#include "FlagSelector.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -71,7 +72,7 @@ private:
 	vector<int> card_data_load_list;
 	
 	CCEditBox* input_text;
-	
+	FlagSelector* flag;
 	CCSprite* nick_back;
 	
 	virtual void editBoxEditingDidBegin(CCEditBox* editBox);

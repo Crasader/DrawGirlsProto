@@ -133,6 +133,8 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
+		
+		
 		is_menu_enable = true;
 		
 		state_label->setString("");
@@ -153,6 +155,9 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		input_text->setDelegate(this);
 		addChild(input_text,3);
 		
+		flag = FlagSelector::create();
+		flag->setPosition(140,210);
+		addChild(flag,100000);
 		
 		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
 		ok_menu->setPosition(ccp(363,160));
@@ -1836,6 +1841,7 @@ void TitleRenewalScene::joinAction()
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
 	param["nick"] = input_text->getText();
+	param["flag"] = flag->getFlag();
 	hspConnector::get()->command("join", param, [=](Json::Value result_data)
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -1846,7 +1852,7 @@ void TitleRenewalScene::joinAction()
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
 										 input_text->removeFromParent();
-										 
+										 flag->removeFromParent();
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										 successLogin();
@@ -1869,6 +1875,7 @@ void TitleRenewalScene::joinAction()
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
 										 input_text->removeFromParent();
+										 flag->removeFromParent();
 										 
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 

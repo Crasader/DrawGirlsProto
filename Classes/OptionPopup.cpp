@@ -34,6 +34,7 @@
 #include "KSLabelTTF.h"
 #include "PopCake.h"
 #include "EffectSprite.h"
+#include "FlagSelector.h"
 
 USING_NS_CC_EXT;
 
@@ -105,6 +106,9 @@ bool OptionPopup::init()
 	
 	
 	setTouchEnabled(true);
+	
+	
+
 	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
 	//addChild(t_popup, 4);

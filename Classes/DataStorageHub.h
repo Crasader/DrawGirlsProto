@@ -54,6 +54,7 @@ typedef enum t_DSH_Key{
 //	kDSH_Key_clearStageNumber_int1,
 //	kDSH_Key_isClearStage_int1,
 	kDSH_Key_nick,
+	kDSH_Key_flag,
 	kDSH_Key_wasTutorialPopupShockWave,
 	kDSH_Key_wasTutorialPopupMissileTrace,
 	kDSH_Key_wasTutorialPopupCrashArea,
