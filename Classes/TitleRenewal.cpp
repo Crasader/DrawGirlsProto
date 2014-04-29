@@ -880,6 +880,8 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
+		
+		
 	}
 	else
 	{
