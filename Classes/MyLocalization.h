@@ -300,7 +300,18 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rankUpSubTitle,
 	kMyLocalKey_recentTakeCard,
 	kMyLocalKey_rankUpRate,
-	kMyLocalKey_rankup
+	kMyLocalKey_rankup,
+	kMyLocalKey_purchase,
+	kMyLocalKey_firstPurchaseSale,
+	kMyLocalKey_firstPurchaseMent1,
+	kMyLocalKey_firstPurchaseMent2,
+	kMyLocalKey_firstPurchaseMent3,
+	kMyLocalKey_packageItemSale,
+	kMyLocalKey_emptyItemSaleMent1,
+	kMyLocalKey_emptyItemSaleMent2,
+	kMyLocalKey_mileageMent1,
+	kMyLocalKey_mileageMent2,
+	kMyLocalKey_mileageMent3
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

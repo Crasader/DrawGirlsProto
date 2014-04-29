@@ -212,17 +212,18 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
 	ko->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
 	ko->setObject(CCString::create("승급하기"), kMyLocalKey_rankup);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	
+	ko->setObject(CCString::create("구매하기"), kMyLocalKey_purchase);
+	ko->setObject(CCString::create("첫구매시 할인"), kMyLocalKey_firstPurchaseSale);
+	ko->setObject(CCString::create("%s할인은 첫 구매 회원님께만"), kMyLocalKey_firstPurchaseMent1);
+	ko->setObject(CCString::create(" 적용됩니다."), kMyLocalKey_firstPurchaseMent2);
+	ko->setObject(CCString::create("이 창을 닫으면 %s 할인 기회는 사라집니다."), kMyLocalKey_firstPurchaseMent3);
+	ko->setObject(CCString::create("지금 묶음 아이템을 구매하시면"), kMyLocalKey_emptyItemSaleMent1);
+	ko->setObject(CCString::create("%s 할인해 드립니다."), kMyLocalKey_emptyItemSaleMent2);
+	ko->setObject(CCString::create("묶음아이템 할인"), kMyLocalKey_packageItemSale);
+	ko->setObject(CCString::create("5번째 구매시"), kMyLocalKey_mileageMent1);
+	ko->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
+	ko->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
 	
