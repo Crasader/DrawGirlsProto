@@ -1404,12 +1404,14 @@ void StarGoldData::resultChangeUserdata(Json::Value result_data)
 
 CommandParam StarGoldData::getChangeUserdataParam(jsonSelType t_callback)
 {
+	change_userdata_callback = t_callback;
+	
 	Json::Value param;
 	
 	for(int i=0;i<changed_userdata_list.size();i++)
 		param[getUserdataTypeToKey(changed_userdata_list[i].m_type)] = changed_userdata_list[i].m_value.getV();
 	
-	return CommandParam("updateuserdata", param, t_callback);
+	return CommandParam("updateuserdata", param, json_selector(this, StarGoldData::resultChangeUserdata));
 }
 
 void StarGoldData::initUserdata(Json::Value result_data)
@@ -1791,14 +1793,64 @@ float StarGoldData::getRankUpAddRate(){	return rank_up_add_rate.getV();}
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}
-void StarGoldData::setUserdataIsVIP(int t_i){	userdata_isVIP = t_i;}
-int StarGoldData::getUserdataIsVIP(){	return userdata_isVIP.getV();}
-void StarGoldData::setUserdataIsFirstBuy(int t_i){	userdata_isFirstBuy = t_i;}
-int StarGoldData::getUserdataIsFirstBuy(){	return userdata_isFirstBuy.getV();	}
-void StarGoldData::setUserdataTotalPlayCount(int t_i){	userdata_totalPlayCount = t_i;	}
-int StarGoldData::getUserdataTotalPlayCount(){	return userdata_totalPlayCount.getV();	}
-void StarGoldData::setUserdataFailCount(int t_i){	userdata_failCount = t_i;	}
-int StarGoldData::getUserdataFailCount(){	return userdata_failCount.getV();	}
-void StarGoldData::setUserdataAutoLevel(int t_i){	userdata_autoLevel = t_i;	}
-int StarGoldData::getUserdataAutoLevel(){	return userdata_autoLevel.getV();	}
+void StarGoldData::setUserdataIsVIP(int t_i)
+{
+	if(userdata_storage[kUserdataType_isVIP].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_isVIP;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataIsVIP(){	return userdata_storage[kUserdataType_isVIP].getV();}
+void StarGoldData::setUserdataIsFirstBuy(int t_i)
+{
+	if(userdata_storage[kUserdataType_isFirstBuy].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_isFirstBuy;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataIsFirstBuy(){	return userdata_storage[kUserdataType_isFirstBuy].getV();	}
+void StarGoldData::setUserdataTotalPlayCount(int t_i)
+{
+	if(userdata_storage[kUserdataType_totalPlayCount].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_totalPlayCount;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataTotalPlayCount(){	return userdata_storage[kUserdataType_totalPlayCount].getV();	}
+void StarGoldData::setUserdataFailCount(int t_i)
+{
+	if(userdata_storage[kUserdataType_failCount].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_failCount;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataFailCount(){	return userdata_storage[kUserdataType_failCount].getV();	}
+void StarGoldData::setUserdataAutoLevel(int t_i)
+{
+	if(userdata_storage[kUserdataType_autoLevel].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_autoLevel;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAutoLevel(){	return userdata_storage[kUserdataType_autoLevel].getV();	}
 
