@@ -20,85 +20,85 @@ echo"</center>";
 	<?php
 }
 
-echo "start make card";
-
-if($_GET["mode"]!="card")exit;
+// if($_GET["mode"]!="card")exit;
 
 
-$cards[]="1_chihaya_1.png";
-$cards[]="1_kanzaki_1.png";
-$cards[]="1_kisaragi_1.png";
-$cards[]="1_kochou_1.png";
-$cards[]="1_ranmaru_1.png";
-$cards[]="2_asuka_1.png";
-$cards[]="2_ayame_1.png";
-$cards[]="2_hibari_1.png";
-$cards[]="2_katsuragi_1.png";
-$cards[]="2_seimei_1.png";
-$cards[]="3_josui_1.png";
-$cards[]="3_kagari_1.png";
-$cards[]="3_mai_1.png";
-$cards[]="3_tamaki_1.png";
-$cards[]="3_yugiri_1.png";
-$cards[]="4_chitose_1.png";
-$cards[]="4_haruka_1.png";
-$cards[]="4_ibuki_1.png";
-$cards[]="4_souji_1.png";
-$cards[]="4_yomi_1.png";
-$cards[]="5_minori_1.png";
-$cards[]="5_murakumo_1.png";
-$cards[]="5_siki_1.png";
-$cards[]="5_yozakura_1.png";
-$cards[]="5_yumi_1.png";
+// echo "start make card";
 
-$school=0;
-$sc=1;
-for($set=0;$set<count($cards);$set++){
-	echo "test";
-	$cardinfo = explode("_",$cards[$set]);
-	$puzzleNo = $cardinfo[0];
-	$cardname = $cardinfo[1];
-	for($rank=1;$rank<=4;$rank++){
-		$cardNo = 12000+$school*100+$sc*10+$rank;
-		$nCard = new Card($cardNo);
-		$nCard->no = $cardNo;
-		$nCard->rank = $rank;
-		$nCard->durability=5;
-		$nCard->ability="[]";
-		$nCard->language="kr";
-		$imagename = "p".$puzzleNo."_".$cardname."_".$rank;
-		$nCard->imgInfo='{"img":"card/'.$imagename.'.png","size":200}';
-		$nCard->silImgInfo='{"isSil":"1","img":"card/'.$imagename.'s.png","size":15}';
-		$nCard->aniInfo='{"isAni":0}';
-		$nCard->reward=$rank*250;
-		$nCard->grade=$rank;
-		$nCard->script="この部分にキャラクターのセリフが入る予定です。";
-		$nCard->name = $cardname;
-		$nCard->version = $nCard->version + 1;
-		if($nCard->save(true))echo"true<br>";
-		else echo"false<br>";
-	}
-	$sc++;
-	if($sc>5){$sc=1; $school+=1;}
-}
+// $cards[]="1_chihaya_1.png";
+// $cards[]="1_kanzaki_1.png";
+// $cards[]="1_kisaragi_1.png";
+// $cards[]="1_kochou_1.png";
+// $cards[]="1_ranmaru_1.png";
+// $cards[]="2_asuka_1.png";
+// $cards[]="2_ayame_1.png";
+// $cards[]="2_hibari_1.png";
+// $cards[]="2_katsuragi_1.png";
+// $cards[]="2_seimei_1.png";
+// $cards[]="3_josui_1.png";
+// $cards[]="3_kagari_1.png";
+// $cards[]="3_mai_1.png";
+// $cards[]="3_tamaki_1.png";
+// $cards[]="3_yugiri_1.png";
+// $cards[]="4_chitose_1.png";
+// $cards[]="4_haruka_1.png";
+// $cards[]="4_ibuki_1.png";
+// $cards[]="4_souji_1.png";
+// $cards[]="4_yomi_1.png";
+// $cards[]="5_minori_1.png";
+// $cards[]="5_murakumo_1.png";
+// $cards[]="5_siki_1.png";
+// $cards[]="5_yozakura_1.png";
+// $cards[]="5_yumi_1.png";
 
-exit;
+// $school=0;
+// $sc=1;
+// for($set=0;$set<count($cards);$set++){
+// 	echo "test";
+// 	$cardinfo = explode("_",$cards[$set]);
+// 	$puzzleNo = $cardinfo[0];
+// 	$cardname = $cardinfo[1];
+// 	for($rank=1;$rank<=4;$rank++){
+// 		$cardNo = 12000+$school*100+$sc*10+$rank;
+// 		$nCard = new Card($cardNo);
+// 		$nCard->no = $cardNo;
+// 		$nCard->rank = $rank;
+// 		$nCard->durability=5;
+// 		$nCard->ability="[]";
+// 		$nCard->language="kr";
+// 		$imagename = "p".$puzzleNo."_".$cardname."_".$rank;
+// 		$nCard->imgInfo='{"img":"card/'.$imagename.'.png","size":200}';
+// 		$nCard->silImgInfo='{"isSil":"1","img":"card/'.$imagename.'s.png","size":15}';
+// 		$nCard->aniInfo='{"isAni":0}';
+// 		$nCard->reward=$rank*250;
+// 		$nCard->grade=$rank;
+// 		$nCard->script="この部分にキャラクターのセリフが入る予定です。";
+// 		$nCard->name = $cardname;
+// 		$nCard->version = $nCard->version + 1;
+// 		if($nCard->save(true))echo"true<br>";
+// 		else echo"false<br>";
+// 	}
+// 	$sc++;
+// 	if($sc>5){$sc=1; $school+=1;}
+// }
 
-if($_GET["mode"]!="balance")exit;
+// exit;
 
-$n = strtotime("next Sunday");
-$c = time();
-$m = $n-$c;
-$m2 = $m/(60*60); //몇시간남음
-$m3 = $m2/24; //몇일남음
-echo "다음주 일요일까지 남은시간".$n."<br>";
-echo "<br>";
-echo "현재시간 ".$c;
-echo "<br>";
-echo ($m2)."시간 남았습니다.";
-echo "<br>";
-echo ($m3)."시간 남았습니다.";
-echo "<br>";
+ if($_GET["mode"]!="balance")exit;
+
+// $n = strtotime("next Sunday");
+// $c = time();
+// $m = $n-$c;
+// $m2 = $m/(60*60); //몇시간남음
+// $m3 = $m2/24; //몇일남음
+// echo "다음주 일요일까지 남은시간".$n."<br>";
+// echo "<br>";
+// echo "현재시간 ".$c;
+// echo "<br>";
+// echo ($m2)."시간 남았습니다.";
+// echo "<br>";
+// echo ($m3)."시간 남았습니다.";
+// echo "<br>";
 ?>
 
 
@@ -783,7 +783,7 @@ function getCircleBoss($stageNo,$stageLevel){
 
 	if($stageNo%5!=0) $stageNo=$stageNo*2/3.0;
 	
-	$level = (int)$stageLevel/2;
+	$level = (int)$stageLevel/2.0;
 
 	if($level>10)$level=10;
 
@@ -793,7 +793,7 @@ function getCircleBoss($stageNo,$stageLevel){
 
 	// $boss["type"]="circle_".$BossNo;
 	// if($BossNo<10)$boss["type"]="circle_0".$BossNo;
-	$boss["ai"]=10*$level*0.7;
+	$boss["ai"]=5*$level*0.7;
 
 	$boss["shape"]="circle";
 	
@@ -819,20 +819,20 @@ function getCircleBoss($stageNo,$stageLevel){
 	$high = 0.5*$stageLevel;
 	$low = 0.25*$stageLevel;
 	if($sType==0){ //hp형 보스
-		$boss["hp"]=200+150*$stageNo;
-		$boss["agi"]=5*$stageNo;
+		$boss["hp"]=ceil(200+150*$stageNo);
+		$boss["agi"]=ceil(5*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$low+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
 		$boss["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  
 	}else if($sType==1){ //회피형 보스
-		$boss["hp"]=200+100*$stageNo;
-		$boss["agi"]=10*$stageNo;
+		$boss["hp"]=ceil(200+100*$stageNo);
+		$boss["agi"]=ceil(10*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$low+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
 		$boss["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  
 	}else{ //speed형 보스
-		$boss["hp"]=200+100*$stageNo;
-		$boss["agi"]=5*$stageNo;
+		$boss["hp"]=ceil(200+100*$stageNo);
+		$boss["agi"]=ceil(5*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$high+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
 		$boss["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  

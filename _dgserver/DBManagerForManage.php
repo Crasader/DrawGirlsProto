@@ -16,14 +16,11 @@ class userInfo
 		$test=$r["profile"];
 		$test["paramreturn"]=$param;
 		
-
-		$r["no"] = "_".$user->m__userIndex->memberID;
-		$r["nick"] = $user->m_nick;
+		$r=$user->getArrayData(true);
+		$r["no"] = "_".$user->memberID;
 		$r["sex"] = $hgr["gender"];
 		$r["birth"] = $hgr["age"];
 		$r["phone"] = $hgr["phoneNo"];
-		$r["lastLogin"] = $user->m_lastDate;
-		$r["regDate"] = $user->m_joinDate;
 
 		$result["data"]=$r;
 		$result["result"]="ok";
