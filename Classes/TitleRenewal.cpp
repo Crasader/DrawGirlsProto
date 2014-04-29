@@ -543,6 +543,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopRuby_int1_countName_s, i, list_ruby[i]["countName"].asString(), false);
 			NSDS_SI(kSDS_GI_shopRuby_int1_price_i, i, list_ruby[i]["price"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_priceType_s, i, list_ruby[i]["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_priceName_s, i, list_ruby[i]["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i, list_ruby[i]["sale"].asString(), false);
 			mySGD->initInappProduct(i, list_ruby[i]["pID"].asString());
 		}
@@ -554,6 +555,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopGold_int1_countName_s, i, list_gold[i]["countName"].asString(), false);
 			NSDS_SI(kSDS_GI_shopGold_int1_price_i, i, list_gold[i]["price"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopGold_int1_priceType_s, i, list_gold[i]["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_priceName_s, i, list_gold[i]["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopGold_int1_sale_s, i, list_gold[i]["sale"].asString(), false);
 		}
 		
@@ -566,6 +568,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopCoin_int1_countName_s, i, list_coin[i]["countName"].asString(), false);
 			NSDS_SI(kSDS_GI_shopCoin_int1_price_i, i, list_coin[i]["price"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i, list_coin[i]["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_priceName_s, i, list_coin[i]["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i, list_coin[i]["sale"].asString(), false);
 		}
 		

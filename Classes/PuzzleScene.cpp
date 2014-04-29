@@ -2195,7 +2195,7 @@ void PuzzleScene::setTop()
 	cancel_item->setTag(kPuzzleMenuTag_cancel);
 	
 	CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
-	cancel_menu->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	cancel_menu->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(cancel_menu, kPuzzleZorder_top);
 	
 	top_list.push_back(cancel_menu);
@@ -2203,7 +2203,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(78+41,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_heart->setPosition(ccp(78+41,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_heart, kPuzzleZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -2226,13 +2226,13 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_gold = CCSprite::create("mainflow_top_gold.png");
 	top_gold->setAnchorPoint(ccp(0.5f,1.f));
-	top_gold->setPosition(ccp(216+27,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_gold->setPosition(ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_gold, kPuzzleZorder_top);
 	
 	top_list.push_back(top_gold);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-5));
+	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-6));
 	top_gold->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
@@ -2251,13 +2251,13 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
-	top_ruby->setPosition(ccp(325+12,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_ruby->setPosition(ccp(325+5,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_ruby, kPuzzleZorder_top);
 	
 	top_list.push_back(top_ruby);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-5));
+	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-6));
 	top_ruby->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
@@ -2282,13 +2282,13 @@ void PuzzleScene::setTop()
 	postbox_item->setTag(kPuzzleMenuTag_postbox);
 	
 	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
-	postbox_menu->setPosition(ccp(394,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	postbox_menu->setPosition(ccp(397,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(postbox_menu, kPuzzleZorder_top);
 	
 	top_list.push_back(postbox_menu);
 	
 	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
-	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
+	postbox_count_case->setPosition(ccp(409,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-16));
 	addChild(postbox_count_case, kPuzzleZorder_top);
 	postbox_count_case->setVisible(false);
 	
@@ -2308,7 +2308,7 @@ void PuzzleScene::setTop()
 	achieve_item->setTag(kPuzzleMenuTag_achieve);
 	
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
-	achieve_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	achieve_menu->setPosition(ccp(429,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(achieve_menu, kPuzzleZorder_top);
 	
 	top_list.push_back(achieve_menu);
@@ -2321,7 +2321,7 @@ void PuzzleScene::setTop()
 	option_item->setTag(kPuzzleMenuTag_option);
 	
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
-	option_menu->setPosition(ccp(460,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	option_menu->setPosition(ccp(461,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(option_menu, kPuzzleZorder_top);
 	
 	top_list.push_back(option_menu);

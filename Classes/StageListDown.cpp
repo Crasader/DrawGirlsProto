@@ -551,6 +551,9 @@ void StageListDown::menuAction(CCObject *sender)
 	{
 		removeChildByTag(kSLD_MT_redown);
 		ing_download_per = 0;
+		ing_download_cnt--;
+		if(ing_download_cnt < 1)
+			ing_download_cnt = 1;
 		if(int(df_list.size()+sf_list.size()) > 0)
 			download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
 		is_downloading = true;
