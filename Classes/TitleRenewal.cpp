@@ -133,6 +133,8 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
+		
+		
 		is_menu_enable = true;
 		
 		state_label->setString("");
@@ -153,6 +155,9 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		input_text->setDelegate(this);
 		addChild(input_text,3);
 		
+		flag = FlagSelector::create();
+		flag->setPosition(140,210);
+		addChild(flag,100000);
 		
 		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
 		ok_menu->setPosition(ccp(363,160));
@@ -509,6 +514,11 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setItemGachaReplayGoldFee(result_data["itemGachaReplayGoldFee"].asInt());
 		mySGD->setUpgradeGoldFee(result_data["upgradeGoldFee"].asInt());
 		mySGD->setIngameTutorialRewardGold(result_data["ingameTutorialRewardGold"].asInt());
+		
+		mySGD->setRankUpConditionCount(result_data["rankUpConditionCount"].asInt());
+		mySGD->setRankUpBaseRate(result_data["rankUpBaseRate"].asFloat());
+		mySGD->setRankUpRateDistance(result_data["rankUpRateDistance"].asFloat());
+		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
 	}
 	else
 	{
@@ -550,6 +560,8 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 		Json::Value list_coin = result_list["h"];
 		for(int i=0;i<list_coin.size();i++)
 		{
+			CCLog("index : %d / count : %d", i, list_coin[i]["count"].asInt());
+			
 			NSDS_SI(kSDS_GI_shopCoin_int1_count_i, i, list_coin[i]["count"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_countName_s, i, list_coin[i]["countName"].asString(), false);
 			NSDS_SI(kSDS_GI_shopCoin_int1_price_i, i, list_coin[i]["price"].asInt(), false);
@@ -1825,6 +1837,7 @@ void TitleRenewalScene::joinAction()
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
 	param["nick"] = input_text->getText();
+	param["flag"] = flag->getFlag();
 	hspConnector::get()->command("join", param, [=](Json::Value result_data)
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -1835,7 +1848,7 @@ void TitleRenewalScene::joinAction()
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
 										 input_text->removeFromParent();
-										 
+										 flag->removeFromParent();
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										 successLogin();
@@ -1858,6 +1871,7 @@ void TitleRenewalScene::joinAction()
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
 										 input_text->removeFromParent();
+										 flag->removeFromParent();
 										 
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 

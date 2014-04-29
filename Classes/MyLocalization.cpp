@@ -208,6 +208,21 @@ void MyLocal::initLocal()
 	
 	ko->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
 	ko->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	ko->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
+	ko->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
+	ko->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
+	ko->setObject(CCString::create("승급하기"), kMyLocalKey_rankup);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
 	
@@ -512,6 +527,10 @@ void MyLocal::initLocal()
 	
 	en->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
 	en->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	en->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
+	en->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
+	en->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
+	en->setObject(CCString::create("승급하기"), kMyLocalKey_rankup);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -814,6 +833,10 @@ void MyLocal::initLocal()
 	
 	ja->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
 	ja->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	ja->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
+	ja->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
+	ja->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
+	ja->setObject(CCString::create("승급하기"), kMyLocalKey_rankup);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);

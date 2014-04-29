@@ -10,111 +10,82 @@
 #include "GDWebSprite.h"
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
-
+#include "CommonButton.h"
 void NoticeContent::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
 		return;
 	
-	is_menu_enable = false;
+	is_menu_enable = true;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
-	if(tag == kNoticeContentMenuTag_ok)
+	if(tag == kNoticeContentMenuTag_check)
 	{
-		if(is_not_show_three_day)
-		{
-			chrono::time_point<chrono::system_clock> chrono_now_time = chrono::system_clock::now();
-			time_t now_time = chrono::system_clock::to_time_t(chrono_now_time);
-			struct tm* struct_time = localtime(&now_time);
-			string time_string = "";
-			
-			int year = struct_time->tm_year+1900;
-			int mon = struct_time->tm_mon+1;
-			int day = struct_time->tm_mday;
-			
-			int base_mon_day;
-			
-			if(mon == 1 || mon == 3 || mon == 5 || mon == 7 || mon == 8 || mon == 10 || mon == 12) // 1~31
-				base_mon_day = 31;
-			else if(mon == 2)
-			{
-				if(year%4 == 0)
-				{
-					if(year%100 == 0)
-					{
-						if(year%400 == 0)
-							base_mon_day = 29;
-						else
-							base_mon_day = 28;
-					}
-					else
-						base_mon_day = 29;
-				}
-				else
-					base_mon_day = 28;
-			}
-			else // 1~30
-				base_mon_day = 30;
-			
-			if(day+3 > base_mon_day)
-			{
-				if(mon == 12)
-				{
-					year++;
-					mon = 1;
-				}
-				else
-					mon++;
-				day = day+3-base_mon_day;
-			}
-			else
-				day += 3;
-			
-			time_string += CCString::createWithFormat("%04d", year)->getCString();
-			time_string += CCString::createWithFormat("%02d", mon)->getCString();
-			time_string += CCString::createWithFormat("%02d", day)->getCString();
-			time_string += CCString::createWithFormat("%02d", struct_time->tm_hour)->getCString();
-			time_string += CCString::createWithFormat("%02d", struct_time->tm_min)->getCString();
-			time_string += CCString::createWithFormat("%02d", struct_time->tm_sec)->getCString();
-			
-			myDSH->setStringForKey(kDSH_Key_noticeViewDate_int1, notice_list[ing_close_cnt]["no"].asInt(), time_string.c_str());
-		}
-		
-		ing_close_cnt++;
-		
-		if(ing_close_cnt >= notice_list.size())
-		{
-			end_selector(NULL);
-		}
-		else
-		{
-			is_not_show_three_day = false;
-			check_img->setVisible(is_not_show_three_day);
-			
-			title_label->setString(notice_list[ing_close_cnt]["title"].asString().c_str());
-			
-			show_content->removeFromParent();
-			CCSprite* default_node = CCSprite::create("whitePaper.png", CCRectMake(0,0, notice_list[ing_close_cnt]["imgInfo"]["w"].asInt(), notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()));
-			show_content = GDWebSprite::create(notice_list[ing_close_cnt]["imgInfo"]["img"].asString(), default_node, this, callfunc_selector(NoticeContent::loadedAction));
-			show_content->setPosition(ccp(-notice_list[ing_close_cnt]["imgInfo"]["w"].asInt()/2.f, -notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()/2.f-16));
-			addChild(show_content);
-			
-			case_back->setContentSize(CCSizeMake(notice_list[ing_close_cnt]["imgInfo"]["w"].asInt() + 17, notice_list[ing_close_cnt]["imgInfo"]["h"].asInt() + 66));
-			
-			is_menu_enable = true;
-		}
+		is_not_show_three_day = true;
 	}
-	else if(tag == kNoticeContentMenuTag_check)
+	
+	if(is_not_show_three_day)
 	{
-		is_not_show_three_day = !is_not_show_three_day;
-		check_img->setVisible(is_not_show_three_day);
-		is_menu_enable = true;
+		myDSH->setStringForKey(kDSH_Key_noticeViewDate_int1, notice_list[ing_close_cnt]["no"].asInt(), CCString::createWithFormat("%lld",GraphDog::get()->getTime()+24*60*60*3)->getCString());
+	}
+	
+	ing_close_cnt++;
+	
+	if(ing_close_cnt >= notice_list.size())
+	{
+		end_selector(NULL);
+	}
+	else
+	{
+		is_not_show_three_day = false;
+		
+		loadNotice();
+		
+		//			case_back->setContentSize(CCSizeMake(notice_list[ing_close_cnt]["imgInfo"]["w"].asInt() + 17, notice_list[ing_close_cnt]["imgInfo"]["h"].asInt() + 66));
 	}
 }
 
+void NoticeContent::loadNotice(){
+	
+	is_not_show_three_day = false;
+	if(notice_list[ing_close_cnt].get("content", "").asString()!=""){
+		//텍스트모드
+		content_label->setString(notice_list[ing_close_cnt]["content"].asString().c_str());
+		title_label->setString(notice_list[ing_close_cnt]["title"].asString().c_str());
+		
+		if(show_content)show_content->setVisible(false);
+		
+		content_label->setVisible(true);
+		title_label->setVisible(true);
+		is_menu_enable=true;
+	}else if(show_content==NULL){
+		//그림모드
+		is_menu_enable=false;
+		CCSprite* default_node = CCSprite::create("whitePaper.png");
+		show_content=GDWebSprite::create(notice_list[ing_close_cnt]["imgInfo"]["img"].asString(), default_node, this, callfunc_selector(NoticeContent::loadedAction));
+		show_content->setPosition(ccpMult(show_content->getContentSize(), -0.5));
+		addChild(show_content,1);
+		if(show_content)show_content->setVisible(true);
+		
+		content_label->setVisible(false);
+		title_label->setVisible(false);
+	}else if(show_content!=NULL){
+		show_content->removeFromParent();
+		is_menu_enable=false;
+		CCSprite* default_node = CCSprite::create("whitePaper.png");
+		show_content=GDWebSprite::create(notice_list[ing_close_cnt]["imgInfo"]["img"].asString(), default_node, this, callfunc_selector(NoticeContent::loadedAction));
+		show_content->setPosition(ccpMult(show_content->getContentSize(), -0.5));
+		addChild(show_content,1);
+		if(show_content)show_content->setVisible(true);
+		
+		content_label->setVisible(false);
+		title_label->setVisible(false);
+		is_menu_enable = true;
+	}
+}
 void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector, Json::Value t_noti_list)
 {
 	touch_priority = t_touch_priority;
@@ -122,54 +93,66 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	
 	notice_list = t_noti_list;
 	
-	case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-	case_back->setPosition(CCPointZero);
-	addChild(case_back);
+	
+	CCSprite* white_paper = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
+	white_paper->setScaleY(myDSH->ui_top/320.f);
+	white_paper->setPosition(ccp(0,0));
+	white_paper->setColor(ccc3(0, 0, 0));
+	addChild(white_paper, 1);
+	
+	
+	//	case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+	//	case_back->setPosition(CCPointZero);
+	//	addChild(case_back);
 	
 	ing_close_cnt = 0;
 	
-	case_back->setContentSize(CCSizeMake(notice_list[ing_close_cnt]["imgInfo"]["w"].asInt() + 17, notice_list[ing_close_cnt]["imgInfo"]["h"].asInt() + 66)); // 333 + 17 , 199 + 66
+	//	case_back->setContentSize(CCSizeMake(notice_list[ing_close_cnt]["imgInfo"]["w"].asInt() + 17, notice_list[ing_close_cnt]["imgInfo"]["h"].asInt() + 66)); // 333 + 17 , 199 + 66
 	
-	title_label = CCLabelTTF::create(notice_list[ing_close_cnt]["title"].asString().c_str(), mySGD->getFont().c_str(), 15);
-	title_label->setPosition(ccp(0, notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()/2.f+11));
-	addChild(title_label);
+	title_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 15);
+	title_label->setPosition(ccp(0,150));
+	title_label->setColor(ccc3(255, 255, 0));
+	addChild(title_label,10);
 	
-	CCSprite* n_close = CCSprite::create("gacha_ok.png");
-	CCSprite* s_close = CCSprite::create("gacha_ok.png");
-	s_close->setColor(ccGRAY);
+	content_label= CCLabelTTF::create("", mySGD->getFont().c_str(), 12, CCSizeMake(450, 280), kCCTextAlignmentCenter);
+	content_label->setColor(ccc3(255, 255, 255));
+	content_label->setPosition(ccp(0,-20));
+	addChild(content_label,10);
 	
-	CCMenuItemSprite* close_item = CCMenuItemSprite::create(n_close, s_close, this, menu_selector(NoticeContent::menuAction));
-	close_item->setTag(kNoticeContentMenuTag_ok);
+	show_content = NULL;
 	
-	close_menu = CCMenu::createWithItem(close_item);
-	close_menu->setTouchPriority(touch_priority-1);
-	close_menu->setPosition(ccp(0,-notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()/2.f-11));
-	addChild(close_menu);
+	loadNotice();
 	
-	is_not_show_three_day = false;
 	
-	CCSprite* n_check = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-	CCSprite* s_check = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-	s_check->setColor(ccGRAY);
 	
-	CCMenuItemSprite* check_item = CCMenuItemSprite::create(n_check, s_check, this, menu_selector(NoticeContent::menuAction));
-	check_item->setTag(kNoticeContentMenuTag_check);
+	CommonButton* btn = CommonButton::create("닫기", 12, CCSizeMake(80, 40), CommonButtonLightPupple, touch_priority-2);
+	addChild(btn,100);
+	btn->setFunction(json_selector(this, NoticeContent::menuAction));
+	btn->setAnchorPoint(ccp(1,0.5));
+	btn->setPosition(ccp(230,-140));
+	btn->setTag(kNoticeContentMenuTag_ok);
 	
-	check_menu = CCMenu::createWithItem(check_item);
-	check_menu->setTouchPriority(touch_priority-1);
-	check_menu->setPosition(ccp(-notice_list[ing_close_cnt]["imgInfo"]["w"].asInt()/2.f+30, -notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()/2.f-11));
-	addChild(check_menu);
 	
-	check_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-	check_img->setColor(ccGREEN);
-	check_img->setPosition(ccp(-notice_list[ing_close_cnt]["imgInfo"]["w"].asInt()/2.f+30, -notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()/2.f-11));
-	addChild(check_img);
-	check_img->setVisible(is_not_show_three_day);
 	
-	CCSprite* default_node = CCSprite::create("whitePaper.png", CCRectMake(0,0, notice_list[ing_close_cnt]["imgInfo"]["w"].asInt(), notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()));
-	show_content = GDWebSprite::create(notice_list[ing_close_cnt]["imgInfo"]["img"].asString(), default_node, this, callfunc_selector(NoticeContent::loadedAction));
-	show_content->setPosition(ccp(-notice_list[ing_close_cnt]["imgInfo"]["w"].asInt()/2.f, -notice_list[ing_close_cnt]["imgInfo"]["h"].asInt()/2.f-16));
-	addChild(show_content);
 	
-	is_menu_enable = true;
+	
+	CommonButton* tbtn = CommonButton::create("3일동안 열지 않음", 12, CCSizeMake(120,40), CommonButtonGray, touch_priority-2);
+	addChild(tbtn,100);
+	tbtn->setTag(kNoticeContentMenuTag_check);
+	tbtn->setAnchorPoint(ccp(0,0.5));
+	tbtn->setPosition(ccp(-230,-140));
+	tbtn->setFunction(json_selector(this, NoticeContent::menuAction));
+	
+	
+	CommonButton* back = CommonButton::create("", 10, CCSizeMake(480, 320), CommonButtonGray, touch_priority-1);
+	addChild(back,0);
+	back->setFunction([=](CCObject* btn){
+		//CCLog("testtest");
+		if(notice_list[ing_close_cnt].get("linkURL", "").asString()!=""){
+			hspConnector::get()->openUrl(notice_list[ing_close_cnt]["linkURL"].asString().c_str());
+			//CCLog("openurl %s",notice_list[ing_close_cnt]["linkURL"].asString().c_str());
+		}
+		
+	});
+	
 }

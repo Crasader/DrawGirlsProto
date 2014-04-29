@@ -296,7 +296,11 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_frameOpenConditionContentRuby,
 	kMyLocalKey_frameOpenConditionContentTimeWeek,
 	kMyLocalKey_frameOpenConditionContentTimeDate,
-	kMyLocalKey_directEnter
+	kMyLocalKey_directEnter,
+	kMyLocalKey_rankUpSubTitle,
+	kMyLocalKey_recentTakeCard,
+	kMyLocalKey_rankUpRate,
+	kMyLocalKey_rankup
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

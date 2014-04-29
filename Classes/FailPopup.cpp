@@ -37,6 +37,7 @@
 
 #include "LoadingTipScene.h"
 #include "LoadingLayer.h"
+#include "FlagSelector.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -99,6 +100,7 @@ bool FailPopup::init()
 	p1_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
 	p1_data["highstage"] = mySGD->suitable_stage;
 	p1_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	p1_data["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::FastWriter p1_data_writer;
 	p1["data"] = p1_data_writer.write(p1_data);
 	
@@ -452,7 +454,14 @@ bool FailPopup::init()
 	param2["myScore"]=int(mySGD->getScore());
 	param2["stageNo"]=mySD->getSilType();
 	param2["memberID"] = hspConnector::get()->getSocialID();
-	
+	Json::Value p2_data;
+	p2_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+	p2_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	p2_data["highstage"] = mySGD->suitable_stage;
+	p2_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	p2_data["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+	Json::FastWriter p2_data_writer;
+	param2["data"] = p2_data_writer.write(p2_data);
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
@@ -609,6 +618,9 @@ void FailPopup::resultGetRank(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		
+		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
+		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
 		graph_back->setPosition(ccp(355,230));
 		main_case->addChild(graph_back, kZ_FP_img);
@@ -716,15 +728,23 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 			
+			string flag = read_data.get("flag", "kr").asString().c_str();
+			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+			selectedFlagSpr->setPosition(ccp(42,20));
+			selectedFlagSpr->setScale(0.5);
+			list_cell_case->addChild(selectedFlagSpr);
+			
 			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+			nick_label->setAnchorPoint(ccp(0,0.5));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(83,20));
+			nick_label->setPosition(ccp(55,20));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setAnchorPoint(ccp(1,0.5));
 			score_label->setColor(ccc3(255, 170, 20));
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(168,20));
+			score_label->setPosition(ccp(200,20));
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();
@@ -748,15 +768,23 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			rank_label->setPosition(ccp(20,20));
 			list_cell_case->addChild(rank_label);
 			
+			string flag = myDSH->getStringForKey(kDSH_Key_flag);
+			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+			selectedFlagSpr->setPosition(ccp(42,20));
+			selectedFlagSpr->setScale(0.5);
+			list_cell_case->addChild(selectedFlagSpr);
+			
 			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+			nick_label->setAnchorPoint(ccp(0,0.5));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(83,20));
+			nick_label->setPosition(ccp(55,20));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			score_label->setAnchorPoint(ccp(1,0.5));
 			score_label->setColor(ccc3(255, 170, 20));
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(168,20));
+			score_label->setPosition(ccp(200,20));
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();

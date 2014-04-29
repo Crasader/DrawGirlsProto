@@ -30,6 +30,7 @@
 #include "KSLabelTTF.h"
 #include "PopCake.h"
 #include "EffectSprite.h"
+#include "FlagSelector.h"
 
 USING_NS_CC_EXT;
 
@@ -93,12 +94,12 @@ bool OptionPopup::init()
 //		KS::KSLog("in-app test \n%", v);
 //	});
 	
-	vector<CommandParam> send_command_list;
-	send_command_list.push_back(CommandParam("gettimeinfo", nullptr,"{'test':'test'}"));
-	GraphDog::get()->command(send_command_list);
 	
 	
 	setTouchEnabled(true);
+	
+	
+
 	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
 	//addChild(t_popup, 4);

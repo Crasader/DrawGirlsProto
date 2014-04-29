@@ -84,6 +84,9 @@ private:
 	void showtimeThirdAction();
 	void showtimeForthAction();
 	
+	bool is_rankup;
+	void rankupAction();
+	
 	bool isAnimated;
 	CCPoint touch_p;
     long touchStartTime;

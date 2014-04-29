@@ -249,6 +249,13 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	jsonTotalCmd["socialID"]=getSocialID();
 	jsonTotalCmd["deviceID"]=this->deviceID;
 	jsonTotalCmd["lang"]=KS::getLocalCode();
+	
+	#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	jsonTotalCmd["os"]="android";
+	#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	jsonTotalCmd["os"]="ios";
+	#endif
+	
 	this->lastCmdNo += (int)(rand()%10)+1;
 	jsonTotalCmd["cmdNo"]=this->lastCmdNo;
 	

@@ -420,11 +420,19 @@ float StarGoldData::getBaseScore()
 	return base_score.getV();
 }
 
+void StarGoldData::setPercentage(float t_f)
+{
+	percentage = t_f;
+}
 float StarGoldData::getPercentage()
 {
 	return percentage.getV();
 }
 
+void StarGoldData::setStageGrade(int t_i)
+{
+	stage_grade = t_i;
+}
 int StarGoldData::getStageGrade()
 {
 	return stage_grade.getV();
@@ -1160,18 +1168,9 @@ void StarGoldData::resetNoticeList(Json::Value t_notice_list)
 	
 	Json::Value not_encode_notice_list;
 	
-	chrono::time_point<chrono::system_clock> chrono_now_time = chrono::system_clock::now();
-	time_t now_time = chrono::system_clock::to_time_t(chrono_now_time);
-	struct tm* struct_time = localtime(&now_time);
-	string time_string = "";
-	time_string += CCString::createWithFormat("%04d", struct_time->tm_year+1900)->getCString();
-	time_string += CCString::createWithFormat("%02d", struct_time->tm_mon+1)->getCString();
-	time_string += CCString::createWithFormat("%02d", struct_time->tm_mday)->getCString();
-	time_string += CCString::createWithFormat("%02d", struct_time->tm_hour)->getCString();
-	time_string += CCString::createWithFormat("%02d", struct_time->tm_min)->getCString();
-	time_string += CCString::createWithFormat("%02d", struct_time->tm_sec)->getCString();
 	
-	int64_t now_value = atoll(time_string.c_str());
+	
+	int64_t now_value = GraphDog::get()->getTime();
 	
 	for(int i=0;i<t_notice_list.size();i++)
 	{
@@ -1529,6 +1528,7 @@ void StarGoldData::myInit()
 	
 	suitable_stage = -1;
 	
+	rank_up_add_rate = 0;
 	keep_time_info.is_loaded = false;
 	
 	goods_data.clear();
@@ -1939,8 +1939,50 @@ void StarGoldData::initInappProduct(int t_index, string t_product)
 {
 	inapp_products[t_index] = t_product;
 }
-
 string StarGoldData::getInappProduct(int t_index)
 {
 	return inapp_products[t_index].getV();
+}
+
+void StarGoldData::setRankUpConditionCount(int t_i)
+{
+	rank_up_condition_count = t_i;
+}
+int StarGoldData::getRankUpConditionCount()
+{
+	return rank_up_condition_count.getV();
+}
+void StarGoldData::setRankUpBaseRate(float t_f)
+{
+	rank_up_base_rate = t_f;
+}
+float StarGoldData::getRankUpBaseRate()
+{
+	return rank_up_base_rate.getV();
+}
+void StarGoldData::setRankUpRateDistance(float t_f)
+{
+	rank_up_rate_distance = t_f;
+}
+float StarGoldData::getRankUpRateDistance()
+{
+	return rank_up_rate_distance.getV();
+}
+
+void StarGoldData::setRankUpRubyFee(int t_i)
+{
+	rank_up_ruby_fee = t_i;
+}
+int StarGoldData::getRankUpRubyFee()
+{
+	return rank_up_ruby_fee.getV();
+}
+
+void StarGoldData::setRankUpAddRate(float t_f)
+{
+	rank_up_add_rate = t_f;
+}
+float StarGoldData::getRankUpAddRate()
+{
+	return rank_up_add_rate.getV();
 }

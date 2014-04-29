@@ -15,6 +15,7 @@
 #include "LabelTTFMarquee.h"
 #include "MyLocalization.h"
 #include "TouchSuctionLayer.h"
+#include "FlagSelector.h"
 
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -191,6 +192,8 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 	{
 		//cell_action_list.clear();
 		
+		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
+		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
 		graph_back->setPosition(ccp(355,230));
 		rankBack->addChild(graph_back, kZ_CP_img);
@@ -307,16 +310,23 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(rank_label);
 			}
 			
-
+			string flag = myDSH->getStringForKey(kDSH_Key_flag);
+			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+			selectedFlagSpr->setPosition(ccp(50,18));
+			list_cell_case->addChild(selectedFlagSpr);
+			
+			
 			KSLabelTTF* nick_label = KSLabelTTF::create(mynick.c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+			nick_label->setAnchorPoint(ccp(0,0.5f));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(83,18));
+			nick_label->setPosition(ccp(70,19));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(255, 170, 20));
+			score_label->setAnchorPoint(ccp(1,0.5f));
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(180,18));
+			score_label->setPosition(ccp(215,18));
 			list_cell_case->addChild(score_label);
 			
 			if(rankBack->getTag()!=1){
@@ -478,16 +488,22 @@ CCTableViewCell* RankNewPopup::tableCellAtIndex(CCTableView *table, unsigned int
 		Json::Reader reader;
 		Json::Value read_data;
 		reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
-		
+		string flag = read_data.get("flag", "kr").asString().c_str();
+		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+		selectedFlagSpr->setPosition(ccp(50,18));
+		list_cell_case->addChild(selectedFlagSpr);
+	
 		KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		nick_label->setPosition(ccp(83,18));
+		nick_label->setPosition(ccp(70,19));
 		list_cell_case->addChild(nick_label);
 		
 		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 		score_label->setColor(ccc3(255, 170, 20));
+		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		score_label->setPosition(ccp(180,18));
+		score_label->setPosition(ccp(215,18));
 		list_cell_case->addChild(score_label);
 	
 	if(rankBack->getTag()!=1){
