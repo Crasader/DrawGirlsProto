@@ -2809,6 +2809,9 @@ void Maingame::hideThumb()
 
 void Maingame::showPause()
 {
+	if(is_gohome)
+		return;
+	
 	bool t_jack_stun = myJack->isStun;
 	
 	CCNode* exit_target = this;

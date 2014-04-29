@@ -1801,7 +1801,11 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	{
 		removeChildByTag(kTitleRenewal_MT_redown);
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_downImgInfo));
-		ing_download_cnt = 1;
+		ing_download_cnt--;
+		
+		if(ing_download_cnt < 1)
+			ing_download_cnt = 1;
+		
 		ing_download_per = 0;
 		is_downloading = true;
 		startFileDownload();
