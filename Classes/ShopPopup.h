@@ -70,6 +70,8 @@ private:
 	LoadingLayer* loading_layer;
 	TouchSuctionLayer* result_stone_layer;
 	
+	int touch_priority;
+	
 	vector<KSProtectVar<int>> index_to_ruby;
 	vector<KSProtectVar<int>> index_to_gold;
 	vector<KSProtectVar<int>> index_to_heart;

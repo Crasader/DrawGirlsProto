@@ -519,6 +519,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setRankUpBaseRate(result_data["rankUpBaseRate"].asFloat());
 		mySGD->setRankUpRateDistance(result_data["rankUpRateDistance"].asFloat());
 		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
+		
+		mySGD->setFirstPurchasePlayCount(result_data["firstPurchasePlayCount"].asInt());
 	}
 	else
 	{
@@ -536,40 +538,89 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 	{
 		Json::Value result_list = result_data["list"];
 		
-		Json::Value list_ruby = result_list["r"];
-		for(int i=0;i<list_ruby.size();i++)
+		for(int i=1;i<=6;i++)
 		{
-			NSDS_SI(kSDS_GI_shopRuby_int1_count_i, i, list_ruby[i]["count"].asInt(), false);
-			NSDS_SS(kSDS_GI_shopRuby_int1_countName_s, i, list_ruby[i]["countName"].asString(), false);
-			NSDS_SI(kSDS_GI_shopRuby_int1_price_i, i, list_ruby[i]["price"].asInt(), false);
-			NSDS_SS(kSDS_GI_shopRuby_int1_priceType_s, i, list_ruby[i]["priceType"].asString(), false);
-			NSDS_SS(kSDS_GI_shopRuby_int1_priceName_s, i, list_ruby[i]["priceName"].asString(), false);
-			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i, list_ruby[i]["sale"].asString(), false);
-			mySGD->initInappProduct(i, list_ruby[i]["pID"].asString());
-		}
-		
-		Json::Value list_gold = result_list["g"];
-		for(int i=0;i<list_gold.size();i++)
-		{
-			NSDS_SI(kSDS_GI_shopGold_int1_count_i, i, list_gold[i]["count"].asInt(), false);
-			NSDS_SS(kSDS_GI_shopGold_int1_countName_s, i, list_gold[i]["countName"].asString(), false);
-			NSDS_SI(kSDS_GI_shopGold_int1_price_i, i, list_gold[i]["price"].asInt(), false);
-			NSDS_SS(kSDS_GI_shopGold_int1_priceType_s, i, list_gold[i]["priceType"].asString(), false);
-			NSDS_SS(kSDS_GI_shopGold_int1_priceName_s, i, list_gold[i]["priceName"].asString(), false);
-			NSDS_SS(kSDS_GI_shopGold_int1_sale_s, i, list_gold[i]["sale"].asString(), false);
-		}
-		
-		Json::Value list_coin = result_list["h"];
-		for(int i=0;i<list_coin.size();i++)
-		{
-			CCLog("index : %d / count : %d", i, list_coin[i]["count"].asInt());
+			string t_key = CCString::createWithFormat("s_r_%d", i)->getCString();
+			Json::Value t_data = result_data[t_key.c_str()];
 			
-			NSDS_SI(kSDS_GI_shopCoin_int1_count_i, i, list_coin[i]["count"].asInt(), false);
-			NSDS_SS(kSDS_GI_shopCoin_int1_countName_s, i, list_coin[i]["countName"].asString(), false);
-			NSDS_SI(kSDS_GI_shopCoin_int1_price_i, i, list_coin[i]["price"].asInt(), false);
-			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i, list_coin[i]["priceType"].asString(), false);
-			NSDS_SS(kSDS_GI_shopCoin_int1_priceName_s, i, list_coin[i]["priceName"].asString(), false);
-			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i, list_coin[i]["sale"].asString(), false);
+			NSDS_SI(kSDS_GI_shopRuby_int1_count_i, i-1, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_countName_s, i-1, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopRuby_int1_price_i, i-1, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
+			mySGD->initInappProduct(i-1, t_data["pID"].asString());
+		}
+		
+		for(int i=1;i<=6;i++)
+		{
+			string t_key = CCString::createWithFormat("s_g_%d", i)->getCString();
+			Json::Value t_data = result_data[t_key.c_str()];
+			
+			NSDS_SI(kSDS_GI_shopGold_int1_count_i, i-1, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_countName_s, i-1, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopGold_int1_price_i, i-1, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_sale_s, i-1, t_data["sale"].asString(), false);
+		}
+		
+		for(int i=1;i<=6;i++)
+		{
+			string t_key = CCString::createWithFormat("s_h_%d", i)->getCString();
+			Json::Value t_data = result_data[t_key.c_str()];
+			
+			NSDS_SI(kSDS_GI_shopCoin_int1_count_i, i-1, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_countName_s, i-1, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopCoin_int1_price_i, i-1, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i-1, t_data["sale"].asString(), false);
+		}
+		
+		Json::FastWriter t_writer;
+		int t_index = 0;
+		{
+			Json::Value t_data = result_data["pg_fp"];
+			
+			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_count_i, t_index, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_countName_s, t_index, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_price_i, t_index, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceType_s, t_index, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			
+			t_index++;
+		}
+		{
+			Json::Value t_data = result_data["pg_ei"];
+			
+			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_count_i, t_index, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_countName_s, t_index, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_price_i, t_index, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceType_s, t_index, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			
+			t_index++;
+		}
+		{
+			Json::Value t_data = result_data["pg_snh"];
+			
+			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_count_i, t_index, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_countName_s, t_index, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_price_i, t_index, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceType_s, t_index, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			
+			t_index++;
 		}
 		
 		NSDS_SI(kSDS_GI_shopVersion_i, result_data["version"].asInt());
@@ -868,7 +919,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
 	KS::KSLog("%", result_data);
 	
-	if(result_data["result"]["code"].asInt() == GDSUCCESS || result_data["result"]["code"].asInt() == GDDONTFIND)
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		hspConnector::get()->myKakaoInfo["userIndex"] = result_data["userIndex"].asInt64();
 		Json::Value data1;
@@ -881,7 +932,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
 		
-		
+		mySGD->initUserdata(result_data);
 	}
 	else
 	{

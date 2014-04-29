@@ -155,6 +155,8 @@ private:
 	void closePopup();
 	void endLoad();
 	
+	void tryTransaction(CCNode* t_loading);
+	
 //	void resultLoadFriends(Json::Value result_data);
 //	void resultGetStageScoreList(Json::Value result_data);
 	void resultSavedUserData(Json::Value result_data);

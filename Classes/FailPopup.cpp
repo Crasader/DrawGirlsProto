@@ -78,7 +78,6 @@ bool FailPopup::init()
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	myLog->addLog(kLOG_remainHeart_i, -1, myDSH->getIntegerForKey(kDSH_Key_heartCnt));
 	
-	vector<CommandParam> send_command_list;
 	send_command_list.clear();
 	
 //	Json::Value param;
@@ -466,32 +465,13 @@ bool FailPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
-	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
-								  {
-									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
-									  {
-										  CCLOG("FailPopup transaction success");
-									  }
-									  else
-									  {
-										  CCLOG("FailPopup transaction fail");
-										  
-										  LoadingLayer* t_loading = LoadingLayer::create(-9999);
-										  addChild(t_loading, 9999);
-										  mySGD->changeGoods([=](Json::Value result_data)
-															 {
-																 t_loading->removeFromParent();
-																 if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																 {
-																	 
-																 }
-																 else
-																 {
-																	 CCLOG("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-																 }
-															 });
-									  }
-								  });
+	mySGD->setUserdataFailCount(mySGD->getUserdataFailCount()+1);
+	send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	LoadingLayer* t_loading = LoadingLayer::create(-9999);
+	addChild(t_loading, 9999);
+	
+	tryTransaction(t_loading);
 	
 	
 	is_saved_user_data = false;
@@ -503,6 +483,24 @@ bool FailPopup::init()
 	addChild(curtain_node, kZ_FP_popup+5);
 	
 	return true;
+}
+
+void FailPopup::tryTransaction(CCNode* t_loading)
+{
+	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
+								  {
+									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									  {
+										  CCLOG("FailPopup transaction success");
+										  t_loading->removeFromParent();
+									  }
+									  else
+									  {
+										  CCLOG("FailPopup transaction fail");
+										  
+										  addChild(KSTimer::create(0.1f, [=](){tryTransaction(t_loading);}));
+									  }
+								  });
 }
 
 FailPopup::~FailPopup()

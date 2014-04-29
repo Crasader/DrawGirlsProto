@@ -16,6 +16,10 @@ void StarGoldData::withdraw()
 	has_gotten_cards.clear();
 	puzzle_historys.clear();
 	piece_historys.clear();
+	goods_data.clear();
+	userdata_storage.clear();
+	
+	is_show_firstPurchase = false;
 }
 
 string StarGoldData::getReplayKey(ReplayKey t_key)
@@ -1249,6 +1253,7 @@ GoodsType StarGoldData::getItemCodeToGoodsType(ITEM_CODE t_code)
 
 void StarGoldData::initProperties(Json::Value t_list)
 {
+	goods_data.clear();
 	for(int i=0;i<t_list.size();i++)
 	{
 		GoodsType t_type = getGoodsKeyToType(t_list[i]["type"].asString());
@@ -1382,6 +1387,7 @@ void StarGoldData::changeUserdata(jsonSelType t_callback)
 	change_userdata_callback = t_callback;
 	
 	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
 	for(int i=0;i<changed_userdata_list.size();i++)
 		param[getUserdataTypeToKey(changed_userdata_list[i].m_type)] = changed_userdata_list[i].m_value.getV();
 	
@@ -1396,10 +1402,14 @@ void StarGoldData::resultChangeUserdata(Json::Value result_data)
 			userdata_storage[changed_userdata_list[i].m_type] = changed_userdata_list[i].m_value.getV();
 		
 		changed_userdata_list.clear();
+		
+		initUserdata(result_data);
+		
 		is_changed_userdata = false;
 	}
 	
-	change_userdata_callback(result_data);
+	if(change_userdata_callback != nullptr)
+		change_userdata_callback(result_data);
 }
 
 CommandParam StarGoldData::getChangeUserdataParam(jsonSelType t_callback)
@@ -1407,7 +1417,7 @@ CommandParam StarGoldData::getChangeUserdataParam(jsonSelType t_callback)
 	change_userdata_callback = t_callback;
 	
 	Json::Value param;
-	
+	param["memberID"] = hspConnector::get()->getMemberID();
 	for(int i=0;i<changed_userdata_list.size();i++)
 		param[getUserdataTypeToKey(changed_userdata_list[i].m_type)] = changed_userdata_list[i].m_value.getV();
 	
@@ -1416,7 +1426,10 @@ CommandParam StarGoldData::getChangeUserdataParam(jsonSelType t_callback)
 
 void StarGoldData::initUserdata(Json::Value result_data)
 {
+	userdata_storage.clear();
 	
+	for(int i=kUserdataType_begin+1;i<kUserdataType_end;i++)
+		userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
 }
 
 void StarGoldData::clearChangeGoods()
@@ -1597,6 +1610,20 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 	}
 }
 
+bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
+{
+	bool return_value = true;
+	if(t_type == kPurchaseGuideType_firstPurchase)
+		return_value = !is_show_firstPurchase;
+	return return_value;
+}
+
+void StarGoldData::showPurchasePopup(PurchaseGuideType t_type)
+{
+	if(t_type == kPurchaseGuideType_firstPurchase)
+		is_show_firstPurchase = true;
+}
+
 string StarGoldData::getAppType()
 {
 	return app_type;
@@ -1615,6 +1642,8 @@ void StarGoldData::myInit()
 	
 	rank_up_add_rate = 0;
 	keep_time_info.is_loaded = false;
+	
+	is_show_firstPurchase = false;
 	
 	goods_data.clear();
 	change_goods_list.clear();
@@ -1790,6 +1819,9 @@ void StarGoldData::setRankUpRubyFee(int t_i){	rank_up_ruby_fee = t_i;}
 int StarGoldData::getRankUpRubyFee(){	return rank_up_ruby_fee.getV();}
 void StarGoldData::setRankUpAddRate(float t_f){	rank_up_add_rate = t_f;}
 float StarGoldData::getRankUpAddRate(){	return rank_up_add_rate.getV();}
+
+void StarGoldData::setFirstPurchasePlayCount(int t_i){	first_purchase_play_count = t_i;	}
+int StarGoldData::getFirstPurchasePlayCount(){	return first_purchase_play_count.getV();	}
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}
