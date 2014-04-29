@@ -25,6 +25,7 @@
 #include "ScrollMenu.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "FirstPurchasePopup.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -257,9 +258,9 @@ void ShopPopup::setShopCode(ShopCode t_code)
 		
 		character_table->setDelegate(this);
 		main_case->addChild(character_table, kSP_Z_content);
-		character_table->setTouchPriority(-400-3);
+		character_table->setTouchPriority(touch_priority-3);
 		
-		suction = TouchSuctionLayer::create(-402);
+		suction = TouchSuctionLayer::create(touch_priority-2);
 		suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
 		suction->setTouchEnabled(true);
 		addChild(suction);
@@ -355,7 +356,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			content_menu->setPosition(CCPointZero);
 			content_node->addChild(content_menu, 1);
 			
-			content_menu->setTouchPriority(-400-4);
+			content_menu->setTouchPriority(touch_priority-4);
 		}
 	}
 	else
@@ -403,7 +404,7 @@ void ShopPopup::setCardBuyMenu(CCPoint t_point, int t_tag, string inner_filename
 	CCMenu* t_buy_menu = CCMenu::createWithItem(t_buy_item);
 	t_buy_menu->setPosition(ccp(t_buy_back->getContentSize().width/2.f, t_buy_back->getContentSize().height/2.f-79));
 	t_buy_back->addChild(t_buy_menu);
-	t_buy_menu->setTouchPriority(-400-4);
+	t_buy_menu->setTouchPriority(touch_priority-4);
 }
 
 enum CharacterCellZorder
@@ -464,9 +465,9 @@ void ShopPopup::cellAction(CCObject* sender)
 		else
 		{
 			if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
-				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 			else if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
-				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 			CCLOG("not enough condition");
 		}
 	}
@@ -558,7 +559,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 		unlock_menu->setPosition(ccp(62,23));
 		cell->addChild(unlock_menu, kCharacterCellZorder_buy);
 		
-		unlock_menu->setTouchPriority(-400-1);
+		unlock_menu->setTouchPriority(touch_priority-1);
 	}
 	else
 	{
@@ -582,7 +583,7 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 			select_menu->setPosition(ccp(62,23));
 			cell->addChild(select_menu, kCharacterCellZorder_selected);
 			
-			select_menu->setTouchPriority(-400-1);
+			select_menu->setTouchPriority(touch_priority-1);
 		}
 	}
 	
@@ -619,6 +620,8 @@ bool ShopPopup::init()
         return false;
     }
 	
+	touch_priority = -400;
+	
 	server_character_count = NSDS_GI(kSDS_GI_characterCount_i);
 	
 	is_menu_enable = false;
@@ -638,7 +641,7 @@ bool ShopPopup::init()
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f);
 	main_case->addChild(main_inner);
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-400-4);
+	CommonButton* close_menu = CommonButton::createCloseButton(touch_priority-4);
 	close_menu->setPosition(getContentPosition(kSP_MT_close));
 	close_menu->setFunction([=](CCObject* sender)
 							{
@@ -649,7 +652,7 @@ bool ShopPopup::init()
 	main_case->addChild(close_menu, kSP_Z_content);
 
 	
-	character_menu = CommonButton::create("무기상점", 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
+	character_menu = CommonButton::create("무기상점", 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	character_menu->setTitleColor(ccWHITE);
 	character_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	character_menu->setTitleColorForDisable(ccBLACK);
@@ -663,7 +666,7 @@ bool ShopPopup::init()
 	character_menu->setVisible(false);
 	main_case->addChild(character_menu, kSP_Z_content);
 	
-	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
+	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	card_menu->setTitleColor(ccWHITE);
 	card_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	card_menu->setTitleColorForDisable(ccBLACK);
@@ -677,7 +680,7 @@ bool ShopPopup::init()
 	main_case->addChild(card_menu, kSP_Z_content);
 	card_menu->setVisible(false);
 	
-	ruby_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
+	ruby_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	ruby_menu->setTitleColor(ccWHITE);
 	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	ruby_menu->setTitleColorForDisable(ccBLACK);
@@ -690,7 +693,7 @@ bool ShopPopup::init()
 								});
 	main_case->addChild(ruby_menu, kSP_Z_content);
 	
-	gold_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
+	gold_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	gold_menu->setTitleColor(ccWHITE);
 	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	gold_menu->setTitleColorForDisable(ccBLACK);
@@ -703,7 +706,7 @@ bool ShopPopup::init()
 						   });
 	main_case->addChild(gold_menu, kSP_Z_content);
 	
-	heart_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), 12, CCSizeMake(83,38), CommonButtonPupple, -400-4);
+	heart_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	heart_menu->setTitleColor(ccWHITE);
 	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellow);
 	heart_menu->setTitleColorForDisable(ccBLACK);
@@ -806,6 +809,14 @@ void ShopPopup::showPopup()
 
 void ShopPopup::endShowPopup()
 {
+	if(!mySGD->getUserdataIsFirstBuy() && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_firstPurchase) && mySGD->getUserdataTotalPlayCount() >= mySGD->getFirstPurchasePlayCount() && !mySGD->getUserdataIsVIP())
+	{
+		mySGD->showPurchasePopup(kPurchaseGuideType_firstPurchase);
+		FirstPurchasePopup* t_popup = FirstPurchasePopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=](){is_menu_enable = true;});
+		addChild(t_popup, kSP_Z_popup);
+		return;
+	}
+	
 	is_menu_enable = true;
 }
 
@@ -995,7 +1006,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLOG("not enough ruby!!!");
 			}
 		}
@@ -1060,7 +1071,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(-410, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
 				CCLOG("not enough ruby!!!");
 			}
 		}
@@ -1578,7 +1589,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-410, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+			addChild(ASPopupView::getCommonNoti(touch_priority-10, "루비가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardMid)
@@ -1679,7 +1690,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-410, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+			addChild(ASPopupView::getCommonNoti(touch_priority-10, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardLow)
@@ -1789,7 +1800,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 
 void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 {
-	ASPopupView* t_popup = ASPopupView::create(-400);
+	ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -2110,7 +2121,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 	}
 	else
 	{
-		replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -450);
+		replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, touch_priority-50);
 		replay_menu->setPosition(ccp(240,100));
 		replay_menu->setFunction([=](CCObject* sender)
 								 {
@@ -2251,7 +2262,7 @@ void ShopPopup::failAction()
 {
 	is_downloading = false;
 	
-	replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -450);
+	replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, touch_priority-50);
 	replay_menu->setPosition(ccp(240,100));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {
@@ -2301,7 +2312,7 @@ void ShopPopup::ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
 void ShopPopup::registerWithTouchDispatcher()
 {
 	CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-	pDispatcher->addTargetedDelegate(this, -400, true);
+	pDispatcher->addTargetedDelegate(this, touch_priority, true);
 }
 
 void ShopPopup::requestItemDelivery()
