@@ -1062,7 +1062,7 @@ public:
 		m_missileSprite->setPosition(m_showWindow.initPosition + ccp(cos(m_showWindow.rotationRad) * r, sin(m_showWindow.rotationRad) * r));
 		if(m_selfRotation)
 		{
-			m_missileSprite->setRotation(m_missileSprite->getRotation() + 5);
+			m_missileSprite->setRotation(m_missileSprite->getRotation() + 15);
 		}
 		else
 		{
