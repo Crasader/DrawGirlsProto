@@ -60,7 +60,13 @@ bool TitleRenewalScene::init()
 		endSplash();
 	});
 	splash.first->setPosition(ccp(240,160));
+	
 	addChild(splash.first);
+	
+//	addChild(KSTimer::create(3.f, [=]()
+//	{
+		splash.second->runAnimationsForSequenceNamed("Default Timeline");
+//	}));
 	
 	
 	

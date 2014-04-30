@@ -57,6 +57,7 @@ bool StartSettingPopup::init()
 	item_title_label = NULL;
 	option_label = NULL;
 	//	card_img = NULL;
+	buy_button = NULL;
 	selected_gacha_item = kIC_emptyBegin;
 	
 	touch_priority = -210;
