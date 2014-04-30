@@ -33,7 +33,9 @@ GaBaBo::~GaBaBo()
 
 bool GaBaBo::init()
 {
-	CCLayer::init();
+	CCLayerColor::initWithColor(ccc4(255, 255, 255, 255));
+	
+	
 	Json::Value value1, value2, value3, value4, value5, value6;
 	value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
 	value1["font"] = mySGD->getFont().c_str();
@@ -96,6 +98,7 @@ bool GaBaBo::init()
 		slttf->setPosition(ccp(0, 160));
 		addChild(slttf);
 	}
+	
 	return true;
 	m_gababoCountShowing = false;
 	
