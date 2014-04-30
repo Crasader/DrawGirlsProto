@@ -2229,6 +2229,8 @@ void Maingame::showDetailMessage(const std::string& fileName)
 																														
 																													}));
 	}
+	
+	// 바뀜 테스트.
 	KSLabelTTF* textMessage = KSLabelTTF::create(fileName.c_str(), mySGD->getFont().c_str(), 30.f);
 	detailWarningQueue.push_back(textMessage);
 	textMessage->setColor(ccc3(255, 0, 0));
