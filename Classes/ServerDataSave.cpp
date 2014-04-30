@@ -656,6 +656,14 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopCoin_int1_priceType_s)			rv = "sc%dprcType";
 	else if(t_key == kSDS_GI_shopCoin_int1_priceName_s)			rv = "sc%dprcName";
 	else if(t_key == kSDS_GI_shopCoin_int1_sale_s)				rv = "sc%dsale";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_count_i)		rv = "sp%dcount";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_countName_s)	rv = "sp%dcntName";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_price_i)		rv = "sp%dprice";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_priceType_s)	rv = "sp%dprcType";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_priceName_s)	rv = "sp%dprcName";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_sale_s)			rv = "sp%dsale";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_data_s)			rv = "sp%ddata";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_pID_s)			rv = "sp%dpID";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";

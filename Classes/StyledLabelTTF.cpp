@@ -82,6 +82,7 @@ void StyledLabelTTF::updateTexture()
 			ttf->setPosition(ccp(m_currentPosition, m_currentLinePosition));
 			unsigned long fillColor = jsonStyle.get("fillcolor", 0).asUInt();
 			ttf->setFontFillColor(ccc3(getRed(fillColor), getGreen(fillColor), getBlue(fillColor)));
+			ttf->setTag(jsonStyle.get("tag", 0).asInt());
 			m_currentPosition += ttf->getContentSize().width;
 			m_oneLineSize += ttf->getContentSize().width;
 			
@@ -123,3 +124,90 @@ bool StyledLabelTTF::init(const std::vector<StyledText>& texts, StyledAlignment 
 	
 	return true;
 }
+
+
+
+
+StyledLabelTTF* StyledLabelTTF::create(const char* text,const char* font ,StyledAlignment sa){
+	
+	//<|rgb|size|newline|tag>   ex)   <|900|15|15|>안녕하세요   ->빨간색 15 사이즈 텍스트
+	std::string str = text;
+	bool isSetMode=false;
+	std::string content="";
+	std::string option="";
+	Json::Value sData;
+	int labelNo=0;
+	int optionNo=0;
+	for (int i=0; i<str.length(); i++) {
+		if((str[i]=='<' && str[i+1]=='|') || i==str.length()-1){
+			if(i==str.length()-1)content+=str[i];
+			sData[labelNo]["content"]=content;
+			
+			if(i!=0)labelNo++;
+			
+			isSetMode=true;
+			content="";
+			optionNo=0;
+			i++;
+			
+			continue;
+		}
+		
+		
+		
+		if(isSetMode){
+			if(str[i]=='|'){
+				//모은옵션스트링저장하기
+				if(optionNo==0)sData[labelNo]["option"]["color"]=std::atoi(option.c_str());
+				else if(optionNo==1)sData[labelNo]["option"]["size"]=std::atoi(option.c_str());
+				else if(optionNo==2)sData[labelNo]["option"]["newline"]=std::atoi(option.c_str());
+				else if(optionNo==3)sData[labelNo]["option"]["tag"]=std::atoi(option.c_str());
+				
+				option="";
+				optionNo++;
+				
+				
+				if(str[i]=='|' && str[i+1]=='>'){
+					i++;
+					isSetMode=false;
+					continue;
+				}
+				continue;
+			}
+			
+			if(str[i]==' ')continue;
+			option+=str[i];
+			
+		}else{
+			if(str[i]=='\n')continue;
+			
+			content+=str[i];
+			
+		}
+	}
+	
+	std::vector<StyledText> texts;
+	for(int k = 0;k<sData.size();k++){
+		Json::Value p;
+		int rgb = sData[k]["option"].get("color", 000).asInt();
+		p["fillcolor"]=StyledLabelTTF::makeRGB((rgb/100)/9.f*255, (rgb/10%10)/9.f*255, (rgb%10)/9.f*255);
+		p["font"]=font;
+		p["size"]=sData[k]["option"].get("size", 12).asInt();
+		p["tag"]=sData[k]["option"].get("tag", 0).asInt();
+		
+		texts.push_back({sData[k]["content"].asString(),p.toStyledString()});
+		
+		if(sData[k]["option"].get("newline",0).asInt()>0){
+			Json::Value nl;
+			nl["linebreak"]=true;
+			nl["linespacing"]=sData[k]["option"].get("newline",0).asInt();
+			texts.push_back({"",nl.toStyledString()});
+		}
+	}
+	
+	StyledLabelTTF* slttf = StyledLabelTTF::create(texts, sa);
+	
+	return slttf;
+	
+}
+

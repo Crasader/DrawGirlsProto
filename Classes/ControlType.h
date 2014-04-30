@@ -33,7 +33,7 @@ public:
 	bool isStun;
 	CT_Type mType;
 	
-	void startControl();
+	virtual void startControl();
 	
 	virtual void setTouchEnabled(bool t_b);
 	
@@ -203,6 +203,8 @@ public:
 	
 	void stopMySchedule();
 	bool isBacking;
+	
+	virtual void startControl();
 	
 	SEL_CallFunc pauseBackTracking;
 	

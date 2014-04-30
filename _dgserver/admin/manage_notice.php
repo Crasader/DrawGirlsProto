@@ -13,9 +13,10 @@ include "manage_header.php";
 			<th field="no" viewer='{"type":"text"}' primary>no</th>
 			<th field="title" viewer='{"type":"text"}' editor='{"type":"text"}'>title</th>
 			<th field="startDate" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>startDate</th>
-			<th field="endDate" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'endDate</th>
+			<th field="endDate" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>endDate</th>
 			<th field="os" viewer='{"type":"text"}' editor='{"type":"select","element":["all","android","ios"]}'>os</th>
-			<th field="type" viewer='{"type":"text"}' editor='{"type":"select","element":["이미지","텍스트","긴급"]}'>type</th>
+			<th field="language" viewer='{"type":"text"}' editor='{"type":"text"}'>language</th>	
+			<th field="type" viewer='{"type":"text"}' editor='{"type":"select","element":["image","text","긴급"]}'>type</th>
 			<th field="imgInfo" viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}'>imgInfo</th>
 			<th field="linkURL" viewer='{"type":"text"}' editor='{"type":"text"}'>linkURL</th>
 			<th field="content" viewer='{"type":"text"}' editor='{"type":"textarea"}'>content</th>

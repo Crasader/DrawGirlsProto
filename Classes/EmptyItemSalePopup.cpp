@@ -11,7 +11,6 @@
 #include "TouchSuctionLayer.h"
 #include "KSUtil.h"
 #include "KSLabelTTF.h"
-#include "StarGoldData.h"
 #include "DataStorageHub.h"
 #include "ASPopupView.h"
 #include "LoadingLayer.h"
@@ -20,16 +19,19 @@
 #include "PuzzleScene.h"
 #include "FormSetter.h"
 
-EmptyItemSalePopup* EmptyItemSalePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func)
+EmptyItemSalePopup* EmptyItemSalePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func, PurchaseGuideType t_type)
 {
 	EmptyItemSalePopup* t_mup = new EmptyItemSalePopup();
-	t_mup->myInit(t_touch_priority, t_end_func, t_purchase_func);
+	t_mup->myInit(t_touch_priority, t_end_func, t_purchase_func, t_type);
 	t_mup->autorelease();
 	return t_mup;
 }
 
-void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func)
+void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func, PurchaseGuideType t_type)
 {
+	m_type = t_type;
+	
+	mySGD->showPurchasePopup(m_type);
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
@@ -51,15 +53,25 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(back_case);
 	
 	
-	CCSprite* title_label = CCSprite::create("emptyitemsale_title.png");
-	title_label->setPosition(ccp(0,95));
-	m_container->addChild(title_label);
+	if(m_type == kPurchaseGuideType_emptyItem)
+	{
+		CCSprite* title_label = CCSprite::create("emptyitemsale_title.png");
+		title_label->setPosition(ccp(0,95));
+		m_container->addChild(title_label);
+	}
+	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
+	{
+		KSLabelTTF* title_label = KSLabelTTF::create("종합 아이템 구매 찬스!", mySGD->getFont().c_str(), 20);
+		title_label->setColor(ccc3(50, 255, 255));
+		title_label->setPosition(ccp(0,95));
+		m_container->addChild(title_label);
+	}
 	
 	KSLabelTTF* sub_ment1 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent1), mySGD->getFont().c_str(), 12);
 	sub_ment1->setPosition(ccp(0,60));
 	m_container->addChild(sub_ment1);
 	
-	string sale_percent_string = "20%";
+	string sale_percent_string = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_sale_s, m_type-1);
 	
 	KSLabelTTF* sub_ment2 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent2), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
 	sub_ment2->setColor(ccYELLOW);
@@ -87,8 +99,13 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	item8->setPosition(ccp(70,0));
 	m_container->addChild(item8);
 	
-		
-	KSLabelTTF* before_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", 3000)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+	
+	string before_value = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_data_s, m_type-1);
+	Json::Reader reader;
+	Json::Value before_data;
+	reader.parse(before_value, before_data);
+	
+	KSLabelTTF* before_price = KSLabelTTF::create(KS::insert_separator(before_data["beforeDiscount"].asString()).c_str(), mySGD->getFont().c_str(), 14);
 	before_price->enableOuterStroke(ccBLACK, 1.f);
 	before_price->setPosition(ccp(-45,-30));
 	m_container->addChild(before_price);
@@ -103,7 +120,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	after_price_type->setPosition(ccp(10,-30));
 	m_container->addChild(after_price_type);
 	
-	KSLabelTTF* after_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", 2400)->getCString()).c_str(), mySGD->getFont().c_str(), 20);
+	KSLabelTTF* after_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, m_type-1))->getCString()).c_str(), mySGD->getFont().c_str(), 20);
 	after_price->setColor(ccYELLOW);
 	after_price->enableOuterStroke(ccBLACK, 1.f);
 	after_price->setPosition(ccp(50,-30));
@@ -153,7 +170,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
 	price_type->setScale(0.7f);
 	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", 2400)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, m_type-1))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+10,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
@@ -209,8 +226,11 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	inapp_loading = LoadingLayer::create(-9999, true);
 	addChild(inapp_loading);
 	
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	mySGD->addChangeGoods(kGoodsType_ruby, 100, "아이템패키지판매팝업(IOS-인앱결재)", "", "", true);
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	mySGD->addChangeGoods(kGoodsType_gold, -NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, m_type-1), "아이템없을때패키지판매팝업(IOS-인앱결재)");
+	mySGD->addChangeGoods(kGoodsType_item9, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, m_type-1), "아이템없을때패키지판매팝업");
+	mySGD->addChangeGoods(kGoodsType_item6, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, m_type-1), "아이템없을때패키지판매팝업");
+	mySGD->addChangeGoods(kGoodsType_item8, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, m_type-1), "아이템없을때패키지판매팝업");
 	
 	mySGD->changeGoods([=](Json::Value result_data){
 		inapp_loading->removeFromParent();
@@ -227,79 +247,79 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 		}
 	});
 	
-	
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	Json::Value param;
-	param["productid"] = mySGD->getInappProduct(0); //
-	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
-		//																				KS::KSLog("in-app test \n%", v);
-		if(v["issuccess"].asInt())
-		{
-			//			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급");
-			requestItemDelivery();
-		}
-		else
-		{
-			inapp_loading->removeFromParent();
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-			is_menu_enable = true;
-		}
-	});
-#endif
+//	
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	Json::Value param;
+//	param["productid"] = mySGD->getInappProduct(0); //
+//	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+//		//																				KS::KSLog("in-app test \n%", v);
+//		if(v["issuccess"].asInt())
+//		{
+//			//			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급");
+//			requestItemDelivery();
+//		}
+//		else
+//		{
+//			inapp_loading->removeFromParent();
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//			is_menu_enable = true;
+//		}
+//	});
+//#endif
 	
 }
 
-void EmptyItemSalePopup::requestItemDelivery()
-{
-	vector<CommandParam> command_list;
-	
-	Json::Value transaction_param;
-	transaction_param["memberID"] = hspConnector::get()->getMemberID();
-	command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
-										{
-											if(result_data["result"]["code"].asInt() == GDSUCCESS)
-											{
-												inapp_loading->removeFromParent();
-												
-												is_menu_enable = true;
-												giveupAction(NULL, CCControlEventTouchUpInside);
-											}
-											else
-											{
-												addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
-											}
-										}));
-	
-	Json::Value request_param;
-	request_param["memberID"] = hspConnector::get()->getSocialID();
-	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
-	
-	command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
-	
-	hspConnector::get()->command(command_list);
-}
+//void EmptyItemSalePopup::requestItemDelivery()
+//{
+//	vector<CommandParam> command_list;
+//	
+//	Json::Value transaction_param;
+//	transaction_param["memberID"] = hspConnector::get()->getMemberID();
+//	command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
+//										{
+//											if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//											{
+//												inapp_loading->removeFromParent();
+//												
+//												is_menu_enable = true;
+//												giveupAction(NULL, CCControlEventTouchUpInside);
+//											}
+//											else
+//											{
+//												addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+//											}
+//										}));
+//	
+//	Json::Value request_param;
+//	request_param["memberID"] = hspConnector::get()->getSocialID();
+//	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
+//	
+//	command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
+//	
+//	hspConnector::get()->command(command_list);
+//}
 
-void EmptyItemSalePopup::resultSaveUserData(Json::Value result_data)
-{
-	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	if(result_data["result"]["code"].asInt() == GDSUCCESS)
-	{
-		CCLOG("save userdata success!!");
-		
-		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-		
-		//		rankup_button->setVisible(false);
-		//		giveup_button->setVisible(false);
-		//
-		//		question_manager->runAnimationsForSequenceNamed("Default Timeline");
-	}
-	else
-	{
-		CCLOG("missile upgrade fail!!");
-		
-		mySGD->clearChangeGoods();
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-		
-		is_menu_enable = true;
-	}
-}
+//void EmptyItemSalePopup::resultSaveUserData(Json::Value result_data)
+//{
+//	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+//	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//	{
+//		CCLOG("save userdata success!!");
+//		
+//		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+//		
+//		//		rankup_button->setVisible(false);
+//		//		giveup_button->setVisible(false);
+//		//
+//		//		question_manager->runAnimationsForSequenceNamed("Default Timeline");
+//	}
+//	else
+//	{
+//		CCLOG("missile upgrade fail!!");
+//		
+//		mySGD->clearChangeGoods();
+//		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//		
+//		is_menu_enable = true;
+//	}
+//}

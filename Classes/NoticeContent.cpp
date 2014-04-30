@@ -11,6 +11,7 @@
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
 #include "CommonButton.h"
+
 void NoticeContent::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
@@ -53,8 +54,20 @@ void NoticeContent::loadNotice(){
 	is_not_show_three_day = false;
 	if(notice_list[ing_close_cnt].get("content", "").asString()!=""){
 		//텍스트모드
-		content_label->setString(notice_list[ing_close_cnt]["content"].asString().c_str());
-		title_label->setString(notice_list[ing_close_cnt]["title"].asString().c_str());
+
+		
+		
+		//<font|rgb|size|tag|newline>
+		if(stTxt)stTxt->removeFromParent();
+		string str = notice_list[ing_close_cnt].get("content", "").asString();
+		
+		stTxt = StyledLabelTTF::create(str.c_str(),mySGD->getFont().c_str(), StyledAlignment::kCenterAlignment);
+		stTxt->setPosition(ccp(0, 110));
+		addChild(stTxt,10000);
+		
+		
+		//		content_label->setString(notice_list[ing_close_cnt]["content"].asString().c_str());
+//		title_label->setString(notice_list[ing_close_cnt]["title"].asString().c_str());
 		
 		if(show_content)show_content->setVisible(false);
 		

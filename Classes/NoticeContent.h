@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "CCMenuLambda.h"
 #include "jsoncpp/json.h"
+#include "StyledLabelTTF.h"
 #include <chrono>
 
 USING_NS_CC;
@@ -44,6 +45,7 @@ private:
 	CCScale9Sprite* case_back;
 	CCLabelTTF* title_label;
 	CCLabelTTF* content_label;
+	StyledLabelTTF* stTxt;
 	//CCMenu* check_menu;
 	//CCSprite* check_img;
 	

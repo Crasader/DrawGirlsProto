@@ -87,6 +87,7 @@ if(!$gid){
 <td><a href=admin_character.php?gid=<?=$gid?>>character<br><font color=red>캐릭터</font></a></td>
 <td><a href=admin_item.php?gid=<?=$gid?>>item<br><font color=red>아이템</font></a></td>
 <td><a href=admin_shop.php?gid=<?=$gid?>>shop<br><font color=red>상점</font></a></td>
+<td><a href=admin_exchange.php?gid=<?=$gid?>>exchange<br><font color=red>교환매니저</font></a></td>
 <td><a href=admin_language.php?gid=<?=$gid?>>language<br><font color=red>언어</font></a></td>
 <td><a href=admin_mission.php?gid=<?=$gid?>>mission<br><font color=red>미션</font></a></td>
 <td><a href=admin_archivement.php?gid=<?=$gid?>>archivement<br><font color=red>업적</font></a></td>

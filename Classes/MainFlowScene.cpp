@@ -121,7 +121,7 @@ bool MainFlowScene::init()
 			bool and_open = true;
 			bool is_time_condition = false;
 			
-			for(int j=0;and_open && j<t_condition_and.size();j++)
+			for(int j=0;j<t_condition_and.size();j++)
 			{
 				Json::Value t_condition = t_condition_and[j];
 				string t_type = t_condition["type"].asString();
@@ -948,7 +948,12 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //			buy_menu->setPosition(ccp(-24, -16));
 //			cell_node->addChild(buy_menu);
 			
-			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", 1)->getCString());
+			int lock_img_number = is_puzzle_enter_list[idx].before_locked_puzzle_count;
+			if(lock_img_number > 1)
+				lock_img_number = 1;
+			lock_img_number++;
+			
+			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", lock_img_number)->getCString());
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 			
@@ -1054,7 +1059,12 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		}
 		else
 		{
-			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", 1)->getCString());
+			int lock_img_number = is_puzzle_enter_list[idx].before_locked_puzzle_count;
+			if(lock_img_number > 1)
+				lock_img_number = 1;
+			lock_img_number++;
+			
+			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", lock_img_number)->getCString());
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 			

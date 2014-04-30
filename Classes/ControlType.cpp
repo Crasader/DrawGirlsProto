@@ -1402,7 +1402,6 @@ ControlJoystickButton* ControlJoystickButton::create( CCObject* t_main, SEL_Call
 void ControlJoystickButton::setTouchEnabled( bool t_b )
 {
 	ControlCommon::setTouchEnabled(t_b);
-
 	if(!t_b)
 	{
 		unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
@@ -2258,9 +2257,15 @@ void ControlJoystickButton::hideDrawButtonTutorial()
 //	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, -110, true);
 //}
 
+void ControlJoystickButton::startControl()
+{
+	setTouchEnabled(true);
+}
+
 void ControlCommon::startControl()
 {
 	//		if(((CCNode*)target_main)->getTag() == 1)
+	
 	setTouchEnabled(true);
 }
 
