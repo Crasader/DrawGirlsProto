@@ -38,9 +38,9 @@ class CommitManager{
 			mysql_query("SET AUTOCOMMIT=0",$this->m_dbInfo[$memberID]->getConnection());
 			mysql_query("BEGIN",$this->m_dbInfo[$memberID]->getConnection());
 
-			LogManager::get()->addLog("start tranjaction".mysql_error());
+			LogManager::get()->addLog("start transaction".mysql_error());
 		}else{
-			LogManager::get()->addLog("start tranjaction but ++");
+			LogManager::get()->addLog("start transaction but ++");
 			$this->m_releaseCount[$memberID]++;
 		}
 	}
@@ -49,7 +49,7 @@ class CommitManager{
 		if(!$this->m_releaseCount[$memberID]) return false;
 
 
-		LogManager::get()->addLog("commit tranjaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::get()->addLog("commit transaction count=".$this->m_releaseCount[$memberID]."-1");
 
 		$this->m_releaseCount[$memberID]--;
 
@@ -74,7 +74,7 @@ class CommitManager{
 		if(!$this->m_releaseCount[$memberID]) return false;
 
 
-		LogManager::get()->addLog("rollback tranjaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::get()->addLog("rollback transaction count=".$this->m_releaseCount[$memberID]."-1");
 
 		$this->m_releaseCount[$memberID]--;
 
@@ -84,7 +84,7 @@ class CommitManager{
 			$this->setSuccess($memberID,false);
 			$result=true;
 		}
-		LogManager::get()->addLog("rollback tranjaction");
+		LogManager::get()->addLog("rollback transaction");
 		return $result;
 	}
 
@@ -328,27 +328,7 @@ class UserData extends DBTable{
 	public function getUserIndex(){
 		return $this->m__userIndex->getUserIndex();
 	}
-	/*
-public function __construct($memberID=0,$DBInfo=null){
-		if($DBInfo==null){
-			$DBInfo = DBManager::get()->getDBInfoByShardKey($memberID);
-		}
-		$this->m__DBInfo = $DBInfo;
-		$this->m_memberID = $memberID;
-		
-		if($this->m_memberID){
-			$query = "select * from ".DBManager::getST("userdata")." where memberID=".$this->m_memberID;
-			$this->m__result = mysql_fetch_array(mysql_query($query,$this->m__DBInfo->getConnection()),MYSQL_ASSOC);
-			if($this->m__result){
-				$this->m_no = $this->m__result["no"];
-				$this->m_data = $this->m__result["data"];
-				$this->m_nick = $this->m__result["nick"];
-				$this->m_lastDate = $this->m__result["lastDate"];
-				$this->m_joinDate = $this->m__result["joinDate"];
-			}
-		}
-	}
-*/
+
 	public function getArrayData($isIncludePrimaryKey=false,$keyList=null){
 		
 		$data = parent::getArrayData($isIncludePrimaryKey);
@@ -479,7 +459,7 @@ class Message extends DBRow{
 	
 
 	public function send(){
-		if(!$this->m_memberID)return "error";
+		if(!$this->memberID)return "error";
 		if(!$this->m__DBInfo){
 			$userIndex = UserIndex::create($this->m_memberID);
 			$this->setDBInfo($userIndex->getShardDBInfo());
@@ -1464,8 +1444,9 @@ class WeeklyScore extends DBTable{
 		}
 	}
 
-	public function getTopRank($start=0,$count=50){
+	public function getTopRank($start=1,$count=50){
 		$rdata = array(); 
+		$start-=1;
 		$query = "where regWeek=".$this->regWeek." order by score desc limit $start,$count";
 		$rl=0;
 		while($data = WeeklyScore::getRowByQuery($query)){
@@ -1485,7 +1466,6 @@ class WeeklyScore extends DBTable{
 				$l++;
 			}
 
-		
 			array_splice($rdata, $l, 0, array($data));
 			array_splice($rdata, $count, 1);
 		}
@@ -1568,7 +1548,7 @@ class StageScore extends DBTable{
 
 	public function getAllUser(){
 		$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo,$this->getDBConnection()));
-		$alluser=$mresult[0]+1;
+		$alluser=$mresult[0];
 		return $alluser;
 	}
 
@@ -1604,7 +1584,7 @@ class Character extends DBTable{
 //	캐릭터히스토리
 ////////////////////////////////////////////////////////////////////////////////////////
 class CharacterHistory extends DBTable{
-	
+	public $m__userIndex = null;
 	public function __construct($memberID=null,$characterNo=null){
 
 		parent::__construct();
@@ -1768,6 +1748,109 @@ public function __construct($pID=null){
 			$q_where = "pID='".$pID."'";
 			parent::load($q_where);
 		}
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//	샵
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+class Exchange extends DBTable{
+public function __construct($id=null){
+
+		parent::__construct();
+		
+		$this->setPrimarykey("no",true);
+		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->id=$id;
+		if($id){
+			$q_where = "`id`='".$id."'";
+			parent::load($q_where);
+		}
+	}
+
+
+	public function getList($param){
+		$dataList = array();
+
+	    while($rData = self ::getRowByQuery()){
+			$dataList[]=$rData;
+
+	    }
+
+	    $result["param"]=$param;
+	    $result["data"]=$dataList;
+	    $result["result"]="ok";
+	    return $result;
+	}
+
+
+	public function writeData($param){
+
+		parent::load("`id`=".$param["data"]["id"]);
+
+		foreach ($param["data"] as $key => $value) {
+			$this->$key = $value;
+		}
+
+		if($this->save()){
+			$r["data"] = $this->getArrayData(true);
+			$r["result"]="ok";
+			return $r;
+		}
+
+		$r["result"]="fail";
+		return $r;
+	}
+
+	
+	public function updateData($param){
+
+		parent::load("no=".$param["data"]["no"]);
+
+		unset($param["data"]["no"]);
+
+		if(!$this->isLoaded()){
+			$r["result"]="fail";
+			$r["message"]="로드실패";
+			return $r;
+		}
+
+		foreach ($param["data"] as $key => $value) {
+			$this->$key = $value;
+		}
+
+		if($this->save()){
+			$r["data"] = $this->getArrayData(true);
+			$r["result"]="ok";
+			return $r;
+		}
+
+		$r["result"]="fail";
+		return $r;
+	}
+
+
+	public function deleteData($param){
+
+		parent::load("no=".$param["data"]["no"]);
+
+		if(!$this->isLoaded()){
+			$r["result"]="fail";
+			return $r;
+		}
+
+		if($this->remove()){
+			$r["result"]="ok";
+			return $r;
+
+		}
+
+		$r["result"]="fail";
+		return $r;
+
+
 	}
 }
 ?>

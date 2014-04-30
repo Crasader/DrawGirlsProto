@@ -56,6 +56,10 @@ public:
 		t->autorelease();
 		return t;
 	}
+	
+	static StyledLabelTTF* create(const char* text,const char* font ,StyledAlignment sa);
+	CCLabelTTF* getLabelByTag(int tag);
+	
 	void updateTexture();
 	static unsigned int makeRGB(unsigned char R, unsigned char G, unsigned char B)
 	{

@@ -176,6 +176,11 @@ function requestitemdelivery($p){
 			$result3 = $this->httpgateway($pppp);
 			LogManager::get()->addLog("-->".json_encode($result3));
 			if(ResultState::successCheck($result3["result"])){
+				$user = new UserData($memberID);
+				if($user->isLoaded()){
+					$user->isVIP = 1;
+					$user->save();
+				}
 				return $result2;
 			}
 			return $result3;
@@ -300,13 +305,14 @@ function getnoticelist($p){
 
 	$r = array();
 
-	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate order by `order` asc")){
+	LogManager::get()->addLog("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."') order by `order` asc");
+	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."') order by `order` asc")){
 		$rData[imgInfo]=json_decode($rData[imgInfo],true);
 		$rData[imgInfo][img]=$nowurl."/images/".$rData[imgInfo][img];		
 		$r["list"][]=$rData;
 	}
 
-	
+	$r["date"]=(string)TimeManager::get()->getCurrentDateString;
 	$r["result"]=ResultState::successToArray();
 	$r["state"]="ok";
 	
@@ -412,17 +418,26 @@ function getshoplist($p){
 	
 	if(!$result)return ResultState::makeReturn(1001,"getshoplist error");
 	
+	$r=array();
 	$list = array();
 	$oldlistname = "";
-	while($charInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
-			if($charInfo[type]!=$oldlistname)$listname=$charInfo[type];
+	while($shopInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
+			$shopInfo["data"]=json_decode($shopInfo["data"],true);
+			$id = $shopInfo["id"];
+			$r[$id]=$shopInfo;
+			// if($shopInfo[category]!=$oldlistname)$listname=$shopInfo[category];
 
-			$charInfo[data]=json_decode($charInfo[data],true);
-			$charInfo[image]=$nowurl."/".$charInfo[image];
-			$list[$listname][]=$charInfo;
-			$oldlistname = $listname;
+			// $shopInfo[data]=json_decode($shopInfo[data],true);
+			// $shopInfo[image]=$nowurl."/".$shopInfo[image];
+			// $list[$listname][]=$shopInfo;
+			// $oldlistname = $listname;
 	}
-	
+	/*********************** 임시코드 ****************************/
+	$olddata = json_decode('{"coin":[{"no":13,"type":"coin","count":5,"countName":5,"price":5,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":14,"type":"coin","count":10,"countName":10,"price":10,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":15,"type":"coin","count":20,"countName":20,"price":20,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":16,"type":"coin","count":40,"countName":40,"price":40,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":17,"type":"coin","count":75,"countName":75,"price":75,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":18,"type":"coin","count":100,"countName":100,"price":100,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""}],"gold":[{"no":7,"type":"gold","count":10000,"countName":"만골드","price":10,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":8,"type":"gold","count":20000,"countName":"이만골드","price":20,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":9,"type":"gold","count":50000,"countName":"오만골드","price":50,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":10,"type":"gold","count":100000,"countName":"십만골드","price":100,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":11,"type":"gold","count":300000,"countName":"삼십만골드","price":300,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":12,"type":"gold","count":500000,"countName":"오십만골드","price":500,"priceType":"ruby","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""}],"ruby":[{"no":1,"type":"ruby","count":10,"countName":10,"price":1000,"priceType":"money","sale":"","image":"182.162.201.147:10010/shop_coin1.png","data":[],"pID":"g_10289_001"},{"no":2,"type":"ruby","count":50,"countName":50,"price":4500,"priceType":"money","sale":"-10%","image":"182.162.201.147:10010/shop_coin2.png","data":[],"pID":"g_10289_002"},{"no":3,"type":"ruby","count":100,"countName":100,"price":8000,"priceType":"money","sale":"-20%","image":"182.162.201.147:10010/shop_coin3.png","data":[],"pID":"g_10289_003"},{"no":4,"type":"ruby","count":300,"countName":300,"price":21000,"priceType":"money","sale":"-30%","image":"182.162.201.147:10010/","data":[],"pID":"g_10289_004"},{"no":5,"type":"ruby","count":500,"countName":500,"price":30000,"priceType":"money","sale":"-40%","image":"182.162.201.147:10010/","data":[],"pID":"g_10289_005"},{"no":6,"type":"ruby","count":1000,"countName":1000,"price":50000,"priceType":"money","sale":"-50%","image":"182.162.201.147:10010/","data":[],"pID":"g_10289_006"}]}',true); 
+	$list = array_merge($list,$olddata);
+	$olddata2 = json_decode('{"g":[{"no":7,"id":"","category":"g","type":"g","count":10000,"countName":"1만골드","priceType":"r","price":10,"priceName":"10개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":8,"id":"","category":"g","type":"g","count":20000,"countName":"2만골드","priceType":"r","price":20,"priceName":"20개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":9,"id":"","category":"g","type":"g","count":50000,"countName":"5만골드","priceType":"r","price":50,"priceName":"50개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":10,"id":"","category":"g","type":"g","count":100000,"countName":"10만골드","priceType":"r","price":100,"priceName":"100개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":11,"id":"","category":"g","type":"g","count":300000,"countName":"30만골드","priceType":"r","price":300,"priceName":"300개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":12,"id":"","category":"g","type":"g","count":500000,"countName":"50만골드","priceType":"r","price":500,"priceName":"500개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""}],"h":[{"no":13,"id":"","category":"h","type":"h","count":5,"countName":"5개","priceType":"r","price":5,"priceName":"5개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":14,"id":"","category":"h","type":"h","count":10,"countName":"10개","priceType":"r","price":10,"priceName":"10개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":15,"id":"","category":"h","type":"h","count":20,"countName":"20개","priceType":"r","price":20,"priceName":"20개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":16,"id":"","category":"h","type":"h","count":40,"countName":"40개","priceType":"r","price":40,"priceName":"40개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":17,"id":"","category":"h","type":"h","count":75,"countName":"75개","priceType":"r","price":75,"priceName":"75개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""},{"no":18,"id":"","category":"h","type":"h","count":100,"countName":"100개","priceType":"r","price":100,"priceName":"100개","sale":"","image":"182.162.201.147:10010/","data":[],"pID":""}],"e":[{"no":20,"id":"empty_item","category":"e","type":"r","count":1,"countName":"아이템 1팩","priceType":"g","price":2400,"priceName":"2400골드","sale":"20%","image":"182.162.201.147:10010/","data":{"beforeDiscount":3000},"pID":""},{"no":21,"id":"stupid_npu_help","category":"e","type":"r","count":1,"countName":"아이템 1팩","priceType":"g","price":2000,"priceName":"2000골드","sale":"30%","image":"182.162.201.147:10010/","data":{"beforeDiscount":3000},"pID":""},{"no":19,"id":"first_purchase","category":"e","type":"r","count":100,"countName":"루비 100개","priceType":"m","price":4000,"priceName":"4000원","sale":"50%","image":"182.162.201.147:10010/","data":{"beforeDiscount":8000},"pID":"g_10289_003"}],"r":[{"no":1,"id":"","category":"r","type":"r","count":10,"countName":"10개","priceType":"m","price":1000,"priceName":"1000원","sale":"","image":"182.162.201.147:10010/shop_coin1.png","data":[],"pID":"g_10289_001"},{"no":2,"id":"","category":"r","type":"r","count":50,"countName":"50개","priceType":"m","price":4500,"priceName":"4500원","sale":"-10%","image":"182.162.201.147:10010/shop_coin2.png","data":[],"pID":"g_10289_002"},{"no":3,"id":"","category":"r","type":"r","count":100,"countName":"100개","priceType":"m","price":8000,"priceName":"8000원","sale":"-20%","image":"182.162.201.147:10010/shop_coin3.png","data":[],"pID":"g_10289_003"},{"no":4,"id":"","category":"r","type":"r","count":300,"countName":"300개","priceType":"m","price":21000,"priceName":"21000원","sale":"-30%","image":"182.162.201.147:10010/","data":[],"pID":"g_10289_004"},{"no":5,"id":"","category":"r","type":"r","count":500,"countName":"500개","priceType":"m","price":30000,"priceName":"3만원","sale":"-40%","image":"182.162.201.147:10010/","data":[],"pID":"g_10289_005"},{"no":6,"id":"","category":"r","type":"r","count":1000,"countName":"1000개","priceType":"m","price":50000,"priceName":"5만원","sale":"-50%","image":"182.162.201.147:10010/","data":[],"pID":"g_10289_006"}]}',true);
+	$list = array_merge($list,$olddata2);
+	/***********************************************************/
 	$r["list"]=$list;
 	$r["version"]=$listVer;
 	$r["state"]="ok";
@@ -1550,16 +1565,16 @@ function dropoutuser($p){
 
 		
 		if($user->isLoaded()){
-			mysql_query("delete from ".DBManager::getMT("userindex")." where memberID=".$user->m_memberID,DBManager::get()->getMainConnection());
-			mysql_query("delete from ".DBManager::getST("message")." where memberID=".$user->m_memberID." and isSendMsg=0",$user->getDBConnection());
-			StageScore::removeRowByQuery("where memberID=".$user->m_memberID);
-			WeeklyScore::removeRowByQuery("where memberID=".$user->m_memberID);
-			PieceHistory::removeRowByQuery("where memberID=".$user->m_memberID);
-			CardHistory::removeRowByQuery("where memberID=".$user->m_memberID);
-			PuzzleHistory::removeRowByQuery("where memberID=".$user->m_memberID);
-			ArchivementHistory::removeRowByQuery("where memberID=".$user->m_memberID);
-			CharacterHistory::removeRowByQuery("where memberID=".$user->m_memberID);
-			UserProperty::removeRowByQuery("where memberID=".$user->m_memberID);
+			mysql_query("delete from ".DBManager::getMT("userindex")." where memberID=".$user->memberID,DBManager::get()->getMainConnection());
+			mysql_query("delete from ".DBManager::getST("message")." where memberID=".$user->memberID." and isSendMsg=0",$user->getDBConnection());
+			StageScore::removeRowByQuery("where memberID=".$user->memberID);
+			WeeklyScore::removeRowByQuery("where memberID=".$user->memberID);
+			PieceHistory::removeRowByQuery("where memberID=".$user->memberID);
+			CardHistory::removeRowByQuery("where memberID=".$user->memberID);
+			PuzzleHistory::removeRowByQuery("where memberID=".$user->memberID);
+			ArchivementHistory::removeRowByQuery("where memberID=".$user->memberID);
+			CharacterHistory::removeRowByQuery("where memberID=".$user->memberID);
+			UserProperty::removeRowByQuery("where memberID=".$user->memberID);
 			if($user->remove()){
 				$r["result"]=ResultState::successToArray();
 			}else{
@@ -1627,6 +1642,7 @@ function help_join(){
 	
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"memberID");
 	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"닉네임");
+	$r["param"][] = array("name"=>"flag","type"=>"string","description"=>"국기");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2008,"닉네임중복");
@@ -1645,9 +1661,10 @@ function join($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002);
 	if(!$nick)return ResultState::makeReturn(2002);
-
+	if(!$p["flag"])$p["flag"]="kr";
 	$user = new UserData($memberID);
 	$user->memberID = $memberID;
+	$user->flag = $p["flag"];
 
     LogManager::get()->addLog("join1 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
 	if(mb_strlen($nick,'UTF-8')>8)return ResultState::makeReturn(2011); 
@@ -1745,9 +1762,9 @@ function setuserdata($p){
 		$user = new UserData($memberid);
 		
 		if($p["nick"]){
-			$user->m_nick = $p["nick"];
+			$user->nick = $p["nick"];
 		}
-		if($p["data"])$user->m_data = $p["data"];
+		if($p["data"])$user->data = $p["data"];
 		
 		
 		if(!$user->save())return ResultState::makeReturn(2006);
@@ -1788,7 +1805,6 @@ function getuserdata($p){
 			$r["state"]="ok";
 			$r["userIndex"]=$user->getUserIndex();
 			$r["result"]=ResultState::successToArray();
-			$r["result"]["nick"]=$user->m__userIndex->nick;
 		}else{
 			$r["state"]="error";
 			$r["result"]=ResultState::toArray(2003,"fail to load userdata");
@@ -1867,6 +1883,11 @@ function help_updateuserdata(){
 	$r["param"][] = array("name"=>"memberID","type"=>"string","description"=>"멤버ID");
 	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"저장할데이터 json string");
 	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"닉네임");
+	$r["param"][] = array("name"=>"isVIP","type"=>"int","description"=>"0이면 무료유저, 1이면 인앱구매유저");
+	$r["param"][] = array("name"=>"isFirstBuy","type"=>"int","description"=>"구매유도플로우저장용");
+	$r["param"][] = array("name"=>"totalPlayCount","type"=>"int","description"=>"총플레이횟수");
+	$r["param"][] = array("name"=>"failCount","type"=>"int","description"=>"연속실패카운트");
+	$r["param"][] = array("name"=>"autoLevel","type"=>"int","description"=>"오토벨런싱용레벨");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID 안넣음");
@@ -1885,17 +1906,24 @@ function updateuserdata($p){
 		if($user->isLoaded()){
 			LogManager::get()->addLog("updateuserdata load ok ".json_encode($user->getArrayData()));
 		}
-		if($p["nick"]){
-			$user->m_nick = $p["nick"];
-		}
+		//if($p["nick"])$user->nick = $p["nick"];
+		if($p["isVIP"])$user->isVIP = $p["isVIP"];
+		if($p["isFirstBuy"])$user->isFirstBuy = $p["isFirstBuy"];
+		if($p["totalPlayCount"])$user->totalPlayCount = $p["totalPlayCount"];
+		if($p["failCount"])$user->failCount = $p["failCount"];
+		if($p["autoLevel"])$user->autoLevel = $p["autoLevel"];
+		if($p["pGuide"])$user->pGuide = $p["pGuide"];
+				
+
 		if($p["data"]){
 			LogManager::get()->addLog("updateuserdata updateData");
 			if(!$user->updateData($p["data"]))return ResultState::makeReturn(2006);
-			$r["data"]=$user->getData();
 		}else{
 			LogManager::get()->addLog("updateuserdata save");
 			if(!$user->save())return ResultState::makeReturn(2006);
 		} 
+
+		$r=$user->getArrayData();
 		$r["result"]=ResultState::successToArray();
 		$r["state"]="ok";
 	}else{
@@ -1933,23 +1961,12 @@ function adduserdata($p){
 	if($memberid){
 		$user = new UserData($memberid);
 		
-		$udata = json_decode($user->m_data,true);
+		$udata = json_decode($user->data,true);
 		if(is_numeric($udata[$key]))$udata[$key]+=$value;
 		else if(!$udata[$key])$udata[$key]=$value;
 		
-		$user->m_data = json_encode($udata,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-		
-/*		safeway
-		if($safekey){
-			$now = TimeManager::get()->getCurrentDateString();
-			if(!($user->m_safekey==$safekey)){
-				$r["state"]="error";
-				$r["error"]="not safe";
-				return $r;
-			}	
-			$user->m_safekey=$safekey;
-		}
-*/
+		$user->data = json_encode($udata,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
 		
 		if($user->save())return ResultState::makeReturn(2006);
 		
@@ -2037,7 +2054,7 @@ function addfriend($p){
 		
 		if(!$user->isLoaded())return ResultState::makeReturn(2005);
 		
-		$friendList = json_decode($user->m_friendList,true);
+		$friendList = json_decode($user->friendList,true);
 		
 		if($friendMax>0 && count($friendList)>$friendMax){
 			$r["state"]="error";
@@ -2049,7 +2066,7 @@ function addfriend($p){
 		$user->addFriend($friendid);
 		if($user->save())return ResultState::makeReturn(2006);
 		
-		$r["friendList"]=json_decode($user->m_friendList,true);
+		$r["friendList"]=json_decode($user->friendList,true);
 		$r["state"]="ok";
 		$r["result"]=ResultState::successToArray();
 	}else{
@@ -2090,10 +2107,10 @@ function addfriendeach($p){
 	}
 	
 	$user = new UserData($memberid);
-	$userfriendList = json_decode($user->m_friendList,true);
+	$userfriendList = json_decode($user->friendList,true);
 	
 	$friend = new UserData($friendid);
-	$friendfriendList = json_decode($friend->m_friendList,true);
+	$friendfriendList = json_decode($friend->friendList,true);
 	
 	if(!$user->isLoaded() || !$friend->isLoaded()){
 		$r["state"]="error";
@@ -2127,7 +2144,7 @@ function addfriendeach($p){
 	}
 	
 	$r["friendInfo"]=$friend->getArrayData(true);
-	$r["friendList"]=json_decode($user->m_friendList,true);
+	$r["friendList"]=json_decode($user->friendList,true);
 	$r["state"]="ok";
 	$r["result"]=ResultState::successToArray();
 	return $r;
@@ -2185,15 +2202,15 @@ function removefriend($p){
 	$friendid = $p["friendID"];
 	if($memberid){
 		$user = new UserData($memberid);
-		$friendList = json_decode($user->m_friendList,true);
+		$friendList = json_decode($user->friendList,true);
 		
 		$index = array_search($friendid, $friendList);
 		array_splice($friendList, $index, 1);
 		$friendList = array_unique($friendList);				
-		$user->m_friendList = json_encode($friendList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+		$user->friendList = json_encode($friendList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		if(!$user->save())return ResultState::makeReturn(2006);
 		
-		$r["list"]=$user->m_friendList;
+		$r["list"]=$user->friendList;
 		$r["result"]=ResultState::successToArray();
 		$r["state"]="ok";
 	}else{
@@ -2222,7 +2239,7 @@ function getfriendlist($p){
 	$memberid = $p["memberID"];
 	if($memberid){
 		$user = new UserData($memberid);	
-		$list=json_decode($user->m_friendList,true); //json_encode($user->m_friendList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+		$list=json_decode($user->friendList,true); //json_encode($user->m_friendList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		
 		for($i=0;$i<count($list);$i++){
 			$friend = new UserData($list[$i]);
@@ -2550,16 +2567,16 @@ function help_setweeklyscore(){
 function setweeklyscore($p){
 
 	$ws =new WeeklyScore($p["memberID"],TimeManager::get()->getCurrentWeekNo());
-	$ws->m_memberID = $p["memberID"];
-	$ws->m_data = $p["data"];
-	$ws->m_regDate = TimeManager::get()->getCurrentDateString();
-	$ws->m_regTime = TimeManager::get()->getTime();
-	$ws->m_regWeek = TimeManager::get()->getCurrentWeekNo();
+	$ws->memberID = $p["memberID"];
+	$ws->data = $p["data"];
+	$ws->regDate = TimeManager::get()->getCurrentDateString();
+	$ws->regTime = TimeManager::get()->getTime();
+	$ws->regWeek = TimeManager::get()->getCurrentWeekNo();
 	
 	$r["update"]=false;
-	if($ws->m_score<$p["score"]){
+	if($ws->score<$p["score"]){
 		$r["update"]=true;
-		$ws->m_score=$p["score"];
+		$ws->score=$p["score"];
 		$r["uresult"]=$ws->save();
 	}else{
 		$r["uresult"]=$ws->save();
@@ -2591,8 +2608,8 @@ function addweeklyscore($p){
 	$ws->regDate = TimeManager::get()->getCurrentDateString();
 	$ws->regTime = TimeManager::get()->getTime();
 	$ws->regWeek = TimeManager::get()->getCurrentWeekNo();
-	$ws->score = $ws->m_score + $p["score"];
-	$ws->count = $ws->m_count+1;
+	$ws->score = $ws->score + $p["score"];
+	$ws->count = $ws->count+1;
 	$r["update"]=false;
 	$r["uresult"]=$ws->save();
 	$r["state"]="ok";
@@ -2654,7 +2671,7 @@ function getweeklyrankbyalluser($p){
 	$limit = $p["limit"];
 	$weekNo = TimeManager::get()->getCurrentWeekNo();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
-	if(!$start)$start=0;
+	if(!$start)$start=1;
 	if(!$limit)$limit=10;
 
 
@@ -2816,16 +2833,16 @@ function setstagescore($p){
 	$score=0;
 	if(is_numeric($p["score"]))$score = $p["score"];
 	$ss = new StageScore($stageNo,$p["memberID"]);
-	$ss->m_memberID = $p["memberID"];
-	$ss->m_stageNo = $stageNo;
-	$ss->m_data = $p["data"];
-	$ss->m_regDate = TimeManager::get()->getCurrentDateString();
-	$ss->m_regTime = TimeManager::get()->getTime();
+	$ss->memberID = $p["memberID"];
+	$ss->stageNo = $stageNo;
+	$ss->data = $p["data"];
+	$ss->regDate = TimeManager::get()->getCurrentDateString();
+	$ss->regTime = TimeManager::get()->getTime();
 
 	$r["update"]=false;
-	if($ss->m_score<=$score){
+	if($ss->score<=$score){
 		$r["update"]=true;
-		$ss->m_score=$score;
+		$ss->score=$score;
 		$ss->save();
 	}
 	$r["state"]="ok";
@@ -2850,12 +2867,12 @@ function help_addstagescore(){
 function addstagescore($p){
 	$stageNo = $p["stageNo"];
 	$ss = new StageScore($stageNo,$p["memberID"]);
-	$ss->m_memberID = $p["memberID"];
-	$ss->m_stageNo = $stageNo;
-	$ss->m_data = $p["data"];
-	$ss->m_regDate = TimeManager::get()->getCurrentDateString();
-	$ss->m_regTime = TimeManager::get()->getTime();
-	$ss->m_score+=$p["score"];	
+	$ss->memberID = $p["memberID"];
+	$ss->stageNo = $stageNo;
+	$ss->data = $p["data"];
+	$ss->regDate = TimeManager::get()->getCurrentDateString();
+	$ss->regTime = TimeManager::get()->getTime();
+	$ss->score+=$p["score"];	
 	$ss->save();
 	$r["state"]="ok";
 	$r["result"]=ResultState::successToArray();
@@ -2985,6 +3002,9 @@ function getstagerankbyalluser($p){
 	$myRank = new StageScore($memberID,$stageNo);
 	$myRank->memberID = $memberID;
 	$myRank->stageNo = $stageNo;
+	
+	if($p["data"])$myRank->data = $p["data"];
+
 	if($myscore){
 		if($myRank->score<$myscore){
 			$myRank->score = $myscore;
@@ -3158,6 +3178,8 @@ function updatepuzzlehistory($p){
 	
 	//보내기
 	$obj = new PuzzleHistory($memberID,$puzzleNo);
+	$obj->memberID=$memberID;
+	$obj->puzzleNo = $puzzleNo;
 	if($p["updateOpenDate"] && !$obj->openDate)$obj->openDate=TimeManager::get()->getCurrentDateString();
 	if($p["updateClearDate"] && !$obj->clearDate)$obj->clearDate=TimeManager::get()->getCurrentDateString();
 	if($p["updatePerfectDate"] && !$obj->perfectDate)$obj->perfectDate=TimeManager::get()->getCurrentDateString();
@@ -3239,7 +3261,7 @@ function updatepiecehistory($p){
 	$obj->memberID = $memberID;
 	$obj->pieceNo = $pieceNo;
 	if($p["openDate"] && !$obj->openDate)$obj->openDate = TimeManager::get()->getCurrentDateString();
-	if($p["firstClearDate"] && !$obj->firstClearDate)$obj->firstClearDate = TimeManager::get()->getCurrentDateString();
+	if(($p["firstClearDate"] && !$obj->firstClearDate) || ($p["clearCount"]>0 && !$obj->firstClearDate))$obj->firstClearDate = TimeManager::get()->getCurrentDateString();
 	if($p["tryCount"])$obj->tryCount= $p["tryCount"];
 	if($p["clearCount"] && !$obj->clearCount)$obj->clearCount = $p["clearCount"];
 	if(is_array($p["clearDateList"])){
@@ -3354,7 +3376,8 @@ function updatecardhistory($p){
 	
 	//보내기
 	$obj = new CardHistory($memberID,$cardNo);
-	
+	$obj->memberID = $memberID;
+	$obj->cardNo = $cardNo;
 	if($p["updateTakeDate"] || !$obj->isLoaded())$obj->takeDate=TimeManager::get()->getCurrentDateString();
 	if($p["comment"])$obj->comment=addslashes($p["comment"]);
 
@@ -3534,13 +3557,18 @@ function changeuserproperties($p){
 
 	$minusProperty = "";
 	$minusPropertyValue = 0;
+
+	//if(count($list)==1 && !$list[0]["valu"])return ResultState::makeReturn(1);
+
 	CommitManager::get()->begin($memberID);
 
 	foreach ($list as $key => $value) {
 		$param=array();
 
 		//루비인경우 특수처리
-		if($value["type"]=="r"){
+		if(!$value["type"] || $value["count"]==0){
+			continue;
+		}else if($value["type"]=="r"){
 			//take
 			if($value["count"]>=0){
 				if($value["isPurchase"]){
@@ -3742,7 +3770,7 @@ function getuserproperties($p){
 ////////////////////////////////////////
 ////////////////////////////////////////
 
-function help_starttranjaction(){
+function help_starttransaction(){
 
 	$r["description"] = "함께보낸 명령들에 대해 트랜잭션을 시작하고 결과를 리턴합니다.";
 
@@ -3756,16 +3784,15 @@ function help_starttranjaction(){
 }
 
 
-function starttranjaction($p){
+function starttransaction($p){
 	$memberID = $p["memberID"];
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
-	if(!$p["actions"])return ResultState::makeReturn(2002,"actions");
-
+	
 	return true;
 }
 
-function help_tranjaction(){
+function help_transaction(){
 
 	$r["description"] = "트랜잭션을 추가합니다.";
 
@@ -3780,7 +3807,7 @@ function help_tranjaction(){
 }
 
 
-function tranjaction($p){
+function transaction($p){
 	$memberID = $p["memberID"];
 	$cResult=array();
 	$results = array();
@@ -4123,6 +4150,28 @@ function updatecharacterhistory($p){
 
 
 
+function help_gettimeinfo(){
+
+	$r["description"] = "시간정보를 받습니다.";
+
+	$r["param"][] = array("name"=>"offset","type"=>"int","description"=>"이 값(초단위)만큼 현시간에서 더하여 계산합니다.");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	return $r;
+}
+
+function gettimeinfo($p){
+	//$r["test"]=$p["test"];
+	if($p["offset"])TimeManager::get()->setTimeOffset($p["offset"]);
+	$r["timestamp"]=TimeManager::get()->getTime();
+	$r["weekNo"]=TimeManager::get()->getCurrentWeekNo();
+	$r["weekday"]=TimeManager::get()->getCurrentWeekDayNo();
+	$r["date"]=TimeManager::get()->getCurrentDateString();
+	$r["hour"]=TimeManager::get()->getCurrentHour();
+	$r["result"]=ResultState::successToArray();
+	return $r;
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
