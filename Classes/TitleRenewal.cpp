@@ -22,6 +22,7 @@
 #include "KSLabelTTF.h"
 #include <random>
 #include "AudioEngine.h"
+#include "FormSetter.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -172,35 +173,42 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		state_label->setString("");
 		
-		nick_back = CCSprite::create("nickname_back.png");
-		nick_back->setPosition(ccp(240,160));
-		addChild(nick_back,3);
+		
+		CCScale9Sprite* nick_back = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		nick_back->setContentSize(CCSizeMake(290,160));
+		nick_back->setPosition(ccp(240,220));
+		addChild(nick_back,100);
+		
+		
 		
 		CCScale9Sprite* t_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
 		t_back->setOpacity(0);
 		
-		input_text = CCEditBox::create(CCSizeMake(210, 30), t_back);
-		input_text->setPosition(ccp(195,145));
+		input_text = CCEditBox::create(CCSizeMake(170, 30), t_back);
+		input_text->setPosition(ccp(115,35));
 		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
 		input_text->setFont(mySGD->getFont().c_str(), 20);
 		input_text->setInputMode(kEditBoxInputModeSingleLine);
 		input_text->setDelegate(this);
-		addChild(input_text,3);
+		nick_back->addChild(input_text,3);
+		//FormSetter::get()->addObject("t1", input_text);
 		
 		flag = FlagSelector::create();
-		flag->setPosition(140,210);
-		addChild(flag,100000);
+		flag->setPosition(42,60);
+		nick_back->addChild(flag,100000);
+		//FormSetter::get()->addObject("t2", flag);
 		
-		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
-		ok_menu->setPosition(ccp(363,160));
+		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(78, 40), CommonButtonLightPupple, kCCMenuHandlerPriority);
+		ok_menu->setPosition(ccp(235,35));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
 								 CCNode* t_node = CCNode::create();
 								 t_node->setTag(kTitleRenewal_MT_nick);
 								 menuAction(t_node);
 							 });
-		addChild(ok_menu, 3, kTitleRenewal_MT_nick);
+		nick_back->addChild(ok_menu, 10, kTitleRenewal_MT_nick);
+		//FormSetter::get()->addObject("t3", ok_menu);
 	}
 	else
 	{
