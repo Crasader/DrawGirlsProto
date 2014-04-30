@@ -185,6 +185,8 @@ enum PurchaseGuideType
 {
 	kPurchaseGuideType_begin = 0,
 	kPurchaseGuideType_firstPurchase,
+	kPurchaseGuideType_emptyItem,
+	kPurchaseGuideType_stupidNpuHelp,
 	kPurchaseGuideType_end
 };
 
@@ -481,6 +483,15 @@ public:
 	string getInappProduct(int t_index);
 	void initInappProduct(int t_index, string t_product);
 	
+	void setEmptyItemReviewHour(int t_i);
+	int getEmptyItemReviewHour();
+	void setStupidNpuHelpReviewHour(int t_i);
+	int getStupidNpuHelpReviewHour();
+	void setStupidNpuHelpPlayCount(int t_i);
+	int getStupidNpuHelpPlayCount();
+	void setStupidNpuHelpFailCount(int t_i);
+	int getStupidNpuHelpFailCount();
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -687,6 +698,10 @@ private:
 	KSProtectVar<float> rank_up_add_rate;
 	
 	KSProtectVar<int> first_purchase_play_count;
+	KSProtectVar<int> empty_item_review_hour;
+	KSProtectVar<int> stupid_npu_help_review_hour;
+	KSProtectVar<int> stupid_npu_help_play_count;
+	KSProtectVar<int> stupid_npu_help_fail_count;
 	
 	vector<ChangeUserdataValue> changed_userdata_list;
 	jsonSelType change_userdata_callback;
@@ -702,6 +717,8 @@ private:
 	void retryChangeGoods();
 	
 	bool is_show_firstPurchase;
+	TimeInfo at_time_show_emptyItem;
+	TimeInfo at_time_show_stupidNpuHelp;
 	
 	string app_type;
 	int app_version;

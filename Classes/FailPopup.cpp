@@ -38,6 +38,7 @@
 #include "LoadingTipScene.h"
 #include "LoadingLayer.h"
 #include "FlagSelector.h"
+#include "EmptyItemSalePopup.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -448,6 +449,17 @@ bool FailPopup::init()
 	main_case->addChild(loading_img, kZ_FP_img);
 	reader->release();
 	
+	if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item8) <= 0)
+	{
+		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_emptyItem);
+		addChild(t_popup, kZ_FP_popup);
+	}
+	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item8) <= 0 &&
+			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount() >= mySGD->getStupidNpuHelpFailCount())
+	{
+		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
+		addChild(t_popup, kZ_FP_popup);
+	}
 	
 	Json::Value param2;
 	param2["myScore"]=int(mySGD->getScore());

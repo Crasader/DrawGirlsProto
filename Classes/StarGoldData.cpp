@@ -20,6 +20,8 @@ void StarGoldData::withdraw()
 	userdata_storage.clear();
 	
 	is_show_firstPurchase = false;
+	at_time_show_emptyItem.is_loaded = false;
+	at_time_show_stupidNpuHelp.is_loaded = false;
 }
 
 string StarGoldData::getReplayKey(ReplayKey t_key)
@@ -1615,6 +1617,16 @@ bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 	bool return_value = true;
 	if(t_type == kPurchaseGuideType_firstPurchase)
 		return_value = !is_show_firstPurchase;
+	else if(t_type == kPurchaseGuideType_emptyItem)
+	{
+		if(at_time_show_emptyItem.is_loaded && at_time_show_emptyItem.hour.getV() + getEmptyItemReviewHour() >= keep_time_info.hour.getV())
+			return_value = false;
+	}
+	else if(t_type == kPurchaseGuideType_stupidNpuHelp)
+	{
+		if(at_time_show_stupidNpuHelp.is_loaded && at_time_show_stupidNpuHelp.hour.getV() + getStupidNpuHelpReviewHour() >= keep_time_info.hour.getV())
+			return_value = false;
+	}
 	return return_value;
 }
 
@@ -1622,6 +1634,10 @@ void StarGoldData::showPurchasePopup(PurchaseGuideType t_type)
 {
 	if(t_type == kPurchaseGuideType_firstPurchase)
 		is_show_firstPurchase = true;
+	else if(t_type == kPurchaseGuideType_emptyItem)
+		at_time_show_emptyItem = keep_time_info;
+	else if(t_type == kPurchaseGuideType_stupidNpuHelp)
+		at_time_show_stupidNpuHelp = keep_time_info;
 }
 
 string StarGoldData::getAppType()
@@ -1644,6 +1660,8 @@ void StarGoldData::myInit()
 	keep_time_info.is_loaded = false;
 	
 	is_show_firstPurchase = false;
+	at_time_show_emptyItem.is_loaded = false;
+	at_time_show_stupidNpuHelp.is_loaded = false;
 	
 	goods_data.clear();
 	change_goods_list.clear();
@@ -1822,6 +1840,14 @@ float StarGoldData::getRankUpAddRate(){	return rank_up_add_rate.getV();}
 
 void StarGoldData::setFirstPurchasePlayCount(int t_i){	first_purchase_play_count = t_i;	}
 int StarGoldData::getFirstPurchasePlayCount(){	return first_purchase_play_count.getV();	}
+void StarGoldData::setEmptyItemReviewHour(int t_i){	empty_item_review_hour = t_i;}
+int StarGoldData::getEmptyItemReviewHour(){	return empty_item_review_hour.getV();}
+void StarGoldData::setStupidNpuHelpReviewHour(int t_i){	stupid_npu_help_review_hour = t_i;	}
+int StarGoldData::getStupidNpuHelpReviewHour(){	return stupid_npu_help_review_hour.getV();	}
+void StarGoldData::setStupidNpuHelpPlayCount(int t_i){	stupid_npu_help_play_count = t_i;	}
+int StarGoldData::getStupidNpuHelpPlayCount(){	return stupid_npu_help_play_count.getV();	}
+void StarGoldData::setStupidNpuHelpFailCount(int t_i){	stupid_npu_help_fail_count = t_i;	}
+int StarGoldData::getStupidNpuHelpFailCount(){	return stupid_npu_help_fail_count.getV();	}
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}

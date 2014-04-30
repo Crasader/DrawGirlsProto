@@ -521,6 +521,10 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
 		
 		mySGD->setFirstPurchasePlayCount(result_data["firstPurchasePlayCount"].asInt());
+		mySGD->setEmptyItemReviewHour(result_data["emptyItemReviewHour"].asInt());
+		mySGD->setStupidNpuHelpReviewHour(result_data["stupidNpuHelpReviewHour"].asInt());
+		mySGD->setStupidNpuHelpPlayCount(result_data["stupidNpuHelpPlayCount"].asInt());
+		mySGD->setStupidNpuHelpFailCount(result_data["stupidNpuHelpFailCount"].asInt());
 	}
 	else
 	{

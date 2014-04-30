@@ -30,6 +30,8 @@ FirstPurchasePopup* FirstPurchasePopup::create(int t_touch_priority, function<vo
 
 void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func)
 {
+	mySGD->showPurchasePopup(kPurchaseGuideType_firstPurchase);
+	
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
@@ -66,7 +68,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(ruby100_img);
 	
 	
-	string before_value = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_data_s, 0);
+	string before_value = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_data_s, kPurchaseGuideType_firstPurchase-1);
 	Json::Reader reader;
 	Json::Value before_data;
 	reader.parse(before_value, before_data);
@@ -82,7 +84,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(sale_arrow);
 	
 	
-	KSLabelTTF* after_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, 0))->getCString()).c_str(), mySGD->getFont().c_str(), 20);
+	KSLabelTTF* after_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 20);
 	after_price->setColor(ccYELLOW);
 	after_price->enableOuterStroke(ccBLACK, 1.f);
 	after_price->setPosition(ccp(-5,20));
@@ -100,7 +102,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	first_sale_label->setPosition(ccp(35,33));
 	stamp_case->addChild(first_sale_label);
 	
-	string sale_percent_string = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_sale_s, 0);
+	string sale_percent_string = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_sale_s, kPurchaseGuideType_firstPurchase-1);
 	
 	KSLabelTTF* sale_value_label = KSLabelTTF::create(CCString::createWithFormat("-%s", sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 17);
 	sale_value_label->setColor(ccYELLOW);
@@ -157,7 +159,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 //	CCSprite* price_type = CCSprite::create("common_button_ruby.png");
 //	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-15,price_back->getContentSize().height/2.f));
 //	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, 0))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
@@ -214,9 +216,9 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	addChild(inapp_loading);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, 0), "첫구매팝업(IOS-인앱결재)", "", "", true);
+	mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, kPurchaseGuideType_firstPurchase-1), "첫구매팝업(IOS-인앱결재)", "", "", true);
 	
-	mySGD->setUserdataIsFirstBuy(1);
+	mySGD->setUserdataIsFirstBuy(1); // true
 	vector<CommandParam> command_list;
 	command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
@@ -239,13 +241,13 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	Json::Value param;
-	param["productid"] = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_pID_s, 0); //
+	param["productid"] = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_pID_s, kPurchaseGuideType_firstPurchase-1); //
 	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
 		//																				KS::KSLog("in-app test \n%", v);
 		if(v["issuccess"].asInt())
 		{
 //			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급");
-			mySGD->setUserdataIsFirstBuy(1);
+			mySGD->setUserdataIsFirstBuy(1); // true
 			requestItemDelivery();
 		}
 		else
