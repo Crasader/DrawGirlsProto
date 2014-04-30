@@ -163,6 +163,31 @@ public:
 	bool m_isPurchase;
 };
 
+enum UserdataType
+{
+	kUserdataType_begin = 0,
+	kUserdataType_isVIP,
+	kUserdataType_isFirstBuy,
+	kUserdataType_totalPlayCount,
+	kUserdataType_failCount,
+	kUserdataType_autoLevel,
+	kUserdataType_end
+};
+
+class ChangeUserdataValue
+{
+public:
+	UserdataType m_type;
+	KSProtectVar<int> m_value;
+};
+
+enum PurchaseGuideType
+{
+	kPurchaseGuideType_begin = 0,
+	kPurchaseGuideType_firstPurchase,
+	kPurchaseGuideType_end
+};
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -437,6 +462,22 @@ public:
 	void setRankUpAddRate(float t_f);
 	float getRankUpAddRate();
 	
+	void setFirstPurchasePlayCount(int t_i);
+	int getFirstPurchasePlayCount();
+	
+//	void setUserdataPGuide(string t_s);
+//	string getUserdataPGuide();
+	void setUserdataIsVIP(int t_i);
+	int getUserdataIsVIP();
+	void setUserdataIsFirstBuy(int t_i);
+	int getUserdataIsFirstBuy();
+	void setUserdataTotalPlayCount(int t_i);
+	int getUserdataTotalPlayCount();
+	void setUserdataFailCount(int t_i);
+	int getUserdataFailCount();
+	void setUserdataAutoLevel(int t_i);
+	int getUserdataAutoLevel();
+	
 	string getInappProduct(int t_index);
 	void initInappProduct(int t_index, string t_product);
 	
@@ -522,6 +563,17 @@ public:
 	int getGoodsValue(GoodsType t_type);
 	
 	TimeInfo keep_time_info;
+	
+	bool is_changed_userdata;
+	UserdataType getUserdataKeyToType(string t_key);
+	string getUserdataTypeToKey(UserdataType t_type);
+	void changeUserdata(jsonSelType t_callback);
+	CommandParam getChangeUserdataParam(jsonSelType t_callback);
+	void initUserdata(Json::Value result_data);
+	void clearChangeUserdata();
+	
+	bool isPossibleShowPurchasePopup(PurchaseGuideType t_type);
+	void showPurchasePopup(PurchaseGuideType t_type);
 	
 private:
 	bool is_not_cleared_stage;
@@ -632,8 +684,14 @@ private:
 	KSProtectVar<float> rank_up_base_rate;
 	KSProtectVar<float> rank_up_rate_distance;
 	KSProtectVar<int> rank_up_ruby_fee;
-	
 	KSProtectVar<float> rank_up_add_rate;
+	
+	KSProtectVar<int> first_purchase_play_count;
+	
+	vector<ChangeUserdataValue> changed_userdata_list;
+	jsonSelType change_userdata_callback;
+	map<UserdataType, KSProtectVar<int>> userdata_storage;
+	void resultChangeUserdata(Json::Value result_data);
 	
 	KSProtectStr inapp_products[6];
 	
@@ -643,6 +701,7 @@ private:
 	void resultChangeGoods(Json::Value result_data);
 	void retryChangeGoods();
 	
+	bool is_show_firstPurchase;
 	
 	string app_type;
 	int app_version;

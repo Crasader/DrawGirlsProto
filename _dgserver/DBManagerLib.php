@@ -1,6 +1,11 @@
 <?php
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+class CurrentUserInfo{
+	static public $os;
+	static public $language;
+	static public $memberID;
+	static public $socialID;
+}
 
 class TimeManager{
 	public $m_timeOffset=32400;
@@ -53,7 +58,17 @@ class TimeManager{
 		return $this->getDateString($this->getTime());
 	}
 
-  
+	public function getWeekDayNo($timestamp){
+		return date("w",$timestamp);
+	}
+
+	public function getCurrentWeekDayNo(){
+		return $this->getWeekDayNo($this->getTime());
+	}
+  	
+  	public function getCurrentHour(){
+  		return date("H",$this->getTime());
+  	}
 }
 
 
@@ -142,7 +157,7 @@ class ResultState{
 			ResultState::addResultCode(2010,"GDALREADYMEMBER");
 			ResultState::addResultCode(2011,"GDLONGNAME");
 			ResultState::addResultCode(2012,"GDSHORTNAME");
-			ResultState::addResultCode(2013,"GDFAILTRANJACTION");
+			ResultState::addResultCode(2013,"GDFAILTRANSACTION");
 			ResultState::addResultCode(2014,"GDDONTSAVE");
 			ResultState::addResultCode(2015,"GDPROPERTYISMINUS");
 			ResultState::addResultCode(2016,"GDNOTINGWORK");
@@ -373,6 +388,7 @@ class DBManager{
 		self::$m_mainTables["missionevent"]="aMissionEventTable";
 		self::$m_mainTables["attendenceevent"]="aAttendenceEventTable";
 		self::$m_mainTables["loginevent"]="aLoginEventTable";
+		self::$m_mainTables["exchange"]="aExchangeManager";
 	}
 	
 	public function setDataBase($gameid=null){
@@ -543,7 +559,7 @@ class DBManager{
 		$query.=") values ("; 
 		for($i=0;$i<count($key);$i++){ 
 			if(is_array($data[$key[$i]]))$data[$key[$i]] = json_encode($data[$key[$i]],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$query.="'".addslashes($data[$key[$i]])."'"; 
+			$query.="'".@addslashes($data[$key[$i]])."'"; 
 			if($i!=count($key)-1) $query.=","; 
 		} 
 		$query.=")"; 
@@ -556,7 +572,7 @@ class DBManager{
 		for($i=0;$i<count($key);$i++){
 			if(is_array($data[$key[$i]]))$data[$key[$i]] = json_encode($data[$key[$i]],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			
-			$query.="`$key[$i]`=\"".addslashes($data[$key[$i]])."\"";
+			$query.="`$key[$i]`=\"".@addslashes($data[$key[$i]])."\"";
 			if($i!=count($key)-1) $query.=",";
 		}
 		$query.=" ".$where;
@@ -980,10 +996,12 @@ class DBTable{
 		LogManager::get()->addLog("load query ".$query);
 
 		$result=mysql_query($query,$this->getDBConnection());
-		if($result)$this->m__data = mysql_fetch_array($result,MYSQL_ASSOC);
+		$tempdata = null;
+		if($result)$tempdata = mysql_fetch_array($result,MYSQL_ASSOC);
 		
 
-		if($this->m__data){
+		if($tempdata){
+			$this->m__data = $tempdata;
 			LogManager::get()->addLog("load ok");
 			$this->m__isLoaded=true;
 			return true;
@@ -1089,7 +1107,8 @@ class DBTable{
 	static public function getRowByQuery($where="",$dbcon=NULL){
 		if(self::isMainDBClass()){
 			if(!self::$m__qResult)self::$m__qResult = mysql_query("select * from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
-			$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
+			LogManager::get()->addLog("select * from ".DBManager::getMT(get_called_class())." ".$where);
+			if(self::$m__qResult)$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
 			if(!$result)self::$m__qResult=null;
 			return $result;
 		}

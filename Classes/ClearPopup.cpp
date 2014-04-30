@@ -510,34 +510,35 @@ bool ClearPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, ClearPopup::resultGetTime)));
 	
+	mySGD->setUserdataFailCount(0);
+	if(mySGD->is_changed_userdata)
+		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	LoadingLayer* t_loading = LoadingLayer::create(-9999);
+	addChild(t_loading, 9999);
+	
+	tryTransaction(t_loading);
+	
+    return true;
+}
+
+void ClearPopup::tryTransaction(CCNode* t_loading)
+{
 	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
 								  {
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										{
-											CCLOG("ClearPopup transaction success");
-										}
+									  {
+										  CCLOG("ClearPopup transaction success");
+										  
+										  t_loading->removeFromParent();
+									  }
 									  else
-										{
-											CCLOG("ClearPopup transaction fail");
-											
-											LoadingLayer* t_loading = LoadingLayer::create(-9999);
-											addChild(t_loading, 9999);
-											mySGD->changeGoods([=](Json::Value result_data)
-															   {
-																   t_loading->removeFromParent();
-																   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																	{
-																		
-																	}
-																   else
-																	{
-																		CCLOG("what? fucking!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-																	}
-															   });
-										}
+									  {
+										  CCLOG("ClearPopup transaction fail");
+										  
+										  addChild(KSTimer::create(0.1f, [=](){tryTransaction(t_loading);}));
+									  }
 								  });
-	
-    return true;
 }
 
 ClearPopup::~ClearPopup()

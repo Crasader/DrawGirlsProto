@@ -127,11 +127,11 @@ if($mode=="update"){
 	if(!$primaryKey || !$primaryValue || !$table){ echo'{"result":"fail","msg":"기본키, 기본키값, 테이블 미정의"}'; mysql_close(); exit; }
 	if($table==DBManager::getST("weeklyscore")){
 		$dataObj = new WeeklyScore($data["memberID"],$data["weekNo"]);
-		$dataObj->m_memberID=$data["memberID"];
-		$dataObj->m_regWeek=$data["regWeek"];
-		$dataObj->m_score=$data["score"];
-		$dataObj->m_regDate=$data["regDate"];
-		$dataObj->m_data=$data["data"];
+		$dataObj->memberID=$data["memberID"];
+		$dataObj->regWeek=$data["regWeek"];
+		$dataObj->score=$data["score"];
+		$dataObj->regDate=$data["regDate"];
+		$dataObj->data=$data["data"];
 		$result=$dataObj->save();
 		$data[log] = LogManager::get()->getLogAndClear();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
@@ -143,11 +143,11 @@ if($mode=="update"){
 		LogManager::get()->addLog("modify stagescore is load? ".$dataObj->isLoaded());
 
 
-		$dataObj->m_memberID=$data["memberID"];
-		$dataObj->m_stageNo=$data["stageNo"];
-		$dataObj->m_score=$data["score"];
-		$dataObj->m_regDate=$data["regDate"];
-		$dataObj->m_data=$data["data"];
+		$dataObj->memberID=$data["memberID"];
+		$dataObj->stageNo=$data["stageNo"];
+		$dataObj->score=$data["score"];
+		$dataObj->regDate=$data["regDate"];
+		$dataObj->data=$data["data"];
 		$result=$dataObj->save();
 		$data[log] = LogManager::get()->getLogAndClear();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
@@ -156,12 +156,12 @@ if($mode=="update"){
 	}else if($table==DBManager::getST("message")){
 		//보내기
 		$message = new Message($data["memberID"],$data["no"]);
-		$message->m_memberID=$data["memberID"];
-		$message->m_content=$data["content"];
-		$message->m_regDate=$data["regDate"];
-		$message->m_friendID=$data["friendID"];
-		$message->m_type=$data["type"];
-		$message->m_isSendMsg=$data["isSendMsg"];
+		$message->memberID=$data["memberID"];
+		$message->content=$data["content"];
+		$message->regDate=$data["regDate"];
+		$message->friendID=$data["friendID"];
+		$message->type=$data["type"];
+		$message->isSendMsg=$data["isSendMsg"];
 		$result=$message->save();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
 		else echo'{"result":"fail","msg":"세이브쿼리실패"}';
@@ -169,8 +169,8 @@ if($mode=="update"){
 	}else if($table==DBManager::getST("userdata")){
 		//보내기
 		$userdata = new UserData($data["memberID"]);
-		$userdata->m_data = $data["data"];
-		$userdata->m_friendList = $data["friendList"];
+		$userdata->data = $data["data"];
+		$userdata->friendList = $data["friendList"];
 
 		$result=$userdata->save();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
@@ -219,12 +219,12 @@ if($mode=="update"){
 	if($table==DBManager::getST("message")){
 		//보내기
 		$message = new Message();
-		$message->m_memberID=$data["memberID"];
-		$message->m_content=$data["content"];
-		$message->m_regDate=TimeManager::get()->getCurrentDateString();
-		$message->m_friendID=$data["friendID"];
-		$message->m_type=$data["type"];
-		$message->m_isSendMsg=$data["isSendMsg"];
+		$message->memberID=$data["memberID"];
+		$message->content=$data["content"];
+		$message->regDate=TimeManager::get()->getCurrentDateString();
+		$message->friendID=$data["friendID"];
+		$message->type=$data["type"];
+		$message->isSendMsg=$data["isSendMsg"];
 		$r["send"]=$message->send();
 		echo'{"result":"ok"}';
 	}else{

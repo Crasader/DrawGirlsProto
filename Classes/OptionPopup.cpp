@@ -829,6 +829,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 																															hspConnector::get()->logout([](Json::Value p){
 																																myDSH->clear();
 																																myDSH->resetDSH();
+																																mySGD->withdraw();
 																																CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 																															});
 																															

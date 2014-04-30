@@ -2917,6 +2917,7 @@ void Maingame::showPause()
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
+		myUI->stopCounting();
 		t_popup->removeFromParent();
 		goHome();
 	}, [=]()

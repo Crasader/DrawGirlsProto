@@ -1470,6 +1470,9 @@ void StartSettingPopup::realStartAction()
 	t_command_list.clear();
 	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
 	
+	mySGD->setUserdataTotalPlayCount(mySGD->getUserdataTotalPlayCount()+1);
+	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
 	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
 	t_history.try_count++;
 	

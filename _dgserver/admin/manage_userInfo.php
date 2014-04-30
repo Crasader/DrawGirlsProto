@@ -36,6 +36,11 @@ $(document).ready(function(){
 		<td>전화번호</td>
 		<td>최근로그인</td>
 		<td>회원가입일시</td>
+		<td>구매한적있는가</td>
+		<td>구매유도플로우자료</td>
+		<td>연속실패</td>
+		<td>오토벨런싱레벨</td>
+		<td>총플레이횟수</td>
 	</tr>
 	<tr>
 		<td field="no" primary></td>
@@ -43,8 +48,13 @@ $(document).ready(function(){
 		<td field="sex" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 		<td field="birth" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 		<td field="phone" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
-		<td field="lastLogin" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
-		<td field="regDate" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+		<td field="lastDate" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+		<td field="joinDate" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+		<td field="isVIP" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+		<td field="isFirstBuy" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+		<td field="failCount" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+		<td field="autoLevel" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+		<td field="totalPlayCount" editor='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 	</tr>
 </table>
 

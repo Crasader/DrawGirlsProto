@@ -659,23 +659,6 @@ void DataStorageHub::resetDSH ()
 		setStringForKey(kDSH_Key_ticketUserId_int1, i, "", false);
 	setIntegerForKey(kDSH_Key_haveTicketCnt, 0, false);
 	
-//	int open_stage_cnt = getIntegerForKey(kDSH_Key_openStageCnt);
-//	for(int i=1;i<=open_stage_cnt;i++)
-//	{
-//		setBoolForKey(kDSH_Key_isOpenStage_int1, getIntegerForKey(kDSH_Key_openStageNumber_int1, i), false, false);
-//		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, 0, false);
-//	}
-//	setIntegerForKey(kDSH_Key_openStageCnt, 1, false);
-//	
-//	
-//	int clear_stage_cnt = getIntegerForKey(kDSH_Key_clearStageCnt);
-//	for(int i=1;i<=clear_stage_cnt;i++)
-//	{
-//		setBoolForKey(kDSH_Key_isClearStage_int1, getIntegerForKey(kDSH_Key_clearStageNumber_int1, i), false, false);
-//		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, 0, false);
-//	}
-//	setIntegerForKey(kDSH_Key_clearStageCnt, 0, false);
-	
 	setStringForKey(kDSH_Key_nick, "", false);
 	
 	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
@@ -726,12 +709,6 @@ void DataStorageHub::resetDSH ()
 	}
 	
 	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
-	
-//	int end_played_stage = getIntegerForKey(kDSH_Key_endPlayedStage);
-//	for(int i=1;i<=end_played_stage;i++)
-//		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, 0, false);
-//	setIntegerForKey(kDSH_Key_endPlayedStage, 0);
-	
 	
 	fFlush();
 }

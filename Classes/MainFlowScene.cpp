@@ -87,6 +87,116 @@ bool MainFlowScene::init()
 		have_card_count_for_puzzle_index.push_back(have_card_cnt);
 	}
 	
+	is_puzzle_enter_list.clear();
+	int total_puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	
+	int locked_puzzle_count = 0;
+	
+	for(int i=1;i<=total_puzzle_count;i++)
+	{
+		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+		
+		PuzzleOpenInfo t_info;
+		t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open;
+		
+		string puzzle_condition = NSDS_GS(t_puzzle_number, kSDS_PZ_condition_s);
+		
+		Json::Value condition_list;
+		Json::Reader reader;
+		reader.parse(puzzle_condition, condition_list);
+		
+		if(condition_list.size() <= 0)
+			t_info.is_open = true;
+		
+		t_info.is_base_condition_success = true;
+		t_info.is_have_week_condition = false;
+		t_info.is_have_date_condition = false;
+		t_info.is_have_ruby_condition = false;
+		t_info.need_star_count = 0;
+		
+		for(int i=0;!t_info.is_open && i<condition_list.size();i++)
+		{
+			Json::Value t_condition_and = condition_list[i];
+			
+			bool and_open = true;
+			bool is_time_condition = false;
+			
+			for(int j=0;j<t_condition_and.size();j++)
+			{
+				Json::Value t_condition = t_condition_and[j];
+				string t_type = t_condition["type"].asString();
+				if(t_type == "p")
+				{
+					if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+					{
+						and_open = false;
+						t_info.is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "s")
+				{
+					t_info.need_star_count = t_condition["value"].asInt();
+					if(mySGD->getClearStarCount() < t_info.need_star_count)
+					{
+						and_open = false;
+						t_info.is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "r")
+				{
+					t_info.need_ruby_value = t_condition["value"].asInt();
+					and_open = false;
+					t_info.is_have_ruby_condition = true;
+				}
+				else if(t_type == "w")
+				{
+					is_time_condition = true;
+					t_info.is_have_week_condition = true;
+					if(!mySGD->keep_time_info.is_loaded)
+						and_open = false;
+					else
+					{
+						int weekday = t_condition["weekday"].asInt();
+						t_info.keep_weekday = weekday;
+						if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+							and_open = false;
+						t_info.keep_week_start = t_condition["s"].asInt();
+						t_info.keep_week_end = t_condition["e"].asInt();
+						if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+							and_open = false;
+					}
+				}
+				else if(t_type == "d")
+				{
+					is_time_condition = true;
+					t_info.is_have_date_condition = true;
+					t_info.keep_date_start = t_condition["s"].asString();
+					if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+						and_open = false;
+				}
+			}
+			
+			if(and_open)
+			{
+				t_info.is_open = true;
+				if(!is_time_condition)
+				{
+					PuzzleHistory t_history = mySGD->getPuzzleHistory(t_puzzle_number);
+					t_history.is_open = true;
+					t_history.open_type = "무료";
+					mySGD->setPuzzleHistory(t_history, nullptr);
+				}
+			}
+		}
+		
+		t_info.before_locked_puzzle_count = locked_puzzle_count;
+		is_puzzle_enter_list.push_back(t_info);
+		
+		if(!t_info.is_open)
+			locked_puzzle_count++;
+	}
+	
+	
 	CCSpriteBatchNode* back_batch = CCSpriteBatchNode::create("ingame_side_pattern.png");
 	back_batch->setPosition(ccp(240,160));
 	addChild(back_batch, kMainFlowZorder_back);
@@ -385,7 +495,7 @@ void MainFlowScene::setTable()
 	puzzle_table->setAnchorPoint(CCPointZero);
 	puzzle_table->setDirection(kCCScrollViewDirectionHorizontal);
 	puzzle_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f));
+	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f-5.f));
 	puzzle_table->setDelegate(this);
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
@@ -756,8 +866,6 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
 	
-	bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open;
-	
 //	if(puzzle_number == is_unlock_puzzle)
 //	{
 //		if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) <= 0 || NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) <= 0)
@@ -772,107 +880,17 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //		}
 //	}
 	
-	string puzzle_condition = NSDS_GS(puzzle_number, kSDS_PZ_condition_s);
-	
-	Json::Value condition_list;
-	Json::Reader reader;
-	reader.parse(puzzle_condition, condition_list);
-	
-	if(condition_list.size() <= 0)
-		is_open = true;
-	
-	bool is_base_condition_success = true;
-	bool is_have_week_condition = false;
-	int keep_weekday;
-	int keep_week_start;
-	int keep_week_end;
-	bool is_have_date_condition = false;
-	string keep_date_start;
-	bool is_have_ruby_condition = false;
-	int need_ruby_value;
-	int need_star_count = 0;
-	
-	for(int i=0;!is_open && i<condition_list.size();i++)
-	{
-		Json::Value t_condition_and = condition_list[i];
-		
-		bool and_open = true;
-		bool is_time_condition = false;
-		
-		for(int j=0;and_open && j<t_condition_and.size();j++)
-		{
-			Json::Value t_condition = t_condition_and[j];
-			string t_type = t_condition["type"].asString();
-			if(t_type == "p")
-			{
-				if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
-				{
-					and_open = false;
-					is_base_condition_success = false;
-				}
-			}
-			else if(t_type == "s")
-			{
-				need_star_count = t_condition["value"].asInt();
-				if(mySGD->getClearStarCount() < need_star_count)
-				{
-					and_open = false;
-					is_base_condition_success = false;
-				}
-			}
-			else if(t_type == "r")
-			{
-				need_ruby_value = t_condition["value"].asInt();
-				and_open = false;
-				is_have_ruby_condition = true;
-			}
-			else if(t_type == "w")
-			{
-				is_time_condition = true;
-				is_have_week_condition = true;
-				if(!mySGD->keep_time_info.is_loaded)
-					and_open = false;
-				else
-				{
-					int weekday = t_condition["weekday"].asInt();
-					keep_weekday = weekday;
-					if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
-						and_open = false;
-					keep_week_start = t_condition["s"].asInt();
-					keep_week_end = t_condition["e"].asInt();
-					if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
-						and_open = false;
-				}
-			}
-			else if(t_type == "d")
-			{
-				is_time_condition = true;
-				is_have_date_condition = true;
-				keep_date_start = t_condition["s"].asString();
-				if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
-					and_open = false;
-			}
-		}
-		
-		if(and_open)
-		{
-			is_open = true;
-			if(!is_time_condition)
-			{
-				PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-				t_history.is_open = true;
-				t_history.open_type = "무료";
-				mySGD->setPuzzleHistory(t_history, nullptr);
-			}
-		}
-	}
-	
-	if(is_open)
+	if(is_puzzle_enter_list[idx].is_open)
 //	if(puzzle_number == 1 || mySGD->getPuzzleHistory(puzzle_number).is_open || (mySGD->getPuzzleHistory(puzzle_number-1).is_clear && NSDS_GI(puzzle_number, kSDS_PZ_point_i) == 0))
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
 		
-		CCSprite* mainTwinkle = KS::loadCCBI<CCSprite*>(this, "main_twinkle.ccbi").first;
+		addChild(KSTimer::create(rand()%10*0.2f, [=](){
+			CCSprite* mainTwinkle = KS::loadCCBI<CCSprite*>(this, "main_twinkle.ccbi").first;
+			mainTwinkle->setAnchorPoint(ccp(0,0));
+			mainTwinkle->setPosition(ccp(mainTwinkle->getContentSize().width/2,mainTwinkle->getContentSize().height/2));
+			cell_node->addChild(mainTwinkle,100);
+		}));
 		
 		CCSprite* n_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
 		CCSprite* s_open_back = mySIL->getLoadedImg(CCString::createWithFormat("puzzleList%d_thumbnail.png", puzzle_number)->getCString());//CCSprite::create("mainflow_puzzle_open_back.png");
@@ -881,9 +899,6 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		
 		CCMenuItem* open_item = CCMenuItemSprite::create(n_open_back, s_open_back, this, menu_selector(MainFlowScene::cellAction));
 		open_item->setTag(kMainFlowTableCellTag_openBase + puzzle_number);
-		mainTwinkle->setAnchorPoint(ccp(0,0));
-		mainTwinkle->setPosition(ccp(mainTwinkle->getContentSize().width/2,mainTwinkle->getContentSize().height/2));
-		cell_node->addChild(mainTwinkle,100);
 		
 		ScrollMenu* open_menu = ScrollMenu::create(open_item, NULL);
 		open_menu->setPosition(CCPointZero);
@@ -918,7 +933,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		close_back->setPosition(CCPointZero);
 		cell_node->addChild(close_back);
 		
-		if(is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
+		if(is_puzzle_enter_list[idx].is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
 		{
 			// 루비 구매 혹은 시간이 되야 열림
 			
@@ -933,53 +948,49 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //			buy_menu->setPosition(ccp(-24, -16));
 //			cell_node->addChild(buy_menu);
 			
-			int before_close_count = 0;
-			int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-			for(int i=1;i<=puzzle_count && before_close_count < 3;i++)
-			{
-				PuzzleHistory t_history = mySGD->getPuzzleHistory(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i));
-				if(t_history.puzzle_number < puzzle_number && !t_history.is_clear)
-					before_close_count++;
-			}
+			int lock_img_number = is_puzzle_enter_list[idx].before_locked_puzzle_count;
+			if(lock_img_number > 1)
+				lock_img_number = 1;
+			lock_img_number++;
 			
-			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", before_close_count)->getCString());
+			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", lock_img_number)->getCString());
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 			
-			if(before_close_count == 1)
+			if(is_puzzle_enter_list[idx].before_locked_puzzle_count == 0)
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->setPosition(ccp(67.5f, 143.5f));
 				not_clear_img->addChild(condition_title);
 				
-				if(is_have_week_condition)
+				if(is_puzzle_enter_list[idx].is_have_week_condition)
 				{
 					string weekday_string;
-					if(keep_weekday == -1)
+					if(is_puzzle_enter_list[idx].keep_weekday == -1)
 						weekday_string = "매일";
-					else if(keep_weekday == 0)
+					else if(is_puzzle_enter_list[idx].keep_weekday == 0)
 						weekday_string = "일요일";
-					else if(keep_weekday == 1)
+					else if(is_puzzle_enter_list[idx].keep_weekday == 1)
 						weekday_string = "월요일";
-					else if(keep_weekday == 2)
+					else if(is_puzzle_enter_list[idx].keep_weekday == 2)
 						weekday_string = "화요일";
-					else if(keep_weekday == 3)
+					else if(is_puzzle_enter_list[idx].keep_weekday == 3)
 						weekday_string = "수요일";
-					else if(keep_weekday == 4)
+					else if(is_puzzle_enter_list[idx].keep_weekday == 4)
 						weekday_string = "목요일";
-					else if(keep_weekday == 5)
+					else if(is_puzzle_enter_list[idx].keep_weekday == 5)
 						weekday_string = "금요일";
-					else if(keep_weekday == 6)
+					else if(is_puzzle_enter_list[idx].keep_weekday == 6)
 						weekday_string = "토요일";
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), keep_week_start, keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), is_puzzle_enter_list[idx].keep_week_start, is_puzzle_enter_list[idx].keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
 					condition_content->setPosition(ccp(67.5f, 122.5f));
 					not_clear_img->addChild(condition_content);
 				}
-				else if(is_have_date_condition)
+				else if(is_puzzle_enter_list[idx].is_have_date_condition)
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), keep_date_start.substr(4,2).c_str(), keep_date_start.substr(6,2).c_str(), keep_date_start.substr(8,2).c_str(), keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), is_puzzle_enter_list[idx].keep_date_start.substr(4,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(6,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(8,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
 					condition_content->setPosition(ccp(67.5f, 122.5f));
 					not_clear_img->addChild(condition_content);
 				}
@@ -990,7 +1001,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					not_clear_img->addChild(condition_content);
 				}
 				
-				if(is_have_ruby_condition)
+				if(is_puzzle_enter_list[idx].is_have_ruby_condition)
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					
@@ -998,7 +1009,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					price_type->setScale(0.7f);
 					c_label->addChild(price_type);
 					
-					KSLabelTTF* price_value_label = KSLabelTTF::create(CCString::createWithFormat("%d  ", need_ruby_value)->getCString(), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* price_value_label = KSLabelTTF::create(CCString::createWithFormat("%d  ", is_puzzle_enter_list[idx].need_ruby_value)->getCString(), mySGD->getFont().c_str(), 10);
 					c_label->addChild(price_value_label);
 					
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
@@ -1016,7 +1027,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
-					detail_button->setTag(10000000 + idx*10000 + need_ruby_value);
+					detail_button->setTag(10000000 + idx*10000 + is_puzzle_enter_list[idx].need_ruby_value);
 					detail_button->setPreferredSize(CCSizeMake(90,35));
 					detail_button->setPosition(ccp(67.5f,94.5f));
 					not_clear_img->addChild(detail_button);
@@ -1048,27 +1059,23 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		}
 		else
 		{
-			int before_close_count = 0;
-			int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-			for(int i=1;i<=puzzle_count && before_close_count < 3;i++)
-			{
-				PuzzleHistory t_history = mySGD->getPuzzleHistory(NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i));
-				if(t_history.puzzle_number < puzzle_number && !t_history.is_clear)
-					before_close_count++;
-			}
+			int lock_img_number = is_puzzle_enter_list[idx].before_locked_puzzle_count;
+			if(lock_img_number > 1)
+				lock_img_number = 1;
+			lock_img_number++;
 			
-			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", before_close_count)->getCString());
+			CCSprite* not_clear_img = CCSprite::create(CCString::createWithFormat("mainflow_puzzle_lock_base%d.png", lock_img_number)->getCString());
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 			
-			if(before_close_count == 1)
+			if(is_puzzle_enter_list[idx].before_locked_puzzle_count == 0)
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->setPosition(ccp(67.5f, 143.5f));
 				not_clear_img->addChild(condition_title);
 				
-				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
+				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
 				condition_content->setPosition(ccp(67.5f, 122.5f));
 				not_clear_img->addChild(condition_content);
 				
@@ -1252,7 +1259,7 @@ void MainFlowScene::scrollViewDidZoom(CCScrollView* view){}
 void MainFlowScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell){}
 CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 {
-	return CCSizeMake(141, 245);
+	return CCSizeMake(132, 245);//135, 245);
 }
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
@@ -1519,7 +1526,7 @@ void MainFlowScene::setBottom()
 	
 	CCNode* bottom_case = CCNode::create();
 	bottom_case->setAnchorPoint(ccp(0.5f,0.5f));
-	bottom_case->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+3));
+	bottom_case->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10));
 	addChild(bottom_case, kMainFlowZorder_uiButton);
 	
 	bottom_list.push_back(bottom_case);
@@ -1528,20 +1535,20 @@ void MainFlowScene::setBottom()
 	CCSprite* n_rank = CCSprite::create("mainflow_rank.png");
 	KSLabelTTF* n_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
 	n_rank_label->enableOuterStroke(ccBLACK, 1.f);
-	n_rank_label->setPosition(ccp(n_rank->getContentSize().width/2.f, 11));
+	n_rank_label->setPosition(ccp(n_rank->getContentSize().width/2.f, 7));
 	n_rank->addChild(n_rank_label);
 	CCSprite* s_rank = CCSprite::create("mainflow_rank.png");
 	s_rank->setColor(ccGRAY);
 	KSLabelTTF* s_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
 	s_rank_label->enableOuterStroke(ccBLACK, 1.f);
-	s_rank_label->setPosition(ccp(s_rank->getContentSize().width/2.f, 11));
+	s_rank_label->setPosition(ccp(s_rank->getContentSize().width/2.f, 7));
 	s_rank->addChild(s_rank_label);
 	
 	CCMenuItem* rank_item = CCMenuItemSprite::create(n_rank, s_rank, this, menu_selector(MainFlowScene::menuAction));
 	rank_item->setTag(kMainFlowMenuTag_rank);
 	
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-	rank_menu->setPosition(ccp(43-240, n_rank->getContentSize().height/2.f+4));//ccp(-205, n_rank->getContentSize().height/2.f));
+	rank_menu->setPosition(ccp(43-240, n_rank->getContentSize().height/2.f+8));//ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
 	
 	{
@@ -1554,20 +1561,20 @@ void MainFlowScene::setBottom()
 	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
 	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
 	n_shop_label->enableOuterStroke(ccBLACK, 1.f);
-	n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 11));
+	n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
 	n_shop->addChild(n_shop_label);
 	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
 	s_shop->setColor(ccGRAY);
 	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
 	s_shop_label->enableOuterStroke(ccBLACK, 1.f);
-	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 11));
+	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
 	s_shop->addChild(s_shop_label);
 	
 	CCMenuItem* shop_item = CCMenuItemSprite::create(n_shop, s_shop, this, menu_selector(MainFlowScene::menuAction));
 	shop_item->setTag(kMainFlowMenuTag_shop);
 	
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
-	shop_menu->setPosition(ccp(43-240+214.f/4.f, n_shop->getContentSize().height/2.f+4));//ccp(-73, n_shop->getContentSize().height/2.f));
+	shop_menu->setPosition(ccp(43-240+214.f/4.f, n_shop->getContentSize().height/2.f+8));//ccp(-73, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
 	
 	{
@@ -1601,20 +1608,20 @@ void MainFlowScene::setBottom()
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
 	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
 	n_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
-	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 11));
+	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 7));
 	n_cardsetting->addChild(n_cardsetting_label);
 	CCSprite* s_cardsetting = CCSprite::create("mainflow_cardsetting.png");
 	s_cardsetting->setColor(ccGRAY);
 	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
 	s_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
-	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 11));
+	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 7));
 	s_cardsetting->addChild(s_cardsetting_label);
 	
 	CCMenuItem* cardsetting_item = CCMenuItemSprite::create(n_cardsetting, s_cardsetting, this, menu_selector(MainFlowScene::menuAction));
 	cardsetting_item->setTag(kMainFlowMenuTag_cardSetting);
 	
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
-	cardsetting_menu->setPosition(ccp(43-240+214.f/4.f*2.f, n_cardsetting->getContentSize().height/2.f+4));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
+	cardsetting_menu->setPosition(ccp(43-240+214.f/4.f*2.f, n_cardsetting->getContentSize().height/2.f+8));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
 	
 	{
@@ -1627,20 +1634,20 @@ void MainFlowScene::setBottom()
 	CCSprite* n_mission = CCSprite::create("mainflow_mission.png");
 	KSLabelTTF* n_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
 	n_mission_label->enableOuterStroke(ccBLACK, 1.f);
-	n_mission_label->setPosition(ccp(n_mission->getContentSize().width/2.f, 11));
+	n_mission_label->setPosition(ccp(n_mission->getContentSize().width/2.f, 7));
 	n_mission->addChild(n_mission_label);
 	CCSprite* s_mission = CCSprite::create("mainflow_mission.png");
 	s_mission->setColor(ccGRAY);
 	KSLabelTTF* s_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
 	s_mission_label->enableOuterStroke(ccBLACK, 1.f);
-	s_mission_label->setPosition(ccp(s_mission->getContentSize().width/2.f, 11));
+	s_mission_label->setPosition(ccp(s_mission->getContentSize().width/2.f, 7));
 	s_mission->addChild(s_mission_label);
 	
 	CCMenuItem* mission_item = CCMenuItemSprite::create(n_mission, s_mission, this, menu_selector(MainFlowScene::menuAction));
 	mission_item->setTag(kMainFlowMenuTag_mission);
 	
 	CCMenu* mission_menu = CCMenu::createWithItem(mission_item);
-	mission_menu->setPosition(ccp(43-240+214.f/4.f*3.f, n_mission->getContentSize().height/2.f+4));
+	mission_menu->setPosition(ccp(43-240+214.f/4.f*3.f, n_mission->getContentSize().height/2.f+8));
 	bottom_case->addChild(mission_menu);
 
 	
@@ -1722,17 +1729,17 @@ void MainFlowScene::setBottom()
 		CCSprite* n_cgp = CCSprite::create("mainflow_event.png");
 		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		n_cgp_label->enableOuterStroke(ccBLACK, 1.f);
-		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 11));
+		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 7));
 		n_cgp->addChild(n_cgp_label);
 		CCSprite* s_cgp = CCSprite::create("mainflow_event.png");
 		s_cgp->setColor(ccGRAY);
 		KSLabelTTF* s_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		s_cgp_label->enableOuterStroke(ccBLACK, 1.f);
-		s_cgp_label->setPosition(ccp(s_cgp->getContentSize().width/2.f, 11));
+		s_cgp_label->setPosition(ccp(s_cgp->getContentSize().width/2.f, 7));
 		s_cgp->addChild(s_cgp_label);
 		
 		CCMenuLambda* cgp_menu = CCMenuLambda::create();
-		cgp_menu->setPosition(ccp(43-240+214.f, n_cgp->getContentSize().height/2.f+4));
+		cgp_menu->setPosition(ccp(43-240+214.f, n_cgp->getContentSize().height/2.f+8));
 		bottom_case->addChild(cgp_menu);
 		
 		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
@@ -1914,7 +1921,7 @@ void MainFlowScene::setBottom()
 	
 	CCSprite* etc_event = CCSprite::create("mainflow_etc_event.png");
 	etc_event->setAnchorPoint(ccp(0.5,0));
-	etc_event->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+4));
+	etc_event->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+11));
 	addChild(etc_event, kMainFlowZorder_uiButton);
 	
 	bottom_list.push_back(etc_event);
@@ -2011,12 +2018,12 @@ void MainFlowScene::topOpenning()
 	for(int i=0;i<top_list.size();i++)
 	{
 		CCPoint original_position = top_list[i]->getPosition();
-		top_list[i]->setPositionY(original_position.y+100);
+		top_list[i]->setPositionY(original_position.y+200);
 		if(i == 0)
 		{
 			top_list[i]->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
 																{
-																	top_list[i]->setPositionY(original_position.y+100.f*t);
+																	top_list[i]->setPositionY(original_position.y+200.f*t);
 																}, [=](float t)
 																{
 																	top_list[i]->setPositionY(original_position.y);
@@ -2103,7 +2110,7 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(78+41,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_heart->setPosition(ccp(78+41,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_heart, kMainFlowZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -2136,13 +2143,13 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_gold = CCSprite::create("mainflow_top_gold.png");
 	top_gold->setAnchorPoint(ccp(0.5f,1.f));
-	top_gold->setPosition(ccp(216+27,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_gold->setPosition(ccp(216+23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_gold, kMainFlowZorder_top);
 	
 	top_list.push_back(top_gold);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-5));
+	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-6));
 	top_gold->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
@@ -2161,13 +2168,13 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
-	top_ruby->setPosition(ccp(325+12,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
+	top_ruby->setPosition(ccp(325+5,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_ruby, kMainFlowZorder_top);
 	
 	top_list.push_back(top_ruby);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-5));
+	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-6));
 	top_ruby->addChild(ruby_label);
 	
 	mySGD->setStarLabel(ruby_label);
@@ -2210,13 +2217,13 @@ void MainFlowScene::setTop()
 	postbox_item->setTag(kMainFlowMenuTag_postbox);
 	
 	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
-	postbox_menu->setPosition(ccp(394,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	postbox_menu->setPosition(ccp(397,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(postbox_menu, kMainFlowZorder_top);
 	
 	top_list.push_back(postbox_menu);
 	
 	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
-	postbox_count_case->setPosition(ccp(406,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-9));
+	postbox_count_case->setPosition(ccp(409,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-16));
 	addChild(postbox_count_case, kMainFlowZorder_top);
 	
 	postbox_count_case->setVisible(false);
@@ -2237,7 +2244,7 @@ void MainFlowScene::setTop()
 	achieve_item->setTag(kMainFlowMenuTag_achievement);
 	
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
-	achieve_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	achieve_menu->setPosition(ccp(429,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(achieve_menu, kMainFlowZorder_top);
 	
 	top_list.push_back(achieve_menu);
@@ -2251,7 +2258,7 @@ void MainFlowScene::setTop()
 	option_item->setTag(kMainFlowMenuTag_option);
 	
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
-	option_menu->setPosition(ccp(460,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-15));
+	option_menu->setPosition(ccp(461,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(option_menu, kMainFlowZorder_top);
 	
 	top_list.push_back(option_menu);

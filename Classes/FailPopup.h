@@ -136,6 +136,10 @@ private:
 	void closePopup();
 	void endLoad();
 	
+	vector<CommandParam> send_command_list;
+	
+	void tryTransaction(CCNode* t_loading);
+	
 	TouchSuctionLayer* suction;
 	
 //	void resultLoadFriends(Json::Value result_data);

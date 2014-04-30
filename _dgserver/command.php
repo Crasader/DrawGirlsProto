@@ -35,9 +35,19 @@ if($mode){
 }else{
    // $param = base64_decode(str_replace(" ","+",$_POST["command"]));
     
-    $param = decryptByAESWithBase64($_POST["command"]); //@mcrypt_decrypt(MCRYPT_DES, "12345678", $param, MCRYPT_MODE_ECB);
+    $paramoriginal = decryptByAESWithBase64($_POST["command"]); //@mcrypt_decrypt(MCRYPT_DES, "12345678", $param, MCRYPT_MODE_ECB);
     
-    $param = json_decode(trim($param),true);
+    $param = json_decode(trim($paramoriginal),true);
+    CurrentUserInfo::$os = $param["os"];
+    CurrentUserInfo::$language = $param["lang"];
+    CurrentUserInfo::$memberID = $param["memberID"];
+    CurrentUserInfo::$socialID = $param["socialID"];
+    CurrentUserInfo::$os = $param["os"];
+    // if(!is_array($param)){
+    //     $param = json_decode(trim(preg_replace("/'/","\"", $paramoriginal)),true);
+    //     LogManager::get()->addLog("ok --> ".$paramoriginal);
+    //     LogManager::get()->addLog("ok --> ".preg_replace("/'/","\"", $paramoriginal));
+    // }
     $version = $_POST["version"];
     
 }
@@ -49,7 +59,7 @@ else include "command/cmd2.php";
 
 if(!$stopCommand){
     $command = new commandClass();
-    $isTranjaction = false;    
+    $istransaction = false;    
     $commitMemberID=0;
     $commitCmdName="";
     $checkUserdata = false;
@@ -59,7 +69,7 @@ if(!$stopCommand){
         $p = $param[$cmd]["p"];
         $a = strtolower($param[$cmd]["a"]);
         
-        if($a=="starttranjaction"){
+        if($a=="starttransaction"){
             $commitMemberID=$p["memberID"];
             CommitManager::get()->begin($commitMemberID);
             $commitCmdName = $cmd;
@@ -173,13 +183,13 @@ if(!$stopCommand){
             $cr["list"] = $allResult;
             $allResult[$commitCmdName]=$cr;
         }else{
-            $cr["result"] = ResultState::toArray(3001,"tranjaction fail");
+            $cr["result"] = ResultState::toArray(3001,"transaction fail");
             $allResult[$commitCmdName]=$cr;
         }
 
          for($c=0;$c<count($param);$c++){
             $cmd = (string)$c;
-            $allResult[$cmd]["tranjaction"]=$commitsuccess;
+            $allResult[$cmd]["transaction"]=$commitsuccess;
         }
     }
 
