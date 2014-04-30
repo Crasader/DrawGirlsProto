@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "hspConnector.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -23,7 +24,7 @@ class ASPopupView;
 class EmptyItemSalePopup : public CCLayer//, public CCBAnimationManagerDelegate
 {
 public:
-	static EmptyItemSalePopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func);
+	static EmptyItemSalePopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func, PurchaseGuideType t_type);
 	
 	//	virtual void completedAnimationSequenceNamed (char const * name);
 	
@@ -32,6 +33,7 @@ private:
 	function<void()> end_func;
 	function<void()> purchase_func;
 	
+	PurchaseGuideType m_type;
 	bool is_menu_enable;
 	
 	TouchSuctionLayer* suction;
@@ -47,12 +49,12 @@ private:
 	
 	LoadingLayer* inapp_loading;
 	
-	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func);
+	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func, PurchaseGuideType t_type);
 	void giveupAction(CCObject* sender, CCControlEvent t_event);
 	void purchaseAction(CCObject* sender, CCControlEvent t_event);
 	
-	void requestItemDelivery();
-	void resultSaveUserData(Json::Value result_data);
+//	void requestItemDelivery();
+//	void resultSaveUserData(Json::Value result_data);
 };
 
 #endif /* defined(__DGproto__EmptyItemSalePopup__) */

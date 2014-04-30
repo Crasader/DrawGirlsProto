@@ -152,8 +152,7 @@ void ContinueContent::menuAction(CCObject* sender)
 			CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
 																		{
 																			inapp_loading = LoadingLayer::create(-9999, true);
-																			inapp_loading->setPosition(ccp(-240, -myDSH->ui_center_y));
-																			addChild(inapp_loading);
+																			getParent()->addChild(inapp_loading, 9999);
 																			
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 																			mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "이어하기(IOS-인앱결재)", "", "", true);
@@ -200,7 +199,7 @@ void ContinueContent::menuAction(CCObject* sender)
 																				{
 																					mySGD->clearChangeGoods();
 																					
-																					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																					getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 																					
 																					is_menu_enable = true;
 																				}
@@ -221,7 +220,7 @@ void ContinueContent::menuAction(CCObject* sender)
 																				{
 																					inapp_loading->removeFromParent();
 																					
-																					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																					getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 																					
 																					is_menu_enable = true;
 																				}

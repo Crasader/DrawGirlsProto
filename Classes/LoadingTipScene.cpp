@@ -659,6 +659,11 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		content_img->runAction(t_spawn);
 	}
 	
+	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
+	CCCallFunc* t_call = CCCallFunc::create(loading_tip_node, callfunc_selector(CCNode::removeFromParent));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+	loading_tip_node->runAction(t_seq);
+	
 	return loading_tip_node;
 }
 

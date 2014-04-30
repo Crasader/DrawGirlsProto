@@ -811,7 +811,6 @@ void ShopPopup::endShowPopup()
 {
 	if(!mySGD->getUserdataIsFirstBuy() && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_firstPurchase) && mySGD->getUserdataTotalPlayCount() >= mySGD->getFirstPurchasePlayCount() && !mySGD->getUserdataIsVIP())
 	{
-		mySGD->showPurchasePopup(kPurchaseGuideType_firstPurchase);
 		FirstPurchasePopup* t_popup = FirstPurchasePopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=](){is_menu_enable = true;});
 		addChild(t_popup, kSP_Z_popup);
 		return;
