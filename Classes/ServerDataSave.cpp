@@ -636,6 +636,9 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_plist_s)		rv = "mi%d_ri_plist";
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_pvrccz_s)	rv = "mi%d_ri_pvrccz";
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_size_i)		rv = "mi%d_ri_size";
+	else if(t_key == kSDS_GI_monsterInfo_int1_script_start_s)			rv = "mi%d_ss";
+	else if(t_key == kSDS_GI_monsterInfo_int1_script_clear_s)			rv = "mi%d_sc";
+	else if(t_key == kSDS_GI_monsterInfo_int1_script_fail_s)			rv = "mi%d_sf";
 	
 	else if(t_key == kSDS_GI_shopVersion_i)				rv = "shopVersion";
 	else if(t_key == kSDS_GI_shopRuby_int1_count_i)				rv = "sr%dcount";

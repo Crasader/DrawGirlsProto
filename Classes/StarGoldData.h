@@ -584,6 +584,7 @@ public:
 	void refreshGoodsData(string t_key, int t_count);
 	CommandParam getChangeGoodsParam(jsonSelType t_callback);
 	void saveChangeGoodsTransaction(Json::Value result_data);
+	bool isChangedGoods();
 	
 	int getGoodsValue(GoodsType t_type);
 	

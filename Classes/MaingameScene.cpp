@@ -281,7 +281,7 @@ void Maingame::startStory()
 	StoryManager* t_sm = StoryManager::create(-500);
 	addChild(t_sm, 100);
 	
-	t_sm->addMent(true, "", "", "니가 날 상대하겠다는거야? 훗..", [=]()
+	t_sm->addMent(true, "", "", intro_boss->start_ment.c_str(), [=]()
 				  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 				  {
 					  CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
@@ -1308,7 +1308,7 @@ void Maingame::clearScenario2()
 	StoryManager* t_sm = StoryManager::create(-500);
 	addChild(t_sm, 100);
 	
-	t_sm->addMent(true, "", "", "이런 분하다!!\n다음엔 꼭 이기고 말테야!!", [=]()
+	t_sm->addMent(true, "", "", intro_boss->clear_ment.c_str(), [=]()
 				  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 				  {
 					  CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
@@ -1845,7 +1845,7 @@ void Maingame::failScenario2()
 	StoryManager* t_sm = StoryManager::create(-500);
 	addChild(t_sm, 100);
 	
-	t_sm->addMent(true, "", "", "가소롭군. 그 실력으로\n나와 겨루려하다니.. 쯧쯧..", [=]()
+	t_sm->addMent(true, "", "", intro_boss->fail_ment.c_str(), [=]()
 				  {
 					  CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
 					  curtain_node->setPosition(ccp(240,myDSH->ui_center_y));

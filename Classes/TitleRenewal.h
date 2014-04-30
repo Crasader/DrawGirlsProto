@@ -146,6 +146,8 @@ private:
 	
 //	void resultGetPathInfo(Json::Value result_data);
 	
+	void endSplash();
+	void realInit();
 	
 	void endingCheck();
 	void endingAction();

@@ -1456,7 +1456,8 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 	transaction_param["memberID"] = hspConnector::get()->getSocialID();
 	
 	transaction_list.push_back(CommandParam("starttransaction", transaction_param, t_callback));
-	transaction_list.push_back(getChangeGoodsParam(json_selector(this, StarGoldData::saveChangeGoodsTransaction)));
+	if(isChangedGoods())
+		transaction_list.push_back(getChangeGoodsParam(json_selector(this, StarGoldData::saveChangeGoodsTransaction)));
 	
 	for(int i=0;i<command_list.size();i++)
 	{
@@ -1517,6 +1518,11 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 		gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
 }
 
+bool StarGoldData::isChangedGoods()
+{
+	return change_goods_list.size() > 0;
+}
+
 CommandParam StarGoldData::getChangeGoodsParam(jsonSelType t_callback)
 {
 	Json::Value param;
@@ -1545,28 +1551,37 @@ CommandParam StarGoldData::getChangeGoodsParam(jsonSelType t_callback)
 
 void StarGoldData::retryChangeGoods()
 {
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getSocialID();
-	
-	Json::Value p_list;
-	
-	for(int i=0;i<change_goods_list.size();i++)
+	if(!isChangedGoods())
 	{
-		p_list[i]["type"] = getGoodsTypeToKey(change_goods_list[i].m_type);
-		p_list[i]["count"] = change_goods_list[i].m_value.getV();
-		if(change_goods_list[i].m_statsID != "")
-			p_list[i]["statsID"] = change_goods_list[i].m_statsID;
-		if(change_goods_list[i].m_statsValue != "")
-			p_list[i]["statsValue"] = change_goods_list[i].m_statsValue;
-		if(change_goods_list[i].m_content != "")
-			p_list[i]["content"] = change_goods_list[i].m_content;
-		if(change_goods_list[i].m_type == kGoodsType_ruby)
-			p_list[i]["isPurchase"] = change_goods_list[i].m_isPurchase;
+		Json::Value result_data;
+		result_data["result"]["code"] = GDSUCCESS;
+		change_goods_callback(result_data);
 	}
-	
-	param["list"] = p_list;
-	
-	hspConnector::get()->command("changeuserproperties", param, json_selector(this, StarGoldData::resultChangeGoods));
+	else
+	{
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getSocialID();
+		
+		Json::Value p_list;
+		
+		for(int i=0;i<change_goods_list.size();i++)
+		{
+			p_list[i]["type"] = getGoodsTypeToKey(change_goods_list[i].m_type);
+			p_list[i]["count"] = change_goods_list[i].m_value.getV();
+			if(change_goods_list[i].m_statsID != "")
+				p_list[i]["statsID"] = change_goods_list[i].m_statsID;
+			if(change_goods_list[i].m_statsValue != "")
+				p_list[i]["statsValue"] = change_goods_list[i].m_statsValue;
+			if(change_goods_list[i].m_content != "")
+				p_list[i]["content"] = change_goods_list[i].m_content;
+			if(change_goods_list[i].m_type == kGoodsType_ruby)
+				p_list[i]["isPurchase"] = change_goods_list[i].m_isPurchase;
+		}
+		
+		param["list"] = p_list;
+		
+		hspConnector::get()->command("changeuserproperties", param, json_selector(this, StarGoldData::resultChangeGoods));
+	}
 }
 
 void StarGoldData::resultChangeGoods(Json::Value result_data)

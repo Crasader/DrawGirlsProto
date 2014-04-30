@@ -729,6 +729,8 @@ void StartSettingPopup::startItemGacha()
 	if(!is_menu_enable)
 		return;
 	
+	is_menu_enable = false;
+	
 	if(mySGD->getItemGachaGoldFee() > mySGD->getGoodsValue(kGoodsType_gold))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
@@ -742,8 +744,6 @@ void StartSettingPopup::startItemGacha()
 															}), 9999);
 		return;
 	}
-	
-	is_menu_enable = false;
 	
 	CCLOG("start item gacha");
 	
