@@ -58,17 +58,17 @@ string ShopPopup::getPriceData(string t_code)
 	string return_value;
 	
 	if(t_code == "wonToRuby1")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopRuby_int1_price_i, 0))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 0);
 	else if(t_code == "wonToRuby2")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopRuby_int1_price_i, 1))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 1);
 	else if(t_code == "wonToRuby3")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopRuby_int1_price_i, 2))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 2);
 	else if(t_code == "wonToRuby4")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopRuby_int1_price_i, 3))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 3);
 	else if(t_code == "wonToRuby5")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopRuby_int1_price_i, 4))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 4);
 	else if(t_code == "wonToRuby6")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopRuby_int1_price_i, 5))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 5);
 	else if(t_code == "rubyFromWon1")
 		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 0);
 	else if(t_code == "rubyFromWon2")
@@ -82,17 +82,17 @@ string ShopPopup::getPriceData(string t_code)
 	else if(t_code == "rubyFromWon6")
 		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 5);
 	else if(t_code == "rubyToGold1")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 0))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 0);
 	else if(t_code == "rubyToGold2")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 1))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 1);
 	else if(t_code == "rubyToGold3")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 2))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 2);
 	else if(t_code == "rubyToGold4")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 3))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 3);
 	else if(t_code == "rubyToGold5")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 4))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 4);
 	else if(t_code == "rubyToGold6")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopGold_int1_price_i, 5))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 5);
 	else if(t_code == "goldFromRuby1")
 		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 0);
 	else if(t_code == "goldFromRuby2")
@@ -106,17 +106,17 @@ string ShopPopup::getPriceData(string t_code)
 	else if(t_code == "goldFromRuby6")
 		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 5);
 	else if(t_code == "rubyToHeart1")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 0))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 0);
 	else if(t_code == "rubyToHeart2")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 1))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 1);
 	else if(t_code == "rubyToHeart3")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 2))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 2);
 	else if(t_code == "rubyToHeart4")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 3))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 3);
 	else if(t_code == "rubyToHeart5")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 4))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 4);
 	else if(t_code == "rubyToHeart6")
-		return_value = CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopCoin_int1_price_i, 5))->getCString();
+		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 5);
 	else if(t_code == "heartFromRuby1")
 		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 0);
 	else if(t_code == "heartFromRuby2")

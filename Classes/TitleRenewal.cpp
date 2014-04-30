@@ -521,10 +521,16 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
 		
 		mySGD->setFirstPurchasePlayCount(result_data["firstPurchasePlayCount"].asInt());
-		mySGD->setEmptyItemReviewHour(result_data["emptyItemReviewHour"].asInt());
-		mySGD->setStupidNpuHelpReviewHour(result_data["stupidNpuHelpReviewHour"].asInt());
+		mySGD->setEmptyItemReviewSecond(result_data["emptyItemReviewSecond"].asInt64());
+		mySGD->setStupidNpuHelpReviewSecond(result_data["stupidNpuHelpReviewSecond"].asInt64());
 		mySGD->setStupidNpuHelpPlayCount(result_data["stupidNpuHelpPlayCount"].asInt());
 		mySGD->setStupidNpuHelpFailCount(result_data["stupidNpuHelpFailCount"].asInt());
+		mySGD->setEventRubyShopReviewSecond(result_data["eventRubyShopReviewSecond"].asInt64());
+		mySGD->setPlayCountHighValue(result_data["playCountHighValue"].asInt());
+		
+		mySGD->setEmptyItemIsOn(result_data["emptyItemIsOn"].asInt());
+		mySGD->setStupidNpuHelpIsOn(result_data["stupidNpuHelpIsOn"].asInt());
+		mySGD->setPlayCountHighIsOn(result_data["playCountHighIsOn"].asInt());
 	}
 	else
 	{
@@ -580,6 +586,20 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i-1, t_data["sale"].asString(), false);
+		}
+		
+		for(int i=1;i<=6;i++)
+		{
+			string t_key = CCString::createWithFormat("es_r_%d", i)->getCString();
+			Json::Value t_data = result_data[t_key.c_str()];
+			
+			NSDS_SI(kSDS_GI_shopEventRuby_int1_count_i, i-1, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_countName_s, i-1, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopEventRuby_int1_price_i, i-1, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
+			mySGD->initEventInappProduct(i-1, t_data["pID"].asString());
 		}
 		
 		Json::FastWriter t_writer;

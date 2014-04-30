@@ -187,6 +187,7 @@ enum PurchaseGuideType
 	kPurchaseGuideType_firstPurchase,
 	kPurchaseGuideType_emptyItem,
 	kPurchaseGuideType_stupidNpuHelp,
+	kPurchaseGuideType_eventRubyShop,
 	kPurchaseGuideType_end
 };
 
@@ -482,15 +483,28 @@ public:
 	
 	string getInappProduct(int t_index);
 	void initInappProduct(int t_index, string t_product);
+	string getEventInappProduct(int t_index);
+	void initEventInappProduct(int t_index, string t_product);
 	
-	void setEmptyItemReviewHour(int t_i);
-	int getEmptyItemReviewHour();
-	void setStupidNpuHelpReviewHour(int t_i);
-	int getStupidNpuHelpReviewHour();
+	void setEmptyItemReviewSecond(long long t_i);
+	long long getEmptyItemReviewSecond();
+	void setStupidNpuHelpReviewSecond(long long t_i);
+	long long getStupidNpuHelpReviewSecond();
 	void setStupidNpuHelpPlayCount(int t_i);
 	int getStupidNpuHelpPlayCount();
 	void setStupidNpuHelpFailCount(int t_i);
 	int getStupidNpuHelpFailCount();
+	void setEventRubyShopReviewSecond(long long t_i);
+	long long getEventRubyShopReviewSecond();
+	void setPlayCountHighValue(int t_i);
+	int getPlayCountHighValue();
+	
+	void setEmptyItemIsOn(int t_i);
+	int getEmptyItemIsOn();
+	void setStupidNpuHelpIsOn(int t_i);
+	int getStupidNpuHelpIsOn();
+	void setPlayCountHighIsOn(int t_i);
+	int getPlayCountHighIsOn();
 	
 	bool is_before_selected_event_stage;
 	
@@ -698,10 +712,16 @@ private:
 	KSProtectVar<float> rank_up_add_rate;
 	
 	KSProtectVar<int> first_purchase_play_count;
-	KSProtectVar<int> empty_item_review_hour;
-	KSProtectVar<int> stupid_npu_help_review_hour;
+	KSProtectVar<long long> empty_item_review_second;
+	KSProtectVar<long long> stupid_npu_help_review_second;
 	KSProtectVar<int> stupid_npu_help_play_count;
 	KSProtectVar<int> stupid_npu_help_fail_count;
+	KSProtectVar<long long> event_ruby_shop_review_second;
+	KSProtectVar<int> play_count_high_value;
+	
+	KSProtectVar<int> empty_item_is_on;
+	KSProtectVar<int> stupid_npu_help_is_on;
+	KSProtectVar<int> play_count_high_is_on;
 	
 	vector<ChangeUserdataValue> changed_userdata_list;
 	jsonSelType change_userdata_callback;
@@ -709,6 +729,7 @@ private:
 	void resultChangeUserdata(Json::Value result_data);
 	
 	KSProtectStr inapp_products[6];
+	KSProtectStr event_inapp_products[6];
 	
 	map<GoodsType, KSProtectVar<int>> goods_data;
 	vector<ChangeGoodsData> change_goods_list;
@@ -717,8 +738,9 @@ private:
 	void retryChangeGoods();
 	
 	bool is_show_firstPurchase;
-	TimeInfo at_time_show_emptyItem;
-	TimeInfo at_time_show_stupidNpuHelp;
+	KSProtectVar<long long> at_time_show_emptyItem;
+	KSProtectVar<long long> at_time_show_stupidNpuHelp;
+	KSProtectVar<long long> at_time_show_eventRubyShop;
 	
 	string app_type;
 	int app_version;

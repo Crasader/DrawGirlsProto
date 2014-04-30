@@ -20,8 +20,9 @@ void StarGoldData::withdraw()
 	userdata_storage.clear();
 	
 	is_show_firstPurchase = false;
-	at_time_show_emptyItem.is_loaded = false;
-	at_time_show_stupidNpuHelp.is_loaded = false;
+	at_time_show_emptyItem = 0;
+	at_time_show_stupidNpuHelp = 0;
+	at_time_show_eventRubyShop = 0;
 }
 
 string StarGoldData::getReplayKey(ReplayKey t_key)
@@ -1619,12 +1620,17 @@ bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 		return_value = !is_show_firstPurchase;
 	else if(t_type == kPurchaseGuideType_emptyItem)
 	{
-		if(at_time_show_emptyItem.is_loaded && at_time_show_emptyItem.hour.getV() + getEmptyItemReviewHour() >= keep_time_info.hour.getV())
+		if(empty_item_is_on.getV() == 0 || (at_time_show_emptyItem.getV() > 0 && at_time_show_emptyItem.getV() + getEmptyItemReviewSecond() >= graphdog->getTime()))
 			return_value = false;
 	}
 	else if(t_type == kPurchaseGuideType_stupidNpuHelp)
 	{
-		if(at_time_show_stupidNpuHelp.is_loaded && at_time_show_stupidNpuHelp.hour.getV() + getStupidNpuHelpReviewHour() >= keep_time_info.hour.getV())
+		if(stupid_npu_help_is_on.getV() == 0 || (at_time_show_stupidNpuHelp.getV() > 0 && at_time_show_stupidNpuHelp.getV() + getStupidNpuHelpReviewSecond() >= graphdog->getTime()))
+			return_value = false;
+	}
+	else if(t_type == kPurchaseGuideType_eventRubyShop)
+	{
+		if(at_time_show_eventRubyShop.getV() > 0 && at_time_show_eventRubyShop.getV() + getEventRubyShopReviewSecond() >= graphdog->getTime())
 			return_value = false;
 	}
 	return return_value;
@@ -1635,9 +1641,11 @@ void StarGoldData::showPurchasePopup(PurchaseGuideType t_type)
 	if(t_type == kPurchaseGuideType_firstPurchase)
 		is_show_firstPurchase = true;
 	else if(t_type == kPurchaseGuideType_emptyItem)
-		at_time_show_emptyItem = keep_time_info;
+		at_time_show_emptyItem = graphdog->getTime();
 	else if(t_type == kPurchaseGuideType_stupidNpuHelp)
-		at_time_show_stupidNpuHelp = keep_time_info;
+		at_time_show_stupidNpuHelp = graphdog->getTime();
+	else if(t_type == kPurchaseGuideType_eventRubyShop)
+		at_time_show_eventRubyShop = graphdog->getTime();
 }
 
 string StarGoldData::getAppType()
@@ -1660,8 +1668,9 @@ void StarGoldData::myInit()
 	keep_time_info.is_loaded = false;
 	
 	is_show_firstPurchase = false;
-	at_time_show_emptyItem.is_loaded = false;
-	at_time_show_stupidNpuHelp.is_loaded = false;
+	at_time_show_emptyItem = 0;
+	at_time_show_stupidNpuHelp = 0;
+	at_time_show_eventRubyShop = 0;
 	
 	goods_data.clear();
 	change_goods_list.clear();
@@ -1827,6 +1836,9 @@ int StarGoldData::getIngameTutorialRewardGold(){	return ingame_tutorial_reward_g
 void StarGoldData::initInappProduct(int t_index, string t_product){	inapp_products[t_index] = t_product;}
 string StarGoldData::getInappProduct(int t_index){	return inapp_products[t_index].getV();}
 
+void StarGoldData::initEventInappProduct(int t_index, string t_product){	event_inapp_products[t_index] = t_product;}
+string StarGoldData::getEventInappProduct(int t_index){	return event_inapp_products[t_index].getV();}
+
 void StarGoldData::setRankUpConditionCount(int t_i){	rank_up_condition_count = t_i;}
 int StarGoldData::getRankUpConditionCount(){	return rank_up_condition_count.getV();}
 void StarGoldData::setRankUpBaseRate(float t_f){	rank_up_base_rate = t_f;}
@@ -1840,14 +1852,25 @@ float StarGoldData::getRankUpAddRate(){	return rank_up_add_rate.getV();}
 
 void StarGoldData::setFirstPurchasePlayCount(int t_i){	first_purchase_play_count = t_i;	}
 int StarGoldData::getFirstPurchasePlayCount(){	return first_purchase_play_count.getV();	}
-void StarGoldData::setEmptyItemReviewHour(int t_i){	empty_item_review_hour = t_i;}
-int StarGoldData::getEmptyItemReviewHour(){	return empty_item_review_hour.getV();}
-void StarGoldData::setStupidNpuHelpReviewHour(int t_i){	stupid_npu_help_review_hour = t_i;	}
-int StarGoldData::getStupidNpuHelpReviewHour(){	return stupid_npu_help_review_hour.getV();	}
+void StarGoldData::setEmptyItemReviewSecond(long long t_i){	empty_item_review_second = t_i;}
+long long StarGoldData::getEmptyItemReviewSecond(){	return empty_item_review_second.getV();}
+void StarGoldData::setStupidNpuHelpReviewSecond(long long t_i){	stupid_npu_help_review_second = t_i;	}
+long long StarGoldData::getStupidNpuHelpReviewSecond(){	return stupid_npu_help_review_second.getV();	}
 void StarGoldData::setStupidNpuHelpPlayCount(int t_i){	stupid_npu_help_play_count = t_i;	}
 int StarGoldData::getStupidNpuHelpPlayCount(){	return stupid_npu_help_play_count.getV();	}
 void StarGoldData::setStupidNpuHelpFailCount(int t_i){	stupid_npu_help_fail_count = t_i;	}
 int StarGoldData::getStupidNpuHelpFailCount(){	return stupid_npu_help_fail_count.getV();	}
+void StarGoldData::setEventRubyShopReviewSecond(long long t_i){	event_ruby_shop_review_second = t_i;	}
+long long StarGoldData::getEventRubyShopReviewSecond(){	return event_ruby_shop_review_second.getV();	}
+void StarGoldData::setPlayCountHighValue(int t_i){	play_count_high_value = t_i;	}
+int StarGoldData::getPlayCountHighValue(){	return play_count_high_value.getV();	}
+
+void StarGoldData::setEmptyItemIsOn(int t_i){	empty_item_is_on = t_i;	}
+int StarGoldData::getEmptyItemIsOn(){	return empty_item_is_on.getV();	}
+void StarGoldData::setStupidNpuHelpIsOn(int t_i){	stupid_npu_help_is_on = t_i;	}
+int StarGoldData::getStupidNpuHelpIsOn(){	return stupid_npu_help_is_on.getV();	}
+void StarGoldData::setPlayCountHighIsOn(int t_i){	play_count_high_is_on = t_i;	}
+int StarGoldData::getPlayCountHighIsOn(){	return play_count_high_is_on.getV();	}
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}

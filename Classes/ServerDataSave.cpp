@@ -656,6 +656,12 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopCoin_int1_priceType_s)			rv = "sc%dprcType";
 	else if(t_key == kSDS_GI_shopCoin_int1_priceName_s)			rv = "sc%dprcName";
 	else if(t_key == kSDS_GI_shopCoin_int1_sale_s)				rv = "sc%dsale";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_count_i)		rv = "esr%dcount";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_countName_s)	rv = "esr%dcntName";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_price_i)		rv = "esr%dprice";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_priceType_s)	rv = "esr%dprcType";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_priceName_s)	rv = "esr%dprcName";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_sale_s)			rv = "esr%dsale";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_count_i)		rv = "sp%dcount";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_countName_s)	rv = "sp%dcntName";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_price_i)		rv = "sp%dprice";
