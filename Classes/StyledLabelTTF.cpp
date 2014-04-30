@@ -211,6 +211,3 @@ StyledLabelTTF* StyledLabelTTF::create(const char* text,const char* font ,Styled
 	
 }
 
-CCLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
-	return (CCLabelTTF*)(m_oneLineContainer->getChildByTag(tag));
-}
