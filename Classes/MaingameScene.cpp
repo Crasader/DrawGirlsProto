@@ -1098,7 +1098,10 @@ void Maingame::setControlJoystickButton()
 
 void Maingame::startControl()
 {
-	mControl->startControl();
+	if(mControl)
+	{
+		mControl->startControl();
+	}
 }
 
 void Maingame::removeConditionLabel()
@@ -2834,24 +2837,23 @@ void Maingame::showPause()
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
-		mControl->setTouchEnabled(true);
-		t_popup->removeFromParent();
 		cancelHome();
+		t_popup->removeFromParent();
 	}, [=]()
 	{
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		myUI->stopCounting();
-		t_popup->removeFromParent();
 		goHome();
+		t_popup->removeFromParent();
 	}, [=]()
 	{
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
-		t_popup->removeFromParent();
 		goReplay();
+		t_popup->removeFromParent();
 	});
 	
 	t_popup->setContainerNode(t_container);
@@ -2920,21 +2922,21 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 	
 	ContinueContent* t_container = ContinueContent::create(t_popup->getTouchPriority(), [=]()
 														   {
-															   t_popup->removeFromParent();
 															   mControl->isStun = false;
 															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
 															   mySGD->is_paused = false;
 															   AudioEngine::sharedInstance()->setAppFore();
 															   (t_end->*d_end)();
+																 t_popup->removeFromParent();
 														   }, [=]()
 														   {
-															   t_popup->removeFromParent();
 															   mControl->isStun = false;
 															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
 															   (t_continue->*d_continue)();
 															   continueAction();
+																 t_popup->removeFromParent();
 														   });
 	
 	t_popup->setContainerNode(t_container);
