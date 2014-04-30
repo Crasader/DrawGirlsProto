@@ -44,7 +44,7 @@
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>0</integer>
+									<integer>255</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -59,7 +59,7 @@
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>0</integer>
+									<integer>255</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -194,7 +194,7 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>0</integer>
+						<integer>255</integer>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -208,6 +208,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -338,11 +340,9 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>255</integer>
+						<integer>0</integer>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -711,12 +711,27 @@
 									<key>easing</key>
 									<dict>
 										<key>type</key>
-										<integer>0</integer>
+										<integer>1</integer>
 									</dict>
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
 									<real>0.0</real>
+									<key>type</key>
+									<integer>5</integer>
+									<key>value</key>
+									<integer>255</integer>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>opacity</string>
+									<key>time</key>
+									<real>1.9666666984558105</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -827,7 +842,7 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>255</integer>
+						<integer>0</integer>
 					</dict>
 				</array>
 				<key>seqExpanded</key>
@@ -990,7 +1005,7 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>0</integer>
+						<integer>255</integer>
 					</dict>
 				</array>
 				<key>seqExpanded</key>
@@ -1092,7 +1107,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1.9666666984558105</real>
+			<real>2.9333333969116211</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
