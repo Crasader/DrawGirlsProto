@@ -54,6 +54,57 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	
+	auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
+	splash.second->setAnimationCompletedCallbackLambda(this, [=](){
+		splash.first->removeFromParent();
+		endSplash();
+	});
+	splash.first->setPosition(ccp(240,160));
+	addChild(splash.first);
+	
+	
+	
+//	Json::Value param;
+//	param["memberID"] = 88899626759589914L;
+//	param["error"]["isSuccess"] = true;
+//	GraphDog::get()->setKakaoMemberID("88899626759589914");
+//	GraphDog::get()->setHSPMemberNo(88899626759589914L);
+//	resultLogin(param);
+	
+	
+	
+//	Json::Value t_result_data;
+//	hspConnector::get()->myKakaoInfo["user_id"] = 88741857374149376L;
+//	hspConnector::get()->myKakaoInfo["nickname"] = "YH";
+//	graphdog->setKakaoMemberID(hspConnector::get()->getSocialID());
+//	t_result_data["error"]["isSuccess"] = true;
+//	resultLogin(t_result_data);
+	
+	return true;
+}
+
+void TitleRenewalScene::endSplash()
+{
+	CCSprite* white_back = CCSprite::create("whitePaper.png");
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	white_back->setScaleX(screen_scale_x);
+	white_back->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	white_back->setPosition(ccp(240,160));
+	addChild(white_back);
+	
+	CCSprite* ratings = CCSprite::create("game_ratings.png");
+	ratings->setPosition(ccp(240,160));
+	addChild(ratings);
+	
+	addChild(KSTimer::create(1.5f, [=](){realInit();}));
+}
+
+void TitleRenewalScene::realInit()
+{
 	title_img = CCSprite::create("temp_title_back.png");
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
@@ -84,26 +135,8 @@ bool TitleRenewalScene::init()
 	
 	Json::Value param;
 	param["ManualLogin"] = true;
-
+	
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-	
-//	Json::Value param;
-//	param["memberID"] = 88899626759589914L;
-//	param["error"]["isSuccess"] = true;
-//	GraphDog::get()->setKakaoMemberID("88899626759589914");
-//	GraphDog::get()->setHSPMemberNo(88899626759589914L);
-//	resultLogin(param);
-	
-	
-	
-//	Json::Value t_result_data;
-//	hspConnector::get()->myKakaoInfo["user_id"] = 88741857374149376L;
-//	hspConnector::get()->myKakaoInfo["nickname"] = "YH";
-//	graphdog->setKakaoMemberID(hspConnector::get()->getSocialID());
-//	t_result_data["error"]["isSuccess"] = true;
-//	resultLogin(t_result_data);
-	
-	return true;
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -521,10 +554,16 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
 		
 		mySGD->setFirstPurchasePlayCount(result_data["firstPurchasePlayCount"].asInt());
-		mySGD->setEmptyItemReviewHour(result_data["emptyItemReviewHour"].asInt());
-		mySGD->setStupidNpuHelpReviewHour(result_data["stupidNpuHelpReviewHour"].asInt());
+		mySGD->setEmptyItemReviewSecond(result_data["emptyItemReviewSecond"].asInt64());
+		mySGD->setStupidNpuHelpReviewSecond(result_data["stupidNpuHelpReviewSecond"].asInt64());
 		mySGD->setStupidNpuHelpPlayCount(result_data["stupidNpuHelpPlayCount"].asInt());
 		mySGD->setStupidNpuHelpFailCount(result_data["stupidNpuHelpFailCount"].asInt());
+		mySGD->setEventRubyShopReviewSecond(result_data["eventRubyShopReviewSecond"].asInt64());
+		mySGD->setPlayCountHighValue(result_data["playCountHighValue"].asInt());
+		
+		mySGD->setEmptyItemIsOn(result_data["emptyItemIsOn"].asInt());
+		mySGD->setStupidNpuHelpIsOn(result_data["stupidNpuHelpIsOn"].asInt());
+		mySGD->setPlayCountHighIsOn(result_data["playCountHighIsOn"].asInt());
 	}
 	else
 	{
@@ -580,6 +619,20 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i-1, t_data["sale"].asString(), false);
+		}
+		
+		for(int i=1;i<=6;i++)
+		{
+			string t_key = CCString::createWithFormat("es_r_%d", i)->getCString();
+			Json::Value t_data = result_data[t_key.c_str()];
+			
+			NSDS_SI(kSDS_GI_shopEventRuby_int1_count_i, i-1, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_countName_s, i-1, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopEventRuby_int1_price_i, i-1, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
+			mySGD->initEventInappProduct(i-1, t_data["pID"].asString());
 		}
 		
 		Json::FastWriter t_writer;
@@ -766,6 +819,13 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_monsterInfo_int1_name_s, i, monster_list[i-1]["name"].asString(), false);
 			NSDS_SB(kSDS_GI_monsterInfo_int1_isBoss_b, i, monster_list[i-1]["isBoss"].asBool(), false);
 			NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbiID_s, i, monster_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
+			
+			if(!monster_list[i-1]["script"].isNull())
+			{
+				NSDS_SS(kSDS_GI_monsterInfo_int1_script_start_s, i, monster_list[i-1]["script"]["start"].asString(), false);
+				NSDS_SS(kSDS_GI_monsterInfo_int1_script_clear_s, i, monster_list[i-1]["script"]["clear"].asString(), false);
+				NSDS_SS(kSDS_GI_monsterInfo_int1_script_fail_s, i, monster_list[i-1]["script"]["fail"].asString(), false);
+			}
 			
 			string monster_type = monster_list[i-1]["type"].asString();
 			if(monster_type == "snake")
