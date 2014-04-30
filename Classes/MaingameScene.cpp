@@ -1,4 +1,5 @@
 //
+//
 //  MaingameScene.cpp
 //  DrawingJack
 //
@@ -31,6 +32,7 @@
 #include "FormSetter.h"
 #include "StoryManager.h"
 #include "LoadingLayer.h"
+#include "KSLabelTTF.h"
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -2202,8 +2204,81 @@ void Maingame::showWarning( int t1 )
 
 void Maingame::showDetailMessage(const std::string& fileName)
 {
-	DetailWarning* w = DetailWarning::create(fileName);
-	addChild(w, goldZorder);
+	//DetailWarning* w = DetailWarning::create(fileName);
+	//addChild(w, goldZorder);
+	
+	// 이미 표시되고 있는게 있다면 큐에서 비워버리고 이동시켜버림.
+	for(auto it : detailWarningQueue)
+	{
+		auto iter = std::find(detailWarningQueue.begin(), detailWarningQueue.end(), it);
+		if(iter != detailWarningQueue.end()){
+			detailWarningQueue.erase(iter);
+		}
+		it->getChildByTag(0x3030)->removeAllChildren(); // 붙은 스케쥴러 다 뗌.
+		it->addChild(KSGradualValue<CCPoint>::create(it->getPosition(),
+																													ccp(0 - it->getContentSize().width, it->getPosition().y),
+																													10.f / 30.f,
+																													[=](CCPoint t){
+																														it->setPosition(t);
+																													}, [=](CCPoint t){
+																														it->setPosition(t);
+																														it->removeFromParent();
+																														
+																													}));
+	}
+	KSLabelTTF* textMessage = KSLabelTTF::create(fileName.c_str(), mySGD->getFont().c_str(), 30.f);
+	detailWarningQueue.push_back(textMessage);
+	textMessage->setColor(ccc3(255, 0, 0));
+	textMessage->enableOuterStroke(ccc3(0, 0, 0), 3.f, true);
+	textMessage->setEnableItalic();
+	textMessage->setAnchorPoint(ccp(0.f, 0.5f));
+	
+	float width = textMessage->getContentSize().width;
+	float centerPosition = 240 - width / 2.f;
+	addChild(textMessage, goldZorder);
+
+	textMessage->setPosition(ccp(520, 160));
+	CCNode* tempScheduler = CCNode::create();
+	textMessage->addChild(tempScheduler, 0, 0x3030);
+	tempScheduler->addChild(KSGradualValue<CCPoint>::create(textMessage->getPosition(),
+																					 ccp(centerPosition, textMessage->getPosition().y),
+																					 7.f / 30.f,
+																					 [=](CCPoint t){
+																						 textMessage->setPosition(t);
+																					 }, [=](CCPoint t){
+																						 textMessage->setPosition(t);
+																						 // 가운데 까지 왔다.
+																						 //
+																						 ccColor3B colors[2];
+																						 colors[0] = ccc3(255, 255, 0);
+																						 colors[1] = ccc3(255, 0, 0);
+																						 for(int i=0; i<11; i++) {
+																							 tempScheduler->addChild(KSTimer::create(3/30.f * (i + 1), [=](){
+																								 textMessage->setColor(colors[i % 2]);
+																								 // 마지막 조건
+																								 if(i == 10) {
+																									 // 마지막 조건일 때 큐에서 이미 지워버림. 어차피 지우고 있는 중이라 ㄱㅊ.
+																									 auto iter = std::find(detailWarningQueue.begin(), detailWarningQueue.end(), textMessage);
+																									 if(iter != detailWarningQueue.end()){
+																										 detailWarningQueue.erase(iter);
+																									 }
+																									 tempScheduler->addChild(KSGradualValue<CCPoint>::create(textMessage->getPosition(),
+																																																				 ccp(0 - width, textMessage->getPosition().y),
+																																																				 10.f / 30.f,
+																																																				 [=](CCPoint t){
+																																																					 textMessage->setPosition(t);
+																																																				 }, [=](CCPoint t){
+																																																					 textMessage->setPosition(t);
+																																																					 textMessage->removeFromParent();
+
+																																																				 }));
+																										
+																								 }
+																							 }));
+																						 }
+
+																							
+																					 }));
 }
 void Maingame::showTextMessage(const std::string& text)
 {

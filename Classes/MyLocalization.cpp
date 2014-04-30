@@ -229,7 +229,35 @@ void MyLocal::initLocal()
 	
 	ko->setObject(CCString::create("게임을 종료하시겠습니까?"), kMyLocalKey_exit);
 	
-	
+	ko->setObject(CCString::create("카운트 폭탄"), kMyLocalKey_warning9);
+	ko->setObject(CCString::create("주황 톱니바퀴"), kMyLocalKey_warning105);
+	ko->setObject(CCString::create("파란 톱니바퀴"), kMyLocalKey_warning106);
+	ko->setObject(CCString::create("파괴 레이저"), kMyLocalKey_warning107);
+	ko->setObject(CCString::create("미사일"), kMyLocalKey_warning108);
+	ko->setObject(CCString::create("돌진"), kMyLocalKey_warning109);
+	ko->setObject(CCString::create("불꽃놀이"), kMyLocalKey_warning110);
+	ko->setObject(CCString::create("해바라기"), kMyLocalKey_warning111);
+	ko->setObject(CCString::create("얼음폭탄"), kMyLocalKey_warning112);
+	ko->setObject(CCString::create("유도폭탄"), kMyLocalKey_warning113);
+	ko->setObject(CCString::create("토네이도"), kMyLocalKey_warning1001);
+	ko->setObject(CCString::create("태양권"), kMyLocalKey_warning1002);
+	ko->setObject(CCString::create("슬로우존"), kMyLocalKey_warning1003);
+	ko->setObject(CCString::create("가시감옥"), kMyLocalKey_warning1004);
+	ko->setObject(CCString::create("빙결"), kMyLocalKey_warning1005);
+	ko->setObject(CCString::create("혼란"), kMyLocalKey_warning1006);
+	ko->setObject(CCString::create("순간이동"), kMyLocalKey_warning1007);
+	ko->setObject(CCString::create("투명망토"), kMyLocalKey_warning1008);
+	ko->setObject(CCString::create("화염 방사"), kMyLocalKey_warning1009);
+	ko->setObject(CCString::create("벼락"), kMyLocalKey_warning1010);
+	ko->setObject(CCString::create("스피드레이저"), kMyLocalKey_warning1011);
+	ko->setObject(CCString::create("방사능"), kMyLocalKey_warning1012);
+	ko->setObject(CCString::create("메테오"), kMyLocalKey_warning1013);
+	ko->setObject(CCString::create("운석"), kMyLocalKey_warning1014);
+	ko->setObject(CCString::create("뾰족풍차"), kMyLocalKey_warning1015);
+	ko->setObject(CCString::create("다이너마이트 지뢰"), kMyLocalKey_warning1016);
+	ko->setObject(CCString::create("불꽃스토커"), kMyLocalKey_warning1017);
+	ko->setObject(CCString::create("문득구름"), kMyLocalKey_warning1018);
+	ko->setObject(CCString::create("보스공격저지"), kMyLocalKey_warningBossSuccess);
 	
 //	ko->setObject(CCString::create("서버에 연결할 수 없습니다."), kMyLocalKey_canNotConnectedServer);
 //	ko->setObject(CCString::create("화면을 터치 해주세요."), kMyLocalKey_touchPlease);
@@ -535,6 +563,35 @@ void MyLocal::initLocal()
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
+	en->setObject(CCString::create("Count Bomb"), kMyLocalKey_warning9);
+	en->setObject(CCString::create("Orange Saw"), kMyLocalKey_warning105);
+	en->setObject(CCString::create("Blue Saw"), kMyLocalKey_warning106);
+	en->setObject(CCString::create("Crash Laser"), kMyLocalKey_warning107);
+	en->setObject(CCString::create("Missile"), kMyLocalKey_warning108);
+	en->setObject(CCString::create("Rush"), kMyLocalKey_warning109);
+	en->setObject(CCString::create("Fire Work"), kMyLocalKey_warning110);
+	en->setObject(CCString::create("Sunflower"), kMyLocalKey_warning111);
+	en->setObject(CCString::create("Ice Bomb"), kMyLocalKey_warning112);
+	en->setObject(CCString::create("Guided Bomb"), kMyLocalKey_warning113);
+	en->setObject(CCString::create("Tornado"), kMyLocalKey_warning1001);
+	en->setObject(CCString::create("Flashing"), kMyLocalKey_warning1002);
+	en->setObject(CCString::create("Slow Zone"), kMyLocalKey_warning1003);
+	en->setObject(CCString::create("Thorn Prison"), kMyLocalKey_warning1004);
+	en->setObject(CCString::create("Freezing"), kMyLocalKey_warning1005);
+	en->setObject(CCString::create("Chaos"), kMyLocalKey_warning1006);
+	en->setObject(CCString::create("Teleport"), kMyLocalKey_warning1007);
+	en->setObject(CCString::create("Invisibility"), kMyLocalKey_warning1008);
+	en->setObject(CCString::create("Flame Spraying"), kMyLocalKey_warning1009);
+	en->setObject(CCString::create("ThunderBolt"), kMyLocalKey_warning1010);
+	en->setObject(CCString::create("Speed Laser"), kMyLocalKey_warning1011);
+	en->setObject(CCString::create("Radioactivity"), kMyLocalKey_warning1012);
+	en->setObject(CCString::create("Meteor"), kMyLocalKey_warning1013);
+	en->setObject(CCString::create("Falling Stone"), kMyLocalKey_warning1014);
+	en->setObject(CCString::create("Do not come"), kMyLocalKey_warning1015);
+	en->setObject(CCString::create("Dynamite Mine"), kMyLocalKey_warning1016);
+	en->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
+	en->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
+	en->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	
 	
 //	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
