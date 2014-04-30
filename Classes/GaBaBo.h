@@ -12,7 +12,7 @@ USING_NS_CC;
 static int 	kAttackGa = 1;
 static int	kAttackBa = 2;
 static int	kAttackBo = 3; 
-class GaBaBo : public CCLayer
+class GaBaBo : public CCLayerColor
 {
 public:
 	GaBaBo();

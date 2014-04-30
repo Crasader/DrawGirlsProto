@@ -7,6 +7,13 @@ USING_NS_CC;
 #include <boost/format.hpp>
 #include <vector>
 
+// 문자열 중간에 수정법.
+	/*
+	 * auto ret = ???->getTexts();
+	 * ret[1] = "2/2";
+	 * ???->updateTexture();
+	 *
+	 * */
 struct StyledText
 {
 	std::string m_text;
@@ -58,8 +65,6 @@ public:
 	}
 	
 	static StyledLabelTTF* create(const char* text,const char* font ,StyledAlignment sa);
-	CCLabelTTF* getLabelByTag(int tag);
-	
 	void updateTexture();
 	static unsigned int makeRGB(unsigned char R, unsigned char G, unsigned char B)
 	{
@@ -86,6 +91,12 @@ protected:
 	float m_currentLinePosition;
 	std::vector<StyledText> m_texts;
 	StyledAlignment m_currentAlignment;
+public:
+	std::vector<StyledText> getTexts()
+	{
+		return m_texts;
+	}
+
 };
 
 #endif
