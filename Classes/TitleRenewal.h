@@ -146,6 +146,11 @@ private:
 	
 //	void resultGetPathInfo(Json::Value result_data);
 	
+	int splash_load_cnt;
+	int splash_ing_cnt;
+	
+	void loadCounting(CCObject* sender);
+	
 	void endSplash();
 	void realInit();
 	

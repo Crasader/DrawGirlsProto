@@ -53,7 +53,7 @@ bool TitleRenewalScene::init()
 	AudioEngine::sharedInstance()->preloadEffectScene("Title");
 	
 	is_menu_enable = false;
-	
+
 	auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
 	splash.second->setAnimationCompletedCallbackLambda(this, [=](){
 		splash.first->removeFromParent();
@@ -63,10 +63,24 @@ bool TitleRenewalScene::init()
 	
 	addChild(splash.first);
 	
-//	addChild(KSTimer::create(3.f, [=]()
-//	{
-		splash.second->runAnimationsForSequenceNamed("Default Timeline");
-//	}));
+	//	addChild(KSTimer::create(3.f, [=]()
+	//	{
+	splash.second->runAnimationsForSequenceNamed("Default Timeline");
+	//	}));
+	
+//	vector<string> preload_list;
+//	preload_list.clear();
+//	
+//	for(int i=0;i<=26;i++)
+//		preload_list.push_back(CCString::createWithFormat("TOAST_GalaxyS3_cropA_%05d.png", i)->getCString());
+//	preload_list.push_back("TOAST_GalaxyS3_typeA_1280x720_all.png");
+//	preload_list.push_back("TOAST_GalaxyS3_typeA_1280x720_BG.png");
+//	
+//	splash_load_cnt = preload_list.size();
+//	splash_ing_cnt = 0;
+//	
+//	for(int i=0;i<splash_load_cnt;i++)
+//		CCTextureCache::sharedTextureCache()->addImageAsync(preload_list[i].c_str(), this, callfuncO_selector(TitleRenewalScene::loadCounting));
 	
 	
 	
@@ -87,6 +101,28 @@ bool TitleRenewalScene::init()
 //	resultLogin(t_result_data);
 	
 	return true;
+}
+
+void TitleRenewalScene::loadCounting(CCObject* sender)
+{
+	splash_ing_cnt++;
+	
+	if(splash_ing_cnt == splash_load_cnt)
+	{
+//		auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
+//		splash.second->setAnimationCompletedCallbackLambda(this, [=](){
+//			splash.first->removeFromParent();
+//			endSplash();
+//		});
+//		splash.first->setPosition(ccp(240,160));
+//		
+//		addChild(splash.first);
+//		
+//		//	addChild(KSTimer::create(3.f, [=]()
+//		//	{
+//		splash.second->runAnimationsForSequenceNamed("Default Timeline");
+//		//	}));
+	}
 }
 
 void TitleRenewalScene::endSplash()
