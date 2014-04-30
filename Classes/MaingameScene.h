@@ -107,7 +107,7 @@ private:
 	
 	MainInitState init_state;
 	GameNodeMovingDirection gamenode_moving_direction;
-	
+	std::vector<CCNode*> detailWarningQueue;	
 	void setLineParticle(bool t_b);
 	
 	void movingGameNode();
