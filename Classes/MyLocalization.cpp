@@ -8,7 +8,7 @@ void MyLocal::initLocal()
 	CCDictionary* ko = CCDictionary::create();
 	ko->setObject(CCString::create("서버 접속중"), kMyLocalKey_connectingServer);
 	ko->setObject(CCString::create("닉네임 입력"), kMyLocalKey_inputNick);
-	ko->setObject(CCString::create("입력해주세요."), kMyLocalKey_inputPlease);
+	ko->setObject(CCString::create(" 닉네임을 입력해주세요."), kMyLocalKey_inputPlease);
 	ko->setObject(CCString::create("확인"), kMyLocalKey_ok);
 	ko->setObject(CCString::create("이미지 정보를 받아옵니다."), kMyLocalKey_downImgInfo);
 	ko->setObject(CCString::create("정보 불러오기 실패"), kMyLocalKey_failLoadInfo);
@@ -16,13 +16,13 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("다운로드중 %.0f%% : %d/%d"), kMyLocalKey_downloadingProgress);
 	ko->setObject(CCString::create("이미지 받아오기 실패"), kMyLocalKey_downImgFail);
 	ko->setObject(CCString::create("로그인 성공"), kMyLocalKey_successLogin);
-	ko->setObject(CCString::create("닉네임 중복"), kMyLocalKey_sameNick);
-	ko->setObject(CCString::create("불량 닉네임"), kMyLocalKey_invalidNick);
+	ko->setObject(CCString::create("사용할 수 없는 닉네임 입니다."), kMyLocalKey_sameNick);
+	ko->setObject(CCString::create("사용할 수 없는 닉네임 입니다."), kMyLocalKey_invalidNick);
 	ko->setObject(CCString::create("닉네임이 너무 깁니다."), kMyLocalKey_longNick);
 	ko->setObject(CCString::create("닉네임이 너무 짧습니다."), kMyLocalKey_shortNick);
 	ko->setObject(CCString::create("지금 열기"), kMyLocalKey_openRightNow);
 	ko->setObject(CCString::create("RUBY %d 로 오픈"), kMyLocalKey_openRubyValue);
-	ko->setObject(CCString::create("GOLD %d 로 오픔"), kMyLocalKey_openGoldValue);
+	ko->setObject(CCString::create("GOLD %d 로 오픈"), kMyLocalKey_openGoldValue);
 	ko->setObject(CCString::create("CGP 일반 보상"), kMyLocalKey_cgpNormalTitle);
 	ko->setObject(CCString::create("보상받기를 눌러주세요."), kMyLocalKey_cgpNormalContent);
 	ko->setObject(CCString::create("보상받기"), kMyLocalKey_getReward);

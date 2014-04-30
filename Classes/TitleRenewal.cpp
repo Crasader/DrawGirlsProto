@@ -157,7 +157,7 @@ void TitleRenewalScene::realInit()
 	title_name->setPosition(ccp(240,10));//240,210));
 	addChild(title_name, 1);
 	
-	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	state_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
 	state_label->setPosition(ccp(240,190));
 	addChild(state_label, 2);
@@ -216,33 +216,36 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		state_label->setString("");
 		
 		
-		CCScale9Sprite* nick_back = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		nick_back = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
 		nick_back->setContentSize(CCSizeMake(290,160));
 		nick_back->setPosition(ccp(240,220));
+//nick_back->setScale(0)
 		addChild(nick_back,100);
 		
+
+		CCScale9Sprite* t_back = CCScale9Sprite::create("nickname_box.png");
+		t_back->setInsetBottom(16);
+		t_back->setInsetTop(34-16*2);
+		t_back->setInsetLeft(13);
+		t_back->setInsetRight(34-13*2);
 		
-		
-		CCScale9Sprite* t_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		t_back->setOpacity(0);
-		
-		input_text = CCEditBox::create(CCSizeMake(170, 30), t_back);
-		input_text->setPosition(ccp(115,35));
+		input_text = CCEditBox::create(CCSizeMake(160, 30), t_back);
+		input_text->setPosition(ccp(107,38));
 		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
-		input_text->setFont(mySGD->getFont().c_str(), 20);
+		input_text->setFont(mySGD->getFont().c_str(), 15);
 		input_text->setInputMode(kEditBoxInputModeSingleLine);
 		input_text->setDelegate(this);
 		nick_back->addChild(input_text,3);
 		//FormSetter::get()->addObject("t1", input_text);
 		
 		flag = FlagSelector::create();
-		flag->setPosition(42,60);
+		flag->setPosition(43,60);
 		nick_back->addChild(flag,100000);
 		//FormSetter::get()->addObject("t2", flag);
 		
 		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(78, 40), CommonButtonLightPupple, kCCMenuHandlerPriority);
-		ok_menu->setPosition(ccp(235,35));
+		ok_menu->setPosition(ccp(227,38));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
 								 CCNode* t_node = CCNode::create();
@@ -250,6 +253,10 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 								 menuAction(t_node);
 							 });
 		nick_back->addChild(ok_menu, 10, kTitleRenewal_MT_nick);
+		
+		
+//		nick_back->setPosition(ccp(240,-500));
+	//	nick_back->runAction(CCEaseBounceOut::create(CCMoveTo::create(0.3, ccp(240,220))));
 		//FormSetter::get()->addObject("t3", ok_menu);
 	}
 	else
@@ -2016,13 +2023,13 @@ void TitleRenewalScene::joinAction()
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
-										 state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
+										 //state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
 										 setTouchEnabled(false);
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
-										 input_text->removeFromParent();
-										 flag->removeFromParent();
+										 //input_text->removeFromParent();
+										 //flag->removeFromParent();
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										 successLogin();
@@ -2039,13 +2046,13 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
 									 {
-										 state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
+										 //state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
 										 setTouchEnabled(false);
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
-										 input_text->removeFromParent();
-										 flag->removeFromParent();
+										 //input_text->removeFromParent();
+										 //flag->removeFromParent();
 										 
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
