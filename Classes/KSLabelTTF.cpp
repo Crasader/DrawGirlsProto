@@ -63,14 +63,15 @@ bool KSLabelTTF::updateTexture()
 		label->setColor(m_outerStrokeColor);
 
 		ccBlendFunc originalBlendFunc = label->getBlendFunc();
-		ccBlendFunc _t = {GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
+		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
 		label->setBlendFunc(_t);
 		CCPoint bottomLeft = ccp(label->getTexture()->getContentSize().width * label->getAnchorPoint().x + m_outerStrokeSize, label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize);
 		CCPoint position = ccpSub(label->getPosition(), ccp(-label->getContentSize().width / 2.0f,-label->getContentSize().height / 2.0f));
 
 		rt->begin();
 
-		for (int i=0; i<360; i+=10) // you should optimize that for your needs
+		float devider = 8; 
+		for (int i=0; i<360; i+=360 / devider) // you should optimize that for your needs
 		{
 			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
 			label->visit();
