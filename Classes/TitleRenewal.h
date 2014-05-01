@@ -122,8 +122,8 @@ private:
 	
 	void resultGetCardHistory(Json::Value result_data);
 	void resultGetPuzzleHistory(Json::Value result_data);
-	
 	void resultGetPieceHistory(Json::Value result_data);
+	void resultGetCharacterHistory(Json::Value result_data);
 	
 	void resultGetUserProperties(Json::Value result_data);
 	

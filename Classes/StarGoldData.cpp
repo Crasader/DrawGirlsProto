@@ -177,13 +177,20 @@ string StarGoldData::getFont2() // Jrnaver
 		return "fonts/meiryo.ttc"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
 	}
-	
+
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "jrNaver";
+	font_name = "RixJGoB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "fonts/jrNaver.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
+	
+//	string font_name;
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//	font_name = "jrNaver";
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	font_name = "fonts/jrNaver.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+//#endif
 	
 	return font_name;
 }
@@ -1123,6 +1130,101 @@ void StarGoldData::initPieceHistory(Json::Value history_list)
 	}
 }
 
+void StarGoldData::initCharacterHistory(Json::Value history_list)
+{
+	for(int i=0;i<history_list.size();i++)
+	{
+		Json::Value t_data = history_list[i];
+		CharacterHistory t_history;
+		t_history.characterNo = t_data["characterNo"].asInt();
+		t_history.level = t_data["level"].asInt();
+		t_history.nextPrice = t_data["nextPrice"].asInt();
+		
+		character_historys.push_back(t_history);
+	}
+}
+void StarGoldData::initSelectedCharacterNo(int t_i)
+{
+	bool is_found = false;
+	for(int i=0;!is_found && i<character_historys.size();i++)
+	{
+		if(character_historys[i].characterNo.getV() == t_i)
+		{
+			selected_character_index = i;
+			is_found = true;
+		}
+	}
+}
+CharacterHistory StarGoldData::getSelectedCharacterHistory()
+{
+	return character_historys[selected_character_index.getV()];
+}
+int StarGoldData::getCharacterHistorySize()
+{
+	return character_historys.size();
+}
+CharacterHistory StarGoldData::getCharacterHistory(int t_index)
+{
+	return character_historys[t_index];
+}
+CommandParam StarGoldData::getUpdateCharacterHistoryParam(CharacterHistory t_history, jsonSelType call_back)
+{
+	keep_character_history_callback = call_back;
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getSocialID();
+	
+	param["characterNo"] = t_history.characterNo.getV();
+	param["level"] = t_history.level.getV();
+	
+	return CommandParam("updatecharacterhistory", param, json_selector(this, StarGoldData::resultUpdateCharacterHistory));
+	
+}
+void StarGoldData::setCharacterHistory(CharacterHistory t_history, jsonSelType call_back)
+{
+	keep_character_history_callback = call_back;
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getSocialID();
+	
+	param["characterNo"] = t_history.characterNo.getV();
+	param["level"] = t_history.level.getV();
+	
+	hspConnector::get()->command("updatecharacterhistory", param, json_selector(this, StarGoldData::resultUpdateCharacterHistory));
+}
+
+void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
+{
+	if(result_data["result"]["code"] == GDSUCCESS)
+	{
+		int characterNo = result_data["characterNo"].asInt();
+		bool is_found = false;
+		for(int i=0;!is_found && i<getCharacterHistorySize();i++)
+		{
+			CharacterHistory t_history = getCharacterHistory(i);
+			if(t_history.characterNo.getV() == characterNo)
+			{
+				t_history.level = result_data["level"].asInt();
+				t_history.nextPrice = result_data["nextPrice"].asInt();
+				is_found = true;
+			}
+		}
+		
+		if(!is_found)
+		{
+			CharacterHistory t_history;
+			t_history.characterNo = characterNo;
+			t_history.level = result_data["level"].asInt();
+			t_history.nextPrice = result_data["nextPrice"].asInt();
+			
+			character_historys.push_back(t_history);
+		}
+	}
+	
+	if(keep_character_history_callback != nullptr)
+		keep_character_history_callback(result_data);
+}
+
 int StarGoldData::getClearStarCount()
 {
 	int return_value = 0;
@@ -1434,7 +1536,11 @@ void StarGoldData::initUserdata(Json::Value result_data)
 	userdata_storage.clear();
 	
 	for(int i=kUserdataType_begin+1;i<kUserdataType_end;i++)
+	{
 		userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
+		if(i == kUserdataType_selectedCharNO)
+			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
+	}
 }
 
 void StarGoldData::clearChangeGoods()

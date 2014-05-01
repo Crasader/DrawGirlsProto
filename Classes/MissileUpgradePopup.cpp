@@ -89,9 +89,9 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	level_case->setPosition(ccp(0,60));
 	upgrade_action_node->addChild(level_case);
 	
-	StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
+	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
 	
-	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
+	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	
 	missile_img = NULL;
 	
@@ -140,7 +140,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	CCSprite* price_type = CCSprite::create("common_button_gold.png");
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_type);
-	price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+	price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
@@ -176,8 +176,8 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	
 	is_menu_enable = false;
 	
-	int upgrade_price = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
-	upgrade_price*=mySGD->getUpgradeGoldFee();
+	int upgrade_price = mySGD->getSelectedCharacterHistory().nextPrice.getV();
+
 	if(mySGD->getGoodsValue(kGoodsType_gold) < upgrade_price)// + use_item_price_gold.getV())
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
@@ -191,17 +191,21 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	loading_layer = LoadingLayer::create(touch_priority-100);
 	addChild(loading_layer);
 	
-	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
+	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	before_gold = mySGD->getGoodsValue(kGoodsType_gold);
-	before_level = missile_level-1;
+	before_level = missile_level;
 	before_damage = StoneAttack::getPower((before_level)/5+1, (before_level)%5+1);
-	mySGD->addChangeGoods(kGoodsType_gold, -missile_level*mySGD->getUpgradeGoldFee(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
+	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getSelectedCharacterHistory().nextPrice.getV(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 	
-	myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	t_history.level = t_history.level.getV() + 1;
 	
-	myDSH->saveUserData({kSaveUserData_Key_character}, nullptr);
+	vector<CommandParam> command_list;
+	command_list.clear();
+	command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
 	
-	mySGD->changeGoods(json_selector(this, MissileUpgradePopup::resultSaveUserData));
+	
+	mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
 }
 
 void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
@@ -300,8 +304,6 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 		mySGD->clearChangeGoods();
 		
 		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-		
-		myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), before_level);
 	}
 	loading_layer->removeFromParent();
 	is_menu_enable = true;
@@ -309,8 +311,7 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 
 void MissileUpgradePopup::setAfterUpgrade()
 {
-	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
-	missile_level++;
+	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	
 	int after_damage = StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1);
 	
@@ -324,7 +325,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 		missile_img->removeFromParent();
 	}
 	
-	StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
+	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
 	
 	if(missile_type_code == kStoneType_guided)
 	{
@@ -355,7 +356,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	else
 	{
 		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString());
-		price_label->setString(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString());
+		price_label->setString(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString());
 	}
 	
 	upgrade_func();

@@ -300,10 +300,6 @@ void TitleRenewalScene::successLogin()
 	
 	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
-	Json::Value userdata_param;
-	userdata_param["memberID"] = hspConnector::get()->getSocialID();
-	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
-	
 	Json::Value card_param;
 	card_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
@@ -316,9 +312,17 @@ void TitleRenewalScene::successLogin()
 	piece_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
 	
+	Json::Value character_history_param;
+	character_history_param["memberID"] = hspConnector::get()->getSocialID();
+	command_list.push_back(CommandParam("getcharacterhistory", character_history_param, json_selector(this, TitleRenewalScene::resultGetCharacterHistory)));
+	
 	Json::Value properties_param;
 	properties_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getuserproperties", properties_param, json_selector(this, TitleRenewalScene::resultGetUserProperties)));
+	
+	Json::Value userdata_param;
+	userdata_param["memberID"] = hspConnector::get()->getSocialID();
+	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
@@ -1126,6 +1130,26 @@ void TitleRenewalScene::resultGetPieceHistory(Json::Value result_data)
 		Json::Value piece_param;
 		piece_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetCharacterHistory(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->initCharacterHistory(result_data["list"]);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value character_history_param;
+		character_history_param["memberID"] = hspConnector::get()->getSocialID();
+		command_list.push_back(CommandParam("getcharacterhistory", character_history_param, json_selector(this, TitleRenewalScene::resultGetCharacterHistory)));
 	}
 	
 	receive_cnt--;

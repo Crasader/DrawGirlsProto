@@ -171,6 +171,7 @@ enum UserdataType
 	kUserdataType_totalPlayCount,
 	kUserdataType_failCount,
 	kUserdataType_autoLevel,
+	kUserdataType_selectedCharNO,
 	kUserdataType_end
 };
 
@@ -189,6 +190,14 @@ enum PurchaseGuideType
 	kPurchaseGuideType_stupidNpuHelp,
 	kPurchaseGuideType_eventRubyShop,
 	kPurchaseGuideType_end
+};
+
+class CharacterHistory
+{
+public:
+	KSProtectVar<int> characterNo;
+	KSProtectVar<int> level;
+	KSProtectVar<int> nextPrice;
 };
 
 #define SGD_KEY	0xD9
@@ -341,6 +350,16 @@ public:
 	void setPieceHistoryForNotSave(PieceHistory t_history);
 	void setPieceHistory(PieceHistory t_history, jsonSelType call_back);
 	void initPieceHistory(Json::Value history_list);
+	
+	void initSelectedCharacterNo(int t_i);
+	CharacterHistory getSelectedCharacterHistory();
+	int getCharacterHistorySize();
+	CharacterHistory getCharacterHistory(int t_index);
+	jsonSelType keep_character_history_callback;
+	CommandParam getUpdateCharacterHistoryParam(CharacterHistory t_history, jsonSelType call_back);
+	void setCharacterHistory(CharacterHistory t_history, jsonSelType call_back);
+	void initCharacterHistory(Json::Value history_list);
+	void resultUpdateCharacterHistory(Json::Value result_data);
 	
 	int getClearStarCount();
 	
@@ -744,6 +763,9 @@ private:
 	KSProtectVar<long long> at_time_show_emptyItem;
 	KSProtectVar<long long> at_time_show_stupidNpuHelp;
 	KSProtectVar<long long> at_time_show_eventRubyShop;
+	
+	KSProtectVar<int> selected_character_index;
+	deque<CharacterHistory> character_historys;
 	
 	string app_type;
 	int app_version;

@@ -477,9 +477,9 @@ void StartSettingPopup::setMain()
 	main_case->addChild(level_case);
 	
 	
-	StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
+	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
 	
-	int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
+	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	
 	if(missile_type_code == kStoneType_guided)
 	{
@@ -525,7 +525,7 @@ void StartSettingPopup::setMain()
 		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
 		n_price_type->setPosition(ccp(25,22));
 		n_upgrade->addChild(n_price_type);
-		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
 		n_price_label->setColor(ccBLACK);
 		n_price_label->setPosition(ccp(78,22));
 		n_upgrade->addChild(n_price_label);
@@ -539,7 +539,7 @@ void StartSettingPopup::setMain()
 		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
 		s_price_type->setPosition(ccp(25,22));
 		s_upgrade->addChild(s_price_type);
-		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
 		s_price_label->setColor(ccBLACK);
 		s_price_label->setPosition(ccp(78,22));
 		s_upgrade->addChild(s_price_label);
@@ -663,7 +663,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	is_menu_enable = false;
 	
 	MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
-		int missile_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter))+1;
+		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
 		missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
 		missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
@@ -675,7 +675,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			missile_img->removeFromParent();
 		}
 		
-		StoneType missile_type_code = StoneType(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7);
+		StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
 		
 		if(missile_type_code == kStoneType_guided)
 		{
@@ -716,7 +716,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
 			n_price_type->setPosition(ccp(25,22));
 			n_upgrade->addChild(n_price_type);
-			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
 			n_price_label->setColor(ccBLACK);
 			n_price_label->setPosition(ccp(78,22));
 			n_upgrade->addChild(n_price_label);
@@ -730,7 +730,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
 			s_price_type->setPosition(ccp(25,22));
 			s_upgrade->addChild(s_price_type);
-			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*mySGD->getUpgradeGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
 			s_price_label->setColor(ccBLACK);
 			s_price_label->setPosition(ccp(78,22));
 			s_upgrade->addChild(s_price_label);

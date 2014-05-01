@@ -44,7 +44,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	suction->setTouchEnabled(true);
 	
 	m_container = CCNode::create();
-	m_container->setPosition(ccp(240,myDSH->ui_center_y));
+	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
 	back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
