@@ -1570,6 +1570,8 @@ const char* MyLocal::getLocalForKey( MyLocalKey key )
 
 	if(returnLocal == NULL)
 		returnLocal = (CCString*)((CCDictionary*)objectForKey("en"))->objectForKey(key);
+	if(returnLocal == NULL)
+		returnLocal = CCString::create("");
 	
 	return returnLocal->getCString();
 }

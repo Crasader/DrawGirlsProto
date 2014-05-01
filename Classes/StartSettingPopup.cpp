@@ -58,7 +58,7 @@ bool StartSettingPopup::init()
 	option_label = NULL;
 	//	card_img = NULL;
 	buy_button = NULL;
-	selected_gacha_item = kIC_emptyBegin;
+	selected_gacha_item = (ITEM_CODE)mySGD->gacha_item.getV();
 	
 	touch_priority = -210;
 	
@@ -420,15 +420,27 @@ void StartSettingPopup::setMain()
 	
 	gachaMenuCreate();
 	
-	gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
-	gacha_item->setPosition(ccp(425,190));
-	main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
-	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 15);
-	gacha_label->enableOuterStroke(ccBLACK, 1.f);
-	gacha_label->setPosition(ccp(37.5f, 23.5f));
-	gacha_item->addChild(gacha_label);
-	
+	if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+	{
+		gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", selected_gacha_item)->getCString());
+		gacha_item->setPosition(ccp(425,190));
+		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+		
+		CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
+		mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-6, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-6));
+		gacha_item->addChild(mount_img);
+	}
+	else
+	{
+		gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
+		gacha_item->setPosition(ccp(425,190));
+		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+		
+		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 15);
+		gacha_label->enableOuterStroke(ccBLACK, 1.f);
+		gacha_label->setPosition(ccp(37.5f, 23.5f));
+		gacha_item->addChild(gacha_label);
+	}
 	
 	CCScale9Sprite* script_box = CCScale9Sprite::create("startsetting_scriptbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	script_box->setContentSize(CCSizeMake(290, 70));
@@ -616,7 +628,16 @@ void StartSettingPopup::gachaMenuCreate()
 																				main_case->addChild(buy_button);
 																			}
 																		   
-																		   buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaGoldFee());
+																		   if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+																			{
+																			   buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
+																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
+																			}
+																		   else
+																			{
+																			   buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaGoldFee());
+																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
+																			}
 																		   buy_button->setFunction([=](CCObject* sender)
 																								   {
 																									   this->startItemGacha();
@@ -776,6 +797,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		ItemGachaPopup* t_popup = ItemGachaPopup::create(touch_priority-100, [=](){endItemGacha();}, [=](int item_type){
 			
 			selected_gacha_item = (ITEM_CODE)item_type;
+			mySGD->gacha_item = selected_gacha_item;
 			
 			CCPoint gacha_item_position = gacha_item->getPosition();
 			gacha_item->removeFromParent();
@@ -787,6 +809,9 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
 			mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-6, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-6));
 			gacha_item->addChild(mount_img);
+			
+			buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
+			buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
 		});
 		addChild(t_popup, kStartSettingPopupZorder_popup);
 	}
@@ -1107,6 +1132,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		}
 		
 		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));
+		buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
 		buy_button->setFunction([=](CCObject* sender)
 								{
 									if(!is_menu_enable)

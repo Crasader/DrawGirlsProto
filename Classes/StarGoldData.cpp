@@ -290,6 +290,8 @@ void StarGoldData::setKeepGold( int t_gold )
 
 void StarGoldData::setGameStart()
 {
+	gacha_item = kIC_emptyEnd;
+	
 	is_clear_diary = false;
 	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	
@@ -1678,6 +1680,8 @@ void StarGoldData::myInit()
 	app_version = 1;
 	
 	suitable_stage = -1;
+	
+	gacha_item = kIC_emptyEnd;
 	
 	rank_up_add_rate = 0;
 	keep_time_info.is_loaded = false;

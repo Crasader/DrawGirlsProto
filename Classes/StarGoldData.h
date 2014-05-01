@@ -601,6 +601,8 @@ public:
 	bool isPossibleShowPurchasePopup(PurchaseGuideType t_type);
 	void showPurchasePopup(PurchaseGuideType t_type);
 	
+	KSProtectVar<int> gacha_item;
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
