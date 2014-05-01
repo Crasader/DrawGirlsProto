@@ -189,6 +189,7 @@ enum PurchaseGuideType
 	kPurchaseGuideType_emptyItem,
 	kPurchaseGuideType_stupidNpuHelp,
 	kPurchaseGuideType_eventRubyShop,
+	kPurchaseGuideType_levelupGuide,
 	kPurchaseGuideType_end
 };
 
@@ -525,6 +526,15 @@ public:
 	void setPlayCountHighIsOn(int t_i);
 	int getPlayCountHighIsOn();
 	
+	void setLevelupGuideReviewSecond(long long t_i);
+	long long getLevelupGuideReviewSecond();
+	void setLevelupGuidePlayCount(int t_i);
+	int getLevelupGuidePlayCount();
+	void setLevelupGuideConditionLevel(int t_i);
+	int getLevelupGuideConditionLevel();
+	void setLevelupGuideIsOn(int t_i);
+	int getLevelupGuideIsOn();
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -740,10 +750,14 @@ private:
 	KSProtectVar<int> stupid_npu_help_fail_count;
 	KSProtectVar<long long> event_ruby_shop_review_second;
 	KSProtectVar<int> play_count_high_value;
+	KSProtectVar<long long> levelup_guide_review_second;
+	KSProtectVar<int> levelup_guide_play_count;
+	KSProtectVar<int> levelup_guide_condition_level;
 	
 	KSProtectVar<int> empty_item_is_on;
 	KSProtectVar<int> stupid_npu_help_is_on;
 	KSProtectVar<int> play_count_high_is_on;
+	KSProtectVar<int> levelup_guide_is_on;
 	
 	vector<ChangeUserdataValue> changed_userdata_list;
 	jsonSelType change_userdata_callback;
@@ -763,6 +777,7 @@ private:
 	KSProtectVar<long long> at_time_show_emptyItem;
 	KSProtectVar<long long> at_time_show_stupidNpuHelp;
 	KSProtectVar<long long> at_time_show_eventRubyShop;
+	KSProtectVar<long long> at_time_show_levelupGuide;
 	
 	KSProtectVar<int> selected_character_index;
 	deque<CharacterHistory> character_historys;

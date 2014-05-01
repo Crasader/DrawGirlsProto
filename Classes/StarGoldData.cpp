@@ -23,6 +23,7 @@ void StarGoldData::withdraw()
 	at_time_show_emptyItem = 0;
 	at_time_show_stupidNpuHelp = 0;
 	at_time_show_eventRubyShop = 0;
+	at_time_show_levelupGuide = 0;
 }
 
 string StarGoldData::getReplayKey(ReplayKey t_key)
@@ -1755,6 +1756,11 @@ bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 		if(at_time_show_eventRubyShop.getV() > 0 && at_time_show_eventRubyShop.getV() + getEventRubyShopReviewSecond() >= graphdog->getTime())
 			return_value = false;
 	}
+	else if(t_type == kPurchaseGuideType_levelupGuide)
+	{
+		if(levelup_guide_is_on.getV() == 0 || (at_time_show_levelupGuide.getV() > 0 && at_time_show_levelupGuide.getV() + getLevelupGuideReviewSecond() >= graphdog->getTime()))
+			return_value = false;
+	}
 	return return_value;
 }
 
@@ -1768,6 +1774,8 @@ void StarGoldData::showPurchasePopup(PurchaseGuideType t_type)
 		at_time_show_stupidNpuHelp = graphdog->getTime();
 	else if(t_type == kPurchaseGuideType_eventRubyShop)
 		at_time_show_eventRubyShop = graphdog->getTime();
+	else if(t_type == kPurchaseGuideType_levelupGuide)
+		at_time_show_levelupGuide = graphdog->getTime();
 }
 
 string StarGoldData::getAppType()
@@ -1795,6 +1803,7 @@ void StarGoldData::myInit()
 	at_time_show_emptyItem = 0;
 	at_time_show_stupidNpuHelp = 0;
 	at_time_show_eventRubyShop = 0;
+	at_time_show_levelupGuide = 0;
 	
 	goods_data.clear();
 	change_goods_list.clear();
@@ -1995,6 +2004,15 @@ void StarGoldData::setStupidNpuHelpIsOn(int t_i){	stupid_npu_help_is_on = t_i;	}
 int StarGoldData::getStupidNpuHelpIsOn(){	return stupid_npu_help_is_on.getV();	}
 void StarGoldData::setPlayCountHighIsOn(int t_i){	play_count_high_is_on = t_i;	}
 int StarGoldData::getPlayCountHighIsOn(){	return play_count_high_is_on.getV();	}
+
+void StarGoldData::setLevelupGuideReviewSecond(long long t_i){	levelup_guide_review_second = t_i;	}
+long long StarGoldData::getLevelupGuideReviewSecond(){	return levelup_guide_review_second.getV();	}
+void StarGoldData::setLevelupGuidePlayCount(int t_i){	levelup_guide_play_count = t_i;	}
+int StarGoldData::getLevelupGuidePlayCount(){	return levelup_guide_play_count.getV();	}
+void StarGoldData::setLevelupGuideConditionLevel(int t_i){	levelup_guide_condition_level = t_i;	}
+int StarGoldData::getLevelupGuideConditionLevel(){	return levelup_guide_condition_level.getV();	}
+void StarGoldData::setLevelupGuideIsOn(int t_i){	levelup_guide_is_on = t_i;	}
+int StarGoldData::getLevelupGuideIsOn(){	return levelup_guide_is_on.getV();	}
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}

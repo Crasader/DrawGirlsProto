@@ -625,6 +625,11 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setEmptyItemIsOn(result_data["emptyItemIsOn"].asInt());
 		mySGD->setStupidNpuHelpIsOn(result_data["stupidNpuHelpIsOn"].asInt());
 		mySGD->setPlayCountHighIsOn(result_data["playCountHighIsOn"].asInt());
+		
+		mySGD->setLevelupGuidePlayCount(result_data["levelupGuidePlayCount"].asInt());
+		mySGD->setLevelupGuideConditionLevel(result_data["levelupGuideConditionLevel"].asInt());
+		mySGD->setLevelupGuideIsOn(result_data["levelupGuideIsOn"].asInt());
+		mySGD->setLevelupGuideReviewSecond(result_data["levelupGuideReviewSecond"].asInt64());
 	}
 	else
 	{

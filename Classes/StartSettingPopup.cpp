@@ -42,6 +42,7 @@
 #include "MissileUpgradePopup.h"
 #include "ItemGachaPopup.h"
 #include "MyLocalization.h"
+#include "LevelupGuidePopup.h"
 
 bool StartSettingPopup::init()
 {
@@ -76,9 +77,9 @@ bool StartSettingPopup::init()
 	
 	gray->runAction(CCFadeTo::create(0.5f, 255));
 	
-	setMain();
+	is_menu_enable = false;
 	
-	is_menu_enable = true;
+	setMain();
 	
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
@@ -163,7 +164,23 @@ void StartSettingPopup::setMain()
 		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
 			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
 	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 255);}));
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
+	{
+		KS::setOpacity(main_case, 255);
+		
+		is_menu_enable = true;
+		
+		if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
+		{
+			is_menu_enable = false;
+			LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																   {
+																	   is_menu_enable = true;
+																	   upgradeAction(NULL);
+																   });
+			addChild(t_popup, kStartSettingPopupZorder_popup);
+		}
+	}));
 	
 	CCScale9Sprite* left_back = CCScale9Sprite::create("startsetting_left_back.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	left_back->setContentSize(CCSizeMake(152, 232));
