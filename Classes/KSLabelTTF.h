@@ -17,8 +17,9 @@ protected:
 	ccColor3B m_outerStrokeColor;
 	bool m_outerIsStroke;
 	CCSprite* m_outerSprite;
+	CCRenderTexture* m_renderTexture;
 public:
-	KSLabelTTF() : m_outerIsStroke(false), m_outerSprite(nullptr)
+	KSLabelTTF() : m_outerIsStroke(false), m_outerSprite(nullptr), m_renderTexture(nullptr)
 	{
 	}
 	virtual void enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture = true);
@@ -27,6 +28,7 @@ public:
 	virtual void setEnableItalic(float value = 30.f);
 	virtual void setDisableItalic();
 	virtual void setOpacity(GLubyte opacity);
+//	void draw();
 	//virtual void setString(const char *label);
 	static KSLabelTTF * create()
 	{

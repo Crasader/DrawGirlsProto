@@ -53,7 +53,7 @@ bool KSLabelTTF::updateTexture()
 	}	
 	if(this->m_outerIsStroke)
 	{
-		CCLabelTTF* label = this;
+		CCSprite* label = CCSprite::createWithTexture(getTexture());
 		auto oFlip = label->isFlipY();
 		auto oColor = label->getColor();
 		auto oPosition = label->getPosition();

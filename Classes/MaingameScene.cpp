@@ -33,6 +33,8 @@
 #include "StoryManager.h"
 #include "LoadingLayer.h"
 #include "KSLabelTTF.h"
+#include "MyLocalization.h"
+
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -2229,7 +2231,41 @@ void Maingame::showDetailMessage(const std::string& fileName)
 																														
 																													}));
 	}
-	KSLabelTTF* textMessage = KSLabelTTF::create(fileName.c_str(), mySGD->getFont().c_str(), 30.f);
+	
+	// 바뀜 테스트.
+	// 또 바뀌나??
+	std::map<std::string, MyLocalKey> fileName2Language;
+	fileName2Language["warning_9.ccbi"] = kMyLocalKey_warning9;
+	fileName2Language["warning_105.ccbi"] = kMyLocalKey_warning105;
+	fileName2Language["warning_106.ccbi"] = kMyLocalKey_warning106;
+	fileName2Language["warning_107.ccbi"] = kMyLocalKey_warning107;
+	fileName2Language["warning_108.ccbi"] = kMyLocalKey_warning108;
+	fileName2Language["warning_109.ccbi"] = kMyLocalKey_warning109;
+	fileName2Language["warning_110.ccbi"] = kMyLocalKey_warning110;
+	fileName2Language["warning_111.ccbi"] = kMyLocalKey_warning111;
+	fileName2Language["warning_112.ccbi"] = kMyLocalKey_warning112;
+	fileName2Language["warning_113.ccbi"] = kMyLocalKey_warning113;
+	fileName2Language["warning_1001.ccbi"] = kMyLocalKey_warning1001;
+	fileName2Language["warning_1002.ccbi"] = kMyLocalKey_warning1002;
+	fileName2Language["warning_1003.ccbi"] = kMyLocalKey_warning1003;
+	fileName2Language["warning_1004.ccbi"] = kMyLocalKey_warning1004;
+	fileName2Language["warning_1005.ccbi"] = kMyLocalKey_warning1005;
+	fileName2Language["warning_1006.ccbi"] = kMyLocalKey_warning1006;
+	fileName2Language["warning_1007.ccbi"] = kMyLocalKey_warning1007;
+	fileName2Language["warning_1008.ccbi"] = kMyLocalKey_warning1008;
+	fileName2Language["warning_1009.ccbi"] = kMyLocalKey_warning1009;
+	fileName2Language["warning_1010.ccbi"] = kMyLocalKey_warning1010;
+	fileName2Language["warning_1011.ccbi"] = kMyLocalKey_warning1011;
+	fileName2Language["warning_1012.ccbi"] = kMyLocalKey_warning1012;
+	fileName2Language["warning_1013.ccbi"] = kMyLocalKey_warning1013;
+	fileName2Language["warning_1014.ccbi"] = kMyLocalKey_warning1014;
+	fileName2Language["warning_1015.ccbi"] = kMyLocalKey_warning1015;
+	fileName2Language["warning_1016.ccbi"] = kMyLocalKey_warning1016;
+	fileName2Language["warning_1017.ccbi"] = kMyLocalKey_warning1017;
+	fileName2Language["warning_1018.ccbi"] = kMyLocalKey_warning1018;
+	
+	
+	KSLabelTTF* textMessage = KSLabelTTF::create(MyLocal::sharedInstance()->getLocalForKey(fileName2Language[fileName]), mySGD->getFont().c_str(), 30.f);
 	detailWarningQueue.push_back(textMessage);
 	textMessage->setColor(ccc3(255, 0, 0));
 	textMessage->enableOuterStroke(ccc3(0, 0, 0), 3.f, true);
