@@ -1675,8 +1675,8 @@ void Jack::takeSpeedUpItem()
 
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
 		
-		int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
-		int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
+		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
+		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
 		int weapon_rank = weapon_level/5 + 1;
 		weapon_level = weapon_level%5 + 1;
@@ -2118,7 +2118,7 @@ void Jack::myInit()
 	afterState = jackStateNormal;
 
 	string path_color;
-	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterNo.getV());
 	if(path_color_code == 1)
 		path_color = "life";
 	else if(path_color_code == 2)
@@ -2140,7 +2140,7 @@ void Jack::myInit()
 //	addChild(line_edge, kJackZ_line);
 	
 	
-	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1) + ".ccbi");
+	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterNo.getV()) + ".ccbi");
 	
 	jackImg = t_pair.first;
 	jack_ccb_manager = t_pair.second;

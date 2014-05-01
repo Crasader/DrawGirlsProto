@@ -384,8 +384,8 @@ void GameItemAttack::acting()
 	
 	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
 	
-	int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
-	int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
+	int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
+	int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
 	
 	int weapon_rank = weapon_level/5 + 1;
 	weapon_level = weapon_level%5 + 1;
@@ -1115,7 +1115,7 @@ void FeverCoinParent::myInit()
 	initWithFile("fever_coin.png", kDefaultSpriteBatchCapacity);
 	is_removing = false;
 //	weight_value = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
-	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV());
 }
 
 GameItemManager* GameItemManager::create()

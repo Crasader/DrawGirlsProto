@@ -229,6 +229,23 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
 	ko->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
 	ko->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	ko->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
+	ko->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
+	ko->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
+	ko->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
+	ko->setObject(CCString::create("다음에"), kMyLocalKey_next);
+	ko->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
 	
@@ -582,6 +599,12 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
 	en->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
 	en->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	en->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
+	en->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
+	en->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
+	en->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
+	en->setObject(CCString::create("다음에"), kMyLocalKey_next);
+	en->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -934,6 +957,12 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
 	ja->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
 	ja->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	ja->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
+	ja->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
+	ja->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
+	ja->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
+	ja->setObject(CCString::create("다음에"), kMyLocalKey_next);
+	ja->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);

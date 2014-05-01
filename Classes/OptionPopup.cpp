@@ -31,6 +31,7 @@
 #include "EmptyItemSalePopup.h"
 #include "MileagePopup.h"
 #include "EventShopPopup.h"
+#include "LevelupGuidePopup.h"
 
 #include "KSLabelTTF.h"
 #include "PopCake.h"
@@ -87,6 +88,7 @@ bool OptionPopup::init()
 //	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});
 //	MileagePopup* t_popup = MileagePopup::create(-999, [=](){}, 5);
 //	EventShopPopup* t_popup = EventShopPopup::create(-999, [=](){});
+//	LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-999, [=](){}, [=](){});
 //	addChild(t_popup, 999);
 	
 //	Json::Value param;

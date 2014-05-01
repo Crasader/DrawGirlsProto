@@ -171,6 +171,7 @@ enum UserdataType
 	kUserdataType_totalPlayCount,
 	kUserdataType_failCount,
 	kUserdataType_autoLevel,
+	kUserdataType_selectedCharNO,
 	kUserdataType_end
 };
 
@@ -188,7 +189,16 @@ enum PurchaseGuideType
 	kPurchaseGuideType_emptyItem,
 	kPurchaseGuideType_stupidNpuHelp,
 	kPurchaseGuideType_eventRubyShop,
+	kPurchaseGuideType_levelupGuide,
 	kPurchaseGuideType_end
+};
+
+class CharacterHistory
+{
+public:
+	KSProtectVar<int> characterNo;
+	KSProtectVar<int> level;
+	KSProtectVar<int> nextPrice;
 };
 
 #define SGD_KEY	0xD9
@@ -341,6 +351,16 @@ public:
 	void setPieceHistoryForNotSave(PieceHistory t_history);
 	void setPieceHistory(PieceHistory t_history, jsonSelType call_back);
 	void initPieceHistory(Json::Value history_list);
+	
+	void initSelectedCharacterNo(int t_i);
+	CharacterHistory getSelectedCharacterHistory();
+	int getCharacterHistorySize();
+	CharacterHistory getCharacterHistory(int t_index);
+	jsonSelType keep_character_history_callback;
+	CommandParam getUpdateCharacterHistoryParam(CharacterHistory t_history, jsonSelType call_back);
+	void setCharacterHistory(CharacterHistory t_history, jsonSelType call_back);
+	void initCharacterHistory(Json::Value history_list);
+	void resultUpdateCharacterHistory(Json::Value result_data);
 	
 	int getClearStarCount();
 	
@@ -505,6 +525,15 @@ public:
 	int getStupidNpuHelpIsOn();
 	void setPlayCountHighIsOn(int t_i);
 	int getPlayCountHighIsOn();
+	
+	void setLevelupGuideReviewSecond(long long t_i);
+	long long getLevelupGuideReviewSecond();
+	void setLevelupGuidePlayCount(int t_i);
+	int getLevelupGuidePlayCount();
+	void setLevelupGuideConditionLevel(int t_i);
+	int getLevelupGuideConditionLevel();
+	void setLevelupGuideIsOn(int t_i);
+	int getLevelupGuideIsOn();
 	
 	bool is_before_selected_event_stage;
 	
@@ -721,10 +750,14 @@ private:
 	KSProtectVar<int> stupid_npu_help_fail_count;
 	KSProtectVar<long long> event_ruby_shop_review_second;
 	KSProtectVar<int> play_count_high_value;
+	KSProtectVar<long long> levelup_guide_review_second;
+	KSProtectVar<int> levelup_guide_play_count;
+	KSProtectVar<int> levelup_guide_condition_level;
 	
 	KSProtectVar<int> empty_item_is_on;
 	KSProtectVar<int> stupid_npu_help_is_on;
 	KSProtectVar<int> play_count_high_is_on;
+	KSProtectVar<int> levelup_guide_is_on;
 	
 	vector<ChangeUserdataValue> changed_userdata_list;
 	jsonSelType change_userdata_callback;
@@ -744,6 +777,10 @@ private:
 	KSProtectVar<long long> at_time_show_emptyItem;
 	KSProtectVar<long long> at_time_show_stupidNpuHelp;
 	KSProtectVar<long long> at_time_show_eventRubyShop;
+	KSProtectVar<long long> at_time_show_levelupGuide;
+	
+	KSProtectVar<int> selected_character_index;
+	deque<CharacterHistory> character_historys;
 	
 	string app_type;
 	int app_version;

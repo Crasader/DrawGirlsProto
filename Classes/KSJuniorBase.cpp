@@ -135,8 +135,8 @@ void KSJuniorBase::checkConfine(float dt)
 		
 		int rmCnt = 5;
 		
-		int weapon_type = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)%7;
-		int weapon_level = myDSH->getIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter));
+		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
+		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
 		int weapon_rank = weapon_level/5 + 1;
 		weapon_level = weapon_level%5 + 1;

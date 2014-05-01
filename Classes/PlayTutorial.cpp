@@ -38,7 +38,7 @@ void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, funct
 		}
 	}
 	
-	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterNo.getV());
 	if(path_color_code == 1)
 		path_color = "life";
 	else if(path_color_code == 2)
@@ -302,7 +302,7 @@ void TutoCharacter::myInit(function<TutoMapType(IntPoint)> t_getMapData, functio
 	
 	height_value = t_height;
 	
-	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1) + ".ccbi");
+	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterNo.getV()) + ".ccbi");
 	
 	character_img = t_pair.first;
 	character_manager = t_pair.second;

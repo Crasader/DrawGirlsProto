@@ -2097,16 +2097,20 @@ void MainFlowScene::setTop()
 {
 	top_list.clear();
 	
+	CCNode* t_star_node = CCNode::create();
+	t_star_node->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	addChild(t_star_node, kMainFlowZorder_top);
+	
 	total_star = KS::loadCCBI<CCSprite*>(this, "main_star.ccbi").first;
-	total_star->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
-	addChild(total_star, kMainFlowZorder_top);
+	total_star->setPosition(ccp(0,0));
+	t_star_node->addChild(total_star);
 	
 	KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount())->getCString(), mySGD->getFont().c_str(), 12);
 	star_count->enableOuterStroke(ccBLACK, 0.8f);
 	star_count->setPosition(ccp(0,0));
-	total_star->addChild(star_count);
+	t_star_node->addChild(star_count);
 	
-	top_list.push_back(total_star);
+	top_list.push_back(t_star_node);
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
