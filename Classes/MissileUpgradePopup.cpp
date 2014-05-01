@@ -194,7 +194,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 	before_level = missile_level;
-	before_damage = StoneAttack::getPower((before_level)/5+1, (before_level)%5+1);
+	before_damage = StoneAttack::getPower((before_level-1)/5+1, (before_level-1)%5+1);
 	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getSelectedCharacterHistory().nextPrice.getV(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 	
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
