@@ -1201,11 +1201,10 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		bool is_found = false;
 		for(int i=0;!is_found && i<getCharacterHistorySize();i++)
 		{
-			CharacterHistory t_history = getCharacterHistory(i);
-			if(t_history.characterNo.getV() == characterNo)
+			if(character_historys[i].characterNo.getV() == characterNo)
 			{
-				t_history.level = result_data["level"].asInt();
-				t_history.nextPrice = result_data["nextPrice"].asInt();
+				character_historys[i].level = result_data["level"].asInt();
+				character_historys[i].nextPrice = result_data["nextPrice"].asInt();
 				is_found = true;
 			}
 		}
