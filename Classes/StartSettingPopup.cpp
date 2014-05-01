@@ -57,6 +57,7 @@ bool StartSettingPopup::init()
 	item_title_label = NULL;
 	option_label = NULL;
 	//	card_img = NULL;
+	buy_button = NULL;
 	selected_gacha_item = kIC_emptyBegin;
 	
 	touch_priority = -210;
@@ -729,6 +730,8 @@ void StartSettingPopup::startItemGacha()
 	if(!is_menu_enable)
 		return;
 	
+	is_menu_enable = false;
+	
 	if(mySGD->getItemGachaGoldFee() > mySGD->getGoodsValue(kGoodsType_gold))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
@@ -742,8 +745,6 @@ void StartSettingPopup::startItemGacha()
 															}), 9999);
 		return;
 	}
-	
-	is_menu_enable = false;
 	
 	CCLOG("start item gacha");
 	

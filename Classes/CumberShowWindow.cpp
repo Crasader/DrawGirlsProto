@@ -104,10 +104,11 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 	else if(t_code == kCumberShowWindowSceneCode_cardChange)
 		boss_position = ccp(0,0);
 	
+	std::string ccbiName = bossJson["type"].asString();
+	std::string ccbiname2 = ccbiName;
+	
 	if(bossShape == "circle")
 	{
-		std::string ccbiName = bossJson["type"].asString();
-		std::string ccbiname2 = ccbiName;
 		if(ccbiName.length()<3) {
 			ccbiname2="cherry";
 		}
@@ -137,8 +138,6 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 	}
 	else if(bossShape == "snake")
 	{
-		std::string ccbiName = bossJson["type"].asString();
-		std::string ccbiname2 = ccbiName;
 		if(ccbiName.length()<3) {
 			ccbiname2="apple2";
 		}
@@ -182,6 +181,24 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 //			this->addChild(m_tailImg, lastZ - 1);
 //			reader->release();
 //		}
+	}
+	
+	start_ment = "";
+	clear_ment = "";
+	fail_ment = "";
+	
+	// 몬스터별 로 가 아닌 스테이지별 로 대사가 바뀔일은 없다고 HS가 자신있게 말했음. 낭비라 함. 그래서 굳이 루프 돌림
+	int monster_count = NSDS_GI(kSDS_GI_monsterCount_i);
+	bool is_found = false;
+	for(int i=0;!is_found && i<monster_count;i++)
+	{
+		if(ccbiname2 == NSDS_GS(kSDS_GI_monsterInfo_int1_name_s, i))
+		{
+			start_ment = NSDS_GS(kSDS_GI_monsterInfo_int1_script_start_s, i);
+			clear_ment = NSDS_GS(kSDS_GI_monsterInfo_int1_script_clear_s, i);
+			fail_ment = NSDS_GS(kSDS_GI_monsterInfo_int1_script_fail_s, i);
+			is_found = true;
+		}
 	}
 	
 	boss_hp = bossJson["hp"].asInt();

@@ -563,8 +563,8 @@ void RankUpPopup::requestItemDelivery()
 	Json::Value request_param;
 	request_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
-	
-	command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
+	if(mySGD->isChangedGoods())
+		command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
 	
 	hspConnector::get()->command(command_list);
 }

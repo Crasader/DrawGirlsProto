@@ -22,6 +22,7 @@
 #include "KSLabelTTF.h"
 #include <random>
 #include "AudioEngine.h"
+#include "FormSetter.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -53,7 +54,100 @@ bool TitleRenewalScene::init()
 	AudioEngine::sharedInstance()->preloadEffectScene("Title");
 	
 	is_menu_enable = false;
+
+	auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
+	splash.second->setAnimationCompletedCallbackLambda(this, [=](){
+		splash.first->removeFromParent();
+		endSplash();
+	});
+	splash.first->setPosition(ccp(240,160));
 	
+	addChild(splash.first);
+	
+	//	addChild(KSTimer::create(3.f, [=]()
+	//	{
+	splash.second->runAnimationsForSequenceNamed("Default Timeline");
+	//	}));
+	
+//	vector<string> preload_list;
+//	preload_list.clear();
+//	
+//	for(int i=0;i<=26;i++)
+//		preload_list.push_back(CCString::createWithFormat("TOAST_GalaxyS3_cropA_%05d.png", i)->getCString());
+//	preload_list.push_back("TOAST_GalaxyS3_typeA_1280x720_all.png");
+//	preload_list.push_back("TOAST_GalaxyS3_typeA_1280x720_BG.png");
+//	
+//	splash_load_cnt = preload_list.size();
+//	splash_ing_cnt = 0;
+//	
+//	for(int i=0;i<splash_load_cnt;i++)
+//		CCTextureCache::sharedTextureCache()->addImageAsync(preload_list[i].c_str(), this, callfuncO_selector(TitleRenewalScene::loadCounting));
+	
+	
+	
+//	Json::Value param;
+//	param["memberID"] = 88899626759589914L;
+//	param["error"]["isSuccess"] = true;
+//	GraphDog::get()->setKakaoMemberID("88899626759589914");
+//	GraphDog::get()->setHSPMemberNo(88899626759589914L);
+//	resultLogin(param);
+	
+	
+	
+//	Json::Value t_result_data;
+//	hspConnector::get()->myKakaoInfo["user_id"] = 88741857374149376L;
+//	hspConnector::get()->myKakaoInfo["nickname"] = "YH";
+//	graphdog->setKakaoMemberID(hspConnector::get()->getSocialID());
+//	t_result_data["error"]["isSuccess"] = true;
+//	resultLogin(t_result_data);
+	
+	return true;
+}
+
+void TitleRenewalScene::loadCounting(CCObject* sender)
+{
+	splash_ing_cnt++;
+	
+	if(splash_ing_cnt == splash_load_cnt)
+	{
+//		auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
+//		splash.second->setAnimationCompletedCallbackLambda(this, [=](){
+//			splash.first->removeFromParent();
+//			endSplash();
+//		});
+//		splash.first->setPosition(ccp(240,160));
+//		
+//		addChild(splash.first);
+//		
+//		//	addChild(KSTimer::create(3.f, [=]()
+//		//	{
+//		splash.second->runAnimationsForSequenceNamed("Default Timeline");
+//		//	}));
+	}
+}
+
+void TitleRenewalScene::endSplash()
+{
+	CCSprite* white_back = CCSprite::create("whitePaper.png");
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	white_back->setScaleX(screen_scale_x);
+	white_back->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	white_back->setPosition(ccp(240,160));
+	addChild(white_back);
+	
+	CCSprite* ratings = CCSprite::create("game_ratings.png");
+	ratings->setPosition(ccp(240,160));
+	addChild(ratings);
+	
+	addChild(KSTimer::create(1.5f, [=](){realInit();}));
+}
+
+void TitleRenewalScene::realInit()
+{
 	title_img = CCSprite::create("temp_title_back.png");
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
@@ -63,7 +157,7 @@ bool TitleRenewalScene::init()
 	title_name->setPosition(ccp(240,10));//240,210));
 	addChild(title_name, 1);
 	
-	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	state_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
 	state_label->setPosition(ccp(240,190));
 	addChild(state_label, 2);
@@ -84,26 +178,8 @@ bool TitleRenewalScene::init()
 	
 	Json::Value param;
 	param["ManualLogin"] = true;
-
+	
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-	
-//	Json::Value param;
-//	param["memberID"] = 88899626759589914L;
-//	param["error"]["isSuccess"] = true;
-//	GraphDog::get()->setKakaoMemberID("88899626759589914");
-//	GraphDog::get()->setHSPMemberNo(88899626759589914L);
-//	resultLogin(param);
-	
-	
-	
-//	Json::Value t_result_data;
-//	hspConnector::get()->myKakaoInfo["user_id"] = 88741857374149376L;
-//	hspConnector::get()->myKakaoInfo["nickname"] = "YH";
-//	graphdog->setKakaoMemberID(hspConnector::get()->getSocialID());
-//	t_result_data["error"]["isSuccess"] = true;
-//	resultLogin(t_result_data);
-	
-	return true;
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -139,35 +215,49 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		state_label->setString("");
 		
-		nick_back = CCSprite::create("nickname_back.png");
-		nick_back->setPosition(ccp(240,160));
-		addChild(nick_back,3);
 		
-		CCScale9Sprite* t_back = CCScale9Sprite::create("popup2_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		t_back->setOpacity(0);
+		nick_back = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		nick_back->setContentSize(CCSizeMake(290,160));
+		nick_back->setPosition(ccp(240,220));
+//nick_back->setScale(0)
+		addChild(nick_back,100);
 		
-		input_text = CCEditBox::create(CCSizeMake(210, 30), t_back);
-		input_text->setPosition(ccp(195,145));
+
+		CCScale9Sprite* t_back = CCScale9Sprite::create("nickname_box.png");
+		t_back->setInsetBottom(16);
+		t_back->setInsetTop(34-16*2);
+		t_back->setInsetLeft(13);
+		t_back->setInsetRight(34-13*2);
+		
+		input_text = CCEditBox::create(CCSizeMake(160, 30), t_back);
+		input_text->setPosition(ccp(107,38));
 		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
-		input_text->setFont(mySGD->getFont().c_str(), 20);
+		input_text->setFont(mySGD->getFont().c_str(), 15);
 		input_text->setInputMode(kEditBoxInputModeSingleLine);
 		input_text->setDelegate(this);
-		addChild(input_text,3);
+		nick_back->addChild(input_text,3);
+		//FormSetter::get()->addObject("t1", input_text);
 		
 		flag = FlagSelector::create();
-		flag->setPosition(140,210);
-		addChild(flag,100000);
+		flag->setPosition(43,60);
+		nick_back->addChild(flag,100000);
+		//FormSetter::get()->addObject("t2", flag);
 		
-		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(90, 80), CommonButtonOrange, kCCMenuHandlerPriority);
-		ok_menu->setPosition(ccp(363,160));
+		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(78, 40), CommonButtonLightPupple, kCCMenuHandlerPriority);
+		ok_menu->setPosition(ccp(227,38));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
 								 CCNode* t_node = CCNode::create();
 								 t_node->setTag(kTitleRenewal_MT_nick);
 								 menuAction(t_node);
 							 });
-		addChild(ok_menu, 3, kTitleRenewal_MT_nick);
+		nick_back->addChild(ok_menu, 10, kTitleRenewal_MT_nick);
+		
+		
+//		nick_back->setPosition(ccp(240,-500));
+	//	nick_back->runAction(CCEaseBounceOut::create(CCMoveTo::create(0.3, ccp(240,220))));
+		//FormSetter::get()->addObject("t3", ok_menu);
 	}
 	else
 	{
@@ -521,10 +611,16 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
 		
 		mySGD->setFirstPurchasePlayCount(result_data["firstPurchasePlayCount"].asInt());
-		mySGD->setEmptyItemReviewHour(result_data["emptyItemReviewHour"].asInt());
-		mySGD->setStupidNpuHelpReviewHour(result_data["stupidNpuHelpReviewHour"].asInt());
+		mySGD->setEmptyItemReviewSecond(result_data["emptyItemReviewSecond"].asInt64());
+		mySGD->setStupidNpuHelpReviewSecond(result_data["stupidNpuHelpReviewSecond"].asInt64());
 		mySGD->setStupidNpuHelpPlayCount(result_data["stupidNpuHelpPlayCount"].asInt());
 		mySGD->setStupidNpuHelpFailCount(result_data["stupidNpuHelpFailCount"].asInt());
+		mySGD->setEventRubyShopReviewSecond(result_data["eventRubyShopReviewSecond"].asInt64());
+		mySGD->setPlayCountHighValue(result_data["playCountHighValue"].asInt());
+		
+		mySGD->setEmptyItemIsOn(result_data["emptyItemIsOn"].asInt());
+		mySGD->setStupidNpuHelpIsOn(result_data["stupidNpuHelpIsOn"].asInt());
+		mySGD->setPlayCountHighIsOn(result_data["playCountHighIsOn"].asInt());
 	}
 	else
 	{
@@ -580,6 +676,20 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i-1, t_data["sale"].asString(), false);
+		}
+		
+		for(int i=1;i<=6;i++)
+		{
+			string t_key = CCString::createWithFormat("es_r_%d", i)->getCString();
+			Json::Value t_data = result_data[t_key.c_str()];
+			
+			NSDS_SI(kSDS_GI_shopEventRuby_int1_count_i, i-1, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_countName_s, i-1, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopEventRuby_int1_price_i, i-1, t_data["price"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
+			mySGD->initEventInappProduct(i-1, t_data["pID"].asString());
 		}
 		
 		Json::FastWriter t_writer;
@@ -766,6 +876,13 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_monsterInfo_int1_name_s, i, monster_list[i-1]["name"].asString(), false);
 			NSDS_SB(kSDS_GI_monsterInfo_int1_isBoss_b, i, monster_list[i-1]["isBoss"].asBool(), false);
 			NSDS_SS(kSDS_GI_monsterInfo_int1_resourceInfo_ccbiID_s, i, monster_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
+			
+			if(!monster_list[i-1]["script"].isNull())
+			{
+				NSDS_SS(kSDS_GI_monsterInfo_int1_script_start_s, i, monster_list[i-1]["script"]["start"].asString(), false);
+				NSDS_SS(kSDS_GI_monsterInfo_int1_script_clear_s, i, monster_list[i-1]["script"]["clear"].asString(), false);
+				NSDS_SS(kSDS_GI_monsterInfo_int1_script_fail_s, i, monster_list[i-1]["script"]["fail"].asString(), false);
+			}
 			
 			string monster_type = monster_list[i-1]["type"].asString();
 			if(monster_type == "snake")
@@ -1906,13 +2023,13 @@ void TitleRenewalScene::joinAction()
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
-										 state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
+										 //state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
 										 setTouchEnabled(false);
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
-										 input_text->removeFromParent();
-										 flag->removeFromParent();
+										 //input_text->removeFromParent();
+										 //flag->removeFromParent();
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										 successLogin();
@@ -1929,13 +2046,13 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
 									 {
-										 state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
+										 //state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
 										 setTouchEnabled(false);
 										 nick_back->removeFromParent();
 										 removeChildByTag(kTitleRenewal_MT_nick);
-										 input_text->removeFromParent();
-										 flag->removeFromParent();
+										 //input_text->removeFromParent();
+										 //flag->removeFromParent();
 										 
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 

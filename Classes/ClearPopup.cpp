@@ -37,6 +37,7 @@
 #include "TakeCardToDiary.h"
 #include "LoadingLayer.h"
 #include "FlagSelector.h"
+#include "EventShopPopup.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -1570,6 +1571,12 @@ void ClearPopup::endLoad()
 {
 	if(is_end_popup_animation && is_saved_user_data)// && is_loaded_list)
 	{
+		if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
+		{
+			EventShopPopup* t_popup = EventShopPopup::create(-300, [=](){});
+			addChild(t_popup, kZ_CP_popup);
+		}
+		
 		is_menu_enable = true;
 	}
 }

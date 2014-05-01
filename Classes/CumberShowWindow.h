@@ -71,6 +71,10 @@ public:
 		return t_blg;
 	}
 	
+	string start_ment;
+	string clear_ment;
+	string fail_ment;
+	
 	int boss_hp;
 	double boss_speed;
 	double boss_agi;

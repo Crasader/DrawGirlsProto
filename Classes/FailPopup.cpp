@@ -39,6 +39,7 @@
 #include "LoadingLayer.h"
 #include "FlagSelector.h"
 #include "EmptyItemSalePopup.h"
+#include "EventShopPopup.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -458,6 +459,11 @@ bool FailPopup::init()
 			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount() >= mySGD->getStupidNpuHelpFailCount())
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
+		addChild(t_popup, kZ_FP_popup);
+	}
+	else if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
+	{
+		EventShopPopup* t_popup = EventShopPopup::create(-300, [=](){});
 		addChild(t_popup, kZ_FP_popup);
 	}
 	

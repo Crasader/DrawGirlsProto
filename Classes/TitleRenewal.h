@@ -73,7 +73,7 @@ private:
 	
 	CCEditBox* input_text;
 	FlagSelector* flag;
-	CCSprite* nick_back;
+	CCScale9Sprite* nick_back;
 	
 	virtual void editBoxEditingDidBegin(CCEditBox* editBox);
     virtual void editBoxEditingDidEnd(CCEditBox* editBox);
@@ -146,6 +146,13 @@ private:
 	
 //	void resultGetPathInfo(Json::Value result_data);
 	
+	int splash_load_cnt;
+	int splash_ing_cnt;
+	
+	void loadCounting(CCObject* sender);
+	
+	void endSplash();
+	void realInit();
 	
 	void endingCheck();
 	void endingAction();

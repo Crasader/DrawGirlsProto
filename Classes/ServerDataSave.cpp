@@ -636,6 +636,9 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_plist_s)		rv = "mi%d_ri_plist";
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_pvrccz_s)	rv = "mi%d_ri_pvrccz";
 	else if(t_key == kSDS_GI_monsterInfo_int1_resourceInfo_size_i)		rv = "mi%d_ri_size";
+	else if(t_key == kSDS_GI_monsterInfo_int1_script_start_s)			rv = "mi%d_ss";
+	else if(t_key == kSDS_GI_monsterInfo_int1_script_clear_s)			rv = "mi%d_sc";
+	else if(t_key == kSDS_GI_monsterInfo_int1_script_fail_s)			rv = "mi%d_sf";
 	
 	else if(t_key == kSDS_GI_shopVersion_i)				rv = "shopVersion";
 	else if(t_key == kSDS_GI_shopRuby_int1_count_i)				rv = "sr%dcount";
@@ -656,6 +659,12 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopCoin_int1_priceType_s)			rv = "sc%dprcType";
 	else if(t_key == kSDS_GI_shopCoin_int1_priceName_s)			rv = "sc%dprcName";
 	else if(t_key == kSDS_GI_shopCoin_int1_sale_s)				rv = "sc%dsale";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_count_i)		rv = "esr%dcount";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_countName_s)	rv = "esr%dcntName";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_price_i)		rv = "esr%dprice";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_priceType_s)	rv = "esr%dprcType";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_priceName_s)	rv = "esr%dprcName";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_sale_s)			rv = "esr%dsale";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_count_i)		rv = "sp%dcount";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_countName_s)	rv = "sp%dcntName";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_price_i)		rv = "sp%dprice";

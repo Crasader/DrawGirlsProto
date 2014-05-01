@@ -67,13 +67,25 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 		m_container->addChild(title_label);
 	}
 	
-	KSLabelTTF* sub_ment1 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent1), mySGD->getFont().c_str(), 12);
+	string ment1_str;
+	if(m_type == kPurchaseGuideType_emptyItem)
+		ment1_str = myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent1);
+	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
+		ment1_str = myLoc->getLocalForKey(kMyLocalKey_stupidNpuHelpMent1);
+	
+	KSLabelTTF* sub_ment1 = KSLabelTTF::create(ment1_str.c_str(), mySGD->getFont().c_str(), 12);
 	sub_ment1->setPosition(ccp(0,60));
 	m_container->addChild(sub_ment1);
 	
+	string ment2_str;
+	if(m_type == kPurchaseGuideType_emptyItem)
+		ment2_str = myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent2);
+	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
+		ment2_str = myLoc->getLocalForKey(kMyLocalKey_stupidNpuHelpMent2);
+	
 	string sale_percent_string = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_sale_s, m_type-1);
 	
-	KSLabelTTF* sub_ment2 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent2), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_ment2 = KSLabelTTF::create(CCString::createWithFormat(ment2_str.c_str(), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
 	sub_ment2->setColor(ccYELLOW);
 	sub_ment2->setPosition(ccp(0,43));
 	m_container->addChild(sub_ment2);

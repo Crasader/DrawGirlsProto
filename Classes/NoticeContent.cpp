@@ -108,7 +108,7 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	
 	
 	CCSprite* white_paper = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
-	white_paper->setScaleY(myDSH->ui_top/320.f);
+	white_paper->setScale(2);
 	white_paper->setPosition(ccp(0,0));
 	white_paper->setColor(ccc3(0, 0, 0));
 	addChild(white_paper, 1);
