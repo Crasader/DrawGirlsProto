@@ -16,7 +16,7 @@
 #include "ASPopupView.h"
 #include "MyLocalization.h"
 #include "FormSetter.h"
-
+#include "StyledLabelTTF.h"
 DetailConditionPopup* DetailConditionPopup::create(int t_touch_priority, function<void()> t_end_func)
 {
 	DetailConditionPopup* t_mup = new DetailConditionPopup();
@@ -51,47 +51,55 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	title_label->setPosition(ccp(0,70));
 	m_container->addChild(title_label);
 	
+	
+
+	
 	KSLabelTTF* sub1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent1), mySGD->getFont().c_str(), 12);
 	sub1_label->setPosition(ccp(0,30));
 	m_container->addChild(sub1_label);
 	
-	KSLabelTTF* sub2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), 12);
-	sub2_label->setColor(ccYELLOW);
-	sub2_label->setAnchorPoint(ccp(1,0.5f));
+	StyledLabelTTF* sub2_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), StyledAlignment::kCenterAlignment);
+	sub2_label->setPosition(ccp(0,-5));
 	m_container->addChild(sub2_label);
 	
-	KSLabelTTF* sub3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent3), mySGD->getFont().c_str(), 12);
-	sub3_label->setAnchorPoint(ccp(0, 0.5f));
-	m_container->addChild(sub3_label);
+//
+//	KSLabelTTF* sub2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), 12);
+//	sub2_label->setColor(ccYELLOW);
+//	sub2_label->setAnchorPoint(ccp(1,0.5f));
+//	m_container->addChild(sub2_label);
+//	
+//	KSLabelTTF* sub3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent3), mySGD->getFont().c_str(), 12);
+//	sub3_label->setAnchorPoint(ccp(0, 0.5f));
+//	m_container->addChild(sub3_label);
 	
-	float x_value;
-	if(sub2_label->getContentSize().width > sub3_label->getContentSize().width)
-		x_value = sub2_label->getContentSize().width - (sub2_label->getContentSize().width+sub3_label->getContentSize().width)/2.f;
-	else
-		x_value = -(sub3_label->getContentSize().width - (sub2_label->getContentSize().width+sub3_label->getContentSize().width)/2.f);
+//	float x_value;
+//	if(sub2_label->getContentSize().width > sub3_label->getContentSize().width)
+//		x_value = sub2_label->getContentSize().width - (sub2_label->getContentSize().width+sub3_label->getContentSize().width)/2.f;
+//	else
+//		x_value = -(sub3_label->getContentSize().width - (sub2_label->getContentSize().width+sub3_label->getContentSize().width)/2.f);
+//	
+//	sub2_label->setPosition(ccp(x_value, -10));
+//	sub3_label->setPosition(ccp(x_value, -10));
 	
-	sub2_label->setPosition(ccp(x_value, -10));
-	sub3_label->setPosition(ccp(x_value, -10));
 	
-	
-	KSLabelTTF* sub4_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent4), mySGD->getFont().c_str(), 12);
-	sub4_label->setColor(ccYELLOW);
-	sub4_label->setAnchorPoint(ccp(1,0.5f));
-	sub4_label->setPosition(ccp(0,-25));
-	m_container->addChild(sub4_label);
-	
-	KSLabelTTF* sub5_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent5), mySGD->getFont().c_str(), 12);
-	sub5_label->setAnchorPoint(ccp(0,0.5f));
-	sub5_label->setPosition(ccp(0,-25));
-	m_container->addChild(sub5_label);
-	
-	if(sub4_label->getContentSize().width > sub5_label->getContentSize().width)
-		x_value = sub4_label->getContentSize().width - (sub4_label->getContentSize().width+sub5_label->getContentSize().width)/2.f;
-	else
-		x_value = -(sub5_label->getContentSize().width - (sub4_label->getContentSize().width+sub5_label->getContentSize().width)/2.f);
-	
-	sub4_label->setPosition(ccp(x_value, -25));
-	sub5_label->setPosition(ccp(x_value, -25));
+//	KSLabelTTF* sub4_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent4), mySGD->getFont().c_str(), 12);
+//	sub4_label->setColor(ccYELLOW);
+//	sub4_label->setAnchorPoint(ccp(1,0.5f));
+//	sub4_label->setPosition(ccp(0,-25));
+//	m_container->addChild(sub4_label);
+//	
+//	KSLabelTTF* sub5_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent5), mySGD->getFont().c_str(), 12);
+//	sub5_label->setAnchorPoint(ccp(0,0.5f));
+//	sub5_label->setPosition(ccp(0,-25));
+//	m_container->addChild(sub5_label);
+//	
+//	if(sub4_label->getContentSize().width > sub5_label->getContentSize().width)
+//		x_value = sub4_label->getContentSize().width - (sub4_label->getContentSize().width+sub5_label->getContentSize().width)/2.f;
+//	else
+//		x_value = -(sub5_label->getContentSize().width - (sub4_label->getContentSize().width+sub5_label->getContentSize().width)/2.f);
+//	
+//	sub4_label->setPosition(ccp(x_value, -25));
+//	sub5_label->setPosition(ccp(x_value, -25));
 	
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();

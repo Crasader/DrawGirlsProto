@@ -694,17 +694,17 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		int alluser = result_data["alluser"].asInt();
 		int myrank = result_data["myrank"].asInt();
 		
-		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
-		all_user_label->setColor(ccc3(255, 50, 50));
-		all_user_label->setAnchorPoint(ccp(1,0.5));
-		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
-		main_case->addChild(all_user_label, kZ_CP_img);
-		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
-		my_rank_label->setAnchorPoint(ccp(1,0.5));
-		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
-		main_case->addChild(my_rank_label, kZ_CP_img);
-		my_rank_label->setOpacity(0);
+//		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
+//		all_user_label->setColor(ccc3(255, 50, 50));
+//		all_user_label->setAnchorPoint(ccp(1,0.5));
+//		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
+//		main_case->addChild(all_user_label, kZ_CP_img);
+//		
+//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+//		my_rank_label->setAnchorPoint(ccp(1,0.5));
+//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
+//		main_case->addChild(my_rank_label, kZ_CP_img);
+//		my_rank_label->setOpacity(0);
 		
 		float rank_percent = 1.f*myrank/alluser;
 		
@@ -725,10 +725,10 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
 			rank_percent_case->runAction(t_move);
 			
-			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
-			CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 255);
-			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
-			my_rank_label->runAction(t_seq1);
+//			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
+//			CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 255);
+//			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
+//			my_rank_label->runAction(t_seq1);
 			
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);

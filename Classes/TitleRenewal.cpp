@@ -157,7 +157,7 @@ void TitleRenewalScene::realInit()
 	title_name->setPosition(ccp(240,10));//240,210));
 	addChild(title_name, 1);
 	
-	state_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
 	state_label->setPosition(ccp(240,190));
 	addChild(state_label, 2);
@@ -215,7 +215,8 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		is_menu_enable = true;
 		
-		state_label->setString("");
+		
+		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
 		
 		
 		nick_back = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
@@ -469,9 +470,9 @@ void TitleRenewalScene::checkReceive()
 					
 					title_name->setPosition(ccp(240,160));
 					
-					CCSprite* logo_img = CCSprite::create("temp_title_sumlanlogo.png");
-					logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
-					addChild(logo_img, 1);
+//					CCSprite* logo_img = CCSprite::create("temp_title_sumlanlogo.png");
+//					logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
+//					addChild(logo_img, 1);
 					
 					CCSprite* progress_back = CCSprite::create("temp_title_loading_back.png");
 					progress_back->setPosition(ccp(240,80));

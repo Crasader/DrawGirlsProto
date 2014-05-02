@@ -6,7 +6,7 @@
 void MyLocal::initLocal()
 {	
 	CCDictionary* ko = CCDictionary::create();
-	ko->setObject(CCString::create("서버 접속중"), kMyLocalKey_connectingServer);
+	ko->setObject(CCString::create("게임을 시작 중 입니다..."), kMyLocalKey_connectingServer);
 	ko->setObject(CCString::create("닉네임 입력"), kMyLocalKey_inputNick);
 	ko->setObject(CCString::create(" 닉네임을 입력해주세요."), kMyLocalKey_inputPlease);
 	ko->setObject(CCString::create("확인"), kMyLocalKey_ok);
@@ -196,8 +196,8 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ko->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	ko->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
-	ko->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	ko->setObject(CCString::create("한 스테이지"), kMyLocalKey_detailConditionPopupContent2);
+	ko->setObject(CCString::create("스테이지를 클리어 할 때\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
+	ko->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	ko->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
@@ -588,7 +588,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	en->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	en->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	en->setObject(CCString::create("한 스테이지"), kMyLocalKey_detailConditionPopupContent2);
+	en->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	en->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
@@ -975,7 +975,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	ja->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	ja->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	ja->setObject(CCString::create("한 스테이지"), kMyLocalKey_detailConditionPopupContent2);
+	ja->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	ja->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
