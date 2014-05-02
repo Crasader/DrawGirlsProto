@@ -934,6 +934,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		close_back->setPosition(CCPointZero);
 		cell_node->addChild(close_back);
 		
+		CCLabelTTF* rate_label = CCLabelTTF::create("0/50", mySGD->getFont().c_str(), 10);
+		rate_label->setPosition(ccp(-25, -81));
+		cell_node->addChild(rate_label);
+		
 		if(is_puzzle_enter_list[idx].is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
 		{
 			// 루비 구매 혹은 시간이 되야 열림

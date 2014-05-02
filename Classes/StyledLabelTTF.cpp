@@ -205,6 +205,11 @@ StyledLabelTTF* StyledLabelTTF::create(const char* text,const char* font ,Styled
 		}
 	}
 	
+	Json::Value nl;
+	nl["linebreak"]=true;
+	nl["linespacing"]=1;
+	texts.push_back({"",nl.toStyledString()});
+	
 	StyledLabelTTF* slttf = StyledLabelTTF::create(texts, sa);
 	
 	return slttf;

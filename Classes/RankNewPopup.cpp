@@ -235,16 +235,16 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		lefttime_label->setPosition(ccp(main_case->getContentSize().width-175, 210));
 		rankBack->addChild(lefttime_label, kZ_CP_img);
 		
-		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
-		all_user_label->setColor(ccc3(255, 50, 50));
-		all_user_label->setAnchorPoint(ccp(1,0.5));
-		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
-		rankBack->addChild(all_user_label, kZ_CP_img);
-		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
-		my_rank_label->setAnchorPoint(ccp(1,0.5));
-		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
-		rankBack->addChild(my_rank_label, kZ_CP_img);
+//		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
+//		all_user_label->setColor(ccc3(255, 50, 50));
+//		all_user_label->setAnchorPoint(ccp(1,0.5));
+//		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
+//		rankBack->addChild(all_user_label, kZ_CP_img);
+//		
+//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+//		my_rank_label->setAnchorPoint(ccp(1,0.5));
+//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
+//		rankBack->addChild(my_rank_label, kZ_CP_img);
 		
 		float rank_percent = 1.f*myrank/alluser;
 		
