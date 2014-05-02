@@ -27,6 +27,7 @@ enum AchievePopupListCode{
 class CommonButton;
 class LoadingLayer;
 class ScrollBar;
+class KSLabelTTF;
 class AchievePopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -65,6 +66,7 @@ private:
 	CommonButton* all_reward_menu;
 	
 	CCTableView* achieve_table;
+	CCLabelTTF* empty_ment;
 	
 	vector<AchievementCode> achieve_list;
 	

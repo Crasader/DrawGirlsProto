@@ -1873,7 +1873,6 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	n_ready_label->setColor(ccc3(47, 30, 6));
-	n_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f));
 	n_ready->addChild(n_ready_label);
 	
@@ -1887,7 +1886,6 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	s_ready_label->setColor(ccc3(47, 30, 6));
-	s_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f));
 	s_ready->addChild(s_ready_label);
 	
@@ -2108,6 +2106,7 @@ void PuzzleScene::setRightTopButton()
 		stage_button->setPosition(ccp(-65-6-29, 118.5f));
 		right_case->addChild(stage_button, 5);
 		stage_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		stage_button->setTitleColorForDisable(ccc3(50, 20, 0));
 		stage_button->setFunction([=](CCObject* sender)
 								  {
 									  if(!is_menu_enable)
@@ -2122,6 +2121,7 @@ void PuzzleScene::setRightTopButton()
 		ranking_button->setPosition(ccp(-65-6+29, 118.5f));
 		right_case->addChild(ranking_button, 5);
 		ranking_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		stage_button->setTitleColorForDisable(ccc3(50, 20, 0));
 		ranking_button->setFunction([=](CCObject* sender)
 								  {
 									  if(!is_menu_enable)

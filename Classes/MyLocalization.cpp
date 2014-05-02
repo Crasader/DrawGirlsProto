@@ -259,11 +259,11 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("현재 잡은 부하몹 "), kMyLocalKey_todaymissionTotalCatch4);
 	ko->setObject(CCString::create("오늘의 미션을 완료하였습니다."), kMyLocalKey_todaymissionSuccess);
 	ko->setObject(CCString::create("완료"), kMyLocalKey_complete);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("업적달성"), kMyLocalKey_achieveSuccess);
+	ko->setObject(CCString::create("업적미완성"), kMyLocalKey_achieveNotSuccess);
+	ko->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
+	ko->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
+	ko->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -650,6 +650,11 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("현재 잡은 부하몹"), kMyLocalKey_todaymissionTotalCatch4);
 	en->setObject(CCString::create("오늘의 미션을 완료하였습니다."), kMyLocalKey_todaymissionSuccess);
 	en->setObject(CCString::create("완료"), kMyLocalKey_complete);
+	en->setObject(CCString::create("업적달성"), kMyLocalKey_achieveSuccess);
+	en->setObject(CCString::create("업적미완성"), kMyLocalKey_achieveNotSuccess);
+	en->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
+	en->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
+	en->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1032,6 +1037,11 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("현재 잡은 부하몹"), kMyLocalKey_todaymissionTotalCatch4);
 	ja->setObject(CCString::create("오늘의 미션을 완료하였습니다."), kMyLocalKey_todaymissionSuccess);
 	ja->setObject(CCString::create("완료"), kMyLocalKey_complete);
+	ja->setObject(CCString::create("업적달성"), kMyLocalKey_achieveSuccess);
+	ja->setObject(CCString::create("업적미완성"), kMyLocalKey_achieveNotSuccess);
+	ja->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
+	ja->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
+	ja->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);

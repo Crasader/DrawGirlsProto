@@ -32,7 +32,8 @@ enum CommonButtonType {
 	CommonButtonLightPupple,
 	CommonButtonYellowDown,
 	CommonButtonYellowUp,
-		CommonButtonClose
+		CommonButtonClose,
+	CommonButtonFree
 	};
 
 enum PriceType{
@@ -102,6 +103,24 @@ public:
 		return btn;
 	}
 	
+	static CommonButton* create(string title, int fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority){
+		CommonButton* btn = new CommonButton();
+		if(btn->init(title, fontSize, size, button_back, touchPriority) == false){
+			return NULL;
+		}
+		btn->autorelease();
+		return btn;
+	}
+	
+	static CommonButton* create(string title, CCScale9Sprite* button_back){
+		CommonButton* btn = new CommonButton();
+		if(btn->init(title,20,CCSizeMake(0, 0),button_back,0)==false){
+			return NULL;
+		}
+		btn->autorelease();
+		return btn;
+	}
+	
 	bool init(string title, int fontSize, CCSize size,CommonButtonType btnType, int touchPriority){
 		
 		if(CCNode::init()==false){
@@ -132,6 +151,48 @@ public:
 			this->setSize(CCSizeMake(45,45));
 		}
 
+		
+		if(size.height>0){
+			m_btn->setPreferredSize(size);
+		}else{
+			m_btn->setMargins(10, 5);
+		}
+		
+		m_btn->setAnchorPoint(ccp(0.5f,0.5f));
+		m_btn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::callFunc), CCControlEventTouchUpInside);
+		m_btn->setPosition(m_btn->getContentSize().width/2, m_btn->getContentSize().height/2);
+		if(touchPriority!=0)m_btn->setTouchPriority(touchPriority);
+		addChild(m_btn,2);
+		this->setContentSize(m_btn->getContentSize());
+		
+		
+		return true;
+	}
+	
+	bool init(string title, int fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority){
+		if(CCNode::init()==false){
+			return false;
+		}
+		m_titleColorNomal=ccc3(255,255,255);
+		m_titleColorDisable=ccc3(255,255,255);
+		
+		m_priceType = PriceTypeNone;
+		m_price=0;
+		
+		m_priceTypeSprite = NULL;
+		m_priceLbl = NULL;
+		
+		m_fontSize=fontSize;
+		m_title=title;
+		this->setAnchorPoint(ccp(0.5f,0.5f));
+		m_btnTitle = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
+		
+		m_btnType = CommonButtonFree;
+		
+		m_btnBack = button_back;
+		
+		
+		m_btn = CCControlButton::create(m_btnTitle, m_btnBack);
 		
 		if(size.height>0){
 			m_btn->setPreferredSize(size);

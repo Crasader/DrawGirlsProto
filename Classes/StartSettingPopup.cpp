@@ -198,7 +198,6 @@ void StartSettingPopup::setMain()
 	
 	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 11);
 	tab_label->setColor(ccc3(54, 35, 12));
-	tab_label->enableOuterStroke(ccc3(54, 35, 12), 0.25f);
 	tab_label->setPosition(ccp(36.5f,12.5f));
 	left_tab->addChild(tab_label);
 	
@@ -416,7 +415,7 @@ void StartSettingPopup::setMain()
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 			if(is_show_item_popup)
 				item_cnt += mySGD->getBonusItemCnt(t_ic);
-			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 			cnt_label->setPosition(ccp(21, -21));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
@@ -470,7 +469,6 @@ void StartSettingPopup::setMain()
 	CCSprite* n_start = CCSprite::create("startsetting_start.png");
 	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
 	n_start_label->setColor(ccc3(47, 30, 6));
-	n_start_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	n_start_label->setPosition(ccp(147.5f,40.5f));
 	n_start->addChild(n_start_label);
 	
@@ -478,7 +476,6 @@ void StartSettingPopup::setMain()
 	s_start->setColor(ccGRAY);
 	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
 	s_start_label->setColor(ccc3(47, 30, 6));
-	s_start_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	s_start_label->setPosition(ccp(147.5f,40.5f));
 	s_start->addChild(s_start_label);
 	
@@ -521,13 +518,11 @@ void StartSettingPopup::setMain()
 	}
 	
 	missile_data_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
-	missile_data_level->setAnchorPoint(ccp(0,0.5f));
-	missile_data_level->setPosition(ccp(30,95));
+	missile_data_level->setPosition(ccp(53,95));
 	main_case->addChild(missile_data_level);
 	
 	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
-	missile_data_power->setAnchorPoint(ccp(0,0.5f));
-	missile_data_power->setPosition(ccp(84,95));
+	missile_data_power->setPosition(ccp(111,95));
 	main_case->addChild(missile_data_power);
 	
 	if(missile_level >= 25)
@@ -537,29 +532,29 @@ void StartSettingPopup::setMain()
 	else
 	{
 		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
-		n_level->setColor(ccBLACK);
+		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 15);
+		n_level->setColor(ccc3(50, 25, 0));
 		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
 		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
 		n_price_type->setPosition(ccp(25,22));
 		n_upgrade->addChild(n_price_type);
-		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
-		n_price_label->setColor(ccBLACK);
+		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+		n_price_label->setColor(ccc3(50, 25, 0));
 		n_price_label->setPosition(ccp(78,22));
 		n_upgrade->addChild(n_price_label);
 		
 		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 		s_upgrade->setColor(ccGRAY);
-		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
-		s_level->setColor(ccBLACK);
+		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 15);
+		s_level->setColor(ccc3(50, 25, 0));
 		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
 		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
 		s_price_type->setPosition(ccp(25,22));
 		s_upgrade->addChild(s_price_type);
-		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
-		s_price_label->setColor(ccBLACK);
+		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+		s_price_label->setColor(ccc3(50, 25, 0));
 		s_price_label->setPosition(ccp(78,22));
 		s_upgrade->addChild(s_price_label);
 		
@@ -581,7 +576,7 @@ void StartSettingPopup::setMain()
 	//		option_rect->setPosition(option_position);
 	//		main_case->addChild(option_rect);
 	
-	option_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectUseItem), mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+	option_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectUseItem), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 	option_label->setAnchorPoint(ccp(0,1));
 	option_label->setPosition(option_position);
 	main_case->addChild(option_label);
@@ -638,12 +633,12 @@ void StartSettingPopup::gachaMenuCreate()
 																		   
 																		   if(!buy_button)
 																			{
-																				buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
+																				buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 115, 50), CCRectMake(57, 24, 1, 2)));
 																				buy_button->setTitleColor(ccBLACK);
 																				buy_button->setTitleSize(13);
 																				buy_button->setTouchPriority(touch_priority);
-																				buy_button->setSize(CCSizeMake(90, 55));
-																				buy_button->setPosition(410,117);
+																				buy_button->setSize(CCSizeMake(115, 50));
+																				buy_button->setPosition(390,117);
 																				main_case->addChild(buy_button);
 																			}
 																		   
@@ -728,29 +723,29 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		else
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-			CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
-			n_level->setColor(ccBLACK);
+			CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 15);
+			n_level->setColor(ccc3(50, 25, 0));
 			n_level->setPosition(ccp(70,47));
 			n_upgrade->addChild(n_level);
 			CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
 			n_price_type->setPosition(ccp(25,22));
 			n_upgrade->addChild(n_price_type);
-			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
-			n_price_label->setColor(ccBLACK);
+			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+			n_price_label->setColor(ccc3(50, 25, 0));
 			n_price_label->setPosition(ccp(78,22));
 			n_upgrade->addChild(n_price_label);
 			
 			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 			s_upgrade->setColor(ccGRAY);
-			CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
-			s_level->setColor(ccBLACK);
+			CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 15);
+			s_level->setColor(ccc3(50, 25, 0));
 			s_level->setPosition(ccp(70,47));
 			s_upgrade->addChild(s_level);
 			CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
 			s_price_type->setPosition(ccp(25,22));
 			s_upgrade->addChild(s_price_type);
-			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
-			s_price_label->setColor(ccBLACK);
+			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+			s_price_label->setColor(ccc3(50, 25, 0));
 			s_price_label->setPosition(ccp(78,22));
 			s_upgrade->addChild(s_price_label);
 			
@@ -993,7 +988,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
-			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 			cnt_label->setPosition(ccp(21, -21));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
@@ -1084,7 +1079,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
-			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
+			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 			cnt_label->setPosition(ccp(21, -21));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
@@ -1125,7 +1120,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		//		option_rect->setPosition(option_position);
 		//		main_case->addChild(option_rect);
 		
-		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 12, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		option_label->setAnchorPoint(ccp(0,1));
 		option_label->setPosition(option_position);
 		main_case->addChild(option_label);
@@ -1141,12 +1136,12 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		if(!buy_button)
 		{
-			buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CommonButtonYellowUp);
+			buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 115, 50), CCRectMake(57, 24, 1, 2)));
 			buy_button->setTitleColor(ccBLACK);
 			buy_button->setTitleSize(13);
 			buy_button->setTouchPriority(touch_priority);
-			buy_button->setSize(CCSizeMake(90, 55));
-			buy_button->setPosition(410,117);
+			buy_button->setSize(CCSizeMake(115, 50));
+			buy_button->setPosition(390,117);
 			main_case->addChild(buy_button);
 		}
 		
