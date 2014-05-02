@@ -6,6 +6,12 @@
 
 using namespace cocos2d;
 using namespace std;
+/*
+ 
+ myLoc->getLocalForKey(kMyLocalKey_tutorial7)
+ 
+ */
+
 
 typedef enum MyLocalKey_ {
 	kMyLocalKey_canNotConnectedServer = 1,
@@ -241,6 +247,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_regame,
 	kMyLocalKey_toMain,
 	kMyLocalKey_beforeNotClearPuzzle,
+	kMyLocalKey_waitForUpdate,
 	kMyLocalKey_diaryNoImg,
 	kMyLocalKey_reward,
 	kMyLocalKey_speed,
