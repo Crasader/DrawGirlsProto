@@ -130,6 +130,9 @@ private:
 	
 	CCSprite* total_star;
 	
+	CCSprite* gold_img;
+	CCSprite* ruby_img;
+	
 	void countingMessage();
 	void countingAchievement();
 	
@@ -138,6 +141,7 @@ private:
 	CCSprite* achievement_count_case;
 	
 	vector<CCNode*> top_list;
+	void topOnLight();
 	void topOpenning();
 	void topOuting();
 	void topPuzzleMode();

@@ -2233,10 +2233,10 @@ void PuzzleScene::setTop()
 	top_list.push_back(top_gold);
 	
 	CCSprite* gold_img = CCSprite::create("price_gold_img.png");
-	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f+1));
 	top_gold->addChild(gold_img);
 	
-	GoodsLight* gold_light = GoodsLight::create(gold_img);
+	GoodsLight* gold_light = GoodsLight::create(CCSprite::create("price_gold_img_mask.png"));
 	gold_light->setPosition(ccp(gold_img->getContentSize().width/2.f, gold_img->getContentSize().height/2.f));
 	gold_img->addChild(gold_light);
 	
@@ -2266,10 +2266,10 @@ void PuzzleScene::setTop()
 	top_list.push_back(top_ruby);
 	
 	CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
-	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f));
 	top_ruby->addChild(ruby_img);
 	
-	GoodsLight* ruby_light = GoodsLight::create(ruby_img);
+	GoodsLight* ruby_light = GoodsLight::create(CCSprite::create("price_ruby_img_mask.png"));
 	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
 	ruby_img->addChild(ruby_light);
 	

@@ -296,9 +296,20 @@ void StarGoldData::setKeepGold( int t_gold )
 	keep_gold = t_gold;
 }
 
+void StarGoldData::increaseCatchCumber()
+{
+	catch_cumber_count = catch_cumber_count.getV() + 1;
+}
+int StarGoldData::getCatchCumberCount()
+{
+	return catch_cumber_count.getV();
+}
+
 void StarGoldData::setGameStart()
 {
 	gacha_item = kIC_emptyEnd;
+	
+	catch_cumber_count = 0;
 	
 	is_clear_diary = false;
 	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
@@ -1226,6 +1237,57 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		keep_character_history_callback(result_data);
 }
 
+CommandParam StarGoldData::getUpdateTodayMissionParam(jsonSelType t_callback)
+{
+	update_today_mission_callback = t_callback;
+	
+	TodayMissionType t_type = (TodayMissionType)today_mission_info.mission_type.getV();
+	
+	Json::Value param;
+	param["memberID"] = myHSP->getSocialID();
+	param["date"] = today_mission_info.today_date.getV();
+	
+	if(t_type == kTodayMissionType_totalPercent)
+	{
+		param["count"] = getPercentage()*100.f;
+	}
+	else if(t_type == kTodayMissionType_totalScore)
+	{
+		param["count"] = getScore();
+	}
+	else if(t_type == kTodayMissionType_totalTakeGold)
+	{
+		param["count"] = getStageGold();
+	}
+	else if(t_type == kTodayMissionType_totalCatch)
+	{
+		param["count"] = getCatchCumberCount();
+	}
+	
+	return CommandParam("updatetodaymission", param, json_selector(this, StarGoldData::resultUpdateTodayMission));
+}
+
+void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		initTodayMission(result_data);
+		
+		GoodsType t_type = getGoodsKeyToType(today_mission_info.reward_type.getV());
+		int t_count = result_data["rewardCount"].asInt();
+		
+		goods_data[t_type] = t_count;
+		
+		if(t_type == kGoodsType_ruby && star_label)
+			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		else if(t_type == kGoodsType_gold && gold_label)
+			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+	}
+	
+	if(update_today_mission_callback != nullptr)
+		update_today_mission_callback(result_data);
+}
+
 int StarGoldData::getClearStarCount()
 {
 	int return_value = 0;
@@ -1782,6 +1844,17 @@ void StarGoldData::showPurchasePopup(PurchaseGuideType t_type)
 		at_time_show_eventRubyShop = graphdog->getTime();
 	else if(t_type == kPurchaseGuideType_levelupGuide)
 		at_time_show_levelupGuide = graphdog->getTime();
+}
+
+void StarGoldData::initTodayMission(Json::Value t_info)
+{
+	today_mission_info.today_date = t_info["date"].asInt();
+	today_mission_info.mission_type = t_info["type"].asInt();
+	today_mission_info.ing_count = t_info["count"].asInt();
+	today_mission_info.reward_type = t_info["reward"]["type"].asString();
+	today_mission_info.reward_count = t_info["reward"]["count"].asInt();
+	today_mission_info.goal_count = t_info["goal"].asInt();
+	today_mission_info.is_success = t_info["isSuccess"].asBool();
 }
 
 string StarGoldData::getAppType()

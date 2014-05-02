@@ -17,7 +17,9 @@ public:
 	bool startGame ();
 	void backHeart ();
 	bool isStartable ();
+	void onLight();
 private:
+	bool is_on_light;
 	vector <CCSprite*> heart_list;
 	CCLabelBMFont * state_label;
 	bool is_checking;

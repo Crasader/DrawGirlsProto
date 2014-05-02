@@ -100,6 +100,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 	{
 		AudioEngine::sharedInstance()->playEffect("se_subdie.mp3", false);
 		
+		mySGD->increaseCatchCumber();
 		myGD->communication("CP_removeSubCumber", this);
 		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
 		KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
@@ -138,8 +139,8 @@ void KSJuniorBase::checkConfine(float dt)
 		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
 		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
-		int weapon_rank = weapon_level/5 + 1;
-		weapon_level = weapon_level%5 + 1;
+		int weapon_rank = (weapon_level-1)/5 + 1;
+		weapon_level = (weapon_level-1)%5 + 1;
 		
 		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rmCnt, getPosition());
 		
@@ -152,6 +153,7 @@ void KSJuniorBase::checkConfine(float dt)
 //		
 //		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
 		
+		mySGD->increaseCatchCumber();
 		myGD->communication("CP_removeSubCumber", this);
 		
 		

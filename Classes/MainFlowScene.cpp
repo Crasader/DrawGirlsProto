@@ -40,6 +40,8 @@
 #include "KSLabelTTF.h"
 #include "DetailConditionPopup.h"
 #include "GoodsLight.h"
+#include "TodayMissionPopup.h"
+#include "FormSetter.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -279,6 +281,7 @@ bool MainFlowScene::init()
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
 	{
 		bottomOpenning();
+		topOnLight();
 	}
 	
 	is_menu_enable = true;
@@ -1455,7 +1458,8 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_mission)
 		{
-			is_menu_enable = true;
+			TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_friendManagement)
 		{
@@ -2039,6 +2043,22 @@ void MainFlowScene::topOpenning()
 			top_list[i]->runAction(t_seq);
 		}
 	}
+	
+	CCDelayTime* t_delay = CCDelayTime::create(top_list.size()*0.1f + 0.1f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::topOnLight));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+	runAction(t_seq);
+}
+
+void MainFlowScene::topOnLight()
+{
+	GoodsLight* gold_light = GoodsLight::create(CCSprite::create("price_gold_img_mask.png"));
+	gold_light->setPosition(ccp(gold_img->getContentSize().width/2.f, gold_img->getContentSize().height/2.f));
+	gold_img->addChild(gold_light);
+	
+	GoodsLight* ruby_light = GoodsLight::create(CCSprite::create("price_ruby_img_mask.png"));
+	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
+	ruby_img->addChild(ruby_light);
 }
 
 void MainFlowScene::topOuting()
@@ -2153,13 +2173,9 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(top_gold);
 	
-	CCSprite* gold_img = CCSprite::create("price_gold_img.png");
-	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	gold_img = CCSprite::create("price_gold_img.png");
+	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f+1));
 	top_gold->addChild(gold_img);
-	
-	GoodsLight* gold_light = GoodsLight::create(gold_img);
-	gold_light->setPosition(ccp(gold_img->getContentSize().width/2.f, gold_img->getContentSize().height/2.f));
-	gold_img->addChild(gold_light);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-6));
@@ -2186,13 +2202,9 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(top_ruby);
 	
-	CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
-	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	ruby_img = CCSprite::create("price_ruby_img.png");
+	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f));
 	top_ruby->addChild(ruby_img);
-	
-	GoodsLight* ruby_light = GoodsLight::create(ruby_img);
-	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
-	ruby_img->addChild(ruby_light);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-6));

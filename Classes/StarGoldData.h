@@ -201,6 +201,28 @@ public:
 	KSProtectVar<int> nextPrice;
 };
 
+class TodayMission
+{
+public:
+	KSProtectVar<int> today_date;
+	KSProtectVar<int> mission_type;
+	KSProtectVar<int> ing_count;
+	KSProtectVar<int> goal_count;
+	KSProtectStr reward_type;
+	KSProtectVar<int> reward_count;
+	KSProtectVar<bool> is_success;
+};
+
+enum TodayMissionType
+{
+	kTodayMissionType_begin = 0,
+	kTodayMissionType_totalPercent,
+	kTodayMissionType_totalScore,
+	kTodayMissionType_totalTakeGold,
+	kTodayMissionType_totalCatch,
+	kTodayMissionType_end
+};
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -632,6 +654,14 @@ public:
 	
 	KSProtectVar<int> gacha_item;
 	
+	void initTodayMission(Json::Value t_info);
+	TodayMission today_mission_info;
+	
+	void increaseCatchCumber();
+	int getCatchCumberCount();
+	
+	CommandParam getUpdateTodayMissionParam(jsonSelType t_callback);
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -781,6 +811,10 @@ private:
 	
 	KSProtectVar<int> selected_character_index;
 	deque<CharacterHistory> character_historys;
+	
+	KSProtectVar<int> catch_cumber_count;
+	jsonSelType update_today_mission_callback;
+	void resultUpdateTodayMission(Json::Value result_data);
 	
 	string app_type;
 	int app_version;

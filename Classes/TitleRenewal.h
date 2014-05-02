@@ -125,6 +125,7 @@ private:
 	void resultGetPuzzleHistory(Json::Value result_data);
 	void resultGetPieceHistory(Json::Value result_data);
 	void resultGetCharacterHistory(Json::Value result_data);
+	void resultGetTodayMission(Json::Value result_data);
 	
 	void resultGetUserProperties(Json::Value result_data);
 	

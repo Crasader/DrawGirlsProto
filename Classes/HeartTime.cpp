@@ -58,12 +58,28 @@ void HeartTime::backHeart ()
 	t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 	addChild(t_heart);
 	
-	GoodsLight* heart_light = GoodsLight::create(t_heart);
-	heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
-	t_heart->addChild(heart_light);
+	if(is_on_light)
+	{
+		GoodsLight* heart_light = GoodsLight::create(CCSprite::create("mainflow_heart_mask.png"));
+		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+		t_heart->addChild(heart_light);
+	}
 	
 	heart_list.push_back(t_heart);
 }
+
+void HeartTime::onLight()
+{
+	is_on_light = true;
+	for(int i=0;i<heart_list.size();i++)
+	{
+		CCSprite* t_heart = heart_list[i];
+		GoodsLight* heart_light = GoodsLight::create(CCSprite::create("mainflow_heart_mask.png"));
+		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+		t_heart->addChild(heart_light);
+	}
+}
+
 bool HeartTime::isStartable ()
 {
 	if(heart_list.size() <= 0)
@@ -87,9 +103,12 @@ void HeartTime::checkingTime ()
 		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 		addChild(t_heart);
 		
-		GoodsLight* heart_light = GoodsLight::create(t_heart);
-		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
-		t_heart->addChild(heart_light);
+		if(is_on_light)
+		{
+			GoodsLight* heart_light = GoodsLight::create(CCSprite::create("mainflow_heart_mask.png"));
+			heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+			t_heart->addChild(heart_light);
+		}
 		
 		heart_list.push_back(t_heart);
 		
@@ -116,6 +135,7 @@ void HeartTime::checkingTime ()
 }
 void HeartTime::myInit ()
 {
+	is_on_light = false;
 	setPosition(CCPointZero);
 	is_checking = false;
 	int loop_cnt = myDSH->getIntegerForKey(kDSH_Key_heartCnt);
@@ -124,10 +144,6 @@ void HeartTime::myInit ()
 		CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 		addChild(t_heart);
-		
-		GoodsLight* heart_light = GoodsLight::create(t_heart);
-		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
-		t_heart->addChild(heart_light);
 		
 		heart_list.push_back(t_heart);
 	}
@@ -147,10 +163,6 @@ void HeartTime::myInit ()
 			CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 			t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 			addChild(t_heart);
-			
-			GoodsLight* heart_light = GoodsLight::create(t_heart);
-			heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
-			t_heart->addChild(heart_light);
 			
 			heart_list.push_back(t_heart);
 			sub_value -= mySGD->getHeartCoolTime();

@@ -515,6 +515,14 @@ bool ClearPopup::init()
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
+	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
+																  {
+																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																	  {
+																		  // 이번에 뭔가를 받았는가 확인해서 팝업 띄울수 있도록 해야 함.
+																	  }
+																  }));
+	
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
 	addChild(t_loading, 9999);
 	
