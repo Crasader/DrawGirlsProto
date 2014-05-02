@@ -42,6 +42,20 @@ bool KSLabelTTF::updateTexture()
 	// release it
 	tex->release();
 
+	bool validString = false;
+	for(auto i : m_string)
+	{
+		if(i != ' ')
+		{
+			validString = true;
+			break;
+		}
+	}
+	if(!validString)
+	{
+		
+		return true;
+	}
 	CCRect rect =CCRectZero;
 	rect.size   = m_pobTexture->getContentSize();
 	this->setTextureRect(rect);

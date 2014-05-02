@@ -439,8 +439,6 @@ void FallingStoneWrapper::selfRemove()
 void FallingStoneWrapper::startMyAction()
 {
 	
-	// 운석 떨어질때
-	AudioEngine::sharedInstance()->playEffect("se_meteor.mp3");
 //	AudioEngine::sharedInstance()->playEffect("sound_rock_falling.mp3", true);
 	ingFrame = 0;
 	schedule(schedule_selector(FallingStoneWrapper::myAction));

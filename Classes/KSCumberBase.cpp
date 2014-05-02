@@ -2198,7 +2198,7 @@ bool KSCumberBase::init()
 	schedule(schedule_selector(ThisClassType::speedAdjustment));
 	
 	// 미션에 따라 on/off 해야됨.
-	schedule(schedule_selector(ThisClassType::selfHealing));
+	//schedule(schedule_selector(ThisClassType::selfHealing));
 	schedule(schedule_selector(ThisClassType::cumberFrame));
 	
 	return true;
@@ -2539,7 +2539,8 @@ float KSCumberBase::getCumberScale()
 void KSCumberBase::onCanceledCasting()
 {
 	m_castingCancelCount++;
-	myGD->communication("Main_showDetailMessage", std::string("warning_boss_success.ccbi")); // 말은 캐스팅 캔슬 됐다고 알려줌.
+//	myGD->communication("Main_showDetailMessage", std::string());
+	myGD->showDetailMessage("warning_boss_success.ccbi", "i"); // 말은 캐스팅 캔슬 됐다고 알려줌.
 }
 
 void KSCumberBase::settingScale( float startScale, float minScale, float maxScale )
