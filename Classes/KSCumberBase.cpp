@@ -2198,7 +2198,7 @@ bool KSCumberBase::init()
 	schedule(schedule_selector(ThisClassType::speedAdjustment));
 	
 	// 미션에 따라 on/off 해야됨.
-	schedule(schedule_selector(ThisClassType::selfHealing));
+	//schedule(schedule_selector(ThisClassType::selfHealing));
 	schedule(schedule_selector(ThisClassType::cumberFrame));
 	
 	return true;
