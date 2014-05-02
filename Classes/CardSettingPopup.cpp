@@ -190,6 +190,7 @@ bool CardSettingPopup::init()
 	
 	
 	align_default_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_default_menu->setTitleColor(ccc3(50, 20, 0));
 	align_default_menu->setPosition(ccp(220,256));
 	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
 	align_default_menu->setFunction([=](CCObject* sender)
@@ -201,7 +202,55 @@ bool CardSettingPopup::init()
 	align_default_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
-	align_take_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_takeOrder), 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+//	else if(tag == kCSS_MT_alignRank)
+//	{
+//		if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_gradeDown)
+//		{
+//			myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_gradeDown);
+//			recent_sort_type = kCST_gradeDown;
+//			mySGD->changeSortType(kCST_gradeDown);
+//			alignChange();
+//		}
+//		else
+//		{
+//			myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_gradeUp);
+//			recent_sort_type = kCST_gradeUp;
+//			mySGD->changeSortType(kCST_gradeUp);
+//			alignChange();
+//		}
+//		
+//		is_menu_enable = true;
+//	}
+//	else if(tag == kCSS_MT_alignTake)
+//	{
+//		if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_take)
+//		{
+//			myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_take);
+//			recent_sort_type = kCST_take;
+//			mySGD->changeSortType(kCST_take);
+//			alignChange();
+//		}
+//		else
+//		{
+//			myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_takeReverse);
+//			recent_sort_type = kCST_takeReverse;
+//			mySGD->changeSortType(kCST_takeReverse);
+//			alignChange();
+//		}
+//		
+//		is_menu_enable = true;
+//	}
+	
+	
+	string sign_str;
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_take)
+		sign_str = "▼";
+	else
+		sign_str = "▲";
+	
+	align_take_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str, 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_take_menu->setTitleColor(ccc3(50, 20, 0));
 	align_take_menu->setPosition(ccp(280,256));
 	main_case->addChild(align_take_menu, kCSS_Z_alignButton);
 	align_take_menu->setFunction([=](CCObject* sender)
@@ -213,7 +262,13 @@ bool CardSettingPopup::init()
 	align_take_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
-	align_rank_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gradeOrder), 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_gradeUp)
+		sign_str = "▼";
+	else
+		sign_str = "▲";
+	
+	align_rank_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str, 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
+	align_rank_menu->setTitleColor(ccc3(50, 20, 0));
 	align_rank_menu->setPosition(ccp(340,256));
 	main_case->addChild(align_rank_menu, kCSS_Z_alignButton);
 	align_rank_menu->setFunction([=](CCObject* sender)
@@ -470,6 +525,14 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				alignChange();
 			}
 			
+			string sign_str;
+			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_gradeUp)
+				sign_str = "▼";
+			else
+				sign_str = "▲";
+			
+			align_rank_menu->setTitle(myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str);
+			
 			is_menu_enable = true;
 		}
 		else if(tag == kCSS_MT_alignTake)
@@ -488,6 +551,14 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 				mySGD->changeSortType(kCST_takeReverse);
 				alignChange();
 			}
+			
+			string sign_str;
+			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_take)
+				sign_str = "▼";
+			else
+				sign_str = "▲";
+			
+			align_take_menu->setTitle(myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str);
 			
 			is_menu_enable = true;
 		}
