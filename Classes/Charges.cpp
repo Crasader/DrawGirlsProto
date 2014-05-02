@@ -195,7 +195,7 @@ void ChargeNodeLambda::charging()
 	particle.first->setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 	if(charge_cnt >= charge_frame)
 	{
-		AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
+		//AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		actionFunction(real_target);
 		removeSelf();
@@ -221,6 +221,7 @@ void ChargeNodeLambda::charging()
 void ChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(ChargeNodeLambda::charging));
+	AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 	KSCumberBase* cumber = (KSCumberBase*)real_target;
 	removeFromParent();
 	
@@ -308,7 +309,6 @@ void SpecialChargeNodeLambda::charging()
 	particle.first->setPosition(dynamic_cast<KSCumberBase*>(real_target)->getPosition());
 	if(charge_cnt >= charge_frame)
 	{
-		AudioEngine::sharedInstance()->stopEffect("se_castspecial.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 		actionFunction(real_target);
 		removeSelf();
@@ -334,6 +334,7 @@ void SpecialChargeNodeLambda::charging()
 void SpecialChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(SpecialChargeNodeLambda::charging));
+	AudioEngine::sharedInstance()->stopEffect("se_castspecial.mp3");
 	KSCumberBase* cumber = (KSCumberBase*)real_target;
 	removeFromParent();
 //	cumber->getChargeParent()->removeFromParent();
@@ -430,7 +431,6 @@ void CrashChargeNodeLambda::charging()
 	{
 		//			myGD->communication("CP_setCasting", false);
 		AudioEngine::sharedInstance()->stopAllEffects();
-		AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		actionFunction(real_target);
 		CCLOG("removeSelf call");
@@ -458,6 +458,7 @@ void CrashChargeNodeLambda::charging()
 void CrashChargeNodeLambda::removeSelf()
 {
 	unschedule(schedule_selector(CrashChargeNodeLambda::charging));
+	AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
 	KSCumberBase* cumber = (KSCumberBase*)real_target;
 	removeFromParent();
 	

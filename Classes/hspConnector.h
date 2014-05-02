@@ -21,6 +21,8 @@ using namespace std;
 typedef void (CCObject::*kakaoSelType)(Json::Value);
 #define kakao_selector(_SELECTOR) (kakaoSelType)(&_SELECTOR)
 
+#define myHSP hspConnector::get()
+
 class jsonDelegator
 {
 	

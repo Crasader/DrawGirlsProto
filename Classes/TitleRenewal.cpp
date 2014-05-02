@@ -319,6 +319,10 @@ void TitleRenewalScene::successLogin()
 	character_history_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getcharacterhistory", character_history_param, json_selector(this, TitleRenewalScene::resultGetCharacterHistory)));
 	
+	Json::Value todaymission_param;
+	todaymission_param["memberID"] = hspConnector::get()->getSocialID();
+	command_list.push_back(CommandParam("gettodaymission", todaymission_param, json_selector(this, TitleRenewalScene::resultGetTodayMission)));
+	
 	Json::Value properties_param;
 	properties_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getuserproperties", properties_param, json_selector(this, TitleRenewalScene::resultGetUserProperties)));
@@ -1158,6 +1162,26 @@ void TitleRenewalScene::resultGetCharacterHistory(Json::Value result_data)
 		Json::Value character_history_param;
 		character_history_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getcharacterhistory", character_history_param, json_selector(this, TitleRenewalScene::resultGetCharacterHistory)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetTodayMission(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->initTodayMission(result_data);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value todaymission_param;
+		todaymission_param["memberID"] = hspConnector::get()->getSocialID();
+		command_list.push_back(CommandParam("gettodaymission", todaymission_param, json_selector(this, TitleRenewalScene::resultGetTodayMission)));
 	}
 	
 	receive_cnt--;

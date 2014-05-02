@@ -30,7 +30,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("상점"), kMyLocalKey_shop);
 	ko->setObject(CCString::create("랭킹"), kMyLocalKey_ranking);
 	ko->setObject(CCString::create("내카드"), kMyLocalKey_mycard);
-	ko->setObject(CCString::create("오늘의미션"), kMyLocalKey_todaymission);
+	ko->setObject(CCString::create("오늘의 미션"), kMyLocalKey_todaymission);
 	ko->setObject(CCString::create("이벤트"), kMyLocalKey_event);
 	ko->setObject(CCString::create("스테이지 열기"), kMyLocalKey_openStage);
 	ko->setObject(CCString::create("스테이지 오픈"), kMyLocalKey_stageOpenTitle);
@@ -242,6 +242,27 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
 	ko->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
 	ko->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
+	ko->setObject(CCString::create("누적영역 "), kMyLocalKey_todaymissionTotalPercent1);
+	ko->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
+	ko->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
+	ko->setObject(CCString::create("현재 획득영역 "), kMyLocalKey_todaymissionTotalPercent4);
+	ko->setObject(CCString::create("누적점수 "), kMyLocalKey_todaymissionTotalScore1);
+	ko->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
+	ko->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
+	ko->setObject(CCString::create("현재 획득점수 "), kMyLocalKey_todaymissionTotalScore4);
+	ko->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold1);
+	ko->setObject(CCString::create("를 획득하라!!"), kMyLocalKey_todaymissionTotalTakeGold2);
+	ko->setObject(CCString::create("현재 획득골드 "), kMyLocalKey_todaymissionTotalTakeGold3);
+	ko->setObject(CCString::create("부하몹 "), kMyLocalKey_todaymissionTotalCatch1);
+	ko->setObject(CCString::create("%s마리"), kMyLocalKey_todaymissionTotalCatch2);
+	ko->setObject(CCString::create(" 사냥하라!!"), kMyLocalKey_todaymissionTotalCatch3);
+	ko->setObject(CCString::create("현재 잡은 부하몹 "), kMyLocalKey_todaymissionTotalCatch4);
+	ko->setObject(CCString::create("오늘의 미션을 완료하였습니다."), kMyLocalKey_todaymissionSuccess);
+	ko->setObject(CCString::create("완료"), kMyLocalKey_complete);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -612,6 +633,23 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
 	en->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
 	en->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
+	en->setObject(CCString::create("누적영역 "), kMyLocalKey_todaymissionTotalPercent1);
+	en->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
+	en->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
+	en->setObject(CCString::create("현재 획득영역"), kMyLocalKey_todaymissionTotalPercent4);
+	en->setObject(CCString::create("누적점수 "), kMyLocalKey_todaymissionTotalScore1);
+	en->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
+	en->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
+	en->setObject(CCString::create("현재 획득점수"), kMyLocalKey_todaymissionTotalScore4);
+	en->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold1);
+	en->setObject(CCString::create("를 획득하라!!"), kMyLocalKey_todaymissionTotalTakeGold2);
+	en->setObject(CCString::create("현재 획득골드"), kMyLocalKey_todaymissionTotalTakeGold3);
+	en->setObject(CCString::create("부하몹 "), kMyLocalKey_todaymissionTotalCatch1);
+	en->setObject(CCString::create("%s마리"), kMyLocalKey_todaymissionTotalCatch2);
+	en->setObject(CCString::create(" 사냥하라!!"), kMyLocalKey_todaymissionTotalCatch3);
+	en->setObject(CCString::create("현재 잡은 부하몹"), kMyLocalKey_todaymissionTotalCatch4);
+	en->setObject(CCString::create("오늘의 미션을 완료하였습니다."), kMyLocalKey_todaymissionSuccess);
+	en->setObject(CCString::create("완료"), kMyLocalKey_complete);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -977,6 +1015,23 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
 	ja->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
 	ja->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
+	ja->setObject(CCString::create("누적영역 "), kMyLocalKey_todaymissionTotalPercent1);
+	ja->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
+	ja->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
+	ja->setObject(CCString::create("현재 획득영역"), kMyLocalKey_todaymissionTotalPercent4);
+	ja->setObject(CCString::create("누적점수 "), kMyLocalKey_todaymissionTotalScore1);
+	ja->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
+	ja->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
+	ja->setObject(CCString::create("현재 획득점수"), kMyLocalKey_todaymissionTotalScore4);
+	ja->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold1);
+	ja->setObject(CCString::create("를 획득하라!!"), kMyLocalKey_todaymissionTotalTakeGold2);
+	ja->setObject(CCString::create("현재 획득골드"), kMyLocalKey_todaymissionTotalTakeGold3);
+	ja->setObject(CCString::create("부하몹 "), kMyLocalKey_todaymissionTotalCatch1);
+	ja->setObject(CCString::create("%s마리"), kMyLocalKey_todaymissionTotalCatch2);
+	ja->setObject(CCString::create(" 사냥하라!!"), kMyLocalKey_todaymissionTotalCatch3);
+	ja->setObject(CCString::create("현재 잡은 부하몹"), kMyLocalKey_todaymissionTotalCatch4);
+	ja->setObject(CCString::create("오늘의 미션을 완료하였습니다."), kMyLocalKey_todaymissionSuccess);
+	ja->setObject(CCString::create("완료"), kMyLocalKey_complete);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);
