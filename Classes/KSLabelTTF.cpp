@@ -51,7 +51,7 @@ bool KSLabelTTF::updateTexture()
 			break;
 		}
 	}
-	if(validString)
+	if(!validString)
 	{
 		
 		return true;
