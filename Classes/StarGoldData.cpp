@@ -1133,6 +1133,7 @@ void StarGoldData::initPieceHistory(Json::Value history_list)
 
 void StarGoldData::initCharacterHistory(Json::Value history_list)
 {
+	character_historys.clear();
 	for(int i=0;i<history_list.size();i++)
 	{
 		Json::Value t_data = history_list[i];
@@ -1367,6 +1368,11 @@ void StarGoldData::initProperties(Json::Value t_list)
 		int t_count = t_list[i]["count"].asInt();
 		
 		goods_data[t_type] = t_count;
+		
+		if(t_type == kGoodsType_ruby && star_label)
+			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		else if(t_type == kGoodsType_gold && gold_label)
+			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
 	}
 }
 

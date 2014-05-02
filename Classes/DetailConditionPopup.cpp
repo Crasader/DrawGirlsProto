@@ -46,8 +46,8 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), mySGD->getFont().c_str(), 18);
-	title_label->setColor(ccc3(100, 100, 255));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), mySGD->getFont().c_str(), 21);
+	title_label->setColor(ccc3(50, 250, 255));
 	title_label->setPosition(ccp(0,70));
 	m_container->addChild(title_label);
 	

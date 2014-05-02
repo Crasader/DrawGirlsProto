@@ -55,6 +55,17 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 
+	white_back = CCSprite::create("whitePaper.png");
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	white_back->setScaleX(screen_scale_x);
+	white_back->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	white_back->setPosition(ccp(240,160));
+	addChild(white_back);
+	
 	auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
 	splash.second->setAnimationCompletedCallbackLambda(this, [=](){
 		splash.first->removeFromParent();
@@ -128,17 +139,6 @@ void TitleRenewalScene::loadCounting(CCObject* sender)
 
 void TitleRenewalScene::endSplash()
 {
-	CCSprite* white_back = CCSprite::create("whitePaper.png");
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
-	
-	white_back->setScaleX(screen_scale_x);
-	white_back->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-	white_back->setPosition(ccp(240,160));
-	addChild(white_back);
-	
 	CCSprite* ratings = CCSprite::create("game_ratings.png");
 	ratings->setPosition(ccp(240,160));
 	addChild(ratings);
@@ -180,6 +180,8 @@ void TitleRenewalScene::realInit()
 	param["ManualLogin"] = true;
 	
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+	
+	white_back->removeFromParent();
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )

@@ -55,7 +55,7 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	suction->setTouchEnabled(true);
 	
 	m_container = CCNode::create();
-	m_container->setPosition(ccp(240,160));
+	m_container->setPosition(ccp(240,160-22.f));
 	addChild(m_container);
 	
 	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
@@ -63,8 +63,8 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventShopTitle), mySGD->getFont().c_str(), 16);
-	title_label->setColor(ccc3(255, 150, 100));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventShopTitle), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0,0.5));
 	title_label->setPosition(ccp(20,256));
 	back_case->addChild(title_label);

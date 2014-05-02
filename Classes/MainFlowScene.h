@@ -131,9 +131,11 @@ private:
 	CCSprite* total_star;
 	
 	void countingMessage();
+	void countingAchievement();
 	
 	CCSprite* postbox_count_case;
 //	CCLabelTTF* postbox_count_label;
+	CCSprite* achievement_count_case;
 	
 	vector<CCNode*> top_list;
 	void topOpenning();
@@ -149,6 +151,7 @@ private:
 	
 	void popupClose();
 	void mailPopupClose();
+	void achievePopupClose();
 	void tutorialCardSettingClose();
 	
 	void endUnlockAnimation();

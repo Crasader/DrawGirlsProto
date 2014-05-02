@@ -55,14 +55,15 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	if(m_type == kPurchaseGuideType_emptyItem)
 	{
-		CCSprite* title_label = CCSprite::create("emptyitemsale_title.png");
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleTitle), mySGD->getFont().c_str(), 21);
+		title_label->setColor(ccc3(50, 250, 255));
 		title_label->setPosition(ccp(0,95));
 		m_container->addChild(title_label);
 	}
 	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
 	{
-		KSLabelTTF* title_label = KSLabelTTF::create("종합 아이템 구매 찬스!", mySGD->getFont().c_str(), 20);
-		title_label->setColor(ccc3(50, 255, 255));
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemPackageChance), mySGD->getFont().c_str(), 21);
+		title_label->setColor(ccc3(50, 250, 255));
 		title_label->setPosition(ccp(0,95));
 		m_container->addChild(title_label);
 	}

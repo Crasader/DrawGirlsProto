@@ -26,6 +26,7 @@ enum AchievePopupListCode{
 };
 class CommonButton;
 class LoadingLayer;
+class ScrollBar;
 class AchievePopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -51,6 +52,8 @@ private:
 	
 	CCSprite* gray;
 	CCScale9Sprite* main_case;
+	
+	ScrollBar* m_scrollBar;
 	
 	bool is_menu_enable;
 	

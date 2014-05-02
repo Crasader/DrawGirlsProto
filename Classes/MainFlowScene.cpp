@@ -39,6 +39,7 @@
 #include "LoadingLayer.h"
 #include "KSLabelTTF.h"
 #include "DetailConditionPopup.h"
+#include "GoodsLight.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -676,7 +677,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 			CCBReader* reader = new CCBReader(nodeLoader);
 			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-			loading_progress_img->setPosition(ccp(0,0));
+			loading_progress_img->setPosition(ccp(0,30));
 			cell_node->addChild(loading_progress_img);
 			reader->release();
 			
@@ -1479,7 +1480,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			AchievePopup* t_ap = AchievePopup::create();
 			addChild(t_ap, kMainFlowZorder_popup);
 			
-			t_ap->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_ap->setHideFinalAction(this, callfunc_selector(MainFlowScene::achievePopupClose));
 		}
 		else if(tag == kMainFlowMenuTag_event)
 		{
@@ -2152,6 +2153,14 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(top_gold);
 	
+	CCSprite* gold_img = CCSprite::create("price_gold_img.png");
+	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	top_gold->addChild(gold_img);
+	
+	GoodsLight* gold_light = GoodsLight::create(gold_img);
+	gold_light->setPosition(ccp(gold_img->getContentSize().width/2.f, gold_img->getContentSize().height/2.f));
+	gold_img->addChild(gold_light);
+	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-6));
 	top_gold->addChild(gold_label);
@@ -2176,6 +2185,14 @@ void MainFlowScene::setTop()
 	addChild(top_ruby, kMainFlowZorder_top);
 	
 	top_list.push_back(top_ruby);
+	
+	CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
+	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	top_ruby->addChild(ruby_img);
+	
+	GoodsLight* ruby_light = GoodsLight::create(ruby_img);
+	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
+	ruby_img->addChild(ruby_light);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-6));
@@ -2230,7 +2247,26 @@ void MainFlowScene::setTop()
 	postbox_count_case->setPosition(ccp(409,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-16));
 	addChild(postbox_count_case, kMainFlowZorder_top);
 	
+	CCScaleTo* t_scale1 = CCScaleTo::create(0.1f, 1.3f);
+	CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
+	CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+	CCScaleTo* t_scale3 = CCScaleTo::create(0.1f, 1.3f);
+	CCScaleTo* t_scale4 = CCScaleTo::create(0.2f, 1.f);
+	CCDelayTime* t_delay2 = CCDelayTime::create(5.f);
+	CCSequence* t_seq1 = CCSequence::create(t_scale1, t_scale2, t_delay1, t_scale3, t_scale4, t_delay2, NULL);
+	CCRepeatForever* t_repeat1 = CCRepeatForever::create(t_seq1);
+	postbox_count_case->runAction(t_repeat1);
+	
 	postbox_count_case->setVisible(false);
+	
+	postbox_count_case->addChild(KSSchedule::create([=](float dt)
+					   {
+						   if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
+							   postbox_count_case->setOpacity(0);
+						   else
+							   postbox_count_case->setOpacity(255);
+						   return true;
+					   }));
 	
 //	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
 //	postbox_count_label->setColor(ccc3(95, 60, 30));
@@ -2253,6 +2289,32 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(achieve_menu);
 
+	achievement_count_case = CCSprite::create("mainflow_new.png");
+	achievement_count_case->setPosition(ccp(441,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-16));
+	addChild(achievement_count_case, kMainFlowZorder_top);
+	
+	CCScaleTo* t_scale5 = CCScaleTo::create(0.1f, 1.3f);
+	CCScaleTo* t_scale6 = CCScaleTo::create(0.2f, 1.f);
+	CCDelayTime* t_delay3 = CCDelayTime::create(0.5f);
+	CCScaleTo* t_scale7 = CCScaleTo::create(0.1f, 1.3f);
+	CCScaleTo* t_scale8 = CCScaleTo::create(0.2f, 1.f);
+	CCDelayTime* t_delay4 = CCDelayTime::create(5.f);
+	CCSequence* t_seq2 = CCSequence::create(t_scale5, t_scale6, t_delay3, t_scale7, t_scale8, t_delay4, NULL);
+	CCRepeatForever* t_repeat2 = CCRepeatForever::create(t_seq2);
+	achievement_count_case->runAction(t_repeat2);
+	
+	achievement_count_case->setVisible(false);
+	
+	achievement_count_case->addChild(KSSchedule::create([=](float dt)
+													{
+														if(achieve_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
+															achievement_count_case->setOpacity(0);
+														else
+															achievement_count_case->setOpacity(255);
+														return true;
+													}));
+	
+	countingAchievement();
 	
 	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
 	CCSprite* s_option = CCSprite::create("mainflow_new_option.png");
@@ -2281,6 +2343,7 @@ void MainFlowScene::setTop()
 
 void MainFlowScene::countingMessage()
 {
+	postbox_count_case->setVisible(false);
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getSocialID();
 	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
@@ -2321,8 +2384,39 @@ void MainFlowScene::countingMessage()
 								 });
 }
 
+void MainFlowScene::countingAchievement()
+{
+	achievement_count_case->setVisible(false);
+	int reward_count = 0;
+	
+	for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			reward_count++; // achieve_list.push_back((AchievementCode)i);
+	}
+	
+	for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			reward_count++; // achieve_list.push_back((AchievementCode)i);
+	}
+	
+	if(reward_count > 0)
+	{
+		achievement_count_case->setVisible(true);
+	}
+}
+
 void MainFlowScene::popupClose()
 {
+	is_menu_enable = true;
+}
+
+void MainFlowScene::achievePopupClose()
+{
+	countingAchievement();
 	is_menu_enable = true;
 }
 

@@ -4,6 +4,7 @@
 #include "HeartTime.h"
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
+#include "GoodsLight.h"
 #include <chrono>
 
 #define LZZ_INLINE inline
@@ -56,6 +57,11 @@ void HeartTime::backHeart ()
 	CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 	t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 	addChild(t_heart);
+	
+	GoodsLight* heart_light = GoodsLight::create(t_heart);
+	heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+	t_heart->addChild(heart_light);
+	
 	heart_list.push_back(t_heart);
 }
 bool HeartTime::isStartable ()
@@ -80,6 +86,10 @@ void HeartTime::checkingTime ()
 		CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 		addChild(t_heart);
+		
+		GoodsLight* heart_light = GoodsLight::create(t_heart);
+		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+		t_heart->addChild(heart_light);
 		
 		heart_list.push_back(t_heart);
 		
@@ -115,6 +125,10 @@ void HeartTime::myInit ()
 		t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 		addChild(t_heart);
 		
+		GoodsLight* heart_light = GoodsLight::create(t_heart);
+		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+		t_heart->addChild(heart_light);
+		
 		heart_list.push_back(t_heart);
 	}
 	
@@ -133,6 +147,10 @@ void HeartTime::myInit ()
 			CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
 			t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
 			addChild(t_heart);
+			
+			GoodsLight* heart_light = GoodsLight::create(t_heart);
+			heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+			t_heart->addChild(heart_light);
 			
 			heart_list.push_back(t_heart);
 			sub_value -= mySGD->getHeartCoolTime();

@@ -225,7 +225,7 @@ bool ClearPopup::init()
     
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-450));
+	main_case->setPosition(ccp(240,160-22.f-450));
 	addChild(main_case, kZ_CP_back);
 	
 	CCScale9Sprite* inner_left = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
@@ -904,7 +904,7 @@ void ClearPopup::showPopup()
 //	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 //	gray->runAction(gray_fade);
 
-	main_case->setPosition(ccp(240,160));
+	main_case->setPosition(ccp(240,160-22.f));
 	endShowPopup();
 //	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
 //	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::endShowPopup));
@@ -925,7 +925,7 @@ void ClearPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -1893,19 +1893,23 @@ void ClearPopup::menuAction(CCObject* pSender)
 			{
 				CCPoint star_origin_position = ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22);
 				
+				CCNode* t_star_node = CCNode::create();
+				t_star_node->setPosition(star_origin_position + ccp(0,150));
+				addChild(t_star_node, kZ_CP_popup);
+				
 				CCSprite* total_star = KS::loadCCBI<CCSprite*>(this, "main_star.ccbi").first;
-				total_star->setPosition(star_origin_position + ccp(0,150));
-				addChild(total_star, kZ_CP_popup);
+				total_star->setPosition(ccp(0,0));
+				t_star_node->addChild(total_star);
 				
 				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade())->getCString(), mySGD->getFont().c_str(), 12);
 				star_count->enableOuterStroke(ccBLACK, 0.8f);
 				star_count->setPosition(ccp(0,0));
-				total_star->addChild(star_count);
+				t_star_node->addChild(star_count);
 				
 				addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
-					total_star->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
+					t_star_node->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
 				}, [=](float t){
-					total_star->setPosition(star_origin_position);
+					t_star_node->setPosition(star_origin_position);
 					
 					float delay_time = 0.f;
 					if(ani_stars.size() > 0)
@@ -1916,17 +1920,17 @@ void ClearPopup::menuAction(CCObject* pSender)
 					addChild(KSTimer::create(delay_time/30.f, [=]()
 					{
 						addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
-							total_star->setScale(1.f+t*0.2f);
+							t_star_node->setScale(1.f+t*0.2f);
 						}, [=](float t){
-							total_star->setScale(1.2f);
+							t_star_node->setScale(1.2f);
 							addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
-								total_star->setScale(1.2f - t*0.2f);
+								t_star_node->setScale(1.2f - t*0.2f);
 							}, [=](float t){
-								total_star->setScale(1.f);
+								t_star_node->setScale(1.f);
 								addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t){
-									total_star->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
+									t_star_node->setPosition(star_origin_position + ccpMult(ccp(0,150), 1.f-t));
 								}, [=](float t){
-									total_star->setPosition(star_origin_position + ccp(0,150));
+									t_star_node->setPosition(star_origin_position + ccp(0,150));
 									hidePopup();
 								}));
 							}));

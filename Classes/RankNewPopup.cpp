@@ -56,12 +56,12 @@ bool RankNewPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-450));
+	main_case->setPosition(ccp(240,160-22.f - 450));
 	addChild(main_case, 1);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 17);
-	title_label->setColor(ccc3(255, 150, 50));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setPosition(ccp(70,253));
 	main_case->addChild(title_label);
 	
@@ -378,7 +378,7 @@ void RankNewPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(RankNewPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -396,7 +396,7 @@ void RankNewPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(RankNewPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
