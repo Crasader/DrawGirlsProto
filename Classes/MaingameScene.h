@@ -222,7 +222,7 @@ private:
 	void resetIsLineDie();
 	
 	void showWarning(int t1);
-	void showDetailMessage(const std::string& fileName);
+	void showDetailMessage(const std::string& fileName, const std::string& type);
 	void showThumbWarning(CCPoint t_point);
 	int warning_count;
 	CCNode* screen_side_warning_node;

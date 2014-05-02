@@ -571,7 +571,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		}
 		cb->setDamageMeasure(0.f);
 		myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
-		myGD->communication("Main_showDetailMessage", warningFileName);
+		myGD->showDetailMessage(warningFileName, "w");
 		myGD->communication("Main_showThumbWarning", startPosition);
 	};
 	string warningFileName = "warning_" + pattern + ".ccbi";

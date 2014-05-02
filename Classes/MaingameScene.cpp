@@ -92,7 +92,7 @@ bool Maingame::init()
 	myGD->V_Ip["Main_showLineDiePosition"] = std::bind(&Maingame::showLineDiePosition, this, _1);
 	myGD->V_V["Main_resetIsLineDie"] = std::bind(&Maingame::resetIsLineDie, this);
 	myGD->V_I["Main_showWarning"] = std::bind(&Maingame::showWarning, this, _1);
-	myGD->V_Str["Main_showDetailMessage"] = std::bind(&Maingame::showDetailMessage, this, _1);
+	myGD->showDetailMessage = std::bind(&Maingame::showDetailMessage, this, _1, _2);
 	myGD->V_Str["Main_showTextMessage"] = std::bind(&Maingame::showTextMessage, this, _1);
 	myGD->V_V["Main_showCoin"] = std::bind(&Maingame::showCoin, this);
 	myGD->V_V["Main_startExchange"] = std::bind(&Maingame::startExchange, this);
@@ -2207,7 +2207,7 @@ void Maingame::showWarning( int t1 )
 	t_w->startAction();
 }
 
-void Maingame::showDetailMessage(const std::string& fileName)
+void Maingame::showDetailMessage(const std::string& fileName, const std::string& type)
 {
 	//DetailWarning* w = DetailWarning::create(fileName);
 	//addChild(w, goldZorder);
@@ -2263,6 +2263,7 @@ void Maingame::showDetailMessage(const std::string& fileName)
 	fileName2Language["warning_1016.ccbi"] = kMyLocalKey_warning1016;
 	fileName2Language["warning_1017.ccbi"] = kMyLocalKey_warning1017;
 	fileName2Language["warning_1018.ccbi"] = kMyLocalKey_warning1018;
+	fileName2Language["boss_warning_success.ccbi"] = kMyLocalKey_warningBossSuccess;
 	
 	
 	KSLabelTTF* textMessage = KSLabelTTF::create(MyLocal::sharedInstance()->getLocalForKey(fileName2Language[fileName]), mySGD->getFont().c_str(), 30.f);
