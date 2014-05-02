@@ -14,6 +14,7 @@
 #include "LoadingLayer.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "ScrollBar.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,
@@ -69,7 +70,8 @@ bool AchievePopup::init()
 	main_case->setPosition(ccp(240,160-450));
 	addChild(main_case, kAchievePopupZorder_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("업적", mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achievement), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
@@ -81,7 +83,7 @@ bool AchievePopup::init()
 	
 	recent_code = kAchievePopupListCode_all;
 	
-	all_reward_menu = CommonButton::create("모든보상 받기", 13, CCSizeMake(100,35), CommonButtonLightPupple, -190);
+	all_reward_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allRewardGet), 13, CCSizeMake(100,35), CommonButtonLightPupple, -190);
 	all_reward_menu->setPosition(ccp(395,32));
 	main_case->addChild(all_reward_menu, kAchievePopupZorder_menu);
 	all_reward_menu->setFunction([=](CCObject* sender)
@@ -117,6 +119,7 @@ bool AchievePopup::init()
 	main_case->addChild(close_menu, kAchievePopupZorder_menu);
 	
 	achieve_table = NULL;
+	m_scrollBar = NULL;
 	setAchieveTable();
 	
 	
@@ -315,6 +318,11 @@ void AchievePopup::setAchieveTable()
 		achieve_table->removeFromParent();
 		achieve_table = NULL;
 	}
+	if(m_scrollBar)
+	{
+		m_scrollBar->removeFromParent();
+		m_scrollBar = NULL;
+	}
 	
 	achieve_list.clear();
 	
@@ -370,14 +378,19 @@ void AchievePopup::setAchieveTable()
 		}
 	}
 	
-	CCSize table_size = CCSizeMake(410, 180);
-	CCPoint table_position = ccp(34, 52);
+	CCSize table_size = CCSizeMake(445, 180);
+	CCPoint table_position = ccp(25, 52);
 	
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_back->setAnchorPoint(CCPointZero);
 //	temp_back->setOpacity(100);
 //	temp_back->setPosition(table_position);
 //	main_case->addChild(temp_back, kAchievePopupZorder_table);
+	
+	CCScale9Sprite* scroll_back = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
+	scroll_back->setContentSize(CCSizeMake(7, table_size.height-20));
+	scroll_back->setPosition(ccpAdd(table_position, ccp(table_size.width-23, table_size.height/2.f)));
+	main_case->addChild(scroll_back, kAchievePopupZorder_table);
 	
 	achieve_table = CCTableView::create(this, table_size);
 	achieve_table->setAnchorPoint(CCPointZero);
@@ -388,6 +401,10 @@ void AchievePopup::setAchieveTable()
 	achieve_table->setDelegate(this);
 	main_case->addChild(achieve_table, kAchievePopupZorder_table);
 	achieve_table->setTouchPriority(-190);
+	
+	m_scrollBar = ScrollBar::createScrollbar(achieve_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"));
+	m_scrollBar->setDynamicScrollSize(false);
+	m_scrollBar->setVisible(true);
 	
 	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-189);
 	t_suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
@@ -687,7 +704,13 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	return cell;
 }
 
-void AchievePopup::scrollViewDidScroll( CCScrollView* view ){}
+void AchievePopup::scrollViewDidScroll( CCScrollView* view )
+{
+	if(m_scrollBar)
+	{
+		m_scrollBar->setBarRefresh();
+	}
+}
 
 void AchievePopup::scrollViewDidZoom( CCScrollView* view ){}
 

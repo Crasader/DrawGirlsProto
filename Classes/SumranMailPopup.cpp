@@ -65,7 +65,8 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	main_case->setPosition(ccp(240,160-450));
 //	addChild(main_case, 0);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	

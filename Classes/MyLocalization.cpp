@@ -235,13 +235,13 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
 	ko->setObject(CCString::create("다음에"), kMyLocalKey_next);
 	ko->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("업적"), kMyLocalKey_achievement);
+	ko->setObject(CCString::create("모든보상 받기"), kMyLocalKey_allRewardGet);
+	ko->setObject(CCString::create("종합 아이템 구매 찬스!"), kMyLocalKey_itemPackageChance);
+	ko->setObject(CCString::create("아이템이 하나도 없네요."), kMyLocalKey_emptyItemSaleTitle);
+	ko->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
+	ko->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
+	ko->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -605,6 +605,13 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
 	en->setObject(CCString::create("다음에"), kMyLocalKey_next);
 	en->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
+	en->setObject(CCString::create("업적"), kMyLocalKey_achievement);
+	en->setObject(CCString::create("모든보상 받기"), kMyLocalKey_allRewardGet);
+	en->setObject(CCString::create("종합 아이템 구매 찬스!"), kMyLocalKey_itemPackageChance);
+	en->setObject(CCString::create("아이템이 하나도 없네요."), kMyLocalKey_emptyItemSaleTitle);
+	en->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
+	en->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
+	en->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -963,6 +970,13 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
 	ja->setObject(CCString::create("다음에"), kMyLocalKey_next);
 	ja->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
+	ja->setObject(CCString::create("업적"), kMyLocalKey_achievement);
+	ja->setObject(CCString::create("모든보상 받기"), kMyLocalKey_allRewardGet);
+	ja->setObject(CCString::create("종합 아이템 구매 찬스!"), kMyLocalKey_itemPackageChance);
+	ja->setObject(CCString::create("아이템이 하나도 없네요."), kMyLocalKey_emptyItemSaleTitle);
+	ja->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
+	ja->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
+	ja->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
 	
 
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);

@@ -81,6 +81,7 @@ private:
 	
 	CCSprite* postbox_count_case;
 //	CCLabelTTF* postbox_count_label;
+	CCSprite* achievement_count_case;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
@@ -163,9 +164,11 @@ private:
 	Json::Value saved_ranking_data;
 	
 	void countingMessage();
+	void countingAchievement();
 	
 	void popupClose();
 	void mailPopupClose();
+	void achievePopupClose();
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked();

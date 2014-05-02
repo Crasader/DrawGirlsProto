@@ -155,7 +155,7 @@ void StartSettingPopup::setMain()
 {
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160));
+	main_case->setPosition(ccp(240,160-22.f));
 	addChild(main_case, kStartSettingPopupZorder_main);
 	
 	main_case->setScaleY(0.f);
@@ -414,6 +414,8 @@ void StartSettingPopup::setMain()
 			}
 			
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
+			if(is_show_item_popup)
+				item_cnt += mySGD->getBonusItemCnt(t_ic);
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 10);
 			cnt_label->setPosition(ccp(21, -21));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);

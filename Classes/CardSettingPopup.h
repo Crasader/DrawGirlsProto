@@ -23,6 +23,7 @@ class CardListViewer;
 class ListViewerScroll;
 class IntPoint;
 class CommonButton;
+class ScrollBar;
 class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -51,6 +52,8 @@ private:
 	CommonButton* align_default_menu;
 	CommonButton* align_take_menu;
 	CommonButton* align_rank_menu;
+	
+	ScrollBar* m_scrollBar;
 	
 	int server_puzzle_list_count;
 	vector<int> server_puzzle_list_no;

@@ -73,7 +73,8 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	cancel_menu->setTouchPriority(touch_priority);
 	
 	
-	CCSprite* title_label = CCSprite::create("missile_upgrade_title.png");
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 21);
+	title_label->setColor(ccc3(50, 250, 255));
 	title_label->setPosition(ccp(0,100));
 	m_container->addChild(title_label);
 	

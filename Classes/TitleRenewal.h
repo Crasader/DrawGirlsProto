@@ -53,6 +53,7 @@ public:
 	
 private:
 	KSLabelTTF* state_label;
+	CCSprite* white_back;
 	CCSprite* title_img;
 	CCSprite* title_name;
 	CCLabelBMFont* download_state;

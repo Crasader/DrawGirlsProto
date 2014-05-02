@@ -190,8 +190,9 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	m_container->addChild(back_case);
 	
 	
-	CCSprite* title_label = CCSprite::create("item_gacha_title.png");
-	title_label->setPosition(ccp(0,90));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 21);
+	title_label->setColor(ccc3(50, 250, 255));
+	title_label->setPosition(ccp(0,95));
 	m_container->addChild(title_label);
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");

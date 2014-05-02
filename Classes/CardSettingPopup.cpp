@@ -24,6 +24,7 @@
 #include "TouchSuctionLayer.h"
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
+#include "ScrollBar.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -92,11 +93,11 @@ bool CardSettingPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-450));
+	main_case->setPosition(ccp(240,160-22.f-450));
 	addChild(main_case, kCSS_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 17);
-	title_label->setColor(ccc3(255, 150, 50));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setPosition(ccp(40,256));
 	main_case->addChild(title_label);
 	
@@ -132,7 +133,7 @@ bool CardSettingPopup::init()
 	
 	default_align_number_of_cell = total_stage_cnt;
 	
-	CCSize table_size = CCSizeMake(410, 208);
+	CCSize table_size = CCSizeMake(430, 208);
 	CCPoint table_position = ccp(36, 20);
 	
 //	CCSprite* temp_table = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
@@ -140,6 +141,11 @@ bool CardSettingPopup::init()
 //	temp_table->setOpacity(100);
 //	temp_table->setPosition(table_position);
 //	main_case->addChild(temp_table, kCSS_Z_content);
+	
+	CCScale9Sprite* scroll_back = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
+	scroll_back->setContentSize(CCSizeMake(7, table_size.height-20));
+	scroll_back->setPosition(ccpAdd(table_position, ccp(table_size.width-23, table_size.height/2.f)));
+	main_case->addChild(scroll_back, kCSS_Z_content);
 	
 	card_table = CCTableView::create(this, table_size);
 	card_table->setAnchorPoint(CCPointZero);
@@ -149,6 +155,10 @@ bool CardSettingPopup::init()
 	card_table->setDelegate(this);
 	main_case->addChild(card_table, kCSS_Z_content);
 	card_table->setTouchPriority(-180-5);
+	
+	m_scrollBar = ScrollBar::createScrollbar(card_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"));
+	m_scrollBar->setDynamicScrollSize(false);
+	m_scrollBar->setVisible(true);
 	
 	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-184);
 	t_suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
@@ -306,7 +316,7 @@ void CardSettingPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -354,7 +364,7 @@ void CardSettingPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -802,7 +812,10 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 
 void CardSettingPopup::scrollViewDidScroll( CCScrollView* view )
 {
-	
+	if(m_scrollBar)
+	{
+		m_scrollBar->setBarRefresh();
+	}
 }
 
 void CardSettingPopup::scrollViewDidZoom( CCScrollView* view )
