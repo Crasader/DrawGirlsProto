@@ -273,7 +273,7 @@ bool MainFlowScene::init()
 																   t_popup->removeFromParent();
 															   }, mySGD->getNoticeList());
 			t_popup->setContainerNode(t_container);
-			addChild(t_popup, kMainFlowZorder_popup);
+			addChild(t_popup, kMainFlowZorder_popup+1000);
 		}
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
