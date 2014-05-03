@@ -345,6 +345,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("불꽃스토커"), kMyLocalKey_warning1017);
 	ko->setObject(CCString::create("문득구름"), kMyLocalKey_warning1018);
 	ko->setObject(CCString::create("보스공격저지"), kMyLocalKey_warningBossSuccess);
+	ko->setObject(CCString::create("마지막 목숨"), kMyLocalKey_warningLastLife);
 	
 //	ko->setObject(CCString::create("서버에 연결할 수 없습니다."), kMyLocalKey_canNotConnectedServer);
 //	ko->setObject(CCString::create("화면을 터치 해주세요."), kMyLocalKey_touchPlease);
@@ -774,7 +775,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
 	en->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
 	en->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
-	
+	en->setObject(CCString::create("Last Life"), kMyLocalKey_warningLastLife);
 	
 	en->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
 	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
