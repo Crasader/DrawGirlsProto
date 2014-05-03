@@ -40,6 +40,7 @@ void StyledLabelTTF::updateTexture()
 {
 	removeAllChildren();
 	m_oneLineContainer = CCNode::create();
+	m_oneLineContainer->setTag(1);
 	addChild(m_oneLineContainer);
 	
 	Json::Value jsonStyle;
@@ -51,6 +52,9 @@ void StyledLabelTTF::updateTexture()
 		
 		Json::Reader reader;
 		reader.parse(st.m_style, jsonStyle);
+		
+		this->setContentSize(CCSizeMake(m_currentPosition, abs(m_currentLinePosition)));
+		
 		if(jsonStyle.get("linebreak", false).asBool()) // 줄바꿈이거나 마지막 요소이면.
 		{
 			if(m_currentAlignment == StyledAlignment::kLeftAlignment)
@@ -67,6 +71,7 @@ void StyledLabelTTF::updateTexture()
 			}
 			m_oneLineSize = 0.f;
 			m_oneLineContainer = CCNode::create();
+			m_oneLineContainer->setTag(1);
 			addChild(m_oneLineContainer);
 			m_currentLinePosition -= jsonStyle.get("linespacing", 18.f).asFloat();
 			m_currentPosition = 0.f;
@@ -88,6 +93,8 @@ void StyledLabelTTF::updateTexture()
 			
 			
 		}
+		
+
 	}
 	
 	//	m_oneLineContainer->setPosition(ccp(-m_oneLineSize / 2.f, 0));
@@ -211,8 +218,118 @@ StyledLabelTTF* StyledLabelTTF::create(const char* text,const char* font ,Styled
 	texts.push_back({"",nl.toStyledString()});
 	
 	StyledLabelTTF* slttf = StyledLabelTTF::create(texts, sa);
-	
+	slttf->m_font = font;
+	slttf->m_string = text;
 	return slttf;
 	
 }
+
+void StyledLabelTTF::setString(const char* text){
+	if(m_string==text)return;
+	
+	//<|rgb|size|newline|tag>   ex)   <|900|15|15|>안녕하세요   ->빨간색 15 사이즈 텍스트
+	std::string str = text;
+	bool isSetMode=false;
+	std::string content="";
+	std::string option="";
+	Json::Value sData;
+	int labelNo=0;
+	int optionNo=0;
+	for (int i=0; i<str.length(); i++) {
+		if((str[i]=='<' && str[i+1]=='|') || i==str.length()-1){
+			if(i==str.length()-1)content+=str[i];
+			sData[labelNo]["content"]=content;
+			
+			if(i!=0)labelNo++;
+			
+			isSetMode=true;
+			content="";
+			optionNo=0;
+			i++;
+			
+			continue;
+		}
+		
+		
+		
+		if(isSetMode){
+			if(str[i]=='|'){
+				//모은옵션스트링저장하기
+				if(optionNo==0)sData[labelNo]["option"]["color"]=std::atoi(option.c_str());
+				else if(optionNo==1)sData[labelNo]["option"]["size"]=std::atoi(option.c_str());
+				else if(optionNo==2)sData[labelNo]["option"]["newline"]=std::atoi(option.c_str());
+				else if(optionNo==3)sData[labelNo]["option"]["tag"]=std::atoi(option.c_str());
+				
+				option="";
+				optionNo++;
+				
+				
+				if(str[i]=='|' && str[i+1]=='>'){
+					i++;
+					isSetMode=false;
+					continue;
+				}
+				continue;
+			}
+			
+			if(str[i]==' ')continue;
+			option+=str[i];
+			
+		}else{
+			if(str[i]=='\n')continue;
+			
+			content+=str[i];
+			
+		}
+	}
+	
+	std::vector<StyledText> texts;
+	for(int k = 0;k<sData.size();k++){
+		Json::Value p;
+		int rgb = sData[k]["option"].get("color", 000).asInt();
+		p["fillcolor"]=StyledLabelTTF::makeRGB((rgb/100)/9.f*255, (rgb/10%10)/9.f*255, (rgb%10)/9.f*255);
+		p["font"]=m_font;
+		p["size"]=sData[k]["option"].get("size", 12).asInt();
+		p["tag"]=sData[k]["option"].get("tag", 0).asInt();
+		
+		texts.push_back({sData[k]["content"].asString(),p.toStyledString()});
+		
+		if(sData[k]["option"].get("newline",0).asInt()>0){
+			Json::Value nl;
+			nl["linebreak"]=true;
+			nl["linespacing"]=sData[k]["option"].get("newline",0).asInt();
+			texts.push_back({"",nl.toStyledString()});
+		}
+	}
+	
+	Json::Value nl;
+	nl["linebreak"]=true;
+	nl["linespacing"]=1;
+	texts.push_back({"",nl.toStyledString()});
+	
+	m_texts.clear();
+	
+	m_texts=texts;
+	m_string=text;
+	updateTexture();
+	
+}
+
+CCLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
+	for(int i=0;i<this->getChildrenCount();i++){
+		CCNode* lineNode = (CCNode*)this->getChildren()->objectAtIndex(i);
+		if(lineNode->getTag()==1){
+			for(int j=0;j<lineNode->getChildrenCount();j++){
+				CCLabelTTF* label = (CCLabelTTF *)lineNode->getChildByTag(tag);
+				if (label) {
+					return label;
+				}
+			}
+		}
+	}
+	
+	return nullptr;
+}
+
+
 

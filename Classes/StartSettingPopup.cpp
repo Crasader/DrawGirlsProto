@@ -233,7 +233,7 @@ void StartSettingPopup::setMain()
 	}
 	
 	CCRect mission_size = CCRectMake(0, 0, 210, 22);
-	CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+90, main_case->getContentSize().height+2-28);
+	CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+92, main_case->getContentSize().height+2-26);
 	
 	//	CCSprite* temp_mission = CCSprite::create("whitePaper.png", mission_size);
 	//	temp_mission->setOpacity(100);

@@ -266,6 +266,26 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	ko->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
 	
+	
+	ko->setObject(CCString::create("영역획득"), kMyLocalKey_missionTitle0);
+	ko->setObject(CCString::create("용감한 기사"), kMyLocalKey_missionTitle1);
+	ko->setObject(CCString::create("부하몹 사냥"), kMyLocalKey_missionTitle2);
+	ko->setObject(CCString::create("욕심쟁이"), kMyLocalKey_missionTitle3);
+	ko->setObject(CCString::create("수집가"), kMyLocalKey_missionTitle4);
+	ko->setObject(CCString::create("완벽주의자"), kMyLocalKey_missionTitle5);
+	ko->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
+	ko->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
+	
+	ko->setObject(CCString::create("<|900|13|>85%이상<|999|13|> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ko->setObject(CCString::create("<|999|13|>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	ko->setObject(CCString::create("<|999|13|>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	ko->setObject(CCString::create("<|999|13|>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	ko->setObject(CCString::create("<|999|13|>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	ko->setObject(CCString::create("<|999|13|>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	ko->setObject(CCString::create("<|999|13|>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	ko->setObject(CCString::create("<|999|13|>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
+	
 	ko->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	ko->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
 	ko->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
@@ -683,6 +703,25 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
 	en->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	en->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
+	
+	en->setObject(CCString::create("영역획득"), kMyLocalKey_missionTitle0);
+	en->setObject(CCString::create("용감한 기사"), kMyLocalKey_missionTitle1);
+	en->setObject(CCString::create("부하몹 사냥"), kMyLocalKey_missionTitle2);
+	en->setObject(CCString::create("욕심쟁이"), kMyLocalKey_missionTitle3);
+	en->setObject(CCString::create("수집가"), kMyLocalKey_missionTitle4);
+	en->setObject(CCString::create("완벽주의자"), kMyLocalKey_missionTitle5);
+	en->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
+	en->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
+	
+	en->setObject(CCString::create("<|900|13|>85%이상<|999|13|> 획득하라!"), kMyLocalKey_missionDiscription0);
+	en->setObject(CCString::create("<|999|13|>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	en->setObject(CCString::create("<|999|13|>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	en->setObject(CCString::create("<|999|13|>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	en->setObject(CCString::create("<|999|13|>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	en->setObject(CCString::create("<|999|13|>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	en->setObject(CCString::create("<|999|13|>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	en->setObject(CCString::create("<|999|13|>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
 	en->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	en->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
 	en->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
@@ -1099,6 +1138,26 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
 	ja->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	ja->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
+	
+	
+	ja->setObject(CCString::create("영역획득"), kMyLocalKey_missionTitle0);
+	ja->setObject(CCString::create("용감한 기사"), kMyLocalKey_missionTitle1);
+	ja->setObject(CCString::create("부하몹 사냥"), kMyLocalKey_missionTitle2);
+	ja->setObject(CCString::create("욕심쟁이"), kMyLocalKey_missionTitle3);
+	ja->setObject(CCString::create("수집가"), kMyLocalKey_missionTitle4);
+	ja->setObject(CCString::create("완벽주의자"), kMyLocalKey_missionTitle5);
+	ja->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
+	ja->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
+	
+	ja->setObject(CCString::create("<|900|13|>85%이상<|999|13|> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ja->setObject(CCString::create("<|999|13|>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	ja->setObject(CCString::create("<|999|13|>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	ja->setObject(CCString::create("<|999|13|>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	ja->setObject(CCString::create("<|999|13|>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	ja->setObject(CCString::create("<|999|13|>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	ja->setObject(CCString::create("<|999|13|>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	ja->setObject(CCString::create("<|999|13|>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
 	ja->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	ja->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
 	ja->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);

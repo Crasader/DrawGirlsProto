@@ -273,7 +273,7 @@ bool MainFlowScene::init()
 																   t_popup->removeFromParent();
 															   }, mySGD->getNoticeList());
 			t_popup->setContainerNode(t_container);
-			addChild(t_popup, kMainFlowZorder_popup);
+			addChild(t_popup, kMainFlowZorder_popup+1000);
 		}
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
@@ -1672,6 +1672,30 @@ void MainFlowScene::setBottom()
 	s_mission_label->enableOuterStroke(ccBLACK, 1.f);
 	s_mission_label->setPosition(ccp(s_mission->getContentSize().width/2.f, 7));
 	s_mission->addChild(s_mission_label);
+	
+	
+	if(mySGD->today_mission_info.goal_count.getV() != 0)
+	{
+		float t_percent = 100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV();
+		if(t_percent < 100.f)
+		{
+			CCSprite* n_percent_back = CCSprite::create("todaymission_percent_back.png");
+			n_percent_back->setPosition(ccp(n_mission->getContentSize().width-8, n_mission->getContentSize().height-n_percent_back->getContentSize().height));
+			n_mission->addChild(n_percent_back);
+			
+			KSLabelTTF* n_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			n_percent_label->setPosition(ccp(n_percent_back->getContentSize().width/2.f, n_percent_back->getContentSize().height/2.f));
+			n_percent_back->addChild(n_percent_label);
+			
+			CCSprite* s_percent_back = CCSprite::create("todaymission_percent_back.png");
+			s_percent_back->setPosition(ccp(s_mission->getContentSize().width-8, s_mission->getContentSize().height-s_percent_back->getContentSize().height));
+			s_mission->addChild(s_percent_back);
+			
+			KSLabelTTF* s_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			s_percent_label->setPosition(ccp(s_percent_back->getContentSize().width/2.f, s_percent_back->getContentSize().height/2.f));
+			s_percent_back->addChild(s_percent_label);
+		}
+	}
 	
 	CCMenuItem* mission_item = CCMenuItemSprite::create(n_mission, s_mission, this, menu_selector(MainFlowScene::menuAction));
 	mission_item->setTag(kMainFlowMenuTag_mission);

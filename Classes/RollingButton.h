@@ -118,7 +118,7 @@ public:
 		
 		// Setup scroll view
 		
-		m_maqueeLbl = LabelTTFMarquee::create(ccc4(160,0,0,0), 155, 12, text);
+		m_maqueeLbl = LabelTTFMarquee::create(ccc4(160,0,0,0), 155, 14, text);
 		m_maqueeLbl->setAnchorPoint(ccp(0.47,0.5));
 		m_maqueeLbl->setPosition(ccp(3,0));
 		m_maqueeLbl->setVisible(false);

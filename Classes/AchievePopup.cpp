@@ -390,14 +390,31 @@ void AchievePopup::setAchieveTable()
 	
 	if(recent_code == kAchievePopupListCode_all)
 	{
+		vector<AchievementCode> another_list;
+		another_list.clear();
+		
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
-			achieve_list.push_back((AchievementCode)i);
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+				achieve_list.push_back((AchievementCode)i);
+			else
+				another_list.push_back((AchievementCode)i);
+		}
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == -1 ||
+			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
 			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
+			else if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == -1 ||
+					AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+				another_list.push_back((AchievementCode)i);
+		}
+		
+		for(int i=0;i<another_list.size();i++)
+		{
+			achieve_list.push_back(another_list[i]);
 		}
 	}
 	else if(recent_code == kAchievePopupListCode_success)

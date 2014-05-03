@@ -82,6 +82,9 @@ public:
 	{
 		return r >> 16;
 	}
+	
+	void setString(const char* text);
+	CCLabelTTF* getLabelByTag(int tag);
 	//virtual void registerWithTouchDispatcher();
 protected:
 	float m_currentPosition;
@@ -89,6 +92,8 @@ protected:
 	CCNode* m_oneLineContainer;
 //	float m_lineSpacing;
 	float m_currentLinePosition;
+	std::string m_font;
+	std::string m_string;
 	std::vector<StyledText> m_texts;
 	StyledAlignment m_currentAlignment;
 public:
