@@ -149,6 +149,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("다시하기"), kMyLocalKey_regame);
 	ko->setObject(CCString::create("메인으로"), kMyLocalKey_toMain);
 	ko->setObject(CCString::create("이전 스테이지를\n클리어 해주세요!"), kMyLocalKey_beforeNotClearPuzzle);
+	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	ko->setObject(CCString::create("기다릴게요!\n제 사진\n모아주세요!"), kMyLocalKey_diaryNoImg);
 	ko->setObject(CCString::create("보상"), kMyLocalKey_reward);
 	ko->setObject(CCString::create("스피드"), kMyLocalKey_speed);
@@ -317,13 +318,16 @@ void MyLocal::initLocal()
 	
 //	ko->setObject(CCString::create("서버에 연결할 수 없습니다."), kMyLocalKey_canNotConnectedServer);
 //	ko->setObject(CCString::create("화면을 터치 해주세요."), kMyLocalKey_touchPlease);
-//	ko->setObject(CCString::create("상하좌우 제스처를 이용하여\n많은 영역을 획득해야 하는 게임입니다."), kMyLocalKey_tutorial1);
-//	ko->setObject(CCString::create("컨트롤 방법에 대해 알려드리겠습니다."), kMyLocalKey_tutorial2);
-//	ko->setObject(CCString::create("영역을 획득하기 위해서\n오른쪽으로 제스쳐 하세요.\n화면의 모든곳에서 할 수 있습니다."), kMyLocalKey_tutorial3);
-//	ko->setObject(CCString::create("위로 제스쳐 하세요."), kMyLocalKey_tutorial4);
-//	ko->setObject(CCString::create("왼쪽으로 제스쳐 하세요."), kMyLocalKey_tutorial5);
-//	ko->setObject(CCString::create("아래로 제스쳐 하세요."), kMyLocalKey_tutorial6);
-//	ko->setObject(CCString::create("영역 획득 완료. 잘하셨습니다.\n선을 그리는 도중에 취소를 하려면\n화면을 터치하면 됩니다."), kMyLocalKey_tutorial7);
+	
+	ko->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
+	ko->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
+	ko->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
+	ko->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
+	ko->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial5);
+	ko->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial6);
+	ko->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial7);
+	
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -553,6 +557,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	en->setObject(CCString::create("Main"), kMyLocalKey_toMain);
 	en->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
+	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	en->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	en->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	en->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -709,6 +714,14 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
 	en->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	
+	
+	en->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
+	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
+	en->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
+	en->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
+	en->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial5);
+	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial6);
+	en->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial7);
 	
 //	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -948,6 +961,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	ja->setObject(CCString::create("Main"), kMyLocalKey_toMain);
 	ja->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
+	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	ja->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	ja->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	ja->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -1072,9 +1086,49 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("부활"), kMyLocalKey_item10title);
 	ja->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
 	
-
+		
+	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
+	ja->setObject(CCString::create("まずは領域の線の上を移動してみましょう。\n右下にジョイスティックでキャラクターの方向を変えることができます。\nキャラクターを上に移動させてみましょう。"), kMyLocalKey_tutorial2);
+	ja->setObject(CCString::create("キャラクターを上に移動"), kMyLocalKey_tutorial3);
+	ja->setObject(CCString::create("次は領域を獲得する方法を調べてみましょう。\n左下のボタンを押したら\n領域の外に動けますよ。\n領域を獲得してみてください。"), kMyLocalKey_tutorial4);
+	ja->setObject(CCString::create("青のシルエット領域を獲得することでゲームをクリアすることができます。"), kMyLocalKey_tutorial5);
+	ja->setObject(CCString::create("時間制限内に領域を85％以上獲得したらクリア！"), kMyLocalKey_tutorial6);
+	ja->setObject(CCString::create("基本チュートリアルが終わりました。\n5000ゴールドをプレゼントします。\n本ゲームに戻ります。"), kMyLocalKey_tutorial7);
+	
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);
 	
+	
+	ja->setObject(CCString::create("Count Bomb"), kMyLocalKey_warning9);
+	ja->setObject(CCString::create("Orange Saw"), kMyLocalKey_warning105);
+	ja->setObject(CCString::create("Blue Saw"), kMyLocalKey_warning106);
+	ja->setObject(CCString::create("Crash Laser"), kMyLocalKey_warning107);
+	ja->setObject(CCString::create("Missile"), kMyLocalKey_warning108);
+	ja->setObject(CCString::create("Rush"), kMyLocalKey_warning109);
+	ja->setObject(CCString::create("Fire Work"), kMyLocalKey_warning110);
+	ja->setObject(CCString::create("Sunflower"), kMyLocalKey_warning111);
+	ja->setObject(CCString::create("Ice Bomb"), kMyLocalKey_warning112);
+	ja->setObject(CCString::create("Guided Bomb"), kMyLocalKey_warning113);
+	ja->setObject(CCString::create("Tornado"), kMyLocalKey_warning1001);
+	ja->setObject(CCString::create("Flashing"), kMyLocalKey_warning1002);
+	ja->setObject(CCString::create("Slow Zone"), kMyLocalKey_warning1003);
+	ja->setObject(CCString::create("Thorn Prison"), kMyLocalKey_warning1004);
+	ja->setObject(CCString::create("Freezing"), kMyLocalKey_warning1005);
+	ja->setObject(CCString::create("Chaos"), kMyLocalKey_warning1006);
+	ja->setObject(CCString::create("Teleport"), kMyLocalKey_warning1007);
+  ja->setObject(CCString::create("Invisibility"), kMyLocalKey_warning1008);
+	ja->setObject(CCString::create("Flame Spraying"), kMyLocalKey_warning1009);
+	ja->setObject(CCString::create("ThunderBolt"), kMyLocalKey_warning1010);
+	ja->setObject(CCString::create("Speed Laser"), kMyLocalKey_warning1011);
+	ja->setObject(CCString::create("Radioactivity"), kMyLocalKey_warning1012);
+	ja->setObject(CCString::create("Meteor"), kMyLocalKey_warning1013);
+	ja->setObject(CCString::create("Falling Stone"), kMyLocalKey_warning1014);
+	ja->setObject(CCString::create("Do not come"), kMyLocalKey_warning1015);
+	ja->setObject(CCString::create("Dynamite Mine"), kMyLocalKey_warning1016);
+	ja->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
+	ja->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
+	ja->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
+	
+
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

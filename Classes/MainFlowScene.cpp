@@ -860,6 +860,24 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell_node->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
 	cell->addChild(cell_node, 1, 1);
 	
+	
+	if(idx==NSDS_GI(kSDS_GI_puzzleListCount_i)){
+		CCSprite* n_locked_back = CCSprite::create("mainflow_puzzle_lock.png"); //mySIL->getLoadedImg("mainflow_puzzle_lock.png");
+		cell_node->addChild(n_locked_back);
+		
+		CCLabelTTF* rate_label = CCLabelTTF::create("??/??", mySGD->getFont().c_str(), 10);
+		rate_label->setPosition(ccp(-25, -81));
+		cell_node->addChild(rate_label);
+		
+		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
+		locked_label->enableOuterStroke(ccBLACK, 1.f);
+		locked_label->setPosition(ccp(67.5f,138.5f));
+		n_locked_back->addChild(locked_label);
+		
+		return cell;
+	}
+	
+	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -1272,7 +1290,7 @@ CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-	return puzzle_count;
+	return puzzle_count+1;
 	
 //	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
 }
