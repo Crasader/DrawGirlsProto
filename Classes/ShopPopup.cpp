@@ -1009,7 +1009,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-10, kGoodsType_ruby, [=]()
+																	{
+																		setShopCode(kSC_ruby);
+																	}), kSP_Z_popup);
+				is_menu_enable = true;
 				CCLOG("not enough ruby!!!");
 			}
 		}
@@ -1074,7 +1078,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-10, kGoodsType_ruby, [=]()
+																	{
+																		setShopCode(kSC_ruby);
+																	}), kSP_Z_popup);
+				is_menu_enable = true;
 				CCLOG("not enough ruby!!!");
 			}
 		}

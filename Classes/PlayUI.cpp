@@ -471,7 +471,7 @@ void MyGold::myInit ()
 	
 //	initWithFile("gold.png");
 	init_position = CCPointZero;
-	setScale(0.4f);
+	setScale(0.3f);
 	setPosition(init_position);
 	
 	i_dy = rand()%3+6;

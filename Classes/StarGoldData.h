@@ -659,6 +659,7 @@ public:
 	
 	void initTodayMission(Json::Value t_info);
 	TodayMission today_mission_info;
+	bool is_today_mission_first;
 	
 	void increaseCatchCumber();
 	int getCatchCumberCount();

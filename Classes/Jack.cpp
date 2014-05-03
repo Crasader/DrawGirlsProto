@@ -1871,9 +1871,9 @@ void Jack::dieEffect()
 			}
 			else
 			{
-				if(!is_on_continue)
+				if(continue_on_count < 2)
 				{
-					is_on_continue = true;
+					continue_on_count++;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
 				}
 				else
@@ -2070,7 +2070,7 @@ CCNode* Jack::getJack()
 
 void Jack::myInit()
 {
-	is_on_continue = false;
+	continue_on_count = 0;
 	before_x_direction = directionStop;
 	before_x_cnt = 0;
 	keep_direction = kKeepDirection_empty;

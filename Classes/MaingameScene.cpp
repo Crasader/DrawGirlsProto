@@ -34,6 +34,7 @@
 #include "LoadingLayer.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "EffectSprite.h"
 
 //#include "ScreenSide.h"
 
@@ -483,6 +484,12 @@ void Maingame::finalSetting()
 	
 	float thumb_scale = 0.17f;
 	
+	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
+	sil_thumb->setSilhouetteConvert((myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1)%7+1);
+	sil_thumb->setScale(thumb_scale);
+	sil_thumb->setPosition(ccp(40,myDSH->ui_center_y));
+	addChild(sil_thumb, clearshowtimeZorder);
+	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
 	thumb_texture->setPosition(ccp(40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
@@ -512,20 +519,20 @@ void Maingame::finalSetting()
 	CCSize screen_data = CCSizeMake(320.f*thumb_scale, 0);
 	screen_data.height = screen_data.width/3.f*2.f*myDSH->ui_top/320.f;
 	
-	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width, 1.5f));
-	screen_top->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.f));
+	screen_top->setColor(ccc3(255, 180, 0));
 	screen_top->setPosition(ccp(0,screen_data.height/2.f));
 	screen_node->addChild(screen_top);
-	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width, 1.5f));
-	screen_down->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.f));
+	screen_down->setColor(ccc3(255, 180, 0));
 	screen_down->setPosition(ccp(0,-screen_data.height/2.f));
 	screen_node->addChild(screen_down);
-	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height));
-	screen_left->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.f, screen_data.height+2));
+	screen_left->setColor(ccc3(255, 180, 0));
 	screen_left->setPosition(ccp(-screen_data.width/2.f,0));
 	screen_node->addChild(screen_left);
-	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height));
-	screen_right->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.f, screen_data.height+2));
+	screen_right->setColor(ccc3(255, 180, 0));
 	screen_right->setPosition(ccp(screen_data.width/2.f,0));
 	screen_node->addChild(screen_right);
 	
@@ -2384,6 +2391,17 @@ void Maingame::startExchange()
 	
 	mySD->exchangeSilhouette();
 	myMS->exchangeMS();
+	
+	float t_scale = sil_thumb->getScale();
+	CCPoint t_position = sil_thumb->getPosition();
+	
+	sil_thumb->removeFromParent();
+	
+	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))->getCString()));
+	sil_thumb->setSilhouetteConvert((myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1)%7+1);
+	sil_thumb->setScale(t_scale);
+	sil_thumb->setPosition(t_position);
+	addChild(sil_thumb, clearshowtimeZorder);
 	
 	myGD->communication("UI_writeImageChange");
 }

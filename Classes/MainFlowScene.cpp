@@ -2086,6 +2086,16 @@ void MainFlowScene::topOnLight()
 	GoodsLight* ruby_light = GoodsLight::create(CCSprite::create("price_ruby_img_mask.png"));
 	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
 	ruby_img->addChild(ruby_light);
+	
+	if(mySGD->is_today_mission_first)
+	{
+		is_menu_enable = false;
+		
+		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+		addChild(t_popup, kMainFlowZorder_popup);
+		
+		mySGD->is_today_mission_first = false;
+	}
 }
 
 void MainFlowScene::topOuting()
