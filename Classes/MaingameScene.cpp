@@ -1256,7 +1256,7 @@ void Maingame::gameover()
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("bgm_result.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString(), false, true);
 		ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 1.f, game_node, this, callfunc_selector(Maingame::clearScenario));
 		game_node->addChild(t_cst, clearshowtimeZorder);
 
@@ -1271,7 +1271,7 @@ void Maingame::gameover()
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("bgm_gameover.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString(), false, true);
 
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
@@ -1776,7 +1776,7 @@ void Maingame::clearScenario3()
 {
 	if(myUI->getPercentage() >= 1.f)
 	{
-		AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3");
+		AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3", false, true);
 		
 		CCSprite* spin_light = CCSprite::create("showtime_spin_light.png");
 		spin_light->setOpacity(0);
@@ -2350,7 +2350,7 @@ void Maingame::showTextMessage(const std::string& text)
 }
 void Maingame::showTakeCoin()
 {
-	AudioEngine::sharedInstance()->playEffect("ment_spread_change.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_spread_change.mp3", false, true);
 	
 	TakeCoin* t_w = TakeCoin::create();
 	addChild(t_w, goldZorder);
@@ -2379,7 +2379,7 @@ void Maingame::takeExchangeCoin( CCPoint t_start_position, int t_coin_number )
 
 void Maingame::startExchange()
 {
-	AudioEngine::sharedInstance()->playEffect("ment_change_success.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_change_success.mp3", false, true);
 	
 	mySD->exchangeSilhouette();
 	myMS->exchangeMS();

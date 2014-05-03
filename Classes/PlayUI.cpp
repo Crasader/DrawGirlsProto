@@ -971,7 +971,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f)
 		{
-			AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
+			AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 			
 			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f);
 			
@@ -1083,7 +1083,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
 			addResultCCB("ui_missonfair.ccbi");
-			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 			
 			endGame(false);
 		}
@@ -1093,7 +1093,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 void PlayUI::addResultClearCCB()
 {
 	addResultCCB("ui_stageclear.ccbi");
-	AudioEngine::sharedInstance()->playEffect("ment_stageclear1.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_stageclear1.mp3", false, true);
 }
 
 void PlayUI::addResultCCB(string ccb_filename)
@@ -1126,7 +1126,7 @@ void PlayUI::conditionClear ()
 	CCSprite* success_ccb = KS::loadCCBI<CCSprite*>(this, "ui_missonsuccess.ccbi").first;
 	success_node->addChild(success_ccb);
 	
-	AudioEngine::sharedInstance()->playEffect("ment_mission_success.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_mission_success.mp3", false, true);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 	CCCallFunc* t_call = CCCallFunc::create(success_node, callfunc_selector(CCNode::removeFromParent));
@@ -1161,7 +1161,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
 			addResultCCB("ui_missonfair.ccbi");
-			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 			
 			endGame(false);
 			return;
@@ -1712,7 +1712,7 @@ void PlayUI::counting ()
 		else if(countingCnt-1 == playtime_limit-30)
 		{
 			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", true);
-			AudioEngine::sharedInstance()->playEffect("ment_30second.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_30second.mp3", false, true);
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}
 		
@@ -1736,7 +1736,7 @@ void PlayUI::counting ()
 			}
 			else
 			{
-				AudioEngine::sharedInstance()->playEffect("ment_timeover.mp3");
+				AudioEngine::sharedInstance()->playEffect("ment_timeover.mp3", false, true);
 				
 				t_is_die = true;
 				//			if(jack_life > 0)
@@ -2003,7 +2003,7 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 }
 void PlayUI::searchEmptyPosition ()
 {
-	AudioEngine::sharedInstance()->playEffect("ment_99percent.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_99percent.mp3", false, true);
 	
 	CCPoint found_empty_position;
 	bool break_flag = false;

@@ -382,7 +382,7 @@ void GameItemAttack::acting()
 	GameItemBase::acting();
 	myLog->addLog(kLOG_getItem_s, myGD->getCommunication("UI_getUseTime"), "attack");
 	
-	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
+	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 	
 	int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
 	int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
