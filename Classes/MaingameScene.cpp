@@ -2313,8 +2313,8 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 																						 }
 																						 else if(type == "h")
 																						 {
-																							 colors[0] = ccc3(255, 210, 255);
-																							 colors[1] = ccc3(191, 241, 255);
+																							 colors[0] = ccc3(30, 200, 255);
+																							 colors[1] = ccc3(255, 150, 100);
 																						 }
 																						 for(int i=0; i<11; i++) {
 																							 tempScheduler->addChild(KSTimer::create(3/30.f * (i + 1), [=](){
