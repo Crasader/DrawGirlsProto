@@ -19,6 +19,7 @@ using namespace std;
 
 class TouchSuctionLayer;
 class LoadingLayer;
+class KSLabelTTF;
 class ItemGachaPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
@@ -42,6 +43,8 @@ private:
 	
 	int item_type;
 	CCSprite* item_img;
+	KSLabelTTF* item_title;
+	KSLabelTTF* item_ment;
 	CCSprite* question_img;
 	CCBAnimationManager* question_manager;
 	

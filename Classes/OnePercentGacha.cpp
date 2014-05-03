@@ -516,7 +516,7 @@ void OnePercentGacha::setBack ()
 	t_label->addChild(price_back);
 	
 	
-	CCSprite* price_type = CCSprite::create("common_button_ruby.png");
+	CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_type);
 	CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);

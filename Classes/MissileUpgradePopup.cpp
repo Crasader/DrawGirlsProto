@@ -138,7 +138,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	price_back->setPosition(ccp(upgrade_label->getContentSize().width/2.f, upgrade_label->getContentSize().height/2.f-20));
 	upgrade_label->addChild(price_back);
 	
-	CCSprite* price_type = CCSprite::create("common_button_gold.png");
+	CCSprite* price_type = CCSprite::create("price_gold_img.png");
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_type);
 	price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);

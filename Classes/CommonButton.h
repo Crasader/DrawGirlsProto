@@ -361,11 +361,11 @@ public:
 		}
 		
 		if(m_priceTypeSprite==NULL && m_priceType!=PriceTypeNone){
-			string priceTypeImg = "common_button_gold.png";
+			string priceTypeImg = "price_gold_img.png";
 			if(m_priceType == PriceTypeCoin)priceTypeImg="common_button_coin.png";
-			else if(m_priceType == PriceTypeGold)priceTypeImg="common_button_gold.png";
+			else if(m_priceType == PriceTypeGold)priceTypeImg="price_gold_img.png";
 			else if(m_priceType == PriceTypeSocial)priceTypeImg="common_button_social.png";
-			else if(m_priceType == PriceTypeRuby)priceTypeImg="common_button_ruby.png";
+			else if(m_priceType == PriceTypeRuby)priceTypeImg="price_ruby_img.png";
 			
 			m_priceTypeSprite = CCSprite::create(priceTypeImg.c_str());
 			m_priceTypeSprite->setScale(0.9);
