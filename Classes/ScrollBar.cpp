@@ -18,6 +18,7 @@ THIS::THIS () {
 	barV = barH = NULL;
 	fixedBarH = fixedBarV = NULL;
 	scrollBarNarrowSize = 30;
+	selectedBarV = selectedBarH = nullptr;
 }
 
 THIS::~THIS() {
@@ -25,13 +26,15 @@ THIS::~THIS() {
 	//        bar = NULL;
 	//    }
 }
-bool THIS::init(CCScrollView* sv, float offset, const std::string& h, const std::string& v)
+bool THIS::init(CCScrollView* sv, float offset, const std::string& h, const std::string& v, int _touchPriority)
 {
 	dynamicScrollSize = false;
+	touchPriority = _touchPriority;
 	scrollView = sv;
 	CCLayerColor::initWithColor(ccc4(0, 255, 0, 0));
 	marginOffset = offset;
 	CCScrollViewDirection type = sv->getDirection();
+	setTouchEnabled(true);
 	switch(type)
 	{
 		case kCCScrollViewDirectionHorizontal:
@@ -42,7 +45,7 @@ bool THIS::init(CCScrollView* sv, float offset, const std::string& h, const std:
 			fixedBarH->setPosition(ccp(0, offset));
 			addChild(fixedBarH);
 			
-			sv->cocos2d::CCLayer::addChild(this);
+			sv->cocos2d::CCNode::addChild(this, 0, -1);
 			setBarRefresh();
 			break;
 		case kCCScrollViewDirectionVertical:
@@ -53,7 +56,7 @@ bool THIS::init(CCScrollView* sv, float offset, const std::string& h, const std:
 			fixedBarV->setPosition(ccp(offset, 0));
 			addChild(fixedBarV);
 			
-			sv->cocos2d::CCLayer::addChild(this);
+			sv->cocos2d::CCNode::addChild(this, 0, -1);
 			setBarRefresh();
 			break;
 		case kCCScrollViewDirectionBoth:
@@ -76,19 +79,21 @@ bool THIS::init(CCScrollView* sv, float offset, const std::string& h, const std:
 			setBarRefreshV();
 			
 			
-			sv->cocos2d::CCLayer::addChild(this);
+			sv->cocos2d::CCNode::addChild(this, 0, -1);
 			break;
 	}
 	return true;
 }
 
 
-bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Sprite* v9)
+bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Sprite* v9, int _touchPriority)
 {
 	dynamicScrollSize = true;
+	touchPriority = _touchPriority;
 	scrollView = sv;
 	CCLayerColor::initWithColor(ccc4(0, 255, 0, 0));
 	marginOffset = offset;
+	setTouchEnabled(true);
 //
 	if(h9 && v9)
 	{
@@ -115,7 +120,7 @@ bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Spri
 			barH->setPosition(ccp(0, offset));
 			addChild(barH);
 				
-			sv->cocos2d::CCLayer::addChild(this);
+			sv->cocos2d::CCNode::addChild(this, 0, -1);
 			setBarRefresh();
 			break;
 		case kCCScrollViewDirectionVertical:
@@ -125,7 +130,7 @@ bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Spri
 			addChild(barV);
 			
 		
-			sv->cocos2d::CCLayer::addChild(this);
+			sv->cocos2d::CCNode::addChild(this, 0, -1);
 			setBarRefresh();
 			break;
 		case kCCScrollViewDirectionBoth:
@@ -141,7 +146,7 @@ bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Spri
 			barV->setPosition(ccp(offset, 0));
 			addChild(barV);
 			
-			sv->cocos2d::CCLayer::addChild(this);
+			sv->cocos2d::CCNode::addChild(this, 0, -1);
 			setBarRefresh();
 			break;
 		case kCCScrollViewDirectionNone:
@@ -153,11 +158,10 @@ bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Spri
 	return true;
 }
 THIS* THIS::createScrollbar(CCScrollView* sv, float offset, const std::string& h,
-						   const std::string& v)
+						   const std::string& v, int _touchPriority)
 {
     THIS* obj = new THIS();
-	
-    if(obj->init(sv, offset, h, v)) {
+    if(obj->init(sv, offset, h, v, _touchPriority)) {
         obj->autorelease();
         return obj;
     } else {
@@ -194,7 +198,7 @@ void THIS::setBarRefreshH()
 	float position = (percent * viewSize.width) + barContentSize.width / 2.f;
 	if(barH)
 	{
-		barH->setPosition(ccp(offset + position, offsetY + marginOffset));
+		barH->setPosition(ccp(offset + position, marginOffset));
 	}
 }
 void THIS::setBarRefreshV()
@@ -222,8 +226,10 @@ void THIS::setBarRefreshV()
 	percent = percent * (viewSize.height - barContentSize.height) / viewSize.height;
 	float position = ((percent * viewSize.height) + barContentSize.height / 2.f);
 	if(barV)
-		barV->setPosition(ccp(marginOffset + offsetX + viewSize.width, offset + position));
-
+	{
+		barV->setPosition(ccp(marginOffset + offsetX + viewSize.width, position));
+		CCLOG("ASdasdasD %f", position);
+	}
 	
 }
 //주기적으로 호출 되면서 내용을 갱신할 함수 -> scrollViewDidScroll에서 호출됨.
@@ -252,5 +258,88 @@ void THIS::setBarRefresh() {
 }
 
 
+bool ScrollBar::ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	// 처음 누른 놈이 선택이 되었다면 움직일 수 있는 상황으로 인식.
+	
+	CCPoint touchLocation = pTouch->getLocation();
+	if(barV)
+	{
+		CCPoint local = barV->convertToNodeSpace(touchLocation);
+		CCRect r = getRectForObject(barV);
+		r.origin = CCPointZero;
+		
+		if (r.containsPoint(local))
+		{
+			selectedBarV = barV;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+	}
+	
+	if(barH)
+	{
+		CCPoint localH = barH->convertToNodeSpace(touchLocation);
+		
+		CCRect rH = getRectForObject(barH);
+		rH.origin = CCPointZero;
+		if(rH.containsPoint(localH))
+		{
+			selectedBarH = barH;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return false;
+	
+}
+
+void ScrollBar::ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	CCPoint touchLocation = pTouch->getLocation();
+//	CCLOG("zzz %f", touchLocation.y);
+	if(selectedBarV)
+	{
+		CCPoint local = convertToNodeSpace(touchLocation);
+		CCSize barContentSize = barV->getContentSize();//, at);
+		CCSize viewSize = scrollView->getViewSize();
+				
+		float _100Position = ((((viewSize.height - barContentSize.height) / viewSize.height) * viewSize.height) + barContentSize.height / 2.f);
+		float _0Position = barContentSize.height / 2.f;
+		
+		float scrollBarPercent = (local.y - _0Position) / (_100Position - _0Position);
+		scrollBarPercent *= -1.f;
+		float clamp = (scrollView->maxContainerOffset().y - scrollView->minContainerOffset().y) * scrollBarPercent;
+		clamp = clampf(clamp, scrollView->minContainerOffset().y, scrollView->maxContainerOffset().y);
+		scrollView->setContentOffset(ccp(scrollView->getContentOffset().x, clamp));
+	}
+	
+	if(selectedBarH)
+	{
+		CCPoint local = convertToNodeSpace(touchLocation);
+		CCSize barContentSize = barV->getContentSize();//, at);
+		CCSize viewSize = scrollView->getViewSize();
+		
+		float _100Position = ((((viewSize.width - barContentSize.width) / viewSize.width) * viewSize.width) + barContentSize.width / 2.f);
+		float _0Position = barContentSize.width / 2.f;
+		
+		float scrollBarPercent = (local.x - _0Position) / (_100Position - _0Position);
+		scrollBarPercent *= -1.f;
+		float clamp = (scrollView->maxContainerOffset().x - scrollView->minContainerOffset().x) * scrollBarPercent;
+		clamp = clampf(clamp, scrollView->minContainerOffset().x, scrollView->maxContainerOffset().x);
+		scrollView->setContentOffset(ccp(clamp, scrollView->getContentOffset().y));
+	}
+}
 
 
+void ScrollBar::ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
+{
+	selectedBarH = selectedBarV = nullptr;
+}
