@@ -357,6 +357,12 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_isPushOff)									return_value = "ipo";
 	else if(t_name == kDSH_Key_isMessageOff)								return_value = "imo";
 	
+	else if(t_name == kDSH_Key_atTimeShowFirstPurchase)						return_value = "ats_fp";
+	else if(t_name == kDSH_Key_atTimeShowEmptyItem)							return_value = "ats_ei";
+	else if(t_name == kDSH_Key_atTimeShowStupidNpuHelp)						return_value = "ats_snh";
+	else if(t_name == kDSH_Key_atTimeShowEventRubyShop)						return_value = "ats_ers";
+	else if(t_name == kDSH_Key_atTimeShowLevelupGuide)						return_value = "ats_lg";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()

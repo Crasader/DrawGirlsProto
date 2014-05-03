@@ -95,6 +95,31 @@ bool AchievePopup::init()
 	
 	all_reward_menu->setVisible(recent_code == kAchievePopupListCode_all || recent_code == kAchievePopupListCode_reward);
 	
+	bool is_found = false;
+	
+	for(int i=kAchievementCode_base+1;!is_found && i<kAchievementCode_end;i++)
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			is_found = true;
+	}
+	
+	for(int i=kAchievementCode_hidden_base+1;!is_found && i<kAchievementCode_hidden_end;i++)
+	{
+		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			is_found = true;
+	}
+	
+	if(is_found)
+	{
+		all_reward_menu->setVisible(true);
+	}
+	else
+	{
+		all_reward_menu->setVisible(false);
+	}
+	
 		
 	all_menu = NULL;
 	setAllMenu();
@@ -122,6 +147,9 @@ bool AchievePopup::init()
 	m_scrollBar = NULL;
 	setAchieveTable();
 	
+	empty_ment = CCLabelTTF::create("", mySGD->getFont().c_str(), 15);
+	empty_ment->setPosition(ccp(25+210,52+90));
+	main_case->addChild(empty_ment, kAchievePopupZorder_menu);
 	
 //	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
 //	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
@@ -230,7 +258,32 @@ void AchievePopup::menuAction(CCObject* pSender)
 			
 			setAllMenu();
 			setAchieveTable();
-			all_reward_menu->setVisible(true);
+			
+			bool is_found = false;
+			
+			for(int i=kAchievementCode_base+1;!is_found && i<kAchievementCode_end;i++)
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+				   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+					is_found = true;
+			}
+			
+			for(int i=kAchievementCode_hidden_base+1;!is_found && i<kAchievementCode_hidden_end;i++)
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
+				   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+					is_found = true;
+			}
+			
+			if(is_found)
+			{
+				all_reward_menu->setVisible(true);
+			}
+			else
+			{
+				all_reward_menu->setVisible(false);
+			}
+			empty_ment->setString("");
 		}
 		is_menu_enable = true;
 	}
@@ -251,6 +304,10 @@ void AchievePopup::menuAction(CCObject* pSender)
 			setSuccessMenu();
 			setAchieveTable();
 			all_reward_menu->setVisible(false);
+			if(achieve_list.size() <= 0)
+				empty_ment->setString(myLoc->getLocalForKey(kMyLocalKey_nothingSuccessAchieve));
+			else
+				empty_ment->setString("");
 		}
 		is_menu_enable = true;
 	}
@@ -271,6 +328,7 @@ void AchievePopup::menuAction(CCObject* pSender)
 			setIngMenu();
 			setAchieveTable();
 			all_reward_menu->setVisible(false);
+			empty_ment->setString("");
 		}
 		is_menu_enable = true;
 	}
@@ -290,7 +348,16 @@ void AchievePopup::menuAction(CCObject* pSender)
 			
 			setRewardMenu();
 			setAchieveTable();
-			all_reward_menu->setVisible(true);
+			if(achieve_list.size() <= 0)
+			{
+				all_reward_menu->setVisible(false);
+				empty_ment->setString(myLoc->getLocalForKey(kMyLocalKey_nothingRewardAchieve));
+			}
+			else
+			{
+				all_reward_menu->setVisible(true);
+				empty_ment->setString("");
+			}
 		}
 		is_menu_enable = true;
 	}
@@ -317,11 +384,6 @@ void AchievePopup::setAchieveTable()
 	{
 		achieve_table->removeFromParent();
 		achieve_table = NULL;
-	}
-	if(m_scrollBar)
-	{
-		m_scrollBar->removeFromParent();
-		m_scrollBar = NULL;
 	}
 	
 	achieve_list.clear();
@@ -410,6 +472,7 @@ void AchievePopup::setAchieveTable()
 	t_suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
 	t_suction->setTouchEnabled(true);
 	main_case->addChild(t_suction);
+	
 }
 
 void AchievePopup::cellAction( CCObject* sender )
@@ -488,7 +551,6 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 																		   AchieveConditionReward::sharedInstance()->getRecentValue(achieve_list[idx*2]),
 																		   AchieveConditionReward::sharedInstance()->getCondition(achieve_list[idx*2]))->getCString(),
 																		   mySGD->getFont().c_str(), 11);
-	cell_title->enableOuterStroke(ccc3(200, 30, 0), 1);
 	cell_title->setAnchorPoint(ccp(0,0.5));
 	cell_title->setPosition(ccp(8,30));
 	cell_back->addChild(cell_title);
@@ -501,12 +563,16 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	CCPoint img_position = ccp(170,24);
 	if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2]) == -1)
 	{
+		cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
+		
 		CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
 		success_img->setPosition(img_position);
 		cell_back->addChild(success_img);
 	}
 	else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2]))
 	{
+		cell_title->enableOuterStroke(ccc3(70, 0, 40), 1);
+		
 		string reward_type_str;
 		AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[idx*2]);
 		if(reward_type == kAchieveRewardType_ruby)
@@ -557,6 +623,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	}
 	else
 	{
+		cell_title->enableOuterStroke(ccc3(70, 40, 0), 1);
+		
 		string reward_type_str;
 		AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[idx*2]);
 		if(reward_type == kAchieveRewardType_ruby)
@@ -604,7 +672,6 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 																			   AchieveConditionReward::sharedInstance()->getRecentValue(achieve_list[idx*2+1]),
 																			   AchieveConditionReward::sharedInstance()->getCondition(achieve_list[idx*2+1]))->getCString(),
 													mySGD->getFont().c_str(), 11);
-		cell_title->enableOuterStroke(ccc3(200, 30, 0), 1);
 		cell_title->setAnchorPoint(ccp(0,0.5));
 		cell_title->setPosition(ccp(8,30));
 		cell_back->addChild(cell_title);
@@ -618,12 +685,14 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2+1]) == -1)
 		{
+			cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
 			CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
 			success_img->setPosition(img_position);
 			cell_back->addChild(success_img);
 		}
 		else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2+1]))
 		{
+			cell_title->enableOuterStroke(ccc3(70, 0, 40), 1);
 			string reward_type_str;
 			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[idx*2+1]);
 			if(reward_type == kAchieveRewardType_ruby)
@@ -674,6 +743,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		}
 		else
 		{
+			cell_title->enableOuterStroke(ccc3(70, 40, 0), 1);
 			string reward_type_str;
 			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[idx*2+1]);
 			if(reward_type == kAchieveRewardType_ruby)
@@ -760,8 +830,7 @@ void AchievePopup::setAllMenu()
 {
 	if(!all_menu)
 	{
-		all_menu = CommonButton::create("전체보기", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
-//		all_menu->setTitleColor(ccWHITE);
+		all_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allView), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
 		all_menu->setPosition(ccp(150,256));
 		main_case->addChild(all_menu, kAchievePopupZorder_menu);
 		all_menu->setFunction([=](CCObject* sender)
@@ -771,8 +840,8 @@ void AchievePopup::setAllMenu()
 								  menuAction(t_node);
 							  });
 		
-		all_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
-//		all_menu->setTitleColorForDisable(ccBLACK);
+		all_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		all_menu->setTitleColorForDisable(ccc3(50, 20, 0));
 	}
 	
 	all_menu->setEnabled(recent_code != kAchievePopupListCode_all);
@@ -781,7 +850,7 @@ void AchievePopup::setSuccessMenu()
 {
 	if(!success_menu)
 	{
-		success_menu = CommonButton::create("업적달성", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
+		success_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_achieveSuccess), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
 //		success_menu->setTitleColor(ccWHITE);
 		success_menu->setPosition(ccp(225,256));
 		main_case->addChild(success_menu, kAchievePopupZorder_menu);
@@ -792,8 +861,8 @@ void AchievePopup::setSuccessMenu()
 								  menuAction(t_node);
 							  });
 		
-		success_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
-//		success_menu->setTitleColorForDisable(ccBLACK);
+		success_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		success_menu->setTitleColorForDisable(ccc3(50, 20, 0));
 	}
 	
 	success_menu->setEnabled(recent_code != kAchievePopupListCode_success);
@@ -802,7 +871,7 @@ void AchievePopup::setIngMenu()
 {
 	if(!ing_menu)
 	{
-		ing_menu = CommonButton::create("업적미완성", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
+		ing_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_achieveNotSuccess), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
 //		ing_menu->setTitleColor(ccWHITE);
 		ing_menu->setPosition(ccp(300,256));
 		main_case->addChild(ing_menu, kAchievePopupZorder_menu);
@@ -813,8 +882,8 @@ void AchievePopup::setIngMenu()
 									  menuAction(t_node);
 								  });
 		
-		ing_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
-//		ing_menu->setTitleColorForDisable(ccBLACK);
+		ing_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		ing_menu->setTitleColorForDisable(ccc3(50, 20, 0));
 	}
 	
 	ing_menu->setEnabled(recent_code != kAchievePopupListCode_ing);
@@ -823,7 +892,7 @@ void AchievePopup::setRewardMenu()
 {
 	if(!reward_menu)
 	{
-		reward_menu = CommonButton::create("업적보상", 13, CCSizeMake(80,38), CommonButtonYellowUp, -190);
+		reward_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_achieveReward), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
 //		reward_menu->setTitleColor(ccWHITE);
 		reward_menu->setPosition(ccp(375,256));
 		main_case->addChild(reward_menu, kAchievePopupZorder_menu);
@@ -834,8 +903,8 @@ void AchievePopup::setRewardMenu()
 								  menuAction(t_node);
 							  });
 		
-		reward_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
-//		reward_menu->setTitleColorForDisable(ccBLACK);
+		reward_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		reward_menu->setTitleColorForDisable(ccc3(50, 20, 0));
 	}
 	
 	reward_menu->setEnabled(recent_code != kAchievePopupListCode_reward);
@@ -847,9 +916,6 @@ void AchievePopup::takeAllReward(CCObject* sender)
 		return;
 	
 	is_menu_enable = false;
-	
-	loading_layer = LoadingLayer::create();
-	addChild(loading_layer, kAchievePopupZorder_popup);
 	
 	keep_value_list.clear();
 	
@@ -893,6 +959,9 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	
 	if(keep_take_ruby > 0 || keep_take_gold > 0)
 	{
+		loading_layer = LoadingLayer::create();
+		addChild(loading_layer, kAchievePopupZorder_popup);
+		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		mySGD->changeGoods(json_selector(this, AchievePopup::resultAllTakeSaveUserData));
 	}

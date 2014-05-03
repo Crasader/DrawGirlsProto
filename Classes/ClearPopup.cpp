@@ -38,6 +38,7 @@
 #include "LoadingLayer.h"
 #include "FlagSelector.h"
 #include "EventShopPopup.h"
+#include "TodayMissionPopup.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -511,9 +512,36 @@ bool ClearPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, ClearPopup::resultGetTime)));
 	
+	if(int(mySGD->getScore()) > mySGD->getUserdataHighScore())
+	{
+		mySGD->setUserdataHighScore(mySGD->getScore());
+		is_high_score = true;
+	}
+	else
+	{
+		is_high_score = false;
+	}
+	
 	mySGD->setUserdataFailCount(0);
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	is_today_mission_success = mySGD->today_mission_info.is_success.getV();
+	
+	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
+																  {
+																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																	  {
+																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
+																			{
+																				is_today_mission_success = true;
+																			}
+																		  else
+																			{
+																				is_today_mission_success = false;
+																			}
+																	  }
+																  }));
 	
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
 	addChild(t_loading, 9999);
@@ -686,17 +714,17 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		int alluser = result_data["alluser"].asInt();
 		int myrank = result_data["myrank"].asInt();
 		
-		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
-		all_user_label->setColor(ccc3(255, 50, 50));
-		all_user_label->setAnchorPoint(ccp(1,0.5));
-		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
-		main_case->addChild(all_user_label, kZ_CP_img);
-		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
-		my_rank_label->setAnchorPoint(ccp(1,0.5));
-		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
-		main_case->addChild(my_rank_label, kZ_CP_img);
-		my_rank_label->setOpacity(0);
+//		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
+//		all_user_label->setColor(ccc3(255, 50, 50));
+//		all_user_label->setAnchorPoint(ccp(1,0.5));
+//		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
+//		main_case->addChild(all_user_label, kZ_CP_img);
+//		
+//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+//		my_rank_label->setAnchorPoint(ccp(1,0.5));
+//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
+//		main_case->addChild(my_rank_label, kZ_CP_img);
+//		my_rank_label->setOpacity(0);
 		
 		float rank_percent = 1.f*myrank/alluser;
 		
@@ -717,10 +745,10 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
 			rank_percent_case->runAction(t_move);
 			
-			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
-			CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 255);
-			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
-			my_rank_label->runAction(t_seq1);
+//			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
+//			CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 255);
+//			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
+//			my_rank_label->runAction(t_seq1);
 			
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
@@ -1592,9 +1620,9 @@ void ClearPopup::startCalcAnimation()
 //	startTimeAnimation();
 //	startGoldAnimation();
 	
-	KSLabelTTF* star_bonus_label = KSLabelTTF::create(CCString::createWithFormat("별보너스 x%.1f", mySGD->getStageGrade()*0.5f+1.f)->getCString(), mySGD->getFont().c_str(), 15);
-	star_bonus_label->setColor(ccBLUE);
-	star_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+	KSLabelTTF* star_bonus_label = KSLabelTTF::create(CCString::createWithFormat("별보너스 x%.1f", mySGD->getStageGrade()*0.5f+1.f)->getCString(), mySGD->getFont().c_str(), 13);
+	star_bonus_label->setColor(ccc3(50, 250, 255));
+	star_bonus_label->enableOuterStroke(ccBLACK, 1.f);
 	star_bonus_label->setPosition(ccp(53+48+24,195));
 	main_case->addChild(star_bonus_label, kZ_CP_table);
 	
@@ -1627,9 +1655,9 @@ void ClearPopup::startCalcAnimation()
 				is_end_call_score_calc = true;
 				end_score_calc_func = [=]()
 				{
-					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 15);
-					time_bonus_label->setColor(ccBLUE);
-					time_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 13);
+					time_bonus_label->setColor(ccc3(50, 250, 255));
+					time_bonus_label->enableOuterStroke(ccBLACK, 1.f);
 					time_bonus_label->setPosition(ccp(170,148)); // 170 148
 					main_case->addChild(time_bonus_label, kZ_CP_table);
 					
@@ -1659,6 +1687,35 @@ void ClearPopup::startCalcAnimation()
 								time_bonus_label->setOpacity(t*255);
 							}, [=](float t){
 								time_bonus_label->setOpacity(0);
+								
+								if(is_high_score)
+								{
+									CCSprite* high_score = CCSprite::create("ending_highscore.png");
+									high_score->setScale(0.5f);
+									high_score->setOpacity(0);
+									high_score->setPosition(ccp(120,82));
+									main_case->addChild(high_score, kZ_CP_table);
+									
+									main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
+										high_score->setScale(0.5f+t*0.8f);
+										high_score->setOpacity(t*255);
+									}, [=](float t){
+										high_score->setScale(1.3f);
+										high_score->setOpacity(255);
+										main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+											high_score->setScale(1.3f-t*0.3f);
+										}, [=](float t){
+											high_score->setScale(1.f);
+										}));
+									}));
+								}
+								
+								if(is_today_mission_success)
+								{
+									TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
+									addChild(t_popup, kZ_CP_popup);
+								}
+								
 								is_end_popup_animation = true;
 								is_end_call_score_calc = true;
 								end_score_calc_func = [=]()

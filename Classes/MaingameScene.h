@@ -61,6 +61,7 @@ enum GameNodeMovingDirection{
 
 class SearchEye;
 class CumberShowWindow;
+class EffectSprite;
 class Maingame : public CCLayer
 {
 public:
@@ -261,6 +262,8 @@ private:
 //	SearchEye* search_eye;
 	
 	CCNode* screen_node;
+	
+	EffectSprite* sil_thumb;
 	
 	CCSprite* character_thumb;
 	CCArray* boss_thumbs;

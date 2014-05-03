@@ -257,14 +257,6 @@ enum AchievementCode
 	kAchievementCode_ruby2,//	루비부자 : 100루비모으기. 완
 	kAchievementCode_ruby3,//	루비재벌 : 1000루비모으기. 완
 	
-	kAchievementCode_heart1,//	큐피트 : 10하트보내기.
-	kAchievementCode_heart2,//	바람둥이 : 30하트보내기.
-	kAchievementCode_heart3,//	카사노바 : 50하트보내기.
-	
-	kAchievementCode_bonusGame1,//	보너스게임아마추어 : 보너스게임 10회 성공
-	kAchievementCode_bonusGame2,//	보너스게임프로 : 보너스게임 20회 성공
-	kAchievementCode_bonusGame3,//	보너스게임마스터 : 보너스게임 30회 성공
-	
 	kAchievementCode_mapGacha1,//	맵가챠맨1 : 맵가챠 10회 돌리기 완
 	kAchievementCode_mapGacha2,//	맵가챠맨2 : 맵가챠 20회 돌리기 완
 	kAchievementCode_mapGacha3,//	맵가챠맨3 : 맵가챠 30회 돌리기 완
@@ -272,10 +264,6 @@ enum AchievementCode
 	kAchievementCode_luckySeven1,//	럭키세븐1 : 한번에 7% 먹기 완
 	kAchievementCode_luckySeven2,//	럭키세븐2 : 한번에 7.7% 먹기 완
 	kAchievementCode_luckySeven3,//	럭키세븐3 : 한번에 77.7% 먹기 완
-	
-	kAchievementCode_feverMania1,//	피버매니아1: 한판에 피버모드 5회진입시 완
-	kAchievementCode_feverMania2,//	피버매니아2: 전체 피버모드 30회진입시 완
-	kAchievementCode_feverMania3,//	피버매니아3: 전체 피버모드 50회진입시 완
 	
 	kAchievementCode_comboMania1,//	콤보매니아1 : 10콤보달성 완
 	kAchievementCode_comboMania2,//	콤보매니아2 : 20콤보달성 완
@@ -301,21 +289,9 @@ enum AchievementCode
 	kAchievementCode_scoreHigh2,//	경쟁의신2 : 100000점 이상 획득
 	kAchievementCode_scoreHigh3,//	경쟁의신3 : 150000점 이상 획득
 	
-	kAchievementCode_allPiece1,//	흑백퍼즐 : 모든피스가 흑백일때
-	kAchievementCode_allPiece2,//	보더퍼즐 : 모든피스가 보더일때
-	kAchievementCode_allPiece3,//	퍼즐완성 : 모든피스가 컬러일때
-	
 	kAchievementCode_fastClear1,//	초스피드클리어1 : 30초안에 클리어
 	kAchievementCode_fastClear2,//	초스피드클리어2 : 10초안에 클리어
 	kAchievementCode_fastClear3,//	초스피드클리어3 : 5초안에 클리어
-	
-	kAchievementCode_continue1,//	이어하기매니아 : 5회 이어하기
-	kAchievementCode_continue2,//	이어하기매니아 : 10회 이어하기
-	kAchievementCode_continue3,//	이어하기매니아 : 20회 이어하기
-	
-	kAchievementCode_attendance1,//	출석체크1 : 5회출첵
-	kAchievementCode_attendance2,//	출석체크2 : 10회출첵
-	kAchievementCode_attendance3,//	출석체크3 : 30회출첵
 	
 	kAchievementCode_changeMania1,//	체인지1 : 10회 체인지
 	kAchievementCode_changeMania2,//	체인지2 : 20회 체인지
@@ -329,34 +305,6 @@ enum AchievementCode
 	kAchievementCode_cardCollection2,//	카드컬렉터2: 카드 100장모으기
 	kAchievementCode_cardCollection3,//	카드컬렉터3: 카드 200장모으기
 	
-	kAchievementCode_friend1,//	마당발1 : 게임친구 10명이상
-	kAchievementCode_friend2,//	마당발2 : 게임친구 30명이상
-	kAchievementCode_friend3,//	마당발3 : 게임친구 50명달성
-	
-	kAchievementCode_invite1,//	초대1 : 카카오친구 10명이상초대
-	kAchievementCode_invite2,//	초대2 : 카카오친구 20명이상초대
-	kAchievementCode_invite3,//	초대3 : 카카오친구 30명이상초대
-	
-	kAchievementCode_challenger1,//	승부사1 : 도전하기 10번
-	kAchievementCode_challenger2,//	승부사1 : 도전하기 20번
-	kAchievementCode_challenger3,//	승부사1 : 도전하기 30번
-	
-	kAchievementCode_help1,//	도움요청1 : 도움요청 10번
-	kAchievementCode_help2,//	도움요청2 : 도움요청 20번
-	kAchievementCode_help3,//	도움요청3 : 도움요청 30번
-	
-	kAchievementCode_helper1,//	흑기사1 : 친구의 도움요청 들어주기 10회
-	kAchievementCode_helper2,//	흑기사2 : 친구의 도움요청 들어주기 30회
-	kAchievementCode_helper3,//	흑기사3 : 친구의 도움요청 들어주기 50회
-	
-	kAchievementCode_defender1,//	덤벼1 : 친구의 도전 수락 10회
-	kAchievementCode_defender2,//	덤벼2 : 친구의 도전 수락 20회
-	kAchievementCode_defender3,//	덤벼3 : 친구의 도전 수락 30회
-	
-	kAchievementCode_upgrade1,//	강화장인1 : 강화 10회성공
-	kAchievementCode_upgrade2,//	강화장인2 : 강화 30회성공
-	kAchievementCode_upgrade3,//	강화장인3 : 강화 50회성공
-	
 	kAchievementCode_perfect1,//	대단한성과1 : 100%클리어 10회
 	kAchievementCode_perfect2,//	대단한성과2 : 100%클리어 30회
 	kAchievementCode_perfect3,//	대단한성과3 : 100%클리어 50회
@@ -365,15 +313,6 @@ enum AchievementCode
 	kAchievementCode_seqAttendance2,//	개근2 : 14일 연속출첵
 	kAchievementCode_seqAttendance3,//	개근3 : 21일 연속출첵
 	
-	kAchievementCode_gacha1,//	경마꾼 : 경마가챠 10회이상
-	kAchievementCode_gacha2,//	야바위꾼 : 야바위가챠 10회이상
-	kAchievementCode_gacha3,//	룰렛꾼 : 룰렛가챠 10회이상
-	kAchievementCode_gacha4,//	슬롯버신꾼 : 슬롯머신 10회이상
-	kAchievementCode_gachaKing,//	도박의신 : 경마&야바위&룰렛&슬롯머신 모두 달성시
-	
-	kAchievementCode_weeklyKing,//	주간킹 : 주간랭킹 1등 5회
-	kAchievementCode_puzzleKing,//	퍼즐킹 : 한퍼즐내에 모든피스 땅따먹기 1등
-	kAchievementCode_characterCollection,//	캐릭터컬렉터 : 캐릭터 5개이상 보유
 	kAchievementCode_luckyGuy,//	럭키가이 : 시작행운아이템 5회성공
 	kAchievementCode_goldMania,//	골드매니아 : 피버모드에서 한번에 100골드 이상획득.
 	kAchievementCode_tutorial,//	초보자 : 튜토리얼다 보기

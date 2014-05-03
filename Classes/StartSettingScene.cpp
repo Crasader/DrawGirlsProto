@@ -544,7 +544,7 @@ void StartSettingScene::setMain()
 		n_level->setColor(ccBLACK);
 		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
-		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
+		CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 		n_price_type->setPosition(ccp(25,22));
 		n_upgrade->addChild(n_price_type);
 		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
@@ -558,7 +558,7 @@ void StartSettingScene::setMain()
 		s_level->setColor(ccBLACK);
 		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
-		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
+		CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 		s_price_type->setPosition(ccp(25,22));
 		s_upgrade->addChild(s_price_type);
 		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
@@ -764,7 +764,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 								   n_level->setColor(ccBLACK);
 								   n_level->setPosition(ccp(70,47));
 								   n_upgrade->addChild(n_level);
-								   CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
+								   CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 								   n_price_type->setPosition(ccp(25,22));
 								   n_upgrade->addChild(n_price_type);
 								   CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
@@ -778,7 +778,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 								   s_level->setColor(ccBLACK);
 								   s_level->setPosition(ccp(70,47));
 								   s_upgrade->addChild(s_level);
-								   CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
+								   CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 								   s_price_type->setPosition(ccp(25,22));
 								   s_upgrade->addChild(s_price_type);
 								   CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);

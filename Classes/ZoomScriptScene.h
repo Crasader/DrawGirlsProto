@@ -19,6 +19,7 @@ using namespace std;
 
 class CommonButton;
 class MyNode;
+class EffectSprite;
 class ZoomScript : public CCLayer
 {
 public:
@@ -50,6 +51,7 @@ private:
 	CommonButton* next_button;
 	CCSprite* showtime_back;
 	MyNode* second_img;
+	EffectSprite* safety_img;
 	MyNode* target_node;
 	CCSprite* white_paper;
 	

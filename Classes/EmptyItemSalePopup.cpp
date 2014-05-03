@@ -129,7 +129,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(sale_arrow);
 	
 	
-	CCSprite* after_price_type = CCSprite::create("common_button_gold.png");
+	CCSprite* after_price_type = CCSprite::create("price_gold_img.png");
 	after_price_type->setPosition(ccp(10,-30));
 	m_container->addChild(after_price_type);
 	
@@ -179,7 +179,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	price_back->setPosition(ccp(purchase_label->getContentSize().width/2.f, purchase_label->getContentSize().height/2.f-20));
 	purchase_label->addChild(price_back);
 	
-	CCSprite* price_type = CCSprite::create("common_button_gold.png");
+	CCSprite* price_type = CCSprite::create("price_gold_img.png");
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
 	price_type->setScale(0.7f);
 	price_back->addChild(price_type);

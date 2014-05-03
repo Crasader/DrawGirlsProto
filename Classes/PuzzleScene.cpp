@@ -1785,6 +1785,7 @@ void PuzzleScene::setRight()
 				}
 				
 				CommonButton* show_img = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_view), 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
+				show_img->setTitleColor(ccc3(50, 20, 0));
 				show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
 				show_img->setFunction([=](CCObject* sender)
 									  {
@@ -1873,7 +1874,6 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	n_ready_label->setColor(ccc3(47, 30, 6));
-	n_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f));
 	n_ready->addChild(n_ready_label);
 	
@@ -1887,7 +1887,6 @@ void PuzzleScene::setRight()
 	
 	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	s_ready_label->setColor(ccc3(47, 30, 6));
-	s_ready_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f));
 	s_ready->addChild(s_ready_label);
 	
@@ -1944,16 +1943,16 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		int alluser = result_data["alluser"].asInt();
 		int myrank = result_data["myrank"].asInt();
 		
-		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
-		all_user_label->setColor(ccc3(255, 50, 50));
-		all_user_label->setAnchorPoint(ccp(1,0.5));
-		all_user_label->setPosition(ccp(right_body->getContentSize().width-10, 204));
-		right_body->addChild(all_user_label);
-		
-		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
-		my_rank_label->setAnchorPoint(ccp(1,0.5));
-		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
-		right_body->addChild(my_rank_label);
+//		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
+//		all_user_label->setColor(ccc3(255, 50, 50));
+//		all_user_label->setAnchorPoint(ccp(1,0.5));
+//		all_user_label->setPosition(ccp(right_body->getContentSize().width-10, 204));
+//		right_body->addChild(all_user_label);
+//		
+//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+//		my_rank_label->setAnchorPoint(ccp(1,0.5));
+//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
+//		right_body->addChild(my_rank_label);
 		
 		float rank_percent = 1.f*myrank/alluser;
 		
@@ -2108,6 +2107,7 @@ void PuzzleScene::setRightTopButton()
 		stage_button->setPosition(ccp(-65-6-29, 118.5f));
 		right_case->addChild(stage_button, 5);
 		stage_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		stage_button->setTitleColorForDisable(ccc3(50, 20, 0));
 		stage_button->setFunction([=](CCObject* sender)
 								  {
 									  if(!is_menu_enable)
@@ -2122,6 +2122,7 @@ void PuzzleScene::setRightTopButton()
 		ranking_button->setPosition(ccp(-65-6+29, 118.5f));
 		right_case->addChild(ranking_button, 5);
 		ranking_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
+		ranking_button->setTitleColorForDisable(ccc3(50, 20, 0));
 		ranking_button->setFunction([=](CCObject* sender)
 								  {
 									  if(!is_menu_enable)
@@ -2233,10 +2234,10 @@ void PuzzleScene::setTop()
 	top_list.push_back(top_gold);
 	
 	CCSprite* gold_img = CCSprite::create("price_gold_img.png");
-	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f+1));
 	top_gold->addChild(gold_img);
 	
-	GoodsLight* gold_light = GoodsLight::create(gold_img);
+	GoodsLight* gold_light = GoodsLight::create(CCSprite::create("price_gold_img_mask.png"));
 	gold_light->setPosition(ccp(gold_img->getContentSize().width/2.f, gold_img->getContentSize().height/2.f));
 	gold_img->addChild(gold_light);
 	
@@ -2266,10 +2267,10 @@ void PuzzleScene::setTop()
 	top_list.push_back(top_ruby);
 	
 	CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
-	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f));
 	top_ruby->addChild(ruby_img);
 	
-	GoodsLight* ruby_light = GoodsLight::create(ruby_img);
+	GoodsLight* ruby_light = GoodsLight::create(CCSprite::create("price_ruby_img_mask.png"));
 	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
 	ruby_img->addChild(ruby_light);
 	

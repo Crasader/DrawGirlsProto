@@ -44,7 +44,7 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 		
 		m_container->addChild(KSTimer::create(0.3f, [=](){
 			CCSprite* beam_img = CCSprite::create("puzzle_unlock_beam.png");
-			beam_img->setPosition(ccp(0,10));
+			beam_img->setPosition(ccp(0,30));
 			beam_img->setScale(0.3f);
 			beam_img->setOpacity(0);
 			m_container->addChild(beam_img);
@@ -65,7 +65,7 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 				}));
 				
 				CCSprite* upgrade_4 = CCSprite::create("missile_upgrade_4.png");
-				upgrade_4->setPosition(ccp(0,10));
+				upgrade_4->setPosition(ccp(0,30));
 				upgrade_4->setScale(0.3f);
 				upgrade_4->setRotation(0);
 				upgrade_4->setOpacity(0);
@@ -87,28 +87,62 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 							m_container->addChild(KSTimer::create(0.1f, [=](){upgrade_4->removeFromParent();}));
 						}));
 						
+						string title_str, ment_str;
 						int random_value = rand()%1000;
 						if(random_value < 250)
-							item_type = kIC_fast;
+						{
+							item_type = kIC_fast; // 4
+							title_str = myLoc->getLocalForKey(kMyLocalKey_item4title);
+							ment_str = myLoc->getLocalForKey(kMyLocalKey_item4ment);
+						}
 						else if(random_value < 500)
-							item_type = kIC_subOneDie;
+						{
+							item_type = kIC_subOneDie; // 5
+							title_str = myLoc->getLocalForKey(kMyLocalKey_item5title);
+							ment_str = myLoc->getLocalForKey(kMyLocalKey_item5ment);
+						}
 						else if(random_value < 800)
-							item_type = kIC_silence;
+						{
+							item_type = kIC_silence; // 7
+							title_str = myLoc->getLocalForKey(kMyLocalKey_item7title);
+							ment_str = myLoc->getLocalForKey(kMyLocalKey_item7ment);
+						}
 						else
-							item_type = kIC_heartUp;
+						{
+							item_type = kIC_heartUp; // 10
+							title_str = myLoc->getLocalForKey(kMyLocalKey_item10title);
+							ment_str = myLoc->getLocalForKey(kMyLocalKey_item10ment);
+						}
 						
 						item_img = CCSprite::create(CCString::createWithFormat("item%d.png", item_type)->getCString());
-						item_img->setPosition(ccp(0,10));
+						item_img->setPosition(ccp(0,30));
 						item_img->setOpacity(0);
 						item_img->setScale(0.6f);
 						m_container->addChild(item_img);
 						
+						
+						
+						item_title = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
+						item_title->setColor(ccYELLOW);
+						item_title->setPosition(ccp(0,-20));
+						item_title->setOpacity(0);
+						m_container->addChild(item_title);
+						
+						item_ment = KSLabelTTF::create(ment_str.c_str(), mySGD->getFont().c_str(), 12);
+						item_ment->setPosition(ccp(0,-35));
+						item_ment->setOpacity(0);
+						m_container->addChild(item_ment);
+						
 						m_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
 							item_img->setScale(0.6f + t*0.4f);
 							item_img->setOpacity(t*255);
+							item_title->setOpacity(t*255);
+							item_ment->setOpacity(t*255);
 						}, [=](float t){
 							item_img->setScale(1.f);
 							item_img->setOpacity(255);
+							item_title->setOpacity(255);
+							item_ment->setOpacity(255);
 							gacha_on_func(item_type);
 						}));
 					}));
@@ -144,10 +178,10 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 			regacha_button->setVisible(true);
 			m_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 6.f/30.f, [=](float t){
 				KS::setOpacity(regacha_button, 255*t);
-				regacha_button->setPosition(ccp(-70,-85-100+100*t));
+				regacha_button->setPosition(ccp(-65,-85-100+100*t));
 			}, [=](float t){
 				KS::setOpacity(regacha_button, 255);
-				regacha_button->setPosition(ccp(-70,-85));
+				regacha_button->setPosition(ccp(-65,-85));
 			}));
 		}));
 		
@@ -156,10 +190,10 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 			use_button->setVisible(true);
 			m_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 6.f/30.f, [=](float t){
 				KS::setOpacity(use_button, 255*t);
-				use_button->setPosition(ccp(70,-85-100+100*t));
+				use_button->setPosition(ccp(65,-85-100+100*t));
 			}, [=](float t){
 				KS::setOpacity(use_button, 255);
-				use_button->setPosition(ccp(70,-85));
+				use_button->setPosition(ccp(65,-85));
 				is_menu_enable = true;
 			}));
 		}));
@@ -198,50 +232,70 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");
 	
 	question_img = t_ccb.first;
-	question_img->setPosition(ccp(0, 10));
+	question_img->setPosition(ccp(0, 30));
 	m_container->addChild(question_img);
 	
 	question_manager = t_ccb.second;
 	question_manager->setDelegate(this);
 	
 	CCSprite* question_box = KS::loadCCBI<CCSprite*>(this, "startsetting_randombox.ccbi").first;
-	question_box->setPosition(ccp(0,10));
+	question_box->setPosition(ccp(0,30));
 	m_container->addChild(question_box);
 	
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
-	KSLabelTTF* regacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemRegacha), mySGD->getFont().c_str(), 13);
-	regacha_label->setPosition(ccp(20,10));
-	CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
-	price_back->setContentSize(CCSizeMake(80, 30));
-	price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f-20, regacha_label->getContentSize().height/2.f-20));
-	regacha_label->addChild(price_back);
-	
-	CCSize stamp_size = CCSizeMake(50,20);
-	
-	CCScale9Sprite* stamp_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
-	stamp_back->setContentSize(stamp_size);
-	stamp_back->setPosition(ccp(-25, regacha_label->getContentSize().height/2.f));
-	stamp_back->setRotation(-27);
-	regacha_label->addChild(stamp_back);
-	
-	float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
-	
-	KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
-	stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
-	stamp_label->setColor(ccc3(255,222,0));
-	stamp_back->addChild(stamp_label);
-	
-	
-	CCSprite* price_type = CCSprite::create("common_button_gold.png");
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getItemGachaReplayGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_label);
-	
+	regacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemRegacha), mySGD->getFont().c_str(), 13);
+	regacha_label->setPosition(ccp(0,10));
 	r_label->addChild(regacha_label);
+	
+	if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0)
+	{
+		is_stamp = true;
+		
+		CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
+		price_back->setContentSize(CCSizeMake(80, 30));
+		price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
+		regacha_label->addChild(price_back);
+		
+		CCSize stamp_size = CCSizeMake(50,20);
+		
+		CCScale9Sprite* stamp_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
+		stamp_back->setContentSize(stamp_size);
+		stamp_back->setPosition(ccp(0, regacha_label->getContentSize().height/2.f+15));
+		stamp_back->setRotation(-27);
+		regacha_label->addChild(stamp_back);
+		
+		float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
+		
+		KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
+		stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
+		stamp_label->setColor(ccc3(255,222,0));
+		stamp_back->addChild(stamp_label);
+		
+		CCSprite* price_type = CCSprite::create("price_gold_img.png");
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_type);
+		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getItemGachaReplayGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_label);
+	}
+	else
+	{
+		is_stamp = false;
+		
+		CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
+		price_back->setContentSize(CCSizeMake(80, 30));
+		price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
+		regacha_label->addChild(price_back);
+		
+		CCSprite* price_type = CCSprite::create("pass_ticket4.png");
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_type);
+		CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_label);
+	}
 	
 	
 	CCScale9Sprite* regacha_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
@@ -249,7 +303,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	regacha_button = CCControlButton::create(r_label, regacha_back);
 	regacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::regachaAction), CCControlEventTouchUpInside);
 	regacha_button->setPreferredSize(CCSizeMake(120,65));
-	regacha_button->setPosition(ccp(-70,-85-100));
+	regacha_button->setPosition(ccp(-65,-85-100));
 	m_container->addChild(regacha_button);
 	
 	regacha_button->setVisible(false);
@@ -262,7 +316,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	use_button = CCControlButton::create(use_label, use_back);
 	use_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::useAction), CCControlEventTouchUpInside);
 	use_button->setPreferredSize(CCSizeMake(120,65));
-	use_button->setPosition(ccp(70,-85-100));
+	use_button->setPosition(ccp(65,-85-100));
 	m_container->addChild(use_button);
 	
 	use_button->setVisible(false);
@@ -305,21 +359,32 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
-	if(mySGD->getGoodsValue(kGoodsType_gold) < mySGD->getItemGachaReplayGoldFee())
+	if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 	{
-		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
-		{
-			((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
-		}), 9999);
-		is_menu_enable = true;
-		return;
+		loading_layer = LoadingLayer::create(touch_priority-100);
+		addChild(loading_layer);
+		
+		mySGD->addChangeGoods(kGoodsType_pass4, -1, "아이템뽑기");
+		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
 	}
-	
-	loading_layer = LoadingLayer::create(touch_priority-100);
-	addChild(loading_layer);
-	
-	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaReplayGoldFee(), "아이템뽑기");
-	mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
+	else
+	{
+		if(mySGD->getGoodsValue(kGoodsType_gold) < mySGD->getItemGachaReplayGoldFee())
+		{
+			addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
+																{
+																	((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+																}), 9999);
+			is_menu_enable = true;
+			return;
+		}
+		
+		loading_layer = LoadingLayer::create(touch_priority-100);
+		addChild(loading_layer);
+		
+		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaReplayGoldFee(), "아이템뽑기");
+		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
+	}
 }
 
 void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
@@ -333,9 +398,46 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		
 		KS::setOpacity(question_img, 255);
 		item_img->removeFromParent();
-		regacha_button->setPosition(ccp(-70,-85-100));
+		item_title->removeFromParent();
+		item_ment->removeFromParent();
+		regacha_button->setPosition(ccp(-65,-85-100));
 		regacha_button->setVisible(false);
-		use_button->setPosition(ccp(70,-85-100));
+		
+		if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0 && !is_stamp)
+		{
+			is_stamp = true;
+			
+			regacha_label->removeAllChildren();
+			
+			CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
+			price_back->setContentSize(CCSizeMake(80, 30));
+			price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
+			regacha_label->addChild(price_back);
+			
+			CCSize stamp_size = CCSizeMake(50,20);
+			
+			CCScale9Sprite* stamp_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
+			stamp_back->setContentSize(stamp_size);
+			stamp_back->setPosition(ccp(0, regacha_label->getContentSize().height/2.f+15));
+			stamp_back->setRotation(-27);
+			regacha_label->addChild(stamp_back);
+			
+			float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
+			
+			KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
+			stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
+			stamp_label->setColor(ccc3(255,222,0));
+			stamp_back->addChild(stamp_label);
+			
+			CCSprite* price_type = CCSprite::create("price_gold_img.png");
+			price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+			price_back->addChild(price_type);
+			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getItemGachaReplayGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+			price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+			price_back->addChild(price_label);
+		}
+		
+		use_button->setPosition(ccp(65,-85-100));
 		use_button->setVisible(false);
 		
 		question_manager->runAnimationsForSequenceNamed("Default Timeline");

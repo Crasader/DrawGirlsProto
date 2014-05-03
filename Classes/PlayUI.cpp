@@ -471,7 +471,7 @@ void MyGold::myInit ()
 	
 //	initWithFile("gold.png");
 	init_position = CCPointZero;
-	setScale(0.4f);
+	setScale(0.3f);
 	setPosition(init_position);
 	
 	i_dy = rand()%3+6;
@@ -978,8 +978,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
 			int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
 			
-			int weapon_rank = weapon_level/5 + 1;
-			weapon_level = weapon_level%5 + 1;
+			int weapon_rank = (weapon_level-1)/5 + 1;
+			weapon_level = (weapon_level-1)%5 + 1;
 			
 			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, cmCnt, myGD->getJackPoint().convertToCCP());
 		}

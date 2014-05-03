@@ -137,22 +137,25 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 {
 	if(recent_shop_code == kSC_ruby)
 	{
-		CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		ruby_label->setColor(ccORANGE);
+		KSLabelTTF* ruby_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		ruby_label->setColor(ccc3(255, 230, 0));
+		ruby_label->enableOuterStroke(ccc3(0, 0, 0), 1);
 		ruby_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f-5));
 		t_target->addChild(ruby_label);
 	}
 	else if(recent_shop_code == kSC_gold)
 	{
-		CCLabelTTF* gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		gold_label->setColor(ccORANGE);
+		KSLabelTTF* gold_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		gold_label->setColor(ccc3(255, 230, 0));
+		gold_label->enableOuterStroke(ccc3(0, 0, 0), 1);
 		gold_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f-5));
 		t_target->addChild(gold_label);
 	}
 	else if(recent_shop_code == kSC_heart)
 	{
-		CCLabelTTF* heart_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		heart_label->setColor(ccORANGE);
+		KSLabelTTF* heart_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		heart_label->setColor(ccc3(255, 230, 0));
+		heart_label->enableOuterStroke(ccc3(0, 0, 0), 1);
 		heart_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f-5));
 		t_target->addChild(heart_label);
 	}
@@ -1006,7 +1009,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-10, kGoodsType_ruby, [=]()
+																	{
+																		setShopCode(kSC_ruby);
+																	}), kSP_Z_popup);
+				is_menu_enable = true;
 				CCLOG("not enough ruby!!!");
 			}
 		}
@@ -1071,7 +1078,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-10, kGoodsType_ruby, [=]()
+																	{
+																		setShopCode(kSC_ruby);
+																	}), kSP_Z_popup);
+				is_menu_enable = true;
 				CCLOG("not enough ruby!!!");
 			}
 		}

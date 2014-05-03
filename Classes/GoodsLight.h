@@ -38,7 +38,6 @@ private:
 		CCClippingNode* main_clipping = CCClippingNode::create(CCSprite::createWithTexture(t_target->getTexture()));
 		main_clipping->setPosition(ccp(0,0));
 		addChild(main_clipping);
-		main_clipping->setAlphaThreshold(0.1f);
 		
 //		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 //		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -59,10 +58,12 @@ private:
 //		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
 //		main_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		
+		main_clipping->setAlphaThreshold(0.1f);
+		
 		t_light = CCSprite::create("mainflow_top_light.png");
+		t_light->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		t_light->setOpacity(100);
 		main_clipping->addChild(t_light);
-//		t_light->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-		t_light->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_SRC_ALPHA});
 		
 		addMoving();
 	}

@@ -40,6 +40,8 @@
 #include "KSLabelTTF.h"
 #include "DetailConditionPopup.h"
 #include "GoodsLight.h"
+#include "TodayMissionPopup.h"
+#include "FormSetter.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -279,6 +281,7 @@ bool MainFlowScene::init()
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
 	{
 		bottomOpenning();
+		topOnLight();
 	}
 	
 	is_menu_enable = true;
@@ -857,6 +860,24 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell_node->setPosition(ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f));
 	cell->addChild(cell_node, 1, 1);
 	
+	
+	if(idx==NSDS_GI(kSDS_GI_puzzleListCount_i)){
+		CCSprite* n_locked_back = CCSprite::create("mainflow_puzzle_lock.png"); //mySIL->getLoadedImg("mainflow_puzzle_lock.png");
+		cell_node->addChild(n_locked_back);
+		
+		CCLabelTTF* rate_label = CCLabelTTF::create("??/??", mySGD->getFont().c_str(), 10);
+		rate_label->setPosition(ccp(-25, -81));
+		cell_node->addChild(rate_label);
+		
+		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
+		locked_label->enableOuterStroke(ccBLACK, 1.f);
+		locked_label->setPosition(ccp(67.5f,133.f));
+		n_locked_back->addChild(locked_label);
+		
+		return cell;
+	}
+	
+	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -934,6 +955,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		close_back->setPosition(CCPointZero);
 		cell_node->addChild(close_back);
 		
+		CCLabelTTF* rate_label = CCLabelTTF::create("0/50", mySGD->getFont().c_str(), 10);
+		rate_label->setPosition(ccp(-25, -81));
+		cell_node->addChild(rate_label);
+		
 		if(is_puzzle_enter_list[idx].is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
 		{
 			// 루비 구매 혹은 시간이 되야 열림
@@ -1006,7 +1031,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					
-					CCSprite* price_type = CCSprite::create("common_button_ruby.png");
+					CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 					price_type->setScale(0.7f);
 					c_label->addChild(price_type);
 					
@@ -1265,7 +1290,7 @@ CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
-	return puzzle_count;
+	return puzzle_count+1;
 	
 //	return NSDS_GI(kSDS_GI_puzzleListCount_i);// eventListCount_i);
 }
@@ -1455,7 +1480,8 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_mission)
 		{
-			is_menu_enable = true;
+			TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_friendManagement)
 		{
@@ -1551,6 +1577,7 @@ void MainFlowScene::setBottom()
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
 	rank_menu->setPosition(ccp(43-240, n_rank->getContentSize().height/2.f+8));//ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
+	rank_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 	
 	{
 		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
@@ -1577,6 +1604,7 @@ void MainFlowScene::setBottom()
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
 	shop_menu->setPosition(ccp(43-240+214.f/4.f, n_shop->getContentSize().height/2.f+8));//ccp(-73, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
+	shop_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 	
 	{
 		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
@@ -1624,6 +1652,7 @@ void MainFlowScene::setBottom()
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
 	cardsetting_menu->setPosition(ccp(43-240+214.f/4.f*2.f, n_cardsetting->getContentSize().height/2.f+8));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
+	cardsetting_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 	
 	{
 		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
@@ -1650,6 +1679,7 @@ void MainFlowScene::setBottom()
 	CCMenu* mission_menu = CCMenu::createWithItem(mission_item);
 	mission_menu->setPosition(ccp(43-240+214.f/4.f*3.f, n_mission->getContentSize().height/2.f+8));
 	bottom_case->addChild(mission_menu);
+	mission_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 
 	
 //	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
@@ -1742,6 +1772,7 @@ void MainFlowScene::setBottom()
 		CCMenuLambda* cgp_menu = CCMenuLambda::create();
 		cgp_menu->setPosition(ccp(43-240+214.f, n_cgp->getContentSize().height/2.f+8));
 		bottom_case->addChild(cgp_menu);
+		cgp_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 		
 		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
 			if(!is_menu_enable)
@@ -2039,6 +2070,32 @@ void MainFlowScene::topOpenning()
 			top_list[i]->runAction(t_seq);
 		}
 	}
+	
+	CCDelayTime* t_delay = CCDelayTime::create(top_list.size()*0.1f + 0.1f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MainFlowScene::topOnLight));
+	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+	runAction(t_seq);
+}
+
+void MainFlowScene::topOnLight()
+{
+	GoodsLight* gold_light = GoodsLight::create(CCSprite::create("price_gold_img_mask.png"));
+	gold_light->setPosition(ccp(gold_img->getContentSize().width/2.f, gold_img->getContentSize().height/2.f));
+	gold_img->addChild(gold_light);
+	
+	GoodsLight* ruby_light = GoodsLight::create(CCSprite::create("price_ruby_img_mask.png"));
+	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
+	ruby_img->addChild(ruby_light);
+	
+	if(mySGD->is_today_mission_first)
+	{
+		is_menu_enable = false;
+		
+		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+		addChild(t_popup, kMainFlowZorder_popup);
+		
+		mySGD->is_today_mission_first = false;
+	}
 }
 
 void MainFlowScene::topOuting()
@@ -2153,13 +2210,9 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(top_gold);
 	
-	CCSprite* gold_img = CCSprite::create("price_gold_img.png");
-	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	gold_img = CCSprite::create("price_gold_img.png");
+	gold_img->setPosition(ccp(gold_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f+1));
 	top_gold->addChild(gold_img);
-	
-	GoodsLight* gold_light = GoodsLight::create(gold_img);
-	gold_light->setPosition(ccp(gold_img->getContentSize().width/2.f, gold_img->getContentSize().height/2.f));
-	gold_img->addChild(gold_light);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f + 1,top_gold->getContentSize().height/2.f-6));
@@ -2186,13 +2239,9 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(top_ruby);
 	
-	CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
-	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f, top_gold->getContentSize().height/2.f));
+	ruby_img = CCSprite::create("price_ruby_img.png");
+	ruby_img->setPosition(ccp(ruby_img->getContentSize().width/2.f-1, top_gold->getContentSize().height/2.f));
 	top_ruby->addChild(ruby_img);
-	
-	GoodsLight* ruby_light = GoodsLight::create(ruby_img);
-	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
-	ruby_img->addChild(ruby_light);
 	
 	ruby_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_ruby))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
 	ruby_label->setPosition(ccp(top_ruby->getContentSize().width/2.f + 1,top_ruby->getContentSize().height/2.f-6));

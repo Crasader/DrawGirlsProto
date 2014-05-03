@@ -136,8 +136,13 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_isSafetyMode,
 	kDSH_Key_isPushOff,
-	kDSH_Key_isMessageOff
+	kDSH_Key_isMessageOff,
 	
+	kDSH_Key_atTimeShowFirstPurchase,
+	kDSH_Key_atTimeShowEmptyItem,
+	kDSH_Key_atTimeShowStupidNpuHelp,
+	kDSH_Key_atTimeShowEventRubyShop,
+	kDSH_Key_atTimeShowLevelupGuide
 }DSH_Key;
 
 enum SpecialTutorialCode{

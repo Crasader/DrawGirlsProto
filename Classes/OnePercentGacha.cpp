@@ -94,7 +94,59 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
-	if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
+	
+	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
+	{
+		myLog->addLog(kLOG_gacha_onePercent, -1);
+		
+		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
+		addChild(t_loading, 9999);
+		
+		mySGD->addChangeGoods(kGoodsType_pass5, -1, "99프로가챠");
+		
+		mySGD->changeGoods([=](Json::Value result_data){
+			t_loading->removeFromParent();
+			if(result_data["result"]["code"] == GDSUCCESS)
+			{
+				gacha_button->removeFromParent();
+				
+				CCLabelTTF* t_label = CCLabelTTF::create();
+				
+				KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+				stop_label->setColor(ccBLACK);
+				stop_label->setPosition(ccp(0,15));
+				t_label->addChild(stop_label);
+				
+				KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+				stop_label2->setColor(ccBLACK);
+				stop_label2->setPosition(ccp(0,-12));
+				t_label->addChild(stop_label2);
+				
+				
+				CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+				
+				stop_button = CCControlButton::create(t_label, stop_back);
+				stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
+				stop_button->setPreferredSize(CCSizeMake(170,65));
+				stop_button->setPosition(ccp(0,-70));
+				m_container->addChild(stop_button, kOnePercentGacha_Z_content);
+				
+				stop_button->setTouchPriority(-180);
+				
+				stop_button->setEnabled(false);
+				cancel_menu->setEnabled(false);
+				
+				gachaOn();
+			}
+			else
+			{
+				mySGD->clearChangeGoods();
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+				is_menu_enable = true;
+			}
+		});
+	}
+	else if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
 	{
 		myLog->addLog(kLOG_gacha_onePercent, -1);
 		
@@ -515,13 +567,25 @@ void OnePercentGacha::setBack ()
 	price_back->setPosition(ccp(0, -10));
 	t_label->addChild(price_back);
 	
-	
-	CCSprite* price_type = CCSprite::create("common_button_ruby.png");
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_label);
+	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
+	{
+		CCSprite* pass_ticket = CCSprite::create("pass_ticket5.png");
+		pass_ticket->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(pass_ticket);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+		free_label->setColor(ccWHITE);
+		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(free_label);
+	}
+	else
+	{
+		CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_type);
+		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_label);
+	}
 	
 	
 	CCScale9Sprite* gacha_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));

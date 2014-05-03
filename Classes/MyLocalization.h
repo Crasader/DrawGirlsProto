@@ -6,6 +6,12 @@
 
 using namespace cocos2d;
 using namespace std;
+/*
+ 
+ myLoc->getLocalForKey(kMyLocalKey_tutorial7)
+ 
+ */
+
 
 typedef enum MyLocalKey_ {
 	kMyLocalKey_canNotConnectedServer = 1,
@@ -241,6 +247,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_regame,
 	kMyLocalKey_toMain,
 	kMyLocalKey_beforeNotClearPuzzle,
+	kMyLocalKey_waitForUpdate,
 	kMyLocalKey_diaryNoImg,
 	kMyLocalKey_reward,
 	kMyLocalKey_speed,
@@ -330,6 +337,48 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_firstPurchaseSaleTitle,
 	kMyLocalKey_mileageTitle,
 	kMyLocalKey_missileUpgrade,
+	kMyLocalKey_todaymissionTotalPercent1,
+	kMyLocalKey_todaymissionTotalPercent2,
+	kMyLocalKey_todaymissionTotalPercent3,
+	kMyLocalKey_todaymissionTotalPercent4,
+	kMyLocalKey_todaymissionTotalScore1,
+	kMyLocalKey_todaymissionTotalScore2,
+	kMyLocalKey_todaymissionTotalScore3,
+	kMyLocalKey_todaymissionTotalScore4,
+	kMyLocalKey_todaymissionTotalTakeGold1,
+	kMyLocalKey_todaymissionTotalTakeGold2,
+	kMyLocalKey_todaymissionTotalTakeGold3,
+	kMyLocalKey_todaymissionTotalCatch1,
+	kMyLocalKey_todaymissionTotalCatch2,
+	kMyLocalKey_todaymissionTotalCatch3,
+	kMyLocalKey_todaymissionTotalCatch4,
+	kMyLocalKey_todaymissionSuccess,
+	kMyLocalKey_complete,
+	kMyLocalKey_achieveSuccess,
+	kMyLocalKey_achieveNotSuccess,
+	kMyLocalKey_achieveReward,
+	kMyLocalKey_nothingSuccessAchieve,
+	kMyLocalKey_nothingRewardAchieve,
+	kMyLocalKey_item4title,
+	kMyLocalKey_item4ment,
+	kMyLocalKey_item5title,
+	kMyLocalKey_item5ment,
+	kMyLocalKey_item7title,
+	kMyLocalKey_item7ment,
+	kMyLocalKey_item10title,
+	kMyLocalKey_item10ment,
+	kMyLocalKey_pause,
+	kMyLocalKey_continue,
+	kMyLocalKey_ingameOut,
+	kMyLocalKey_ingameReplay,
+	kMyLocalKey_publicPlaceMode,
+	kMyLocalKey_todaymissionSuccessPass1,
+	kMyLocalKey_todaymissionSuccessPass2,
+	kMyLocalKey_todaymissionSuccessPass3,
+	kMyLocalKey_todaymissionSuccessPass4,
+	kMyLocalKey_todaymissionSuccessPass5,
+	kMyLocalKey_free,
+	kMyLocalKey_areaReGacha,
 	kMyLocalKey_warning9,
 	kMyLocalKey_warning105,
 	kMyLocalKey_warning106,
