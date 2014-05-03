@@ -548,6 +548,7 @@ void PuzzleScene::showClearPopup()
 	t_popup->replay_func = [=](){openSettingPopup();};
 	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	t_popup->is_take_star_effect = true;
+	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success;
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -814,10 +815,6 @@ void PuzzleScene::showUnlockEffect()
 	if(unlock_cover)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_pieceopen.mp3", false);
-		
-		PieceHistory t_history = mySGD->getPieceHistory(next_stage_number);
-		t_history.is_open = true;
-		mySGD->setPieceHistory(t_history, nullptr);
 		
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endUnlockEffect));

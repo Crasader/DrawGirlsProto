@@ -73,6 +73,7 @@ bool ClearPopup::init()
 	
 	AudioEngine::sharedInstance()->preloadEffectScene("Ending");
 	
+	is_not_replay = false;
 	is_take_star_effect = false;
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
@@ -511,6 +512,28 @@ bool ClearPopup::init()
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, ClearPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, ClearPopup::resultGetTime)));
+	
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int open_stage = -1;
+	if(mySGD->getIsNotClearedStage())
+	{
+		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+		{
+			if(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == mySD->getSilType())
+			{
+				open_stage = i;
+				break;
+			}
+		}
+	}
+	if(open_stage != -1)
+	{
+		PieceHistory t_history = mySGD->getPieceHistory(open_stage);
+		t_history.is_open = true;
+		send_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, [=](Json::Value result_data){
+			
+		}));
+	}
 	
 	if(int(mySGD->getScore()) > mySGD->getUserdataHighScore())
 	{
@@ -1731,7 +1754,7 @@ void ClearPopup::startCalcAnimation()
 									KS::setOpacity(replay_menu, 0);
 									KS::setOpacity(ok_menu, 0);
 									
-									replay_menu->setVisible(true);
+									replay_menu->setVisible(!is_not_replay);
 									ok_menu->setVisible(true);
 									
 									CCPoint replay_origin_position = replay_menu->getPosition();

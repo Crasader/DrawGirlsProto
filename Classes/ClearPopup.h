@@ -49,6 +49,7 @@ public:
 	
 	virtual void onEnter();
 	
+	bool is_not_replay;
 	bool is_take_star_effect;
 	std::function<void()> replay_func;
 	std::function<void()> goToMainFlow_func;
