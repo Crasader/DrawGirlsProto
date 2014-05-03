@@ -881,6 +881,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	else if(tag == kOP_MT_safety)
 	{
 		myDSH->setBoolForKey(kDSH_Key_isSafetyMode, !myDSH->getBoolForKey(kDSH_Key_isSafetyMode));
+		mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 		resetSafetyMenu();
 		is_menu_enable = true;
 	}

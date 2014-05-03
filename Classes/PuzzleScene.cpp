@@ -2122,7 +2122,7 @@ void PuzzleScene::setRightTopButton()
 		ranking_button->setPosition(ccp(-65-6+29, 118.5f));
 		right_case->addChild(ranking_button, 5);
 		ranking_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
-		stage_button->setTitleColorForDisable(ccc3(50, 20, 0));
+		ranking_button->setTitleColorForDisable(ccc3(50, 20, 0));
 		ranking_button->setFunction([=](CCObject* sender)
 								  {
 									  if(!is_menu_enable)

@@ -519,19 +519,19 @@ void Maingame::finalSetting()
 	CCSize screen_data = CCSizeMake(320.f*thumb_scale, 0);
 	screen_data.height = screen_data.width/3.f*2.f*myDSH->ui_top/320.f;
 	
-	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.f));
+	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.5f));
 	screen_top->setColor(ccc3(255, 180, 0));
 	screen_top->setPosition(ccp(0,screen_data.height/2.f));
 	screen_node->addChild(screen_top);
-	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.f));
+	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.5f));
 	screen_down->setColor(ccc3(255, 180, 0));
 	screen_down->setPosition(ccp(0,-screen_data.height/2.f));
 	screen_node->addChild(screen_down);
-	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.f, screen_data.height+2));
+	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+2));
 	screen_left->setColor(ccc3(255, 180, 0));
 	screen_left->setPosition(ccp(-screen_data.width/2.f,0));
 	screen_node->addChild(screen_left);
-	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.f, screen_data.height+2));
+	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+2));
 	screen_right->setColor(ccc3(255, 180, 0));
 	screen_right->setPosition(ccp(screen_data.width/2.f,0));
 	screen_node->addChild(screen_right);
@@ -2909,6 +2909,8 @@ void Maingame::refreshReplayPosition(int temp_time)
 
 void Maingame::hideThumb()
 {
+	sil_thumb->setVisible(false);
+	
 	for(int i=0;i<search_eye_vector.size();i++)
 	{
 		SearchEye* t_search_eye = search_eye_vector[i];

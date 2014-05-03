@@ -274,11 +274,11 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
 	ko->setObject(CCString::create("부활"), kMyLocalKey_item10title);
 	ko->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
+	ko->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
+	ko->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
+	ko->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
+	ko->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -681,6 +681,11 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
 	en->setObject(CCString::create("부활"), kMyLocalKey_item10title);
 	en->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	en->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
+	en->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
+	en->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
+	en->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
+	en->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1085,6 +1090,11 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
 	ja->setObject(CCString::create("부활"), kMyLocalKey_item10title);
 	ja->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	ja->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
+	ja->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
+	ja->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
+	ja->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
+	ja->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

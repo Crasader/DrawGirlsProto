@@ -13,6 +13,8 @@
 #include "DataStorageHub.h"
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
+#include "FormSetter.h"
+#include "MyLocalization.h"
 
 PauseContent* PauseContent::create(int t_touch_priority, function<void(void)> t_resume, function<void(void)> t_gohome, function<void(void)> t_replay)
 {
@@ -120,15 +122,17 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	case_back->setPosition(CCPointZero);
 	addChild(case_back);
 	
-	case_back->setContentSize(CCSizeMake(180, 230));
+	case_back->setContentSize(CCSizeMake(300, 186));
 	
-	CCLabelTTF* title_label = CCLabelTTF::create("일시정지", mySGD->getFont().c_str(), 15);
+	
+	CCLabelTTF* title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pause), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccORANGE);
-	title_label->setPosition(ccp(-47, 93));
+	title_label->setPosition(ccp(-105, 70));
 	addChild(title_label);
 	
+	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
-	close_button->setPosition(ccp(67, 93));
+	close_button->setPosition(ccp(125, 70));
 	close_button->setFunction([=](CCObject* sender){
 		if(!is_menu_enable)
 			return;
@@ -139,16 +143,17 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	});
 	addChild(close_button);
 	
+	
 	CCScale9Sprite* content_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24,24,2,2));
-	content_back->setPosition(ccp(0,-10));
+	content_back->setPosition(ccp(0,-13));
 	addChild(content_back);
 	
-	content_back->setContentSize(CCSizeMake(160,180));
+	content_back->setContentSize(CCSizeMake(280,140));
 	
 	
 	CCLabelTTF* t1_label = CCLabelTTF::create();
 	
-	KSLabelTTF* resume_label = KSLabelTTF::create("계속하기", mySGD->getFont().c_str(), 18);
+	KSLabelTTF* resume_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_continue), mySGD->getFont().c_str(), 18);
 	resume_label->enableOuterStroke(ccBLACK, 1.f);
 	resume_label->setPosition(ccp(0,0));
 	t1_label->addChild(resume_label);
@@ -157,8 +162,8 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCControlButton* resume_button = CCControlButton::create(t1_label, resume_back);
 	resume_button->addTargetWithActionForControlEvents(this, cccontrol_selector(PauseContent::resumeAction), CCControlEventTouchUpInside);
-	resume_button->setPreferredSize(CCSizeMake(150,45));
-	resume_button->setPosition(ccp(0,53));
+	resume_button->setPreferredSize(CCSizeMake(120,45));
+	resume_button->setPosition(ccp(75,30));
 	addChild(resume_button);
 	
 	resume_button->setTouchPriority(touch_priority-1);
@@ -177,7 +182,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gohome_label = KSLabelTTF::create("나가기", mySGD->getFont().c_str(), 18);
+	KSLabelTTF* gohome_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ingameOut), mySGD->getFont().c_str(), 18);
 	gohome_label->enableOuterStroke(ccBLACK, 1.f);
 	gohome_label->setPosition(ccp(0,0));
 	t2_label->addChild(gohome_label);
@@ -186,8 +191,8 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCControlButton* gohome_button = CCControlButton::create(t2_label, gohome_back);
 	gohome_button->addTargetWithActionForControlEvents(this, cccontrol_selector(PauseContent::gohomeAction), CCControlEventTouchUpInside);
-	gohome_button->setPreferredSize(CCSizeMake(150,45));
-	gohome_button->setPosition(ccp(0,11));
+	gohome_button->setPreferredSize(CCSizeMake(120,45));
+	gohome_button->setPosition(ccp(75,-12));
 	addChild(gohome_button);
 	
 	gohome_button->setTouchPriority(touch_priority-1);
@@ -204,7 +209,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCLabelTTF* t3_label = CCLabelTTF::create();
 	
-	KSLabelTTF* replay_label = KSLabelTTF::create("재시작", mySGD->getFont().c_str(), 18);
+	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ingameReplay), mySGD->getFont().c_str(), 18);
 	replay_label->enableOuterStroke(ccBLACK, 1.f);
 	replay_label->setPosition(ccp(0,0));
 	t3_label->addChild(replay_label);
@@ -213,8 +218,8 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCControlButton* replay_button = CCControlButton::create(t3_label, replay_back);
 	replay_button->addTargetWithActionForControlEvents(this, cccontrol_selector(PauseContent::replayAction), CCControlEventTouchUpInside);
-	replay_button->setPreferredSize(CCSizeMake(150,45));
-	replay_button->setPosition(ccp(0,-31));
+	replay_button->setPreferredSize(CCSizeMake(120,45));
+	replay_button->setPosition(ccp(75,-54));
 	addChild(replay_button);
 	
 	replay_button->setTouchPriority(touch_priority-1);
@@ -232,30 +237,36 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 //							 });
 //	addChild(replay_menu);
 	
-	KSLabelTTF* safety_label = KSLabelTTF::create("대중교통\n모드", mySGD->getFont().c_str(), 13);
+	CCNode* safety_node = CCNode::create();
+	safety_node->setPosition(ccp(-60,18));
+	addChild(safety_node);
+	
+	FormSetter::get()->addObject("safety_node", safety_node);
+	
+	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_publicPlaceMode), mySGD->getFont().c_str(), 13);
 	safety_label->enableOuterStroke(ccBLACK, 1.f);
 	safety_label->setPosition(ccp(-45,-73));
-	addChild(safety_label);
+	safety_node->addChild(safety_label);
 	
 	CCSprite* line_img = CCSprite::create("option_scroll.png");
 	line_img->setScaleX(0.7f);
 	line_img->setPosition(ccp(25,-73));
-	addChild(line_img);
+	safety_node->addChild(line_img);
 	
 	CCMenuLambda* on_off_menu = CCMenuLambda::create();
 	on_off_menu->setPosition(ccp(25,-73));
-	addChild(on_off_menu);
+	safety_node->addChild(on_off_menu);
 	on_off_menu->setTouchPriority(touch_priority-1);
 	
 	CCSprite* n_on = CCSprite::create("option_button.png");
-	KSLabelTTF* n_on_label = KSLabelTTF::create("켜짐", mySGD->getFont().c_str(), 11);
+	KSLabelTTF* n_on_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 11);
 	n_on_label->enableOuterStroke(ccBLACK, 0.5f);
 	n_on_label->setPosition(ccp(n_on->getContentSize().width/2.f, n_on->getContentSize().height/2.f));
 	n_on->addChild(n_on_label);
 	
 	CCSprite* s_on = CCSprite::create("option_button.png");
 	s_on->setColor(ccGRAY);
-	KSLabelTTF* s_on_label = KSLabelTTF::create("켜짐", mySGD->getFont().c_str(), 11);
+	KSLabelTTF* s_on_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 11);
 	s_on_label->enableOuterStroke(ccBLACK, 0.5f);
 	s_on_label->setPosition(ccp(s_on->getContentSize().width/2.f, s_on->getContentSize().height/2.f));
 	s_on->addChild(s_on_label);
@@ -274,14 +285,14 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	
 	CCSprite* n_off = CCSprite::create("option_button.png");
-	KSLabelTTF* n_off_label = KSLabelTTF::create("꺼짐", mySGD->getFont().c_str(), 11);
+	KSLabelTTF* n_off_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 11);
 	n_off_label->enableOuterStroke(ccBLACK, 0.5f);
 	n_off_label->setPosition(ccp(n_off->getContentSize().width/2.f, n_off->getContentSize().height/2.f));
 	n_off->addChild(n_off_label);
 	
 	CCSprite* s_off = CCSprite::create("option_button.png");
 	s_off->setColor(ccGRAY);
-	KSLabelTTF* s_off_label = KSLabelTTF::create("꺼짐", mySGD->getFont().c_str(), 11);
+	KSLabelTTF* s_off_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 11);
 	s_off_label->enableOuterStroke(ccBLACK, 0.5f);
 	s_off_label->setPosition(ccp(s_off->getContentSize().width/2.f, s_off->getContentSize().height/2.f));
 	s_off->addChild(s_off_label);
@@ -305,6 +316,169 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 		off_item->setVisible(false);
 	else
 		on_item->setVisible(false);
+	
+	
+	
+	CCNode* sound_node = CCNode::create();
+	sound_node->setPosition(ccp(-60,102));
+	addChild(sound_node);
+	
+	FormSetter::get()->addObject("sound_node", sound_node);
+	
+	KSLabelTTF* sound_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 13);
+	sound_label->enableOuterStroke(ccBLACK, 1.f);
+	sound_label->setPosition(ccp(-45,-73));
+	sound_node->addChild(sound_label);
+	
+	CCSprite* line2_img = CCSprite::create("option_scroll.png");
+	line2_img->setScaleX(0.7f);
+	line2_img->setPosition(ccp(25,-73));
+	sound_node->addChild(line2_img);
+	
+	CCMenuLambda* on_off_menu2 = CCMenuLambda::create();
+	on_off_menu2->setPosition(ccp(25,-73));
+	sound_node->addChild(on_off_menu2);
+	on_off_menu2->setTouchPriority(touch_priority-1);
+	
+	CCSprite* n_on2 = CCSprite::create("option_button.png");
+	KSLabelTTF* n_on_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 11);
+	n_on_label2->enableOuterStroke(ccBLACK, 0.5f);
+	n_on_label2->setPosition(ccp(n_on2->getContentSize().width/2.f, n_on2->getContentSize().height/2.f));
+	n_on2->addChild(n_on_label2);
+	
+	CCSprite* s_on2 = CCSprite::create("option_button.png");
+	s_on2->setColor(ccGRAY);
+	KSLabelTTF* s_on_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 11);
+	s_on_label2->enableOuterStroke(ccBLACK, 0.5f);
+	s_on_label2->setPosition(ccp(s_on2->getContentSize().width/2.f, s_on2->getContentSize().height/2.f));
+	s_on2->addChild(s_on_label2);
+	
+	on_item2 = CCMenuItemSpriteLambda::create(n_on2, s_on2, [=](CCObject* sender){
+		this->on_item2->setVisible(false);
+		this->off_item2->setVisible(true);
+		
+		bool t_sound = !myDSH->getBoolForKey(kDSH_Key_bgmOff);
+		myDSH->setBoolForKey(kDSH_Key_bgmOff, t_sound);
+		AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
+	});
+	on_item2->setPosition(ccp(-15,0));
+	
+	on_off_menu2->addChild(on_item2);
+	
+	
+	CCSprite* n_off2 = CCSprite::create("option_button.png");
+	KSLabelTTF* n_off_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 11);
+	n_off_label2->enableOuterStroke(ccBLACK, 0.5f);
+	n_off_label2->setPosition(ccp(n_off2->getContentSize().width/2.f, n_off2->getContentSize().height/2.f));
+	n_off2->addChild(n_off_label2);
+	
+	CCSprite* s_off2 = CCSprite::create("option_button.png");
+	s_off2->setColor(ccGRAY);
+	KSLabelTTF* s_off_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 11);
+	s_off_label2->enableOuterStroke(ccBLACK, 0.5f);
+	s_off_label2->setPosition(ccp(s_off2->getContentSize().width/2.f, s_off2->getContentSize().height/2.f));
+	s_off2->addChild(s_off_label2);
+	
+	off_item2 = CCMenuItemSpriteLambda::create(n_off2, s_off2, [=](CCObject* sender){
+		this->on_item2->setVisible(true);
+		this->off_item2->setVisible(false);
+		
+		bool t_sound = !myDSH->getBoolForKey(kDSH_Key_bgmOff);
+		myDSH->setBoolForKey(kDSH_Key_bgmOff, t_sound);
+		AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
+	});
+	off_item2->setPosition(ccp(15,0));
+	
+	on_off_menu2->addChild(off_item2);
+	
+	
+	
+	bool is_sound = myDSH->getBoolForKey(kDSH_Key_bgmOff);
+	if(is_sound)
+		on_item2->setVisible(false);
+	else
+		off_item2->setVisible(false);
+	
+	
+	CCNode* effect_node = CCNode::create();
+	effect_node->setPosition(ccp(-60,60));
+	addChild(effect_node);
+	
+	FormSetter::get()->addObject("effect_node", effect_node);
+	
+	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 13);
+	effect_label->enableOuterStroke(ccBLACK, 1.f);
+	effect_label->setPosition(ccp(-45,-73));
+	effect_node->addChild(effect_label);
+	
+	CCSprite* line3_img = CCSprite::create("option_scroll.png");
+	line3_img->setScaleX(0.7f);
+	line3_img->setPosition(ccp(25,-73));
+	effect_node->addChild(line3_img);
+	
+	CCMenuLambda* on_off_menu3 = CCMenuLambda::create();
+	on_off_menu3->setPosition(ccp(25,-73));
+	effect_node->addChild(on_off_menu3);
+	on_off_menu3->setTouchPriority(touch_priority-1);
+	
+	CCSprite* n_on3 = CCSprite::create("option_button.png");
+	KSLabelTTF* n_on_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 11);
+	n_on_label3->enableOuterStroke(ccBLACK, 0.5f);
+	n_on_label3->setPosition(ccp(n_on3->getContentSize().width/2.f, n_on3->getContentSize().height/2.f));
+	n_on3->addChild(n_on_label3);
+	
+	CCSprite* s_on3 = CCSprite::create("option_button.png");
+	s_on3->setColor(ccGRAY);
+	KSLabelTTF* s_on_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 11);
+	s_on_label3->enableOuterStroke(ccBLACK, 0.5f);
+	s_on_label3->setPosition(ccp(s_on3->getContentSize().width/2.f, s_on3->getContentSize().height/2.f));
+	s_on3->addChild(s_on_label3);
+	
+	on_item3 = CCMenuItemSpriteLambda::create(n_on3, s_on3, [=](CCObject* sender){
+		this->on_item3->setVisible(false);
+		this->off_item3->setVisible(true);
+		
+		bool t_effect = !myDSH->getBoolForKey(kDSH_Key_effectOff);
+		myDSH->setBoolForKey(kDSH_Key_effectOff, t_effect);
+		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
+	});
+	on_item3->setPosition(ccp(-15,0));
+	
+	on_off_menu3->addChild(on_item3);
+	
+	
+	CCSprite* n_off3 = CCSprite::create("option_button.png");
+	KSLabelTTF* n_off_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 11);
+	n_off_label3->enableOuterStroke(ccBLACK, 0.5f);
+	n_off_label3->setPosition(ccp(n_off3->getContentSize().width/2.f, n_off3->getContentSize().height/2.f));
+	n_off3->addChild(n_off_label3);
+	
+	CCSprite* s_off3 = CCSprite::create("option_button.png");
+	s_off3->setColor(ccGRAY);
+	KSLabelTTF* s_off_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 11);
+	s_off_label3->enableOuterStroke(ccBLACK, 0.5f);
+	s_off_label3->setPosition(ccp(s_off3->getContentSize().width/2.f, s_off3->getContentSize().height/2.f));
+	s_off3->addChild(s_off_label3);
+	
+	off_item3 = CCMenuItemSpriteLambda::create(n_off3, s_off3, [=](CCObject* sender){
+		this->on_item3->setVisible(true);
+		this->off_item3->setVisible(false);
+		
+		bool t_effect = !myDSH->getBoolForKey(kDSH_Key_effectOff);
+		myDSH->setBoolForKey(kDSH_Key_effectOff, t_effect);
+		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
+	});
+	off_item3->setPosition(ccp(15,0));
+	
+	on_off_menu3->addChild(off_item3);
+	
+	
+	
+	bool is_effect = myDSH->getBoolForKey(kDSH_Key_effectOff);
+	if(is_effect)
+		on_item3->setVisible(false);
+	else
+		off_item3->setVisible(false);
 	
 //	CommonButton* on_off = CommonButton::create(on_off_str, 14, CCSizeMake(60, 45), CommonButtonOrange, touch_priority-1);
 //	on_off->setPosition(ccp(40,-70));

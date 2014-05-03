@@ -1683,7 +1683,7 @@ void ClearPopup::startCalcAnimation()
 									CCSprite* high_score = CCSprite::create("ending_highscore.png");
 									high_score->setScale(0.5f);
 									high_score->setOpacity(0);
-									high_score->setPosition(ccp(130,82));
+									high_score->setPosition(ccp(120,82));
 									main_case->addChild(high_score, kZ_CP_table);
 									
 									main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
