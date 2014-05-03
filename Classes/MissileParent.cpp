@@ -57,7 +57,7 @@ void MissileParent::bombCumber( CCObject* target )
 	
 	if(cancelSound)
 	{
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", ks19937::getIntValue(1, 4))->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", ks19937::getIntValue(1, 4))->getCString(), false, true);
 //		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", rand()%4+1)->getCString());
 	}
 	//if(target == myGD->getCommunicationNode("CP_getMainCumberPointer") && saveAP)
@@ -1366,7 +1366,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		if(atype == "crash")
 		{
 //			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
-			AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3", false, true);
 			myGD->communication("Main_showWarning", 2);
 			
 			AudioEngine::sharedInstance()->playEffect("se_castmap.mp3", true);
@@ -1376,7 +1376,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		else if(atype == "special")
 		{
 			AudioEngine::sharedInstance()->playEffect("se_castspecial.mp3", true);
-			AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3", false, true);
 //			AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
 		}
 		else // normal
@@ -1385,7 +1385,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			AudioEngine::sharedInstance()->playEffect("se_castmissile.mp3", true);
 //			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
 //			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
-			AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3", false, true);
 		}
 		ccbPiece->runTimeline(patternData); // "at" 같은게 넘어감.
 	}
