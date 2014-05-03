@@ -457,7 +457,7 @@ public:
 			string real_filename = filename;
 			SoundEffect* t_effect = new SoundEffect();
 			t_effect->autorelease();
-			unsigned int code = mySAE->playEffect(real_filename.c_str(), true);
+			unsigned int code = mySAE->playEffect(real_filename.c_str(), false);
 			t_effect->filename = filename;
 			t_effect->effectCode = code;
 			t_effect->isLoop = false;
