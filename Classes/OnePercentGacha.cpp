@@ -569,7 +569,7 @@ void OnePercentGacha::setBack ()
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
 	{
-		CCSprite* pass_ticket = CCSprite::create("pass_ticket.png");
+		CCSprite* pass_ticket = CCSprite::create("pass_ticket5.png");
 		pass_ticket->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 		price_back->addChild(pass_ticket);
 		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
