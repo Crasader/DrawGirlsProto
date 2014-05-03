@@ -871,7 +871,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		
 		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
 		locked_label->enableOuterStroke(ccBLACK, 1.f);
-		locked_label->setPosition(ccp(67.5f,138.5f));
+		locked_label->setPosition(ccp(67.5f,133.f));
 		n_locked_back->addChild(locked_label);
 		
 		return cell;
