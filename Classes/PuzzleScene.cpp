@@ -316,7 +316,7 @@ bool PuzzleScene::init()
 	{
 		keep_card_number = 0;
 		
-//		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
 		bool is_not_empty_card[3] = {false,};
 		
