@@ -415,16 +415,16 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 	game_time = t_game_time;
 	
-	if(!mySGD->isClearPiece(mySD->getSilType()))
-	{
+//	if(!mySGD->isClearPiece(mySD->getSilType()))
+//	{
 //		myDSH->setIntegerForKey(kDSH_Key_clearStageCnt, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt)+1);
 //		myDSH->setIntegerForKey(kDSH_Key_clearStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt), mySD->getSilType());
 //		myDSH->setBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType(), true);
-		
-		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-		t_history.is_clear[t_grade-1] = true;
-		mySGD->setPieceHistory(t_history, nullptr);
-	}
+//		
+//		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+//		t_history.is_clear[t_grade-1] = true;
+//		mySGD->setPieceHistory(t_history, nullptr);
+//	}
 	
 	myGD->setIsGameover(true);
 }
@@ -1260,19 +1260,19 @@ CommandParam StarGoldData::getUpdateTodayMissionParam(jsonSelType t_callback)
 	
 	if(t_type == kTodayMissionType_totalPercent)
 	{
-		param["count"] = getPercentage()*100.f;
+		param["count"] = int(getPercentage()*100.f);
 	}
 	else if(t_type == kTodayMissionType_totalScore)
 	{
-		param["count"] = getScore();
+		param["count"] = int(getScore());
 	}
 	else if(t_type == kTodayMissionType_totalTakeGold)
 	{
-		param["count"] = getStageGold();
+		param["count"] = int(getStageGold());
 	}
 	else if(t_type == kTodayMissionType_totalCatch)
 	{
-		param["count"] = getCatchCumberCount();
+		param["count"] = int(getCatchCumberCount());
 	}
 	
 	return CommandParam("updatetodaymission", param, json_selector(this, StarGoldData::resultUpdateTodayMission));
@@ -1284,15 +1284,18 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 	{
 		initTodayMission(result_data);
 		
-		GoodsType t_type = getGoodsKeyToType(today_mission_info.reward_type.getV());
-		int t_count = result_data["rewardCount"].asInt();
-		
-		goods_data[t_type] = t_count;
-		
-		if(t_type == kGoodsType_ruby && star_label)
-			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
-		else if(t_type == kGoodsType_gold && gold_label)
-			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		if(result_data["isFirstCheck"].asBool())
+		{
+			GoodsType t_type = getGoodsKeyToType(today_mission_info.reward_type.getV());
+			int t_count = result_data["rewardCount"].asInt();
+			
+			goods_data[t_type] = t_count;
+			
+			if(t_type == kGoodsType_ruby && star_label)
+				star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+			else if(t_type == kGoodsType_gold && gold_label)
+				gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		}
 	}
 	
 	if(update_today_mission_callback != nullptr)
