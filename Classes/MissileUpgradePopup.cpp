@@ -138,12 +138,24 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	price_back->setPosition(ccp(upgrade_label->getContentSize().width/2.f, upgrade_label->getContentSize().height/2.f-20));
 	upgrade_label->addChild(price_back);
 	
-	CCSprite* price_type = CCSprite::create("price_gold_img.png");
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_type);
-	price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_label);
+	if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
+	{
+		price_type = CCSprite::create("pass_ticket3.png");
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_type);
+		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_label);
+	}
+	else
+	{
+		price_type = CCSprite::create("price_gold_img.png");
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_type);
+		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 12);
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_label);
+	}
 	
 	t_label->addChild(upgrade_label);
 	
@@ -177,36 +189,60 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	
 	is_menu_enable = false;
 	
-	int upgrade_price = mySGD->getSelectedCharacterHistory().nextPrice.getV();
-
-	if(mySGD->getGoodsValue(kGoodsType_gold) < upgrade_price)// + use_item_price_gold.getV())
+	if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
 	{
-		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
-															{
-																((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
-															}), 9999);
-		is_menu_enable = true;
-		return;
+		loading_layer = LoadingLayer::create(touch_priority-100);
+		addChild(loading_layer);
+		
+		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
+		before_level = missile_level;
+		before_damage = StoneAttack::getPower((before_level-1)/5+1, (before_level-1)%5+1);
+		mySGD->addChangeGoods(kGoodsType_pass3, -1, "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		t_history.level = t_history.level.getV() + 1;
+		
+		vector<CommandParam> command_list;
+		command_list.clear();
+		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+		
+		
+		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
 	}
-	
-	loading_layer = LoadingLayer::create(touch_priority-100);
-	addChild(loading_layer);
-	
-	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
-	before_gold = mySGD->getGoodsValue(kGoodsType_gold);
-	before_level = missile_level;
-	before_damage = StoneAttack::getPower((before_level-1)/5+1, (before_level-1)%5+1);
-	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getSelectedCharacterHistory().nextPrice.getV(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
-	
-	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-	t_history.level = t_history.level.getV() + 1;
-	
-	vector<CommandParam> command_list;
-	command_list.clear();
-	command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
-	
-	
-	mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
+	else
+	{
+		int upgrade_price = mySGD->getSelectedCharacterHistory().nextPrice.getV();
+		
+		if(mySGD->getGoodsValue(kGoodsType_gold) < upgrade_price)// + use_item_price_gold.getV())
+		{
+			addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
+																{
+																	((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+																}), 9999);
+			is_menu_enable = true;
+			return;
+		}
+		
+		loading_layer = LoadingLayer::create(touch_priority-100);
+		addChild(loading_layer);
+		
+		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
+		before_level = missile_level;
+		before_damage = StoneAttack::getPower((before_level-1)/5+1, (before_level-1)%5+1);
+		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getSelectedCharacterHistory().nextPrice.getV(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		t_history.level = t_history.level.getV() + 1;
+		
+		vector<CommandParam> command_list;
+		command_list.clear();
+		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+		
+		
+		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
+	}
 }
 
 void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
@@ -357,7 +393,29 @@ void MissileUpgradePopup::setAfterUpgrade()
 	else
 	{
 		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString());
-		price_label->setString(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString());
+		
+		if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
+		{
+			CCNode* parent_node = price_type->getParent();
+			CCPoint t_position = price_type->getPosition();
+			price_type->removeFromParent();
+			price_type = CCSprite::create("pass_ticket3.png");
+			price_type->setPosition(t_position);
+			parent_node->addChild(price_type);
+			
+			price_label->setString(myLoc->getLocalForKey(kMyLocalKey_free));
+		}
+		else
+		{
+			CCNode* parent_node = price_type->getParent();
+			CCPoint t_position = price_type->getPosition();
+			price_type->removeFromParent();
+			price_type = CCSprite::create("price_gold_img.png");
+			price_type->setPosition(t_position);
+			parent_node->addChild(price_type);
+			
+			price_label->setString(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString());
+		}
 	}
 	
 	upgrade_func();

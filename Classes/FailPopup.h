@@ -138,6 +138,8 @@ private:
 	
 	vector<CommandParam> send_command_list;
 	
+	bool is_today_mission_success;
+	
 	void tryTransaction(CCNode* t_loading);
 	
 	TouchSuctionLayer* suction;

@@ -39,6 +39,10 @@ private:
 	CCNode* m_container;
 	CCScale9Sprite* back_case;
 	CCControlButton* regacha_button;
+	
+	bool is_stamp;
+	KSLabelTTF* regacha_label;
+	
 	CCControlButton* use_button;
 	
 	int item_type;

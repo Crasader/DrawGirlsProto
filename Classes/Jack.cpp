@@ -1269,7 +1269,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	//		return;
 	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString(), false, true);
 		
 		myGD->communication("UI_writeDie");
 		
@@ -1673,7 +1673,7 @@ void Jack::takeSpeedUpItem()
 	{
 		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
 
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 		
 		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
 		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
@@ -1848,7 +1848,7 @@ void Jack::dieEffect()
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 				
-				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString());
+				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString(), false, true);
 				
 				startReviveAnimation(jackImg);
 			}
@@ -1865,7 +1865,7 @@ void Jack::dieEffect()
 //				jackImg->setScale(0.8f);
 //				addChild(jackImg, kJackZ_main);
 				
-				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString());
+				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString(), false, true);
 				
 				startReviveAnimation(jackImg);
 			}

@@ -40,6 +40,7 @@
 #include "FlagSelector.h"
 #include "EmptyItemSalePopup.h"
 #include "EventShopPopup.h"
+#include "TodayMissionPopup.h"
 
 typedef enum tMenuTagFailPopup{
 	kMT_FP_main = 1,
@@ -453,18 +454,18 @@ bool FailPopup::init()
 	if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item8) <= 0)
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_emptyItem);
-		addChild(t_popup, kZ_FP_popup);
+		addChild(t_popup, kZ_FP_popup+1);
 	}
 	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item8) <= 0 &&
 			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount() >= mySGD->getStupidNpuHelpFailCount())
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
-		addChild(t_popup, kZ_FP_popup);
+		addChild(t_popup, kZ_FP_popup+1);
 	}
 	else if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
 	{
 		EventShopPopup* t_popup = EventShopPopup::create(-300, [=](){});
-		addChild(t_popup, kZ_FP_popup);
+		addChild(t_popup, kZ_FP_popup+1);
 	}
 	
 	Json::Value param2;
@@ -486,11 +487,25 @@ bool FailPopup::init()
 	mySGD->setUserdataFailCount(mySGD->getUserdataFailCount()+1);
 	send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
+	is_today_mission_success = mySGD->today_mission_info.is_success.getV();
+	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
-																		  // 이번에 뭔가를 받았는가 확인해서 팝업 띄울수 있도록 해야 함.
+																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
+																			{
+																				is_today_mission_success = true;
+																				if(is_today_mission_success)
+																				{
+																					TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+																					addChild(t_popup, kZ_FP_popup);
+																				}
+																			}
+																		  else
+																			{
+																				is_today_mission_success = false;
+																			}
 																	  }
 																  }));
 	

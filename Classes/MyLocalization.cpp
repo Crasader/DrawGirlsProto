@@ -299,6 +299,16 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
 	ko->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
 	ko->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
+	ko->setObject(CCString::create("이어하기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass1);
+	ko->setObject(CCString::create("맵다시뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass2);
+	ko->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
+	ko->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
+	ko->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
+	ko->setObject(CCString::create("무료"), kMyLocalKey_free);
+	ko->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -725,6 +735,13 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
 	en->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
 	en->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
+	en->setObject(CCString::create("이어하기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass1);
+	en->setObject(CCString::create("맵다시뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass2);
+	en->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
+	en->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
+	en->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
+	en->setObject(CCString::create("무료"), kMyLocalKey_free);
+	en->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1154,6 +1171,13 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
 	ja->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
 	ja->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
+	ja->setObject(CCString::create("이어하기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass1);
+	ja->setObject(CCString::create("맵다시뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass2);
+	ja->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
+	ja->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
+	ja->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
+	ja->setObject(CCString::create("무료"), kMyLocalKey_free);
+	ja->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

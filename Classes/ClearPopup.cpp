@@ -38,6 +38,7 @@
 #include "LoadingLayer.h"
 #include "FlagSelector.h"
 #include "EventShopPopup.h"
+#include "TodayMissionPopup.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -525,11 +526,20 @@ bool ClearPopup::init()
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
+	is_today_mission_success = mySGD->today_mission_info.is_success.getV();
+	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
-																		  // 이번에 뭔가를 받았는가 확인해서 팝업 띄울수 있도록 해야 함.
+																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
+																			{
+																				is_today_mission_success = true;
+																			}
+																		  else
+																			{
+																				is_today_mission_success = false;
+																			}
 																	  }
 																  }));
 	
@@ -1698,6 +1708,12 @@ void ClearPopup::startCalcAnimation()
 											high_score->setScale(1.f);
 										}));
 									}));
+								}
+								
+								if(is_today_mission_success)
+								{
+									TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
+									addChild(t_popup, kZ_CP_popup);
 								}
 								
 								is_end_popup_animation = true;

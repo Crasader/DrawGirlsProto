@@ -167,7 +167,7 @@ void ChargeNodeLambda::startCharge()
 	AudioEngine::sharedInstance()->playEffect("se_castmissile.mp3", true);
 //	AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
 //	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
-	AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3", false, true);
 	schedule(schedule_selector(ChargeNodeLambda::charging));
 }
 
@@ -277,7 +277,7 @@ void SpecialChargeNodeLambda::startCharge()
 {
 	charge_cnt = 0;
 	AudioEngine::sharedInstance()->playEffect("se_castspecial.mp3", true);
-	AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3", false, true);
 //	AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
 	//myGD->communication("Main_showWarning", 3);
 	schedule(schedule_selector(SpecialChargeNodeLambda::charging));
@@ -382,7 +382,7 @@ void CrashChargeNodeLambda::setChargeColor( ccColor4F change_color )
 void CrashChargeNodeLambda::startCharge()
 {
 //	AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
-	AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3", false, true);
 	//myGD->communication("Main_showWarning", 2);
 	charge_cnt = 0;
 	AudioEngine::sharedInstance()->playEffect("se_castmap.mp3", true);
