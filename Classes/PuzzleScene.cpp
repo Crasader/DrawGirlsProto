@@ -1785,6 +1785,7 @@ void PuzzleScene::setRight()
 				}
 				
 				CommonButton* show_img = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_view), 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
+				show_img->setTitleColor(ccc3(50, 20, 0));
 				show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
 				show_img->setFunction([=](CCObject* sender)
 									  {

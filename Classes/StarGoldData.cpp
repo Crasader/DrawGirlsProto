@@ -1538,6 +1538,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "failCount";
 	else if(t_type == kUserdataType_autoLevel)
 		return_value = "autoLevel";
+	else if(t_type == kUserdataType_highScore)
+		return_value = "highScore";
 	
 	return return_value;
 }
@@ -2155,4 +2157,15 @@ void StarGoldData::setUserdataAutoLevel(int t_i)
 	}
 }
 int StarGoldData::getUserdataAutoLevel(){	return userdata_storage[kUserdataType_autoLevel].getV();	}
-
+void StarGoldData::setUserdataHighScore(int t_i)
+{
+	if(userdata_storage[kUserdataType_highScore].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_highScore;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataHighScore(){	return userdata_storage[kUserdataType_highScore].getV();	}

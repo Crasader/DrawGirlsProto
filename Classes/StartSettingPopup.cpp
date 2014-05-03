@@ -43,6 +43,7 @@
 #include "ItemGachaPopup.h"
 #include "MyLocalization.h"
 #include "LevelupGuidePopup.h"
+#include "CumberShowWindow.h"
 
 bool StartSettingPopup::init()
 {
@@ -493,6 +494,11 @@ void StartSettingPopup::setMain()
 	main_case->addChild(level_case);
 	
 	
+	CumberShowWindow* t_cumber = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+	t_cumber->setPosition(ccp(83,158));
+	main_case->addChild(t_cumber);
+	
+	
 	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
 	
 	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
@@ -536,7 +542,7 @@ void StartSettingPopup::setMain()
 		n_level->setColor(ccc3(50, 25, 0));
 		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
-		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
+		CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 		n_price_type->setPosition(ccp(25,22));
 		n_upgrade->addChild(n_price_type);
 		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
@@ -550,7 +556,7 @@ void StartSettingPopup::setMain()
 		s_level->setColor(ccc3(50, 25, 0));
 		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
-		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
+		CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 		s_price_type->setPosition(ccp(25,22));
 		s_upgrade->addChild(s_price_type);
 		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
@@ -633,11 +639,11 @@ void StartSettingPopup::gachaMenuCreate()
 																		   
 																		   if(!buy_button)
 																			{
-																				buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 115, 50), CCRectMake(57, 24, 1, 2)));
-																				buy_button->setTitleColor(ccBLACK);
+																				buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
+																				buy_button->setTitleColor(ccc3(50,20,0));
 																				buy_button->setTitleSize(13);
 																				buy_button->setTouchPriority(touch_priority);
-																				buy_button->setSize(CCSizeMake(115, 50));
+																				buy_button->setSize(CCSizeMake(110, 55));
 																				buy_button->setPosition(395,117);
 																				main_case->addChild(buy_button);
 																			}
@@ -727,7 +733,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			n_level->setColor(ccc3(50, 25, 0));
 			n_level->setPosition(ccp(70,47));
 			n_upgrade->addChild(n_level);
-			CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
+			CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 			n_price_type->setPosition(ccp(25,22));
 			n_upgrade->addChild(n_price_type);
 			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
@@ -741,7 +747,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			s_level->setColor(ccc3(50, 25, 0));
 			s_level->setPosition(ccp(70,47));
 			s_upgrade->addChild(s_level);
-			CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
+			CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 			s_price_type->setPosition(ccp(25,22));
 			s_upgrade->addChild(s_price_type);
 			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
@@ -1136,11 +1142,11 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		if(!buy_button)
 		{
-			buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 115, 50), CCRectMake(57, 24, 1, 2)));
-			buy_button->setTitleColor(ccBLACK);
+			buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
+			buy_button->setTitleColor(ccc3(50,20,0));
 			buy_button->setTitleSize(13);
 			buy_button->setTouchPriority(touch_priority);
-			buy_button->setSize(CCSizeMake(115, 50));
+			buy_button->setSize(CCSizeMake(110, 55));
 			buy_button->setPosition(395,117);
 			main_case->addChild(buy_button);
 		}

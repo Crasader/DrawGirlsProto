@@ -139,7 +139,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("등급순"), kMyLocalKey_gradeOrder);
 	ko->setObject(CCString::create("회전"), kMyLocalKey_rotation);
 	ko->setObject(CCString::create("레벨을 올리면 보스를 좀 더 쉽게 물리칠 수 있어요!"), kMyLocalKey_upgradeSubMent);
-	ko->setObject(CCString::create("다시 뽑기"), kMyLocalKey_itemRegacha);
+	ko->setObject(CCString::create("버리고 다시 뽑기"), kMyLocalKey_itemRegacha);
 	ko->setObject(CCString::create("%.0f%% 할인"), kMyLocalKey_itemRegachaDiscountValue);
 	ko->setObject(CCString::create("이 아이템 사용"), kMyLocalKey_thisItemUse);
 	ko->setObject(CCString::create("타임"), kMyLocalKey_time);
@@ -265,6 +265,19 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
 	ko->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	ko->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
+	
+	ko->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
+	ko->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
+	ko->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
+	ko->setObject(CCString::create("부하 몬스터 한마리를 제거합니다."), kMyLocalKey_item5ment);
+	ko->setObject(CCString::create("침묵"), kMyLocalKey_item7title);
+	ko->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
+	ko->setObject(CCString::create("부활"), kMyLocalKey_item10title);
+	ko->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -660,6 +673,14 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
 	en->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	en->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
+	en->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
+	en->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
+	en->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
+	en->setObject(CCString::create("부하 몬스터 한마리를 제거합니다."), kMyLocalKey_item5ment);
+	en->setObject(CCString::create("침묵"), kMyLocalKey_item7title);
+	en->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
+	en->setObject(CCString::create("부활"), kMyLocalKey_item10title);
+	en->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1056,6 +1077,14 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
 	ja->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	ja->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
+	ja->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
+	ja->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
+	ja->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
+	ja->setObject(CCString::create("부하 몬스터 한마리를 제거합니다."), kMyLocalKey_item5ment);
+	ja->setObject(CCString::create("침묵"), kMyLocalKey_item7title);
+	ja->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
+	ja->setObject(CCString::create("부활"), kMyLocalKey_item10title);
+	ja->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

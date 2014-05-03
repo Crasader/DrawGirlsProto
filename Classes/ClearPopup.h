@@ -141,6 +141,8 @@ private:
 	void scoreAnimation(float dt);
 	void stopScoreAnimation();
 	
+	bool is_high_score;
+	
 	float keep_time;
 	float decrease_time;
 	float increase_time;

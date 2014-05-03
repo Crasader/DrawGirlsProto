@@ -511,6 +511,16 @@ bool ClearPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, ClearPopup::resultGetTime)));
 	
+	if(int(mySGD->getScore()) > mySGD->getUserdataHighScore())
+	{
+		mySGD->setUserdataHighScore(mySGD->getScore());
+		is_high_score = true;
+	}
+	else
+	{
+		is_high_score = false;
+	}
+	
 	mySGD->setUserdataFailCount(0);
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
@@ -1600,9 +1610,9 @@ void ClearPopup::startCalcAnimation()
 //	startTimeAnimation();
 //	startGoldAnimation();
 	
-	KSLabelTTF* star_bonus_label = KSLabelTTF::create(CCString::createWithFormat("별보너스 x%.1f", mySGD->getStageGrade()*0.5f+1.f)->getCString(), mySGD->getFont().c_str(), 15);
-	star_bonus_label->setColor(ccBLUE);
-	star_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+	KSLabelTTF* star_bonus_label = KSLabelTTF::create(CCString::createWithFormat("별보너스 x%.1f", mySGD->getStageGrade()*0.5f+1.f)->getCString(), mySGD->getFont().c_str(), 13);
+	star_bonus_label->setColor(ccc3(50, 250, 255));
+	star_bonus_label->enableOuterStroke(ccBLACK, 1.f);
 	star_bonus_label->setPosition(ccp(53+48+24,195));
 	main_case->addChild(star_bonus_label, kZ_CP_table);
 	
@@ -1635,9 +1645,9 @@ void ClearPopup::startCalcAnimation()
 				is_end_call_score_calc = true;
 				end_score_calc_func = [=]()
 				{
-					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 15);
-					time_bonus_label->setColor(ccBLUE);
-					time_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 13);
+					time_bonus_label->setColor(ccc3(50, 250, 255));
+					time_bonus_label->enableOuterStroke(ccBLACK, 1.f);
 					time_bonus_label->setPosition(ccp(170,148)); // 170 148
 					main_case->addChild(time_bonus_label, kZ_CP_table);
 					
@@ -1667,6 +1677,29 @@ void ClearPopup::startCalcAnimation()
 								time_bonus_label->setOpacity(t*255);
 							}, [=](float t){
 								time_bonus_label->setOpacity(0);
+								
+								if(is_high_score)
+								{
+									CCSprite* high_score = CCSprite::create("ending_highscore.png");
+									high_score->setScale(0.5f);
+									high_score->setOpacity(0);
+									high_score->setPosition(ccp(130,82));
+									main_case->addChild(high_score, kZ_CP_table);
+									
+									main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
+										high_score->setScale(0.5f+t*0.8f);
+										high_score->setOpacity(t*255);
+									}, [=](float t){
+										high_score->setScale(1.3f);
+										high_score->setOpacity(255);
+										main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+											high_score->setScale(1.3f-t*0.3f);
+										}, [=](float t){
+											high_score->setScale(1.f);
+										}));
+									}));
+								}
+								
 								is_end_popup_animation = true;
 								is_end_call_score_calc = true;
 								end_score_calc_func = [=]()

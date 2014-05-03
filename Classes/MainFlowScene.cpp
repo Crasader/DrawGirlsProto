@@ -1031,7 +1031,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					
-					CCSprite* price_type = CCSprite::create("common_button_ruby.png");
+					CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 					price_type->setScale(0.7f);
 					c_label->addChild(price_type);
 					
@@ -1577,6 +1577,7 @@ void MainFlowScene::setBottom()
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
 	rank_menu->setPosition(ccp(43-240, n_rank->getContentSize().height/2.f+8));//ccp(-205, n_rank->getContentSize().height/2.f));
 	bottom_case->addChild(rank_menu);
+	rank_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 	
 	{
 		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
@@ -1603,6 +1604,7 @@ void MainFlowScene::setBottom()
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
 	shop_menu->setPosition(ccp(43-240+214.f/4.f, n_shop->getContentSize().height/2.f+8));//ccp(-73, n_shop->getContentSize().height/2.f));
 	bottom_case->addChild(shop_menu);
+	shop_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 	
 	{
 		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
@@ -1650,6 +1652,7 @@ void MainFlowScene::setBottom()
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
 	cardsetting_menu->setPosition(ccp(43-240+214.f/4.f*2.f, n_cardsetting->getContentSize().height/2.f+8));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
 	bottom_case->addChild(cardsetting_menu);
+	cardsetting_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 	
 	{
 		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
@@ -1676,6 +1679,7 @@ void MainFlowScene::setBottom()
 	CCMenu* mission_menu = CCMenu::createWithItem(mission_item);
 	mission_menu->setPosition(ccp(43-240+214.f/4.f*3.f, n_mission->getContentSize().height/2.f+8));
 	bottom_case->addChild(mission_menu);
+	mission_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 
 	
 //	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
@@ -1768,6 +1772,7 @@ void MainFlowScene::setBottom()
 		CCMenuLambda* cgp_menu = CCMenuLambda::create();
 		cgp_menu->setPosition(ccp(43-240+214.f, n_cgp->getContentSize().height/2.f+8));
 		bottom_case->addChild(cgp_menu);
+		cgp_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 		
 		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
 			if(!is_menu_enable)

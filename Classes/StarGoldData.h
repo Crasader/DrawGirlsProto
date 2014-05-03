@@ -172,6 +172,7 @@ enum UserdataType
 	kUserdataType_failCount,
 	kUserdataType_autoLevel,
 	kUserdataType_selectedCharNO,
+	kUserdataType_highScore,
 	kUserdataType_end
 };
 
@@ -522,6 +523,8 @@ public:
 	int getUserdataFailCount();
 	void setUserdataAutoLevel(int t_i);
 	int getUserdataAutoLevel();
+	void setUserdataHighScore(int t_i);
+	int getUserdataHighScore();
 	
 	string getInappProduct(int t_index);
 	void initInappProduct(int t_index, string t_product);
