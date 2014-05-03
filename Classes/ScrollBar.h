@@ -14,12 +14,12 @@ public:
 	ScrollBar();
 	virtual ~ScrollBar();
 	static ScrollBar* createScrollbar(CCScrollView* table, float offset, const std::string& h = "popup_bar_h.png",
-																		const std::string& v = "popup_bar_v.png");
-	static ScrollBar* createScrollbar(CCScrollView* table, float offset, CCScale9Sprite* h9, CCScale9Sprite* v9)
+																		const std::string& v = "popup_bar_v.png", int touchPrioity = INT_MIN);
+	static ScrollBar* createScrollbar(CCScrollView* table, float offset, CCScale9Sprite* h9, CCScale9Sprite* v9, int touchPrioity = INT_MIN)
 	{
 		ScrollBar* obj = new ScrollBar();
 		
-    if(obj->init(table, offset, h9, v9)) {
+    if(obj->init(table, offset, h9, v9, touchPrioity)) {
 			obj->autorelease();
 			return obj;
     } else {
@@ -27,10 +27,27 @@ public:
 			return NULL;
     }
 	}
-	bool init(CCScrollView* sv, float offset, const std::string& h, const std::string& v);
-	bool init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Sprite* v9);
+	bool init(CCScrollView* sv, float offset, const std::string& h, const std::string& v, int touchPriority);
+	bool init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Sprite* v9, int touchPriority);
 	//주기적으로 호출 되면서 내용을 갱신할 함수
 	void setBarRefresh();
+	void registerWithTouchDispatcher()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, touchPriority, true);
+	}
+	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	CCRect getRectForObject(CCScale9Sprite* ob)
+	{
+		CCPoint obPosition = ob->getPosition();
+		CCSize obContentSize = ob->getContentSize();
+		CCPoint obAnchorPoint = ob->getAnchorPoint();
+		return CCRectMake( obPosition.x - obContentSize.width * obAnchorPoint.x,
+											obPosition.y - obContentSize.height * obAnchorPoint.y,
+											obContentSize.width, obContentSize.height);
+	}
 protected:
 	void setBarRefreshH();
 	void setBarRefreshV();
@@ -43,6 +60,9 @@ public:
 		setBarRefresh();
 	}
 	
+	CCScale9Sprite* selectedBarV;
+	CCScale9Sprite* selectedBarH;
+	int touchPriority;
 	CC_SYNTHESIZE(float, marginOffset, MarginOffset);
 	CC_SYNTHESIZE(CCScale9Sprite*, barV, BarV);
 	CC_SYNTHESIZE(CCScale9Sprite*, barH, BarH);
