@@ -255,7 +255,7 @@ bool MainFlowScene::init()
 		
 		if(mySGD->getMustBeShowNotice())
 		{
-			ASPopupView* t_popup = ASPopupView::create(-200);
+			ASPopupView* t_popup = ASPopupView::create(-9999999);
 			
 			float height_value = 320.f;
 			if(myDSH->screen_convert_rate < 1.f)
