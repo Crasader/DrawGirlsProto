@@ -13,17 +13,28 @@
 
 void StarGoldData::withdraw()
 {
+	star_label = NULL;
+	gold_label = NULL;
+	
 	has_gotten_cards.clear();
 	puzzle_historys.clear();
 	piece_historys.clear();
 	goods_data.clear();
 	userdata_storage.clear();
 	
-	is_show_firstPurchase = false;
+	at_time_show_firstPurchase = 0;
 	at_time_show_emptyItem = 0;
 	at_time_show_stupidNpuHelp = 0;
 	at_time_show_eventRubyShop = 0;
 	at_time_show_levelupGuide = 0;
+	
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowFirstPurchase, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowEmptyItem, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowStupidNpuHelp, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowEventRubyShop, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowLevelupGuide, 0, false);
+	
+	myDSH->fFlush();
 }
 
 string StarGoldData::getReplayKey(ReplayKey t_key)
@@ -1810,7 +1821,10 @@ bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 {
 	bool return_value = true;
 	if(t_type == kPurchaseGuideType_firstPurchase)
-		return_value = !is_show_firstPurchase;
+	{
+		if(at_time_show_firstPurchase.getV() > 0 && at_time_show_firstPurchase.getV() + getFirstPurchaseReviewSecond() >= graphdog->getTime())
+			return_value = false;
+	}
 	else if(t_type == kPurchaseGuideType_emptyItem)
 	{
 		if(empty_item_is_on.getV() == 0 || (at_time_show_emptyItem.getV() > 0 && at_time_show_emptyItem.getV() + getEmptyItemReviewSecond() >= graphdog->getTime()))
@@ -1837,15 +1851,30 @@ bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 void StarGoldData::showPurchasePopup(PurchaseGuideType t_type)
 {
 	if(t_type == kPurchaseGuideType_firstPurchase)
-		is_show_firstPurchase = true;
+	{
+		at_time_show_firstPurchase = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowFirstPurchase, at_time_show_firstPurchase.getV());
+	}
 	else if(t_type == kPurchaseGuideType_emptyItem)
+	{
 		at_time_show_emptyItem = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowEmptyItem, at_time_show_emptyItem.getV());
+	}
 	else if(t_type == kPurchaseGuideType_stupidNpuHelp)
+	{
 		at_time_show_stupidNpuHelp = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowStupidNpuHelp, at_time_show_stupidNpuHelp.getV());
+	}
 	else if(t_type == kPurchaseGuideType_eventRubyShop)
+	{
 		at_time_show_eventRubyShop = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowEventRubyShop, at_time_show_eventRubyShop.getV());
+	}
 	else if(t_type == kPurchaseGuideType_levelupGuide)
+	{
 		at_time_show_levelupGuide = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowLevelupGuide, at_time_show_levelupGuide.getV());
+	}
 }
 
 void StarGoldData::initTodayMission(Json::Value t_info)
@@ -1882,11 +1911,11 @@ void StarGoldData::myInit()
 	rank_up_add_rate = 0;
 	keep_time_info.is_loaded = false;
 	
-	is_show_firstPurchase = false;
-	at_time_show_emptyItem = 0;
-	at_time_show_stupidNpuHelp = 0;
-	at_time_show_eventRubyShop = 0;
-	at_time_show_levelupGuide = 0;
+	at_time_show_firstPurchase = myDSH->getIntegerForKey(kDSH_Key_atTimeShowFirstPurchase);
+	at_time_show_emptyItem = myDSH->getIntegerForKey(kDSH_Key_atTimeShowEmptyItem);
+	at_time_show_stupidNpuHelp = myDSH->getIntegerForKey(kDSH_Key_atTimeShowStupidNpuHelp);
+	at_time_show_eventRubyShop = myDSH->getIntegerForKey(kDSH_Key_atTimeShowEventRubyShop);
+	at_time_show_levelupGuide = myDSH->getIntegerForKey(kDSH_Key_atTimeShowLevelupGuide);
 	
 	goods_data.clear();
 	change_goods_list.clear();
@@ -2068,6 +2097,8 @@ float StarGoldData::getRankUpAddRate(){	return rank_up_add_rate.getV();}
 
 void StarGoldData::setFirstPurchasePlayCount(int t_i){	first_purchase_play_count = t_i;	}
 int StarGoldData::getFirstPurchasePlayCount(){	return first_purchase_play_count.getV();	}
+void StarGoldData::setFirstPurchaseReviewSecond(long long t_i){	first_purchase_review_second = t_i;	}
+long long StarGoldData::getFirstPurchaseReviewSecond(){	return first_purchase_review_second.getV();	}
 void StarGoldData::setEmptyItemReviewSecond(long long t_i){	empty_item_review_second = t_i;}
 long long StarGoldData::getEmptyItemReviewSecond(){	return empty_item_review_second.getV();}
 void StarGoldData::setStupidNpuHelpReviewSecond(long long t_i){	stupid_npu_help_review_second = t_i;	}

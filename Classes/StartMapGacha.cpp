@@ -5,6 +5,7 @@
 #include "StarGoldData.h"
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
+#include "MyLocalization.h"
 
 #define LZZ_INLINE inline
 using namespace std;
@@ -29,7 +30,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	
 	CCLabelTTF* g_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create("영역 다시뽑기", mySGD->getFont().c_str(), 11);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_areaReGacha), mySGD->getFont().c_str(), 11);
 	gacha_label->enableOuterStroke(ccBLACK, 1.f);
 	gacha_label->setPosition(ccp(-35,0));
 	g_label->addChild(gacha_label);
@@ -39,14 +40,28 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	price_back->setPosition(ccp(38, 0));
 	g_label->addChild(price_back);
 	
-	CCSprite* price_type = CCSprite::create("ui_gold_img.png");
-	price_type->setPosition(ccp(15,15));
-	price_back->addChild(price_type);
-	
-	KSLabelTTF* price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 11);
-	price_label->enableOuterStroke(ccBLACK, 1.f);
-	price_label->setPosition(ccp(47,15));
-	price_back->addChild(price_label);
+	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
+	{
+		CCSprite* pass_ticket = CCSprite::create("pass_ticket.png");
+		pass_ticket->setPosition(ccp(15,15));
+		price_back->addChild(pass_ticket);
+		
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 11);
+		free_label->enableOuterStroke(ccBLACK, 1.f);
+		free_label->setPosition(ccp(47,15));
+		price_back->addChild(free_label);
+	}
+	else
+	{
+		CCSprite* price_type = CCSprite::create("ui_gold_img.png");
+		price_type->setPosition(ccp(15,15));
+		price_back->addChild(price_type);
+		
+		KSLabelTTF* price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 11);
+		price_label->enableOuterStroke(ccBLACK, 1.f);
+		price_label->setPosition(ccp(47,15));
+		price_back->addChild(price_label);
+	}
 	
 	CCScale9Sprite* gacha_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	

@@ -510,6 +510,8 @@ public:
 	
 	void setFirstPurchasePlayCount(int t_i);
 	int getFirstPurchasePlayCount();
+	void setFirstPurchaseReviewSecond(long long t_i);
+	long long getFirstPurchaseReviewSecond();
 	
 //	void setUserdataPGuide(string t_s);
 //	string getUserdataPGuide();
@@ -778,6 +780,7 @@ private:
 	KSProtectVar<float> rank_up_add_rate;
 	
 	KSProtectVar<int> first_purchase_play_count;
+	KSProtectVar<long long> first_purchase_review_second;
 	KSProtectVar<long long> empty_item_review_second;
 	KSProtectVar<long long> stupid_npu_help_review_second;
 	KSProtectVar<int> stupid_npu_help_play_count;
@@ -807,7 +810,7 @@ private:
 	void resultChangeGoods(Json::Value result_data);
 	void retryChangeGoods();
 	
-	bool is_show_firstPurchase;
+	KSProtectVar<long long> at_time_show_firstPurchase;
 	KSProtectVar<long long> at_time_show_emptyItem;
 	KSProtectVar<long long> at_time_show_stupidNpuHelp;
 	KSProtectVar<long long> at_time_show_eventRubyShop;

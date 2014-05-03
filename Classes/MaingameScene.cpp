@@ -872,7 +872,10 @@ void Maingame::gachaOn()
 	LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 	addChild(t_loading, 9999);
 	
-	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");
+	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
+		mySGD->addChangeGoods(kGoodsType_pass2, -1, "시작맵가챠");
+	else
+		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");
 	
 	mySGD->changeGoods([=](Json::Value result_data)
 					   {
