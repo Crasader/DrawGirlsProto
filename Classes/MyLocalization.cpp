@@ -198,7 +198,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	ko->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	ko->setObject(CCString::create("스테이지를 클리어 할 때\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	ko->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
+	ko->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=13>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	ko->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
@@ -276,14 +276,14 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
 	ko->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
-	ko->setObject(CCString::create("<|900|13|>85%이상<|999|13|> 획득하라!"), kMyLocalKey_missionDiscription0);
-	ko->setObject(CCString::create("<|999|13|>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
-	ko->setObject(CCString::create("<|999|13|>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
-	ko->setObject(CCString::create("<|999|13|>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
-	ko->setObject(CCString::create("<|999|13|>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
-	ko->setObject(CCString::create("<|999|13|>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
-	ko->setObject(CCString::create("<|999|13|>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
-	ko->setObject(CCString::create("<|999|13|>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	ko->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ko->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	ko->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	ko->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	ko->setObject(CCString::create("<font color=999 size=13>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	ko->setObject(CCString::create("<font color=999 size=13>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	ko->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	ko->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
 	
 	
 	ko->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
@@ -638,7 +638,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	en->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	en->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	en->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
+	en->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=12>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	en->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
@@ -715,14 +715,15 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
 	en->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
-	en->setObject(CCString::create("<|900|13|>85%이상<|999|13|> 획득하라!"), kMyLocalKey_missionDiscription0);
-	en->setObject(CCString::create("<|999|13|>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
-	en->setObject(CCString::create("<|999|13|>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
-	en->setObject(CCString::create("<|999|13|>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
-	en->setObject(CCString::create("<|999|13|>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
-	en->setObject(CCString::create("<|999|13|>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
-	en->setObject(CCString::create("<|999|13|>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
-	en->setObject(CCString::create("<|999|13|>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
+	en->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	en->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	en->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	en->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	en->setObject(CCString::create("<font color=999 size=13>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	en->setObject(CCString::create("<font color=999 size=13>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	en->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	en->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
 	
 	en->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	en->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
@@ -1074,7 +1075,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
 	ja->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	ja->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	ja->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
+	
+	
+	ja->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=13>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	ja->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
@@ -1152,14 +1155,17 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
 	ja->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
-	ja->setObject(CCString::create("<|900|13|>85%이상<|999|13|> 획득하라!"), kMyLocalKey_missionDiscription0);
-	ja->setObject(CCString::create("<|999|13|>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
-	ja->setObject(CCString::create("<|999|13|>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
-	ja->setObject(CCString::create("<|999|13|>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
-	ja->setObject(CCString::create("<|999|13|>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
-	ja->setObject(CCString::create("<|999|13|>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
-	ja->setObject(CCString::create("<|999|13|>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
-	ja->setObject(CCString::create("<|999|13|>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
+	
+	ja->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ja->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	ja->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	ja->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	ja->setObject(CCString::create("<font color=999 size=13>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	ja->setObject(CCString::create("<font color=999 size=13>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	ja->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	ja->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
 	
 	ja->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	ja->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);

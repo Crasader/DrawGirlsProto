@@ -58,7 +58,7 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	sub1_label->setPosition(ccp(0,30));
 	m_container->addChild(sub1_label);
 	
-	StyledLabelTTF* sub2_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* sub2_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
 	sub2_label->setPosition(ccp(0,-5));
 	m_container->addChild(sub2_label);
 	

@@ -43,7 +43,6 @@
 #include "ItemGachaPopup.h"
 #include "MyLocalization.h"
 #include "LevelupGuidePopup.h"
-#include "CumberShowWindow.h"
 
 bool StartSettingPopup::init()
 {
@@ -494,7 +493,7 @@ void StartSettingPopup::setMain()
 	main_case->addChild(level_case);
 	
 	
-	CumberShowWindow* t_cumber = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+	t_cumber = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 	t_cumber->setPosition(ccp(83,158));
 	main_case->addChild(t_cumber);
 	
@@ -512,6 +511,10 @@ void StartSettingPopup::setMain()
 		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
 																														 rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
 //		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
+		t_gm->setFunctionForCrash([=](){
+			t_cumber->stopAllActions();
+			t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1)));
+		});
 		t_gm->setPosition(ccp(83,158));
 		main_case->addChild(t_gm);
 		
@@ -736,6 +739,11 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
 																															 rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
 //			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
+			
+			t_gm->setFunctionForCrash([=](){
+				t_cumber->stopAllActions();
+				t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1)));
+			});
 			t_gm->setPosition(missile_position);
 //			t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 			main_case->addChild(t_gm);
