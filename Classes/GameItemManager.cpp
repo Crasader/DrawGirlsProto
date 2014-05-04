@@ -768,6 +768,20 @@ void ExchangeCoin::changeFront()
 	back_img->setVisible(false);
 }
 
+bool ExchangeCoin::isLocked()
+{
+	if(myGD->mapState[myPoint.x][myPoint.y] != mapEmpty &&
+	   myGD->mapState[myPoint.x-1][myPoint.y] != mapEmpty &&
+	   myGD->mapState[myPoint.x+1][myPoint.y] != mapEmpty &&
+	   myGD->mapState[myPoint.x][myPoint.y-1] != mapEmpty &&
+	   myGD->mapState[myPoint.x][myPoint.y+1] != mapEmpty)
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 void ExchangeCoin::moving()
 {
 	if(myGD->mapState[myPoint.x][myPoint.y] != mapEmpty &&
@@ -1198,6 +1212,20 @@ void GameItemManager::dieCreateItem()
 	}
 }
 
+bool GameItemManager::isChangeAllInner()
+{
+	CCArray* t_array = coin_parent->getChildren();
+	int t_count = t_array->count();
+	bool t_all_locked = true;
+	for(int i=0;i<t_count;i++)
+	{
+		ExchangeCoin* t_ec = (ExchangeCoin*)t_array->objectAtIndex(i);
+		t_all_locked = t_all_locked && t_ec->isLocked();
+	}
+	
+	return t_all_locked;
+}
+
 void GameItemManager::showCoin(CCObject* t_ui, SEL_CallFuncCCpI d_takeExchangeCoin)
 {
 	for(int i=1;i<=6;i++)
@@ -1435,6 +1463,7 @@ void GameItemManager::myInit()
 	
 	myGD->V_V["GIM_showBeautyStone"] = std::bind(&GameItemManager::showBeautyStone, this);
 	myGD->V_V["GIM_removeBeautyStone"] = std::bind(&GameItemManager::removeBeautyStone, this);
+	myGD->B_V["GIM_isChangeAllInner"] = std::bind(&GameItemManager::isChangeAllInner, this);
 }
 
 //class GameItemPlasma : public GameItemBase

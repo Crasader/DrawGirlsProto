@@ -1032,7 +1032,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	
 	if(!isGameover && t_p > clearPercentage.getV()) // clear 80%
 	{
-		if(!is_exchanged && is_show_exchange_coin && myGD->getCommunicationBool("MS_isCheckBossLocked"))
+		if(!is_exchanged && is_show_exchange_coin && myGD->getCommunicationBool("MS_isCheckBossLocked") && myGD->getCommunicationBool("GIM_isChangeAllInner"))
 		{
 			taked_coin_cnt = 6;
 			

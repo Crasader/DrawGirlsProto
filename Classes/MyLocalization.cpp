@@ -323,9 +323,9 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ko->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
 	ko->setObject(CCString::create("<font newline=18>모든 스테이지의<font newline=18>모든 카드를 획득하셨네요!<font newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
+	ko->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
+	ko->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -780,6 +780,9 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	en->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
 	en->setObject(CCString::create("<font newline=18>모든 스테이지의<font newline=18>모든 카드를 획득하셨네요!<font newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
+	en->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
+	en->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
+	en->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1239,6 +1242,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ja->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
 	ja->setObject(CCString::create("<font newline=18>모든 스테이지의<font newline=18>모든 카드를 획득하셨네요!<font newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
+	ja->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
+	ja->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
+	ja->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

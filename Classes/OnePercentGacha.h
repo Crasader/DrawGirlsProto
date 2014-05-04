@@ -17,7 +17,8 @@ enum OnePercentGachaZorder
 {
 	kOnePercentGacha_Z_gray = 1,
 	kOnePercentGacha_Z_back,
-	kOnePercentGacha_Z_content
+	kOnePercentGacha_Z_content,
+	kOnePercentGacha_Z_shop
 };
 enum OnePercentGachaMenuTag
 {

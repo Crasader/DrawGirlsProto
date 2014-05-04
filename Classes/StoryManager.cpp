@@ -9,6 +9,7 @@
 #include "StoryManager.h"
 #include "StarGoldData.h"
 #include "utf8.h"
+#include "AudioEngine.h"
 
 void StoryManager::addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func,
 						   CCSize t_size/* = CCSizeMake(350,100)*/, CCPoint t_point/* = ccp(0,-110)*/, int t_font_size/* = 12*/)
@@ -98,7 +99,10 @@ bool StoryManager::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 	touch_count++;
 	is_boosting = true;
 	if(!is_menting && !is_delaying && end_func)
+	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		end_func();
+	}
 	
 	return true;
 }

@@ -170,6 +170,7 @@ public:
 	void showCoin();
 	void stopMoving();
 	void smallScaleHiding();
+	bool isLocked();
 	
 private:
 	int myType;
@@ -265,6 +266,8 @@ private:
 	deque<CCSprite*> effect_que;
 	
 	bool is_on_addTime;
+	
+	bool isChangeAllInner();
 	
 	void showTakeItemEffect(CCPoint t_p);
 	

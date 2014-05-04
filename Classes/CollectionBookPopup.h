@@ -87,7 +87,7 @@ private:
 	
 	CCPoint begin_point;
 	
-	CCEditBox* input_text;
+//	CCEditBox* input_text; // last
 //	CCTextFieldTTF* input_text;
 //    bool was_open_text;
 	

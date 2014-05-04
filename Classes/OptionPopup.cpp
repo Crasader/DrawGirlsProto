@@ -61,7 +61,8 @@ enum OptionPopupMenuTag{
 	kOP_MT_message,
 	kOP_MT_coupon,
 	kOP_MT_community,
-	kOP_MT_accountLink
+	kOP_MT_accountLink,
+	kOP_MT_kakao
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -168,6 +169,7 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* coupon_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	coupon_button->setTitleColor(ccc3(50, 20, 0));
 	coupon_button->setPosition(getContentPosition(kOP_MT_coupon));
 	coupon_button->setFunction([=](CCObject* sender)
 														 {
@@ -179,6 +181,7 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* community_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_community), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	community_button->setTitleColor(ccc3(50, 20, 0));
 	community_button->setPosition(getContentPosition(kOP_MT_community));
 	community_button->setFunction([=](CCObject* sender)
 																{
@@ -190,6 +193,7 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* account_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	account_button->setTitleColor(ccc3(50, 20, 0));
 	account_button->setPosition(getContentPosition(kOP_MT_accountLink));
 	account_button->setFunction([=](CCObject* sender)
 													{
@@ -198,6 +202,17 @@ bool OptionPopup::init()
 														menuAction(t_node);
 													});
 	main_case->addChild(account_button, kOP_Z_content);
+	
+	
+	CommonButton* kakao_button = CommonButton::create("", 12, CCSizeMake(85, 33), CCScale9Sprite::create("option_kakao.png"), -171);
+	kakao_button->setPosition(getContentPosition(kOP_MT_kakao));
+	kakao_button->setFunction([=](CCObject* sender)
+								{
+									CCNode* t_node = CCNode::create();
+									t_node->setTag(kOP_MT_kakao);
+									menuAction(t_node);
+								});
+	main_case->addChild(kakao_button, kOP_Z_content);
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-171);
@@ -881,6 +896,10 @@ void OptionPopup::menuAction(CCObject* pSender)
 	{
 		is_menu_enable = true;
 	}
+	else if(tag == kOP_MT_kakao)
+	{
+		is_menu_enable = true;
+	}
 }
 
 void OptionPopup::popupClose()
@@ -1137,6 +1156,7 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_coupon)			return_value = ccp(390, 256);
 	else if(t_tag == kOP_MT_community)		return_value = ccp(313, 256);
 	else if(t_tag == kOP_MT_accountLink)	return_value = ccp(236, 256);
+	else if(t_tag == kOP_MT_kakao)			return_value = ccp(156, 256);
 	
 	else if(t_tag == kOP_MT_help)			return_value = ccp(410, 36);
 	

@@ -36,7 +36,7 @@ enum CBP_MenuTag{
 	kCBP_MT_zoom,
 	kCBP_MT_pre,
 	kCBP_MT_next,
-	kCBP_MT_inputText,
+//	kCBP_MT_inputText,
 	kCBP_MT_strength,
 	kCBP_MT_second,
 	kCBP_MT_third,
@@ -54,14 +54,14 @@ CCPoint CollectionBookPopup::getContentPosition(int t_tag)
 {
 	CCPoint return_value;
 	
-	if(t_tag == kCBP_MT_zoom)		return_value = ccp(45, 51);
-	else if(t_tag == kCBP_MT_pre)	return_value = ccp(120, 51);
-	else if(t_tag == kCBP_MT_next)	return_value = ccp(170, 51);
+	if(t_tag == kCBP_MT_zoom)		return_value = ccp(57, 57);
+	else if(t_tag == kCBP_MT_pre)	return_value = ccp(30, 160);
+	else if(t_tag == kCBP_MT_next)	return_value = ccp(210, 160);
 	else if(t_tag == kCBP_MT_second)	return_value = ccp(50,225);
 	else if(t_tag == kCBP_MT_third)	return_value = ccp(110,225);
 	else if(t_tag == kCBP_MT_forth)	return_value = ccp(170,225);
 	else if(t_tag == kCBP_MT_close)	return_value = ccp(200, 287);
-	else if(t_tag == kCBP_MT_inputText)	return_value = ccp(112,95);
+//	else if(t_tag == kCBP_MT_inputText)	return_value = ccp(112,95);
 	else if(t_tag == kCBP_MT_strength)	return_value = ccp(55,40);
 	
 	return return_value;
@@ -87,17 +87,17 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	target->addChild(close, 1, kCBP_MT_close);
 	
 	
-	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
-	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
-	s_zoom->setColor(ccGRAY);
-	
-	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBookPopup::menuAction));
-	zoom_item->setTag(kCBP_MT_zoom);
-	
-	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
-	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
-	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
-	zoom_menu->setTouchPriority(-191);
+//	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
+//	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
+//	s_zoom->setColor(ccGRAY);
+//	
+//	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBookPopup::menuAction));
+//	zoom_item->setTag(kCBP_MT_zoom);
+//	
+//	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
+//	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
+//	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
+//	zoom_menu->setTouchPriority(-191);
 	
 	
 	float mul_value = 0.88f;
@@ -267,17 +267,17 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	right_bottom_paper->setPosition(ccp(213,44));
 	target->addChild(right_bottom_paper);
 	
-//	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
-//	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
-//	s_zoom->setColor(ccGRAY);
-//	
-//	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBookPopup::menuAction));
-//	zoom_item->setTag(kCBP_MT_zoom);
-//	
-//	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
-//	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
-//	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
-//	zoom_menu->setTouchPriority(-191);
+	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
+	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
+	s_zoom->setColor(ccGRAY);
+	
+	CCMenuItem* zoom_item = CCMenuItemSprite::create(n_zoom, s_zoom, this, menu_selector(CollectionBookPopup::menuAction));
+	zoom_item->setTag(kCBP_MT_zoom);
+	
+	CCMenu* zoom_menu = CCMenu::createWithItem(zoom_item);
+	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
+	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
+	zoom_menu->setTouchPriority(-191);
 }
 
 // on "init" you need to initialize your instance
@@ -335,26 +335,38 @@ bool CollectionBookPopup::init()
 	
 	setRightPage(recent_right_img, recent_card_number);
 	
-	string input_data = mySGD->getCardComment(recent_card_number);
-    if(input_data == "")
-        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
-    
-    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
-	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
-	input_text->setPlaceHolder(input_data.c_str());
-	input_text->setReturnType(kKeyboardReturnTypeDone);
-	input_text->setFont(mySGD->getFont().c_str(), 12);
-	input_text->setFontColor(ccBLACK);
-	input_text->setDelegate(this);
-	input_text->setTouchPriority(-191);
-	
-    recent_right_img->addChild(input_text, kCBP_Z_cover);
-	
-    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
-        input_text->setText(input_data.c_str());
+//	string input_data = mySGD->getCardComment(recent_card_number);
+//    if(input_data == "")
+//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//    
+//    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
+//	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
+//	input_text->setPlaceHolder(input_data.c_str());
+//	input_text->setReturnType(kKeyboardReturnTypeDone);
+//	input_text->setFont(mySGD->getFont().c_str(), 12);
+//	input_text->setFontColor(ccBLACK);
+//	input_text->setDelegate(this);
+//	input_text->setTouchPriority(-191);
+//	
+//    recent_right_img->addChild(input_text, kCBP_Z_cover);
+//	
+//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//        input_text->setText(input_data.c_str());
 	
 	if(is_enable_pageturn)
 	{
+//		CCSprite* n_pre = CCSprite::create("diary_left.png");
+//		CCSprite* s_pre = CCSprite::create("diary_left.png");
+//		s_pre->setColor(ccGRAY);
+//		
+//		CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//		r_pre_item->setTag(kCBP_MT_pre);
+//		
+//		CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+//		r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//		recent_right_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+//		r_pre_menu->setTouchPriority(-191);
+		
 		CCSprite* n_pre = CCSprite::create("diary_left.png");
 		CCSprite* s_pre = CCSprite::create("diary_left.png");
 		s_pre->setColor(ccGRAY);
@@ -364,7 +376,7 @@ bool CollectionBookPopup::init()
 		
 		CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
 		r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-		recent_right_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+		recent_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
 		r_pre_menu->setTouchPriority(-191);
 		
 		CCSprite* n_next = CCSprite::create("diary_right.png");
@@ -388,7 +400,7 @@ bool CollectionBookPopup::init()
 		
 		setLeftPage(after_left_img, pre_number);
 		
-//		((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+		((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 		
 		
 		after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
@@ -399,7 +411,7 @@ bool CollectionBookPopup::init()
 		setRightPage(after_right_img, next_number);
 		
 		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 		int sub_count = after_right_img->getTag();
 		for(int i=0;i<sub_count;i++)
 		{
@@ -411,6 +423,19 @@ bool CollectionBookPopup::init()
 //		if(after_right_img->getChildByTag(kCBP_MT_third))
 //			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 		
+//		CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//		CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//		a_s_pre->setColor(ccGRAY);
+//		
+//		CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//		a_pre_item->setTag(kCBP_MT_pre);
+//		
+//		CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//		a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//		a_pre_menu->setEnabled(false);
+//		after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//		a_pre_menu->setTouchPriority(-191);
+		
 		CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 		CCSprite* a_s_pre = CCSprite::create("diary_left.png");
 		a_s_pre->setColor(ccGRAY);
@@ -421,8 +446,9 @@ bool CollectionBookPopup::init()
 		CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
 		a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
 		a_pre_menu->setEnabled(false);
-		after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+		after_left_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
 		a_pre_menu->setTouchPriority(-191);
+		
 		
 		CCSprite* a_n_next = CCSprite::create("diary_right.png");
 		CCSprite* a_s_next = CCSprite::create("diary_right.png");
@@ -658,8 +684,8 @@ void CollectionBookPopup::startNextPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
 	int sub_count = recent_right_img->getTag();
@@ -674,7 +700,8 @@ void CollectionBookPopup::startNextPage()
 //		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
 	
 	
-//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
@@ -684,24 +711,36 @@ void CollectionBookPopup::startNextPage()
 	int next_number = mySGD->getNextStageCardNumber(recent_card_number);
 	recent_card_number = next_number;
 	
-	string input_data = mySGD->getCardComment(recent_card_number);
-    if(input_data == "")
-        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
-    
-    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
-	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
-	input_text->setPlaceHolder(input_data.c_str());
-	input_text->setReturnType(kKeyboardReturnTypeDone);
-	input_text->setFont(mySGD->getFont().c_str(), 12);
-	input_text->setFontColor(ccBLACK);
-	input_text->setDelegate(this);
-	recent_right_img->addChild(input_text, kCBP_Z_cover);
-	input_text->setTouchPriority(-191);
-    
-    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
-        input_text->setText(input_data.c_str());
+//	string input_data = mySGD->getCardComment(recent_card_number);
+//    if(input_data == "")
+//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//    
+//    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
+//	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
+//	input_text->setPlaceHolder(input_data.c_str());
+//	input_text->setReturnType(kKeyboardReturnTypeDone);
+//	input_text->setFont(mySGD->getFont().c_str(), 12);
+//	input_text->setFontColor(ccBLACK);
+//	input_text->setDelegate(this);
+//	recent_right_img->addChild(input_text, kCBP_Z_cover);
+//	input_text->setTouchPriority(-191);
+//    
+//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//        input_text->setText(input_data.c_str());
 	
 	setLeftPage(covered_left_img, next_number);
+	
+	CCSprite* n_pre = CCSprite::create("diary_left.png");
+	CCSprite* s_pre = CCSprite::create("diary_left.png");
+	s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	r_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+	r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	covered_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+	r_pre_menu->setTouchPriority(-191);
 	
 	
 	animation_angle = 90.f;
@@ -733,7 +772,7 @@ void CollectionBookPopup::startNextFullSelectedPage()
 	setRightPage(after_right_img, mySGD->selected_collectionbook);
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -747,18 +786,18 @@ void CollectionBookPopup::startNextFullSelectedPage()
 //	if(after_right_img->getChildByTag(kCBP_MT_third))
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 	
-	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
-	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
-	a_s_pre->setColor(ccGRAY);
-	
-	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
-	a_pre_item->setTag(kCBP_MT_pre);
-	
-	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-	a_pre_menu->setEnabled(false);
-	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
-	a_pre_menu->setTouchPriority(-191);
+//	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//	a_s_pre->setColor(ccGRAY);
+//	
+//	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//	a_pre_item->setTag(kCBP_MT_pre);
+//	
+//	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//	a_pre_menu->setEnabled(false);
+//	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//	a_pre_menu->setTouchPriority(-191);
 	
 	CCSprite* a_n_next = CCSprite::create("diary_right.png");
 	CCSprite* a_s_next = CCSprite::create("diary_right.png");
@@ -798,7 +837,20 @@ void CollectionBookPopup::startPreFullSelectedPage()
 	
 	setLeftPage(after_left_img, mySGD->selected_collectionbook);
 	
-//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	CCSprite* n_pre = CCSprite::create("diary_left.png");
+	CCSprite* s_pre = CCSprite::create("diary_left.png");
+	s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	r_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+	r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	after_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+	r_pre_menu->setTouchPriority(-191);
+	
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
 	
 	animation_angle = 0;
 	animation_img = recent_left_img;
@@ -816,7 +868,8 @@ void CollectionBookPopup::startPreSelectedPage()
 	after_left_img = NULL;
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
-//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	
 	recent_card_number = mySGD->selected_collectionbook;
 	
@@ -827,25 +880,25 @@ void CollectionBookPopup::startPreSelectedPage()
 	
 	setRightPage(covered_right_img, recent_card_number);
 	
-	string input_data = mySGD->getCardComment(recent_card_number);
-    if(input_data == "")
-        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
-    
-    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
-	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
-	input_text->setPlaceHolder(input_data.c_str());
-	input_text->setReturnType(kKeyboardReturnTypeDone);
-	input_text->setFont(mySGD->getFont().c_str(), 12);
-	input_text->setFontColor(ccBLACK);
-	input_text->setDelegate(this);
-	covered_right_img->addChild(input_text, kCBP_Z_cover);
-	input_text->setTouchPriority(-191);
-    
-    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
-        input_text->setText(input_data.c_str());
+//	string input_data = mySGD->getCardComment(recent_card_number);
+//    if(input_data == "")
+//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//    
+//    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
+//	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
+//	input_text->setPlaceHolder(input_data.c_str());
+//	input_text->setReturnType(kKeyboardReturnTypeDone);
+//	input_text->setFont(mySGD->getFont().c_str(), 12);
+//	input_text->setFontColor(ccBLACK);
+//	input_text->setDelegate(this);
+//	covered_right_img->addChild(input_text, kCBP_Z_cover);
+//	input_text->setTouchPriority(-191);
+//    
+//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//        input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = covered_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -859,18 +912,18 @@ void CollectionBookPopup::startPreSelectedPage()
 //	if(covered_right_img->getChildByTag(kCBP_MT_third))
 //		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 	
-	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
-	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
-	a_s_pre->setColor(ccGRAY);
-	
-	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
-	a_pre_item->setTag(kCBP_MT_pre);
-	
-	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-	a_pre_menu->setEnabled(false);
-	covered_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
-	a_pre_menu->setTouchPriority(-191);
+//	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//	a_s_pre->setColor(ccGRAY);
+//	
+//	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//	a_pre_item->setTag(kCBP_MT_pre);
+//	
+//	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//	a_pre_menu->setEnabled(false);
+//	covered_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//	a_pre_menu->setTouchPriority(-191);
 	
 	CCSprite* a_n_next = CCSprite::create("diary_right.png");
 	CCSprite* a_s_next = CCSprite::create("diary_right.png");
@@ -907,8 +960,8 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
 	int sub_count = recent_right_img->getTag();
@@ -923,7 +976,8 @@ void CollectionBookPopup::startNextSelectedPage()
 //	if(recent_right_img->getChildByTag(kCBP_MT_third))
 //		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
 	
-//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
@@ -932,24 +986,36 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 	recent_card_number = mySGD->selected_collectionbook;
 	
-	string input_data = mySGD->getCardComment(recent_card_number);
-    if(input_data == "")
-        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
-    
-    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
-	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
-	input_text->setPlaceHolder(input_data.c_str());
-	input_text->setReturnType(kKeyboardReturnTypeDone);
-	input_text->setFont(mySGD->getFont().c_str(), 12);
-	input_text->setFontColor(ccBLACK);
-	input_text->setDelegate(this);
-	recent_right_img->addChild(input_text, kCBP_Z_cover);
-	input_text->setTouchPriority(-191);
-    
-    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
-        input_text->setText(input_data.c_str());
+//	string input_data = mySGD->getCardComment(recent_card_number);
+//    if(input_data == "")
+//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//    
+//    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
+//	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
+//	input_text->setPlaceHolder(input_data.c_str());
+//	input_text->setReturnType(kKeyboardReturnTypeDone);
+//	input_text->setFont(mySGD->getFont().c_str(), 12);
+//	input_text->setFontColor(ccBLACK);
+//	input_text->setDelegate(this);
+//	recent_right_img->addChild(input_text, kCBP_Z_cover);
+//	input_text->setTouchPriority(-191);
+//    
+//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//        input_text->setText(input_data.c_str());
 	
 	setLeftPage(covered_left_img, recent_card_number);
+	
+	CCSprite* n_pre = CCSprite::create("diary_left.png");
+	CCSprite* s_pre = CCSprite::create("diary_left.png");
+	s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	r_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+	r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	covered_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+	r_pre_menu->setTouchPriority(-191);
 	
 	
 	animation_angle = 90.f;
@@ -999,7 +1065,21 @@ void CollectionBookPopup::endNextPage()
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
-//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	
+	CCSprite* n_pre = CCSprite::create("diary_left.png");
+	CCSprite* s_pre = CCSprite::create("diary_left.png");
+	s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	r_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+	r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	after_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+	r_pre_menu->setTouchPriority(-191);
+	
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
 	
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
@@ -1012,7 +1092,7 @@ void CollectionBookPopup::endNextPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1027,18 +1107,18 @@ void CollectionBookPopup::endNextPage()
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 	
 	
-	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
-	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
-	a_s_pre->setColor(ccGRAY);
-	
-	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
-	a_pre_item->setTag(kCBP_MT_pre);
-	
-	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-	a_pre_menu->setEnabled(false);
-	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
-	a_pre_menu->setTouchPriority(-191);
+//	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//	a_s_pre->setColor(ccGRAY);
+//	
+//	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//	a_pre_item->setTag(kCBP_MT_pre);
+//	
+//	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//	a_pre_menu->setEnabled(false);
+//	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//	a_pre_menu->setTouchPriority(-191);
 	
 	CCSprite* a_n_next = CCSprite::create("diary_right.png");
 	CCSprite* a_s_next = CCSprite::create("diary_right.png");
@@ -1072,7 +1152,21 @@ void CollectionBookPopup::endNextSelectedPage()
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
-//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	
+	CCSprite* n_pre = CCSprite::create("diary_left.png");
+	CCSprite* s_pre = CCSprite::create("diary_left.png");
+	s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	r_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+	r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	after_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+	r_pre_menu->setTouchPriority(-191);
+	
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
 	
@@ -1084,7 +1178,7 @@ void CollectionBookPopup::endNextSelectedPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1099,18 +1193,18 @@ void CollectionBookPopup::endNextSelectedPage()
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 	
 	
-	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
-	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
-	a_s_pre->setColor(ccGRAY);
-	
-	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
-	a_pre_item->setTag(kCBP_MT_pre);
-	
-	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-	a_pre_menu->setEnabled(false);
-	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
-	a_pre_menu->setTouchPriority(-191);
+//	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//	a_s_pre->setColor(ccGRAY);
+//	
+//	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//	a_pre_item->setTag(kCBP_MT_pre);
+//	
+//	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//	a_pre_menu->setEnabled(false);
+//	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//	a_pre_menu->setTouchPriority(-191);
 	
 	CCSprite* a_n_next = CCSprite::create("diary_right.png");
 	CCSprite* a_s_next = CCSprite::create("diary_right.png");
@@ -1135,7 +1229,8 @@ void CollectionBookPopup::startPrePage()
 	after_left_img = NULL;
 	
 	reorderChild(recent_left_img, kCBP_Z_recent);
-//	((CommonButton*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	
 	recent_card_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
@@ -1146,25 +1241,25 @@ void CollectionBookPopup::startPrePage()
 	
 	setRightPage(covered_right_img, recent_card_number);
 	
-	string input_data = mySGD->getCardComment(recent_card_number);
-    if(input_data == "")
-        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
-    
-    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
-	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
-	input_text->setPlaceHolder(input_data.c_str());
-	input_text->setReturnType(kKeyboardReturnTypeDone);
-	input_text->setFont(mySGD->getFont().c_str(), 12);
-	input_text->setFontColor(ccBLACK);
-	input_text->setDelegate(this);
-	covered_right_img->addChild(input_text, kCBP_Z_cover);
-	input_text->setTouchPriority(-191);
-    
-    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
-        input_text->setText(input_data.c_str());
+//	string input_data = mySGD->getCardComment(recent_card_number);
+//    if(input_data == "")
+//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//    
+//    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
+//	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
+//	input_text->setPlaceHolder(input_data.c_str());
+//	input_text->setReturnType(kKeyboardReturnTypeDone);
+//	input_text->setFont(mySGD->getFont().c_str(), 12);
+//	input_text->setFontColor(ccBLACK);
+//	input_text->setDelegate(this);
+//	covered_right_img->addChild(input_text, kCBP_Z_cover);
+//	input_text->setTouchPriority(-191);
+//    
+//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//        input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = covered_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1178,18 +1273,18 @@ void CollectionBookPopup::startPrePage()
 //	if(covered_right_img->getChildByTag(kCBP_MT_third))
 //		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 	
-	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
-	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
-	a_s_pre->setColor(ccGRAY);
-	
-	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
-	a_pre_item->setTag(kCBP_MT_pre);
-	
-	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-	a_pre_menu->setEnabled(false);
-	covered_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
-	a_pre_menu->setTouchPriority(-191);
+//	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//	a_s_pre->setColor(ccGRAY);
+//	
+//	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//	a_pre_item->setTag(kCBP_MT_pre);
+//	
+//	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//	a_pre_menu->setEnabled(false);
+//	covered_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//	a_pre_menu->setTouchPriority(-191);
 	
 	CCSprite* a_n_next = CCSprite::create("diary_right.png");
 	CCSprite* a_s_next = CCSprite::create("diary_right.png");
@@ -1227,8 +1322,8 @@ void CollectionBookPopup::endPrePage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 
 	int sub_count = recent_right_img->getTag();
@@ -1251,7 +1346,21 @@ void CollectionBookPopup::endPrePage()
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	setLeftPage(after_left_img, pre_number);
-//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	
+	CCSprite* n_pre = CCSprite::create("diary_left.png");
+	CCSprite* s_pre = CCSprite::create("diary_left.png");
+	s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	r_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+	r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	after_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+	r_pre_menu->setTouchPriority(-191);
+	
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
 	
 	
 	after_right_img->removeFromParent();
@@ -1265,7 +1374,7 @@ void CollectionBookPopup::endPrePage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1279,18 +1388,18 @@ void CollectionBookPopup::endPrePage()
 //	if(after_right_img->getChildByTag(kCBP_MT_third))
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 	
-	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
-	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
-	a_s_pre->setColor(ccGRAY);
-	
-	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
-	a_pre_item->setTag(kCBP_MT_pre);
-	
-	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-	a_pre_menu->setEnabled(false);
-	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
-	a_pre_menu->setTouchPriority(-191);
+//	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//	a_s_pre->setColor(ccGRAY);
+//	
+//	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//	a_pre_item->setTag(kCBP_MT_pre);
+//	
+//	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//	a_pre_menu->setEnabled(false);
+//	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//	a_pre_menu->setTouchPriority(-191);
 	
 	CCSprite* a_n_next = CCSprite::create("diary_right.png");
 	CCSprite* a_s_next = CCSprite::create("diary_right.png");
@@ -1317,8 +1426,8 @@ void CollectionBookPopup::endPreSelectedPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
-	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
+//	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
 	int sub_count = recent_right_img->getTag();
@@ -1341,7 +1450,21 @@ void CollectionBookPopup::endPreSelectedPage()
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
 	setLeftPage(after_left_img, pre_number);
-//	((CommonButton*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	
+	CCSprite* n_pre = CCSprite::create("diary_left.png");
+	CCSprite* s_pre = CCSprite::create("diary_left.png");
+	s_pre->setColor(ccGRAY);
+	
+	CCMenuItem* r_pre_item = CCMenuItemSprite::create(n_pre, s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+	r_pre_item->setTag(kCBP_MT_pre);
+	
+	CCMenu* r_pre_menu = CCMenu::createWithItem(r_pre_item);
+	r_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+	after_left_img->addChild(r_pre_menu, 1, kCBP_MT_pre);
+	r_pre_menu->setTouchPriority(-191);
+	
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+	((CCMenu*)after_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
 	
 	
 	after_right_img->removeFromParent();
@@ -1355,7 +1478,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
-	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
+//	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	sub_count = after_right_img->getTag();
 	for(int i=0;i<sub_count;i++)
@@ -1369,18 +1492,18 @@ void CollectionBookPopup::endPreSelectedPage()
 //	if(after_right_img->getChildByTag(kCBP_MT_third))
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
 	
-	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
-	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
-	a_s_pre->setColor(ccGRAY);
-	
-	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
-	a_pre_item->setTag(kCBP_MT_pre);
-	
-	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
-	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
-	a_pre_menu->setEnabled(false);
-	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
-	a_pre_menu->setTouchPriority(-191);
+//	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
+//	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
+//	a_s_pre->setColor(ccGRAY);
+//	
+//	CCMenuItem* a_pre_item = CCMenuItemSprite::create(a_n_pre, a_s_pre, this, menu_selector(CollectionBookPopup::menuAction));
+//	a_pre_item->setTag(kCBP_MT_pre);
+//	
+//	CCMenu* a_pre_menu = CCMenu::createWithItem(a_pre_item);
+//	a_pre_menu->setPosition(getContentPosition(kCBP_MT_pre));
+//	a_pre_menu->setEnabled(false);
+//	after_right_img->addChild(a_pre_menu, 1, kCBP_MT_pre);
+//	a_pre_menu->setTouchPriority(-191);
 	
 	CCSprite* a_n_next = CCSprite::create("diary_right.png");
 	CCSprite* a_s_next = CCSprite::create("diary_right.png");

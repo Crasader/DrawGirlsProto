@@ -357,7 +357,7 @@ void ZoomScript::menuAction(CCObject *sender)
 				
 				if(is_rank_up_chance)
 				{
-					RankUpPopup* t_popup = RankUpPopup::create(-999, [=]()
+					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
 															   {
 																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
 																   {
