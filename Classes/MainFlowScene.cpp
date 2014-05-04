@@ -547,6 +547,86 @@ void MainFlowScene::loadTempFunc(CCObject* sender)
 	
 }
 
+void MainFlowScene::tableDownloading(function<void()> end_func)
+{
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	bool is_found = false;
+	
+	for(int i=0;i<cell_cnt;i++)
+	{
+		int index_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+		CCTableViewCell* t_cell = puzzle_table->cellAtIndex(i);
+		
+		if(is_found)
+		{
+			if(t_cell)
+			{
+				CCNode* t_node = t_cell->getChildByTag(1);
+				float origin_x = t_node->getPositionX();
+				t_node->addChild(KSGradualValue<float>::create(0.f, 800.f, 1.f, [=](float t)
+															   {
+																   t_node->setPositionX(origin_x + t);
+															   }, [=](float t)
+															   {
+																   t_node->setPositionX(origin_x + 800.f);
+															   }));
+			}
+		}
+		else
+		{
+			if(index_puzzle_number == puzzle_number)
+			{
+				is_found = true;
+				if(t_cell)
+				{
+					CCNode* t_node = t_cell->getChildByTag(1);
+					
+					CCNode* t_rate = t_node->getChildByTag(999);
+					if(t_rate)
+						t_rate->setVisible(false);
+					
+					float origin_x = t_node->getPositionX();
+					t_node->addChild(KSGradualValue<float>::create(0.f, 800.f, 1.f, [=](float t)
+																   {
+																	   t_node->setPositionX(origin_x + t);
+																   }, [=](float t)
+																   {
+																	   t_node->setPositionX(origin_x + 800.f);
+																   }));
+					
+					t_node->addChild(KSGradualValue<float>::create(1.f, -0.2f, 0.6f, [=](float t)
+																   {
+																	   if(t >= 0.f)
+																		   KS::setOpacity(t_node, 255*t);
+																	   else
+																		   KS::setOpacity(t_node, 0);
+																   }, [=](float t)
+																   {
+																	   end_func();
+																   }));
+				}
+			}
+			else
+			{
+				if(t_cell)
+				{
+					CCNode* t_node = t_cell->getChildByTag(1);
+					float origin_x = t_node->getPositionX();
+					t_node->addChild(KSGradualValue<float>::create(0.f, -800.f, 1.f, [=](float t)
+																   {
+																	   t_node->setPositionX(origin_x + t);
+																   }, [=](float t)
+																   {
+																	   t_node->setPositionX(origin_x - 800.f);
+																   }));
+				}
+			}
+		}
+	}
+}
+
 void MainFlowScene::tableEnter(function<void()> end_func)
 {
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
@@ -940,6 +1020,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		rate_timer->setPercentage(100.f*have_card_count_for_puzzle_index[idx]/total_card_cnt);
 		rate_timer->setPosition(ccp(22, -80));
 		cell_node->addChild(rate_timer, 0, 999);
+		
+		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 12);
+		title_label->setColor(ccBLACK);
+		title_label->setPosition(ccp(0,-59));
+		cell_node->addChild(title_label, 1);
 
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
@@ -1128,6 +1213,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			}
 		}
 		
+		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 12);
+		title_label->setColor(ccBLACK);
+		title_label->setPosition(ccp(0,-59));
+		cell_node->addChild(title_label, 1);
+		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
 //		cell->addChild(shadow_node, -1);
 //		shadow_node->startAction();
@@ -1232,7 +1322,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
 		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
 		t_history.is_open = true;
-		t_history.open_type = "루비결재";
+		t_history.open_type = "루비결제";
 		
 		mySGD->addChangeGoods(kGoodsType_ruby, -t_need_ruby, "퍼즐오픈", CCString::createWithFormat("%d", puzzle_number)->getCString());
 		

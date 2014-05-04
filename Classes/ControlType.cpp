@@ -882,7 +882,8 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				mySGD->is_draw_button_tutorial = false;
 				button_touch = touch;
 				myJack->isDrawingOn = true;
-				onButton();
+				onButton(location);
+				
 //				draw_button->setColor(ccGRAY);
 				
 				if(isBacking)
@@ -1522,7 +1523,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	mType = kCT_Type_Joystick_button;
 }
 
-void ControlJoystickButton::onButton()
+void ControlJoystickButton::onButton(CCPoint t_location)
 {
 	if(button_ani)
 	{
@@ -1532,6 +1533,8 @@ void ControlJoystickButton::onButton()
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
 		click_label->runAction(t_fade);
+		
+		draw_button->setPosition(t_location);
 	}
 }
 
@@ -1545,6 +1548,11 @@ void ControlJoystickButton::offButton()
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
 		click_label->runAction(t_fade);
+		
+		if(controlJoystickDirection == kControlJoystickDirection_left)
+			draw_button->setPosition(ccp(480-40,40));
+		else
+			draw_button->setPosition(ccp(40,40));
 	}
 }
 

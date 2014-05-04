@@ -216,7 +216,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	addChild(inapp_loading);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, kPurchaseGuideType_firstPurchase-1), "첫구매팝업(IOS-인앱결재)", "", "", true);
+	mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, kPurchaseGuideType_firstPurchase-1), "첫구매팝업(IOS-인앱결제)", "", "", true);
 	
 	mySGD->setUserdataIsFirstBuy(1); // true
 	vector<CommandParam> command_list;

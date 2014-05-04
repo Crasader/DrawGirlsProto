@@ -1163,6 +1163,10 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		t_history.characterNo = t_data["characterNo"].asInt();
 		t_history.level = t_data["level"].asInt();
 		t_history.nextPrice = t_data["nextPrice"].asInt();
+		t_history.power = t_data["power"].asInt();
+		t_history.nextPower = t_data["nextPower"].asInt();
+		t_history.prevPower = t_data["prevPower"].asInt();
+		t_history.isMaxLevel = t_data["isMaxLevel"].asBool();
 		
 		character_historys.push_back(t_history);
 	}
@@ -1229,6 +1233,10 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			{
 				character_historys[i].level = result_data["level"].asInt();
 				character_historys[i].nextPrice = result_data["nextPrice"].asInt();
+				character_historys[i].power = result_data["power"].asInt();
+				character_historys[i].nextPower = result_data["nextPower"].asInt();
+				character_historys[i].prevPower = result_data["prevPower"].asInt();
+				character_historys[i].isMaxLevel = result_data["isMaxLevel"].asBool();
 				is_found = true;
 			}
 		}
@@ -1239,6 +1247,10 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			t_history.characterNo = characterNo;
 			t_history.level = result_data["level"].asInt();
 			t_history.nextPrice = result_data["nextPrice"].asInt();
+			t_history.power = result_data["power"].asInt();
+			t_history.nextPower = result_data["nextPower"].asInt();
+			t_history.prevPower = result_data["prevPower"].asInt();
+			t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
 			
 			character_historys.push_back(t_history);
 		}
@@ -1908,7 +1920,7 @@ void StarGoldData::myInit()
 	app_version = 1;
 	
 	suitable_stage = -1;
-	
+	is_on_maingame = false;
 	gacha_item = kIC_emptyEnd;
 	
 	rank_up_add_rate = 0;

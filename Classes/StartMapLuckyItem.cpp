@@ -149,27 +149,18 @@ void StartMapLuckyItem::speedUpAction ()
 		},
 		[=](float t)
 		{
+			
 			speedUp();
 			main_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f,
-			[=](float t)
-			{
-//				main_img->setScale(t*(1.6f-1.3f) + 1.3f);
-//				KS::setOpacity(main_img, 130 - t*(130-65));
-			},
-			[=](float t)
-			{
-				speedUp();
-				main_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f,
-				[=](float t)
-				{
-//					main_img->setScale(t*(1.9f-1.6f) + 1.6f);
-//					KS::setOpacity(main_img, 65 - t*(65-0));
-				},
-				[=](float t)
-				{
-					removeFromParent();
-				}));
-			}));
+															 [=](float t)
+															 {
+																 //					main_img->setScale(t*(1.9f-1.6f) + 1.6f);
+																 //					KS::setOpacity(main_img, 65 - t*(65-0));
+															 },
+															 [=](float t)
+															 {
+																 removeFromParent();
+															 }));
 		}));
 	}));
 	
