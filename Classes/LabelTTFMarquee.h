@@ -60,14 +60,14 @@ public:
 		cNode->setInverted(false);
 		this->addChild(cNode,1);
 		
-		m_text1 = StyledLabelTTF::create("<|999|12|>load..", mySGD->getFont().c_str(), StyledAlignment::kLeftAlignment);
+		m_text1 = StyledLabelTTF::create("<font color=999 size=12>load..", mySGD->getFont().c_str(),12,999, StyledAlignment::kLeftAlignment);
 		
 		m_text1->setAnchorPoint(ccp(0,0.5));
 		m_text1->setPosition(ccp(m_text1->getContentSize().width*-1,height/2));
 		m_text1->setTag(-2);
 		
 		
-		m_text2 = StyledLabelTTF::create("<|999|12|>load..", mySGD->getFont().c_str(), StyledAlignment::kLeftAlignment);
+		m_text2 = StyledLabelTTF::create("<font color=999 size=12>load..", mySGD->getFont().c_str(),12,999, StyledAlignment::kLeftAlignment);
 		m_text2->setAnchorPoint(ccp(0,0.5));
 		m_text2->setTag(0);
 		m_text2->setPosition(ccp(0,height/2));
@@ -110,12 +110,12 @@ public:
 		//지금현재 보여지고있는건 바로 수정
 		StyledLabelTTF *fl = this->getFirstLabel();
 		if(fl->getTag()==index){
-			fl->setString(text.c_str());
+			fl->setStringByTag(text.c_str());
 		}
 		
 		StyledLabelTTF *ll = this->getLastLabel();
 		if(ll->getTag()==index){
-			ll->setString(text.c_str());
+			ll->setStringByTag(text.c_str());
 		}
 		
 		return true;
@@ -185,7 +185,7 @@ public:
 			firstLabel->setPositionX(nextP);
 			int strIndex = this->getNextTextIndex();
 			firstLabel->setTag(strIndex);
-			firstLabel->setString(m_texts[strIndex].c_str());
+			firstLabel->setStringByTag(m_texts[strIndex].c_str());
 		}
 	}
 };

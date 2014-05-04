@@ -1190,7 +1190,7 @@ public:
 		m_showWindow.level = level;
 		schedule(schedule_selector(GuidedMissile::showWindow));
 
-		m_showWindow.whiteBoard = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 90, 90));
+		m_showWindow.whiteBoard = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 90));
 		//m_back->setOpacity(color.a);
 
 		//addChild(m_showWindow.whiteBoard);
@@ -1207,6 +1207,11 @@ public:
 		cNode->addChild(m_showWindow.explosionNode);
 
 		return true;
+	}
+	
+	function<void(void)> m_func;
+	void setFunctionForCrash(function<void(void)> func){
+		this->m_func = func;
 	}
 	void showWindow(float dt)
 	{
@@ -1229,7 +1234,7 @@ public:
 		
 		m_showWindow.currentTime += 1 / 60.f;
 
-		if(m_showWindow.currentTime > m_showWindow.lastCreationTime + 1.5f)
+		if(m_showWindow.currentTime > m_showWindow.lastCreationTime + 1.0f)
 		{
 			m_showWindow.lastCreationTime = m_showWindow.currentTime;
 			float creationRad = ks19937::getFloatValue(0, 2 * M_PI);
@@ -1271,7 +1276,7 @@ public:
 
 			if(ccpLength(i.missileSprite->getPosition() - CCPointZero) <= 2.f)
 			{
-				AudioEngine::sharedInstance()->playEffect("sound_jack_missile_bomb.mp3",false);
+				//AudioEngine::sharedInstance()->playEffect("sound_jack_missile_bomb.mp3",false);
 				i.missileSprite->removeFromParent();
 				if(i.streak)	
 					i.streak->removeFromParent();
@@ -1289,7 +1294,8 @@ public:
 				for(int i=0;i<2;i++)
 					for(int j=0;j<3;j++)
 						t_animation->addSpriteFrameWithTexture(m_showWindow.explosionNode->getTexture(), CCRectMake(j*167, i*191, 167, 191));
-
+				
+				this->m_func();
 				CCAnimate* t_animate = CCAnimate::create(t_animation);
 				CCFadeOut* t_fade = CCFadeOut::create(0.2f);
 				CCRemoveSelf* t_remove = CCRemoveSelf::create();
