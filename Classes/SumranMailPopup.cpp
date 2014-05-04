@@ -177,7 +177,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 					{
 						string t_friend_id = puzzleTicket[t_i]["friendID"].asString();
 						int t_puzzle_number = puzzleTicket[t_i]["puzzlenumber"].asInt();
-						if(mySGD->getPuzzleHistory(t_puzzle_number-1).is_clear && mySGD->getOpenPuzzleCount()+1 == t_puzzle_number) {
+						if(mySGD->getPuzzleHistory(t_puzzle_number-1).is_clear.getV() && mySGD->getOpenPuzzleCount()+1 == t_puzzle_number) {
 							bool good_ticket = true;
 							int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 							for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
@@ -1114,7 +1114,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
-																						 if(mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()-1).is_clear && mySGD->getOpenPuzzleCount()+1 == contentObj["puzzlenumber"].asInt()) {
+																						 if(mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()-1).is_clear.getV() && mySGD->getOpenPuzzleCount()+1 == contentObj["puzzlenumber"].asInt()) {
 																							 bool good_ticket = true;
 																							 int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 																							 for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {

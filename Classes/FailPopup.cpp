@@ -563,7 +563,7 @@ void FailPopup::resultGetTime(Json::Value result_data)
 		is_go_to_mainflow = false;
 		
 		int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-		bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open;
+		bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open.getV();
 		
 		if(!is_open)
 		{

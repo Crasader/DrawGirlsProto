@@ -412,7 +412,7 @@ void PLV_Node::setChild()
 	int frame_type = 0;
 	if(puzzle_number > 1 && puzzle_number > mySGD->getOpenPuzzleCount())
 	{
-		if(mySGD->getPuzzleHistory(puzzle_number-1).is_clear)
+		if(mySGD->getPuzzleHistory(puzzle_number-1).is_clear.getV())
 		{
 			if(NSDS_GI(puzzle_number, kSDS_PZ_point_i) > 0 && NSDS_GI(puzzle_number, kSDS_PZ_ticket_i) > 0)
 				frame_type = 1;

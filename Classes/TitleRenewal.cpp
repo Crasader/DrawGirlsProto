@@ -659,6 +659,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setItem6OpenStage(result_data["item6OpenStage"].asInt());
 		mySGD->setItem8OpenStage(result_data["item8OpenStage"].asInt());
 		mySGD->setItemGachaOpenStage(result_data["itemGachaOpenStage"].asInt());
+		
+		mySGD->setPuzzlePerfectRewardRuby(result_data["puzzlePerfectRewardRuby"].asInt());
 	}
 	else
 	{

@@ -210,7 +210,7 @@ bool NewMainFlowScene::init()
 		int history_count = mySGD->getPuzzleHistorySize();
 		int open_puzzle_count = 0;
 		for(int i=0;i<history_count;i++)
-			if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+			if(mySGD->getPuzzleHistoryForIndex(i).is_open.getV())
 				open_puzzle_count++;
 		
 		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, open_puzzle_count);
@@ -222,10 +222,10 @@ bool NewMainFlowScene::init()
 		for(int i = t_puzzle_start_stage;i<t_puzzle_start_stage+t_puzzle_stage_count && last_stage_number == -1;i++)
 		{
 			int stage_number = i;
-			if((stage_number == 1 || mySGD->getPieceHistory(stage_number).is_open ||
+			if((stage_number == 1 || mySGD->getPieceHistory(stage_number).is_open.getV() ||
 			   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
 				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))))) && (i+1 == t_puzzle_start_stage+t_puzzle_stage_count ||
-					(!((i+1 == 1 || mySGD->getPieceHistory(i+1).is_open ||
+					(!((i+1 == 1 || mySGD->getPieceHistory(i+1).is_open.getV() ||
 				   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i+1) == 0 &&
 					(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1) == 0 ||
 					 mySGD->isClearPiece(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i+1)))))))))
@@ -699,7 +699,7 @@ void NewMainFlowScene::hideClearPopup()
 	int history_count = mySGD->getPuzzleHistorySize();
 	int open_puzzle_count = 0;
 	for(int i=0;i<history_count;i++)
-		if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+		if(mySGD->getPuzzleHistoryForIndex(i).is_open.getV())
 			open_puzzle_count++;
 	
 	if(clear_is_first_puzzle_success)
@@ -1151,7 +1151,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 								int history_count = mySGD->getPuzzleHistorySize();
 								int open_puzzle_count = 0;
 								for(int i=0;i<history_count;i++)
-									if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+									if(mySGD->getPuzzleHistoryForIndex(i).is_open.getV())
 										open_puzzle_count++;
 								
 								int tt_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, open_puzzle_count+1);
@@ -1438,7 +1438,7 @@ CCTableViewCell* NewMainFlowScene::tableCellAtIndex(CCTableView *table, unsigned
 		int history_count = mySGD->getPuzzleHistorySize();
 		int open_puzzle_count = 0;
 		for(int i=0;i<history_count;i++)
-			if(mySGD->getPuzzleHistoryForIndex(i).is_open)
+			if(mySGD->getPuzzleHistoryForIndex(i).is_open.getV())
 				open_puzzle_count++;
 		
 		if(idx == 0 || open_puzzle_count >= idx+1)

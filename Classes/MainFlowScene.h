@@ -92,6 +92,7 @@ private:
 	bool is_menu_enable;
 	
 	int is_unlock_puzzle;
+	int is_perfect_puzzle;
 	
 	CountingBMLabel* ruby_label;
 	CountingBMLabel* gold_label;

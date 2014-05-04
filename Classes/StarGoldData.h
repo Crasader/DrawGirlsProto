@@ -82,21 +82,21 @@ public:
 
 class PuzzleHistory{
 public:
-	int puzzle_number;
-	bool is_open;
-	bool is_clear;
-	bool is_perfect;
-	string open_type;
+	KSProtectVar<int> puzzle_number;
+	KSProtectVar<bool> is_open;
+	KSProtectVar<bool> is_clear;
+	KSProtectVar<bool> is_perfect;
+	KSProtectStr open_type;
 };
 
 class PieceHistory{
 public:
-	int stage_number;
-	bool is_open;
-	bool is_clear[4];
-	int try_count;
-	int clear_count;
-	string open_type;
+	KSProtectVar<int> stage_number;
+	KSProtectVar<bool> is_open;
+	KSProtectVar<bool> is_clear[4];
+	KSProtectVar<int> try_count;
+	KSProtectVar<int> clear_count;
+	KSProtectStr open_type;
 };
 
 class TimeInfo{
@@ -577,6 +577,8 @@ public:
 	void setItemGachaOpenStage(int t_i);
 	int getItemGachaOpenStage();
 	
+	void setPuzzlePerfectRewardRuby(int t_i);
+	int getPuzzlePerfectRewardRuby();
 	
 	bool is_before_selected_event_stage;
 	
@@ -601,6 +603,8 @@ public:
 	bool getIsNotClearedStage();
 	int getIsUnlockPuzzle();
 	void setIsUnlockPuzzle(int t_i);
+	int getIsPerfectPuzzle();
+	void setIsPerfectPuzzle(int t_i);
 	
 	void setStrengthTargetCardNumber(int t_card_number);
 	int getStrengthTargetCardNumber();
@@ -687,6 +691,7 @@ public:
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
+	int is_perfect_puzzle;
 	
 	CardStrengthBefore card_strength_before;
 	
@@ -793,6 +798,8 @@ private:
 	KSProtectVar<int> item6_open_stage;
 	KSProtectVar<int> item8_open_stage;
 	KSProtectVar<int> itemGacha_open_stage;
+	
+	KSProtectVar<int> puzzle_perfect_reward_ruby;
 	
 	KSProtectVar<int> rank_up_condition_count;
 	KSProtectVar<float> rank_up_base_rate;

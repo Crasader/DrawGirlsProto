@@ -319,10 +319,10 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
 	ko->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
 	ko->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("<font color=299 size=21>모든 피스 획득"), kMyLocalKey_puzzleSuccessTitle);
+	ko->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
+	ko->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
+	ko->setObject(CCString::create("<font newline=18>모든 스테이지의<font newline=18>모든 카드를 획득하셨네요!<font newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -776,6 +776,10 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
 	en->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
 	en->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
+	en->setObject(CCString::create("<font color=299 size=21>모든 피스 획득"), kMyLocalKey_puzzleSuccessTitle);
+	en->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
+	en->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
+	en->setObject(CCString::create("<font newline=18>모든 스테이지의<font newline=18>모든 카드를 획득하셨네요!<font newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1231,6 +1235,10 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
 	ja->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
 	ja->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
+	ja->setObject(CCString::create("<font color=299 size=21>모든 피스 획득"), kMyLocalKey_puzzleSuccessTitle);
+	ja->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
+	ja->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
+	ja->setObject(CCString::create("<font newline=18>모든 스테이지의<font newline=18>모든 카드를 획득하셨네요!<font newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

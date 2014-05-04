@@ -4155,7 +4155,7 @@ CCNode* PuzzleMapScene::createMapNode()
 	{
 		if(recent_puzzle_number > mySGD->getOpenPuzzleCount())
 		{
-			if(mySGD->getPuzzleHistory(recent_puzzle_number-1).is_clear)
+			if(mySGD->getPuzzleHistory(recent_puzzle_number-1).is_clear.getV())
 			{
 				if(NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i) == 0 || NSDS_GI(recent_puzzle_number, kSDS_PZ_ticket_i) == 0)
 				{

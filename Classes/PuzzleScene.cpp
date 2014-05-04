@@ -551,7 +551,7 @@ void PuzzleScene::showClearPopup()
 	t_popup->replay_func = [=](){openSettingPopup();};
 	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	t_popup->is_take_star_effect = true;
-	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success;
+	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success | clear_is_first_perfect;
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -808,7 +808,8 @@ void PuzzleScene::showPerfectPuzzleEffect()
 }
 void PuzzleScene::endPerfectPuzzleEffect()
 {
-	is_menu_enable = true;
+	mySGD->setIsPerfectPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
+	startBacking();
 }
 
 void PuzzleScene::showUnlockEffect()
@@ -980,7 +981,7 @@ void PuzzleScene::setPuzzle()
 		if(is_stage_piece)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, puzzle_number, CCString::createWithFormat("stage%d_level", stage_number)->getCString());
-			if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
+			if(stage_number == 1 || mySGD->getPieceHistory(stage_number).is_open.getV() ||
 			   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
 				(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 			{
@@ -994,7 +995,7 @@ void PuzzleScene::setPuzzle()
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
-					t_piece->setTurnInfo(t_history.is_clear[0], t_history.is_clear[1], t_history.is_clear[2], t_history.is_clear[3]);
+					t_piece->setTurnInfo(t_history.is_clear[0].getV(), t_history.is_clear[1].getV(), t_history.is_clear[2].getV(), t_history.is_clear[3].getV());
 					t_piece->initWithPieceInfo(piece_mode, kPieceType_color, piece_type);
 				}
 				else // empty
@@ -1245,7 +1246,9 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 														   a_piece->setPosition(piece_position);
 														   puzzle_node->addChild(a_piece, kPuzzleNodeZorder_piece, t_stage_number);
 														   a_piece->initWithPieceInfo(piece_mode, kPieceType_empty, piece_type);
+														   
 														   is_menu_enable = true;
+														   pieceAction(t_stage_number);
 													   }, t_stage_number);
 		addChild(t_popup, kPuzzleZorder_popup);
 	}
@@ -1595,7 +1598,7 @@ void PuzzleScene::setRight()
 		for(int i=1;i<=stage_card_count && i <= 4;i++)
 		{
 			int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
-			is_have_card_list[i-1] = t_history.is_clear[i-1];
+			is_have_card_list[i-1] = t_history.is_clear[i-1].getV();
 			
 			CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-(i-1)*46.5f);
 			

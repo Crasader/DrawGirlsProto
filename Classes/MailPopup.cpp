@@ -183,7 +183,7 @@ void MailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<
 					{
 						string t_friend_id = puzzleTicket[t_i]["friendID"].asString();
 						int t_puzzle_number = puzzleTicket[t_i]["puzzlenumber"].asInt();
-						if(mySGD->getPuzzleHistory(t_puzzle_number-1).is_clear && !mySGD->getPuzzleHistory(t_puzzle_number).is_open) {
+						if(mySGD->getPuzzleHistory(t_puzzle_number-1).is_clear.getV() && !mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV()) {
 							bool good_ticket = true;
 							int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 							for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {
@@ -1384,7 +1384,7 @@ CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int
 														 removeMessage(mail["no"].asInt(), mail["memberID"].asInt64(),
 																					 [=](Json::Value r) {
 																						 av->removeFromParent();
-																						 if(mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()-1).is_clear && !mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()).is_open) {
+																						 if(mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()-1).is_clear.getV() && !mySGD->getPuzzleHistory(contentObj["puzzlenumber"].asInt()).is_open.getV()) {
 																							 bool good_ticket = true;
 																							 int have_ticket_cnt = myDSH->getIntegerForKey(kDSH_Key_haveTicketCnt);
 																							 for(int i=1;i<=have_ticket_cnt && good_ticket;i++) {

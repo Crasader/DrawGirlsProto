@@ -27,11 +27,7 @@
 #include "hspConnector.h"
 #include "TitleRenewal.h"
 
-#include "FirstPurchasePopup.h"
-#include "EmptyItemSalePopup.h"
-#include "MileagePopup.h"
-#include "EventShopPopup.h"
-#include "LevelupGuidePopup.h"
+//#include "PuzzleSuccessAndPerfect.h"
 
 #include "KSLabelTTF.h"
 #include "PopCake.h"
@@ -83,11 +79,7 @@ bool OptionPopup::init()
 		return false;
 	}
 	
-//	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-999, [=](){}, [=](){});
-//	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});
-//	MileagePopup* t_popup = MileagePopup::create(-999, [=](){}, 5);
-//	EventShopPopup* t_popup = EventShopPopup::create(-999, [=](){});
-//	LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-999, [=](){}, [=](){});
+//	PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){}, false);
 //	addChild(t_popup, 999);
 	
 //	Json::Value param;

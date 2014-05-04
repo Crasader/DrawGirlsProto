@@ -13,6 +13,9 @@
 
 void StarGoldData::withdraw()
 {
+	is_unlock_puzzle = 0;
+	is_perfect_puzzle = 0;
+	
 	star_label = NULL;
 	gold_label = NULL;
 	
@@ -921,7 +924,7 @@ int StarGoldData::getOpenPuzzleCount()
 	int history_count = getPuzzleHistorySize();
 	int open_puzzle_count = 0;
 	for(int i=0;i<history_count;i++)
-		if(getPuzzleHistoryForIndex(i).is_open)
+		if(getPuzzleHistoryForIndex(i).is_open.getV())
 			open_puzzle_count++;
 	return open_puzzle_count;
 }
@@ -973,11 +976,11 @@ CommandParam StarGoldData::getUpdatePuzzleHistoryParam(PuzzleHistory t_history, 
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
-	param["puzzleNo"] = t_history.puzzle_number;
-	param["updateOpenDate"] = t_history.is_open;
-	param["updateClearDate"] = t_history.is_clear;
-	param["updatePerfectDate"] = t_history.is_perfect;
-	param["openType"] = t_history.open_type;
+	param["puzzleNo"] = t_history.puzzle_number.getV();
+	param["updateOpenDate"] = t_history.is_open.getV();
+	param["updateClearDate"] = t_history.is_clear.getV();
+	param["updatePerfectDate"] = t_history.is_perfect.getV();
+	param["openType"] = t_history.open_type.getV();
 	
 	return CommandParam("updatePuzzleHistory", param, call_back);
 }
@@ -988,11 +991,11 @@ void StarGoldData::setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_ba
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
-	param["puzzleNo"] = t_history.puzzle_number;
-	param["updateOpenDate"] = t_history.is_open;
-	param["updateClearDate"] = t_history.is_clear;
-	param["updatePerfectDate"] = t_history.is_perfect;
-	param["openType"] = t_history.open_type;
+	param["puzzleNo"] = t_history.puzzle_number.getV();
+	param["updateOpenDate"] = t_history.is_open.getV();
+	param["updateClearDate"] = t_history.is_clear.getV();
+	param["updatePerfectDate"] = t_history.is_perfect.getV();
+	param["openType"] = t_history.open_type.getV();
 	hspConnector::get()->command("updatePuzzleHistory", param, call_back);
 }
 
@@ -1039,7 +1042,7 @@ bool StarGoldData::isClearPiece(int stage_number)
 {
 	for(int i=0;i<piece_historys.size();i++)
 		if(piece_historys[i].stage_number == stage_number)
-			return piece_historys[i].is_clear[0] || piece_historys[i].is_clear[1] || piece_historys[i].is_clear[2] || piece_historys[i].is_clear[3];
+			return piece_historys[i].is_clear[0].getV() || piece_historys[i].is_clear[1].getV() || piece_historys[i].is_clear[2].getV() || piece_historys[i].is_clear[3].getV();
 	
 	return false;
 }
@@ -1084,13 +1087,13 @@ Json::Value StarGoldData::getSavePieceHistoryParam(PieceHistory t_history)
 {
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
-	param["pieceNo"] = t_history.stage_number;
-	param["openDate"] = t_history.is_open;
+	param["pieceNo"] = t_history.stage_number.getV();
+	param["openDate"] = t_history.is_open.getV();
 	for(int j=0;j<4;j++)
-		param["clearDateList"][j] = t_history.is_clear[j];
-	param["tryCount"] = t_history.try_count;
-	param["clearCount"] = t_history.clear_count;
-	param["openType"] = t_history.open_type;
+		param["clearDateList"][j] = t_history.is_clear[j].getV();
+	param["tryCount"] = t_history.try_count.getV();
+	param["clearCount"] = t_history.clear_count.getV();
+	param["openType"] = t_history.open_type.getV();
 	return param;
 }
 
@@ -1321,7 +1324,7 @@ int StarGoldData::getClearStarCount()
 	{
 		for(int j=0;j<4;j++)
 		{
-			if(piece_historys[i].is_clear[j])
+			if(piece_historys[i].is_clear[j].getV())
 				return_value += j+1;
 		}
 	}
@@ -1946,6 +1949,7 @@ void StarGoldData::myInit()
 	is_before_stage_img_download = false;
 	
 	is_unlock_puzzle = 0;
+	is_perfect_puzzle = 0;
 	strength_target_card_number = 0;
 	is_ingame_before_have_stage_cards.push_back(false);
 	is_ingame_before_have_stage_cards.push_back(false);
@@ -2014,6 +2018,8 @@ void StarGoldData::myInit()
 bool StarGoldData::getIsNotClearedStage(){	return is_not_cleared_stage;}
 int StarGoldData::getIsUnlockPuzzle(){	return is_unlock_puzzle;}
 void StarGoldData::setIsUnlockPuzzle(int t_i){	is_unlock_puzzle = t_i;}
+int StarGoldData::getIsPerfectPuzzle(){	return is_perfect_puzzle;}
+void StarGoldData::setIsPerfectPuzzle(int t_i){	is_perfect_puzzle = t_i;}
 void StarGoldData::setStrengthTargetCardNumber(int t_card_number){	strength_target_card_number = t_card_number;}
 int StarGoldData::getStrengthTargetCardNumber(){	return strength_target_card_number;}
 CardStrengthBefore StarGoldData::getCardStrengthBefore(){	return card_strength_before;}
@@ -2152,6 +2158,9 @@ void StarGoldData::setItem8OpenStage(int t_i){	item8_open_stage = t_i;	}
 int StarGoldData::getItem8OpenStage(){	return item8_open_stage.getV();	}
 void StarGoldData::setItemGachaOpenStage(int t_i){	itemGacha_open_stage = t_i;	}
 int StarGoldData::getItemGachaOpenStage(){	return itemGacha_open_stage.getV();	}
+
+void StarGoldData::setPuzzlePerfectRewardRuby(int t_i){	puzzle_perfect_reward_ruby = t_i;	}
+int StarGoldData::getPuzzlePerfectRewardRuby(){	return puzzle_perfect_reward_ruby.getV();	}
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}

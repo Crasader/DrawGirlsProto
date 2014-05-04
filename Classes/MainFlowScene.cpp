@@ -42,6 +42,7 @@
 #include "GoodsLight.h"
 #include "TodayMissionPopup.h"
 #include "AttendancePopup.h"
+#include "PuzzleSuccessAndPerfect.h"
 #include "FormSetter.h"
 
 CCScene* MainFlowScene::scene()
@@ -101,7 +102,7 @@ bool MainFlowScene::init()
 		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
 		
 		PuzzleOpenInfo t_info;
-		t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open;
+		t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV();
 		
 		string puzzle_condition = NSDS_GS(t_puzzle_number, kSDS_PZ_condition_s);
 		
@@ -224,6 +225,8 @@ bool MainFlowScene::init()
 	
 	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
 	mySGD->setIsUnlockPuzzle(0);
+	is_perfect_puzzle = mySGD->getIsPerfectPuzzle();
+	mySGD->setIsPerfectPuzzle(0);
 	
 	setTable();
 	
@@ -1290,9 +1293,40 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																			  }, [=](float t)
 																			  {
 																				  cell_node->setScale(1.f);
-																				  endUnlockAnimation();
+																				  
+																				  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < 5)
+																					{
+																						myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+																						
+																						CCNode* target_parent = heart_time->getParent();
+																						CCPoint heart_time_position = heart_time->getPosition();
+																						int heart_time_tag = heart_time->getTag();
+																						
+																						heart_time->removeFromParent();
+																						heart_time = HeartTime::create();
+																						heart_time->setPosition(heart_time_position);
+																						target_parent->addChild(heart_time, 0, heart_time_tag);
+																					}
+																				  
+																				  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){endUnlockAnimation();}, true);
+																				  addChild(t_popup, kMainFlowZorder_popup);
 																			  }));
 											}));
+	}
+	else if(puzzle_number == is_perfect_puzzle)
+	{
+		LoadingLayer* loading_layer = LoadingLayer::create(-9999);
+		addChild(loading_layer, 9999);
+		
+		mySGD->addChangeGoods(kGoodsType_ruby, mySGD->getPuzzlePerfectRewardRuby());
+		mySGD->changeGoods([=](Json::Value result_data)
+						   {
+							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+							   {
+								   PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){loading_layer->removeFromParent();}, false);
+								   addChild(t_popup, kMainFlowZorder_popup);
+							   }
+						   });
 	}
 	
 	return cell;
