@@ -96,7 +96,7 @@ void MobHpGraph::hidingAction ()
 void MobHpGraph::myInit (CCObject * t_target, string filename)
 {
 	is_setted_minimum_rate = false;
-	t_case = CCSprite::create("monster_hp_back.png");
+	t_case = CCSprite::create("junior_hp_back.png");
 	t_case->setPosition(CCPointZero);
 	addChild(t_case);
 	
@@ -116,7 +116,7 @@ void MobHpGraph::myInit (CCObject * t_target, string filename)
 	
 	hidingAction();
 	
-	setPosition(ccpAdd(target_node->getPosition(), ccp(0,-20)));
+	setPosition(ccpAdd(target_node->getPosition(), ccp(0,-10)));
 	
 	startGraph();
 	

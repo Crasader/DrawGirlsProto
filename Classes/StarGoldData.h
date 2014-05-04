@@ -216,6 +216,7 @@ public:
 	KSProtectStr reward_type;
 	KSProtectVar<int> reward_count;
 	KSProtectVar<bool> is_success;
+	KSProtectVar<long long> resetTimestamp;
 };
 
 enum TodayMissionType

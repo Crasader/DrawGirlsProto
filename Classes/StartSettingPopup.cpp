@@ -278,14 +278,7 @@ void StartSettingPopup::setMain()
 	for(int i=0;i<item_list.size();i++)
 	{
 		ITEM_CODE t_code = item_list[i];
-		if(t_code != kIC_baseSpeedUp && t_code != kIC_doubleItem && t_code != kIC_longTime && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
-		{
-			show_item_popup.push_back(t_code);
-			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
-			
-			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
-		}
-		else if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
@@ -496,6 +489,14 @@ void StartSettingPopup::setMain()
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
 		gacha_label->setPosition(ccp(37.5f, 23.5f));
 		gacha_item->addChild(gacha_label);
+	}
+	
+	if(mySGD->getItemGachaOpenStage() > mySD->getSilType())
+	{
+		item_gacha_menu->setEnabled(false);
+		CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
+		locked_img->setPosition(ccp(425,190));
+		main_case->addChild(locked_img, kStartSettingPopupZorder_main);
 	}
 	
 	CCScale9Sprite* script_box = CCScale9Sprite::create("startsetting_scriptbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
@@ -774,14 +775,6 @@ void StartSettingPopup::gachaMenuCreate()
 	item_gacha_menu = CCMenuLambda::createWithItem(gacha_item_item);
 	item_gacha_menu->setPosition(ccp(425,190));
 	main_case->addChild(item_gacha_menu);
-	
-	if(mySGD->getItemGachaOpenStage() > mySD->getSilType())
-	{
-		item_gacha_menu->setEnabled(false);
-		CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
-		locked_img->setPosition(ccp(425,190));
-		main_case->addChild(locked_img);
-	}
 	
 	item_gacha_menu->setTouchPriority(touch_priority);
 }

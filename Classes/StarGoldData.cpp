@@ -1901,6 +1901,7 @@ void StarGoldData::initTodayMission(Json::Value t_info)
 	today_mission_info.reward_count = t_info["reward"]["count"].asInt();
 	today_mission_info.goal_count = t_info["goal"].asInt();
 	today_mission_info.is_success = t_info["isSuccess"].asBool();
+	today_mission_info.resetTimestamp = t_info["resetTimestamp"].asInt64();
 	
 	is_today_mission_first = t_info["isFirstCheck"].asBool();
 }

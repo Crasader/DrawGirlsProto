@@ -369,7 +369,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				state_ment->setPosition(ccp(240,80));
 				ing_download_cnt = 1;
 				ing_download_per = 0;
-				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "allfont.fnt");
+				download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), "allfont.fnt");
 				download_state->setPosition(ccp(240,38));
 				addChild(download_state, kSLD_Z_content);
 				is_downloading = true;
@@ -500,7 +500,7 @@ void StageListDown::endOpenning()
 	state_ment->setPosition(ccp(240,80));
 	ing_download_cnt = 1;
 	ing_download_per = 0;
-	download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString(), "allfont.fnt");
+	download_state = CCLabelBMFont::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), "allfont.fnt");
 	download_state->setPosition(ccp(240,90));
 	addChild(download_state, kSLD_Z_content);
 	is_downloading = true;
@@ -559,7 +559,7 @@ void StageListDown::menuAction(CCObject *sender)
 		if(ing_download_cnt < 1)
 			ing_download_cnt = 1;
 		if(int(df_list.size()+sf_list.size()) > 0)
-			download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 		is_downloading = true;
 		startDownload();
 	}
@@ -576,7 +576,7 @@ void StageListDown::successAction()
 		ing_download_per = 0.f;
 		if(int(df_list.size()+sf_list.size()) > 0)
 		{
-			download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
 				loading_progress->stopAllActions();
@@ -824,7 +824,7 @@ void StageListDown::successAction()
 			
 			if(int(df_list.size()+sf_list.size()) > 0)
 			{
-				download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+				download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 				if(loading_progress)
 				{
 					loading_progress->stopAllActions();
@@ -844,7 +844,7 @@ void StageListDown::successAction()
 			ing_download_per = 0.f;
 			if(int(df_list.size()+sf_list.size()) > 0)
 			{
-				download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+				download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 				if(loading_progress)
 				{
 					loading_progress->stopAllActions();
@@ -862,7 +862,7 @@ void StageListDown::successAction()
 		ing_download_per = 0.f;
 		if(int(df_list.size()+sf_list.size()) > 0)
 		{
-			download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
 				loading_progress->stopAllActions();
@@ -912,7 +912,7 @@ void StageListDown::successAction()
 		
 		if(int(df_list.size()+sf_list.size()) > 0)
 		{
-			download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
 				loading_progress->stopAllActions();
@@ -956,7 +956,7 @@ void StageListDown::downloadingAction()
 	ing_download_per = t_per;
 	
 	if(int(df_list.size()+sf_list.size()) > 0)
-		download_state->setString(CCSTR_CWF("%.0f%%", (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()))->getCString());
+		download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 }
 
 void StageListDown::startDownload()

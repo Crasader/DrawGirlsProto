@@ -312,13 +312,13 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ko->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ko->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("%d성 카드 획득방법!"), kMyLocalKey_cardLockedTitle);
+	ko->setObject(CCString::create("<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent1);
+	ko->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent2);
+	ko->setObject(CCString::create("<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent3);
+	ko->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
+	ko->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
+	ko->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -769,6 +769,13 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	en->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	en->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
+	en->setObject(CCString::create("%d성 카드 획득방법!"), kMyLocalKey_cardLockedTitle);
+	en->setObject(CCString::create("<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent1);
+	en->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent2);
+	en->setObject(CCString::create("<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent3);
+	en->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
+	en->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
+	en->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1217,6 +1224,13 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ja->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ja->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
+	ja->setObject(CCString::create("%d성 카드 획득방법!"), kMyLocalKey_cardLockedTitle);
+	ja->setObject(CCString::create("<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent1);
+	ja->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent2);
+	ja->setObject(CCString::create("<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent3);
+	ja->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
+	ja->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
+	ja->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

@@ -299,6 +299,9 @@ public:
 	
 	//@ JsonBox::Object dictParam;
 	Json::Value dictParam;
+	long long int getServerTimestamp(){
+		return this->timestamp;
+	}
 private:
 	//    GDStruct gdchunk;
 	pthread_mutex_t t_functionMutex;
@@ -334,9 +337,7 @@ private:
 	static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp);
 	static void* t_function(void *data);
 	void receivedCommand(float dt);
-	long long int getServerTimestamp(){
-		return this->timestamp;
-	}
+	
 	long long int getServerDate(){
 		return this->date;
 	}

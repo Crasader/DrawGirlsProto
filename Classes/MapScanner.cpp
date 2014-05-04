@@ -68,7 +68,7 @@ bool MapScanner::isCheckBossLocked()
 			bfsCheck(mapScaningEmptySide, mapEmpty, IntPoint(mapWidthInnerEnd-1, j));
 	}
 	
-	return !is_found;
+	return is_found;
 }
 
 void MapScanner::scanMap()

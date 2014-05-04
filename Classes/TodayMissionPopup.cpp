@@ -220,11 +220,31 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	}
 	
 	
+	CCLabelTTF* c_label = CCLabelTTF::create();
 	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	close_label->setPosition(ccp(0,10));
+	c_label->addChild(close_label);
+	
+	CCScale9Sprite* remain_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
+	remain_back->setContentSize(CCSizeMake(120, 30));
+	remain_back->setPosition(ccp(0,-10));
+	c_label->addChild(remain_back);
+	
+	long long sub_value = mySGD->today_mission_info.resetTimestamp.getV() - graphdog->getServerTimestamp();
+	string ment_string;
+	if(sub_value >= 3600)
+		ment_string = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTime), sub_value/3600)->getCString();
+	else
+		ment_string = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute), sub_value/60)->getCString();
+	
+	StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+	remain_label->setPosition(ccp(remain_back->getContentSize().width/2.f, remain_back->getContentSize().height/2.f));
+	remain_back->addChild(remain_label);
+	
 	CCScale9Sprite* close_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-	close_button = CCControlButton::create(close_label, close_back);
+	close_button = CCControlButton::create(c_label, close_back);
 	close_button->addTargetWithActionForControlEvents(this, cccontrol_selector(TodayMissionPopup::closeAction), CCControlEventTouchUpInside);
-	close_button->setPreferredSize(CCSizeMake(90,50));
+	close_button->setPreferredSize(CCSizeMake(150,55));
 	close_button->setPosition(ccp(0,-70));
 	m_container->addChild(close_button);
 	
@@ -251,6 +271,8 @@ void TodayMissionPopup::closeAction(CCObject* sender, CCControlEvent t_event)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
 	progress_bar->setVisible(false);
 	

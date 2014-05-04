@@ -41,6 +41,7 @@
 #include "DetailConditionPopup.h"
 #include "GoodsLight.h"
 #include "TodayMissionPopup.h"
+#include "AttendancePopup.h"
 #include "FormSetter.h"
 
 CCScene* MainFlowScene::scene()
@@ -2205,10 +2206,14 @@ void MainFlowScene::topOnLight()
 	{
 		is_menu_enable = false;
 		
-		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
-		addChild(t_popup, kMainFlowZorder_popup);
-		
 		mySGD->is_today_mission_first = false;
+		
+		AttendancePopup* t_popup = AttendancePopup::create(-300, [=]()
+														   {
+															   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+															   addChild(t_popup, kMainFlowZorder_popup);
+														   });
+		addChild(t_popup, kMainFlowZorder_popup);
 	}
 }
 
