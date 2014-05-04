@@ -106,6 +106,24 @@ bool ZoomScript::init()
 		game_node->addChild(safety_img, kZS_Z_second_img);
 	}
 	
+	CCPoint center_position = ccp(160,215);
+	
+	CCSprite* top_case = CCSprite::create("diary_frame_top.png");
+	top_case->setPosition(ccpAdd(center_position, ccp(0,215)));
+	game_node->addChild(top_case, kZS_Z_script_case);
+	
+	CCSprite* bottom_case = CCSprite::create("diary_frame_bottom.png");
+	bottom_case->setPosition(ccpAdd(center_position, ccp(0,-215)));
+	game_node->addChild(bottom_case, kZS_Z_script_case);
+	
+	CCSprite* left_case = CCSprite::create("diary_frame_left.png");
+	left_case->setPosition(ccpAdd(center_position, ccp(-160,0)));
+	game_node->addChild(left_case, kZS_Z_script_case);
+	
+	CCSprite* right_case = CCSprite::create("diary_frame_right.png");
+	right_case->setPosition(ccpAdd(center_position, ccp(160,0)));
+	game_node->addChild(right_case, kZS_Z_script_case);
+	
 	target_node = first_img;
 	
 	zoom_img = CCSprite::create("ending_expand.png");

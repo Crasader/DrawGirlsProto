@@ -310,6 +310,24 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_stop);
 	ko->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
 	ko->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
+	ko->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
+	ko->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
@@ -749,6 +767,8 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("STOP"), kMyLocalKey_stop);
 	en->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
 	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
+	en->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
+	en->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1195,6 +1215,8 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("STOP"), kMyLocalKey_stop);
 	ja->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
 	ja->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
+	ja->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
+	ja->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

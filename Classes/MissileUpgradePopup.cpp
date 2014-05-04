@@ -390,7 +390,11 @@ void MissileUpgradePopup::setAfterUpgrade()
 	
 	if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 	{
-		upgrade_button->removeFromParent();
+		upgrade_button->setEnabled(false);
+		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString());
+		price_type->removeFromParent();
+		price_label->setPositionX(price_label->getPositionX()-8);
+		price_label->setString(myLoc->getLocalForKey(kMyLocalKey_endUpgrade));
 	}
 	else
 	{

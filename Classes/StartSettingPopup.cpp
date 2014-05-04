@@ -535,7 +535,39 @@ void StartSettingPopup::setMain()
 	
 	if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 	{
-		upgrade_menu = NULL;
+		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
+		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 15);
+		n_level->setColor(ccc3(50, 25, 0));
+		n_level->setPosition(ccp(70,47));
+		n_upgrade->addChild(n_level);
+		
+		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
+		s_upgrade->setColor(ccGRAY);
+		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 15);
+		s_level->setColor(ccc3(50, 25, 0));
+		s_level->setPosition(ccp(70,47));
+		s_upgrade->addChild(s_level);
+		
+		
+		CCLabelTTF* n_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+		n_price_label->setColor(ccc3(50, 25, 0));
+		n_price_label->setPosition(ccp(70,22));
+		n_upgrade->addChild(n_price_label);
+		
+		CCLabelTTF* s_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+		s_price_label->setColor(ccc3(50, 25, 0));
+		s_price_label->setPosition(ccp(70,22));
+		s_upgrade->addChild(s_price_label);
+		
+		
+		CCMenuItem* upgrade_item = CCMenuItemSprite::create(n_upgrade, s_upgrade, this, menu_selector(StartSettingPopup::upgradeAction));
+		
+		upgrade_menu = CCMenu::createWithItem(upgrade_item);
+		upgrade_menu->setPosition(ccp(83,46));
+		main_case->addChild(upgrade_menu);
+		
+		upgrade_menu->setTouchPriority(touch_priority);
+		upgrade_menu->setEnabled(false);
 	}
 	else
 	{
@@ -762,7 +794,39 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		
 		if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 		{
-			upgrade_menu = NULL;
+			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
+			CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 15);
+			n_level->setColor(ccc3(50, 25, 0));
+			n_level->setPosition(ccp(70,47));
+			n_upgrade->addChild(n_level);
+			
+			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
+			s_upgrade->setColor(ccGRAY);
+			CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 15);
+			s_level->setColor(ccc3(50, 25, 0));
+			s_level->setPosition(ccp(70,47));
+			s_upgrade->addChild(s_level);
+			
+			
+			CCLabelTTF* n_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+			n_price_label->setColor(ccc3(50, 25, 0));
+			n_price_label->setPosition(ccp(70,22));
+			n_upgrade->addChild(n_price_label);
+			
+			CCLabelTTF* s_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+			s_price_label->setColor(ccc3(50, 25, 0));
+			s_price_label->setPosition(ccp(70,22));
+			s_upgrade->addChild(s_price_label);
+			
+			
+			CCMenuItem* upgrade_item = CCMenuItemSprite::create(n_upgrade, s_upgrade, this, menu_selector(StartSettingPopup::upgradeAction));
+			
+			upgrade_menu = CCMenu::createWithItem(upgrade_item);
+			upgrade_menu->setPosition(ccp(83,46));
+			main_case->addChild(upgrade_menu);
+			
+			upgrade_menu->setTouchPriority(touch_priority);
+			upgrade_menu->setEnabled(false);
 		}
 		else
 		{

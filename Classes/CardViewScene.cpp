@@ -85,6 +85,23 @@ bool CardViewScene::init()
 		game_node->addChild(safety_img, kCV_Z_first_img);
 	}
 	
+	CCPoint center_position = ccp(160,215);
+	
+	CCSprite* top_case = CCSprite::create("diary_frame_top.png");
+	top_case->setPosition(ccpAdd(center_position, ccp(0,215)));
+	game_node->addChild(top_case, kCV_Z_first_img);
+	
+	CCSprite* bottom_case = CCSprite::create("diary_frame_bottom.png");
+	bottom_case->setPosition(ccpAdd(center_position, ccp(0,-215)));
+	game_node->addChild(bottom_case, kCV_Z_first_img);
+	
+	CCSprite* left_case = CCSprite::create("diary_frame_left.png");
+	left_case->setPosition(ccpAdd(center_position, ccp(-160,0)));
+	game_node->addChild(left_case, kCV_Z_first_img);
+	
+	CCSprite* right_case = CCSprite::create("diary_frame_right.png");
+	right_case->setPosition(ccpAdd(center_position, ccp(160,0)));
+	game_node->addChild(right_case, kCV_Z_first_img);
 	
 	
 	zoom_img = CCSprite::create("ending_expand.png");

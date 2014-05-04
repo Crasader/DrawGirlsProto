@@ -399,6 +399,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_stop,
 	kMyLocalKey_go100percent,
 	kMyLocalKey_accountLink,
+	kMyLocalKey_maxLevel,
+	kMyLocalKey_endUpgrade,
 	kMyLocalKey_warning9,
 	kMyLocalKey_warning105,
 	kMyLocalKey_warning106,
