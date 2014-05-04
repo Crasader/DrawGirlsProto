@@ -512,9 +512,10 @@ void StartSettingScene::setMain()
 		bool rotation = false;
 		if(grade == 1 || grade == 4)
 			rotation = true;
-		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), rotation);
+		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), rotation,
+																														 (missile_level-1)/5+1, (missile_level-1)%5+1);
 		t_gm->setPosition(ccp(83,158));
-		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+//		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 		main_case->addChild(t_gm);
 		
 		
@@ -737,9 +738,10 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 									 bool rotation = false;
 									 if(grade == 1 || grade == 4)
 										 rotation = true;
-								   GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), 													rotation);
+								   GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), rotation,
+																																						(missile_level-1)/5+1, (missile_level-1)%5+1);
 								   t_gm->setPosition(missile_position);
-								   t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+//								   t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 								   main_case->addChild(t_gm);
 								   
 								   

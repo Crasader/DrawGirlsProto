@@ -334,14 +334,14 @@ std::string SilhouetteData::getConditionContent( int t_type )
 
 	t_type = getClearCondition(t_type);
 
-	if(t_type == kCLEAR_bossLifeZero)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle1);
-	else if(t_type == kCLEAR_subCumberCatch)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle2);
-	else if(t_type == kCLEAR_bigArea)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle3);
-	else if(t_type == kCLEAR_itemCollect)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle4);
-	else if(t_type == kCLEAR_perfect)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle5);
-	else if(t_type == kCLEAR_sequenceChange)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle6);
-	else if(t_type == kCLEAR_timeLimit)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle7);
-	else											return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle0);
+	if(t_type == kCLEAR_bossLifeZero)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription1);
+	else if(t_type == kCLEAR_subCumberCatch)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription2);
+	else if(t_type == kCLEAR_bigArea)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription3);
+	else if(t_type == kCLEAR_itemCollect)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription4);
+	else if(t_type == kCLEAR_perfect)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription5);
+	else if(t_type == kCLEAR_sequenceChange)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription6);
+	else if(t_type == kCLEAR_timeLimit)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription7);
+	else											return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription0);
 
 	return return_value;
 }

@@ -2286,7 +2286,7 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 	fileName2Language["warning_1017.ccbi"] = kMyLocalKey_warning1017;
 	fileName2Language["warning_1018.ccbi"] = kMyLocalKey_warning1018;
 	fileName2Language["warning_boss_success.ccbi"] = kMyLocalKey_warningBossSuccess;
-	
+	fileName2Language["warning_over_02.ccbi"] = kMyLocalKey_warningLastLife;
 	
 	KSLabelTTF* textMessage = KSLabelTTF::create(MyLocal::sharedInstance()->getLocalForKey(fileName2Language[fileName]), mySGD->getFont().c_str(), 30.f);
 	detailWarningQueue.push_back(textMessage);
@@ -2321,6 +2321,11 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 																						 {
 																							 colors[0] = ccc3(255, 210, 255);
 																							 colors[1] = ccc3(191, 241, 255);
+																						 }
+																						 else if(type == "h")
+																						 {
+																							 colors[0] = ccc3(30, 200, 255);
+																							 colors[1] = ccc3(255, 150, 100);
 																						 }
 																						 for(int i=0; i<11; i++) {
 																							 tempScheduler->addChild(KSTimer::create(3/30.f * (i + 1), [=](){

@@ -442,9 +442,10 @@ protected:
 };
 
 // 옛날 GuidedMissile
-#if 0
 
 
+/*
+ #if 0
 class GuidedMissile : public StoneAttack
 {
 public:
@@ -626,53 +627,54 @@ public:
 				m_streak->setPosition(m_missileSprite->getPosition());
 		}
 	}
-	void beautifier(int grade, int level)
+	void beautifier(int grade, int level, ASMotionStreak*& motionStreak = m_streak, CCParticleSystemQuad*& particleQuad = m_particle)
 	{
 		if(grade >= 3)
-			addStreak();
+			motionStreak = addStreak();
 
 		if(grade == 2)
 		{
 			if(level <= 2)
-				addParticle(0);
+				particleQuad = addParticle(0);
 			else if(level <= 4)
-				addParticle(2);
+				particleQuad = addParticle(2);
 			else
-				addParticle(3);
+				particleQuad = addParticle(3);
 		}
 		else if(grade == 3)
 		{
 			if(level <= 2)
-				addParticle(8);
+				particleQuad = addParticle(8);
 			else if(level <= 4)
-				addParticle(10);
+				particleQuad = addParticle(10);
 			else
-				addParticle(11);
+				particleQuad = addParticle(11);
 		}
 		else if(grade == 4)
 		{
 			if(level <= 2)
-				addParticle(12);
+				particleQuad = addParticle(12);
 			else if(level <= 4)
-				addParticle(14);
+				particleQuad = addParticle(14);
 			else
-				addParticle(15);
+				particleQuad = addParticle(15);
 		}
 		else if(grade == 5)
 		{
 			if(level <= 2)
-				addParticle(16);
+				particleQuad = addParticle(16);
 			else if(level <= 4)
-				addParticle(18);
+				particleQuad = addParticle(18);
 			else
-				addParticle(19);
+				particleQuad = addParticle(19);
 		}
 	}	
-	void addStreak()
+	ASMotionStreak* addStreak()
 	{
-		m_streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-		m_streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-		addChild(m_streak, -2);
+		auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+		streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		addChild(streak, -2);
+		return streak;
 	}
 	
 	void addParticle(int particle_type)
@@ -719,9 +721,10 @@ public:
 		else if(particle_type == 19)
 			plist_name = "jm_particle5_water.plist";
 		
-		m_particle = CCParticleSystemQuad::create(plist_name.c_str());
-		m_particle->setPositionType(kCCPositionTypeRelative);
+		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
+		quad->setPositionType(kCCPositionTypeRelative);
 		addChild(m_particle, -1);
+		return quad;
 	}
 	void showWindow(float dt)
 	{
@@ -779,13 +782,16 @@ protected:
 };
 
 #endif
-class GuidedMissile : public StoneAttack
+ 
+ */
+
+class GuidedMissileForUpgradeWindow : public StoneAttack
 {
 public:
-	static GuidedMissile* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, 
+	static GuidedMissileForUpgradeWindow* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, 
 															 float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
 	{
-		GuidedMissile* object = new GuidedMissile();
+		GuidedMissileForUpgradeWindow* object = new GuidedMissileForUpgradeWindow();
 		object->init(targetNode, initPosition, fileName, initSpeed, power, range, ao, selfRotation);
 
 		object->autorelease();
@@ -793,9 +799,9 @@ public:
 
 		return object;
 	}
-	static GuidedMissile* createForShowWindow(const string& fileName, bool selfRotation)
+	static GuidedMissileForUpgradeWindow* createForShowWindow(const string& fileName, bool selfRotation)
 	{
-		GuidedMissile* object = new GuidedMissile();
+		GuidedMissileForUpgradeWindow* object = new GuidedMissileForUpgradeWindow();
 		object->initForShowWindow(fileName, selfRotation);
 		object->autorelease();
 		return object;
@@ -853,7 +859,7 @@ public:
 		addChild(m_missileSprite);
 		//		m_missileSprite->setScale(1.f/myGD->game_scale);
 		m_missileSprite->setPosition(ccp(0, 0));
-		schedule(schedule_selector(GuidedMissile::showWindow));
+		schedule(schedule_selector(GuidedMissileForUpgradeWindow::showWindow));
 		return true;
 	}
 	void update(float dt)
@@ -1112,6 +1118,475 @@ protected:
 		float rotationRadius;
 		float rotationVelocityRad;
 		CCPoint initPosition;
+	}m_showWindow;
+	
+	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+};
+class GuidedMissile : public StoneAttack
+{
+public:
+	static GuidedMissile* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, 
+															 float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+	{
+		GuidedMissile* object = new GuidedMissile();
+		object->init(targetNode, initPosition, fileName, initSpeed, power, range, ao, selfRotation);
+
+		object->autorelease();
+		
+
+		return object;
+	}
+	static GuidedMissile* createForShowWindow(const string& fileName, bool selfRotation, int grade, int level)
+	{
+		GuidedMissile* object = new GuidedMissile();
+		object->initForShowWindow(fileName, selfRotation, grade, level);
+		object->autorelease();
+		return object;
+	}
+	
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+	{
+		StoneAttack::init();
+		
+		m_particle = NULL;
+		m_streak = NULL;
+		
+		m_initSpeed = initSpeed;
+		m_option = ao;
+		m_power = power;
+		m_targetNode = targetNode;	
+		m_guided = false;
+		m_range = range;
+		m_selfRotation = selfRotation;
+		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+			//m_missileSprite->setRotationY(t);
+			//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(initPosition);
+
+		if(targetNode)
+		{
+			CCPoint diff = m_targetNode->getPosition() - initPosition;
+			
+			int random_value = rand()%21 - 10; // -10~10
+			float random_float = 1.f + random_value/100.f;
+			
+			m_initRad = atan2f(diff.y, diff.x) * random_float;
+			m_currentRad = m_initRad; // + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
+			scheduleUpdate();
+		}
+		return true;
+	}
+	
+	bool initForShowWindow(const string& fileName, bool selfRotation, int grade, int level )
+	{
+		StoneAttack::init();
+		m_showWindow.fileName = fileName;	
+		m_selfRotation = selfRotation;
+		m_showWindow.grade = grade;
+		m_showWindow.level = level;
+		schedule(schedule_selector(GuidedMissile::showWindow));
+
+		m_showWindow.whiteBoard = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 90, 90));
+		//m_back->setOpacity(color.a);
+
+		//addChild(m_showWindow.whiteBoard);
+		m_showWindow.clippingNode = CCClippingNode::create();
+		CCClippingNode* cNode = m_showWindow.clippingNode;
+		//cNode->setContentSize(CCSizeMake(100, 100));
+		//cNode->setAnchorPoint(ccp(0.5,0.f));
+		cNode->setPosition(ccp(0,0));
+		cNode->setStencil(m_showWindow.whiteBoard);
+		cNode->setInverted(false);
+		this->addChild(cNode,1);
+		m_showWindow.explosionNode = CCSpriteBatchNode::create("fx_monster_hit.png");
+
+		cNode->addChild(m_showWindow.explosionNode);
+
+		return true;
+	}
+	void showWindow(float dt)
+	{
+		//float r = m_showWindow.rotationRadius;
+		//m_missileSprite->setPosition(m_showWindow.initPosition + ccp(cos(m_showWindow.rotationRad) * r, sin(m_showWindow.rotationRad) * r));
+		//if(m_selfRotation)
+		//{
+			//m_missileSprite->setRotation(m_missileSprite->getRotation() + 15);
+		//}
+		//else
+		//{
+			//m_missileSprite->setRotation(-rad2Deg(m_showWindow.rotationRad) + 180);
+		//}
+
+		//if(m_particle)
+			//m_particle->setPosition(m_missileSprite->getPosition());
+
+		//if(m_streak)
+			//m_streak->setPosition(m_missileSprite->getPosition());
+		
+		m_showWindow.currentTime += 1 / 60.f;
+
+		if(m_showWindow.currentTime > m_showWindow.lastCreationTime + 1.5f)
+		{
+			m_showWindow.lastCreationTime = m_showWindow.currentTime;
+			float creationRad = ks19937::getFloatValue(0, 2 * M_PI);
+			ShowWindow::MissileSprite missile;
+			missile.missileSprite = CCSprite::create(m_showWindow.fileName.c_str());
+			beautifier(m_showWindow.grade, m_showWindow.level, &missile.streak, &missile.particleQuad);
+
+			m_showWindow.clippingNode->addChild(missile.missileSprite);
+			missile.missileSprite->setPosition(ccp(100 * cosf(creationRad), 100 * sinf(creationRad)));
+			if(missile.streak)
+				missile.streak->setPosition(missile.missileSprite->getPosition());
+			if(missile.particleQuad)
+				missile.particleQuad->setPosition(missile.missileSprite->getPosition());
+			missile.missileRad = creationRad;
+			int random_value = rand()%7 - 3;
+			float random_float = random_value/10.f;
+			float speed = 1.4f+random_float + m_showWindow.grade / 10.f;
+			missile.missileSpeed = speed;
+			m_showWindow.missileSprites.push_back(missile);	
+		}
+		
+		for(auto iter = m_showWindow.missileSprites.begin(); iter != m_showWindow.missileSprites.end();)
+		{
+			ShowWindow::MissileSprite i = *iter;
+			i.missileSprite->setPosition(i.missileSprite->getPosition() -
+																	 ccp(i.missileSpeed * cosf(i.missileRad), i.missileSpeed * sinf(i.missileRad)));
+			if(i.streak)
+				i.streak->setPosition(i.missileSprite->getPosition());
+			if(i.particleQuad)
+				i.particleQuad->setPosition(i.missileSprite->getPosition());
+			if(m_selfRotation)
+			{
+				i.missileSprite->setRotation(i.missileSprite->getRotation() + 15);
+			}
+			else
+			{
+				i.missileSprite->setRotation(-rad2Deg(i.missileRad) + 90);
+			}
+
+			if(ccpLength(i.missileSprite->getPosition() - CCPointZero) <= 2.f)
+			{
+				AudioEngine::sharedInstance()->playEffect("sound_jack_missile_bomb.mp3",false);
+				i.missileSprite->removeFromParent();
+				if(i.streak)	
+					i.streak->removeFromParent();
+				if(i.particleQuad)
+					i.particleQuad->removeFromParent();
+				iter = m_showWindow.missileSprites.erase(iter);
+				CCSprite* t_explosion = CCSprite::createWithTexture(m_showWindow.explosionNode->getTexture(), CCRectMake(0, 0, 167, 191));
+				t_explosion->setScale(0.65f);
+				t_explosion->setRotation(-rad2Deg(i.missileRad)-90 + 180.f);
+				m_showWindow.explosionNode->addChild(t_explosion);
+
+				CCAnimation* t_animation = CCAnimation::create();
+				t_animation->setDelayPerUnit(0.1f);
+				t_animation->addSpriteFrameWithTexture(m_showWindow.explosionNode->getTexture(), CCRectMake(0, 0, 167, 191));
+				for(int i=0;i<2;i++)
+					for(int j=0;j<3;j++)
+						t_animation->addSpriteFrameWithTexture(m_showWindow.explosionNode->getTexture(), CCRectMake(j*167, i*191, 167, 191));
+
+				CCAnimate* t_animate = CCAnimate::create(t_animation);
+				CCFadeOut* t_fade = CCFadeOut::create(0.2f);
+				CCRemoveSelf* t_remove = CCRemoveSelf::create();
+				CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_remove, NULL);
+				t_explosion->runAction(t_seq);
+			}
+			else 
+			{
+				++iter;
+			}
+		}
+	}	
+	void update(float dt)
+	{
+		bool isEnable = true;
+		bool emptyMonster = !myGD->isValidMainCumber(m_targetNode) && !myGD->isValidSubCumber(m_targetNode);
+		IntPoint missilePoint = ccp2ip(m_missileSprite->getPosition());
+		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+											 missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		if(
+			 myGD->getIsGameover() ||
+			 emptyMonster ||
+			 invalidRange
+			 )
+		{
+			isEnable = false;
+		}
+
+		if(!isEnable)
+		{
+			removeFromParentAndCleanup(true);
+			return;
+		}
+
+		CCPoint targetPosition = m_targetNode->getPosition();
+		CCPoint subDistance = ccpSub(targetPosition, m_missileSprite->getPosition());
+		float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
+
+		// 몬스터가 맞는 조건
+		if(distance <= 4)
+		{
+			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
+			
+			CCPoint effectPosition = m_missileSprite->getPosition();
+			effectPosition.x += rand()%21 - 10;
+			effectPosition.y += rand()%21 - 10;
+			
+			float damage = m_power;
+			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
+			
+			removeFromParentAndCleanup(true);
+		}
+		else  // 거리가 멀면 몬스터 쪽으로 유도함.
+		{
+			CCPoint missilePosition = m_missileSprite->getPosition();
+			CCPoint cumberPosition;
+			cumberPosition = m_targetNode->getPosition();		
+			CCPoint diffPosition = cumberPosition - missilePosition;
+
+			bool isNearMonster = false;
+			for(auto bosses : myGD->getMainCumberVector())
+			{
+				if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= m_range)
+				{
+					isNearMonster = true;
+					break;
+				}
+			}
+			for(auto mob : myGD->getSubCumberVector())
+			{
+				if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= m_range)
+				{
+					isNearMonster = true;
+					break;
+				}
+			}
+			{
+				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
+				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
+//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
+				
+				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
+				float tempTt = tt - m_currentRad;
+				bool sign = tt - m_currentRad > 0  ? 1 : -1;
+				float missileSpeed = m_initSpeed * 1.3f;
+				if(isNearMonster)
+				{
+					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.f), deg2Rad(2.f));
+				}
+				else 
+				{
+					//m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
+				}
+//				m_currentRad = m_currentRad + tt - m_currentRad;
+				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
+																																					sin(m_currentRad) * missileSpeed));
+				
+				if(m_selfRotation)
+				{
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 20);
+				}
+				else
+				{
+					m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+				}
+//				m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+		 	}
+			
+			if(m_particle)
+				m_particle->setPosition(m_missileSprite->getPosition());
+			
+			if(m_streak)
+				m_streak->setPosition(m_missileSprite->getPosition());
+		}
+	}
+	void beautifier(int grade, int level, ASMotionStreak** motionStreak = nullptr, CCParticleSystemQuad** particleQuad = nullptr)
+	{
+		auto origi1 = motionStreak;
+		auto origi2 = particleQuad;
+		if(motionStreak == nullptr)
+		{
+			motionStreak = &m_streak;
+		}
+		
+		if(particleQuad == nullptr)
+		{
+			particleQuad = &m_particle;
+		}
+		if(grade >= 3)
+			*motionStreak = addStreak();
+
+		if(grade == 2)
+		{
+			if(level <= 2)
+				*particleQuad = addParticle(0);
+			else if(level <= 4)
+				*particleQuad = addParticle(2);
+			else
+				*particleQuad = addParticle(3);
+		}
+		else if(grade == 3)
+		{
+			if(level <= 2)
+				*particleQuad = addParticle(8);
+			else if(level <= 4)
+				*particleQuad = addParticle(10);
+			else
+				*particleQuad = addParticle(11);
+		}
+		else if(grade == 4)
+		{
+			if(level <= 2)
+				*particleQuad = addParticle(12);
+			else if(level <= 4)
+				*particleQuad = addParticle(14);
+			else
+				*particleQuad = addParticle(15);
+		}
+		else if(grade == 5)
+		{
+			if(level <= 2)
+				*particleQuad = addParticle(16);
+			else if(level <= 4)
+				*particleQuad = addParticle(18);
+			else
+				*particleQuad = addParticle(19);
+		}
+
+		if(*particleQuad)
+		{
+			if(origi2)
+			{
+				m_showWindow.clippingNode->addChild(*particleQuad, -1);
+			}
+			else
+			{
+				addChild(*particleQuad, -1);
+			}
+		}
+		if(*motionStreak)
+		{
+			if(origi1)
+			{
+				m_showWindow.clippingNode->addChild(*motionStreak, -1);
+			}
+			else
+			{
+				addChild(*motionStreak, -2);
+			}
+		}
+	}	
+	CCParticleSystemQuad* addParticle(int particle_type)
+	{
+		string plist_name = "jm_particle1_empty.plist";
+		if(particle_type == 0)
+			plist_name = "jm_particle1_empty.plist"; // 노랑 불
+		else if(particle_type == 1)
+			plist_name = "jm_particle1_fire.plist"; // 붉은 불(주황)
+		else if(particle_type == 2)
+			plist_name = "jm_particle1_life.plist"; // 초록 불(노랑)
+		else if(particle_type == 3)
+			plist_name = "jm_particle1_water.plist"; // 파란 불(하양)
+		else if(particle_type == 4)
+			plist_name = "jm_particle2_empty.plist"; // 가시
+		else if(particle_type == 5)
+			plist_name = "jm_particle2_fire.plist";
+		else if(particle_type == 6)
+			plist_name = "jm_particle2_life.plist";
+		else if(particle_type == 7)
+			plist_name = "jm_particle2_water.plist";
+		else if(particle_type == 8)
+			plist_name = "jm_particle3_empty.plist"; // 반사빛/뽀샤시빛
+		else if(particle_type == 9)
+			plist_name = "jm_particle3_fire.plist";
+		else if(particle_type == 10)
+			plist_name = "jm_particle3_life.plist";
+		else if(particle_type == 11)
+			plist_name = "jm_particle3_water.plist";
+		else if(particle_type == 12)
+			plist_name = "jm_particle4_empty.plist"; // 심한 반짝임
+		else if(particle_type == 13)
+			plist_name = "jm_particle4_fire.plist";
+		else if(particle_type == 14)
+			plist_name = "jm_particle4_life.plist";
+		else if(particle_type == 15)
+			plist_name = "jm_particle4_water.plist";
+		else if(particle_type == 16)
+			plist_name = "jm_particle5_empty.plist"; // 둥근 파장까지
+		else if(particle_type == 17)
+			plist_name = "jm_particle5_fire.plist";
+		else if(particle_type == 18)
+			plist_name = "jm_particle5_life.plist";
+		else if(particle_type == 19)
+			plist_name = "jm_particle5_water.plist";
+		
+		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
+		quad->setPositionType(kCCPositionTypeRelative);
+		return quad;
+	}
+	ASMotionStreak* addStreak()
+	{
+		auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+		streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		return streak;
+	}
+	
+		// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+
+	}
+protected:
+	float m_initSpeed; // 초기 속도.
+	float m_initRad; // 처음에 날아가는 각도.
+	float m_currentRad; // 범위내 들어왔을 때 현재 각도.
+
+	bool m_guided; // 유도 모드인지 여부.
+	int m_range; // 유도 범위.
+	bool m_selfRotation; // 스스로 도는지 여부.
+	CCNode* m_targetNode;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	struct ShowWindow
+	{
+		ShowWindow()
+		{
+			lastCreationTime = 0.f;
+			currentTime = 0.f;
+		}
+		struct MissileSprite
+		{
+			MissileSprite()
+			{
+				streak = nullptr;
+				particleQuad = nullptr;
+			}
+
+			CCSprite* missileSprite;
+			ASMotionStreak* streak;
+			CCParticleSystemQuad* particleQuad;
+			float missileRad;
+			float missileSpeed;
+		};
+		std::vector<MissileSprite> missileSprites;
+		float lastCreationTime;
+		float currentTime;
+		std::string fileName;
+		int grade, level;
+		CCSprite* whiteBoard;
+		CCClippingNode* clippingNode;
+		CCSpriteBatchNode* explosionNode;
 	}m_showWindow;
 	
 	CC_SYNTHESIZE(int, m_power, Power); // 파워.
