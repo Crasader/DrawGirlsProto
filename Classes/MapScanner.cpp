@@ -13,6 +13,64 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 
+bool MapScanner::isCheckBossLocked()
+{
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		if(myGD->mapState[i][mapHeightInnerBegin] == mapEmpty)
+			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
+		if(myGD->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
+			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
+		if(myGD->game_step == kGS_limited)
+		{
+			if(myGD->mapState[i][myGD->limited_step_top] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, myGD->limited_step_top));
+			if(myGD->mapState[i][myGD->limited_step_bottom] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, myGD->limited_step_bottom));
+		}
+	}
+	
+	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+	{
+		if(myGD->mapState[mapWidthInnerBegin][j] == mapEmpty)
+			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(mapWidthInnerBegin, j));
+		if(myGD->mapState[mapWidthInnerEnd-1][j] == mapEmpty)
+			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(mapWidthInnerEnd-1, j));
+	}
+	
+	vector<CCNode*> main_cumber_vector = myGD->getMainCumberCCNodeVector();
+	int main_cumber_count = main_cumber_vector.size();
+	bool is_found = false;
+	IntPoint mainCumberPoint = IntPoint();
+	for(int i=0;i<main_cumber_count && !is_found;i++)
+	{
+		CCNode* t_boss = main_cumber_vector[i];
+		IntPoint t_boss_point = myGD->getMainCumberPoint(t_boss);
+		if(!t_boss_point.isNull() && myGD->mapState[t_boss_point.x][t_boss_point.y] == mapScaningEmptySide)
+		{
+			is_found = true;
+			mainCumberPoint = t_boss_point;
+		}
+	}
+	
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		if(myGD->mapState[i][mapHeightInnerBegin] == mapScaningEmptySide)
+			bfsCheck(mapScaningEmptySide, mapEmpty, IntPoint(i, mapHeightInnerBegin));
+		if(myGD->mapState[i][mapHeightInnerEnd-1] == mapScaningEmptySide)
+			bfsCheck(mapScaningEmptySide, mapEmpty, IntPoint(i, mapHeightInnerEnd-1));
+	}
+	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+	{
+		if(myGD->mapState[mapWidthInnerBegin][j] == mapScaningEmptySide)
+			bfsCheck(mapScaningEmptySide, mapEmpty, IntPoint(mapWidthInnerBegin, j));
+		if(myGD->mapState[mapWidthInnerEnd-1][j] == mapScaningEmptySide)
+			bfsCheck(mapScaningEmptySide, mapEmpty, IntPoint(mapWidthInnerEnd-1, j));
+	}
+	
+	return !is_found;
+}
+
 void MapScanner::scanMap()
 {
 //	chrono::time_point<chrono::system_clock> start, end;
@@ -1038,6 +1096,7 @@ void MapScanner::myInit()
 	myGD->V_CCP["MS_showEmptyPoint"] = std::bind(&MapScanner::showEmptyPoint, this, _1);
 	myGD->V_V["MS_setTopBottomBlock"] = std::bind(&MapScanner::setTopBottomBlock, this);
 	myGD->V_V["MS_startRemoveBlock"] = std::bind(&MapScanner::startRemoveBlock, this);
+	myGD->B_V["MS_isCheckBossLocked"] = std::bind(&MapScanner::isCheckBossLocked, this);
 
 	
 	setMapImg();
@@ -1056,7 +1115,8 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 {
 	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
 	t_spr->setPosition(ccp(160,215));
-	t_spr->setSilhouetteConvert((myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1)%7+1);
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 	addChild(t_spr);
 	
 //	CCRenderTexture* t_render = CCRenderTexture::create(320, 430);

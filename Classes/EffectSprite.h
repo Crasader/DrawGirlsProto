@@ -31,6 +31,8 @@ static const GLchar* brightenFrag =
 static const GLchar* silCvtFrag =
 #include "SilhouetteConvertFrag.h"
 
+static const GLchar* colorSilFrag =
+#include "ColorSilhouette.h"
 
 static const GLchar * grayVert =
 #include "GrayVert.h"
@@ -53,7 +55,8 @@ enum class CurrentMode
 	kSilCvt,
 	kGray,
 	kGrayPixelation,
-	kGrayBlur
+	kGrayBlur,
+	kColorSil
 };
 class EffectSprite : public CCSprite
 {
@@ -218,6 +221,26 @@ public:
 		}
 		
 		getShaderProgram()->setUniformLocationWith1i(glGetUniformLocation(getShaderProgram()->getProgram(), "u_type"), t_type);
+	}
+	
+	void setColorSilhouette(int t_r, int t_g, int t_b)
+	{
+		if(m_currentMode != CurrentMode::kSilCvt)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(ccPositionTextureColor_vert, colorSilFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			m_currentMode = CurrentMode::kColorSil;
+			afterEffect(pProgram);
+		}
+		else
+		{
+			getShaderProgram()->use();
+		}
+		
+		GLint color3Index = getShaderProgram()->getUniformLocationForName("color3");
+		getShaderProgram()->setUniformLocationWith3f(color3Index, t_r/255.f, t_g/255.f, t_b/255.f);
 	}
 	
 	void setNonEffect()

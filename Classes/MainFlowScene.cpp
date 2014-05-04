@@ -773,7 +773,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 				mySGD->is_before_stage_img_download = true;
 				topOuting();
 				bottomPuzzleMode();
-				tableEnter(t_func);
+				tableDownloading(t_func);
 			}, [=](){puzzleLoadSuccess();});
 			addChild(t_sld, kMainFlowZorder_popup);
 		}

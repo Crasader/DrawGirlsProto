@@ -294,6 +294,8 @@ private:
 	
 	void showEmptyPoint(CCPoint t_point);
 	
+	bool isCheckBossLocked();
+	
 	void myInit();
 };
 

@@ -494,7 +494,8 @@ void Maingame::finalSetting()
 	float thumb_scale = 0.17f;
 	
 	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
-	sil_thumb->setSilhouetteConvert((myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1)%7+1);
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 	sil_thumb->setScale(thumb_scale);
 	sil_thumb->setPosition(ccp(40,myDSH->ui_center_y));
 	addChild(sil_thumb, clearshowtimeZorder);
@@ -2417,7 +2418,8 @@ void Maingame::startExchange()
 	sil_thumb->removeFromParent();
 	
 	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))->getCString()));
-	sil_thumb->setSilhouetteConvert((myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1)%7+1);
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 	sil_thumb->setScale(t_scale);
 	sil_thumb->setPosition(t_position);
 	addChild(sil_thumb, clearshowtimeZorder);

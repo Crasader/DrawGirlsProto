@@ -1436,6 +1436,10 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				
 				NSDS_SS(puzzle_number, kSDS_PZ_condition_s, puzzle_list[i]["condition"].asString(), false);
 				
+				NSDS_SI(puzzle_number, kSDS_PZ_color_r_d, puzzle_list[i]["color"]["r"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_color_g_d, puzzle_list[i]["color"]["g"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_color_b_d, puzzle_list[i]["color"]["b"].asInt(), false);
+				
 //				NSDS_SI(puzzle_number, kSDS_PZ_point_i, puzzle_list[i]["point"].asInt(), false);
 //				NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt(), false);
 				

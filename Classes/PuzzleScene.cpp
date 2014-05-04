@@ -1011,7 +1011,7 @@ void PuzzleScene::setPuzzle()
 			{
 				is_puzzle_clear = false;
 				
-				if(mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
+				if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) <= 0 || mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
 				{
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::buyPieceAction));
 					t_piece->setPosition(piece_position);

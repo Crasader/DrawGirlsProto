@@ -85,6 +85,8 @@ bool CardViewScene::init()
 		game_node->addChild(safety_img, kCV_Z_first_img);
 	}
 	
+	
+	
 	zoom_img = CCSprite::create("ending_expand.png");
 	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
 	addChild(zoom_img, kCV_Z_next_button);
