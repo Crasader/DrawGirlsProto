@@ -150,8 +150,11 @@ public:
 		
 		m_btnBack = CommonButton::getBackgroundByType(btnType);
 		
+		CCLabelTTF* titleNode = CCLabelTTF::create();
 		
-		m_btn = CCControlButton::create(m_btnTitle, m_btnBack);
+		titleNode->addChild(m_btnTitle);
+		
+		m_btn = CCControlButton::create(titleNode, m_btnBack);
 		
 		if(btnType == CommonButtonClose){
 			this->setSize(CCSizeMake(45,45));
@@ -278,7 +281,9 @@ public:
 		}
 	}
 	void callFunc(CCObject* obj, CCControlEvent event){
+		if(m_priceLbl!=NULL)m_btnTitle->setPositionY(m_btnTitle->getPositionY()+8);
 		if(m_func)m_func((CCObject*)this);
+		
 	}
 	
 	void setTouchPriority(int touchPriority){
