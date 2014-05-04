@@ -567,6 +567,16 @@ public:
 	void setLevelupGuideIsOn(int t_i);
 	int getLevelupGuideIsOn();
 	
+	void setItem9OpenStage(int t_i);
+	int getItem9OpenStage();
+	void setItem6OpenStage(int t_i);
+	int getItem6OpenStage();
+	void setItem8OpenStage(int t_i);
+	int getItem8OpenStage();
+	void setItemGachaOpenStage(int t_i);
+	int getItemGachaOpenStage();
+	
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -777,6 +787,11 @@ private:
 	
 	KSProtectVar<int> upgrade_gold_fee;
 	KSProtectVar<int> ingame_tutorial_reward_gold;
+	
+	KSProtectVar<int> item9_open_stage;
+	KSProtectVar<int> item6_open_stage;
+	KSProtectVar<int> item8_open_stage;
+	KSProtectVar<int> itemGacha_open_stage;
 	
 	KSProtectVar<int> rank_up_condition_count;
 	KSProtectVar<float> rank_up_base_rate;

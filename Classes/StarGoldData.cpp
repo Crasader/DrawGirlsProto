@@ -2143,6 +2143,15 @@ int StarGoldData::getLevelupGuideConditionLevel(){	return levelup_guide_conditio
 void StarGoldData::setLevelupGuideIsOn(int t_i){	levelup_guide_is_on = t_i;	}
 int StarGoldData::getLevelupGuideIsOn(){	return levelup_guide_is_on.getV();	}
 
+void StarGoldData::setItem9OpenStage(int t_i){	item9_open_stage = t_i;	}
+int StarGoldData::getItem9OpenStage(){	return item9_open_stage.getV();	}
+void StarGoldData::setItem6OpenStage(int t_i){	item6_open_stage = t_i;	}
+int StarGoldData::getItem6OpenStage(){	return item6_open_stage.getV();	}
+void StarGoldData::setItem8OpenStage(int t_i){	item8_open_stage = t_i;	}
+int StarGoldData::getItem8OpenStage(){	return item8_open_stage.getV();	}
+void StarGoldData::setItemGachaOpenStage(int t_i){	itemGacha_open_stage = t_i;	}
+int StarGoldData::getItemGachaOpenStage(){	return itemGacha_open_stage.getV();	}
+
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}
 void StarGoldData::setUserdataIsVIP(int t_i)

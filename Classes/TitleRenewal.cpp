@@ -654,6 +654,11 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setLevelupGuideConditionLevel(result_data["levelupGuideConditionLevel"].asInt());
 		mySGD->setLevelupGuideIsOn(result_data["levelupGuideIsOn"].asInt());
 		mySGD->setLevelupGuideReviewSecond(result_data["levelupGuideReviewSecond"].asInt64());
+		
+		mySGD->setItem9OpenStage(result_data["item9OpenStage"].asInt());
+		mySGD->setItem6OpenStage(result_data["item6OpenStage"].asInt());
+		mySGD->setItem8OpenStage(result_data["item8OpenStage"].asInt());
+		mySGD->setItemGachaOpenStage(result_data["itemGachaOpenStage"].asInt());
 	}
 	else
 	{

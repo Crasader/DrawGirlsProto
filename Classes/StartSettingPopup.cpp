@@ -278,7 +278,28 @@ void StartSettingPopup::setMain()
 	for(int i=0;i<item_list.size();i++)
 	{
 		ITEM_CODE t_code = item_list[i];
-		if(!myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		if(t_code != kIC_baseSpeedUp && t_code != kIC_doubleItem && t_code != kIC_longTime && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		{
+			show_item_popup.push_back(t_code);
+			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+			
+			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
+		}
+		else if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		{
+			show_item_popup.push_back(t_code);
+			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+			
+			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
+		}
+		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		{
+			show_item_popup.push_back(t_code);
+			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+			
+			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
+		}
+		else if(t_code == kIC_longTime && mySGD->getItem8OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
@@ -332,6 +353,14 @@ void StartSettingPopup::setMain()
 		
 		CCPoint item_position = ccp(205.f + i*71.f, 190);
 		
+		bool is_unlocked = true;
+		if(t_ic == kIC_baseSpeedUp && mySGD->getItem9OpenStage() > mySD->getSilType())
+			is_unlocked = false;
+		else if(t_ic == kIC_doubleItem && mySGD->getItem6OpenStage() > mySD->getSilType())
+			is_unlocked = false;
+		else if(t_ic == kIC_longTime && mySGD->getItem8OpenStage() > mySD->getSilType())
+			is_unlocked = false;
+		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
 		if(iter == card_options.end()) // not same option card // enable item
 		{
@@ -352,7 +381,7 @@ void StartSettingPopup::setMain()
 			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
 			is_price_usable = is_price_usable || (mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic)) > 0); // 소지하고 있는지
 			
-			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable)
+			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable && is_unlocked)
 			{
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
@@ -409,6 +438,8 @@ void StartSettingPopup::setMain()
 				item_parent->addChild(item_menu);
 				item_menu->setTouchPriority(touch_priority);
 				
+				item_menu->setEnabled(is_unlocked);
+				
 				is_selected_item.push_back(false);
 			}
 			
@@ -426,6 +457,13 @@ void StartSettingPopup::setMain()
 		}
 		else
 			is_selected_item.push_back(false);
+		
+		if(!is_unlocked)
+		{
+			CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
+			locked_img->setPosition(item_position);
+			main_case->addChild(locked_img, 1);
+		}
 	}
 	
 	item_gacha_menu = NULL;
@@ -549,12 +587,12 @@ void StartSettingPopup::setMain()
 		s_upgrade->addChild(s_level);
 		
 		
-		CCLabelTTF* n_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+		CCLabelTTF* n_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 15);
 		n_price_label->setColor(ccc3(50, 25, 0));
 		n_price_label->setPosition(ccp(70,22));
 		n_upgrade->addChild(n_price_label);
 		
-		CCLabelTTF* s_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+		CCLabelTTF* s_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 15);
 		s_price_label->setColor(ccc3(50, 25, 0));
 		s_price_label->setPosition(ccp(70,22));
 		s_upgrade->addChild(s_price_label);
@@ -737,6 +775,14 @@ void StartSettingPopup::gachaMenuCreate()
 	item_gacha_menu->setPosition(ccp(425,190));
 	main_case->addChild(item_gacha_menu);
 	
+	if(mySGD->getItemGachaOpenStage() > mySD->getSilType())
+	{
+		item_gacha_menu->setEnabled(false);
+		CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
+		locked_img->setPosition(ccp(425,190));
+		main_case->addChild(locked_img);
+	}
+	
 	item_gacha_menu->setTouchPriority(touch_priority);
 }
 
@@ -808,12 +854,12 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			s_upgrade->addChild(s_level);
 			
 			
-			CCLabelTTF* n_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+			CCLabelTTF* n_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 15);
 			n_price_label->setColor(ccc3(50, 25, 0));
 			n_price_label->setPosition(ccp(70,22));
 			n_upgrade->addChild(n_price_label);
 			
-			CCLabelTTF* s_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 18);
+			CCLabelTTF* s_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 15);
 			s_price_label->setColor(ccc3(50, 25, 0));
 			s_price_label->setPosition(ccp(70,22));
 			s_upgrade->addChild(s_price_label);

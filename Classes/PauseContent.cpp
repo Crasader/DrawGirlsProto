@@ -13,7 +13,6 @@
 #include "DataStorageHub.h"
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
-#include "FormSetter.h"
 #include "MyLocalization.h"
 
 PauseContent* PauseContent::create(int t_touch_priority, function<void(void)> t_resume, function<void(void)> t_gohome, function<void(void)> t_replay)
@@ -241,7 +240,6 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	safety_node->setPosition(ccp(-60,18));
 	addChild(safety_node);
 	
-	FormSetter::get()->addObject("safety_node", safety_node);
 	
 	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_publicPlaceMode), mySGD->getFont().c_str(), 13);
 	safety_label->enableOuterStroke(ccBLACK, 1.f);
@@ -323,7 +321,6 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	sound_node->setPosition(ccp(-60,102));
 	addChild(sound_node);
 	
-	FormSetter::get()->addObject("sound_node", sound_node);
 	
 	KSLabelTTF* sound_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 13);
 	sound_label->enableOuterStroke(ccBLACK, 1.f);
@@ -404,7 +401,6 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	effect_node->setPosition(ccp(-60,60));
 	addChild(effect_node);
 	
-	FormSetter::get()->addObject("effect_node", effect_node);
 	
 	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 13);
 	effect_label->enableOuterStroke(ccBLACK, 1.f);

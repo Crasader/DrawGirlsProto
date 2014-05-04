@@ -42,6 +42,7 @@ private:
 	KSLabelTTF* upgrade_label;
 	CCSprite* price_type;
 	CCLabelTTF* price_label;
+	CCScale9Sprite* price_back;
 	CCControlButton* upgrade_button;
 	LoadingLayer* loading_layer;
 	

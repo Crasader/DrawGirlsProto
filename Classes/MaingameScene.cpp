@@ -855,7 +855,7 @@ void Maingame::counting()
 		
 		if(countingCnt/60 == 1)
 		{
-			AudioEngine::sharedInstance()->playEffect("ment_go.mp3");
+//			AudioEngine::sharedInstance()->playEffect("ment_go.mp3");
 			setTag(1);
 			myJack->isStun = false;
 			myCP->onStartGame();
@@ -1135,7 +1135,7 @@ void Maingame::removeConditionLabel()
 	//		AudioEngine::sharedInstance()->playEffect("sound_ready.mp3", false);
 //	AudioEngine::sharedInstance()->playEffect("sound_gamestart.mp3", false);
 	
-	AudioEngine::sharedInstance()->playEffect("ment_ready.mp3");
+//	AudioEngine::sharedInstance()->playEffect("ment_ready.mp3");
 
 	myGIM->startItemSetting();
 	myGIM->startCounting();
