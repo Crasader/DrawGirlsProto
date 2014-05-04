@@ -156,6 +156,18 @@
 						<array>
 							<dict>
 								<key>name</key>
+								<string>position</string>
+								<key>type</key>
+								<string>Position</string>
+								<key>value</key>
+								<array>
+									<real>-2.0931122303009033</real>
+									<real>-2.0931122303009033</real>
+									<integer>0</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>name</key>
 								<string>anchorPoint</string>
 								<key>type</key>
 								<string>Point</string>
@@ -177,8 +189,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>0.88636362552642822</real>
-									<real>0.88636362552642822</real>
+									<real>1.2999999523162842</real>
+									<real>1.2999999523162842</real>
 									<true/>
 									<integer>0</integer>
 								</array>
@@ -210,7 +222,19 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>255</integer>
+								<integer>0</integer>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>color</string>
+								<key>type</key>
+								<string>Color3</string>
+								<key>value</key>
+								<array>
+									<integer>117</integer>
+									<integer>161</integer>
+									<integer>255</integer>
+								</array>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -228,8 +252,10 @@
 										<dict>
 											<key>easing</key>
 											<dict>
+												<key>opt</key>
+												<real>2</real>
 												<key>type</key>
-												<integer>1</integer>
+												<integer>4</integer>
 											</dict>
 											<key>name</key>
 											<string>scale</string>
@@ -239,15 +265,17 @@
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>1</real>
-												<real>1</real>
+												<real>0.5</real>
+												<real>0.5</real>
 											</array>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
+												<key>opt</key>
+												<real>2</real>
 												<key>type</key>
-												<integer>1</integer>
+												<integer>4</integer>
 											</dict>
 											<key>name</key>
 											<string>scale</string>
@@ -257,8 +285,8 @@
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>1.2000000476837158</real>
-												<real>1.2000000476837158</real>
+												<real>0.55000001192092896</real>
+												<real>0.55000001192092896</real>
 											</array>
 										</dict>
 										<dict>
@@ -275,8 +303,8 @@
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>1</real>
-												<real>1</real>
+												<real>0.5</real>
+												<real>0.5</real>
 											</array>
 										</dict>
 									</array>
@@ -294,25 +322,13 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>ingame_speed_fontup</string>
+						<string>item5</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
 						<integer>0</integer>
 						<key>properties</key>
 						<array>
-							<dict>
-								<key>name</key>
-								<string>position</string>
-								<key>type</key>
-								<string>Position</string>
-								<key>value</key>
-								<array>
-									<real>0.0</real>
-									<real>-0.80375510454177856</real>
-									<integer>0</integer>
-								</array>
-							</dict>
 							<dict>
 								<key>name</key>
 								<string>anchorPoint</string>
@@ -336,8 +352,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1.2000000476837158</real>
-									<real>1.2000000476837158</real>
+									<real>0.5</real>
+									<real>0.5</real>
 									<true/>
 									<integer>0</integer>
 								</array>
@@ -358,12 +374,10 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>ingame_bomb_fornt.png</string>
+									<string>item5.png</string>
 								</array>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 						<key>seqExpanded</key>
 						<true/>
 					</dict>
@@ -530,7 +544,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.5</real>
+			<real>0.73333334922790527</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
