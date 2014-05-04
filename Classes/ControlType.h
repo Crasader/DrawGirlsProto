@@ -256,7 +256,7 @@ private:
 	
 	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack);
 	
-	void onButton();
+	void onButton(CCPoint t_location);
 	void offButton();
 	void touchAction(CCPoint t_p, bool t_b);
 	void directionKeeping();

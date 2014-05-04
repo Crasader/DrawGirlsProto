@@ -17,7 +17,7 @@ void main() {
 	vec4 texColor = texture2D(CC_Texture0, v_texCoord);
 	vec4 resultColor;
 	if(u_type == 0)
-		resultColor = vec4(0, 0, 1, texColor.a);
+		resultColor = vec4(texColor.a, texColor.a, texColor.a, texColor.a);
 	else if(u_type == 1)
 		resultColor = vec4(0, 0, texColor.b, 1);
 	else if(u_type == 2)

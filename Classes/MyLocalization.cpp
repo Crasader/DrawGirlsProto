@@ -139,7 +139,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("등급순"), kMyLocalKey_gradeOrder);
 	ko->setObject(CCString::create("회전"), kMyLocalKey_rotation);
 	ko->setObject(CCString::create("레벨을 올리면 보스를 좀 더 쉽게 물리칠 수 있어요!"), kMyLocalKey_upgradeSubMent);
-	ko->setObject(CCString::create("다시 뽑기"), kMyLocalKey_itemRegacha);
+	ko->setObject(CCString::create("버리고 다시 뽑기"), kMyLocalKey_itemRegacha);
 	ko->setObject(CCString::create("%.0f%% 할인"), kMyLocalKey_itemRegachaDiscountValue);
 	ko->setObject(CCString::create("이 아이템 사용"), kMyLocalKey_thisItemUse);
 	ko->setObject(CCString::create("타임"), kMyLocalKey_time);
@@ -196,13 +196,13 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	ko->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ko->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
-	ko->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
+	ko->setObject(CCString::create("<font color=099 size=21 newline=35>별 획득 방법<font newline=14>스테이지를 클리어 할 때<font newline=30>클리어 단계에 따라 별을 획득합니다.<font>스테이지에서 <font color=990>4가지등급<font newline=14>을 모두 클리어하면<font color=990>별 10개<font>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupTitle);
 	ko->setObject(CCString::create("스테이지를 클리어 할 때\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	ko->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
+	ko->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=13>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	ko->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
-	ko->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
+	ko->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
 	ko->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ko->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ko->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
@@ -265,8 +265,51 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("업적보상"), kMyLocalKey_achieveReward);
 	ko->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	ko->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	
+	
+	ko->setObject(CCString::create("영역획득"), kMyLocalKey_missionTitle0);
+	ko->setObject(CCString::create("용감한 기사"), kMyLocalKey_missionTitle1);
+	ko->setObject(CCString::create("부하몹 사냥"), kMyLocalKey_missionTitle2);
+	ko->setObject(CCString::create("욕심쟁이"), kMyLocalKey_missionTitle3);
+	ko->setObject(CCString::create("수집가"), kMyLocalKey_missionTitle4);
+	ko->setObject(CCString::create("완벽주의자"), kMyLocalKey_missionTitle5);
+	ko->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
+	ko->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
+	
+	ko->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ko->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	ko->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	ko->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	ko->setObject(CCString::create("<font color=999 size=13>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	ko->setObject(CCString::create("<font color=999 size=13>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	ko->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	ko->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
+	
+	ko->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
+	ko->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
+	ko->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
+	ko->setObject(CCString::create("부하 몬스터 한마리를 제거합니다."), kMyLocalKey_item5ment);
+	ko->setObject(CCString::create("침묵"), kMyLocalKey_item7title);
+	ko->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
+	ko->setObject(CCString::create("부활"), kMyLocalKey_item10title);
+	ko->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	ko->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
+	ko->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
+	ko->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
+	ko->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
+	ko->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
+	ko->setObject(CCString::create("이어하기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass1);
+	ko->setObject(CCString::create("맵다시뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass2);
+	ko->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
+	ko->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
+	ko->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
+	ko->setObject(CCString::create("무료"), kMyLocalKey_free);
+	ko->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
+	ko->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
+	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_stop);
+	ko->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	ko->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
@@ -302,6 +345,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("불꽃스토커"), kMyLocalKey_warning1017);
 	ko->setObject(CCString::create("문득구름"), kMyLocalKey_warning1018);
 	ko->setObject(CCString::create("보스공격저지"), kMyLocalKey_warningBossSuccess);
+	ko->setObject(CCString::create("마지막 목숨"), kMyLocalKey_warningLastLife);
 	
 //	ko->setObject(CCString::create("서버에 연결할 수 없습니다."), kMyLocalKey_canNotConnectedServer);
 //	ko->setObject(CCString::create("화면을 터치 해주세요."), kMyLocalKey_touchPlease);
@@ -310,9 +354,10 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
 	ko->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
 	ko->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
-	ko->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial5);
-	ko->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial6);
-	ko->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial7);
+	ko->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
+	ko->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
+	ko->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
+	ko->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -544,7 +589,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	en->setObject(CCString::create("Main"), kMyLocalKey_toMain);
 	en->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
-	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
+	en->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	en->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	en->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	en->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -591,13 +636,13 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	en->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	en->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
-	en->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
+	en->setObject(CCString::create("<font color=099 size=21 newline=35>별 획득 방법<font newline=14>스테이지를 클리어 할 때<font newline=30>클리어 단계에 따라 별을 획득합니다.<font>스테이지에서 <font color=990>4가지등급<font newline=14>을 모두 클리어하면<font color=990>별 10개<font>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupTitle);
 	en->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	en->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
+	en->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=12>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	en->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
-	en->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
+	en->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
 	en->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	en->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	en->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
@@ -661,6 +706,50 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	en->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
 	
+	en->setObject(CCString::create("영역획득"), kMyLocalKey_missionTitle0);
+	en->setObject(CCString::create("용감한 기사"), kMyLocalKey_missionTitle1);
+	en->setObject(CCString::create("부하몹 사냥"), kMyLocalKey_missionTitle2);
+	en->setObject(CCString::create("욕심쟁이"), kMyLocalKey_missionTitle3);
+	en->setObject(CCString::create("수집가"), kMyLocalKey_missionTitle4);
+	en->setObject(CCString::create("완벽주의자"), kMyLocalKey_missionTitle5);
+	en->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
+	en->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
+	
+	
+	en->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	en->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	en->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	en->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	en->setObject(CCString::create("<font color=999 size=13>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	en->setObject(CCString::create("<font color=999 size=13>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	en->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	en->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
+	en->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
+	en->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
+	en->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
+	en->setObject(CCString::create("부하 몬스터 한마리를 제거합니다."), kMyLocalKey_item5ment);
+	en->setObject(CCString::create("침묵"), kMyLocalKey_item7title);
+	en->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
+	en->setObject(CCString::create("부활"), kMyLocalKey_item10title);
+	en->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	en->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
+	en->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
+	en->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
+	en->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
+	en->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
+	en->setObject(CCString::create("이어하기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass1);
+	en->setObject(CCString::create("맵다시뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass2);
+	en->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
+	en->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
+	en->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
+	en->setObject(CCString::create("무료"), kMyLocalKey_free);
+	en->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
+	en->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
+	en->setObject(CCString::create("STOP"), kMyLocalKey_stop);
+	en->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
+	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
 	en->setObject(CCString::create("Count Bomb"), kMyLocalKey_warning9);
@@ -692,17 +781,18 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
 	en->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
 	en->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
-	
+	en->setObject(CCString::create("Last Life"), kMyLocalKey_warningLastLife);
 	
 	en->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
 	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
 	en->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
 	en->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
-	en->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial5);
-	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial6);
-	en->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial7);
+	en->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
+	en->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
+	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
+	en->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
-//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
+	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
 //	en->setObject(CCString::create("This is a game in which you\nhave to gain as much area as\npossible using up, down, left,\nand right gestures."), kMyLocalKey_tutorial1);
 //	en->setObject(CCString::create("I will tell you\nabout the controls."), kMyLocalKey_tutorial2);
@@ -940,7 +1030,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	ja->setObject(CCString::create("Main"), kMyLocalKey_toMain);
 	ja->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
-	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
+	ja->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	ja->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	ja->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	ja->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -987,13 +1077,15 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	ja->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ja->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
-	ja->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
+	ja->setObject(CCString::create("<font color=099 size=21 newline=35>별 획득 방법<font newline=14>스테이지를 클리어 할 때<font newline=30>클리어 단계에 따라 별을 획득합니다.<font>스테이지에서 <font color=990>4가지등급<font newline=14>을 모두 클리어하면<font color=990>별 10개<font>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupTitle);
 	ja->setObject(CCString::create("스테이지를 클리어 할 때마다\n클리어 단계에 따라 별을 획득합니다."), kMyLocalKey_detailConditionPopupContent1);
-	ja->setObject(CCString::create("<|999|12|>스테이지에서 <|990|12|>4가지 등급<|999|12|13|>을 모두 Clear하면<|990|12|>별 10개<|999|12|>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
+	
+	
+	ja->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=13>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
 	ja->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
-	ja->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
+	ja->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
 	ja->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ja->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ja->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
@@ -1057,6 +1149,53 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("달성한 업적이 없습니다."), kMyLocalKey_nothingSuccessAchieve);
 	ja->setObject(CCString::create("보상받을 업적이 없습니다."), kMyLocalKey_nothingRewardAchieve);
 	
+	
+	ja->setObject(CCString::create("영역획득"), kMyLocalKey_missionTitle0);
+	ja->setObject(CCString::create("용감한 기사"), kMyLocalKey_missionTitle1);
+	ja->setObject(CCString::create("부하몹 사냥"), kMyLocalKey_missionTitle2);
+	ja->setObject(CCString::create("욕심쟁이"), kMyLocalKey_missionTitle3);
+	ja->setObject(CCString::create("수집가"), kMyLocalKey_missionTitle4);
+	ja->setObject(CCString::create("완벽주의자"), kMyLocalKey_missionTitle5);
+	ja->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
+	ja->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
+	
+	
+	
+	ja->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ja->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
+	ja->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
+	ja->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
+	ja->setObject(CCString::create("<font color=999 size=13>정해진 숫자만큼 아이템을 모으세요!"), kMyLocalKey_missionDiscription4);
+	ja->setObject(CCString::create("<font color=999 size=13>정해진 목표로 정확하게 영역을 획득하세요!"), kMyLocalKey_missionDiscription5);
+	ja->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
+	ja->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
+	
+	
+	ja->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
+	ja->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
+	ja->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
+	ja->setObject(CCString::create("부하 몬스터 한마리를 제거합니다."), kMyLocalKey_item5ment);
+	ja->setObject(CCString::create("침묵"), kMyLocalKey_item7title);
+	ja->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
+	ja->setObject(CCString::create("부활"), kMyLocalKey_item10title);
+	ja->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	ja->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
+	ja->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
+	ja->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
+	ja->setObject(CCString::create("재시작"), kMyLocalKey_ingameReplay);
+	ja->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_publicPlaceMode);
+	ja->setObject(CCString::create("이어하기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass1);
+	ja->setObject(CCString::create("맵다시뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass2);
+	ja->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
+	ja->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
+	ja->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
+	ja->setObject(CCString::create("무료"), kMyLocalKey_free);
+	ja->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
+	ja->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
+	ja->setObject(CCString::create("STOP"), kMyLocalKey_stop);
+	ja->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	ja->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
+	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
 	ja->setObject(CCString::create("まずは領域の線の上を移動してみましょう。\n右下にジョイスティックでキャラクターの方向を変えることができます。\nキャラクターを上に移動させてみましょう。"), kMyLocalKey_tutorial2);
@@ -1100,7 +1239,16 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	
 
-
+	
+	ja->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
+	ja->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
+	ja->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
+	ja->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
+	ja->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
+	ja->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
+	ja->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
+	ja->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
+	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
 //	ja->setObject(CCString::create("上下左右にジェスチャーを利用し、\n多くのエリアを獲得しなければなら\nないゲームです。"), kMyLocalKey_tutorial1);

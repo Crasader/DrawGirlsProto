@@ -51,7 +51,12 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
-	AudioEngine::sharedInstance()->preloadEffectScene("Title");
+//	std::chrono::time_point<std::chrono::system_clock> recent;
+//    recent = std::chrono::system_clock::now();
+//	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
+//	CCLOG("title init : %d", int(recent_time));
+	
+	AudioEngine::sharedInstance()->stopSound();
 	
 	is_menu_enable = false;
 
@@ -113,6 +118,14 @@ bool TitleRenewalScene::init()
 //	resultLogin(t_result_data);
 	
 	return true;
+}
+
+void TitleRenewalScene::onEnterTransitionDidFinish()
+{
+//	std::chrono::time_point<std::chrono::system_clock> recent;
+//    recent = std::chrono::system_clock::now();
+//	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
+//	CCLOG("title onEnter Finish : %d", int(recent_time));
 }
 
 void TitleRenewalScene::loadCounting(CCObject* sender)
@@ -182,6 +195,8 @@ void TitleRenewalScene::realInit()
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	
 	white_back->removeFromParent();
+	
+	AudioEngine::sharedInstance()->preloadEffectScene("Title");
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -278,6 +293,7 @@ void TitleRenewalScene::successLogin()
 	}
 	
 	AudioEngine::sharedInstance()->playEffect("ment_title.mp3");
+	addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);}));
 	
 	is_loaded_server = false;
 	
@@ -622,6 +638,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setRankUpRubyFee(result_data["rankUpRubyFee"].asInt());
 		
 		mySGD->setFirstPurchasePlayCount(result_data["firstPurchasePlayCount"].asInt());
+		mySGD->setFirstPurchaseReviewSecond(result_data["firstPurchaseReviewSecond"].asInt64());
 		mySGD->setEmptyItemReviewSecond(result_data["emptyItemReviewSecond"].asInt64());
 		mySGD->setStupidNpuHelpReviewSecond(result_data["stupidNpuHelpReviewSecond"].asInt64());
 		mySGD->setStupidNpuHelpPlayCount(result_data["stupidNpuHelpPlayCount"].asInt());
@@ -1419,6 +1436,10 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				
 				NSDS_SS(puzzle_number, kSDS_PZ_condition_s, puzzle_list[i]["condition"].asString(), false);
 				
+				NSDS_SI(puzzle_number, kSDS_PZ_color_r_d, puzzle_list[i]["color"]["r"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_color_g_d, puzzle_list[i]["color"]["g"].asInt(), false);
+				NSDS_SI(puzzle_number, kSDS_PZ_color_b_d, puzzle_list[i]["color"]["b"].asInt(), false);
+				
 //				NSDS_SI(puzzle_number, kSDS_PZ_point_i, puzzle_list[i]["point"].asInt(), false);
 //				NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, puzzle_list[i]["ticket"].asInt(), false);
 				
@@ -1627,6 +1648,7 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());

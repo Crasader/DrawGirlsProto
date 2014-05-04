@@ -40,6 +40,7 @@ private:
 	KSLabelTTF* missile_data_power;
 	CCNode* missile_img;
 	KSLabelTTF* upgrade_label;
+	CCSprite* price_type;
 	CCLabelTTF* price_label;
 	CCControlButton* upgrade_button;
 	LoadingLayer* loading_layer;

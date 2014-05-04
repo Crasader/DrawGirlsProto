@@ -94,7 +94,59 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
-	if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
+	
+	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
+	{
+		myLog->addLog(kLOG_gacha_onePercent, -1);
+		
+		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
+		addChild(t_loading, 9999);
+		
+		mySGD->addChangeGoods(kGoodsType_pass5, -1, "99프로가챠");
+		
+		mySGD->changeGoods([=](Json::Value result_data){
+			t_loading->removeFromParent();
+			if(result_data["result"]["code"] == GDSUCCESS)
+			{
+				gacha_button->removeFromParent();
+				
+				CCLabelTTF* t_label = CCLabelTTF::create();
+				
+				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
+				stop_label->setColor(ccBLACK);
+				stop_label->setPosition(ccp(0,15));
+				t_label->addChild(stop_label);
+				
+				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
+				stop_label2->setColor(ccBLACK);
+				stop_label2->setPosition(ccp(0,-12));
+				t_label->addChild(stop_label2);
+				
+				
+				CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+				
+				stop_button = CCControlButton::create(t_label, stop_back);
+				stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGacha::gachaStopAction), CCControlEventTouchUpInside);
+				stop_button->setPreferredSize(CCSizeMake(170,65));
+				stop_button->setPosition(ccp(0,-70));
+				m_container->addChild(stop_button, kOnePercentGacha_Z_content);
+				
+				stop_button->setTouchPriority(-180);
+				
+				stop_button->setEnabled(false);
+				cancel_menu->setEnabled(false);
+				
+				gachaOn();
+			}
+			else
+			{
+				mySGD->clearChangeGoods();
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+				is_menu_enable = true;
+			}
+		});
+	}
+	else if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
 	{
 		myLog->addLog(kLOG_gacha_onePercent, -1);
 		
@@ -111,12 +163,12 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 				
 				CCLabelTTF* t_label = CCLabelTTF::create();
 				
-				KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
 				stop_label->setColor(ccBLACK);
 				stop_label->setPosition(ccp(0,15));
 				t_label->addChild(stop_label);
 				
-				KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
 				stop_label2->setColor(ccBLACK);
 				stop_label2->setPosition(ccp(0,-12));
 				t_label->addChild(stop_label2);
@@ -219,14 +271,14 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		CCScale9Sprite* n_buy = CCScale9Sprite::create("popup4_green_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
 		n_buy->setContentSize(CCSizeMake(95,45));
-		CCLabelTTF* n_buy_label = CCLabelTTF::create("임시 결재", mySGD->getFont().c_str(), 14);
+		CCLabelTTF* n_buy_label = CCLabelTTF::create("임시 결제", mySGD->getFont().c_str(), 14);
 		n_buy_label->setPosition(ccp(n_buy->getContentSize().width/2.f, n_buy->getContentSize().height/2.f));
 		n_buy->addChild(n_buy_label);
 		
 		CCScale9Sprite* s_buy = CCScale9Sprite::create("popup4_green_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
 		s_buy->setContentSize(CCSizeMake(95,45));
 		s_buy->setColor(ccGRAY);
-		CCLabelTTF* s_buy_label = CCLabelTTF::create("임시 결재", mySGD->getFont().c_str(), 14);
+		CCLabelTTF* s_buy_label = CCLabelTTF::create("임시 결제", mySGD->getFont().c_str(), 14);
 		s_buy_label->setPosition(ccp(s_buy->getContentSize().width/2.f, s_buy->getContentSize().height/2.f));
 		s_buy->addChild(s_buy_label);
 		
@@ -240,7 +292,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 																		addChild(inapp_loading);
 																		
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-																		mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "99프로가챠(IOS-인앱결재)", "", "", true);
+																		mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "99프로가챠(IOS-인앱결제)", "", "", true);
 																		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠(IOS-소모)");
 																		
 																		mySGD->changeGoods([=](Json::Value result_data){
@@ -253,12 +305,12 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 																				
 																				CCLabelTTF* t_label = CCLabelTTF::create();
 																				
-																				KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+																				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
 																				stop_label->setColor(ccBLACK);
 																				stop_label->setPosition(ccp(0,15));
 																				t_label->addChild(stop_label);
 																				
-																				KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+																				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
 																				stop_label2->setColor(ccBLACK);
 																				stop_label2->setPosition(ccp(0,-12));
 																				t_label->addChild(stop_label2);
@@ -341,12 +393,12 @@ void OnePercentGacha::requestItemDelivery()
 												
 												CCLabelTTF* t_label = CCLabelTTF::create();
 												
-												KSLabelTTF* stop_label = KSLabelTTF::create("버튼을 눌러주세요.", mySGD->getFont().c_str(), 13);
+												KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
 												stop_label->setColor(ccBLACK);
 												stop_label->setPosition(ccp(0,15));
 												t_label->addChild(stop_label);
 												
-												KSLabelTTF* stop_label2 = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 28);
+												KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
 												stop_label2->setColor(ccBLACK);
 												stop_label2->setPosition(ccp(0,-12));
 												t_label->addChild(stop_label2);
@@ -462,7 +514,7 @@ void OnePercentGacha::setBack ()
 	inner_back->setPosition(ccp(0,-20));
 	m_container->addChild(inner_back, kOnePercentGacha_Z_back);
 	
-	KSLabelTTF* recent_percent_label = KSLabelTTF::create("현재 획득영역", mySGD->getFont().c_str(), 18);
+	KSLabelTTF* recent_percent_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent4), mySGD->getFont().c_str(), 18);
 	recent_percent_label->setPosition(ccp(-70,95));
 	m_container->addChild(recent_percent_label, kOnePercentGacha_Z_content);
 	
@@ -504,7 +556,7 @@ void OnePercentGacha::setBack ()
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create("보너스 영역을 뽑습니다.", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_go100percent), mySGD->getFont().c_str(), 13);
 	gacha_label->setColor(ccBLACK);
 	gacha_label->setPosition(ccp(0,15));
 	t_label->addChild(gacha_label);
@@ -515,13 +567,25 @@ void OnePercentGacha::setBack ()
 	price_back->setPosition(ccp(0, -10));
 	t_label->addChild(price_back);
 	
-	
-	CCSprite* price_type = CCSprite::create("common_button_ruby.png");
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
-	price_back->addChild(price_label);
+	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
+	{
+		CCSprite* pass_ticket = CCSprite::create("pass_ticket5.png");
+		pass_ticket->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(pass_ticket);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+		free_label->setColor(ccWHITE);
+		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(free_label);
+	}
+	else
+	{
+		CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_type);
+		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_label);
+	}
 	
 	
 	CCScale9Sprite* gacha_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));

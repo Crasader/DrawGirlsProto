@@ -14,6 +14,7 @@
 #include "StarGoldData.h"
 #include "StageImgLoader.h"
 #include "DataStorageHub.h"
+#include "EffectSprite.h"
 
 ClearShowTime* ClearShowTime::create( bool t_exchanged, bool t_is, CCNode* t_game_node, CCObject* t_changeScene, SEL_CallFunc d_changeScene )
 {
@@ -100,16 +101,30 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 
 	silType = mySD->getSilType();
 
-	string ttt;
+	string ttt, ttt2;
 
 	if(t_exchanged)
+	{
 		ttt = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
+		ttt2 = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
+	}
 	else
+	{
 		ttt = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+		ttt2 = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+	}
 
 	clear_img = mySIL->getLoadedImg(ttt.c_str());
 	clear_img->setPosition(ccp(160,215));
 	addChild(clear_img, kCST_Z_clear);
+	
+	if(mySGD->is_safety_mode)
+	{
+		EffectSprite* safety_img = EffectSprite::createWithTexture(mySIL->addImage(ttt2.c_str()));
+		safety_img->setSilhouetteConvert(0);
+		safety_img->setPosition(ccp(160, 215));
+		addChild(safety_img, kCST_Z_clear);
+	}
 
 	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
 	addChild(side_back);

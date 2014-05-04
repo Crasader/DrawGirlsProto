@@ -37,6 +37,7 @@
 #include "KSLabelTTF.h"
 #include "FlagSelector.h"
 #include "GoodsLight.h"
+#include "CardViewScene.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -316,7 +317,7 @@ bool PuzzleScene::init()
 	{
 		keep_card_number = 0;
 		
-//		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
 		bool is_not_empty_card[3] = {false,};
 		
@@ -548,6 +549,7 @@ void PuzzleScene::showClearPopup()
 	t_popup->replay_func = [=](){openSettingPopup();};
 	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	t_popup->is_take_star_effect = true;
+	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success;
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -815,10 +817,6 @@ void PuzzleScene::showUnlockEffect()
 	{
 		AudioEngine::sharedInstance()->playEffect("se_pieceopen.mp3", false);
 		
-		PieceHistory t_history = mySGD->getPieceHistory(next_stage_number);
-		t_history.is_open = true;
-		mySGD->setPieceHistory(t_history, nullptr);
-		
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PuzzleScene::endUnlockEffect));
 		CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
@@ -1013,7 +1011,7 @@ void PuzzleScene::setPuzzle()
 			{
 				is_puzzle_clear = false;
 				
-				if(mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
+				if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) <= 0 || mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
 				{
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::buyPieceAction));
 					t_piece->setPosition(piece_position);
@@ -1122,7 +1120,7 @@ void PuzzleScene::setPieceClick(int t_stage_number)
 	if(selected_piece_img)
 		selected_piece_img->removeFromParent();
 	
-	PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+	PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(t_stage_number);//myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 	string WorH = target_piece->getWorH();
 	selected_piece_img = CCSprite::create(("piece_selected_" + WorH + ".png").c_str());
 	selected_piece_img->setPosition(target_piece->getPosition());
@@ -1785,20 +1783,24 @@ void PuzzleScene::setRight()
 				}
 				
 				CommonButton* show_img = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_view), 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
+				show_img->setTitleColor(ccc3(50, 20, 0));
 				show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
 				show_img->setFunction([=](CCObject* sender)
 									  {
 										  if(!is_menu_enable)
 											  return;
 										  
-										  is_menu_enable = false;
+//										  is_menu_enable = false;
 										  
 										  mySGD->selected_collectionbook = step_card_number;
 										  
-										  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
-										  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-										  t_popup->is_before_no_diary = true;
-										  addChild(t_popup, kPuzzleZorder_popup);
+//										  CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, CardViewScene::scene());
+										  CCDirector::sharedDirector()->pushScene(CardViewScene::scene());
+										  
+//										  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
+//										  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+//										  t_popup->is_before_no_diary = true;
+//										  addChild(t_popup, kPuzzleZorder_popup);
 									  });
 				right_body->addChild(show_img);
 			}
@@ -2121,7 +2123,7 @@ void PuzzleScene::setRightTopButton()
 		ranking_button->setPosition(ccp(-65-6+29, 118.5f));
 		right_case->addChild(ranking_button, 5);
 		ranking_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
-		stage_button->setTitleColorForDisable(ccc3(50, 20, 0));
+		ranking_button->setTitleColorForDisable(ccc3(50, 20, 0));
 		ranking_button->setFunction([=](CCObject* sender)
 								  {
 									  if(!is_menu_enable)

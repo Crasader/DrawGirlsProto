@@ -98,6 +98,14 @@ bool ZoomScript::init()
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
+	if(mySGD->is_safety_mode)
+	{
+		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
+		safety_img->setSilhouetteConvert(0);
+		safety_img->setPosition(ccp(160, 215));
+		game_node->addChild(safety_img, kZS_Z_second_img);
+	}
+	
 	target_node = first_img;
 	
 	zoom_img = CCSprite::create("ending_expand.png");
@@ -476,6 +484,16 @@ void ZoomScript::showtimeFirstAction()
 	second_img->setPosition(ccp(160,215));
 	second_img->setTouchEnabled(false);
 	game_node->addChild(second_img, kZS_Z_second_img);
+	
+	if(mySGD->is_safety_mode)
+	{
+		safety_img->removeFromParent();
+		
+		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
+		safety_img->setSilhouetteConvert(0);
+		safety_img->setPosition(ccp(160, 215));
+		game_node->addChild(safety_img, kZS_Z_second_img);
+	}
 	
 	target_node = second_img;
 	

@@ -64,7 +64,10 @@ public:
 		return t;
 	}
 	
-	static StyledLabelTTF* create(const char* text,const char* font ,StyledAlignment sa);
+	static StyledLabelTTF* create(const char* text,const char* defaultFont,int defaultFontSize, int defaultFontColor,StyledAlignment sa);
+	
+	bool isSameStringAtIndex(std::string str, int idx, std::string option);
+	
 	void updateTexture();
 	static unsigned int makeRGB(unsigned char R, unsigned char G, unsigned char B)
 	{
@@ -82,6 +85,10 @@ public:
 	{
 		return r >> 16;
 	}
+	
+	//void setString(const char* text);
+	void setStringByTag(const char* text);
+	CCLabelTTF* getLabelByTag(int tag);
 	//virtual void registerWithTouchDispatcher();
 protected:
 	float m_currentPosition;
@@ -89,6 +96,10 @@ protected:
 	CCNode* m_oneLineContainer;
 //	float m_lineSpacing;
 	float m_currentLinePosition;
+	std::string m_font;
+	std::string m_string;
+	int m_fontSize;
+	int m_fontColor;
 	std::vector<StyledText> m_texts;
 	StyledAlignment m_currentAlignment;
 public:

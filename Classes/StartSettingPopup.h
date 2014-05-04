@@ -16,6 +16,7 @@
 #include "hspConnector.h"
 #include "KSProtect.h"
 #include "CCMenuLambda.h"
+#include "CumberShowWindow.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -77,6 +78,7 @@ private:
 	CCLabelTTF* item_title_label;
 	CCLabelTTF* option_label;
 	CommonButton* buy_button;
+	CumberShowWindow* t_cumber;
 	
 	int gacha_item_frame;
 	ITEM_CODE selected_gacha_item;

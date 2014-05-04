@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "StarGoldData.h"
+#include "StyledLabelTTF.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -21,8 +22,8 @@ class LabelTTFMarquee : public CCNode {
 		
 public:
 	
-	CCLabelTTF* m_text1;
-	CCLabelTTF* m_text2;
+	StyledLabelTTF* m_text1;
+	StyledLabelTTF* m_text2;
 	CCSprite* m_back;
 	vector<string> m_texts;
 	int m_strIndex;
@@ -59,13 +60,14 @@ public:
 		cNode->setInverted(false);
 		this->addChild(cNode,1);
 		
-		m_text1 = CCLabelTTF::create("", mySGD->getFont().c_str(), height);
+		m_text1 = StyledLabelTTF::create("<font color=999 size=12>load..", mySGD->getFont().c_str(),12,999, StyledAlignment::kLeftAlignment);
+		
 		m_text1->setAnchorPoint(ccp(0,0.5));
 		m_text1->setPosition(ccp(m_text1->getContentSize().width*-1,height/2));
 		m_text1->setTag(-2);
 		
 		
-		m_text2 = CCLabelTTF::create(m_texts[0].c_str(), mySGD->getFont().c_str(), height);
+		m_text2 = StyledLabelTTF::create("<font color=999 size=12>load..", mySGD->getFont().c_str(),12,999, StyledAlignment::kLeftAlignment);
 		m_text2->setAnchorPoint(ccp(0,0.5));
 		m_text2->setTag(0);
 		m_text2->setPosition(ccp(0,height/2));
@@ -80,16 +82,16 @@ public:
 
 	
 	void setFontSize(int size){
-		m_text1->setFontSize(size);
-		m_text2->setFontSize(size);
+		//m_text1->setFontSize(size);
+		//m_text2->setFontSize(size);
 	}
 	
-	CCLabelTTF* getFirstLabel(){
+	StyledLabelTTF* getFirstLabel(){
 		if(m_text1->getPositionX()<m_text2->getPositionX())return m_text1;
 		else return m_text2;
 	}
 	
-	CCLabelTTF* getLastLabel(){
+	StyledLabelTTF* getLastLabel(){
 		if(m_text1->getPositionX()<m_text2->getPositionX())return m_text2;
 		else return m_text1;
 	}
@@ -106,14 +108,14 @@ public:
 		this->m_texts[index]=text;
 		
 		//지금현재 보여지고있는건 바로 수정
-		CCLabelTTF *fl = this->getFirstLabel();
+		StyledLabelTTF *fl = this->getFirstLabel();
 		if(fl->getTag()==index){
-			fl->setString(text.c_str());
+			fl->setStringByTag(text.c_str());
 		}
 		
-		CCLabelTTF *ll = this->getLastLabel();
+		StyledLabelTTF *ll = this->getLastLabel();
 		if(ll->getTag()==index){
-			ll->setString(text.c_str());
+			ll->setStringByTag(text.c_str());
 		}
 		
 		return true;
@@ -160,8 +162,8 @@ public:
 	}
 	
 	void setTextPosition(){
-		CCLabelTTF* firstLabel = this->getFirstLabel();
-		CCLabelTTF* lastLabel = this->getLastLabel();
+		StyledLabelTTF* firstLabel = this->getFirstLabel();
+		StyledLabelTTF* lastLabel = this->getLastLabel();
 		
 		float labelTerm =firstLabel->getContentSize().width + 100;
 		if(firstLabel->getContentSize().width>labelTerm){
@@ -183,7 +185,7 @@ public:
 			firstLabel->setPositionX(nextP);
 			int strIndex = this->getNextTextIndex();
 			firstLabel->setTag(strIndex);
-			firstLabel->setString(m_texts[strIndex].c_str());
+			firstLabel->setStringByTag(m_texts[strIndex].c_str());
 		}
 	}
 };

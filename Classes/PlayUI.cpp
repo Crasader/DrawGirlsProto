@@ -471,7 +471,7 @@ void MyGold::myInit ()
 	
 //	initWithFile("gold.png");
 	init_position = CCPointZero;
-	setScale(0.4f);
+	setScale(0.3f);
 	setPosition(init_position);
 	
 	i_dy = rand()%3+6;
@@ -971,7 +971,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f)
 		{
-			AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
+			AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 			
 			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f);
 			
@@ -1032,15 +1032,52 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	
 	if(!isGameover && t_p > clearPercentage.getV()) // clear 80%
 	{
+		if(!is_exchanged && is_show_exchange_coin && myGD->getCommunicationBool("MS_isCheckBossLocked"))
+		{
+			taked_coin_cnt = 6;
+			
+			for(int i=1;i<=6;i++)
+			{
+				CCSprite* t_coin_spr = (CCSprite*)exchange_dic->objectForKey(i);
+				CCPoint after_position = t_coin_spr->getPosition();
+				t_coin_spr->removeFromParentAndCleanup(true);
+				exchange_dic->removeObjectForKey(i);
+				
+				CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", i)->getCString());
+				new_coin_spr->setPosition(after_position);
+				top_center_node->addChild(new_coin_spr);
+				
+				
+				exchange_dic->setObject(new_coin_spr, i);
+			}
+			
+			if(clr_cdt_type == kCLEAR_sequenceChange)
+			{
+				conditionClear();
+			}
+				
+			isFirst = true;
+			is_exchanged = true;
+			my_fp->addFeverGage(20);
+			
+			myGD->communication("Main_startExchange");
+			myGD->communication("Main_showChangeCard");
+			myGD->communication("Jack_positionRefresh");
+				
+			m_areaGage->onChange();
+			
+			return;
+		}
+		
 		myGD->communication("GIM_stopCoin");
 		
-		if(clr_cdt_type == kCLEAR_timeLimit)
-		{
-			if(playtime_limit.getV() - countingCnt.getV() >= ing_cdt_cnt.getV())
-				conditionClear();
-			else
-				conditionFail();
-		}
+//		if(clr_cdt_type == kCLEAR_timeLimit)
+//		{
+//			if(playtime_limit.getV() - countingCnt.getV() >= ing_cdt_cnt.getV())
+//				conditionClear();
+//			else
+//				conditionFail();
+//		}
 		
 		if(clr_cdt_type == kCLEAR_default)
 			conditionClear();
@@ -1083,7 +1120,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
 			addResultCCB("ui_missonfair.ccbi");
-			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 			
 			endGame(false);
 		}
@@ -1093,7 +1130,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 void PlayUI::addResultClearCCB()
 {
 	addResultCCB("ui_stageclear.ccbi");
-	AudioEngine::sharedInstance()->playEffect("ment_stageclear1.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_stageclear1.mp3", false, true);
 }
 
 void PlayUI::addResultCCB(string ccb_filename)
@@ -1126,7 +1163,7 @@ void PlayUI::conditionClear ()
 	CCSprite* success_ccb = KS::loadCCBI<CCSprite*>(this, "ui_missonsuccess.ccbi").first;
 	success_node->addChild(success_ccb);
 	
-	AudioEngine::sharedInstance()->playEffect("ment_mission_success.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_mission_success.mp3", false, true);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 	CCCallFunc* t_call = CCCallFunc::create(success_node, callfunc_selector(CCNode::removeFromParent));
@@ -1161,7 +1198,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
 			addResultCCB("ui_missonfair.ccbi");
-			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 			
 			endGame(false);
 			return;
@@ -1393,14 +1430,16 @@ bool PlayUI::beRevivedJack ()
 		
 		if(jack_life <= 0)
 		{
-			CCSprite* last_life_ccb = KS::loadCCBI<CCSprite*>(this, "warning_over_02.ccbi").first;
-			last_life_ccb->setPosition(ccp(240,myDSH->ui_center_y));
-			addChild(last_life_ccb);
+			myGD->showDetailMessage("warning_over_02.ccbi", "h");
 			
-			last_life_ccb->addChild(KSTimer::create(1.5f, [=]()
-			{
-				last_life_ccb->removeFromParent();
-			}));
+//			CCSprite* last_life_ccb = KS::loadCCBI<CCSprite*>(this, "warning_over_02.ccbi").first;
+//			last_life_ccb->setPosition(ccp(240,myDSH->ui_center_y));
+//			addChild(last_life_ccb);
+//			
+//			last_life_ccb->addChild(KSTimer::create(1.5f, [=]()
+//			{
+//				last_life_ccb->removeFromParent();
+//			}));
 		}
 		
 		AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
@@ -1712,7 +1751,7 @@ void PlayUI::counting ()
 		else if(countingCnt-1 == playtime_limit-30)
 		{
 			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", true);
-			AudioEngine::sharedInstance()->playEffect("ment_30second.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_30second.mp3", false, true);
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}
 		
@@ -1736,7 +1775,7 @@ void PlayUI::counting ()
 			}
 			else
 			{
-				AudioEngine::sharedInstance()->playEffect("ment_timeover.mp3");
+				AudioEngine::sharedInstance()->playEffect("ment_timeover.mp3", false, true);
 				
 				t_is_die = true;
 				//			if(jack_life > 0)
@@ -2003,7 +2042,7 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 }
 void PlayUI::searchEmptyPosition ()
 {
-	AudioEngine::sharedInstance()->playEffect("ment_99percent.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_99percent.mp3", false, true);
 	
 	CCPoint found_empty_position;
 	bool break_flag = false;
@@ -2487,8 +2526,11 @@ void PlayUI::myInit ()
 		
 		ing_cdt_cnt = mySD->getClearConditionTimeLimit();
 		
+		playtime_limit = playtime_limit.getV() - ing_cdt_cnt.getV();
+		total_time = total_time - ing_cdt_cnt.getV();
+		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
-		mission_button->addText(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString());
+		mission_button->addText(CCString::createWithFormat("%d", playtime_limit.getV())->getCString());
 		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));

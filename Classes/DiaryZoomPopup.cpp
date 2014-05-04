@@ -17,6 +17,7 @@
 #include "TouchSwallowManagement.h"
 #include "bustMorphing.h"
 #include "MyLocalization.h"
+#include "EffectSprite.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -72,6 +73,14 @@ bool DiaryZoomPopup::init()
 	first_img->setPosition(ccp(160,215));
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kDZP_Z_first_img);
+	
+	if(mySGD->is_safety_mode)
+	{
+		EffectSprite* safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
+		safety_img->setSilhouetteConvert(0);
+		safety_img->setPosition(ccp(160, 215));
+		game_node->addChild(safety_img, kDZP_Z_first_img);
+	}
 	
 	is_animation = NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number);
 	if(is_animation)

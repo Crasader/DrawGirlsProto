@@ -35,6 +35,8 @@ USING_NS_CC;
 #include "GraphDog.h"
 #include "KSUtil.h"
 #include "GaBaBo.h"
+#include "StarGoldData.h"
+#include <chrono>
 
 //#include <boost/graph/graphviz.hpp>
 /*
@@ -50,6 +52,10 @@ USING_NS_CC;
 AppDelegate::AppDelegate()
 {
 	CCLOG("!!!");
+//	std::chrono::time_point<std::chrono::system_clock> recent;
+//    recent = std::chrono::system_clock::now();
+//	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
+//	CCLOG("start : %d", int(recent_time));
 //	KSProtectVar<float> testVar(15.f);
 //	KSProtectVar<float> testVar2(20.f);
 //	testVar += 3.f;
@@ -97,6 +103,14 @@ struct AA
 bool AppDelegate::applicationDidFinishLaunching()
 {
 	CCLOG("finish l");
+//	std::chrono::time_point<std::chrono::system_clock> recent;
+//    recent = std::chrono::system_clock::now();
+//	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
+//	CCLOG("finish start : %d", int(recent_time));
+//	
+//	std::chrono::time_point<std::chrono::system_clock> start, end;
+//    start = std::chrono::system_clock::now();
+	
 	graphdog = GraphDog::get();
 	ks19937::seed(std::random_device()());
 	// initialize director
@@ -280,6 +294,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	GraphDog::get()->setDuplicateLoginFunc([](){
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "다른 기기로 연결되었습니다.\n다시 로그인합니다.",[](){
+			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -288,6 +303,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	GraphDog::get()->setCmdNoErrorFunc([](){
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다.",[](){
+			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -295,6 +311,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	GraphDog::get()->setLongTimeErrorFunc([](){
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "세션이 종료되었습니다.\n다시 로그인합니다.",[](){
+			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -310,6 +327,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 	//	CCScene* pScene = RandomDistribution::scene();
 	pDirector->runWithScene(pScene);
 	
+//	end = std::chrono::system_clock::now();
+//    std::chrono::duration<double> elapsed_seconds = end-start;
+//	CCLOG("AppDelegate Finish time : %f", elapsed_seconds.count());
+//	
+//    recent = std::chrono::system_clock::now();
+//	recent_time = std::chrono::system_clock::to_time_t(recent);
+//	CCLOG("finish end : %d", int(recent_time));
 	
 	return true;
 }
@@ -317,6 +341,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground()
 {
+	if(!mySGD->is_paused && mySGD->is_on_maingame)
+		myGD->communication("Main_showPause");
+	
 	CCDirector::sharedDirector()->stopAnimation();
 	
 	SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();

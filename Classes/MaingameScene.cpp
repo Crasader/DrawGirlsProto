@@ -34,6 +34,8 @@
 #include "LoadingLayer.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "EffectSprite.h"
+#include "ShopPopup.h"
 
 //#include "ScreenSide.h"
 
@@ -46,6 +48,12 @@ CCScene* Maingame::scene()
     return scene;
 }
 
+Maingame::~Maingame()
+{
+	mySGD->is_on_maingame = false;
+	sub_thumbs->release();
+}
+
 bool Maingame::init()
 {
     if ( !CCLayer::init() )
@@ -56,6 +64,7 @@ bool Maingame::init()
 	setTag(0);
 	AudioEngine::sharedInstance()->startGame();
 	
+	is_pause = false;
 	is_gohome = false;
 	setKeypadEnabled(true);
 	
@@ -111,6 +120,7 @@ bool Maingame::init()
 	myGD->V_V["Main_showDrawButtonTutorial"] = std::bind(&Maingame::showDrawButtonTutorial, this);
 	myGD->V_V["Main_hideDrawButtonTutorial"] = std::bind(&Maingame::hideDrawButtonTutorial, this);
 	myGD->V_V["Main_showPause"] = std::bind(&Maingame::showPause, this);
+	myGD->V_I["Main_showShop"] = std::bind(&Maingame::showShop, this, _1);
 	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
 	myGD->V_B["Main_setLineParticle"] = std::bind(&Maingame::setLineParticle, this, _1);
 	myGD->V_CCPI["Main_showComboImage"] = std::bind(&Maingame::showComboImage, this, _1, _2);
@@ -483,6 +493,13 @@ void Maingame::finalSetting()
 	
 	float thumb_scale = 0.17f;
 	
+	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+	sil_thumb->setScale(thumb_scale);
+	sil_thumb->setPosition(ccp(40,myDSH->ui_center_y));
+	addChild(sil_thumb, clearshowtimeZorder);
+	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
 	thumb_texture->setPosition(ccp(40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
@@ -512,20 +529,20 @@ void Maingame::finalSetting()
 	CCSize screen_data = CCSizeMake(320.f*thumb_scale, 0);
 	screen_data.height = screen_data.width/3.f*2.f*myDSH->ui_top/320.f;
 	
-	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width, 1.5f));
-	screen_top->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.5f));
+	screen_top->setColor(ccc3(255, 180, 0));
 	screen_top->setPosition(ccp(0,screen_data.height/2.f));
 	screen_node->addChild(screen_top);
-	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width, 1.5f));
-	screen_down->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+2, 1.5f));
+	screen_down->setColor(ccc3(255, 180, 0));
 	screen_down->setPosition(ccp(0,-screen_data.height/2.f));
 	screen_node->addChild(screen_down);
-	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height));
-	screen_left->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+2));
+	screen_left->setColor(ccc3(255, 180, 0));
 	screen_left->setPosition(ccp(-screen_data.width/2.f,0));
 	screen_node->addChild(screen_left);
-	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height));
-	screen_right->setColor(ccc3(150, 150, 150));
+	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+2));
+	screen_right->setColor(ccc3(255, 180, 0));
 	screen_right->setPosition(ccp(screen_data.width/2.f,0));
 	screen_node->addChild(screen_right);
 	
@@ -686,6 +703,8 @@ void Maingame::finalSetting()
 			exit_target->getParent()->addChild(t_popup);
 		}
 //	}
+	
+	mySGD->is_on_maingame = true;
 }
 
 void Maingame::initJackPosition(CCPoint jack_position)
@@ -865,7 +884,10 @@ void Maingame::gachaOn()
 	LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 	addChild(t_loading, 9999);
 	
-	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");
+	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
+		mySGD->addChangeGoods(kGoodsType_pass2, -1, "시작맵가챠");
+	else
+		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");
 	
 	mySGD->changeGoods([=](Json::Value result_data)
 					   {
@@ -1256,7 +1278,7 @@ void Maingame::gameover()
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("bgm_result.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString(), false, true);
 		ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 1.f, game_node, this, callfunc_selector(Maingame::clearScenario));
 		game_node->addChild(t_cst, clearshowtimeZorder);
 
@@ -1271,7 +1293,7 @@ void Maingame::gameover()
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("bgm_gameover.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString(), false, true);
 
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
@@ -1329,7 +1351,6 @@ void Maingame::clearScenario2()
 					  
 					  t_popup->setDimmedSize(CCSizeMake(480.f, height_value));
 					  t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-					  t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
 					  
 					  CCSprite* dimmed_img = t_popup->getDimmedSprite();
 					  dimmed_img->setOpacity(0);
@@ -1339,14 +1360,16 @@ void Maingame::clearScenario2()
 					  t_popup->setContainerNode(t_container);
 					  addChild(t_popup, shutterZorder+5);
 					  
+					  t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+					  
 					  CCSprite* title_img = CCSprite::create(CCString::createWithFormat("ending_reward_%s.png", myLoc->getSupportLocalCode())->getCString());
-					  title_img->setPosition(ccp(0,105));
+					  title_img->setPosition(ccp(0,75));
 					  title_img->setOpacity(0);
 					  t_container->addChild(title_img);
 					  
 					  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectClearBox), mySGD->getFont().c_str(), 18);
 					  title_label->enableOuterStroke(ccBLACK, 1.f);
-					  title_label->setPosition(ccp(0,70));
+					  title_label->setPosition(ccp(0,40));
 					  title_label->setOpacity(0);
 					  t_container->addChild(title_label);
 					  
@@ -1374,22 +1397,22 @@ void Maingame::clearScenario2()
 					  
 					  CCSprite* goldbox1 = CCSprite::create("goldbox_off.png");
 					  goldbox1->setOpacity(0);
-					  goldbox1->setPosition(ccp(0,0));
+					  goldbox1->setPosition(ccp(0,-30));
 					  t_container->addChild(goldbox1);
 					  
 					  CCSprite* goldbox2 = CCSprite::create("goldbox_off.png");
 					  goldbox2->setOpacity(0);
-					  goldbox2->setPosition(ccp(0,0));
+					  goldbox2->setPosition(ccp(0,-30));
 					  t_container->addChild(goldbox2);
 					  
 					  CCSprite* goldbox3 = CCSprite::create("goldbox_off.png");
 					  goldbox3->setOpacity(0);
-					  goldbox3->setPosition(ccp(0,0));
+					  goldbox3->setPosition(ccp(0,-30));
 					  t_container->addChild(goldbox3);
 					  
 					  
 					  CCMenuLambda* goldbox_menu = CCMenuLambda::create();
-					  goldbox_menu->setPosition(ccp(0,0));
+					  goldbox_menu->setPosition(ccp(0,-30));
 					  t_container->addChild(goldbox_menu);
 					  goldbox_menu->setVisible(false);
 					  goldbox_menu->setTouchPriority(t_popup->getTouchPriority()-1);
@@ -1406,38 +1429,38 @@ void Maingame::clearScenario2()
 																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
-																						   goldbox4->setPosition(ccp(-150,0));
+																						   goldbox4->setPosition(ccp(-150,-30));
 																						   t_container->addChild(goldbox4, 2);
 																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   goldbox2->removeFromParent();
 																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
-																						   goldbox5->setPosition(ccp(0,0));
+																						   goldbox5->setPosition(ccp(0,-30));
 																						   t_container->addChild(goldbox5, 2);
 																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   goldbox3->removeFromParent();
 																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
-																						   goldbox6->setPosition(ccp(150,0));
+																						   goldbox6->setPosition(ccp(150,-30));
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
 																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
+																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
 																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																						   item_gold->addChild(t_gold_img);
 																						   
 																						   KSLabelTTF* item_gold_or_item;
 																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
 																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
+																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
 																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																						   item_gold_or_item->addChild(t_gold_img2);
 																						   
 																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
 																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
+																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
 																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																						   item_stone->addChild(t_stone_img);
 																						   
@@ -1446,48 +1469,48 @@ void Maingame::clearScenario2()
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
-																							   item_gold->setPosition(ccp(-150,0));
+																							   item_gold->setPosition(ccp(-150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(0,0));
-																								   item_stone->setPosition(ccp(150,0));
+																								   item_gold_or_item->setPosition(ccp(0,-30));
+																								   item_stone->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(150,0));
-																								   item_stone->setPosition(ccp(0,0));
+																								   item_gold_or_item->setPosition(ccp(150,-30));
+																								   item_stone->setPosition(ccp(0,-30));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   item_gold_or_item->setPosition(ccp(-150,0));
+																							   item_gold_or_item->setPosition(ccp(-150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(0,0));
-																								   item_stone->setPosition(ccp(150,0));
+																								   item_gold->setPosition(ccp(0,-30));
+																								   item_stone->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,0));
-																								   item_stone->setPosition(ccp(0,0));
+																								   item_gold->setPosition(ccp(150,-30));
+																								   item_stone->setPosition(ccp(0,-30));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   item_stone->setPosition(ccp(-150,0));
+																							   item_stone->setPosition(ccp(-150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(0,0));
-																								   item_gold_or_item->setPosition(ccp(150,0));
+																								   item_gold->setPosition(ccp(0,-30));
+																								   item_gold_or_item->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,0));
-																								   item_gold_or_item->setPosition(ccp(0,0));
+																								   item_gold->setPosition(ccp(150,-30));
+																								   item_gold_or_item->setPosition(ccp(0,-30));
 																							   }
 																						   }
 																						   t_container->addChild(item_gold);
@@ -1504,7 +1527,7 @@ void Maingame::clearScenario2()
 																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
-					  goldbox1_item->setPosition(ccp(-150,0));
+					  goldbox1_item->setPosition(ccp(-150,-30));
 					  goldbox_menu->addChild(goldbox1_item);
 					  
 					  
@@ -1519,38 +1542,38 @@ void Maingame::clearScenario2()
 																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
-																						   goldbox4->setPosition(ccp(-150,0));
+																						   goldbox4->setPosition(ccp(-150,-30));
 																						   t_container->addChild(goldbox4, 2);
 																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   goldbox2->removeFromParent();
 																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
-																						   goldbox5->setPosition(ccp(0,0));
+																						   goldbox5->setPosition(ccp(0,-30));
 																						   t_container->addChild(goldbox5, 2);
 																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   goldbox3->removeFromParent();
 																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
-																						   goldbox6->setPosition(ccp(150,0));
+																						   goldbox6->setPosition(ccp(150,-30));
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
 																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
+																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
 																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																						   item_gold->addChild(t_gold_img);
 																						   
 																						   KSLabelTTF* item_gold_or_item;
 																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
 																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
+																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
 																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																						   item_gold_or_item->addChild(t_gold_img2);
 																						   
 																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
 																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
+																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
 																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																						   item_stone->addChild(t_stone_img);
 																						   
@@ -1559,48 +1582,48 @@ void Maingame::clearScenario2()
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
-																							   item_gold->setPosition(ccp(0,0));
+																							   item_gold->setPosition(ccp(0,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(-150,0));
-																								   item_stone->setPosition(ccp(150,0));
+																								   item_gold_or_item->setPosition(ccp(-150,-30));
+																								   item_stone->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(150,0));
-																								   item_stone->setPosition(ccp(-150,0));
+																								   item_gold_or_item->setPosition(ccp(150,-30));
+																								   item_stone->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   item_gold_or_item->setPosition(ccp(0,0));
+																							   item_gold_or_item->setPosition(ccp(0,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,0));
-																								   item_stone->setPosition(ccp(150,0));
+																								   item_gold->setPosition(ccp(-150,-30));
+																								   item_stone->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,0));
-																								   item_stone->setPosition(ccp(-150,0));
+																								   item_gold->setPosition(ccp(150,-30));
+																								   item_stone->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   item_stone->setPosition(ccp(0,0));
+																							   item_stone->setPosition(ccp(0,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,0));
-																								   item_gold_or_item->setPosition(ccp(150,0));
+																								   item_gold->setPosition(ccp(-150,-30));
+																								   item_gold_or_item->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,0));
-																								   item_gold_or_item->setPosition(ccp(-150,0));
+																								   item_gold->setPosition(ccp(150,-30));
+																								   item_gold_or_item->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   t_container->addChild(item_gold);
@@ -1617,7 +1640,7 @@ void Maingame::clearScenario2()
 																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
-					  goldbox2_item->setPosition(ccp(0,0));
+					  goldbox2_item->setPosition(ccp(0,-30));
 					  goldbox_menu->addChild(goldbox2_item);
 					  
 					  
@@ -1632,25 +1655,25 @@ void Maingame::clearScenario2()
 																						   
 																						   goldbox1->removeFromParent();
 																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
-																						   goldbox4->setPosition(ccp(-150,0));
+																						   goldbox4->setPosition(ccp(-150,-30));
 																						   t_container->addChild(goldbox4, 2);
 																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   goldbox2->removeFromParent();
 																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
-																						   goldbox5->setPosition(ccp(0,0));
+																						   goldbox5->setPosition(ccp(0,-30));
 																						   t_container->addChild(goldbox5, 2);
 																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   goldbox3->removeFromParent();
 																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
-																						   goldbox6->setPosition(ccp(150,0));
+																						   goldbox6->setPosition(ccp(150,-30));
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
 																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
 																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_gold_img = CCSprite::create("shop_gold4.png");
+																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
 																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
 																						   item_gold->addChild(t_gold_img);
 																						   
@@ -1658,13 +1681,13 @@ void Maingame::clearScenario2()
 																						   
 																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
 																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold5.png");
+																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
 																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
 																						   item_gold_or_item->addChild(t_gold_img2);
 																						   
 																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
 																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
-																						   CCSprite* t_stone_img = CCSprite::create("shop_gold6.png");
+																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
 																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
 																						   item_stone->addChild(t_stone_img);
 																						   
@@ -1673,48 +1696,48 @@ void Maingame::clearScenario2()
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
-																							   item_gold->setPosition(ccp(150,0));
+																							   item_gold->setPosition(ccp(150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(-150,0));
-																								   item_stone->setPosition(ccp(0,0));
+																								   item_gold_or_item->setPosition(ccp(-150,-30));
+																								   item_stone->setPosition(ccp(0,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(0,0));
-																								   item_stone->setPosition(ccp(-150,0));
+																								   item_gold_or_item->setPosition(ccp(0,-30));
+																								   item_stone->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   item_gold_or_item->setPosition(ccp(150,0));
+																							   item_gold_or_item->setPosition(ccp(150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,0));
-																								   item_stone->setPosition(ccp(0,0));
+																								   item_gold->setPosition(ccp(-150,-30));
+																								   item_stone->setPosition(ccp(0,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(0,0));
-																								   item_stone->setPosition(ccp(-150,0));
+																								   item_gold->setPosition(ccp(0,-30));
+																								   item_stone->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   item_stone->setPosition(ccp(150,0));
+																							   item_stone->setPosition(ccp(150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,0));
-																								   item_gold_or_item->setPosition(ccp(0,0));
+																								   item_gold->setPosition(ccp(-150,-30));
+																								   item_gold_or_item->setPosition(ccp(0,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(0,0));
-																								   item_gold_or_item->setPosition(ccp(-150,0));
+																								   item_gold->setPosition(ccp(0,-30));
+																								   item_gold_or_item->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   t_container->addChild(item_gold);
@@ -1731,19 +1754,19 @@ void Maingame::clearScenario2()
 																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
-					  goldbox3_item->setPosition(ccp(150,0));
+					  goldbox3_item->setPosition(ccp(150,-30));
 					  goldbox_menu->addChild(goldbox3_item);
 					  
 					  CCSprite* falling_box = CCSprite::create("goldbox_off.png");
 					  falling_box->setPosition(ccp(0,1000));
 					  t_container->addChild(falling_box);
 					  
-					  t_container->addChild(KSGradualValue<float>::create(1000.f, 0.f, 1.f, [=](float t)
+					  t_container->addChild(KSGradualValue<float>::create(1000.f, -30.f, 1.f, [=](float t)
 																		  {
 																			  falling_box->setPositionY(t);
 																		  }, [=](float t)
 																		  {
-																			  falling_box->setPositionY(0);
+																			  falling_box->setPositionY(-30);
 																			  
 																			  t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																  {
@@ -1776,7 +1799,7 @@ void Maingame::clearScenario3()
 {
 	if(myUI->getPercentage() >= 1.f)
 	{
-		AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3");
+		AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3", false, true);
 		
 		CCSprite* spin_light = CCSprite::create("showtime_spin_light.png");
 		spin_light->setOpacity(0);
@@ -2264,7 +2287,7 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 	fileName2Language["warning_1017.ccbi"] = kMyLocalKey_warning1017;
 	fileName2Language["warning_1018.ccbi"] = kMyLocalKey_warning1018;
 	fileName2Language["warning_boss_success.ccbi"] = kMyLocalKey_warningBossSuccess;
-	
+	fileName2Language["warning_over_02.ccbi"] = kMyLocalKey_warningLastLife;
 	
 	KSLabelTTF* textMessage = KSLabelTTF::create(MyLocal::sharedInstance()->getLocalForKey(fileName2Language[fileName]), mySGD->getFont().c_str(), 30.f);
 	detailWarningQueue.push_back(textMessage);
@@ -2299,6 +2322,11 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 																						 {
 																							 colors[0] = ccc3(255, 210, 255);
 																							 colors[1] = ccc3(191, 241, 255);
+																						 }
+																						 else if(type == "h")
+																						 {
+																							 colors[0] = ccc3(30, 200, 255);
+																							 colors[1] = ccc3(255, 150, 100);
 																						 }
 																						 for(int i=0; i<11; i++) {
 																							 tempScheduler->addChild(KSTimer::create(3/30.f * (i + 1), [=](){
@@ -2350,7 +2378,7 @@ void Maingame::showTextMessage(const std::string& text)
 }
 void Maingame::showTakeCoin()
 {
-	AudioEngine::sharedInstance()->playEffect("ment_spread_change.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_spread_change.mp3", false, true);
 	
 	TakeCoin* t_w = TakeCoin::create();
 	addChild(t_w, goldZorder);
@@ -2379,10 +2407,22 @@ void Maingame::takeExchangeCoin( CCPoint t_start_position, int t_coin_number )
 
 void Maingame::startExchange()
 {
-	AudioEngine::sharedInstance()->playEffect("ment_change_success.mp3");
+	AudioEngine::sharedInstance()->playEffect("ment_change_success.mp3", false, true);
 	
 	mySD->exchangeSilhouette();
 	myMS->exchangeMS();
+	
+	float t_scale = sil_thumb->getScale();
+	CCPoint t_position = sil_thumb->getPosition();
+	
+	sil_thumb->removeFromParent();
+	
+	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))->getCString()));
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+	sil_thumb->setScale(t_scale);
+	sil_thumb->setPosition(t_position);
+	addChild(sil_thumb, clearshowtimeZorder);
 	
 	myGD->communication("UI_writeImageChange");
 }
@@ -2890,6 +2930,8 @@ void Maingame::refreshReplayPosition(int temp_time)
 
 void Maingame::hideThumb()
 {
+	sil_thumb->setVisible(false);
+	
 	for(int i=0;i<search_eye_vector.size();i++)
 	{
 		SearchEye* t_search_eye = search_eye_vector[i];
@@ -2930,10 +2972,90 @@ void Maingame::hideThumb()
 	}
 }
 
+void Maingame::showShop(int t_shopcode)
+{
+	if(is_pause)
+		return;
+	
+	is_pause = true;
+	
+	bool t_jack_stun = myJack->isStun;
+	
+	CCNode* exit_target = this;
+	mControl->setTouchEnabled(false);
+	exit_target->onExit();
+	
+	ShopPopup* t_popup = ShopPopup::create();
+	t_popup->setScale(myDSH->screen_convert_rate);
+	t_popup->setShopCode((ShopCode)t_shopcode);
+	t_popup->setCloseFunc([=]()
+						  {
+							  mControl->isStun = false;
+							  myJack->isStun = t_jack_stun;
+							  exit_target->onEnter();
+							  is_pause = false;
+						  });
+	exit_target->getParent()->addChild(t_popup);
+	
+	CCSprite* dimmed_sprite = CCSprite::create("whitePaper.png");
+	dimmed_sprite->setPosition(ccp(240, myDSH->ui_center_y));
+	dimmed_sprite->setColor(ccc3(0, 0, 0));
+	dimmed_sprite->setOpacity(100);
+	dimmed_sprite->setScaleY(myDSH->ui_top/320);
+	t_popup->addChild(dimmed_sprite, -1);
+	
+//	ASPopupView* t_popup = ASPopupView::create(-200);
+//	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+//	t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+//	t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+//	
+//	PauseContent* t_container = PauseContent::create(t_popup->getTouchPriority(), [=]()
+//													 {
+//														 mControl->isStun = false;
+//														 myJack->isStun = t_jack_stun;
+//														 exit_target->onEnter();
+//														 cancelHome();
+//														 is_pause = false;
+//														 t_popup->removeFromParent();
+//													 }, [=]()
+//													 {
+//														 mControl->isStun = false;
+//														 myJack->isStun = t_jack_stun;
+//														 exit_target->onEnter();
+//														 myUI->stopCounting();
+//														 goHome();
+//														 is_pause = false;
+//														 t_popup->removeFromParent();
+//													 }, [=]()
+//													 {
+//														 mControl->isStun = false;
+//														 myJack->isStun = t_jack_stun;
+//														 exit_target->onEnter();
+//														 goReplay();
+//														 is_pause = false;
+//														 t_popup->removeFromParent();
+//													 });
+//	
+//	t_popup->setContainerNode(t_container);
+//	exit_target->getParent()->addChild(t_popup);
+//	t_container->startShow();
+}
+
 void Maingame::showPause()
 {
 	if(is_gohome)
 		return;
+	
+	if(is_pause)
+		return;
+	
+	is_pause = true;
 	
 	bool t_jack_stun = myJack->isStun;
 	
@@ -2958,6 +3080,7 @@ void Maingame::showPause()
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		cancelHome();
+		is_pause = false;
 		t_popup->removeFromParent();
 	}, [=]()
 	{
@@ -2966,6 +3089,7 @@ void Maingame::showPause()
 		exit_target->onEnter();
 		myUI->stopCounting();
 		goHome();
+		is_pause = false;
 		t_popup->removeFromParent();
 	}, [=]()
 	{
@@ -2973,6 +3097,7 @@ void Maingame::showPause()
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		goReplay();
+		is_pause = false;
 		t_popup->removeFromParent();
 	});
 	

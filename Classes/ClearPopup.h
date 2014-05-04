@@ -49,6 +49,7 @@ public:
 	
 	virtual void onEnter();
 	
+	bool is_not_replay;
 	bool is_take_star_effect;
 	std::function<void()> replay_func;
 	std::function<void()> goToMainFlow_func;
@@ -140,6 +141,9 @@ private:
 	void startScoreAnimation(float t_score);
 	void scoreAnimation(float dt);
 	void stopScoreAnimation();
+	
+	bool is_high_score;
+	bool is_today_mission_success;
 	
 	float keep_time;
 	float decrease_time;

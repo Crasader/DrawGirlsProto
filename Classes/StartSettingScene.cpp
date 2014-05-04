@@ -512,9 +512,10 @@ void StartSettingScene::setMain()
 		bool rotation = false;
 		if(grade == 1 || grade == 4)
 			rotation = true;
-		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), rotation);
+		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), rotation,
+																														 (missile_level-1)/5+1, (missile_level-1)%5+1);
 		t_gm->setPosition(ccp(83,158));
-		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+//		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 		main_case->addChild(t_gm);
 		
 		
@@ -528,7 +529,7 @@ void StartSettingScene::setMain()
 	missile_data_level->setPosition(ccp(30,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = CCLabelTTF::create(CCString::createWithFormat("파워 %d", mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_power->setAnchorPoint(ccp(0,0.5f));
 	missile_data_power->setPosition(ccp(84,95));
 	main_case->addChild(missile_data_power);
@@ -544,7 +545,7 @@ void StartSettingScene::setMain()
 		n_level->setColor(ccBLACK);
 		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
-		CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
+		CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 		n_price_type->setPosition(ccp(25,22));
 		n_upgrade->addChild(n_price_type);
 		CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
@@ -558,7 +559,7 @@ void StartSettingScene::setMain()
 		s_level->setColor(ccBLACK);
 		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
-		CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
+		CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 		s_price_type->setPosition(ccp(25,22));
 		s_upgrade->addChild(s_price_type);
 		CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
@@ -720,7 +721,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 							   
 							   missile_level++;
 							   missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
-							   missile_data_power->setString(CCString::createWithFormat("파워 %d", StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
+							   missile_data_power->setString(CCString::createWithFormat("파워 %d", mySGD->getSelectedCharacterHistory().power.getV())->getCString());
 							   
 							   CCPoint missile_position;
 							   if(missile_img)
@@ -737,9 +738,10 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 									 bool rotation = false;
 									 if(grade == 1 || grade == 4)
 										 rotation = true;
-								   GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), 													rotation);
+								   GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(), rotation,
+																																						(missile_level-1)/5+1, (missile_level-1)%5+1);
 								   t_gm->setPosition(missile_position);
-								   t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+//								   t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
 								   main_case->addChild(t_gm);
 								   
 								   
@@ -764,7 +766,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 								   n_level->setColor(ccBLACK);
 								   n_level->setPosition(ccp(70,47));
 								   n_upgrade->addChild(n_level);
-								   CCSprite* n_price_type = CCSprite::create("common_button_gold.png");
+								   CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 								   n_price_type->setPosition(ccp(25,22));
 								   n_upgrade->addChild(n_price_type);
 								   CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);
@@ -778,7 +780,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 								   s_level->setColor(ccBLACK);
 								   s_level->setPosition(ccp(70,47));
 								   s_upgrade->addChild(s_level);
-								   CCSprite* s_price_type = CCSprite::create("common_button_gold.png");
+								   CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 								   s_price_type->setPosition(ccp(25,22));
 								   s_upgrade->addChild(s_price_type);
 								   CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", missile_level*1000)->getCString(), mySGD->getFont().c_str(), 12);

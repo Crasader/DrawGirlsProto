@@ -8,11 +8,13 @@ using namespace cocos2d;
 using namespace CocosDenshion;
 using namespace std;
 
-class LoopEffect : public CCObject
+class SoundEffect : public CCObject
 {
 public:
 	string filename;
 	unsigned int effectCode;
+	bool cancut; // 중간에 잘릴 수 있는지...
+	bool isLoop; // 루프중인가
 private:
 	
 };
@@ -32,7 +34,7 @@ public:
 	
 	virtual ~AudioEngine()
 	{
-		loopEffects->release();
+		soundEffects->release();
 		SimpleAudioEngine::end();
 	}
 	
@@ -70,11 +72,12 @@ public:
 	{
 		effectOn = t_b;
 	}
-	
+	bool is_preloaded;
 	void preloadEffectScene(string scenename)
 	{
-		if(scenename == "Title")
+		if(scenename == "Title" && !is_preloaded)
 		{
+			is_preloaded = true;
 //			mySAE->preloadEffect("sound_buttonClick_Low.mp3");
 //			mySAE->preloadEffect("sound_scrolling.mp3");
 //			mySAE->preloadEffect("sound_start_brush.mp3");
@@ -269,11 +272,12 @@ public:
 	}
 	void unloadEffectScene(string scenename)
 	{
-		while(loopEffects->count() > 0)
+		// 전부 멈추는 코드
+		while(soundEffects->count() > 0)
 		{
-			LoopEffect* target = (LoopEffect*)loopEffects->lastObject();
+			SoundEffect* target = (SoundEffect*)soundEffects->lastObject();
 			mySAE->stopEffect(target->effectCode);
-			loopEffects->removeObject(target);
+			soundEffects->removeObject(target);
 		}
 		
 		if(scenename == "Title")
@@ -398,53 +402,90 @@ public:
 	}
 	void startGame()
 	{
-		loopEffects->removeAllObjects();
+		soundEffects->removeAllObjects();
 	}
-	void playEffect(const char* filename, bool loop = false)
+	void playEffect(const char* filename, bool loop = false, bool cancut = false)
 	{
-		if(effectOn)
+		if(effectOn == false)
+			return;
+	
+		// loop 와 cancut 이 둘다 false 여야 그냥 재생만.
+		// 아니면은 일단 저장해야 됨.
+		// loop = false && cancut == true 일 때,
+		// 그냥 재생하고 저장함.
+		// loop = true && cancut == false 일 때,
+		// 재생하고 있는게 있다면 무시하고, 저장하고 재생
+		// loop = true && cancut == true 이면,
+		// cancut == false 인거랑 동일하게 처리하면 될 듯.
+		//
+		if(!loop && !cancut)
 		{
-			if(loop)
+			mySAE->playEffect(filename);
+		}
+		if(loop)
+		{
+			bool is_ing = false;
+			for(int i=0;i<soundEffects->count();i++)
 			{
-				bool is_ing = false;
-				for(int i=0;i<loopEffects->count();i++)
+				SoundEffect* target = (SoundEffect*)soundEffects->objectAtIndex(i);
+				if(target->filename == filename && target->isLoop)
 				{
-					LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(i);
-					if(target->filename == filename)
-					{
-						is_ing = true;
-					}
-				}
-				
-				if(!is_ing)
-				{
-					string real_filename = filename;
-//#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-//					if(real_filename == "sound_casting_attack.mp3" || real_filename == "sound_casting_crash.mp3" ||
-//					   real_filename == "sound_casting_option.mp3" || real_filename == "sound_bomb_wave.mp3" || real_filename == "sound_calc.mp3")
-//					{
-//						real_filename = real_filename.substr(0,real_filename.length()-3);
-//						real_filename += "ogg";
-//					}
-//#endif
-					
-					CCLOG("PlayEffect loop : %s", filename);
-					
-					LoopEffect* t_effect = new LoopEffect();
-					t_effect->autorelease();
-					unsigned int code = mySAE->playEffect(real_filename.c_str(), true);
-					t_effect->filename = filename;
-					t_effect->effectCode = code;
-					loopEffects->addObject(t_effect);
+					is_ing = true;
+					break;
 				}
 			}
-			else
+
+			if(!is_ing)
 			{
-				mySAE->playEffect(filename);
+				string real_filename = filename;
+				CCLOG("PlayEffect loop : %s", filename);
+
+				SoundEffect* t_effect = new SoundEffect();
+				t_effect->autorelease();
+				unsigned int code = mySAE->playEffect(real_filename.c_str(), true);
+				t_effect->filename = filename;
+				t_effect->effectCode = code;
+				t_effect->isLoop = true;
+				t_effect->cancut = false;
+				soundEffects->addObject(t_effect);
 			}
 		}
+
+		if(!loop && cancut)
+		{
+			stopEffectForCutting(); // 잘릴 수 있는 애들은 다 자름			
+
+			string real_filename = filename;
+			SoundEffect* t_effect = new SoundEffect();
+			t_effect->autorelease();
+			unsigned int code = mySAE->playEffect(real_filename.c_str(), false);
+			t_effect->filename = filename;
+			t_effect->effectCode = code;
+			t_effect->isLoop = false;
+			t_effect->cancut = true;
+			soundEffects->addObject(t_effect);
+		}
 	}
-	
+
+	// 중간에 잘릴 수 있는 애들은 자름
+	void stopEffectForCutting()
+	{
+		std::vector<SoundEffect*> removingObject;
+		for(int i=0; i<soundEffects->count(); i++)
+		{
+			SoundEffect* target = (SoundEffect*)soundEffects->objectAtIndex(i);
+			if(target->cancut)
+			{
+				removingObject.push_back(target);
+			}
+		}
+
+		for(auto i : removingObject)
+		{
+			mySAE->stopEffect(i->effectCode);
+			soundEffects->removeObject(i);
+		}
+	}
 	void stopEffect(const char* filename)
 	{
 		CCLOG("StopEffect loop check start : %s", filename);
@@ -452,15 +493,15 @@ public:
 		do
 		{
 			is_found = false;
-			for(int i=0;i<loopEffects->count();i++)
+			for(int i=0;i<soundEffects->count();i++)
 			{
-				LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(i);
+				SoundEffect* target = (SoundEffect*)soundEffects->objectAtIndex(i);
 				if(target->filename == filename)
 				{
 					CCLOG("StopEffect loop find : %s", filename);
 					is_found = true;
 					mySAE->stopEffect(target->effectCode);
-					loopEffects->removeObject(target);
+					soundEffects->removeObject(target);
 					break;
 				}
 			}
@@ -469,12 +510,12 @@ public:
 	
 	void stopAllEffects()
 	{
-		while(loopEffects->count() > 0)
+		while(soundEffects->count() > 0)
 		{
-			LoopEffect* target = (LoopEffect*)loopEffects->objectAtIndex(0);
+			SoundEffect* target = (SoundEffect*)soundEffects->objectAtIndex(0);
 			CCLOG("StopEffect loop find : %s", target->filename.c_str());
 			mySAE->stopEffect(target->effectCode);
-			loopEffects->removeObject(target);
+			soundEffects->removeObject(target);
 		}
 		
 		CCLOG("StopAllEffect loop");
@@ -541,7 +582,7 @@ public:
 	
 private:
 	SimpleAudioEngine* mySAE;
-	CCArray* loopEffects;
+	CCArray* soundEffects;
 	string playing_sound_name;
 	int musicOn;
 	bool effectOn;
@@ -552,8 +593,8 @@ private:
 	{
 		mySAE = SimpleAudioEngine::sharedEngine();
 		back_down = false;
-		
-		loopEffects = new CCArray(1);
+		is_preloaded = false;
+		soundEffects = new CCArray(1);
 	}
 	
 };

@@ -22,6 +22,7 @@
 #include "StageImgLoader.h"
 #include <random>
 #include "KSLabelTTF.h"
+#include "CardViewScene.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -1475,15 +1476,18 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 	else if(tag == kCBP_MT_zoom)
 	{
 		mySGD->selected_collectionbook = recent_card_number;
+
+		is_menu_enable = true;
 		
-		DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
-		t_popup->setHideFinalAction(target_final, delegate_final);
-		getParent()->addChild(t_popup, kPMS_Z_popup);
+//		CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, CardViewScene::scene());
+		CCDirector::sharedDirector()->pushScene(CardViewScene::scene());
 		
-		target_final = NULL;
-		hidePopup();
-		
-//		CCDirector::sharedDirector()->replaceScene(DiaryZoom::scene());
+//		DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
+//		t_popup->setHideFinalAction(target_final, delegate_final);
+//		getParent()->addChild(t_popup, kPMS_Z_popup);
+//		
+//		target_final = NULL;
+//		hidePopup();
 	}
 	else if(tag == kCBP_MT_pre)
 	{

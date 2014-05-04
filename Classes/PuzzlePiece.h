@@ -518,37 +518,65 @@ private:
 	
 	void setStar(CCSprite* piece_img)
 	{
+		int t_grade = 0;
 		if(is_have_card[3])
-		{
-			for(int i=0;i<4;i++)
-			{
-				CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-				star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+90.f*i)/180.f*M_PI)*10.f, sinf((45.f+90.f*i)/180.f*M_PI)*10.f)));
-				piece_img->addChild(star_img);
-			}
-		}
+			t_grade = 4;
 		else if(is_have_card[2])
-		{
-			for(int i=0;i<3;i++)
-			{
-				CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-				star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((90.f+120.f*i)/180.f*M_PI)*10.f, sinf((90.f+120.f*i)/180.f*M_PI)*10.f)));
-				piece_img->addChild(star_img);
-			}
-		}
+			t_grade = 3;
 		else if(is_have_card[1])
-		{
-			for(int i=0;i<2;i++)
-			{
-				CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-				star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((0.f+180.f*i)/180.f*M_PI)*10.f, sinf((0.f+180.f*i)/180.f*M_PI)*10.f)));
-				piece_img->addChild(star_img);
-			}
-		}
+			t_grade = 2;
 		else if(is_have_card[0])
+			t_grade = 1;
+		
+		if(t_grade >= 1)
 		{
 			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-			star_img->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+90.f)/180.f*M_PI)*10.f, sinf((45.f+90.f)/180.f*M_PI)*10.f)));
+			piece_img->addChild(star_img);
+		}
+		else
+		{
+			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+90.f)/180.f*M_PI)*10.f, sinf((45.f+90.f)/180.f*M_PI)*10.f)));
+			piece_img->addChild(star_img);
+		}
+		
+		if(t_grade >= 2)
+		{
+			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f)/180.f*M_PI)*10.f, sinf((45.f)/180.f*M_PI)*10.f)));
+			piece_img->addChild(star_img);
+		}
+		else
+		{
+			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f)/180.f*M_PI)*10.f, sinf((45.f)/180.f*M_PI)*10.f)));
+			piece_img->addChild(star_img);
+		}
+		
+		if(t_grade >= 3)
+		{
+			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+180.f)/180.f*M_PI)*10.f, sinf((45.f+180.f)/180.f*M_PI)*10.f)));
+			piece_img->addChild(star_img);
+		}
+		else
+		{
+			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+180.f)/180.f*M_PI)*10.f, sinf((45.f+180.f)/180.f*M_PI)*10.f)));
+			piece_img->addChild(star_img);
+		}
+		
+		if(t_grade >= 4)
+		{
+			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f-90.f)/180.f*M_PI)*10.f, sinf((45.f-90.f)/180.f*M_PI)*10.f)));
+			piece_img->addChild(star_img);
+		}
+		else
+		{
+			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f-90.f)/180.f*M_PI)*10.f, sinf((45.f-90.f)/180.f*M_PI)*10.f)));
 			piece_img->addChild(star_img);
 		}
 	}

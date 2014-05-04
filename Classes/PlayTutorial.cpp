@@ -1446,7 +1446,7 @@ void PlayTutorial::nextStep()
 		area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
 		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
 		area_take_sample->addChild(t_ccbi);
-		area_take_sample->setPosition(ccp(240,220));
+		area_take_sample->setPosition(ccp(240,200));
 		addChild(area_take_sample, 101);
 		
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
@@ -1456,7 +1456,7 @@ void PlayTutorial::nextStep()
 			mark_img->setPosition(ccp(80,myDSH->ui_center_y));
 			mark_img->setVisible(true);
 			
-			top_label->setString("領域獲得");//"영역 획득하기");
+			top_label->setString(myLoc->getLocalForKey(kMyLocalKey_tutorial5));//"영역 획득하기");
 			tutorial_step = 3;
 
 			startCatching();
@@ -1493,7 +1493,7 @@ void PlayTutorial::nextStep()
 		
 		view_img->startSilhouette();
 			
-		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial5), [=]()
+		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial6), [=]()
 					  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 					  {
 						  view_img->stopSilhouette();
@@ -1525,7 +1525,7 @@ void PlayTutorial::nextStep()
 						  CCRepeat* t_repeat3 = CCRepeat::create(t_seq3, 3);
 						  time_case->runAction(t_repeat3);
 						  
-						  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial6), [=]()
+						  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial7), [=]()
 										//"제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
 										{
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
@@ -1548,7 +1548,7 @@ void PlayTutorial::nextStep()
 													
 													AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 													
-													t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial7), [=]()
+													t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
 																  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
 																  {
 																	  t_sm->removeFromParent();

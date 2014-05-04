@@ -41,6 +41,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		NSDS_SS(puzzle_number, kSDS_PZ_title_s, result_data["title"].asString(), false);
 		NSDS_SS(puzzle_number, kSDS_PZ_condition_s, result_data["condition"].asString(), false);
 		
+		NSDS_SI(puzzle_number, kSDS_PZ_color_r_d, result_data["color"]["r"].asInt(), false);
+		NSDS_SI(puzzle_number, kSDS_PZ_color_g_d, result_data["color"]["g"].asInt(), false);
+		NSDS_SI(puzzle_number, kSDS_PZ_color_b_d, result_data["color"]["b"].asInt(), false);
+		
 //		NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, result_data["ticket"].asInt(), false);
 //		NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt(), false);
 		

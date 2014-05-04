@@ -311,14 +311,14 @@ std::string SilhouetteData::getConditionTitle()
 
 	CLEAR_CONDITION my_clear_condition = getClearCondition();
 
-	if(my_clear_condition == kCLEAR_bossLifeZero)			return_value = "용감한 기사";
-	else if(my_clear_condition == kCLEAR_subCumberCatch)	return_value = "부하몹 사냥";
-	else if(my_clear_condition == kCLEAR_bigArea)			return_value = "욕심쟁이";
-	else if(my_clear_condition == kCLEAR_itemCollect)		return_value = "수집가";
-	else if(my_clear_condition == kCLEAR_perfect)			return_value = "완벽주의자";
-	else if(my_clear_condition == kCLEAR_sequenceChange)	return_value = "결벽주의자";
-	else if(my_clear_condition == kCLEAR_timeLimit)			return_value = "비지니스맨";
-	else													return_value = "";
+	if(my_clear_condition == kCLEAR_bossLifeZero)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle1);
+	else if(my_clear_condition == kCLEAR_subCumberCatch)	return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle2);
+	else if(my_clear_condition == kCLEAR_bigArea)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle3);
+	else if(my_clear_condition == kCLEAR_itemCollect)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle4);
+	else if(my_clear_condition == kCLEAR_perfect)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle5);
+	else if(my_clear_condition == kCLEAR_sequenceChange)	return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle6);
+	else if(my_clear_condition == kCLEAR_timeLimit)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle7);
+	else													return_value =myLoc->getLocalForKey(kMyLocalKey_missionTitle0);
 
 	return return_value;
 }
@@ -334,14 +334,14 @@ std::string SilhouetteData::getConditionContent( int t_type )
 
 	t_type = getClearCondition(t_type);
 
-	if(t_type == kCLEAR_bossLifeZero)				return_value = "보스의 에너지를 모두 소진시켜라!";
-	else if(t_type == kCLEAR_subCumberCatch)		return_value = "부하 몬스터를 가두어 잡으세요!";
-	else if(t_type == kCLEAR_bigArea)				return_value = "정해진 횟수만큼 한번에 많이 먹으세요!";
-	else if(t_type == kCLEAR_itemCollect)			return_value = "정해진 숫자만큼 아이템을 모으세요!";
-	else if(t_type == kCLEAR_perfect)				return_value = "정해진 목표로 정확하게 영역을 획득하세요!";
-	else if(t_type == kCLEAR_sequenceChange)		return_value = "CHANGE를 순서대로 획득하세요!";
-	else if(t_type == kCLEAR_timeLimit)				return_value = "목표시간 내에 클리어하세요!";
-	else											return_value = "85%이상 획득하라!";
+	if(t_type == kCLEAR_bossLifeZero)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription1);
+	else if(t_type == kCLEAR_subCumberCatch)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription2);
+	else if(t_type == kCLEAR_bigArea)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription3);
+	else if(t_type == kCLEAR_itemCollect)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription4);
+	else if(t_type == kCLEAR_perfect)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription5);
+	else if(t_type == kCLEAR_sequenceChange)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription6);
+	else if(t_type == kCLEAR_timeLimit)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription7);
+	else											return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription0);
 
 	return return_value;
 }

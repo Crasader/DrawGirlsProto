@@ -1269,7 +1269,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	//		return;
 	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString(), false, true);
 		
 		myGD->communication("UI_writeDie");
 		
@@ -1673,7 +1673,7 @@ void Jack::takeSpeedUpItem()
 	{
 		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
 
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString());
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 		
 		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
 		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
@@ -1848,8 +1848,6 @@ void Jack::dieEffect()
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 				
-				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString());
-				
 				startReviveAnimation(jackImg);
 			}
 			else if(myGD->getCommunicationBool("UI_beRevivedJack"))
@@ -1865,15 +1863,13 @@ void Jack::dieEffect()
 //				jackImg->setScale(0.8f);
 //				addChild(jackImg, kJackZ_main);
 				
-				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString());
-				
 				startReviveAnimation(jackImg);
 			}
 			else
 			{
-				if(!is_on_continue)
+				if(continue_on_count < 2)
 				{
-					is_on_continue = true;
+					continue_on_count++;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
 				}
 				else
@@ -2070,7 +2066,7 @@ CCNode* Jack::getJack()
 
 void Jack::myInit()
 {
-	is_on_continue = false;
+	continue_on_count = 0;
 	before_x_direction = directionStop;
 	before_x_cnt = 0;
 	keep_direction = kKeepDirection_empty;
@@ -2322,6 +2318,8 @@ CCPoint Jack::checkOutlineTurnPosition( CCPoint turnPosition )
 
 void Jack::startReviveAnimation( CCSprite* t_jack_img )
 {
+	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString(), false, true);
+	
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("born"))
 		jack_ccb_manager->runAnimationsForSequenceNamed("born");
 //	t_jack_img->setOpacity(0);

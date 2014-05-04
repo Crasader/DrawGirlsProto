@@ -172,6 +172,7 @@ enum UserdataType
 	kUserdataType_failCount,
 	kUserdataType_autoLevel,
 	kUserdataType_selectedCharNO,
+	kUserdataType_highScore,
 	kUserdataType_end
 };
 
@@ -199,6 +200,10 @@ public:
 	KSProtectVar<int> characterNo;
 	KSProtectVar<int> level;
 	KSProtectVar<int> nextPrice;
+	KSProtectVar<int> power;
+	KSProtectVar<int> nextPower;
+	KSProtectVar<int> prevPower;
+	KSProtectVar<bool> isMaxLevel;
 };
 
 class TodayMission
@@ -294,6 +299,7 @@ public:
 	Json::Value getStartRequestsData();
 	
 	bool is_paused;
+	bool is_on_maingame;
 	
 	string getFont();
 	string getFont2();
@@ -509,6 +515,8 @@ public:
 	
 	void setFirstPurchasePlayCount(int t_i);
 	int getFirstPurchasePlayCount();
+	void setFirstPurchaseReviewSecond(long long t_i);
+	long long getFirstPurchaseReviewSecond();
 	
 //	void setUserdataPGuide(string t_s);
 //	string getUserdataPGuide();
@@ -522,6 +530,8 @@ public:
 	int getUserdataFailCount();
 	void setUserdataAutoLevel(int t_i);
 	int getUserdataAutoLevel();
+	void setUserdataHighScore(int t_i);
+	int getUserdataHighScore();
 	
 	string getInappProduct(int t_index);
 	void initInappProduct(int t_index, string t_product);
@@ -656,6 +666,7 @@ public:
 	
 	void initTodayMission(Json::Value t_info);
 	TodayMission today_mission_info;
+	bool is_today_mission_first;
 	
 	void increaseCatchCumber();
 	int getCatchCumberCount();
@@ -774,6 +785,7 @@ private:
 	KSProtectVar<float> rank_up_add_rate;
 	
 	KSProtectVar<int> first_purchase_play_count;
+	KSProtectVar<long long> first_purchase_review_second;
 	KSProtectVar<long long> empty_item_review_second;
 	KSProtectVar<long long> stupid_npu_help_review_second;
 	KSProtectVar<int> stupid_npu_help_play_count;
@@ -803,7 +815,7 @@ private:
 	void resultChangeGoods(Json::Value result_data);
 	void retryChangeGoods();
 	
-	bool is_show_firstPurchase;
+	KSProtectVar<long long> at_time_show_firstPurchase;
 	KSProtectVar<long long> at_time_show_emptyItem;
 	KSProtectVar<long long> at_time_show_stupidNpuHelp;
 	KSProtectVar<long long> at_time_show_eventRubyShop;

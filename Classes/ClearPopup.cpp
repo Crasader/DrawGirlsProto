@@ -38,6 +38,7 @@
 #include "LoadingLayer.h"
 #include "FlagSelector.h"
 #include "EventShopPopup.h"
+#include "TodayMissionPopup.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -72,6 +73,7 @@ bool ClearPopup::init()
 	
 	AudioEngine::sharedInstance()->preloadEffectScene("Ending");
 	
+	is_not_replay = false;
 	is_take_star_effect = false;
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
@@ -511,15 +513,56 @@ bool ClearPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, ClearPopup::resultGetTime)));
 	
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int open_stage = -1;
+	if(mySGD->getIsNotClearedStage())
+	{
+		for(int i=start_stage_number;i<start_stage_number+stage_count;i++)
+		{
+			if(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == mySD->getSilType())
+			{
+				open_stage = i;
+				break;
+			}
+		}
+	}
+	if(open_stage != -1)
+	{
+		PieceHistory t_history = mySGD->getPieceHistory(open_stage);
+		t_history.is_open = true;
+		send_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, [=](Json::Value result_data){
+			
+		}));
+	}
+	
+	if(int(mySGD->getScore()) > mySGD->getUserdataHighScore())
+	{
+		mySGD->setUserdataHighScore(mySGD->getScore());
+		is_high_score = true;
+	}
+	else
+	{
+		is_high_score = false;
+	}
+	
 	mySGD->setUserdataFailCount(0);
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	is_today_mission_success = mySGD->today_mission_info.is_success.getV();
 	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
-																		  // 이번에 뭔가를 받았는가 확인해서 팝업 띄울수 있도록 해야 함.
+																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
+																			{
+																				is_today_mission_success = true;
+																			}
+																		  else
+																			{
+																				is_today_mission_success = false;
+																			}
 																	  }
 																  }));
 	
@@ -1600,9 +1643,9 @@ void ClearPopup::startCalcAnimation()
 //	startTimeAnimation();
 //	startGoldAnimation();
 	
-	KSLabelTTF* star_bonus_label = KSLabelTTF::create(CCString::createWithFormat("별보너스 x%.1f", mySGD->getStageGrade()*0.5f+1.f)->getCString(), mySGD->getFont().c_str(), 15);
-	star_bonus_label->setColor(ccBLUE);
-	star_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+	KSLabelTTF* star_bonus_label = KSLabelTTF::create(CCString::createWithFormat("별보너스 x%.1f", mySGD->getStageGrade()*0.5f+1.f)->getCString(), mySGD->getFont().c_str(), 13);
+	star_bonus_label->setColor(ccc3(50, 250, 255));
+	star_bonus_label->enableOuterStroke(ccBLACK, 1.f);
 	star_bonus_label->setPosition(ccp(53+48+24,195));
 	main_case->addChild(star_bonus_label, kZ_CP_table);
 	
@@ -1635,9 +1678,9 @@ void ClearPopup::startCalcAnimation()
 				is_end_call_score_calc = true;
 				end_score_calc_func = [=]()
 				{
-					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 15);
-					time_bonus_label->setColor(ccBLUE);
-					time_bonus_label->enableOuterStroke(ccBLACK, 2.f);
+					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 13);
+					time_bonus_label->setColor(ccc3(50, 250, 255));
+					time_bonus_label->enableOuterStroke(ccBLACK, 1.f);
 					time_bonus_label->setPosition(ccp(170,148)); // 170 148
 					main_case->addChild(time_bonus_label, kZ_CP_table);
 					
@@ -1667,6 +1710,35 @@ void ClearPopup::startCalcAnimation()
 								time_bonus_label->setOpacity(t*255);
 							}, [=](float t){
 								time_bonus_label->setOpacity(0);
+								
+								if(is_high_score)
+								{
+									CCSprite* high_score = CCSprite::create("ending_highscore.png");
+									high_score->setScale(0.5f);
+									high_score->setOpacity(0);
+									high_score->setPosition(ccp(120,82));
+									main_case->addChild(high_score, kZ_CP_table);
+									
+									main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
+										high_score->setScale(0.5f+t*0.8f);
+										high_score->setOpacity(t*255);
+									}, [=](float t){
+										high_score->setScale(1.3f);
+										high_score->setOpacity(255);
+										main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+											high_score->setScale(1.3f-t*0.3f);
+										}, [=](float t){
+											high_score->setScale(1.f);
+										}));
+									}));
+								}
+								
+								if(is_today_mission_success)
+								{
+									TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
+									addChild(t_popup, kZ_CP_popup);
+								}
+								
 								is_end_popup_animation = true;
 								is_end_call_score_calc = true;
 								end_score_calc_func = [=]()
@@ -1682,7 +1754,7 @@ void ClearPopup::startCalcAnimation()
 									KS::setOpacity(replay_menu, 0);
 									KS::setOpacity(ok_menu, 0);
 									
-									replay_menu->setVisible(true);
+									replay_menu->setVisible(!is_not_replay);
 									ok_menu->setVisible(true);
 									
 									CCPoint replay_origin_position = replay_menu->getPosition();

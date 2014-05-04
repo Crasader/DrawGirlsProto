@@ -86,16 +86,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		m_container->addChild(slttf);
 		
 		
-		if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())
-		{
-			StyledLabelTTF* under_label = StyledLabelTTF::create({
-				{myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccess), value1.toStyledString()},
-				{"", value5.toStyledString()}
-			}, StyledAlignment::kCenterAlignment);
-			under_label->setPosition(ccp(0, -20));
-			m_container->addChild(under_label);
-		}
-		else
+		if(mySGD->today_mission_info.ing_count.getV() < mySGD->today_mission_info.goal_count.getV())
 		{
 			StyledLabelTTF* under_label = StyledLabelTTF::create({
 				{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent4), value3.toStyledString()},
@@ -118,16 +109,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		m_container->addChild(slttf);
 		
 		
-		if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())
-		{
-			StyledLabelTTF* under_label = StyledLabelTTF::create({
-				{myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccess), value1.toStyledString()},
-				{"", value5.toStyledString()}
-			}, StyledAlignment::kCenterAlignment);
-			under_label->setPosition(ccp(0, -20));
-			m_container->addChild(under_label);
-		}
-		else
+		if(mySGD->today_mission_info.ing_count.getV() < mySGD->today_mission_info.goal_count.getV())
 		{
 			StyledLabelTTF* under_label = StyledLabelTTF::create({
 				{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore4), value3.toStyledString()},
@@ -149,16 +131,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		m_container->addChild(slttf);
 		
 		
-		if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())
-		{
-			StyledLabelTTF* under_label = StyledLabelTTF::create({
-				{myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccess), value1.toStyledString()},
-				{"", value5.toStyledString()}
-			}, StyledAlignment::kCenterAlignment);
-			under_label->setPosition(ccp(0, -20));
-			m_container->addChild(under_label);
-		}
-		else
+		if(mySGD->today_mission_info.ing_count.getV() < mySGD->today_mission_info.goal_count.getV())
 		{
 			StyledLabelTTF* under_label = StyledLabelTTF::create({
 				{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold3), value3.toStyledString()},
@@ -181,16 +154,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		m_container->addChild(slttf);
 		
 		
-		if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())
-		{
-			StyledLabelTTF* under_label = StyledLabelTTF::create({
-				{myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccess), value1.toStyledString()},
-				{"", value5.toStyledString()}
-			}, StyledAlignment::kCenterAlignment);
-			under_label->setPosition(ccp(0, -20));
-			m_container->addChild(under_label);
-		}
-		else
+		if(mySGD->today_mission_info.ing_count.getV() < mySGD->today_mission_info.goal_count.getV())
 		{
 			StyledLabelTTF* under_label = StyledLabelTTF::create({
 				{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch4), value3.toStyledString()},
@@ -200,6 +164,30 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 			under_label->setPosition(ccp(0, -20));
 			m_container->addChild(under_label);
 		}
+	}
+	
+	if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())
+	{
+		string reward_ment;
+		GoodsType reward_type = mySGD->getGoodsKeyToType(mySGD->today_mission_info.reward_type.getV());
+		
+		if(reward_type == kGoodsType_pass1)
+			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass1);
+		else if(reward_type == kGoodsType_pass2)
+			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass2);
+		else if(reward_type == kGoodsType_pass3)
+			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass3);
+		else if(reward_type == kGoodsType_pass4)
+			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass4);
+		else if(reward_type == kGoodsType_pass5)
+			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass5);
+		
+		StyledLabelTTF* under_label = StyledLabelTTF::create({
+			{reward_ment.c_str(), value1.toStyledString()},
+			{"", value5.toStyledString()}
+		}, StyledAlignment::kCenterAlignment);
+		under_label->setPosition(ccp(0, -20));
+		m_container->addChild(under_label);
 	}
 	
 	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");

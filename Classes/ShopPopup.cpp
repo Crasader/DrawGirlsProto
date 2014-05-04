@@ -613,6 +613,12 @@ unsigned int ShopPopup::numberOfCellsInTableView(CCTableView *table)
 	return server_character_count;
 }
 
+void ShopPopup::setCloseFunc(function<void(void)> t_close_func)
+{
+	is_set_close_func = true;
+	close_func = t_close_func;
+}
+
 // on "init" you need to initialize your instance
 bool ShopPopup::init()
 {
@@ -622,6 +628,9 @@ bool ShopPopup::init()
     {
         return false;
     }
+	
+	is_set_close_func = false;
+	target_heartTime = NULL;
 	
 	touch_priority = -400;
 	
@@ -837,6 +846,8 @@ void ShopPopup::endHidePopup()
 {
 	if(target_final)
 		(target_final->*delegate_final)();
+	if(is_set_close_func)
+		close_func();
 	removeFromParent();
 }
 
@@ -946,7 +957,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									addChild(loading_layer, kSP_Z_popup);
 									
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-									mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, tag-kSP_MT_content1), "루비구매(IOS-인앱결재)", "", "", true);
+									mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, tag-kSP_MT_content1), "루비구매(IOS-인앱결제)", "", "", true);
 									
 									mySGD->changeGoods([=](Json::Value result_data){
 										loading_layer->removeFromParent();
@@ -1009,7 +1020,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-10, kGoodsType_ruby, [=]()
+																	{
+																		setShopCode(kSC_ruby);
+																	}), kSP_Z_popup);
+				is_menu_enable = true;
 				CCLOG("not enough ruby!!!");
 			}
 		}
@@ -1029,28 +1044,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 										
 										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 										
-										CCNode* target_parent = target_heartTime->getParent();
-										CCPoint heart_time_position = target_heartTime->getPosition();
-										int heart_time_tag = target_heartTime->getTag();
-										
-										target_heartTime->removeFromParent();
-										target_heartTime = HeartTime::create();
-										target_heartTime->setPosition(heart_time_position);
-										target_parent->addChild(target_heartTime, 0, heart_time_tag);
-										if(before_code == kShopBeforeCode_stagesetting)
-											((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
-										else if(before_code == kShopBeforeCode_mainflow)
-											((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-										else if(before_code == kShopBeforeCode_puzzle)
-											((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-										else if(before_code == kShopBeforeCode_startsetting)
-											((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-										
-										fail_func = [=]()
+										if(target_heartTime)
 										{
-											mySGD->clearChangeGoods();
-											myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
-											
 											CCNode* target_parent = target_heartTime->getParent();
 											CCPoint heart_time_position = target_heartTime->getPosition();
 											int heart_time_tag = target_heartTime->getTag();
@@ -1067,6 +1062,32 @@ void ShopPopup::menuAction(CCObject* pSender)
 												((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 											else if(before_code == kShopBeforeCode_startsetting)
 												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+										}
+										
+										fail_func = [=]()
+										{
+											mySGD->clearChangeGoods();
+											myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) - ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
+											
+											if(target_heartTime)
+											{
+												CCNode* target_parent = target_heartTime->getParent();
+												CCPoint heart_time_position = target_heartTime->getPosition();
+												int heart_time_tag = target_heartTime->getTag();
+												
+												target_heartTime->removeFromParent();
+												target_heartTime = HeartTime::create();
+												target_heartTime->setPosition(heart_time_position);
+												target_parent->addChild(target_heartTime, 0, heart_time_tag);
+												if(before_code == kShopBeforeCode_stagesetting)
+													((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_mainflow)
+													((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_puzzle)
+													((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+												else if(before_code == kShopBeforeCode_startsetting)
+													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+											}
 										};
 										
 										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
@@ -1074,7 +1095,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 			}
 			else
 			{
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-10, kGoodsType_ruby, [=]()
+																	{
+																		setShopCode(kSC_ruby);
+																	}), kSP_Z_popup);
+				is_menu_enable = true;
 				CCLOG("not enough ruby!!!");
 			}
 		}

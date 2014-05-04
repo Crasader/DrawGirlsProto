@@ -240,7 +240,7 @@ public:
 	
 private:
 	
-	bool is_on_continue;
+	int continue_on_count;
 	
 	CCSprite* touchPointSpr_byJoystick;
 	CCSprite* directionSpr_byJoystick;

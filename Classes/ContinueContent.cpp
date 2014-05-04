@@ -138,14 +138,14 @@ void ContinueContent::menuAction(CCObject* sender)
 			
 			CCScale9Sprite* n_buy = CCScale9Sprite::create("popup4_green_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
 			n_buy->setContentSize(CCSizeMake(95,45));
-			CCLabelTTF* n_buy_label = CCLabelTTF::create("임시 결재", mySGD->getFont().c_str(), 14);
+			CCLabelTTF* n_buy_label = CCLabelTTF::create("임시 결제", mySGD->getFont().c_str(), 14);
 			n_buy_label->setPosition(ccp(n_buy->getContentSize().width/2.f, n_buy->getContentSize().height/2.f));
 			n_buy->addChild(n_buy_label);
 			
 			CCScale9Sprite* s_buy = CCScale9Sprite::create("popup4_green_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
 			s_buy->setContentSize(CCSizeMake(95,45));
 			s_buy->setColor(ccGRAY);
-			CCLabelTTF* s_buy_label = CCLabelTTF::create("임시 결재", mySGD->getFont().c_str(), 14);
+			CCLabelTTF* s_buy_label = CCLabelTTF::create("임시 결제", mySGD->getFont().c_str(), 14);
 			s_buy_label->setPosition(ccp(s_buy->getContentSize().width/2.f, s_buy->getContentSize().height/2.f));
 			s_buy->addChild(s_buy_label);
 			
@@ -155,7 +155,7 @@ void ContinueContent::menuAction(CCObject* sender)
 																			getParent()->addChild(inapp_loading, 9999);
 																			
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-																			mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "이어하기(IOS-인앱결재)", "", "", true);
+																			mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "이어하기(IOS-인앱결제)", "", "", true);
 																			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getPlayContinueFee(), "이어하기(IOS-소모)");
 																			
 																			mySGD->changeGoods([=](Json::Value result_data){

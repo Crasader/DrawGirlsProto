@@ -13,17 +13,28 @@
 
 void StarGoldData::withdraw()
 {
+	star_label = NULL;
+	gold_label = NULL;
+	
 	has_gotten_cards.clear();
 	puzzle_historys.clear();
 	piece_historys.clear();
 	goods_data.clear();
 	userdata_storage.clear();
 	
-	is_show_firstPurchase = false;
+	at_time_show_firstPurchase = 0;
 	at_time_show_emptyItem = 0;
 	at_time_show_stupidNpuHelp = 0;
 	at_time_show_eventRubyShop = 0;
 	at_time_show_levelupGuide = 0;
+	
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowFirstPurchase, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowEmptyItem, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowStupidNpuHelp, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowEventRubyShop, 0, false);
+	myDSH->setIntegerForKey(kDSH_Key_atTimeShowLevelupGuide, 0, false);
+	
+	myDSH->fFlush();
 }
 
 string StarGoldData::getReplayKey(ReplayKey t_key)
@@ -404,16 +415,16 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 	game_time = t_game_time;
 	
-	if(!mySGD->isClearPiece(mySD->getSilType()))
-	{
+//	if(!mySGD->isClearPiece(mySD->getSilType()))
+//	{
 //		myDSH->setIntegerForKey(kDSH_Key_clearStageCnt, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt)+1);
 //		myDSH->setIntegerForKey(kDSH_Key_clearStageNumber_int1, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt), mySD->getSilType());
 //		myDSH->setBoolForKey(kDSH_Key_isClearStage_int1, mySD->getSilType(), true);
-		
-		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-		t_history.is_clear[t_grade-1] = true;
-		mySGD->setPieceHistory(t_history, nullptr);
-	}
+//		
+//		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+//		t_history.is_clear[t_grade-1] = true;
+//		mySGD->setPieceHistory(t_history, nullptr);
+//	}
 	
 	myGD->setIsGameover(true);
 }
@@ -1152,6 +1163,10 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		t_history.characterNo = t_data["characterNo"].asInt();
 		t_history.level = t_data["level"].asInt();
 		t_history.nextPrice = t_data["nextPrice"].asInt();
+		t_history.power = t_data["power"].asInt();
+		t_history.nextPower = t_data["nextPower"].asInt();
+		t_history.prevPower = t_data["prevPower"].asInt();
+		t_history.isMaxLevel = t_data["isMaxLevel"].asBool();
 		
 		character_historys.push_back(t_history);
 	}
@@ -1218,6 +1233,10 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			{
 				character_historys[i].level = result_data["level"].asInt();
 				character_historys[i].nextPrice = result_data["nextPrice"].asInt();
+				character_historys[i].power = result_data["power"].asInt();
+				character_historys[i].nextPower = result_data["nextPower"].asInt();
+				character_historys[i].prevPower = result_data["prevPower"].asInt();
+				character_historys[i].isMaxLevel = result_data["isMaxLevel"].asBool();
 				is_found = true;
 			}
 		}
@@ -1228,6 +1247,10 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			t_history.characterNo = characterNo;
 			t_history.level = result_data["level"].asInt();
 			t_history.nextPrice = result_data["nextPrice"].asInt();
+			t_history.power = result_data["power"].asInt();
+			t_history.nextPower = result_data["nextPower"].asInt();
+			t_history.prevPower = result_data["prevPower"].asInt();
+			t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
 			
 			character_historys.push_back(t_history);
 		}
@@ -1249,19 +1272,19 @@ CommandParam StarGoldData::getUpdateTodayMissionParam(jsonSelType t_callback)
 	
 	if(t_type == kTodayMissionType_totalPercent)
 	{
-		param["count"] = getPercentage()*100.f;
+		param["count"] = int(getPercentage()*100.f);
 	}
 	else if(t_type == kTodayMissionType_totalScore)
 	{
-		param["count"] = getScore();
+		param["count"] = int(getScore());
 	}
 	else if(t_type == kTodayMissionType_totalTakeGold)
 	{
-		param["count"] = getStageGold();
+		param["count"] = int(getStageGold());
 	}
 	else if(t_type == kTodayMissionType_totalCatch)
 	{
-		param["count"] = getCatchCumberCount();
+		param["count"] = int(getCatchCumberCount());
 	}
 	
 	return CommandParam("updatetodaymission", param, json_selector(this, StarGoldData::resultUpdateTodayMission));
@@ -1273,15 +1296,18 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 	{
 		initTodayMission(result_data);
 		
-		GoodsType t_type = getGoodsKeyToType(today_mission_info.reward_type.getV());
-		int t_count = result_data["rewardCount"].asInt();
-		
-		goods_data[t_type] = t_count;
-		
-		if(t_type == kGoodsType_ruby && star_label)
-			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
-		else if(t_type == kGoodsType_gold && gold_label)
-			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		if(result_data["isFirstCheck"].asBool())
+		{
+			GoodsType t_type = getGoodsKeyToType(today_mission_info.reward_type.getV());
+			int t_count = result_data["rewardCount"].asInt();
+			
+			goods_data[t_type] = t_count;
+			
+			if(t_type == kGoodsType_ruby && star_label)
+				star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+			else if(t_type == kGoodsType_gold && gold_label)
+				gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		}
 	}
 	
 	if(update_today_mission_callback != nullptr)
@@ -1538,6 +1564,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "failCount";
 	else if(t_type == kUserdataType_autoLevel)
 		return_value = "autoLevel";
+	else if(t_type == kUserdataType_highScore)
+		return_value = "highScore";
 	
 	return return_value;
 }
@@ -1808,7 +1836,10 @@ bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 {
 	bool return_value = true;
 	if(t_type == kPurchaseGuideType_firstPurchase)
-		return_value = !is_show_firstPurchase;
+	{
+		if(at_time_show_firstPurchase.getV() > 0 && at_time_show_firstPurchase.getV() + getFirstPurchaseReviewSecond() >= graphdog->getTime())
+			return_value = false;
+	}
 	else if(t_type == kPurchaseGuideType_emptyItem)
 	{
 		if(empty_item_is_on.getV() == 0 || (at_time_show_emptyItem.getV() > 0 && at_time_show_emptyItem.getV() + getEmptyItemReviewSecond() >= graphdog->getTime()))
@@ -1835,15 +1866,30 @@ bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 void StarGoldData::showPurchasePopup(PurchaseGuideType t_type)
 {
 	if(t_type == kPurchaseGuideType_firstPurchase)
-		is_show_firstPurchase = true;
+	{
+		at_time_show_firstPurchase = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowFirstPurchase, at_time_show_firstPurchase.getV());
+	}
 	else if(t_type == kPurchaseGuideType_emptyItem)
+	{
 		at_time_show_emptyItem = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowEmptyItem, at_time_show_emptyItem.getV());
+	}
 	else if(t_type == kPurchaseGuideType_stupidNpuHelp)
+	{
 		at_time_show_stupidNpuHelp = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowStupidNpuHelp, at_time_show_stupidNpuHelp.getV());
+	}
 	else if(t_type == kPurchaseGuideType_eventRubyShop)
+	{
 		at_time_show_eventRubyShop = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowEventRubyShop, at_time_show_eventRubyShop.getV());
+	}
 	else if(t_type == kPurchaseGuideType_levelupGuide)
+	{
 		at_time_show_levelupGuide = graphdog->getTime();
+		myDSH->setIntegerForKey(kDSH_Key_atTimeShowLevelupGuide, at_time_show_levelupGuide.getV());
+	}
 }
 
 void StarGoldData::initTodayMission(Json::Value t_info)
@@ -1855,6 +1901,8 @@ void StarGoldData::initTodayMission(Json::Value t_info)
 	today_mission_info.reward_count = t_info["reward"]["count"].asInt();
 	today_mission_info.goal_count = t_info["goal"].asInt();
 	today_mission_info.is_success = t_info["isSuccess"].asBool();
+	
+	is_today_mission_first = t_info["isFirstCheck"].asBool();
 }
 
 string StarGoldData::getAppType()
@@ -1872,17 +1920,17 @@ void StarGoldData::myInit()
 	app_version = 1;
 	
 	suitable_stage = -1;
-	
+	is_on_maingame = false;
 	gacha_item = kIC_emptyEnd;
 	
 	rank_up_add_rate = 0;
 	keep_time_info.is_loaded = false;
 	
-	is_show_firstPurchase = false;
-	at_time_show_emptyItem = 0;
-	at_time_show_stupidNpuHelp = 0;
-	at_time_show_eventRubyShop = 0;
-	at_time_show_levelupGuide = 0;
+	at_time_show_firstPurchase = myDSH->getIntegerForKey(kDSH_Key_atTimeShowFirstPurchase);
+	at_time_show_emptyItem = myDSH->getIntegerForKey(kDSH_Key_atTimeShowEmptyItem);
+	at_time_show_stupidNpuHelp = myDSH->getIntegerForKey(kDSH_Key_atTimeShowStupidNpuHelp);
+	at_time_show_eventRubyShop = myDSH->getIntegerForKey(kDSH_Key_atTimeShowEventRubyShop);
+	at_time_show_levelupGuide = myDSH->getIntegerForKey(kDSH_Key_atTimeShowLevelupGuide);
 	
 	goods_data.clear();
 	change_goods_list.clear();
@@ -2064,6 +2112,8 @@ float StarGoldData::getRankUpAddRate(){	return rank_up_add_rate.getV();}
 
 void StarGoldData::setFirstPurchasePlayCount(int t_i){	first_purchase_play_count = t_i;	}
 int StarGoldData::getFirstPurchasePlayCount(){	return first_purchase_play_count.getV();	}
+void StarGoldData::setFirstPurchaseReviewSecond(long long t_i){	first_purchase_review_second = t_i;	}
+long long StarGoldData::getFirstPurchaseReviewSecond(){	return first_purchase_review_second.getV();	}
 void StarGoldData::setEmptyItemReviewSecond(long long t_i){	empty_item_review_second = t_i;}
 long long StarGoldData::getEmptyItemReviewSecond(){	return empty_item_review_second.getV();}
 void StarGoldData::setStupidNpuHelpReviewSecond(long long t_i){	stupid_npu_help_review_second = t_i;	}
@@ -2155,4 +2205,15 @@ void StarGoldData::setUserdataAutoLevel(int t_i)
 	}
 }
 int StarGoldData::getUserdataAutoLevel(){	return userdata_storage[kUserdataType_autoLevel].getV();	}
-
+void StarGoldData::setUserdataHighScore(int t_i)
+{
+	if(userdata_storage[kUserdataType_highScore].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_highScore;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataHighScore(){	return userdata_storage[kUserdataType_highScore].getV();	}

@@ -45,6 +45,12 @@ private:
 	CCMenuItemLambda* on_item;
 	CCMenuItemLambda* off_item;
 	
+	CCMenuItemLambda* on_item2;
+	CCMenuItemLambda* off_item2;
+	
+	CCMenuItemLambda* on_item3;
+	CCMenuItemLambda* off_item3;
+	
 	void endShow()
 	{
 		is_menu_enable = true;

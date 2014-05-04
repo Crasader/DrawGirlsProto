@@ -156,7 +156,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	price_back->setPosition(ccp(purchase_label->getContentSize().width/2.f, purchase_label->getContentSize().height/2.f-20));
 	purchase_label->addChild(price_back);
 	
-//	CCSprite* price_type = CCSprite::create("common_button_ruby.png");
+//	CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 //	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-15,price_back->getContentSize().height/2.f));
 //	price_back->addChild(price_type);
 	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
@@ -216,7 +216,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	addChild(inapp_loading);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, kPurchaseGuideType_firstPurchase-1), "첫구매팝업(IOS-인앱결재)", "", "", true);
+	mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, kPurchaseGuideType_firstPurchase-1), "첫구매팝업(IOS-인앱결제)", "", "", true);
 	
 	mySGD->setUserdataIsFirstBuy(1); // true
 	vector<CommandParam> command_list;
