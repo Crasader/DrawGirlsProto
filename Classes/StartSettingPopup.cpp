@@ -513,7 +513,7 @@ void StartSettingPopup::setMain()
 //		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 		t_gm->setFunctionForCrash([=](){
 			t_cumber->stopAllActions();
-			t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1)));
+			t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
 		});
 		t_gm->setPosition(ccp(83,158));
 		main_case->addChild(t_gm);
@@ -774,7 +774,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			
 			t_gm->setFunctionForCrash([=](){
 				t_cumber->stopAllActions();
-				t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1)));
+				t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
 			});
 			t_gm->setPosition(missile_position);
 //			t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
