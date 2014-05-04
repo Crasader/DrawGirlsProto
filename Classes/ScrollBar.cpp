@@ -228,7 +228,7 @@ void THIS::setBarRefreshV()
 	if(barV)
 	{
 		barV->setPosition(ccp(marginOffset + offsetX + viewSize.width, position));
-		CCLOG("ASdasdasD %f", position);
+		//CCLOG("ASdasdasD %f", position);
 	}
 	
 }
