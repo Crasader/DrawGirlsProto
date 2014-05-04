@@ -529,11 +529,11 @@ void StartSettingPopup::setMain()
 	missile_data_level->setPosition(ccp(53,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_power->setPosition(ccp(111,95));
 	main_case->addChild(missile_data_power);
 	
-	if(missile_level >= 25)
+	if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 	{
 		upgrade_menu = NULL;
 	}
@@ -719,7 +719,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
 		missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
-		missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString());
+		missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString());
 		
 		CCPoint missile_position;
 		if(missile_img)
@@ -760,7 +760,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		CCPoint upgrade_position = upgrade_menu->getPosition();
 		upgrade_menu->removeFromParent();
 		
-		if(missile_level >= 25)
+		if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 		{
 			upgrade_menu = NULL;
 		}

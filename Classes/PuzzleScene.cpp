@@ -37,6 +37,7 @@
 #include "KSLabelTTF.h"
 #include "FlagSelector.h"
 #include "GoodsLight.h"
+#include "CardViewScene.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -1119,7 +1120,7 @@ void PuzzleScene::setPieceClick(int t_stage_number)
 	if(selected_piece_img)
 		selected_piece_img->removeFromParent();
 	
-	PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+	PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(t_stage_number);//myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 	string WorH = target_piece->getWorH();
 	selected_piece_img = CCSprite::create(("piece_selected_" + WorH + ".png").c_str());
 	selected_piece_img->setPosition(target_piece->getPosition());
@@ -1789,14 +1790,17 @@ void PuzzleScene::setRight()
 										  if(!is_menu_enable)
 											  return;
 										  
-										  is_menu_enable = false;
+//										  is_menu_enable = false;
 										  
 										  mySGD->selected_collectionbook = step_card_number;
 										  
-										  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
-										  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-										  t_popup->is_before_no_diary = true;
-										  addChild(t_popup, kPuzzleZorder_popup);
+//										  CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, CardViewScene::scene());
+										  CCDirector::sharedDirector()->pushScene(CardViewScene::scene());
+										  
+//										  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
+//										  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+//										  t_popup->is_before_no_diary = true;
+//										  addChild(t_popup, kPuzzleZorder_popup);
 									  });
 				right_body->addChild(show_img);
 			}

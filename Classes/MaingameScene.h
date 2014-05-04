@@ -78,10 +78,7 @@ public:
 	virtual void onEnterTransitionDidFinish();
 	
 	void controlStunOff();
-	virtual ~Maingame()
-	{
-		sub_thumbs->release();
-	}
+	virtual ~Maingame();
 		
 private:
 	
@@ -298,7 +295,9 @@ private:
 	void hideDrawButtonTutorial();
 	
 	bool is_gohome;
+	bool is_pause;
 	void showPause();
+	void showShop(int t_shopcode);
 	void goHome ();
 	void goReplay ();
 	void cancelHome ();

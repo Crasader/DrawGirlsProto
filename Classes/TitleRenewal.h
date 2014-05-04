@@ -51,6 +51,8 @@ public:
 	// preprocessor macro for "static create()" constructor ( node() deprecated )
 	CREATE_FUNC(TitleRenewalScene);
 	
+	virtual void onEnterTransitionDidFinish();
+	
 private:
 	KSLabelTTF* state_label;
 	CCSprite* white_back;

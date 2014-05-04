@@ -35,6 +35,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "EffectSprite.h"
+#include "ShopPopup.h"
 
 //#include "ScreenSide.h"
 
@@ -47,6 +48,12 @@ CCScene* Maingame::scene()
     return scene;
 }
 
+Maingame::~Maingame()
+{
+	mySGD->is_on_maingame = false;
+	sub_thumbs->release();
+}
+
 bool Maingame::init()
 {
     if ( !CCLayer::init() )
@@ -57,6 +64,7 @@ bool Maingame::init()
 	setTag(0);
 	AudioEngine::sharedInstance()->startGame();
 	
+	is_pause = false;
 	is_gohome = false;
 	setKeypadEnabled(true);
 	
@@ -112,6 +120,7 @@ bool Maingame::init()
 	myGD->V_V["Main_showDrawButtonTutorial"] = std::bind(&Maingame::showDrawButtonTutorial, this);
 	myGD->V_V["Main_hideDrawButtonTutorial"] = std::bind(&Maingame::hideDrawButtonTutorial, this);
 	myGD->V_V["Main_showPause"] = std::bind(&Maingame::showPause, this);
+	myGD->V_I["Main_showShop"] = std::bind(&Maingame::showShop, this, _1);
 	myGD->V_TDTD["Main_showContinue"] = std::bind(&Maingame::showContinue, this, _1, _2, _3, _4);
 	myGD->V_B["Main_setLineParticle"] = std::bind(&Maingame::setLineParticle, this, _1);
 	myGD->V_CCPI["Main_showComboImage"] = std::bind(&Maingame::showComboImage, this, _1, _2);
@@ -693,6 +702,8 @@ void Maingame::finalSetting()
 			exit_target->getParent()->addChild(t_popup);
 		}
 //	}
+	
+	mySGD->is_on_maingame = true;
 }
 
 void Maingame::initJackPosition(CCPoint jack_position)
@@ -2959,10 +2970,90 @@ void Maingame::hideThumb()
 	}
 }
 
+void Maingame::showShop(int t_shopcode)
+{
+	if(is_pause)
+		return;
+	
+	is_pause = true;
+	
+	bool t_jack_stun = myJack->isStun;
+	
+	CCNode* exit_target = this;
+	mControl->setTouchEnabled(false);
+	exit_target->onExit();
+	
+	ShopPopup* t_popup = ShopPopup::create();
+	t_popup->setScale(myDSH->screen_convert_rate);
+	t_popup->setShopCode((ShopCode)t_shopcode);
+	t_popup->setCloseFunc([=]()
+						  {
+							  mControl->isStun = false;
+							  myJack->isStun = t_jack_stun;
+							  exit_target->onEnter();
+							  is_pause = false;
+						  });
+	exit_target->getParent()->addChild(t_popup);
+	
+	CCSprite* dimmed_sprite = CCSprite::create("whitePaper.png");
+	dimmed_sprite->setPosition(ccp(240, myDSH->ui_center_y));
+	dimmed_sprite->setColor(ccc3(0, 0, 0));
+	dimmed_sprite->setOpacity(100);
+	dimmed_sprite->setScaleY(myDSH->ui_top/320);
+	t_popup->addChild(dimmed_sprite, -1);
+	
+//	ASPopupView* t_popup = ASPopupView::create(-200);
+//	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+//	t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+//	t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+//	
+//	PauseContent* t_container = PauseContent::create(t_popup->getTouchPriority(), [=]()
+//													 {
+//														 mControl->isStun = false;
+//														 myJack->isStun = t_jack_stun;
+//														 exit_target->onEnter();
+//														 cancelHome();
+//														 is_pause = false;
+//														 t_popup->removeFromParent();
+//													 }, [=]()
+//													 {
+//														 mControl->isStun = false;
+//														 myJack->isStun = t_jack_stun;
+//														 exit_target->onEnter();
+//														 myUI->stopCounting();
+//														 goHome();
+//														 is_pause = false;
+//														 t_popup->removeFromParent();
+//													 }, [=]()
+//													 {
+//														 mControl->isStun = false;
+//														 myJack->isStun = t_jack_stun;
+//														 exit_target->onEnter();
+//														 goReplay();
+//														 is_pause = false;
+//														 t_popup->removeFromParent();
+//													 });
+//	
+//	t_popup->setContainerNode(t_container);
+//	exit_target->getParent()->addChild(t_popup);
+//	t_container->startShow();
+}
+
 void Maingame::showPause()
 {
 	if(is_gohome)
 		return;
+	
+	if(is_pause)
+		return;
+	
+	is_pause = true;
 	
 	bool t_jack_stun = myJack->isStun;
 	
@@ -2987,6 +3078,7 @@ void Maingame::showPause()
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		cancelHome();
+		is_pause = false;
 		t_popup->removeFromParent();
 	}, [=]()
 	{
@@ -2995,6 +3087,7 @@ void Maingame::showPause()
 		exit_target->onEnter();
 		myUI->stopCounting();
 		goHome();
+		is_pause = false;
 		t_popup->removeFromParent();
 	}, [=]()
 	{
@@ -3002,6 +3095,7 @@ void Maingame::showPause()
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		goReplay();
+		is_pause = false;
 		t_popup->removeFromParent();
 	});
 	

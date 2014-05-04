@@ -202,7 +202,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
-	ko->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
+	ko->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
 	ko->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ko->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ko->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
@@ -306,10 +306,10 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
 	ko->setObject(CCString::create("무료"), kMyLocalKey_free);
 	ko->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
+	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_stop);
+	ko->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	ko->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
@@ -589,7 +589,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	en->setObject(CCString::create("Main"), kMyLocalKey_toMain);
 	en->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
-	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
+	en->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	en->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	en->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	en->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -642,7 +642,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
-	en->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
+	en->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
 	en->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	en->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	en->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
@@ -745,6 +745,10 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
 	en->setObject(CCString::create("무료"), kMyLocalKey_free);
 	en->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
+	en->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
+	en->setObject(CCString::create("STOP"), kMyLocalKey_stop);
+	en->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1026,7 +1030,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	ja->setObject(CCString::create("Main"), kMyLocalKey_toMain);
 	ja->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
-	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
+	ja->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	ja->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	ja->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	ja->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -1081,7 +1085,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("에서 획득할 수 있는"), kMyLocalKey_detailConditionPopupContent3);
 	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
-	ja->setObject(CCString::create("결재 실패"), kMyLocalKey_failPurchase);
+	ja->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
 	ja->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ja->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ja->setObject(CCString::create("상점가기"), kMyLocalKey_goShopButton);
@@ -1187,6 +1191,10 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
 	ja->setObject(CCString::create("무료"), kMyLocalKey_free);
 	ja->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
+	ja->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
+	ja->setObject(CCString::create("STOP"), kMyLocalKey_stop);
+	ja->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	ja->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

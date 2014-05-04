@@ -1848,8 +1848,6 @@ void Jack::dieEffect()
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 				
-				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString(), false, true);
-				
 				startReviveAnimation(jackImg);
 			}
 			else if(myGD->getCommunicationBool("UI_beRevivedJack"))
@@ -1864,8 +1862,6 @@ void Jack::dieEffect()
 //				jackImg = CCSprite::createWithTexture(jack_texture, CCRectMake(0, 0, 23, 23));
 //				jackImg->setScale(0.8f);
 //				addChild(jackImg, kJackZ_main);
-				
-				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString(), false, true);
 				
 				startReviveAnimation(jackImg);
 			}
@@ -2322,6 +2318,8 @@ CCPoint Jack::checkOutlineTurnPosition( CCPoint turnPosition )
 
 void Jack::startReviveAnimation( CCSprite* t_jack_img )
 {
+	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString(), false, true);
+	
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("born"))
 		jack_ccb_manager->runAnimationsForSequenceNamed("born");
 //	t_jack_img->setOpacity(0);

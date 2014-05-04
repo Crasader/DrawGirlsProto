@@ -72,11 +72,12 @@ public:
 	{
 		effectOn = t_b;
 	}
-	
+	bool is_preloaded;
 	void preloadEffectScene(string scenename)
 	{
-		if(scenename == "Title")
+		if(scenename == "Title" && !is_preloaded)
 		{
+			is_preloaded = true;
 //			mySAE->preloadEffect("sound_buttonClick_Low.mp3");
 //			mySAE->preloadEffect("sound_scrolling.mp3");
 //			mySAE->preloadEffect("sound_start_brush.mp3");
@@ -592,7 +593,7 @@ private:
 	{
 		mySAE = SimpleAudioEngine::sharedEngine();
 		back_down = false;
-		
+		is_preloaded = false;
 		soundEffects = new CCArray(1);
 	}
 	

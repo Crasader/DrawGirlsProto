@@ -52,6 +52,8 @@ public:
     // preprocessor macro for "static create()" constructor ( node() deprecated )
     CREATE_FUNC(ShopPopup);
 	
+	void setCloseFunc(function<void(void)> t_close_func);
+	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	void targetHeartTime(HeartTime* t_heartTime);
 	void setShopBeforeCode(ShopBeforeCode t_code);
@@ -59,6 +61,9 @@ public:
 	void setShopCode(ShopCode t_code);
 	
 private:
+	
+	bool is_set_close_func;
+	function<void(void)> close_func;
 	
 	ShopBeforeCode before_code;
 	ShopCode recent_shop_code;

@@ -119,6 +119,7 @@ private:
 	
 	void basicEnter();
 	void tableEnter(function<void()> end_func);
+	void tableDownloading(function<void()> end_func);
 	void tableOpenning();
 	
 	void setTable();

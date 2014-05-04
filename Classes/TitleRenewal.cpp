@@ -51,7 +51,12 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
-	AudioEngine::sharedInstance()->preloadEffectScene("Title");
+//	std::chrono::time_point<std::chrono::system_clock> recent;
+//    recent = std::chrono::system_clock::now();
+//	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
+//	CCLOG("title init : %d", int(recent_time));
+	
+	AudioEngine::sharedInstance()->stopSound();
 	
 	is_menu_enable = false;
 
@@ -113,6 +118,14 @@ bool TitleRenewalScene::init()
 //	resultLogin(t_result_data);
 	
 	return true;
+}
+
+void TitleRenewalScene::onEnterTransitionDidFinish()
+{
+//	std::chrono::time_point<std::chrono::system_clock> recent;
+//    recent = std::chrono::system_clock::now();
+//	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
+//	CCLOG("title onEnter Finish : %d", int(recent_time));
 }
 
 void TitleRenewalScene::loadCounting(CCObject* sender)
@@ -182,6 +195,8 @@ void TitleRenewalScene::realInit()
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	
 	white_back->removeFromParent();
+	
+	AudioEngine::sharedInstance()->preloadEffectScene("Title");
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -278,6 +293,7 @@ void TitleRenewalScene::successLogin()
 	}
 	
 	AudioEngine::sharedInstance()->playEffect("ment_title.mp3");
+	addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);}));
 	
 	is_loaded_server = false;
 	

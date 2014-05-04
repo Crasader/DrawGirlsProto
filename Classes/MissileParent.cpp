@@ -193,7 +193,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 
 void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition)
 {
-	int power = StoneAttack::getPower(grade, level);
+	int power = mySGD->getSelectedCharacterHistory().power.getV();
 	AttackOption ao = getAttackOption(stoneType, grade);
 	int missileNumbersInt = floor(missileNumbers);
 	if(stoneType == StoneType::kStoneType_guided)

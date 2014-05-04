@@ -1393,14 +1393,16 @@ bool PlayUI::beRevivedJack ()
 		
 		if(jack_life <= 0)
 		{
-			CCSprite* last_life_ccb = KS::loadCCBI<CCSprite*>(this, "warning_over_02.ccbi").first;
-			last_life_ccb->setPosition(ccp(240,myDSH->ui_center_y));
-			addChild(last_life_ccb);
+			myGD->showDetailMessage("warning_over_02.ccbi", "h");
 			
-			last_life_ccb->addChild(KSTimer::create(1.5f, [=]()
-			{
-				last_life_ccb->removeFromParent();
-			}));
+//			CCSprite* last_life_ccb = KS::loadCCBI<CCSprite*>(this, "warning_over_02.ccbi").first;
+//			last_life_ccb->setPosition(ccp(240,myDSH->ui_center_y));
+//			addChild(last_life_ccb);
+//			
+//			last_life_ccb->addChild(KSTimer::create(1.5f, [=]()
+//			{
+//				last_life_ccb->removeFromParent();
+//			}));
 		}
 		
 		AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");

@@ -1446,7 +1446,7 @@ void PlayTutorial::nextStep()
 		area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
 		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
 		area_take_sample->addChild(t_ccbi);
-		area_take_sample->setPosition(ccp(240,220));
+		area_take_sample->setPosition(ccp(240,200));
 		addChild(area_take_sample, 101);
 		
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()

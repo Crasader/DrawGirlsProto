@@ -200,6 +200,10 @@ public:
 	KSProtectVar<int> characterNo;
 	KSProtectVar<int> level;
 	KSProtectVar<int> nextPrice;
+	KSProtectVar<int> power;
+	KSProtectVar<int> nextPower;
+	KSProtectVar<int> prevPower;
+	KSProtectVar<bool> isMaxLevel;
 };
 
 class TodayMission
@@ -295,6 +299,7 @@ public:
 	Json::Value getStartRequestsData();
 	
 	bool is_paused;
+	bool is_on_maingame;
 	
 	string getFont();
 	string getFont2();

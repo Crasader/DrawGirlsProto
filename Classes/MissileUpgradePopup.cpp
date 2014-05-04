@@ -122,7 +122,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	missile_data_level->setPosition(ccp(-53,60));
 	upgrade_action_node->addChild(missile_data_level);
 	
-	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1))->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_power->setColor(ccc3(255, 222, 0));
 	missile_data_power->enableOuterStroke(ccBLACK, 1.f);
 	missile_data_power->setAnchorPoint(ccp(0,0.5f));
@@ -198,7 +198,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
-		before_damage = StoneAttack::getPower((before_level-1)/5+1, (before_level-1)%5+1);
+		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
 		mySGD->addChangeGoods(kGoodsType_pass3, -1, "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
@@ -231,7 +231,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
-		before_damage = StoneAttack::getPower((before_level-1)/5+1, (before_level-1)%5+1);
+		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
 		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getSelectedCharacterHistory().nextPrice.getV(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
@@ -351,7 +351,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 {
 	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	
-	int after_damage = StoneAttack::getPower((missile_level-1)/5+1, (missile_level-1)%5+1);
+	int after_damage = mySGD->getSelectedCharacterHistory().power.getV();
 	
 	missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
 	missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), after_damage)->getCString());
@@ -388,7 +388,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	}
 	
 	
-	if(missile_level >= 25)
+	if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 	{
 		upgrade_button->removeFromParent();
 	}
