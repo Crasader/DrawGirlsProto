@@ -7,7 +7,7 @@
     <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">약관동의</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.terms">TOAST 이용약관 보기</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">개인정보 수집 이용보기</string>
-    <string name="hsp.toastnew.auth.welcome.agreement.alert">이용중이던 아이디가 있으시면 [아이디로 로그인]을 해 주세요\n [게스트 로그인]을 하시면 앱 삭제 시 게임정보가 함께 삭제되오니 유의해 주세요 </string>
+    <string name="hsp.toastnew.auth.welcome.agreement.alert">테스트. 이용중이던 아이디가 있으시면 [아이디로 로그인]을 해 주세요\n [게스트 로그인]을 하시면 앱 삭제 시 게임정보가 함께 삭제되오니 유의해 주세요 </string>
     <string name="hsp.toastnew.auth.welcome.idp.login">아이디 로그인</string>
     <string name="hsp.toastnew.auth.welcome.guest.login">게스트 로그인</string>
     <string name="hsp.toastnew.auth.welcome.alert.hid.login">아이디로 로그인</string>
