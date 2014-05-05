@@ -214,6 +214,7 @@ void StartSettingPopup::setMain()
 		stage_number = mySD->getSilType();
 		
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		stage_number_label->setColor(ccc3(255, 170, 20));
 		stage_number_label->setPosition(ccp(65, 256));
 		main_case->addChild(stage_number_label);
 		
@@ -225,6 +226,7 @@ void StartSettingPopup::setMain()
 		stage_number = mySD->getSilType();
 		
 		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		piece_number_label->setColor(ccc3(255, 170, 20));
 		piece_number_label->setPosition(ccp(65, 256));
 		main_case->addChild(piece_number_label);
 		

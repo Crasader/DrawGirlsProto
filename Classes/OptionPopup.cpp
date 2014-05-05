@@ -180,6 +180,7 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* coupon_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	coupon_button->setTitleColor(ccc3(50, 20, 0));
 	coupon_button->setPosition(getContentPosition(kOP_MT_coupon));
 	coupon_button->setFunction([=](CCObject* sender)
 														 {
@@ -191,6 +192,7 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* community_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_community), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	community_button->setTitleColor(ccc3(50, 20, 0));
 	community_button->setPosition(getContentPosition(kOP_MT_community));
 	community_button->setFunction([=](CCObject* sender)
 																{
@@ -201,7 +203,8 @@ bool OptionPopup::init()
 	main_case->addChild(community_button, kOP_Z_content);
 	
 	
-	CommonButton* tip_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gametip), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	CommonButton* tip_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	tip_button->setTitleColor(ccc3(50, 20, 0));
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
 													{
