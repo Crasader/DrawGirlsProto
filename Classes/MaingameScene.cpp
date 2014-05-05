@@ -1469,48 +1469,48 @@ void Maingame::clearScenario2()
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
-																							   item_gold->setPosition(ccp(-150,-30));
+																							   item_gold->setPosition(ccp(-150,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(0,-30));
-																								   item_stone->setPosition(ccp(150,-30));
+																								   item_gold_or_item->setPosition(ccp(0,-10));
+																								   item_stone->setPosition(ccp(150,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(150,-30));
-																								   item_stone->setPosition(ccp(0,-30));
+																								   item_gold_or_item->setPosition(ccp(150,-10));
+																								   item_stone->setPosition(ccp(0,-10));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   item_gold_or_item->setPosition(ccp(-150,-30));
+																							   item_gold_or_item->setPosition(ccp(-150,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(0,-30));
-																								   item_stone->setPosition(ccp(150,-30));
+																								   item_gold->setPosition(ccp(0,-10));
+																								   item_stone->setPosition(ccp(150,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-30));
-																								   item_stone->setPosition(ccp(0,-30));
+																								   item_gold->setPosition(ccp(150,-10));
+																								   item_stone->setPosition(ccp(0,-10));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   item_stone->setPosition(ccp(-150,-30));
+																							   item_stone->setPosition(ccp(-150,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(0,-30));
-																								   item_gold_or_item->setPosition(ccp(150,-30));
+																								   item_gold->setPosition(ccp(0,-10));
+																								   item_gold_or_item->setPosition(ccp(150,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-30));
-																								   item_gold_or_item->setPosition(ccp(0,-30));
+																								   item_gold->setPosition(ccp(150,-10));
+																								   item_gold_or_item->setPosition(ccp(0,-10));
 																							   }
 																						   }
 																						   t_container->addChild(item_gold);
@@ -1582,48 +1582,48 @@ void Maingame::clearScenario2()
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
-																							   item_gold->setPosition(ccp(0,-30));
+																							   item_gold->setPosition(ccp(0,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(-150,-30));
-																								   item_stone->setPosition(ccp(150,-30));
+																								   item_gold_or_item->setPosition(ccp(-150,-10));
+																								   item_stone->setPosition(ccp(150,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(150,-30));
-																								   item_stone->setPosition(ccp(-150,-30));
+																								   item_gold_or_item->setPosition(ccp(150,-10));
+																								   item_stone->setPosition(ccp(-150,-10));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   item_gold_or_item->setPosition(ccp(0,-30));
+																							   item_gold_or_item->setPosition(ccp(0,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-30));
-																								   item_stone->setPosition(ccp(150,-30));
+																								   item_gold->setPosition(ccp(-150,-10));
+																								   item_stone->setPosition(ccp(150,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-30));
-																								   item_stone->setPosition(ccp(-150,-30));
+																								   item_gold->setPosition(ccp(150,-10));
+																								   item_stone->setPosition(ccp(-150,-10));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   item_stone->setPosition(ccp(0,-30));
+																							   item_stone->setPosition(ccp(0,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-30));
-																								   item_gold_or_item->setPosition(ccp(150,-30));
+																								   item_gold->setPosition(ccp(-150,-10));
+																								   item_gold_or_item->setPosition(ccp(150,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-30));
-																								   item_gold_or_item->setPosition(ccp(-150,-30));
+																								   item_gold->setPosition(ccp(150,-10));
+																								   item_gold_or_item->setPosition(ccp(-150,-10));
 																							   }
 																						   }
 																						   t_container->addChild(item_gold);
@@ -1696,48 +1696,48 @@ void Maingame::clearScenario2()
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
-																							   item_gold->setPosition(ccp(150,-30));
+																							   item_gold->setPosition(ccp(150,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(-150,-30));
-																								   item_stone->setPosition(ccp(0,-30));
+																								   item_gold_or_item->setPosition(ccp(-150,-10));
+																								   item_stone->setPosition(ccp(0,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(0,-30));
-																								   item_stone->setPosition(ccp(-150,-30));
+																								   item_gold_or_item->setPosition(ccp(0,-10));
+																								   item_stone->setPosition(ccp(-150,-10));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   item_gold_or_item->setPosition(ccp(150,-30));
+																							   item_gold_or_item->setPosition(ccp(150,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-30));
-																								   item_stone->setPosition(ccp(0,-30));
+																								   item_gold->setPosition(ccp(-150,-10));
+																								   item_stone->setPosition(ccp(0,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(0,-30));
-																								   item_stone->setPosition(ccp(-150,-30));
+																								   item_gold->setPosition(ccp(0,-10));
+																								   item_stone->setPosition(ccp(-150,-10));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   item_stone->setPosition(ccp(150,-30));
+																							   item_stone->setPosition(ccp(150,-10));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-30));
-																								   item_gold_or_item->setPosition(ccp(0,-30));
+																								   item_gold->setPosition(ccp(-150,-10));
+																								   item_gold_or_item->setPosition(ccp(0,-10));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(0,-30));
-																								   item_gold_or_item->setPosition(ccp(-150,-30));
+																								   item_gold->setPosition(ccp(0,-10));
+																								   item_gold_or_item->setPosition(ccp(-150,-10));
 																							   }
 																						   }
 																						   t_container->addChild(item_gold);
@@ -1758,12 +1758,31 @@ void Maingame::clearScenario2()
 					  goldbox_menu->addChild(goldbox3_item);
 					  
 					  CCSprite* falling_box = CCSprite::create("goldbox_off.png");
-					  falling_box->setPosition(ccp(0,1000));
+					  falling_box->setPosition(ccp(0,600));
 					  t_container->addChild(falling_box);
 					  
-					  t_container->addChild(KSGradualValue<float>::create(1000.f, -30.f, 1.f, [=](float t)
+					  t_container->addChild(KSGradualValue<float>::create(0, 1.f, 1.f, [=](float t)
 																		  {
-																			  falling_box->setPositionY(t);
+																			  float t_t;
+																			  if (t < 1 / 2.75)
+																			  {
+																				  t_t = 7.5625f * t * t;
+																			  } else if (t < 2 / 2.75)
+																			  {
+																				  t -= 1.5f / 2.75f;
+																				  t_t = 7.5625f * t * t + 0.75f;
+																			  } else if(t < 2.5 / 2.75)
+																			  {
+																				  t -= 2.25f / 2.75f;
+																				  t_t = 7.5625f * t * t + 0.9375f;
+																			  }
+																			  else
+																			  {
+																				  t -= 2.625f / 2.75f;
+																				  t_t = 7.5625f * t * t + 0.984375f;
+																			  }
+																			  
+																			  falling_box->setPositionY(600.f - 630.f*t_t);
 																		  }, [=](float t)
 																		  {
 																			  falling_box->setPositionY(-30);
