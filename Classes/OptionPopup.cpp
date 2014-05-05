@@ -27,12 +27,17 @@
 #include "hspConnector.h"
 #include "TitleRenewal.h"
 
-//#include "PuzzleSuccessAndPerfect.h"
+#include "FirstPurchasePopup.h"
+#include "EmptyItemSalePopup.h"
+#include "MileagePopup.h"
+#include "EventShopPopup.h"
+#include "LevelupGuidePopup.h"
 
 #include "KSLabelTTF.h"
 #include "PopCake.h"
 #include "EffectSprite.h"
 #include "FlagSelector.h"
+
 
 USING_NS_CC_EXT;
 
@@ -56,13 +61,13 @@ enum OptionPopupMenuTag{
 	kOP_MT_withdraw,
 	kOP_MT_joystickPositioning,
 	kOP_MT_joystickMoving,
+	kOP_MT_tutorial,
 	kOP_MT_safety,
 	kOP_MT_push,
 	kOP_MT_message,
 	kOP_MT_coupon,
 	kOP_MT_community,
-	kOP_MT_accountLink,
-	kOP_MT_kakao
+	kOP_MT_tip
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -80,7 +85,12 @@ bool OptionPopup::init()
 		return false;
 	}
 	
-//	PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){}, false);
+
+//	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-999, [=](){}, [=](){});
+//	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});
+//	MileagePopup* t_popup = MileagePopup::create(-999, [=](){}, 5);
+//	EventShopPopup* t_popup = EventShopPopup::create(-999, [=](){});
+//	LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-999, [=](){}, [=](){});
 //	addChild(t_popup, 999);
 	
 //	Json::Value param;
@@ -169,7 +179,6 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* coupon_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
-	coupon_button->setTitleColor(ccc3(50, 20, 0));
 	coupon_button->setPosition(getContentPosition(kOP_MT_coupon));
 	coupon_button->setFunction([=](CCObject* sender)
 														 {
@@ -181,7 +190,6 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* community_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_community), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
-	community_button->setTitleColor(ccc3(50, 20, 0));
 	community_button->setPosition(getContentPosition(kOP_MT_community));
 	community_button->setFunction([=](CCObject* sender)
 																{
@@ -192,27 +200,26 @@ bool OptionPopup::init()
 	main_case->addChild(community_button, kOP_Z_content);
 	
 	
-	CommonButton* account_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
-	account_button->setTitleColor(ccc3(50, 20, 0));
-	account_button->setPosition(getContentPosition(kOP_MT_accountLink));
-	account_button->setFunction([=](CCObject* sender)
+	CommonButton* tip_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gametip), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	tip_button->setPosition(getContentPosition(kOP_MT_tip));
+	tip_button->setFunction([=](CCObject* sender)
 													{
 														CCNode* t_node = CCNode::create();
-														t_node->setTag(kOP_MT_accountLink);
+														t_node->setTag(kOP_MT_tip);
 														menuAction(t_node);
 													});
-	main_case->addChild(account_button, kOP_Z_content);
+	main_case->addChild(tip_button, kOP_Z_content);
 	
 	
-	CommonButton* kakao_button = CommonButton::create("", 12, CCSizeMake(85, 33), CCScale9Sprite::create("option_kakao.png"), -171);
-	kakao_button->setPosition(getContentPosition(kOP_MT_kakao));
-	kakao_button->setFunction([=](CCObject* sender)
-								{
-									CCNode* t_node = CCNode::create();
-									t_node->setTag(kOP_MT_kakao);
-									menuAction(t_node);
-								});
-	main_case->addChild(kakao_button, kOP_Z_content);
+	CommonButton* tutorial_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_tutorial), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	tutorial_button->setPosition(getContentPosition(kOP_MT_tutorial));
+	tutorial_button->setFunction([=](CCObject* sender)
+															 {
+																 CCNode* t_node = CCNode::create();
+																 t_node->setTag(kOP_MT_tutorial);
+																 menuAction(t_node);
+															 });
+	main_case->addChild(tutorial_button, kOP_Z_content);
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-171);
@@ -869,6 +876,10 @@ void OptionPopup::menuAction(CCObject* pSender)
 		//		resetJoystickMovingMenu();
 		//		is_menu_enable = true;
 	}
+	else if(tag == kOP_MT_tutorial)
+	{
+		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
+	}
 	else if(tag == kOP_MT_safety)
 	{
 		myDSH->setBoolForKey(kDSH_Key_isSafetyMode, !myDSH->getBoolForKey(kDSH_Key_isSafetyMode));
@@ -892,11 +903,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	{
 		is_menu_enable = true;
 	}
-	else if(tag == kOP_MT_accountLink)
-	{
-		is_menu_enable = true;
-	}
-	else if(tag == kOP_MT_kakao)
+	else if(tag == kOP_MT_tip)
 	{
 		is_menu_enable = true;
 	}
@@ -1155,8 +1162,8 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	
 	else if(t_tag == kOP_MT_coupon)			return_value = ccp(390, 256);
 	else if(t_tag == kOP_MT_community)		return_value = ccp(313, 256);
-	else if(t_tag == kOP_MT_accountLink)	return_value = ccp(236, 256);
-	else if(t_tag == kOP_MT_kakao)			return_value = ccp(156, 256);
+	else if(t_tag == kOP_MT_tip)			return_value = ccp(236, 256);
+	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(159, 256);
 	
 	else if(t_tag == kOP_MT_help)			return_value = ccp(410, 36);
 	
