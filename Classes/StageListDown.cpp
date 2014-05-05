@@ -446,7 +446,7 @@ void StageListDown::endOpenning()
 	talk_box->setVisible(false);
 	addChild(talk_box, kSLD_Z_content);
 	
-	talk_label->setPosition(ccp(240, 200));
+	talk_label->setPosition(ccp(240, 220));
 	addChild(talk_label);
 	
 	KS::setOpacity(talk_label, 0);
