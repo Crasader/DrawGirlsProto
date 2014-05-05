@@ -104,7 +104,7 @@ class SumranMailPopup : public DimmedPopup, public CCTableViewDataSource, public
 		ScrollBar * m_scrollBar;
 		SumranMailFilter m_mailFilter;
 		SumranPostBoxState m_popupState;
-
+		CommonButton* allReceive;
 		CCLabelTTF* m_nothingMessage; // 받은 메시지가 없습니다.
 		int download_card_number;
 		CCNode* loading_card_img;
