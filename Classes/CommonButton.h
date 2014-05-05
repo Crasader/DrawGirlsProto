@@ -193,14 +193,18 @@ public:
 		m_fontSize=fontSize;
 		m_title=title;
 		this->setAnchorPoint(ccp(0.5f,0.5f));
+		
 		m_btnTitle = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
+		
+		CCLabelTTF* titleNode = CCLabelTTF::create();
+		titleNode->addChild(m_btnTitle);
 		
 		m_btnType = CommonButtonFree;
 		
 		m_btnBack = button_back;
 		
 		
-		m_btn = CCControlButton::create(m_btnTitle, m_btnBack);
+		m_btn = CCControlButton::create(titleNode, m_btnBack);
 		
 		if(size.height>0){
 			m_btn->setPreferredSize(size);
@@ -307,8 +311,12 @@ public:
 		m_btn->setEnabled(isEnabled);
 		if(isEnabled){
 			this->m_btnTitle->setColor(m_titleColorNomal);
+			if(m_priceLbl)
+				m_priceLbl->setColor(m_titleColorNomal);
 		}else{
 			this->m_btnTitle->setColor(m_titleColorDisable);
+			if(m_priceLbl)
+				m_priceLbl->setColor(m_titleColorDisable);
 		}
 	}
 	
@@ -365,9 +373,16 @@ public:
 				m_priceLbl=CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 13);
 			else
 				m_priceLbl=CCLabelTTF::create(CCString::createWithFormat("%d",m_price)->getCString(), mySGD->getFont().c_str(), 13);
+			
+			if(isEnabled()){
+				this->m_priceLbl->setColor(m_titleColorNomal);
+			}else{
+				this->m_priceLbl->setColor(m_titleColorDisable);
+			}
+			
 			m_priceLbl->setAnchorPoint(ccp(0.5,0));
-			m_priceLbl->setPosition(ccp(this->getContentSize().width/2+5,7));
-			m_btnTitle->setPositionY(m_btnTitle->getPositionY()+8);
+			m_priceLbl->setPosition(ccp(this->getContentSize().width/2+5,getContentSize().height/2.f-m_priceLbl->getContentSize().height/2.f-1));
+			m_btnTitle->setPositionY(getContentSize().height/2.f+m_priceLbl->getContentSize().height/2.f+1);
 			addChild(m_priceLbl,10);
 		}else{
 			if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
@@ -397,9 +412,15 @@ public:
 			
 			m_priceTypeSprite = CCSprite::create(priceTypeImg.c_str());
 			m_priceTypeSprite->setScale(0.9);
-			m_priceTypeSprite->setPosition(ccp(m_priceLbl->getPositionX()-m_priceLbl->getContentSize().width/2-10+2,m_priceLbl->getPositionY()+m_priceLbl->getContentSize().height/2));
+			m_priceTypeSprite->setPosition(ccp(m_priceLbl->getPositionX()-m_priceLbl->getContentSize().width/2-10+2,getContentSize().height/2.f-m_priceTypeSprite->getContentSize().height/2.f-1));
 			addChild(m_priceTypeSprite,11);
 		}
+		
+		float w1 = m_priceTypeSprite->getContentSize().height;
+		float w2 = m_priceLbl->getContentSize().width;
+		
+		m_priceTypeSprite->setPositionX(getContentSize().width/2.f-w2/2.f);
+		m_priceLbl->setPositionX(getContentSize().width/2.f+w1/2.f);
 	}
 	
 	int getPrice(){

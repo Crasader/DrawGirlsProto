@@ -627,7 +627,7 @@ void StartSettingPopup::setMain()
 		if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
 		{
 			CCSprite* n_pass_ticket = CCSprite::create("pass_ticket3.png");
-			n_pass_ticket->setPosition(ccp(28,23.5f));
+			n_pass_ticket->setPosition(ccp(28,23.f));
 			n_upgrade->addChild(n_pass_ticket);
 			KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 18);
 			n_free_label->setColor(ccc3(50, 25, 0));
@@ -635,7 +635,7 @@ void StartSettingPopup::setMain()
 			n_upgrade->addChild(n_free_label);
 			
 			CCSprite* s_pass_ticket = CCSprite::create("pass_ticket3.png");
-			s_pass_ticket->setPosition(ccp(28,23.5f));
+			s_pass_ticket->setPosition(ccp(28,23.f));
 			s_upgrade->addChild(s_pass_ticket);
 			KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 18);
 			s_free_label->setColor(ccc3(50, 25, 0));
@@ -749,11 +749,7 @@ void StartSettingPopup::gachaMenuCreate()
 																		   if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
 																			{
 																				if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
-																				{
 																					buy_button->setPrice(PriceTypePass4, 0);
-																					CCSprite* t_ticket = buy_button->m_priceTypeSprite;
-																					t_ticket->setPosition(t_ticket->getPosition() + ccp(-15, 0));
-																				}
 																				else
 																					buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
 																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
@@ -761,11 +757,7 @@ void StartSettingPopup::gachaMenuCreate()
 																		   else
 																			{
 																				if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
-																				{
 																					buy_button->setPrice(PriceTypePass4, 0);
-																					CCSprite* t_ticket = buy_button->m_priceTypeSprite;
-																					t_ticket->setPosition(t_ticket->getPosition() + ccp(-15, 0));
-																				}
 																				else
 																					buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaGoldFee());
 																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
@@ -893,7 +885,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
 			{
 				CCSprite* n_pass_ticket = CCSprite::create("pass_ticket3.png");
-				n_pass_ticket->setPosition(ccp(28,23.5f));
+				n_pass_ticket->setPosition(ccp(28,23.f));
 				n_upgrade->addChild(n_pass_ticket);
 				KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 18);
 				n_free_label->setColor(ccc3(50, 25, 0));
@@ -901,7 +893,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				n_upgrade->addChild(n_free_label);
 				
 				CCSprite* s_pass_ticket = CCSprite::create("pass_ticket3.png");
-				s_pass_ticket->setPosition(ccp(28,23.5f));
+				s_pass_ticket->setPosition(ccp(28,23.f));
 				s_upgrade->addChild(s_pass_ticket);
 				KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 18);
 				s_free_label->setColor(ccc3(50, 25, 0));
@@ -997,22 +989,14 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
 		if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
-		{
 			buy_button->setPrice(PriceTypePass4, 0);
-			CCSprite* t_ticket = buy_button->m_priceTypeSprite;
-			t_ticket->setPosition(t_ticket->getPosition() + ccp(-15, 0));
-		}
 		else
 			buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
 		
 		ItemGachaPopup* t_popup = ItemGachaPopup::create(touch_priority-100, [=]()
 		{
 			if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
-			{
 				buy_button->setPrice(PriceTypePass4, 0);
-				CCSprite* t_ticket = buy_button->m_priceTypeSprite;
-				t_ticket->setPosition(t_ticket->getPosition() + ccp(-15, 0));
-			}
 			else
 				buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
 			endItemGacha();
@@ -1033,11 +1017,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			gacha_item->addChild(mount_img);
 			
 			if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
-			{
 				buy_button->setPrice(PriceTypePass4, 0);
-				CCSprite* t_ticket = buy_button->m_priceTypeSprite;
-				t_ticket->setPosition(t_ticket->getPosition() + ccp(-15, 0));
-			}
 			else
 				buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
 			buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));

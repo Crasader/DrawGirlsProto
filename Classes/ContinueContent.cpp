@@ -601,19 +601,19 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
 	{
 		price_type = CCSprite::create("pass_ticket1.png");
-		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
 		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
-		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+18,price_back->getContentSize().height/2.f));
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+15,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
 	}
 	else
 	{
 		price_type = CCSprite::create("price_ruby_img.png");
-		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
 		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 12);
-		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+18,price_back->getContentSize().height/2.f));
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+15,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
 	}
 	
