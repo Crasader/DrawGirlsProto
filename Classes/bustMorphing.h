@@ -252,6 +252,8 @@ public:
 	CCPoint m_validTouchPosition;
 	float m_waveRange;
 	bool m_isWaving;
+	float m_lastTouchTime; // 마지막 터치 시점.
+	float m_touchTimer; // 증가하는 시간
 	///
 	
 	int colorRampUniformLocation;   // 1
@@ -264,6 +266,8 @@ public:
 		texture = nullptr;
 		m_isWaving = false;
 		m_isLoadedRGB = false;
+		m_touchTimer = 0.f;
+		m_lastTouchTime = 0.f;
 	}
 	///////////////////
 	virtual ~MyNode()
@@ -365,6 +369,15 @@ public:
 			}
 		}
 #endif
+		if(m_touchTimer > m_lastTouchTime + 0.7f)
+		{
+			m_lastTouchTime = m_touchTimer;
+//			setTouchEnabled(false);
+		}
+		else
+		{
+			return; // 너무 이른 터치가 들어왔으면 나감
+		}
 		if(m_isLoadedRGB == false)
 			return;
 		CCPoint touchLocation = pTouch->getLocation();
@@ -538,9 +551,15 @@ public:
 	{
 		CCLayer::init();
 		
-		
+		scheduleUpdate();	
 		return true;
 	}
+	void update(float dt)
+	{
+		m_touchTimer += 1 / 60.f;
+		
+	}
+	
 	void wave(float dt)
 	{
 		// 원래 대로 돌아가려는 힘.
@@ -549,6 +568,15 @@ public:
 	}
 	void movingDistance(CCPoint t) // 영호.
 	{
+		if(m_touchTimer > m_lastTouchTime + 1.f)
+		{
+//			m_lastTouchTime = m_touchTimer;
+			//			setTouchEnabled(false);
+		}
+		else
+		{
+			return; // 너무 이른 터치가 들어왔으면 나감
+		}
 //		CCLOG("%f %f", t.x, t.y);
 		if(m_isLoadedRGB == false)
 			return;
@@ -599,6 +627,7 @@ public:
 	}
 	bool init(CCTexture2D* tex){
 		CCLayer::init();
+		scheduleUpdate();
 		ignoreAnchorPointForPosition(false);
 //		if(!CCSprite::initWithTexture(tex))
 //			return false;
