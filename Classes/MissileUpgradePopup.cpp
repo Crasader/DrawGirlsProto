@@ -60,6 +60,8 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 																	   
 																	   is_menu_enable = false;
 																	   
+																	   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+																	   
 																	   addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
 																		   addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
 																	   

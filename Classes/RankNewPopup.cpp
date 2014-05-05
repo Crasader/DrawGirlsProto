@@ -418,6 +418,8 @@ void RankNewPopup::menuAction(CCObject* pSender)
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+	
 	hidePopup();
 }
 

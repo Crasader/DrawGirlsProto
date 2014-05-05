@@ -59,6 +59,7 @@ void StoryManager::addMent(bool is_left, string t_name, string t_namefile, strin
 	}
 	
 	end_func = t_end_func;
+	is_click_effect = true;
 	
 	startMent();
 }
@@ -100,7 +101,11 @@ bool StoryManager::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 	is_boosting = true;
 	if(!is_menting && !is_delaying && end_func)
 	{
-		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+		if(is_click_effect)
+		{
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+			is_click_effect = false;
+		}
 		end_func();
 	}
 	

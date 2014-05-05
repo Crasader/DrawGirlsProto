@@ -582,7 +582,7 @@ void OnePercentGacha::setBack ()
 		CCSprite* pass_ticket = CCSprite::create("pass_ticket5.png");
 		pass_ticket->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 		price_back->addChild(pass_ticket);
-		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 20);
 		free_label->setColor(ccWHITE);
 		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(free_label);
@@ -592,7 +592,7 @@ void OnePercentGacha::setBack ()
 		CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
-		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 20);
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
 	}

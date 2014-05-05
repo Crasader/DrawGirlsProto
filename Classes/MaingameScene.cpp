@@ -3260,6 +3260,7 @@ void Maingame::showPause()
 	
 	PauseContent* t_container = PauseContent::create(t_popup->getTouchPriority(), [=]()
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
@@ -3268,6 +3269,7 @@ void Maingame::showPause()
 		t_popup->removeFromParent();
 	}, [=]()
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
@@ -3277,6 +3279,7 @@ void Maingame::showPause()
 		t_popup->removeFromParent();
 	}, [=]()
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();

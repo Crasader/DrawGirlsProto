@@ -340,6 +340,8 @@ void StartSettingPopup::setMain()
 	
 	clicked_item_idx = -1;
 	
+	bool is_have_unlock_item = false;
+	
 	for(int i=0;i<item_list.size() && i < 3;i++)
 	{
 		ITEM_CODE t_ic = item_list[i];
@@ -456,6 +458,10 @@ void StartSettingPopup::setMain()
 			CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
 			locked_img->setPosition(item_position);
 			main_case->addChild(locked_img, 1);
+		}
+		else
+		{
+			is_have_unlock_item = true;
 		}
 	}
 	
@@ -680,9 +686,15 @@ void StartSettingPopup::setMain()
 	//		option_rect->setPosition(option_position);
 	//		main_case->addChild(option_rect);
 	
-	option_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectUseItem), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
-	option_label->setAnchorPoint(ccp(0,1));
-	option_label->setPosition(option_position);
+	string option_ment;
+	if(is_have_unlock_item)
+		option_ment = myLoc->getLocalForKey(kMyLocalKey_selectUseItem);
+	else
+		option_ment = myLoc->getLocalForKey(kMyLocalKey_notUseItem);
+	
+	option_label = CCLabelTTF::create(option_ment.c_str(), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	option_label->setAnchorPoint(ccp(0.5,0.5));
+	option_label->setPosition(ccp(317,117));
 	main_case->addChild(option_label);
 }
 
@@ -785,6 +797,8 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
 	MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
@@ -1477,6 +1491,8 @@ void StartSettingPopup::menuAction(CCObject* sender)
 		
 		int tag = ((CCNode*)sender)->getTag();
 		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+		
 		if(tag == kStartSettingPopupMenuTag_back)
 		{
 			closeAction();
@@ -1835,6 +1851,8 @@ void StartSettingPopup::goToGame()
 	{
 		myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control, true);
 		mySGD->setNextSceneName("playtutorial");
+		
+		AudioEngine::sharedInstance()->preloadEffectScene("playtutorial");
 		
 		LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
 		addChild(loading_tip, kStartSettingPopupZorder_popup);

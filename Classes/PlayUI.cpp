@@ -2223,8 +2223,8 @@ void PlayUI::myInit ()
 	
 	if(clr_cdt_type == kCLEAR_timeLimit)
 	{
-		playtime_limit = playtime_limit.getV() - ing_cdt_cnt.getV();
-		total_time = total_time - ing_cdt_cnt.getV();
+		playtime_limit = playtime_limit.getV() - mySD->getClearConditionTimeLimit();
+		total_time = total_time - mySD->getClearConditionTimeLimit();
 	}
 	
 //	CCSprite* time_back = CCSprite::create("ui_time_back.png");
@@ -2337,11 +2337,13 @@ void PlayUI::myInit ()
 	mission_button->startMarquee();
 	
 	mission_button->setOpenFunction([&](){
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mission_button->runAction(CCMoveBy::create(0.3,ccp(174,0)));
 		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mission_button->runAction(CCMoveBy::create(0.3,ccp(-174,0)));
 		top_center_node->setVisible(true);
 	});
@@ -2701,7 +2703,7 @@ void PlayUI::continueAction ()
 }
 void PlayUI::menuAction (CCObject * sender)
 {
-	AudioEngine::sharedInstance()->playEffect("sound_buttonClick_Low.mp3", false);
+//	AudioEngine::sharedInstance()->playEffect("sound_buttonClick_Low.mp3", false);
 	int tag = ((CCNode*)sender)->getTag();
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);

@@ -380,9 +380,9 @@ public:
 				this->m_priceLbl->setColor(m_titleColorDisable);
 			}
 			
-			m_priceLbl->setAnchorPoint(ccp(0.5,0));
+			m_priceLbl->setAnchorPoint(ccp(0.5,0.5));
 			m_priceLbl->setPosition(ccp(this->getContentSize().width/2+5,getContentSize().height/2.f-m_priceLbl->getContentSize().height/2.f-1));
-			m_btnTitle->setPositionY(getContentSize().height/2.f+m_priceLbl->getContentSize().height/2.f+1);
+			m_btnTitle->setPositionY(m_priceLbl->getContentSize().height/2.f+1);
 			addChild(m_priceLbl,10);
 		}else{
 			if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
