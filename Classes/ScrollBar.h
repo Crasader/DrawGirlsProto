@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include <string>
+#include "KSGeometry.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
 
@@ -44,9 +45,9 @@ public:
 		CCPoint obPosition = ob->getPosition();
 		CCSize obContentSize = ob->getContentSize();
 		CCPoint obAnchorPoint = ob->getAnchorPoint();
-		return CCRectMake( obPosition.x - obContentSize.width * obAnchorPoint.x,
+		return rtSetScale( CCRectMake( obPosition.x - obContentSize.width * obAnchorPoint.x,
 											obPosition.y - obContentSize.height * obAnchorPoint.y,
-											obContentSize.width, obContentSize.height);
+											obContentSize.width, obContentSize.height), 1.5f );
 	}
 protected:
 	void setBarRefreshH();
