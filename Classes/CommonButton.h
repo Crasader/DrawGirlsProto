@@ -284,7 +284,7 @@ public:
 		}
 	}
 	void callFunc(CCObject* obj, CCControlEvent event){
-		if(m_priceLbl!=NULL)m_btnTitle->setPositionY(m_btnTitle->getPositionY()+8);
+		if(m_priceLbl!=NULL)m_btnTitle->setPositionY(m_priceLbl->getContentSize().height/2.f+2);
 		if(m_func)m_func((CCObject*)this);
 		
 	}
@@ -381,8 +381,8 @@ public:
 			}
 			
 			m_priceLbl->setAnchorPoint(ccp(0.5,0.5));
-			m_priceLbl->setPosition(ccp(this->getContentSize().width/2+5,getContentSize().height/2.f-m_priceLbl->getContentSize().height/2.f-1));
-			m_btnTitle->setPositionY(m_priceLbl->getContentSize().height/2.f+1);
+			m_priceLbl->setPosition(ccp(this->getContentSize().width/2+5,getContentSize().height/2.f-m_priceLbl->getContentSize().height/2.f-2));
+			m_btnTitle->setPositionY(m_priceLbl->getContentSize().height/2.f+2);
 			addChild(m_priceLbl,10);
 		}else{
 			if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
@@ -412,7 +412,7 @@ public:
 			
 			m_priceTypeSprite = CCSprite::create(priceTypeImg.c_str());
 			m_priceTypeSprite->setScale(0.9);
-			m_priceTypeSprite->setPosition(ccp(m_priceLbl->getPositionX()-m_priceLbl->getContentSize().width/2-10+2,getContentSize().height/2.f-m_priceTypeSprite->getContentSize().height/2.f-1));
+			m_priceTypeSprite->setPosition(ccp(m_priceLbl->getPositionX()-m_priceLbl->getContentSize().width/2-10+2,m_priceLbl->getPositionY()));//getContentSize().height/2.f-m_priceTypeSprite->getContentSize().height/2.f-2));
 			addChild(m_priceTypeSprite,11);
 		}
 		

@@ -447,7 +447,7 @@ bool PuzzleScene::init()
 	{
 		if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stageSetting)
 		{
-			openSettingPopup();
+			openBeforeSettingPopup();
 		}
 		else
 		{
@@ -1479,6 +1479,18 @@ void PuzzleScene::autoTurnPiece()
 void PuzzleScene::stopAutoTurnPiece()
 {
 	unschedule(schedule_selector(PuzzleScene::autoTurnPiece));
+}
+
+void PuzzleScene::openBeforeSettingPopup()
+{
+	is_menu_enable = false;
+	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	
+	myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, mySD->getSilType());
+	
+	StartSettingPopup* t_popup = StartSettingPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	addChild(t_popup, kPuzzleZorder_popup);
 }
 
 void PuzzleScene::openSettingPopup()

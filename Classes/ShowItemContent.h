@@ -139,16 +139,24 @@ private:
 		addChild(item_title);
 		
 		item_ment = KSLabelTTF::create(mySD->getItemScript((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 9);
-		item_ment->setColor(ccc3(255,100,30));
+		item_ment->setColor(ccWHITE);
 		item_ment->setPosition(ccp(0,-55));
 		addChild(item_ment);
 		
+		if(item_ment->getContentSize().width > 100)
+		{
+			case_back->setContentSize(CCSizeMake(item_ment->getContentSize().width+20,154));
+			content_back->setContentSize(CCSizeMake(item_ment->getContentSize().width,90));
+		}
+		
 		
 		KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemTitle), mySGD->getFont().c_str(), 20);
+		title_img->setColor(ccc3(255,230,0));
 		title_img->setPosition(ccp(0, 115));
 		addChild(title_img);
 		
 		KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 17);
+		bonus_ment_img->setColor(ccc3(255,230,0));
 		bonus_ment_img->setPosition(ccp(0,-115));
 		addChild(bonus_ment_img);
 		
