@@ -493,6 +493,11 @@ void Maingame::finalSetting()
 	
 	float thumb_scale = 0.17f;
 	
+	thumb_case = CCScale9Sprite::create("minimap_back.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
+	thumb_case->setContentSize(CCSizeMake(320*thumb_scale, 430*thumb_scale));
+	thumb_case->setPosition(ccp(40,myDSH->ui_center_y));
+	addChild(thumb_case, myUIZorder);
+	
 	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
@@ -505,21 +510,23 @@ void Maingame::finalSetting()
 	thumb_texture->setPosition(ccp(40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
 	addChild(thumb_texture, myUIZorder);
 	
-	thumb_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
-	thumb_case_top->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(0,215*thumb_scale+1)));
-	addChild(thumb_case_top, myUIZorder);
 	
-	thumb_case_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
-	thumb_case_down->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(0,-215*thumb_scale-1)));
-	addChild(thumb_case_down, myUIZorder);
 	
-	thumb_case_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
-	thumb_case_left->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(-160*thumb_scale-1,0)));
-	addChild(thumb_case_left, myUIZorder);
-	
-	thumb_case_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
-	thumb_case_right->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(160*thumb_scale+1,0)));
-	addChild(thumb_case_right, myUIZorder);
+//	thumb_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+//	thumb_case_top->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(0,215*thumb_scale+1)));
+//	addChild(thumb_case_top, myUIZorder);
+//	
+//	thumb_case_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+//	thumb_case_down->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(0,-215*thumb_scale-1)));
+//	addChild(thumb_case_down, myUIZorder);
+//	
+//	thumb_case_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+//	thumb_case_left->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(-160*thumb_scale-1,0)));
+//	addChild(thumb_case_left, myUIZorder);
+//	
+//	thumb_case_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+//	thumb_case_right->setPosition(ccpAdd(thumb_texture->getPosition(), ccp(160*thumb_scale+1,0)));
+//	addChild(thumb_case_right, myUIZorder);
 	
 	screen_node = CCNode::create();
 	screen_node->setPosition(thumb_texture->getPosition());
@@ -529,22 +536,27 @@ void Maingame::finalSetting()
 	CCSize screen_data = CCSizeMake(320.f*thumb_scale, 0);
 	screen_data.height = screen_data.width/3.f*2.f*myDSH->ui_top/320.f;
 	
-	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+1, 1.5f));
-	screen_top->setColor(ccc3(255, 180, 0));
-	screen_top->setPosition(ccp(0,screen_data.height/2.f));
-	screen_node->addChild(screen_top);
-	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+1, 1.5f));
-	screen_down->setColor(ccc3(255, 180, 0));
-	screen_down->setPosition(ccp(0,-screen_data.height/2.f));
-	screen_node->addChild(screen_down);
-	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+1));
-	screen_left->setColor(ccc3(255, 180, 0));
-	screen_left->setPosition(ccp(-screen_data.width/2.f,0));
-	screen_node->addChild(screen_left);
-	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+1));
-	screen_right->setColor(ccc3(255, 180, 0));
-	screen_right->setPosition(ccp(screen_data.width/2.f,0));
-	screen_node->addChild(screen_right);
+	CCScale9Sprite* screen_img = CCScale9Sprite::create("minimap_front.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
+	screen_img->setContentSize(screen_data);
+	screen_img->setPosition(ccp(0,0));
+	screen_node->addChild(screen_img);
+	
+//	CCSprite* screen_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+1, 1.5f));
+//	screen_top->setColor(ccc3(255, 180, 0));
+//	screen_top->setPosition(ccp(0,screen_data.height/2.f));
+//	screen_node->addChild(screen_top);
+//	CCSprite* screen_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, screen_data.width+1, 1.5f));
+//	screen_down->setColor(ccc3(255, 180, 0));
+//	screen_down->setPosition(ccp(0,-screen_data.height/2.f));
+//	screen_node->addChild(screen_down);
+//	CCSprite* screen_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+1));
+//	screen_left->setColor(ccc3(255, 180, 0));
+//	screen_left->setPosition(ccp(-screen_data.width/2.f,0));
+//	screen_node->addChild(screen_left);
+//	CCSprite* screen_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, screen_data.height+1));
+//	screen_right->setColor(ccc3(255, 180, 0));
+//	screen_right->setPosition(ccp(screen_data.width/2.f,0));
+//	screen_node->addChild(screen_right);
 	
 	myGD->communication("Main_initJackPosition", myJack->getPosition());
 //	myJack->setPosition(myJack->getPosition());
@@ -2694,7 +2706,7 @@ void Maingame::showThumbWarning(CCPoint t_point)
 void Maingame::refreshThumb()
 {
 	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
-	thumb_texture->beginWithClear(0, 0, 0.3f, 0.5f);
+	thumb_texture->beginWithClear(0, 0, 0.f, 0.f);
 	t_vs->visitForThumb();
 	thumb_texture->end();
 	
@@ -2980,10 +2992,11 @@ void Maingame::hideThumb()
 		t_sub->setVisible(false);
 	}
 	
-	thumb_case_top->setVisible(false);
-	thumb_case_down->setVisible(false);
-	thumb_case_left->setVisible(false);
-	thumb_case_right->setVisible(false);
+	thumb_case->setVisible(false);
+//	thumb_case_top->setVisible(false);
+//	thumb_case_down->setVisible(false);
+//	thumb_case_left->setVisible(false);
+//	thumb_case_right->setVisible(false);
 	
 	if(mySGD->is_play_replay && mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 	{

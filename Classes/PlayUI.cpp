@@ -2587,7 +2587,7 @@ void PlayUI::myInit ()
 			using_item_cnt++;
 			
 			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", i)->getCString());
-			item_img->setScale(0.5f);
+			item_img->setScale(0.4f);
 			addChild(item_img);
 			
 			CCSprite* item_case = CCSprite::create("ingame_itembox.png");
