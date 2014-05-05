@@ -76,6 +76,21 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	r_stage_script->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_script);
 	
+	
+	CCLabelTTF* r_stage_name = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft);
+	r_stage_name->setPosition(ccp(25,50));
+	r_stage_name->setColor(ccBLACK);
+	r_stage_name->setVerticalAlignment(kCCVerticalTextAlignmentTop);
+	r_stage_name->setAnchorPoint(ccp(0,1));
+	target->addChild(r_stage_name);
+	
+	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft);
+	r_stage_profile->setPosition(ccp(25,50));
+	r_stage_profile->setColor(ccBLACK);
+	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
+	r_stage_profile->setAnchorPoint(ccp(0,1));
+	target->addChild(r_stage_profile);
+	
 	CommonButton* close = CommonButton::createCloseButton(-191);
 	close->setFunction([=](CCObject* sender)
 					   {

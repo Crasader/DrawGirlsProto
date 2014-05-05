@@ -205,10 +205,15 @@ bool OptionPopup::init()
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
 													{
-
-														CCNode* t_node = CCNode::create();
-														t_node->setTag(kOP_MT_tip);
-														menuAction(t_node);
+														hspConnector::get()->mappingToAccount([](Json::Value v){
+														
+															CCLog("mapping test - %s",v.toStyledString().c_str());
+														
+														});
+														
+//														CCNode* t_node = CCNode::create();
+//														t_node->setTag(kOP_MT_tip);
+//														menuAction(t_node);
 													});
 	main_case->addChild(tip_button, kOP_Z_content);
 	
@@ -1167,7 +1172,7 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_coupon)			return_value = ccp(390, 256);
 	else if(t_tag == kOP_MT_community)		return_value = ccp(313, 256);
 	else if(t_tag == kOP_MT_tip)			return_value = ccp(236, 256);
-	else if(t_tag == kOP_MT_kakao)		return_value = ccp(159, 256);
+	else if(t_tag == kOP_MT_kakao)		return_value = ccp(157, 256);
 	
 	else if(t_tag == kOP_MT_help)			return_value = ccp(410, 36);
 	

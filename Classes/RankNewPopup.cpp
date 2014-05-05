@@ -148,9 +148,10 @@ bool RankNewPopup::init()
 	main_case->addChild(rankBack);
 	
 	
-	rank_table=CCTableView::create(this, CCSizeMake(237, 118));
+	rank_table = CCTableView::create(this, CCSizeMake(237, 118));
 	rank_table->setPosition(5,40);
 	rank_table->setDelegate(this);
+	
 	
 	main_inner_right->addChild(rank_table);
 	
