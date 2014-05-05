@@ -9,9 +9,34 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>asd.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>cpplanguage.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>D75F9E25183B0A50009C3554</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D7EE072C1862DF810061AE4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D7EE074B1862DF820061AE4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>F293B3C715EB7BE500256477</key>
 		<dict>
 			<key>primary</key>
