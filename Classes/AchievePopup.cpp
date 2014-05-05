@@ -388,6 +388,8 @@ void AchievePopup::setAchieveTable()
 	
 	achieve_list.clear();
 	
+	bool is_reward = false;
+	
 	if(recent_code == kAchievePopupListCode_all)
 	{
 		vector<AchievementCode> another_list;
@@ -397,7 +399,10 @@ void AchievePopup::setAchieveTable()
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
 			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			{
 				achieve_list.push_back((AchievementCode)i);
+				is_reward = true;
+			}
 			else
 				another_list.push_back((AchievementCode)i);
 		}
@@ -406,7 +411,10 @@ void AchievePopup::setAchieveTable()
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
 			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			{
 				achieve_list.push_back((AchievementCode)i);
+				is_reward = true;
+			}
 			else if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == -1 ||
 					AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
 				another_list.push_back((AchievementCode)i);
@@ -446,14 +454,20 @@ void AchievePopup::setAchieveTable()
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
 			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			{
 				achieve_list.push_back((AchievementCode)i);
+				is_reward = true;
+			}
 		}
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
 			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			{
 				achieve_list.push_back((AchievementCode)i);
+				is_reward = true;
+			}
 		}
 	}
 	
@@ -490,6 +504,8 @@ void AchievePopup::setAchieveTable()
 	t_suction->setTouchEnabled(true);
 	main_case->addChild(t_suction);
 	
+	
+	all_reward_menu->setVisible(is_reward);
 }
 
 void AchievePopup::cellAction( CCObject* sender )
@@ -981,6 +997,11 @@ void AchievePopup::takeAllReward(CCObject* sender)
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		mySGD->changeGoods(json_selector(this, AchievePopup::resultAllTakeSaveUserData));
+	}
+	else
+	{
+		all_reward_menu->setVisible(false);
+		is_menu_enable = true;
 	}
 }
 

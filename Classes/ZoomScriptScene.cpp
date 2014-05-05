@@ -141,6 +141,7 @@ bool ZoomScript::init()
 	
 	
 	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(80,50), CommonButtonYellow, -160);
+	next_button->setTitleColor(ccc3(50, 20, 0));
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
 	next_button->setPosition(ccp(480-50,30));
 	next_button->setVisible(false);

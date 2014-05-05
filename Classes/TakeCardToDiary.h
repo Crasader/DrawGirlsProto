@@ -87,10 +87,10 @@ private:
 		
 		setRightPage(recent_right_img, recent_card_number);
 		
-		CCScale9Sprite* text_case = CCScale9Sprite::create("diary_text_box.png", CCRectMake(0,0,35,35), CCRectMake(17,17,1,1));
-		text_case->setContentSize(CCSizeMake(190, 50));
-		text_case->setPosition(ccp(112,95));
-		recent_right_img->addChild(text_case);
+//		CCScale9Sprite* text_case = CCScale9Sprite::create("diary_text_box.png", CCRectMake(0,0,35,35), CCRectMake(17,17,1,1));
+//		text_case->setContentSize(CCSizeMake(190, 50));
+//		text_case->setPosition(ccp(112,95));
+//		recent_right_img->addChild(text_case);
 		
 		AudioEngine::sharedInstance()->playEffect("se_cardget.mp3", false);
 		

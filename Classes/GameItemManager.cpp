@@ -477,19 +477,23 @@ void GameItemSubOneDie::myInit(bool is_near)
 		return;
 	}
 	
-	item_img = CCSprite::create(CCString::createWithFormat("item%d.png", kIC_subOneDie)->getCString());
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_onekill.ccbi",this));
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
 	
+	
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
 	
-	CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.75f*0.7f);
-	
-	item_img->runAction(t_scale);
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.75f, 1.f, [=](float t)
+													 {
+														 item_img->setScale(t*0.5f);
+													 }, [](float t){}));
 }
 
 
@@ -540,19 +544,23 @@ void GameItemSilence::myInit(bool is_near)
 		return;
 	}
 	
-	item_img = CCSprite::create(CCString::createWithFormat("item%d.png", kIC_silence)->getCString());
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_silence.ccbi",this));
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
 	
+	
 	starting_side_cnt = getSideCount();
 	
 	startFraming();
 	
-	CCScaleTo* t_scale = CCScaleTo::create(1.f, 0.75f*0.7f);
-	
-	item_img->runAction(t_scale);
+	item_img->addChild(KSGradualValue<float>::create(0.f, 0.75f, 1.f, [=](float t)
+													 {
+														 item_img->setScale(t*0.5f);
+													 }, [](float t){}));
 }
 
 

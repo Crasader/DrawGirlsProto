@@ -267,10 +267,7 @@ private:
 	CCArray* sub_thumbs;
 	CCPoint thumb_base_position;
 	CCRenderTexture* thumb_texture;
-	CCSprite* thumb_case_top;
-	CCSprite* thumb_case_down;
-	CCSprite* thumb_case_left;
-	CCSprite* thumb_case_right;
+	CCScale9Sprite* thumb_case;
 	void refreshThumb();
 	
 	CCRenderTexture* replay_thumb_texture;

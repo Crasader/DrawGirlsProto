@@ -1455,14 +1455,14 @@ bool PlayUI::beRevivedJack ()
 		{
 			using_item_sprites[kIC_heartUp]->setGray(true);
 			
-			CCLabelTTF* item_bonus_label = CCLabelTTF::create("부활 아이템!!!", mySGD->getFont().c_str(), 20);
-			item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
-			addChild(item_bonus_label);
-			
-			CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
-			CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
-			CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
-			item_bonus_label->runAction(t_seq);
+//			CCLabelTTF* item_bonus_label = CCLabelTTF::create("부활 아이템!!!", mySGD->getFont().c_str(), 20);
+//			item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
+//			addChild(item_bonus_label);
+//			
+//			CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+//			CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
+//			CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+//			item_bonus_label->runAction(t_seq);
 			
 			is_used_heartUpItem = true;
 			
@@ -1478,14 +1478,14 @@ bool PlayUI::beRevivedJack ()
 
 void PlayUI::takeSilenceItem()
 {
-	CCLabelTTF* item_bonus_label = CCLabelTTF::create("침묵 아이템!!!", mySGD->getFont().c_str(), 20);
-	item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
-	addChild(item_bonus_label);
-	
-	CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
-	CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
-	CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
-	item_bonus_label->runAction(t_seq);
+//	CCLabelTTF* item_bonus_label = CCLabelTTF::create("침묵 아이템!!!", mySGD->getFont().c_str(), 20);
+//	item_bonus_label->setPosition(ccp(240,myDSH->ui_center_y));
+//	addChild(item_bonus_label);
+//	
+//	CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+//	CCCallFunc* t_call = CCCallFunc::create(item_bonus_label, callfunc_selector(CCLabelTTF::removeFromParent));
+//	CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+//	item_bonus_label->runAction(t_seq);
 }
 
 void PlayUI::takeAddTimeItem ()
@@ -2587,7 +2587,7 @@ void PlayUI::myInit ()
 			using_item_cnt++;
 			
 			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", i)->getCString());
-			item_img->setScale(0.5f);
+			item_img->setScale(0.4f);
 			addChild(item_img);
 			
 			CCSprite* item_case = CCSprite::create("ingame_itembox.png");

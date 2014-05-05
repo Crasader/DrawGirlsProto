@@ -275,7 +275,7 @@ public class hspConnector{
 									if (result.isSuccess() == false) {
 										//Log.i("litqoo", "HSP Login Error = " + result);
 
-										// ������ ������ 肄����瑜� �����명�����.
+										// 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
 										int errorCode = result.getCode();
 										String errorDescription = result.getDetail();
 
@@ -477,7 +477,7 @@ public class hspConnector{
 		Map<String, String> mapData = new LinkedHashMap<String, String>();
 		mapData.put("content", mMessage);
 		mapData.put("url", "http://www.hangame.com");
-		mapData.put("extraData", "湲고����곗�댄��");
+		mapData.put("extraData", "疫꿸��占쏙옙占쏙옙怨�占쎈��占쏙옙");
 
 		HSPMessage.sendPushNotification(mReceiver, "test ~!!", mapData, new HSPMessage.HSPSendPushNotificationCB() {
 			@Override
@@ -503,6 +503,7 @@ public class hspConnector{
 			}
 		};
 
+		
 		HSPMessage.addMessageReceiveListener(mReceiveMessageListener);
 
 		// An event that is invoked when a packet is received
