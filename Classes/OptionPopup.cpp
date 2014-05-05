@@ -67,7 +67,8 @@ enum OptionPopupMenuTag{
 	kOP_MT_message,
 	kOP_MT_coupon,
 	kOP_MT_community,
-	kOP_MT_tip
+	kOP_MT_tip,
+	kOP_MT_kakao
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -204,6 +205,7 @@ bool OptionPopup::init()
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
 													{
+
 														CCNode* t_node = CCNode::create();
 														t_node->setTag(kOP_MT_tip);
 														menuAction(t_node);
@@ -211,15 +213,17 @@ bool OptionPopup::init()
 	main_case->addChild(tip_button, kOP_Z_content);
 	
 	
-	CommonButton* tutorial_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_tutorial), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
-	tutorial_button->setPosition(getContentPosition(kOP_MT_tutorial));
-	tutorial_button->setFunction([=](CCObject* sender)
-															 {
-																 CCNode* t_node = CCNode::create();
-																 t_node->setTag(kOP_MT_tutorial);
-																 menuAction(t_node);
-															 });
-	main_case->addChild(tutorial_button, kOP_Z_content);
+	CommonButton* kakao_button = CommonButton::create("", 12, CCSizeMake(85, 33), CCScale9Sprite::create("option_kakao.png"), -171);
+	kakao_button->setPosition(getContentPosition(kOP_MT_kakao));
+	kakao_button->setFunction([=](CCObject* sender)
+								{
+									
+									hspConnector::get()->openKakaoMsg();
+									//									CCNode* t_node = CCNode::create();
+//									t_node->setTag(kOP_MT_kakao);
+//									menuAction(t_node);
+								});
+	main_case->addChild(kakao_button, kOP_Z_content);
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-171);
@@ -1163,7 +1167,7 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_coupon)			return_value = ccp(390, 256);
 	else if(t_tag == kOP_MT_community)		return_value = ccp(313, 256);
 	else if(t_tag == kOP_MT_tip)			return_value = ccp(236, 256);
-	else if(t_tag == kOP_MT_tutorial)		return_value = ccp(159, 256);
+	else if(t_tag == kOP_MT_kakao)		return_value = ccp(159, 256);
 	
 	else if(t_tag == kOP_MT_help)			return_value = ccp(410, 36);
 	

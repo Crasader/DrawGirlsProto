@@ -1090,23 +1090,23 @@ void PuzzleScene::setPuzzle()
 			have_card_cnt++;
 	}
 	
-	CCLabelTTF* have_card_cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d / %d", have_card_cnt, total_card_cnt)->getCString(), mySGD->getFont().c_str(), 13);
-	have_card_cnt_label->setPosition(ccp(have_card_cnt_case->getContentSize().width/2.f-20, have_card_cnt_case->getContentSize().height/2.f));
-	have_card_cnt_case->addChild(have_card_cnt_label);
-	
-	puzzle_node->addChild(have_card_cnt_case, kPuzzleNodeZorder_haveCardCntCase);
-	
-	CCSprite* n_change_mode = CCSprite::create("puzzle_change_mode.png");
-	CCSprite* s_change_mode = CCSprite::create("puzzle_change_mode.png");
-	s_change_mode->setColor(ccGRAY);
-	
-	CCMenuItem* change_mode_item = CCMenuItemSprite::create(n_change_mode, s_change_mode, this, menu_selector(PuzzleScene::menuAction));
-	change_mode_item->setTag(kPuzzleMenuTag_changeMode);
-	
-	CCMenu* change_mode_menu = CCMenu::createWithItem(change_mode_item);
-	change_mode_menu->setPosition(ccp(puzzle_size.width/2.f-n_change_mode->getContentSize().width/2.f, puzzle_size.height/2.f-n_change_mode->getContentSize().height/2.f));
-	puzzle_node->addChild(change_mode_menu, kPuzzleNodeZorder_changeMode);
-	change_mode_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+//	CCLabelTTF* have_card_cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d / %d", have_card_cnt, total_card_cnt)->getCString(), mySGD->getFont().c_str(), 13);
+//	have_card_cnt_label->setPosition(ccp(have_card_cnt_case->getContentSize().width/2.f-20, have_card_cnt_case->getContentSize().height/2.f));
+//	have_card_cnt_case->addChild(have_card_cnt_label);
+//	
+//	puzzle_node->addChild(have_card_cnt_case, kPuzzleNodeZorder_haveCardCntCase);
+//	
+//	CCSprite* n_change_mode = CCSprite::create("puzzle_change_mode.png");
+//	CCSprite* s_change_mode = CCSprite::create("puzzle_change_mode.png");
+//	s_change_mode->setColor(ccGRAY);
+//	
+//	CCMenuItem* change_mode_item = CCMenuItemSprite::create(n_change_mode, s_change_mode, this, menu_selector(PuzzleScene::menuAction));
+//	change_mode_item->setTag(kPuzzleMenuTag_changeMode);
+//	
+//	CCMenu* change_mode_menu = CCMenu::createWithItem(change_mode_item);
+//	change_mode_menu->setPosition(ccp(puzzle_size.width/2.f-n_change_mode->getContentSize().width/2.f, puzzle_size.height/2.f-n_change_mode->getContentSize().height/2.f));
+//	puzzle_node->addChild(change_mode_menu, kPuzzleNodeZorder_changeMode);
+//	change_mode_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 }
 
 //void PuzzleScene::addShadow(string piece_type, CCPoint piece_position, int t_stage_number)
