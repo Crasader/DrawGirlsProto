@@ -741,6 +741,9 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_script_s)						rv = "%d_script";
 	else if(t_key == kSDS_CI_int1_silImgInfoIsSil_b)			rv = "%d_silImgInfo_isSil";
 	else if(t_key == kSDS_CI_int1_silImgInfoImg_s)				rv = "%d_silImgInfo_img";
+	else if(t_key == kSDS_CI_int1_profile_s)			rv = "%d_profile";
+	else if(t_key == kSDS_CI_int1_name_s)			rv = "%d_name";
+	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 	
 	return rv.c_str();

@@ -215,6 +215,8 @@ enum SDS_KEY
 	kSDS_CI_int1_script_s,
 	kSDS_CI_int1_silImgInfoIsSil_b,
 	kSDS_CI_int1_silImgInfoImg_s,
+	kSDS_CI_int1_profile_s,
+	kSDS_CI_int1_name_s,
 	kSDS_CI_end = 3999
 };
 class SDS_SET
