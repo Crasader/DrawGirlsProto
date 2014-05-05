@@ -1564,14 +1564,14 @@ void Maingame::clearScenario2()
 																						   
 																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
 																																			   {
-																																				   selected_node->setScale(1.f+t);
+																																				   selected_node->setScale(1.f+t*0.5f);
 																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																			   }, [=](float t)
 																																			   {
-																																				   selected_node->setScale(2.f);
+																																				   selected_node->setScale(1.5f);
 																																				   another_img1->setColor(ccc3(155, 155, 155));
 																																				   another_img2->setColor(ccc3(155, 155, 155));
 																																				   another_label1->setColor(ccc3(155, 155, 155));
@@ -1729,14 +1729,14 @@ void Maingame::clearScenario2()
 																						   
 																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
 																																			   {
-																																				   selected_node->setScale(1.f+t);
+																																				   selected_node->setScale(1.f+t*0.5f);
 																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																			   }, [=](float t)
 																																			   {
-																																				   selected_node->setScale(2.f);
+																																				   selected_node->setScale(1.5f);
 																																				   another_img1->setColor(ccc3(155, 155, 155));
 																																				   another_img2->setColor(ccc3(155, 155, 155));
 																																				   another_label1->setColor(ccc3(155, 155, 155));
@@ -1894,14 +1894,14 @@ void Maingame::clearScenario2()
 																						   
 																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
 																																			   {
-																																				   selected_node->setScale(1.f+t);
+																																				   selected_node->setScale(1.f+t*0.5f);
 																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																			   }, [=](float t)
 																																			   {
-																																				   selected_node->setScale(2.f);
+																																				   selected_node->setScale(1.5f);
 																																				   another_img1->setColor(ccc3(155, 155, 155));
 																																				   another_img2->setColor(ccc3(155, 155, 155));
 																																				   another_label1->setColor(ccc3(155, 155, 155));
