@@ -43,7 +43,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
 	{
 		CCSprite* pass_ticket = CCSprite::create("pass_ticket2.png");
-		pass_ticket->setPosition(ccp(15,15));
+		pass_ticket->setPosition(ccp(18,15.5f));
 		price_back->addChild(pass_ticket);
 		
 		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 11);
