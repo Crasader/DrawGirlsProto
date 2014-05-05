@@ -1,6 +1,7 @@
 #include "StyledLabelTTF.h"
 #include "jsoncpp/json.h"
 #include "ks19937.h"
+#include "KSLabelTTF.h"
 using namespace boost;
 
 StyledLabelTTF::StyledLabelTTF() :
@@ -83,7 +84,13 @@ void StyledLabelTTF::updateTexture()
 		}
 		else
 		{
-			CCLabelTTF* ttf = CCLabelTTF::create(st.m_text.c_str(), jsonStyle.get("font", "").asString().c_str(), jsonStyle.get("size", 12.f).asFloat());
+			KSLabelTTF* ttf = KSLabelTTF::create(st.m_text.c_str(), jsonStyle.get("font", "").asString().c_str(), jsonStyle.get("size", 12.f).asFloat());
+			float strokeSize = jsonStyle.get("strokesize", 0.f).asFloat();
+			unsigned long strokeColor = jsonStyle.get("strokecolor", 0).asUInt();
+			if(strokeSize > 0.f)
+			{
+				ttf->enableStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
+			}
 			m_oneLineContainer->addChild(ttf);
 			ttf->setAnchorPoint(ccp(0.f, 0.5f));
 			ttf->setPosition(ccp(m_currentPosition, m_currentLinePosition));
@@ -370,12 +377,12 @@ void StyledLabelTTF::setStringByTag(const char* text){
 	
 }
 
-CCLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
+KSLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
 	for(int i=0;i<this->getChildrenCount();i++){
 		CCNode* lineNode = (CCNode*)this->getChildren()->objectAtIndex(i);
 		if(lineNode->getTag()==1){
 			for(int j=0;j<lineNode->getChildrenCount();j++){
-				CCLabelTTF* label = (CCLabelTTF *)lineNode->getChildByTag(tag);
+				KSLabelTTF* label = (KSLabelTTF *)lineNode->getChildByTag(tag);
 				if (label) {
 					return label;
 				}
