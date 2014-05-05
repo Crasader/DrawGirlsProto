@@ -197,9 +197,17 @@ bool OptionPopup::init()
 	account_button->setPosition(getContentPosition(kOP_MT_accountLink));
 	account_button->setFunction([=](CCObject* sender)
 													{
-														CCNode* t_node = CCNode::create();
-														t_node->setTag(kOP_MT_accountLink);
-														menuAction(t_node);
+														
+														
+														Json::Value param;
+														param["ManualLogin"] = true;
+														hspConnector::get()->login(param, param,[](Json::Value r){
+															CCLog("login log - %s",r.toStyledString().c_str());
+														});
+														
+														//														CCNode* t_node = CCNode::create();
+//														t_node->setTag(kOP_MT_accountLink);
+//														menuAction(t_node);
 													});
 	main_case->addChild(account_button, kOP_Z_content);
 	
@@ -208,9 +216,11 @@ bool OptionPopup::init()
 	kakao_button->setPosition(getContentPosition(kOP_MT_kakao));
 	kakao_button->setFunction([=](CCObject* sender)
 								{
-									CCNode* t_node = CCNode::create();
-									t_node->setTag(kOP_MT_kakao);
-									menuAction(t_node);
+									
+									hspConnector::get()->openKakaoMsg();
+									//									CCNode* t_node = CCNode::create();
+//									t_node->setTag(kOP_MT_kakao);
+//									menuAction(t_node);
 								});
 	main_case->addChild(kakao_button, kOP_Z_content);
 	

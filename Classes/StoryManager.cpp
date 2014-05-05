@@ -29,7 +29,7 @@ void StoryManager::addMent(bool is_left, string t_name, string t_namefile, strin
 	ment_label->setHorizontalAlignment(kCCTextAlignmentLeft);
 	ment_box->addChild(ment_label);
 	
-	next_label = CCLabelTTF::create("click_", mySGD->getFont().c_str(), 12);
+	next_label = CCLabelTTF::create("TAB_", mySGD->getFont().c_str(), 12);
 	next_label->setAnchorPoint(ccp(1,0));
 	next_label->setPosition(ccp(t_size.width-12, 12));
 	next_label->setVisible(false);

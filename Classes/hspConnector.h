@@ -234,6 +234,7 @@ public:
 	void purchaseProduct(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func);
 	void openUrl(const std::string& url);
 	void launchPromotion();
+	void openKakaoMsg();
 	//void loadMyInfo(Json::Value obj);
 	//void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	//void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
