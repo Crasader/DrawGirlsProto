@@ -63,8 +63,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.3999999761581421</real>
-										<real>1.3999999761581421</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -99,8 +99,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.5</real>
-										<real>1.5</real>
+										<real>1.2999999523162842</real>
+										<real>1.2999999523162842</real>
 									</array>
 								</dict>
 								<dict>
@@ -117,8 +117,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.2000000476837158</real>
-										<real>1.2000000476837158</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 								<dict>
@@ -135,8 +135,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.3999999761581421</real>
-										<real>1.3999999761581421</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -204,7 +204,7 @@
 						<array>
 							<real>1</real>
 							<real>1</real>
-							<false/>
+							<true/>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -272,8 +272,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.3999999761581421</real>
-										<real>1.3999999761581421</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -308,8 +308,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.5</real>
-										<real>1.5</real>
+										<real>1.2999999523162842</real>
+										<real>1.2999999523162842</real>
 									</array>
 								</dict>
 								<dict>
@@ -326,8 +326,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.2000000476837158</real>
-										<real>1.2000000476837158</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 								<dict>
@@ -344,8 +344,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.3999999761581421</real>
-										<real>1.3999999761581421</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -570,7 +570,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
