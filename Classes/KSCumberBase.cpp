@@ -1521,7 +1521,7 @@ void KSCumberBase::cumberAttack(float dt)
 		//return;
 	//}
 	bool attackCondition = m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f; // 공격할 조건.
-	if(m_slience || !attackCondition) // 공격 못하는 조건이라면 패스.
+	if(m_slience || !attackCondition || (m_state & kCumberStateAttack)) // 공격 못하는 조건이라면 패스.
 	{
 		return;
 	}
