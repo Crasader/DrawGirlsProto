@@ -26,6 +26,7 @@ import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.cgp.HSPCGP;
 import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.payment.HSPPayment;
+
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
 //import com.kakao.api.Logger;
@@ -136,6 +137,8 @@ public class hspConnector{
 	}
 	public static void openUrl(final String url)
 	{
+		
+		
 		hspConnector.handler.post(
 				new Runnable(){
 					public void run() {
@@ -145,17 +148,52 @@ public class hspConnector{
 								Uri.parse(url)
 								);
 						activity.startActivity(market);
-					
+						
 						
 					}
 				}
 				);
 		
 	}
+	
+	public static void openKakaoMsg(){
+
+			/**
+			 * @param activity
+			 * @param url
+			 * @param message
+			 * @param appId
+			 * @param appVer
+			 * @param appName
+			 * @param encoding
+			 */
+
+			
+			hspConnector.handler.post(
+					new Runnable(){
+						public void run() {
+							KakaoLink kakaoLink = KakaoLink.getLink((Activity)hspConnector.sContext);
+
+							// check, intent is available.
+							if (!kakaoLink.isAvailableIntent())
+							  return;
+							kakaoLink.openKakaoLink((Activity)hspConnector.sContext, 
+							        "http://naver.com", 
+							        "남자들을 흥분의 도가니로 몰아 넣은 그게임!!\n땅따먹기 섬란카구라 뉴웨이브", 
+							        "com.nhnent.SKDRAWGIRLSA", 
+							        "1.0",
+							        "땅따먹기 섬란카구라", 
+							        "UTF-8");
+						
+							
+						}
+					}
+					);
+	}
 	public static void finishItemDelivery(final int _key, final String datas)
 	{
 		try {
-			Log.d("finishItemDelivery", datas);
+			//Log.d("finishItemDelivery", datas);
 			JSONObject json = new JSONObject(datas);
 			JSONArray itemSeqArray = json.getJSONArray("itemsequence");
 			ArrayList<Long> itemList = new ArrayList<Long>();
@@ -223,27 +261,27 @@ public class hspConnector{
 						HSPCore core = HSPCore.getInstance();
 
 						if(core!=null){
-							Log.i("com.litqoo.dgproto", "hspcore create ok2");
+							//Log.i("com.litqoo.dgproto", "hspcore create ok2");
 
 
 
 							core.login(activity,manualLogin,new HSPCore.HSPLoginCB() {
 
 								public void onLogin(final HSPResult result, boolean isPlayable) {
-									Log.d("litqoo", "BEGIN - HSPLoginCB");
+									//Log.d("litqoo", "BEGIN - HSPLoginCB");
 									JSONObject r= new JSONObject();
 									JSONObject error = new JSONObject();
 
 									if (result.isSuccess() == false) {
-										Log.i("litqoo", "HSP Login Error = " + result);
+										//Log.i("litqoo", "HSP Login Error = " + result);
 
 										// 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
 										int errorCode = result.getCode();
 										String errorDescription = result.getDetail();
 
-										Log.i("litqoo", "code = " + errorCode + ", message = " + errorDescription);
+										//Log.i("litqoo", "code = " + errorCode + ", message = " + errorDescription);
 									}else{
-										Log.i("litqoo", "success");
+										//Log.i("litqoo", "success");
 									}
 
 									try {
@@ -261,8 +299,8 @@ public class hspConnector{
 									mGLView.queueEvent(new KRunnable(_key,r.toString()) {
 										public void run() {
 
-											Log.d("litqoo", "login id:"+HSPCore.getInstance().getMemberID()+"/no:"+HSPCore.getInstance().getMemberNo());
-											Log.d("litqoo", "SendResult"+this.totalSource);
+											//Log.d("litqoo", "login id:"+HSPCore.getInstance().getMemberID()+"/no:"+HSPCore.getInstance().getMemberNo());
+											//Log.d("litqoo", "SendResult"+this.totalSource);
 											hspConnector.SendResult(this.delekey,this.totalSource);
 										}
 									});
@@ -272,7 +310,7 @@ public class hspConnector{
 								}
 							});
 						}else{
-							Log.d("litqoo","!!!!!!!! need setup !!!!!!");
+							//Log.d("litqoo","!!!!!!!! need setup !!!!!!");
 						}
 
 
@@ -290,13 +328,13 @@ public class hspConnector{
 						HSPCore core = HSPCore.getInstance();
 
 						if(core!=null){
-							Log.i("com.litqoo.dgproto", "hspcore create ok2");
+							//Log.i("com.litqoo.dgproto", "hspcore create ok2");
 
 							core.logout(new HSPCore.HSPLogoutCB() {
 								@Override
 								public void onLogout(HSPResult result) {
 									// TODO Auto-generated method stub
-									Log.d("litqoo", "BEGIN - HSPLogoutCB");
+									//Log.d("litqoo", "BEGIN - HSPLogoutCB");
 									JSONObject r= new JSONObject();
 									JSONObject error = new JSONObject();
 									try {
@@ -339,7 +377,7 @@ public class hspConnector{
 			@Override
 			public void onBeforeLogout() {
 				// TODO Auto-generated method stub
-				Log.i("litqoo","~~~~~~HSPBeforeLogoutListener");
+				//Log.i("litqoo","~~~~~~HSPBeforeLogoutListener");
 
 			}
 		};
@@ -349,7 +387,7 @@ public class hspConnector{
 			@Override
 			public void onBeforeResetAccount() {
 				// TODO Auto-generated method stub
-				Log.i("litqoo","~~~~~~HSPBeforeResetAccountListener");
+				//Log.i("litqoo","~~~~~~HSPBeforeResetAccountListener");
 
 			}
 		};
@@ -362,7 +400,7 @@ public class hspConnector{
 			@Override
 			public void onAfterLogin() {
 				// TODO Auto-generated method stub
-				Log.i("litqoo","~~~~~~HSPAfterLoginListener");
+				//Log.i("litqoo","~~~~~~HSPAfterLoginListener");
 
 			}
 		};
@@ -372,7 +410,7 @@ public class hspConnector{
 			@Override
 			public void onBeforeLogin() {
 				// TODO Auto-generated method stub
-				Log.i("litqoo","~~~~~~HSPBeforeLoginListener");
+				//Log.i("litqoo","~~~~~~HSPBeforeLoginListener");
 
 			}
 		};
@@ -382,7 +420,7 @@ public class hspConnector{
 			@Override
 			public void onAfterLogout() {
 				// TODO Auto-generated method stub
-				Log.i("litqoo","~~~~~~HSPAfterLogoutListener");
+				//Log.i("litqoo","~~~~~~HSPAfterLogoutListener");
 
 			}
 		};
@@ -392,7 +430,7 @@ public class hspConnector{
 			@Override
 			public void onAfterResetAccount() {
 				// TODO Auto-generated method stub
-				Log.i("litqoo","~~~~~~HSPAfterResetAccountListener");
+				//Log.i("litqoo","~~~~~~HSPAfterResetAccountListener");
 
 			}
 		};
@@ -419,16 +457,16 @@ public class hspConnector{
 			@Override
 			public void onPacketSend(HSPResult result) {
 				if (result.isSuccess()) {
-					Log.i("litqoo","Send Packet has been successful.");
+					//Log.i("litqoo","Send Packet has been successful.");
 				} else {
-					Log.i("litqoo","Failed to send packet: " + result);
+					//Log.i("litqoo","Failed to send packet: " + result);
 				}
 			}
 		});
 	}
 
 	public static void sendPushMessage(){
-		Log.i("litqoo","java sendPushMessage, go test");
+		//Log.i("litqoo","java sendPushMessage, go test");
 		testSendPushNotification();
 	}
 	public static void testSendPushNotification() {
@@ -445,9 +483,9 @@ public class hspConnector{
 			@Override
 			public void onPushNotificationSend(HSPResult result) {
 				if (result.isSuccess()) {
-					Log.i("litqoo","Send Push message has been successful.");
+					//Log.i("litqoo","Send Push message has been successful.");
 				} else {
-					Log.i("litqoo","Failed to Send push message. ( " + result + " )");
+					//Log.i("litqoo","Failed to Send push message. ( " + result + " )");
 				}
 			}
 		});
@@ -455,13 +493,13 @@ public class hspConnector{
 
 	public static void testRegisterListener() {
 
-		Log.i("litqoo","regist message listener");
+		//Log.i("litqoo","regist message listener");
 		// An event that is invoked when a message is received
 		mReceiveMessageListener = new HSPMessage.HSPReceiveMessageListener() {
 			@Override
 			public void onMessageReceive(HSPMessage message) {
 				// the actions required when handling incoming message
-				Log.i("litqoo","onMessageReceive");
+				//Log.i("litqoo","onMessageReceive");
 			}
 		};
 
@@ -473,7 +511,7 @@ public class hspConnector{
 			@Override
 			public void onPacketReceive(int gameNo, int type, long senderMemberNo, byte[] data) {
 				// the actions required when handling incoming packet
-				Log.i("litqoo","onPacketReceive");
+				//Log.i("litqoo","onPacketReceive");
 			}
 		};
 
@@ -488,9 +526,9 @@ public class hspConnector{
 				//
 				// log("extradata :: " + extraData.toString());
 
-				Log.d("nPush", "onPushNotificationReceive :: " + pushData.toString());
-				Log.d("nPush", "id " + pushData.get("id") + " :: badge " + pushData.get("badge") + " :: content "
-						+ pushData.get("content"));
+				//Log.d("nPush", "onPushNotificationReceive :: " + pushData.toString());
+				//Log.d("nPush", "id " + pushData.get("id") + " :: badge " + pushData.get("badge") + " :: content "
+				//		+ pushData.get("content"));
 			}
 		};
 
