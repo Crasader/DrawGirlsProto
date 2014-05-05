@@ -224,9 +224,7 @@ bool MainFlowScene::init()
 //	addChild(back_img, kMainFlowZorder_back);
 	
 	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
-	mySGD->setIsUnlockPuzzle(0);
 	is_perfect_puzzle = mySGD->getIsPerfectPuzzle();
-	mySGD->setIsPerfectPuzzle(0);
 	
 	setTable();
 	
@@ -1312,6 +1310,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																										  
 																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){endUnlockAnimation();}, true);
 																										  addChild(t_popup, kMainFlowZorder_popup);
+																										  
+																										  mySGD->setIsUnlockPuzzle(0);
 																									  }));
 												}));
 		}
@@ -1355,6 +1355,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																										  
 																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){endUnlockAnimation();}, true);
 																										  addChild(t_popup, kMainFlowZorder_popup);
+																										  
+																										  mySGD->setIsUnlockPuzzle(0);
 																									  }));
 												}));
 		}
@@ -1371,6 +1373,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 							   {
 								   PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){loading_layer->removeFromParent();}, false);
 								   addChild(t_popup, kMainFlowZorder_popup);
+								   
+								   mySGD->setIsPerfectPuzzle(0);
 							   }
 						   });
 	}

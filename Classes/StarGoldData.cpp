@@ -2017,7 +2017,10 @@ void StarGoldData::myInit()
 
 bool StarGoldData::getIsNotClearedStage(){	return is_not_cleared_stage;}
 int StarGoldData::getIsUnlockPuzzle(){	return is_unlock_puzzle;}
-void StarGoldData::setIsUnlockPuzzle(int t_i){	is_unlock_puzzle = t_i;}
+void StarGoldData::setIsUnlockPuzzle(int t_i)
+{
+	is_unlock_puzzle = t_i;
+}
 int StarGoldData::getIsPerfectPuzzle(){	return is_perfect_puzzle;}
 void StarGoldData::setIsPerfectPuzzle(int t_i){	is_perfect_puzzle = t_i;}
 void StarGoldData::setStrengthTargetCardNumber(int t_card_number){	strength_target_card_number = t_card_number;}

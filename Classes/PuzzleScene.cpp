@@ -510,7 +510,7 @@ bool PuzzleScene::init()
 			}
 		}
 		
-		addChild(KSTimer::create(6.f, [=](){startAutoTurnPiece();}));
+		addChild(KSTimer::create(4.f, [=](){startAutoTurnPiece();}));
 	}
 	
 	return true;
@@ -598,7 +598,7 @@ void PuzzleScene::hideClearPopup()
 					showUnlockEffect();
 				else
 				{
-					addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+					addChild(KSTimer::create(3.5f, [=](){startAutoTurnPiece();}));
 					is_menu_enable = true;
 				}
 			}
@@ -719,7 +719,7 @@ void PuzzleScene::endGetStar()
 			}
 			else
 			{
-				addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+				addChild(KSTimer::create(3.5f, [=](){startAutoTurnPiece();}));
 				is_menu_enable = true;
 			}
 		}
@@ -843,7 +843,7 @@ void PuzzleScene::endUnlockEffect()
 	setPieceClick(next_stage_number);
 	setRight();
 	
-	addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+	addChild(KSTimer::create(3.5f, [=](){startAutoTurnPiece();}));
 	is_menu_enable = true;
 }
 
@@ -875,7 +875,7 @@ void PuzzleScene::hideFailPopup()
 		}
 	}
 	
-	addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+	addChild(KSTimer::create(3.5f, [=](){startAutoTurnPiece();}));
 	is_menu_enable = true;
 }
 
@@ -1389,7 +1389,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 				((PuzzlePiece*)puzzle_node->getChildByTag(i))->turnPiece(piece_mode);
 			
 			stopAutoTurnPiece();
-			addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+			addChild(KSTimer::create(3.5f, [=](){startAutoTurnPiece();}));
 //			is_auto_turn = false;
 //			auto_turn_piece_frame = 0;
 			
@@ -1440,7 +1440,7 @@ void PuzzleScene::autoTurnPiece()
 	if(auto_turn_piece_frame == stage_count)
 	{
 		stopAutoTurnPiece();
-		addChild(KSTimer::create(5.f, [=](){startAutoTurnPiece();}));
+		addChild(KSTimer::create(3.5f, [=](){startAutoTurnPiece();}));
 	}
 	
 //	if(is_auto_turn)
