@@ -1317,7 +1317,46 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		}
 		else
 		{
-			endUnlockAnimation();
+			is_unlock_puzzle = 0;
+			
+			cell_node->addChild(KSTimer::create(0.7f, [=]()
+												{
+													cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
+																									  {
+																										  if(t < 1.f)
+																										  {
+																											  cell_node->setScale(1.f+0.1f*t);
+																										  }
+																										  else if(t < 2.f)
+																										  {
+																											  cell_node->setScale(1.1f);
+																										  }
+																										  else
+																										  {
+																											  cell_node->setScale(1.1f-0.1f*(t-2.f));
+																										  }
+																									  }, [=](float t)
+																									  {
+																										  cell_node->setScale(1.f);
+																										  
+																										  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < 5)
+																										  {
+																											  myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+																											  
+																											  CCNode* target_parent = heart_time->getParent();
+																											  CCPoint heart_time_position = heart_time->getPosition();
+																											  int heart_time_tag = heart_time->getTag();
+																											  
+																											  heart_time->removeFromParent();
+																											  heart_time = HeartTime::create();
+																											  heart_time->setPosition(heart_time_position);
+																											  target_parent->addChild(heart_time, 0, heart_time_tag);
+																										  }
+																										  
+																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){endUnlockAnimation();}, true);
+																										  addChild(t_popup, kMainFlowZorder_popup);
+																									  }));
+												}));
 		}
 	}
 	else if(puzzle_number == is_perfect_puzzle)

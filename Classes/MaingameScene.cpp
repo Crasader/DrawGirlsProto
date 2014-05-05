@@ -1478,10 +1478,20 @@ void Maingame::clearScenario2()
 																						   
 																						   int random_left_right = rand()%2;
 																						   
+																						   KSLabelTTF* selected_label;
+																						   KSLabelTTF* another_label1;
+																						   KSLabelTTF* another_label2;
+																						   CCSprite* another_img1;
+																						   CCSprite* another_img2;
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
 																							   item_gold->setPosition(ccp(-150,-10));
+																							   selected_label = item_gold;
+																							   another_label1 = item_gold_or_item;
+																							   another_img1 = t_gold_img2;
+																							   another_label2 = item_stone;
+																							   another_img2 = t_stone_img;
 																							   if(random_left_right == 0)
 																							   {
 																								   item_gold_or_item->setPosition(ccp(0,-10));
@@ -1498,6 +1508,11 @@ void Maingame::clearScenario2()
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
 																							   item_gold_or_item->setPosition(ccp(-150,-10));
+																							   selected_label = item_gold_or_item;
+																							   another_label1 = item_gold;
+																							   another_img1 = t_gold_img;
+																							   another_label2 = item_stone;
+																							   another_img2 = t_stone_img;
 																							   if(random_left_right == 0)
 																							   {
 																								   item_gold->setPosition(ccp(0,-10));
@@ -1514,6 +1529,11 @@ void Maingame::clearScenario2()
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
 																							   item_stone->setPosition(ccp(-150,-10));
+																							   selected_label = item_stone;
+																							   another_label1 = item_gold_or_item;
+																							   another_label2 = item_gold;
+																							   another_img1 = t_gold_img2;
+																							   another_img2 = t_gold_img;
 																							   if(random_left_right == 0)
 																							   {
 																								   item_gold->setPosition(ccp(0,-10));
@@ -1525,9 +1545,28 @@ void Maingame::clearScenario2()
 																								   item_gold_or_item->setPosition(ccp(0,-10));
 																							   }
 																						   }
+																						   
 																						   t_container->addChild(item_gold);
 																						   t_container->addChild(item_gold_or_item);
 																						   t_container->addChild(item_stone);
+																						   
+																						   CCPoint before_position = selected_label->getPosition();
+																						   
+																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
+																																			   {
+																																				   selected_label->setPosition(before_position + ccp(0,50*t));
+																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																			   }, [=](float t)
+																																			   {
+																																				   selected_label->setPosition(before_position + ccp(0,50));
+																																				   another_img1->setColor(ccc3(155, 155, 155));
+																																				   another_img2->setColor(ccc3(155, 155, 155));
+																																				   another_label1->setColor(ccc3(155, 155, 155));
+																																				   another_label2->setColor(ccc3(155, 155, 155));
+																																			   }));
 																						   
 																						   goldbox_menu->setVisible(false);
 																						   
@@ -1591,9 +1630,22 @@ void Maingame::clearScenario2()
 																						   
 																						   int random_left_right = rand()%2;
 																						   
+																						   KSLabelTTF* selected_label;
+																						   KSLabelTTF* another_label1;
+																						   KSLabelTTF* another_label2;
+																						   CCSprite* another_img1;
+																						   CCSprite* another_img2;
+																						   
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
+																							   
+																							   selected_label = item_gold;
+																							   another_label1 = item_gold_or_item;
+																							   another_img1 = t_gold_img2;
+																							   another_label2 = item_stone;
+																							   another_img2 = t_stone_img;
+																							   
 																							   item_gold->setPosition(ccp(0,-10));
 																							   if(random_left_right == 0)
 																							   {
@@ -1609,6 +1661,12 @@ void Maingame::clearScenario2()
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
+																							   
+																							   selected_label = item_gold_or_item;
+																							   another_label1 = item_gold;
+																							   another_img1 = t_gold_img;
+																							   another_label2 = item_stone;
+																							   another_img2 = t_stone_img;
 																							   
 																							   item_gold_or_item->setPosition(ccp(0,-10));
 																							   if(random_left_right == 0)
@@ -1626,6 +1684,12 @@ void Maingame::clearScenario2()
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
+																							   selected_label = item_stone;
+																							   another_label1 = item_gold_or_item;
+																							   another_label2 = item_gold;
+																							   another_img1 = t_gold_img2;
+																							   another_img2 = t_gold_img;
+																							   
 																							   item_stone->setPosition(ccp(0,-10));
 																							   if(random_left_right == 0)
 																							   {
@@ -1641,6 +1705,24 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(item_gold);
 																						   t_container->addChild(item_gold_or_item);
 																						   t_container->addChild(item_stone);
+																						   
+																						   CCPoint before_position = selected_label->getPosition();
+																						   
+																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
+																																			   {
+																																				   selected_label->setPosition(before_position + ccp(0,50*t));
+																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																			   }, [=](float t)
+																																			   {
+																																				   selected_label->setPosition(before_position + ccp(0,50));
+																																				   another_img1->setColor(ccc3(155, 155, 155));
+																																				   another_img2->setColor(ccc3(155, 155, 155));
+																																				   another_label1->setColor(ccc3(155, 155, 155));
+																																				   another_label2->setColor(ccc3(155, 155, 155));
+																																			   }));
 																						   
 																						   goldbox_menu->setVisible(false);
 																						   
@@ -1705,9 +1787,22 @@ void Maingame::clearScenario2()
 																						   
 																						   int random_left_right = rand()%2;
 																						   
+																						   KSLabelTTF* selected_label;
+																						   KSLabelTTF* another_label1;
+																						   KSLabelTTF* another_label2;
+																						   CCSprite* another_img1;
+																						   CCSprite* another_img2;
+																						   
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
+																							   
+																							   selected_label = item_gold;
+																							   another_label1 = item_gold_or_item;
+																							   another_img1 = t_gold_img2;
+																							   another_label2 = item_stone;
+																							   another_img2 = t_stone_img;
+																							   
 																							   item_gold->setPosition(ccp(150,-10));
 																							   if(random_left_right == 0)
 																							   {
@@ -1723,6 +1818,12 @@ void Maingame::clearScenario2()
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
+																							   
+																							   selected_label = item_gold_or_item;
+																							   another_label1 = item_gold;
+																							   another_img1 = t_gold_img;
+																							   another_label2 = item_stone;
+																							   another_img2 = t_stone_img;
 																							   
 																							   item_gold_or_item->setPosition(ccp(150,-10));
 																							   if(random_left_right == 0)
@@ -1740,6 +1841,12 @@ void Maingame::clearScenario2()
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
+																							   selected_label = item_stone;
+																							   another_label1 = item_gold_or_item;
+																							   another_label2 = item_gold;
+																							   another_img1 = t_gold_img2;
+																							   another_img2 = t_gold_img;
+																							   
 																							   item_stone->setPosition(ccp(150,-10));
 																							   if(random_left_right == 0)
 																							   {
@@ -1755,6 +1862,24 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(item_gold);
 																						   t_container->addChild(item_gold_or_item);
 																						   t_container->addChild(item_stone);
+																						   
+																						   CCPoint before_position = selected_label->getPosition();
+																						   
+																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
+																																			   {
+																																				   selected_label->setPosition(before_position + ccp(0,50*t));
+																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+																																			   }, [=](float t)
+																																			   {
+																																				   selected_label->setPosition(before_position + ccp(0,50));
+																																				   another_img1->setColor(ccc3(155, 155, 155));
+																																				   another_img2->setColor(ccc3(155, 155, 155));
+																																				   another_label1->setColor(ccc3(155, 155, 155));
+																																				   another_label2->setColor(ccc3(155, 155, 155));
+																																			   }));
 																						   
 																						   goldbox_menu->setVisible(false);
 																						   
@@ -1828,58 +1953,58 @@ void Maingame::clearScenario2()
 
 void Maingame::clearScenario3()
 {
-	if(myUI->getPercentage() >= 1.f)
-	{
-		AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3", false, true);
-		
-		CCSprite* spin_light = CCSprite::create("showtime_spin_light.png");
-		spin_light->setOpacity(0);
-		spin_light->setPosition(ccp(240,myDSH->ui_center_y));
-		addChild(spin_light, particleZorder);
-		
-		CCScaleTo* light_scale = CCScaleTo::create(1.2f, 2.f);//2.f/3.f, 2);
-		CCRotateTo* light_rotate = CCRotateTo::create(1.2f, -90);//2.f/3.f, -90);
-		
-		CCFadeTo* light_fade1 = CCFadeTo::create(0.3f, 255);//1.f/6.f, 255);
-		CCFadeTo* light_fade2 = CCFadeTo::create(0.3f, 20);//1.f/6.f, 20);
-		CCFadeTo* light_fade3 = CCFadeTo::create(0.3f, 255);//1.f/6.f, 255);
-		CCFadeTo* light_fade4 = CCFadeTo::create(0.3f, 0);//1.f/6.f, 0);
-		CCCallFunc* light_call = CCCallFunc::create(spin_light, callfunc_selector(CCSprite::removeFromParent));
-		CCSequence* light_seq = CCSequence::create(light_fade1, light_fade2, light_fade3, light_fade4, light_call, NULL);
-		
-		CCSpawn* light_spawn = CCSpawn::create(light_scale, light_rotate, light_seq, NULL);
-		spin_light->runAction(light_spawn); // 1.3
-		
-		
-		CCSprite* bakper = CCSprite::create("bakper.png");
-		bakper->setOpacity(0);
-		bakper->setPosition(ccp(240,myDSH->ui_center_y));
-		addChild(bakper, particleZorder);
-		
-		CCScaleTo* bak_scale1 = CCScaleTo::create(32.4f/60.f, 1.3f);
-		CCScaleTo* bak_scale2 = CCScaleTo::create(18.f/60.f, 0.9f);
-		CCScaleTo* bak_scale3 = CCScaleTo::create(7.2f/60.f,1.2f);
-		CCScaleTo* bak_scale4 = CCScaleTo::create(14.4f/60.f,0.f);
-		CCSequence* bak_seq1 = CCSequence::create(bak_scale1, bak_scale2, bak_scale3, bak_scale4, NULL);
-		
-		CCFadeTo* bak_fade1 = CCFadeTo::create(32.4f/60.f, 255);
-		CCDelayTime* bak_delay = CCDelayTime::create(25.2f/60.f);
-		CCFadeTo* bak_fade2 = CCFadeTo::create(14.4f/60.f, 0);
-		CCCallFunc* bak_call = CCCallFunc::create(bakper, callfunc_selector(CCSprite::removeFromParent));
-		CCSequence* bak_seq2 = CCSequence::create(bak_fade1, bak_delay, bak_fade2, bak_call, NULL);
-		
-		CCSpawn* bak_spawn = CCSpawn::create(bak_seq1, bak_seq2, NULL);
-		bakper->runAction(bak_spawn);
-		
-		addChild(KSTimer::create(1.5f, [=]()
-								 {
-									 closeShutter();
-								 }));
-	}
-	else
-	{
+//	if(myUI->getPercentage() >= 1.f)
+//	{
+//		AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3", false, true);
+//		
+//		CCSprite* spin_light = CCSprite::create("showtime_spin_light.png");
+//		spin_light->setOpacity(0);
+//		spin_light->setPosition(ccp(240,myDSH->ui_center_y));
+//		addChild(spin_light, particleZorder);
+//		
+//		CCScaleTo* light_scale = CCScaleTo::create(1.2f, 2.f);//2.f/3.f, 2);
+//		CCRotateTo* light_rotate = CCRotateTo::create(1.2f, -90);//2.f/3.f, -90);
+//		
+//		CCFadeTo* light_fade1 = CCFadeTo::create(0.3f, 255);//1.f/6.f, 255);
+//		CCFadeTo* light_fade2 = CCFadeTo::create(0.3f, 20);//1.f/6.f, 20);
+//		CCFadeTo* light_fade3 = CCFadeTo::create(0.3f, 255);//1.f/6.f, 255);
+//		CCFadeTo* light_fade4 = CCFadeTo::create(0.3f, 0);//1.f/6.f, 0);
+//		CCCallFunc* light_call = CCCallFunc::create(spin_light, callfunc_selector(CCSprite::removeFromParent));
+//		CCSequence* light_seq = CCSequence::create(light_fade1, light_fade2, light_fade3, light_fade4, light_call, NULL);
+//		
+//		CCSpawn* light_spawn = CCSpawn::create(light_scale, light_rotate, light_seq, NULL);
+//		spin_light->runAction(light_spawn); // 1.3
+//		
+//		
+//		CCSprite* bakper = CCSprite::create("bakper.png");
+//		bakper->setOpacity(0);
+//		bakper->setPosition(ccp(240,myDSH->ui_center_y));
+//		addChild(bakper, particleZorder);
+//		
+//		CCScaleTo* bak_scale1 = CCScaleTo::create(32.4f/60.f, 1.3f);
+//		CCScaleTo* bak_scale2 = CCScaleTo::create(18.f/60.f, 0.9f);
+//		CCScaleTo* bak_scale3 = CCScaleTo::create(7.2f/60.f,1.2f);
+//		CCScaleTo* bak_scale4 = CCScaleTo::create(14.4f/60.f,0.f);
+//		CCSequence* bak_seq1 = CCSequence::create(bak_scale1, bak_scale2, bak_scale3, bak_scale4, NULL);
+//		
+//		CCFadeTo* bak_fade1 = CCFadeTo::create(32.4f/60.f, 255);
+//		CCDelayTime* bak_delay = CCDelayTime::create(25.2f/60.f);
+//		CCFadeTo* bak_fade2 = CCFadeTo::create(14.4f/60.f, 0);
+//		CCCallFunc* bak_call = CCCallFunc::create(bakper, callfunc_selector(CCSprite::removeFromParent));
+//		CCSequence* bak_seq2 = CCSequence::create(bak_fade1, bak_delay, bak_fade2, bak_call, NULL);
+//		
+//		CCSpawn* bak_spawn = CCSpawn::create(bak_seq1, bak_seq2, NULL);
+//		bakper->runAction(bak_spawn);
+//		
+//		addChild(KSTimer::create(1.5f, [=]()
+//								 {
+//									 closeShutter();
+//								 }));
+//	}
+//	else
+//	{
 		closeShutter();
-	}
+//	}
 }
 
 void Maingame::failScenario()

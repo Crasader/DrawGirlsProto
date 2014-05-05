@@ -60,14 +60,13 @@ class CommonButton : public CCNode {
 	CommonButtonType m_btnType;
 	int m_price;
 	PriceType m_priceType;
-	CCSprite* m_priceTypeSprite;
 	CCLabelTTF* m_priceLbl;
 	float m_fontSize;
 	string m_title;
 	ccColor3B m_titleColorNomal;
 	ccColor3B m_titleColorDisable;
 public:
-	
+	CCSprite* m_priceTypeSprite;
 	void setFunction(std::function<void(CCObject*)> func){
 		m_func=func;
 	}

@@ -495,7 +495,7 @@ void AchievePopup::setAchieveTable()
 	main_case->addChild(achieve_table, kAchievePopupZorder_table);
 	achieve_table->setTouchPriority(-190);
 	
-	m_scrollBar = ScrollBar::createScrollbar(achieve_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"));
+	m_scrollBar = ScrollBar::createScrollbar(achieve_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"), -191);
 	m_scrollBar->setDynamicScrollSize(false);
 	m_scrollBar->setVisible(true);
 	
