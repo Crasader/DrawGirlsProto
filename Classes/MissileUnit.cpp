@@ -390,7 +390,10 @@ void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, CCObjec
 	stoneSprite->setPosition(ccp(randomX, ip2ccp(jackPoint).y + 300));
 	
 	// 운석 떨어질때
-	AudioEngine::sharedInstance()->playEffect("se_meteor.mp3");
+	addChild(KSTimer::create(0.4f, [=](){
+		AudioEngine::sharedInstance()->playEffect("se_meteor.mp3");
+	}));
+	
 	startMove();
 }
 Targeting * Targeting::create ()

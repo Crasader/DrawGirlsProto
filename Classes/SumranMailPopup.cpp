@@ -74,7 +74,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	m_nothingMessage->setPosition(ccpMult(main_case->getContentSize(),0.5));
 	main_case->addChild(m_nothingMessage, 1);
 	m_nothingMessage->setVisible(false);	
-
+	
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_inner->setContentSize(CCSizeMake(460, 232));
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);
@@ -104,7 +104,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	_menu->setTouchPriority(-200);
 
 	
-	CommonButton* allReceive = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), 12, CCSizeMake(100,40), CommonButtonLightPupple, -200);
+	allReceive = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), 12, CCSizeMake(100,40), CommonButtonLightPupple, -200);
 	allReceive->setTitleColor(ccc3(20, 0, 0));
 	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setFunction([=](CCObject*){
@@ -492,8 +492,9 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	
 	CCScale9Sprite* barBack = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
 	barBack->setContentSize(CCSizeMake(7, 160.f));
+	barBack->setPosition(ccp(453, 140));
 //	FormSetter::get()->addObject("testksoo", barBack);
-	addChild(barBack, kMP_Z_mailTable + -1);
+	addChild(barBack, kMP_Z_mailTable - 1);
 	//320x320 테이블 뷰 생성
 
 	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
@@ -1675,6 +1676,8 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 			}
 			
 			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
+			NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].toStyledString(), false);
+			NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["name"].asString(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
 			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
@@ -1957,5 +1960,6 @@ void SumranMailPopup::filterWithMailFilter()
 		KS::KSLog("%", m_mailList);
 	}
 	m_nothingMessage->setVisible(m_filteredMailList.size() == 0);
+	allReceive->setVisible(m_filteredMailList.size() != 0);
 }
 #undef LZZ_INLINE

@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "hspConnector.h"
-
+#include "ScrollBar.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
@@ -41,6 +41,7 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	
+	ScrollBar* m_scrollBar;
 	CCTableView* rank_table;
 	CCScale9Sprite* main_case;
 	CCSprite* gray;

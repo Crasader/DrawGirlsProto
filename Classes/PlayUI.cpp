@@ -1073,13 +1073,13 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		myGD->communication("GIM_stopCoin");
 		
-//		if(clr_cdt_type == kCLEAR_timeLimit)
-//		{
+		if(clr_cdt_type == kCLEAR_timeLimit)
+		{
 //			if(playtime_limit.getV() - countingCnt.getV() >= ing_cdt_cnt.getV())
-//				conditionClear();
+				conditionClear();
 //			else
 //				conditionFail();
-//		}
+		}
 		
 		if(clr_cdt_type == kCLEAR_default)
 			conditionClear();
@@ -2219,6 +2219,14 @@ void PlayUI::myInit ()
 	playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime");
 	total_time = playtime_limit.getV();
 	
+	clr_cdt_type = mySD->getClearCondition();
+	
+	if(clr_cdt_type == kCLEAR_timeLimit)
+	{
+		playtime_limit = playtime_limit.getV() - ing_cdt_cnt.getV();
+		total_time = total_time - ing_cdt_cnt.getV();
+	}
+	
 //	CCSprite* time_back = CCSprite::create("ui_time_back.png");
 //	time_back->setPosition(ccp(240-25,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			time_back->setPosition(ccp((480-50-myGD->boarder_value*2)*3.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-25));
@@ -2318,7 +2326,6 @@ void PlayUI::myInit ()
 	}
 	
 	is_show_condition = false;
-	clr_cdt_type = mySD->getClearCondition();
 	
 	mission_button = RollingButton::create("");
 	mission_button->setPosition(ccp(68, myDSH->ui_top-22+UI_OUT_DISTANCE));
@@ -2527,9 +2534,6 @@ void PlayUI::myInit ()
 //		addChild(icon_menu, 0, kCT_UI_clrCdtIcon);
 		
 		ing_cdt_cnt = mySD->getClearConditionTimeLimit();
-		
-		playtime_limit = playtime_limit.getV() - ing_cdt_cnt.getV();
-		total_time = total_time - ing_cdt_cnt.getV();
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		mission_button->addText(CCString::createWithFormat("%d", playtime_limit.getV())->getCString());

@@ -315,6 +315,28 @@ void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,jsonSelType 
 	 dict error : 에러정보.
  */
 
+void hspConnector::mappingToAccount(jsonSelType func){
+	int dkey = jsonDelegator::get()->add(func, 0, 0);
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[[HSPCore sharedHSPCore] requestMappingToAccountWithCompletionHandler:
+	 ^(HSPError *error)
+	 {
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 addErrorInResult(resultDict, error);
+		 callFuncMainQueue2(0,0,func,resultDict);
+	 }
+	 ];
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "mappingToAccount", "(I)V")) {
+		int _key =  jsonDelegator::get()->add(func,0,0);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID,_key);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
+}
+
 void hspConnector::logout(jsonSelType func){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] logoutWithCompletionHandler:
@@ -335,6 +357,7 @@ void hspConnector::logout(jsonSelType func){
 #endif
 
 }
+
 void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType func){
 	bool ManualLogin=true;
 	if(param!=0 && param!=NULL){
@@ -358,8 +381,10 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 
 		//		});
 
-};
+		};
 
+
+	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
 [[HSPCore sharedHSPCore] loginWithManualLogin:ManualLogin completionHandler:
@@ -382,6 +407,9 @@ if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(
 }
 #endif
 }
+
+
+
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
@@ -491,6 +519,7 @@ void hspConnector::openUrl(const std::string& url)
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 }
+
 
 void hspConnector::openKakaoMsg()
 {

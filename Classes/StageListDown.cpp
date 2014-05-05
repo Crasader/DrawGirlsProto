@@ -315,6 +315,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					}
 					
 					NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
+					NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].toStyledString(), false);
+					NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["name"].asString(), false);
 					
 					Json::Value t_silImgInfo = t_card["silImgInfo"];
 					NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
@@ -433,28 +435,30 @@ void StageListDown::startOpenning()
 
 void StageListDown::endOpenning()
 {
-	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(250, 70), kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(250, 70), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
 //	talk_label->setHorizontalAlignment(kCCTextAlignmentLeft);
 //	talk_label->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	talk_label->enableOuterStroke(ccBLACK, 1.f);
+	talk_label->setAnchorPoint(ccp(0.5,0));
 	
 	talk_box = CCScale9Sprite::create("loading_talkbox.png", CCRectMake(0, 0, 150, 64.5f), CCRectMake(50, 21.5f, 50, 21.5f));
 	talk_box->setContentSize(CCSizeMake(100+talk_label->getContentSize().width, 43+talk_label->getContentSize().height));
 	talk_box->setAnchorPoint(ccp(0.5,0));
 	talk_box->setPosition(ccp(240,200));
+	talk_box->setVisible(false);
 	addChild(talk_box, kSLD_Z_content);
 	
-	talk_label->setPosition(ccp(talk_box->getContentSize().width/2.f, talk_box->getContentSize().height/2.f));
-	talk_box->addChild(talk_label);
+	talk_label->setPosition(ccp(240, 220));
+	addChild(talk_label);
 	
-	KS::setOpacity(talk_box, 0);
+	KS::setOpacity(talk_label, 0);
 	
 	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 										   {
-											   KS::setOpacity(talk_box, t*255);
+											   KS::setOpacity(talk_label, t*255);
 										   }, [=](float t)
 										   {
-											   KS::setOpacity(talk_box, 255);
+											   KS::setOpacity(talk_label, 255);
 										   }));
 	
 	

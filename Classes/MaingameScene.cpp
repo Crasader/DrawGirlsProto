@@ -1457,28 +1457,40 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
+																						   
+																						   CCNode* gold_node = CCNode::create();
 																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
 																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
+																						   item_gold->setPosition(ccp(0,20));
+																						   gold_node->addChild(item_gold);
 																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
-																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
-																						   item_gold->addChild(t_gold_img);
+																						   t_gold_img->setPosition(ccp(0, -20));
+																						   gold_node->addChild(t_gold_img);
 																						   
+																						   
+																						   CCNode* gold_item_node = CCNode::create();
 																						   KSLabelTTF* item_gold_or_item;
 																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
 																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
+																						   item_gold_or_item->setPosition(ccp(0,20));
+																						   gold_item_node->addChild(item_gold_or_item);
 																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
-																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
-																						   item_gold_or_item->addChild(t_gold_img2);
+																						   t_gold_img2->setPosition(ccp(0, -20));
+																						   gold_item_node->addChild(t_gold_img2);
 																						   
+																						   
+																						   CCNode* stone_node = CCNode::create();
 																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
 																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
+																						   item_stone->setPosition(ccp(0,20));
+																						   stone_node->addChild(item_stone);
 																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
-																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
-																						   item_stone->addChild(t_stone_img);
+																						   t_stone_img->setPosition(ccp(0, -20));
+																						   stone_node->addChild(t_stone_img);
 																						   
 																						   int random_left_right = rand()%2;
 																						   
-																						   KSLabelTTF* selected_label;
+																						   CCNode* selected_node;
 																						   KSLabelTTF* another_label1;
 																						   KSLabelTTF* another_label2;
 																						   CCSprite* another_img1;
@@ -1486,82 +1498,80 @@ void Maingame::clearScenario2()
 																						   if(reward_type == 1)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
-																							   item_gold->setPosition(ccp(-150,-10));
-																							   selected_label = item_gold;
+																							   gold_node->setPosition(ccp(-150,-30));
+																							   selected_node = gold_node;
 																							   another_label1 = item_gold_or_item;
 																							   another_img1 = t_gold_img2;
 																							   another_label2 = item_stone;
 																							   another_img2 = t_stone_img;
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(0,-10));
-																								   item_stone->setPosition(ccp(150,-10));
+																								   gold_item_node->setPosition(ccp(0,-30));
+																								   stone_node->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(150,-10));
-																								   item_stone->setPosition(ccp(0,-10));
+																								   gold_item_node->setPosition(ccp(150,-30));
+																								   stone_node->setPosition(ccp(0,-30));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   item_gold_or_item->setPosition(ccp(-150,-10));
-																							   selected_label = item_gold_or_item;
+																							   gold_item_node->setPosition(ccp(-150,-30));
+																							   selected_node = gold_item_node;
 																							   another_label1 = item_gold;
 																							   another_img1 = t_gold_img;
 																							   another_label2 = item_stone;
 																							   another_img2 = t_stone_img;
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(0,-10));
-																								   item_stone->setPosition(ccp(150,-10));
+																								   gold_node->setPosition(ccp(0,-30));
+																								   stone_node->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-10));
-																								   item_stone->setPosition(ccp(0,-10));
+																								   gold_node->setPosition(ccp(150,-30));
+																								   stone_node->setPosition(ccp(0,-30));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   item_stone->setPosition(ccp(-150,-10));
-																							   selected_label = item_stone;
+																							   stone_node->setPosition(ccp(-150,-30));
+																							   selected_node = stone_node;
 																							   another_label1 = item_gold_or_item;
 																							   another_label2 = item_gold;
 																							   another_img1 = t_gold_img2;
 																							   another_img2 = t_gold_img;
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(0,-10));
-																								   item_gold_or_item->setPosition(ccp(150,-10));
+																								   gold_node->setPosition(ccp(0,-30));
+																								   gold_item_node->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-10));
-																								   item_gold_or_item->setPosition(ccp(0,-10));
+																								   gold_node->setPosition(ccp(150,-30));
+																								   gold_item_node->setPosition(ccp(0,-30));
 																							   }
 																						   }
 																						   
-																						   t_container->addChild(item_gold);
-																						   t_container->addChild(item_gold_or_item);
-																						   t_container->addChild(item_stone);
-																						   
-																						   CCPoint before_position = selected_label->getPosition();
+																						   t_container->addChild(gold_node);
+																						   t_container->addChild(gold_item_node);
+																						   t_container->addChild(stone_node);
 																						   
 																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
 																																			   {
-																																				   selected_label->setPosition(before_position + ccp(0,50*t));
+																																				   selected_node->setScale(1.f+t*0.5f);
 																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																			   }, [=](float t)
 																																			   {
-																																				   selected_label->setPosition(before_position + ccp(0,50));
+																																				   selected_node->setScale(1.5f);
 																																				   another_img1->setColor(ccc3(155, 155, 155));
 																																				   another_img2->setColor(ccc3(155, 155, 155));
 																																				   another_label1->setColor(ccc3(155, 155, 155));
@@ -1609,28 +1619,39 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
+																						   CCNode* gold_node = CCNode::create();
 																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
 																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
+																						   item_gold->setPosition(ccp(0,20));
+																						   gold_node->addChild(item_gold);
 																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
-																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
-																						   item_gold->addChild(t_gold_img);
+																						   t_gold_img->setPosition(ccp(0, -20));
+																						   gold_node->addChild(t_gold_img);
 																						   
+																						   
+																						   CCNode* gold_item_node = CCNode::create();
 																						   KSLabelTTF* item_gold_or_item;
 																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
 																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
+																						   item_gold_or_item->setPosition(ccp(0,20));
+																						   gold_item_node->addChild(item_gold_or_item);
 																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
-																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
-																						   item_gold_or_item->addChild(t_gold_img2);
+																						   t_gold_img2->setPosition(ccp(0, -20));
+																						   gold_item_node->addChild(t_gold_img2);
 																						   
+																						   
+																						   CCNode* stone_node = CCNode::create();
 																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
 																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
+																						   item_stone->setPosition(ccp(0,20));
+																						   stone_node->addChild(item_stone);
 																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
-																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
-																						   item_stone->addChild(t_stone_img);
+																						   t_stone_img->setPosition(ccp(0, -20));
+																						   stone_node->addChild(t_stone_img);
 																						   
 																						   int random_left_right = rand()%2;
 																						   
-																						   KSLabelTTF* selected_label;
+																						   CCNode* selected_node;
 																						   KSLabelTTF* another_label1;
 																						   KSLabelTTF* another_label2;
 																						   CCSprite* another_img1;
@@ -1640,84 +1661,82 @@ void Maingame::clearScenario2()
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
 																							   
-																							   selected_label = item_gold;
+																							   selected_node = gold_node;
 																							   another_label1 = item_gold_or_item;
 																							   another_img1 = t_gold_img2;
 																							   another_label2 = item_stone;
 																							   another_img2 = t_stone_img;
 																							   
-																							   item_gold->setPosition(ccp(0,-10));
+																							   gold_node->setPosition(ccp(0,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(-150,-10));
-																								   item_stone->setPosition(ccp(150,-10));
+																								   gold_item_node->setPosition(ccp(-150,-30));
+																								   stone_node->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(150,-10));
-																								   item_stone->setPosition(ccp(-150,-10));
+																								   gold_item_node->setPosition(ccp(150,-30));
+																								   stone_node->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   selected_label = item_gold_or_item;
+																							   selected_node = gold_item_node;
 																							   another_label1 = item_gold;
 																							   another_img1 = t_gold_img;
 																							   another_label2 = item_stone;
 																							   another_img2 = t_stone_img;
 																							   
-																							   item_gold_or_item->setPosition(ccp(0,-10));
+																							   gold_item_node->setPosition(ccp(0,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-10));
-																								   item_stone->setPosition(ccp(150,-10));
+																								   gold_node->setPosition(ccp(-150,-30));
+																								   stone_node->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-10));
-																								   item_stone->setPosition(ccp(-150,-10));
+																								   gold_node->setPosition(ccp(150,-30));
+																								   stone_node->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   selected_label = item_stone;
+																							   selected_node = stone_node;
 																							   another_label1 = item_gold_or_item;
 																							   another_label2 = item_gold;
 																							   another_img1 = t_gold_img2;
 																							   another_img2 = t_gold_img;
 																							   
-																							   item_stone->setPosition(ccp(0,-10));
+																							   stone_node->setPosition(ccp(0,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-10));
-																								   item_gold_or_item->setPosition(ccp(150,-10));
+																								   gold_node->setPosition(ccp(-150,-30));
+																								   gold_item_node->setPosition(ccp(150,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(150,-10));
-																								   item_gold_or_item->setPosition(ccp(-150,-10));
+																								   gold_node->setPosition(ccp(150,-30));
+																								   gold_item_node->setPosition(ccp(-150,-30));
 																							   }
 																						   }
-																						   t_container->addChild(item_gold);
-																						   t_container->addChild(item_gold_or_item);
-																						   t_container->addChild(item_stone);
-																						   
-																						   CCPoint before_position = selected_label->getPosition();
+																						   t_container->addChild(gold_node);
+																						   t_container->addChild(gold_item_node);
+																						   t_container->addChild(stone_node);
 																						   
 																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
 																																			   {
-																																				   selected_label->setPosition(before_position + ccp(0,50*t));
+																																				   selected_node->setScale(1.f+t*0.5f);
 																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																			   }, [=](float t)
 																																			   {
-																																				   selected_label->setPosition(before_position + ccp(0,50));
+																																				   selected_node->setScale(1.5f);
 																																				   another_img1->setColor(ccc3(155, 155, 155));
 																																				   another_img2->setColor(ccc3(155, 155, 155));
 																																				   another_label1->setColor(ccc3(155, 155, 155));
@@ -1765,29 +1784,39 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(goldbox6, 2);
 																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
 																						   
+																						   CCNode* gold_node = CCNode::create();
 																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
 																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
+																						   item_gold->setPosition(ccp(0,20));
+																						   gold_node->addChild(item_gold);
 																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
-																						   t_gold_img->setPosition(ccp(item_gold->getContentSize().width/2.f, -40));
-																						   item_gold->addChild(t_gold_img);
+																						   t_gold_img->setPosition(ccp(0, -20));
+																						   gold_node->addChild(t_gold_img);
 																						   
+																						   
+																						   CCNode* gold_item_node = CCNode::create();
 																						   KSLabelTTF* item_gold_or_item;
-																						   
 																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
 																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
+																						   item_gold_or_item->setPosition(ccp(0,20));
+																						   gold_item_node->addChild(item_gold_or_item);
 																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
-																						   t_gold_img2->setPosition(ccp(item_gold_or_item->getContentSize().width/2.f, -40));
-																						   item_gold_or_item->addChild(t_gold_img2);
+																						   t_gold_img2->setPosition(ccp(0, -20));
+																						   gold_item_node->addChild(t_gold_img2);
 																						   
+																						   
+																						   CCNode* stone_node = CCNode::create();
 																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
 																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
+																						   item_stone->setPosition(ccp(0,20));
+																						   stone_node->addChild(item_stone);
 																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
-																						   t_stone_img->setPosition(ccp(item_stone->getContentSize().width/2.f, -40));
-																						   item_stone->addChild(t_stone_img);
+																						   t_stone_img->setPosition(ccp(0, -20));
+																						   stone_node->addChild(t_stone_img);
 																						   
 																						   int random_left_right = rand()%2;
 																						   
-																						   KSLabelTTF* selected_label;
+																						   CCNode* selected_node;
 																						   KSLabelTTF* another_label1;
 																						   KSLabelTTF* another_label2;
 																						   CCSprite* another_img1;
@@ -1797,84 +1826,82 @@ void Maingame::clearScenario2()
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(100);
 																							   
-																							   selected_label = item_gold;
+																							   selected_node = gold_node;
 																							   another_label1 = item_gold_or_item;
 																							   another_img1 = t_gold_img2;
 																							   another_label2 = item_stone;
 																							   another_img2 = t_stone_img;
 																							   
-																							   item_gold->setPosition(ccp(150,-10));
+																							   gold_node->setPosition(ccp(150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold_or_item->setPosition(ccp(-150,-10));
-																								   item_stone->setPosition(ccp(0,-10));
+																								   gold_item_node->setPosition(ccp(-150,-30));
+																								   stone_node->setPosition(ccp(0,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold_or_item->setPosition(ccp(0,-10));
-																								   item_stone->setPosition(ccp(-150,-10));
+																								   gold_item_node->setPosition(ccp(0,-30));
+																								   stone_node->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else if(reward_type == 2)
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(200);
 																							   
-																							   selected_label = item_gold_or_item;
+																							   selected_node = gold_item_node;
 																							   another_label1 = item_gold;
 																							   another_img1 = t_gold_img;
 																							   another_label2 = item_stone;
 																							   another_img2 = t_stone_img;
 																							   
-																							   item_gold_or_item->setPosition(ccp(150,-10));
+																							   gold_item_node->setPosition(ccp(150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-10));
-																								   item_stone->setPosition(ccp(0,-10));
+																								   gold_node->setPosition(ccp(-150,-30));
+																								   stone_node->setPosition(ccp(0,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(0,-10));
-																								   item_stone->setPosition(ccp(-150,-10));
+																								   gold_node->setPosition(ccp(0,-30));
+																								   stone_node->setPosition(ccp(-150,-30));
 																							   }
 																						   }
 																						   else
 																						   {
 																							   mySGD->addChangeGoodsIngameGold(300);
 																							   
-																							   selected_label = item_stone;
+																							   selected_node = stone_node;
 																							   another_label1 = item_gold_or_item;
 																							   another_label2 = item_gold;
 																							   another_img1 = t_gold_img2;
 																							   another_img2 = t_gold_img;
 																							   
-																							   item_stone->setPosition(ccp(150,-10));
+																							   stone_node->setPosition(ccp(150,-30));
 																							   if(random_left_right == 0)
 																							   {
-																								   item_gold->setPosition(ccp(-150,-10));
-																								   item_gold_or_item->setPosition(ccp(0,-10));
+																								   gold_node->setPosition(ccp(-150,-30));
+																								   gold_item_node->setPosition(ccp(0,-30));
 																							   }
 																							   else
 																							   {
-																								   item_gold->setPosition(ccp(0,-10));
-																								   item_gold_or_item->setPosition(ccp(-150,-10));
+																								   gold_node->setPosition(ccp(0,-30));
+																								   gold_item_node->setPosition(ccp(-150,-30));
 																							   }
 																						   }
-																						   t_container->addChild(item_gold);
-																						   t_container->addChild(item_gold_or_item);
-																						   t_container->addChild(item_stone);
-																						   
-																						   CCPoint before_position = selected_label->getPosition();
+																						   t_container->addChild(gold_node);
+																						   t_container->addChild(gold_item_node);
+																						   t_container->addChild(stone_node);
 																						   
 																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
 																																			   {
-																																				   selected_label->setPosition(before_position + ccp(0,50*t));
+																																				   selected_node->setScale(1.f+t*0.5f);
 																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																			   }, [=](float t)
 																																			   {
-																																				   selected_label->setPosition(before_position + ccp(0,50));
+																																				   selected_node->setScale(1.5f);
 																																				   another_img1->setColor(ccc3(155, 155, 155));
 																																				   another_img2->setColor(ccc3(155, 155, 155));
 																																				   another_label1->setColor(ccc3(155, 155, 155));
