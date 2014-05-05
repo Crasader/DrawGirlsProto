@@ -156,7 +156,7 @@ bool CardSettingPopup::init()
 	main_case->addChild(card_table, kCSS_Z_content);
 	card_table->setTouchPriority(-180-5);
 	
-	m_scrollBar = ScrollBar::createScrollbar(card_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"));
+	m_scrollBar = ScrollBar::createScrollbar(card_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"), -186);
 	m_scrollBar->setDynamicScrollSize(false);
 	m_scrollBar->setVisible(true);
 	

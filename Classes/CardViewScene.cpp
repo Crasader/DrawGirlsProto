@@ -480,7 +480,7 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				timeval time;
 				gettimeofday(&time, NULL);
 				
-				if(int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 100000)
+				if(int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
 					first_img->ccTouchEnded(touch, pEvent);
 				}
