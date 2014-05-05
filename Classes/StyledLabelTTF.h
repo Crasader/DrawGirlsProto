@@ -41,6 +41,7 @@ enum class StyledAlignment
 	kRightAlignment
 };
 
+class KSLabelTTF;
 class StyledLabelTTF : public CCNode
 {
 public:
@@ -88,7 +89,7 @@ public:
 	
 	//void setString(const char* text);
 	void setStringByTag(const char* text);
-	CCLabelTTF* getLabelByTag(int tag);
+	KSLabelTTF* getLabelByTag(int tag);
 	//virtual void registerWithTouchDispatcher();
 protected:
 	float m_currentPosition;
