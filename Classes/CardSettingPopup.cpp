@@ -166,7 +166,7 @@ bool CardSettingPopup::init()
 	addChild(t_suction);
 	
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-185);
+	CommonButton* close_menu = CommonButton::createCloseButton(-200);
 	close_menu->setPosition(getContentPosition(kCSS_MT_close));
 	close_menu->setFunction([=](CCObject* sender)
 							{

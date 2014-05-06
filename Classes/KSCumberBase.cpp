@@ -1512,9 +1512,7 @@ void KSCumberBase::cumberAttack(float dt)
 {
 	//	myJack->get
 	
-	//분노카운터,재공격카운터 계속 증가
-	m_reAttackCnt++;
-	m_furyCnt++;
+
 	
 	//if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
 	//{
@@ -1529,6 +1527,10 @@ void KSCumberBase::cumberAttack(float dt)
 	bool crashAttack = false;
 	bool distanceFury = false; // 거리로 인한 분노인가.
 	
+	//분노카운터,재공격카운터 계속 증가
+	m_reAttackCnt++;
+	m_furyCnt++;
+	if(m_reAttackCnt<0)return;
 	//거리분노룰 - 분노카운터와 리어택카운터가 0이상일때, 보스-유저의 거리가 떨어져있으면 부수기공격
 	if(m_furyCnt > 0 && m_reAttackCnt > 0){
 		
@@ -1568,11 +1570,11 @@ void KSCumberBase::cumberAttack(float dt)
 				if(ret == 1)
 				{
 					attackBehavior(attackCode);
+					m_reAttackCnt = -120;
 				}
 				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
 				m_furyCnt = -300;
 				outlineCountRatio.clear();
-			
 				//myGD->communication("Main_showTextMessage", std::string("갇힘 순간이동"));
 				return;
 			}
@@ -1720,6 +1722,8 @@ void KSCumberBase::cumberAttack(float dt)
 			if(ret == 1)
 			{
 				attackBehavior(attackCode);
+				m_reAttackCnt = -120;
+				return;
 			}
 		}
 		else if(!selectedAttacks.empty())
@@ -1741,6 +1745,8 @@ void KSCumberBase::cumberAttack(float dt)
 				if(ret == 1)
 				{
 					attackBehavior(attackCode);
+					m_reAttackCnt = -120;
+					return;
 				}
 			}
 			else
@@ -2656,11 +2662,16 @@ void KSCumberBase::applyAutoBalance()
 	CCLOG("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
 	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 
+	if(autobalanceTry==0){
+		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
+		return;
+	}
+	
 	if(vCount>0){
-		if(m_attackPercent>0)m_aiValue = m_aiValue+5*vCount;
-		else m_aiValue = m_aiValue+2.5f*vCount;
-		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.025;
-		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.05;
+		if(m_attackPercent>0)m_aiValue = m_aiValue+2.5f*vCount;
+		else m_aiValue = m_aiValue+1.25f*vCount;
+		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.01;
+		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.025;
 	}
 	
 	

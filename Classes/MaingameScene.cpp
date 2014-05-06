@@ -1585,7 +1585,7 @@ void Maingame::clearScenario2()
 																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
+																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
 					  goldbox1_item->setPosition(ccp(-150,-30));
@@ -1750,7 +1750,7 @@ void Maingame::clearScenario2()
 																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
+																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
 					  goldbox2_item->setPosition(ccp(0,-30));
@@ -1915,7 +1915,7 @@ void Maingame::clearScenario2()
 																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
+																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
 					  goldbox3_item->setPosition(ccp(150,-30));

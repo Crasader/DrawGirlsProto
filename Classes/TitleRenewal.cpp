@@ -196,7 +196,6 @@ void TitleRenewalScene::realInit()
 	
 	white_back->removeFromParent();
 	
-	AudioEngine::sharedInstance()->preloadEffectScene("Title");
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -287,6 +286,9 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 
 void TitleRenewalScene::successLogin()
 {
+	
+	AudioEngine::sharedInstance()->preloadEffectScene("Title");
+	
 	if(myLog->getLogCount() > 0)
 	{
 		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
