@@ -233,9 +233,9 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	long long sub_value = mySGD->today_mission_info.resetTimestamp.getV() - graphdog->getServerTimestamp();
 	string ment_string;
 	if(sub_value >= 3600)
-		ment_string = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTime), sub_value/3600)->getCString();
+		ment_string = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTime), (int)(sub_value/3600.f))->getCString();
 	else
-		ment_string = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute), sub_value/60)->getCString();
+		ment_string = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute), (int)(sub_value/60.f))->getCString();
 	
 	StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	remain_label->setPosition(ccp(remain_back->getContentSize().width/2.f, remain_back->getContentSize().height/2.f));

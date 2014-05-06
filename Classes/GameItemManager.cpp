@@ -385,10 +385,10 @@ void GameItemAttack::acting()
 	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 	
 	int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
-	int weapon_level = mySGD->getSelectedCharacterHistory().level.getV()+5;
-	
+	int weapon_level = mySGD->getSelectedCharacterHistory().level.getV()+3;
+	if(weapon_level>30)weapon_level=30;
 	int weapon_rank = (weapon_level-1)/5 + 1;
-	weapon_level = (weapon_level-1)%5 + 1+5;
+	weapon_level = (weapon_level-1)%5 + 1;
 	
 	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, myPoint.convertToCCP());
 	

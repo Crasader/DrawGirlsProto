@@ -956,6 +956,9 @@ void ClearPopup::showPopup()
 //	gray->runAction(gray_fade);
 
 	main_case->setPosition(ccp(240,160-22.f));
+	
+	
+	
 	endShowPopup();
 //	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
 //	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ClearPopup::endShowPopup));
@@ -1260,6 +1263,8 @@ void ClearPopup::checkChallengeOrHelp()
 
 void ClearPopup::endTakeCard()
 {
+	
+	AudioEngine::sharedInstance()->playEffect("bgm_result.mp3");
 	is_end_take_card = true;
 //	if(is_saved_user_data)
 //	{

@@ -1530,7 +1530,7 @@ void KSCumberBase::cumberAttack(float dt)
 	//분노카운터,재공격카운터 계속 증가
 	m_reAttackCnt++;
 	m_furyCnt++;
-	if(m_reAttackCnt<0)return;
+	if(m_reAttackCnt<100)return;
 	//거리분노룰 - 분노카운터와 리어택카운터가 0이상일때, 보스-유저의 거리가 떨어져있으면 부수기공격
 	if(m_furyCnt > 0 && m_reAttackCnt > 0){
 		
@@ -1886,10 +1886,11 @@ void KSCumberBase::cumberAttack(float dt)
 					int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
 					if(ret == 1)
 					{
+						int cframe =  attackCode.get("castframe", 60).asInt() + attackCode.get("totalframe", 0).asInt() + attackCode.get("crashframe",0).asInt();
 						attackBehavior(attackCode);
-						
+						CCLog("cast frame si %d",cframe);
 						//한번 공격후 3초간 재공격 하지 않음.
-						m_reAttackCnt = -120;
+						m_reAttackCnt = -1 * (cframe + 60);
 					}
 				}
 			}
