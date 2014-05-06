@@ -539,10 +539,13 @@ void StartSettingPopup::setMain()
 	level_case->setPosition(ccp(83,95));
 	main_case->addChild(level_case);
 	
+	cumber_node = CCNode::create();
+	cumber_node->setPosition(ccp(83,158));
+	main_case->addChild(cumber_node);
 	
 	t_cumber = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
-	t_cumber->setPosition(ccp(83,158));
-	main_case->addChild(t_cumber);
+//	t_cumber->setPosition(ccp(83,158));
+	cumber_node->addChild(t_cumber);
 	
 	
 	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
@@ -559,8 +562,8 @@ void StartSettingPopup::setMain()
 																														 rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
 //		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 		t_gm->setFunctionForCrash([=](){
-			t_cumber->stopAllActions();
-			t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
+			cumber_node->stopAllActions();
+			cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
 		});
 		t_gm->setPosition(ccp(83,158));
 		main_case->addChild(t_gm);
@@ -828,8 +831,8 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 //			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 			
 			t_gm->setFunctionForCrash([=](){
-				t_cumber->stopAllActions();
-				t_cumber->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
+				cumber_node->stopAllActions();
+				cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
 			});
 			t_gm->setPosition(missile_position);
 //			t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
