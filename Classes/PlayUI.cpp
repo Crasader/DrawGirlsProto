@@ -1132,7 +1132,14 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 void PlayUI::addResultClearCCB()
 {
 	addResultCCB("ui_stageclear.ccbi");
-	AudioEngine::sharedInstance()->playEffect("ment_stageclear1.mp3", false, true);
+	
+	
+	AudioEngine::sharedInstance()->stopSound();
+	
+	//AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString(), false, true);
+	
+	AudioEngine::sharedInstance()->playEffect("bgm_gameclear.mp3");
+	//AudioEngine::sharedInstance()->playEffect("ment_stageclear1.mp3", false, true);
 }
 
 void PlayUI::addResultCCB(string ccb_filename)

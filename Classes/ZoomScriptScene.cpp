@@ -289,7 +289,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		
 		if(is_showtime)
 		{
-			AudioEngine::sharedInstance()->playEffect("bgm_gameclear.mp3");
+			AudioEngine::sharedInstance()->playEffect("ment_showtime.mp3");
 			showtime_back = CCSprite::create("showtime_back.png");
 			showtime_back->setScale(10.f);
 			showtime_back->setPosition(ccp(240,myDSH->ui_center_y));

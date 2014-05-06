@@ -273,6 +273,7 @@ string DataStorageHub::getKey (DSH_Key t_name)
 //	else if(t_name == kDSH_Key_isClearStage_int1)					return_value = "ics%d";
 	
 	else if(t_name == kDSH_Key_nick)								return_value = "nick";
+	else if(t_name == kDSH_Key_flag)								return_value = "flag";
 	
 	else if(t_name == kDSH_Key_wasTutorialPopupShockWave)			return_value = "wtpsw";
 	else if(t_name == kDSH_Key_wasTutorialPopupMissileTrace)		return_value = "wtpmt";

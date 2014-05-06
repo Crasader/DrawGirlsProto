@@ -492,6 +492,7 @@ CCTableViewCell* RankNewPopup::tableCellAtIndex(CCTableView *table, unsigned int
 		Json::Value read_data;
 		reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 		string flag = read_data.get("flag", "kr").asString().c_str();
+
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
 		selectedFlagSpr->setPosition(ccp(50,18));
 		list_cell_case->addChild(selectedFlagSpr);
