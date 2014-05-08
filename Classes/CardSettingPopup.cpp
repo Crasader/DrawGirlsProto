@@ -166,7 +166,7 @@ bool CardSettingPopup::init()
 	addChild(t_suction);
 	
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-185);
+	CommonButton* close_menu = CommonButton::createCloseButton(-200);
 	close_menu->setPosition(getContentPosition(kCSS_MT_close));
 	close_menu->setFunction([=](CCObject* sender)
 							{
@@ -296,7 +296,7 @@ bool CardSettingPopup::init()
 		
 		for(int j=t_start_stage;j<t_start_stage+t_stage_count;j++)
 		{
-			int t_stage_card_count = NSDS_GI(j, kSDS_SI_cardCount_i);
+			int t_stage_card_count = 4;
 			
 //			int condition_gold = NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, j);
 //			bool is_on_condition_gold = condition_gold == 0;
@@ -310,7 +310,7 @@ bool CardSettingPopup::init()
 		}
 	}
 	
-	KSLabelTTF* take_card_count = KSLabelTTF::create(CCString::createWithFormat("%d/%d", mySGD->getHasGottenCardsSize(), /*open_stage_card_count, */all_stage_card_count)->getCString(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* take_card_count = KSLabelTTF::create(CCString::createWithFormat("%d/%d장", mySGD->getHasGottenCardsSize(), /*open_stage_card_count, */all_stage_card_count)->getCString(), mySGD->getFont().c_str(), 12);
 	take_card_count->setAnchorPoint(ccp(0,0.5f));
 	take_card_count->setPosition(ccp(70,255));
 	main_case->addChild(take_card_count, kCSS_Z_content);

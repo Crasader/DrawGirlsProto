@@ -78,6 +78,7 @@ private:
 	CCLabelTTF* item_title_label;
 	CCLabelTTF* option_label;
 	CommonButton* buy_button;
+	CCNode* cumber_node;
 	CumberShowWindow* t_cumber;
 	
 	int gacha_item_frame;

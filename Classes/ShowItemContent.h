@@ -14,6 +14,9 @@
 #include "CCMenuLambda.h"
 #include "EnumDefine.h"
 #include "StarGoldData.h"
+#include "KSLabelTTF.h"
+#include "SilhouetteData.h"
+#include "MyLocalization.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -36,6 +39,8 @@ private:
 	vector<int> item_list;
 	function<void(CCObject*)> end_selector;
 	CCSprite* show_content;
+	KSLabelTTF* item_title;
+	KSLabelTTF* item_ment;
 	int ing_close_cnt;
 	
 	bool is_menu_enable;
@@ -52,9 +57,13 @@ private:
 		else
 		{
 			show_content->removeFromParent();
-			show_content = CCSprite::create(CCString::createWithFormat("newitem_item%d.png", item_list[ing_close_cnt])->getCString());
-			show_content->setPosition(ccp(0, 0));
+			show_content = CCSprite::create(CCString::createWithFormat("item%d.png", item_list[ing_close_cnt])->getCString());
+			show_content->setPosition(ccp(0, 23));
 			addChild(show_content);
+			
+			item_title->setString(convertToItemCodeToItemName((ITEM_CODE)item_list[ing_close_cnt]).c_str());
+			
+			item_ment->setString(mySD->getItemScript((ITEM_CODE)item_list[ing_close_cnt]).c_str());
 		}
 	}
 	
@@ -119,15 +128,35 @@ private:
 		
 		ing_close_cnt = 0;
 		
-		show_content = CCSprite::create(CCString::createWithFormat("newitem_item%d.png", item_list[ing_close_cnt])->getCString());
-		show_content->setPosition(ccp(0, 0));
+		show_content = CCSprite::create(CCString::createWithFormat("item%d.png", item_list[ing_close_cnt])->getCString());
+		show_content->setPosition(ccp(0, 23));
 		addChild(show_content);
 		
-		CCSprite* title_img = CCSprite::create("newitem_title.png");
+		item_title = KSLabelTTF::create(convertToItemCodeToItemName((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 12);
+		item_title->setColor(ccc3(255,100,30));
+		item_title->enableOuterStroke(ccBLACK, 1);
+		item_title->setPosition(ccp(0,-33));
+		addChild(item_title);
+		
+		item_ment = KSLabelTTF::create(mySD->getItemScript((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 9);
+		item_ment->setColor(ccWHITE);
+		item_ment->setPosition(ccp(0,-55));
+		addChild(item_ment);
+		
+		if(item_ment->getContentSize().width > 100)
+		{
+			case_back->setContentSize(CCSizeMake(item_ment->getContentSize().width+20,154));
+			content_back->setContentSize(CCSizeMake(item_ment->getContentSize().width,90));
+		}
+		
+		
+		KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemTitle), mySGD->getFont().c_str(), 20);
+		title_img->setColor(ccc3(255,230,0));
 		title_img->setPosition(ccp(0, 115));
 		addChild(title_img);
 		
-		CCSprite* bonus_ment_img = CCSprite::create("newitem_bonus_ment.png");
+		KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 17);
+		bonus_ment_img->setColor(ccc3(255,230,0));
 		bonus_ment_img->setPosition(ccp(0,-115));
 		addChild(bonus_ment_img);
 		
@@ -153,6 +182,23 @@ private:
 		addChild(close_menu);
 		
 		startShowAnimation();
+	}
+	
+	string convertToItemCodeToItemName(ITEM_CODE t_code)
+	{
+		string return_value;
+		if(t_code == kIC_attack)				return_value = "Attack";
+		else if(t_code == kIC_speedUp)			return_value = "SpeedUp";
+		else if(t_code == kIC_addTime)			return_value = "AddTime";
+		else if(t_code == kIC_fast)				return_value = "Fast";
+		else if(t_code == kIC_subOneDie)		return_value = "SubOneDie";
+		else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemTitle);
+		else if(t_code == kIC_silence)			return_value = "Silence";
+		else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
+		else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
+		else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
+		
+		return return_value.c_str();
 	}
 };
 

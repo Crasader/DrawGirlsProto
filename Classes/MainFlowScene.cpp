@@ -1023,8 +1023,9 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		rate_timer->setPosition(ccp(22, -80));
 		cell_node->addChild(rate_timer, 0, 999);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
 		title_label->setColor(ccBLACK);
+		//title_label->enableOuterStroke(ccWHITE, 1.f);
 		title_label->setPosition(ccp(0,-59));
 		cell_node->addChild(title_label, 1);
 
@@ -1215,8 +1216,9 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			}
 		}
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
 		title_label->setColor(ccBLACK);
+		//title_label->enableOuterStroke(ccWHITE, 1.f);
 		title_label->setPosition(ccp(0,-59));
 		cell_node->addChild(title_label, 1);
 		
@@ -1271,8 +1273,6 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, t_remove_self1, NULL);
 			not_clear_img->runAction(t_seq1);
 			
-			is_unlock_puzzle = 0;
-			
 			cell_node->addChild(KSTimer::create(0.7f, [=]()
 												{
 													AudioEngine::sharedInstance()->playEffect("se_puzzleopen_2.mp3", false);
@@ -1312,13 +1312,12 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																										  addChild(t_popup, kMainFlowZorder_popup);
 																										  
 																										  mySGD->setIsUnlockPuzzle(0);
+																										  is_unlock_puzzle = 0;
 																									  }));
 												}));
 		}
 		else
 		{
-			is_unlock_puzzle = 0;
-			
 			cell_node->addChild(KSTimer::create(0.7f, [=]()
 												{
 													cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
@@ -1357,6 +1356,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																										  addChild(t_popup, kMainFlowZorder_popup);
 																										  
 																										  mySGD->setIsUnlockPuzzle(0);
+																										  is_unlock_puzzle = 0;
 																									  }));
 												}));
 		}
@@ -1375,6 +1375,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 								   addChild(t_popup, kMainFlowZorder_popup);
 								   
 								   mySGD->setIsPerfectPuzzle(0);
+								   is_perfect_puzzle = 0;
 							   }
 						   });
 	}

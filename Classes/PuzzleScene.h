@@ -92,6 +92,7 @@ private:
 	
 	void startBacking();
 	
+	void openBeforeSettingPopup();
 	void openSettingPopup();
 	
 	void showClearPopup();

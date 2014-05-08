@@ -301,7 +301,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	}
 	else if(mission_type == kCLEAR_timeLimit)
 	{
-		int sec_value = NSDS_GI(stage_number, kSDS_SI_missionOptionSec_i);
+		int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 		
 		title_img = CCSprite::create("mission_title_timelimit.png");
 		
@@ -525,7 +525,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		}
 		else if(mission_type == kCLEAR_timeLimit)
 		{
-			int sec_value = NSDS_GI(stage_number, kSDS_SI_missionOptionSec_i);
+			int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 			
 			title_img = CCSprite::create("mission_title_timelimit.png");
 			
@@ -618,33 +618,13 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		if(selected_loading_tip == 0)
 			tip_filename += "achievement";
 		else if(selected_loading_tip == 1)
-			tip_filename += "bonusgame";
-		else if(selected_loading_tip == 2)
 			tip_filename += "bosstip1";
-		else if(selected_loading_tip == 3)
+		else if(selected_loading_tip == 2)
 			tip_filename += "bosstip2";
-		else if(selected_loading_tip == 4)
-			tip_filename += "cardsetting";
-		else if(selected_loading_tip == 5)
-			tip_filename += "challenge";
-		else if(selected_loading_tip == 6)
-			tip_filename += "change";
-		else if(selected_loading_tip == 7)
-			tip_filename += "clear";
-		else if(selected_loading_tip == 8)
-			tip_filename += "continue";
-		else if(selected_loading_tip == 9)
-			tip_filename += "newitem1";
-		else if(selected_loading_tip == 10)
-			tip_filename += "newitem2";
-		else if(selected_loading_tip == 11)
+		else if(selected_loading_tip == 3)
 			tip_filename += "newpuzzle";
-		else if(selected_loading_tip == 12)
-			tip_filename += "option";
-		else if(selected_loading_tip == 13)
-			tip_filename += "shop";
 		else
-			tip_filename += "bonusgame";
+			tip_filename += "bosstip1";
 		
 		tip_filename += ".png";
 		
@@ -669,7 +649,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 
 CCNode* LoadingTipScene::getCurtainTipImage()
 {
-	int total_loading_tip = 14;
+	int total_loading_tip = 4;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCNode* loading_tip_node = CCNode::create();
@@ -699,33 +679,13 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	if(selected_loading_tip == 0)
 		tip_filename += "achievement";
 	else if(selected_loading_tip == 1)
-		tip_filename += "bonusgame";
-	else if(selected_loading_tip == 2)
 		tip_filename += "bosstip1";
-	else if(selected_loading_tip == 3)
+	else if(selected_loading_tip == 2)
 		tip_filename += "bosstip2";
-	else if(selected_loading_tip == 4)
-		tip_filename += "cardsetting";
-	else if(selected_loading_tip == 5)
-		tip_filename += "challenge";
-	else if(selected_loading_tip == 6)
-		tip_filename += "change";
-	else if(selected_loading_tip == 7)
-		tip_filename += "clear";
-	else if(selected_loading_tip == 8)
-		tip_filename += "continue";
-	else if(selected_loading_tip == 9)
-		tip_filename += "newitem1";
-	else if(selected_loading_tip == 10)
-		tip_filename += "newitem2";
-	else if(selected_loading_tip == 11)
+	else if(selected_loading_tip == 3)
 		tip_filename += "newpuzzle";
-	else if(selected_loading_tip == 12)
-		tip_filename += "option";
-	else if(selected_loading_tip == 13)
-		tip_filename += "shop";
 	else
-		tip_filename += "bonusgame";
+		tip_filename += "bosstip1";
 	
 	tip_filename += ".png";
 	
@@ -747,7 +707,7 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 
 CCSprite* LoadingTipScene::getLoadingTipImage()
 {
-	int total_loading_tip = 14;
+	int total_loading_tip = 4;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
@@ -755,33 +715,13 @@ CCSprite* LoadingTipScene::getLoadingTipImage()
 	if(selected_loading_tip == 0)
 		tip_filename += "achievement";
 	else if(selected_loading_tip == 1)
-		tip_filename += "bonusgame";
-	else if(selected_loading_tip == 2)
 		tip_filename += "bosstip1";
-	else if(selected_loading_tip == 3)
+	else if(selected_loading_tip == 2)
 		tip_filename += "bosstip2";
-	else if(selected_loading_tip == 4)
-		tip_filename += "cardsetting";
-	else if(selected_loading_tip == 5)
-		tip_filename += "challenge";
-	else if(selected_loading_tip == 6)
-		tip_filename += "change";
-	else if(selected_loading_tip == 7)
-		tip_filename += "clear";
-	else if(selected_loading_tip == 8)
-		tip_filename += "continue";
-	else if(selected_loading_tip == 9)
-		tip_filename += "newitem1";
-	else if(selected_loading_tip == 10)
-		tip_filename += "newitem2";
-	else if(selected_loading_tip == 11)
+	else if(selected_loading_tip == 3)
 		tip_filename += "newpuzzle";
-	else if(selected_loading_tip == 12)
-		tip_filename += "option";
-	else if(selected_loading_tip == 13)
-		tip_filename += "shop";
 	else
-		tip_filename += "bonusgame";
+		tip_filename += "bosstip1";
 	
 	tip_filename += ".png";
 	

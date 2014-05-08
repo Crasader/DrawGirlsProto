@@ -315,8 +315,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					}
 					
 					NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
-					NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].toStyledString(), false);
-					NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["name"].asString(), false);
+					NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].asString(), false);
+					NSDS_SS(kSDS_CI_int1_name_s, t_card["no"].asInt(), t_card["name"].asString(), false);
 					
 					Json::Value t_silImgInfo = t_card["silImgInfo"];
 					NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
@@ -435,7 +435,7 @@ void StageListDown::startOpenning()
 
 void StageListDown::endOpenning()
 {
-	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(250, 70), kCCTextAlignmentLeft, kCCVerticalTextAlignmentBottom);
+	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(300, 70), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
 //	talk_label->setHorizontalAlignment(kCCTextAlignmentLeft);
 //	talk_label->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	talk_label->enableOuterStroke(ccBLACK, 1.f);
@@ -448,7 +448,7 @@ void StageListDown::endOpenning()
 	talk_box->setVisible(false);
 	addChild(talk_box, kSLD_Z_content);
 	
-	talk_label->setPosition(ccp(240, 220));
+	talk_label->setPosition(ccp(240, 230));
 	addChild(talk_label);
 	
 	KS::setOpacity(talk_label, 0);
@@ -467,7 +467,7 @@ void StageListDown::endOpenning()
 	gray->removeFromParent();
 
 	progress_back = CCSprite::create("loading_progress_back.png");
-	progress_back->setPosition(ccp(240,90));
+	progress_back->setPosition(ccp(240,110));
 	addChild(progress_back);
 	
 	loading_progress = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
@@ -475,7 +475,7 @@ void StageListDown::endOpenning()
 	loading_progress->setMidpoint(ccp(0,0));
 	loading_progress->setBarChangeRate(ccp(1,0));
 	loading_progress->setPercentage(0);
-	loading_progress->setPosition(ccp(240, 90));
+	loading_progress->setPosition(ccp(240, 110));
 	addChild(loading_progress);
 	
 //	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();

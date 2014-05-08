@@ -1398,12 +1398,28 @@ bool PlayTutorial::init()
 	gray->runAction(CCFadeTo::create(0.5f, 255));
 	t_sm->back_node->addChild(gray);
 	
+	AudioEngine::sharedInstance()->playEffect("ment_tutorial_start.mp3", false, true);
+						addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial1.mp3", false, true);
+						addChild(KSTimer::create(2.4f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial2.mp3", false, true);
+						}));
+						}));
+						
+						
+						
 	t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial1), [=]()
 				  //"조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
 	{
 		gray->runAction(CCFadeTo::create(0.3f, 0));
 		controler->joystickSetVisible(true);
 		mark_img->setVisible(true);
+		
+		AudioEngine::sharedInstance()->playEffect("ment_tutorial3.mp3", false, true);
+		
+		addChild(KSTimer::create(2.6f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial4.mp3", false, true);
+			addChild(KSTimer::create(3.3f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial5.mp3", false, true);
+				
+			}));
+		}));
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial2), [=]()
 					  //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
 		{
@@ -1449,6 +1465,13 @@ void PlayTutorial::nextStep()
 		area_take_sample->setPosition(ccp(240,200));
 		addChild(area_take_sample, 101);
 		
+		AudioEngine::sharedInstance()->playEffect("ment_tutorial6.mp3", false, true);
+		addChild(KSTimer::create(2.f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial7.mp3", false, true);
+			addChild(KSTimer::create(5.f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial8.mp3", false, true);
+				
+			}));
+		}));
+		
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
 			controler->setTouchEnabled(true);
@@ -1492,7 +1515,9 @@ void PlayTutorial::nextStep()
 		ui_percent->runAction(t_seqq);
 		
 		view_img->startSilhouette();
-			
+		
+		AudioEngine::sharedInstance()->playEffect("ment_tutorial9.mp3", false, true);
+		
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial6), [=]()
 					  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 					  {
@@ -1546,13 +1571,21 @@ void PlayTutorial::nextStep()
 													time_case->setVisible(true);
 													
 													
-													AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+													AudioEngine::sharedInstance()->playEffect("ment_tutorial10.mp3", false, true);
+													addChild(KSTimer::create(1.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial11.mp3", false, true);
+														addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial12.mp3", false, true);
+															
+														}));
+													}));
 													
 													t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
 																  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
 																  {
+																	  AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 																	  t_sm->removeFromParent();
 																	  mySGD->setNextSceneName("maingame");
+																	  
+																	  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
 																	  
 																	  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
 																	  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);

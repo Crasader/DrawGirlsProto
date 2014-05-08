@@ -1288,7 +1288,7 @@ void Maingame::gameover()
 	if(mySGD->getIsCleared())
 	{
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
-		AudioEngine::sharedInstance()->playEffect("bgm_result.mp3");
+//			AudioEngine::sharedInstance()->playEffect("bgm_gameclear.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString(), false, true);
 		ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 1.f, game_node, this, callfunc_selector(Maingame::clearScenario));
@@ -1562,16 +1562,17 @@ void Maingame::clearScenario2()
 																						   t_container->addChild(gold_item_node);
 																						   t_container->addChild(stone_node);
 																						   
+																							 
 																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
 																																			   {
-																																				   selected_node->setScale(1.f+t*0.5f);
+																																				   
+																																					 
 																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
 																																			   }, [=](float t)
 																																			   {
-																																				   selected_node->setScale(1.5f);
 																																				   another_img1->setColor(ccc3(155, 155, 155));
 																																				   another_img2->setColor(ccc3(155, 155, 155));
 																																				   another_label1->setColor(ccc3(155, 155, 155));
@@ -1585,7 +1586,7 @@ void Maingame::clearScenario2()
 																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
+																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
 					  goldbox1_item->setPosition(ccp(-150,-30));
@@ -1750,7 +1751,7 @@ void Maingame::clearScenario2()
 																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
+																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
 					  goldbox2_item->setPosition(ccp(0,-30));
@@ -1915,7 +1916,7 @@ void Maingame::clearScenario2()
 																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
 																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
 																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-																						   CCSequence* t_seq = CCSequence::create(dimmed_fade, dimmed_call, remove_call, NULL);
+																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
 																						   dimmed_img->runAction(t_seq);
 																					   });
 					  goldbox3_item->setPosition(ccp(150,-30));
@@ -3260,6 +3261,7 @@ void Maingame::showPause()
 	
 	PauseContent* t_container = PauseContent::create(t_popup->getTouchPriority(), [=]()
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
@@ -3268,6 +3270,7 @@ void Maingame::showPause()
 		t_popup->removeFromParent();
 	}, [=]()
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
@@ -3277,6 +3280,7 @@ void Maingame::showPause()
 		t_popup->removeFromParent();
 	}, [=]()
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();

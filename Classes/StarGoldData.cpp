@@ -261,7 +261,7 @@ void StarGoldData::setIngameGoldLabel( CCLabelBMFont* t_label )
 //			}
 //		}
 //	}
-//	
+//
 //	if(star_label && myDSH->getIntegerForKey(kDSH_Key_savedStar) != t_star)
 //		star_label->setString(CCString::createWithFormat("%d", t_star)->getCString());
 //	
@@ -293,7 +293,7 @@ void StarGoldData::setGoldLabel( CCLabelBMFont* t_label )
 //			}
 //		}
 //	}
-//	
+//
 //	if(gold_label && myDSH->getIntegerForKey(kDSH_Key_savedGold) != t_gold)
 //		gold_label->setString(CCString::createWithFormat("%d", t_gold)->getCString());
 //	
@@ -1303,13 +1303,49 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 		{
 			GoodsType t_type = getGoodsKeyToType(today_mission_info.reward_type.getV());
 			int t_count = result_data["rewardCount"].asInt();
-			
+			int before_value = goods_data[t_type].getV();
 			goods_data[t_type] = t_count;
 			
 			if(t_type == kGoodsType_ruby && star_label)
+			{
 				star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+				
+				if(before_value < t_count)
+				{
+					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+					
+					for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+					{
+						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						{
+							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+						}
+					}
+				}
+			}
 			else if(t_type == kGoodsType_gold && gold_label)
+			{
 				gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+				
+				if(before_value < t_count)
+				{
+					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+					
+					for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+					{
+						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						{
+							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -1688,25 +1724,98 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 		{
 			GoodsType t_type = getGoodsKeyToType(result_list[i]["type"].asString());
 			int t_count = result_list[i]["count"].asInt();
+			int before_value = goods_data[t_type].getV();
 			goods_data[t_type] = t_count;
 			
 			if(t_type == kGoodsType_ruby && star_label)
+			{
 				star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+				
+				if(before_value < t_count)
+				{
+					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+					
+					for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+					{
+						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						{
+							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+						}
+					}
+				}
+			}
 			else if(t_type == kGoodsType_gold && gold_label)
+			{
 				gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+				
+				if(before_value < t_count)
+				{
+					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+					
+					for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+					{
+						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						{
+							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+						}
+					}
+				}
+			}
 		}
 	}
 	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
 	{
 		GoodsType t_type = getGoodsKeyToType(result_data["minusType"].asString());
 		int t_count = result_data["minusCount"].asInt();
-		
+		int before_value = goods_data[t_type].getV();
 		goods_data[t_type] = t_count;
 		
 		if(t_type == kGoodsType_ruby && star_label)
+		{
 			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+			
+			if(before_value < t_count)
+			{
+				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+				
+				for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+				{
+					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					{
+						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+					}
+				}
+			}
+		}
 		else if(t_type == kGoodsType_gold && gold_label)
+		{
 			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+			
+			if(before_value < t_count)
+			{
+				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+				
+				for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+				{
+					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					{
+						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+					}
+				}
+			}
+		}
 	}
 	else
 	{
@@ -1717,12 +1826,49 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 void StarGoldData::refreshGoodsData(string t_key, int t_count)
 {
 	GoodsType t_type = getGoodsKeyToType(t_key);
+	int before_value = goods_data[t_type].getV();
 	goods_data[t_type] = t_count;
 	
 	if(t_type == kGoodsType_ruby && star_label)
+	{
 		star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		
+		if(before_value < t_count)
+		{
+			AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+			
+			for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+				   t_count >= shared_acr->getCondition((AchievementCode)i))
+				{
+					myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+				}
+			}
+		}
+	}
 	else if(t_type == kGoodsType_gold && gold_label)
+	{
 		gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		
+		if(before_value < t_count)
+		{
+			AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+			
+			for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+			{
+				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+				   t_count >= shared_acr->getCondition((AchievementCode)i))
+				{
+					myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+				}
+			}
+		}
+	}
 }
 
 bool StarGoldData::isChangedGoods()
@@ -1805,12 +1951,49 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 		{
 			GoodsType t_type = getGoodsKeyToType(result_list[i]["type"].asString());
 			int t_count = result_list[i]["count"].asInt();
+			int before_value = goods_data[t_type].getV();
 			goods_data[t_type] = t_count;
 			
 			if(t_type == kGoodsType_ruby && star_label)
+			{
 				star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+				
+				if(before_value < t_count)
+				{
+					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+					
+					for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+					{
+						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						{
+							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+						}
+					}
+				}
+			}
 			else if(t_type == kGoodsType_gold && gold_label)
+			{
 				gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+				
+				if(before_value < t_count)
+				{
+					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+					
+					for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+					{
+						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						{
+							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+						}
+					}
+				}
+			}
 		}
 		
 		change_goods_callback(result_data);
@@ -1818,14 +2001,51 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
 	{
 		GoodsType t_type = getGoodsKeyToType(result_data["minusType"].asString());
+		int before_value = goods_data[t_type].getV();
 		int t_count = result_data["minusCount"].asInt();
 		
 		goods_data[t_type] = t_count;
 		
 		if(t_type == kGoodsType_ruby && star_label)
+		{
 			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+			
+			if(before_value < t_count)
+			{
+				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+				
+				for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+				{
+					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					{
+						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+					}
+				}
+			}
+		}
 		else if(t_type == kGoodsType_gold && gold_label)
+		{
 			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+			
+			if(before_value < t_count)
+			{
+				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
+				
+				for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+				{
+					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
+					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					{
+						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+					}
+				}
+			}
+		}
 		
 		change_goods_callback(result_data);
 	}

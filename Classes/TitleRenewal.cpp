@@ -196,7 +196,6 @@ void TitleRenewalScene::realInit()
 	
 	white_back->removeFromParent();
 	
-	AudioEngine::sharedInstance()->preloadEffectScene("Title");
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -287,6 +286,9 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 
 void TitleRenewalScene::successLogin()
 {
+	
+	AudioEngine::sharedInstance()->preloadEffectScene("Title");
+	
 	if(myLog->getLogCount() > 0)
 	{
 		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
@@ -1382,8 +1384,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			}
 			
 			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
-			NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].toStyledString(), false);
-			NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["name"].asString(), false);
+			NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].asString(), false);
+			NSDS_SS(kSDS_CI_int1_name_s, t_card["no"].asInt(), t_card["name"].asString(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
 			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);

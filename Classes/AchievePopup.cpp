@@ -85,6 +85,7 @@ bool AchievePopup::init()
 	
 	all_reward_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allRewardGet), 13, CCSizeMake(100,35), CommonButtonLightPupple, -190);
 	all_reward_menu->setPosition(ccp(395,32));
+	all_reward_menu->setBackgroundTypeForDisabled(CommonButtonGray);
 	main_case->addChild(all_reward_menu, kAchievePopupZorder_menu);
 	all_reward_menu->setFunction([=](CCObject* sender)
 						  {
@@ -93,7 +94,7 @@ bool AchievePopup::init()
 							  takeAllReward(t_node);
 						  });
 	
-	all_reward_menu->setVisible(recent_code == kAchievePopupListCode_all || recent_code == kAchievePopupListCode_reward);
+	all_reward_menu->setEnabled(recent_code == kAchievePopupListCode_all || recent_code == kAchievePopupListCode_reward);
 	
 	bool is_found = false;
 	
@@ -113,11 +114,11 @@ bool AchievePopup::init()
 	
 	if(is_found)
 	{
-		all_reward_menu->setVisible(true);
+		all_reward_menu->setEnabled(true);
 	}
 	else
 	{
-		all_reward_menu->setVisible(false);
+		all_reward_menu->setEnabled(false);
 	}
 	
 		
@@ -133,7 +134,7 @@ bool AchievePopup::init()
 	reward_menu = NULL;
 	setRewardMenu();
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-190);
+	CommonButton* close_menu = CommonButton::createCloseButton(-200);
 	close_menu->setPosition(ccp(452,257));
 	close_menu->setFunction([=](CCObject* sender)
 							{
@@ -277,11 +278,11 @@ void AchievePopup::menuAction(CCObject* pSender)
 			
 			if(is_found)
 			{
-				all_reward_menu->setVisible(true);
+				all_reward_menu->setEnabled(true);
 			}
 			else
 			{
-				all_reward_menu->setVisible(false);
+				all_reward_menu->setEnabled(false);
 			}
 			empty_ment->setString("");
 		}
@@ -303,7 +304,7 @@ void AchievePopup::menuAction(CCObject* pSender)
 			
 			setSuccessMenu();
 			setAchieveTable();
-			all_reward_menu->setVisible(false);
+			all_reward_menu->setEnabled(false);
 			if(achieve_list.size() <= 0)
 				empty_ment->setString(myLoc->getLocalForKey(kMyLocalKey_nothingSuccessAchieve));
 			else
@@ -327,7 +328,7 @@ void AchievePopup::menuAction(CCObject* pSender)
 			
 			setIngMenu();
 			setAchieveTable();
-			all_reward_menu->setVisible(false);
+			all_reward_menu->setEnabled(false);
 			empty_ment->setString("");
 		}
 		is_menu_enable = true;
@@ -350,12 +351,12 @@ void AchievePopup::menuAction(CCObject* pSender)
 			setAchieveTable();
 			if(achieve_list.size() <= 0)
 			{
-				all_reward_menu->setVisible(false);
+				all_reward_menu->setEnabled(false);
 				empty_ment->setString(myLoc->getLocalForKey(kMyLocalKey_nothingRewardAchieve));
 			}
 			else
 			{
-				all_reward_menu->setVisible(true);
+				all_reward_menu->setEnabled(true);
 				empty_ment->setString("");
 			}
 		}
@@ -505,7 +506,7 @@ void AchievePopup::setAchieveTable()
 	main_case->addChild(t_suction);
 	
 	
-	all_reward_menu->setVisible(is_reward);
+	all_reward_menu->setEnabled(is_reward);
 }
 
 void AchievePopup::cellAction( CCObject* sender )
@@ -1000,7 +1001,7 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	}
 	else
 	{
-		all_reward_menu->setVisible(false);
+		all_reward_menu->setEnabled(false);
 		is_menu_enable = true;
 	}
 }

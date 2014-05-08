@@ -14,6 +14,7 @@
 #include "cocos-ext.h"
 #include "KSUtil.h"
 #include "DataStorageHub.h"
+#include "AudioEngine.h"
 USING_NS_CC;
 
 
@@ -120,6 +121,8 @@ public:
 	void hidePopup()
 	{
 		m_isEnable = false;
+		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 		m_gray->runAction(gray_fade);
 		

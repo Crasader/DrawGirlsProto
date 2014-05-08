@@ -351,9 +351,9 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
 	ko->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
 	ko->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
+	ko->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
+	ko->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
 	
@@ -833,6 +833,9 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
 	en->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
 	en->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
+	en->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
+	en->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
+	en->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1320,6 +1323,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
 	ja->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
 	ja->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
+	ja->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
+	ja->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
+	ja->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

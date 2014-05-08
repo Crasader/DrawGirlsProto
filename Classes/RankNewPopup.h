@@ -41,7 +41,7 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	
-	ScrollBar* m_scrollBar;
+	//ScrollBar* m_scrollBar;
 	CCTableView* rank_table;
 	CCScale9Sprite* main_case;
 	CCSprite* gray;

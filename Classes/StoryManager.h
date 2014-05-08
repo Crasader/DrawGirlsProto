@@ -45,6 +45,8 @@ private:
 	CCLabelTTF* ment_label;
 	CCLabelTTF* next_label;
 	
+	bool is_click_effect;
+	
 	int m_touch_priority;
 	CCNode* ment_node;
 	
@@ -67,6 +69,7 @@ private:
 		is_delaying = false;
 		is_menting = false;
 		end_func = NULL;
+		is_click_effect = false;
 		m_touch_priority = t_touch_priority;
 		
 		setTouchEnabled(true);

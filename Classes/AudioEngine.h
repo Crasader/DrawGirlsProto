@@ -269,6 +269,22 @@ public:
 		{
 			
 		}
+		else if(scenename == "playtutorial")
+		{
+			mySAE->preloadEffect("ment_tutorial_start.mp3");
+			mySAE->preloadEffect("ment_tutorial1.mp3");
+			mySAE->preloadEffect("ment_tutorial2.mp3");
+			mySAE->preloadEffect("ment_tutorial3.mp3");
+			mySAE->preloadEffect("ment_tutorial4.mp3");
+			mySAE->preloadEffect("ment_tutorial5.mp3");
+			mySAE->preloadEffect("ment_tutorial6.mp3");
+			mySAE->preloadEffect("ment_tutorial7.mp3");
+			mySAE->preloadEffect("ment_tutorial8.mp3");
+			mySAE->preloadEffect("ment_tutorial9.mp3");
+			mySAE->preloadEffect("ment_tutorial10.mp3");
+			mySAE->preloadEffect("ment_tutorial11.mp3");
+			mySAE->preloadEffect("ment_tutorial12.mp3");
+		}
 	}
 	void unloadEffectScene(string scenename)
 	{
@@ -398,6 +414,22 @@ public:
 //			mySAE->unloadEffect("sound_ending_fail.mp3");
 //			mySAE->unloadEffect("sound_star_visible.mp3");
 //			mySAE->unloadEffect("sound_calc.mp3");
+		}
+		else if(scenename == "playtutorial")
+		{
+			mySAE->unloadEffect("ment_tutorial_start.mp3");
+			mySAE->unloadEffect("ment_tutorial1.mp3");
+			mySAE->unloadEffect("ment_tutorial2.mp3");
+			mySAE->unloadEffect("ment_tutorial3.mp3");
+			mySAE->unloadEffect("ment_tutorial4.mp3");
+			mySAE->unloadEffect("ment_tutorial5.mp3");
+			mySAE->unloadEffect("ment_tutorial6.mp3");
+			mySAE->unloadEffect("ment_tutorial7.mp3");
+			mySAE->unloadEffect("ment_tutorial8.mp3");
+			mySAE->unloadEffect("ment_tutorial9.mp3");
+			mySAE->unloadEffect("ment_tutorial10.mp3");
+			mySAE->unloadEffect("ment_tutorial11.mp3");
+			mySAE->unloadEffect("ment_tutorial12.mp3");
 		}
 	}
 	void startGame()

@@ -37,6 +37,8 @@
 #include "PopCake.h"
 #include "EffectSprite.h"
 #include "FlagSelector.h"
+#include "BugTestScene1.h"
+#include "BugTestScene2.h"
 
 
 USING_NS_CC_EXT;
@@ -110,6 +112,22 @@ bool OptionPopup::init()
 //		KS::KSLog("in-app test \n%", v);
 //	});
 	
+	CommonButton* test1 = CommonButton::createCloseButton(-999);
+	test1->setPosition(ccp(200, 300));
+	addChild(test1, 999);
+	test1->setFunction([=](CCObject* sender)
+					   {
+						   CCDirector::sharedDirector()->replaceScene(BugTestScene1::scene());
+					   });
+	
+	CommonButton* test2 = CommonButton::createCloseButton(-999);
+	test2->setPosition(ccp(280, 300));
+	addChild(test2, 999);
+	test2->setFunction([=](CCObject* sender)
+					   {
+						   CCDirector::sharedDirector()->replaceScene(BugTestScene2::scene());
+					   });
+	
 	
 	
 	setTouchEnabled(true);
@@ -180,6 +198,7 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* coupon_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	coupon_button->setTitleColor(ccc3(50, 20, 0));
 	coupon_button->setPosition(getContentPosition(kOP_MT_coupon));
 	coupon_button->setFunction([=](CCObject* sender)
 														 {
@@ -191,6 +210,7 @@ bool OptionPopup::init()
 	
 	
 	CommonButton* community_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_community), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	community_button->setTitleColor(ccc3(50, 20, 0));
 	community_button->setPosition(getContentPosition(kOP_MT_community));
 	community_button->setFunction([=](CCObject* sender)
 																{
@@ -201,7 +221,8 @@ bool OptionPopup::init()
 	main_case->addChild(community_button, kOP_Z_content);
 	
 	
-	CommonButton* tip_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gametip), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	CommonButton* tip_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
+	tip_button->setTitleColor(ccc3(50, 20, 0));
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
 													{
