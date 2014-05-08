@@ -11,6 +11,9 @@
 #include "StarGoldData.h"
 #include "KSUtil.h"
 #include "StageImgLoader.h"
+#include "CommonButton.h"
+#include "MainFlowScene.h"
+
 //#include "KSCircleBase.h"
 
 CCScene* BugTestScene1::scene()
@@ -38,6 +41,14 @@ bool BugTestScene1::init()
 	{
 		return false;
 	}
+	
+	CommonButton* return_button = CommonButton::createCloseButton();
+	return_button->setPosition(ccp(450,280));
+	addChild(return_button);
+	return_button->setFunction([=](CCObject* sender)
+							   {
+								   CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+							   });
 	
 	CCLabelTTF* character_label = CCLabelTTF::create("character", mySGD->getFont().c_str(), 12);
 	character_label->setPosition(ccp(30,230));
