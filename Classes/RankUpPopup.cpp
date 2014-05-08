@@ -364,7 +364,7 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
-	if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getItemGachaReplayGoldFee())
+	if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getRankUpRubyFee())
 	{
 		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);

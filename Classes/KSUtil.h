@@ -160,7 +160,7 @@ namespace KS
 					strCCBFileName += strSuffix;
 				}
 				
-				std::string strPath = CCFileUtils::sharedFileUtils()->fullPathForFilename(strCCBFileName.c_str());
+				std::string strPath = strCCBFileName;//CCFileUtils::sharedFileUtils()->fullPathForFilename(strCCBFileName.c_str());
 				unsigned long size = 0;
 				
 				unsigned char * pBytes = CCFileUtils::sharedFileUtils()->getFileData(strPath.c_str(), "rb", &size);
