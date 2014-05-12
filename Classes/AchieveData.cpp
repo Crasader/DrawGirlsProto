@@ -96,8 +96,8 @@ void AchieveConditionReward::resultUpdateAchieveHistory(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		AchievementCode t_code = AchievementCode(result_data["archiveID"].asInt());
-		data_map[t_code].setIngCount(result_data["count"].asInt());
-		if(result_data["rewardDate"].asInt() != 0)
+		data_map[t_code].setIngCount(result_data.get("count", Json::Value()).asInt());
+		if(result_data["rewardDate"].asInt64() != 0)
 			data_map[t_code].setComplete();
 		
 		for(auto iter = changed_data.begin();iter != changed_data.end();iter++)
@@ -218,7 +218,7 @@ bool AchieveConditionReward::isAchieve(AchievementCode t_code)
 {
 	bool return_value;
 	
-	return_value = getIngCount(t_code) >= getCondition(t_code);
+	return_value = getRecentValue(t_code) >= getCondition(t_code);
 	
 	return return_value;
 }

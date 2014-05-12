@@ -519,8 +519,8 @@ void AchievePopup::cellAction( CCObject* sender )
 	
 	myAchieve->changeComplete(achieve_list[keep_tag]);
 	
-	vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
-	mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
+	vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(json_selector(this, AchievePopup::resultSaveUserData));
+	mySGD->changeGoodsTransaction(t_command_achieve, nullptr);
 }
 
 void AchievePopup::resultSaveUserData(Json::Value result_data)
@@ -1002,8 +1002,8 @@ void AchievePopup::takeAllReward(CCObject* sender)
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
-		vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
-		mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultAllTakeSaveUserData));
+		vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(json_selector(this, AchievePopup::resultAllTakeSaveUserData));
+		mySGD->changeGoodsTransaction(t_command_achieve, nullptr);
 	}
 	else
 	{
