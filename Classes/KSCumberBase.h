@@ -501,6 +501,8 @@ protected:
 
 		
 	}m_damageData;
+	
+	
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
 	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
 
