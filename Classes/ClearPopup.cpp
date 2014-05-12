@@ -545,6 +545,28 @@ bool ClearPopup::init()
 		is_high_score = false;
 	}
 	
+	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
+	int autolevel_value = mySGD->getUserdataAutoLevel()+2;
+	int nofail_value = mySGD->getUserdataAchieveNoFail()+1;
+	mySGD->setUserdataAchieveNoFail(nofail_value);
+	
+	if(autobalanceTry>0){
+		mySGD->setUserdataAutoLevel(autolevel_value);
+		CCLOG("up autobalance value %d",autolevel_value);
+	}else{
+		CCLOG("no up autobalance value %d",autolevel_value);
+	}
+	
+	for(int i=kAchievementCode_noFail1;i<=kAchievementCode_noFail3;i++)
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+		   nofail_value >= myAchieve->getCondition((AchievementCode)i))
+		{
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
 	mySGD->setUserdataFailCount(0);
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
@@ -565,6 +587,7 @@ bool ClearPopup::init()
 																			}
 																	  }
 																  }));
+	
 	
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
 	addChild(t_loading, 9999);
@@ -928,29 +951,6 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 
 void ClearPopup::showPopup()
 {
-	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
-	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)+2;
-	
-	if(autobalanceTry>0){
-		myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
-		CCLOG("up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
-	}else{
-		CCLOG("no up autobalance,kDSH_Key_achieve_seqNoFailCnt value %d",seq_no_fail_cnt);
-	}
-	
-	AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-	
-	for(int i=kAchievementCode_noFail1;i<=kAchievementCode_noFail3;i++)
-	{
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-		   seq_no_fail_cnt == shared_acr->getCondition((AchievementCode)i))
-		{
-			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
-			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-		}
-	}
-	
 	gray->setOpacity(255);
 //	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 //	gray->runAction(gray_fade);

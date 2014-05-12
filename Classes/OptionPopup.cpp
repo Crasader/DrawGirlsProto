@@ -112,21 +112,21 @@ bool OptionPopup::init()
 //		KS::KSLog("in-app test \n%", v);
 //	});
 	
-	CommonButton* test1 = CommonButton::createCloseButton(-999);
-	test1->setPosition(ccp(200, 300));
-	addChild(test1, 999);
-	test1->setFunction([=](CCObject* sender)
-					   {
-						   CCDirector::sharedDirector()->replaceScene(BugTestScene1::scene());
-					   });
-	
-	CommonButton* test2 = CommonButton::createCloseButton(-999);
-	test2->setPosition(ccp(280, 300));
-	addChild(test2, 999);
-	test2->setFunction([=](CCObject* sender)
-					   {
-						   CCDirector::sharedDirector()->replaceScene(BugTestScene2::scene());
-					   });
+//	CommonButton* test1 = CommonButton::createCloseButton(-999);
+//	test1->setPosition(ccp(200, 300));
+//	addChild(test1, 999);
+//	test1->setFunction([=](CCObject* sender)
+//					   {
+//						   CCDirector::sharedDirector()->replaceScene(BugTestScene1::scene());
+//					   });
+//	
+//	CommonButton* test2 = CommonButton::createCloseButton(-999);
+//	test2->setPosition(ccp(280, 300));
+//	addChild(test2, 999);
+//	test2->setFunction([=](CCObject* sender)
+//					   {
+//						   CCDirector::sharedDirector()->replaceScene(BugTestScene2::scene());
+//					   });
 	
 	
 	

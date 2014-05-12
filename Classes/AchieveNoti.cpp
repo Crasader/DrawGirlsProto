@@ -21,6 +21,8 @@ void AchieveNoti::checkAchieveNotiQueue()
 
 void AchieveNoti::myInit(AchievementCode t_code)
 {
+	myAchieve->onNoti(t_code);
+	
 	if(mySGD->isEmptyAchieveNotiQueue() || mySGD->frontAchieveNotiQueue() == t_code)
 	{
 		setPosition(ccp(240,-80));
@@ -28,12 +30,12 @@ void AchieveNoti::myInit(AchievementCode t_code)
 		back_img->setPosition(CCPointZero);
 		addChild(back_img);
 		
-		CCLabelTTF* title_label = CCLabelTTF::create(AchieveTitleContent::getAchievementScript(t_code).title.c_str(), mySGD->getFont().c_str(), 13);
+		CCLabelTTF* title_label = CCLabelTTF::create(myAchieve->getTitle(t_code).c_str(), mySGD->getFont().c_str(), 13);
 		title_label->setAnchorPoint(ccp(0,0.5));
 		title_label->setPosition(ccp(-60,10));
 		addChild(title_label);
 		
-		CCLabelTTF* content_label = CCLabelTTF::create(AchieveTitleContent::getAchievementScript(t_code).content.c_str(), mySGD->getFont().c_str(), 10);
+		CCLabelTTF* content_label = CCLabelTTF::create(myAchieve->getContent(t_code).c_str(), mySGD->getFont().c_str(), 10);
 		content_label->setAnchorPoint(ccp(0,0.5));
 		content_label->setPosition(ccp(-60,-12));
 		addChild(content_label);
