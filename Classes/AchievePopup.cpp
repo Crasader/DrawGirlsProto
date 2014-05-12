@@ -975,12 +975,12 @@ void AchievePopup::takeAllReward(CCObject* sender)
 					
 					if(t_type == kAchieveRewardType_ruby)
 					{
-						keep_take_ruby += reward_value;
+						keep_take_ruby += t_value;
 						ruby_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
 					}
 					else if(t_type == kAchieveRewardType_gold)
 					{
-						keep_take_gold += reward_value;
+						keep_take_gold += t_value;
 						gold_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
 					}
 				}
