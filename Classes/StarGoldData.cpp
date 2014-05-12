@@ -1312,14 +1312,11 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 				
 				if(before_value < t_count)
 				{
-					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-					
 					for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
 					{
-						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -1332,14 +1329,12 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 				
 				if(before_value < t_count)
 				{
-					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-					
 					for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
 					{
-						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							myAchieve->changeIngCount(AchievementCode(i), 1);
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -1606,6 +1601,21 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 	else if(t_type == kUserdataType_highScore)
 		return_value = "highScore";
 	
+	else if(t_type == kUserdataType_achieve_mapGacha)
+		return_value = "aMapGacha";
+	else if(t_type == kUserdataType_achieve_noFail)
+		return_value = "aNoFail";
+	else if(t_type == kUserdataType_achieve_hunter)
+		return_value = "aHunter";
+	else if(t_type == kUserdataType_achieve_changeMania)
+		return_value = "aChange";
+	else if(t_type == kUserdataType_achieve_fail)
+		return_value = "aFail";
+	else if(t_type == kUserdataType_achieve_perfect)
+		return_value = "aPerfect";
+	else if(t_type == kUserdataType_achieve_seqAttendance)
+		return_value = "aSeqAtd";
+	
 	return return_value;
 }
 
@@ -1672,7 +1682,15 @@ void StarGoldData::initUserdata(Json::Value result_data)
 	
 	for(int i=kUserdataType_begin+1;i<kUserdataType_end;i++)
 	{
-		userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
+		if(i >= kUserdataType_achieve_mapGacha && i <= kUserdataType_achieve_seqAttendance) // HS가 유저데이터의 업적관련한 정보는 따로 묶겠다고 했음. 그래서 분기
+		{
+			userdata_storage[(UserdataType)i] = result_data["archiveData"][getUserdataTypeToKey((UserdataType)i)].asInt();
+		}
+		else
+		{
+			userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
+		}
+		
 		if(i == kUserdataType_selectedCharNO)
 			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
 	}
@@ -1691,7 +1709,8 @@ void StarGoldData::changeGoods(jsonSelType t_callback)
 
 void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback)
 {
-	addChangeGoods(kGoodsType_gold, ingame_gold.getV(), "인게임", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	if(ingame_gold.getV() > 0)
+		addChangeGoods(kGoodsType_gold, ingame_gold.getV(), "인게임", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	
 	vector<CommandParam> transaction_list;
 	
@@ -1733,14 +1752,12 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				
 				if(before_value < t_count)
 				{
-					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-					
 					for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
 					{
-						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							myAchieve->changeIngCount(AchievementCode(i), 1);
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -1753,14 +1770,12 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				
 				if(before_value < t_count)
 				{
-					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-					
 					for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
 					{
-						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							myAchieve->changeIngCount(AchievementCode(i), 1);
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -1768,6 +1783,8 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				}
 			}
 		}
+		
+		ingame_gold = 0;
 	}
 	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
 	{
@@ -1782,14 +1799,12 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 			
 			if(before_value < t_count)
 			{
-				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-				
 				for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
 				{
-					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						myAchieve->changeIngCount(AchievementCode(i), 1);
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -1802,20 +1817,20 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 			
 			if(before_value < t_count)
 			{
-				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-				
 				for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
 				{
-					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						myAchieve->changeIngCount(AchievementCode(i), 1);
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
 				}
 			}
 		}
+		
+		ingame_gold = 0;
 	}
 	else
 	{
@@ -1835,14 +1850,12 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 		
 		if(before_value < t_count)
 		{
-			AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-			
 			for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
 			{
-				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-				   t_count >= shared_acr->getCondition((AchievementCode)i))
+				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+				   t_count >= myAchieve->getCondition((AchievementCode)i))
 				{
-					myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+					myAchieve->changeIngCount(AchievementCode(i), 1);
 					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 				}
@@ -1855,14 +1868,12 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 		
 		if(before_value < t_count)
 		{
-			AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-			
 			for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
 			{
-				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-				   t_count >= shared_acr->getCondition((AchievementCode)i))
+				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+				   t_count >= myAchieve->getCondition((AchievementCode)i))
 				{
-					myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+					myAchieve->changeIngCount(AchievementCode(i), 1);
 					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 				}
@@ -1960,14 +1971,12 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 				
 				if(before_value < t_count)
 				{
-					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-					
 					for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
 					{
-						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							myAchieve->changeIngCount(AchievementCode(i), 1);
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -1980,14 +1989,12 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 				
 				if(before_value < t_count)
 				{
-					AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-					
 					for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
 					{
-						if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-						   t_count >= shared_acr->getCondition((AchievementCode)i))
+						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+							myAchieve->changeIngCount(AchievementCode(i), 1);
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2012,14 +2019,12 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 			
 			if(before_value < t_count)
 			{
-				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-				
 				for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
 				{
-					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						myAchieve->changeIngCount(AchievementCode(i), 1);
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -2032,14 +2037,12 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 			
 			if(before_value < t_count)
 			{
-				AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-				
 				for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
 				{
-					if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-					   t_count >= shared_acr->getCondition((AchievementCode)i))
+					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+						myAchieve->changeIngCount(AchievementCode(i), 1);
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -2459,3 +2462,87 @@ void StarGoldData::setUserdataHighScore(int t_i)
 	}
 }
 int StarGoldData::getUserdataHighScore(){	return userdata_storage[kUserdataType_highScore].getV();	}
+void StarGoldData::setUserdataAchieveMapGacha(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_mapGacha].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_mapGacha;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchieveMapGacha(){	return userdata_storage[kUserdataType_achieve_mapGacha].getV();	}
+void StarGoldData::setUserdataAchieveNoFail(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_noFail].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_noFail;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchieveNoFail(){	return userdata_storage[kUserdataType_achieve_noFail].getV();	}
+void StarGoldData::setUserdataAchieveHunter(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_hunter].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_hunter;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchieveHunter(){	return userdata_storage[kUserdataType_achieve_hunter].getV();	}
+void StarGoldData::setUserdataAchieveChangeMania(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_changeMania].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_changeMania;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchieveChangeMania(){	return userdata_storage[kUserdataType_achieve_changeMania].getV();	}
+void StarGoldData::setUserdataAchieveFail(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_fail].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_fail;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchieveFail(){	return userdata_storage[kUserdataType_achieve_fail].getV();	}
+void StarGoldData::setUserdataAchievePerfect(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_perfect].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_perfect;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchievePerfect(){	return userdata_storage[kUserdataType_achieve_perfect].getV();	}
+void StarGoldData::setUserdataAchieveSeqAttendance(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_seqAttendance].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_seqAttendance;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchieveSeqAttendance(){	return userdata_storage[kUserdataType_achieve_seqAttendance].getV();	}

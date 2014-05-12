@@ -314,7 +314,6 @@ enum AchievementCode
 	kAchievementCode_seqAttendance3,//	개근3 : 21일 연속출첵
 	
 	kAchievementCode_luckyGuy,//	럭키가이 : 시작행운아이템 5회성공
-	kAchievementCode_goldMania,//	골드매니아 : 피버모드에서 한번에 100골드 이상획득.
 	kAchievementCode_tutorial,//	초보자 : 튜토리얼다 보기
 	kAchievementCode_cardSet,//	셋트완성 : 한스테이지의 1,2,3단계 카드셋트 완성
 	

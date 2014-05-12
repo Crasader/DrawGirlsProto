@@ -2956,20 +2956,7 @@ void NewMainFlowScene::countingMessage()
 
 void NewMainFlowScene::countingAchievement()
 {
-	int reward_achieve_count = 0;
-	for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
-	{
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
-			reward_achieve_count++;
-	}
-	
-	for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
-	{
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
-			reward_achieve_count++;
-	}
+	int reward_achieve_count = myAchieve->isHaveRewardCount();
 	
 	if(reward_achieve_count > 0)
 	{

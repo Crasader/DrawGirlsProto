@@ -96,23 +96,9 @@ bool AchievePopup::init()
 	
 	all_reward_menu->setEnabled(recent_code == kAchievePopupListCode_all || recent_code == kAchievePopupListCode_reward);
 	
-	bool is_found = false;
+	int is_found = myAchieve->isHaveRewardCount();
 	
-	for(int i=kAchievementCode_base+1;!is_found && i<kAchievementCode_end;i++)
-	{
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
-			is_found = true;
-	}
-	
-	for(int i=kAchievementCode_hidden_base+1;!is_found && i<kAchievementCode_hidden_end;i++)
-	{
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-		   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
-			is_found = true;
-	}
-	
-	if(is_found)
+	if(is_found > 0)
 	{
 		all_reward_menu->setEnabled(true);
 	}
@@ -260,23 +246,9 @@ void AchievePopup::menuAction(CCObject* pSender)
 			setAllMenu();
 			setAchieveTable();
 			
-			bool is_found = false;
+			int is_found = myAchieve->isHaveRewardCount();
 			
-			for(int i=kAchievementCode_base+1;!is_found && i<kAchievementCode_end;i++)
-			{
-				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-				   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
-					is_found = true;
-			}
-			
-			for(int i=kAchievementCode_hidden_base+1;!is_found && i<kAchievementCode_hidden_end;i++)
-			{
-				if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-				   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
-					is_found = true;
-			}
-			
-			if(is_found)
+			if(is_found > 0)
 			{
 				all_reward_menu->setEnabled(true);
 			}
@@ -398,8 +370,8 @@ void AchievePopup::setAchieveTable()
 		
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			if(!myAchieve->isCompleted((AchievementCode)i) &&
+			   myAchieve->isAchieve((AchievementCode)i))
 			{
 				achieve_list.push_back((AchievementCode)i);
 				is_reward = true;
@@ -410,14 +382,14 @@ void AchievePopup::setAchieveTable()
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			if(!myAchieve->isCompleted((AchievementCode)i) &&
+			   myAchieve->isAchieve((AchievementCode)i))
 			{
 				achieve_list.push_back((AchievementCode)i);
 				is_reward = true;
 			}
-			else if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == -1 ||
-					AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			else if(myAchieve->isCompleted((AchievementCode)i) ||
+					myAchieve->isAchieve((AchievementCode)i))
 				another_list.push_back((AchievementCode)i);
 		}
 		
@@ -430,13 +402,13 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == -1)
+			if(myAchieve->isCompleted((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == -1)
+			if(myAchieve->isCompleted((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
 	}
@@ -444,8 +416,8 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-			   !AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			if(!myAchieve->isCompleted((AchievementCode)i) &&
+			   !myAchieve->isAchieve((AchievementCode)i))
 				achieve_list.push_back((AchievementCode)i);
 		}
 	}
@@ -453,8 +425,8 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			if(!myAchieve->isCompleted((AchievementCode)i) &&
+			   myAchieve->isAchieve((AchievementCode)i))
 			{
 				achieve_list.push_back((AchievementCode)i);
 				is_reward = true;
@@ -463,8 +435,8 @@ void AchievePopup::setAchieveTable()
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) != -1 &&
-			   AchieveConditionReward::sharedInstance()->isAchieve((AchievementCode)i))
+			if(!myAchieve->isCompleted((AchievementCode)i) &&
+			   myAchieve->isAchieve((AchievementCode)i))
 			{
 				achieve_list.push_back((AchievementCode)i);
 				is_reward = true;
@@ -524,19 +496,31 @@ void AchievePopup::cellAction( CCObject* sender )
 	addChild(loading_layer, kAchievePopupZorder_popup);
 	
 	keep_tag = tag;
-	AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[keep_tag]);
-	int reward_value = AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[keep_tag]);
+	AchieveRewardType reward_type = myAchieve->getRewardType(achieve_list[keep_tag]);
+	int reward_value = myAchieve->getRewardValue(achieve_list[keep_tag]);
 	
 	if(reward_type == kAchieveRewardType_ruby)
 		mySGD->addChangeGoods(kGoodsType_ruby, reward_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString(), "", false);
 	else if(reward_type == kAchieveRewardType_gold)
 		mySGD->addChangeGoods(kGoodsType_gold, reward_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString());
+	else if(reward_type == kAchieveRewardType_package)
+	{
+		for(int i=0;i<reward_value;i++)
+		{
+			AchieveRewardType t_type = myAchieve->getRewardTypeForIndex(achieve_list[keep_tag], i);
+			int t_value = myAchieve->getRewardValueForIndex(achieve_list[keep_tag], i);
+			
+			if(t_type == kAchieveRewardType_ruby)
+				mySGD->addChangeGoods(kGoodsType_ruby, t_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString(), "", false);
+			else if(t_type == kAchieveRewardType_gold)
+				mySGD->addChangeGoods(kGoodsType_gold, t_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString());
+		}
+	}
 	
-	keep_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag]);
-	myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[tag], -1);
-	myDSH->saveUserData({kSaveUserData_Key_achieve}, nullptr);
+	myAchieve->changeComplete(achieve_list[keep_tag]);
 	
-	mySGD->changeGoods(json_selector(this, AchievePopup::resultSaveUserData));
+	vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
+	mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
 }
 
 void AchievePopup::resultSaveUserData(Json::Value result_data)
@@ -547,17 +531,23 @@ void AchievePopup::resultSaveUserData(Json::Value result_data)
 		CCLOG("reward get success!!");
 		
 		setAchieveTable();
+		
+		loading_layer->removeFromParent();
+		is_menu_enable = true;
 	}
 	else
 	{
 		CCLOG("reward get fail!!");
 		
-		mySGD->clearChangeGoods();
+		addChild(KSTimer::create(0.1f, [=](){
+			vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
+			mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
+		}));
 		
-		myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, keep_value);
+//		mySGD->clearChangeGoods();
+		
+//		myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, keep_value);
 	}
-	loading_layer->removeFromParent();
-	is_menu_enable = true;
 }
 
 CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned int idx )
@@ -567,9 +557,9 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	cell->autorelease();
 	
 	string cell_back_filename;
-	if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2]) == -1)
+	if(myAchieve->isCompleted(achieve_list[idx*2]))
 		cell_back_filename = "achievement_cellback_success.png";
-	else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2]))
+	else if(myAchieve->isAchieve(achieve_list[idx*2]))
 		cell_back_filename = "achievement_cellback_reward.png";
 	else
 		cell_back_filename = "achievement_cellback_normal.png";
@@ -581,21 +571,21 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	cell->addChild(cell_back);
 	
 	KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s(%d/%d)",
-																		   AchieveTitleContent::getAchievementScript(achieve_list[idx*2]).title.c_str(),
-																		   AchieveConditionReward::sharedInstance()->getRecentValue(achieve_list[idx*2]),
-																		   AchieveConditionReward::sharedInstance()->getCondition(achieve_list[idx*2]))->getCString(),
+																		   myAchieve->getTitle(achieve_list[idx*2]).c_str(),
+																		   myAchieve->getRecentValue(achieve_list[idx*2]),
+																		   myAchieve->getCondition(achieve_list[idx*2]))->getCString(),
 																		   mySGD->getFont().c_str(), 11);
 	cell_title->setAnchorPoint(ccp(0,0.5));
 	cell_title->setPosition(ccp(8,30));
 	cell_back->addChild(cell_title);
 	
-	CCLabelTTF* cell_content = CCLabelTTF::create(AchieveTitleContent::getAchievementScript(achieve_list[idx*2]).content.c_str(), mySGD->getFont().c_str(), 8);
+	CCLabelTTF* cell_content = CCLabelTTF::create(myAchieve->getContent(achieve_list[idx*2]).c_str(), mySGD->getFont().c_str(), 8);
 	cell_content->setAnchorPoint(ccp(0,0.5));
 	cell_content->setPosition(ccp(8,14));
 	cell_back->addChild(cell_content);
 	
 	CCPoint img_position = ccp(170,24);
-	if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2]) == -1)
+	if(myAchieve->isCompleted(achieve_list[idx*2]))
 	{
 		cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
 		
@@ -603,7 +593,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		success_img->setPosition(img_position);
 		cell_back->addChild(success_img);
 	}
-	else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2]))
+	else if(myAchieve->isAchieve(achieve_list[idx*2]))
 	{
 		cell_title->enableOuterStroke(ccc3(70, 0, 40), 1);
 		
@@ -679,7 +669,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		reward_type_img->setScale(0.5f);
 		reward_type_img->setPosition(ccp(ing_back->getContentSize().width/2.f-12, ing_back->getContentSize().height/2.f-6.5f));
 		ing_back->addChild(reward_type_img);
-		CCLabelTTF* reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2]))->getCString(),
+		CCLabelTTF* reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", myAchieve->getRewardValue(achieve_list[idx*2]))->getCString(),
 														mySGD->getFont().c_str(), 10);
 		reward_value->setPosition(ccp(ing_back->getContentSize().width/2.f+7, ing_back->getContentSize().height/2.f-7));
 		ing_back->addChild(reward_value);
@@ -688,9 +678,9 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	if(idx*2+1 < achieve_list.size())
 	{
 		string cell_back_filename;
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2+1]) == -1)
+		if(myAchieve->isCompleted(achieve_list[idx*2+1]))
 			cell_back_filename = "achievement_cellback_success.png";
-		else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2+1]))
+		else if(myAchieve->isAchieve(achieve_list[idx*2+1]))
 			cell_back_filename = "achievement_cellback_reward.png";
 		else
 			cell_back_filename = "achievement_cellback_normal.png";
@@ -702,33 +692,33 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		cell->addChild(cell_back);
 		
 		KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s(%d/%d)",
-																			   AchieveTitleContent::getAchievementScript(achieve_list[idx*2+1]).title.c_str(),
-																			   AchieveConditionReward::sharedInstance()->getRecentValue(achieve_list[idx*2+1]),
-																			   AchieveConditionReward::sharedInstance()->getCondition(achieve_list[idx*2+1]))->getCString(),
+																			   myAchieve->getTitle(achieve_list[idx*2+1]).c_str(),
+																			   myAchieve->getRecentValue(achieve_list[idx*2+1]),
+																			   myAchieve->getCondition(achieve_list[idx*2+1]))->getCString(),
 													mySGD->getFont().c_str(), 11);
 		cell_title->setAnchorPoint(ccp(0,0.5));
 		cell_title->setPosition(ccp(8,30));
 		cell_back->addChild(cell_title);
 		
-		CCLabelTTF* cell_content = CCLabelTTF::create(AchieveTitleContent::getAchievementScript(achieve_list[idx*2+1]).content.c_str(), mySGD->getFont().c_str(), 8);
+		CCLabelTTF* cell_content = CCLabelTTF::create(myAchieve->getContent(achieve_list[idx*2+1]).c_str(), mySGD->getFont().c_str(), 8);
 		cell_content->setAnchorPoint(ccp(0,0.5));
 		cell_content->setPosition(ccp(8,14));
 		cell_back->addChild(cell_content);
 		
 		CCPoint img_position = ccp(170,24);
 		
-		if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[idx*2+1]) == -1)
+		if(myAchieve->isCompleted(achieve_list[idx*2+1]))
 		{
 			cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
 			CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
 			success_img->setPosition(img_position);
 			cell_back->addChild(success_img);
 		}
-		else if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[idx*2+1]))
+		else if(myAchieve->isAchieve(achieve_list[idx*2+1]))
 		{
 			cell_title->enableOuterStroke(ccc3(70, 0, 40), 1);
 			string reward_type_str;
-			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[idx*2+1]);
+			AchieveRewardType reward_type = myAchieve->getRewardType(achieve_list[idx*2+1]);
 			if(reward_type == kAchieveRewardType_ruby)
 				reward_type_str = "price_ruby_img.png";
 			else if(reward_type == kAchieveRewardType_gold)
@@ -762,7 +752,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			s_reward_type_img->setScale(0.5f);
 			s_reward_type_img->setPosition(ccp(s_reward_img->getContentSize().width/2.f-12, s_reward_img->getContentSize().height/2.f-6.5f));
 			s_reward_img->addChild(s_reward_type_img);
-			CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2+1]))->getCString(),
+			CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", myAchieve->getRewardValue(achieve_list[idx*2+1]))->getCString(),
 															mySGD->getFont().c_str(), 10);
 			s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+7, s_reward_img->getContentSize().height/2.f-7));
 			s_reward_img->addChild(s_reward_value);
@@ -779,7 +769,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		{
 			cell_title->enableOuterStroke(ccc3(70, 40, 0), 1);
 			string reward_type_str;
-			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[idx*2+1]);
+			AchieveRewardType reward_type = myAchieve->getRewardType(achieve_list[idx*2+1]);
 			if(reward_type == kAchieveRewardType_ruby)
 				reward_type_str = "price_ruby_img.png";
 			else if(reward_type == kAchieveRewardType_gold)
@@ -798,7 +788,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			reward_type_img->setScale(0.5f);
 			reward_type_img->setPosition(ccp(ing_back->getContentSize().width/2.f-12, ing_back->getContentSize().height/2.f-6.5f));
 			ing_back->addChild(reward_type_img);
-			CCLabelTTF* reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[idx*2+1]))->getCString(),
+			CCLabelTTF* reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", myAchieve->getRewardValue(achieve_list[idx*2+1]))->getCString(),
 														  mySGD->getFont().c_str(), 10);
 			reward_value->setPosition(ccp(ing_back->getContentSize().width/2.f+7, ing_back->getContentSize().height/2.f-7));
 			ing_back->addChild(reward_value);
@@ -961,10 +951,10 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	
 	for(int i=0;i<achieve_list.size();i++)
 	{
-		if(AchieveConditionReward::sharedInstance()->isAchieve(achieve_list[i]))
+		if(myAchieve->isAchieve(achieve_list[i]))
 		{
-			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(achieve_list[i]);
-			int reward_value = AchieveConditionReward::sharedInstance()->getRewardValue(achieve_list[i]);
+			AchieveRewardType reward_type = myAchieve->getRewardType(achieve_list[i]);
+			int reward_value = myAchieve->getRewardValue(achieve_list[i]);
 			
 			if(reward_type == kAchieveRewardType_ruby)
 			{
@@ -976,20 +966,34 @@ void AchievePopup::takeAllReward(CCObject* sender)
 				keep_take_gold += reward_value;
 				gold_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
 			}
+			else if(reward_type == kAchieveRewardType_package)
+			{
+				for(int i=0;i<reward_value;i++)
+				{
+					AchieveRewardType t_type = myAchieve->getRewardTypeForIndex(achieve_list[keep_tag], i);
+					int t_value = myAchieve->getRewardValueForIndex(achieve_list[keep_tag], i);
+					
+					if(t_type == kAchieveRewardType_ruby)
+					{
+						keep_take_ruby += reward_value;
+						ruby_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
+					}
+					else if(t_type == kAchieveRewardType_gold)
+					{
+						keep_take_gold += reward_value;
+						gold_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
+					}
+				}
+			}
 			
-			keep_value_list.push_back(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[i]));
-			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, achieve_list[i], -1, false);
+			myAchieve->changeComplete(achieve_list[i]);
 		}
 	}
-	myDSH->fFlush();
 	
 	if(keep_take_ruby > 0)
 		mySGD->addChangeGoods(kGoodsType_ruby, keep_take_ruby, "업적", ruby_stats_value);
 	if(keep_take_gold > 0)
 		mySGD->addChangeGoods(kGoodsType_gold, keep_take_gold, "업적", gold_stats_value);
-	
-	
-	myDSH->saveUserData({kSaveUserData_Key_achieve}, nullptr);
 	
 	if(keep_take_ruby > 0 || keep_take_gold > 0)
 	{
@@ -997,7 +1001,9 @@ void AchievePopup::takeAllReward(CCObject* sender)
 		addChild(loading_layer, kAchievePopupZorder_popup);
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-		mySGD->changeGoods(json_selector(this, AchievePopup::resultAllTakeSaveUserData));
+		
+		vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
+		mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultAllTakeSaveUserData));
 	}
 	else
 	{
@@ -1014,17 +1020,23 @@ void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 		CCLOG("reward get success!!");
 		
 		setAchieveTable();
+		
+		loading_layer->removeFromParent();
+		is_menu_enable = true;
 	}
 	else
 	{
 		CCLOG("reward get fail!!");
 		
-		mySGD->clearChangeGoods();
+		addChild(KSTimer::create(0.1f, [=](){
+			vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
+			mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
+		}));
 		
-		for(int i=0;i<keep_value_list.size();i++)
-			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, keep_value_list[i], false);
-		myDSH->fFlush();
+//		mySGD->clearChangeGoods();
+		
+//		for(int i=0;i<keep_value_list.size();i++)
+//			myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, keep_value_list[i], false);
+//		myDSH->fFlush();
 	}
-	loading_layer->removeFromParent();
-	is_menu_enable = true;
 }
