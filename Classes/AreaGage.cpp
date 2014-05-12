@@ -182,6 +182,14 @@ void AreaGage::myInit(float t_clear_percent)
 	gage_bar3->setPosition(ccpAdd(gage_bar2->getPosition(), ccp(gage_bar2->getSprite()->getContentSize().width, 0)));
 	addChild(gage_bar3);
 	
+	float w1 = gage_bar1->getSprite()->getContentSize().width;
+	float w2 = gage_bar2->getSprite()->getContentSize().width;
+	float w3 = gage_bar3->getSprite()->getContentSize().width;
+	
+	gage_bar1->setPositionX(-(w1+w2+w3)/2.f);
+	gage_bar2->setPositionX(gage_bar1->getPositionX()+w1);
+	gage_bar3->setPositionX(gage_bar2->getPositionX()+w2);
+	
 //	gage_bar4 = CCProgressTimer::create(CCSprite::create("star_gage_bar3.png"));
 //	gage_bar4->getSprite()->setColor(gage_color);
 //	gage_bar4->setType(kCCProgressTimerTypeBar);
