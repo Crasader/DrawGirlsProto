@@ -206,7 +206,7 @@ void AreaGage::myInit(float t_clear_percent)
 	
 	star1 = CCNode::create();
 	star1->setPosition(ccp(gage_bar2->getPositionX(), 13));
-	addChild(star1);
+	addChild(star1, 3);
 	
 	{
 		CCSprite* star_img = CCSprite::create("star_one.png");
@@ -216,7 +216,7 @@ void AreaGage::myInit(float t_clear_percent)
 	
 	star2 = CCNode::create();// CCSprite::create("gage_star_gold.png");
 	star2->setPosition(ccp(gage_bar3->getPositionX(), 13));
-	addChild(star2);
+	addChild(star2, 3);
 	
 	CCPoint base_position = ccp(-9,0);
 	CCPoint d_position = ccp(9,0);

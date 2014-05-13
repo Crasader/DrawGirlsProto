@@ -2190,7 +2190,7 @@ void PlayUI::myInit ()
 	percentageLabel = CCLabelBMFont::create("0%", "scorefont.fnt");
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 //	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
-	percentageLabel->setPosition(ccp(185,myDSH->ui_top-29));
+	percentageLabel->setPosition(ccp(185,myDSH->ui_top-39));//29
 	
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
