@@ -277,7 +277,7 @@ private:
 	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;
-	KSLabelTTF * percentageLabel;
+	CCLabelBMFont * percentageLabel;
 	CCLabelBMFont * countingLabel;
 	CCSprite * result_sprite;
 	CCDictionary * exchange_dic;
