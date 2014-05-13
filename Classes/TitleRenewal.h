@@ -108,6 +108,7 @@ private:
 	void failDownloadAction();
 	
 	void resultGetCommonSetting(Json::Value result_data);
+	void resultGetAchieveList(Json::Value result_data);
 	
 	void resultGetShopList(Json::Value result_data);
 	
@@ -123,6 +124,7 @@ private:
 	
 	void resultGetUserData(Json::Value result_data);
 	
+	void resultGetAchieveHistory(Json::Value result_data);
 	void resultGetCardHistory(Json::Value result_data);
 	void resultGetPuzzleHistory(Json::Value result_data);
 	void resultGetPieceHistory(Json::Value result_data);

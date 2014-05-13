@@ -69,7 +69,7 @@ void AreaGage::onChange()
 	CCPoint d_position = ccp(2,0);
 	for(int i=0;i<2;i++)
 	{
-		CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+		CCSprite* star_img = CCSprite::create("star_one.png");
 		star_img->setPosition(base_position + d_position*i);
 		star1->addChild(star_img);
 	}
@@ -78,7 +78,7 @@ void AreaGage::onChange()
 	d_position = ccp(2,0);
 	for(int i=0;i<4;i++)
 	{
-		CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+		CCSprite* star_img = CCSprite::create("star_one.png");
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}
@@ -124,6 +124,10 @@ void AreaGage::myInit(float t_clear_percent)
 	gage_back = CCSprite::create("star_gage_back.png");
 	gage_back->setPosition(CCPointZero);
 	addChild(gage_back);
+	
+	CCSprite* gage_case = CCSprite::create("star_gage_case.png");
+	gage_case->setPosition(CCPointZero);
+	addChild(gage_case, 2);
 	
 	ccColor3B gage_color;
 	
@@ -178,6 +182,14 @@ void AreaGage::myInit(float t_clear_percent)
 	gage_bar3->setPosition(ccpAdd(gage_bar2->getPosition(), ccp(gage_bar2->getSprite()->getContentSize().width, 0)));
 	addChild(gage_bar3);
 	
+	float w1 = gage_bar1->getSprite()->getContentSize().width;
+	float w2 = gage_bar2->getSprite()->getContentSize().width;
+	float w3 = gage_bar3->getSprite()->getContentSize().width;
+	
+	gage_bar1->setPositionX(-(w1+w2+w3)/2.f);
+	gage_bar2->setPositionX(gage_bar1->getPositionX()+w1);
+	gage_bar3->setPositionX(gage_bar2->getPositionX()+w2);
+	
 //	gage_bar4 = CCProgressTimer::create(CCSprite::create("star_gage_bar3.png"));
 //	gage_bar4->getSprite()->setColor(gage_color);
 //	gage_bar4->setType(kCCProgressTimerTypeBar);
@@ -197,7 +209,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(star1);
 	
 	{
-		CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+		CCSprite* star_img = CCSprite::create("star_one.png");
 		star_img->setPosition(ccp(0,0));
 		star1->addChild(star_img);
 	}
@@ -210,7 +222,7 @@ void AreaGage::myInit(float t_clear_percent)
 	CCPoint d_position = ccp(2,0);
 	for(int i=0;i<3;i++)
 	{
-		CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+		CCSprite* star_img = CCSprite::create("star_one.png");
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}

@@ -944,14 +944,12 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			}
 		}
 		
-		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-		
 		for(int i=kAchievementCode_luckySeven1;i<=kAchievementCode_luckySeven3;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-			   t_p == t_beforePercentage + shared_acr->getCondition((AchievementCode)i)/0.001f)
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   t_p == t_beforePercentage + myAchieve->getCondition((AchievementCode)i)/0.001f)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				myAchieve->changeIngCount(AchievementCode(i), 1);
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -1530,14 +1528,12 @@ void PlayUI::setComboCnt (int t_combo)
 	{
 		my_combo->showCombo(t_combo);
 		
-		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-		
 		for(int i=kAchievementCode_comboMania1;i<=kAchievementCode_comboMania3;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-			   combo_cnt == shared_acr->getCondition((AchievementCode)i))
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   combo_cnt == myAchieve->getCondition((AchievementCode)i))
 			{
-				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				myAchieve->changeIngCount(AchievementCode(i), 1);
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}

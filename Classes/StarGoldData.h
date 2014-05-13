@@ -173,6 +173,15 @@ enum UserdataType
 	kUserdataType_autoLevel,
 	kUserdataType_selectedCharNO,
 	kUserdataType_highScore,
+	
+	kUserdataType_achieve_mapGacha,
+	kUserdataType_achieve_noFail,
+	kUserdataType_achieve_hunter,
+	kUserdataType_achieve_changeMania,
+	kUserdataType_achieve_fail,
+	kUserdataType_achieve_perfect,
+	kUserdataType_achieve_seqAttendance,
+	
 	kUserdataType_end
 };
 
@@ -533,6 +542,20 @@ public:
 	int getUserdataAutoLevel();
 	void setUserdataHighScore(int t_i);
 	int getUserdataHighScore();
+	void setUserdataAchieveMapGacha(int t_i);
+	int getUserdataAchieveMapGacha();
+	void setUserdataAchieveNoFail(int t_i);
+	int getUserdataAchieveNoFail();
+	void setUserdataAchieveHunter(int t_i);
+	int getUserdataAchieveHunter();
+	void setUserdataAchieveChangeMania(int t_i);
+	int getUserdataAchieveChangeMania();
+	void setUserdataAchieveFail(int t_i);
+	int getUserdataAchieveFail();
+	void setUserdataAchievePerfect(int t_i);
+	int getUserdataAchievePerfect();
+	void setUserdataAchieveSeqAttendance(int t_i);
+	int getUserdataAchieveSeqAttendance();
 	
 	string getInappProduct(int t_index);
 	void initInappProduct(int t_index, string t_product);
