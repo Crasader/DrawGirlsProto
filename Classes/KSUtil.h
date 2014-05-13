@@ -114,6 +114,7 @@ namespace KS
 	void setPositionType(CCObject* object, tCCPositionType pt);
 	void setFlipX(CCObject* object, bool flip);
 	
+	void setFlipToggleX(CCObject* object);
 	template <typename NodeT>
 	pair<NodeT, CCBAnimationManager*> loadCCBI(CCObject* thiz, const std::string& fn)
 	{

@@ -492,11 +492,20 @@ void KSCircleBase::setPosition( const CCPoint& t_sp )
 		if(t_sp.x - beforePosition.x >= 0)
 		{
 			// right
-			KS::setFlipX(m_headImg, false);
+			if(m_lookToLeft == true)
+			{
+				m_lookToLeft = false;
+				KS::setFlipToggleX(m_headImg);
+			}
 		}
 		else
 		{
-			KS::setFlipX(m_headImg, true);
+			if(m_lookToLeft == false)
+			{
+				m_lookToLeft = true;
+				KS::setFlipToggleX(m_headImg);
+				//KS::setFlipX(m_headImg, true);
+			}
 //			m_headImg->setFlipX(true);
 		}
 	}
