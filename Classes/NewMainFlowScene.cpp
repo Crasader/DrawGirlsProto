@@ -2374,7 +2374,7 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setPosition(CCPointZero);
 		t_suction->addChild(cliping_node);

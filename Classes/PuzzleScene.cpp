@@ -1635,7 +1635,7 @@ void PuzzleScene::setRight()
 				if(screen_scale_y > 1.f)
 					change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 				CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-				t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//				t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 				
 				
 				t_clipping->setPosition(step_position);
