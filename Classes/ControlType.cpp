@@ -1485,7 +1485,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	{
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
-		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("gameui_button.ccbi",this));
+		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString(),this));
 		button_ani = reader->getAnimationManager();
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)
@@ -1510,6 +1510,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		click_label->setColor(ccc3(120, 60, 0));
 		click_label->enableOuterStroke(ccc3(255, 231, 133), 1.f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
+		click_label->setVisible(false);
 		draw_button->addChild(click_label);
 		
 		reader->release();
