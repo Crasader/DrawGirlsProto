@@ -87,7 +87,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -130,7 +130,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -183,7 +183,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -242,7 +242,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -369,7 +369,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -412,7 +412,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -456,7 +456,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -499,7 +499,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -542,7 +542,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -594,7 +594,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -650,7 +650,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -693,7 +693,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -737,7 +737,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -781,7 +781,7 @@ void TutorialFlowStepLayer::initStep(TutorialFlowStep t_step)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);
@@ -851,7 +851,7 @@ void TutorialFlowStepLayer::ccTouchEnded (CCTouch * pTouch, CCEvent * pEvent)
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		cliping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		cliping_node->addChild(gray);
 		cliping_node->setAlphaThreshold(0.05f);
 		cliping_node->setInverted(true);

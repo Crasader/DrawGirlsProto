@@ -2665,6 +2665,7 @@ void KSCumberBase::applyAutoBalance()
 
 	if(autobalanceTry==0){
 		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
+        settingFuryRule();
 		return;
 	}
 	

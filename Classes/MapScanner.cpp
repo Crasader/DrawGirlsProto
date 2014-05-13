@@ -972,7 +972,7 @@ void MapScanner::setTopBottomBlock()
 		if(screen_scale_y > 1.f)
 			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		
 		t_clipping->getStencil()->setAnchorPoint(ccp(0.5,1.f));
 		t_clipping->setPosition(ccp(29.5f,26-sub_value));
