@@ -1618,7 +1618,7 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 		mySGD->selected_collectionbook = recent_card_number;
 
 		is_menu_enable = true;
-		
+		CCLog("why two?");
 //		CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, CardViewScene::scene());
 		CCDirector::sharedDirector()->pushScene(CardViewScene::scene());
 		

@@ -150,6 +150,32 @@ namespace KS
 			}
 		}
 	}
+	void setFlipToggleX(CCObject* object)
+	{
+		CCArray* childs = NULL;
+		CCObject* child = NULL;
+		CCNode* nodeObject = (CCNode*)object;
+		CCSprite* mine = dynamic_cast<CCSprite*>(nodeObject);
+		if(mine)
+			mine->setFlipX(!mine->isFlipX());
+		if (nodeObject) {
+			childs = nodeObject->getChildren();
+		}
+		if (childs) {
+			CCARRAY_FOREACH(childs, child){
+				CCSprite *pRGBAProtocol = dynamic_cast<CCSprite*>(child);
+				if (pRGBAProtocol)
+				{
+					pRGBAProtocol->setFlipX(pRGBAProtocol->isFlipX());
+					// pRGBAProtocol->setColor(ccc3(opaque, opaque, opaque));
+				}
+				CCNode* singleObject = (CCNode*)child;
+				if (singleObject && singleObject->getChildrenCount()>0) {
+					setFlipToggleX(singleObject);
+				}
+			}
+		}
+	}
 	string longLongToStr(long long t)
 	{
 		int radix = 26;

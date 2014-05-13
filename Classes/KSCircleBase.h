@@ -53,7 +53,7 @@ public:
 	virtual void runTimeline(Json::Value patternInfo);
 	
 	virtual void completedAnimationSequenceNamed(const char *name_);
-	KSCircleBase() : RADIUS(15.f)
+	KSCircleBase() : RADIUS(15.f), m_lookToLeft(true)
 	{
 		m_state = 0;
 	}
@@ -145,6 +145,7 @@ public:
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition);
 	float getRadius();
 protected:
+	bool m_lookToLeft;
 	std::string m_atype;
 	std::string currentTimeline;
 	std::string currentTimelineFooter; // _b _m _e 같은것들.
