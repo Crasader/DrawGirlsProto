@@ -17,7 +17,7 @@ void main() {
 	vec4 texColor = texture2D(CC_Texture0, v_texCoord);
 	vec4 resultColor;
 	
-	resultColor = vec4(color3[0]*texColor.b, color3[1]*texColor.b, color3[2]*texColor.b, 1);
+	resultColor = vec4(color3[0]*texColor.b, color3[1]*texColor.b, color3[2]*texColor.b, texColor.b);
 	
 	gl_FragColor = resultColor;
 }
