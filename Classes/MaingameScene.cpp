@@ -500,7 +500,7 @@ void Maingame::finalSetting()
 	
 	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)*0.7f);
 	sil_thumb->setScale(thumb_scale);
 	sil_thumb->setPosition(ccp(40,myDSH->ui_center_y));
 	addChild(sil_thumb, clearshowtimeZorder);
@@ -901,51 +901,56 @@ void Maingame::gachaOn()
 	else
 		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");
 	
-	mySGD->changeGoods([=](Json::Value result_data)
-					   {
-						   t_loading->removeFromParent();
-						    if(result_data["result"]["code"].asInt() == GDSUCCESS)
-							{
-								mControl->isStun = false;
-								myJack->isStun = t_jack_stun;
-								exit_target->onEnter();
-								
-								myGD->resetGameData();
-								mySGD->startMapGachaOn();
-								
-								int map_gacha_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_mapGachaCnt)+1;
-								myDSH->setIntegerForKey(kDSH_Key_achieve_mapGachaCnt, map_gacha_cnt);
-								
-								AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-								
-								for(int i=kAchievementCode_mapGacha1;i<=kAchievementCode_mapGacha3;i++)
-								{
-									if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-									   map_gacha_cnt >= shared_acr->getCondition((AchievementCode)i))
-									{
-										myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
-										AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-										CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-									}
-								}
-								
-								vector<SaveUserData_Key> save_userdata_list;
-								save_userdata_list.push_back(kSaveUserData_Key_achieve);
-								myDSH->saveUserData(save_userdata_list, nullptr);
-								
-								CCDirector::sharedDirector()->replaceScene(Maingame::scene());
-							}
-						    else
-							{
-								mySGD->clearChangeGoods();
-								addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
-									mControl->isStun = false;
-									myJack->isStun = t_jack_stun;
-									exit_target->onEnter();
-								}), 9999);
-							}
-						   
-					   });
+	int map_gacha_cnt = mySGD->getUserdataAchieveMapGacha()+1;
+	mySGD->setUserdataAchieveMapGacha(map_gacha_cnt);
+	
+	vector<CommandParam> t_command_list;
+	t_command_list.clear();
+	t_command_list.push_back(mySGD->getChangeUserdataParam([=](Json::Value result_data)
+								  {
+									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+										{
+											for(int i=kAchievementCode_mapGacha1;i<=kAchievementCode_mapGacha3;i++)
+											{
+												if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+												   map_gacha_cnt >= myAchieve->getCondition((AchievementCode)i))
+												{
+													AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+													CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+												}
+											}
+										}
+									  else
+										{
+											mySGD->clearChangeUserdata();
+										}
+								  }));
+	
+	mySGD->changeGoodsTransaction(t_command_list, [=](Json::Value result_data)
+								  {
+									  t_loading->removeFromParent();
+									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									  {
+										  mControl->isStun = false;
+										  myJack->isStun = t_jack_stun;
+										  exit_target->onEnter();
+										  
+										  myGD->resetGameData();
+										  mySGD->startMapGachaOn();
+										  
+										  CCDirector::sharedDirector()->replaceScene(Maingame::scene());
+									  }
+									  else
+									  {
+										  mySGD->clearChangeGoods();
+										  addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
+											  mControl->isStun = false;
+											  myJack->isStun = t_jack_stun;
+											  exit_target->onEnter();
+										  }), 9999);
+									  }
+									  
+								  });
 }
 
 bool Maingame::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -3310,7 +3315,7 @@ void Maingame::goHome ()
 }
 void Maingame::goReplay ()
 {
-	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, 0);
+	mySGD->setUserdataAchieveNoFail(0);
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
 	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());

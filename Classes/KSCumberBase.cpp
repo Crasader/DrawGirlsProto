@@ -2649,7 +2649,7 @@ void KSCumberBase::applyAutoBalance()
 	
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	
-	int vCount = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt);
+	int vCount = mySGD->getUserdataAutoLevel();
 	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
 	ostringstream oss;

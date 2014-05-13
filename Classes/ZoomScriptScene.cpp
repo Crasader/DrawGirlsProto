@@ -89,10 +89,10 @@ bool ZoomScript::init()
 	else				card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1);
 	
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
-	first_img->putBasicInfomation();	// 기본정보 들어가게.
+
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
-	first_img->triangulationWithPoints();
+
 	
 	first_img->setPosition(ccp(160,215));
 	first_img->setTouchEnabled(false);
@@ -383,10 +383,10 @@ void ZoomScript::menuAction(CCObject *sender)
 																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
 																   
 																   target_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
-																   target_node->putBasicInfomation();	// 기본정보 들어가게.
+
 																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
-																   target_node->triangulationWithPoints();
+
 																   
 																   target_node->setPosition(ccp(160,215));
 																   target_node->setTouchEnabled(false);
@@ -495,10 +495,10 @@ void ZoomScript::showtimeFirstAction()
 	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
 	
 	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
-	second_img->putBasicInfomation();	// 기본정보 들어가게.
+
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
-	second_img->triangulationWithPoints();
+
 	
 	second_img->setPosition(ccp(160,215));
 	second_img->setTouchEnabled(false);

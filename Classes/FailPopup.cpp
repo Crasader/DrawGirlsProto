@@ -484,6 +484,12 @@ bool FailPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
+	mySGD->setUserdataAchieveNoFail(0);
+	
+	int seq_no_fail_cnt = mySGD->getUserdataAutoLevel()-1;
+	if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
+	mySGD->setUserdataAutoLevel(seq_no_fail_cnt);
+	
 	mySGD->setUserdataFailCount(mySGD->getUserdataFailCount()+1);
 	send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
@@ -859,11 +865,6 @@ void FailPopup::onEnter()
 
 void FailPopup::showPopup()
 {
-	
-	int seq_no_fail_cnt = myDSH->getIntegerForKey(kDSH_Key_achieve_seqNoFailCnt)-1;
-	if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
-	myDSH->setIntegerForKey(kDSH_Key_achieve_seqNoFailCnt, seq_no_fail_cnt);
-	
 	gray->setOpacity(255);
 //	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 //	gray->runAction(gray_fade);

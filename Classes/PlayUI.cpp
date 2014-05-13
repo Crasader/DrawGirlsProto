@@ -944,14 +944,12 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			}
 		}
 		
-		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-		
 		for(int i=kAchievementCode_luckySeven1;i<=kAchievementCode_luckySeven3;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-			   t_p == t_beforePercentage + shared_acr->getCondition((AchievementCode)i)/0.001f)
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   t_p == t_beforePercentage + myAchieve->getCondition((AchievementCode)i)/0.001f)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				myAchieve->changeIngCount(AchievementCode(i), 1);
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -1337,7 +1335,7 @@ void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
 	m_areaGage = AreaGage::create(clearPercentage.getV());
-	m_areaGage->setPosition(ccp(240,myDSH->ui_top-22));
+	m_areaGage->setPosition(ccp(240,myDSH->ui_top-29));
 	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
 }
@@ -1530,14 +1528,12 @@ void PlayUI::setComboCnt (int t_combo)
 	{
 		my_combo->showCombo(t_combo);
 		
-		AchieveConditionReward* shared_acr = AchieveConditionReward::sharedInstance();
-		
 		for(int i=kAchievementCode_comboMania1;i<=kAchievementCode_comboMania3;i++)
 		{
-			if(myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, i) == 0 &&
-			   combo_cnt == shared_acr->getCondition((AchievementCode)i))
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   combo_cnt == myAchieve->getCondition((AchievementCode)i))
 			{
-				myDSH->setIntegerForKey(kDSH_Key_achieveData_int1_value, i, 1);
+				myAchieve->changeIngCount(AchievementCode(i), 1);
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -1554,7 +1550,7 @@ int PlayUI::getUseTime ()
 }
 void PlayUI::takeCoinModeOn ()
 {
-	top_center_node->setPosition(ccpAdd(top_center_node->getPosition(), ccp(0,8)));
+//	top_center_node->setPosition(ccpAdd(top_center_node->getPosition(), ccp(0,8)));
 	
 	is_show_exchange_coin = true;
 	taked_coin_cnt = 0;
@@ -1858,7 +1854,7 @@ void PlayUI::counting ()
 		countingLabel->setColor(ccYELLOW);
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
-		countingLabel->setPosition(ccp(240,35));
+		countingLabel->setPosition(ccp(240,5));
 		countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 	}
 	
@@ -2190,10 +2186,11 @@ void PlayUI::myInit ()
 	
 	m_areaGage = NULL;
 	
-	percentageLabel = KSLabelTTF::create("0%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
+//	percentageLabel = KSLabelTTF::create("0%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
+	percentageLabel = CCLabelBMFont::create("0%", "star_gage_font.fnt");
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
-	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
-	percentageLabel->setPosition(ccp(185,myDSH->ui_top-22));
+//	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
+	percentageLabel->setPosition(ccp(182,myDSH->ui_top-36));//29
 	
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
@@ -2244,11 +2241,11 @@ void PlayUI::myInit ()
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit-countingCnt)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccp(240,35-UI_OUT_DISTANCE));
+	countingLabel->setPosition(ccp(240,5-UI_OUT_DISTANCE));
 	countingLabel->setColor(ccYELLOW);
 	addChild(countingLabel);
 	
-	addChild(KSGradualValue<float>::create(35-UI_OUT_DISTANCE, 35, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(35);}));
+	addChild(KSGradualValue<float>::create(5-UI_OUT_DISTANCE, 5, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(5);}));
 	
 	isFirst = true;
 	//		beforePercentage = 0;
@@ -2322,9 +2319,9 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-37));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-37));
-		else									exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-37));
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-50));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-50));
+		else									exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-50));
 		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);

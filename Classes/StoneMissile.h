@@ -889,7 +889,7 @@ public:
 		float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
 
 		// 몬스터가 맞는 조건
-		if(distance <= 4)
+		if(distance <= 6)
 		{
 			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
 			
@@ -1383,7 +1383,7 @@ public:
 				float missileSpeed = m_initSpeed * 1.3f;
 				if(isNearMonster)
 				{
-					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.f), deg2Rad(2.f));
+					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
 				}
 				else 
 				{

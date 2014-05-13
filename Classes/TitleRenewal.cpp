@@ -23,6 +23,7 @@
 #include <random>
 #include "AudioEngine.h"
 #include "FormSetter.h"
+#include "AchieveData.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -303,6 +304,8 @@ void TitleRenewalScene::successLogin()
 	
 	command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	
+	command_list.push_back(CommandParam("getarchivementlist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetAchieveList)));
+	
 	Json::Value shopdata_param;
 	shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
 	command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
@@ -320,6 +323,11 @@ void TitleRenewalScene::successLogin()
 	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
 	
 	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
+	
+	
+	Json::Value achieve_param;
+	achieve_param["memberID"] = myHSP->getSocialID();
+	command_list.push_back(CommandParam("getarchivementhistory", achieve_param, json_selector(this, TitleRenewalScene::resultGetAchieveHistory)));
 	
 	Json::Value card_param;
 	card_param["memberID"] = hspConnector::get()->getSocialID();
@@ -348,6 +356,7 @@ void TitleRenewalScene::successLogin()
 	Json::Value userdata_param;
 	userdata_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+	
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
@@ -668,6 +677,22 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 	{
 		is_receive_fail = true;
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetAchieveList(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		myAchieve->initAchievement(result_data["list"]);
+	}
+	else
+	{
+		is_receive_fail = true;
+		command_list.push_back(CommandParam("getarchivementlist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetAchieveList)));
 	}
 	
 	receive_cnt--;
@@ -1103,6 +1128,26 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		Json::Value userdata_param;
 		userdata_param["memberID"] = hspConnector::get()->getSocialID();
 		command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetAchieveHistory(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		myAchieve->initHistory(result_data["list"]);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value achieve_param;
+		achieve_param["memberID"] = hspConnector::get()->getSocialID();
+		command_list.push_back(CommandParam("getarchivementhistory", achieve_param, json_selector(this, TitleRenewalScene::resultGetAchieveHistory)));
 	}
 	
 	receive_cnt--;
