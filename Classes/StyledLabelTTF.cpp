@@ -267,81 +267,189 @@ bool StyledLabelTTF::isSameStringAtIndex(std::string str, int idx, std::string o
 	return true;
 }
 
+
 void StyledLabelTTF::setStringByTag(const char* text){
 	if(m_string==text)return;
 	
 	//<|rgb|size|newline|tag>   ex)   <|900|15|15|>안녕하세요   ->빨간색 15 사이즈 텍스트
 	std::string str = text;
-	bool isSetMode=false;
-	std::string content="";
-	std::string option="";
-	std::string optionName="";
 	Json::Value sData;
 	int labelNo=0;
-	int optionNo=0;
+	int lastIncludeContentTagNo=-1;
 	for (int i=0; i<str.length(); i++) {
-		if(isSameStringAtIndex(str, i, "<font") || i==str.length()-1){
-			if(i==str.length()-1)content+=str[i];
-			sData[labelNo]["content"]=content;
-			
-			
-			if(i!=0)labelNo++;
-			
-			isSetMode=true;
-			content="";
-			optionNo=0;
-			optionName="";
-			//i++;
-			i+=4;
-			
-			continue;
-		}
 		
-		
-		
-		if(isSetMode){
-			if(str[i]==' ' || str[i]=='>'){
-				//모은옵션스트링저장하기
-//				if(optionNo==0)sData[labelNo]["option"]["color"]=std::atoi(option.c_str());
-//				else if(optionNo==1)sData[labelNo]["option"]["size"]=std::atoi(option.c_str());
-//				else if(optionNo==2)sData[labelNo]["option"]["newline"]=std::atoi(option.c_str());
-//				else if(optionNo==3)sData[labelNo]["option"]["tag"]=std::atoi(option.c_str());
-//				
-				if(optionName!="")sData[labelNo][optionName]=option.c_str();
-				//CCLog("option : %s -> value : %s",optionName.c_str(),option.c_str());
-				option="";
-				optionName="";
-				optionNo++;
-				
-				
-				if(str[i]=='>'){
-					isSetMode=false;
-					continue;
-				}
-				continue;
+		//닫는태그처리
+		if(isSameStringAtIndex(str, i,"</")){
+			
+			
+		//태그시작
+		}else if(str[i]=='<'){
+			//1.태그이름 뽑기
+			std::string tagName="";
+			i++;
+			int overCount=0;
+			while(str[i]!=' ' && str[i]!='>'){
+				tagName+=str[i];
+				i++;
+				overCount++;
+				if(overCount>100)assert("tag name over");
 			}
+			if(str[i]!='>')i++;
+			CCLog("tagName is %s at %d",tagName.c_str(),labelNo);
+			sData[labelNo]["tag"]=tagName;
 			
-
-			if(isSameStringAtIndex(str, i, "size=")){optionName="size"; i+=4; continue;}
-			if(isSameStringAtIndex(str, i, "color=")){optionName="color"; i+=5; continue;}
-			if(isSameStringAtIndex(str, i, "tag=")){optionName="tag"; i+=3; continue;}
-			if(isSameStringAtIndex(str, i, "font=")){optionName="font"; i+=4; continue;}
-			if(isSameStringAtIndex(str, i, "newline=")){optionName="newline"; i+=7; continue;}
+			//내용을 포함하는 태그종류는 현재번호를 등록해놓기
+			if(tagName=="font")lastIncludeContentTagNo=labelNo;
 			
-			if(str[i]==' ')continue;
+			labelNo++;
 			
-			option+=str[i];
-			
+			//2.태그옵션뽑기
+			overCount=0;
+			while (str[i]!='>') {
+				std::string optionName="";
+				std::string optionValue="";
+				bool isOptionName=true;
+				
+				int overCount2=0;
+				while(str[i]!=' ' && str[i]!='>'){
+					if(str[i]=='='){
+						i++;
+						isOptionName=false;
+						continue;
+					}
+					
+					if(!isOptionName && str[i]=='"'){
+						i++;
+						continue;
+					}
+					
+					if(isOptionName)optionName+=str[i];
+					else optionValue+=str[i];
+					
+					i++;
+					overCount2++;
+					if(overCount2>100)assert("option name over");
+				}
+				
+				
+				
+				CCLog("tagOption is %s = %s , i = %d",optionName.c_str(),optionValue.c_str(),i);
+				//i=i+ti+oi;
+				if(optionName!="")sData[labelNo-1][optionName.c_str()]=optionValue.c_str();
+				
+				if(str[i]=='>')break;
+				i++;
+				overCount++;
+				if(overCount>10000)assert("tag option over");
+			}
+			CCLog("tag number %d ok , i = %d",labelNo-1,i);
+		//내용모으기 및 적용
 		}else{
-			if(str[i]=='\n')continue;
-			if(isSameStringAtIndex(str, i, "</font>")){i+=6;continue;}
-			content+=str[i];
+			//int ti=0;
+			CCLog("take content %d",i);
+			std::string content="";
+			while(str[i]!='<'){
+				if(i>str.length())break;
+				if(str[i]!='\n')content+=str[i];
+				i++;
+				//if(ti>100000)assert("content over");
+			}
+			i--;
 			
+			if(lastIncludeContentTagNo>=0)sData[lastIncludeContentTagNo]["content"]=content;
+			else CCLog("dont find set content");
 		}
+		
+		
+//		
+//		
+//		
+//		
+//		
+//		
+//		if(i==str.length()-1 || ((str[i]=='<' && isSetMode==false))){
+//			
+//			if(isSameStringAtIndex(str, i, "</")){
+//				//닫는태그처리
+//				int ti=1;
+//				while(str[i+ti]!='>'){
+//					if(ti>100)break;
+//					ti++;
+//				}
+//				i+=ti;
+//				continue;
+//			}
+//			
+//			if(i==str.length()-1)content+=str[i];
+//			sData[labelNo]["content"]=content;
+//			if(i==str.length()-1)break;
+//			
+//			if(i!=0)labelNo++;
+//			
+//			isSetMode=true;
+//			content="";
+//			optionNo=0;
+//			optionName="";
+//			//i++;
+//			
+//			int ti=1;
+//			std::string tagName="";
+//			while(str[i+ti]!=' ' && str[i+ti]!='>'){
+//				tagName+=str[i+ti];
+//				if(ti>100)break;
+//				ti++;
+//			}
+//			i+=ti-1;
+//			sData[labelNo]["tagname"]=tagName;
+//			continue;
+//		}
+//		
+//		
+//		
+//		if(isSetMode){
+//			if(str[i]==' ' || str[i]=='>'){
+//				//모은옵션스트링저장하기
+////				if(optionNo==0)sData[labelNo]["option"]["color"]=std::atoi(option.c_str());
+////				else if(optionNo==1)sData[labelNo]["option"]["size"]=std::atoi(option.c_str());
+////				else if(optionNo==2)sData[labelNo]["option"]["newline"]=std::atoi(option.c_str());
+////				else if(optionNo==3)sData[labelNo]["option"]["tag"]=std::atoi(option.c_str());
+////				
+//				if(optionName!="")sData[labelNo][optionName]=option.c_str();
+//				//CCLog("option : %s -> value : %s",optionName.c_str(),option.c_str());
+//				option="";
+//				optionName="";
+//				optionNo++;
+//				
+//				
+//				if(str[i]=='>'){
+//					isSetMode=false;
+//					continue;
+//				}
+//				continue;
+//			}
+//			
+//
+//			if(isSameStringAtIndex(str, i, "size=")){optionName="size"; i+=4; continue;}
+//			if(isSameStringAtIndex(str, i, "color=")){optionName="color"; i+=5; continue;}
+//			if(isSameStringAtIndex(str, i, "tag=")){optionName="tag"; i+=3; continue;}
+//			if(isSameStringAtIndex(str, i, "font=")){optionName="font"; i+=4; continue;}
+//			if(isSameStringAtIndex(str, i, "newline=")){optionName="newline"; i+=7; continue;}
+//			
+//			if(str[i]==' ')continue;
+//			
+//			option+=str[i];
+//			
+//		}else{
+//			if(str[i]=='\n')continue;
+//			//if(isSameStringAtIndex(str, i, "</font>")){i+=6; continue;}
+//			//if(isSameStringAtIndex(str, i, "<br>")){};
+//			content+=str[i];
+//			
+//		}
 	}
 	
 	
-	//CCLog("ok go - %s",sData.toStyledString().c_str());
+	CCLog("ok go - %s",sData.toStyledString().c_str());
 	
 	std::vector<StyledText> texts;
 	for(int k = 0;k<sData.size();k++){
