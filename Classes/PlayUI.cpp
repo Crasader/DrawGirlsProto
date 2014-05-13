@@ -1550,7 +1550,7 @@ int PlayUI::getUseTime ()
 }
 void PlayUI::takeCoinModeOn ()
 {
-	top_center_node->setPosition(ccpAdd(top_center_node->getPosition(), ccp(0,8)));
+//	top_center_node->setPosition(ccpAdd(top_center_node->getPosition(), ccp(0,8)));
 	
 	is_show_exchange_coin = true;
 	taked_coin_cnt = 0;
@@ -2187,10 +2187,10 @@ void PlayUI::myInit ()
 	m_areaGage = NULL;
 	
 //	percentageLabel = KSLabelTTF::create("0%", mySGD->getFont().c_str(), 14);// CCLabelTTF::create("0%%", mySGD->getFont().c_str(), 14);
-	percentageLabel = CCLabelBMFont::create("0%", "scorefont.fnt");
+	percentageLabel = CCLabelBMFont::create("0%", "star_gage_font.fnt");
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 //	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
-	percentageLabel->setPosition(ccp(185,myDSH->ui_top-39));//29
+	percentageLabel->setPosition(ccp(182,myDSH->ui_top-36));//29
 	
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
@@ -2319,9 +2319,9 @@ void PlayUI::myInit ()
 	for(int i=1;i<=6;i++)
 	{
 		CCSprite* exchange_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", i)->getCString());
-		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-59));
-		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-59));
-		else									exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-59));
+		if(myGD->gamescreen_type == kGT_leftUI)			exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-50));
+		else if(myGD->gamescreen_type == kGT_rightUI)		exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-50));
+		else									exchange_spr->setPosition(ccp(240-20*3.5f+i*20,myDSH->ui_top-50));
 		top_center_node->addChild(exchange_spr);
 		
 		exchange_spr->setVisible(false);
