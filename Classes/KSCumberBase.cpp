@@ -1886,7 +1886,7 @@ void KSCumberBase::cumberAttack(float dt)
 					int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
 					if(ret == 1)
 					{
-						int cframe =  attackCode.get("castframe", 60).asInt() + attackCode.get("totalframe", 0).asInt() + attackCode.get("crashframe",0).asInt();
+						int cframe =  attackCode.get("castframe", 0).asInt() + attackCode.get("totalframe", 0).asInt() + attackCode.get("crashframe",0).asInt();
 						attackBehavior(attackCode);
 						CCLog("cast frame si %d",cframe);
 						//한번 공격후 3초간 재공격 하지 않음.
