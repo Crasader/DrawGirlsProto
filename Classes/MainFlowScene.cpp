@@ -1371,7 +1371,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 							   {
-								   PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){loading_layer->removeFromParent();}, false);
+								   PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-99999, [=](){loading_layer->removeFromParent();}, false);
 								   addChild(t_popup, kMainFlowZorder_popup);
 								   
 								   mySGD->setIsPerfectPuzzle(0);

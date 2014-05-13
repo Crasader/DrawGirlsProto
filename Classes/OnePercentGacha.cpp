@@ -23,6 +23,11 @@ OnePercentGacha * OnePercentGacha::create (CCObject * t_cancel, SEL_CallFunc d_c
 void OnePercentGacha::myInit (CCObject * t_cancel, SEL_CallFunc d_cancel, CCObject * t_ok, SEL_CallFuncF d_ok, float t_recent_percent)
 {
 	recent_percent = t_recent_percent;
+	
+	recent_percent*=10.f;
+	recent_percent = floor(recent_percent);
+	recent_percent/=10.f;
+	
 	target_cancel = t_cancel;
 	delegate_cancel = d_cancel;
 	target_ok = t_ok;
@@ -454,6 +459,10 @@ void OnePercentGacha::gachaStopAction(CCObject *sender, CCControlEvent t_event)
 	stop_button->setEnabled(false);
 	arrow_img->stopAllActions();
 	float position_value = (arrow_img->getPositionX()+114.f)/228.f;
+	
+	position_value*=10.f;
+	position_value = floor(position_value);
+	position_value/=10.f;
 	
 	KSLabelTTF* get_percent = KSLabelTTF::create(CCString::createWithFormat("%.1f%%", position_value)->getCString(), mySGD->getFont().c_str(), 13);
 	get_percent->setColor(ccORANGE);
