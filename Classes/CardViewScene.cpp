@@ -305,6 +305,8 @@ void CardViewScene::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 		if(multiTouchData.size() == 1)
 		{
 			first_touch_time = touchStartTime;
+			first_touch_p = (int)touch;
+			first_touch_point = location;
 			is_scrolling = true;
 			//			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 			//			{
@@ -351,6 +353,15 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 		if(o_it != multiTouchData.end())
 		{
 			o_it->second = location;
+			
+			if((int)touch == first_touch_p)
+			{
+				if(first_touch_point.getDistanceSq(location) > 100.f)
+				{
+					first_touch_time = -200000;
+				}
+			}
+			
 			if(multiTouchData.size() == 1)
 			{
 				//				if(is_touched_menu)
@@ -480,7 +491,7 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				timeval time;
 				gettimeofday(&time, NULL);
 				
-				if(int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
+				if((int)touch == first_touch_p && int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
 					first_img->ccTouchEnded(touch, pEvent);
 				}
