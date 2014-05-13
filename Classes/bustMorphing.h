@@ -73,7 +73,7 @@ public:
 class Triangle{
 public:
  int vt[3];
- Triangle(){ memset(vt, 0, sizeof(vt)); }
+	Triangle(){ vt[0] = vt[1] = vt[2] = 0; }
  Triangle(const Triangle& t){ memcpy(vt, t.vt, sizeof(vt)); }
  Triangle(int v1, int v2, int v3){
   vt[0]=v1; vt[1]=v2; vt[2]=v3;
@@ -87,10 +87,10 @@ private:
 	vector<Vertex> mVertices;
 	vector<Triangle> mTriangles;
 public:
-	vector<Vertex> getVertices(){return mVertices;}
+	const vector<Vertex>& getVertices(){return mVertices;}
 	vector<Triangle> getTriangles(){
 		vector<Triangle> retValue;
-		for(auto i : mTriangles)
+		for(auto& i : mTriangles)
 		{
 			if(fabsf(mVertices[i.vt[0]].x) == INIT_SUPERTRI_SIZE)
 				continue;
@@ -478,57 +478,7 @@ public:
 	{
 		triangulationWithPoints(m_points);
 	}
-	void triangulationWithPoints(const vector<Vertex3D>& points)
-	{
-		DelaunayTriangulation delaunay;
-		for(auto i : points)
-		{
-			delaunay.PushVertex(i.x, i.y, i.z);
-		}
-		vector<Triangle> mTriangles2 = delaunay.getTriangles();
-		int nTri = mTriangles2.size();
-		m_triCount = nTri;
-		if(m_textCoords)
-		{
-			delete [] m_textCoords;
-		}
-		if(m_vertices)
-			delete [] m_vertices;
-		if(m_2xVertices)
-			delete [] m_2xVertices;
-		if(m_colors)
-			delete [] m_colors;
-		
-		m_textCoords = new Vertex3D[nTri * 3];
-		m_vertices = new Vertex3D[nTri * 3];
-		m_2xVertices = new Vertex3D[nTri * 3];
-		m_colors = new ccColor4F[nTri * 3];
-		for(int i=0; i<nTri; i++){
-			for(int j=0; j<3; j++){
-				float ss = ks19937::getIntValue(0, 0);
-				Vertex3D temp = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x / 2.f,
-																		 delaunay.getVertices()[mTriangles2[i].vt[j]].y / 2.f,
-																		 delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
-//				temp.z = points
-				m_vertices[i*3 + j] = temp;
-				m_2xVertices[i * 3 + j] = Vertex3DMake(delaunay.getVertices()[mTriangles2[i].vt[j]].x,
-										 delaunay.getVertices()[mTriangles2[i].vt[j]].y,
-										 delaunay.getVertices()[mTriangles2[i].vt[j]].extraData);
-				m_textCoords[i*3 + j] = Vertex3DMake(m_2xVertices[i * 3 + j].x / (2 * m_halfWidth),
-																						 1.f - (m_2xVertices[i * 3 + j].y) / (2 * m_halfHeight), temp.z);
-				m_colors[i*3 + j] = ccc4f(ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), ks19937::getFloatValue(0, 1), 1.f);
-			}
-		}
-		
-		
-		
-		
-		for(int i=0; i<nTri; i++){
-			for(int j=0; j<3; j++){
-				m_backupVertices[&m_vertices[i*3 + j]] = m_vertices[i*3 + j];
-			}
-		}
-	}
+	void triangulationWithPoints(const vector<Vertex3D>& points);
 	static MyNode* create(CCTexture2D* tex)
 	{
 		MyNode* n = new MyNode();
