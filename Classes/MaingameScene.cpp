@@ -219,7 +219,7 @@ void Maingame::onEnterTransitionDidFinish()
 	top_bottom_layer->setPosition(ccp(0, 0));
 	getParent()->addChild(top_bottom_layer, -1);
 	
-	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
+	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern2.png");
 	top_bottom_layer->addChild(side_back, topBottomZorder);
 	
 	CCSize pattern_size = side_back->getTexture()->getContentSize();
