@@ -129,31 +129,31 @@ void AreaGage::myInit(float t_clear_percent)
 	gage_case->setPosition(CCPointZero);
 	addChild(gage_case, 2);
 	
-	ccColor3B gage_color;
-	
-	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1;
-	puzzle_number %= 7;
-	puzzle_number++;
-	
-	if(puzzle_number == 1)
-		gage_color = ccc3(0, 0, 255);
-	else if(puzzle_number == 2)
-		gage_color = ccc3(240, 110, 170);
-	else if(puzzle_number == 3)
-		gage_color = ccc3(255, 245, 104);
-	else if(puzzle_number == 4)
-		gage_color = ccc3(57, 181, 74);
-	else if(puzzle_number == 5)
-		gage_color = ccc3(168, 100, 168);
-	else if(puzzle_number == 6)
-		gage_color = ccc3(0, 191, 243);
-	else if(puzzle_number == 7)
-		gage_color = ccc3(242, 101, 34);
-	else
-		gage_color = ccc3(0, 0, 255);
+//	ccColor3B gage_color;
+//	
+//	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)-1;
+//	puzzle_number %= 7;
+//	puzzle_number++;
+//	
+//	if(puzzle_number == 1)
+//		gage_color = ccc3(0, 0, 255);
+//	else if(puzzle_number == 2)
+//		gage_color = ccc3(240, 110, 170);
+//	else if(puzzle_number == 3)
+//		gage_color = ccc3(255, 245, 104);
+//	else if(puzzle_number == 4)
+//		gage_color = ccc3(57, 181, 74);
+//	else if(puzzle_number == 5)
+//		gage_color = ccc3(168, 100, 168);
+//	else if(puzzle_number == 6)
+//		gage_color = ccc3(0, 191, 243);
+//	else if(puzzle_number == 7)
+//		gage_color = ccc3(242, 101, 34);
+//	else
+//		gage_color = ccc3(0, 0, 255);
 	
 	gage_bar1 = CCProgressTimer::create(CCSprite::create("star_gage_bar1.png"));
-	gage_bar1->getSprite()->setColor(gage_color);
+//	gage_bar1->getSprite()->setColor(gage_color);
 	gage_bar1->setType(kCCProgressTimerTypeBar);
 	gage_bar1->setMidpoint(ccp(0,0));
 	gage_bar1->setBarChangeRate(ccp(1,0));
@@ -163,7 +163,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_bar1);
 	
 	gage_bar2 = CCProgressTimer::create(CCSprite::create("star_gage_bar2.png"));
-	gage_bar2->getSprite()->setColor(gage_color);
+//	gage_bar2->getSprite()->setColor(gage_color);
 	gage_bar2->setType(kCCProgressTimerTypeBar);
 	gage_bar2->setMidpoint(ccp(0,0));
 	gage_bar2->setBarChangeRate(ccp(1,0));
@@ -173,7 +173,7 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(gage_bar2);
 	
 	gage_bar3 = CCProgressTimer::create(CCSprite::create("star_gage_bar3.png"));
-	gage_bar3->getSprite()->setColor(gage_color);
+//	gage_bar3->getSprite()->setColor(gage_color);
 	gage_bar3->setType(kCCProgressTimerTypeBar);
 	gage_bar3->setMidpoint(ccp(0,0));
 	gage_bar3->setBarChangeRate(ccp(1,0));
@@ -205,7 +205,7 @@ void AreaGage::myInit(float t_clear_percent)
 //	addChild(gage_case);
 	
 	star1 = CCNode::create();
-	star1->setPosition(ccp(gage_bar2->getPositionX(), 13));
+	star1->setPosition(ccp(gage_bar2->getPositionX(), 17));
 	addChild(star1, 3);
 	
 	{
@@ -215,7 +215,7 @@ void AreaGage::myInit(float t_clear_percent)
 	}
 	
 	star2 = CCNode::create();// CCSprite::create("gage_star_gold.png");
-	star2->setPosition(ccp(gage_bar3->getPositionX(), 13));
+	star2->setPosition(ccp(gage_bar3->getPositionX(), 17));
 	addChild(star2, 3);
 	
 	CCPoint base_position = ccp(-9,0);
