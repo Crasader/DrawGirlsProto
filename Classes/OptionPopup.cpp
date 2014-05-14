@@ -87,7 +87,6 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
-	
 
 //	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-999, [=](){}, [=](){});
 //	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});

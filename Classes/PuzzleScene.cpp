@@ -1425,15 +1425,15 @@ void PuzzleScene::autoTurnPiece()
 	
 	PuzzlePiece* t_piece = (PuzzlePiece*)puzzle_node->getChildByTag(start_stage+auto_turn_piece_frame);
 	
-	if(t_piece->is_simple)
-		t_piece->turnPiece(kPieceMode_thumb);
-	else
-	{
+//	if(t_piece->is_simple)
+//		t_piece->turnPiece(kPieceMode_thumb);
+//	else
+//	{
 		if(t_piece->piece_mode == kPieceMode_default)
-			t_piece->simpleView();
+			t_piece->turnPiece(kPieceMode_thumb);
 		else if(t_piece->piece_mode == kPieceMode_thumb)
 			t_piece->turnPiece(kPieceMode_default);
-	}
+//	}
 	
 	auto_turn_piece_frame++;
 	

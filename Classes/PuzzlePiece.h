@@ -266,15 +266,20 @@ private:
 			{
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-				if(!is_simple)
-					setStar(n_piece);
+//				if(!is_simple)
+//					setStar(n_piece);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-				if(!is_simple)
-					setStar(s_piece);
+//				if(!is_simple)
+//					setStar(s_piece);
 				s_piece->setColor(ccGRAY);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
+				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu, kPieceZorder_menu);
@@ -283,17 +288,26 @@ private:
 			{
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
+				setStar(n_piece);
+				setStageLevel(n_piece, false);
 //				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
 //				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
 //				n_piece->addChild(n_embo);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccGRAY);
+				setStar(s_piece);
+				setStageLevel(s_piece, false);
 //				CCSprite* s_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
 //				s_embo->setPosition(ccp(s_piece->getContentSize().width/2.f, s_piece->getContentSize().height/2.f));
 //				s_piece->addChild(s_embo);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
+				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu, kPieceZorder_menu);
@@ -305,12 +319,16 @@ private:
 			{
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-				setStageLevel(n_piece, false);
+//				setStageLevel(n_piece, false);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
-				setStageLevel(s_piece, true);
+//				setStageLevel(s_piece, true);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
 				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
@@ -321,11 +339,20 @@ private:
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				n_piece->setGray(true);
+				setStar(n_piece);
+				setStageLevel(n_piece, false);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccc3(80, 80, 80));
+				setStar(s_piece);
+				setStageLevel(s_piece, false);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
+				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu, kPieceZorder_menu);
@@ -360,6 +387,10 @@ private:
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
 				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
+				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu);
@@ -369,11 +400,20 @@ private:
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				n_piece->setGray(true);
+				setStar(n_piece);
+				setStageLevel(n_piece, false);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccc3(80, 80, 80));
+				setStar(s_piece);
+				setStageLevel(s_piece, false);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
+				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu, kPieceZorder_menu);
@@ -389,6 +429,10 @@ private:
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
 				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
+				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu);
@@ -398,11 +442,20 @@ private:
 				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				n_piece->setGray(true);
+				setStar(n_piece);
+				setStageLevel(n_piece, false);
 				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccc3(80, 80, 80));
+				setStar(s_piece);
+				setStageLevel(s_piece, false);
 				
 				CCMenuItem* piece_item = CCMenuItemSprite::create(n_piece, s_piece, this, menu_selector(PuzzlePiece::menuAction));
+				
+				CCSize original_size = piece_item->getContentSize();
+				piece_item->setContentSize(CCSizeMake(60, 60));
+				piece_item->setPosition(ccp(-(original_size.width-60)/2.f, -(original_size.height-60)/2.f));
+				
 				piece_menu = CCMenu::createWithItem(piece_item);
 				piece_menu->setPosition(CCPointZero);
 				addChild(piece_menu, kPieceZorder_menu);
@@ -429,6 +482,9 @@ private:
 		is_menu_enable = true;
 	}
 	
+	bool is_mission_stage;
+	bool is_special_stage; // 과금 스테이지
+	
 	void myInit(int t_stage_number, int t_stage_level, CCObject* t_clicked, SEL_CallFuncI d_clicked)
 	{
 		star1 = NULL;
@@ -441,79 +497,39 @@ private:
 		target_clicked = t_clicked;
 		delegate_clicked = d_clicked;
 		
-		
+		is_mission_stage = NSDS_GI(stage_number, kSDS_SI_missionType_i) != kCLEAR_default;
+		is_special_stage = NSDS_GI(NSDS_GI(stage_number, kSDS_SI_puzzle_i), kSDS_PZ_stage_int1_condition_gold_i, stage_number) > 0;
 		
 		is_menu_enable = true;
 	}
 	
 	void setStageLevel(CCSprite* piece_img, bool is_gray)
 	{
+		if(is_special_stage)
+		{
+			CCSprite* special_mark = CCSprite::create("puzzle_special.png");
+			special_mark->setPosition(ccp(piece_img->getContentSize().width/2.f-20, piece_img->getContentSize().height/2.f+20));
+			piece_img->addChild(special_mark);
+		}
+		
+		if(is_mission_stage)
+		{
+			CCSprite* mission_mark = CCSprite::create("puzzle_mission.png");
+			mission_mark->setPosition(ccp(piece_img->getContentSize().width/2.f+20, piece_img->getContentSize().height/2.f+20));
+			piece_img->addChild(mission_mark);
+		}
+		
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont2().c_str(), 13);
 		stage_number_label->setColor(ccc3(195, 255, 50));
 		stage_number_label->enableOuterStroke(ccBLACK, 1.f);
-		stage_number_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f + 7));
+		stage_number_label->setPosition(ccp(piece_img->getContentSize().width/2.f-17, piece_img->getContentSize().height/2.f-20));
 		piece_img->addChild(stage_number_label);
 		
-		KSLabelTTF* stage_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont2().c_str(), 9);
-		stage_label->setColor(ccWHITE);
-		stage_label->enableOuterStroke(ccBLACK, 1.f);
-		stage_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f - 7));
-		piece_img->addChild(stage_label);
-		
-//		CCSprite* level_label = CCSprite::create("level_label.png");
-//		level_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f));
-//		piece_img->addChild(level_label);
-//		
-//		CCLabelBMFont* level_count = CCLabelBMFont::create(CCString::createWithFormat("%d", stage_level)->getCString(), "allfont.fnt");
-//		level_count->setAnchorPoint(ccp(0.5,0.5));
-//		level_count->setPosition(ccp(piece_img->getContentSize().width/2.f-9, piece_img->getContentSize().height/2.f-10));
-//		piece_img->addChild(level_count);
-//		
-//		if(!is_gray)
-//		{
-//			ccColor3B font_color = ccc3(0,0,0);
-//			if(stage_level <= 1)
-//				font_color = ccc3(255,255,255);
-//			else if(stage_level == 2)
-//				font_color = ccc3(255,255,102);
-//			else if(stage_level == 3)
-//				font_color = ccc3(255,204,102);
-//			else if(stage_level == 4)
-//				font_color = ccc3(204,255,102);
-//			else if(stage_level == 5)
-//				font_color = ccc3(102,255,204);
-//			else if(stage_level == 6)
-//				font_color = ccc3(102,204,255);
-//			else if(stage_level == 7)
-//				font_color = ccc3(204,102,255);
-//			else if(stage_level == 8)
-//				font_color = ccc3(255,111,207);
-//			else if(stage_level == 9)
-//				font_color = ccc3(255,0,128);
-//			else if(stage_level == 10)
-//				font_color = ccc3(128,0,128);
-//			else if(stage_level == 11)
-//				font_color = ccc3(128,0,0);
-//			else if(stage_level == 12)
-//				font_color = ccc3(128,64,0);
-//			else if(stage_level == 13)
-//				font_color = ccc3(128,128,0);
-//			else if(stage_level == 14)
-//				font_color = ccc3(0,128,128);
-//			else if(stage_level == 15)
-//				font_color = ccc3(0,64,128);
-//			else if(stage_level == 16)
-//				font_color = ccc3(64,0,128);
-//			else if(stage_level >= 17)
-//				font_color = ccc3(0,0,0);
-//			
-//			level_count->setColor(font_color);
-//		}
-//		else
-//		{
-//			ccColor3B font_color = ccc3(100,100,100);
-//			level_count->setColor(font_color);
-//		}
+//		KSLabelTTF* stage_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont2().c_str(), 9);
+//		stage_label->setColor(ccWHITE);
+//		stage_label->enableOuterStroke(ccBLACK, 1.f);
+//		stage_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f - 7));
+//		piece_img->addChild(stage_label);
 	}
 	
 	void setStar(CCSprite* piece_img)
@@ -528,57 +544,73 @@ private:
 		else if(is_have_card[0])
 			t_grade = 1;
 		
-		if(t_grade >= 1)
+		for(int i=3;i>=0;i--)
 		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+90.f)/180.f*M_PI)*10.f, sinf((45.f+90.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
-		}
-		else
-		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+90.f)/180.f*M_PI)*10.f, sinf((45.f+90.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
-		}
-		
-		if(t_grade >= 2)
-		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f)/180.f*M_PI)*10.f, sinf((45.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
-		}
-		else
-		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f)/180.f*M_PI)*10.f, sinf((45.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
+			if(t_grade >= i+1)
+			{
+				CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+				star_img->setPosition(ccp(piece_img->getContentSize().width/2.f+i*7, piece_img->getContentSize().height/2.f-20));
+				piece_img->addChild(star_img);
+			}
+			else
+			{
+				CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+				star_img->setPosition(ccp(piece_img->getContentSize().width/2.f+i*7, piece_img->getContentSize().height/2.f-20));
+				piece_img->addChild(star_img);
+			}
 		}
 		
-		if(t_grade >= 3)
-		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+180.f)/180.f*M_PI)*10.f, sinf((45.f+180.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
-		}
-		else
-		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+180.f)/180.f*M_PI)*10.f, sinf((45.f+180.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
-		}
-		
-		if(t_grade >= 4)
-		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f-90.f)/180.f*M_PI)*10.f, sinf((45.f-90.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
-		}
-		else
-		{
-			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
-			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f-90.f)/180.f*M_PI)*10.f, sinf((45.f-90.f)/180.f*M_PI)*10.f)));
-			piece_img->addChild(star_img);
-		}
+//		if(t_grade >= 4)
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f-90.f)/180.f*M_PI)*10.f, sinf((45.f-90.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
+//		else
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f-90.f)/180.f*M_PI)*10.f, sinf((45.f-90.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
+//		
+//		if(t_grade >= 3)
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+180.f)/180.f*M_PI)*10.f, sinf((45.f+180.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
+//		else
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+180.f)/180.f*M_PI)*10.f, sinf((45.f+180.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
+//		
+//		if(t_grade >= 2)
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f)/180.f*M_PI)*10.f, sinf((45.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
+//		else
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f)/180.f*M_PI)*10.f, sinf((45.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
+//		
+//		if(t_grade >= 1)
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+90.f)/180.f*M_PI)*10.f, sinf((45.f+90.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
+//		else
+//		{
+//			CCSprite* star_img = CCSprite::create("gage_star_gold_down.png");
+//			star_img->setPosition(ccpAdd(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f), ccp(cosf((45.f+90.f)/180.f*M_PI)*10.f, sinf((45.f+90.f)/180.f*M_PI)*10.f)));
+//			piece_img->addChild(star_img);
+//		}
 	}
 };
 

@@ -1165,10 +1165,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			}
 			else
 			{
-				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
-				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
-				not_clear_label->setPosition(ccp(67.5f,138.5f));
-				not_clear_img->addChild(not_clear_label);
+//				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
+//				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
+//				not_clear_label->setPosition(ccp(67.5f,138.5f));
+//				not_clear_img->addChild(not_clear_label);
 			}
 		}
 		else
@@ -1209,10 +1209,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			}
 			else
 			{
-				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 10);
-				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
-				not_clear_label->setPosition(ccp(67.5f,138.5f));
-				not_clear_img->addChild(not_clear_label);
+//				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 10);
+//				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
+//				not_clear_label->setPosition(ccp(67.5f,138.5f));
+//				not_clear_img->addChild(not_clear_label);
 			}
 		}
 		

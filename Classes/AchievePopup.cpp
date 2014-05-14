@@ -603,6 +603,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			reward_type_str = "price_ruby_img.png";
 		else if(reward_type == kAchieveRewardType_gold)
 			reward_type_str = "price_gold_img.png";
+		else if(reward_type == kAchieveRewardType_package)
+			reward_type_str = "price_package_img.png";
 		
 		CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
 		
@@ -655,6 +657,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			reward_type_str = "price_ruby_img.png";
 		else if(reward_type == kAchieveRewardType_gold)
 			reward_type_str = "price_gold_img.png";
+		else if(reward_type == kAchieveRewardType_package)
+			reward_type_str = "price_package_img.png";
 		
 		CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
 		
@@ -723,6 +727,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				reward_type_str = "price_ruby_img.png";
 			else if(reward_type == kAchieveRewardType_gold)
 				reward_type_str = "price_gold_img.png";
+			else if(reward_type == kAchieveRewardType_package)
+				reward_type_str = "price_package_img.png";
 			
 			CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
 			
@@ -774,6 +780,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				reward_type_str = "price_ruby_img.png";
 			else if(reward_type == kAchieveRewardType_gold)
 				reward_type_str = "price_gold_img.png";
+			else if(reward_type == kAchieveRewardType_package)
+				reward_type_str = "price_package_img.png";
 			
 			CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
 			

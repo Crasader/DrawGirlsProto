@@ -1310,6 +1310,12 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
+				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial3), mySGD->getFont().c_str(), 12.5f);
+				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+				content_label->setAnchorPoint(ccp(0,0.5));
+				content_label->setPosition(ccp(60,35));
+				content_back->addChild(content_label);
+				
 //				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
 //				title_img->setPosition(ccp(0, 102));
 //				t_container->addChild(title_img);
@@ -1397,6 +1403,12 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
+				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial2), mySGD->getFont().c_str(), 12.5f);
+				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+				content_label->setAnchorPoint(ccp(0,0.5));
+				content_label->setPosition(ccp(60,35));
+				content_back->addChild(content_label);
+				
 //				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
 //				title_img->setPosition(ccp(0, 102));
 //				t_container->addChild(title_img);
@@ -1483,6 +1495,12 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCSprite* content_back = CCSprite::create("tutorial_popup1.png");
 				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
+				
+				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial1), mySGD->getFont().c_str(), 12.5f);
+				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+				content_label->setAnchorPoint(ccp(0,0.5));
+				content_label->setPosition(ccp(60,35));
+				content_back->addChild(content_label);
 				
 //				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
 //				title_img->setPosition(ccp(0, 102));

@@ -354,6 +354,13 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
 	ko->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
 	ko->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
+	ko->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
+	ko->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
+	ko->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
+//	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 	
 	
@@ -836,6 +843,9 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
 	en->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
 	en->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
+	en->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
+	en->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
+	en->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1326,6 +1336,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
 	ja->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
 	ja->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
+	ja->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
+	ja->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
+	ja->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
