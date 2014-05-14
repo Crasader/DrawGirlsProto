@@ -1140,6 +1140,344 @@ void FeverCoinParent::myInit()
 	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV());
 }
 
+
+FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point)
+{
+	FloatingCoin* t_fc = new FloatingCoin();
+	t_fc->myInit(t_take_func, t_gold, t_start_point);
+	t_fc->autorelease();
+	return t_fc;
+}
+void FloatingCoin::startAbsorbChecking()
+{
+	absorb_frame = 0;
+	schedule(schedule_selector(FloatingCoin::absorbChecking), 1.f/30.f);
+}
+void FloatingCoin::absorbChecking()
+{
+	// 주변에 캐릭터 있는지 체크
+	
+	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+	if(getPosition().getDistanceSq(jack_position) < 30)
+	{
+		takeIt();
+		return;
+	}
+	
+	if(is_locked)
+	{
+		if(myGD->mapState[locked_point.x][locked_point.y] != mapOutline && (myGD->mapState[locked_point.x-1][locked_point.y-1] == mapOldget || myGD->mapState[locked_point.x-1][locked_point.y-1] == mapOldline ||
+																	myGD->mapState[locked_point.x-1][locked_point.y+1] == mapOldget || myGD->mapState[locked_point.x-1][locked_point.y+1] == mapOldline ||
+																	myGD->mapState[locked_point.x+1][locked_point.y-1] == mapOldget || myGD->mapState[locked_point.x+1][locked_point.y-1] == mapOldline ||
+																	myGD->mapState[locked_point.x+1][locked_point.y+1] == mapOldget || myGD->mapState[locked_point.x+1][locked_point.y+1] == mapOldline))
+		{
+			takeIt();
+			return;
+		}
+	}
+	
+	
+	absorb_frame++;
+	
+	if(absorb_frame > 300)
+		hideAction();
+}
+void FloatingCoin::hideAction()
+{
+	unschedule(schedule_selector(FloatingCoin::absorbChecking));
+	unschedule(schedule_selector(FloatingCoin::floating));
+	unschedule(schedule_selector(FloatingCoin::ting));
+	unschedule(schedule_selector(FloatingCoin::asLonging));
+	
+	coin_img->runAction(CCSequence::createWithTwoActions(CCScaleTo::create(0.3f, 0), CCCallFunc::create(this, callfunc_selector(FloatingCoin::removeFromParent))));
+}
+void FloatingCoin::takeIt()
+{
+	unschedule(schedule_selector(FloatingCoin::absorbChecking));
+	unschedule(schedule_selector(FloatingCoin::floating));
+	unschedule(schedule_selector(FloatingCoin::ting));
+	unschedule(schedule_selector(FloatingCoin::asLonging));
+	
+	AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
+	mySGD->addChangeGoodsIngameGold(m_gold);
+	
+	take_func(getPosition());
+	
+	removeFromParent();
+}
+void FloatingCoin::onLock()
+{
+	is_locked = true;
+	locked_point = IntPoint::convertToIntPoint(getPosition());
+}
+void FloatingCoin::startFloating()
+{
+	ing_frame = 0;
+	schedule(schedule_selector(FloatingCoin::floating));
+}
+void FloatingCoin::floating()
+{
+	ing_frame++;
+	if(ing_frame == 20)
+		startAbsorbChecking();
+	
+	bool is_found = false;
+	CCPoint after_position;
+	float step = 5.f;
+	int step_count = 0;
+	int search_direction = ing_frame%2;
+	while(!is_found)
+	{
+		if(step <= 0.f)
+			removeFromParent();
+		
+		is_found = true;
+		after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*moving_speed, sinf(moving_direction/180.f*M_PI)*moving_speed);
+		
+		if(after_position.x > 320.f || after_position.x < 0.f || after_position.y > 430.f || after_position.y < 0.f)
+		{
+			is_found = false;
+			if(search_direction == 0)
+			{
+				moving_direction += step;
+				if(moving_direction >= 180.f)
+					moving_direction -= 360.f;
+			}
+			else
+			{
+				moving_direction -= step;
+				if(moving_direction < -180.f)
+					moving_direction += 360.f;
+			}
+			
+			step_count++;
+			if(step_count*step >= 360.f)
+			{
+				step -= 1.f;
+				step_count = 0;
+			}
+		}
+	}
+	
+	setPosition(after_position);
+	getParent()->reorderChild(this, 431-int(getPositionY()));
+	
+	IntPoint check_point = IntPoint::convertToIntPoint(after_position);
+	if(ing_frame > 20 && myGD->mapState[check_point.x][check_point.y] == mapEmpty &&
+	   myGD->mapState[check_point.x-1][check_point.y-1] == mapEmpty &&
+	   myGD->mapState[check_point.x-1][check_point.y+1] == mapEmpty &&
+	   myGD->mapState[check_point.x+1][check_point.y-1] == mapEmpty &&
+	   myGD->mapState[check_point.x+1][check_point.y+1] == mapEmpty)
+	{
+		unschedule(schedule_selector(FloatingCoin::floating));
+		if(isAsLong())
+		{
+			startAsLonging();
+		}
+		else
+		{
+			onLock();
+		}
+	}
+}
+
+bool FloatingCoin::isAsLong()
+{
+	CCPoint after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*moving_speed, sinf(moving_direction/180.f*M_PI)*moving_speed);
+	
+	if(after_position.x > 320.f || after_position.x < 0.f || after_position.y > 430.f || after_position.y < 0.f)
+	{
+		return false;
+	}
+	IntPoint check_point = IntPoint::convertToIntPoint(after_position);
+	if(ing_frame > 20 && myGD->mapState[check_point.x][check_point.y] == mapEmpty &&
+	   myGD->mapState[check_point.x-1][check_point.y-1] == mapEmpty &&
+	   myGD->mapState[check_point.x-1][check_point.y+1] == mapEmpty &&
+	   myGD->mapState[check_point.x+1][check_point.y-1] == mapEmpty &&
+	   myGD->mapState[check_point.x+1][check_point.y+1] == mapEmpty)
+	{
+		return true;
+	}
+	return false;
+}
+
+void FloatingCoin::startAsLonging()
+{
+	keeping_count = 2 + rand()%3;
+	schedule(schedule_selector(FloatingCoin::asLonging));
+}
+void FloatingCoin::asLonging()
+{
+	CCPoint after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*moving_speed, sinf(moving_direction/180.f*M_PI)*moving_speed);
+	
+	if(after_position.x > 320.f || after_position.x < 0.f || after_position.y > 430.f || after_position.y < 0.f)
+	{
+		unschedule(schedule_selector(FloatingCoin::asLonging));
+		onLock();
+		return;
+	}
+	
+	setPosition(after_position);
+	
+	getParent()->reorderChild(this, 431-int(getPositionY()));
+	
+	
+	keeping_count--;
+	
+	if(keeping_count <= 0 || !isAsLong())
+	{
+		unschedule(schedule_selector(FloatingCoin::asLonging));
+		onLock();
+	}
+}
+
+void FloatingCoin::startTing()
+{
+	start_speed = 2.f+(rand()%20)/10.f;
+	schedule(schedule_selector(FloatingCoin::ting));
+}
+void FloatingCoin::ting()
+{
+	float after_y = coin_img->getPositionY() + start_speed;
+	
+	coin_img->setPositionY(MAX(coin_img->getPositionY() + start_speed, 0.f));
+	
+	if(after_y < 0)
+	{
+		start_speed = -start_speed*0.7f;
+		if(fabsf(start_speed) < 0.3f)
+		{
+			coin_img->setPositionY(0);
+			unschedule(schedule_selector(FloatingCoin::ting));
+			return;
+		}
+	}
+	
+	start_speed -= 0.3f;
+}
+void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point)
+{
+	take_func = t_take_func;
+	is_locked = false;
+	m_gold = t_gold;
+	
+	moving_direction = rand()%360 - 180;
+	moving_speed = rand()%10 / 10.f + 1.f;
+	
+	int start_cut = rand()%6;
+	
+	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
+	coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
+	coin_img->setScale((50 - rand()%20)/100.f);
+	coin_img->setPosition(CCPointZero);
+	addChild(coin_img);
+	CCAnimation* t_animation = CCAnimation::create();
+	t_animation->setDelayPerUnit(0.1f);
+	int add_count = 0;
+	for(int i=start_cut;add_count < 6;i=(i+1)%6)
+	{
+		add_count++;
+		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+	}
+	CCAnimate* t_animate = CCAnimate::create(t_animation);
+	CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+	coin_img->runAction(t_repeat);
+	
+	startTing();
+	
+	setPosition(t_start_point);
+	
+	startFloating();
+}
+
+FloatingCoinCreator* FloatingCoinCreator::create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point)
+{
+	FloatingCoinCreator* t_fcc = new FloatingCoinCreator();
+	t_fcc->myInit(t_add_parent, t_take_func, t_frame, t_count, t_gold, t_start_point);
+	t_fcc->autorelease();
+	return t_fcc;
+}
+void FloatingCoinCreator::startCreate()
+{
+	ing_frame = 0;
+	ing_count = 0;
+	schedule(schedule_selector(FloatingCoinCreator::creating));
+}
+void FloatingCoinCreator::creating()
+{
+	ing_frame++;
+	
+	if(ing_frame >= m_frame)
+	{
+		ing_frame = 0;
+		ing_count++;
+		
+		add_parent->addChild(FloatingCoin::create(take_func, m_gold, start_point));
+		
+		if(ing_count >= m_count)
+		{
+			unschedule(schedule_selector(FloatingCoinCreator::creating));
+			removeFromParent();
+		}
+	}
+}
+void FloatingCoinCreator::myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point)
+{
+	take_func = t_take_func;
+	add_parent = t_add_parent;
+	m_frame = t_frame;
+	m_count = t_count;
+	m_gold = t_gold;
+	start_point = t_start_point;
+	
+	startCreate();
+}
+
+FloatingCoinParent* FloatingCoinParent::create(function<void(CCPoint)> t_take_func)
+{
+	FloatingCoinParent* t_fcp = new FloatingCoinParent();
+	t_fcp->myInit(t_take_func);
+	t_fcp->autorelease();
+	return t_fcp;
+}
+void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
+{
+	float t_d = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f;
+	
+	int t_coin_count = roundf(t_percent/t_d);
+	
+	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), myGD->getJackPoint().convertToCCP()));
+}
+void FloatingCoinParent::showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count)
+{
+	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), t_target_point));
+}
+void FloatingCoinParent::hideAllFloatingCoin()
+{
+	creator_node->removeAllChildren();
+	
+	CCArray* coin_array = coin_node->getChildren();
+	int loop_count = coin_array->count();
+	for(int i=loop_count-1;i>=0;i--)
+	{
+		((FloatingCoin*)coin_array->objectAtIndex(i))->hideAction();
+	}
+}
+void FloatingCoinParent::myInit(function<void(CCPoint)> t_take_func)
+{
+	take_func = t_take_func;
+	
+	creator_node = CCNode::create();
+	creator_node->setPosition(CCPointZero);
+	addChild(creator_node);
+	
+	coin_node = CCNode::create();
+	coin_node->setPosition(CCPointZero);
+	addChild(coin_node);
+}
+
+
+
 GameItemManager* GameItemManager::create()
 {
 	GameItemManager* t_gim = new GameItemManager();
@@ -1253,6 +1591,8 @@ void GameItemManager::stopCoin()
 		ExchangeCoin* t_ec = (ExchangeCoin*)child->objectAtIndex(i);
 		t_ec->smallScaleHiding();
 	}
+	
+	floating_coin_parent->hideAllFloatingCoin();
 }
 
 void GameItemManager::counting()
@@ -1434,6 +1774,9 @@ void GameItemManager::myInit()
 	fever_coin_parent = FeverCoinParent::create();
 	addChild(fever_coin_parent);
 	
+	floating_coin_parent = FloatingCoinParent::create([=](CCPoint t_point){showTakeItemEffect(t_point);});
+	addChild(floating_coin_parent);
+	
 //	take_item_effects = CCSpriteBatchNode::create("fx_take_item.png");
 //	addChild(take_item_effects);
 	
@@ -1472,6 +1815,9 @@ void GameItemManager::myInit()
 	myGD->V_V["GIM_showBeautyStone"] = std::bind(&GameItemManager::showBeautyStone, this);
 	myGD->V_V["GIM_removeBeautyStone"] = std::bind(&GameItemManager::removeBeautyStone, this);
 	myGD->B_V["GIM_isChangeAllInner"] = std::bind(&GameItemManager::isChangeAllInner, this);
+	myGD->V_F["GIM_showPercentFloatingCoin"] = std::bind(&FloatingCoinParent::showPercentFloatingCoin, floating_coin_parent, std::placeholders::_1);
+	myGD->V_CCPI["GIM_showAttackFloatingCoin"] = std::bind(&FloatingCoinParent::showAttackFloatingCoin, floating_coin_parent, std::placeholders::_1, std::placeholders::_2);
+	myGD->V_V["GIM_hideAllFloatingCoin"] = std::bind(&FloatingCoinParent::hideAllFloatingCoin, floating_coin_parent);
 }
 
 //class GameItemPlasma : public GameItemBase

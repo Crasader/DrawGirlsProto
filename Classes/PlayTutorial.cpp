@@ -1554,14 +1554,14 @@ void PlayTutorial::nextStep()
 						  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial7), [=]()
 										//"제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
 										{
-											LoadingLayer* t_loading = LoadingLayer::create(-9999);
-											addChild(t_loading, 9999);
-											
-											mySGD->addChangeGoods(kGoodsType_gold, mySGD->getIngameTutorialRewardGold(), "컨트롤튜토리얼보상");
-											mySGD->changeGoods([=](Json::Value result_data){
-												t_loading->removeFromParent();
-												if(result_data["result"]["code"].asInt() == GDSUCCESS)
-												{
+//											LoadingLayer* t_loading = LoadingLayer::create(-9999);
+//											addChild(t_loading, 9999);
+//											
+//											mySGD->addChangeGoods(kGoodsType_gold, mySGD->getIngameTutorialRewardGold(), "컨트롤튜토리얼보상");
+//											mySGD->changeGoods([=](Json::Value result_data){
+//												t_loading->removeFromParent();
+//												if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//												{
 													clear_condition->stopAllActions();
 													clear_condition->setVisible(true);
 													
@@ -1592,12 +1592,12 @@ void PlayTutorial::nextStep()
 																	  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
 																	  addChild(loading_tip, 999);
 																  });
-												}
-												else
-												{
-													
-												}
-											});
+//												}
+//												else
+//												{
+//													
+//												}
+//											});
 										}, CCSizeMake(350,100), ccp(0,0), 12);
 					  });
 	}

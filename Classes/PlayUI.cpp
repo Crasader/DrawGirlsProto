@@ -935,7 +935,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				IntPoint jackPoint = myGD->getJackPoint();
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
 				
-				myGD->communication("Main_goldGettingEffect", jackPosition, int(floorf((t_p-t_beforePercentage)*200.f)));
+//				myGD->communication("Main_goldGettingEffect", jackPosition, int(floorf((t_p-t_beforePercentage)*200.f)));
+				myGD->communication("GIM_showPercentFloatingCoin", t_p-t_beforePercentage);
 				
 				if(clr_cdt_type == kCLEAR_bigArea || clr_cdt_type == kCLEAR_perfect)
 				{

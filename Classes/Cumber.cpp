@@ -137,6 +137,7 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle, 
 //	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 //	mainCumber->startDamageReaction(userdata);
 	KSCumberBase* cbp = dynamic_cast<KSCumberBase*>(cb);
+	myGD->communication("GIM_showAttackFloatingCoin", cbp->getPosition(), 2);
 	return cbp->startDamageReaction(damage, angle, castCancel, stiffen);
 }
 

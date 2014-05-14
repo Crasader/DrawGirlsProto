@@ -237,6 +237,87 @@ private:
 	void myInit();
 };
 
+class FloatingCoin : public CCNode
+{
+public:
+	static FloatingCoin* create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point);
+	
+	void hideAction();
+private:
+	
+	int m_gold;
+	float moving_direction; // -180 <= ~ < 180
+	float moving_speed; // 2 <= ~ < 5
+	
+	int ing_frame;
+	bool is_locked;
+	IntPoint locked_point;
+	int absorb_frame;
+	
+	int keeping_count;
+	
+	CCSprite* coin_img;
+	
+	float start_speed;
+	
+	void onLock();
+	void startAsLonging();
+	void asLonging();
+	
+	bool isAsLong();
+	
+	void startAbsorbChecking();
+	void absorbChecking();
+	void startFloating();
+	void floating();
+	
+	void startTing();
+	void ting();
+	
+	function<void(CCPoint)> take_func;
+	void takeIt();
+	
+	void myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point);
+};
+
+class FloatingCoinCreator : public CCNode
+{
+public:
+	static FloatingCoinCreator* create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point);
+	
+private:
+	int m_frame;
+	int m_count;
+	int m_gold;
+	CCPoint start_point;
+	int ing_frame;
+	int ing_count;
+	CCNode* add_parent;
+	function<void(CCPoint)> take_func;
+	
+	void startCreate();
+	void creating();
+	void myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point);
+};
+
+class FloatingCoinParent : public CCNode
+{
+public:
+	static FloatingCoinParent* create(function<void(CCPoint)> t_take_func);
+	
+	void showPercentFloatingCoin(float t_percent);
+	void showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count);
+	void hideAllFloatingCoin();
+	
+private:
+	CCNode* coin_node;
+	CCNode* creator_node;
+	
+	function<void(CCPoint)> take_func;
+	
+	void myInit(function<void(CCPoint)> t_take_func);
+};
+
 class GameItemManager : public CCNode, public CCBAnimationManagerDelegate
 {
 public:
@@ -263,6 +344,7 @@ private:
 	CCNode* coin_parent;//change coin
 	FeverCoinParent* fever_coin_parent;
 //	CCSpriteBatchNode* take_item_effects;
+	FloatingCoinParent* floating_coin_parent;
 	deque<CCSprite*> effect_que;
 	
 	bool is_on_addTime;
