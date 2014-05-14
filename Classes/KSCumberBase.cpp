@@ -17,10 +17,6 @@ template <class _Tp>
 struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
 {
 	virtual _Tp operator()(const _Tp& a, const _Tp& b) const = 0;//(const _Tp& a, const _Tp& b) const
-	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
-	//	{
-	//		return __x*(1 - __y);
-	//	}
 };
 
 template <class _Tp>
@@ -30,10 +26,6 @@ struct DecreaseOp : public PassiveOp<_Tp>
 	{
 		return a*(1 - b);
 	}
-	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
-	//	{
-	//		return __x*(1 - __y);
-	//	}
 };
 
 
@@ -49,10 +41,6 @@ struct SubtractOp : public PassiveOp<_Tp>
 	{
 		return a - b;
 	}
-	//	_Tp operator()(const _Tp& __x, const _Tp& __y) const
-	//	{
-	//		return __x*(1 - __y);
-	//	}
 };
 
 
@@ -74,27 +62,19 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 				if(myGD->mapState[t_p.x+k][t_p.y+l] == mapOldget)		myGD->mapState[t_p.x+k][t_p.y+l] = mapOldline;
 			}
 		}
-		//		myGD->communication("EP_crashed");
 		myGD->communication("MFP_createNewFragment", t_p);
 		myGD->communication("VS_divideRect", t_p);
 	}
 	
 	if(jackPoint.x == t_p.x && jackPoint.y == t_p.y)
 	{
-		//			showEmotion(kEmotionType_fun);
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-		//			if(isFuryMode) //##
-		//				furyModeOff();
 	}
 	
 	if(t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
 	{
-		//					myGD->communication("PM_pathChainBomb", t_p);
-		
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		myGD->communication("Main_showLineDiePosition", t_p);
-		//			if(isFuryMode) //##
-		//				furyModeOff();
 	}
 }
 
@@ -102,18 +82,13 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 void KSCumberBase::randomMoving(float dt)
 {
 	m_scale.timer += 1/60.f;
-	
-
-	
 	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
-		//                setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
 	}
 	CCPoint afterPosition;
 	IntPoint afterPoint;
-	//        int check_loop_cnt = 0;
 	
 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
 	{
@@ -122,8 +97,6 @@ void KSCumberBase::randomMoving(float dt)
 		{
 			m_directionAngleDegree += m_well512.GetValue(-4, +4);
 		}
-		
-		
 		int sela = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
 		if(sela == 0)
 		{
@@ -461,11 +434,9 @@ void KSCumberBase::followMoving(float dt)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
-		//		setCumberSize(MIN(1.0, getCumberSize() + scale.SCALE_ADDER));
 	}
 	CCPoint afterPosition;
 	IntPoint afterPoint;
-	//	int check_loop_cnt = 0;
 	
 	float dx, dy;
 	dx = dy = 0;
@@ -474,39 +445,12 @@ void KSCumberBase::followMoving(float dt)
 		if(m_follow.timer - m_follow.lastMapCollisionTime > 1.f)
 		{
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
-//			CCLOG("aiValue : %d", this->getAiValue());
 			t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			float goalDegree = rad2Deg(atan2(t.y, t.x));
 			float deltaDegree = (goalDegree - m_follow.followDegree)/1.f;
-			//m_follow.followDegree += deltaDegree;
-//			CCLOG("%f", deltaDegree);
 			m_follow.followDegree += clampf(deltaDegree, -5, 5);
-			//m_fo
-			//if(deltaDegree < 0)
-			//{
-				//m_follow.followDegree += MAX(-3, deltaDegree);
-			//}
-			//else
-			//{
-				//m_follow.followDegree += MIN(3, deltaDegree);
-			//}	
-			//float varRad = deg2Rad(m_follow.followDegree);
 			dx = getSpeed() * cos(deg2Rad(m_follow.followDegree)) * 2.f;
 			dy = getSpeed() * sin(deg2Rad(m_follow.followDegree)) * 2.f;
-			//ProbSelector ps = {this->getAiValue(), 125 - this->getAiValue()};
-			//int result = ps.getResult();
-			//if(result == 0)
-			//{
-				//t = ip2ccp(myGD->getJackPoint()) - getPosition();
-				//dx = getSpeed() * cos(atan2(t.y, t.x));
-				//dy = getSpeed() * sin(atan2(t.y, t.x));
-			//}
-			//else 
-			//{
-				//t = ccp(m_well512.GetFloatValue(-1, 1), m_well512.GetFloatValue(-1, 1));
-				//dx = getSpeed() * cos(atan2(t.y, t.x)) * 2.f;
-				//dy = getSpeed() * sin(atan2(t.y, t.x)) * 2.f;
-			//}
 		}
 		else
 		{
@@ -603,12 +547,8 @@ void KSCumberBase::followMoving(float dt)
 				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 								
-				//			CCLOG("collision!!");
-				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
-				//									callfuncI_selector(MetalSnake::showEmotion)); //##
-				
 			}
 			
 			else if(collisionCode == kCOLLISION_NONE)
@@ -766,7 +706,6 @@ void KSCumberBase::rightAngleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_OUTLINE)
 			{
-				//			CCLOG("collision!!");
 				m_crashCount++;
 				onceOutlineAndMapCollision = true;
 				m_directionAngleDegree += 180;
@@ -774,11 +713,8 @@ void KSCumberBase::rightAngleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				//			CCLOG("collision!!");
-				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("SW_createSW", checkPosition);
-				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				int changeDirection = m_well512.GetValue(3);
 				
@@ -1195,161 +1131,6 @@ void KSCumberBase::snakeMoving(float dt)
 
 void KSCumberBase::earthwarmMoving(float dt)
 {
-//	m_scale.timer += 1/60.f;
-//	if(m_scale.timer - m_earthwarm.lastChangeDirectionTime >= 3/60.f) // 3 프레임 이상 차이 나면 다시 설정.
-//	{
-//		m_earthwarm.setRelocation(m_well512);
-//	}
-//	
-//	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
-//	{
-//		m_scale.collisionCount = 0;
-//		m_scale.collisionStartTime = m_scale.timer;
-//	}
-//	CCPoint afterPosition;
-//	IntPoint afterPoint;
-//	//	int check_loop_cnt = 0;
-//	
-//	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
-//	{
-//		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
-//		{
-//			// m_snake 변수를 재지정 ...
-//			m_earthwarm.setRelocation(m_well512);	
-//		}
-//	}
-//	
-//	bool validPosition = false;
-//	int cnt = 0;
-//	bool onceOutlineAndMapCollision = false;
-//	bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
-//	while(!validPosition)
-//	{
-//		cnt++;
-//		
-//		float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
-//															pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
-//		
-//		// 쿰버위치에서 센터 위치까지의 각도.
-//		
-//		float theta = atan2f(m_snake.relocationPosition.y - m_snake.centerPosition.y,
-//												 m_snake.relocationPosition.x - m_snake.centerPosition.x);
-//		
-//		float a = circleRadius;
-//		float b = a * m_snake.shortRadianRatio;
-//		afterPosition = ccp(m_snake.centerPosition.x + a * cos(theta) * cos(m_snake.angleRad) - b * sin(theta) * sin(m_snake.angleRad),
-//												m_snake.centerPosition.y + a * cos(m_snake.angleRad) * sin(theta) + b * sin(m_snake.angleRad) * cos(theta));
-//		afterPoint = ccp2ip(afterPosition);
-//		IntPoint checkPosition;
-//		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-//		if(m_state != kCumberStateFury)
-//		{
-//			if(collisionCode == kCOLLISION_JACK)
-//			{
-//				// 즉사 시킴.
-//				validPosition = true;
-//				if(myGD->getJackState() != jackStateNormal)
-//					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-//			}
-//			else if(collisionCode == kCOLLISION_MAP)
-//			{
-//				m_crashCount++;
-//				onceOutlineAndMapCollision = true;
-//				m_snake.setRelocation(getPosition(), m_well512);
-//			}
-//			else if(collisionCode == kCOLLISION_OUTLINE)
-//			{
-//				m_crashCount++;
-//				//			CCLOG("collision!!");
-//				onceOutlineAndMapCollision = true;
-//				// m_snake 변수를 재지정 ...
-//				m_snake.setRelocation(getPosition(), m_well512);
-//				
-//			}
-//			else if(collisionCode == kCOLLISION_NEWLINE)
-//			{
-//				//			CCLOG("collision!!");
-//				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-//				myGD->communication("SW_createSW", checkPosition);
-//				//									callfuncI_selector(MetalSnake::showEmotion)); //##
-//				
-//				// m_snake 변수를 재지정 ...
-//				m_snake.setRelocation(getPosition(), m_well512);
-//			}
-//			
-//			else if(collisionCode == kCOLLISION_NONE)
-//			{
-//				validPosition = true;
-//			}
-//			else
-//			{
-//				validPosition = true;
-//			}
-//		}
-//		else
-//		{
-//			if(collisionCode == kCOLLISION_OUTLINE)
-//			{
-//				m_crashCount++;
-//				// m_snake 변수를 재지정 ...
-//				m_snake.setRelocation(getPosition(), m_well512);
-//			}
-//			else
-//			{
-//				validPosition = true;
-//			}
-//
-//			if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
-//			{
-//				crashMapForPosition(afterPosition);
-//			}
-//		}
-//		if(cnt >= 3)
-//			CCLOG("snakeMoving cnt !! = %d", cnt);
-//		if(cnt >= 30)
-//		{
-//			pathFound = false;
-//			validPosition = true;
-//		}
-//		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
-//		{
-//			validPosition = true;
-//		}
-//	}
-//	
-//	//	CCLOG("cnt outer !! = %d", cnt);
-//	
-//	
-//	
-// 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
-//	{
-//		if(pathFound)
-//		{
-//			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
-//																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
-//			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
-//			
-//			//		CCLOG("%f %f", afterPosition.x, afterPosition.y);
-//			setPosition(afterPosition);
-//		}
-//		
-//	}
-//	if(onceOutlineAndMapCollision)
-//	{
-//		if(m_scale.collisionCount == 0)
-//		{
-//			m_scale.collisionStartTime = m_scale.timer;
-//			
-//		}
-//		m_scale.collisionCount++;
-//		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
-//		{
-//			CCLOG("decrese Size !!");
-//			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
-//		}
-//	}
-//	
-//	m_snake.lastMovingTime = m_scale.timer;
 }
 void KSCumberBase::rushMoving(float dt)
 {
@@ -1379,11 +1160,6 @@ void KSCumberBase::rushMoving(float dt)
 		else 
 		{
 			// 오직 벽에 의해서만 튕기도록함.
-			//int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
-			//if(changeDirection == 0)
-			//{
-				//m_directionAngleDegree += m_well512.GetValue(0, 360);
-			//}
 		}
 
 	}
@@ -1510,20 +1286,11 @@ n<m 인 부수기 공격은 m초 안에는 안함.
  * */
 void KSCumberBase::cumberAttack(float dt)
 {
-	//	myJack->get
-	
-
-	
-	//if(m_slience || myGD->Fcommunication("UI_getMapPercentage") < 0.05f) // 침묵 상태이거나 5% 이하면 공격 ㄴㄴ...
-	//{
-		//return;
-	//}
 	bool attackCondition = m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f; // 공격할 조건.
 	if(m_slience || !attackCondition || (m_state & kCumberStateAttack)) // 공격 못하는 조건이라면 패스.
 	{
 		return;
 	}
-	//	CCLOG("%f %f %d", distance, gainPercent, m_crashCount);
 	bool crashAttack = false;
 	bool distanceFury = false; // 거리로 인한 분노인가.
 	
@@ -1911,12 +1678,6 @@ void KSCumberBase::speedAdjustment(float dt)
 																	[=](int w){
 																		return w >= m_frameCount - considerFrames;
 																	}), maxCre);
-	//static int t = 0;
-	//t++;
-	//if(t % 60)
-	//{
-		//myGD->communication("Main_showTextMessage", boost::str(boost::format("%||") % cntPerSecond));
-	//}
 	float baseSpeed = m_maxSpeed;
 	float finalSpeed = m_maxSpeed - (cntPerSecond) * (m_maxSpeed - m_minSpeed) / maxCre;
 	m_speed = clampf(finalSpeed, m_minSpeed, m_maxSpeed);
@@ -1939,9 +1700,6 @@ void KSCumberBase::selfHealing(float dt)
 bool KSCumberBase::startDamageReaction(float damage, float angle, bool castCancel, bool stiffen)
 {
 	m_damagedFrames.push_back(m_frameCount);
-	//	float t = (m_maxSpeed - m_minSpeed) * 0.3f;
-	//	m_speed = MAX(m_speed - t, m_minSpeed);
-	//	m_speed.init(m_speed, to, 0.1f);
 	return true; // 의미없음.
 }
 
@@ -1964,8 +1722,8 @@ void KSCumberBase::bossDieBomb(float dt)
 		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi");
 		KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		CCPoint t = getPosition();
-		t.x += m_well512.GetFloatValue(-100.f, 100.f);
-		t.y += m_well512.GetFloatValue(-100.f, 100.f);
+		t.x += ks19937::getFloatValue(-100.f, 100.f); // m_well512.GetFloatValue(-100.f, 100.f);
+		t.y += ks19937::getFloatValue(-100.f, 100.f); 
 		ret.first->setPosition(t);
 		getParent()->addChild(ret.first, 11);
 		
@@ -1984,24 +1742,8 @@ void KSCumberBase::bossDieBomb(float dt)
 
 void KSCumberBase::getRandomPositionToJack(IntPoint* ip, bool* finded)
 {
-	//	chrono::time_point<chrono::system_clock> start, end;
-	//	start = chrono::system_clock::now();
-	//	chrono::duration<double> elapsed_seconds;
-	//	start = chrono::system_clock::now();
 	bool isGoodPointed = false;
 	IntPoint jackPoint = myGD->getJackPoint();
-	//	auto comp1 = [jackPoint](const IntPoint& a, const IntPoint& b ) {
-	//		auto _a = (jackPoint - a).length();
-	//		auto _b = (jackPoint - b).length();
-	//		if(_a < 50)
-	//			return false;
-	////		if(_b < 50)
-	////			_b = 99999999;
-	//		return _a > _b;
-	//	};
-	//	priority_queue<IntPoint, std::vector<IntPoint>, decltype(comp1) > shuffledPositions(comp1);
-	//	std::vector<IntPoint>
-	//	priority_queue<IntPoint> shuffledPositions;
 	IntPoint mapPoint;
 	vector<IntPoint> shuffledPositions;
 	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x+=5)
@@ -2012,25 +1754,15 @@ void KSCumberBase::getRandomPositionToJack(IntPoint* ip, bool* finded)
 				shuffledPositions.push_back(IntPoint(x, y));
 		}
 	}
-	//	end = chrono::system_clock::now();
-	//	KS::KSLog("s1 %", chrono::duration_cast<chrono::milliseconds>(end - start).count());
-	//	start = chrono::system_clock::now();
 	std::sort(shuffledPositions.begin(), shuffledPositions.end(), [jackPoint](const IntPoint& a, const IntPoint& b ) {
 		auto _a = (jackPoint - a).length();
 		auto _b = (jackPoint - b).length();
 		
 		if(_a < 35)
 			return false;
-		////		if(_b < 50)
-		////			_b = 99999999;
 		return _a < _b;
 	});
 	
-	//	end = chrono::system_clock::now();
-	//	KS::KSLog("s2 %", chrono::duration_cast<chrono::milliseconds>(end - start).count());
-	//	random_shuffle(shuffledPositions.begin(), shuffledPositions.end(), [=](int n){
-	//		return this->m_well512.GetValue(n-1);
-	//	});
 	int retryLimit = 5;
 	auto copiedObject = shuffledPositions;
 	
@@ -2180,22 +1912,6 @@ void KSCumberBase::getRandomPosition(IntPoint* ip, bool* finded)
 
 void KSCumberBase::onJackDrawLine()
 {
-	//ProbSelector ps({getAiValue(), 100.f - getAiValue()});
-	//int r = ps.getResult();
-	//r = 0;
-	//CCLOG("%d %d", myGD->getJackPoint().x, myGD->getJackPoint().y);
-	//CCLOG("%f %f", getPosition().x, getPosition().y);
-	//CCLOG("distance = %f", ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition()));
-	//float dis = ccpLength(ip2ccp(myGD->getJackPoint()) - getPosition());
-	//dis = 100.f;
-	//if(r == 0 && dis >= 55.f) // 너무 가까우면 안따라가게 함.
-	//{
-		//m_drawMovement = FOLLOW_TYPE;
-	//}
-	//else
-	//{
-		//m_drawMovement = m_normalMovement;
-	//}
 }
 
 bool KSCumberBase::init()
@@ -2227,7 +1943,6 @@ void KSCumberBase::stopMoving()
 void KSCumberBase::setCumberState( int e )
 {
 	m_state = (CUMBER_STATE)e;
-	CCLOG("%s %d ???", __FILE__, __LINE__);
 }
 
 CUMBER_STATE KSCumberBase::getCumberState()
@@ -2271,7 +1986,6 @@ void KSCumberBase::movingAndCrash( float dt )
 	bool bossIsClosed_ = bossIsClosed();
 	if(bossIsClosed_)
 	{
-		//KS::setColor(this, ccc3(0, 255, 0));
 		//myGD->communication("Main_showTextMessage", std::string("갇힘..!!!"));
 	}
 	else
@@ -2424,7 +2138,6 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 		m_swell.totalFrame = totalFrame;
 //		auto backupState = m_state;
 		m_state = 0;
-		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 		addChild(KSGradualValue<float>::create(m_swell.scale, scale, 1.3f, 
 																					 [=](float t){
 																						 m_swell.scale = t;

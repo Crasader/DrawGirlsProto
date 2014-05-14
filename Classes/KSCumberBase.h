@@ -148,20 +148,6 @@ public:
 	
 	void setCumberState(int e);
 	CUMBER_STATE getCumberState();
-	
-	
-//	void showEmotion(EmotionType t_type)
-//	{
-//		if(mEmotion)
-//			mEmotion->selfRemove();
-//		mEmotion = Emotion::create(t_type, this, callfunc_selector(KSCumberBase::nullmEmotion));
-//		mEmotion->setPosition(ccp(30,20));
-//		addChild(mEmotion);
-//	}
-//	void nullmEmotion()
-//	{
-//		mEmotion = NULL;
-//	}
 	CCNode* getBossEye() { return NULL; }
 	void resetCastingCancelCount();
 	int getCastingCancelCount();
@@ -242,34 +228,42 @@ public:
 	{
 		assignBossData(m_properties);
 	}
+	// 보스에게 데이터 넣음
 	void assignBossData(Json::Value data);
+	// ??
 	void applyPassiveData(const std::string& passive);
+	// 오토 밸런스 적용
 	void applyAutoBalance();
+	// 분노룰 세팅
 	void settingFuryRule();
-	
-	
+	// 지능 세팅
 	void settingAI(int ai);
 	void settingSpeed(float startSpeed, float minSpeed, float maxSpeed);
 	void settingMovement(enum MOVEMENT normal, enum MOVEMENT draw, enum MOVEMENT fury);
+	// 어떤 패턴을 쓰는지 세팅함.
 	void settingPattern(Json::Value pattern);
+	// 피통 세팅.
 	void settingHp(float hp);
+	// 공격 확률 정의
 	void settingAttackPercent(float ap);
-	
-	
 	void decreaseLife(float damage);
 	float getLife();
 	void setLife(float t);
 	float getTotalLife();
 	void setTotalLife(float t);
+	// 보스가 움직이는 속도의 곱하기 값
 	void setSpeedRatio(float sr);
 	void setSlience(bool s);
 	void caughtAnimation();
 	// 보스가 갇혔으면 true
 	bool bossIsClosed();
+	// 랜덤으로 위치를 잡음.
 	void getRandomPosition(IntPoint* ip, bool* finded);
+	// 플레이어 근처로 랜덤 위치 잡음.
 	void getRandomPositionToJack(IntPoint* ip, bool* finded);
 	virtual float getRadius() = 0;
 	float aiProbAdder();
+	// 잭이 선을 그리러 나갔을 때 호출됨.
 	void onJackDrawLine();
 	int getAiValue();
 	float getAgility();
