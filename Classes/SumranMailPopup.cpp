@@ -592,7 +592,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 
-		title = CCLabelTTF::create(mail.get("sender","Evnet").asString().c_str(), mySGD->getFont().c_str(),12); // "님의"
+		title = CCLabelTTF::create(mail.get("sender","Event").asString().c_str(), mySGD->getFont().c_str(),12); // "님의"
 		title->setPosition(ccp(38,20));
 		title->setColor(ccc3(20, 0, 0));
 		title->setAnchorPoint(CCPointZero);

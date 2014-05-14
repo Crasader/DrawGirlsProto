@@ -2638,7 +2638,7 @@ void MainFlowScene::achievePopupClose()
 
 void MainFlowScene::mailPopupClose()
 {
-	countingMessage();
+	//countingMessage();
 	is_menu_enable = true;
 }
 

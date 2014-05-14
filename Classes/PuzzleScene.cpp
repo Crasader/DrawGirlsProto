@@ -1507,7 +1507,7 @@ void PuzzleScene::openSettingPopup()
 
 void PuzzleScene::mailPopupClose()
 {
-	countingMessage();
+	//countingMessage();
 	is_menu_enable = true;
 }
 
