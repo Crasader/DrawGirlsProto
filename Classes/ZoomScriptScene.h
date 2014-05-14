@@ -93,6 +93,8 @@ private:
 	CCPoint touch_p;
     long touchStartTime;
 	long first_touch_time;
+	int first_touch_p;
+	CCPoint first_touch_point;
 	CCPoint touchStart_p;
 	CCPoint moveSpeed_p;
 	float zoom_base_distance;

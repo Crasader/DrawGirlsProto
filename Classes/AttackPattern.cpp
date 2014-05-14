@@ -509,8 +509,8 @@ void Saw::myInit( CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize )
 
 	float throwAngle;
 
-	if(distance < 200)			throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%91-45)/2;
-	else						throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + (rand()%31-15)/2;
+	if(distance < 200)			throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;// + (rand()%91-45)/2;
+	else						throwAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;// + (rand()%31-15)/2;
 
 
 	ThrowObject* t_to = ThrowObject::create(t_sp, t_type, t_speed, throwAngle, t_mSize);

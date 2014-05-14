@@ -733,9 +733,18 @@ public:
 				
 				calcAlpha = (stencilData[stencil_i+3] / 255.f);
 				if(stencilData[stencil_i+3]>0){
+					
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 					stencilData[stencil_i] = originData[origin_i]*calcAlpha;
 					stencilData[stencil_i+1] = originData[origin_i+1]*calcAlpha;
 					stencilData[stencil_i+2] = originData[origin_i+2]*calcAlpha;
+					stencilData[stencil_i+3] = stencilData[stencil_i+3];
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+					stencilData[stencil_i] = originData[origin_i];
+					stencilData[stencil_i+1] = originData[origin_i+1];
+					stencilData[stencil_i+2] = originData[origin_i+2];
+					stencilData[stencil_i+3] = stencilData[stencil_i+3];
+#endif
 				}
 			}
 		}
@@ -790,9 +799,20 @@ public:
 				
 				calcAlpha = (stencilData[stencil_i+3] / 255.f);
 				if(stencilData[stencil_i+3]>0){
+					
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 					stencilData[stencil_i] = originData[origin_i]*calcAlpha;
 					stencilData[stencil_i+1] = originData[origin_i+1]*calcAlpha;
 					stencilData[stencil_i+2] = originData[origin_i+2]*calcAlpha;
+					stencilData[stencil_i+3] = stencilData[stencil_i+3];
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+					stencilData[stencil_i] = originData[origin_i];
+					stencilData[stencil_i+1] = originData[origin_i+1];
+					stencilData[stencil_i+2] = originData[origin_i+2];
+					stencilData[stencil_i+3] = stencilData[stencil_i+3];
+#endif
+
+					
 				}
 			}
 		}

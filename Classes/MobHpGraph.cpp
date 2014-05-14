@@ -61,13 +61,13 @@ void MobHpGraph::graphing ()
 }
 void MobHpGraph::realHidingAction ()
 {
-	CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
-	CCHide* t_hide1 = CCHide::create();
-	CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
-	CCHide* t_hide2 = CCHide::create();
-	
-	t_case->runAction(CCSequence::createWithTwoActions(t_delay1, t_hide1));
-	hp_progress->runAction(CCSequence::createWithTwoActions(t_delay2, t_hide2));
+//	CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+//	CCHide* t_hide1 = CCHide::create();
+//	CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
+//	CCHide* t_hide2 = CCHide::create();
+//	
+//	t_case->runAction(CCSequence::createWithTwoActions(t_delay1, t_hide1));
+//	hp_progress->runAction(CCSequence::createWithTwoActions(t_delay2, t_hide2));
 }
 void MobHpGraph::hidingAction ()
 {
@@ -77,20 +77,20 @@ void MobHpGraph::hidingAction ()
 	}
 	else
 	{
-		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
-		CCHide* t_hide1 = CCHide::create();
-		CCDelayTime* t_delay2 = CCDelayTime::create(0.2f);
-		CCShow* t_show1 = CCShow::create();
-		CCSequence* t_seq1 = CCSequence::create(t_delay1, t_hide1, t_delay2, t_show1, NULL);
-		
-		CCDelayTime* t_delay3 = CCDelayTime::create(0.5f);
-		CCHide* t_hide2 = CCHide::create();
-		CCDelayTime* t_delay4 = CCDelayTime::create(0.2f);
-		CCShow* t_show2 = CCShow::create();
-		CCSequence* t_seq2 = CCSequence::create(t_delay3, t_hide2, t_delay4, t_show2, NULL);
-		
-		t_case->runAction(t_seq1);
-		hp_progress->runAction(t_seq2);
+//		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+//		CCHide* t_hide1 = CCHide::create();
+//		CCDelayTime* t_delay2 = CCDelayTime::create(0.2f);
+//		CCShow* t_show1 = CCShow::create();
+//		CCSequence* t_seq1 = CCSequence::create(t_delay1, t_hide1, t_delay2, t_show1, NULL);
+//		
+//		CCDelayTime* t_delay3 = CCDelayTime::create(0.5f);
+//		CCHide* t_hide2 = CCHide::create();
+//		CCDelayTime* t_delay4 = CCDelayTime::create(0.2f);
+//		CCShow* t_show2 = CCShow::create();
+//		CCSequence* t_seq2 = CCSequence::create(t_delay3, t_hide2, t_delay4, t_show2, NULL);
+//		
+//		t_case->runAction(t_seq1);
+//		hp_progress->runAction(t_seq2);
 	}
 }
 void MobHpGraph::myInit (CCObject * t_target, string filename)

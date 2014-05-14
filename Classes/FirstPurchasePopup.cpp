@@ -242,16 +242,19 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	Json::Value param;
 	param["productid"] = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_pID_s, kPurchaseGuideType_firstPurchase-1); //
+	CCLOG("productid : %s", param["productid"].asString().c_str());
 	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
 		//																				KS::KSLog("in-app test \n%", v);
 		if(v["issuccess"].asInt())
 		{
+			CCLOG("FirstPurchase purchaseProduct success");
 //			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급");
 			mySGD->setUserdataIsFirstBuy(1); // true
 			requestItemDelivery();
 		}
 		else
 		{
+			CCLOG("FirstPurchase purchaseProduct fail");
 			inapp_loading->removeFromParent();
 			mySGD->clearChangeUserdata();
 			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
@@ -264,6 +267,8 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 
 void FirstPurchasePopup::requestItemDelivery()
 {
+	CCLOG("FirstPurchase requestItemDelivery try");
+	
 	vector<CommandParam> command_list;
 	
 	Json::Value transaction_param;
@@ -272,6 +277,7 @@ void FirstPurchasePopup::requestItemDelivery()
 										{
 											if(result_data["result"]["code"].asInt() == GDSUCCESS)
 											{
+												CCLOG("FirstPurchase requestItemDelivery success");
 												inapp_loading->removeFromParent();
 												
 												is_menu_enable = true;
@@ -279,6 +285,7 @@ void FirstPurchasePopup::requestItemDelivery()
 											}
 											else
 											{
+												CCLOG("FirstPurchase requestItemDelivery fail");
 												addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
 											}
 										}));
