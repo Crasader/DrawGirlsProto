@@ -17,6 +17,8 @@
 //#include "DataStorageHub.h"
 //#include "MissileDamageData.h"
 
+#define ABSORB_DISTANCE 30.f
+
 void GameItemBase::selfRemove()
 {
 	removeFromParentAndCleanup(true);
@@ -31,6 +33,21 @@ void GameItemBase::startFraming()
 void GameItemBase::framing()
 {
 	frame_cnt++;
+	
+	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
+	{
+		if(mySD->getClearCondition() == kCLEAR_itemCollect)
+			myGD->communication("UI_takeItemCollect");
+		
+		item_img->removeFromParentAndCleanup(true);
+		unschedule(schedule_selector(GameItemBase::framing));
+		
+		(target_effect->*delegate_effect)(myPoint.convertToCCP());
+		
+		acting();
+		return;
+	}
 	
 	if(getSideCount() > starting_side_cnt)
 	{
@@ -792,6 +809,31 @@ bool ExchangeCoin::isLocked()
 
 void ExchangeCoin::moving()
 {
+	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
+	{
+		stopMoving();
+		
+		back_img = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", myType)->getCString());
+		back_img->setVisible(false);
+		back_img->setScale(1.f/myGD->game_scale);
+		back_img->setPosition(CCPointZero);
+		addChild(back_img);
+		
+		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.05f, 0.2f, 0, 0, 90, 0, 0);
+		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::changeBack));
+		CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.05f, 0.2f, 0, -90, 90, 0, 0);
+		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::changeFront));
+		CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
+		CCRepeat* t_repeat = CCRepeat::create(t_seq, 10);
+		CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::endTakeAction));
+		CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_repeat, t_call3);
+		
+		runAction(t_seq2);
+		
+		return;
+	}
+	
 	if(myGD->mapState[myPoint.x][myPoint.y] != mapEmpty &&
 	   myGD->mapState[myPoint.x-1][myPoint.y] != mapEmpty &&
 	   myGD->mapState[myPoint.x+1][myPoint.y] != mapEmpty &&
@@ -1158,7 +1200,7 @@ void FloatingCoin::absorbChecking()
 	// 주변에 캐릭터 있는지 체크
 	
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
-	if(getPosition().getDistanceSq(jack_position) < 30)
+	if(getPosition().getDistanceSq(jack_position) < ABSORB_DISTANCE)
 	{
 		takeIt();
 		return;
