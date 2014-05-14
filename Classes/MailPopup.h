@@ -65,7 +65,8 @@ enum class MailFilter
 	kTicket,
 	kInvite,
 	kNews,
-	kUnknownFriendRequest
+	kUnknownFriendRequest,
+	kGift
 };
 class MailPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate
 {

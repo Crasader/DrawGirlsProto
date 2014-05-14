@@ -242,7 +242,8 @@ enum MessageRecvType
 	kTicketResult = 7,
 	kInvite,
 	kNews,
-	kUnknownFriendRequest
+	kUnknownFriendRequest,
+	kGift
 };
 #define SHOP_KEY	0xD9
 
