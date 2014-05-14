@@ -1507,7 +1507,7 @@ void PuzzleScene::openSettingPopup()
 
 void PuzzleScene::mailPopupClose()
 {
-	countingMessage();
+	//countingMessage();
 	is_menu_enable = true;
 }
 
@@ -2289,45 +2289,21 @@ void PuzzleScene::setTop()
 void PuzzleScene::countingMessage()
 {
 	postbox_count_case->setVisible(false);
-	
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getSocialID();
-	p["type"]=0; // 모든 타입의 메시지를 받겠다는 뜻.
-	p["limitDay"] = mySGD->getMsgRemoveDay();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	
-	hspConnector::get()->command("getmessagelist",p,[this](Json::Value r)
-								 {
-									 GraphDogLib::JsonToLog("getmessagelist", r);
-									 if(r["result"]["code"].asInt() != GDSUCCESS)
-										 return;
-									 Json::Value message_list = r["list"];
-									 if(message_list.size() > 0)
-									 {
-										 postbox_count_case->setVisible(true);
-										 
-//										 if(message_list.size() < 10)
-//										 {
-//											 postbox_count_label->setFontSize(10);
-//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-//										 }
-//										 else if(message_list.size() < 100)
-//										 {
-//											 postbox_count_label->setFontSize(7);
-//											 postbox_count_label->setString(CCString::createWithFormat("%d", message_list.size())->getCString());
-//										 }
-//										 else
-//										 {
-//											 postbox_count_label->setFontSize(8);
-//											 postbox_count_label->setString("...");
-//										 }
-									 }
-									 else
-									 {
-										 postbox_count_case->setVisible(false);
-//										 postbox_count_label->setString("0");
-									 }
-								 });
+	//USE GETMESSAGELIST
+	hspConnector::get()->command("checkgiftboxhistory",p,[this](Json::Value r)
+															 {
+																 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
+																 
+																 if(r["result"]["code"].asInt() != GDSUCCESS)
+																	 return;
+																 
+																 postbox_count_case->setVisible(r.get("haveNewGift", false).asBool());
+																 
+															 });
 }
 
 void PuzzleScene::countingAchievement()
