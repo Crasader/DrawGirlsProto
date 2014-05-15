@@ -39,13 +39,15 @@
 										<dict>
 											<key>easing</key>
 											<dict>
+												<key>opt</key>
+												<real>2</real>
 												<key>type</key>
-												<integer>1</integer>
+												<integer>4</integer>
 											</dict>
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>0.40000000596046448</real>
+											<real>0.36666667461395264</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -60,7 +62,7 @@
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>0.73333334922790527</real>
+											<real>0.66666668653488159</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -69,8 +71,10 @@
 										<dict>
 											<key>easing</key>
 											<dict>
+												<key>opt</key>
+												<real>2</real>
 												<key>type</key>
-												<integer>1</integer>
+												<integer>4</integer>
 											</dict>
 											<key>name</key>
 											<string>opacity</string>
@@ -178,15 +182,18 @@
 								<string>Blendmode</string>
 								<key>value</key>
 								<array>
-									<integer>770</integer>
+									<integer>1</integer>
 									<integer>1</integer>
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
+						<key>animatedProperties</key>
+						<dict>
+							<key>0</key>
+							<dict/>
+						</dict>
 						<key>baseClass</key>
 						<string>CCSprite</string>
 						<key>children</key>
@@ -460,7 +467,7 @@
 								<string>Blendmode</string>
 								<key>value</key>
 								<array>
-									<integer>775</integer>
+									<integer>1</integer>
 									<integer>1</integer>
 								</array>
 							</dict>
@@ -680,7 +687,7 @@
 								<string>Blendmode</string>
 								<key>value</key>
 								<array>
-									<integer>775</integer>
+									<integer>1</integer>
 									<integer>1</integer>
 								</array>
 							</dict>
@@ -908,7 +915,7 @@
 								<string>Blendmode</string>
 								<key>value</key>
 								<array>
-									<integer>775</integer>
+									<integer>1</integer>
 									<integer>1</integer>
 								</array>
 							</dict>
@@ -1136,7 +1143,7 @@
 								<string>Blendmode</string>
 								<key>value</key>
 								<array>
-									<integer>775</integer>
+									<integer>1</integer>
 									<integer>1</integer>
 								</array>
 							</dict>
