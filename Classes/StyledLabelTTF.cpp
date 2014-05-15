@@ -280,8 +280,10 @@ void StyledLabelTTF::setStringByTag(const char* text){
 		
 		//닫는태그처리
 		if(isSameStringAtIndex(str, i,"</")){
-			
-			
+			i++;
+			while (str[i]!='>') {
+				i++;
+			}
 		//태그시작
 		}else if(str[i]=='<'){
 			//1.태그이름 뽑기
