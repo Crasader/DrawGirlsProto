@@ -24,9 +24,9 @@ void OnePercentGacha::myInit (CCObject * t_cancel, SEL_CallFunc d_cancel, CCObje
 {
 	recent_percent = t_recent_percent;
 	
-	recent_percent*=10.f;
+	recent_percent*=1000.f;
 	recent_percent = floor(recent_percent);
-	recent_percent/=10.f;
+	recent_percent/=1000.f;
 	
 	target_cancel = t_cancel;
 	delegate_cancel = d_cancel;

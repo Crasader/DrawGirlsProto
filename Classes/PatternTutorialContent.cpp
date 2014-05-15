@@ -10,6 +10,10 @@
 #include "CCMenuLambda.h"
 #include "KSUtil.h"
 #include "DataStorageHub.h"
+#include "StarGoldData.h"
+#include "KSLabelTTF.h"
+#include "MyLocalization.h"
+#include "CommonButton.h"
 
 PatternTutorialContent* PatternTutorialContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_pattern_list)
 {
@@ -44,10 +48,16 @@ void PatternTutorialContent::menuAction(CCObject* sender)
 	}
 	else
 	{
+		CCNode* add_parent = show_content->getParent();
+		CCPoint add_position = show_content->getPosition();
+		
 		show_content->removeFromParent();
 		show_content = CCSprite::create(CCString::createWithFormat("pattern%d_tutorial.png", pattern_list[ing_close_cnt])->getCString());
-		show_content->setPosition(ccp(0, -9));
-		show_node->addChild(show_content);
+		show_content->setPosition(add_position);
+		add_parent->addChild(show_content);
+		
+		pattern_title->setString(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))));
+		pattern_content->setString(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))));
 		
 		addChild(KSTimer::create(0.5f, [=](){is_menu_enable = true;}));
 	}
@@ -67,17 +77,50 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	for(int i=0;i<t_pattern_list.size();i++)
 		pattern_list.push_back(t_pattern_list[i]);
 	
-	CCSprite* case_back = CCSprite::create("pattern_tutorial_back.png");
+	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	case_back->setContentSize(CCSizeMake(275, 210));
 	case_back->setPosition(CCPointZero);
 	show_node->addChild(case_back);
 	
+	CCSprite* warning_img = CCSprite::create("ui_warning.png");
+	warning_img->setPosition(ccp(15+warning_img->getContentSize().width/2.f, case_back->getContentSize().height-25));
+	case_back->addChild(warning_img);
+	
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newBossPattern), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setAnchorPoint(ccp(0,0.5f));
+	title_label->setPosition(ccp(warning_img->getContentSize().width+10, warning_img->getContentSize().height/2.f));
+	warning_img->addChild(title_label);
+	
+	CommonButton* close_button = CommonButton::createCloseButton(0);
+	close_button->setPosition(ccp(case_back->getContentSize().width/2.f-22, case_back->getContentSize().height/2.f-22));
+	close_button->setEnabled(false);
+	show_node->addChild(close_button);
+	
+	CCScale9Sprite* case_in = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	case_in->setContentSize(CCSizeMake(260, 100));
+	case_in->setPosition(ccp(case_back->getContentSize().width/2.f,case_back->getContentSize().height/2.f+10));
+	case_back->addChild(case_in);
+	
 	ing_close_cnt = 0;
+	
+	pattern_title = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))), mySGD->getFont().c_str(), 17.5f);
+	pattern_title->setColor(ccc3(255, 170, 20));
+	pattern_title->setAnchorPoint(ccp(0,0.5f));
+	pattern_title->setPosition(ccp(15, 50));
+	case_back->addChild(pattern_title);
+	
+	pattern_content = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))), mySGD->getFont().c_str(), 12);
+	pattern_content->setAnchorPoint(ccp(0,0.5f));
+	pattern_content->setPosition(ccp(15, 25));
+	case_back->addChild(pattern_content);
+	
 	
 	show_content = CCSprite::create(CCString::createWithFormat("pattern%d_tutorial.png", pattern_list[ing_close_cnt])->getCString());
 	if(show_content)
 	{
-		show_content->setPosition(ccp(0, -9));
-		show_node->addChild(show_content);
+		show_content->setPosition(ccp(case_in->getContentSize().width/2.f, case_in->getContentSize().height/2.f));
+		case_in->addChild(show_content);
 	}
 	
 	CCSprite* n_close = CCSprite::create("whitePaper.png");
@@ -100,4 +143,130 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 				is_menu_enable = true;}));}));}));
 	
 	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(show_node, t);}, [=](int t){KS::setOpacity(show_node, 255);}));
+}
+
+int PatternTutorialContent::getTitleLocalKeyForPatternNumber(int t_pattern)
+{
+	int return_value = 0;
+	if(t_pattern == 9)
+		return_value = kMyLocalKey_warning9;
+	else if(t_pattern == 105)
+		return_value = kMyLocalKey_warning105;
+	else if(t_pattern == 106)
+		return_value = kMyLocalKey_warning106;
+	else if(t_pattern == 107)
+		return_value = kMyLocalKey_warning107;
+	else if(t_pattern == 108)
+		return_value = kMyLocalKey_warning108;
+	else if(t_pattern == 109)
+		return_value = kMyLocalKey_warning109;
+	else if(t_pattern == 110)
+		return_value = kMyLocalKey_warning110;
+	else if(t_pattern == 111)
+		return_value = kMyLocalKey_warning111;
+	else if(t_pattern == 112)
+		return_value = kMyLocalKey_warning112;
+	else if(t_pattern == 113)
+		return_value = kMyLocalKey_warning113;
+	else if(t_pattern == 1001)
+		return_value = kMyLocalKey_warning1001;
+	else if(t_pattern == 1002)
+		return_value = kMyLocalKey_warning1002;
+	else if(t_pattern == 1003)
+		return_value = kMyLocalKey_warning1003;
+	else if(t_pattern == 1004)
+		return_value = kMyLocalKey_warning1004;
+	else if(t_pattern == 1005)
+		return_value = kMyLocalKey_warning1005;
+	else if(t_pattern == 1006)
+		return_value = kMyLocalKey_warning1006;
+	else if(t_pattern == 1007)
+		return_value = kMyLocalKey_warning1007;
+	else if(t_pattern == 1008)
+		return_value = kMyLocalKey_warning1008;
+	else if(t_pattern == 1009)
+		return_value = kMyLocalKey_warning1009;
+	else if(t_pattern == 1010)
+		return_value = kMyLocalKey_warning1010;
+	else if(t_pattern == 1011)
+		return_value = kMyLocalKey_warning1011;
+	else if(t_pattern == 1012)
+		return_value = kMyLocalKey_warning1012;
+	else if(t_pattern == 1013)
+		return_value = kMyLocalKey_warning1013;
+	else if(t_pattern == 1014)
+		return_value = kMyLocalKey_warning1014;
+	else if(t_pattern == 1015)
+		return_value = kMyLocalKey_warning1015;
+	else if(t_pattern == 1016)
+		return_value = kMyLocalKey_warning1016;
+	else if(t_pattern == 1017)
+		return_value = kMyLocalKey_warning1017;
+	else if(t_pattern == 1018)
+		return_value = kMyLocalKey_warning1018;
+	
+	return return_value;
+}
+
+int PatternTutorialContent::getContentLocalKeyForPatternNumber(int t_pattern)
+{
+	int return_value = 0;
+	if(t_pattern == 9)
+		return_value = kMyLocalKey_patternContent9;
+	else if(t_pattern == 105)
+		return_value = kMyLocalKey_patternContent105;
+	else if(t_pattern == 106)
+		return_value = kMyLocalKey_patternContent106;
+	else if(t_pattern == 107)
+		return_value = kMyLocalKey_patternContent107;
+	else if(t_pattern == 108)
+		return_value = kMyLocalKey_patternContent108;
+	else if(t_pattern == 109)
+		return_value = kMyLocalKey_patternContent109;
+	else if(t_pattern == 110)
+		return_value = kMyLocalKey_patternContent110;
+	else if(t_pattern == 111)
+		return_value = kMyLocalKey_patternContent111;
+	else if(t_pattern == 112)
+		return_value = kMyLocalKey_patternContent112;
+	else if(t_pattern == 113)
+		return_value = kMyLocalKey_patternContent113;
+	else if(t_pattern == 1001)
+		return_value = kMyLocalKey_patternContent1001;
+	else if(t_pattern == 1002)
+		return_value = kMyLocalKey_patternContent1002;
+	else if(t_pattern == 1003)
+		return_value = kMyLocalKey_patternContent1003;
+	else if(t_pattern == 1004)
+		return_value = kMyLocalKey_patternContent1004;
+	else if(t_pattern == 1005)
+		return_value = kMyLocalKey_patternContent1005;
+	else if(t_pattern == 1006)
+		return_value = kMyLocalKey_patternContent1006;
+	else if(t_pattern == 1007)
+		return_value = kMyLocalKey_patternContent1007;
+	else if(t_pattern == 1008)
+		return_value = kMyLocalKey_patternContent1008;
+	else if(t_pattern == 1009)
+		return_value = kMyLocalKey_patternContent1009;
+	else if(t_pattern == 1010)
+		return_value = kMyLocalKey_patternContent1010;
+	else if(t_pattern == 1011)
+		return_value = kMyLocalKey_patternContent1011;
+	else if(t_pattern == 1012)
+		return_value = kMyLocalKey_patternContent1012;
+	else if(t_pattern == 1013)
+		return_value = kMyLocalKey_patternContent1013;
+	else if(t_pattern == 1014)
+		return_value = kMyLocalKey_patternContent1014;
+	else if(t_pattern == 1015)
+		return_value = kMyLocalKey_patternContent1015;
+	else if(t_pattern == 1016)
+		return_value = kMyLocalKey_patternContent1016;
+	else if(t_pattern == 1017)
+		return_value = kMyLocalKey_patternContent1017;
+	else if(t_pattern == 1018)
+		return_value = kMyLocalKey_patternContent1018;
+	
+	return return_value;
 }

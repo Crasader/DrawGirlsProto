@@ -95,7 +95,7 @@ void StyledLabelTTF::updateTexture()
 			ttf->setAnchorPoint(ccp(0.f, 0.5f));
 			ttf->setPosition(ccp(m_currentPosition, m_currentLinePosition));
 			unsigned long fillColor = jsonStyle.get("fillcolor", 0).asUInt();
-			ttf->setFontFillColor(ccc3(getRed(fillColor), getGreen(fillColor), getBlue(fillColor)));
+			ttf->setColor(ccc3(getRed(fillColor), getGreen(fillColor), getBlue(fillColor)));
 			ttf->setTag(jsonStyle.get("tag", 0).asInt());
 			m_currentPosition += ttf->getContentSize().width;
 			m_oneLineSize += ttf->getContentSize().width;

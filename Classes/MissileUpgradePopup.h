@@ -34,6 +34,8 @@ private:
 	
 	TouchSuctionLayer* suction;
 	
+	CCSprite* gray;
+	
 	CCNode* m_container;
 	CCScale9Sprite* back_case;
 	KSLabelTTF* missile_data_level;

@@ -1487,12 +1487,13 @@ void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 	float t_d = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f;
 	
 	int t_coin_count = roundf(t_percent/t_d);
-	
-	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), myGD->getJackPoint().convertToCCP()));
+	if(t_coin_count > 0)
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), myGD->getJackPoint().convertToCCP()));
 }
 void FloatingCoinParent::showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count)
 {
-	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), t_target_point));
+	if(t_coin_count > 0)
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), t_target_point));
 }
 void FloatingCoinParent::hideAllFloatingCoin()
 {

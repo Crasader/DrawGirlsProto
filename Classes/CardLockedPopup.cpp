@@ -15,6 +15,7 @@
 #include "MyLocalization.h"
 #include "AudioEngine.h"
 #include "StyledLabelTTF.h"
+#include "CommonButton.h"
 
 CardLockedPopup* CardLockedPopup::create(int t_touch_priority, function<void()> t_end_func, int t_step)
 {
@@ -40,37 +41,63 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-	back_case->setContentSize(CCSizeMake(270,180));
+	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+	back_case->setContentSize(CCSizeMake(230,120));
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
+	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_in->setContentSize(CCSizeMake(220, 80));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-15));
+	back_case->addChild(back_in);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_cardLockedTitle), t_step)->getCString(), mySGD->getFont().c_str(), 21);
-	title_label->setColor(ccc3(50, 250, 255));
-	title_label->setPosition(ccp(0,50));
+	
+	KSLabelTTF* title_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_cardLockedTitle), t_step)->getCString(), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255,170,20));
+	title_label->setAnchorPoint(ccp(0, 0.5f));
+	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,37));
 	m_container->addChild(title_label);
 	
 	
-	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_cardLockedMent1+t_step-1)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-	slttf->setPosition(ccp(0,15));
+	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_cardLockedMent1+t_step-1)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kLeftAlignment);
+	slttf->setPosition(ccp(-back_case->getContentSize().width/2.f+19,5));
 	m_container->addChild(slttf);
 	
 	if(t_step == 1 || t_step == 3)
 	{
-		slttf->setPosition(ccp(0,10));
+		slttf->setPosition(ccp(-back_case->getContentSize().width/2.f+19,-14));
+	}
+	else
+	{
+		float distance = 21.f;
+		CCPoint base_position = ccp(-back_case->getContentSize().width/2.f+32, -35);
+		for(int i=1;i<=6;i++)
+		{
+			CCSprite* change_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", i)->getCString());
+			change_img->setPosition(base_position + ccp(distance*(i-1),0));
+			m_container->addChild(change_img);
+		}
 	}
 	
 	
-	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
-	CCScale9Sprite* close_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-	close_button = CCControlButton::create(close_label, close_back);
-	close_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardLockedPopup::closeAction), CCControlEventTouchUpInside);
-	close_button->setPreferredSize(CCSizeMake(90,45));
-	close_button->setPosition(ccp(0,-40));
+	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-22));
+	close_button->setFunction([=](CCObject* sender)
+							  {
+								  closeAction(sender, CCControlEventTouchUpInside);
+							  });
 	m_container->addChild(close_button);
 	
-	close_button->setTouchPriority(touch_priority);
+	
+//	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+//	CCScale9Sprite* close_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+//	close_button = CCControlButton::create(close_label, close_back);
+//	close_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardLockedPopup::closeAction), CCControlEventTouchUpInside);
+//	close_button->setPreferredSize(CCSizeMake(90,45));
+//	close_button->setPosition(ccp(0,-40));
+//	m_container->addChild(close_button);
+//	
+//	close_button->setTouchPriority(touch_priority);
 	
 	
 	m_container->setScaleY(0.f);

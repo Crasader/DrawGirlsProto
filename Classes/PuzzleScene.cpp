@@ -730,6 +730,11 @@ void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLOG("success puzzle animation");
 	
+	if(selected_piece_img)
+	{
+		selected_piece_img->runAction(CCFadeTo::create(0.5f, 0));
+	}
+	
 	AudioEngine::sharedInstance()->playEffect("se_puzzleopen_1.mp3", false);
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
@@ -741,31 +746,30 @@ void PuzzleScene::showSuccessPuzzleEffect()
 		new_piece->simpleView();
 	}
 	
-	CCSprite* light_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 272));
-	light_img->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-	light_img->setSkewX(10);
-	light_img->setOpacity(0);
-	light_img->setPosition(ccp(-130, 0));
-	puzzle_node->addChild(light_img, 999);
+	CCClippingNode* clipping_node = CCClippingNode::create(CCSprite::create("puzzle_clearmask_light.png"));
+	clipping_node->setPosition(ccp(0,0));
+	clipping_node->setAlphaThreshold(0.1f);
+	puzzle_node->addChild(clipping_node, 999);
 	
-	CCMoveTo* t_move1 = CCMoveTo::create(0.7f, ccp(130,0));
-	CCMoveTo* t_move2 = CCMoveTo::create(0.f, ccp(-130,0));
+	CCSprite* inner_node = CCSprite::create("puzzle_clear_light.png");
+	inner_node->setOpacity(130);
+	inner_node->setPosition(ccp(-inner_node->getContentSize().width/2.f-clipping_node->getStencil()->getContentSize().width/2.f, 0));
+	clipping_node->addChild(inner_node);
+	
+	inner_node->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	
+	CCMoveTo* t_move1 = CCMoveTo::create(1.f, ccp(inner_node->getContentSize().width/2.f+clipping_node->getStencil()->getContentSize().width/2.f, 0));
+	CCMoveTo* t_move2 = CCMoveTo::create(0.f, ccp(-inner_node->getContentSize().width/2.f-clipping_node->getStencil()->getContentSize().width/2.f, 0));
 	CCSequence* t_seq1 = CCSequence::create(t_move1, t_move2, NULL);
 	
-	CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 100);
-	CCDelayTime* t_delay1 = CCDelayTime::create(0.3f);
-	CCFadeTo* t_fade2 = CCFadeTo::create(0.2f, 0);
-	CCSequence* t_seq2 = CCSequence::create(t_fade1, t_delay1, t_fade2, NULL);
-	
-	CCSpawn* t_spawn = CCSpawn::create(t_seq1, t_seq2, NULL);
-	CCRepeat* t_repeat = CCRepeat::create(t_spawn, 2);
+	CCRepeat* t_repeat = CCRepeat::create(t_seq1, 2);
 	
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzleScene::pumpPuzzle));
-	CCCallFunc* t_call2 = CCCallFunc::create(light_img, callfunc_selector(CCSprite::removeFromParent));
+	CCCallFunc* t_call2 = CCCallFunc::create(clipping_node, callfunc_selector(CCClippingNode::removeFromParent));
 	
 	CCSequence* t_seq3 = CCSequence::create(t_repeat, t_call1, t_call2, NULL);
 	
-	light_img->runAction(t_seq3);
+	inner_node->runAction(t_seq3);
 }
 
 void PuzzleScene::pumpPuzzle()
@@ -1322,7 +1326,9 @@ void PuzzleScene::menuAction(CCObject* sender)
 		
 		if(tag == kPuzzleMenuTag_cancel)
 		{
-			startBacking();
+			showSuccessPuzzleEffect();
+			
+//			startBacking();
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)

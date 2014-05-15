@@ -1026,7 +1026,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
 		title_label->setColor(ccBLACK);
 		//title_label->enableOuterStroke(ccWHITE, 1.f);
-		title_label->setPosition(ccp(0,-59));
+		title_label->setPosition(ccp(0,-57.5f));
 		cell_node->addChild(title_label, 1);
 
 		
@@ -1075,7 +1075,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
-				condition_title->setPosition(ccp(67.5f, 143.5f));
+				condition_title->setPosition(ccp(67.5f, 141));
 				not_clear_img->addChild(condition_title);
 				
 				if(is_puzzle_enter_list[idx].is_have_week_condition)
@@ -1186,7 +1186,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
-				condition_title->setPosition(ccp(67.5f, 143.5f));
+				condition_title->setPosition(ccp(67.5f, 141));
 				not_clear_img->addChild(condition_title);
 				
 				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
@@ -1219,7 +1219,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
 		title_label->setColor(ccBLACK);
 		//title_label->enableOuterStroke(ccWHITE, 1.f);
-		title_label->setPosition(ccp(0,-59));
+		title_label->setPosition(ccp(0,-57.5f));
 		cell_node->addChild(title_label, 1);
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
