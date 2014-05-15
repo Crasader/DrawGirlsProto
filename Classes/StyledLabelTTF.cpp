@@ -461,7 +461,10 @@ void StyledLabelTTF::setStringByTag(const char* text){
 		p["size"]=sData[k].get("size", m_fontSize).asInt();
 		p["tag"]=sData[k].get("tag", 0).asInt();
 		p["font"]=sData[k].get("font", m_font).asString();
-		
+		auto strokeColor = sData[k].get("strokecolor", 0).asUInt();
+
+		p["strokecolor"]=StyledLabelTTF::makeRGB((strokeColor/100)/9.f*255, (strokeColor/10%10)/9.f*255, (strokeColor%10)/9.f*255);
+		p["strokesize"]=sData[k].get("strokesize", 0.f).asFloat(); 
 		texts.push_back({sData[k]["content"].asString(),p.toStyledString()});
 		
 		//CCLog("ok new ttf is %s and %s",sData[k]["content"].asString().c_str(),p.toStyledString().c_str());
