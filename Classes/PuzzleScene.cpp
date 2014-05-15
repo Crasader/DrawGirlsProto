@@ -1078,9 +1078,9 @@ void PuzzleScene::setPuzzle()
 	
 	setPieceClick(selected_stage_number);
 	
-	have_card_cnt_case = CCSprite::create("have_card_cnt_case.png");
-	have_card_cnt_case->setPosition(ccp(0, puzzle_size.height/2.f-have_card_cnt_case->getContentSize().height/2.f));
-	have_card_cnt_case->setVisible(false);
+//	have_card_cnt_case = CCSprite::create("have_card_cnt_case.png");
+//	have_card_cnt_case->setPosition(ccp(0, puzzle_size.height/2.f-have_card_cnt_case->getContentSize().height/2.f));
+//	have_card_cnt_case->setVisible(false);
 	
 	int have_card_cnt = 0;
 	int total_card_cnt = stage_count*4;
@@ -1379,12 +1379,12 @@ void PuzzleScene::menuAction(CCObject* sender)
 			if(piece_mode == kPieceMode_default)
 			{
 				piece_mode = kPieceMode_thumb;
-				have_card_cnt_case->setVisible(true);
+//				have_card_cnt_case->setVisible(true);
 			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
 				piece_mode = kPieceMode_default;
-				have_card_cnt_case->setVisible(false);
+//				have_card_cnt_case->setVisible(false);
 			}
 			
 			myDSH->setIntegerForKey(kDSH_Key_puzzleMode, piece_mode);

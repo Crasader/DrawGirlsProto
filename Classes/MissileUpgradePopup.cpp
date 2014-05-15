@@ -383,7 +383,6 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 	}
 	loading_layer->removeFromParent();
-	is_menu_enable = true;
 }
 
 void MissileUpgradePopup::setAfterUpgrade()
@@ -503,6 +502,8 @@ void MissileUpgradePopup::setAfterUpgrade()
 			CCSequence* t_seq = CCSequence::create(t_repeat, t_spawn, t_call, NULL);
 			
 			upgrade_effect_2->runAction(t_seq);
+			
+			is_menu_enable = true;
 		}));
 	}));
 }

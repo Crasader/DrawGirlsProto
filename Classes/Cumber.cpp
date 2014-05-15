@@ -554,7 +554,7 @@ void CumberParent::myInit()
 		// 에너지 달음.
 		if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_bossLifeZero)
 		{
-			MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "monster_hp_bar.png");
+			MobHpGraph* main_hp = MobHpGraph::create(mainCumber, "junior_hp_bar.png");
 			addChild(main_hp);
 			main_hp->setMinimumRate();
 			hp_graphs.push_back(main_hp);

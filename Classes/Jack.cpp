@@ -1569,7 +1569,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		//				jack_drawing->setVisible(false);
 		//			}
 		setJackState(jackStateNormal);
-		jack_barrier->setVisible(false);
+//		jack_barrier->setVisible(false);
 		isDrawingOn = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
 
 		myGD->removeMapNewline();
@@ -1789,8 +1789,8 @@ void Jack::setJackState( jackState t_s )
 //		jackImg->setVisible(true);
 //		line_edge->setVisible(false);
 		myGD->communication("Main_setLineParticle", false);
-		if(!is_hard && !jack_barrier->isVisible())
-			jack_barrier->setVisible(true);
+//		if(!is_hard && !jack_barrier->isVisible())
+//			jack_barrier->setVisible(true);
 		
 		if(is_changed)
 			myGD->communication("GIM_removeBeautyStone");
@@ -1802,8 +1802,8 @@ void Jack::setJackState( jackState t_s )
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("draw");
 //		jackImg->setVisible(false);
-		if(!is_hard && jack_barrier->isVisible())
-			jack_barrier->setVisible(false);
+//		if(!is_hard && jack_barrier->isVisible())
+//			jack_barrier->setVisible(false);
 		
 		if(is_changed)
 			myGD->communication("GIM_showBeautyStone");
@@ -1815,8 +1815,8 @@ void Jack::setJackState( jackState t_s )
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("rewind"))
 			jack_ccb_manager->runAnimationsForSequenceNamed("rewind");
 //		jackImg->setColor(ccGRAY);
-		if(!is_hard && jack_barrier->isVisible())
-			jack_barrier->setVisible(false);
+//		if(!is_hard && jack_barrier->isVisible())
+//			jack_barrier->setVisible(false);
 		
 		if(is_changed)
 			myGD->communication("GIM_removeBeautyStone");
@@ -1970,7 +1970,7 @@ void Jack::endReviveJack()
 	setJackState(jackStateNormal);
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
 		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
-	jack_barrier->setVisible(true);
+//	jack_barrier->setVisible(true);
 	
 	myGD->communication("UI_resumeCounting");
 	myGD->communication("GIM_dieCreateItem");
@@ -2182,21 +2182,21 @@ void Jack::myInit()
 
 	is_hard = false;
 
-	CCSprite* t_texture = CCSprite::create("jack_barrier.png");
-
-	jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
+//	CCSprite* t_texture = CCSprite::create("jack_barrier.png");
+//
+//	jack_barrier = CCSprite::createWithTexture(t_texture->getTexture(), CCRectMake(100, 0, 25, 25));
 //	jack_barrier->setScale(0.8f);
-	addChild(jack_barrier, kJackZ_defaultBarrier);
-	jack_barrier->setOpacity(0);
-
-	CCAnimation* t_animation = CCAnimation::create();
-	t_animation->setDelayPerUnit(0.1);
-	for(int i=0;i<5;i++)
-		t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(i*25, 0, 25, 25));
-	CCAnimate* t_animate = CCAnimate::create(t_animation);
-	CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-
-	jack_barrier->runAction(t_repeat);
+//	addChild(jack_barrier, kJackZ_defaultBarrier);
+//	jack_barrier->setOpacity(0);
+//
+//	CCAnimation* t_animation = CCAnimation::create();
+//	t_animation->setDelayPerUnit(0.1);
+//	for(int i=0;i<5;i++)
+//		t_animation->addSpriteFrameWithTexture(t_texture->getTexture(), CCRectMake(i*25, 0, 25, 25));
+//	CCAnimate* t_animate = CCAnimate::create(t_animation);
+//	CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+//
+//	jack_barrier->runAction(t_repeat);
 	
 	setScale(1/myGD->game_scale);//NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)
 }

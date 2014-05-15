@@ -136,6 +136,45 @@ void AchieveConditionReward::resultUpdateAchieveHistory(Json::Value result_data)
 	}
 }
 
+void AchieveConditionReward::resultUpdateAchieveHistoryNotLast(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		AchievementCode t_code = AchievementCode(result_data["archiveID"].asInt());
+		data_map[t_code].setIngCount(result_data.get("count", Json::Value()).asInt());
+		if(result_data["rewardDate"].asInt64() != 0)
+			data_map[t_code].setComplete();
+		
+		for(auto iter = changed_data.begin();iter != changed_data.end();iter++)
+		{
+			if(iter->m_type.getV() == t_code)
+			{
+				bool is_success = true;
+				if(iter->isCompleted())
+				{
+					if(result_data["rewardDate"].asInt64() == 0)
+						is_success = false;
+				}
+				
+				if(iter->getIngCount() != 0)
+				{
+					if(result_data["count"].asInt() != iter->getIngCount())
+						is_success = false;
+				}
+				
+				if(is_success)
+					changed_data.erase(iter);
+				
+				break;
+			}
+		}
+	}
+	else
+	{
+		
+	}
+}
+
 vector<CommandParam> AchieveConditionReward::updateAchieveHistoryVectorParam(jsonSelType t_callback)
 {
 	keep_callback = t_callback;
@@ -155,7 +194,10 @@ vector<CommandParam> AchieveConditionReward::updateAchieveHistoryVectorParam(jso
 		if(changed_data[i].getIngCount() != 0)
 			param["count"] = changed_data[i].getIngCount();
 		
-		t_command_list.push_back(CommandParam("updatearchivementhistory", param, json_selector(this, AchieveConditionReward::resultUpdateAchieveHistory)));
+		if(i >= changed_data.size()-1)
+			t_command_list.push_back(CommandParam("updatearchivementhistory", param, json_selector(this, AchieveConditionReward::resultUpdateAchieveHistory)));
+		else
+			t_command_list.push_back(CommandParam("updatearchivementhistory", param, json_selector(this, AchieveConditionReward::resultUpdateAchieveHistoryNotLast)));
 	}
 	
 	return t_command_list;

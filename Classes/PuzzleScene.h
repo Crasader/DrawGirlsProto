@@ -132,7 +132,7 @@ private:
 	void pieceAction(int t_stage_number);
 	void buyPieceAction(int t_stage_number);
 	void lockPieceAction(int t_stage_number);
-	CCSprite* have_card_cnt_case;
+//	CCSprite* have_card_cnt_case;
 	
 	void pumpPuzzle();
 	

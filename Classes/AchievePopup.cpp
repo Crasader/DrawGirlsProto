@@ -246,16 +246,6 @@ void AchievePopup::menuAction(CCObject* pSender)
 			setAllMenu();
 			setAchieveTable();
 			
-			int is_found = myAchieve->isHaveRewardCount();
-			
-			if(is_found > 0)
-			{
-				all_reward_menu->setEnabled(true);
-			}
-			else
-			{
-				all_reward_menu->setEnabled(false);
-			}
 			empty_ment->setString("");
 		}
 		is_menu_enable = true;
@@ -276,7 +266,6 @@ void AchievePopup::menuAction(CCObject* pSender)
 			
 			setSuccessMenu();
 			setAchieveTable();
-			all_reward_menu->setEnabled(false);
 			if(achieve_list.size() <= 0)
 				empty_ment->setString(myLoc->getLocalForKey(kMyLocalKey_nothingSuccessAchieve));
 			else
@@ -300,7 +289,6 @@ void AchievePopup::menuAction(CCObject* pSender)
 			
 			setIngMenu();
 			setAchieveTable();
-			all_reward_menu->setEnabled(false);
 			empty_ment->setString("");
 		}
 		is_menu_enable = true;
@@ -323,12 +311,10 @@ void AchievePopup::menuAction(CCObject* pSender)
 			setAchieveTable();
 			if(achieve_list.size() <= 0)
 			{
-				all_reward_menu->setEnabled(false);
 				empty_ment->setString(myLoc->getLocalForKey(kMyLocalKey_nothingRewardAchieve));
 			}
 			else
 			{
-				all_reward_menu->setEnabled(true);
 				empty_ment->setString("");
 			}
 		}
@@ -959,7 +945,7 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	
 	for(int i=0;i<achieve_list.size();i++)
 	{
-		if(myAchieve->isAchieve(achieve_list[i]))
+		if(!myAchieve->isCompleted(achieve_list[i]) && myAchieve->isAchieve(achieve_list[i]))
 		{
 			AchieveRewardType reward_type = myAchieve->getRewardType(achieve_list[i]);
 			int reward_value = myAchieve->getRewardValue(achieve_list[i]);

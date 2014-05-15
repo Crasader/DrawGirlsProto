@@ -167,6 +167,7 @@ public:
 	void changeComplete(AchievementCode t_code);
 	void updateAchieve(jsonSelType t_callback);
 	void resultUpdateAchieveHistory(Json::Value result_data);
+	void resultUpdateAchieveHistoryNotLast(Json::Value result_data);
 	vector<CommandParam> updateAchieveHistoryVectorParam(jsonSelType t_callback);
 	
 	int getCondition(AchievementCode t_code)

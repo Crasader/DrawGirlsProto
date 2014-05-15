@@ -1739,8 +1739,6 @@ void PlayUI::counting ()
 				myGD->communication("Main_refreshReplayScore", use_time);
 		}
 		
-		CCRotateBy* t_rotate = CCRotateBy::create(0.5, -180);
-		sand_clock->runAction(t_rotate);
 		
 		if(countingCnt-1 == playtime_limit/3)
 		{
@@ -2213,10 +2211,6 @@ void PlayUI::myInit ()
 	//		counting_tiem->setPosition(ccp(140, 410));
 	//		addChild(counting_tiem);
 	
-	sand_clock = CCSprite::create("maingame_ui_sandclock.png");
-	sand_clock->setPosition(ccp(147,463));
-	addChild(sand_clock);
-	
 	countingCnt = 0;//-mySGD->getLongTimeValue();
 	detail_counting_cnt = 0;
 	is_urgent = false;
@@ -2250,11 +2244,6 @@ void PlayUI::myInit ()
 	
 	isFirst = true;
 	//		beforePercentage = 0;
-	
-	
-	m_bossLifeGage = BossLifeGage::create();
-	m_bossLifeGage->setPosition(ccp(108,600));//441));
-	addChild(m_bossLifeGage);
 	
 	
 	CCSprite* n_home = CCSprite::create("ui_stop.png");
