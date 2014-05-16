@@ -2144,7 +2144,7 @@ int StarGoldData::getAppVersion()
 void StarGoldData::myInit()
 {
 	app_type = "light1";
-	app_version = 1;
+	app_version = 2;
 	
 	suitable_stage = -1;
 	is_on_maingame = false;
