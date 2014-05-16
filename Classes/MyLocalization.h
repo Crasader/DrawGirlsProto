@@ -507,7 +507,11 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_patternContent1015,
 	kMyLocalKey_patternContent1016,
 	kMyLocalKey_patternContent1017,
-	kMyLocalKey_patternContent1018
+	kMyLocalKey_patternContent1018,
+	kMyLocalKey_controlTip_lineTangle_title,
+	kMyLocalKey_controlTip_lineTangle_content,
+	kMyLocalKey_controlTip_slimLine_title,
+	kMyLocalKey_controlTip_slimLine_content
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

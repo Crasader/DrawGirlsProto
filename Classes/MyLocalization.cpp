@@ -443,6 +443,11 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ko->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
+	ko->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	ko->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
+	ko->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
+	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -956,6 +961,11 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	en->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
+	
+	en->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	en->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
+	en->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1494,6 +1504,11 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	ja->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ja->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
+	
+	ja->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	ja->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
+	ja->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
