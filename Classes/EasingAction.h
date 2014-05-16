@@ -13,5 +13,5 @@ float elasticOut(float time);
 float bounceOut(float time);
 float easeOut(float time);
 float expoIn(float time);
-
+float boundTime(float time);
 #endif

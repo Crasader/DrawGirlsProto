@@ -65,6 +65,27 @@ float bounceOut(float time)
 	return temp * time * time + 0.984375f;
 }
 
+float boundTime(float time)
+{
+	if (time < 1 / 2.75)
+	{
+		return 7.5625f * time * time;
+	} else
+    if (time < 2 / 2.75)
+    {
+			time -= 1.5f / 2.75f;
+			return 7.5625f * time * time + 0.75f;
+    } else
+			if(time < 2.5 / 2.75)
+			{
+        time -= 2.25f / 2.75f;
+        return 7.5625f * time * time + 0.9375f;
+			}
+	
+	time -= 2.625f / 2.75f;
+	return 7.5625f * time * time + 0.984375f;
+}
+
 float expoIn(float time)
 {
 	return time == 0 ? 0 : powf(2, 10 * (time/1 - 1)) - 1 * 0.001f;
