@@ -283,7 +283,7 @@ private:
 	CCBAnimationManager* jack_ccb_manager;
 	CCSprite* die_particle;
 //	CCSprite* jack_drawing;
-	CCSprite* jack_barrier;
+//	CCSprite* jack_barrier;
 	IntDirection jack_img_direction;
 	SpeedChangeEffect* speed_change_img;
 	

@@ -63,7 +63,7 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ani_title_takecard.png");
+		title = CCSprite::create("whitePaper.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -262,7 +262,7 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ani_title_downcard.png");
+		title = CCSprite::create("whitePaper.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -483,7 +483,7 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ani_title_removecard.png");
+		title = CCSprite::create("whitePaper.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -859,17 +859,17 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-		title = CCSprite::create("ani_title_strength.png");
+		title = CCSprite::create("whitePaper.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
 		
-		titleSuccess = CCSprite::create("ani_title_s_success.png");
+		titleSuccess = CCSprite::create("whitePaper.png");
 		titleSuccess->setPosition(ccp(240,276));
 		titleSuccess->setScale(0);
 		this->addChild(titleSuccess,2);
 		
-		titleFail = CCSprite::create("ani_title_s_fail.png");
+		titleFail = CCSprite::create("whitePaper.png");
 		titleFail->setPosition(ccp(240,276));
 		titleFail->setScale(0);
 		this->addChild(titleFail,2);
@@ -1361,7 +1361,7 @@ public:
 //		
 //		this->addChild(card,3);
 //
-		title = CCSprite::create("ani_title_changerank.png");
+		title = CCSprite::create("whitePaper.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
@@ -1784,18 +1784,18 @@ public:
 		//
 		//		this->addChild(card,3);
 		//
-		title = CCSprite::create("ani_title_fight.png");
+		title = CCSprite::create("whitePaper.png");
 		title->setPosition(ccp(240,276));
 		title->setScale(0);
 		this->addChild(title,2);
 		
-		titleWin = CCSprite::create("ani_title_win.png");
+		titleWin = CCSprite::create("whitePaper.png");
 		titleWin->setPosition(ccp(240,276));
 		titleWin->setScale(0);
 		this->addChild(titleWin,2);
 		
 		
-		titleLose = CCSprite::create("ani_title_lose.png");
+		titleLose = CCSprite::create("whitePaper.png");
 		titleLose->setPosition(ccp(240,276));
 		titleLose->setScale(0);
 		this->addChild(titleLose,2);

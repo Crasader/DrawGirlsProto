@@ -32,6 +32,7 @@
 #include "MileagePopup.h"
 #include "EventShopPopup.h"
 #include "LevelupGuidePopup.h"
+#include "CardLockedPopup.h"
 
 #include "KSLabelTTF.h"
 #include "PopCake.h"
@@ -87,7 +88,7 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
-
+	
 //	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-999, [=](){}, [=](){});
 //	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});
 //	MileagePopup* t_popup = MileagePopup::create(-999, [=](){}, 5);

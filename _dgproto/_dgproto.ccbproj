@@ -24,6 +24,8 @@
 	<false/>
 	<key>javascriptMainCCB</key>
 	<string></string>
+	<key>needRepublish</key>
+	<false/>
 	<key>onlyPublishCCBs</key>
 	<false/>
 	<key>publishDirectory</key>
@@ -89,5 +91,9 @@
 			<string>ms_img</string>
 		</dict>
 	</array>
+	<key>versionStr</key>
+	<string>Version: 3.0-alpha5
+GitHub: 76499877e8
+</string>
 </dict>
 </plist>

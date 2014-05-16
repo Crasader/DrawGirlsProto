@@ -36,6 +36,7 @@
 #include "MyLocalization.h"
 #include "EffectSprite.h"
 #include "ShopPopup.h"
+#include "ControlTipContent.h"
 
 //#include "ScreenSide.h"
 
@@ -670,6 +671,149 @@ void Maingame::finalSetting()
 	
 //	else
 //	{
+	
+	if(mySD->getSilType() == 3 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_lineTangle))
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		ControlTipContent* t_container = ControlTipContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																   {
+																	   myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_lineTangle, true);
+																	   
+																	   Json::Reader reader;
+																	   Json::Value root;
+																	   reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+																	   Json::Value boss = root[0u];
+																	   Json::Value patterns = boss["pattern"];
+																	   
+																	   vector<int> pattern_code;
+																	   
+																	   for(int i=0;i<patterns.size();i++)
+																	   {
+																		   int t_code = patterns[i]["pattern"].asInt();
+																		   if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, t_code))
+																		   {
+																			   vector<int>::iterator iter = find(pattern_code.begin(), pattern_code.end(), t_code);
+																			   if(iter == pattern_code.end())
+																				   pattern_code.push_back(t_code);
+																		   }
+																	   }
+																	   
+																	   if(pattern_code.size() > 0)
+																	   {
+																		   ASPopupView* t_popup = ASPopupView::create(-200);
+																		   
+																		   CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																		   float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																		   if(screen_scale_x < 1.f)
+																			   screen_scale_x = 1.f;
+																		   
+																		   t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+																		   t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+																		   t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+																		   
+																		   PatternTutorialContent* t_container = PatternTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																																				{
+																																					for(int i=0;i<pattern_code.size();i++)
+																																						myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
+																																					exit_target->onEnter();
+																																				}, pattern_code);
+																		   t_popup->setContainerNode(t_container);
+																		   exit_target->getParent()->addChild(t_popup);
+																	   }
+																	   else
+																		{
+																			exit_target->onEnter();
+																		}
+																	   
+																   }, kSpecialTutorialCode_lineTangle);
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
+	else if(mySD->getSilType() == 6 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_slimLine))
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		ControlTipContent* t_container = ControlTipContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																   {
+																	   myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_slimLine, true);
+																	   
+																	   Json::Reader reader;
+																	   Json::Value root;
+																	   reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+																	   Json::Value boss = root[0u];
+																	   Json::Value patterns = boss["pattern"];
+																	   
+																	   vector<int> pattern_code;
+																	   
+																	   for(int i=0;i<patterns.size();i++)
+																	   {
+																		   int t_code = patterns[i]["pattern"].asInt();
+																		   if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, t_code))
+																		   {
+																			   vector<int>::iterator iter = find(pattern_code.begin(), pattern_code.end(), t_code);
+																			   if(iter == pattern_code.end())
+																				   pattern_code.push_back(t_code);
+																		   }
+																	   }
+																	   
+																	   if(pattern_code.size() > 0)
+																	   {
+																		   ASPopupView* t_popup = ASPopupView::create(-200);
+																		   
+																		   CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																		   float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																		   if(screen_scale_x < 1.f)
+																			   screen_scale_x = 1.f;
+																		   
+																		   t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+																		   t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+																		   t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+																		   
+																		   PatternTutorialContent* t_container = PatternTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																																				{
+																																					for(int i=0;i<pattern_code.size();i++)
+																																						myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
+																																					exit_target->onEnter();
+																																				}, pattern_code);
+																		   t_popup->setContainerNode(t_container);
+																		   exit_target->getParent()->addChild(t_popup);
+																	   }
+																	   else
+																	   {
+																		   exit_target->onEnter();
+																	   }
+																	   
+																   }, kSpecialTutorialCode_slimLine);
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
+	else
+	{
 		Json::Reader reader;
 		Json::Value root;
 		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
@@ -714,6 +858,7 @@ void Maingame::finalSetting()
 			t_popup->setContainerNode(t_container);
 			exit_target->getParent()->addChild(t_popup);
 		}
+	}
 //	}
 	
 	mySGD->is_on_maingame = true;

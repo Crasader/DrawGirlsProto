@@ -558,9 +558,7 @@ public:
 	int getUserdataAchieveSeqAttendance();
 	
 	string getInappProduct(int t_index);
-	void initInappProduct(int t_index, string t_product);
 	string getEventInappProduct(int t_index);
-	void initEventInappProduct(int t_index, string t_product);
 	
 	void setEmptyItemReviewSecond(long long t_i);
 	long long getEmptyItemReviewSecond();
@@ -852,8 +850,6 @@ private:
 	map<UserdataType, KSProtectVar<int>> userdata_storage;
 	void resultChangeUserdata(Json::Value result_data);
 	
-	KSProtectStr inapp_products[6];
-	KSProtectStr event_inapp_products[6];
 	
 	map<GoodsType, KSProtectVar<int>> goods_data;
 	vector<ChangeGoodsData> change_goods_list;

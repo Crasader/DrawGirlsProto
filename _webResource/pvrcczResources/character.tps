@@ -4,7 +4,9 @@
         <key>fileFormatVersion</key>
         <int>3</int>
         <key>texturePackerVersion</key>
-        <string>3.2.1</string>
+        <string>3.3.1</string>
+        <key>fileName</key>
+        <string>/Users/jinsilgim/cocos2d-x-2.1.5/projects/dgproto/_webResource/pvrcczResources/character.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -53,7 +55,7 @@
         <key>dataFormat</key>
         <string>cocos2d</string>
         <key>textureFileName</key>
-        <filename>../character/{v}charTexture.pvr.ccz</filename>
+        <filename>../character/{v}character.pvr.ccz</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -76,6 +78,8 @@
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
         <uint>0</uint>
+        <key>webpQualityLevel</key>
+        <uint>101</uint>
         <key>textureSubPath</key>
         <string></string>
         <key>textureFormat</key>
@@ -144,7 +148,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../character/{v}charTexture.plist</filename>
+                <filename>../character/{v}character.plist</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -183,11 +187,20 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>character/ballpoint.png</filename>
-            <filename>character/crayon.png</filename>
-            <filename>character/fountainpen.png</filename>
-            <filename>character/pencil.png</filename>
-            <filename>character/plumepen.png</filename>
+            <filename>character/_block.png</filename>
+            <filename>character/cha_ruby_orange.png</filename>
+            <filename>character/cha_ruby_fire.png</filename>
+            <filename>character/cha_ruby.png</filename>
+            <filename>character/cha_ruby_ball.png</filename>
+            <filename>character/cha_back_bottom.png</filename>
+            <filename>character/cha_back_hand.png</filename>
+            <filename>character/cha_back_head.png</filename>
+            <filename>character/cha_back_top.png</filename>
+            <filename>character/cha_front_bottom.png</filename>
+            <filename>character/cha_front_hand.png</filename>
+            <filename>character/cha_front_head.png</filename>
+            <filename>character/cha_front_top.png</filename>
+            <filename>character/cha_left_all.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

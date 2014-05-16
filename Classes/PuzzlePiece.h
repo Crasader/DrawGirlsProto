@@ -33,8 +33,8 @@ enum PieceZorder{
 };
 
 enum PieceMode{
-	kPieceMode_default = 0,
-	kPieceMode_thumb
+	kPieceMode_thumb = 0,
+	kPieceMode_default
 };
 
 enum PieceType{

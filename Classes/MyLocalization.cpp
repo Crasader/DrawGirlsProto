@@ -234,6 +234,7 @@ void MyLocal::initLocal()
 	
 	ko->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
 	ko->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	ko->setObject(CCString::create("카드 승급 기회!!"), kMyLocalKey_rankUpTitle);
 	ko->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
 	ko->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
 	ko->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
@@ -337,13 +338,15 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ko->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ko->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
-	ko->setObject(CCString::create("%d성 카드 획득방법!"), kMyLocalKey_cardLockedTitle);
-	ko->setObject(CCString::create("<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent1);
-	ko->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent2);
-	ko->setObject(CCString::create("<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent3);
-	ko->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
-	ko->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
-	ko->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
+	ko->setObject(CCString::create("%d성 카드 획득방법"), kMyLocalKey_cardLockedTitle);
+	ko->setObject(CCString::create("<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent1);
+	ko->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent2);
+	ko->setObject(CCString::create("<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent3);
+	ko->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent4);
+	ko->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTime);
+	ko->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
+	ko->setObject(CCString::create("<font color=961 size=15>%d시간"), kMyLocalKey_todaymissionRemainTime2);
+	ko->setObject(CCString::create("<font color=961 size=15>%d분"), kMyLocalKey_todaymissionRemainTimeMinute2);
 	ko->setObject(CCString::create("<font color=299 size=21>모든 피스 획득"), kMyLocalKey_puzzleSuccessTitle);
 	ko->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ko->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
@@ -397,6 +400,37 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("보스공격저지"), kMyLocalKey_warningBossSuccess);
 	ko->setObject(CCString::create("마지막 목숨"), kMyLocalKey_warningLastLife);
 	
+	ko->setObject(CCString::create("새로운 보스 공격!"), kMyLocalKey_newBossPattern);
+	
+	ko->setObject(CCString::create("맵에 부딪힐때마다 숫자가 줄고, 0이 되면 폭발해요."), kMyLocalKey_patternContent9);
+	ko->setObject(CCString::create("하나의 톱날이 획득영역을 부숴요."), kMyLocalKey_patternContent105);
+	ko->setObject(CCString::create("여러개의 톱날이 획득영역을 부숴요."), kMyLocalKey_patternContent106);
+	ko->setObject(CCString::create("레이저가 획득영역을 부숴요."), kMyLocalKey_patternContent107);
+	ko->setObject(CCString::create("그리는도중 맞지 않도록 주의하세요."), kMyLocalKey_patternContent108);
+	ko->setObject(CCString::create("보스가 획득영역을 파괴하며 이동해요."), kMyLocalKey_patternContent109);
+	ko->setObject(CCString::create("획득영역에서 폭발후 미사일을 퍼트려요."), kMyLocalKey_patternContent110);
+	ko->setObject(CCString::create("사방으로 미사일을 발사해요."), kMyLocalKey_patternContent111);
+	ko->setObject(CCString::create("연속으로 발사되어 획득영역을 부숴요."), kMyLocalKey_patternContent112);
+	ko->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
+	ko->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
+	ko->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
+	ko->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
+	ko->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	ko->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
+	ko->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
+	ko->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
+	ko->setObject(CCString::create("일정시간 보스가 보이지 않아요."), kMyLocalKey_patternContent1008);
+	ko->setObject(CCString::create("획득영역에 불을 피워요."), kMyLocalKey_patternContent1009);
+	ko->setObject(CCString::create("캐릭터를 따라오며 맵을 부숴요."), kMyLocalKey_patternContent1010);
+	ko->setObject(CCString::create("그리는중 맞지 않도록 주의하세요."), kMyLocalKey_patternContent1011);
+	ko->setObject(CCString::create("방사능이 퍼진곳을 조심하세요."), kMyLocalKey_patternContent1012);
+	ko->setObject(CCString::create("대각선으로 떨어져 맵을 부숴요."), kMyLocalKey_patternContent1013);
+	ko->setObject(CCString::create("위에서 아래로 운석이 떨어져요."), kMyLocalKey_patternContent1014);
+	ko->setObject(CCString::create("닿지않도록 주의하세요."), kMyLocalKey_patternContent1015);
+	ko->setObject(CCString::create("카운트가 끝나면 폭발해요."), kMyLocalKey_patternContent1016);
+	ko->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
+	ko->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
+	
 //	ko->setObject(CCString::create("서버에 연결할 수 없습니다."), kMyLocalKey_canNotConnectedServer);
 //	ko->setObject(CCString::create("화면을 터치 해주세요."), kMyLocalKey_touchPlease);
 	
@@ -408,6 +442,11 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	ko->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ko->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
+	
+	ko->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	ko->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
+	ko->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -724,6 +763,7 @@ void MyLocal::initLocal()
 	
 	en->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
 	en->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	en->setObject(CCString::create("카드 승급 기회!!"), kMyLocalKey_rankUpTitle);
 	en->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
 	en->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
 	en->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
@@ -826,13 +866,15 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	en->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	en->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
-	en->setObject(CCString::create("%d성 카드 획득방법!"), kMyLocalKey_cardLockedTitle);
-	en->setObject(CCString::create("<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent1);
-	en->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent2);
-	en->setObject(CCString::create("<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent3);
-	en->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
-	en->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
-	en->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
+	en->setObject(CCString::create("%d성 카드 획득방법"), kMyLocalKey_cardLockedTitle);
+	en->setObject(CCString::create("<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent1);
+	en->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent2);
+	en->setObject(CCString::create("<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent3);
+	en->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent4);
+	en->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTime);
+	en->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
+	en->setObject(CCString::create("<font color=961 size=15>%d시간"), kMyLocalKey_todaymissionRemainTime2);
+	en->setObject(CCString::create("<font color=961 size=15>%d분"), kMyLocalKey_todaymissionRemainTimeMinute2);
 	en->setObject(CCString::create("<font color=299 size=21>모든 피스 획득"), kMyLocalKey_puzzleSuccessTitle);
 	en->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	en->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
@@ -880,6 +922,37 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	en->setObject(CCString::create("Last Life"), kMyLocalKey_warningLastLife);
 	
+	en->setObject(CCString::create("새로운 보스 공격!"), kMyLocalKey_newBossPattern);
+	
+	en->setObject(CCString::create("맵에 부딪힐때마다 숫자가 줄고, 0이 되면 폭발해요."), kMyLocalKey_patternContent9);
+	en->setObject(CCString::create("하나의 톱날이 획득영역을 부숴요."), kMyLocalKey_patternContent105);
+	en->setObject(CCString::create("여러개의 톱날이 획득영역을 부숴요."), kMyLocalKey_patternContent106);
+	en->setObject(CCString::create("레이저가 획득영역을 부숴요."), kMyLocalKey_patternContent107);
+	en->setObject(CCString::create("그리는도중 맞지 않도록 주의하세요."), kMyLocalKey_patternContent108);
+	en->setObject(CCString::create("보스가 획득영역을 파괴하며 이동해요."), kMyLocalKey_patternContent109);
+	en->setObject(CCString::create("획득영역에서 폭발후 미사일을 퍼트려요."), kMyLocalKey_patternContent110);
+	en->setObject(CCString::create("사방으로 미사일을 발사해요."), kMyLocalKey_patternContent111);
+	en->setObject(CCString::create("연속으로 발사되어 획득영역을 부숴요."), kMyLocalKey_patternContent112);
+	en->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
+	en->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
+	en->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
+	en->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
+	en->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	en->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
+	en->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
+	en->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
+	en->setObject(CCString::create("일정시간 보스가 보이지 않아요."), kMyLocalKey_patternContent1008);
+	en->setObject(CCString::create("획득영역에 불을 피워요."), kMyLocalKey_patternContent1009);
+	en->setObject(CCString::create("캐릭터를 따라오며 맵을 부숴요."), kMyLocalKey_patternContent1010);
+	en->setObject(CCString::create("그리는중 맞지 않도록 주의하세요."), kMyLocalKey_patternContent1011);
+	en->setObject(CCString::create("방사능이 퍼진곳을 조심하세요."), kMyLocalKey_patternContent1012);
+	en->setObject(CCString::create("대각선으로 떨어져 맵을 부숴요."), kMyLocalKey_patternContent1013);
+	en->setObject(CCString::create("위에서 아래로 운석이 떨어져요."), kMyLocalKey_patternContent1014);
+	en->setObject(CCString::create("닿지않도록 주의하세요."), kMyLocalKey_patternContent1015);
+	en->setObject(CCString::create("카운트가 끝나면 폭발해요."), kMyLocalKey_patternContent1016);
+	en->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
+	en->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
+	
 	en->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
 	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
 	en->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
@@ -888,6 +961,11 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	en->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
+	
+	en->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	en->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
+	en->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1214,6 +1292,7 @@ void MyLocal::initLocal()
 	
 	ja->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
 	ja->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	ja->setObject(CCString::create("카드 승급 기회!!"), kMyLocalKey_rankUpTitle);
 	ja->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
 	ja->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
 	ja->setObject(CCString::create("승급확률"), kMyLocalKey_rankUpRate);
@@ -1319,13 +1398,15 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ja->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ja->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
-	ja->setObject(CCString::create("%d성 카드 획득방법!"), kMyLocalKey_cardLockedTitle);
-	ja->setObject(CCString::create("<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent1);
-	ja->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 85% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent2);
-	ja->setObject(CCString::create("<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent3);
-	ja->setObject(CCString::create("<font color=990 size=13>체인지 알파벳 6개<font color=999 size=13 newline=18>를 모두 모은후<font color=990 size=13>영역을 100% 획득<font color=999 size=13>하면 됩니다."), kMyLocalKey_cardLockedMent4);
-	ja->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d시간"), kMyLocalKey_todaymissionRemainTime);
-	ja->setObject(CCString::create("<font color=999 size=10>남은시간    <font color=990 size=13>%d분"), kMyLocalKey_todaymissionRemainTimeMinute);
+	ja->setObject(CCString::create("%d성 카드 획득방법"), kMyLocalKey_cardLockedTitle);
+	ja->setObject(CCString::create("<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent1);
+	ja->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent2);
+	ja->setObject(CCString::create("<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent3);
+	ja->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent4);
+	ja->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTime);
+	ja->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
+	ja->setObject(CCString::create("<font color=961 size=15>%d시간"), kMyLocalKey_todaymissionRemainTime2);
+	ja->setObject(CCString::create("<font color=961 size=15>%d분"), kMyLocalKey_todaymissionRemainTimeMinute2);
 	ja->setObject(CCString::create("<font color=299 size=21>모든 피스 획득"), kMyLocalKey_puzzleSuccessTitle);
 	ja->setObject(CCString::create("<font newline=18>모든 스테이지를<font newline=18>클리어 하셨네요!<font newline=18>보상으로 하트를 채워드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ja->setObject(CCString::create("<font color=965 size=18>놀라워요! <font color=990 size=21>퍼펙트 클리어!"), kMyLocalKey_puzzlePerfectTitle);
@@ -1382,6 +1463,37 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
 	ja->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	
+	ja->setObject(CCString::create("새로운 보스 공격!"), kMyLocalKey_newBossPattern);
+	
+	ja->setObject(CCString::create("맵에 부딪힐때마다 숫자가 줄고, 0이 되면 폭발해요."), kMyLocalKey_patternContent9);
+	ja->setObject(CCString::create("하나의 톱날이 획득영역을 부숴요."), kMyLocalKey_patternContent105);
+	ja->setObject(CCString::create("여러개의 톱날이 획득영역을 부숴요."), kMyLocalKey_patternContent106);
+	ja->setObject(CCString::create("레이저가 획득영역을 부숴요."), kMyLocalKey_patternContent107);
+	ja->setObject(CCString::create("그리는도중 맞지 않도록 주의하세요."), kMyLocalKey_patternContent108);
+	ja->setObject(CCString::create("보스가 획득영역을 파괴하며 이동해요."), kMyLocalKey_patternContent109);
+	ja->setObject(CCString::create("획득영역에서 폭발후 미사일을 퍼트려요."), kMyLocalKey_patternContent110);
+	ja->setObject(CCString::create("사방으로 미사일을 발사해요."), kMyLocalKey_patternContent111);
+	ja->setObject(CCString::create("연속으로 발사되어 획득영역을 부숴요."), kMyLocalKey_patternContent112);
+	ja->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
+	ja->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
+	ja->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
+	ja->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
+	ja->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	ja->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
+	ja->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
+	ja->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
+	ja->setObject(CCString::create("일정시간 보스가 보이지 않아요."), kMyLocalKey_patternContent1008);
+	ja->setObject(CCString::create("획득영역에 불을 피워요."), kMyLocalKey_patternContent1009);
+	ja->setObject(CCString::create("캐릭터를 따라오며 맵을 부숴요."), kMyLocalKey_patternContent1010);
+	ja->setObject(CCString::create("그리는중 맞지 않도록 주의하세요."), kMyLocalKey_patternContent1011);
+	ja->setObject(CCString::create("방사능이 퍼진곳을 조심하세요."), kMyLocalKey_patternContent1012);
+	ja->setObject(CCString::create("대각선으로 떨어져 맵을 부숴요."), kMyLocalKey_patternContent1013);
+	ja->setObject(CCString::create("위에서 아래로 운석이 떨어져요."), kMyLocalKey_patternContent1014);
+	ja->setObject(CCString::create("닿지않도록 주의하세요."), kMyLocalKey_patternContent1015);
+	ja->setObject(CCString::create("카운트가 끝나면 폭발해요."), kMyLocalKey_patternContent1016);
+	ja->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
+	ja->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
+	
 
 	
 	ja->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
@@ -1392,6 +1504,11 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	ja->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ja->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
+	
+	ja->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	ja->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
+	ja->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

@@ -25,7 +25,7 @@
 	<key>javascriptMainCCB</key>
 	<string></string>
 	<key>needRepublish</key>
-	<false/>
+	<true/>
 	<key>onlyPublishCCBs</key>
 	<false/>
 	<key>publishDirectory</key>
@@ -81,6 +81,10 @@
 		<dict>
 			<key>path</key>
 			<string>character</string>
+		</dict>
+		<dict>
+			<key>path</key>
+			<string>boss3</string>
 		</dict>
 	</array>
 	<key>versionStr</key>

@@ -1574,128 +1574,6 @@ void StarGoldData::updateChangeGoods(GoodsType t_type, int t_value, string t_sta
 	change_goods_list.push_back(t_data);
 }
 
-UserdataType StarGoldData::getUserdataKeyToType(string t_key)
-{
-	for(int i=kUserdataType_begin+1;i<kUserdataType_end;i++)
-	{
-		if(t_key == getUserdataTypeToKey((UserdataType)i))
-			return (UserdataType)i;
-	}
-	
-	return kUserdataType_end;
-}
-string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
-{
-	string return_value = "";
-
-	if(t_type == kUserdataType_isVIP)
-		return_value = "isVIP";
-	else if(t_type == kUserdataType_isFirstBuy)
-		return_value = "isFirstBuy";
-	else if(t_type == kUserdataType_totalPlayCount)
-		return_value = "totalPlayCount";
-	else if(t_type == kUserdataType_failCount)
-		return_value = "failCount";
-	else if(t_type == kUserdataType_autoLevel)
-		return_value = "autoLevel";
-	else if(t_type == kUserdataType_highScore)
-		return_value = "highScore";
-	
-	else if(t_type == kUserdataType_achieve_mapGacha)
-		return_value = "aMapGacha";
-	else if(t_type == kUserdataType_achieve_noFail)
-		return_value = "aNoFail";
-	else if(t_type == kUserdataType_achieve_hunter)
-		return_value = "aHunter";
-	else if(t_type == kUserdataType_achieve_changeMania)
-		return_value = "aChange";
-	else if(t_type == kUserdataType_achieve_fail)
-		return_value = "aFail";
-	else if(t_type == kUserdataType_achieve_perfect)
-		return_value = "aPerfect";
-	else if(t_type == kUserdataType_achieve_seqAttendance)
-		return_value = "aSeqAtd";
-	
-	return return_value;
-}
-
-void StarGoldData::clearChangeUserdata()
-{
-	changed_userdata_list.clear();
-	is_changed_userdata = false;
-}
-
-void StarGoldData::changeUserdata(jsonSelType t_callback)
-{
-	if(!is_changed_userdata)
-	{
-		Json::Value param;
-		param["result"]["code"] = GDSUCCESS;
-		
-		t_callback(param);
-		return;
-	}
-	
-	change_userdata_callback = t_callback;
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	for(int i=0;i<changed_userdata_list.size();i++)
-		param[getUserdataTypeToKey(changed_userdata_list[i].m_type)] = changed_userdata_list[i].m_value.getV();
-	
-	hspConnector::get()->command("updateuserdata", param, json_selector(this, StarGoldData::resultChangeUserdata));
-}
-
-void StarGoldData::resultChangeUserdata(Json::Value result_data)
-{
-	if(result_data["result"]["code"].asInt() == GDSUCCESS)
-	{
-		for(int i=0;i<changed_userdata_list.size();i++)
-			userdata_storage[changed_userdata_list[i].m_type] = changed_userdata_list[i].m_value.getV();
-		
-		changed_userdata_list.clear();
-		
-		initUserdata(result_data);
-		
-		is_changed_userdata = false;
-	}
-	
-	if(change_userdata_callback != nullptr)
-		change_userdata_callback(result_data);
-}
-
-CommandParam StarGoldData::getChangeUserdataParam(jsonSelType t_callback)
-{
-	change_userdata_callback = t_callback;
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	for(int i=0;i<changed_userdata_list.size();i++)
-		param[getUserdataTypeToKey(changed_userdata_list[i].m_type)] = changed_userdata_list[i].m_value.getV();
-	
-	return CommandParam("updateuserdata", param, json_selector(this, StarGoldData::resultChangeUserdata));
-}
-
-void StarGoldData::initUserdata(Json::Value result_data)
-{
-	userdata_storage.clear();
-	
-	for(int i=kUserdataType_begin+1;i<kUserdataType_end;i++)
-	{
-		if(i >= kUserdataType_achieve_mapGacha && i <= kUserdataType_achieve_seqAttendance) // HS가 유저데이터의 업적관련한 정보는 따로 묶겠다고 했음. 그래서 분기
-		{
-			userdata_storage[(UserdataType)i] = result_data["archiveData"][getUserdataTypeToKey((UserdataType)i)].asInt();
-		}
-		else
-		{
-			userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
-		}
-		
-		if(i == kUserdataType_selectedCharNO)
-			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
-	}
-}
-
 void StarGoldData::clearChangeGoods()
 {
 	change_goods_list.clear();
@@ -2058,6 +1936,128 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 	}
 }
 
+UserdataType StarGoldData::getUserdataKeyToType(string t_key)
+{
+	for(int i=kUserdataType_begin+1;i<kUserdataType_end;i++)
+	{
+		if(t_key == getUserdataTypeToKey((UserdataType)i))
+			return (UserdataType)i;
+	}
+	
+	return kUserdataType_end;
+}
+string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
+{
+	string return_value = "";
+
+	if(t_type == kUserdataType_isVIP)
+		return_value = "isVIP";
+	else if(t_type == kUserdataType_isFirstBuy)
+		return_value = "isFirstBuy";
+	else if(t_type == kUserdataType_totalPlayCount)
+		return_value = "totalPlayCount";
+	else if(t_type == kUserdataType_failCount)
+		return_value = "failCount";
+	else if(t_type == kUserdataType_autoLevel)
+		return_value = "autoLevel";
+	else if(t_type == kUserdataType_highScore)
+		return_value = "highScore";
+	
+	else if(t_type == kUserdataType_achieve_mapGacha)
+		return_value = "aMapGacha";
+	else if(t_type == kUserdataType_achieve_noFail)
+		return_value = "aNoFail";
+	else if(t_type == kUserdataType_achieve_hunter)
+		return_value = "aHunter";
+	else if(t_type == kUserdataType_achieve_changeMania)
+		return_value = "aChange";
+	else if(t_type == kUserdataType_achieve_fail)
+		return_value = "aFail";
+	else if(t_type == kUserdataType_achieve_perfect)
+		return_value = "aPerfect";
+	else if(t_type == kUserdataType_achieve_seqAttendance)
+		return_value = "aSeqAtd";
+	
+	return return_value;
+}
+
+void StarGoldData::clearChangeUserdata()
+{
+	changed_userdata_list.clear();
+	is_changed_userdata = false;
+}
+
+void StarGoldData::changeUserdata(jsonSelType t_callback)
+{
+	if(!is_changed_userdata)
+	{
+		Json::Value param;
+		param["result"]["code"] = GDSUCCESS;
+		
+		t_callback(param);
+		return;
+	}
+	
+	change_userdata_callback = t_callback;
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	for(int i=0;i<changed_userdata_list.size();i++)
+		param[getUserdataTypeToKey(changed_userdata_list[i].m_type)] = changed_userdata_list[i].m_value.getV();
+	
+	hspConnector::get()->command("updateuserdata", param, json_selector(this, StarGoldData::resultChangeUserdata));
+}
+
+void StarGoldData::resultChangeUserdata(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		for(int i=0;i<changed_userdata_list.size();i++)
+			userdata_storage[changed_userdata_list[i].m_type] = changed_userdata_list[i].m_value.getV();
+		
+		changed_userdata_list.clear();
+		
+		initUserdata(result_data);
+		
+		is_changed_userdata = false;
+	}
+	
+	if(change_userdata_callback != nullptr)
+		change_userdata_callback(result_data);
+}
+
+CommandParam StarGoldData::getChangeUserdataParam(jsonSelType t_callback)
+{
+	change_userdata_callback = t_callback;
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	for(int i=0;i<changed_userdata_list.size();i++)
+		param[getUserdataTypeToKey(changed_userdata_list[i].m_type)] = changed_userdata_list[i].m_value.getV();
+	
+	return CommandParam("updateuserdata", param, json_selector(this, StarGoldData::resultChangeUserdata));
+}
+
+void StarGoldData::initUserdata(Json::Value result_data)
+{
+	userdata_storage.clear();
+	
+	for(int i=kUserdataType_begin+1;i<kUserdataType_end;i++)
+	{
+		if(i >= kUserdataType_achieve_mapGacha && i <= kUserdataType_achieve_seqAttendance) // HS가 유저데이터의 업적관련한 정보는 따로 묶겠다고 했음. 그래서 분기
+		{
+			userdata_storage[(UserdataType)i] = result_data["archiveData"][getUserdataTypeToKey((UserdataType)i)].asInt();
+		}
+		else
+		{
+			userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
+		}
+		
+		if(i == kUserdataType_selectedCharNO)
+			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
+	}
+}
+
 bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
 {
 	bool return_value = true;
@@ -2144,7 +2144,7 @@ int StarGoldData::getAppVersion()
 void StarGoldData::myInit()
 {
 	app_type = "light1";
-	app_version = 1;
+	app_version = 2;
 	
 	suitable_stage = -1;
 	is_on_maingame = false;
@@ -2326,11 +2326,8 @@ int StarGoldData::getUpgradeGoldFee(){	return upgrade_gold_fee.getV();}
 void StarGoldData::setIngameTutorialRewardGold(int t_i){	ingame_tutorial_reward_gold = t_i;}
 int StarGoldData::getIngameTutorialRewardGold(){	return ingame_tutorial_reward_gold.getV();}
 
-void StarGoldData::initInappProduct(int t_index, string t_product){	inapp_products[t_index] = t_product;}
-string StarGoldData::getInappProduct(int t_index){	return inapp_products[t_index].getV();}
-
-void StarGoldData::initEventInappProduct(int t_index, string t_product){	event_inapp_products[t_index] = t_product;}
-string StarGoldData::getEventInappProduct(int t_index){	return event_inapp_products[t_index].getV();}
+string StarGoldData::getInappProduct(int t_index){	return NSDS_GS(kSDS_GI_shopRuby_int1_pID_s, t_index);}
+string StarGoldData::getEventInappProduct(int t_index){	return NSDS_GS(kSDS_GI_shopEventRuby_int1_pID_s, t_index);}
 
 void StarGoldData::setRankUpConditionCount(int t_i){	rank_up_condition_count = t_i;}
 int StarGoldData::getRankUpConditionCount(){	return rank_up_condition_count.getV();}

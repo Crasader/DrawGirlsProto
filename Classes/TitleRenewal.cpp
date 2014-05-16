@@ -716,7 +716,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
-			mySGD->initInappProduct(i-1, t_data["pID"].asString());
+			NSDS_SS(kSDS_GI_shopRuby_int1_pID_s, i-1, t_data["pID"].asString(), false);
 		}
 		
 		for(int i=1;i<=6;i++)
@@ -756,7 +756,43 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
-			mySGD->initEventInappProduct(i-1, t_data["pID"].asString());
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_pID_s, i-1, t_data["pID"].asString(), false);
+		}
+		
+		{
+			int t_code = kIC_baseSpeedUp;
+			string t_key = CCString::createWithFormat("s_i_%d", t_code)->getCString();
+			
+			Json::Value t_data = result_data[t_key.c_str()];
+			
+			NSDS_SS(kSDS_GI_shopItem_int1_countName_s, t_code, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
+			
+			
+			t_code = kIC_doubleItem;
+			t_key = CCString::createWithFormat("s_i_%d", t_code)->getCString();
+			
+			t_data.clear();
+			t_data = result_data[t_key.c_str()];
+			
+			NSDS_SS(kSDS_GI_shopItem_int1_countName_s, t_code, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
+			
+			
+			t_code = kIC_longTime;
+			t_key = CCString::createWithFormat("s_i_%d", t_code)->getCString();
+			
+			t_data.clear();
+			t_data = result_data[t_key.c_str()];
+			
+			NSDS_SS(kSDS_GI_shopItem_int1_countName_s, t_code, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
 		}
 		
 		Json::FastWriter t_writer;

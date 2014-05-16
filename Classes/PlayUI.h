@@ -268,8 +268,8 @@ private:
 	float keepLife;
 	float maxBossLife;
 	KSProtectVar<float> clearPercentage;
-	CCSprite * sand_clock;
-	BossLifeGage * m_bossLifeGage;
+//	CCSprite * sand_clock;
+//	BossLifeGage * m_bossLifeGage;
 	AreaGage * m_areaGage;
 	FeverParent * my_fp;
 	ComboParent * my_combo;
