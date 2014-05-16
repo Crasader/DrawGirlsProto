@@ -1116,22 +1116,25 @@ void FeverCoinParent::stopFever()
 	myGD->communication("Main_setLineParticle", false);
 	int loop_cnt = getChildrenCount();
 	CCArray* my_childs = getChildren();
-	CCArray* delete_target_list = CCArray::createWithCapacity(1);
-	for(int i=0;i<loop_cnt;i++)
-	{
-		FeverCoin* t_fc = (FeverCoin*)my_childs->objectAtIndex(i);
-		if(!t_fc->is_stan_by)
-		{
-			delete_target_list->addObject(t_fc);
-		}
-	}
-	
-	while(delete_target_list->count() > 0)
-	{
-		CCNode* t_node = (CCNode*)delete_target_list->randomObject();
-		delete_target_list->removeObject(t_node);
-		t_node->removeFromParent();
-	}
+    if(my_childs)
+    {
+        CCArray* delete_target_list = CCArray::createWithCapacity(1);
+        for(int i=0;i<loop_cnt;i++)
+        {
+            FeverCoin* t_fc = (FeverCoin*)my_childs->objectAtIndex(i);
+            if(!t_fc->is_stan_by)
+            {
+                delete_target_list->addObject(t_fc);
+            }
+        }
+        
+        while(delete_target_list->count() > 0)
+        {
+            CCNode* t_node = (CCNode*)delete_target_list->randomObject();
+            delete_target_list->removeObject(t_node);
+            t_node->removeFromParent();
+        }
+    }
 }
 
 void FeverCoinParent::addGetCoinList(CCObject* t_coin)
@@ -1500,11 +1503,14 @@ void FloatingCoinParent::hideAllFloatingCoin()
 	creator_node->removeAllChildren();
 	
 	CCArray* coin_array = coin_node->getChildren();
-	int loop_count = coin_array->count();
-	for(int i=loop_count-1;i>=0;i--)
-	{
-		((FloatingCoin*)coin_array->objectAtIndex(i))->hideAction();
-	}
+    if(coin_array)
+    {
+        int loop_count = coin_array->count();
+        for(int i=loop_count-1;i>=0;i--)
+        {
+            ((FloatingCoin*)coin_array->objectAtIndex(i))->hideAction();
+        }
+    }
 }
 void FloatingCoinParent::myInit(function<void(CCPoint)> t_take_func)
 {
@@ -1603,14 +1609,19 @@ void GameItemManager::dieCreateItem()
 
 bool GameItemManager::isChangeAllInner()
 {
+    bool t_all_locked = true;
+    
 	CCArray* t_array = coin_parent->getChildren();
-	int t_count = t_array->count();
-	bool t_all_locked = true;
-	for(int i=0;i<t_count;i++)
-	{
-		ExchangeCoin* t_ec = (ExchangeCoin*)t_array->objectAtIndex(i);
-		t_all_locked = t_all_locked && t_ec->isLocked();
-	}
+    if(t_array)
+    {
+        int t_count = t_array->count();
+        
+        for(int i=0;i<t_count;i++)
+        {
+            ExchangeCoin* t_ec = (ExchangeCoin*)t_array->objectAtIndex(i);
+            t_all_locked = t_all_locked && t_ec->isLocked();
+        }
+    }
 	
 	return t_all_locked;
 }
@@ -1629,11 +1640,14 @@ void GameItemManager::stopCoin()
 {
 	int loop_cnt = coin_parent->getChildrenCount();
 	CCArray* child = coin_parent->getChildren();
-	for(int i=0;i<loop_cnt;i++)
-	{
-		ExchangeCoin* t_ec = (ExchangeCoin*)child->objectAtIndex(i);
-		t_ec->smallScaleHiding();
-	}
+    if(child)
+    {
+        for(int i=0;i<loop_cnt;i++)
+        {
+            ExchangeCoin* t_ec = (ExchangeCoin*)child->objectAtIndex(i);
+            t_ec->smallScaleHiding();
+        }
+    }
 	
 	floating_coin_parent->hideAllFloatingCoin();
 }
