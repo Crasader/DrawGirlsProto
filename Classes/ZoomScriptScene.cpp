@@ -935,13 +935,13 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				timeval time;
 				gettimeofday(&time, NULL);
 				
-				if((int)touch == first_touch_p && int(((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
+				if((int)touch == first_touch_p && (((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
 					target_node->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{
-					long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
+					unsigned long long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
 					CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
 					
 					float spd_value = sqrtf(powf(_spd.x, 2.f) + powf(_spd.y, 2.f));

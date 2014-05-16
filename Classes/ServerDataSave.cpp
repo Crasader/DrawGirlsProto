@@ -650,6 +650,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopRuby_int1_priceType_s)			rv = "sr%dprcType";
 	else if(t_key == kSDS_GI_shopRuby_int1_priceName_s)			rv = "sr%dprcName";
 	else if(t_key == kSDS_GI_shopRuby_int1_sale_s)				rv = "sr%dsale";
+	else if(t_key == kSDS_GI_shopRuby_int1_pID_s)				rv = "sr%dpID";
 	else if(t_key == kSDS_GI_shopGold_int1_count_i)				rv = "sg%dcount";
 	else if(t_key == kSDS_GI_shopGold_int1_countName_s)			rv = "sg%dcntName";
 	else if(t_key == kSDS_GI_shopGold_int1_price_i)				rv = "sg%dprice";
@@ -668,6 +669,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopEventRuby_int1_priceType_s)	rv = "esr%dprcType";
 	else if(t_key == kSDS_GI_shopEventRuby_int1_priceName_s)	rv = "esr%dprcName";
 	else if(t_key == kSDS_GI_shopEventRuby_int1_sale_s)			rv = "esr%dsale";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_pID_s)			rv = "esr%dpID";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_count_i)		rv = "sp%dcount";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_countName_s)	rv = "sp%dcntName";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_price_i)		rv = "sp%dprice";
@@ -676,6 +678,10 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_sale_s)			rv = "sp%dsale";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_data_s)			rv = "sp%ddata";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_pID_s)			rv = "sp%dpID";
+	else if(t_key == kSDS_GI_shopItem_int1_countName_s)			rv = "si%dcntName";
+	else if(t_key == kSDS_GI_shopItem_int1_priceType_s)			rv = "si%dprcType";
+	else if(t_key == kSDS_GI_shopItem_int1_priceName_s)			rv = "si%dprcName";
+	else if(t_key == kSDS_GI_shopItem_int1_sale_s)				rv = "si%dsale";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
