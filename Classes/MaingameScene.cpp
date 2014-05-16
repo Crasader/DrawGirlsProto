@@ -36,6 +36,7 @@
 #include "MyLocalization.h"
 #include "EffectSprite.h"
 #include "ShopPopup.h"
+#include "OnePercentGame.h"
 #include "ControlTipContent.h"
 
 //#include "ScreenSide.h"
@@ -59,6 +60,7 @@ bool Maingame::init()
 {
     if ( !CCLayer::init() )
     {
+    
         return false;
     }
 	
@@ -464,6 +466,8 @@ void Maingame::finalSetting()
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
+	//OnePercentGame* opg = OnePercentGame::create(0.99, nullptr, nullptr);
+	//addChild(opg, 9999);
 	myUI->setMaxBossLife(mySD->getBossMaxLife());
 	myUI->setClearPercentage(0.85f);
 	

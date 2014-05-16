@@ -9,6 +9,7 @@
 #include "KSLabelTTF.h"
 #include "EnumDefine.h"
 #include "GraySprite.h"
+#include "OnePercentGame.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -2014,7 +2015,9 @@ void PlayUI::endGame (bool is_show_reason)
 }
 void PlayUI::showGachaOnePercent ()
 {
-	OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), keep_percentage.getV());
+	//OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), keep_percentage.getV());
+	OnePercentGame* t_popup = OnePercentGame::create(keep_percentage.getV(), bind(&PlayUI::cancelOnePercentGacha, this), bind(&PlayUI::gachaOnOnePercent, this, _1) );
+
 	getParent()->addChild(t_popup, 9999);
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
