@@ -185,15 +185,7 @@ namespace KS
 		return retValue;
 	}
 	
-	float getTimeSec()
-	{
-		auto duration = chrono::system_clock::now().time_since_epoch();
-		auto temp = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-		temp %= 1000;
-		float downSecond = temp / 1000.f;
-		auto secondTime = (float)std::chrono::duration_cast<std::chrono::seconds>(duration).count();
-		return secondTime + downSecond;
-	}
+	float getTimeSec();
 }
 
 class KS_Util

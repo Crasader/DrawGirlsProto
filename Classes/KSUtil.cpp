@@ -369,6 +369,15 @@ namespace KS
 		return CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathForFilename(fileName.c_str()));
 	}
 	
-	float getTimeSec();
+	float getTimeSec()
+	{
+		auto duration = chrono::system_clock::now().time_since_epoch();
+		auto temp = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+		temp %= 1000;
+		float downSecond = temp / 1000.f;
+		auto secondTime = (float)std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+		return secondTime + downSecond;
+	}
+	
 }
 
