@@ -7,7 +7,7 @@
 #include <boost/format.hpp>
 #include "KSUtil.h"
 #include "StyledLabelTTF.h"
-
+#include "FormSetter.h"
 GaBaBo::GaBaBo()
 {
 	
@@ -15,95 +15,45 @@ GaBaBo::GaBaBo()
 GaBaBo::~GaBaBo()
 {
 }
-//void GaBaBo::registerWithTouchDispatcher()
-//{
-//CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-//pDispatcher->addTargetedDelegate(this, INT_MIN, true);
-//}
-
-//bool GaBaBo::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
-//{
-//	CCTouch* touch = pTouch;
-//
-//	CCPoint location(ccp(0, 0));
-//	location = CCDirector::sharedDirector()->convertToGL(touch->locationInView());
-//
-//	return true;
-//}
-
-bool GaBaBo::init()
+void GaBaBo::registerWithTouchDispatcher()
 {
-	CCLayerColor::initWithColor(ccc4(255, 255, 255, 255));
-	
-	
-	Json::Value value1, value2, value3, value4, value5, value6;
-	value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
-	value1["font"] = mySGD->getFont().c_str();
-	value1["size"] = 15.f;
-	value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
-	value2["font"] = mySGD->getFont().c_str();
-	value2["size"] = 15.f;
+	//CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+	//pDispatcher->addTargetedDelegate(this, INT_MIN, true);
+}
 
-	value3["linebreak"] = true;
-	value3["linespacing"] = 30.f;
-	
-	value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
-	value4["font"] = mySGD->getFont2();
-	value4["size"] = 20.f;
-	
-	value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
-	value5["font"] = mySGD->getFont2();
-	value5["size"] = 25.f;
-	
-	
-	StyledLabelTTF* slttf = StyledLabelTTF::create({
-		{"가을하늘공활한데", value1.toStyledString()},
-		{"높고구름없이", value2.toStyledString()},
-		{"", value3.toStyledString()},
-		{"밝은달은우리가슴", value4.toStyledString()},
-		{"일편단심일세", value5.toStyledString()},
-		{"", value3.toStyledString()}
-	}, StyledAlignment::kCenterAlignment);
-	slttf->setPosition(ccp(240, 240));
-	addChild(slttf);
-	{
-		Json::Value value1, value2, value3, value4, value5, value6;
-		value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
-		value1["font"] = mySGD->getFont().c_str();
-		value1["size"] = 15.f;
-		value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
-		value2["font"] = mySGD->getFont().c_str();
-		value2["size"] = 15.f;
-		
-		value3["linebreak"] = true;
-		value3["linespacing"] = 30.f;
-		
-		value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
-		value4["font"] = mySGD->getFont2();
-		value4["size"] = 20.f;
-		
-		value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
-		value5["font"] = mySGD->getFont2();
-		value5["size"] = 25.f;
-		
-		
-		StyledLabelTTF* slttf = StyledLabelTTF::create({
-			{"동해물과백두산이", value1.toStyledString()},
-			{"마르고닳도록", value2.toStyledString()},
-			{"", value3.toStyledString()},
-			{"하느님이보우하사", value4.toStyledString()},
-			{"우리나라만세", value5.toStyledString()},
-			{"", value3.toStyledString()}
-		}, StyledAlignment::kLeftAlignment);
-		slttf->setPosition(ccp(0, 160));
-		addChild(slttf);
-	}
-	
+bool GaBaBo::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
+{
+	//CCTouch* touch = pTouch;
+
+	//CCPoint location(ccp(0, 0));
+	//location = CCDirector::sharedDirector()->convertToGL(touch->getLocationInView());
+
 	return true;
+}
+
+bool GaBaBo::init(int touchPriority, const std::vector<GababoReward>& rewards)
+{
+	CCLayerColor::initWithColor(ccc4(255, 255, 255, 0));
+
+
+	//  그라디언트 텍스트.
+	//CCClippingNode* cNode = CCClippingNode::create();
+	//CCLabelTTF* testTTF = CCLabelTTF::create("TEXT TEXT", mySGD->getFont().c_str(), 100.f);
+	//cNode->setStencil(testTTF);
+	//cNode->setAlphaThreshold(0.1f);
+	//CCLayerGradient* gradient = CCLayerGradient::create(ccc4(255, 0, 0, 255), ccc4(0, 255, 0, 255));
+	//gradient->ignoreAnchorPointForPosition(false);
+	//gradient->setScaleY(testTTF->getContentSize().height / gradient->getContentSize().height);
+	//cNode->addChild(gradient);
+	//addChild(cNode, 100);
+
+	//CCLayerGradient* gradient1 = CCLayerGradient::create(ccc4(255, 0, 0, 255), ccc4(0, 255, 0, 255));
+	//gradient1->setScaleY(testTTF->getContentSize().height / gradient1->getContentSize().height);
+	//addChild(gradient1, 102);
+	m_touchPriority = touchPriority;	
 	m_gababoCountShowing = false;
-	
-	
-	
+
+	//setTouchEnabled(true);	
 	CCSprite* bg = CCSprite::create("gababo_bg.png");
 	m_winCount = m_drawCount = m_loseCount = 0;
 	m_step = 1;
@@ -124,7 +74,11 @@ bool GaBaBo::init()
 	m_thinkSprite = CCSprite::create("gababo_think.png");
 	addChild(m_thinkSprite, 1);
 
+	//FormSetter::get()->addObject("ga1", m_thinkSprite);
+
+
 	CCMenuLambda* gababo = CCMenuLambda::create();
+	gababo->setTouchPriority(m_touchPriority);
 	gababo->setPropaOnBegan(true);
 	gababo->setPosition(CCPointZero);
 	addChild(gababo, 1);
@@ -167,6 +121,7 @@ bool GaBaBo::init()
 	{
 		m_thinkSprite->addChild(i.second, 1); // 일단 붙임.
 		i.second->setVisible(false);
+		i.second->setPosition(ccp(60, 74));
 	}
 	m_computerThink = 1; // 가위로 세팅	
 	m_computerThinkSprites[m_computerThink]->setVisible(true);
@@ -367,7 +322,17 @@ void GaBaBo::update(float dt)
 				main_case->setContentSize(CCSizeMake(300, 250));
 				main_case->setPosition(ccp(240,160));
 				addChild(main_case, 2);
-				
+			
+				main_case->setScaleY(0.f);
+
+				addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+					addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
+						addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
+
+				addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t) {
+					KS::setOpacity(main_case, 255);
+				}
+																						 ));
 				CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 				main_inner->setContentSize(CCSizeMake(270, 200));
 				main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);
@@ -432,28 +397,28 @@ void GaBaBo::initAnimation()
 	m_bo->setPosition(ccp(340, 50 - 170));
 	addChild(KSTimer::create(0.3f, [=](){
 		addChild(KSTimer::create(0.1f, [=](){
-			addChild(KSGradualValue<CCPoint>::create(m_thinkSprite->getPosition(), m_thinkSprite->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+			addChild(KSGradualValue<CCPoint>::create(m_thinkSprite->getPosition(), m_thinkSprite->getPosition() - ccp(0, 135), 0.4f, [=](CCPoint t){
 				m_thinkSprite->setPosition(t);
 			}, [=](CCPoint t){
 				m_thinkSprite->setPosition(t);
-			}));
+			}, elasticOut));
 			addChild(KSGradualValue<CCPoint>::create(m_ba->getPosition(), m_ba->getPosition() + ccp(0, 170), 0.4f, [=](CCPoint t){
 				m_ba->setPosition(t);
 			}, [=](CCPoint t){
 				m_ba->setPosition(t);
-			}));
+			}, elasticOut));
 			addChild(KSTimer::create(0.1f, [=](){
 				addChild(KSGradualValue<CCPoint>::create(m_ga->getPosition(), m_ga->getPosition() + ccp(0, 170), 0.4f, [=](CCPoint t){
 					m_ga->setPosition(t);
 				}, [=](CCPoint t){
 					m_ga->setPosition(t);
-				}));
+				}, elasticOut));
 				addChild(KSTimer::create(0.1f, [=](){
 					addChild(KSGradualValue<CCPoint>::create(m_bo->getPosition(), m_bo->getPosition() + ccp(0, 170), 0.4f, [=](CCPoint t){
 						m_bo->setPosition(t);
 					}, [=](CCPoint t){
 						m_bo->setPosition(t);
-					}));
+					}, elasticOut));
 				}));
 			}));
 		}));

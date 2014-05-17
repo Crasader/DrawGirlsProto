@@ -6,44 +6,50 @@ USING_NS_CC;
 
 #include "DataStorageHub.h"
 #include "CCMenuLambda.h"
-
+#include "EasingAction.h"
 
 
 static int 	kAttackGa = 1;
 static int	kAttackBa = 2;
-static int	kAttackBo = 3; 
+static int	kAttackBo = 3;
+
+struct GababoReward
+{
+	std::string spriteName;
+	std::string desc;
+};
 class GaBaBo : public CCLayerColor
 {
 public:
 	GaBaBo();
 	virtual ~GaBaBo();
-	//	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init();
-	static GaBaBo* create()
+	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
+	virtual bool init(int touchPriority, const std::vector<GababoReward>& rewards);
+	static GaBaBo* create(int prior, const std::vector<GababoReward>& rewards)
 	{
 		GaBaBo* t = new GaBaBo();
-		t->init();
+		t->init(prior, rewards);
 		t->autorelease();
 		return t;
 	}
-	static CCScene* scene()
-	{
-		// 'scene' is an autorelease object
-		CCScene *scene = CCScene::create();
-		
-		// 'layer' is an autorelease object
-		GaBaBo *layer = GaBaBo::create();
-		layer->setAnchorPoint(ccp(0.5,0));
-		layer->setScale(myDSH->screen_convert_rate);
-		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
-		
-		scene->addChild(layer);
-		return scene;
-	}
+//	static CCScene* scene()
+//	{
+//		// 'scene' is an autorelease object
+//		CCScene *scene = CCScene::create();
+//		
+//		// 'layer' is an autorelease object
+//		GaBaBo *layer = GaBaBo::create();
+//		layer->setAnchorPoint(ccp(0.5,0));
+//		layer->setScale(myDSH->screen_convert_rate);
+//		layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
+//		
+//		scene->addChild(layer);
+//		return scene;
+//	}
 	void update(float dt);
 	void initGameTime()
 	{
-		m_remainTime = 9.f;
+		m_remainTime = 5.f;
 		m_gababoCountShowing = false;
 	}
 	void loadImage(int step);
@@ -51,7 +57,7 @@ public:
 	void setVisibleInterface(bool r);
 	void initAnimation();
 	void hidingAnimation();
-	//virtual void registerWithTouchDispatcher();
+	virtual void registerWithTouchDispatcher();
 protected:
 	CCMenuItemToggleLambda* m_ba, *m_ga, *m_bo;
 	int m_computerThink;
@@ -65,6 +71,7 @@ protected:
 	int m_step;
 	long long m_lastChangeTime;
 	int m_winCount, m_drawCount, m_loseCount;
+	int m_touchPriority;
 };
 
 #endif
