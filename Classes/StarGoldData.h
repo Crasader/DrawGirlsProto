@@ -149,10 +149,13 @@ enum GoodsType
 	kGoodsType_pass3,
 	kGoodsType_pass4,
 	kGoodsType_pass5,
-	kGoodsType_end
+	kGoodsType_end,
+	kGoodsType_pz,
+	kGoodsType_pc,
+	kGoodsType_cu
 };
 
-class ChangeGoodsData
+class ChangeGoodsDataDetail
 {
 public:
 	GoodsType m_type;
@@ -161,6 +164,21 @@ public:
 	string m_statsValue;
 	string m_content;
 	bool m_isPurchase;
+};
+
+class ChangeGoodsData
+{
+public:
+	vector<ChangeGoodsDataDetail> detail_list;
+	
+	bool is_renewal;
+	KSProtectStr m_exchangeID;
+	
+	ChangeGoodsData()
+	{
+		is_renewal = false;
+		detail_list.clear();
+	}
 };
 
 enum UserdataType
@@ -378,6 +396,7 @@ public:
 	PuzzleHistory getPuzzleHistory(int puzzle_number);
 	void setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_back);
 	void setPuzzleHistoryForNotSave(PuzzleHistory t_history);
+	void resultUpdatePuzzleHistory(Json::Value result_data);
 	void initPuzzleHistory(Json::Value history_list);
 	
 	CommandParam getUpdatePieceHistoryParam(PieceHistory t_history, jsonSelType call_back);
@@ -388,6 +407,7 @@ public:
 	PieceHistory getPieceHistory(int stage_number);
 	void setPieceHistoryForNotSave(PieceHistory t_history);
 	void setPieceHistory(PieceHistory t_history, jsonSelType call_back);
+	void resultUpdatePieceHistory(Json::Value result_data);
 	void initPieceHistory(Json::Value history_list);
 	
 	void initSelectedCharacterNo(int t_i);
@@ -673,15 +693,19 @@ public:
 	GoodsType getGoodsKeyToType(string t_key);
 	GoodsType getItemCodeToGoodsType(ITEM_CODE t_code);
 	void addChangeGoodsIngameGold(int t_value);
-	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
-	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+	void addChangeGoods(string t_exchangeID, GoodsType t_type = kGoodsType_begin, int t_value = 0, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+	void addChangeGoods(string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list);
+//	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+//	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void clearChangeGoods();
 	void changeGoods(jsonSelType t_callback);
 	void changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback);
 	void refreshGoodsData(string t_key, int t_count);
-	CommandParam getChangeGoodsParam(jsonSelType t_callback);
+	vector<CommandParam> getChangeGoodsParam(jsonSelType t_callback);
 	void saveChangeGoodsTransaction(Json::Value result_data);
 	bool isChangedGoods();
+	
+	void linkChangeHistory(Json::Value result_data);
 	
 	int getGoodsValue(GoodsType t_type);
 	

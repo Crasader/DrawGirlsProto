@@ -216,7 +216,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	addChild(inapp_loading);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_count_i, kPurchaseGuideType_firstPurchase-1), "첫구매팝업(IOS-인앱결제)", "", "", true);
+	mySGD->addChangeGoods("pg_fp");
 	
 	mySGD->setUserdataIsFirstBuy(1); // true
 	vector<CommandParam> command_list;
@@ -294,7 +294,13 @@ void FirstPurchasePopup::requestItemDelivery()
 	request_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
 	if(mySGD->isChangedGoods())
-		command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
+	{
+		vector<CommandParam> t_list = mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction));
+		for(int i=0;i<t_list.size();i++)
+		{
+			command_list.push_back(t_list[i]);
+		}
+	}
 	command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
 	hspConnector::get()->command(command_list);

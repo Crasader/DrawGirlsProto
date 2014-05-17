@@ -847,7 +847,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 					LoadingLayer* t_loading = LoadingLayer::create(-9999);
 					addChild(t_loading, 9999);
 					
-					mySGD->addChangeGoods(kGoodsType_ruby, -NSDS_GI(puzzle_number, kSDS_PZ_point_i), "퍼즐오픈", CCString::createWithFormat("%d", puzzle_number)->getCString());
+					mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
 					
 					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
@@ -1366,7 +1366,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		LoadingLayer* loading_layer = LoadingLayer::create(-9999);
 		addChild(loading_layer, 9999);
 		
-		mySGD->addChangeGoods(kGoodsType_ruby, mySGD->getPuzzlePerfectRewardRuby());
+		mySGD->addChangeGoods("b_pft", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", puzzle_number)->getCString());
 		mySGD->changeGoods([=](Json::Value result_data)
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -1410,7 +1410,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		t_history.is_open = true;
 		t_history.open_type = "루비결제";
 		
-		mySGD->addChangeGoods(kGoodsType_ruby, -t_need_ruby, "퍼즐오픈", CCString::createWithFormat("%d", puzzle_number)->getCString());
+		mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
 		
 		vector<CommandParam> command_list;
 		
@@ -2175,7 +2175,7 @@ void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
 	addChild(t_loading, 9999);
 	
-	mySGD->addChangeGoods(kGoodsType_gold, 10000, "CGP일반보상");
+	mySGD->addChangeGoods("cgp_n");
 	mySGD->changeGoods([=](Json::Value result_data){
 		t_loading->removeFromParent();
 		if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -2212,7 +2212,7 @@ void MainFlowScene::cgpAllReward(CCObject* sender, CCControlEvent t_event)
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
 	addChild(t_loading, 9999);
 	
-	mySGD->addChangeGoods(kGoodsType_gold, 10000, "CGP전체팝업보상");
+	mySGD->addChangeGoods("cgp_ap");
 	mySGD->changeGoods([=](Json::Value result_data){
 		t_loading->removeFromParent();
 		if(result_data["result"]["code"].asInt() == GDSUCCESS)

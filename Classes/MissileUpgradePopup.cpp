@@ -238,17 +238,20 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
 		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
-		mySGD->addChangeGoods(kGoodsType_pass3, -1, "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 		
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		t_history.level = t_history.level.getV() + 1;
+		mySGD->addChangeGoods("cu_p", kGoodsType_cu, mySGD->getSelectedCharacterHistory().characterNo.getV());
 		
-		vector<CommandParam> command_list;
-		command_list.clear();
-		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+		mySGD->changeGoods(json_selector(this, MissileUpgradePopup::resultSaveUserData));
 		
-		
-		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
+//		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+//		t_history.level = t_history.level.getV() + 1;
+//		
+//		vector<CommandParam> command_list;
+//		command_list.clear();
+//		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+//		
+//		
+//		mySGD->changeGoodsTransaction(command_list, );
 	}
 	else
 	{
@@ -271,17 +274,42 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
 		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
-		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getSelectedCharacterHistory().nextPrice.getV(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 		
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		t_history.level = t_history.level.getV() + 1;
+		vector<ChangeGoodsDataDetail> t_list;
 		
-		vector<CommandParam> command_list;
-		command_list.clear();
-		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+		ChangeGoodsDataDetail t_detail;
+		t_detail.m_type = kGoodsType_gold;
+		t_detail.m_value = -upgrade_price;
+		t_detail.m_statsID = "";
+		t_detail.m_statsValue = "";
+		t_detail.m_content = "";
+		t_detail.m_isPurchase = false;
 		
+		t_list.push_back(t_detail);
 		
-		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
+		ChangeGoodsDataDetail t_detail2;
+		t_detail2.m_type = kGoodsType_cu;
+		t_detail2.m_value = mySGD->getSelectedCharacterHistory().characterNo.getV();
+		t_detail2.m_statsID = "";
+		t_detail2.m_statsValue = "";
+		t_detail2.m_content = "";
+		t_detail2.m_isPurchase = false;
+		
+		t_list.push_back(t_detail2);
+		
+		mySGD->addChangeGoods("cu_g", t_list);
+		
+		mySGD->changeGoods(json_selector(this, MissileUpgradePopup::resultSaveUserData));
+		
+//		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+//		t_history.level = t_history.level.getV() + 1;
+//		
+//		vector<CommandParam> command_list;
+//		command_list.clear();
+//		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+//		
+//		
+//		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
 	}
 }
 

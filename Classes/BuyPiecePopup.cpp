@@ -128,7 +128,7 @@ void BuyPiecePopup::buyAction(CCObject* sender, CCControlEvent t_event)
 		loading_layer = LoadingLayer::create(-9999);
 		addChild(loading_layer, 9999);
 		
-		mySGD->addChangeGoods(kGoodsType_gold, -NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number), "피스오픈", CCString::createWithFormat("%d", stage_number)->getCString());
+		mySGD->addChangeGoods(CCString::createWithFormat("p_s_%d", stage_number)->getCString());
 		
 		PieceHistory t_history = mySGD->getPieceHistory(stage_number);
 		t_history.is_open = true;

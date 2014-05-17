@@ -1046,9 +1046,9 @@ void Maingame::gachaOn()
 	addChild(t_loading, 9999);
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
-		mySGD->addChangeGoods(kGoodsType_pass2, -1, "시작맵가챠");
+		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	else
-		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getGachaMapFee(), "시작맵가챠");
+		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	
 	int map_gacha_cnt = mySGD->getUserdataAchieveMapGacha()+1;
 	mySGD->setUserdataAchieveMapGacha(map_gacha_cnt);
