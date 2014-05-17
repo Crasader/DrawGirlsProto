@@ -8,6 +8,7 @@
 #include "KSUtil.h"
 #include "StyledLabelTTF.h"
 #include "FormSetter.h"
+#include "StageImgLoader.h"
 GaBaBo::GaBaBo()
 {
 	
@@ -153,7 +154,7 @@ void GaBaBo::loadImage(int step)
 {
 	if(m_stepSprite != nullptr)
 		m_stepSprite->removeFromParent();
-	m_stepSprite = CCSprite::create(boost::str(boost::format("ga%||.png") % step).c_str());
+	m_stepSprite = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", NSDS_GI(1, kSDS_SI_level_int1_card_i, step))->getCString());// CCSprite::create(boost::str(boost::format("ga%||.png") % step).c_str());
 	m_stepSprite->setScale(320.f / m_stepSprite->getContentSize().height);
 	m_stepSprite->setPosition(ccp(240, 160));
 	addChild(m_stepSprite);
