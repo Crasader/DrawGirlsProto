@@ -40,6 +40,8 @@
 #include "CardViewScene.h"
 #include "CardLockedPopup.h"
 #include "BuyPiecePopup.h"
+#include "GaBaBo.h"
+#include "CurtainNodeForBonusGame.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -784,8 +786,32 @@ void PuzzleScene::pumpPuzzle()
 
 void PuzzleScene::endSuccessPuzzleEffect()
 {
-	mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
-	startBacking();
+	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kMiniGameCode_gababo, -500, [=](){
+		//		if(m_gameCode == kMiniGameCode_gababo)
+		{
+			GababoReward gr1;
+			gr1.spriteName = "shop_ruby2.png";
+			gr1.desc = "루우비~!";
+			
+			GababoReward gr2;
+			gr2.spriteName = "shop_ruby2.png";
+			gr2.desc = "루우비~!";
+			GababoReward gr3;
+			gr3.spriteName = "shop_ruby2.png";
+			gr3.desc = "루우비~!";
+			GababoReward gr4;
+			gr4.spriteName = "shop_ruby2.png";
+			gr4.desc = "루우비~!";
+			GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+										 {
+											 mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
+											 startBacking();
+										 });
+			addChild(gbb, 990);
+		}
+	});
+	addChild(bonusGame, 999);
+	
 //	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 }
 
@@ -1326,7 +1352,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 		
 		if(tag == kPuzzleMenuTag_cancel)
 		{
-			startBacking();
+			showSuccessPuzzleEffect();
+//			startBacking();
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
