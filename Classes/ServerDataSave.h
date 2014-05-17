@@ -122,18 +122,21 @@ enum SDS_KEY
 	kSDS_GI_shopRuby_int1_priceName_s,
 	kSDS_GI_shopRuby_int1_sale_s,
 	kSDS_GI_shopRuby_int1_pID_s,
+	kSDS_GI_shopRuby_int1_exchangeID_s,
 	kSDS_GI_shopGold_int1_count_i,
 	kSDS_GI_shopGold_int1_countName_s,
 	kSDS_GI_shopGold_int1_price_i,
 	kSDS_GI_shopGold_int1_priceType_s,
 	kSDS_GI_shopGold_int1_priceName_s,
 	kSDS_GI_shopGold_int1_sale_s,
+	kSDS_GI_shopGold_int1_exchangeID_s,
 	kSDS_GI_shopCoin_int1_count_i,
 	kSDS_GI_shopCoin_int1_countName_s,
 	kSDS_GI_shopCoin_int1_price_i,
 	kSDS_GI_shopCoin_int1_priceType_s,
 	kSDS_GI_shopCoin_int1_priceName_s,
 	kSDS_GI_shopCoin_int1_sale_s,
+	kSDS_GI_shopCoin_int1_exchangeID_s,
 	kSDS_GI_shopEventRuby_int1_count_i,
 	kSDS_GI_shopEventRuby_int1_countName_s,
 	kSDS_GI_shopEventRuby_int1_price_i,
@@ -141,6 +144,7 @@ enum SDS_KEY
 	kSDS_GI_shopEventRuby_int1_priceName_s,
 	kSDS_GI_shopEventRuby_int1_sale_s,
 	kSDS_GI_shopEventRuby_int1_pID_s,
+	kSDS_GI_shopEventRuby_int1_exchangeID_s,
 	kSDS_GI_shopPurchaseGuide_int1_count_i,
 	kSDS_GI_shopPurchaseGuide_int1_countName_s,
 	kSDS_GI_shopPurchaseGuide_int1_price_i,
@@ -149,10 +153,12 @@ enum SDS_KEY
 	kSDS_GI_shopPurchaseGuide_int1_sale_s,
 	kSDS_GI_shopPurchaseGuide_int1_data_s,
 	kSDS_GI_shopPurchaseGuide_int1_pID_s,
+	kSDS_GI_shopPurchaseGuide_int1_exchangeID_s,
 	kSDS_GI_shopItem_int1_countName_s,
 	kSDS_GI_shopItem_int1_priceType_s,
 	kSDS_GI_shopItem_int1_priceName_s,
 	kSDS_GI_shopItem_int1_sale_s,
+	kSDS_GI_shopItem_int1_exchangeID_s,
 	kSDS_GI_end = 1999,
 	kSDS_SI_base = 2000,
 	kSDS_SI_version_i,
@@ -223,7 +229,19 @@ enum SDS_KEY
 	kSDS_CI_int1_silImgInfoImg_s,
 	kSDS_CI_int1_profile_s,
 	kSDS_CI_int1_name_s,
-	kSDS_CI_end = 3999
+	kSDS_CI_end = 3999,
+	kSDS_AI_base = 4000,
+	kSDS_AI_version_i,
+	kSDS_AI_count_i,
+	kSDS_AI_int1_id_i,
+	kSDS_AI_int1_title_s,
+	kSDS_AI_int1_content_s,
+	kSDS_AI_int1_goal_i,
+	kSDS_AI_int1_reward_count_i,
+	kSDS_AI_int1_reward_int2_type_s,
+	kSDS_AI_int1_reward_int2_count_i,
+	kSDS_AI_int1_exchangeID_s,
+	kSDS_AI_end = 4999
 };
 class SDS_SET
 {
@@ -298,6 +316,8 @@ public:
 	string gsfk (SDS_KEY fr_key);
 	string getStringForKey (SaveDataFile f_key, string r_key, int key_val1);
 	string gsfk (SDS_KEY fr_key, int key_val1);
+	string getStringForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2);
+	string gsfk (SDS_KEY fr_key, int key_val1, int key_val2);
 	string getStringForKey (SaveDataFile f_key, int i1, string r_key);
 	string gsfk (int i1, SDS_KEY fr_key);
 	string getStringForKey (SaveDataFile f_key, int i1, string r_key, int key_val1);
@@ -306,6 +326,8 @@ public:
 	void ssfk (SDS_KEY fr_key, string val1, bool diskWrite = true);
 	void setStringForKey (SaveDataFile f_key, string r_key, int key_val1, string val1, bool diskWrite = true);
 	void ssfk (SDS_KEY fr_key, int key_val1, string val1, bool diskWrite = true);
+	void setStringForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, string val1, bool diskWrite = true);
+	void ssfk (SDS_KEY fr_key, int key_val1, int key_val2, string val1, bool diskWrite = true);
 	void setStringForKey (SaveDataFile f_key, int i1, string r_key, string val1, bool diskWrite = true);
 	void ssfk (int i1, SDS_KEY fr_key, string val1, bool diskWrite = true);
 	void setStringForKey (SaveDataFile f_key, int i1, string r_key, int key_val1, string val1, bool diskWrite = true);

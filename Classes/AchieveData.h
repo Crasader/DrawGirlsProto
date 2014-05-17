@@ -125,7 +125,7 @@ public:
 		reward_list.clear();
 	}
 	
-	void initReward(Json::Value t_list);
+	void initReward(AchievementCode t_type);
 	
 private:
 	KSProtectVar<bool> is_completed;
@@ -207,7 +207,7 @@ public:
 	
 	int getRecentValue(AchievementCode t_code);
 	
-	void initAchievement(Json::Value t_list);
+	void initAchievement();
 	void initHistory(Json::Value t_list);
 	
 private:

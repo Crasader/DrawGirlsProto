@@ -304,7 +304,9 @@ void TitleRenewalScene::successLogin()
 	
 	command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	
-	command_list.push_back(CommandParam("getarchivementlist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetAchieveList)));
+	Json::Value achievelist_param;
+	achievelist_param["version"] = NSDS_GI(kSDS_AI_version_i);
+	command_list.push_back(CommandParam("getarchivementlist", achievelist_param, json_selector(this, TitleRenewalScene::resultGetAchieveList)));
 	
 	Json::Value shopdata_param;
 	shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
@@ -687,7 +689,36 @@ void TitleRenewalScene::resultGetAchieveList(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		myAchieve->initAchievement(result_data["list"]);
+		Json::Value t_list = result_data["list"];
+		int list_size = t_list.size();
+		NSDS_SI(kSDS_AI_count_i, list_size, false);
+		for(int i=0;i<list_size;i++)
+		{
+			NSDS_SI(kSDS_AI_int1_id_i, i+1, t_list[i]["id"].asInt(), false);
+			NSDS_SS(kSDS_AI_int1_title_s, t_list[i]["id"].asInt(), t_list[i]["title"].asString(), false);
+			NSDS_SS(kSDS_AI_int1_content_s, t_list[i]["id"].asInt(), t_list[i]["content"].asString(), false);
+			NSDS_SI(kSDS_AI_int1_goal_i, t_list[i]["id"].asInt(), t_list[i]["goal"].asInt(), false);
+			
+			Json::Value t_reward = t_list[i]["reward"];
+			int reward_size = t_reward.size();
+			NSDS_SI(kSDS_AI_int1_reward_count_i, t_list[i]["id"].asInt(), reward_size, false);
+			for(int j=0;j<reward_size;j++)
+			{
+				NSDS_SS(kSDS_AI_int1_reward_int2_type_s, t_list[i]["id"].asInt(), j+1, t_reward[j]["type"].asString(), false);
+				NSDS_SI(kSDS_AI_int1_reward_int2_count_i, t_list[i]["id"].asInt(), j+1, t_reward[j]["count"].asInt(), false);
+			}
+			
+			NSDS_SS(kSDS_AI_int1_exchangeID_s, t_list[i]["id"].asInt(), t_list[i]["exchangeID"].asString(), false);
+		}
+		
+		NSDS_SI(kSDS_AI_version_i, result_data["version"].asInt(), false);
+		mySDS->fFlush(kSDS_AI_base);
+		
+		myAchieve->initAchievement();
+	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		myAchieve->initAchievement();
 	}
 	else
 	{
@@ -717,6 +748,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_pID_s, i-1, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
 		for(int i=1;i<=6;i++)
@@ -730,6 +762,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopGold_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopGold_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopGold_int1_sale_s, i-1, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGold_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
 		for(int i=1;i<=6;i++)
@@ -743,6 +776,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopCoin_int1_sale_s, i-1, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopCoin_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
 		for(int i=1;i<=6;i++)
@@ -757,6 +791,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_pID_s, i-1, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
 		{
@@ -769,6 +804,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_exchangeID_s, t_code, t_data["exchangeID"].asString(), false);
 			
 			
 			t_code = kIC_doubleItem;
@@ -781,6 +817,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_exchangeID_s, t_code, t_data["exchangeID"].asString(), false);
 			
 			
 			t_code = kIC_longTime;
@@ -793,6 +830,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopItem_int1_exchangeID_s, t_code, t_data["exchangeID"].asString(), false);
 		}
 		
 		Json::FastWriter t_writer;
@@ -808,6 +846,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
 		}
@@ -822,6 +861,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
 		}
@@ -836,6 +876,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
 		}
