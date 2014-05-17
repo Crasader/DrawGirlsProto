@@ -459,7 +459,7 @@ public:
 	void showFail()
 	{
 		KSLabelTTF* label = KSLabelTTF::create(boost::str(boost::format("%|4.3|%% 실패") % (recent_percent * 100.f)).c_str(), mySGD->getFont().c_str(), 30.f);
-		label->enableStroke(ccc3(19, 9, 0), 2.f);
+		label->enableStroke(ccc3(19, 9, 0), 1.f);
 		label->setColor(ccc3(255, 155, 0));
 		m_container->addChild(label, kOnePercentGame_Z_content);
 		label->setScale(0);
@@ -487,7 +487,7 @@ public:
 			label->setScale(t);
 		}, elasticOut));
 
-		label->enableStroke(ccc3(19, 9, 0), 2.f);
+		label->enableStroke(ccc3(19, 9, 0), 1.f);
 		label->setColor(ccc3(255, 155, 0));
 
 		m_99State = 777;	

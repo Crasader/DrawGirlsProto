@@ -14,6 +14,70 @@ USING_NS_CC;
 	 * ???->updateTexture();
 	 *
 	 * */
+/*	
+	Json::Value value1, value2, value3, value4, value5, value6;
+	value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
+	value1["font"] = mySGD->getFont().c_str();
+	value1["size"] = 15.f;
+	value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
+	value2["font"] = mySGD->getFont().c_str();
+	value2["size"] = 15.f;
+
+	value3["linebreak"] = true;
+	value3["linespacing"] = 30.f;
+	
+	value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
+	value4["font"] = mySGD->getFont2();
+	value4["size"] = 20.f;
+	
+	value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
+	value5["font"] = mySGD->getFont2();
+	value5["size"] = 25.f;
+	
+	
+	StyledLabelTTF* slttf = StyledLabelTTF::create({
+		{"가을하늘공활한데", value1.toStyledString()},
+		{"높고구름없이", value2.toStyledString()},
+		{"", value3.toStyledString()},
+		{"밝은달은우리가슴", value4.toStyledString()},
+		{"일편단심일세", value5.toStyledString()},
+		{"", value3.toStyledString()}
+	}, StyledAlignment::kCenterAlignment);
+	slttf->setPosition(ccp(240, 240));
+	addChild(slttf);
+	{
+		Json::Value value1, value2, value3, value4, value5, value6;
+		value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
+		value1["font"] = mySGD->getFont().c_str();
+		value1["size"] = 15.f;
+		value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
+		value2["font"] = mySGD->getFont().c_str();
+		value2["size"] = 15.f;
+		
+		value3["linebreak"] = true;
+		value3["linespacing"] = 30.f;
+		
+		value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
+		value4["font"] = mySGD->getFont2();
+		value4["size"] = 20.f;
+		
+		value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
+		value5["font"] = mySGD->getFont2();
+		value5["size"] = 25.f;
+		
+		
+		StyledLabelTTF* slttf = StyledLabelTTF::create({
+			{"동해물과백두산이", value1.toStyledString()},
+			{"마르고닳도록", value2.toStyledString()},
+			{"", value3.toStyledString()},
+			{"하느님이보우하사", value4.toStyledString()},
+			{"우리나라만세", value5.toStyledString()},
+			{"", value3.toStyledString()}
+		}, StyledAlignment::kLeftAlignment);
+		slttf->setPosition(ccp(0, 160));
+		addChild(slttf);
+	}
+*/	
 struct StyledText
 {
 	std::string m_text;
