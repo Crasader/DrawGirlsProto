@@ -31,7 +31,7 @@ bool GaBaBo::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
 	return true;
 }
 
-bool GaBaBo::init(int touchPriority, const std::vector<GababoReward>& rewards)
+bool GaBaBo::init(int touchPriority, const std::vector<GababoReward>& rewards, std::function<void(int)> endFunction)
 {
 	CCLayerColor::initWithColor(ccc4(255, 255, 255, 0));
 
@@ -50,6 +50,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<GababoReward>& rewards)
 	//CCLayerGradient* gradient1 = CCLayerGradient::create(ccc4(255, 0, 0, 255), ccc4(0, 255, 0, 255));
 	//gradient1->setScaleY(testTTF->getContentSize().height / gradient1->getContentSize().height);
 	//addChild(gradient1, 102);
+	m_endFunction = endFunction;
 	m_touchPriority = touchPriority;	
 	m_gababoCountShowing = false;
 

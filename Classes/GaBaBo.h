@@ -24,11 +24,11 @@ public:
 	GaBaBo();
 	virtual ~GaBaBo();
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(int touchPriority, const std::vector<GababoReward>& rewards);
-	static GaBaBo* create(int prior, const std::vector<GababoReward>& rewards)
+	virtual bool init(int touchPriority, const std::vector<GababoReward>& rewards, std::function<void(int)> endFunction);
+	static GaBaBo* create(int prior, const std::vector<GababoReward>& rewards, std::function<void(int)> endFunction)
 	{
 		GaBaBo* t = new GaBaBo();
-		t->init(prior, rewards);
+		t->init(prior, rewards, endFunction);
 		t->autorelease();
 		return t;
 	}
@@ -59,6 +59,7 @@ public:
 	void hidingAnimation();
 	virtual void registerWithTouchDispatcher();
 protected:
+	std::function<void(int)> m_endFunction;
 	CCMenuItemToggleLambda* m_ba, *m_ga, *m_bo;
 	int m_computerThink;
 	std::map<int, CCSprite*> m_computerThinkSprites;
