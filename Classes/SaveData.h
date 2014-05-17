@@ -28,6 +28,7 @@ enum SaveDataFile{
 	kSDF_stageInfo,
 	kSDF_cardInfo,
 	kSDF_downloadedInfo,
+	kSDF_achieveInfo,
 	kSDF_log
 };
 

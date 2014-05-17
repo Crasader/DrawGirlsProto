@@ -34,6 +34,7 @@ string SaveData::getSyncKey(SaveDataFile t_sdf)
 	else if(t_sdf == kSDF_gameInfo)			return_value = "GAMEINFO";
 	else if(t_sdf == kSDF_cardInfo)			return_value = "CARDINFO";
 	else if(t_sdf == kSDF_downloadedInfo)	return_value = "DOWNLOADEDINFO";
+	else if(t_sdf == kSDF_achieveInfo)		return_value = "ACHIEVEINFO";
 	else if(t_sdf == kSDF_log)				return_value = "LOG";
 	
 	return return_value;

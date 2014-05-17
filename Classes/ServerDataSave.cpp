@@ -468,6 +468,23 @@ string ServerDataSave::gsfk (SDS_KEY fr_key, int key_val1)
 	SDS_SET key_set = getKeySet(fr_key);
 	return getStringForKey(key_set.f_key, key_set.r_key, key_val1);
 }
+string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2)
+{
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	
+	iter_string = sds_cache_string.find(c_key);
+	if(iter_string != sds_cache_string.end())
+		return iter_string->second.getV();
+	
+	string return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), "");
+	sds_cache_string[c_key] = return_value;
+	return return_value;
+}
+string ServerDataSave::gsfk (SDS_KEY fr_key, int key_val1, int key_val2)
+{
+	SDS_SET key_set = getKeySet(fr_key);
+	return getStringForKey(key_set.f_key, key_set.r_key, key_val1, key_val2);
+}
 string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key)
 {
 	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
@@ -525,6 +542,18 @@ void ServerDataSave::ssfk (SDS_KEY fr_key, int key_val1, string val1, bool diskW
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setStringForKey(key_set.f_key, key_set.r_key, key_val1, val1.c_str(), diskWrite);
+}
+void ServerDataSave::setStringForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, string val1, bool diskWrite)
+{
+	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1.c_str(), diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	sds_cache_string[c_key] = val1;
+}
+void ServerDataSave::ssfk (SDS_KEY fr_key, int key_val1, int key_val2, string val1, bool diskWrite)
+{
+	SDS_SET key_set = getKeySet(fr_key);
+	setStringForKey(key_set.f_key, key_set.r_key, key_val1, key_val2, val1.c_str(), diskWrite);
 }
 void ServerDataSave::setStringForKey (SaveDataFile f_key, int i1, string r_key, string val1, bool diskWrite)
 {
@@ -651,18 +680,21 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopRuby_int1_priceName_s)			rv = "sr%dprcName";
 	else if(t_key == kSDS_GI_shopRuby_int1_sale_s)				rv = "sr%dsale";
 	else if(t_key == kSDS_GI_shopRuby_int1_pID_s)				rv = "sr%dpID";
+	else if(t_key == kSDS_GI_shopRuby_int1_exchangeID_s)		rv = "sr%dxcID";
 	else if(t_key == kSDS_GI_shopGold_int1_count_i)				rv = "sg%dcount";
 	else if(t_key == kSDS_GI_shopGold_int1_countName_s)			rv = "sg%dcntName";
 	else if(t_key == kSDS_GI_shopGold_int1_price_i)				rv = "sg%dprice";
 	else if(t_key == kSDS_GI_shopGold_int1_priceType_s)			rv = "sg%dprcType";
 	else if(t_key == kSDS_GI_shopGold_int1_priceName_s)			rv = "sg%dprcName";
 	else if(t_key == kSDS_GI_shopGold_int1_sale_s)				rv = "sg%dsale";
+	else if(t_key == kSDS_GI_shopGold_int1_exchangeID_s)		rv = "sg%dxcID";
 	else if(t_key == kSDS_GI_shopCoin_int1_count_i)				rv = "sc%dcount";
 	else if(t_key == kSDS_GI_shopCoin_int1_countName_s)			rv = "sc%dcntName";
 	else if(t_key == kSDS_GI_shopCoin_int1_price_i)				rv = "sc%dprice";
 	else if(t_key == kSDS_GI_shopCoin_int1_priceType_s)			rv = "sc%dprcType";
 	else if(t_key == kSDS_GI_shopCoin_int1_priceName_s)			rv = "sc%dprcName";
 	else if(t_key == kSDS_GI_shopCoin_int1_sale_s)				rv = "sc%dsale";
+	else if(t_key == kSDS_GI_shopCoin_int1_exchangeID_s)		rv = "sc%dxcID";
 	else if(t_key == kSDS_GI_shopEventRuby_int1_count_i)		rv = "esr%dcount";
 	else if(t_key == kSDS_GI_shopEventRuby_int1_countName_s)	rv = "esr%dcntName";
 	else if(t_key == kSDS_GI_shopEventRuby_int1_price_i)		rv = "esr%dprice";
@@ -670,6 +702,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopEventRuby_int1_priceName_s)	rv = "esr%dprcName";
 	else if(t_key == kSDS_GI_shopEventRuby_int1_sale_s)			rv = "esr%dsale";
 	else if(t_key == kSDS_GI_shopEventRuby_int1_pID_s)			rv = "esr%dpID";
+	else if(t_key == kSDS_GI_shopEventRuby_int1_exchangeID_s)		rv = "esr%dxcID";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_count_i)		rv = "sp%dcount";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_countName_s)	rv = "sp%dcntName";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_price_i)		rv = "sp%dprice";
@@ -678,10 +711,12 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_sale_s)			rv = "sp%dsale";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_data_s)			rv = "sp%ddata";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_pID_s)			rv = "sp%dpID";
+	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_exchangeID_s)	rv = "sp%dxcID";
 	else if(t_key == kSDS_GI_shopItem_int1_countName_s)			rv = "si%dcntName";
 	else if(t_key == kSDS_GI_shopItem_int1_priceType_s)			rv = "si%dprcType";
 	else if(t_key == kSDS_GI_shopItem_int1_priceName_s)			rv = "si%dprcName";
 	else if(t_key == kSDS_GI_shopItem_int1_sale_s)				rv = "si%dsale";
+	else if(t_key == kSDS_GI_shopItem_int1_exchangeID_s)		rv = "si%dxcID";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
@@ -752,6 +787,17 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 	
+	else if(t_key == kSDS_AI_version_i)							rv = "version";
+	else if(t_key == kSDS_AI_count_i)							rv = "count";
+	else if(t_key == kSDS_AI_int1_id_i)							rv = "%d_id";
+	else if(t_key == kSDS_AI_int1_title_s)						rv = "%d_title";
+	else if(t_key == kSDS_AI_int1_content_s)					rv = "%d_content";
+	else if(t_key == kSDS_AI_int1_goal_i)						rv = "%d_goal";
+	else if(t_key == kSDS_AI_int1_reward_count_i)				rv = "%d_reward_count";
+	else if(t_key == kSDS_AI_int1_reward_int2_type_s)			rv = "%d_reward_%d_type";
+	else if(t_key == kSDS_AI_int1_reward_int2_count_i)			rv = "%d_reward_%d_count";
+	else if(t_key == kSDS_AI_int1_exchangeID_s)					rv = "%d_xc";
+	
 	return rv.c_str();
 }
 
@@ -775,6 +821,7 @@ SaveDataFile ServerDataSave::getSDF (SDS_KEY t_key)
 	else if(t_key >= kSDS_GI_base && t_key <= kSDS_GI_end)				rv = kSDF_gameInfo;
 	else if(t_key >= kSDS_SI_base && t_key <= kSDS_SI_end)				rv = kSDF_stageInfo;
 	else if(t_key >= kSDS_CI_base && t_key <= kSDS_CI_end)				rv = kSDF_cardInfo;
+	else if(t_key >= kSDS_AI_base && t_key <= kSDS_AI_end)				rv = kSDF_achieveInfo;
 	return rv;
 }
 

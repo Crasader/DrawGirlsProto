@@ -192,7 +192,7 @@ public:
 	//서버의 응답을 받아 등록된 오브젝트의 포지션과 스케일을 조절하고 펑션이 등록되어있다면 호출한다.
 	void receivedFormData(Json::Value p){
 		
-		this->matchRecedvedData(p);
+		this->matchReceivedData(p);
 		//갱신후 부를 함수가 설정되어있다면 콜한다.
 		if(m_funcAtReceived)m_funcAtReceived();
 
@@ -208,14 +208,32 @@ public:
 	
 	//한번만 부른다.
 	void receivedFormDataOnce(Json::Value p){
-		this->matchRecedvedData(p);
+		this->matchReceivedData(p);
 		if(m_funcAtReceivedOnce){
 				m_funcAtReceivedOnce();
 				m_funcAtReceivedOnce=nullptr;
 		}
 	}
 	
-	void matchRecedvedData(Json::Value p){
+	CCNode* findObjectByString(CCNode* obj,string strID){
+		if(!obj)return nullptr;
+		if(obj->getStringData()==strID)return obj;
+		
+		CCArray* children = obj->getChildren();
+		if(children==nullptr)return nullptr;
+		
+		for(int i=0;i<children->count();i++){
+			CCNode* child = (CCNode*)children->objectAtIndex(i);
+			if(child->getStringData()==strID)return child;
+			
+			CCNode* childchild = findObjectByString(child, strID);
+			if(childchild!=nullptr)return childchild;
+		}
+		
+		return nullptr;
+	}
+	
+	void matchReceivedData(Json::Value p){
 		//update data
 		Json::Value::Members m = p.getMemberNames();
 		
@@ -223,6 +241,32 @@ public:
 		for(auto iter=m.begin();iter!=m.end();++iter){
 			map<string,FormSetterData>::iterator it;
 			it = m_list.find(*iter);
+			
+			CCNode* findObject = findObjectByString((CCNode *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0)), *iter);
+			if(findObject){
+				CCNode* obj = findObject;
+				Json::Value fData = p.get((*iter).c_str(),Json::Value());
+				if(obj && !fData["height"].isNull())
+					obj->setContentSize(ccp(fData.get("width", 0).asFloat(),fData.get("height", 0).asFloat()));
+				
+				if(obj && !fData["x"].isNull())
+					obj->setPositionX(fData.get("x", 0).asFloat());
+				
+				if(obj &&!fData["y"].isNull())
+					obj->setPositionY(fData.get("y", 0).asFloat());
+				
+				if(obj &&!fData["scale"].isNull() && fData["scale"].asFloat()>0)
+					obj->setScale(fData.get("scale", 1).asFloat());
+				
+				if(obj && !fData["anchorX"].isNull())
+					obj->setAnchorPoint(ccp(fData.get("anchorX", 0).asFloat(),fData.get("anchorY", 0).asFloat()));
+				
+				if(obj && !fData["w"].isNull())
+					obj->setContentSize(CCSizeMake(fData.get("w", 0).asFloat(),obj->getContentSize().height));
+				
+				if(obj && !fData["h"].isNull())
+					obj->setContentSize(CCSizeMake(obj->getContentSize().width, fData.get("h", 0).asFloat()));
+			}
 			
 			//받아온 데이터와 등록되어있는 오브젝트중 매칭이 되어있으면
 			if(it != m_list.end()){
@@ -234,27 +278,27 @@ public:
 				
 				vector<CCNode*>::iterator it2;
 				for (it2=(it->second).objects.begin();it2!=(it->second).objects.end();it2++) {
+					CCNode* obj = *it2;
+					if(obj && !(it->second).data["height"].isNull())
+						obj->setContentSize(ccp((it->second).data.get("width", 0).asFloat(),(it->second).data.get("height", 0).asFloat()));
 					
-					if((*it2) && !(it->second).data["height"].isNull())
-						(*it2)->setContentSize(ccp((it->second).data.get("width", 0).asFloat(),(it->second).data.get("height", 0).asFloat()));
+					if(obj && !(it->second).data["x"].isNull())
+						obj->setPositionX((it->second).data.get("x", 0).asFloat());
 					
-					if((*it2) && !(it->second).data["x"].isNull())
-						(*it2)->setPositionX((it->second).data.get("x", 0).asFloat());
+					if(obj &&!(it->second).data["y"].isNull())
+						obj->setPositionY((it->second).data.get("y", 0).asFloat());
 					
-					if((*it2) &&!(it->second).data["y"].isNull())
-						(*it2)->setPositionY((it->second).data.get("y", 0).asFloat());
+					if(obj &&!(it->second).data["scale"].isNull() && (it->second).data["scale"].asFloat()>0)
+						obj->setScale((it->second).data.get("scale", 1).asFloat());
 					
-					if((*it2) &&!(it->second).data["scale"].isNull() && (it->second).data["scale"].asFloat()>0)
-						(*it2)->setScale((it->second).data.get("scale", 1).asFloat());
+					if(obj && !(it->second).data["anchorX"].isNull())
+						obj->setAnchorPoint(ccp((it->second).data.get("anchorX", 0).asFloat(),(it->second).data.get("anchorY", 0).asFloat()));
 					
-					if((*it2) && !(it->second).data["anchorX"].isNull())
-						(*it2)->setAnchorPoint(ccp((it->second).data.get("anchorX", 0).asFloat(),(it->second).data.get("anchorY", 0).asFloat()));
-					
-					if((*it2) && !(it->second).data["w"].isNull())
-						(*it2)->setContentSize(CCSizeMake((it->second).data.get("w", 0).asFloat(),(*it2)->getContentSize().height));
+					if(obj && !(it->second).data["w"].isNull())
+						obj->setContentSize(CCSizeMake((it->second).data.get("w", 0).asFloat(),obj->getContentSize().height));
 											   
-					if((*it2) && !(it->second).data["h"].isNull())
-						(*it2)->setContentSize(CCSizeMake((*it2)->getContentSize().width, (it->second).data.get("h", 0).asFloat()));
+					if(obj && !(it->second).data["h"].isNull())
+						obj->setContentSize(CCSizeMake(obj->getContentSize().width, (it->second).data.get("h", 0).asFloat()));
 				}
 				
 				

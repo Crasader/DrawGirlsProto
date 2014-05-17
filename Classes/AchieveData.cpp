@@ -12,14 +12,15 @@
 #include "UnknownFriends.h"
 #include "ServerDataSave.h"
 
-void AchieveConditionRewardData::initReward(Json::Value t_list)
+void AchieveConditionRewardData::initReward(AchievementCode t_code)
 {
 	reward_list.clear();
 	
-	for(int i=0;i<t_list.size();i++)
+	int list_size = NSDS_GI(kSDS_AI_int1_reward_count_i, t_code);
+	for(int i=0;i<list_size;i++)
 	{
-		string t_type = t_list[i]["type"].asString();
-		int t_count = t_list[i]["count"].asInt();
+		string t_type = NSDS_GS(kSDS_AI_int1_reward_int2_type_s, t_code, i+1);
+		int t_count = NSDS_GI(kSDS_AI_int1_reward_int2_count_i, t_code, i+1);
 		
 		reward_list.push_back(AchieveRewardClass(t_type, t_count));
 	}
@@ -204,19 +205,20 @@ vector<CommandParam> AchieveConditionReward::updateAchieveHistoryVectorParam(jso
 }
 
 
-void AchieveConditionReward::initAchievement(Json::Value t_list)
+void AchieveConditionReward::initAchievement()
 {
 	data_map.clear();
 	
-	for(int i=0;i<t_list.size();i++)
+	int list_size = NSDS_GI(kSDS_AI_count_i);
+	for(int i=0;i<list_size;i++)
 	{
-		AchievementCode t_type = (AchievementCode)t_list[i]["id"].asInt();
-		string t_title = t_list[i]["title"].asString();
-		string t_content = t_list[i]["content"].asString();
-		int t_goal = t_list[i]["goal"].asInt();
+		AchievementCode t_type = (AchievementCode)NSDS_GI(kSDS_AI_int1_id_i, i+1);
+		string t_title = NSDS_GS(kSDS_AI_int1_title_s, t_type);
+		string t_content = NSDS_GS(kSDS_AI_int1_content_s, t_type);
+		int t_goal = NSDS_GI(kSDS_AI_int1_goal_i, t_type);
 		
 		data_map[t_type] = AchieveConditionRewardData(t_type, t_goal, t_title, t_content);
-		data_map[t_type].initReward(t_list[i]["reward"]);
+		data_map[t_type].initReward(t_type);
 	}
 }
 
