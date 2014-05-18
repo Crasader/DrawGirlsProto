@@ -158,7 +158,11 @@ void MissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize 
 	distance = t_distance;
 	da = t_da;
 	reduce_da = t_reduce_da;
-	
+//	setOpacity(0);
+//	auto missile = KS::loadCCBI<CCSprite*>(this, "ingame_missile.ccbi").first;
+//	missile->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
+//	missile->setAnchorPoint(ccp(0, 0));
+//	addChild(missile);
 	setPosition(t_sp);
 	startMove();
 }
@@ -261,7 +265,10 @@ void MissileUnit2::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize
 	distance = t_distance;
 	da = t_da;
 	reduce_da = t_reduce_da;
-	
+//	setOpacity(0);
+//	auto missile = KS::loadCCBI<CCSprite*>(this, "ingame_missile.ccbi").first;
+//	missile->setAnchorPoint(ccp(0, 0));
+//	addChild(missile);
 	setPosition(t_sp);
 	startMove();
 }
@@ -4201,6 +4208,14 @@ void MathmaticalMissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distan
 	//			ccp(75, 0), ccp(100, 0), ccp(125, 0), ccp(150, 0), ccp(175, 0),
 	//			ccp(200, 0), ccp(250, 0)};
 	setPosition(t_sp);
+	
+//	setOpacity(0);
+//	auto missile = KS::loadCCBI<CCSprite*>(this, "ingame_missile.ccbi").first;
+//	missile->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
+////	missile->setAnchorPoint(ccp(0, 0));
+//	addChild(missile);
+	
+	
 	schedule(schedule_selector(ThisClassType::move));
 }
 CCPoint MathmaticalMissileUnit::myFunction (float fc)

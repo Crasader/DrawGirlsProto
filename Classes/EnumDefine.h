@@ -362,4 +362,10 @@ enum StoneType
 	kStoneType_global
 };
 
+enum class Curtain
+{
+	kCurtain = 999,
+	kBonusGame = 990,
+	kTouchPriority = -500
+};
 #endif
