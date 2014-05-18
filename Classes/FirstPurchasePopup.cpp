@@ -38,6 +38,18 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	end_func = t_end_func;
 	purchase_func = t_purchase_func;
 	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray);
+	
 	suction = TouchSuctionLayer::create(touch_priority+1);
 	addChild(suction);
 	
@@ -47,24 +59,32 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-	back_case->setContentSize(CCSizeMake(320,280));
+	
+	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_case->setContentSize(CCSizeMake(300,260));
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseSaleTitle), mySGD->getFont().c_str(), 21);
-	title_label->setColor(ccc3(50, 250, 255));
-	title_label->setPosition(ccp(0,95));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	back_case->addChild(back_in);
+	
+	
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseSaleTitle), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setAnchorPoint(ccp(0,0.5f));
+	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	
 	CCSprite* ruby_img = CCSprite::create("shop_ruby6.png");
-	ruby_img->setPosition(ccp(-70,20));
+	ruby_img->setPosition(ccp(0,20));
 	m_container->addChild(ruby_img);
 	
 	
 	CCSprite* ruby100_img = CCSprite::create("firstpurchase_ruby100.png");
-	ruby100_img->setPosition(ccp(-25,45));
+	ruby100_img->setPosition(ccp(45,45));
 	m_container->addChild(ruby100_img);
 	
 	
@@ -75,25 +95,25 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	KSLabelTTF* before_price = KSLabelTTF::create(KS::insert_separator(before_data["beforeDiscount"].asString()).c_str(), mySGD->getFont().c_str(), 14);
 	before_price->enableOuterStroke(ccBLACK, 1.f);
-	before_price->setPosition(ccp(-70,20));
+	before_price->setPosition(ccp(0,20));
 	m_container->addChild(before_price);
 	
 	
 	CCSprite* sale_arrow = CCSprite::create("sale_arrow.png");
-	sale_arrow->setPosition(ccp(-70,20));
+	sale_arrow->setPosition(ccp(0,20));
 	m_container->addChild(sale_arrow);
 	
 	
 	KSLabelTTF* after_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 20);
 	after_price->setColor(ccYELLOW);
 	after_price->enableOuterStroke(ccBLACK, 1.f);
-	after_price->setPosition(ccp(-5,20));
+	after_price->setPosition(ccp(65,20));
 	m_container->addChild(after_price);
 	
 	
 	CCScale9Sprite* stamp_case = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	stamp_case->setContentSize(CCSizeMake(70, 45));
-	stamp_case->setPosition(ccp(75,40));
+	stamp_case->setPosition(ccp(-70,40));
 	stamp_case->setRotation(-15);
 	m_container->addChild(stamp_case);
 	
@@ -111,7 +131,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	
 	KSLabelTTF* sub_ment1 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseMent1), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
-	sub_ment1->setColor(ccYELLOW);
+	sub_ment1->setColor(ccc3(255,170,20));
 	sub_ment1->setAnchorPoint(ccp(1.f,0.5f));
 	sub_ment1->setPositionY(-18);
 	m_container->addChild(sub_ment1);
@@ -134,12 +154,13 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(sub_ment3);
 	
 	
-	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 13);
-	CCScale9Sprite* giveup_back = CCScale9Sprite::create("subpop_gray.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+	giveup_label->setColor(ccBLACK);
+	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
 	giveup_button = CCControlButton::create(giveup_label, giveup_back);
 	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(FirstPurchasePopup::giveupAction), CCControlEventTouchUpInside);
-	giveup_button->setPreferredSize(CCSizeMake(90,60));
-	giveup_button->setPosition(ccp(-55,-85));
+	giveup_button->setPreferredSize(CCSizeMake(80,40));
+	giveup_button->setPosition(ccp(-87,-85));
 	m_container->addChild(giveup_button);
 	
 	giveup_button->setTouchPriority(touch_priority);
@@ -148,31 +169,34 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	CCLabelTTF* p_label = CCLabelTTF::create();
 	
-	KSLabelTTF* purchase_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_purchase), mySGD->getFont().c_str(), 13);
-	purchase_label->setPosition(ccp(0,10));
+	KSLabelTTF* purchase_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_purchase), mySGD->getFont().c_str(), 15);
+	purchase_label->setAnchorPoint(ccp(0,0.5f));
+	purchase_label->setPosition(ccp(0,0));
 	
-	CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
-	price_back->setContentSize(CCSizeMake(60, 30));
-	price_back->setPosition(ccp(purchase_label->getContentSize().width/2.f, purchase_label->getContentSize().height/2.f-20));
+	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
+	price_back->setContentSize(CCSizeMake(82, 26));
+	price_back->setPosition(ccp(purchase_label->getContentSize().width + price_back->getContentSize().width/2.f + 5, purchase_label->getContentSize().height/2.f));
 	purchase_label->addChild(price_back);
 	
 //	CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 //	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-15,price_back->getContentSize().height/2.f));
 //	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 15);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
 	p_label->addChild(purchase_label);
 	
 	
-	CCScale9Sprite* purchase_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* purchase_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	
 	purchase_button = CCControlButton::create(p_label, purchase_back);
 	purchase_button->addTargetWithActionForControlEvents(this, cccontrol_selector(FirstPurchasePopup::purchaseAction), CCControlEventTouchUpInside);
-	purchase_button->setPreferredSize(CCSizeMake(90,60));
-	purchase_button->setPosition(ccp(55,-85));
+	purchase_button->setPreferredSize(CCSizeMake(170,44));
+	purchase_button->setPosition(ccp(43,-85));
 	m_container->addChild(purchase_button);
+	
+	purchase_label->setPositionX(-purchase_button->getPreferredSize().width/2.f+15);
 	
 	purchase_button->setTouchPriority(touch_priority);
 	
@@ -183,8 +207,13 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
 			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
 	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t)
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
 										 {
+											 gray->setOpacity(255);
 											 KS::setOpacity(m_container, 255);
 											 is_menu_enable = true;
 										 }));
@@ -200,7 +229,15 @@ void FirstPurchasePopup::giveupAction(CCObject* sender, CCControlEvent t_event)
 	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
 		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
 	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t){KS::setOpacity(m_container, 0); end_func(); removeFromParent();}));
+	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
+	{
+		gray->setOpacity(0);
+		KS::setOpacity(m_container, 0); end_func(); removeFromParent();
+	}));
 }
 
 void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event)

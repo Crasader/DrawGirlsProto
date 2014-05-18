@@ -32,7 +32,6 @@
 #include "EffectSprite.h"
 #include "FlagSelector.h"
 
-
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -79,8 +78,6 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
-	
-
 	
 //	Json::Value param;
 //	param["productid"] = "g_10289_001";

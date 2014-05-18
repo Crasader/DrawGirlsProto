@@ -521,7 +521,7 @@ public:
 		addChild(selectedFlagSpr,2);
 		
 		CCSprite* selectBox = CCSprite::create("nickname_flagbox.png");
-		selectBox->setPosition(ccp(100,55));
+		selectBox->setPosition(ccp(100.5f,56));
 		addChild(selectBox,1);
 		
 		CCSprite* leftArrow = CCSprite::create("nickname_arrow.png");
