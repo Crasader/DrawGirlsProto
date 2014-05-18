@@ -74,6 +74,8 @@ public:
 	bool is_menu_enable;
 	vector<function<void()>> button_func_list;
 	
+	void buttonAction(CCObject* sender, CCControlEvent t_event);
+	
 protected:
 	CCSprite* dimmed_sprite;
 	CCPoint base_position;
@@ -92,10 +94,8 @@ protected:
 		
 		base_position = ccp(240,160);
 		
-		dimmed_sprite = CCSprite::create("whitePaper.png");
+		dimmed_sprite = CCSprite::create("back_gray.png");
 		dimmed_sprite->setPosition(base_position);
-		dimmed_sprite->setColor(ccc3(0, 0, 0));
-		dimmed_sprite->setOpacity(100);
 		addChild(dimmed_sprite);
 	}
 	
@@ -122,8 +122,6 @@ protected:
 	{
 		
 	}
-	
-	void buttonAction(CCObject* sender, CCControlEvent t_event);
 };
 
 #endif /* defined(__DGproto__ASPopupView__) */
