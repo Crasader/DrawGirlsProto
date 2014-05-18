@@ -42,7 +42,7 @@
 #include "BuyPiecePopup.h"
 #include "GaBaBo.h"
 #include "CurtainNodeForBonusGame.h"
-
+#include "EndlessSettingPopup.h"
 CCScene* PuzzleScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -786,20 +786,20 @@ void PuzzleScene::pumpPuzzle()
 
 void PuzzleScene::endSuccessPuzzleEffect()
 {
-	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kMiniGameCode_gababo, -500, [=](){
+	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
 		//		if(m_gameCode == kMiniGameCode_gababo)
 		{
-			GababoReward gr1;
+			BonusGameReward gr1;
 			gr1.spriteName = "shop_ruby2.png";
 			gr1.desc = "루우비~!";
 			
-			GababoReward gr2;
+			BonusGameReward gr2;
 			gr2.spriteName = "shop_ruby2.png";
 			gr2.desc = "루우비~!";
-			GababoReward gr3;
+			BonusGameReward gr3;
 			gr3.spriteName = "shop_ruby2.png";
 			gr3.desc = "루우비~!";
-			GababoReward gr4;
+			BonusGameReward gr4;
 			gr4.spriteName = "shop_ruby2.png";
 			gr4.desc = "루우비~!";
 			GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
@@ -807,10 +807,10 @@ void PuzzleScene::endSuccessPuzzleEffect()
 											 mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
 											 startBacking();
 										 });
-			addChild(gbb, 990);
+			addChild(gbb, (int)Curtain::kBonusGame);
 		}
 	});
-	addChild(bonusGame, 999);
+	addChild(bonusGame, (int)Curtain::kCurtain);
 	
 //	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 }
@@ -1531,9 +1531,12 @@ void PuzzleScene::openSettingPopup()
 	
 	mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 	
-	StartSettingPopup* t_popup = StartSettingPopup::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
 	addChild(t_popup, kPuzzleZorder_popup);
+	
+//	StartSettingPopup* t_popup = StartSettingPopup::create();
+//	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+//	addChild(t_popup, kPuzzleZorder_popup);
 }
 
 void PuzzleScene::mailPopupClose()
