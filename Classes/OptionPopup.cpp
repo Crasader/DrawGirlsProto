@@ -27,19 +27,10 @@
 #include "hspConnector.h"
 #include "TitleRenewal.h"
 
-#include "FirstPurchasePopup.h"
-#include "EmptyItemSalePopup.h"
-#include "MileagePopup.h"
-#include "EventShopPopup.h"
-#include "LevelupGuidePopup.h"
-#include "CardLockedPopup.h"
-
 #include "KSLabelTTF.h"
 #include "PopCake.h"
 #include "EffectSprite.h"
 #include "FlagSelector.h"
-#include "BugTestScene1.h"
-#include "BugTestScene2.h"
 
 
 USING_NS_CC_EXT;
@@ -89,13 +80,6 @@ bool OptionPopup::init()
 		return false;
 	}
 	
-//	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-999, [=](){}, [=](){});
-//	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});
-//	MileagePopup* t_popup = MileagePopup::create(-999, [=](){}, 5);
-//	EventShopPopup* t_popup = EventShopPopup::create(-999, [=](){});
-//	LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-999, [=](){}, [=](){});
-//	addChild(t_popup, 999);
-	
 //	Json::Value param;
 //	param["productid"] = "g_10289_001";
 //	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
@@ -111,24 +95,6 @@ bool OptionPopup::init()
 //		}
 //		KS::KSLog("in-app test \n%", v);
 //	});
-	
-//	CommonButton* test1 = CommonButton::createCloseButton(-999);
-//	test1->setPosition(ccp(200, 300));
-//	addChild(test1, 999);
-//	test1->setFunction([=](CCObject* sender)
-//					   {
-//						   CCDirector::sharedDirector()->replaceScene(BugTestScene1::scene());
-//					   });
-//	
-//	CommonButton* test2 = CommonButton::createCloseButton(-999);
-//	test2->setPosition(ccp(280, 300));
-//	addChild(test2, 999);
-//	test2->setFunction([=](CCObject* sender)
-//					   {
-//						   CCDirector::sharedDirector()->replaceScene(BugTestScene2::scene());
-//					   });
-	
-	
 	
 	setTouchEnabled(true);
 	

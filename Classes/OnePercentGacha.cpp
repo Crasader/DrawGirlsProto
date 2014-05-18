@@ -108,7 +108,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);
 		
-		mySGD->addChangeGoods(kGoodsType_pass5, -1, "99프로가챠");
+		mySGD->addChangeGoods("g_99_p");
 		
 		mySGD->changeGoods([=](Json::Value result_data){
 			t_loading->removeFromParent();
@@ -159,7 +159,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);
 		
-		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠");
+		mySGD->addChangeGoods("g_99_r");
 		
 		mySGD->changeGoods([=](Json::Value result_data){
 			t_loading->removeFromParent();
@@ -444,7 +444,13 @@ void OnePercentGacha::requestItemDelivery()
 	request_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
 	if(mySGD->isChangedGoods())
-		command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
+	{
+		vector<CommandParam> t_list = mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction));
+		for(int i=0;i<t_list.size();i++)
+		{
+			command_list.push_back(t_list[i]);
+		}
+	}
 	
 	hspConnector::get()->command(command_list);
 }

@@ -801,6 +801,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			Json::Value t_data = result_data[t_key.c_str()];
 			
 			NSDS_SS(kSDS_GI_shopItem_int1_countName_s, t_code, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopItem_int1_price_i, t_code, t_data["price"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
@@ -814,6 +815,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			t_data = result_data[t_key.c_str()];
 			
 			NSDS_SS(kSDS_GI_shopItem_int1_countName_s, t_code, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopItem_int1_price_i, t_code, t_data["price"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);
@@ -827,6 +829,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			t_data = result_data[t_key.c_str()];
 			
 			NSDS_SS(kSDS_GI_shopItem_int1_countName_s, t_code, t_data["countName"].asString(), false);
+			NSDS_SI(kSDS_GI_shopItem_int1_price_i, t_code, t_data["price"].asInt(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceType_s, t_code, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_priceName_s, t_code, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopItem_int1_sale_s, t_code, t_data["sale"].asString(), false);

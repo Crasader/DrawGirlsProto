@@ -265,7 +265,7 @@ public:
 				LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 				addChild(t_loading, 9999);
 
-				mySGD->addChangeGoods(kGoodsType_pass5, -1, "99프로가챠");
+				mySGD->addChangeGoods("g_99_p");
 
 				mySGD->changeGoods([=](Json::Value result_data){
 					t_loading->removeFromParent();
@@ -290,7 +290,7 @@ public:
 				LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 				addChild(t_loading, 9999);
 
-				mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠");
+				mySGD->addChangeGoods("g_99_r");
 
 				mySGD->changeGoods([=](Json::Value result_data){
 					t_loading->removeFromParent();

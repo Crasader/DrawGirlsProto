@@ -279,7 +279,13 @@ void ContinueContent::requestItemDelivery()
 	request_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
 	if(mySGD->isChangedGoods())
-		command_list.push_back(mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction)));
+	{
+		vector<CommandParam> t_list = mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction));
+		for(int i=0;i<t_list.size();i++)
+		{
+			command_list.push_back(t_list[i]);
+		}
+	}
 	
 	hspConnector::get()->command(command_list);
 }
@@ -299,7 +305,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 		t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 		addChild(t_popup, 9999);
 		
-		mySGD->addChangeGoods(kGoodsType_pass1, -1, "이어하기");
+		mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 		mySGD->changeGoods([=](Json::Value result_data)
 						   {
 							   t_popup->removeFromParent();
@@ -337,7 +343,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 		t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 		addChild(t_popup, 9999);
 		
-		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getPlayContinueFee(), "이어하기");
+		mySGD->addChangeGoods("rp_r", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 		mySGD->changeGoods([=](Json::Value result_data)
 						   {
 							   t_popup->removeFromParent();

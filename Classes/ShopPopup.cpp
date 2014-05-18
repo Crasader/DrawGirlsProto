@@ -957,7 +957,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									addChild(loading_layer, kSP_Z_popup);
 									
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-									mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, tag-kSP_MT_content1), "루비구매(IOS-인앱결제)", "", "", true);
+									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopRuby_int1_exchangeID_s, tag-kSP_MT_content1));
 									
 									mySGD->changeGoods([=](Json::Value result_data){
 										loading_layer->removeFromParent();
@@ -1007,8 +1007,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										mySGD->addChangeGoods(kGoodsType_ruby, -index_to_gold[tag-kSP_MT_content1].getV(), "골드구매");
-										mySGD->addChangeGoods(kGoodsType_gold, ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV(), "루비로구매");
+										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopGold_int1_exchangeID_s, tag-kSP_MT_content1));
 										
 										fail_func = [=]()
 										{
@@ -1039,8 +1038,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										mySGD->addChangeGoods(kGoodsType_ruby, -index_to_heart[tag-kSP_MT_content1].getV(), "하트구매");
-										
+										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopCoin_int1_exchangeID_s, tag-kSP_MT_content1));
 										
 										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 										

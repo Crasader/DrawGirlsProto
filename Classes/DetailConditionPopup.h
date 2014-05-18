@@ -29,6 +29,7 @@ private:
 	
 	bool is_menu_enable;
 	
+	CCSprite* gray;
 	TouchSuctionLayer* suction;
 	
 	CCNode* m_container;

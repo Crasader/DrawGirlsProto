@@ -155,6 +155,7 @@ enum SDS_KEY
 	kSDS_GI_shopPurchaseGuide_int1_pID_s,
 	kSDS_GI_shopPurchaseGuide_int1_exchangeID_s,
 	kSDS_GI_shopItem_int1_countName_s,
+	kSDS_GI_shopItem_int1_price_i,
 	kSDS_GI_shopItem_int1_priceType_s,
 	kSDS_GI_shopItem_int1_priceName_s,
 	kSDS_GI_shopItem_int1_sale_s,

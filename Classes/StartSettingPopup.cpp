@@ -285,21 +285,21 @@ void StartSettingPopup::setMain()
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
-			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
+			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
 		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
-			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
+			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
 		else if(t_code == kIC_longTime && mySGD->getItem8OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
-			mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(t_code), mySGD->getBonusItemCnt(t_code), "첫등장무료");
+			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
 	}
 	mySGD->changeGoods([=](Json::Value result_data)
@@ -960,29 +960,50 @@ void StartSettingPopup::startItemGacha()
 	{
 		CCLOG("start item gacha");
 		
-		mySGD->addChangeGoods(kGoodsType_pass4, -1, "아이템뽑기");
+		
+		mySGD->addChangeGoods("g_i_p");
 		
 		mySGD->changeGoods(json_selector(this, StartSettingPopup::goItemGacha));
 	}
 	else
 	{
-		if(mySGD->getItemGachaGoldFee() > mySGD->getGoodsValue(kGoodsType_gold))
+		if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
 		{
-			addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
-																{
-																	ShopPopup* t_shop = ShopPopup::create();
-																	t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																	t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-																	t_shop->setShopCode(kSC_gold);
-																	t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-																	addChild(t_shop, kStartSettingPopupZorder_popup);
-																}), 9999);
-			return;
+			if(mySGD->getItemGachaReplayGoldFee() > mySGD->getGoodsValue(kGoodsType_gold))
+			{
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
+																	{
+																		ShopPopup* t_shop = ShopPopup::create();
+																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+																		t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																		t_shop->setShopCode(kSC_gold);
+																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																		addChild(t_shop, kStartSettingPopupZorder_popup);
+																	}), 9999);
+				return;
+			}
+			
+			mySGD->addChangeGoods("g_i_gr");
 		}
-		
+		else
+		{
+			if(mySGD->getItemGachaGoldFee() > mySGD->getGoodsValue(kGoodsType_gold))
+			{
+				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
+																	{
+																		ShopPopup* t_shop = ShopPopup::create();
+																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+																		t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																		t_shop->setShopCode(kSC_gold);
+																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																		addChild(t_shop, kStartSettingPopupZorder_popup);
+																	}), 9999);
+				return;
+			}
+			
+			mySGD->addChangeGoods("g_i_g");
+		}
 		CCLOG("start item gacha");
-		
-		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaGoldFee(), "아이템뽑기");
 		
 		mySGD->changeGoods(json_selector(this, StartSettingPopup::goItemGacha));
 	}
@@ -1379,8 +1400,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
 											addChild(t_loading, 9999);
 											
-											mySGD->addChangeGoods(kGoodsType_gold, -mySD->getItemPrice(item_list[clicked_item_idx]), "아이템구매", CCString::createWithFormat("%d", item_list[clicked_item_idx])->getCString());
-											mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(item_list[clicked_item_idx]), 1, "아이템구매");
+											mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopItem_int1_exchangeID_s, item_list[clicked_item_idx]));
 											
 											mySGD->changeGoods([=](Json::Value result_data){
 												t_loading->removeFromParent();
@@ -1420,8 +1440,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
 											addChild(t_loading, 9999);
 											
-											mySGD->addChangeGoods(kGoodsType_ruby, -mySD->getItemPrice(item_list[clicked_item_idx]), "아이템구매", CCString::createWithFormat("%d", item_list[clicked_item_idx])->getCString());
-											mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(item_list[clicked_item_idx]), 1, "아이템구매");
+											mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopItem_int1_exchangeID_s, item_list[clicked_item_idx]));
 											
 											mySGD->changeGoods([=](Json::Value result_data){
 												t_loading->removeFromParent();
@@ -1797,7 +1816,7 @@ void StartSettingPopup::finalSetting()
 		{
 			if(mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[i])) > 0)
 			{
-				mySGD->addChangeGoods(mySGD->getItemCodeToGoodsType(item_list[i]), -1, "사용");
+				mySGD->addChangeGoods(CCString::createWithFormat("u_i_%d", item_list[i])->getCString());
 				is_have_item[i] = true;
 			}
 			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());

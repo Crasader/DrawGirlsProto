@@ -456,18 +456,7 @@ float SilhouetteData::getItemPrice( ITEM_CODE t_code )
 {
 	float return_value;
 
-	int shop_item_cnt = NSDS_GI(myType, kSDS_SI_shopItemsCnt_i);
-	bool is_found = false;
-	for(int i=0;i<shop_item_cnt && !is_found;i++)
-	{
-		if(t_code == NSDS_GI(myType, kSDS_SI_shopItems_int1_type_i, i))
-		{
-			is_found = true;
-			return_value = NSDS_GI(myType, kSDS_SI_shopItems_int1_price_i, i);
-		}
-	}
-
-	return return_value;
+	return NSDS_GI(kSDS_GI_shopItem_int1_price_i, t_code);
 }
 
 string SilhouetteData::getItemCurrency(ITEM_CODE t_code)

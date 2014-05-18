@@ -364,7 +364,7 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
-		mySGD->addChangeGoods(kGoodsType_pass4, -1, "아이템뽑기");
+		mySGD->addChangeGoods("g_i_p");
 		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
 	}
 	else
@@ -382,7 +382,7 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
-		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaReplayGoldFee(), "아이템뽑기");
+		mySGD->addChangeGoods("g_i_gr");
 		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
 	}
 }
