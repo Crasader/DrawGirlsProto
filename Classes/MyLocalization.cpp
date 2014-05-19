@@ -367,7 +367,9 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	ko->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ko->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
-//	ko->setObject(CCString::create(""), kMyLocalKey_);
+	ko->setObject(CCString::create("남은시간"), kMyLocalKey_restTime);
+	ko->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
+	ko->setObject(CCString::create("%d분"), kMyLocalKey_restTimeSecond);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -902,6 +904,9 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	en->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	en->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
+	en->setObject(CCString::create("남은시간"), kMyLocalKey_restTime);
+	en->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
+	en->setObject(CCString::create("%d분"), kMyLocalKey_restTimeSecond);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1439,6 +1444,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	ja->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ja->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
+	ja->setObject(CCString::create("남은시간"), kMyLocalKey_restTime);
+	ja->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
+	ja->setObject(CCString::create("%d분"), kMyLocalKey_restTimeSecond);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
