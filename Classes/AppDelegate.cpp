@@ -36,6 +36,7 @@ USING_NS_CC;
 #include "KSUtil.h"
 #include "GaBaBo.h"
 #include "StarGoldData.h"
+#include "FormSetter.h"
 #include <chrono>
 
 //#include <boost/graph/graphviz.hpp>
@@ -316,6 +317,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	});
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	FormSetter::get()->setEnabledRemocon(true);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	FormSetter::get()->setEnabledRemocon(false);
+#endif
 	//	CCScene* pScene = TitleScene::scene();
 //	CCScene* pScene = GaBaBo::scene();
 		CCScene* pScene = TitleRenewalScene::scene();

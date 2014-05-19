@@ -12,10 +12,28 @@
 #include <iostream>
 #include "GraphDog.h"
 #include "KSUtil.h"
+#include "CommonButton.h"
+#include "KSLabelTTF.h"
 /*******************************************************
 오브젝트 배치하기의 슈퍼초 울트라 캡 혁신
  *******************************************************
  
+ 2.0v - 자체 리모컨으로
+ 1.조절할 오브젝트에 이름추가 obj->setStringData("objName");
+ 2.init함수 마지막에 리모콘코드 추가 FormSetter::get()->start();
+ 3.실행후 해당씬에서 디스플레이 오른쪽 아래를 터치하면 리모콘이 뜬다. 조절후 log버튼을 눌러보시라
+ 4.조절끝나면 소스코드삭제도 필요없음 FormSetter::get()->setEnabledRemocon(false) 한번만 호출해주면 있는 리모콘 모두 꺼짐.
+ 
+ 
+ 1.5v - 서버연동 버전 사용법2
+ 1.조절할 오브젝트에 이름추가 obj->setStringData("objName");
+ 2.init함수 마지막에 서버호출코드 추가  FormSetter::get()->requestFormData();
+ 3.웹어드민에 1번에서 추가한 이름으로 등록하여 사용가능.
+ 4.조절끝나면 2번 코드만 삭제하면 끝
+ 
+
+ 1.0v  - 서버연동 버전 사용법
+
 이제 오브젝트 배치한다고 포지션잡고 실행하고 포지션 잡고 실행해보고.. 의 무한 반복 작업을 하지 맙시다~!
 
 배치할 페이지를 켜놓고 웹에서 위치를 수정하면 실시간으로 오브젝트의 위치,스케일 등이 수정됩니다.
@@ -77,8 +95,57 @@
  });
  
 */
-class FormSetter : public CCNode{
+class TouchCancelLayer : public CCLayer{
 public:
+	bool init(){
+		if(!CCLayer::init()){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	static TouchCancelLayer* create(){
+		TouchCancelLayer* obj = new TouchCancelLayer();
+		obj->init();
+		obj->autorelease();
+		return obj;
+	}
+	
+	bool ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		//CCLog("sw touch");
+		return true;
+	}
+	
+	
+	void ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		
+		
+	}
+	
+	void ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		
+	}
+	
+	void ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		
+	}
+	
+	void registerWithTouchDispatcher()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, -999, true);
+	}
+	
+};
+class FormSetter : public CCLayer{
+public:
+	CCNode* remocon;
+	
 	struct FormSetterData{
 		Json::Value data;
 	//	CCNode* obj;
@@ -88,16 +155,27 @@ public:
 	
 	bool m_is_sch;
 	bool m_is_once;
+	int m_mode;
+	int m_selectedObjNumber;
+	CCPoint m_startPosition;
+	CCArray* m_objList;
 	map<string,FormSetterData> m_list;
 	float m_delay;
 	std::function<void(void)> m_funcAtReceived;
 	std::function<void(void)> m_funcAtReceivedOnce;
-	
+	KSLabelTTF* m_objName;
+	KSLabelTTF* m_objInfo;
+	CommonButton* m_modeBtn;
+	TouchCancelLayer* m_swLayer;
+	bool m_isEnabledRemocon;
 	static FormSetter* get()
 	{
 		static FormSetter* _ins = 0;
 		if(_ins == 0)
+		{
 			_ins = new FormSetter();
+			_ins->retain();
+		}
 		
 		return _ins;
 	}
@@ -108,7 +186,308 @@ public:
 		m_delay = 1.f;
 		m_funcAtReceived = nullptr;
 		m_funcAtReceivedOnce = nullptr;
+		m_mode=0;
+		remocon = CCNode::create();
+		remocon->retain();
+		m_objList = CCArray::create();
+		m_objList = new CCArray();
+		m_objList->init();
+		m_selectedObjNumber=-1;
+		m_isEnabledRemocon = false;
+		CommonButton* next = CommonButton::create("next", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
+		next->setFunction([this](CCObject *){
+			if(m_selectedObjNumber>=0){
+				m_selectedObjNumber++;
+				if(m_selectedObjNumber>=m_objList->count())m_selectedObjNumber=0;
+				CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
+				this->m_objName->setString(selectedObj->getStringData().c_str());
+				m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+				selectedObj->runAction(CCBlink::create(0.5f, 3));
+			}
+		});
+		next->setPosition(50,0);
+		CommonButton* prev = CommonButton::create("prev", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
+		prev->setFunction([this](CCObject *){
+			if(m_selectedObjNumber>=0){
+				m_selectedObjNumber--;
+				if(m_selectedObjNumber<0)m_selectedObjNumber = m_objList->count()-1;
+				CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
+				this->m_objName->setString(selectedObj->getStringData().c_str());
+				m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+				selectedObj->runAction(CCBlink::create(0.5f, 3));
+			}
+		});
+		prev->setPosition(0,0);
+		
+		CommonButton* showSetting = CommonButton::create("log", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
+		showSetting->setFunction([this](CCObject *){
+			if(m_selectedObjNumber<0)return;
+			CCLog("----------------------- start log ---------------------------");
+			for(int i=0;i<m_objList->count();i++){
+				CCNode* obj = (CCNode*)m_objList->objectAtIndex(i);
+				CCLog("");
+				CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
+				CCLog("%s->setScaleX(%.1f); %s->setScaleX(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
+				CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
+			}
+			CCLog("----------------------- selected log ---------------------------");
+			CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
+			CCNode* obj = selectedObj;
+			CCLog("");
+			CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
+			CCLog("%s->setScaleX(%.1f); %s->setScaleX(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
+			CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
+			
+			CCLog("----------------------- end log ---------------------------");
+		});
+		showSetting->setPosition(50,80);
+		
+		
+		CommonButton* exit = CommonButton::create("exit", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
+		exit->setFunction([this](CCObject *){
+			remocon->setVisible(false);
+			m_swLayer->setTouchEnabled(false);
+			
+			if(m_selectedObjNumber<0)return;
+			CCLog("----------------------- start log ---------------------------");
+			for(int i=0;i<m_objList->count();i++){
+				CCNode* obj = (CCNode*)m_objList->objectAtIndex(i);
+				CCLog("");
+				CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
+				CCLog("%s->setScaleX(%.1f); %s->setScaleX(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
+				CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
+			}
+			CCLog("----------------------- end log ---------------------------");
+		});
+		
+		exit->setPosition(0,80);
+		
+//		CommonButton* scan = CommonButton::create("scan", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
+//		scan->setFunction([this](CCObject *){
+//			CCNode* front = (CCNode *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0));
+//			m_objList->removeAllObjects();
+//			findObject(front);
+//			if(m_objList->count()>0){
+//				m_selectedObjNumber = m_objList->count()-1;
+//				CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
+//				this->m_objName->setString(selectedObj->getStringData().c_str());
+//				m_modeBtn->setTitle("position");
+//				m_modeBtn->setTag(0);
+//				m_objInfo->setString(CCString::createWithFormat("x:%f,y:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+//			}else{
+//				m_selectedObjNumber=-1;
+//			}
+//		});
+//		scan->setPosition(50,50);
+		
+		m_modeBtn = CommonButton::create("mode", 13, CCSizeMake(100, 50), CommonButtonOrange, -100000);
+		m_modeBtn->setFunction([this](CCObject *){
+			if(m_selectedObjNumber<0)return;
+			
+			int mode = m_modeBtn->getTag();
+			mode++;
+			if(mode>3)mode=0;
+			
+			CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
+
+			switch (mode) {
+				case 0:
+					m_modeBtn->setTitle("position");
+					m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+					break;
+				case 1:
+					m_modeBtn->setTitle("scale");
+					m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",selectedObj->getScaleX(),selectedObj->getScaleY())->getCString());
+					break;
+				case 2:
+					m_modeBtn->setTitle("size");
+					m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
+					break;
+				case 3:
+					m_modeBtn->setTitle("remocon");
+					break;
+				default:
+					break;
+			}
+			m_modeBtn->setTag(mode);
+		});
+		
+		m_modeBtn->setPosition(25,40);
+		m_modeBtn->setTag(0);
+		
+		m_objName = KSLabelTTF::create("title", 	mySGD->getFont().c_str(), 13, CCSizeMake(100, 20), kCCTextAlignmentLeft);
+		m_objName->setPosition(ccp(30,-30));
+		m_objName->enableOuterStroke(ccc3(0,0,0), 1);
+		m_objName->setColor(ccc3(255,0,0));
+		
+		m_objInfo = KSLabelTTF::create("info", 	mySGD->getFont().c_str(), 13, CCSizeMake(100, 80), kCCTextAlignmentLeft);
+		m_objInfo->setVerticalAlignment(kCCVerticalTextAlignmentTop);
+		m_objInfo->setPosition(ccp(30,-75));
+		m_objInfo->enableOuterStroke(ccc3(0,0,0), 1);
+		
+		remocon->addChild(m_objName,10);
+		remocon->addChild(m_objInfo,10);
+		remocon->addChild(m_modeBtn,10);
+		remocon->addChild(next,10);
+		remocon->addChild(prev,10);
+		//remocon->addChild(scan,10);
+		remocon->addChild(exit,10);
+		remocon->addChild(showSetting,10);
+		
+		
+		remocon->setPosition(240,160);
+		this->addChild(remocon,100);
+		remocon->setVisible(false);
+		
+		m_swLayer = TouchCancelLayer::create();
+		this->addChild(m_swLayer);
+		m_swLayer->setTouchEnabled(false);
 	}
+	void setEnabledRemocon(bool _is){
+		this->m_isEnabledRemocon=_is;
+	}
+	void start(){
+		this->start("");
+	}
+	string m_startObjName;
+	void start(string startName){
+		if(!m_isEnabledRemocon)return;
+		m_startObjName=startName;
+		
+		this->retain();
+		CCNode* front = (CCNode *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0));
+		//remocon->setVisible(true);
+		if(this->getParent()){
+			this->removeFromParent();
+			this->setParent(nullptr);
+		}
+		front->addChild(this,100000);
+		this->setTouchEnabled(true);
+		//this->schedule(schedule_selector(FormSetter::sch));
+		
+		
+	}
+	void findObject(CCNode* obj){
+		if(!obj)return;
+		if(obj->getStringData()!=""){m_objList->addObject(obj);}
+		
+		CCArray* children = obj->getChildren();
+		if(children==nullptr)return;
+		
+		for(int i=0;i<children->count();i++){
+			CCNode* child = (CCNode*)children->objectAtIndex(i);
+			findObject(child);
+			//if(childchild!=nullptr){m_objList->addObject(childchild);}
+		}
+		
+		//	return nullptr;
+	}
+	
+	
+	
+	bool ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		
+		m_startPosition = pTouch->getLocation();
+		
+		if(!remocon->isVisible()){
+			if(m_startPosition.x>475 && m_startPosition.y<15){
+				
+				if(this->getParent()){
+					this->removeFromParent();
+					this->setParent(nullptr);
+				}
+				CCNode* front = (CCNode *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0));
+				front->addChild(this,100000);
+				
+				remocon->setVisible(true);
+				m_swLayer->setTouchEnabled(true);
+				
+				m_objList->removeAllObjects();
+				findObject(front);
+				if(m_objList->count()>0){
+					for(int i=0;i<m_objList->count();i++){
+						CCNode* obj = (CCNode*)m_objList->objectAtIndex(i);
+						if(obj->getStringData()==m_startObjName){
+							m_selectedObjNumber=i;
+						}
+					}
+					if(m_selectedObjNumber<=0)m_selectedObjNumber = m_objList->count()-1;
+					CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
+					this->m_objName->setString(selectedObj->getStringData().c_str());
+					m_modeBtn->setTitle("position");
+					m_modeBtn->setTag(0);
+					m_objInfo->setString(CCString::createWithFormat("x:%f,y:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+					selectedObj->runAction(CCBlink::create(1, 5));
+				}else{
+					m_selectedObjNumber=-1;
+					m_objName->setString("don't find");
+					m_objInfo->setString("don't find");
+				}
+
+			}
+		}
+		return true;
+	}
+	
+	
+	void ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		
+		
+		
+		if(m_selectedObjNumber>=0){
+			
+			CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
+			if(pTouch->getLocation().y<20 || pTouch->getLocation().x<20 || m_modeBtn->getTag()==3){
+				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.5f);
+				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
+				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
+				remocon->setPosition(ccpAdd(remocon->getPosition(),dtPos));
+			}else if(m_modeBtn->getTag()==0){
+				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
+				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
+				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
+				selectedObj->setPosition(ccpAdd(selectedObj->getPosition(),dtPos));
+				m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+			}else if(m_modeBtn->getTag()==1){
+				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
+				dtPos.y = (int)(dtPos.y*10)/10.f;
+				dtPos.x = (int)(dtPos.x*10)/10.f;
+				selectedObj->setScaleX(selectedObj->getScaleX()+dtPos.x);
+				selectedObj->setScaleY(selectedObj->getScaleY()+dtPos.y);
+				m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",selectedObj->getScaleX(),selectedObj->getScaleY())->getCString());
+
+			}else if(m_modeBtn->getTag()==2){
+				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
+				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f+selectedObj->getContentSize().width;
+				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f+selectedObj->getContentSize().height;
+				
+				selectedObj->setContentSize(CCSizeMake(dtPos.x, dtPos.y));
+				m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
+			}
+			m_startPosition = pTouch->getLocation();
+		}
+		
+	}
+	
+	void ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		
+	}
+	
+	void ccTouchCancelled( CCTouch *pTouch, CCEvent *pEvent )
+	{
+		
+	}
+	
+	void registerWithTouchDispatcher()
+	{
+		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
+		pDispatcher->addTargetedDelegate(this, -1000, false);
+	}
+	
+	
 	
 	
 	//정보를 갱신할 오브젝트를 등록한다.  이름, 오브젝트, 갱신시부를 펑션
