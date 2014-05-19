@@ -93,7 +93,7 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	close_button->setVisible(false);
 	addChild(close_button);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 17.5f);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 15.f); // 17.5f는 너무 큼
 	title_label->setColor(ccYELLOW);
 	title_label->setPosition(ccp(0, 80));
 	addChild(title_label);
