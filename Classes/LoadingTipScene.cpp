@@ -75,8 +75,8 @@ bool LoadingTipScene::init()
 			tip_img->setPosition(ccp(240,160));
 			addChild(tip_img, kLoadingTipZorder_back);
 			
-			CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::popRootScene));
+			CCDelayTime* t_delay = CCDelayTime::create(0.6f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::readyLoading));
 			CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
 			tip_img->runAction(t_seq);
 		}
@@ -95,8 +95,8 @@ bool LoadingTipScene::init()
 		tip_img->setPosition(ccp(240,160));
 		addChild(tip_img, kLoadingTipZorder_back);
 		
-		CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::popRootScene));
+		CCDelayTime* t_delay = CCDelayTime::create(0.6f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::readyLoading));
 		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
 		tip_img->runAction(t_seq);
 	}
@@ -104,39 +104,64 @@ bool LoadingTipScene::init()
 	return true;
 }
 
-void LoadingTipScene::popRootScene()
-{
-	readyLoading();
-}
-
 CCNode* LoadingTipScene::getMissionTipImage()
 {
 	CCNode* loading_tip_node = CCNode::create();
 	
-//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	
-	CCSprite* left_curtain = CCSprite::create("curtain_left.png");
-	left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-	left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
-	left_curtain->setPosition(ccp(-240, 0));
-	loading_tip_node->addChild(left_curtain);
+	CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+	loading_tip_back->setPosition(ccp(0,0));
+	loading_tip_back->setVisible(false);
+	loading_tip_node->addChild(loading_tip_back);
 	
-	CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(0,0));
-	left_curtain->runAction(left_in);
+	CCDelayTime* back_delay = CCDelayTime::create(0.3f);
+	CCShow* back_show = CCShow::create();
+	CCSequence* back_seq = CCSequence::create(back_delay, back_show, NULL);
 	
-	CCSprite* right_curtain = CCSprite::create("curtain_left.png");
-	right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-	right_curtain->setFlipX(true);
-	right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
-	right_curtain->setPosition(ccp(240,0));
-	loading_tip_node->addChild(right_curtain);
+	loading_tip_back->runAction(back_seq);
 	
-	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
-	right_curtain->runAction(right_in);
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	CCSprite* black_img = CCSprite::create("whitePaper.png");
+	black_img->setColor(ccBLACK);
+	black_img->setOpacity(0);
+	black_img->setPosition(ccp(0,0));
+	black_img->setScaleX(screen_scale_x);
+	black_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	loading_tip_node->addChild(black_img, 3);
+	
+	CCFadeTo* black_fadein = CCFadeTo::create(0.3f, 255);
+	CCFadeTo* black_fadeout = CCFadeTo::create(0.3f, 0);
+	CCCallFunc* black_remove = CCCallFunc::create(black_img, callfunc_selector(CCSprite::removeFromParent));
+	CCSequence* black_seq = CCSequence::create(black_fadein, black_fadeout, black_remove, NULL);
+	black_img->runAction(black_seq);
+	
+	
+//	CCSprite* left_curtain = CCSprite::create("curtain_left.png");
+//	left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//	left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
+//	left_curtain->setPosition(ccp(-240, 0));
+//	loading_tip_node->addChild(left_curtain);
+//	
+//	CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(0,0));
+//	left_curtain->runAction(left_in);
+//	
+//	CCSprite* right_curtain = CCSprite::create("curtain_left.png");
+//	right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//	right_curtain->setFlipX(true);
+//	right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
+//	right_curtain->setPosition(ccp(240,0));
+//	loading_tip_node->addChild(right_curtain);
+//	
+//	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
+//	right_curtain->runAction(right_in);
 	
 	CCSprite* mission_back = CCSprite::create("mission_back.png");
-	mission_back->setPosition(ccp(0, 0));
-	loading_tip_node->addChild(mission_back);
+	mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
+	loading_tip_back->addChild(mission_back);
 	
 	CCSprite* title_img;
 	
@@ -364,24 +389,24 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	title_img->setPosition(ccp(mission_back->getContentSize().width/2.f+20, mission_back->getContentSize().height/2.f+68));
 	mission_back->addChild(title_img);
 	
-	mission_back->setScale(1.5f);
-	KS::setOpacity(mission_back, 0);
-	loading_tip_node->addChild(KSGradualValue<int>::create(-255, 102, 0.7f, [=](int t)
-								{
-									if(t >= 0)
-									{
-										mission_back->setScale(1.5f - t/204.f);
-										KS::setOpacity(mission_back, t/0.2f*0.5f);
-										n_ok->setOpacity(0);
-										s_ok->setOpacity(0);
-									}
-								}, [=](int t)
-								{
-									mission_back->setScale(1.f);
-									KS::setOpacity(mission_back, 255);
-									n_ok->setOpacity(0);
-									s_ok->setOpacity(0);
-								}));
+//	mission_back->setScale(1.5f);
+//	KS::setOpacity(mission_back, 0);
+//	loading_tip_node->addChild(KSGradualValue<int>::create(-255, 102, 0.7f, [=](int t)
+//								{
+//									if(t >= 0)
+//									{
+//										mission_back->setScale(1.5f - t/204.f);
+//										KS::setOpacity(mission_back, t/0.2f*0.5f);
+//										n_ok->setOpacity(0);
+//										s_ok->setOpacity(0);
+//									}
+//								}, [=](int t)
+//								{
+//									mission_back->setScale(1.f);
+//									KS::setOpacity(mission_back, 255);
+//									n_ok->setOpacity(0);
+//									s_ok->setOpacity(0);
+//								}));
 	
 	return loading_tip_node;
 }
@@ -392,32 +417,64 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 	
 	if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
 	{
-		CCSprite* left_curtain = CCSprite::create("curtain_left.png");
-		left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
-		left_curtain->setPosition(ccp(0, 0));
-		loading_tip_node->addChild(left_curtain);
+		CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+		loading_tip_back->setPosition(ccp(0,0));
+		loading_tip_node->addChild(loading_tip_back);
 		
-		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
-		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
-		left_curtain->runAction(left_seq);
+		CCDelayTime* back_delay = CCDelayTime::create(0.3f);
+		CCCallFunc* back_remove = CCCallFunc::create(loading_tip_back, callfunc_selector(CCSprite::removeFromParent));
+		CCSequence* back_seq = CCSequence::create(back_delay, back_remove, NULL);
 		
-		CCSprite* right_curtain = CCSprite::create("curtain_left.png");
-		right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		right_curtain->setFlipX(true);
-		right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
-		right_curtain->setPosition(ccp(0,0));
-		loading_tip_node->addChild(right_curtain);
+		loading_tip_back->runAction(back_seq);
 		
-		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
-		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
-		right_curtain->runAction(right_seq);
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* black_img = CCSprite::create("whitePaper.png");
+		black_img->setColor(ccBLACK);
+		black_img->setOpacity(0);
+		black_img->setPosition(ccp(0,0));
+		black_img->setScaleX(screen_scale_x);
+		black_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		loading_tip_node->addChild(black_img, 3);
+		
+		CCFadeTo* black_fadein = CCFadeTo::create(0.3f, 255);
+		CCFadeTo* black_fadeout = CCFadeTo::create(0.3f, 0);
+		CCCallFunc* black_remove = CCCallFunc::create(black_img, callfunc_selector(CCSprite::removeFromParent));
+		CCSequence* black_seq = CCSequence::create(black_fadein, black_fadeout, black_remove, NULL);
+		black_img->runAction(black_seq);
+		
+		
+		
+		
+//		CCSprite* left_curtain = CCSprite::create("curtain_left.png");
+//		left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
+//		left_curtain->setPosition(ccp(0, 0));
+//		loading_tip_node->addChild(left_curtain);
+//		
+//		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
+//		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
+//		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
+//		left_curtain->runAction(left_seq);
+//		
+//		CCSprite* right_curtain = CCSprite::create("curtain_left.png");
+//		right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		right_curtain->setFlipX(true);
+//		right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
+//		right_curtain->setPosition(ccp(0,0));
+//		loading_tip_node->addChild(right_curtain);
+//		
+//		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
+//		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
+//		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
+//		right_curtain->runAction(right_seq);
 		
 		CCSprite* mission_back = CCSprite::create("mission_back.png");
-		mission_back->setPosition(ccp(0, 0));
-		loading_tip_node->addChild(mission_back);
+		mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
+		loading_tip_back->addChild(mission_back);
 		
 		CCSprite* title_img;
 		
@@ -576,42 +633,71 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		title_img->setPosition(ccp(mission_back->getContentSize().width/2.f+20, mission_back->getContentSize().height/2.f+68));
 		mission_back->addChild(title_img);
 		
-		loading_tip_node->addChild(KSGradualValue<int>::create(255, 0, 0.2f, [=](int t)
-															   {
-																   mission_back->setScale(1.f + (255-t)/510.f);
-																   KS::setOpacity(mission_back, t);
-															   }, [=](int t)
-															   {
-																   mission_back->setScale(1.5f);
-																   KS::setOpacity(mission_back, 0);
-															   }));
+//		loading_tip_node->addChild(KSGradualValue<int>::create(255, 0, 0.2f, [=](int t)
+//															   {
+//																   mission_back->setScale(1.f + (255-t)/510.f);
+//																   KS::setOpacity(mission_back, t);
+//															   }, [=](int t)
+//															   {
+//																   mission_back->setScale(1.5f);
+//																   KS::setOpacity(mission_back, 0);
+//															   }));
 	}
 	else
 	{
 		int selected_loading_tip = mySGD->before_curtain_tip_type;
 		
-		CCSprite* left_curtain = CCSprite::create("curtain_left.png");
-		left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
-		left_curtain->setPosition(ccp(0, 0));
-		loading_tip_node->addChild(left_curtain);
+		CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+		loading_tip_back->setPosition(ccp(0,0));
+		loading_tip_node->addChild(loading_tip_back);
 		
-		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
-		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
-		left_curtain->runAction(left_seq);
+		CCDelayTime* back_delay = CCDelayTime::create(0.3f);
+		CCCallFunc* back_remove = CCCallFunc::create(loading_tip_back, callfunc_selector(CCSprite::removeFromParent));
+		CCSequence* back_seq = CCSequence::create(back_delay, back_remove, NULL);
 		
-		CCSprite* right_curtain = CCSprite::create("curtain_left.png");
-		right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		right_curtain->setFlipX(true);
-		right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
-		right_curtain->setPosition(ccp(0,0));
-		loading_tip_node->addChild(right_curtain);
+		loading_tip_back->runAction(back_seq);
 		
-		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
-		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
-		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
-		right_curtain->runAction(right_seq);
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* black_img = CCSprite::create("whitePaper.png");
+		black_img->setColor(ccBLACK);
+		black_img->setOpacity(0);
+		black_img->setPosition(ccp(0,0));
+		black_img->setScaleX(screen_scale_x);
+		black_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		loading_tip_node->addChild(black_img, 3);
+		
+		CCFadeTo* black_fadein = CCFadeTo::create(0.3f, 255);
+		CCFadeTo* black_fadeout = CCFadeTo::create(0.3f, 0);
+		CCCallFunc* black_remove = CCCallFunc::create(black_img, callfunc_selector(CCSprite::removeFromParent));
+		CCSequence* black_seq = CCSequence::create(black_fadein, black_fadeout, black_remove, NULL);
+		black_img->runAction(black_seq);
+		
+//		CCSprite* left_curtain = CCSprite::create("curtain_left.png");
+//		left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
+//		left_curtain->setPosition(ccp(0, 0));
+//		loading_tip_node->addChild(left_curtain);
+//		
+//		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
+//		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
+//		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
+//		left_curtain->runAction(left_seq);
+//		
+//		CCSprite* right_curtain = CCSprite::create("curtain_left.png");
+//		right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		right_curtain->setFlipX(true);
+//		right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
+//		right_curtain->setPosition(ccp(0,0));
+//		loading_tip_node->addChild(right_curtain);
+//		
+//		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
+//		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
+//		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
+//		right_curtain->runAction(right_seq);
 		
 		//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 		string tip_filename = "loading_tip_";
@@ -629,17 +715,16 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		tip_filename += ".png";
 		
 		CCSprite* content_img = CCSprite::create(tip_filename.c_str());
-		content_img->setPosition(ccp(0, 0));
-		content_img->setOpacity(255);
-		loading_tip_node->addChild(content_img);
+		content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
+		loading_tip_back->addChild(content_img);
 		
-		CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
-		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.5f);
-		CCSpawn* t_spawn = CCSpawn::create(t_fade, t_scale, NULL);
-		content_img->runAction(t_spawn);
+//		CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
+//		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.5f);
+//		CCSpawn* t_spawn = CCSpawn::create(t_fade, t_scale, NULL);
+//		content_img->runAction(t_spawn);
 	}
 	
-	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
+	CCDelayTime* t_delay = CCDelayTime::create(0.6f);
 	CCCallFunc* t_call = CCCallFunc::create(loading_tip_node, callfunc_selector(CCNode::removeFromParent));
 	CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
 	loading_tip_node->runAction(t_seq);
@@ -653,24 +738,55 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCNode* loading_tip_node = CCNode::create();
-	CCSprite* left_curtain = CCSprite::create("curtain_left.png");
-	left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-	left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
-	left_curtain->setPosition(ccp(-240, 0));
-	loading_tip_node->addChild(left_curtain);
 	
-	CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(0,0));
-	left_curtain->runAction(left_in);
+	CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+	loading_tip_back->setPosition(ccp(0,0));
+	loading_tip_back->setVisible(false);
+	loading_tip_node->addChild(loading_tip_back);
 	
-	CCSprite* right_curtain = CCSprite::create("curtain_left.png");
-	right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-	right_curtain->setFlipX(true);
-	right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
-	right_curtain->setPosition(ccp(240,0));
-	loading_tip_node->addChild(right_curtain);
+	CCDelayTime* back_delay = CCDelayTime::create(0.3f);
+	CCShow* back_show = CCShow::create();
+	CCSequence* back_seq = CCSequence::create(back_delay, back_show, NULL);
 	
-	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
-	right_curtain->runAction(right_in);
+	loading_tip_back->runAction(back_seq);
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	CCSprite* black_img = CCSprite::create("whitePaper.png");
+	black_img->setColor(ccBLACK);
+	black_img->setOpacity(0);
+	black_img->setPosition(ccp(0,0));
+	black_img->setScaleX(screen_scale_x);
+	black_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	loading_tip_node->addChild(black_img, 3);
+	
+	CCFadeTo* black_fadein = CCFadeTo::create(0.3f, 255);
+	CCFadeTo* black_fadeout = CCFadeTo::create(0.3f, 0);
+	CCCallFunc* black_remove = CCCallFunc::create(black_img, callfunc_selector(CCSprite::removeFromParent));
+	CCSequence* black_seq = CCSequence::create(black_fadein, black_fadeout, black_remove, NULL);
+	black_img->runAction(black_seq);
+	
+//	CCSprite* left_curtain = CCSprite::create("curtain_left.png");
+//	left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//	left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
+//	left_curtain->setPosition(ccp(-240, 0));
+//	loading_tip_node->addChild(left_curtain);
+//	
+//	CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(0,0));
+//	left_curtain->runAction(left_in);
+//	
+//	CCSprite* right_curtain = CCSprite::create("curtain_left.png");
+//	right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//	right_curtain->setFlipX(true);
+//	right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
+//	right_curtain->setPosition(ccp(240,0));
+//	loading_tip_node->addChild(right_curtain);
+//	
+//	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
+//	right_curtain->runAction(right_in);
 	
 	mySGD->before_curtain_tip_type = selected_loading_tip;
 	
@@ -690,17 +806,8 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	tip_filename += ".png";
 	
 	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
-	content_img->setPosition(ccp(0, 0));
-	content_img->setOpacity(0);
-	content_img->setScale(1.5f);
-	loading_tip_node->addChild(content_img);
-	
-	CCDelayTime* t_delay = CCDelayTime::create(0.5f);
-	CCFadeTo* t_fade = CCFadeTo::create(0.2f, 255);
-	CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.f);
-	CCSpawn* t_spawn = CCSpawn::create(t_fade, t_scale, NULL);
-	CCSequence* t_seq = CCSequence::create(t_delay, t_spawn, NULL);
-	content_img->runAction(t_seq);
+	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
+	loading_tip_back->addChild(content_img);
 	
 	return loading_tip_node;
 }

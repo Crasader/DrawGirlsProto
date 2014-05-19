@@ -62,8 +62,6 @@ private:
 	
 	void endLoadingTip();
 	
-	void popRootScene();
-	
 	void showButton();
 	
 	

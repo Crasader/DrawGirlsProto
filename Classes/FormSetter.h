@@ -14,15 +14,18 @@
 #include "KSUtil.h"
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
+#include <vector>
+#include <stdio.h>
+#define setFormSetter(name) name->setStringData(#name);
 /*******************************************************
 오브젝트 배치하기의 슈퍼초 울트라 캡 혁신
  *******************************************************
  
  2.0v - 자체 리모컨으로
- 1.조절할 오브젝트에 이름추가 obj->setStringData("objName");
+ 1.조절할 오브젝트추가 setFormSetter(obj);
  2.init함수 마지막에 리모콘코드 추가 FormSetter::get()->start();
  3.실행후 해당씬에서 디스플레이 오른쪽 아래를 터치하면 리모콘이 뜬다. 조절후 log버튼을 눌러보시라
- 4.조절끝나면 소스코드삭제도 필요없음 FormSetter::get()->setEnabledRemocon(false) 한번만 호출해주면 있는 리모콘 모두 꺼짐.
+ 4.조절끝나면 소스코드삭제도 필요없음 나중에 FormSetter::get()->setEnabledRemocon(false) 한번만 호출해주면 있는 리모콘 모두 꺼짐.
  
  
  1.5v - 서버연동 버전 사용법2
@@ -153,12 +156,18 @@ public:
 		vector<std::function<void(Json::Value)>> funcs;
 	};
 	
+	struct FormSetterObj{
+		CCNode* obj;
+		bool isEdited;
+		Json::Value originalData;
+	};
+	
 	bool m_is_sch;
 	bool m_is_once;
 	int m_mode;
 	int m_selectedObjNumber;
 	CCPoint m_startPosition;
-	CCArray* m_objList;
+	vector<FormSetterObj> m_objList;
 	map<string,FormSetterData> m_list;
 	float m_delay;
 	std::function<void(void)> m_funcAtReceived;
@@ -166,6 +175,7 @@ public:
 	KSLabelTTF* m_objName;
 	KSLabelTTF* m_objInfo;
 	CommonButton* m_modeBtn;
+	CommonButton* m_resetBtn;
 	TouchCancelLayer* m_swLayer;
 	bool m_isEnabledRemocon;
 	static FormSetter* get()
@@ -189,20 +199,17 @@ public:
 		m_mode=0;
 		remocon = CCNode::create();
 		remocon->retain();
-		m_objList = CCArray::create();
-		m_objList = new CCArray();
-		m_objList->init();
+		m_objList.clear();
 		m_selectedObjNumber=-1;
 		m_isEnabledRemocon = false;
 		CommonButton* next = CommonButton::create("next", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		next->setFunction([this](CCObject *){
 			if(m_selectedObjNumber>=0){
 				m_selectedObjNumber++;
-				if(m_selectedObjNumber>=m_objList->count())m_selectedObjNumber=0;
-				CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-				this->m_objName->setString(selectedObj->getStringData().c_str());
-				m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+				if(m_selectedObjNumber>=m_objList.size())m_selectedObjNumber=0;
+				CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
 				selectedObj->runAction(CCBlink::create(0.5f, 3));
+				setInfomation();
 			}
 		});
 		next->setPosition(50,0);
@@ -210,11 +217,10 @@ public:
 		prev->setFunction([this](CCObject *){
 			if(m_selectedObjNumber>=0){
 				m_selectedObjNumber--;
-				if(m_selectedObjNumber<0)m_selectedObjNumber = m_objList->count()-1;
-				CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-				this->m_objName->setString(selectedObj->getStringData().c_str());
-				m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+				if(m_selectedObjNumber<0)m_selectedObjNumber = m_objList.size()-1;
+				CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
 				selectedObj->runAction(CCBlink::create(0.5f, 3));
+				setInfomation();
 			}
 		});
 		prev->setPosition(0,0);
@@ -222,23 +228,11 @@ public:
 		CommonButton* showSetting = CommonButton::create("log", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		showSetting->setFunction([this](CCObject *){
 			if(m_selectedObjNumber<0)return;
-			CCLog("----------------------- start log ---------------------------");
-			for(int i=0;i<m_objList->count();i++){
-				CCNode* obj = (CCNode*)m_objList->objectAtIndex(i);
-				CCLog("");
-				CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
-				CCLog("%s->setScaleX(%.1f); %s->setScaleX(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
-				CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
-			}
-			CCLog("----------------------- selected log ---------------------------");
-			CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-			CCNode* obj = selectedObj;
-			CCLog("");
-			CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
-			CCLog("%s->setScaleX(%.1f); %s->setScaleX(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
-			CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
 			
-			CCLog("----------------------- end log ---------------------------");
+			logFormSetting();
+			CCLog("----------------------- selected log ---------------------------");
+			logOnce(m_selectedObjNumber);
+			CCLog("----------------------- end log --------------------------------");
 		});
 		showSetting->setPosition(50,80);
 		
@@ -249,71 +243,45 @@ public:
 			m_swLayer->setTouchEnabled(false);
 			
 			if(m_selectedObjNumber<0)return;
-			CCLog("----------------------- start log ---------------------------");
-			for(int i=0;i<m_objList->count();i++){
-				CCNode* obj = (CCNode*)m_objList->objectAtIndex(i);
-				CCLog("");
-				CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
-				CCLog("%s->setScaleX(%.1f); %s->setScaleX(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
-				CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
-			}
-			CCLog("----------------------- end log ---------------------------");
+			
+			logFormSetting();
 		});
 		
 		exit->setPosition(0,80);
 		
-//		CommonButton* scan = CommonButton::create("scan", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
-//		scan->setFunction([this](CCObject *){
-//			CCNode* front = (CCNode *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0));
-//			m_objList->removeAllObjects();
-//			findObject(front);
-//			if(m_objList->count()>0){
-//				m_selectedObjNumber = m_objList->count()-1;
-//				CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-//				this->m_objName->setString(selectedObj->getStringData().c_str());
-//				m_modeBtn->setTitle("position");
-//				m_modeBtn->setTag(0);
-//				m_objInfo->setString(CCString::createWithFormat("x:%f,y:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
-//			}else{
-//				m_selectedObjNumber=-1;
-//			}
-//		});
-//		scan->setPosition(50,50);
-		
-		m_modeBtn = CommonButton::create("mode", 13, CCSizeMake(100, 50), CommonButtonOrange, -100000);
+		m_modeBtn = CommonButton::create("mode", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		m_modeBtn->setFunction([this](CCObject *){
 			if(m_selectedObjNumber<0)return;
 			
 			int mode = m_modeBtn->getTag();
 			mode++;
 			if(mode>3)mode=0;
-			
-			CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-
-			switch (mode) {
-				case 0:
-					m_modeBtn->setTitle("position");
-					m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
-					break;
-				case 1:
-					m_modeBtn->setTitle("scale");
-					m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",selectedObj->getScaleX(),selectedObj->getScaleY())->getCString());
-					break;
-				case 2:
-					m_modeBtn->setTitle("size");
-					m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
-					break;
-				case 3:
-					m_modeBtn->setTitle("remocon");
-					break;
-				default:
-					break;
-			}
 			m_modeBtn->setTag(mode);
+			
+			setInfomation();
 		});
 		
-		m_modeBtn->setPosition(25,40);
+		m_modeBtn->setPosition(0,40);
 		m_modeBtn->setTag(0);
+		
+		m_resetBtn = CommonButton::create("reset", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
+		m_resetBtn->setFunction([this](CCObject *){
+			if(m_selectedObjNumber<0)return;
+			CCNode* obj =  m_objList[m_selectedObjNumber].obj;
+			obj->setPosition(m_objList[m_selectedObjNumber].originalData["x"].asFloat(),m_objList[m_selectedObjNumber].originalData["y"].asFloat());
+			obj->setContentSize(CCSizeMake(m_objList[m_selectedObjNumber].originalData["w"].asFloat(),m_objList[m_selectedObjNumber].originalData["h"].asFloat()));
+			obj->setScaleX(m_objList[m_selectedObjNumber].originalData["sx"].asFloat());
+			obj->setScaleY(m_objList[m_selectedObjNumber].originalData["sy"].asFloat());
+			if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(obj)){
+				checkobj->setFontSize(m_objList[m_selectedObjNumber].originalData["fontsize"].asFloat());
+			}
+			m_objList[m_selectedObjNumber].isEdited=false;
+			setInfomation();
+		});
+		
+		m_resetBtn->setBackgroundTypeForDisabled(CommonButtonGray);
+		
+		m_resetBtn->setPosition(50,40);
 		
 		m_objName = KSLabelTTF::create("title", 	mySGD->getFont().c_str(), 13, CCSizeMake(100, 20), kCCTextAlignmentLeft);
 		m_objName->setPosition(ccp(30,-30));
@@ -328,9 +296,9 @@ public:
 		remocon->addChild(m_objName,10);
 		remocon->addChild(m_objInfo,10);
 		remocon->addChild(m_modeBtn,10);
+		remocon->addChild(m_resetBtn,10);
 		remocon->addChild(next,10);
 		remocon->addChild(prev,10);
-		//remocon->addChild(scan,10);
 		remocon->addChild(exit,10);
 		remocon->addChild(showSetting,10);
 		
@@ -342,6 +310,32 @@ public:
 		m_swLayer = TouchCancelLayer::create();
 		this->addChild(m_swLayer);
 		m_swLayer->setTouchEnabled(false);
+	}
+	
+	void logFormSetting(){
+		if(m_selectedObjNumber<0)return;
+		CCLog("----------------------- start log ---------------------------");
+		for(int i=0;i<m_objList.size();i++){
+			logOnce(i);
+		}
+		CCLog("----------------------- end log -----------------------------");
+	}
+	
+	void logOnce(int i){
+		CCNode* obj = m_objList[i].obj;
+		if(!m_objList[i].isEdited)return;
+		CCLog("");
+		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
+			CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
+		if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX() || m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY()){
+			if(obj->getScaleX()==obj->getScaleY())
+				CCLog("%s->setScale(%.1f);",obj->getStringData().c_str(),obj->getScale());
+			else
+				CCLog("%s->setScaleX(%.1f); %s->setScaleY(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
+		}
+		if(m_objList[i].originalData["w"].asFloat()!=obj->getContentSize().width || m_objList[i].originalData["h"].asFloat()!=obj->getContentSize().height)
+			CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
+
 	}
 	void setEnabledRemocon(bool _is){
 		this->m_isEnabledRemocon=_is;
@@ -367,9 +361,29 @@ public:
 		
 		
 	}
+	
+	void addObjectInObjList(CCNode* obj){
+		FormSetterObj newobj;
+		newobj.obj = obj;
+		newobj.isEdited = false;
+		newobj.originalData["x"]= obj->getPosition().x;
+		newobj.originalData["y"]= obj->getPosition().y;
+		newobj.originalData["w"]= obj->getContentSize().width;
+		newobj.originalData["h"]= obj->getContentSize().height;
+		newobj.originalData["sx"]=obj->getScaleX();
+		newobj.originalData["sy"]=obj->getScaleY();
+		
+		if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(obj)){
+			newobj.originalData["fontsize"]=checkobj->getFontSize();
+		}
+		
+		m_objList.push_back(newobj);
+	}
 	void findObject(CCNode* obj){
 		if(!obj)return;
-		if(obj->getStringData()!=""){m_objList->addObject(obj);}
+		if(obj->getStringData()!=""){
+			this->addObjectInObjList(obj);
+		}
 		
 		CCArray* children = obj->getChildren();
 		if(children==nullptr)return;
@@ -382,7 +396,6 @@ public:
 		
 		//	return nullptr;
 	}
-	
 	
 	
 	bool ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
@@ -403,22 +416,19 @@ public:
 				remocon->setVisible(true);
 				m_swLayer->setTouchEnabled(true);
 				
-				m_objList->removeAllObjects();
+				m_objList.clear();
 				findObject(front);
-				if(m_objList->count()>0){
-					for(int i=0;i<m_objList->count();i++){
-						CCNode* obj = (CCNode*)m_objList->objectAtIndex(i);
+				if(m_objList.size()>0){
+					for(int i=0;i<m_objList.size();i++){
+						CCNode* obj = (CCNode*)m_objList[i].obj;
 						if(obj->getStringData()==m_startObjName){
 							m_selectedObjNumber=i;
 						}
 					}
-					if(m_selectedObjNumber<=0)m_selectedObjNumber = m_objList->count()-1;
-					CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-					this->m_objName->setString(selectedObj->getStringData().c_str());
-					m_modeBtn->setTitle("position");
-					m_modeBtn->setTag(0);
-					m_objInfo->setString(CCString::createWithFormat("x:%f,y:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+					if(m_selectedObjNumber<=0)m_selectedObjNumber = m_objList.size()-1;
+					CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
 					selectedObj->runAction(CCBlink::create(1, 5));
+					setInfomation();
 				}else{
 					m_selectedObjNumber=-1;
 					m_objName->setString("don't find");
@@ -431,6 +441,35 @@ public:
 	}
 	
 	
+	void setInfomation(){
+		if(m_selectedObjNumber<0)return;
+		
+		CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
+		m_objName->setString(selectedObj->getStringData().c_str());
+		if(m_modeBtn->getTag()==0){
+			m_modeBtn->setTitle("position");
+			m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
+		}else if(m_modeBtn->getTag()==1){
+			m_modeBtn->setTitle("scale");
+			m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",selectedObj->getScaleX(),selectedObj->getScaleY())->getCString());
+		}else if(m_modeBtn->getTag()==2){
+			m_modeBtn->setTitle("size");
+			m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
+		}else if(m_modeBtn->getTag()==3){
+			m_modeBtn->setTitle("fotnsize");
+			if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(selectedObj)){
+				m_objInfo->setString(CCString::createWithFormat("size:%f",checkobj->getFontSize())->getCString());
+			}else{
+				m_objInfo->setString("do not support");
+			}
+		}else{
+			m_modeBtn->setTitle("none");
+		}
+		
+		m_resetBtn->setEnabled(m_objList[m_selectedObjNumber].isEdited);
+	}
+
+	
 	void ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
 	{
 		
@@ -438,8 +477,9 @@ public:
 		
 		if(m_selectedObjNumber>=0){
 			
-			CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-			if(pTouch->getLocation().y<20 || pTouch->getLocation().x<20 || m_modeBtn->getTag()==3){
+			CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
+			m_objList[m_selectedObjNumber].isEdited = true;
+			if(pTouch->getLocation().y<20 || pTouch->getLocation().x<20){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.5f);
 				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
 				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
@@ -449,23 +489,27 @@ public:
 				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
 				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
 				selectedObj->setPosition(ccpAdd(selectedObj->getPosition(),dtPos));
-				m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
 			}else if(m_modeBtn->getTag()==1){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
 				dtPos.y = (int)(dtPos.y*10)/10.f;
 				dtPos.x = (int)(dtPos.x*10)/10.f;
 				selectedObj->setScaleX(selectedObj->getScaleX()+dtPos.x);
 				selectedObj->setScaleY(selectedObj->getScaleY()+dtPos.y);
-				m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",selectedObj->getScaleX(),selectedObj->getScaleY())->getCString());
-
 			}else if(m_modeBtn->getTag()==2){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
 				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f+selectedObj->getContentSize().width;
 				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f+selectedObj->getContentSize().height;
 				
 				selectedObj->setContentSize(CCSizeMake(dtPos.x, dtPos.y));
-				m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
+			}else if(m_modeBtn->getTag()==3){
+				if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(selectedObj)){
+					CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
+					dtPos.y = (int)(dtPos.y*10)/10.f;
+					checkobj->setFontSize(checkobj->getFontSize()+dtPos.y);
+				}
 			}
+			
+			setInfomation();
 			m_startPosition = pTouch->getLocation();
 		}
 		
