@@ -43,6 +43,8 @@ private:
 	CCScale9Sprite* main_case;
 	
 	void setMain();
+	
+	void menuAction(CCObject* sender);
 };
 
 #endif /* defined(__DGproto__EndlessModeOpening__) */

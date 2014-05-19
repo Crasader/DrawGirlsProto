@@ -183,7 +183,7 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 		CCTexture2D* top_texture = CCTextureCache::sharedTextureCache()->addImage("frame_top.png");
 		CCAnimation* top_animation = CCAnimation::create();
 		top_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
+		for(int i=0;i<3;i++)
 			top_animation->addSpriteFrameWithTexture(top_texture, CCRectMake(0, i*7, 334, 7));
 		CCAnimate* top_animate = CCAnimate::create(top_animation);
 		CCRepeatForever* top_repeat = CCRepeatForever::create(top_animate);
@@ -192,7 +192,7 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 		CCTexture2D* bottom_texture = CCTextureCache::sharedTextureCache()->addImage("frame_bottom.png");
 		CCAnimation* bottom_animation = CCAnimation::create();
 		bottom_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
+		for(int i=0;i<3;i++)
 			bottom_animation->addSpriteFrameWithTexture(bottom_texture, CCRectMake(0, i*7, 334, 7));
 		CCAnimate* bottom_animate = CCAnimate::create(bottom_animation);
 		CCRepeatForever* bottom_repeat = CCRepeatForever::create(bottom_animate);
@@ -201,7 +201,7 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 		CCTexture2D* left_texture = CCTextureCache::sharedTextureCache()->addImage("frame_left.png");
 		CCAnimation* left_animation = CCAnimation::create();
 		left_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
+		for(int i=0;i<3;i++)
 			left_animation->addSpriteFrameWithTexture(left_texture, CCRectMake(i*7, 0, 7, 430));
 		CCAnimate* left_animate = CCAnimate::create(left_animation);
 		CCRepeatForever* left_repeat = CCRepeatForever::create(left_animate);
@@ -210,7 +210,7 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 		CCTexture2D* right_texture = CCTextureCache::sharedTextureCache()->addImage("frame_right.png");
 		CCAnimation* right_animation = CCAnimation::create();
 		right_animation->setDelayPerUnit(0.1f);
-		for(int i=0;i<4;i++)
+		for(int i=0;i<3;i++)
 			right_animation->addSpriteFrameWithTexture(right_texture, CCRectMake(i*7, 0, 7, 430));
 		CCAnimate* right_animate = CCAnimate::create(right_animation);
 		CCRepeatForever* right_repeat = CCRepeatForever::create(right_animate);
