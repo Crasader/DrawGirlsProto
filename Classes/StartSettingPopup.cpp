@@ -53,8 +53,6 @@ bool StartSettingPopup::init()
 	
 	//	mySGD->selectFriendCard();
 	
-	setKeypadEnabled(true);
-	
 	item_title_label = NULL;
 	option_label = NULL;
 	//	card_img = NULL;
