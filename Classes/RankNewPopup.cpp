@@ -59,26 +59,26 @@ bool RankNewPopup::init()
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-22.f - 450));
-	main_case->setStringData("main_case");
+	setFormSetter(main_case);
 	addChild(main_case, 1);
 	
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setPosition(ccp(70,253));
-	title_label->setStringData("title_label");
+	setFormSetter(title_label);
 	main_case->addChild(title_label);
 	
 	CCScale9Sprite* main_inner_left = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_inner_left->setContentSize(CCSizeMake(197, 227));
 	main_inner_left->setPosition(110,125);
-	main_inner_left->setStringData("main_inner_left");
+	setFormSetter(main_inner_left);
 	main_case->addChild(main_inner_left);
 	
 	CCScale9Sprite* main_inner_right = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_inner_right->setContentSize(CCSizeMake(255, 227));
 	main_inner_right->setPosition(340,125);
-	main_inner_right->setStringData("main_inner_right");
+	setFormSetter(main_inner_right);
 	main_case->addChild(main_inner_right);
 	
 	
@@ -86,26 +86,28 @@ bool RankNewPopup::init()
 		CCScale9Sprite* rewardBack1 = CCScale9Sprite::create("startsetting_left_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 		rewardBack1->setContentSize(CCSizeMake(200,85));
 		rewardBack1->setPosition(105,175);
-		rewardBack1->setStringData("rewardBack1");
+		setFormSetter(rewardBack1);
 		main_inner_left->addChild(rewardBack1);
 		
 		
 		CCScale9Sprite* rewardBack2 = CCScale9Sprite::create("startsetting_left_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 		rewardBack2->setContentSize(CCSizeMake(190,75));
-		rewardBack2->setStringData("rewardBack2");
+		setFormSetter(rewardBack2);
 		rewardBack2->setPosition(100,42);
 		
 		rewardBack1->addChild(rewardBack2);
 		
 		CCSprite* rewardTag= CCSprite::create("rankpopup_top10.png");
 		rewardTag->setPosition(ccp(45,50));
-		rewardTag->setStringData("rewardTag");
+		setFormSetter(rewardTag);
+
 		rewardBack2->addChild(rewardTag);
 		
 		CCSprite* rewardImg= CCSprite::create("rankpopup_top10_ruby.png");
 		rewardImg->setPosition(ccp(135,45));
-		rewardImg->setStringData("rewardImg");
+		setFormSetter(rewardImg);
 		rewardBack2->addChild(rewardImg);
+
 	}
 	
 	{
@@ -155,14 +157,14 @@ bool RankNewPopup::init()
 	
 	rankBack = CCNode::create();
 	rankBack->setPosition(-13,-30);
-	rankBack->setStringData("rankBack");
+	setFormSetter(rankBack);
 	main_case->addChild(rankBack);
 	
 	
 	rank_table = CCTableView::create(this, CCSizeMake(237, 118));
 	rank_table->setPosition(5,40);
 	rank_table->setDelegate(this);
-	rank_table->setStringData("rank_table");
+	setFormSetter(rank_table);
 	
 	
 	main_inner_right->addChild(rank_table);
@@ -178,7 +180,7 @@ bool RankNewPopup::init()
 								CCNode* t_node = CCNode::create();
 								menuAction(t_node);
 							});
-	close_menu->setStringData("close_menu");
+	setFormSetter(close_menu);
 	main_case->addChild(close_menu);
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
