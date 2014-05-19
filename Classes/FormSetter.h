@@ -439,9 +439,12 @@ public:
 		if(m_selectedObjNumber>=0){
 			
 			CCNode* selectedObj = (CCNode*)m_objList->objectAtIndex(m_selectedObjNumber);
-			
-
-			if(m_modeBtn->getTag()==0){
+			if(pTouch->getLocation().y<20 || pTouch->getLocation().x<20 || m_modeBtn->getTag()==3){
+				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.5f);
+				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
+				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
+				remocon->setPosition(ccpAdd(remocon->getPosition(),dtPos));
+			}else if(m_modeBtn->getTag()==0){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
 				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
 				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
@@ -462,11 +465,6 @@ public:
 				
 				selectedObj->setContentSize(CCSizeMake(dtPos.x, dtPos.y));
 				m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
-			}else if(m_modeBtn->getTag()==3){
-				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.5f);
-				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
-				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
-				remocon->setPosition(ccpAdd(remocon->getPosition(),dtPos));
 			}
 			m_startPosition = pTouch->getLocation();
 		}
