@@ -67,6 +67,13 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_isChangedMap)							return_value = "icm";
 	else if(t_key == kReplayKey_isChangedScore)							return_value = "ics";
 	else if(t_key == kReplayKey_playIndex)								return_value = "pi";
+	else if(t_key == kReplayKey_clearGrade)								return_value = "cg";
+	else if(t_key == kReplayKey_gameTime)								return_value = "gt";
+	else if(t_key == kReplayKey_takeGold)								return_value = "tg";
+	else if(t_key == kReplayKey_totalScore)								return_value = "tts";
+	else if(t_key == kReplayKey_originalScore)							return_value = "os";
+	else if(t_key == kReplayKey_win)									return_value = "win";
+	else if(t_key == kReplayKey_lose)									return_value = "lose";
 	
 	return return_value;
 }

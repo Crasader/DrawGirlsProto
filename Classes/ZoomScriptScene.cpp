@@ -345,7 +345,7 @@ void ZoomScript::menuAction(CCObject *sender)
 					take_grade = 3;
 			}
 			
-			if(!is_rankup)
+			if(!mySGD->is_endless_mode && !is_rankup)
 			{
 				is_rankup = true;
 				

@@ -38,6 +38,7 @@
 #include "ShopPopup.h"
 #include "OnePercentGame.h"
 #include "ControlTipContent.h"
+#include "EndlessStartContent.h"
 
 //#include "ScreenSide.h"
 
@@ -672,22 +673,40 @@ void Maingame::finalSetting()
 //		replay_nick->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215.f*thumb_scale-10)));
 //		replay_all_node->addChild(replay_nick);
 	}
+	
+	if(mySGD->is_endless_mode)
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		EndlessStartContent* t_container = EndlessStartContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																   {
+																	   exit_target->onEnter();
+																	   checkTutorial();
+																	   
+																   });
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
+	else
+	{
+		checkTutorial();
+	}
+}
 
-//	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
-//	for(int i=0;i<myGD->getSubCumberVector().size(); i++)
-//	{
-//		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
-//		sub_position_img->setColor(ccYELLOW);
-//		CCNode* sub_pointer = (CCNode*)sub_array[i];
-//		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_scale)));
-//		addChild(sub_position_img, myUIZorder);
-//		
-//		sub_thumbs->addObject(sub_position_img);
-//	}
-	
-//	else
-//	{
-	
+void Maingame::checkTutorial()
+{
 	if(mySD->getSilType() == 3 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_lineTangle))
 	{
 		CCNode* exit_target = this;
@@ -750,9 +769,9 @@ void Maingame::finalSetting()
 																		   exit_target->getParent()->addChild(t_popup);
 																	   }
 																	   else
-																		{
-																			exit_target->onEnter();
-																		}
+																	   {
+																		   exit_target->onEnter();
+																	   }
 																	   
 																   }, kSpecialTutorialCode_lineTangle);
 		t_popup->setContainerNode(t_container);
@@ -875,7 +894,7 @@ void Maingame::finalSetting()
 			exit_target->getParent()->addChild(t_popup);
 		}
 	}
-//	}
+	//	}
 	
 	mySGD->is_on_maingame = true;
 }

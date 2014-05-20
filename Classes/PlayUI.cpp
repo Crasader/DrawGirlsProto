@@ -615,11 +615,14 @@ TakeSpeedUp * TakeSpeedUp::create (int t_step, std::function<void()> t_end_func)
 }
 void TakeSpeedUp::startFadeOut ()
 {
-	CCFadeOut* t_fadeout1 = CCFadeOut::create(1.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TakeSpeedUp::selfRemove));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fadeout1, t_call);
-	
-	runAction(t_seq);
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+								  {
+									  KS::setOpacity(this, (1.f-t)*255);
+								  }, [=](float t)
+								  {
+									  KS::setOpacity(this, 0);
+									  selfRemove();
+								  }));
 }
 void TakeSpeedUp::selfRemove ()
 {
@@ -635,6 +638,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 		initWithString("", mySGD->getFont().c_str(), 20);
 		
 		CCSprite* speed_label = CCSprite::create("speed_max.png");
+		speed_label->setScale(1.f/myGD->game_scale);
 		speed_label->setPosition(ccp(getContentSize().width/2.f,getContentSize().height/2.f));
 		addChild(speed_label);
 		
@@ -643,6 +647,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	else
 	{
 		CCSprite* speed_label = CCSprite::create("speed.png");
+		speed_label->setScale(1.f/myGD->game_scale);
 		
 		initWithString(CCString::createWithFormat("%d", t_step)->getCString(), mySGD->getFont().c_str(), 20);
 		//	initWithString(CCString::createWithFormat("%s %d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step)->getCString(), mySGD->getFont().c_str(), 20);
@@ -650,7 +655,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 		enableOuterStroke(ccBLACK, 2);
 		//	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
 		
-		float w1 = speed_label->getContentSize().width;
+		float w1 = speed_label->getContentSize().width*speed_label->getScale();
 		float w2 = getContentSize().width;
 		
 		speed_label->setPosition(ccp(-(w1+w2)/2.f, getContentSize().height/2.f));

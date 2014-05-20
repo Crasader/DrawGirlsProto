@@ -68,6 +68,7 @@ private:
 	KSProtectVar<int> remainTime;
 	KSLabelTTF* highscore_content;
 	KSLabelTTF* straight_content;
+	KSLabelTTF* record_content;
 	
 	CCSprite* rank_percent_case;
 	KSLabelTTF* percent_label;

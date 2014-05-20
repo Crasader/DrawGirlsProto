@@ -152,6 +152,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("타임"), kMyLocalKey_time);
 	ko->setObject(CCString::create("골드"), kMyLocalKey_gold);
 	ko->setObject(CCString::create("점수"), kMyLocalKey_score);
+	ko->setObject(CCString::create("총점"), kMyLocalKey_totalScore);
 	ko->setObject(CCString::create("다음스테이지"), kMyLocalKey_nextStage);
 	ko->setObject(CCString::create("다시하기"), kMyLocalKey_regame);
 	ko->setObject(CCString::create("메인으로"), kMyLocalKey_toMain);
@@ -469,6 +470,17 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ko->setObject(CCString::create("미션"), kMyLocalKey_mission);
+	ko->setObject(CCString::create("무한모드"), kMyLocalKey_endlessMode);
+	ko->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
+	ko->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
+	ko->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
+	ko->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
+	ko->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
+	ko->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
+	ko->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
+	ko->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
+	ko->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
+	ko->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -702,6 +714,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("Time"), kMyLocalKey_time);
 	en->setObject(CCString::create("Gold"), kMyLocalKey_gold);
 	en->setObject(CCString::create("Score"), kMyLocalKey_score);
+	en->setObject(CCString::create("총점"), kMyLocalKey_totalScore);
 	en->setObject(CCString::create("The next stage"), kMyLocalKey_nextStage);
 	en->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	en->setObject(CCString::create("Main"), kMyLocalKey_toMain);
@@ -1010,6 +1023,17 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	en->setObject(CCString::create("미션"), kMyLocalKey_mission);
+	en->setObject(CCString::create("무한모드"), kMyLocalKey_endlessMode);
+	en->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
+	en->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
+	en->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
+	en->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
+	en->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
+	en->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
+	en->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
+	en->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
+	en->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
+	en->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1252,6 +1276,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("Time"), kMyLocalKey_time);
 	ja->setObject(CCString::create("Gold"), kMyLocalKey_gold);
 	ja->setObject(CCString::create("Score"), kMyLocalKey_score);
+	ja->setObject(CCString::create("총점"), kMyLocalKey_totalScore);
 	ja->setObject(CCString::create("The next stage"), kMyLocalKey_nextStage);
 	ja->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	ja->setObject(CCString::create("Main"), kMyLocalKey_toMain);
@@ -1574,6 +1599,17 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ja->setObject(CCString::create("미션"), kMyLocalKey_mission);
+	ja->setObject(CCString::create("무한모드"), kMyLocalKey_endlessMode);
+	ja->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
+	ja->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
+	ja->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
+	ja->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
+	ja->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
+	ja->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
+	ja->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
+	ja->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
+	ja->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
+	ja->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

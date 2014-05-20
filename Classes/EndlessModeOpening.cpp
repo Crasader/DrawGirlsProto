@@ -99,7 +99,7 @@ void EndlessModeOpening::setMain()
 											 is_menu_enable = true;
 										 }));
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("무한모드", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0,0.5f));
 	title_label->setPosition(ccp(17,main_case->getContentSize().height-25));
@@ -135,7 +135,7 @@ void EndlessModeOpening::setMain()
 	left_back->setPosition(ccp(10+left_back->getContentSize().width/2.f, main_case->getContentSize().height*0.44f));
 	main_case->addChild(left_back);
 	
-	KSLabelTTF* left_title = KSLabelTTF::create("주간 랭킹", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessWeeklyranking), mySGD->getFont().c_str(), 15);
 	left_title->setColor(ccc3(255, 170, 20));
 	left_title->setAnchorPoint(ccp(0,0.5f));
 	left_title->setPosition(ccp(10,left_back->getContentSize().height-20));
@@ -170,7 +170,7 @@ void EndlessModeOpening::setMain()
 	right_back->setPosition(ccp(main_case->getContentSize().width-10-right_back->getContentSize().width/2.f, 149));
 	main_case->addChild(right_back);
 	
-	KSLabelTTF* right_title = KSLabelTTF::create("내 정보", mySGD->getFont().c_str(), 18);
+	KSLabelTTF* right_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMyInfo), mySGD->getFont().c_str(), 18);
 	right_title->setColor(ccc3(255, 170, 0));
 	right_title->setPosition(ccp(right_back->getContentSize().width/2.f, 162));
 	right_back->addChild(right_title);
@@ -236,12 +236,12 @@ void EndlessModeOpening::setMain()
 	record_back->setPosition(ccp(right_back->getContentSize().width/2.f, 85.5f));
 	right_back->addChild(record_back);
 	
-	KSLabelTTF* record_title = KSLabelTTF::create("전적", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 13);
 	record_title->setAnchorPoint(ccp(0,0.5f));
 	record_title->setPosition(ccp(10, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_title);
 	
-	KSLabelTTF* record_content = KSLabelTTF::create("n승 n패 승률n%", mySGD->getFont().c_str(), 13);
+	record_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 13);
 	record_content->setAnchorPoint(ccp(1,0.5f));
 	record_content->setPosition(ccp(record_back->getContentSize().width-10, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_content);
@@ -252,7 +252,7 @@ void EndlessModeOpening::setMain()
 	highscore_back->setPosition(ccp(right_back->getContentSize().width/2.f, 55));
 	right_back->addChild(highscore_back);
 	
-	KSLabelTTF* highscore_title = KSLabelTTF::create("최고점수", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* highscore_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighScore), mySGD->getFont().c_str(), 13);
 	highscore_title->setAnchorPoint(ccp(0,0.5f));
 	highscore_title->setPosition(ccp(10, highscore_back->getContentSize().height/2.f));
 	highscore_back->addChild(highscore_title);
@@ -267,7 +267,7 @@ void EndlessModeOpening::setMain()
 	straight_back->setPosition(ccp(right_back->getContentSize().width/2.f, 24.5f));
 	right_back->addChild(straight_back);
 	
-	KSLabelTTF* straight_title = KSLabelTTF::create("최고연승", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* straight_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraight), mySGD->getFont().c_str(), 13);
 	straight_title->setAnchorPoint(ccp(0,0.5f));
 	straight_title->setPosition(ccp(10, straight_back->getContentSize().height/2.f));
 	straight_back->addChild(straight_title);
@@ -347,7 +347,7 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 		ready_loading->removeFromParent();
 		ready_loading = NULL;
 		
-		addChild(ASPopupView::getCommonNoti(-999, "뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), 999);
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_endlessServerError)), 999);
 	}
 }
 
@@ -668,7 +668,7 @@ void EndlessModeOpening::successAction()
 
 void EndlessModeOpening::failAction()
 {
-	addChild(ASPopupView::getCommonNoti(-1000, "스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다.", [=]()
+	addChild(ASPopupView::getCommonNoti(-1000, myLoc->getLocalForKey(kMyLocalKey_endlessDownloadFail), [=]()
 							   {
 								   startDownload();
 							   }));
@@ -737,8 +737,28 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		remainTime = result_data["remainTime"].asInt();
 		mySGD->endless_my_level = result_data["level"].asInt();
 		
-		highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str());
-		straight_content->setString(CCString::createWithFormat("%d연승", victory.getV())->getCString());
+		if(!result_data["myInfo"].isNull())
+		{
+			mySGD->endless_my_high_victory = result_data["myInfo"]["victory"].asInt();
+			mySGD->endless_my_lose = result_data["myInfo"]["lose"].asInt();
+			mySGD->endless_my_high_score = result_data["myInfo"]["score"].asInt();
+			mySGD->endless_my_win = result_data["myInfo"]["win"].asInt();
+		}
+		else
+		{
+			mySGD->endless_my_high_victory = 0;
+			mySGD->endless_my_lose = 0;
+			mySGD->endless_my_high_score = 0;
+			mySGD->endless_my_win = 0;
+		}
+		
+		int win_count = mySGD->endless_my_win.getV();
+		int lose_count = mySGD->endless_my_lose.getV();
+		int win_rate = 100.f*win_count/(win_count + lose_count);
+		
+		record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());
+		highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str());
+		straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), mySGD->endless_my_high_victory.getV())->getCString());
 		
 		float rank_percent = 1.f*myrank.getV()/alluser.getV();
 		
@@ -850,7 +870,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		score_label->setPosition(ccp(170,18));
 		list_cell_case->addChild(score_label);
 		
-		KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat("%d연승", victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
 		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 		victory_label->setPosition(ccp(215,18));
@@ -942,7 +962,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	score_label->setPosition(ccp(170,18));
 	list_cell_case->addChild(score_label);
 	
-	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat("%d연승",rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
 	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 	victory_label->setPosition(ccp(215,18));
