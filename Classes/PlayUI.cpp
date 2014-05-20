@@ -629,10 +629,35 @@ void TakeSpeedUp::selfRemove ()
 void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 {
 	end_function = t_end_func;
-	initWithString(CCString::createWithFormat("%s %d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step)->getCString(), mySGD->getFont().c_str(), 20);
-	setColor(ccc3(0, 245, 255));
-	enableOuterStroke(ccBLACK, 2);
-//	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
+	
+	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterNo.getV()) + t_step*0.1f >= 2.f)
+	{
+		initWithString("", mySGD->getFont().c_str(), 20);
+		
+		CCSprite* speed_label = CCSprite::create("speed_max.png");
+		speed_label->setPosition(ccp(getContentSize().width/2.f,getContentSize().height/2.f));
+		addChild(speed_label);
+		
+		setPosition(CCPointZero);
+	}
+	else
+	{
+		CCSprite* speed_label = CCSprite::create("speed.png");
+		
+		initWithString(CCString::createWithFormat("%d", t_step)->getCString(), mySGD->getFont().c_str(), 20);
+		//	initWithString(CCString::createWithFormat("%s %d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step)->getCString(), mySGD->getFont().c_str(), 20);
+		setColor(ccc3(0, 245, 255));
+		enableOuterStroke(ccBLACK, 2);
+		//	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
+		
+		float w1 = speed_label->getContentSize().width;
+		float w2 = getContentSize().width;
+		
+		speed_label->setPosition(ccp(-(w1+w2)/2.f, getContentSize().height/2.f));
+		addChild(speed_label);
+		
+		setPosition(ccp(w1/2.f, 0));
+	}
 	
 	startFadeOut();
 }

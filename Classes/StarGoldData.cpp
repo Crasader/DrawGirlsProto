@@ -16,6 +16,8 @@ void StarGoldData::withdraw()
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
+	endless_my_victory_on = false;
+	
 	star_label = NULL;
 	gold_label = NULL;
 	
@@ -2278,6 +2280,9 @@ void StarGoldData::myInit()
 {
 	app_type = "light1";
 	app_version = 2;
+	
+	is_endless_mode = false;
+	endless_my_victory_on = false;
 	
 	suitable_stage = -1;
 	is_on_maingame = false;

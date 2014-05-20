@@ -257,9 +257,18 @@ void StartSettingPopup::setMain()
 		mission_label->runAction(t_repeat);
 	}
 	
-	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+	CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+	mission_img->setContentSize(CCSizeMake(65, 22));
 	mission_img->setPosition(ccp(198,255));
 	main_case->addChild(mission_img);
+	
+	KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
+	mission_img_label->setColor(ccc3(255, 170, 20));
+	mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
+	mission_img->addChild(mission_img_label);
+//	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+//	mission_img->setPosition(ccp(198,255));
+//	main_case->addChild(mission_img);
 	
 	
 	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);
@@ -973,7 +982,10 @@ void StartSettingPopup::startItemGacha()
 																	{
 																		ShopPopup* t_shop = ShopPopup::create();
 																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																		t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																		if(mySGD->is_endless_mode)
+																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																		else
+																			t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																		t_shop->setShopCode(kSC_gold);
 																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																		addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -991,7 +1003,10 @@ void StartSettingPopup::startItemGacha()
 																	{
 																		ShopPopup* t_shop = ShopPopup::create();
 																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																		t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																		if(mySGD->is_endless_mode)
+																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																		else
+																			t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																		t_shop->setShopCode(kSC_gold);
 																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																		addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1420,7 +1435,10 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																								{
 																									ShopPopup* t_shop = ShopPopup::create();
 																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																									t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																									if(mySGD->is_endless_mode)
+																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																									else
+																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																									t_shop->setShopCode(kSC_gold);
 																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																									addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1460,7 +1478,10 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																								{
 																									ShopPopup* t_shop = ShopPopup::create();
 																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																									t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																									if(mySGD->is_endless_mode)
+																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																									else
+																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																									t_shop->setShopCode(kSC_ruby);
 																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																									addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1654,9 +1675,29 @@ void StartSettingPopup::callStart()
 		}
 	}
 	
-	if(((PuzzleScene*)getParent())->heart_time->isStartable())
+	bool is_startable = false;
+	if(mySGD->is_endless_mode)
 	{
-		if(((PuzzleScene*)getParent())->heart_time->startGame())
+		is_startable = ((MainFlowScene*)getParent())->heart_time->isStartable();
+	}
+	else
+	{
+		is_startable = ((PuzzleScene*)getParent())->heart_time->isStartable();
+	}
+	
+	if(is_startable)
+	{
+		bool is_startGame = false;
+		if(mySGD->is_endless_mode)
+		{
+			is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
+		}
+		else
+		{
+			is_startGame = ((PuzzleScene*)getParent())->heart_time->startGame();
+		}
+		
+		if(is_startGame)
 			realStartAction();
 		else
 		{
@@ -1725,7 +1766,10 @@ void StartSettingPopup::callStart()
 							   {
 								   ShopPopup* t_shop = ShopPopup::create();
 								   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-								   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+								   if(mySGD->is_endless_mode)
+									   t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+								   else
+									   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 								   t_shop->setShopCode(kSC_heart);
 								   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 								   addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1938,7 +1982,10 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 	}
 	else
 	{
-		((PuzzleScene*)getParent())->heart_time->backHeart();
+		if(mySGD->is_endless_mode)
+			((MainFlowScene*)getParent())->heart_time->backHeart();
+		else
+			((PuzzleScene*)getParent())->heart_time->backHeart();
 		
 		cancelGame();
 	}
