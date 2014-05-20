@@ -282,6 +282,7 @@ private:
 	void refreshReplayPosition(int temp_time);
 	
 	CCNode* replay_all_node;
+	EffectSprite* replay_sil_thumb;
 	
 	int replay_continue_count;
 	CCLabelTTF* replay_continue_label;

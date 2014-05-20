@@ -323,22 +323,22 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 	{
 		mySGD->resetReplayPlayingInfo();
 		
-		if(result_data["rivar"]["playData"].isNull())
+		if(!result_data["rival"]["playData"].isNull())
 		{
 			Json::Value read_data;
 			Json::Reader reader;
-			reader.parse(result_data["rivar"]["playData"].asString(), read_data);
+			reader.parse(result_data["rival"]["playData"].asString(), read_data);
 			mySGD->setReplayPlayingInfo(read_data);
 		}
 		
-		mySGD->endless_memberID = result_data["rivar"]["memberID"].asInt();
-		mySGD->endless_nick = result_data["rivar"]["nick"].asString();
-		mySGD->endless_flag = result_data["rivar"]["flag"].asString();
-		mySGD->endless_victory = result_data["rivar"]["victory"].asInt();
-		mySGD->endless_autoLevel = result_data["rivar"]["autoLevel"].asInt();
-		mySGD->endless_level = result_data["rivar"]["level"].asInt();
-		mySGD->endless_score = result_data["rivar"]["score"].asInt();
-		mySGD->endless_regDate = result_data["rivar"]["regDate"].asInt64();
+		mySGD->endless_memberID = result_data["rival"]["memberID"].asInt64();
+		mySGD->endless_nick = result_data["rival"]["nick"].asString();
+		mySGD->endless_flag = result_data["rival"]["flag"].asString();
+		mySGD->endless_victory = result_data["rival"]["victory"].asInt();
+		mySGD->endless_autoLevel = result_data["rival"]["autoLevel"].asInt();
+		mySGD->endless_level = result_data["rival"]["level"].asInt();
+		mySGD->endless_score = result_data["rival"]["score"].asInt();
+		mySGD->endless_regDate = result_data["rival"]["regDate"].asInt64();
 		
 		saveStageInfo(result_data["stageInfo"]);
 	}
@@ -718,7 +718,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		for(int i=0;i<list_size;i++)
 		{
 			EndlessRankInfo t_rank;
-			t_rank.memberID = t_list[i]["memberID"].asInt();
+			t_rank.memberID = t_list[i]["memberID"].asInt64();
 			t_rank.regWeek = t_list[i]["regWeek"].asInt();
 			t_rank.score = t_list[i]["score"].asInt();
 			t_rank.nick = t_list[i]["nick"].asString();

@@ -23,7 +23,7 @@ class TouchSuctionLayer;
 class EndlessRankInfo
 {
 public:
-	KSProtectVar<int> memberID;
+	KSProtectVar<long long> memberID;
 	KSProtectVar<int> regWeek;
 	KSProtectVar<int> score;
 	KSProtectStr nick;

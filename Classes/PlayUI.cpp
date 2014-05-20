@@ -653,7 +653,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 		float w1 = speed_label->getContentSize().width;
 		float w2 = getContentSize().width;
 		
-		speed_label->setPosition(ccp(-w2/2.f, getContentSize().height/2.f));
+		speed_label->setPosition(ccp(-(w1+w2)/2.f, getContentSize().height/2.f));
 		addChild(speed_label);
 		
 		setPosition(ccp(w1/2.f, 0));
