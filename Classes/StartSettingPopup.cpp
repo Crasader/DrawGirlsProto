@@ -257,9 +257,18 @@ void StartSettingPopup::setMain()
 		mission_label->runAction(t_repeat);
 	}
 	
-	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+	CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+	mission_img->setContentSize(CCSizeMake(65, 22));
 	mission_img->setPosition(ccp(198,255));
 	main_case->addChild(mission_img);
+	
+	KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
+	mission_img_label->setColor(ccc3(255, 170, 20));
+	mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
+	mission_img->addChild(mission_img_label);
+//	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+//	mission_img->setPosition(ccp(198,255));
+//	main_case->addChild(mission_img);
 	
 	
 	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);

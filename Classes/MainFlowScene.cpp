@@ -43,6 +43,8 @@
 #include "TodayMissionPopup.h"
 #include "AttendancePopup.h"
 #include "PuzzleSuccessAndPerfect.h"
+#include "EndlessModeOpening.h"
+#include "EndlessModeResult.h"
 #include "FormSetter.h"
 
 CCScene* MainFlowScene::scene()
@@ -247,7 +249,11 @@ bool MainFlowScene::init()
 	setBottom();
 	
 	bool is_openning = false;
-	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
+	if(mySGD->is_endless_mode)
+	{
+		
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
 		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 		
@@ -288,8 +294,15 @@ bool MainFlowScene::init()
 	
 	is_menu_enable = true;
 	
-	
-	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
+	if(mySGD->is_endless_mode)
+	{
+		mySGD->endless_my_victory_on = true;
+		is_menu_enable = false;
+		puzzle_table->setTouchEnabled(false);
+		
+		showEndlessResult();
+	}
+	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
@@ -1486,7 +1499,8 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_friendManagement,
 	kMainFlowMenuTag_gacha,
 	kMainFlowMenuTag_achievement,
-	kMainFlowMenuTag_event
+	kMainFlowMenuTag_event,
+	kMainFlowMenuTag_endlessMode
 };
 
 void MainFlowScene::menuAction(CCObject* sender)
@@ -1693,7 +1707,30 @@ void MainFlowScene::menuAction(CCObject* sender)
 //			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 //			addChild(t_popup, kMainFlowZorder_popup);
 		}
+		else if(tag == kMainFlowMenuTag_endlessMode)
+		{
+			showEndlessOpening();
+		}
 	}
+}
+
+void MainFlowScene::showEndlessOpening()
+{
+	mySGD->is_endless_mode = false;
+	mySGD->resetReplayPlayingInfo();
+	
+	puzzle_table->setTouchEnabled(false);
+	EndlessModeOpening* t_popup = EndlessModeOpening::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
+	addChild(t_popup, kMainFlowZorder_popup);
+}
+
+void MainFlowScene::showEndlessResult()
+{
+	puzzle_table->setTouchEnabled(false);
+	EndlessModeResult* t_popup = EndlessModeResult::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showEndlessOpening));
+	addChild(t_popup, kMainFlowZorder_popup);
 }
 
 void MainFlowScene::bottomOpenning()
@@ -2157,6 +2194,26 @@ void MainFlowScene::setBottom()
 	addChild(etc_event, kMainFlowZorder_uiButton);
 	
 	bottom_list.push_back(etc_event);
+	
+	CCSprite* n_endless = CCSprite::create("mainflow_cardsetting.png");
+//	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+//	n_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
+//	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 7));
+//	n_cardsetting->addChild(n_cardsetting_label);
+	CCSprite* s_endless = CCSprite::create("mainflow_cardsetting.png");
+	s_endless->setColor(ccGRAY);
+//	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+//	s_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
+//	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 7));
+//	s_cardsetting->addChild(s_cardsetting_label);
+	
+	CCMenuItem* endless_item = CCMenuItemSprite::create(n_endless, s_endless, this, menu_selector(MainFlowScene::menuAction));
+	endless_item->setTag(kMainFlowMenuTag_endlessMode);
+	
+	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
+	endless_menu->setPosition(ccp(43-240+214.f/4.f*6.f, n_endless->getContentSize().height/2.f+8));
+	bottom_case->addChild(endless_menu);
+	endless_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)

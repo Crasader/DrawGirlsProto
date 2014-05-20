@@ -318,6 +318,15 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
 	ko->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
 	
+	ko->setObject(CCString::create(""), kMyLocalKey_missionCondition0);
+	ko->setObject(CCString::create(""), kMyLocalKey_missionCondition1);
+	ko->setObject(CCString::create("<font>목표 <font color=961 size=18>%d마리"), kMyLocalKey_missionCondition2);
+	ko->setObject(CCString::create("<font color=961 size=18>%d%%이상 %d번"), kMyLocalKey_missionCondition3);
+	ko->setObject(CCString::create("<font>목표 <font color=961 size=18>%d개"), kMyLocalKey_missionCondition4);
+	ko->setObject(CCString::create(""), kMyLocalKey_missionCondition5);
+	ko->setObject(CCString::create(""), kMyLocalKey_missionCondition6);
+	ko->setObject(CCString::create("<font>목표시간 <font color=961 size=18>%d초"), kMyLocalKey_missionCondition7);
+	
 	
 	ko->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	ko->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
@@ -367,9 +376,11 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	ko->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ko->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
-	ko->setObject(CCString::create("남은시간"), kMyLocalKey_restTime);
+	ko->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
+	ko->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
 	ko->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	ko->setObject(CCString::create("%d분"), kMyLocalKey_restTimeSecond);
+	ko->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
+	ko->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -457,6 +468,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
 	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
+	ko->setObject(CCString::create("미션"), kMyLocalKey_mission);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -856,6 +868,15 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
 	en->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
 	
+	en->setObject(CCString::create(""), kMyLocalKey_missionCondition0);
+	en->setObject(CCString::create(""), kMyLocalKey_missionCondition1);
+	en->setObject(CCString::create("<font>목표 <font color=961 size=18>%d마리"), kMyLocalKey_missionCondition2);
+	en->setObject(CCString::create("<font color=961 size=18>%d%%이상 %d번"), kMyLocalKey_missionCondition3);
+	en->setObject(CCString::create("<font>목표 <font color=961 size=18>%d개"), kMyLocalKey_missionCondition4);
+	en->setObject(CCString::create(""), kMyLocalKey_missionCondition5);
+	en->setObject(CCString::create(""), kMyLocalKey_missionCondition6);
+	en->setObject(CCString::create("<font>목표시간 <font color=961 size=18>%d초"), kMyLocalKey_missionCondition7);
+	
 	en->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	en->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
 	en->setObject(CCString::create("부하몹제거"), kMyLocalKey_item5title);
@@ -904,9 +925,11 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	en->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	en->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
-	en->setObject(CCString::create("남은시간"), kMyLocalKey_restTime);
+	en->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
+	en->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
 	en->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	en->setObject(CCString::create("%d분"), kMyLocalKey_restTimeSecond);
+	en->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
+	en->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -985,6 +1008,8 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
 	en->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
 	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
+	
+	en->setObject(CCString::create("미션"), kMyLocalKey_mission);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1395,6 +1420,15 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("<font color=999 size=13>CHANGE를 순서대로 획득하세요!"), kMyLocalKey_missionDiscription6);
 	ja->setObject(CCString::create("<font color=999 size=13>목표시간 내에 클리어하세요!"), kMyLocalKey_missionDiscription7);
 	
+	ja->setObject(CCString::create(""), kMyLocalKey_missionCondition0);
+	ja->setObject(CCString::create(""), kMyLocalKey_missionCondition1);
+	ja->setObject(CCString::create("<font>목표 <font color=961 size=18>%d마리"), kMyLocalKey_missionCondition2);
+	ja->setObject(CCString::create("<font color=961 size=18>%d%%이상 %d번"), kMyLocalKey_missionCondition3);
+	ja->setObject(CCString::create("<font>목표 <font color=961 size=18>%d개"), kMyLocalKey_missionCondition4);
+	ja->setObject(CCString::create(""), kMyLocalKey_missionCondition5);
+	ja->setObject(CCString::create(""), kMyLocalKey_missionCondition6);
+	ja->setObject(CCString::create("<font>목표시간 <font color=961 size=18>%d초"), kMyLocalKey_missionCondition7);
+	
 	
 	ja->setObject(CCString::create("대쉬"), kMyLocalKey_item4title);
 	ja->setObject(CCString::create("잠깐동안 빠른속도로 이동 가능합니다."), kMyLocalKey_item4ment);
@@ -1444,9 +1478,11 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	ja->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ja->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
-	ja->setObject(CCString::create("남은시간"), kMyLocalKey_restTime);
+	ja->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
+	ja->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
 	ja->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	ja->setObject(CCString::create("%d분"), kMyLocalKey_restTimeSecond);
+	ja->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
+	ja->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
@@ -1536,6 +1572,8 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
 	ja->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
 	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
+	
+	ja->setObject(CCString::create("미션"), kMyLocalKey_mission);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

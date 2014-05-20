@@ -478,8 +478,15 @@ void ZoomScript::menuAction(CCObject *sender)
 
 void ZoomScript::nextScene()
 {
-	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
-	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+	if(mySGD->is_endless_mode)
+	{
+		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+	}
+	else
+	{
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
+		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+	}
 }
 
 void ZoomScript::showtimeFirstAction()

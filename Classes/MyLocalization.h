@@ -457,7 +457,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_dieTutorial2,
 	kMyLocalKey_dieTutorial3,
 	kMyLocalKey_restTime,
+	kMyLocalKey_restTimeDayHour,
 	kMyLocalKey_restTimeHour,
+	kMyLocalKey_restTimeMinute,
 	kMyLocalKey_restTimeSecond,
 	kMyLocalKey_warning9,
 	kMyLocalKey_warning105,
@@ -521,7 +523,16 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_controlTip_lineTangle_title,
 	kMyLocalKey_controlTip_lineTangle_content,
 	kMyLocalKey_controlTip_slimLine_title,
-	kMyLocalKey_controlTip_slimLine_content
+	kMyLocalKey_controlTip_slimLine_content,
+	kMyLocalKey_mission,
+	kMyLocalKey_missionCondition0,
+	kMyLocalKey_missionCondition1,
+	kMyLocalKey_missionCondition2,
+	kMyLocalKey_missionCondition3,
+	kMyLocalKey_missionCondition4,
+	kMyLocalKey_missionCondition5,
+	kMyLocalKey_missionCondition6,
+	kMyLocalKey_missionCondition7
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

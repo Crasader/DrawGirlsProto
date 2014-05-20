@@ -32,8 +32,6 @@
 #include "EffectSprite.h"
 #include "FlagSelector.h"
 
-#include "EndlessModeOpening.h"
-
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -80,10 +78,6 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
-	
-	EndlessModeOpening* t_popup = EndlessModeOpening::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(OptionPopup::popupClose));
-	addChild(t_popup, 999);
 	
 //	Json::Value param;
 //	param["productid"] = "g_10289_001";

@@ -2242,17 +2242,16 @@ void Maingame::endCloseShutter()
 	{
 		AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
 		
-		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
-//		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-		if(mySD->getSilType() <= 10000)
+		if(mySGD->is_endless_mode)
 		{
-			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else
 		{
-			mySGD->setNextSceneName("newmainflow");
-			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
-//			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
+			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+//			mySGD->setNextSceneName("newmainflow");
+//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
 		}
 	}
 }
@@ -2425,7 +2424,7 @@ void Maingame::takeSpeedUpEffect( int t_step )
 		
 		TakeSpeedUp* t_tsu = TakeSpeedUp::create(t_step, bind(&Maingame::endTakeSpeedUpEffect, this));
 		t_tsu->setScale(1.f/myGD->game_scale);
-		t_tsu->setPosition(ccpAdd(jack_position, add_point));
+		t_tsu->setPosition(ccpAdd(t_tsu->getPosition(), ccpAdd(jack_position, add_point)));
 		game_node->addChild(t_tsu, goldZorder);
 		
 		save_take_speed_up_effect = t_tsu;

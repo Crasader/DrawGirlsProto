@@ -667,7 +667,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
-		graph_back->setPosition(ccp(355,230));
+		graph_back->setPosition(ccp(355,219));
 		main_case->addChild(graph_back, kZ_FP_img);
 		
 		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -708,7 +708,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(257+195,230));
+		rank_percent_case->setPosition(ccp(257+195,219));
 		main_case->addChild(rank_percent_case, kZ_FP_img);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
@@ -717,7 +717,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_FP_img);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,219));
 		rank_percent_case->runAction(t_move);
 		
 		Json::Value user_list = result_data["list"];
