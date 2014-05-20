@@ -14,6 +14,7 @@
 #include "KSUtil.h"
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
+#include "KSUtil.h"
 #include <vector>
 #include <stdio.h>
 #define setFormSetter(name) name->setStringData(#name);
@@ -245,6 +246,7 @@ public:
 			if(m_selectedObjNumber<0)return;
 			
 			logFormSetting();
+			m_selectedObjNumber=-1;
 		});
 		
 		exit->setPosition(0,80);
@@ -340,8 +342,18 @@ public:
 	void setEnabledRemocon(bool _is){
 		this->m_isEnabledRemocon=_is;
 	}
+	
 	void start(){
 		this->start("");
+	}
+	
+	void start(CCNode* obj,string startName){
+		if(!m_isEnabledRemocon)return;
+		obj->addChild(KSTimer::create(0.5f,[this,startName](){this->start(startName);}));
+	}
+	
+	void start(CCNode* obj){
+		this->start(obj,"");
 	}
 	string m_startObjName;
 	void start(string startName){

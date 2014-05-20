@@ -172,18 +172,10 @@ CCSprite* StarGoldData::getLoadingImg()
 string StarGoldData::getFont()
 {
 	
-	if(myLoc->getSupportLocalCode() == "ja")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-		return "meiryo";
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-		return "fonts/meiryo.ttc"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
-#endif
-	}
 	
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixJGoB";
+	font_name = "RixGoEB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
@@ -193,18 +185,10 @@ string StarGoldData::getFont()
 
 string StarGoldData::getFont2() // Jrnaver
 {
-	if(myLoc->getSupportLocalCode() == "ja")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-		return "meiryo";
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-		return "fonts/meiryo.ttc"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
-#endif
-	}
 
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixJGoB";
+	font_name = "RixGoEB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif

@@ -422,7 +422,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		switch(type)
 		{
 			case kGift:
-				comment =mail.get("sender","Event").asString().c_str();
+				comment =mail.get("regDate","Event").asString().c_str();
 				sendBtn = CCMenuItemImageLambda::create
 				("postbox_cell_receive.png", "postbox_cell_receive.png",
 				 [=](CCObject* sender)
