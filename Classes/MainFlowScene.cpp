@@ -2339,17 +2339,33 @@ void MainFlowScene::topOnLight()
 	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
 	ruby_img->addChild(ruby_light);
 	
-	if(mySGD->is_today_mission_first)
+	if(mySGD->is_on_attendance)
+	{
+		is_menu_enable = false;
+		
+		AttendancePopup* t_popup = AttendancePopup::create(-300, [=]()
+														   {
+															   if(mySGD->is_today_mission_first)
+																{
+																	mySGD->is_today_mission_first = false;
+																	
+																	TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																	addChild(t_popup, kMainFlowZorder_popup);
+																}
+															   else
+																{
+																	is_menu_enable = true;
+																}
+														   });
+		addChild(t_popup, kMainFlowZorder_popup);
+	}
+	else if(mySGD->is_today_mission_first)
 	{
 		is_menu_enable = false;
 		
 		mySGD->is_today_mission_first = false;
 		
-		AttendancePopup* t_popup = AttendancePopup::create(-300, [=]()
-														   {
-															   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
-															   addChild(t_popup, kMainFlowZorder_popup);
-														   });
+		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
 }

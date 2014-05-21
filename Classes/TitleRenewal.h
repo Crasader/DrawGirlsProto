@@ -124,6 +124,8 @@ private:
 	
 	void resultGetUserData(Json::Value result_data);
 	
+	void resultCheckAttendanceEvent(Json::Value result_data);
+	
 	void resultGetAchieveHistory(Json::Value result_data);
 	void resultGetCardHistory(Json::Value result_data);
 	void resultGetPuzzleHistory(Json::Value result_data);

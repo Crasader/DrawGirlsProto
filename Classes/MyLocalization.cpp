@@ -482,6 +482,10 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	ko->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
+	ko->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
+	ko->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	ko->setObject(CCString::create("일"), kMyLocalKey_attendanceDay);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1034,6 +1038,10 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	en->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	en->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
+	
+	en->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
+	en->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	en->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1610,6 +1618,10 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	ja->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	ja->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
+	
+	ja->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
+	ja->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	ja->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

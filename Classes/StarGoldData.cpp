@@ -2274,6 +2274,25 @@ void StarGoldData::initTodayMission(Json::Value t_info)
 	is_today_mission_first = t_info["isFirstCheck"].asBool();
 }
 
+void StarGoldData::initAttendance(Json::Value result_data)
+{
+	if(result_data["sendGift"].asBool())
+	{
+		is_on_attendance = true;
+		attendance_data = result_data;
+	}
+	else
+	{
+		is_on_attendance = false;
+	}
+}
+
+void StarGoldData::resetAttendance()
+{
+	is_on_attendance = false;
+	attendance_data.clear();
+}
+
 string StarGoldData::getAppType()
 {
 	return app_type;
@@ -2288,6 +2307,7 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 2;
 	
+	is_on_attendance = false;
 	is_endless_mode = false;
 	endless_my_victory_on = false;
 	

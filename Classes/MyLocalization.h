@@ -544,7 +544,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessHighStraightValue,
 	kMyLocalKey_endlessServerError,
 	kMyLocalKey_endlessDownloadFail,
-	kMyLocalKey_endlessCheckGiveup
+	kMyLocalKey_endlessCheckGiveup,
+	kMyLocalKey_attendanceTitle,
+	kMyLocalKey_attendanceContent,
+	kMyLocalKey_attendanceDay
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

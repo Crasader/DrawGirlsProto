@@ -760,6 +760,11 @@ public:
 	
 	CommandParam getUpdateTodayMissionParam(jsonSelType t_callback);
 	
+	bool is_on_attendance;
+	Json::Value attendance_data;
+	void initAttendance(Json::Value result_data);
+	void resetAttendance();
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
