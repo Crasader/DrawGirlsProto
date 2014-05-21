@@ -294,7 +294,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setDuplicateLoginFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "다른 기기로 연결되었습니다.\n다시 로그인합니다.",[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,"재접속", "다른 기기로 연결되었습니다.\n다시 로그인합니다.",[](){
 			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
@@ -303,7 +303,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setCmdNoErrorFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다.",[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,"재접속", "서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다.",[](){
 			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
@@ -311,7 +311,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	});
 	
 	GraphDog::get()->setLongTimeErrorFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999, "세션이 종료되었습니다.\n다시 로그인합니다.",[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,"재접속", "세션이 종료되었습니다.\n다시 로그인합니다.",[](){
 			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});

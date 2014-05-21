@@ -68,7 +68,8 @@ public:
 	
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment);
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func);
-	
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func);
+
 	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func);
 	
 	bool is_menu_enable;

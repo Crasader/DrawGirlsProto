@@ -13,16 +13,18 @@
 #include "AudioEngine.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "FormSetter.h"
 
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 {
 	return getCommonNoti(t_touch_priority, t_comment, [](){});
 }
 
-ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func)
+
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func)
 {
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
-	
+	startFormSetter(t_popup);
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -48,24 +50,97 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 	CCNode* t_container = CCNode::create();
 	t_popup->setContainerNode(t_container);
 	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	setFormSetter(case_back);
 	case_back->setPosition(CCPointZero);
 	t_container->addChild(case_back);
 	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	content_back->setPosition(CCPointZero);
+	CCScale9Sprite* content_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	setFormSetter(content_back);
+	content_back->setPosition(ccp(0,-10));
 	t_container->addChild(content_back);
 	
-	CCLabelTTF* ment_label = CCLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 15);
-	ment_label->setPosition(ccp(0,0));
+	CCLabelTTF* title_label = CCLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), 16);
+	setFormSetter(title_label);
+	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setPosition(ccp(0,0));
+	t_container->addChild(title_label);
+	
+	CCLabelTTF* ment_label = CCLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 12);
+	setFormSetter(ment_label);
+	ment_label->setPosition(ccp(0,5));
 	t_container->addChild(ment_label);
 	
-	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+60, ment_label->getContentSize().height + 40));
-	content_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+40, ment_label->getContentSize().height + 20));
+	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+60+80, ment_label->getContentSize().height + 40+80));
+	content_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+40+85, ment_label->getContentSize().height+76));
+	title_label->setPosition(ccp(0,case_back->getContentSize().height/2-21));
 	
-	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	close_button->setPosition(ccp(case_back->getContentSize().width/2.f-10,
-								  case_back->getContentSize().height/2.f-10));
+	CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(70, 40), CommonButtonLightPupple, t_popup->getTouchPriority()-5);
+	setFormSetter(close_button);
+	close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+20+18));
+	close_button->setFunction([=](CCObject* sender)
+														{
+															AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+															close_func();
+															t_popup->removeFromParent();
+														});
+	t_container->addChild(close_button);
+	
+	return t_popup;
+}
+
+
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func)
+{
+	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
+	startFormSetter(t_popup);
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	float height_value = 320.f;
+	if(myDSH->screen_convert_rate < 1.f)
+		height_value = 320.f/myDSH->screen_convert_rate;
+	
+	if(height_value < myDSH->ui_top)
+		height_value = myDSH->ui_top;
+	
+	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+	t_popup->setDimmedPosition(ccp(240, 160));
+	t_popup->setBasePosition(ccp(240, 160));
+	
+	if(mySGD->is_on_maingame)
+	{
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+	}
+	
+	CCNode* t_container = CCNode::create();
+	t_popup->setContainerNode(t_container);
+	
+	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	setFormSetter(case_back);
+	case_back->setPosition(CCPointZero);
+	t_container->addChild(case_back);
+	
+	CCScale9Sprite* content_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	setFormSetter(content_back);
+	content_back->setPosition(CCPointZero);
+	t_container->addChild(content_back);
+
+	
+	CCLabelTTF* ment_label = CCLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 12);
+	setFormSetter(ment_label);
+	ment_label->setPosition(ccp(0,20));
+	t_container->addChild(ment_label);
+	
+	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+60+80, ment_label->getContentSize().height + 40+80));
+	content_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+40+85, ment_label->getContentSize().height+20+85));
+
+	CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(70, 40), CommonButtonLightPupple, t_popup->getTouchPriority()-5);
+	setFormSetter(close_button);
+	close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+20+18));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
