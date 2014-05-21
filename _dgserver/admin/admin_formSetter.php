@@ -15,7 +15,7 @@ include "header.php";
  FormSetter.h 속에 더 다양한 기능 사용법이~~
 </td></tr></table></center>
 <br><br>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("formsetter")?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="FormSetter" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>

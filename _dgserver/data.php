@@ -13,6 +13,7 @@ unset($_dirs[count($_dirs)-1]);
 $_dirs = implode($_dirs,"/");
 $nowurl = $nowurl.$_dirs;
 
+CurrentUserInfo::$language = "ko";
 
 $mode = $_GET["mode"];
 $allResult="";

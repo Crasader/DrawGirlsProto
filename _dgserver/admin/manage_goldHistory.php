@@ -29,7 +29,7 @@ $(document).ready(function(){
 	</tr>
 	<tr>
 		<td>기간</td>
-		<td colspan=2><input type="text" name="startDate" value="<?=TimeManager::get()->getDateString(TimeManager::get()->getTime()-60*60*24*30)?>"> ~ <input type="text" name="endDate" value="<?=TimeManager::get()->getCurrentDateString()?>"></td>
+		<td colspan=2><input type="text" name="startDate" value="<?=TimeManager::get()->getDateTime(TimeManager::get()->getTime()-60*60*24*30)?>"> ~ <input type="text" name="endDate" value="<?=TimeManager::get()->getCurrentDateTime()?>"></td>
 	</tr>
 </table>
 

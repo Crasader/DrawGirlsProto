@@ -28,7 +28,7 @@ $(document).ready(function(){
 </table>
 
 <br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Message" dbFunc='{"select":"getList"}' dbWhere='' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Message"  dbWhere='' name="datatable" border=1>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>

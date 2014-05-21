@@ -28,17 +28,20 @@ $(document).ready(function(){
 </table>
 
 <br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="GiftBoxHistory" dbFunc='{"select":"getHistory","write":"writeData","update":"updateData","delete":"deleteData"}' dbWhere='' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="GiftBoxHistory" dbWhere='' name="datatable" border=1>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>
+			<th field="memberID" viewer='{"type":"text"}' editor='{"type":"text"}'>memberID</th>
 			<th field="regDate" viewer='{"type":"text"}' editor='{"type":"text"}'>regDate</th>
 			<th field="confirmDate" viewer='{"type":"text"}' editor='{"type":"text"}'>confirmDate</th>
 			<th field="sender" viewer='{"type":"text"}' editor='{"type":"text"}'>sender</th>
 			<th field="content" viewer='{"type":"text"}' editor='{"type":"text"}'>content</th>
-			<th field="reward" viewer='{"type":"text"}' editor='{"type":"array","element":{"type":"dictionary","element":[{"type":"text","field":"type"},{"type":"text","field":"value","datatype":"int"}]}}'>reward</th>
+			<th field="reward" viewer='{"type":"text"}' editor='{"type":"array","element":{"type":"dictionary","element":[{"type":"text","field":"type"},{"type":"text","field":"count","datatype":"int"}]}}'>reward</th>
 			<th field="data" viewer='{"type":"text"}' editor='{"type":"textarea"}'>data</th>
-			<th manage="delete update">manage</th>
+			<th field="exchangeID" viewer='{"type":"text"}' editor='{"type":"textarea"}'>exchangeID</th>
+			<th field="exchangeList" viewer='{"type":"text"}'>exchangeList</th>
+			<th manage="insert delete update">manage</th>
 		</tr>
 	</thead>
 	<tbody datazone>

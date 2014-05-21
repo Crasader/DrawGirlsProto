@@ -15,7 +15,10 @@ $nowurl = $nowurl.$_dirs;
 
 
 $mode = $_GET["mode"];
-$allResult="";
+$allResult=array();
+$allResult["cmdNoError"]=false;
+$allResult["checkDeviceError"]=false;
+$allResult["longTimeError"]=false;
 $version=1;
 
 function webLog($log){
@@ -77,7 +80,8 @@ if(!$stopCommand){
             if(!($a=="login" || $a=="join") && $p["memberID"] && $checkUserdata==false){
                 $userdata = new UserData($p["memberID"]);
                 LogManager::get()->addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
-                
+                LogManager::get()->addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
+
                 if($userdata->isLoaded()){
                     if($userdata->deviceID!=$param["deviceID"]){
                             $checkUserdata=true;
@@ -85,12 +89,17 @@ if(!$stopCommand){
                             $r["result"]=ResultState::toArray(4002);
                             $allResult[$cmd]= $r;
                             //continue;
-                    }else if($userdata->lastCmdNo>=$param["cmdNo"]){
-                        $allResult["cmdNoError"]=true;
-                        $checkUserdata=true;
-                        $r["result"]=ResultState::toArray(4001);
-                        $allResult[$cmd]= $r;
-                        //continue;
+                    /*
+                    else if($userdata->lastCmdNo>=$param["cmdNo"]){
+                                            $allResult["cmdNoError"]=true;
+                                            $checkUserdata=true;
+                                            $r["result"]=ResultState::toArray(4001);
+                                            $allResult[$cmd]= $r;
+                                            //continue;
+
+                                        }
+                    */
+
 
                     }else if((TimeManager::get()->getTime()-$userdata->lastTime)>60*30){
                         $checkUserdata=true;
@@ -191,11 +200,16 @@ if(!$stopCommand){
             $cmd = (string)$c;
             $allResult[$cmd]["transaction"]=$commitsuccess;
         }
+
+        $p2["category"]="starttransaction";
+        $p2["content"]='{"memberID":"'.$memberID.'"}';
+        $p2["output"]=$allResult[$commitCmdName];
+        $command->writelog($p2);
     }
 
     $allResult["state"]="ok";
     $allResult["timestamp"]=TimeManager::get()->getTime();
-    $allResult["date"]=TimeManager::get()->getCurrentDateString();
+    $allResult["date"]=TimeManager::get()->getCurrentDateTime();
     $allResult["weekNo"]=TimeManager::get()->getCurrentWeekNo();
     
     $allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);

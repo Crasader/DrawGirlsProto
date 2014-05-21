@@ -141,10 +141,10 @@ $apiListStr = json_encode($apiList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	var textareaViewer = function(obj,value){
 		return "<textarea rows=3 cols=50>"+j2s(obj)+"</textarea>";
 	}
-</script>
+</script> 
 <br><br>
 <b>--최근로그--</b><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbFunc='{"select":"getHistory"}' dbWhere='' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbWhere='' name="datatable" border=1>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>
