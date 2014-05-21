@@ -451,7 +451,7 @@ void StartSettingPopup::setMain()
 			if(is_show_item_popup)
 				item_cnt += mySGD->getBonusItemCnt(t_ic);
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			cnt_label->setPosition(ccp(21, -21));
+			cnt_label->setPosition(ccp(21, -20));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
@@ -1237,7 +1237,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			cnt_label->setPosition(ccp(21, -21));
+			cnt_label->setPosition(ccp(21, -20));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
@@ -1328,7 +1328,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			cnt_label->setPosition(ccp(21, -21));
+			cnt_label->setPosition(ccp(21, -20));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");

@@ -34,6 +34,7 @@ public:
 	bool is_delaying;
 	
 	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func, CCSize t_size = CCSizeMake(350,100), CCPoint t_point = ccp(0,-110), int t_font_size = 12);
+	void cleanSM();
 	
 private:
 	

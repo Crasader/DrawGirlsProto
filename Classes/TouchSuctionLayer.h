@@ -20,6 +20,8 @@ public:
 	static TouchSuctionLayer* create(int t_touch_priority);
 	CCObject* target_touch_began;
 	SEL_CallFunc delegate_touch_began;
+	bool is_on_touch_began_func;
+	function<void()> touch_began_func;
 	void setNotSwallowRect(CCRect t_rect);
 	void setSwallowRect(CCRect t_rect);
 	void setSwallowMent(string t_ment);

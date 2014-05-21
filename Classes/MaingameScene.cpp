@@ -1039,11 +1039,11 @@ void Maingame::counting()
 	else if(countingCnt/60 >= 1 && countingCnt%60 == 0)
 	{
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
-		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
-		{
+//		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
+//		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
 			addChild(t_smg, startGachaZorder);
-		}
+//		}
 		
 		if(countingCnt/60 == 1)
 		{
@@ -1067,6 +1067,16 @@ void Maingame::gachaOn()
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
+	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
+		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	else if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
+		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	else
+	{
+		showShop(kSC_gold);
+		return;
+	}
+	
 	bool t_jack_stun = myJack->isStun;
 	
 	CCNode* exit_target = this;
@@ -1075,11 +1085,6 @@ void Maingame::gachaOn()
 	
 	LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 	addChild(t_loading, 9999);
-	
-	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
-		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
-	else
-		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	
 	int map_gacha_cnt = mySGD->getUserdataAchieveMapGacha()+1;
 	mySGD->setUserdataAchieveMapGacha(map_gacha_cnt);
@@ -1113,7 +1118,7 @@ void Maingame::gachaOn()
 									  {
 										  mControl->isStun = false;
 										  myJack->isStun = t_jack_stun;
-										  exit_target->onEnter();
+//										  exit_target->onEnter();
 										  
 										  myGD->resetGameData();
 										  mySGD->startMapGachaOn();
@@ -1123,7 +1128,7 @@ void Maingame::gachaOn()
 									  else
 									  {
 										  mySGD->clearChangeGoods();
-										  addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
+										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
 											  mControl->isStun = false;
 											  myJack->isStun = t_jack_stun;
 											  exit_target->onEnter();
@@ -3373,6 +3378,7 @@ void Maingame::showShop(int t_shopcode)
 	t_popup->setCloseFunc([=]()
 						  {
 							  mControl->isStun = false;
+							  startControl();
 							  myJack->isStun = t_jack_stun;
 							  exit_target->onEnter();
 							  is_pause = false;

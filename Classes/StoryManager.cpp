@@ -64,6 +64,11 @@ void StoryManager::addMent(bool is_left, string t_name, string t_namefile, strin
 	startMent();
 }
 
+void StoryManager::cleanSM()
+{
+	ment_node->removeAllChildren();
+}
+
 void StoryManager::mentAction()
 {
 	ing_ment_cnt++;
@@ -105,8 +110,8 @@ bool StoryManager::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 		{
 			AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 			is_click_effect = false;
+			end_func();
 		}
-		end_func();
 	}
 	
 	return true;

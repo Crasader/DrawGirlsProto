@@ -849,7 +849,7 @@ void ChangeCard::startMyAction()
 }
 void ChangeCard::myInit ()
 {
-	setPosition(ccp(480,myDSH->ui_top*0.67f));
+	setPosition(ccp(240,myDSH->ui_top*0.67f));
 	
 	schedule(schedule_selector(ChangeCard::startMyAction));
 }

@@ -34,11 +34,6 @@ void TakeCardToDiary::myInit(int t_take_card_number, std::function<void()> t_end
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray);
 	
-	CCSprite* right_cover = CCSprite::create("diary_back_cover.png", CCRectMake(240, 0, 240, 320));
-	right_cover->setAnchorPoint(ccp(0,0.5f));
-	right_cover->setPosition(ccp(240,160));
-	addChild(right_cover);
-	
 	recent_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	recent_left_img->setAnchorPoint(ccp(1.f,0.5f));
 	recent_left_img->setPosition(ccp(240,160));
@@ -56,6 +51,11 @@ void TakeCardToDiary::myInit(int t_take_card_number, std::function<void()> t_end
 	recent_right_img->setAnchorPoint(ccp(0.f,0.5f));
 	recent_right_img->setPosition(ccp(240,160));
 	addChild(recent_right_img);
+	
+	CCSprite* right_cover = CCSprite::create("diary_back_cover.png", CCRectMake(240, 0, 240, 320));
+	right_cover->setAnchorPoint(ccp(0,0.5f));
+	right_cover->setPosition(ccp(0,160));
+	recent_right_img->addChild(right_cover, -1);
 	
 	setRightPage(recent_right_img, recent_card_number);
 	

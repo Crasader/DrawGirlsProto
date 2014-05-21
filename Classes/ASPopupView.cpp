@@ -39,6 +39,12 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 	t_popup->setDimmedPosition(ccp(240, 160));
 	t_popup->setBasePosition(ccp(240, 160));
 	
+	if(mySGD->is_on_maingame)
+	{
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+	}
+	
 	CCNode* t_container = CCNode::create();
 	t_popup->setContainerNode(t_container);
 	
