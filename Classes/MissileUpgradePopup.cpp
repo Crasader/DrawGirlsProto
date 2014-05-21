@@ -497,7 +497,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	addChild(KSTimer::create(0.1f, [=](){
 		CCSprite* upgrade_effect_2 = CCSprite::create("missile_upgrade_2.png");
 		upgrade_effect_2->setScaleX(0.f);
-		upgrade_effect_2->setPosition(ccp(99,-14));
+		upgrade_effect_2->setPosition(ccp(80,-14));
 		m_container->addChild(upgrade_effect_2);
 		
 		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont2().c_str(), 13);
@@ -516,12 +516,12 @@ void MissileUpgradePopup::setAfterUpgrade()
 		}, [=](float t){
 			upgrade_effect_2->setScaleX(1.f);
 			
-			CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(99, 12));
-			CCMoveTo* t_move2 = CCMoveTo::create(0.15f, ccp(99, -8));
+			CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(80, 12));
+			CCMoveTo* t_move2 = CCMoveTo::create(0.15f, ccp(80, -8));
 			CCSequence* t_seq1 = CCSequence::createWithTwoActions(t_move1, t_move2);
 			CCRepeat* t_repeat = CCRepeat::create(t_seq1, 3);
 			
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(99, 12));
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(80, 12));
 			CCScaleTo* t_scale = CCScaleTo::create(0.3f, 0.f, 1.f);
 			CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
 			

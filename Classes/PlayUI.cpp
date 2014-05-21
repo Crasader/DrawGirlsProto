@@ -755,7 +755,7 @@ TakeCoin * TakeCoin::create ()
 void TakeCoin::startMyAction()
 {
 	unschedule(schedule_selector(TakeCoin::startMyAction));
-	CCSprite* take_coin = KS::loadCCBI<CCSprite*>(this, "ui_change.ccbi").first;
+	CCSprite* take_coin = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("ui_change_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
 	addChild(take_coin);
 	
 	CCDelayTime* t_delay = CCDelayTime::create(3.f);
