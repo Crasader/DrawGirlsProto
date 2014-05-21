@@ -345,15 +345,52 @@ public:
 		CCLog("");
 		
 		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
-			CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
+			CCLog("%s->setPosition(%.1f,%.1f); // dt (%.1f,%.1f)",
+						obj->getStringData().c_str(),obj->getPosition().x,
+						obj->getPosition().x-obj->getPosition().y,m_objList[i].originalData["x"].asFloat(),
+						obj->getPosition().y-m_objList[i].originalData["y"].asFloat()
+						);
 		if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX() || m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY()){
 			if(obj->getScaleX()==obj->getScaleY())
-				CCLog("%s->setScale(%.1f);",obj->getStringData().c_str(),obj->getScale());
-			else
-				CCLog("%s->setScaleX(%.1f); %s->setScaleY(%.1f);",obj->getStringData().c_str(),obj->getScaleX(),obj->getStringData().c_str(),obj->getScaleY());
+				CCLog("%s->setScale(%.1f); // dt (%.1f,%.1f)",
+							obj->getStringData().c_str(),
+							(int)(obj->getScale()*10)/10.f,
+							(int)(obj->getScale()*10)/10.f-m_objList[i].originalData["sx"].asFloat(),
+							(int)(obj->getScale()*10)/10.f-m_objList[i].originalData["sy"].asFloat()
+							);
+			else{
+				if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX())
+					CCLog("%s->setScaleX(%.1f); // dt %.1f",
+								obj->getStringData().c_str(),
+								(int)(obj->getScaleX()*10)/10.f,
+								(int)(obj->getScaleX()*10)/10.f-m_objList[i].originalData["sx"].asFloat()
+								);
+				if(m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY())
+					CCLog("%s->setScaleY(%.1f); // dt %.1f",
+								obj->getStringData().c_str(),
+								(int)(obj->getScaleY()*10)/10.f,
+								(int)(obj->getScaleY()*10)/10.f-m_objList[i].originalData["sy"].asFloat()
+								);
+			}
+				
 		}
 		if(m_objList[i].originalData["w"].asFloat()!=obj->getContentSize().width || m_objList[i].originalData["h"].asFloat()!=obj->getContentSize().height)
-			CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
+			CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f)); // dt (%.1f,%.1f)",
+						obj->getStringData().c_str(),
+						obj->getContentSize().width,
+						obj->getContentSize().height,
+						obj->getContentSize().width-m_objList[i].originalData["w"].asFloat(),
+						obj->getContentSize().height-m_objList[i].originalData["h"].asFloat()
+						);
+		
+		if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(obj)){
+			if(m_objList[i].originalData["fontsize"].asFloat()!=checkobj->getFontSize())
+				CCLog("%s->setFontSize(%.1f); // dt %.1f",
+							obj->getStringData().c_str(),
+							(int)(checkobj->getFontSize()*10)/10.f,
+							(int)(checkobj->getFontSize()*10)/10.f-m_objList[i].originalData["fontsize"].asFloat()
+							);
+		}
 		
 	}
 	void setEnabledRemocon(bool _is){
@@ -489,7 +526,7 @@ public:
 			m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
 		}else if(m_modeBtn->getTag()==1){
 			m_modeBtn->setTitle("scale");
-			m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",selectedObj->getScaleX(),selectedObj->getScaleY())->getCString());
+			m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",(int)(selectedObj->getScaleX()*10)/10.f,(int)(selectedObj->getScaleY()*10)/10.f)->getCString());
 		}else if(m_modeBtn->getTag()==2){
 			m_modeBtn->setTitle("size");
 			m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
@@ -539,8 +576,8 @@ public:
 				selectedObj->setPosition(ccpAdd(selectedObj->getPosition(),dtPos));
 			}else if(m_modeBtn->getTag()==1){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
-				dtPos.y = (int)(dtPos.y*10)/10.f;
-				dtPos.x = (int)(dtPos.x*10)/10.f;
+				dtPos.x = ((int)(dtPos.x*10*10)/(int)10)/(double)10;
+				dtPos.y = ((int)(dtPos.y*10*10)/(int)10)/(double)10;
 				selectedObj->setScaleX(selectedObj->getScaleX()+dtPos.x);
 				selectedObj->setScaleY(selectedObj->getScaleY()+dtPos.y);
 			}else if(m_modeBtn->getTag()==2){
@@ -561,6 +598,15 @@ public:
 		}
 		
 		m_startPosition = pTouch->getLocation();
+	}
+	
+	double round( double value, int pos )
+	{
+		double temp;
+		temp = value * pow( 10, pos );  // 원하는 소수점 자리수만큼 10의 누승을 함
+		temp = floor( temp + 0.5 );          // 0.5를 더한후 버림하면 반올림이 됨
+		temp *= pow( 10, -pos );           // 다시 원래 소수점 자리수로
+		return temp;
 	}
 	
 	void ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
