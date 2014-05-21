@@ -17,6 +17,7 @@
 #include "KSUtil.h"
 #include <vector>
 #include <stdio.h>
+#define startFormSetter(obj) FormSetter::get()->start(obj,__FILE__)
 #define setFormSetter(name) name->setStringData(#name);
 /*******************************************************
 오브젝트 배치하기의 슈퍼초 울트라 캡 혁신
@@ -24,7 +25,7 @@
  
  2.0v - 자체 리모컨으로
  1.조절할 오브젝트추가 setFormSetter(obj);
- 2.init함수 마지막에 리모콘코드 추가 FormSetter::get()->start();
+ 2.init함수에 리모콘코드 추가 startFormSetter(this);
  3.실행후 해당씬에서 디스플레이 오른쪽 아래를 터치하면 리모콘이 뜬다. 조절후 log버튼을 눌러보시라
  4.조절끝나면 소스코드삭제도 필요없음 나중에 FormSetter::get()->setEnabledRemocon(false) 한번만 호출해주면 있는 리모콘 모두 꺼짐.
  
@@ -230,11 +231,13 @@ public:
 		CommonButton* showSetting = CommonButton::create("log", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		showSetting->setFunction([this](CCObject *){
 			if(m_selectedObjNumber<0)return;
-			
 			logFormSetting();
-			CCLog("----------------------- selected log ---------------------------");
+			if(!m_objList[m_selectedObjNumber].isEdited)return;
+			
+			CCLog("################ FormSetter Selected : %s ##############START##",m_filename.c_str());
 			logOnce(m_selectedObjNumber);
-			CCLog("----------------------- end log --------------------------------");
+			CCLog("");
+			CCLog("################ FormSetter Selected : %s ################END##",m_filename.c_str());
 		});
 		showSetting->setPosition(50,80);
 		
@@ -324,17 +327,23 @@ public:
 	
 	void logFormSetting(){
 		if(m_selectedObjNumber<0)return;
-		CCLog("----------------------- start log ---------------------------");
+		CCLog("");
+		CCLog("");
+		CCLog("");
+		CCLog("");
+		CCLog("################ FormSetter Result : %s ################START##",m_filename.c_str());
 		for(int i=0;i<m_objList.size();i++){
 			logOnce(i);
 		}
-		CCLog("----------------------- end log -----------------------------");
+		CCLog("");
+		CCLog("################ FormSetter Result : %s ##################END##",m_filename.c_str());
 	}
 	
 	void logOnce(int i){
 		CCNode* obj = m_objList[i].obj;
 		if(!m_objList[i].isEdited)return;
 		CCLog("");
+		
 		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
 			CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
 		if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX() || m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY()){
@@ -345,29 +354,37 @@ public:
 		}
 		if(m_objList[i].originalData["w"].asFloat()!=obj->getContentSize().width || m_objList[i].originalData["h"].asFloat()!=obj->getContentSize().height)
 			CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
-
+		
 	}
 	void setEnabledRemocon(bool _is){
 		this->m_isEnabledRemocon=_is;
 	}
 	
 	void start(){
-		this->start("");
+		this->start("","");
+	}
+	void start(string filename){
+		this->start(filename,"");
 	}
 	
-	void start(CCNode* obj,string startName){
+	void start(CCNode* obj,string filename, string startName){
 		if(!m_isEnabledRemocon)return;
-		obj->addChild(KSTimer::create(0.5f,[this,startName](){this->start(startName);}));
+		obj->addChild(KSTimer::create(0.3f,[this,filename,startName](){this->start(filename,startName);}));
 	}
 	
 	void start(CCNode* obj){
-		this->start(obj,"");
+		this->start(obj,"","");
 	}
+	void start(CCNode* obj,string filename){
+		this->start(obj,filename,"");
+	}
+	
 	string m_startObjName;
-	void start(string startName){
+	string m_filename;
+	void start(string filename, string startName){
 		if(!m_isEnabledRemocon)return;
 		m_startObjName=startName;
-		
+		m_filename = filename;
 		this->retain();
 		CCNode* front = (CCNode *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0));
 		//remocon->setVisible(true);
