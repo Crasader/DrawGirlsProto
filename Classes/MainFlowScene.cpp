@@ -1088,7 +1088,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
-				condition_title->setPosition(ccp(67.5f, 141));
+				condition_title->setPosition(ccp(67.5f, 137));
 				not_clear_img->addChild(condition_title);
 				
 				if(is_puzzle_enter_list[idx].is_have_week_condition)
@@ -1112,19 +1112,19 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 						weekday_string = "토요일";
 					
 					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), is_puzzle_enter_list[idx].keep_week_start, is_puzzle_enter_list[idx].keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
-					condition_content->setPosition(ccp(67.5f, 122.5f));
+					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else if(is_puzzle_enter_list[idx].is_have_date_condition)
 				{
 					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), is_puzzle_enter_list[idx].keep_date_start.substr(4,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(6,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(8,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
-					condition_content->setPosition(ccp(67.5f, 122.5f));
+					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else
 				{
 					KSLabelTTF* condition_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), mySGD->getFont().c_str(), 9);
-					condition_content->setPosition(ccp(67.5f, 122.5f));
+					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				
@@ -1155,8 +1155,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(10000000 + idx*10000 + is_puzzle_enter_list[idx].need_ruby_value);
-					detail_button->setPreferredSize(CCSizeMake(90,35));
-					detail_button->setPosition(ccp(67.5f,94.5f));
+					detail_button->setPreferredSize(CCSizeMake(90,34));
+					detail_button->setPosition(ccp(67.5f,93.5f));
 					not_clear_img->addChild(detail_button);
 				}
 				else
@@ -1171,8 +1171,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(0);
-					detail_button->setPreferredSize(CCSizeMake(75,35));
-					detail_button->setPosition(ccp(67.5f,94.5f));
+					detail_button->setPreferredSize(CCSizeMake(75,34));
+					detail_button->setPosition(ccp(67.5f,93.5f));
 					not_clear_img->addChild(detail_button);
 				}
 			}
@@ -1199,11 +1199,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
-				condition_title->setPosition(ccp(67.5f, 141));
+				condition_title->setPosition(ccp(67.5f, 137));
 				not_clear_img->addChild(condition_title);
 				
 				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
-				condition_content->setPosition(ccp(67.5f, 122.5f));
+				condition_content->setPosition(ccp(67.5f, 118.5f));
 				not_clear_img->addChild(condition_content);
 				
 				CCLabelTTF* c_label = CCLabelTTF::create();
@@ -1216,8 +1216,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 				detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 				detail_button->setTag(0);
-				detail_button->setPreferredSize(CCSizeMake(75,35));
-				detail_button->setPosition(ccp(67.5f,94.5f));
+				detail_button->setPreferredSize(CCSizeMake(75,34));
+				detail_button->setPosition(ccp(67.5f,93.5f));
 				not_clear_img->addChild(detail_button);
 			}
 			else
@@ -1474,7 +1474,7 @@ void MainFlowScene::scrollViewDidZoom(CCScrollView* view){}
 void MainFlowScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell){}
 CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 {
-	return CCSizeMake(132, 245);//135, 245);
+	return CCSizeMake(126, 245);//132, 245);
 }
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {

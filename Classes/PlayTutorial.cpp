@@ -1462,7 +1462,7 @@ void PlayTutorial::nextStep()
 		
 		controler->buttonSetVisible(true);
 		
-		area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
+		area_take_sample = CCClippingNode::create(CCSprite::create("tutorial_ccb_mask.png"));
 		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
 		area_take_sample->addChild(t_ccbi);
 		area_take_sample->setPosition(ccp(240,200));

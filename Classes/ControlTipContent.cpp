@@ -78,7 +78,7 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, getCCBfilenameForTipNumber(t_code).c_str());
 	
-	area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
+	area_take_sample = CCClippingNode::create(CCSprite::create("tutorial_ccb_mask.png"));
 	area_take_sample->setAlphaThreshold(0.1f);
 	t_ccb.first->setPosition(ccp(0,0));
 	area_take_sample->addChild(t_ccb.first);
