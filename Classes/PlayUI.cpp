@@ -31,14 +31,6 @@ void ComboView::setPercentage (float t_percent)
 }
 void ComboView::myInit (int combo)
 {
-	initWithFile("combo_back.png");
-//	setPosition(ccp(480-30,myDSH->ui_top-100));//78));
-	setOpacity(0);
-	
-//	combo_str = CCSprite::create("combo_front.png");
-//	combo_str->setPosition(ccp(getContentSize().width/2.f-13, getContentSize().height/2.f));
-//	addChild(combo_str);
-	
 //	combo_timer = CCProgressTimer::create(CCSprite::create("combo_front.png"));
 //	combo_timer->setType(kCCProgressTimerTypeBar);
 //	combo_timer->setMidpoint(ccp(0,0));
@@ -47,19 +39,15 @@ void ComboView::myInit (int combo)
 //	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
 //	addChild(combo_timer);
 	
-	KSLabelTTF* combo_ment = KSLabelTTF::create("콤보", mySGD->getFont2().c_str(), 18);
-	combo_ment->setColor(ccc3(50,215,0));
-	combo_ment->setAnchorPoint(ccp(1,0.5));
-	combo_ment->enableOuterStroke(ccBLACK, 1.f);
-	combo_ment->setPosition(ccp(20,6));
-	addChild(combo_ment);
+	CCSprite* combo_front = CCSprite::create("combo_front.png");
+	combo_front->setAnchorPoint(ccp(1,0.5f));
+	combo_front->setPosition(ccp(-48,0));
+	addChild(combo_front);
 	
 	
-	combo_label = KSLabelTTF::create(CCString::createWithFormat("%d", combo)->getCString(), mySGD->getFont().c_str(), 23);//CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
-	combo_label->setColor(ccc3(50, 215, 0));
-	combo_label->setAnchorPoint(ccp(1,0.5));
-	combo_label->enableOuterStroke(ccBLACK, 1.f);
-	combo_label->setPosition(ccp(-17,6));
+	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+	combo_label->setAnchorPoint(ccp(1,0.5f));
+	combo_label->setPosition(ccp(-22,-15));
 	addChild(combo_label);
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
@@ -633,36 +621,30 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 {
 	end_function = t_end_func;
 	
+	setPosition(CCPointZero);
+	
 	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterNo.getV()) + t_step*0.1f >= 2.f)
 	{
-		initWithString("", mySGD->getFont().c_str(), 20);
-		
 		CCSprite* speed_label = CCSprite::create("speed_max.png");
-		speed_label->setScale(1.f/myGD->game_scale);
-		speed_label->setPosition(ccp(getContentSize().width/2.f,getContentSize().height/2.f));
+		speed_label->setPosition(ccp(0,0));
 		addChild(speed_label);
-		
-		setPosition(CCPointZero);
 	}
 	else
 	{
-		CCSprite* speed_label = CCSprite::create("speed.png");
-		speed_label->setScale(1.f/myGD->game_scale);
-		
-		initWithString(CCString::createWithFormat("%d", t_step)->getCString(), mySGD->getFont().c_str(), 20);
-		//	initWithString(CCString::createWithFormat("%s %d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step)->getCString(), mySGD->getFont().c_str(), 20);
-		setColor(ccc3(0, 245, 255));
-		enableOuterStroke(ccBLACK, 2);
-		//	initWithFile(CCString::createWithFormat("speed_step%d.png", t_step)->getCString());
-		
-		float w1 = speed_label->getContentSize().width*speed_label->getScale();
-		float w2 = getContentSize().width;
-		
-		speed_label->setPosition(ccp(-(w1+w2)/2.f, getContentSize().height/2.f));
+		CCSprite* speed_label = CCSprite::create("speed_front.png");
 		addChild(speed_label);
 		
-		setPosition(ccp(w1/2.f, 0));
+		CCLabelBMFont* bm_label = CCLabelBMFont::create(CCString::createWithFormat("%d", t_step)->getCString(), "speed.fnt");
+		addChild(bm_label);
+		
+		float w1 = speed_label->getContentSize().width;
+		float w2 = bm_label->getContentSize().width;
+		
+		speed_label->setPosition(ccp(-w2/2.f, 0));
+		bm_label->setPosition(ccp(w1/2.f, 0));
 	}
+	
+	setScale(1.f/myGD->game_scale);
 	
 	startFadeOut();
 }
@@ -796,7 +778,7 @@ AreaScroll * AreaScroll::create ()
 }
 void AreaScroll::startAction ()
 {
-	CCSprite* main_view = CCSprite::create("show_area_scroll.png");
+	CCSprite* main_view = CCSprite::create(CCString::createWithFormat("show_area_scroll_%s.png", myLoc->getLocalCode()->getCString())->getCString());
 	main_view->setPosition(ccp(640,myDSH->ui_center_y));
 	addChild(main_view);
 	
@@ -1195,7 +1177,7 @@ void PlayUI::conditionClear ()
 //	addChild(condition_clear);
 	
 	CCNode* success_node = CCNode::create();
-	success_node->setPosition(ccp(480,myDSH->ui_top*0.67f));
+	success_node->setPosition(ccp(240,myDSH->ui_top*0.67f));
 	addChild(success_node);
 	
 	
