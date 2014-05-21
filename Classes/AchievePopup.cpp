@@ -917,14 +917,7 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	
 	is_menu_enable = false;
 	
-	keep_value_list.clear();
-	
-	keep_take_gold = 0;
-	keep_take_ruby = 0;
-	
-	string ruby_stats_value = "";
-	string gold_stats_value = "";
-	
+	bool is_have = false;
 	for(int i=0;i<achieve_list.size();i++)
 	{
 		if(!myAchieve->isCompleted(achieve_list[i]) && myAchieve->isAchieve(achieve_list[i]))
@@ -932,10 +925,11 @@ void AchievePopup::takeAllReward(CCObject* sender)
 			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", achieve_list[i])->getCString());
 			
 			myAchieve->changeComplete(achieve_list[i]);
+			is_have = true;
 		}
 	}
 	
-	if(keep_take_ruby > 0 || keep_take_gold > 0)
+	if(is_have)
 	{
 		loading_layer = LoadingLayer::create();
 		addChild(loading_layer, kAchievePopupZorder_popup);

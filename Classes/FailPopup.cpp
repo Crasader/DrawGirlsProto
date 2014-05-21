@@ -399,7 +399,7 @@ bool FailPopup::init()
 	CCSprite* n_ok = CCSprite::create("ending_button.png");
 	KSLabelTTF* n_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	n_ok_label->setColor(ccc3(50, 30, 5));
-	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_ok_label->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-3));
 	n_ok->addChild(n_ok_label);
 	
@@ -407,7 +407,7 @@ bool FailPopup::init()
 	s_ok->setColor(ccGRAY);
 	KSLabelTTF* s_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	s_ok_label->setColor(ccc3(50, 30, 5));
-	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_ok_label->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-3));
 	s_ok->addChild(s_ok_label);
 	
@@ -424,14 +424,14 @@ bool FailPopup::init()
 	CCSprite* n_replay = CCSprite::create("ending_button.png");
 	KSLabelTTF* n_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	n_replay_label->setColor(ccc3(50, 30, 5));
-	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_replay_label->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-3));
 	n_replay->addChild(n_replay_label);
 	CCSprite* s_replay = CCSprite::create("ending_button.png");
 	s_replay->setColor(ccGRAY);
 	KSLabelTTF* s_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	s_replay_label->setColor(ccc3(50, 30, 5));
-	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_replay_label->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-3));
 	s_replay->addChild(s_replay_label);
 	

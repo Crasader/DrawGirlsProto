@@ -634,7 +634,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 		CCSprite* speed_label = CCSprite::create("speed_front.png");
 		addChild(speed_label);
 		
-		CCLabelBMFont* bm_label = CCLabelBMFont::create(CCString::createWithFormat("%d", t_step)->getCString(), "speed.fnt");
+		CCLabelBMFont* bm_label = CCLabelBMFont::create(CCString::createWithFormat("%d", t_step)->getCString(), "speed_n.fnt");
 		addChild(bm_label);
 		
 		float w1 = speed_label->getContentSize().width;

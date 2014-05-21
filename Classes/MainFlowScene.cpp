@@ -1919,42 +1919,54 @@ void MainFlowScene::setBottom()
 	mission_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 
 	
-//	CCSprite* n_gacha = CCSprite::create("mainflow_gacha.png");
-//	CCSprite* s_gacha = CCSprite::create("mainflow_gacha.png");
-//	s_gacha->setColor(ccGRAY);
-//	
-//	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(MainFlowScene::menuAction));
-//	gacha_item->setTag(kMainFlowMenuTag_gacha);
-//	
-//	CCMenu* gacha_menu = CCMenu::createWithItem(gacha_item);
-//	gacha_menu->setPosition(ccp(59, n_gacha->getContentSize().height/2.f));
-//	bottom_case->addChild(gacha_menu);
+	CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
+	t_bar->setPosition(ccp(43-240+214.f/8.f*7.f, n_rank->getContentSize().height/2.f-4));
+	bottom_case->addChild(t_bar, -1);
 	
 	
-//	CCSprite* n_event = CCSprite::create("mainflow_event.png");
-//	CCSprite* s_event = CCSprite::create("mainflow_event.png");
-//	s_event->setColor(ccGRAY);
-//	
-//	CCMenuItem* event_item = CCMenuItemSprite::create(n_event, s_event, this, menu_selector(MainFlowScene::menuAction));
-//	event_item->setTag(kMainFlowMenuTag_event);
-//	
-//	CCMenu* event_menu = CCMenu::createWithItem(event_item);
-//	event_menu->setPosition(ccp(201, n_event->getContentSize().height/2.f-3));
-//	bottom_case->addChild(event_menu);
+	CCSprite* n_endless = CCSprite::create("mainflow_endless.png");
+	KSLabelTTF* n_endless_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 12);
+	n_endless_label->enableOuterStroke(ccBLACK, 1.f);
+	n_endless_label->setPosition(ccp(n_endless->getContentSize().width/2.f, 7));
+	n_endless->addChild(n_endless_label);
+	CCSprite* s_endless = CCSprite::create("mainflow_endless.png");
+	s_endless->setColor(ccGRAY);
+	KSLabelTTF* s_endless_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 12);
+	s_endless_label->enableOuterStroke(ccBLACK, 1.f);
+	s_endless_label->setPosition(ccp(s_endless->getContentSize().width/2.f, 7));
+	s_endless->addChild(s_endless_label);
+	
+	CCMenuItem* endless_item = CCMenuItemSprite::create(n_endless, s_endless, this, menu_selector(MainFlowScene::menuAction));
+	endless_item->setTag(kMainFlowMenuTag_endlessMode);
+	
+	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
+	endless_menu->setPosition(ccp(43-240+214.f, n_endless->getContentSize().height/2.f+8));
+	bottom_case->addChild(endless_menu);
+	endless_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+	
 	
 	CCSprite* left_back = CCSprite::create("mainflow_bottom_case_left.png");
 	left_back->setPosition(ccp(39-240,left_back->getContentSize().height/2.f));
 	bottom_case->addChild(left_back, -1);
 	
 	CCSprite* right_back = CCSprite::create("mainflow_bottom_case_right.png");
-	right_back->setPosition(ccp(207.5f-240,right_back->getContentSize().height/2.f)); // 207.5 // 262
+	right_back->setPosition(ccp(262-240,right_back->getContentSize().height/2.f));
 	bottom_case->addChild(right_back, -1);
 	
 	CCSprite* center_back = CCSprite::create("mainflow_bottom_case_center.png");
 	center_back->setAnchorPoint(ccp(0,0.5));
 	center_back->setPosition(ccp(39-240+left_back->getContentSize().width/2.f,center_back->getContentSize().height/2.f));
-	center_back->setScaleX(0.662f);
 	bottom_case->addChild(center_back, -1);
+	
+	
+	CCSprite* etc_frame = CCSprite::create("mainflow_event_frame.png");
+	etc_frame->setAnchorPoint(ccp(0.5,0));
+	etc_frame->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+11));
+	addChild(etc_frame, kMainFlowZorder_uiButton);
+	
+	bottom_list.push_back(etc_frame);
+	
+	bool is_add_etc = false;
 	
 	Json::Value v = mySGD->cgp_data;
 	std::string pState = v["promotionstate"].asString();
@@ -1987,12 +1999,7 @@ void MainFlowScene::setBottom()
 		 
 		 */
 		
-		CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
-		t_bar->setPosition(ccp(43-240+214.f/8.f*7.f, n_rank->getContentSize().height/2.f-4));
-		bottom_case->addChild(t_bar, -1);
-		
-		center_back->setScaleX(1.f);
-		right_back->setPosition(ccp(262-240,right_back->getContentSize().height/2.f));
+		is_add_etc = true;
 		
 		CCSprite* n_cgp = CCSprite::create("mainflow_event.png");
 		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
@@ -2007,8 +2014,8 @@ void MainFlowScene::setBottom()
 		s_cgp->addChild(s_cgp_label);
 		
 		CCMenuLambda* cgp_menu = CCMenuLambda::create();
-		cgp_menu->setPosition(ccp(43-240+214.f, n_cgp->getContentSize().height/2.f+8));
-		bottom_case->addChild(cgp_menu);
+		cgp_menu->setPosition(ccp(43-240+220.f, n_cgp->getContentSize().height/2.f+8));
+		etc_frame->addChild(cgp_menu);
 		cgp_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 		
 		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
@@ -2019,11 +2026,15 @@ void MainFlowScene::setBottom()
 			
 			hspConnector::get()->launchPromotion();
 			
-			t_bar->removeFromParent();
-			center_back->setScaleX(0.662f);
-			right_back->setPosition(ccp(207.5f-240,right_back->getContentSize().height/2.f));
-			
 			cgp_menu->removeFromParent();
+			
+			CCSprite* etc_img = CCSprite::create("mainflow_etc_event.png");
+			etc_img->setPosition(ccp(43-240+220.f, etc_img->getContentSize().height/2.f+8));
+			etc_frame->addChild(etc_img);
+			KSLabelTTF* etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+			etc_label->enableOuterStroke(ccBLACK, 1.f);
+			etc_label->setPosition(ccp(etc_img->getContentSize().width/2.f, 7));
+			etc_frame->addChild(etc_label);
 		});
 		
 		cgp_menu->addChild(cgp_item);
@@ -2188,32 +2199,16 @@ void MainFlowScene::setBottom()
 		//			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
 	}
 	
-	CCSprite* etc_event = CCSprite::create("mainflow_etc_event.png");
-	etc_event->setAnchorPoint(ccp(0.5,0));
-	etc_event->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+11));
-	addChild(etc_event, kMainFlowZorder_uiButton);
-	
-	bottom_list.push_back(etc_event);
-	
-	CCSprite* n_endless = CCSprite::create("mainflow_cardsetting.png");
-//	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
-//	n_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
-//	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 7));
-//	n_cardsetting->addChild(n_cardsetting_label);
-	CCSprite* s_endless = CCSprite::create("mainflow_cardsetting.png");
-	s_endless->setColor(ccGRAY);
-//	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
-//	s_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
-//	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 7));
-//	s_cardsetting->addChild(s_cardsetting_label);
-	
-	CCMenuItem* endless_item = CCMenuItemSprite::create(n_endless, s_endless, this, menu_selector(MainFlowScene::menuAction));
-	endless_item->setTag(kMainFlowMenuTag_endlessMode);
-	
-	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	endless_menu->setPosition(ccp(43-240+214.f/4.f*6.f, n_endless->getContentSize().height/2.f+8));
-	bottom_case->addChild(endless_menu);
-	endless_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+	if(!is_add_etc)
+	{
+		CCSprite* etc_img = CCSprite::create("mainflow_etc_event.png");
+		etc_img->setPosition(ccp(43-240+220.f, etc_img->getContentSize().height/2.f+8));
+		etc_frame->addChild(etc_img);
+		KSLabelTTF* etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+		etc_label->enableOuterStroke(ccBLACK, 1.f);
+		etc_label->setPosition(ccp(etc_img->getContentSize().width/2.f, 7));
+		etc_frame->addChild(etc_label);
+	}
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
