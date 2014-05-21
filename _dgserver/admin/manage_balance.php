@@ -49,6 +49,9 @@ while($data = mysql_fetch_assoc($result)){
 	$bgcolor="ffffff";
 	if($data[no]%2)$bgcolor="eeeeee";
 	if($data[no]%5==0)$bgcolor="eeffff";
+
+	$ap =$boss[0][attackpercent];
+	$sPer =(1-pow((1 - $ap/100),(60 * 5)))*100;
 	echo"
 	<tr bgcolor=$bgcolor>
 		<td>".$data[no]."</td>
@@ -56,8 +59,8 @@ while($data = mysql_fetch_assoc($result)){
 		<td>".$mission[type]."</td>
 		<td>".$data[autoBalanceTry]."</td>
 		<td>".round($boss[0][ai])."</td>
-		<td>".round($boss[0][attackpercent],2)."</td>
-		<td>".round($boss[0][attackpercent]*60*5,1)."%</td>
+		<td>".round($ap,2)."</td>
+		<td>".round($sPer,1)."%</td>
 		<td>".round($boss[0][hp])."</td>
 		<td>".round($boss[0][agi])."</td>
 		<td>".round($boss[0][speed][start],2)."</td>

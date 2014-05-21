@@ -53,9 +53,11 @@ class CommitManager{
 
 		$this->m_releaseCount[$memberID]--;
 
-		if(!$this->isSuccess($memberID) && $this->m_releaseCount[$memberID]==0){
-			$result = mysql_query("ROLLBACK", $this->m_dbInfo[$memberID]->getConnection());
-			LogManager::get()->addLog("commit query but rollback : ".mysql_error());
+		if(!$this->isSuccess($memberID)){
+			if($this->m_releaseCount[$memberID]==0){
+				$result = mysql_query("ROLLBACK", $this->m_dbInfo[$memberID]->getConnection());
+				LogManager::get()->addLog("commit query but rollback : ".mysql_error());
+			}
 			return false;
 		}
 
@@ -155,7 +157,7 @@ class UserIndex extends DBTable{
 		 	}else{
 				$this->memberID = $memberID;
 		 		$this->shardIndex = $this->getShardIndexByNumberKey($memberID);
-		 		LogManager::get()->addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::get()->m_shardDBCount);
+		 		LogManager::get()->addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::get()->getShardDBCount());
 		 		//$this->save(true);
 		 	}
 		}
@@ -166,7 +168,7 @@ class UserIndex extends DBTable{
 		return $this->no;
 	}
 	public function getShardIndexByNumberKey($numberKey){
-		return abs($numberKey%DBManager::get()->m_shardDBCount);
+		return abs($numberKey%DBManager::get()->getShardDBCount());
 	}
 
 	public function getShardConnection(){
@@ -207,7 +209,7 @@ class UserLog extends DBTable{
 		$this->setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("userlog"));
 		$this->memberID = $memberID;
-		
+
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
 			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
@@ -221,7 +223,7 @@ class UserLog extends DBTable{
 		}
 	}
 
-	public function getHistory($param){
+	public function selectWithLQTable($param){
 		$dataList = array();
 		$where="";
 
@@ -297,21 +299,25 @@ class UserData extends DBTable{
 			if($this->m__userIndex->isLoaded()){
 				if(parent::load("memberID=".$memberID)){
 					//$this->autoMatching($this->m__result);
-
+					$this->archiveData = json_decode($this->archiveData,true);
+					$this->eventCheckData = json_decode($this->eventCheckData,true);
+					$this->TMInfo = json_decode($this->TMInfo,true);
+					$this->TMLevel = json_decode($this->TMLevel,true);
+					$this->endlessData = json_decode($this->endlessData,true);
 				}
 			}
 		}
 		
 
 		//가입시간
-		if(!$this->joinDate)$this->joinDate=TimeManager::get()->getCurrentDateString();
+		if(!$this->joinDate)$this->joinDate=TimeManager::get()->getCurrentDateTime();
 	}
 
 
 
 	public function save($isIncludePrimaryKey=false){
 		//마지막접속시간
-		$this->lastDate = TimeManager::get()->getCurrentDateString();
+		$this->lastDate = TimeManager::get()->getCurrentDateTime();
 		$this->lastTime = TimeManager::get()->getTime();
 		return parent::save($isIncludePrimaryKey);
 	}
@@ -344,6 +350,7 @@ class UserData extends DBTable{
 
 			$data["userdata"]=json_encode($userdata,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		}	
+
 		return $data;
 
 		// $arraydata=array();
@@ -410,6 +417,12 @@ class UserData extends DBTable{
 		LogManager::get()->addLog("addfriendResult is ".$this->friendList);
 	}
 
+	public function setArchiveData($key,$value){
+		if(!is_array($this->archiveData))$this->archiveData = array();
+
+		$this->archiveData = array_merge($this->archiveData,array($key=>$value));
+
+	}
 
 }
 
@@ -418,25 +431,17 @@ class UserData extends DBTable{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-class Message extends DBRow{
-	public $m_no=null;
-	public $m_memberID=null;
-	public $m_content=null;
-	public $m_regDate=null;
-	public $m_confirmDate=null;
-	public $m_regTime=null;
-	public $m_friendID=null;
-	public $m_type=null;
-	public $m_isSendMsg=null;
-	public $m__userIndex=null;
+class Message extends DBTable{
 
-	static public $m__queryResult = null;
-	static public $m__queryCnt = 0;
+	public $m__userIndex=null;
 	public function __construct($memberID=null,$messageNo=null){
 		parent::__construct();
 		$this->setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("message"));
-		
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."' and isSendMsg=0";
+		});
+
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
 			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
@@ -444,15 +449,7 @@ class Message extends DBRow{
 		
 		if($memberID && $messageNo){
 			if(parent::load("no = $messageNo")){
-				$this->autoMatching($this->m__result);
-				// $this->m_memberID = $this->m__result["memberID"];
-				// $this->m_no = $this->m__result["no"];
-				// $this->m_content = $this->m__result["conetnt"];
-				// $this->m_regDate = $this->m__result["regDate"];
-				// $this->m_friendID = $this->m__result["friendID"];
-				// $this->m_type = $this->m__result["type"];
-				// $this->m_isSendMsg = $this->m__result["isSendMsg"];
-				// $this->m_data = $this->m__result["data"];
+
 			}
 		}
 	}
@@ -492,19 +489,6 @@ class Message extends DBRow{
 
 	}
 
-
-	public function getList($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."' and isSendMsg=0")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -614,7 +598,7 @@ class Card extends DBTable{
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		
 
-		if($cardNo)$this->m_no=$cardNo;
+		if($cardNo)$this->no=$cardNo;
 
 		if($cardNo){
 			$query = "no=".$cardNo;
@@ -634,6 +618,21 @@ class CardHistory extends DBTable{
 		
 		$this->setPrimarykey("no");
 
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
+
+		$this->setLQTableSelectCustomFunction(function ($rData){
+	    	$cardInfo = new Card($rData["cardNo"]);
+	    	$pieceInfo = new Piece($cardInfo->stage);
+	    	$puzzleInfo = new Puzzle($pieceInfo->puzzle);
+
+	    	$rData["cardName"]=$cardInfo->name;
+	    	$rData["cardImg"]=json_decode($cardInfo->imgInfo,true);
+	    	$rData["puzzleInfo"]=$puzzleInfo->no."-".$puzzleInfo->title;
+			return $rData;
+		});
+
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
 			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
@@ -646,27 +645,6 @@ class CardHistory extends DBTable{
 		if($memberID && $cardNo){
 			parent::load("memberID=".$memberID." and cardNo=".$cardNo);
 		}
-	}
-
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-	    	$cardInfo = new Card($rData["cardNo"]);
-	    	$pieceInfo = new Piece($cardInfo->stage);
-	    	$puzzleInfo = new Puzzle($pieceInfo->puzzle);
-
-	    	$rData["cardName"]=$cardInfo->name;
-	    	$rData["cardImg"]=json_decode($cardInfo->imgInfo,true);
-	    	$rData["puzzleInfo"]=$puzzleInfo->no."-".$puzzleInfo->title;
-
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
 	}
 
 
@@ -684,8 +662,17 @@ class PuzzleHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
+
+		$this->setLQTableSelectCustomFunction(function ($data){
+			$puzzle = new Puzzle($data["puzzleNo"]);
+			$data["title"]=$puzzle->title;
+			return $data;
+		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
@@ -700,22 +687,6 @@ class PuzzleHistory extends DBTable{
 		}
 	}
 
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self ::getRowByQuery("where memberID='".$param["id"]."'")){
-			
-	    	$puzzle = new Puzzle($rData["puzzleNo"]);
-			$rData["title"]=$puzzle->title;
-			$dataList[]=$rData;
-
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
 
 
 }
@@ -731,8 +702,11 @@ class PieceHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
@@ -749,29 +723,12 @@ class PieceHistory extends DBTable{
 		}
 	}
 
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
 
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //		불량닉네임
 ////////////////////////////////////////////////////////////////////////////////////////
-class FaultyNick extends DBRow{
-
-	public $m_no;
-	public $m_nick;
-	public $m_isIncluionRule;
+class FaultyNick extends DBTable{
 
 	public function __construct($no=null){
 		
@@ -786,7 +743,7 @@ class FaultyNick extends DBRow{
 		if($no){
 			$query = "no=".$no;
 			if(parent::load($query)){
-				$this->autoMatching($this->m__result);
+
 			}
 		}
 	}
@@ -803,9 +760,16 @@ class Archivement extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		$this->setPrimarykey("no",true);
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		
+		$this->setLQTableSelectCustomFunction(function ($data){
+			if($data["exchangeID"]){
+				$exchange = new Exchange($data["exchangeID"]);
+				$data["exchangeList"]=$exchange->list;				
+			}
+			return $data;
+		});
 
 		if($no)$this->no=$no;
 
@@ -815,78 +779,45 @@ class Archivement extends DBTable{
 		}
 	}
 
+	public function updateWithLQTable($p){
+		
 
-	public function getList($param){
-		$dataList = array();
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
+		}
+		unset($p["data"]["exchangeList"]);
+		$r = parent::updateWithLQTable($p);
 
-	    while($rData = self::getRowByQuery()){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
-	public function writeData($param){
-		$this->id = $param["data"]["id"];
-		$this->category = $param["data"]["category"];
-		$this->title = $param["data"]["title"];
-		$this->reward = $param["data"]["reward"];
-		$this->goal = $param["data"]["goal"];
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
 		}
 
-		$r["result"]="fail";
+		kvManager::increase("arcListVer");
+
 		return $r;
 	}
 
-
-	public function updateData($param){
-
-		parent::load("no=".$param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			return $r;
+	public function insertWithLQTable($p){
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
 		}
-		$this->id = $param["data"]["id"];
-		$this->category = $param["data"]["category"];
-		$this->title = $param["data"]["title"];
-		$this->reward = $param["data"]["reward"];
-		$this->goal = $param["data"]["goal"];
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
-		}
+		unset($p["data"]["exchangeList"]);
+		$r = parent::insertWithLQTable($p);
 
-		$r["result"]="fail";
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
+		}
+		kvManager::increase("arcListVer");
+
 		return $r;
-	}
-
-	public function deleteData($param){
-		parent::load("no=".$param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			return $r;
-		}
-
-		if($this->remove()){
-			$r["result"]="ok";
-			return $r;
-
-		}
-
-		$r["result"]="fail";
-		return $r;
-
-
 	}
 
 }
@@ -902,8 +833,11 @@ class ArchivementHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
@@ -916,19 +850,6 @@ class ArchivementHistory extends DBTable{
 		if($memberID && $fNo){
 			parent::load("memberID=".$memberID." and archiveID='".$fNo."'");
 		}
-	}
-
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
 	}
 
 
@@ -948,6 +869,18 @@ class GiftBoxHistory extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
+
+		$this->setLQTableSelectCustomFunction(function ($rData){
+			if($rData["reward"])$rData["reward"] = json_decode($rData["reward"],true);
+			if($rData["exchangeID"]){
+				$exchange = new Exchange($rData["exchangeID"]);
+				$rData["exchangeList"]=$exchange->list;				
+			}
+			return $rData;
+		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
@@ -956,99 +889,41 @@ class GiftBoxHistory extends DBTable{
 		}
 
 		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
+			if(parent::load("memberID=".$memberID." and no=".$fNo)){
+				$this->reward = json_decode($this->reward,true);
+			}
 		}
 	}
 
-	public function getHistory($param){
-		$dataList = array();
 
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-    	if($rData["reward"])$rData["reward"] = json_decode($rData["reward"],true);
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
-
-	public function writeData($param){
-
-		$this->m__userIndex = UserIndex::create($param["data"]["memberID"]);
-		$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-
-		parent::load("no=".$param["data"]["no"]);
-
-		foreach ($param["data"] as $key => $value) {
-			$this->$key = $value;
+	public function updateWithLQTable($p){
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
 		}
+		
+		unset($p["data"]["exchangeList"]);
+		
+		$r = parent::updateWithLQTable($p);
+		
+		if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
-
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
-		}
-
-		$r["result"]="fail";
 		return $r;
 	}
 
-
-	public function updateData($param){
-
-		$this->m__userIndex = UserIndex::create($param["data"]["memberID"]);
-		$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-
-		parent::load("no=".$param["data"]["no"]);
-
-		unset($param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			$r["message"]="로드실패";
-			return $r;
+	public function insertWithLQTable($p){
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
 		}
+		
+		unset($p["data"]["exchangeList"]);
 
-		foreach ($param["data"] as $key => $value) {
-			$this->$key = $value;
-		}
+		$r = parent::insertWithLQTable($p);
 
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
-		}
+		if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
-		$r["result"]="fail";
 		return $r;
-	}
-
-
-	public function deleteData($param){
-		$this->m__userIndex = UserIndex::create($param["data"]["memberID"]);
-		$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-
-		parent::load("no=".$param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			return $r;
-		}
-
-		if($this->remove()){
-			$r["result"]="ok";
-			return $r;
-
-		}
-
-		$r["result"]="fail";
-		return $r;
-
-
 	}
 
 }
@@ -1075,6 +950,9 @@ class UserProperty extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
@@ -1087,20 +965,69 @@ class UserProperty extends DBTable{
 		}
 	}
 
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+//	유저보관함
+////////////////////////////////////////////////////////////////////////////////////////
+
+class UserStorage extends DBTable{
+	public $m__userIndex;
+
+	public function __construct($memberID=null){
+		
+		parent::__construct();
+		
+		$this->setPrimarykey("no",true);
+
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
+
+		if($memberID){
+			$this->m__userIndex = UserIndex::create($memberID);
+			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			$this->memberID=$memberID;
+		}
+
+		if($memberID){
+			parent::load("memberID=".$memberID);
+		}
+	}
+
+	public function loadWithDataTable($p){
+		$textEditor = array("type"=>"text");
+		$textViewer = array("type"=>"text");
+		$data["head"][]=array("field"=>"no","viewer"=>$textViewer,"editor"=>$textEditor,"primary");
+		$data["head"][]=array("field"=>"memberID","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"pr","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"fr","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"h","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"m","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"g","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i1","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i2","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i3","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i4","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i5","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i6","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i7","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i8","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"i9","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"p1","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"p2","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"p3","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"p4","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"p5","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"p6","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"p7","viewer"=>$textViewer,"editor"=>$textEditor);
+		//$data["head"][]=array("manage"=>"update delete insert");
+		
+		return $data;
+	}
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //	유저보관함히스토리
@@ -1130,6 +1057,9 @@ class UserPropertyHistory extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
@@ -1142,177 +1072,6 @@ class UserPropertyHistory extends DBTable{
 		}
 	}
 
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////
-//	골드히스토리
-////////////////////////////////////////////////////////////////////////////////////////
-class GoldHistory extends DBTable{
-	public $m__userIndex;
-
-	public function __construct($memberID=null,$fNo=null){
-		
-		parent::__construct();
-		
-		$this->setPrimarykey("no",true);
-
-
-		if($memberID){
-			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-			$this->setField("memberID",$memberID);
-		}
-
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
-		}
-	}
-
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-//	루비히스토리
-////////////////////////////////////////////////////////////////////////////////////////
-class RubyHistory extends DBTable{
-	public $m__userIndex;
-
-	public function __construct($memberID=null,$fNo=null){
-		
-		parent::__construct();
-		
-		$this->setPrimarykey("no",true);
-
-
-		if($memberID){
-			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-			$this->setField("memberID",$memberID);
-		}
-
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
-		}
-	}
-
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-//	하트히스토리
-////////////////////////////////////////////////////////////////////////////////////////
-class HeartHistory extends DBTable{
-	public $m__userIndex;
-
-	public function __construct($memberID=null,$fNo=null){
-		
-		parent::__construct();
-		
-		$this->setPrimarykey("no",true);
-
-
-		if($memberID){
-			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-			$this->setField("memberID",$memberID);
-		}
-
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
-		}
-	}
-
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
-}
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-//	쿠폰히스토리
-////////////////////////////////////////////////////////////////////////////////////////
-class CuponHistory extends DBTable{
-	public $m__userIndex;
-
-	public function __construct($memberID=null,$fNo=null){
-		
-		parent::__construct();
-		
-		$this->setPrimarykey("no",true);
-
-
-		if($memberID){
-			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
-			$this->setField("memberID",$memberID);
-		}
-
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
-		}
-	}
-
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery("where memberID='".$param["id"]."'")){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
 
 }
 
@@ -1324,19 +1083,63 @@ class CuponHistory extends DBTable{
 ////////////////////////////////////////////////////////////////////////////////////////
 class LoginEvent extends DBTable{
 	
-	public function __construct($memberID=null,$fNo=null){
+	public function __construct($fNo=null){
 		
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectCustomFunction(function ($data){
+			if($data["exchangeID"]){
+				$exchange = new Exchange($data["exchangeID"]);
+				$data["exchangeList"]=$exchange->list;				
+			}
+			return $data;
+		});
+
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
+		if($fNo){
+			parent::load("no=".$fNo);
 		}
 	}
 
+	public function updateWithLQTable($p){
+		
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
+		}
+		unset($p["data"]["exchangeList"]);
+		$r = parent::updateWithLQTable($p);
+
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
+		}
+
+		return $r;
+	}
+
+	public function insertWithLQTable($p){
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
+		}
+		unset($p["data"]["exchangeList"]);
+		$r = parent::insertWithLQTable($p);
+
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
+		}
+
+		return $r;
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1344,7 +1147,7 @@ class LoginEvent extends DBTable{
 ////////////////////////////////////////////////////////////////////////////////////////
 class AttendenceEvent extends DBTable{
 	
-	public function __construct($memberID=null,$fNo=null){
+	public function __construct($fNo=null){
 		
 		parent::__construct();
 		
@@ -1352,9 +1155,18 @@ class AttendenceEvent extends DBTable{
 
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
+
+		if($fNo){
+			$query = "no=".$fNo;
+		}else{
+			$today = TimeManager::get()->getCurrentDateTime();
+			$query = "startDate<=".$today." and endDate>=".$today;
 		}
+		if(parent::load($query)){
+			$this->rewardList = json_decode($this->rewardList,true);
+			$this->exchangeIDList = json_decode($this->exchangeIDList,true);
+		}
+		
 	}
 
 }
@@ -1384,7 +1196,7 @@ class MissionEvent extends DBTable{
 ////////////////////////////////////////////////////////////////////////////////////////
 class CuponManager extends DBTable{
 	
-	public function __construct($memberID=null,$fNo=null){
+	public function __construct($fNo=null){
 		
 		parent::__construct();
 		
@@ -1392,9 +1204,81 @@ class CuponManager extends DBTable{
 
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
+		$this->setLQTableSelectCustomFunction(function ($data){
+			if($data["exchangeID"]){
+				$exchange = new Exchange($data["exchangeID"]);
+				$data["exchangeList"]=$exchange->list;				
+			}
+			return $data;
+		});
+
+		if($fNo){
+			if(parent::load("no=".$fNo)){
+				$this->reward=json_decode($this->reward,true);
+			}
 		}
+	}
+
+
+	public function loadWithDataTable($p){
+		$textEditor = array("type"=>"text");
+		$textViewer = array("type"=>"text");
+		$osEditor = json_decode('{"type":"select","element":["all","android","ios"]}',true);
+		$rewardEditor = json_decode('{"type":"array","element":{"type":"dictionary","element":[{"type":"type","field":"type"},{"type":"text","field":"count"}]}}',true);
+		$exchangeEditor = json_decode('{"type":"array","element":{"type":"dictionary","element":[{"type":"text","field":"type"},{"type":"text","field":"count","datatype":"int"},{"type":"text","field":"statsID"},{"type":"text","field":"statsValue","datatype":"int"},{"type":"text","field":"content"}]}}',true);
+		$data["head"][]=array("field"=>"no","viewer"=>$textViewer,"primary");
+		$data["head"][]=array("field"=>"title","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"os","viewer"=>$textViewer,"editor"=>$osEditor);
+		$data["head"][]=array("field"=>"startDate","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"endDate","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"reward","viewer"=>$textViewer,"editor"=>$rewardEditor);
+		$data["head"][]=array("field"=>"isCommon","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"writer","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"regDate","viewer"=>$textViewer);
+		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"exchangeList","viewer"=>$textViewer,"editor"=>$exchangeEditor);
+
+		$data["head"][]=array("manage"=>"update delete insert");
+		
+		return $data;
+	}
+
+	public function updateWithLQTable($p){
+		
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
+		}
+		unset($p["data"]["exchangeList"]);
+		$r = parent::updateWithLQTable($p);
+
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
+		}
+
+		return $r;
+	}
+
+	public function insertWithLQTable($p){
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
+		}
+		unset($p["data"]["exchangeList"]);
+		$p["data"]["regDate"]=TimeManager::get()->getCurrentDateTime();
+		$r = parent::insertWithLQTable($p);
+
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
+		}
+
+		return $r;
 	}
 
 }
@@ -1404,16 +1288,137 @@ class CuponManager extends DBTable{
 ////////////////////////////////////////////////////////////////////////////////////////
 class CuponCode extends DBTable{
 	
-	public function __construct($memberID=null,$fNo=null){
+	public function __construct($fNo=null){
 		
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
 
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		
+		$this->setLQTableInsertCustomFunction(function ($param){
+			return "`cuponCode`='".$param["data"]["cuponCode"]."'";
+		});
+		if($fNo){
+			parent::load("cuponCode='".$fNo."'");
+		}
+	}
 
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
+
+	public function loadWithDataTable($p){
+		$textEditor = array("type"=>"text");
+		$textViewer = array("type"=>"text");
+		$codeEditor = array("type"=>"array","element"=>array("type"=>"text"));
+		$data["head"][]=array("field"=>"no","viewer"=>$textViewer,"primary");
+		$data["head"][]=array("field"=>"cuponNo","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"cuponCode","viewer"=>$textViewer,"editor"=>$codeEditor);
+		$data["head"][]=array("field"=>"shardIndex","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("manage"=>"delete insert");
+		
+		return $data;
+	}
+
+	public function updateWithLQTable($p){
+		//$r = parent::updateWithLQTable($p);
+		$r["result"]="fail";
+		return $r;
+	}
+
+	public function insertWithLQTable($p){
+		$codeList = json_decode($p["data"]["cuponCode"],true);
+		//unset($p["data"]["code"]);
+		LogManager::get()->addLog("test count is ".count($codeList));
+		for($i=0;$i<count($codeList);$i++){
+
+			LogManager::get()->addLog("test1 ".$i);
+			
+			$p2=unserialize(serialize($p));
+			$p2["data"]["cuponCode"]=$codeList[$i];
+			$this->setLoaded(false);
+			$ri = parent::insertWithLQTable($p2);
+			if($ri["result"]=="ok")$r["data"][]=$ri["data"];
+		}
+		$r["result"]="ok";
+		return $r;
+	}
+
+	public function getRandomString($length = 10) {
+	    $validCharacters = "abcdefghijklmnopqrstuxyvwz123456789";
+	    $validCharNumber = strlen($validCharacters);
+	 
+	    $result = "";
+	 
+	    for ($i = 0; $i < $length; $i++) {
+	        $index = mt_rand(0, $validCharNumber - 1);
+	        $result .= $validCharacters[$index];
+	    }
+	 
+	    return $result;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//	쿠폰히스토리
+////////////////////////////////////////////////////////////////////////////////////////
+class CuponHistory extends DBTable{
+	public $m__userIndex;
+
+	public function __construct($code=null,$memberID=null){
+		
+		parent::__construct();
+		
+		$this->setPrimarykey("no",true);
+
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
+
+		if($memberID){
+			$this->m__userIndex = UserIndex::create($memberID);
+			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			$this->memberID=$memberID;
+		}
+		if($code && $memberID){
+			parent::load("memberID='".$memberID."' and cuponCode='".$code."'");
+		}
+	}
+
+
+
+	public function loadWithDataTable($p){
+		$textEditor = array("type"=>"text");
+		$textViewer = array("type"=>"text");
+		
+		$data["head"][]=array("field"=>"no","viewer"=>$textViewer,"primary");
+		$data["head"][]=array("field"=>"memberID","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"cuponNo","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"cuponCode","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"userDate","viewer"=>$textViewer,"editor"=>$textEditor);
+		
+		$data["head"][]=array("manage"=>"update delete insert");
+		
+		return $data;
+	}
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+//	쿠폰사용정보
+////////////////////////////////////////////////////////////////////////////////////////
+class CuponUsedInfo extends DBTable{
+	public function __construct($code=null,$shardIndex=null){
+		
+		parent::__construct();
+		
+		$this->setPrimarykey("no",true);
+
+		if($shardIndex){
+			$this->setDbInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+			
+		}
+		$this->cuponCode=$code;
+		if($code){
+			parent::load("cuponCode='".$code."'");
 		}
 	}
 
@@ -1527,7 +1532,7 @@ class StageScore extends DBTable{
 	}
 	public function save($p=null){
 		if(!$this->regDate){
-			$this->regDate=TimeManager::get()->getCurrentDateString();
+			$this->regDate=TimeManager::get()->getCurrentDateTime();
 			$this->regDate=TimeManager::get()->getTime();
 		}
 		return parent::save($p);
@@ -1576,7 +1581,9 @@ class Character extends DBTable{
 
 		if($characterNo){
 			$q_where = "no=".$characterNo;
-			parent::load($q_where);
+			if(parent::load($q_where)){
+
+			}
 		}
 	}
 }
@@ -1591,6 +1598,16 @@ class CharacterHistory extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
+		$this->setLQTableSelectCustomFunction(function ($data) {
+			LogManager::get()->addLog("test");
+			$character = new Character($data["characterNo"]);
+			$data["name"]=$character->name;
+			return $data;
+		});
+
+		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			return "where memberID='".$param["id"]."'";
+		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
@@ -1600,25 +1617,10 @@ class CharacterHistory extends DBTable{
 		
 		if($memberID && $characterNo){
 			$q_where = "memberID=".$memberID." and characterNo=".$characterNo;
-			parent::load($q_where);
+			if(parent::load($q_where)){
+				
+			}
 		}
-	}
-
-
-	public function getHistory($param){
-		$dataList = array();
-
-	    while($rData = self ::getRowByQuery("where memberID='".$param["id"]."'")){
-			$character = new Character($rData["characterNo"]);
-			$rData["name"]=$character->name;
-			$dataList[]=$rData;
-
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
 	}
 }
 
@@ -1644,87 +1646,6 @@ class Notice extends DBTable{
 		}
 	}
 
-
-	public function getList($param){
-		$dataList = array();
-
-	    while($rData = self::getRowByQuery()){
-			$dataList[]=$rData;
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
-
-	public function writeData($param){
-
-		parent::load("no=".$param["data"]["no"]);
-
-		foreach ($param["data"] as $key => $value) {
-			$this->$key = $value;
-		}
-
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
-		}
-
-		$r["result"]="fail";
-		return $r;
-	}
-
-
-	public function updateData($param){
-
-		parent::load("no=".$param["data"]["no"]);
-
-		unset($param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			$r["message"]="로드실패";
-			return $r;
-		}
-
-		foreach ($param["data"] as $key => $value) {
-			$this->$key = $value;
-		}
-
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
-		}
-
-		$r["result"]="fail";
-		return $r;
-	}
-
-
-	public function deleteData($param){
-
-		parent::load("no=".$param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			return $r;
-		}
-
-		if($this->remove()){
-			$r["result"]="ok";
-			return $r;
-
-		}
-
-		$r["result"]="fail";
-		return $r;
-
-
-	}
 }
 
 
@@ -1735,20 +1656,70 @@ class Notice extends DBTable{
 
 
 class Shop extends DBTable{
-public function __construct($pID=null){
+	public function __construct($pID=null,$exchangeID=null){
 
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-
-
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		
+		$this->setLQTableSelectCustomFunction(function ($data){
+			if($data["exchangeID"]){
+				$exchange = new Exchange($data["exchangeID"]);
+				$data["exchangeList"]=$exchange->list;				
+			}
+			return $data;
+		});
+
 		if($pID){
 			$q_where = "pID='".$pID."'";
 			parent::load($q_where);
+		}else if($exchangeID){
+			$q_where = "exchangeID='".$exchangeID."'";
+			parent::load($q_where);
 		}
 	}
+
+	public function updateWithLQTable($p){
+		
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
+		}
+		unset($p["data"]["exchangeList"]);
+		$r = parent::updateWithLQTable($p);
+
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
+		}
+
+		return $r;
+	}
+
+	public function insertWithLQTable($p){
+		$exchange=null;
+		if($p["data"]["exchangeID"]){
+				$exchange = new Exchange($p["data"]["exchangeID"]);
+				if($p["data"]["exchangeList"] && is_string($p["data"]["exchangeList"]))$p["data"]["exchangeList"]=json_decode($p["data"]["exchangeList"],true);
+				if(is_array($p["data"]["exchangeList"]) && count($p["data"]["exchangeList"])>0)$exchange->list=$p["data"]["exchangeList"];		
+				$exchange->save();		
+		}
+		unset($p["data"]["exchangeList"]);
+		$r = parent::insertWithLQTable($p);
+
+		if($exchange){
+			$r["data"]["exchangeList"]=$exchange->list;
+		}
+
+		return $r;
+	}
+	// public function selectWithLQTable($p){
+	// 	$p["data"]["exchangeList"]="test";
+	// 	return parent::selectWithLQTable($p);
+	// }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1761,96 +1732,162 @@ public function __construct($id=null){
 
 		parent::__construct();
 		
+		$this->setLQTableInsertCustomFunction(function ($param){
+			return "`id`=".$param["data"]["id"];
+		});
+
 		$this->setPrimarykey("no",true);
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		$this->id=$id;
 		if($id){
 			$q_where = "`id`='".$id."'";
-			parent::load($q_where);
+			if(parent::load($q_where)){
+				$this->list = json_decode($this->list,true);
+			}
 		}
 	}
 
-
-	public function getList($param){
-		$dataList = array();
-
-	    while($rData = self ::getRowByQuery()){
-			$dataList[]=$rData;
-
-	    }
-
-	    $result["param"]=$param;
-	    $result["data"]=$dataList;
-	    $result["result"]="ok";
-	    return $result;
-	}
-
-
-	public function writeData($param){
-
-		parent::load("`id`=".$param["data"]["id"]);
-
-		foreach ($param["data"] as $key => $value) {
-			$this->$key = $value;
-		}
-
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
-		}
-
-		$r["result"]="fail";
-		return $r;
-	}
-
-	
-	public function updateData($param){
-
-		parent::load("no=".$param["data"]["no"]);
-
-		unset($param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			$r["message"]="로드실패";
-			return $r;
-		}
-
-		foreach ($param["data"] as $key => $value) {
-			$this->$key = $value;
-		}
-
-		if($this->save()){
-			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
-			return $r;
-		}
-
-		$r["result"]="fail";
-		return $r;
-	}
-
-
-	public function deleteData($param){
-
-		parent::load("no=".$param["data"]["no"]);
-
-		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			return $r;
-		}
-
-		if($this->remove()){
-			$r["result"]="ok";
-			return $r;
-
-		}
-
-		$r["result"]="fail";
-		return $r;
-
-
-	}
 }
+
+
+
+class FormSetter extends DBTable{
+public function __construct($no=null){
+
+		parent::__construct();
+
+		$this->setPrimarykey("no",true);
+		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->no = $no;
+		if($no){
+			$q_where = "`no`='".$no."'";
+			if(parent::load($q_where)){
+			}
+		}
+	}
+
+}
+
+
+class EndlessRank extends DBTable{
+	public $m__userIndex=null;
+
+	public function __construct($memberID=null,$weekNo=null){
+
+		parent::__construct();
+
+		$this->setPrimarykey("no",true);
+
+
+		if($memberID){
+			$this->m__userIndex = UserIndex::create($memberID);
+			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			$this->memberID=$memberID;
+		}
+
+		if($memberID && $weekNo){
+			$q_where = "`memberID`='".$memberID."'";
+			if($weekNo)$q_where.=" and regWeek=".$weekNo;
+			if(parent::load($q_where)){
+			}
+		}
+	}
+
+public function getTopRank($start=1,$count=50){
+		$rdata = array(); 
+		$start-=1;
+		$query = "where regWeek=".$this->regWeek." order by victory desc, score desc limit $start,$count";
+		$rl=0;
+
+		$orderField = "victory";
+		while($data = EndlessRank::getRowByQuery($query)){
+			$rl++;
+			$l=0;
+			if(count($rdata)==0){
+				$rdata[]=$data;
+				continue;
+			}
+
+			if($rdata[$count-1][$orderField]>$data[$orderField]){
+				EndlessRank::$m__qResult=null;
+				EndlessRank::$m__qCnt++;
+			}
+			for($i=0;$i<count($rdata);$i++){
+				if($rdata[$i][$orderField]<$data[$orderField])break;
+				$l++;
+			}
+
+			array_splice($rdata, $l, 0, array($data));
+			array_splice($rdata, $count, 1);
+		}
+		return $rdata;
+	}
+
+	public function getAllUser(){
+
+		$alluser=0;
+		while($result = EndlessRank::getQueryResult("select count(*) from ".$this->getDBTable()." where regWeek=".$this->regWeek)){
+			$data = mysql_fetch_array($result);
+			$alluser+=$data[0];
+		}
+
+		return $alluser;
+	}
+
+	public function getMyRank(){
+		if($this->score<=0)return -1;
+		
+		$alluser=0;
+		while($result = EndlessRank::getQueryResult("select count(*) from ".$this->getDBTable()." where regWeek=".$this->regWeek." and (victory>".$this->victory." or (victory=".$this->victory." and score>".$this->score."))")){			
+			$data =mysql_fetch_array($result);
+			$alluser+=$data[0];
+		}
+		
+		return $alluser+1;
+	}
+
+}
+
+
+
+class EndlessPlayList extends DBTable{
+	public $m__userIndex=null;
+	
+	public function __construct($memberID=null,$weekNo=null){
+
+		parent::__construct();
+
+		$this->setPrimarykey("no",true);
+		if($memberID){
+			$this->m__userIndex = UserIndex::create($memberID);
+			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			$this->memberID=$memberID;
+		}
+
+		if($memberID && $weekNo){
+			$q_where = "`memberID`='".$memberID."'";
+			if($weekNo)$q_where.=" and weekNo=".$weekNo;
+			if(parent::load($q_where)){
+			}
+		}
+	}
+
+	public function getPlayDataByRandom($lvl){
+
+		$query = mysql_query("select * from `".$this->getDBTable()."` where autoLevel<=".($lvl+5)." and autoLevel>=".($lvl-5)." ORDER BY RAND() limit 1",UserIndex::getShardConnectionByRandom());
+		LogManager::get()->addLog("select * from `".$this->getDBTable()."` where autoLevel<=".($lvl+5)." and autoLevel>=".($lvl-5)." ORDER BY RAND() limit 1");
+		if($query)$result = mysql_fetch_assoc($query);
+		if(!$result){
+			$query = mysql_query("select * from `".$this->getDBTable()."` ORDER BY RAND() limit 1",UserIndex::getShardConnectionByRandom());
+			if($query)$result = mysql_fetch_assoc($query);
+		}
+
+		LogManager::get()->addLog(mysql_error());
+		
+		return $result;
+	}
+
+}
+
+
 ?>

@@ -15,7 +15,7 @@ limit : <input name='limit' size="50" value='<?=$_GET['limit']?>'><br>
  <input type=submit value="확인"><br>
  
  현재시각 : <?php 
-echo TimeManager::get()->getCurrentDateString();
+echo TimeManager::get()->getCurrentDateTime();
  ?>
 </form>
 </center>

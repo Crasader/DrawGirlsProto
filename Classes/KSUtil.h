@@ -16,7 +16,7 @@
 #include <iterator>
 #include <locale>
 #include <functional>
-
+#include <chrono>
 #include "utf8.h"
 #include "cocos2d.h"
 #include "cocos-ext.h"

@@ -17,6 +17,7 @@
 #include "KSUtil.h"
 #include <vector>
 #include <stdio.h>
+#define startFormSetter(obj) FormSetter::get()->start(obj,__FILE__)
 #define setFormSetter(name) name->setStringData(#name);
 /*******************************************************
 오브젝트 배치하기의 슈퍼초 울트라 캡 혁신
@@ -24,7 +25,7 @@
  
  2.0v - 자체 리모컨으로
  1.조절할 오브젝트추가 setFormSetter(obj);
- 2.init함수 마지막에 리모콘코드 추가 FormSetter::get()->start();
+ 2.init함수에 리모콘코드 추가 startFormSetter(this);
  3.실행후 해당씬에서 디스플레이 오른쪽 아래를 터치하면 리모콘이 뜬다. 조절후 log버튼을 눌러보시라
  4.조절끝나면 소스코드삭제도 필요없음 나중에 FormSetter::get()->setEnabledRemocon(false) 한번만 호출해주면 있는 리모콘 모두 꺼짐.
  
@@ -178,6 +179,7 @@ public:
 	CommonButton* m_modeBtn;
 	CommonButton* m_resetBtn;
 	TouchCancelLayer* m_swLayer;
+	CCSprite* m_guideLine;
 	bool m_isEnabledRemocon;
 	static FormSetter* get()
 	{
@@ -229,11 +231,13 @@ public:
 		CommonButton* showSetting = CommonButton::create("log", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		showSetting->setFunction([this](CCObject *){
 			if(m_selectedObjNumber<0)return;
-			
 			logFormSetting();
-			CCLog("----------------------- selected log ---------------------------");
+			if(!m_objList[m_selectedObjNumber].isEdited)return;
+			
+			CCLog("################ FormSetter Selected : %s ##############START##",m_filename.c_str());
 			logOnce(m_selectedObjNumber);
-			CCLog("----------------------- end log --------------------------------");
+			CCLog("");
+			CCLog("################ FormSetter Selected : %s ################END##",m_filename.c_str());
 		});
 		showSetting->setPosition(50,80);
 		
@@ -241,6 +245,7 @@ public:
 		CommonButton* exit = CommonButton::create("exit", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		exit->setFunction([this](CCObject *){
 			remocon->setVisible(false);
+			m_guideLine->setVisible(false);
 			m_swLayer->setTouchEnabled(false);
 			
 			if(m_selectedObjNumber<0)return;
@@ -295,6 +300,7 @@ public:
 		m_objInfo->setPosition(ccp(30,-75));
 		m_objInfo->enableOuterStroke(ccc3(0,0,0), 1);
 		
+		
 		remocon->addChild(m_objName,10);
 		remocon->addChild(m_objInfo,10);
 		remocon->addChild(m_modeBtn,10);
@@ -312,21 +318,32 @@ public:
 		m_swLayer = TouchCancelLayer::create();
 		this->addChild(m_swLayer);
 		m_swLayer->setTouchEnabled(false);
+		
+		m_guideLine = CCSprite::create("formsetter_guide.png");
+		m_guideLine->setPosition(ccp(-240,160));
+		this->addChild(m_guideLine,1);
+		m_guideLine->setVisible(false);
 	}
 	
 	void logFormSetting(){
 		if(m_selectedObjNumber<0)return;
-		CCLog("----------------------- start log ---------------------------");
+		CCLog("");
+		CCLog("");
+		CCLog("");
+		CCLog("");
+		CCLog("################ FormSetter Result : %s ################START##",m_filename.c_str());
 		for(int i=0;i<m_objList.size();i++){
 			logOnce(i);
 		}
-		CCLog("----------------------- end log -----------------------------");
+		CCLog("");
+		CCLog("################ FormSetter Result : %s ##################END##",m_filename.c_str());
 	}
 	
 	void logOnce(int i){
 		CCNode* obj = m_objList[i].obj;
 		if(!m_objList[i].isEdited)return;
 		CCLog("");
+		
 		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
 			CCLog("%s->setPosition(%.1f,%.1f);",obj->getStringData().c_str(),obj->getPosition().x,obj->getPosition().y);
 		if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX() || m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY()){
@@ -337,29 +354,37 @@ public:
 		}
 		if(m_objList[i].originalData["w"].asFloat()!=obj->getContentSize().width || m_objList[i].originalData["h"].asFloat()!=obj->getContentSize().height)
 			CCLog("%s->setContentSize(CCSizeMake(%.1f,%.1f));",obj->getStringData().c_str(),obj->getContentSize().width,obj->getContentSize().height);
-
+		
 	}
 	void setEnabledRemocon(bool _is){
 		this->m_isEnabledRemocon=_is;
 	}
 	
 	void start(){
-		this->start("");
+		this->start("","");
+	}
+	void start(string filename){
+		this->start(filename,"");
 	}
 	
-	void start(CCNode* obj,string startName){
+	void start(CCNode* obj,string filename, string startName){
 		if(!m_isEnabledRemocon)return;
-		obj->addChild(KSTimer::create(0.5f,[this,startName](){this->start(startName);}));
+		obj->addChild(KSTimer::create(0.3f,[this,filename,startName](){this->start(filename,startName);}));
 	}
 	
 	void start(CCNode* obj){
-		this->start(obj,"");
+		this->start(obj,"","");
 	}
+	void start(CCNode* obj,string filename){
+		this->start(obj,filename,"");
+	}
+	
 	string m_startObjName;
-	void start(string startName){
+	string m_filename;
+	void start(string filename, string startName){
 		if(!m_isEnabledRemocon)return;
 		m_startObjName=startName;
-		
+		m_filename = filename;
 		this->retain();
 		CCNode* front = (CCNode *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0));
 		//remocon->setVisible(true);
@@ -427,6 +452,7 @@ public:
 				
 				remocon->setVisible(true);
 				m_swLayer->setTouchEnabled(true);
+				m_guideLine->setVisible(true);
 				
 				m_objList.clear();
 				findObject(front);
@@ -485,18 +511,28 @@ public:
 	void ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
 	{
 		
-		
-		
-		if(m_selectedObjNumber>=0){
-			
-			CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
-			m_objList[m_selectedObjNumber].isEdited = true;
+		bool utilMove = false;
+		if(remocon->isVisible()){
 			if(pTouch->getLocation().y<20 || pTouch->getLocation().x<20){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.5f);
 				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
 				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
 				remocon->setPosition(ccpAdd(remocon->getPosition(),dtPos));
-			}else if(m_modeBtn->getTag()==0){
+				utilMove=true;
+			}else if(pTouch->getLocation().y>300 || pTouch->getLocation().x>460){
+				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.5f);
+				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
+				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
+				m_guideLine->setPosition(ccpAdd(m_guideLine->getPosition(),dtPos));
+				utilMove=true;
+			}
+		}
+		
+		if(m_selectedObjNumber>=0 && utilMove==false){
+			
+			CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
+			m_objList[m_selectedObjNumber].isEdited = true;
+			if(m_modeBtn->getTag()==0){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
 				dtPos.x = ((int)(dtPos.x*10*2)/(int)10)/2.f;
 				dtPos.y = ((int)(dtPos.y*10*2)/(int)10)/2.f;
@@ -522,9 +558,9 @@ public:
 			}
 			
 			setInfomation();
-			m_startPosition = pTouch->getLocation();
 		}
 		
+		m_startPosition = pTouch->getLocation();
 	}
 	
 	void ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )

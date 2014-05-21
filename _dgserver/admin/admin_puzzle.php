@@ -1,6 +1,5 @@
 <?php
 include "header.php";
-
 ?>
 <script>
 var showPuzzleImg = function(value,option){
@@ -10,13 +9,19 @@ var showPuzzleImg = function(value,option){
 	return '<img src=../images/'+data["image"]+' width=300>';
 }
 </script>
+<table align=center>
+	<tr><td>
+		-condition type<br>
+		퍼즐 p(value),별 s(value),루비 r(value,exchangeID),요일 w(weekday,s,e),일 d(s,e)
+
+	</td></tr></table><br><br>
 <table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("puzzle")?>" dbSort="`order` asc" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>
 			<th field="order" viewer='{"type":"text"}' editor='{"type":"text"}'>order</th>
 			<th field="isEvent" viewer='{"type":"text"}' editor='{"type":"select","element":["일반","이벤트","미노출"],"value":[0,1,2]}'>isEvent</th>
-			<th field="title" viewer='{"type":"text"}' editor='{"type":"text"}'>title</th>
+			<th field="title" viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}'>title</th>
 			<th field="thumbnail" viewer='{"type":"custom","func":"showPuzzleImg"}' editor='{"type":"dictionary","element":[
 				{"field":"image","type":"custom","func":"imageSelector","viewer":{"type":"custom","func":"imageViewer"}},
 				{"field":"size","type":"text","datatype":"int"}			
@@ -62,7 +67,8 @@ var showPuzzleImg = function(value,option){
 				{"field":"y","type":"text","datatype":"int"}		
 			]}
 			'>endPosition</th>
-			<th field="point" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>point</th>
+			<th field="color" viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"field":"r","type":"text","datatype":"int"},{"field":"g","type":"text","datatype":"int"},{"field":"b","type":"text","datatype":"int"}]}'>color</th>
+			<th field="conditionInfo" viewer='{"type":"json"}'>conditionInfo (자동갱신)</th>
 			<th field="pathInfo" viewer='{"type":"json"}' editor='{"type":"array","element":{"type":"text","datatype":"int"}}'>pathInfo</th>
 			<th field="cardInfo" viewer='{"type":"json"}' editor='{"type":"array","element":{"type":"array","element":{"type":"text","datatype":"int"}}}'>cardInfo</th>
 			<th field="rewardInfo" viewer='{"type":"json"}'>rewardInfo (자동갱신)</th>

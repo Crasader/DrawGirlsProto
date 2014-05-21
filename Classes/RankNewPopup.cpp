@@ -36,7 +36,7 @@ bool RankNewPopup::init()
         return false;
     }
 	
-	FormSetter::get()->start();
+	startFormSetter(this);
 	
 	is_menu_enable = false;
 	

@@ -14,10 +14,11 @@ if(!$GAMEID)$GAMEID = $_GET["gid"];
 
 $gid = $GAMEID;
 
+include_once("config.php");
+
 $AES_KEY = "qrqhyrlgprghedvh";
 
-
-DBManager::get()->setDataBase($GAMEID);
+//DBManager::get()->setDataBase($GAMEID);
 
 if($_SERVER["SERVER_NAME"]=="182.162.201.147"){
 	$LQset["db_host"]="10.99.197.209:13306";
@@ -560,6 +561,9 @@ function reloadPuzzleInfo(){
 
 		$cmodify='{"no":0}';
 		if($puzzleCount!=0)$cmodify = '{"no":'.($stageData[no]-1).'}';
+		
+		$originCondition = json_decode($stageData["condition"],true);
+		if($originCondition["gold"])$cmodify = $stageData["condition"];
 		
 		$puzzleConditionInfo[] = json_decode($cmodify,true);
 		
