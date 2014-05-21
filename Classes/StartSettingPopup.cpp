@@ -1583,6 +1583,7 @@ void StartSettingPopup::callStart()
 {
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open.getV();
+	is_open = is_open | mySGD->is_endless_mode;
 	
 	is_go_to_mainflow = false;
 	
@@ -1678,7 +1679,10 @@ void StartSettingPopup::callStart()
 	bool is_startable = false;
 	if(mySGD->is_endless_mode)
 	{
-		is_startable = ((MainFlowScene*)getParent())->heart_time->isStartable();
+		if(mySGD->endless_my_victory.getV() > 0)
+			is_startable = true;
+		else
+			is_startable = ((MainFlowScene*)getParent())->heart_time->isStartable();
 	}
 	else
 	{
@@ -1690,7 +1694,10 @@ void StartSettingPopup::callStart()
 		bool is_startGame = false;
 		if(mySGD->is_endless_mode)
 		{
-			is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
+			if(mySGD->endless_my_victory.getV() > 0)
+				is_startGame = true;
+			else
+				is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
 		}
 		else
 		{

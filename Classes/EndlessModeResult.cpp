@@ -95,18 +95,18 @@ void EndlessModeResult::setMain()
 	main_case->setPosition(ccp(240,160-22.f));
 	addChild(main_case, kEndlessModeResultZorder_back);
 	
-//	main_case->setScaleY(0.f);
-//	
-//	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-//		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-//			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-//	
-//	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
-//										 {
-//											 KS::setOpacity(main_case, 255);
-//											 
-//											 is_menu_enable = true;
-//										 }));
+	main_case->setScaleY(0.f);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
+	
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
+										 {
+											 KS::setOpacity(main_case, 255);
+											 
+											 is_menu_enable = true;
+										 }));
 	
 	CCScale9Sprite* left_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	left_back->setContentSize(CCSizeMake((main_case->getContentSize().width-30)/2.f, 212));
@@ -118,7 +118,7 @@ void EndlessModeResult::setMain()
 	left_star_back->setPosition(ccp(left_back->getContentSize().width/2.f, 154));
 	left_back->addChild(left_star_back);
 	
-	int star_count = 4;
+	int star_count = mySGD->getStageGrade();
 	for(int i=0;i<star_count;i++)
 	{
 		CCSprite* t_star = CCSprite::create("ending_star_gold.png");
@@ -145,12 +145,16 @@ void EndlessModeResult::setMain()
 	left_score_back->setPosition(ccp(left_back->getContentSize().width/2.f, 111.f));
 	left_back->addChild(left_score_back);
 	
-	KSLabelTTF* left_score_title = KSLabelTTF::create("점수", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 13);
 	left_score_title->setAnchorPoint(ccp(0,0.5f));
 	left_score_title->setPosition(ccp(10, left_score_back->getContentSize().height/2.f));
 	left_score_back->addChild(left_score_title);
 	
-	KSLabelTTF* left_score_content = KSLabelTTF::create("9999", mySGD->getFont().c_str(), 13);
+	CCSprite* left_score_img = CCSprite::create("ending_mark_score.png");
+	left_score_img->setPosition(ccp(10 + left_score_title->getContentSize().width + 15,left_score_back->getContentSize().height/2.f));
+	left_score_back->addChild(left_score_img);
+	
+	KSLabelTTF* left_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", int(mySGD->getBaseScore()))->getCString(), mySGD->getFont().c_str(), 13);
 	left_score_content->setAnchorPoint(ccp(1,0.5f));
 	left_score_content->setPosition(ccp(left_score_back->getContentSize().width-10, left_score_back->getContentSize().height/2.f));
 	left_score_back->addChild(left_score_content);
@@ -161,12 +165,16 @@ void EndlessModeResult::setMain()
 	left_time_back->setPosition(ccp(left_back->getContentSize().width/2.f, 81.f));
 	left_back->addChild(left_time_back);
 	
-	KSLabelTTF* left_time_title = KSLabelTTF::create("타임", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 13);
 	left_time_title->setAnchorPoint(ccp(0,0.5f));
 	left_time_title->setPosition(ccp(10, left_time_back->getContentSize().height/2.f));
 	left_time_back->addChild(left_time_title);
 	
-	KSLabelTTF* left_time_content = KSLabelTTF::create("9999", mySGD->getFont().c_str(), 13);
+	CCSprite* left_time_img = CCSprite::create("ending_mark_time.png");
+	left_time_img->setPosition(ccp(10 + left_time_title->getContentSize().width + 15,left_time_back->getContentSize().height/2.f));
+	left_time_back->addChild(left_time_img);
+	
+	KSLabelTTF* left_time_content = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString(), mySGD->getFont().c_str(), 13);
 	left_time_content->setAnchorPoint(ccp(1,0.5f));
 	left_time_content->setPosition(ccp(left_time_back->getContentSize().width-10, left_time_back->getContentSize().height/2.f));
 	left_time_back->addChild(left_time_content);
@@ -177,12 +185,16 @@ void EndlessModeResult::setMain()
 	left_gold_back->setPosition(ccp(left_back->getContentSize().width/2.f, 51.f));
 	left_back->addChild(left_gold_back);
 	
-	KSLabelTTF* left_gold_title = KSLabelTTF::create("골드", mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_gold_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 13);
 	left_gold_title->setAnchorPoint(ccp(0,0.5f));
 	left_gold_title->setPosition(ccp(10, left_gold_back->getContentSize().height/2.f));
 	left_gold_back->addChild(left_gold_title);
 	
-	KSLabelTTF* left_gold_content = KSLabelTTF::create("9999", mySGD->getFont().c_str(), 13);
+	CCSprite* left_gold_img = CCSprite::create("ending_mark_gold.png");
+	left_gold_img->setPosition(ccp(10 + left_gold_title->getContentSize().width + 15,left_gold_back->getContentSize().height/2.f));
+	left_gold_back->addChild(left_gold_img);
+	
+	KSLabelTTF* left_gold_content = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), mySGD->getFont().c_str(), 13);
 	left_gold_content->setAnchorPoint(ccp(1,0.5f));
 	left_gold_content->setPosition(ccp(left_gold_back->getContentSize().width-10, left_gold_back->getContentSize().height/2.f));
 	left_gold_back->addChild(left_gold_content);
@@ -193,28 +205,30 @@ void EndlessModeResult::setMain()
 	left_total_score_back->setPosition(ccp(left_back->getContentSize().width/2.f, 21));
 	left_back->addChild(left_total_score_back);
 	
-	KSLabelTTF* left_total_score_title = KSLabelTTF::create("총점", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* left_total_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
 	left_total_score_title->setColor(ccc3(255, 170, 20));
 	left_total_score_title->setAnchorPoint(ccp(0,0.5f));
 	left_total_score_title->setPosition(ccp(10, left_total_score_back->getContentSize().height/2.f));
 	left_total_score_back->addChild(left_total_score_title);
 	
-	KSLabelTTF* left_total_score_content = KSLabelTTF::create("9999", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* left_total_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", int(mySGD->getScore()))->getCString(), mySGD->getFont().c_str(), 15);
 	left_total_score_content->setColor(ccc3(255, 170, 20));
 	left_total_score_content->setAnchorPoint(ccp(1,0.5f));
 	left_total_score_content->setPosition(ccp(left_total_score_back->getContentSize().width-10, left_total_score_back->getContentSize().height/2.f));
 	left_total_score_back->addChild(left_total_score_content);
 	
 	
+	//왼쪽 버튼은 포기하기 버튼으로. 계속 이겨서 왔더라도 패 가 올라가도록 함. 결국 무조건 1패는 생기는 구조. 라고 HS가 강력히 주장
+	
 	CCSprite* n_stop = CCSprite::create("endless_ready.png");
-	KSLabelTTF* n_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
 	n_stop_label->setColor(ccc3(50, 30, 5));
 	n_stop_label->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-1));
 	n_stop->addChild(n_stop_label);
 	
 	CCSprite* s_stop = CCSprite::create("endless_ready.png");
 	s_stop->setColor(ccGRAY);
-	KSLabelTTF* s_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
 	s_stop_label->setColor(ccc3(50, 30, 5));
 	s_stop_label->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-1));
 	s_stop->addChild(s_stop_label);
@@ -226,85 +240,420 @@ void EndlessModeResult::setMain()
 																	  
 																	  is_menu_enable = false;
 																	  
-																	  ready_loading = LoadingLayer::create(-999);
-																	  addChild(ready_loading, 999);
+																	  if(mySGD->getScore() > mySGD->endless_score.getV())
+																		{
 																	  
-																	  vector<CommandParam> command_list;
-																	  command_list.clear();
-																	  
-																	  Json::Value param;
-																	  param.clear();
-																	  param["memberID"] = myHSP->getMemberID();
-																	  param["score"] = mySGD->endless_my_total_score.getV();
-																	  param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																	  param["level"] = mySGD->endless_my_level.getV();
-																	  param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																	  param["victory"] = mySGD->endless_my_victory.getV();
-																	  
-																	  command_list.push_back(CommandParam("setendlessrank", param, [=](Json::Value result_data)
-																										  {
-																											  if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																			ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
+																			
+																			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																			if(screen_scale_x < 1.f)
+																				screen_scale_x = 1.f;
+																			
+																			float height_value = 320.f;
+																			if(myDSH->screen_convert_rate < 1.f)
+																				height_value = 320.f/myDSH->screen_convert_rate;
+																			
+																			if(height_value < myDSH->ui_top)
+																				height_value = myDSH->ui_top;
+																			
+																			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+																			t_popup->setDimmedPosition(ccp(240, 160));
+																			t_popup->setBasePosition(ccp(240, 160));
+																			
+																			CCNode* t_container = CCNode::create();
+																			t_popup->setContainerNode(t_container);
+																			addChild(t_popup, 999);
+																			
+																			CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+																			back_case->setContentSize(CCSizeMake(240,140));
+																			back_case->setPosition(ccp(0,0));
+																			t_container->addChild(back_case);
+																			
+																			CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+																			back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+																			back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+																			back_case->addChild(back_in);
+																			
+																			KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+																			title_label->setColor(ccc3(255, 170, 20));
+																			title_label->setAnchorPoint(ccp(0,0.5f));
+																			title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
+																			t_container->addChild(title_label);
+																			
+																			KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessCheckGiveup), mySGD->getFont().c_str(), 12);
+																			sub_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+																			sub_label->setAnchorPoint(ccp(0,0.5f));
+																			sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,5));
+																			t_container->addChild(sub_label);
+																			
+																			CCSprite* t_gray = t_popup->getDimmedSprite();
+																			
+																			CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+																			close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+																			close_button->setFunction([=](CCObject* sender)
+																									  {
+																										  if(!t_popup->is_menu_enable)
+																											  return;
+																										  
+																										  t_popup->is_menu_enable = false;
+																										  
+																										  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																											  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+																										  
+																										  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+																																						{
+																																							t_gray->setOpacity(t);
+																																							KS::setOpacity(t_container, t);
+																																						}, [=](int t)
+																																						{
+																																							t_gray->setOpacity(0);
+																																							KS::setOpacity(t_container, 0);
+																																							is_menu_enable = true;
+																																							t_popup->removeFromParent();
+																																						}));
+																									  });
+																			t_container->addChild(close_button);
+																			
+																			t_popup->button_func_list.clear();
+																			
+																			t_popup->button_func_list.push_back([=](){
+																				if(!t_popup->is_menu_enable)
+																					return;
+																				
+																				t_popup->is_menu_enable = false;
+																				
+																				t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																					t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+																				
+																				t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+																															  {
+																																  t_gray->setOpacity(t);
+																																  KS::setOpacity(t_container, t);
+																															  }, [=](int t)
+																															  {
+																																  t_gray->setOpacity(0);
+																																  KS::setOpacity(t_container, 0);
+																																  
+																																  
+																																  ready_loading = LoadingLayer::create(-999);
+																																  addChild(ready_loading, 999);
+																																  
+																																  vector<CommandParam> command_list;
+																																  command_list.clear();
+																																  
+																																  Json::Value param;
+																																  param.clear();
+																																  param["memberID"] = myHSP->getMemberID();
+																																  param["score"] = mySGD->endless_my_total_score.getV();
+																																  param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																																  param["level"] = mySGD->endless_my_level.getV();
+																																  param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																																  param["victory"] = mySGD->endless_my_victory.getV();
+																																  
+																																  command_list.push_back(CommandParam("setendlessrank", param, [=](Json::Value result_data)
+																																									  {
+																																										  if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																																										  {
+																																											  addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
+																																										  }
+																																										  else
+																																										  {
+																																											  ready_loading->removeFromParent();
+																																											  ready_loading = NULL;
+																																											  
+																																											  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																																																					 {
+																																																						 gray->setOpacity(255*t);
+																																																					 }, [=](float t)
+																																																					 {
+																																																						 gray->setOpacity(0);
+																																																						 if(target_final && delegate_final)
+																																																							 (target_final->*delegate_final)();
+																																																						 removeFromParent();
+																																																					 }));
+																																											  
+																																											  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+																																												  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
+																																											  
+																																											  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
+																																										  }
+																																									  }));
+																																  
+																																  Json::Value param2;
+																																  param2.clear();
+																																  param2["memberID"] = myHSP->getMemberID();
+																																  param2["score"] = mySGD->getScore();
+																																  param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																																  param2["level"] = mySGD->endless_my_level.getV();
+																																  param2["autoLevel"] = 1;
+																																  param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																																  param2["victory"] = mySGD->endless_my_victory.getV();
+																																  
+																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
+																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
+																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
+																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
+																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
+																																  
+																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
+																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
+																																  
+																																  
+																																  Json::FastWriter writer;
+																																  param2["playData"] = writer.write(mySGD->replay_write_info);
+																																  
+																																  command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
+																																  
+																																  myHSP->command(command_list);
+																																  
+																																  
+																																  
+																																  t_popup->removeFromParent();
+																															  }));
+																				
+																			});
+																			
+																			CCLabelTTF* t2_label = CCLabelTTF::create();
+																			
+																			KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+																			ok_label->setPosition(ccp(0,0));
+																			t2_label->addChild(ok_label);
+																			
+																			CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+																			
+																			CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
+																			ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
+																			ok_button->setTag(0);
+																			ok_button->setPreferredSize(CCSizeMake(110,45));
+																			ok_button->setPosition(ccp(0,-35));
+																			t_container->addChild(ok_button);
+																			
+																			ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+																			
+																			
+																			t_container->setScaleY(0.f);
+																			
+																			t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																				t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+																					t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+																			
+																			t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+																														  {
+																															  t_gray->setOpacity(t);
+																															  KS::setOpacity(t_container, t);
+																														  }, [=](int t)
+																														  {
+																															  t_gray->setOpacity(255);
+																															  KS::setOpacity(t_container, 255);
+																															  t_popup->is_menu_enable = true;
+																														  }));
+																		}
+																	  else
+																		{
+																			ready_loading = LoadingLayer::create(-999);
+																			addChild(ready_loading, 999);
+																			
+																			vector<CommandParam> command_list;
+																			command_list.clear();
+																			
+																			Json::Value param;
+																			param.clear();
+																			param["memberID"] = myHSP->getMemberID();
+																			param["score"] = mySGD->endless_my_total_score.getV();
+																			param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																			param["level"] = mySGD->endless_my_level.getV();
+																			param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																			param["victory"] = mySGD->endless_my_victory.getV();
+																			
+																			command_list.push_back(CommandParam("setendlessrank", param, [=](Json::Value result_data)
 																												{
-																													addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
-																												}
-																											  else
-																											  {
-																												  ready_loading->removeFromParent();
-																												  ready_loading = NULL;
-																												  
-																												  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
-																																						 {
-																																							 gray->setOpacity(255*t);
-																																						 }, [=](float t)
-																																						 {
-																																							 gray->setOpacity(0);
-																																							 if(target_final && delegate_final)
-																																								 (target_final->*delegate_final)();
-																																							 removeFromParent();
-																																						 }));
-																												  
-																												  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-																													  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-																												  
-																												  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
-																											  }
-																										  }));
-																	  
-																	  Json::Value param2;
-																	  param2.clear();
-																	  param2["memberID"] = myHSP->getMemberID();
-																	  param2["score"] = mySGD->getScore();
-																	  param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																	  param2["level"] = mySGD->endless_my_level.getV();
-																	  param2["autoLevel"] = 1;
-																	  param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																	  param2["victory"] = mySGD->endless_my_victory.getV();
-																	  Json::FastWriter writer;
-																	  param2["playData"] = writer.write(mySGD->replay_write_info);
-																	  
-																	  command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
-																	  
-																	  myHSP->command(command_list);
+																													if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																													{
+																														addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
+																													}
+																													else
+																													{
+																														ready_loading->removeFromParent();
+																														ready_loading = NULL;
+																														
+																														addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																																							   {
+																																								   gray->setOpacity(255*t);
+																																							   }, [=](float t)
+																																							   {
+																																								   gray->setOpacity(0);
+																																								   if(target_final && delegate_final)
+																																									   (target_final->*delegate_final)();
+																																								   removeFromParent();
+																																							   }));
+																														
+																														addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+																															addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
+																														
+																														addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
+																													}
+																												}));
+																			
+																			Json::Value param2;
+																			param2.clear();
+																			param2["memberID"] = myHSP->getMemberID();
+																			param2["score"] = mySGD->getScore();
+																			param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																			param2["level"] = mySGD->endless_my_level.getV();
+																			param2["autoLevel"] = 1;
+																			param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																			param2["victory"] = mySGD->endless_my_victory.getV();
+																			
+																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
+																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
+																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
+																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
+																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
+																			
+																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
+																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
+																			
+																			
+																			Json::FastWriter writer;
+																			param2["playData"] = writer.write(mySGD->replay_write_info);
+																			
+																			command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
+																			
+																			myHSP->command(command_list);
+																		}
 																  });
 	stop_item->setPosition(ccp(-main_case->getContentSize().width/2.f+left_back->getPositionX(), 0));
 	
+	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	right_back->setContentSize(CCSizeMake((main_case->getContentSize().width-30)/2.f, 180));
-	right_back->setPosition(ccp(main_case->getContentSize().width-10-right_back->getContentSize().width/2.f, 149));
+	right_back->setContentSize(CCSizeMake((main_case->getContentSize().width-30)/2.f, 212));
+	right_back->setPosition(ccp(main_case->getContentSize().width-10-right_back->getContentSize().width/2.f, 165));
 	main_case->addChild(right_back);
+	
+	CCScale9Sprite* right_star_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_star_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 60));
+	right_star_back->setPosition(ccp(right_back->getContentSize().width/2.f, 154));
+	right_back->addChild(right_star_back);
+	
+	int right_star_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_clearGrade), Json::Value()).asInt(); // 상대방 별 갯수
+	for(int i=0;i<right_star_count;i++)
+	{
+		CCSprite* t_star = CCSprite::create("ending_star_gold.png");
+		t_star->setPosition(ccp(30+i*48,right_star_back->getContentSize().height/2.f));
+		right_star_back->addChild(t_star);
+	}
+	
+	CCSprite* right_title = CCSprite::create("endless_nickname.png");
+	right_title->setPosition(ccp(right_back->getContentSize().width/2.f, 193.5f));
+	right_back->addChild(right_title);
+	
+	string t_right_flag = mySGD->endless_flag.getV();
+	CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(t_right_flag).c_str());
+	right_flag->setPosition(ccp(25,26));
+	right_title->addChild(right_flag);
+	
+	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 13);
+	right_nick->enableOuterStroke(ccBLACK, 1.f);
+	right_nick->setPosition(ccp(97, 24));
+	right_title->addChild(right_nick);
+	
+	CCScale9Sprite* right_score_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_score_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_score_back->setPosition(ccp(right_back->getContentSize().width/2.f, 111.f));
+	right_back->addChild(right_score_back);
+	
+	KSLabelTTF* right_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 13);
+	right_score_title->setAnchorPoint(ccp(0,0.5f));
+	right_score_title->setPosition(ccp(10, right_score_back->getContentSize().height/2.f));
+	right_score_back->addChild(right_score_title);
+	
+	CCSprite* right_score_img = CCSprite::create("ending_mark_score.png");
+	right_score_img->setPosition(ccp(10 + right_score_title->getContentSize().width + 15,right_score_back->getContentSize().height/2.f));
+	right_score_back->addChild(right_score_img);
+	
+	KSLabelTTF* right_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_originalScore), Json::Value()).asInt())->getCString(), mySGD->getFont().c_str(), 13);
+	right_score_content->setAnchorPoint(ccp(1,0.5f));
+	right_score_content->setPosition(ccp(right_score_back->getContentSize().width-10, right_score_back->getContentSize().height/2.f));
+	right_score_back->addChild(right_score_content);
+	
+	
+	CCScale9Sprite* right_time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_time_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_time_back->setPosition(ccp(right_back->getContentSize().width/2.f, 81.f));
+	right_back->addChild(right_time_back);
+	
+	KSLabelTTF* right_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 13);
+	right_time_title->setAnchorPoint(ccp(0,0.5f));
+	right_time_title->setPosition(ccp(10, right_time_back->getContentSize().height/2.f));
+	right_time_back->addChild(right_time_title);
+	
+	CCSprite* right_time_img = CCSprite::create("ending_mark_time.png");
+	right_time_img->setPosition(ccp(10 + right_time_title->getContentSize().width + 15,right_time_back->getContentSize().height/2.f));
+	right_time_back->addChild(right_time_img);
+	
+	int right_game_time = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_gameTime), Json::Value()).asInt();// 상대방 게임 시간
+	KSLabelTTF* right_time_content = KSLabelTTF::create(CCString::createWithFormat("%d", right_game_time)->getCString(), mySGD->getFont().c_str(), 13);
+	right_time_content->setAnchorPoint(ccp(1,0.5f));
+	right_time_content->setPosition(ccp(right_time_back->getContentSize().width-10, right_time_back->getContentSize().height/2.f));
+	right_time_back->addChild(right_time_content);
+	
+	
+	CCScale9Sprite* right_gold_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_gold_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_gold_back->setPosition(ccp(right_back->getContentSize().width/2.f, 51.f));
+	right_back->addChild(right_gold_back);
+	
+	KSLabelTTF* right_gold_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 13);
+	right_gold_title->setAnchorPoint(ccp(0,0.5f));
+	right_gold_title->setPosition(ccp(10, right_gold_back->getContentSize().height/2.f));
+	right_gold_back->addChild(right_gold_title);
+	
+	CCSprite* right_gold_img = CCSprite::create("ending_mark_gold.png");
+	right_gold_img->setPosition(ccp(10 + right_gold_title->getContentSize().width + 15,right_gold_back->getContentSize().height/2.f));
+	right_gold_back->addChild(right_gold_img);
+	
+	int right_gold = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt();// 상대방 획득 골드
+	KSLabelTTF* right_gold_content = KSLabelTTF::create(CCString::createWithFormat("%d", right_gold)->getCString(), mySGD->getFont().c_str(), 13);
+	right_gold_content->setAnchorPoint(ccp(1,0.5f));
+	right_gold_content->setPosition(ccp(right_gold_back->getContentSize().width-10, right_gold_back->getContentSize().height/2.f));
+	right_gold_back->addChild(right_gold_content);
+	
+	
+	CCScale9Sprite* right_total_score_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_total_score_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_total_score_back->setPosition(ccp(right_back->getContentSize().width/2.f, 21));
+	right_back->addChild(right_total_score_back);
+	
+	KSLabelTTF* right_total_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
+	right_total_score_title->setColor(ccc3(255, 170, 20));
+	right_total_score_title->setAnchorPoint(ccp(0,0.5f));
+	right_total_score_title->setPosition(ccp(10, right_total_score_back->getContentSize().height/2.f));
+	right_total_score_back->addChild(right_total_score_title);
+	
+	
+	int right_total_score = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_totalScore), Json::Value()).asInt(); // 상대방 총점
+	KSLabelTTF* right_total_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", right_total_score)->getCString(), mySGD->getFont().c_str(), 15);
+	right_total_score_content->setColor(ccc3(255, 170, 20));
+	right_total_score_content->setAnchorPoint(ccp(1,0.5f));
+	right_total_score_content->setPosition(ccp(right_total_score_back->getContentSize().width-10, right_total_score_back->getContentSize().height/2.f));
+	right_total_score_back->addChild(right_total_score_content);
+	
+	
+	
 	
 	
 	
 	
 	CCSprite* n_next = CCSprite::create("endless_ready.png");
-	KSLabelTTF* n_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	n_next_label->setColor(ccc3(50, 30, 5));
 	n_next_label->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-1));
 	n_next->addChild(n_next_label);
 	
 	CCSprite* s_next = CCSprite::create("endless_ready.png");
 	s_next->setColor(ccGRAY);
-	KSLabelTTF* s_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	s_next_label->setColor(ccc3(50, 30, 5));
 	s_next_label->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-1));
 	s_next->addChild(s_next_label);
@@ -335,11 +684,7 @@ void EndlessModeResult::setMain()
 	
 	if(mySGD->getScore() <= mySGD->endless_score.getV())
 	{
-		next_item->setEnabled(false);
-	}
-	else
-	{
-		
+		next_item->setVisible(false);
 	}
 	
 	CCSprite* vs_img = CCSprite::create("endless_vs.png");

@@ -250,6 +250,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_time,
 	kMyLocalKey_gold,
 	kMyLocalKey_score,
+	kMyLocalKey_totalScore,
 	kMyLocalKey_nextStage,
 	kMyLocalKey_regame,
 	kMyLocalKey_toMain,
@@ -532,7 +533,18 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_missionCondition4,
 	kMyLocalKey_missionCondition5,
 	kMyLocalKey_missionCondition6,
-	kMyLocalKey_missionCondition7
+	kMyLocalKey_missionCondition7,
+	kMyLocalKey_endlessMode,
+	kMyLocalKey_endlessWeeklyranking,
+	kMyLocalKey_endlessMyInfo,
+	kMyLocalKey_endlessInfoScore,
+	kMyLocalKey_endlessInfoScoreValue,
+	kMyLocalKey_endlessHighScore,
+	kMyLocalKey_endlessHighStraight,
+	kMyLocalKey_endlessHighStraightValue,
+	kMyLocalKey_endlessServerError,
+	kMyLocalKey_endlessDownloadFail,
+	kMyLocalKey_endlessCheckGiveup
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()
