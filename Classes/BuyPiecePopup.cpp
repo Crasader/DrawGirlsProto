@@ -215,7 +215,7 @@ void BuyPiecePopup::buyAction(CCObject* sender, CCControlEvent t_event)
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
 															{
-																((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+																((PuzzleScene*)getParent())->showShopPopup(kSC_gold);
 															}), 9999);
 		is_menu_enable = true;
 		return;
