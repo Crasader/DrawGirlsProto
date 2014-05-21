@@ -178,6 +178,7 @@ public:
 	KSLabelTTF* m_objInfo;
 	CommonButton* m_modeBtn;
 	CommonButton* m_resetBtn;
+	CommonButton* m_pauseBtn;
 	TouchCancelLayer* m_swLayer;
 	CCSprite* m_guideLine;
 	bool m_isEnabledRemocon;
@@ -207,7 +208,7 @@ public:
 		m_isEnabledRemocon = false;
 		CommonButton* next = CommonButton::create("next", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		next->setFunction([this](CCObject *){
-			if(m_selectedObjNumber>=0){
+				if(m_selectedObjNumber>=0){
 				m_selectedObjNumber++;
 				if(m_selectedObjNumber>=m_objList.size())m_selectedObjNumber=0;
 				CCNode* selectedObj = (CCNode*)m_objList[m_selectedObjNumber].obj;
@@ -255,6 +256,21 @@ public:
 		});
 		
 		exit->setPosition(0,80);
+		
+		m_pauseBtn = CommonButton::create("||", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
+		m_pauseBtn->setFunction([this](CCObject *){
+			if(CCDirector::sharedDirector()->isPaused()){
+				CCDirector::sharedDirector()->resume();
+				//cocos2d::CCDirector::sharedDirector()->startAnimation();
+			}else{
+				CCDirector::sharedDirector()->pause();
+				//cocos2d::CCDirector::sharedDirector()->stopAnimation();
+			}
+			
+		});
+		
+		m_pauseBtn->setPosition(100,80);
+
 		
 		m_modeBtn = CommonButton::create("mode", 13, CCSizeMake(50, 50), CommonButtonOrange, -100000);
 		m_modeBtn->setFunction([this](CCObject *){
@@ -309,7 +325,7 @@ public:
 		remocon->addChild(prev,10);
 		remocon->addChild(exit,10);
 		remocon->addChild(showSetting,10);
-		
+		remocon->addChild(m_pauseBtn,10);
 		
 		remocon->setPosition(240,160);
 		this->addChild(remocon,100);
@@ -345,9 +361,11 @@ public:
 		CCLog("");
 		
 		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
-			CCLog("%s->setPosition(%.1f,%.1f); \t\t\t// dt (%.1f,%.1f)",
-						obj->getStringData().c_str(),obj->getPosition().x,
-						obj->getPosition().x-obj->getPosition().y,m_objList[i].originalData["x"].asFloat(),
+			CCLog("%s->setPosition(ccp(%.1f,%.1f)); \t\t\t// dt (%.1f,%.1f)",
+						obj->getStringData().c_str(),
+						obj->getPosition().x,
+						obj->getPosition().y,
+						obj->getPosition().x-m_objList[i].originalData["x"].asFloat(),
 						obj->getPosition().y-m_objList[i].originalData["y"].asFloat()
 						);
 		if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX() || m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY()){
