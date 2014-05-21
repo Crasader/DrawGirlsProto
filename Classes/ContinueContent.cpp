@@ -240,19 +240,19 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	continue_selector = t_continue;
 	
 	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_case->setContentSize(CCSizeMake(290, 240));
+	back_case->setContentSize(CCSizeMake(290, 230));
 	back_case->setPosition(ccp(0,0));
 	addChild(back_case);
 	
 	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_pupple5.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	back_in->setContentSize(CCSizeMake(260,150));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+15.f));
+	back_in->setContentSize(CCSizeMake(260,130));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+5.f));
 	back_case->addChild(back_in);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(0,100));
-	addChild(title_label);
+	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-25));
+	back_case->addChild(title_label);
 	
 	counting_value = 10*60;
 	
