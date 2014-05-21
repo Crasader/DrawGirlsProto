@@ -3562,6 +3562,7 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
 															   mySGD->is_paused = false;
+															   myUI->stopCounting();
 															   AudioEngine::sharedInstance()->setAppFore();
 															   (t_end->*d_end)();
 																 t_popup->removeFromParent();

@@ -814,23 +814,23 @@ void MapScanner::setTopBottomBlock()
 		if(top_y+block_size.height >= 430)
 		{
 			float sub_value = top_y+block_size.height-430;
-			for(int i=0;i<8;i++) // float 문제때문에
+			for(int i=0;i<10;i++) // float 문제때문에
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, 0, block_size.width, block_size.height-sub_value));
 				t_block->setAnchorPoint(ccp(0,0));
 				t_block->setPosition(ccp(i*block_size.width, top_y+2));
-				t_block->setTag(top_cnt*8+i); // float 문제때문에
+				t_block->setTag(top_cnt*10+i); // float 문제때문에
 				top_block_manager->addChild(t_block);
 			}
 		}
 		else
 		{
-			for(int i=0;i<8;i++) // float 문제때문에
+			for(int i=0;i<10;i++) // float 문제때문에
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture());
 				t_block->setAnchorPoint(ccp(0,0));
 				t_block->setPosition(ccp(i*block_size.width, top_y+2));
-				t_block->setTag(top_cnt*8+i); // float 문제때문에
+				t_block->setTag(top_cnt*10+i); // float 문제때문에
 				top_block_manager->addChild(t_block);
 			}
 		}
@@ -920,23 +920,23 @@ void MapScanner::setTopBottomBlock()
 		if(bottom_y-block_size.height <= 0)
 		{
 			float sub_value = -(bottom_y-block_size.height);
-			for(int i=0;i<8;i++)
+			for(int i=0;i<10;i++)
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture(), CCRectMake(0, 0, block_size.width, block_size.height-sub_value));
 				t_block->setAnchorPoint(ccp(0,1.f));
 				t_block->setPosition(ccp(i*block_size.width, bottom_y-2));
-				t_block->setTag(bottom_cnt*8+i);
+				t_block->setTag(bottom_cnt*10+i);
 				bottom_block_manager->addChild(t_block);
 			}
 		}
 		else
 		{
-			for(int i=0;i<8;i++)
+			for(int i=0;i<10;i++)
 			{
 				CCSprite* t_block = CCSprite::createWithTexture(bottom_block_manager->getTexture());
 				t_block->setAnchorPoint(ccp(0,1.f));
 				t_block->setPosition(ccp(i*block_size.width, bottom_y-2));
-				t_block->setTag(bottom_cnt*8+i);
+				t_block->setTag(bottom_cnt*10+i);
 				bottom_block_manager->addChild(t_block);
 			}
 		}
@@ -1046,8 +1046,8 @@ void MapScanner::removingBlock()
 			is_removed_top_block = true;
 		else
 		{
-			for(int i=0;i<8;i++)
-				top_block_manager->removeChildByTag(remove_block_cnt*8+i);
+			for(int i=0;i<10;i++)
+				top_block_manager->removeChildByTag(remove_block_cnt*10+i);
 		}
 	}
 	if(!is_removed_bottom_block)
@@ -1056,8 +1056,8 @@ void MapScanner::removingBlock()
 			is_removed_bottom_block = true;
 		else
 		{
-			for(int i=0;i<8;i++)
-				bottom_block_manager->removeChildByTag(remove_block_cnt*8+i);
+			for(int i=0;i<10;i++)
+				bottom_block_manager->removeChildByTag(remove_block_cnt*10+i);
 		}
 	}
 
