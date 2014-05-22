@@ -23,7 +23,7 @@ USING_NS_CC_EXT;
 #include "FormSetter.h"
 #include "EasingAction.h"
 #include "StageImgLoader.h"
-
+#include "FormSetter.h"
 enum OnePercentGameZorder
 {
 	kOnePercentGame_Z_gray = 1,
@@ -56,6 +56,7 @@ public:
 	bool init(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha)
 	{
 		CCLayer::init();
+//		startFormSetter(this);
 		setTouchEnabled(true);
 		m_cancelGacha = cancelGacha;
 		m_resultGacha = tryGacha;
@@ -228,6 +229,8 @@ public:
 		
 		CCSprite* girl = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))->getCString());
 		cNode->addChild(girl);
+		girl->setScale(130 / girl->getContentSize().width);
+//		setFormSetter(girl);
 		cNode->setAlphaThreshold(0.1f);
 		tempNode->addChild(cNode, kOnePercentGame_Z_content);
 
