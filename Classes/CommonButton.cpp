@@ -25,7 +25,7 @@ bool CommonButton::init(string title, int fontSize, CCSize size,CommonButtonType
 	m_fontSize=fontSize;
 	m_title=title;
 	this->setAnchorPoint(ccp(0.5f,0.5f));
-	m_btnTitle = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
+	m_btnTitle = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
 	
 	m_btnType = btnType;
 	
@@ -79,7 +79,7 @@ bool CommonButton::init(string title, int fontSize, CCSize size, CCScale9Sprite*
 	m_title=title;
 	this->setAnchorPoint(ccp(0.5f,0.5f));
 	
-	m_btnTitle = CCLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
+	m_btnTitle = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), fontSize);
 	
 	CCLabelTTF* titleNode = CCLabelTTF::create();
 	titleNode->addChild(m_btnTitle);
@@ -263,9 +263,9 @@ void CommonButton::setPrice(PriceType priceType, int price){
 	
 	if(m_priceLbl==NULL){
 		if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
-			m_priceLbl=CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 13);
+			m_priceLbl=KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 13);
 		else
-			m_priceLbl=CCLabelTTF::create(CCString::createWithFormat("%d",m_price)->getCString(), mySGD->getFont().c_str(), 13);
+			m_priceLbl=KSLabelTTF::create(CCString::createWithFormat("%d",m_price)->getCString(), mySGD->getFont().c_str(), 13);
 		
 		if(isEnabled()){
 			this->m_priceLbl->setColor(m_titleColorNomal);
@@ -340,4 +340,16 @@ PriceType CommonButton::getPriceType(){
 
 void CommonButton::setOpacity(float opacity){
 	m_btn->setOpacity(opacity);
+}
+
+KSLabelTTF* CommonButton::getTitleLabel(){
+	return m_btnTitle;
+}
+
+KSLabelTTF* CommonButton::getPriceLabel(){
+	return m_priceLbl;
+}
+
+CCSprite* CommonButton::getPriceSprite(){
+	return m_priceTypeSprite;
 }

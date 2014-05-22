@@ -93,8 +93,10 @@ struct StyledText
 				m_style = i;
 			c++;
 		}
-//		m_text = _list;
-//		m_style = _list[1];
+	}
+	StyledText(const std::string& _style)
+	{
+		m_style = _style;
 	}
 };
 

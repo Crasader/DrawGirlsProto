@@ -15,6 +15,7 @@
 #include "StarGoldData.h"
 #include "KSUtil.h"
 #include "MyLocalization.h"
+#include "KSLabelTTF.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -55,12 +56,12 @@ enum PriceType{
 class CommonButton : public CCNode {
 	CCControlButton* m_btn;
 	std::function<void(CCObject*)> m_func;
-	CCLabelTTF* m_btnTitle;
+	KSLabelTTF* m_btnTitle;
 	CCScale9Sprite* m_btnBack;
 	CommonButtonType m_btnType;
 	int m_price;
 	PriceType m_priceType;
-	CCLabelTTF* m_priceLbl;
+	KSLabelTTF* m_priceLbl;
 	float m_fontSize;
 	string m_title;
 	ccColor3B m_titleColorNomal;
@@ -126,6 +127,9 @@ public:
 		return btn;
 	}
 	
+	static CommonButton* create(CCSprite* sprite);
+	static CommonButton* create(string title, CCSprite* backSprite);
+	
 	bool init(string title, int fontSize, CCSize size,CommonButtonType btnType, int touchPriority);
 	
 	bool init(string title, int fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority);
@@ -150,6 +154,9 @@ public:
 	void setBackgroundTypeForState(CommonButtonType type,CCControlState state);
 	void setTitleColor(ccColor3B color);
 	
+	KSLabelTTF* getTitleLabel();
+	KSLabelTTF* getPriceLabel();
+	CCSprite* getPriceSprite();
 	
 	void setTitleColorForDisable(ccColor3B color);
 	
