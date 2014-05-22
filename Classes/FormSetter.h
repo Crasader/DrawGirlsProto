@@ -19,6 +19,7 @@
 #include <stdio.h>
 #define startFormSetter(obj) FormSetter::get()->start(obj,__FILE__)
 #define setFormSetter(name) name->setStringData(#name);
+#define setFormSetterGuide(filename) FormSetter::get()->setGuideImage(filename);
 /*******************************************************
 오브젝트 배치하기의 슈퍼초 울트라 캡 혁신
  *******************************************************
@@ -181,6 +182,7 @@ public:
 	CommonButton* m_pauseBtn;
 	TouchCancelLayer* m_swLayer;
 	CCSprite* m_guideLine;
+	CCSprite* m_guideImage;
 	bool m_isEnabledRemocon;
 	static FormSetter* get()
 	{
@@ -196,6 +198,7 @@ public:
 	
 	
 	FormSetter(){
+		m_guideImage=nullptr;
 		m_is_sch=false;
 		m_delay = 1.f;
 		m_funcAtReceived = nullptr;
@@ -248,7 +251,7 @@ public:
 			remocon->setVisible(false);
 			m_guideLine->setVisible(false);
 			m_swLayer->setTouchEnabled(false);
-			
+			if(m_guideImage)m_guideImage->setVisible(false);
 			if(m_selectedObjNumber<0)return;
 			
 			logFormSetting();
@@ -278,7 +281,7 @@ public:
 			
 			int mode = m_modeBtn->getTag();
 			mode++;
-			if(mode>3)mode=0;
+			if(mode>4)mode=0;
 			m_modeBtn->setTag(mode);
 			
 			setInfomation();
@@ -372,22 +375,22 @@ public:
 			if(obj->getScaleX()==obj->getScaleY())
 				CCLog("%s->setScale(%.1f); \t\t\t// dt (%.1f,%.1f)",
 							obj->getStringData().c_str(),
-							(int)(obj->getScale()*10)/10.f,
-							(int)(obj->getScale()*10)/10.f-m_objList[i].originalData["sx"].asFloat(),
-							(int)(obj->getScale()*10)/10.f-m_objList[i].originalData["sy"].asFloat()
+							(int)(obj->getScale()*100)/100.f,
+							(int)(obj->getScale()*100)/100.f-m_objList[i].originalData["sx"].asFloat(),
+							(int)(obj->getScale()*100)/100.f-m_objList[i].originalData["sy"].asFloat()
 							);
 			else{
 				if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX())
 					CCLog("%s->setScaleX(%.1f); \t\t\t// dt %.1f",
 								obj->getStringData().c_str(),
-								(int)(obj->getScaleX()*10)/10.f,
-								(int)(obj->getScaleX()*10)/10.f-m_objList[i].originalData["sx"].asFloat()
+								(int)(obj->getScaleX()*100)/100.f,
+								(int)(obj->getScaleX()*100)/100.f-m_objList[i].originalData["sx"].asFloat()
 								);
 				if(m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY())
 					CCLog("%s->setScaleY(%.1f); \t\t\t// dt %.1f",
 								obj->getStringData().c_str(),
-								(int)(obj->getScaleY()*10)/10.f,
-								(int)(obj->getScaleY()*10)/10.f-m_objList[i].originalData["sy"].asFloat()
+								(int)(obj->getScaleY()*100)/100.f,
+								(int)(obj->getScaleY()*100)/100.f-m_objList[i].originalData["sy"].asFloat()
 								);
 			}
 				
@@ -410,6 +413,27 @@ public:
 							);
 		}
 		
+		if(CCNodeRGBA* checkobj = dynamic_cast<CCNodeRGBA*>(obj)){
+			if(m_objList[i].originalData["opacity"].asInt()!=checkobj->getOpacity())
+				CCLog("%s->setOpacity(%d); \t\t\t// dt %d",
+							obj->getStringData().c_str(),
+							checkobj->getOpacity(),
+							checkobj->getOpacity()-m_objList[i].originalData["opacity"].asInt()
+							);
+		}
+		
+	}
+	
+	void setGuideImage(string filename){
+		if(m_guideImage){
+			m_guideImage->removeFromParentAndCleanup(true);
+		}
+		m_guideImage = CCSprite::create(filename.c_str());
+		setFormSetter(m_guideImage);
+		this->addChild(m_guideImage);
+		m_guideImage->setPosition(ccp(240,160));
+		m_guideImage->setOpacity(80);
+		m_guideImage->setVisible(false);
 	}
 	void setEnabledRemocon(bool _is){
 		this->m_isEnabledRemocon=_is;
@@ -465,6 +489,9 @@ public:
 		newobj.originalData["sx"]=obj->getScaleX();
 		newobj.originalData["sy"]=obj->getScaleY();
 		
+		if(CCNodeRGBA* checkobj = dynamic_cast<CCNodeRGBA*>(obj)){
+			newobj.originalData["opacity"]=checkobj->getOpacity();
+		}
 		if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(obj)){
 			newobj.originalData["fontsize"]=checkobj->getFontSize();
 		}
@@ -508,6 +535,7 @@ public:
 				remocon->setVisible(true);
 				m_swLayer->setTouchEnabled(true);
 				m_guideLine->setVisible(true);
+				if(m_guideImage)m_guideImage->setVisible(true);
 				
 				m_objList.clear();
 				findObject(front);
@@ -544,7 +572,7 @@ public:
 			m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getPosition().x,selectedObj->getPosition().y)->getCString());
 		}else if(m_modeBtn->getTag()==1){
 			m_modeBtn->setTitle("scale");
-			m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",(int)(selectedObj->getScaleX()*10)/10.f,(int)(selectedObj->getScaleY()*10)/10.f)->getCString());
+			m_objInfo->setString(CCString::createWithFormat("scaleX:%f\nscaleY:%f",(int)(selectedObj->getScaleX()*100)/100.f,(int)(selectedObj->getScaleY()*100)/100.f)->getCString());
 		}else if(m_modeBtn->getTag()==2){
 			m_modeBtn->setTitle("size");
 			m_objInfo->setString(CCString::createWithFormat("width:%f\nheight:%f",selectedObj->getContentSize().width,selectedObj->getContentSize().height)->getCString());
@@ -552,6 +580,13 @@ public:
 			m_modeBtn->setTitle("fotnsize");
 			if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(selectedObj)){
 				m_objInfo->setString(CCString::createWithFormat("size:%f",checkobj->getFontSize())->getCString());
+			}else{
+				m_objInfo->setString("do not support");
+			}
+		}else if(m_modeBtn->getTag()==4){
+			m_modeBtn->setTitle("opacity");
+			if(CCNodeRGBA* checkobj = dynamic_cast<CCNodeRGBA*>(selectedObj)){
+				m_objInfo->setString(CCString::createWithFormat("opacity:%d",checkobj->getOpacity())->getCString());
 			}else{
 				m_objInfo->setString("do not support");
 			}
@@ -594,8 +629,8 @@ public:
 				selectedObj->setPosition(ccpAdd(selectedObj->getPosition(),dtPos));
 			}else if(m_modeBtn->getTag()==1){
 				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
-				dtPos.x = ((int)(dtPos.x*10*10)/(int)10)/(double)10;
-				dtPos.y = ((int)(dtPos.y*10*10)/(int)10)/(double)10;
+				dtPos.x = ((int)(dtPos.x*10*10)/(int)10)/(double)500;
+				dtPos.y = ((int)(dtPos.y*10*10)/(int)10)/(double)500;
 				selectedObj->setScaleX(selectedObj->getScaleX()+dtPos.x);
 				selectedObj->setScaleY(selectedObj->getScaleY()+dtPos.y);
 			}else if(m_modeBtn->getTag()==2){
@@ -609,6 +644,14 @@ public:
 					CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
 					dtPos.y = (int)(dtPos.y*10)/10.f;
 					checkobj->setFontSize(checkobj->getFontSize()+dtPos.y);
+				}
+			}else if(m_modeBtn->getTag()==4){
+				if(CCNodeRGBA* checkobj = dynamic_cast<CCNodeRGBA*>(selectedObj)){
+					CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),1.f);
+					int newopa = checkobj->getOpacity()+(int)dtPos.y;
+					if(newopa>255)newopa=255;
+					if(newopa<0)newopa=0;
+					checkobj->setOpacity(newopa);
 				}
 			}
 			

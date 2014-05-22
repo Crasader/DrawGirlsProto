@@ -79,6 +79,8 @@ bool StartSettingPopup::init()
 	
 	setMain();
 	
+	startFormSetter(this);
+	setFormSetterGuide("guide1.png");
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	
 	if(recent_step == kTutorialFlowStep_startClick)
@@ -191,6 +193,7 @@ void StartSettingPopup::setMain()
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 		stage_number_label->setColor(ccc3(255, 170, 20));
 		stage_number_label->setPosition(ccp(65, 256));
+		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
 		
 		is_before_selected_event_stage = true;
@@ -201,6 +204,7 @@ void StartSettingPopup::setMain()
 		stage_number = mySD->getSilType();
 		
 		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		setFormSetter(piece_number_label);
 		piece_number_label->setColor(ccc3(255, 170, 20));
 		piece_number_label->setPosition(ccp(65, 256));
 		main_case->addChild(piece_number_label);
@@ -217,6 +221,7 @@ void StartSettingPopup::setMain()
 	//	main_case->addChild(temp_mission);
 	
 	LabelTTFMarquee* mission_label = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, mySD->getConditionContent(stage_number).c_str());
+	setFormSetter(mission_label);
 	mission_label->setAnchorPoint(ccp(0.5,0.5));
 	mission_label->setPosition(mission_position);
 	main_case->addChild(mission_label);
@@ -235,6 +240,7 @@ void StartSettingPopup::setMain()
 	}
 	
 	CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+	setFormSetter(mission_img);
 	mission_img->setContentSize(CCSizeMake(65, 22));
 	mission_img->setPosition(ccp(198,255));
 	main_case->addChild(mission_img);
@@ -249,6 +255,7 @@ void StartSettingPopup::setMain()
 	
 	
 	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);
+	setFormSetter(back_button);
 	back_button->setPosition(ccp(main_case->getContentSize().width-28, main_case->getContentSize().height+40-65));
 	back_button->setFunction([=](CCObject* sender)
 							 {
@@ -464,6 +471,8 @@ void StartSettingPopup::setMain()
 	if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
 	{
 		gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", selected_gacha_item)->getCString());
+
+		setFormSetter(gacha_item);
 		gacha_item->setPosition(ccp(422,193));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
@@ -474,6 +483,8 @@ void StartSettingPopup::setMain()
 	else
 	{
 		gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
+
+		setFormSetter(gacha_item);
 		gacha_item->setPosition(ccp(422,193));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
@@ -487,33 +498,41 @@ void StartSettingPopup::setMain()
 	{
 		item_gacha_menu->setEnabled(false);
 		CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
+
 		locked_img->setPosition(ccp(422,193));
+		setFormSetter(locked_img);
 		main_case->addChild(locked_img, kStartSettingPopupZorder_main);
 	}
 	
 	CCScale9Sprite* script_box = CCScale9Sprite::create("startsetting_scriptbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	script_box->setContentSize(CCSizeMake(282, 64));
+	
 	script_box->setPosition(ccp(317,127));
+	setFormSetter(script_box);
 	main_case->addChild(script_box);
 	
 	
 	CCSprite* n_start = CCSprite::create("startsetting_start.png");
-	
+	setFormSetter(n_start);
 	n_start_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
+	setFormSetter(n_start_label2);
 	n_start_label2->setColor(ccWHITE);
 	n_start_label2->setOpacity(100);
 	n_start_label2->setPosition(ccp(147.5f,39.5f));
 	n_start->addChild(n_start_label2);
 	
 	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
+	setFormSetter(n_start_label);
 	n_start_label->setColor(ccc3(47, 30, 6));
 	n_start_label->setPosition(ccp(147.5f,40.5f));
 	n_start->addChild(n_start_label);
 	
 	
 	CCSprite* s_start = CCSprite::create("startsetting_start.png");
+	setFormSetter(s_start);
 	s_start->setColor(ccGRAY);
 	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
+	setFormSetter(s_start_label);
 	s_start_label->setColor(ccc3(47, 30, 6));
 	s_start_label->setPosition(ccp(147.5f,40.5f));
 	s_start->addChild(s_start_label);
@@ -528,10 +547,12 @@ void StartSettingPopup::setMain()
 	
 	
 	CCSprite* level_case = CCSprite::create("startsetting_levelbox.png");
+	setFormSetter(level_case);
 	level_case->setPosition(ccp(83,95));
 	main_case->addChild(level_case);
 	
 	cumber_node = CCNode::create();
+	setFormSetter(cumber_node);
 	cumber_node->setPosition(ccp(83,158));
 	main_case->addChild(cumber_node);
 	
@@ -568,42 +589,50 @@ void StartSettingPopup::setMain()
 	}
 	
 	missile_data_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+	setFormSetter(missile_data_level);
 	missile_data_level->setPosition(ccp(53,95));
 	main_case->addChild(missile_data_level);
 	
 	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	setFormSetter(missile_data_power);
 	missile_data_power->setPosition(ccp(111,95));
 	main_case->addChild(missile_data_power);
 	
 	if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 	{
 		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
+		setFormSetter(n_upgrade);
 		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 15);
+		setFormSetter(n_level);
 		n_level->setColor(ccc3(50, 25, 0));
 		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
 		
 		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 		s_upgrade->setColor(ccGRAY);
+		setFormSetter(s_upgrade);
 		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 15);
+		setFormSetter(s_level);
 		s_level->setColor(ccc3(50, 25, 0));
 		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
 		
 		
 		CCLabelTTF* n_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 15);
+		setFormSetter(n_price_label);
 		n_price_label->setColor(ccc3(50, 25, 0));
 		n_price_label->setPosition(ccp(70,22));
 		n_upgrade->addChild(n_price_label);
 		
 		CCLabelTTF* s_price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 15);
+		setFormSetter(s_price_label);
 		s_price_label->setColor(ccc3(50, 25, 0));
 		s_price_label->setPosition(ccp(70,22));
 		s_upgrade->addChild(s_price_label);
 		
 		
 		CCMenuItem* upgrade_item = CCMenuItemSprite::create(n_upgrade, s_upgrade, this, menu_selector(StartSettingPopup::upgradeAction));
-		
+		setFormSetter(upgrade_item);
 		upgrade_menu = CCMenu::createWithItem(upgrade_item);
 		upgrade_menu->setPosition(ccp(83,46));
 		main_case->addChild(upgrade_menu);
@@ -614,14 +643,18 @@ void StartSettingPopup::setMain()
 	else
 	{
 		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
+		setFormSetter(n_upgrade);
 		CCLabelTTF* n_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 15);
+		setFormSetter(n_level);
 		n_level->setColor(ccc3(50, 25, 0));
 		n_level->setPosition(ccp(70,47));
 		n_upgrade->addChild(n_level);
 		
 		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
+		setFormSetter(s_upgrade);
 		s_upgrade->setColor(ccGRAY);
 		CCLabelTTF* s_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 15);
+		setFormSetter(s_level);
 		s_level->setColor(ccc3(50, 25, 0));
 		s_level->setPosition(ccp(70,47));
 		s_upgrade->addChild(s_level);
@@ -630,6 +663,7 @@ void StartSettingPopup::setMain()
 		if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
 		{
 			CCSprite* n_pass_ticket = CCSprite::create("pass_ticket3.png");
+			
 			n_pass_ticket->setPosition(ccp(28,23.f));
 			n_upgrade->addChild(n_pass_ticket);
 			KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 18);
@@ -690,6 +724,7 @@ void StartSettingPopup::setMain()
 		option_ment = myLoc->getLocalForKey(kMyLocalKey_notUseItem);
 	
 	option_label = CCLabelTTF::create(option_ment.c_str(), mySGD->getFont().c_str(), 11, option_size.size, kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	setFormSetter(option_label);
 	option_label->setAnchorPoint(ccp(0.5,0.5));
 	option_label->setPosition(ccp(317,127));
 	main_case->addChild(option_label);
@@ -760,6 +795,7 @@ void StartSettingPopup::gachaMenuCreate()
 																		   CCPoint title_position = ccp(188, 150);
 																		   
 																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 14, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+																			 setFormSetter(item_title_label);
 																		   item_title_label->setAnchorPoint(ccp(0,1));
 																		   item_title_label->setPosition(title_position);
 																		   item_title_label->setColor(ccORANGE);
@@ -769,19 +805,19 @@ void StartSettingPopup::gachaMenuCreate()
 																		   CCPoint option_position = ccp(188, 123);
 																		   
 																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+																			 setFormSetter(option_label);
 																		   option_label->setAnchorPoint(ccp(0,1));
 																		   option_label->setPosition(option_position);
 																		   main_case->addChild(option_label);
 																		   
 																		   if(!buy_button)
 																			{
-																				buy_button = CommonButton::create("", CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
+																				buy_button = CommonButton::create("", 13, CCSizeMake(98, 55), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 95, 55), CCRectMake(54, 27, 2, 1)), touch_priority);
+																				setFormSetter(buy_button);
 																				buy_button->setTitleColor(ccc3(50,20,0));
-																				buy_button->setTitleSize(13);
-																				buy_button->setTouchPriority(touch_priority);
-																				buy_button->setSize(CCSizeMake(110, 55));
-																				buy_button->setPosition(415,117);
+																				buy_button->setPosition(ccp(405.5,116.5));
 																				main_case->addChild(buy_button);
+																
 																			}
 																		   
 																		   if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
@@ -812,6 +848,7 @@ void StartSettingPopup::gachaMenuCreate()
 	
 	item_gacha_menu = CCMenuLambda::createWithItem(gacha_item_item);
 	item_gacha_menu->setPosition(ccp(422,193));
+	setFormSetter(item_gacha_menu);
 	main_case->addChild(item_gacha_menu);
 	
 	item_gacha_menu->setTouchPriority(touch_priority);
@@ -1368,6 +1405,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		//		main_case->addChild(title_rect);
 		
 		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 14, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		setFormSetter(item_title_label);
 		item_title_label->setAnchorPoint(ccp(0,1));
 		item_title_label->setPosition(title_position);
 		item_title_label->setColor(ccORANGE);
@@ -1383,6 +1421,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		//		main_case->addChild(option_rect);
 		
 		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 11, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		setFormSetter(option_label);
 		option_label->setAnchorPoint(ccp(0,1));
 		option_label->setPosition(option_position);
 		main_case->addChild(option_label);
@@ -1398,13 +1437,12 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		if(!buy_button)
 		{
-			buy_button = CommonButton::create("", CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
+			buy_button = CommonButton::create("", 13, CCSizeMake(98, 55), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 95, 55), CCRectMake(54, 27, 2, 1)), touch_priority);
+			setFormSetter(buy_button);
 			buy_button->setTitleColor(ccc3(50,20,0));
-			buy_button->setTitleSize(13);
-			buy_button->setTouchPriority(touch_priority);
-			buy_button->setSize(CCSizeMake(110, 55));
-			buy_button->setPosition(415,117);
+			buy_button->setPosition(ccp(405.5,116.5));
 			main_case->addChild(buy_button);
+			
 		}
 		
 		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));
