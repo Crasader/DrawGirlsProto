@@ -79,6 +79,9 @@ private:
 	
 	void endShow()
 	{
+		counting_label->setOpacity(0);
+		counting_label->setVisible(true);
+		
 		is_menu_enable = true;
 		schedule(schedule_selector(ContinueContent::countingSchedule));
 	}

@@ -1548,7 +1548,7 @@ void PlayTutorial::nextStep()
 						  time_label->runAction(t_repeat2);
 						  
 						  CCSprite* time_case = CCSprite::create(CCString::createWithFormat("play_tutorial_time_guide_%s.png", myLoc->getLocalCode()->getCString())->getCString());
-						  time_case->setPosition(ccp(240,30));
+						  time_case->setPosition(ccp(240,37));
 						  addChild(time_case, 4);
 						  
 						  CCSequence* t_seq3 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
