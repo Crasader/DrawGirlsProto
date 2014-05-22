@@ -226,7 +226,7 @@ public:
 		if(mySGD->is_exchanged)
 			t_grade = 4;
 		
-		CCSprite* girl = mySIL->getLoadedImg(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))->getCString());
+		CCSprite* girl = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))->getCString());
 		cNode->addChild(girl);
 		cNode->setAlphaThreshold(0.1f);
 		tempNode->addChild(cNode, kOnePercentGame_Z_content);
