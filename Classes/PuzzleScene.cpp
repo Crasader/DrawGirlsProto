@@ -1531,12 +1531,12 @@ void PuzzleScene::openSettingPopup()
 	
 	mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 	
-	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
-	addChild(t_popup, kPuzzleZorder_popup);
-	
-//	StartSettingPopup* t_popup = StartSettingPopup::create();
-//	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+//	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
 //	addChild(t_popup, kPuzzleZorder_popup);
+	
+	StartSettingPopup* t_popup = StartSettingPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	addChild(t_popup, kPuzzleZorder_popup);
 }
 
 void PuzzleScene::mailPopupClose()
