@@ -197,25 +197,29 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 		m_bo->setSelectedIndex(0);
 	};
 	
-	m_ba = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
-		allInActiver();
-		m_ba->setSelectedIndex(1);
-	}, CCMenuItemImageLambda::create("ba_inactive.png", "ba_inactive.png", nullptr),
-		CCMenuItemImageLambda::create("ba_active.png", "ba_active.png", nullptr));
+	m_ba = CCMenuItemToggleLambda::createWithTarget(
+													[=](CCObject* obj)
+													{
+														allInActiver();
+														m_ba->setSelectedIndex(1);
+													},
+													CCMenuItemImageLambda::create("ba_inactive.png", "ba_inactive.png", nullptr),
+													CCMenuItemImageLambda::create("ba_active.png", "ba_active.png", nullptr)
+												,NULL);
 	gababo->addChild(m_ba, 1);
 
 	m_ga = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
 		allInActiver();
 		m_ga->setSelectedIndex(1);
 	}, CCMenuItemImageLambda::create("ga_inactive.png", "ga_inactive.png", nullptr),
-		CCMenuItemImageLambda::create("ga_active.png", "ga_active.png", nullptr));
+		CCMenuItemImageLambda::create("ga_active.png", "ga_active.png", nullptr), NULL);
 	gababo->addChild(m_ga, 1);
 
 	m_bo = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
 		allInActiver();
 		m_bo->setSelectedIndex(1);
 	}, CCMenuItemImageLambda::create("bo_inactive.png", "bo_inactive.png", nullptr),
-		CCMenuItemImageLambda::create("bo_active.png", "bo_active.png", nullptr));
+		CCMenuItemImageLambda::create("bo_active.png", "bo_active.png", nullptr), NULL);
 	gababo->addChild(m_bo, 1);
 
 	initAnimation();

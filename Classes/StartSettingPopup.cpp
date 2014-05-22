@@ -812,10 +812,10 @@ void StartSettingPopup::gachaMenuCreate()
 																		   
 																		   if(!buy_button)
 																			{
-																				buy_button = CommonButton::create("", 13, CCSizeMake(98, 55), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 95, 55), CCRectMake(54, 27, 2, 1)), touch_priority);
+																				buy_button = CommonButton::create("", 15, CCSizeMake(98, 55), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 95, 55), CCRectMake(54, 27, 2, 1)), touch_priority);
 																				setFormSetter(buy_button);
 																				buy_button->setTitleColor(ccc3(50,20,0));
-																				buy_button->setPosition(ccp(405.5,116.5));
+																				buy_button->setPosition(ccp(405.5,126.5));
 																				main_case->addChild(buy_button);
 																
 																			}
@@ -1437,10 +1437,10 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		if(!buy_button)
 		{
-			buy_button = CommonButton::create("", 13, CCSizeMake(98, 55), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 95, 55), CCRectMake(54, 27, 2, 1)), touch_priority);
+			buy_button = CommonButton::create("", 15, CCSizeMake(98, 55), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 95, 55), CCRectMake(54, 27, 2, 1)), touch_priority);
 			setFormSetter(buy_button);
 			buy_button->setTitleColor(ccc3(50,20,0));
-			buy_button->setPosition(ccp(405.5,116.5));
+			buy_button->setPosition(ccp(405.5,126.5));
 			main_case->addChild(buy_button);
 			
 		}

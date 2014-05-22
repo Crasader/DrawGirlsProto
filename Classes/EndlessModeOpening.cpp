@@ -111,6 +111,9 @@ void EndlessModeOpening::setMain()
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  is_menu_enable = false;
+								  
+								  myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+								  
 								  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
 																		 {
 																			 gray->setOpacity(255*t);

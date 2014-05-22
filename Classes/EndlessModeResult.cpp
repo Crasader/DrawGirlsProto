@@ -118,6 +118,13 @@ void EndlessModeResult::setMain()
 	left_star_back->setPosition(ccp(left_back->getContentSize().width/2.f, 154));
 	left_back->addChild(left_star_back);
 	
+	for(int i=0;i<4;i++)
+	{
+		CCSprite* t_star = CCSprite::create("ending_star_empty.png");
+		t_star->setPosition(ccp(30+i*48,left_star_back->getContentSize().height/2.f));
+		left_star_back->addChild(t_star);
+	}
+	
 	int star_count = mySGD->getStageGrade();
 	for(int i=0;i<star_count;i++)
 	{
@@ -535,6 +542,13 @@ void EndlessModeResult::setMain()
 	right_star_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 60));
 	right_star_back->setPosition(ccp(right_back->getContentSize().width/2.f, 154));
 	right_back->addChild(right_star_back);
+	
+	for(int i=0;i<4;i++)
+	{
+		CCSprite* t_star = CCSprite::create("ending_star_empty.png");
+		t_star->setPosition(ccp(30+i*48,right_star_back->getContentSize().height/2.f));
+		right_star_back->addChild(t_star);
+	}
 	
 	int right_star_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_clearGrade), Json::Value()).asInt(); // 상대방 별 갯수
 	for(int i=0;i<right_star_count;i++)

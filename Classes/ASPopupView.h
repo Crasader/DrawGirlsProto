@@ -67,8 +67,8 @@ public:
 	}
 	
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment);
-	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func);
-	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero);
 
 	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func, function<void()> cancel_func = nullptr);
 	

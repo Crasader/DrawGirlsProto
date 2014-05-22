@@ -310,7 +310,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
 	ko->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
-	ko->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ko->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	ko->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	ko->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	ko->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -485,6 +485,10 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	ko->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
 	ko->setObject(CCString::create("일"), kMyLocalKey_attendanceDay);
+	
+	ko->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
+	ko->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	ko->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -876,7 +880,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
 	
-	en->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	en->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	en->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	en->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	en->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -1042,6 +1046,10 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	en->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
 	en->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
+	
+	en->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
+	en->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	en->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1444,7 +1452,7 @@ void MyLocal::initLocal()
 	
 	
 	
-	ja->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ja->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	ja->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	ja->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	ja->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -1622,6 +1630,10 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	ja->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
 	ja->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
+	
+	ja->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
+	ja->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	ja->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

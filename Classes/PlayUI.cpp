@@ -803,7 +803,7 @@ void AreaScroll::showArrow ()
 	for(int i=0;i<8;i++)
 	{
 		CCSprite* t_down = CCSprite::create("area_scroll_down.png");
-		t_down->setPosition(ccp(65+i*50, myDSH->ui_center_y-18));
+		t_down->setPosition(ccp(65+i*50, myDSH->ui_center_y-30));
 		t_down->setOpacity(0);
 		addChild(t_down);
 		
@@ -815,7 +815,7 @@ void AreaScroll::showArrow ()
 		
 		
 		CCSprite* t_up = CCSprite::create("area_scroll_up.png");
-		t_up->setPosition(ccp(65+i*50, myDSH->ui_center_y+18));
+		t_up->setPosition(ccp(65+i*50, myDSH->ui_center_y+30));
 		t_up->setOpacity(0);
 		addChild(t_up);
 		
@@ -849,7 +849,7 @@ void ChangeCard::startMyAction()
 }
 void ChangeCard::myInit ()
 {
-	setPosition(ccp(240,myDSH->ui_top*0.67f));
+	setPosition(ccp(240,myDSH->ui_center_y));
 	
 	schedule(schedule_selector(ChangeCard::startMyAction));
 }
@@ -1928,6 +1928,7 @@ void PlayUI::lifeBonus ()
 	}
 	else
 	{
+		CCLOG("keep percentage2 : %.4f", keep_percentage.getV());
 		int grade_value = 1;
 		if(is_exchanged && keep_percentage.getV() >= 1.f)	grade_value = 4;
 		else if(keep_percentage.getV() >= 1.f)				grade_value = 3;
@@ -2045,6 +2046,8 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 	
 	if(jack_life > 0)
 	{
+		CCLOG("keep percentage : %.4f", keep_percentage.getV());
+		keep_percentage = t_percent;
 		createBonusScore();
 	}
 	else

@@ -547,7 +547,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessCheckGiveup,
 	kMyLocalKey_attendanceTitle,
 	kMyLocalKey_attendanceContent,
-	kMyLocalKey_attendanceDay
+	kMyLocalKey_attendanceDay,
+	kMyLocalKey_buyMorphingTitle,
+	kMyLocalKey_buyMorphingContent,
+	kMyLocalKey_buyMorphingBuy
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()
