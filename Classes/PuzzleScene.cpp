@@ -1352,8 +1352,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 		
 		if(tag == kPuzzleMenuTag_cancel)
 		{
-//			showSuccessPuzzleEffect();
-			startBacking();
+			showSuccessPuzzleEffect();
+//			startBacking();
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
@@ -1531,12 +1531,12 @@ void PuzzleScene::openSettingPopup()
 	
 	mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 	
-<<<<<<< HEAD
-//	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
-//	addChild(t_popup, kPuzzleZorder_popup);
-	
-=======
->>>>>>> refs/remotes/origin/standAlone
+//<<<<<<< HEAD
+////	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
+////	addChild(t_popup, kPuzzleZorder_popup);
+//	
+//=======
+//>>>>>>> refs/remotes/origin/standAlone
 	StartSettingPopup* t_popup = StartSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 	addChild(t_popup, kPuzzleZorder_popup);
