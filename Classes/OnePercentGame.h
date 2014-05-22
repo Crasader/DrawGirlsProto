@@ -22,6 +22,8 @@ USING_NS_CC_EXT;
 #include <boost/format.hpp>
 #include "FormSetter.h"
 #include "EasingAction.h"
+#include "StageImgLoader.h"
+
 enum OnePercentGameZorder
 {
 	kOnePercentGame_Z_gray = 1,
@@ -219,7 +221,12 @@ public:
 		CCNode* tempNode = CCNode::create();
 		CCClippingNode* cNode = CCClippingNode::create();
 		cNode->setStencil(CCSprite::create("one_percent_gacha_color.png"));
-		CCSprite* girl = CCSprite::create("ga1.png");
+		
+		int t_grade = 3;
+		if(mySGD->is_exchanged)
+			t_grade = 4;
+		
+		CCSprite* girl = mySIL->getLoadedImg(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))->getCString());
 		cNode->addChild(girl);
 		cNode->setAlphaThreshold(0.1f);
 		tempNode->addChild(cNode, kOnePercentGame_Z_content);
