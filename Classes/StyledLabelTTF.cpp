@@ -84,22 +84,35 @@ void StyledLabelTTF::updateTexture()
 		}
 		else
 		{
-			KSLabelTTF* ttf = KSLabelTTF::create(st.m_text.c_str(), jsonStyle.get("font", "").asString().c_str(), jsonStyle.get("size", 12.f).asFloat());
-			float strokeSize = jsonStyle.get("strokesize", 0.f).asFloat();
-			unsigned long strokeColor = jsonStyle.get("strokecolor", 0).asUInt();
-			if(strokeSize > 0.f)
+			if(st.m_text != "")
 			{
-				ttf->enableStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
+				KSLabelTTF* ttf = KSLabelTTF::create(st.m_text.c_str(), jsonStyle.get("font", "").asString().c_str(), jsonStyle.get("size", 12.f).asFloat());
+				float strokeSize = jsonStyle.get("strokesize", 0.f).asFloat();
+				unsigned long strokeColor = jsonStyle.get("strokecolor", 0).asUInt();
+				if(strokeSize > 0.f)
+				{
+					ttf->enableStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
+				}
+				m_oneLineContainer->addChild(ttf);
+				ttf->setAnchorPoint(ccp(0.f, 0.5f));
+				ttf->setPosition(ccp(m_currentPosition, m_currentLinePosition));
+				unsigned long fillColor = jsonStyle.get("fillcolor", 0).asUInt();
+				ttf->setColor(ccc3(getRed(fillColor), getGreen(fillColor), getBlue(fillColor)));
+				ttf->setTag(jsonStyle.get("tag", 0).asInt());
+				m_currentPosition += ttf->getContentSize().width;
+				m_oneLineSize += ttf->getContentSize().width;
 			}
-			m_oneLineContainer->addChild(ttf);
-			ttf->setAnchorPoint(ccp(0.f, 0.5f));
-			ttf->setPosition(ccp(m_currentPosition, m_currentLinePosition));
-			unsigned long fillColor = jsonStyle.get("fillcolor", 0).asUInt();
-			ttf->setColor(ccc3(getRed(fillColor), getGreen(fillColor), getBlue(fillColor)));
-			ttf->setTag(jsonStyle.get("tag", 0).asInt());
-			m_currentPosition += ttf->getContentSize().width;
-			m_oneLineSize += ttf->getContentSize().width;
-			
+			else
+			{
+				CCSprite* sprite = CCSprite::create(jsonStyle["img"].asString().c_str());
+				m_oneLineContainer->addChild(sprite);
+				sprite->setAnchorPoint(ccp(0.f, 0.5f));
+				sprite->setPosition(ccp(m_currentPosition, m_currentLinePosition));
+				
+				m_currentPosition += sprite->getContentSize().width;
+				m_oneLineSize += sprite->getContentSize().width;
+			}
+						
 			
 		}
 		
