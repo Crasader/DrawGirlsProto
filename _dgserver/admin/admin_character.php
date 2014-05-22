@@ -7,7 +7,7 @@ include "header.php";
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>
-			<th field="name" viewer='{"type":"text"}' editor='{"type":"text"}'>name</th>
+			<th field="name" viewer='{"type":"text"}'  editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}'>name</th>
 			<th field="sale" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>sale</th>
 			<th field="purchaseInfo" viewer='{"type":"json"}' editor='{"type":"dictionary","element":
 			[
@@ -36,7 +36,7 @@ include "header.php";
 				{"field":"size","type":"text","datatype":"int"}	
 			]
 			}'>resourceInfo</th>
-			<th field="comment" viewer='{"type":"text"}' editor='{"type":"textarea"}'>comment</th>
+			<th field="comment" viewer='{"type":"text"}'  editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}'>comment</th>
 			<th manage="delete update insert">manage</th>
 		</tr>
 	</thead>

@@ -33,7 +33,7 @@ USING_NS_CC;
 #define t_tta 0xD9
 #define LZZ_INLINE inline
 class KSLabelTTF;
-class ComboView : public CCSprite
+class ComboView : public CCNode
 {
 public:
 	static ComboView * create (int combo);
@@ -41,7 +41,7 @@ public:
 	void setPercentage (float t_percent);
 private:
 	int hide_frame;
-	KSLabelTTF * combo_label;
+	CCLabelBMFont * combo_label;
 	CCSprite* combo_str;
 //	CCProgressTimer * combo_timer;
 	void myInit (int combo);
@@ -147,7 +147,7 @@ private:
 	void selfRemove ();
 	void myInit (float t_gp, bool is_item);
 };
-class TakeSpeedUp : public KSLabelTTF
+class TakeSpeedUp : public CCNode
 {
 public:
 	static TakeSpeedUp * create (int t_step, std::function<void()> t_end_func);

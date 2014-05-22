@@ -234,21 +234,31 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
 		
 		
-		nick_back = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-		nick_back->setContentSize(CCSizeMake(290,160));
+		nick_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));// CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		nick_back->setContentSize(CCSizeMake(270,150));
 		nick_back->setPosition(ccp(240,220));
 //nick_back->setScale(0)
 		addChild(nick_back,100);
-		
 
-		CCScale9Sprite* t_back = CCScale9Sprite::create("nickname_box.png");
-		t_back->setInsetBottom(16);
-		t_back->setInsetTop(34-16*2);
-		t_back->setInsetLeft(13);
-		t_back->setInsetRight(34-13*2);
+		CCScale9Sprite* flag_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		flag_back->setContentSize(CCSizeMake(240, 40));
+		flag_back->setPosition(ccp(nick_back->getContentSize().width/2.f,76));
+		nick_back->addChild(flag_back);
+
+		CCScale9Sprite* nick_case = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+		nick_case->setContentSize(CCSizeMake(236,35));
+		nick_case->setPosition(ccp(nick_back->getContentSize().width/2.f,35));
+		nick_back->addChild(nick_case);
 		
-		input_text = CCEditBox::create(CCSizeMake(160, 30), t_back);
-		input_text->setPosition(ccp(107,38));
+		CCScale9Sprite* t_back = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+		t_back->setOpacity(0);
+//		t_back->setInsetBottom(16);
+//		t_back->setInsetTop(34-16*2);
+//		t_back->setInsetLeft(13);
+//		t_back->setInsetRight(34-13*2);
+		
+		input_text = CCEditBox::create(CCSizeMake(160, 35), t_back);
+		input_text->setPosition(ccp(110,35));
 		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
 		input_text->setFont(mySGD->getFont().c_str(), 15);
@@ -258,12 +268,12 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		//FormSetter::get()->addObject("t1", input_text);
 		
 		flag = FlagSelector::create();
-		flag->setPosition(43,60);
+		flag->setPosition(35,60);
 		nick_back->addChild(flag,100000);
 		//FormSetter::get()->addObject("t2", flag);
 		
-		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(78, 40), CommonButtonLightPupple, kCCMenuHandlerPriority);
-		ok_menu->setPosition(ccp(227,38));
+		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(60, 35), CCScale9Sprite::create("nickname_ok.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)), kCCMenuHandlerPriority);
+		ok_menu->setPosition(ccp(221,35));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
 								 CCNode* t_node = CCNode::create();
@@ -326,6 +336,10 @@ void TitleRenewalScene::successLogin()
 	
 	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
+	
+	Json::Value attendance_param;
+	attendance_param["memberID"] = myHSP->getMemberID();
+	command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
 	
 	Json::Value achieve_param;
 	achieve_param["memberID"] = myHSP->getSocialID();
@@ -679,6 +693,24 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 	{
 		is_receive_fail = true;
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultCheckAttendanceEvent(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->initAttendance(result_data);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value attendance_param;
+		attendance_param["memberID"] = myHSP->getMemberID();
+		command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
 	}
 	
 	receive_cnt--;

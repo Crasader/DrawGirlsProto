@@ -46,6 +46,7 @@ void TouchSuctionLayer::myInit(int t_touch_priority)
 	delegate_touch_began = NULL;
 	is_setted_not_swallow_rect = false;
 	is_setted_swallow_rect = false;
+	is_on_touch_began_func = false;
 	
 	swallow_ment = "touch swallow : TouchSuctionLayer";
 	
@@ -90,6 +91,9 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 			(target_touch_began->*delegate_touch_began)();
 		else
 			CCLOG("%s : %d", swallow_ment.c_str(), touch_priority);
+		
+		if(is_on_touch_began_func)
+			touch_began_func();
 	}
 	return true;
 }

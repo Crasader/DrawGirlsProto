@@ -38,6 +38,7 @@
 #include "ShopPopup.h"
 #include "OnePercentGame.h"
 #include "ControlTipContent.h"
+#include "EndlessStartContent.h"
 
 //#include "ScreenSide.h"
 
@@ -603,6 +604,18 @@ void Maingame::finalSetting()
 		
 		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 		{
+			CCScale9Sprite* replay_thumb_case = CCScale9Sprite::create("minimap_back.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
+			replay_thumb_case->setContentSize(CCSizeMake(320*thumb_scale, 430*thumb_scale));
+			replay_thumb_case->setPosition(ccp(480-40,myDSH->ui_center_y));
+			replay_all_node->addChild(replay_thumb_case);
+			
+			replay_sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
+			int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+			replay_sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)*0.7f);
+			replay_sil_thumb->setScale(thumb_scale);
+			replay_sil_thumb->setPosition(ccp(480-40,myDSH->ui_center_y));
+			replay_all_node->addChild(replay_sil_thumb, -1);
+			
 			replay_thumb_texture = CCRenderTexture::create(320, 430);
 			replay_thumb_texture->setScale(thumb_scale);
 			replay_thumb_texture->setPosition(ccp(480-40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
@@ -611,23 +624,23 @@ void Maingame::finalSetting()
 			myGD->V_I["Main_refreshReplayThumb"] = std::bind(&Maingame::refreshReplayThumb, this, _1);
 			
 			
-			CCSprite* replay_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
-			replay_case_top->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215*thumb_scale+1)));
-			replay_all_node->addChild(replay_case_top);
-			
-			CCSprite* replay_case_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
-			replay_case_down->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215*thumb_scale-1)));
-			replay_all_node->addChild(replay_case_down);
-			
-			CCSprite* replay_case_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
-			replay_case_left->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(-160*thumb_scale-1,0)));
-			replay_all_node->addChild(replay_case_left);
-			
-			CCSprite* replay_case_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
-			replay_case_right->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(160*thumb_scale+1,0)));
-			replay_all_node->addChild(replay_case_right);
-			
-			
+//			CCSprite* replay_case_top = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+//			replay_case_top->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215*thumb_scale+1)));
+//			replay_all_node->addChild(replay_case_top);
+//			
+//			CCSprite* replay_case_down = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 320*thumb_scale + 2, 1));
+//			replay_case_down->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215*thumb_scale-1)));
+//			replay_all_node->addChild(replay_case_down);
+//			
+//			CCSprite* replay_case_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+//			replay_case_left->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(-160*thumb_scale-1,0)));
+//			replay_all_node->addChild(replay_case_left);
+//			
+//			CCSprite* replay_case_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 430*thumb_scale + 2));
+//			replay_case_right->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(160*thumb_scale+1,0)));
+//			replay_all_node->addChild(replay_case_right);
+//			
+//			
 //			replay_boss = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 6, 6));
 //			replay_boss->setColor(ccRED);
 //			replay_boss->setVisible(false);
@@ -660,22 +673,40 @@ void Maingame::finalSetting()
 //		replay_nick->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215.f*thumb_scale-10)));
 //		replay_all_node->addChild(replay_nick);
 	}
+	
+	if(mySGD->is_endless_mode)
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		EndlessStartContent* t_container = EndlessStartContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																   {
+																	   exit_target->onEnter();
+																	   checkTutorial();
+																	   
+																   });
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
+	else
+	{
+		checkTutorial();
+	}
+}
 
-//	vector<KSCumberBase*> sub_array = myGD->getSubCumberVector();
-//	for(int i=0;i<myGD->getSubCumberVector().size(); i++)
-//	{
-//		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
-//		sub_position_img->setColor(ccYELLOW);
-//		CCNode* sub_pointer = (CCNode*)sub_array[i];
-//		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_scale)));
-//		addChild(sub_position_img, myUIZorder);
-//		
-//		sub_thumbs->addObject(sub_position_img);
-//	}
-	
-//	else
-//	{
-	
+void Maingame::checkTutorial()
+{
 	if(mySD->getSilType() == 3 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_lineTangle))
 	{
 		CCNode* exit_target = this;
@@ -738,9 +769,9 @@ void Maingame::finalSetting()
 																		   exit_target->getParent()->addChild(t_popup);
 																	   }
 																	   else
-																		{
-																			exit_target->onEnter();
-																		}
+																	   {
+																		   exit_target->onEnter();
+																	   }
 																	   
 																   }, kSpecialTutorialCode_lineTangle);
 		t_popup->setContainerNode(t_container);
@@ -863,7 +894,7 @@ void Maingame::finalSetting()
 			exit_target->getParent()->addChild(t_popup);
 		}
 	}
-//	}
+	//	}
 	
 	mySGD->is_on_maingame = true;
 }
@@ -1008,11 +1039,11 @@ void Maingame::counting()
 	else if(countingCnt/60 >= 1 && countingCnt%60 == 0)
 	{
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
-		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
-		{
+//		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
+//		{
 			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
 			addChild(t_smg, startGachaZorder);
-		}
+//		}
 		
 		if(countingCnt/60 == 1)
 		{
@@ -1036,6 +1067,16 @@ void Maingame::gachaOn()
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
+	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
+		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	else if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
+		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	else
+	{
+		showShop(kSC_gold);
+		return;
+	}
+	
 	bool t_jack_stun = myJack->isStun;
 	
 	CCNode* exit_target = this;
@@ -1044,11 +1085,6 @@ void Maingame::gachaOn()
 	
 	LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 	addChild(t_loading, 9999);
-	
-	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
-		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
-	else
-		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	
 	int map_gacha_cnt = mySGD->getUserdataAchieveMapGacha()+1;
 	mySGD->setUserdataAchieveMapGacha(map_gacha_cnt);
@@ -1082,7 +1118,7 @@ void Maingame::gachaOn()
 									  {
 										  mControl->isStun = false;
 										  myJack->isStun = t_jack_stun;
-										  exit_target->onEnter();
+//										  exit_target->onEnter();
 										  
 										  myGD->resetGameData();
 										  mySGD->startMapGachaOn();
@@ -1092,7 +1128,7 @@ void Maingame::gachaOn()
 									  else
 									  {
 										  mySGD->clearChangeGoods();
-										  addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
+										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
 											  mControl->isStun = false;
 											  myJack->isStun = t_jack_stun;
 											  exit_target->onEnter();
@@ -2242,17 +2278,16 @@ void Maingame::endCloseShutter()
 	{
 		AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
 		
-		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
-//		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
-		if(mySD->getSilType() <= 10000)
+		if(mySGD->is_endless_mode)
 		{
-			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else
 		{
-			mySGD->setNextSceneName("newmainflow");
-			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
-//			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
+			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
+			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+//			mySGD->setNextSceneName("newmainflow");
+//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
 		}
 	}
 }
@@ -2425,7 +2460,7 @@ void Maingame::takeSpeedUpEffect( int t_step )
 		
 		TakeSpeedUp* t_tsu = TakeSpeedUp::create(t_step, bind(&Maingame::endTakeSpeedUpEffect, this));
 		t_tsu->setScale(1.f/myGD->game_scale);
-		t_tsu->setPosition(ccpAdd(jack_position, add_point));
+		t_tsu->setPosition(ccpAdd(t_tsu->getPosition(), ccpAdd(jack_position, add_point)));
 		game_node->addChild(t_tsu, goldZorder);
 		
 		save_take_speed_up_effect = t_tsu;
@@ -2762,6 +2797,19 @@ void Maingame::startExchange()
 	sil_thumb->setPosition(t_position);
 	addChild(sil_thumb, clearshowtimeZorder);
 	
+	if(mySGD->is_play_replay && mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
+	{
+		CCPoint t_position = replay_sil_thumb->getPosition();
+		replay_sil_thumb->removeFromParent();
+		
+		replay_sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))->getCString()));
+		int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		replay_sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+		replay_sil_thumb->setScale(t_scale);
+		replay_sil_thumb->setPosition(t_position);
+		replay_all_node->addChild(replay_sil_thumb, -1);
+	}
+	
 	myGD->communication("UI_writeImageChange");
 }
 
@@ -3078,7 +3126,7 @@ void Maingame::refreshReplayThumb(int temp_time)
 		return;
 	
 	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
-	replay_thumb_texture->beginWithClear(0, 0.3f, 0, 0.5f);
+	replay_thumb_texture->beginWithClear(0, 0.f, 0, 0.f);
 	t_vs->replayVisitForThumb(temp_time);
 	replay_thumb_texture->end();
 	
@@ -3330,6 +3378,7 @@ void Maingame::showShop(int t_shopcode)
 	t_popup->setCloseFunc([=]()
 						  {
 							  mControl->isStun = false;
+							  startControl();
 							  myJack->isStun = t_jack_stun;
 							  exit_target->onEnter();
 							  is_pause = false;
@@ -3513,6 +3562,7 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
 															   mySGD->is_paused = false;
+															   myUI->stopCounting();
 															   AudioEngine::sharedInstance()->setAppFore();
 															   (t_end->*d_end)();
 																 t_popup->removeFromParent();

@@ -9,7 +9,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 
-class ScrollBar : public CCLayerColor {
+class ScrollBar : public CCLayer {
 public:
 	//자신의 크기를 정하고, 바를 생성
 	ScrollBar();

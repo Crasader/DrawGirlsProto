@@ -16,6 +16,8 @@ void StarGoldData::withdraw()
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
+	endless_my_victory_on = false;
+	
 	star_label = NULL;
 	gold_label = NULL;
 	
@@ -65,6 +67,13 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_isChangedMap)							return_value = "icm";
 	else if(t_key == kReplayKey_isChangedScore)							return_value = "ics";
 	else if(t_key == kReplayKey_playIndex)								return_value = "pi";
+	else if(t_key == kReplayKey_clearGrade)								return_value = "cg";
+	else if(t_key == kReplayKey_gameTime)								return_value = "gt";
+	else if(t_key == kReplayKey_takeGold)								return_value = "tg";
+	else if(t_key == kReplayKey_totalScore)								return_value = "tts";
+	else if(t_key == kReplayKey_originalScore)							return_value = "os";
+	else if(t_key == kReplayKey_win)									return_value = "win";
+	else if(t_key == kReplayKey_lose)									return_value = "lose";
 	
 	return return_value;
 }
@@ -163,20 +172,12 @@ CCSprite* StarGoldData::getLoadingImg()
 string StarGoldData::getFont()
 {
 	
-	if(myLoc->getSupportLocalCode() == "ja")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-		return "meiryo";
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-		return "fonts/meiryo.ttc"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
-#endif
-	}
 	
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixJGoB";
+	font_name = "RixGoEB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+	font_name = "fonts/RixGoEB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
 	
 	return font_name;
@@ -184,20 +185,12 @@ string StarGoldData::getFont()
 
 string StarGoldData::getFont2() // Jrnaver
 {
-	if(myLoc->getSupportLocalCode() == "ja")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-		return "meiryo";
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-		return "fonts/meiryo.ttc"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
-#endif
-	}
 
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixJGoB";
+	font_name = "RixGoEB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+	font_name = "fonts/RixGoEB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
 	
 //	string font_name;
@@ -2281,6 +2274,25 @@ void StarGoldData::initTodayMission(Json::Value t_info)
 	is_today_mission_first = t_info["isFirstCheck"].asBool();
 }
 
+void StarGoldData::initAttendance(Json::Value result_data)
+{
+	if(result_data["sendGift"].asBool())
+	{
+		is_on_attendance = true;
+		attendance_data = result_data;
+	}
+	else
+	{
+		is_on_attendance = false;
+	}
+}
+
+void StarGoldData::resetAttendance()
+{
+	is_on_attendance = false;
+	attendance_data.clear();
+}
+
 string StarGoldData::getAppType()
 {
 	return app_type;
@@ -2294,6 +2306,10 @@ void StarGoldData::myInit()
 {
 	app_type = "light1";
 	app_version = 2;
+	
+	is_on_attendance = false;
+	is_endless_mode = false;
+	endless_my_victory_on = false;
 	
 	suitable_stage = -1;
 	is_on_maingame = false;

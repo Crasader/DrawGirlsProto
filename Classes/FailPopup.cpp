@@ -399,7 +399,7 @@ bool FailPopup::init()
 	CCSprite* n_ok = CCSprite::create("ending_button.png");
 	KSLabelTTF* n_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	n_ok_label->setColor(ccc3(50, 30, 5));
-	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_ok_label->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-3));
 	n_ok->addChild(n_ok_label);
 	
@@ -407,7 +407,7 @@ bool FailPopup::init()
 	s_ok->setColor(ccGRAY);
 	KSLabelTTF* s_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	s_ok_label->setColor(ccc3(50, 30, 5));
-	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_ok_label->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-3));
 	s_ok->addChild(s_ok_label);
 	
@@ -424,14 +424,14 @@ bool FailPopup::init()
 	CCSprite* n_replay = CCSprite::create("ending_button.png");
 	KSLabelTTF* n_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	n_replay_label->setColor(ccc3(50, 30, 5));
-	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_replay_label->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-3));
 	n_replay->addChild(n_replay_label);
 	CCSprite* s_replay = CCSprite::create("ending_button.png");
 	s_replay->setColor(ccGRAY);
 	KSLabelTTF* s_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	s_replay_label->setColor(ccc3(50, 30, 5));
-	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
+//	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_replay_label->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-3));
 	s_replay->addChild(s_replay_label);
 	
@@ -667,7 +667,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
-		graph_back->setPosition(ccp(355,230));
+		graph_back->setPosition(ccp(355,219));
 		main_case->addChild(graph_back, kZ_FP_img);
 		
 		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -708,7 +708,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(257+195,230));
+		rank_percent_case->setPosition(ccp(257+195,219));
 		main_case->addChild(rank_percent_case, kZ_FP_img);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
@@ -717,7 +717,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_FP_img);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,219));
 		rank_percent_case->runAction(t_move);
 		
 		Json::Value user_list = result_data["list"];

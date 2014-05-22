@@ -327,6 +327,11 @@ bool CollectionBookPopup::init()
 	main_case->setPosition(ccp(0,-320));
 	addChild(main_case, kCBP_Z_gray);
 	
+	CCSprite* diary_case = CCSprite::create("diary_back_cover.png");
+	diary_case->setPosition(ccp(240,160));
+	main_case->addChild(diary_case);
+	
+	
 	recent_card_number = mySGD->selected_collectionbook;
 	
 	int next_number = mySGD->getNextStageCardNumber(recent_card_number);

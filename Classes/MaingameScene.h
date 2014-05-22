@@ -282,6 +282,7 @@ private:
 	void refreshReplayPosition(int temp_time);
 	
 	CCNode* replay_all_node;
+	EffectSprite* replay_sil_thumb;
 	
 	int replay_continue_count;
 	CCLabelTTF* replay_continue_label;
@@ -301,6 +302,8 @@ private:
 	
 	void showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
 	void continueAction();
+	
+	void checkTutorial();
 	
 	void initJackPosition(CCPoint jack_position);
 	

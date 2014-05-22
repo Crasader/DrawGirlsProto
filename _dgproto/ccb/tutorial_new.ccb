@@ -35,7 +35,7 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>tutorial_back2</string>
+						<string>tutorial_back1</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
@@ -82,10 +82,12 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>tutorial_back2.png</string>
+									<string>tutorial_back1.png</string>
 								</array>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -4014,78 +4016,6 @@
 						</array>
 					</dict>
 					<dict>
-						<key>baseClass</key>
-						<string>CCSprite</string>
-						<key>children</key>
-						<array/>
-						<key>customClass</key>
-						<string></string>
-						<key>displayName</key>
-						<string>tutorial_frame</string>
-						<key>memberVarAssignmentName</key>
-						<string></string>
-						<key>memberVarAssignmentType</key>
-						<integer>0</integer>
-						<key>properties</key>
-						<array>
-							<dict>
-								<key>name</key>
-								<string>position</string>
-								<key>type</key>
-								<string>Position</string>
-								<key>value</key>
-								<array>
-									<real>0.0</real>
-									<real>0.48225307464599609</real>
-									<integer>0</integer>
-								</array>
-							</dict>
-							<dict>
-								<key>name</key>
-								<string>anchorPoint</string>
-								<key>type</key>
-								<string>Point</string>
-								<key>value</key>
-								<array>
-									<real>0.5</real>
-									<real>0.5</real>
-								</array>
-							</dict>
-							<dict>
-								<key>name</key>
-								<string>scale</string>
-								<key>type</key>
-								<string>ScaleLock</string>
-								<key>value</key>
-								<array>
-									<real>1</real>
-									<real>1</real>
-									<false/>
-									<integer>0</integer>
-								</array>
-							</dict>
-							<dict>
-								<key>name</key>
-								<string>ignoreAnchorPointForPosition</string>
-								<key>type</key>
-								<string>Check</string>
-								<key>value</key>
-								<false/>
-							</dict>
-							<dict>
-								<key>name</key>
-								<string>displayFrame</string>
-								<key>type</key>
-								<string>SpriteFrame</string>
-								<key>value</key>
-								<array>
-									<string></string>
-									<string>tutorial_frame.png</string>
-								</array>
-							</dict>
-						</array>
-					</dict>
-					<dict>
 						<key>animatedProperties</key>
 						<dict>
 							<key>0</key>
@@ -4352,7 +4282,7 @@
 			<key>offset</key>
 			<real>1.4070515632629395</real>
 			<key>position</key>
-			<real>6.0999999046325684</real>
+			<real>7</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

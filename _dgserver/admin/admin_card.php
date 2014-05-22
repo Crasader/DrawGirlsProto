@@ -33,7 +33,7 @@ var showCardImg = function(value,option){
 			<th field="no" viewer='{"type":"text"}' editor='{"type":"text"}' primary>no</th>
 			<th field="rank" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>rank(카드등급)</th>
 			<th field="grade" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>grade(스테이지단계)</th>
-			<th field="name" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>name(이름)</th>
+			<th field="name" viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}'>name(이름)</th>
 			<th field="reward" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>reward(골드보상)</th>
 			<th field="durability" viewer='{"type":"text"}' editor='{"type":"text"}'>durability</th>
 			<th field="ability" viewer='{"type":"json"}' editor='{"type":"table","element":[{"title":"아이템번호","field":"type","type":"text","datatype":"int"},{"title":"옵션","field":"option","type":"dictionary"}]}'>ability</th>
@@ -89,7 +89,10 @@ var showCardImg = function(value,option){
 					]
 						}
 			]}'>aniInfo</th>
-			<th field="script" viewer='{"type":"text"}' editor='{"type":"text"}'>script</th>
+			<th field="script" viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}'>script</th>
+			<th field="profile" viewer='{"type":"text"}' editor='{"type":"textarea"}'>profile</th>
+						
+
 			<th field="silImgInfo" viewer='{"type":"text","cut":50}' editor='{"type":"dictionary","element":[{"field":"isSil","type":"bool"},{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}'>silImgInfo</td>
 			<th manage="[delete,update,insert]">manage</th>
 		</tr>

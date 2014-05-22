@@ -29,7 +29,7 @@ $(document).ready(function(){
 </table>
 
 <br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ArchivementHistory" dbFunc='{"select":"getHistory"}' dbWhere='' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ArchivementHistory" dbWhere='' name="datatable" border=1>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>

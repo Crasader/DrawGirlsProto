@@ -53,8 +53,6 @@ bool StartSettingPopup::init()
 	
 	//	mySGD->selectFriendCard();
 	
-	setKeypadEnabled(true);
-	
 	item_title_label = NULL;
 	option_label = NULL;
 	//	card_img = NULL;
@@ -155,32 +153,9 @@ void StartSettingPopup::setMain()
 {
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-22.f));
+	main_case->setPosition(ccp(240,160-22.f+8));
 	addChild(main_case, kStartSettingPopupZorder_main);
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
-	{
-		KS::setOpacity(main_case, 255);
-		
-		is_menu_enable = true;
-		
-		if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
-		{
-			is_menu_enable = false;
-			LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
-																   {
-																	   is_menu_enable = true;
-																	   upgradeAction(NULL);
-																   });
-			addChild(t_popup, kStartSettingPopupZorder_popup);
-		}
-	}));
 	
 	CCScale9Sprite* left_back = CCScale9Sprite::create("startsetting_left_back.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	left_back->setContentSize(CCSizeMake(152, 232));
@@ -259,9 +234,18 @@ void StartSettingPopup::setMain()
 		mission_label->runAction(t_repeat);
 	}
 	
-	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+	CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+	mission_img->setContentSize(CCSizeMake(65, 22));
 	mission_img->setPosition(ccp(198,255));
 	main_case->addChild(mission_img);
+	
+	KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
+	mission_img_label->setColor(ccc3(255, 170, 20));
+	mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
+	mission_img->addChild(mission_img_label);
+//	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+//	mission_img->setPosition(ccp(198,255));
+//	main_case->addChild(mission_img);
 	
 	
 	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);
@@ -348,7 +332,7 @@ void StartSettingPopup::setMain()
 	{
 		ITEM_CODE t_ic = item_list[i];
 		
-		CCPoint item_position = ccp(205.f + i*71.f, 190);
+		CCPoint item_position = ccp(205.f + i*71.f, 193);
 		
 		bool is_unlocked = true;
 		if(t_ic == kIC_baseSpeedUp && mySGD->getItem9OpenStage() > mySD->getSilType())
@@ -443,8 +427,8 @@ void StartSettingPopup::setMain()
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 			if(is_show_item_popup)
 				item_cnt += mySGD->getBonusItemCnt(t_ic);
-			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			cnt_label->setPosition(ccp(21, -21));
+			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 11);
+			cnt_label->setPosition(ccp(21, -20));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
@@ -471,7 +455,7 @@ void StartSettingPopup::setMain()
 	is_clicked_gacha_menu = false;
 	
 	gacha_clicked_img = CCSprite::create("startsetting_item_clicked.png");
-	gacha_clicked_img->setPosition(ccp(425,190));
+	gacha_clicked_img->setPosition(ccp(425,193));
 	gacha_clicked_img->setVisible(false);
 	main_case->addChild(gacha_clicked_img, kStartSettingPopupZorder_main+1);
 	
@@ -480,7 +464,7 @@ void StartSettingPopup::setMain()
 	if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
 	{
 		gacha_item = CCSprite::create(CCString::createWithFormat("item%d.png", selected_gacha_item)->getCString());
-		gacha_item->setPosition(ccp(425,190));
+		gacha_item->setPosition(ccp(425,193));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
@@ -490,12 +474,12 @@ void StartSettingPopup::setMain()
 	else
 	{
 		gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
-		gacha_item->setPosition(ccp(425,190));
+		gacha_item->setPosition(ccp(425,193));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
-		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 15);
+		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
-		gacha_label->setPosition(ccp(37.5f, 23.5f));
+		gacha_label->setPosition(ccp(37.5f, 20.f));
 		gacha_item->addChild(gacha_label);
 	}
 	
@@ -503,25 +487,33 @@ void StartSettingPopup::setMain()
 	{
 		item_gacha_menu->setEnabled(false);
 		CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
-		locked_img->setPosition(ccp(425,190));
+		locked_img->setPosition(ccp(425,193));
 		main_case->addChild(locked_img, kStartSettingPopupZorder_main);
 	}
 	
 	CCScale9Sprite* script_box = CCScale9Sprite::create("startsetting_scriptbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	script_box->setContentSize(CCSizeMake(290, 70));
+	script_box->setContentSize(CCSizeMake(282, 64));
 	script_box->setPosition(ccp(317,117));
 	main_case->addChild(script_box);
 	
 	
 	CCSprite* n_start = CCSprite::create("startsetting_start.png");
-	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
+	
+	n_start_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
+	n_start_label2->setColor(ccWHITE);
+	n_start_label2->setOpacity(100);
+	n_start_label2->setPosition(ccp(147.5f,39.5f));
+	n_start->addChild(n_start_label2);
+	
+	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
 	n_start_label->setColor(ccc3(47, 30, 6));
 	n_start_label->setPosition(ccp(147.5f,40.5f));
 	n_start->addChild(n_start_label);
 	
+	
 	CCSprite* s_start = CCSprite::create("startsetting_start.png");
 	s_start->setColor(ccGRAY);
-	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
+	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
 	s_start_label->setColor(ccc3(47, 30, 6));
 	s_start_label->setPosition(ccp(147.5f,40.5f));
 	s_start->addChild(s_start_label);
@@ -697,10 +689,39 @@ void StartSettingPopup::setMain()
 	else
 		option_ment = myLoc->getLocalForKey(kMyLocalKey_notUseItem);
 	
-	option_label = CCLabelTTF::create(option_ment.c_str(), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	option_label = CCLabelTTF::create(option_ment.c_str(), mySGD->getFont().c_str(), 11, option_size.size, kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	option_label->setAnchorPoint(ccp(0.5,0.5));
 	option_label->setPosition(ccp(317,117));
 	main_case->addChild(option_label);
+	
+	main_case->setScaleY(0.f);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
+	
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+	{
+		KS::setOpacity(main_case, t);
+		n_start_label2->setOpacity(100);
+	}, [=](int t)
+										 {
+											 KS::setOpacity(main_case, 255);
+											 n_start_label2->setOpacity(100);
+											 
+											 is_menu_enable = true;
+											 
+											 if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
+											 {
+												 is_menu_enable = false;
+												 LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																										{
+																											is_menu_enable = true;
+																											upgradeAction(NULL);
+																										});
+												 addChild(t_popup, kStartSettingPopupZorder_popup);
+											 }
+										 }));
 }
 
 void StartSettingPopup::gachaMenuCreate()
@@ -754,12 +775,12 @@ void StartSettingPopup::gachaMenuCreate()
 																		   
 																		   if(!buy_button)
 																			{
-																				buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
+																				buy_button = CommonButton::create("", CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
 																				buy_button->setTitleColor(ccc3(50,20,0));
 																				buy_button->setTitleSize(13);
 																				buy_button->setTouchPriority(touch_priority);
 																				buy_button->setSize(CCSizeMake(110, 55));
-																				buy_button->setPosition(395,117);
+																				buy_button->setPosition(415,117);
 																				main_case->addChild(buy_button);
 																			}
 																		   
@@ -769,7 +790,7 @@ void StartSettingPopup::gachaMenuCreate()
 																					buy_button->setPrice(PriceTypePass4, 0);
 																				else
 																					buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
-																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
+//																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
 																			}
 																		   else
 																			{
@@ -777,7 +798,7 @@ void StartSettingPopup::gachaMenuCreate()
 																					buy_button->setPrice(PriceTypePass4, 0);
 																				else
 																					buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaGoldFee());
-																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
+//																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
 																			}
 																		   buy_button->setFunction([=](CCObject* sender)
 																								   {
@@ -790,7 +811,7 @@ void StartSettingPopup::gachaMenuCreate()
 																	   });
 	
 	item_gacha_menu = CCMenuLambda::createWithItem(gacha_item_item);
-	item_gacha_menu->setPosition(ccp(425,190));
+	item_gacha_menu->setPosition(ccp(425,193));
 	main_case->addChild(item_gacha_menu);
 	
 	item_gacha_menu->setTouchPriority(touch_priority);
@@ -975,7 +996,10 @@ void StartSettingPopup::startItemGacha()
 																	{
 																		ShopPopup* t_shop = ShopPopup::create();
 																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																		t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																		if(mySGD->is_endless_mode)
+																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																		else
+																			t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																		t_shop->setShopCode(kSC_gold);
 																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																		addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -993,7 +1017,10 @@ void StartSettingPopup::startItemGacha()
 																	{
 																		ShopPopup* t_shop = ShopPopup::create();
 																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																		t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																		if(mySGD->is_endless_mode)
+																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																		else
+																			t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																		t_shop->setShopCode(kSC_gold);
 																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																		addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1060,7 +1087,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 				buy_button->setPrice(PriceTypePass4, 0);
 			else
 				buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
-			buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
+//			buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
 		});
 		addChild(t_popup, kStartSettingPopupZorder_popup);
 	}
@@ -1223,8 +1250,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
-			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			cnt_label->setPosition(ccp(21, -21));
+			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 11);
+			cnt_label->setPosition(ccp(21, -20));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
@@ -1314,8 +1341,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 			
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
 
-			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-			cnt_label->setPosition(ccp(21, -21));
+			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 11);
+			cnt_label->setPosition(ccp(21, -20));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
@@ -1355,7 +1382,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		//		option_rect->setPosition(option_position);
 		//		main_case->addChild(option_rect);
 		
-		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
+		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 11, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		option_label->setAnchorPoint(ccp(0,1));
 		option_label->setPosition(option_position);
 		main_case->addChild(option_label);
@@ -1371,17 +1398,17 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		if(!buy_button)
 		{
-			buy_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_buy), CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
+			buy_button = CommonButton::create("", CCScale9Sprite::create("startsetting_item_buy.png", CCRectMake(0, 0, 110, 55), CCRectMake(54, 27, 2, 1)));
 			buy_button->setTitleColor(ccc3(50,20,0));
 			buy_button->setTitleSize(13);
 			buy_button->setTouchPriority(touch_priority);
 			buy_button->setSize(CCSizeMake(110, 55));
-			buy_button->setPosition(395,117);
+			buy_button->setPosition(415,117);
 			main_case->addChild(buy_button);
 		}
 		
 		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));
-		buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
+//		buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
 		buy_button->setFunction([=](CCObject* sender)
 								{
 									if(!is_menu_enable)
@@ -1422,7 +1449,10 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																								{
 																									ShopPopup* t_shop = ShopPopup::create();
 																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																									t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																									if(mySGD->is_endless_mode)
+																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																									else
+																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																									t_shop->setShopCode(kSC_gold);
 																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																									addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1462,7 +1492,10 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																								{
 																									ShopPopup* t_shop = ShopPopup::create();
 																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																									t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																									if(mySGD->is_endless_mode)
+																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																									else
+																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 																									t_shop->setShopCode(kSC_ruby);
 																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																									addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1564,6 +1597,7 @@ void StartSettingPopup::callStart()
 {
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	bool is_open = mySGD->getPuzzleHistory(puzzle_number).is_open.getV();
+	is_open = is_open | mySGD->is_endless_mode;
 	
 	is_go_to_mainflow = false;
 	
@@ -1656,9 +1690,35 @@ void StartSettingPopup::callStart()
 		}
 	}
 	
-	if(((PuzzleScene*)getParent())->heart_time->isStartable())
+	bool is_startable = false;
+	if(mySGD->is_endless_mode)
 	{
-		if(((PuzzleScene*)getParent())->heart_time->startGame())
+		if(mySGD->endless_my_victory.getV() > 0)
+			is_startable = true;
+		else
+			is_startable = ((MainFlowScene*)getParent())->heart_time->isStartable();
+	}
+	else
+	{
+		is_startable = ((PuzzleScene*)getParent())->heart_time->isStartable();
+	}
+	
+	if(is_startable)
+	{
+		bool is_startGame = false;
+		if(mySGD->is_endless_mode)
+		{
+			if(mySGD->endless_my_victory.getV() > 0)
+				is_startGame = true;
+			else
+				is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
+		}
+		else
+		{
+			is_startGame = ((PuzzleScene*)getParent())->heart_time->startGame();
+		}
+		
+		if(is_startGame)
 			realStartAction();
 		else
 		{
@@ -1727,7 +1787,10 @@ void StartSettingPopup::callStart()
 							   {
 								   ShopPopup* t_shop = ShopPopup::create();
 								   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-								   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+								   if(mySGD->is_endless_mode)
+									   t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+								   else
+									   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
 								   t_shop->setShopCode(kSC_heart);
 								   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 								   addChild(t_shop, kStartSettingPopupZorder_popup);
@@ -1940,7 +2003,10 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 	}
 	else
 	{
-		((PuzzleScene*)getParent())->heart_time->backHeart();
+		if(mySGD->is_endless_mode)
+			((MainFlowScene*)getParent())->heart_time->backHeart();
+		else
+			((PuzzleScene*)getParent())->heart_time->backHeart();
 		
 		cancelGame();
 	}

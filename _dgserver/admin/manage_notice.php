@@ -7,7 +7,7 @@ include "manage_header.php";
 
 
 <br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Notice" dbFunc='{"select":"getList","write":"writeData","update":"updateData","delete":"deleteData"}' dbWhere='' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Notice" dbWhere='' name="datatable" border=1>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>

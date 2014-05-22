@@ -32,6 +32,18 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
 	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray);
+	
 	suction = TouchSuctionLayer::create(touch_priority+1);
 	addChild(suction);
 	
@@ -41,10 +53,16 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	CCScale9Sprite* back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-	back_case->setContentSize(CCSizeMake(320,250));
+	
+	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_case->setContentSize(CCSizeMake(240,220));
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
+	
+	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	back_case->addChild(back_in);
 	
 	string title_string, ment_string;
 	if(is_success)
@@ -58,12 +76,12 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 		ment_string = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectMent);
 	}
 	
-	StyledLabelTTF* title_label = StyledLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 21, 299, StyledAlignment::kCenterAlignment);
-	title_label->setPosition(ccp(0,80));
+	StyledLabelTTF* title_label = StyledLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 21, 299, StyledAlignment::kLeftAlignment);
+	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
-	StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-	ment_label->setPosition(ccp(0,50));
+	StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kLeftAlignment);
+	ment_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,50));
 	m_container->addChild(ment_label);
 	
 	
@@ -90,10 +108,10 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 	close_label->setPosition(ccp(0,0));
 	c_label->addChild(close_label);
 	
-	CCScale9Sprite* close_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* close_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	CCControlButton* close_button = CCControlButton::create(c_label, close_back);
 	close_button->addTargetWithActionForControlEvents(this, cccontrol_selector(PuzzleSuccessAndPerfect::closeAction), CCControlEventTouchUpInside);
-	close_button->setPreferredSize(CCSizeMake(80,50));
+	close_button->setPreferredSize(CCSizeMake(100,45));
 	close_button->setPosition(ccp(0,-70));
 	m_container->addChild(close_button);
 	
@@ -106,8 +124,13 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
 			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
 	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t)
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
 										 {
+											 gray->setOpacity(255);
 											 KS::setOpacity(m_container, 255);
 											 is_menu_enable = true;
 										 }));
@@ -125,5 +148,13 @@ void PuzzleSuccessAndPerfect::closeAction(CCObject* sender, CCControlEvent t_eve
 	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
 		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
 	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t){KS::setOpacity(m_container, 0); end_func(); removeFromParent();}));
+	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
+	{
+		gray->setOpacity(0);
+		KS::setOpacity(m_container, 0); end_func(); removeFromParent();
+	}));
 }

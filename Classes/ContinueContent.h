@@ -80,7 +80,7 @@ private:
 	void endShow()
 	{
 		is_menu_enable = true;
-		schedule(schedule_selector(ContinueContent::countingSchedule), 1.f);
+		schedule(schedule_selector(ContinueContent::countingSchedule));
 	}
 	
 	void countingSchedule();

@@ -132,7 +132,14 @@ enum ReplayKey
 	kReplayKey_scoreData,
 	kReplayKey_isChangedMap,
 	kReplayKey_isChangedScore,
-	kReplayKey_playIndex
+	kReplayKey_playIndex,
+	kReplayKey_clearGrade,
+	kReplayKey_gameTime,
+	kReplayKey_takeGold,
+	kReplayKey_totalScore,
+	kReplayKey_originalScore,
+	kReplayKey_win,
+	kReplayKey_lose
 };
 
 enum GoodsType
@@ -661,6 +668,26 @@ public:
 	bool is_play_replay;
 	Json::Value replay_playing_info;
 	
+	bool is_endless_mode;
+	KSProtectVar<bool> endless_my_victory_on;
+	KSProtectVar<int> endless_my_victory;
+	KSProtectVar<int> endless_my_total_score;
+	KSProtectVar<int> endless_my_level;
+	KSProtectVar<int> endless_my_high_victory;
+	KSProtectVar<int> endless_my_lose;
+	KSProtectVar<int> endless_my_high_score;
+	KSProtectVar<int> endless_my_win;
+	KSProtectVar<int> endless_memberID;
+	KSProtectStr endless_nick;
+	KSProtectStr endless_flag;
+	KSProtectVar<int> endless_victory;
+	KSProtectVar<int> endless_autoLevel;
+	KSProtectVar<int> endless_level;
+	KSProtectVar<int> endless_score;
+	KSProtectVar<long long> endless_regDate;
+	KSProtectVar<int> endless_lose;
+	KSProtectVar<int> endless_win;
+	
 	void setReplayPlayingInfo(Json::Value t_data)
 	{
 		is_play_replay = true;
@@ -732,6 +759,11 @@ public:
 	int getCatchCumberCount();
 	
 	CommandParam getUpdateTodayMissionParam(jsonSelType t_callback);
+	
+	bool is_on_attendance;
+	Json::Value attendance_data;
+	void initAttendance(Json::Value result_data);
+	void resetAttendance();
 	
 private:
 	bool is_not_cleared_stage;

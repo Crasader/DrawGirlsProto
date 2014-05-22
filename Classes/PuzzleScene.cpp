@@ -42,7 +42,7 @@
 #include "BuyPiecePopup.h"
 #include "GaBaBo.h"
 #include "CurtainNodeForBonusGame.h"
-#include "EndlessSettingPopup.h"
+
 CCScene* PuzzleScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -1531,9 +1531,12 @@ void PuzzleScene::openSettingPopup()
 	
 	mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 	
+<<<<<<< HEAD
 //	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
 //	addChild(t_popup, kPuzzleZorder_popup);
 	
+=======
+>>>>>>> refs/remotes/origin/standAlone
 	StartSettingPopup* t_popup = StartSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 	addChild(t_popup, kPuzzleZorder_popup);
@@ -1843,7 +1846,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		Json::Value user_list = result_data["list"];
 		
 		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
-		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,220));
+		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,213));
 		right_body->addChild(graph_back);
 		
 		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -1884,7 +1887,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("puzzle_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(10+115,220));
+		rank_percent_case->setPosition(ccp(10+115,213));
 		right_body->addChild(rank_percent_case);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 11);
@@ -1893,7 +1896,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,220));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,213));
 		rank_percent_case->runAction(t_move);
 		
 //		delay_index = 0;

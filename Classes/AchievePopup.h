@@ -82,10 +82,10 @@ private:
 	int keep_tag;
 	int keep_value;
 	
-	vector<int> keep_value_list;
-	
-	int keep_take_gold;
-	int keep_take_ruby;
+//	vector<int> keep_value_list;
+//	
+//	int keep_take_gold;
+//	int keep_take_ruby;
 	
 	LoadingLayer* loading_layer;
 	void resultSaveUserData(Json::Value result_data);

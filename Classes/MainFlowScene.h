@@ -76,6 +76,9 @@ public:
 	
 	virtual ~MainFlowScene();
 	
+	void showEndlessOpening();
+	void showEndlessResult();
+	
 private:
 	
 //	int is_unlock_puzzle;

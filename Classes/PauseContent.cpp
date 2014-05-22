@@ -223,6 +223,9 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	replay_button->setTouchPriority(touch_priority-1);
 	
+	if(mySGD->is_endless_mode)
+		replay_button->setEnabled(false);
+	
 	
 //	CommonButton* replay_menu = CommonButton::create("재시작", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
 //	replay_menu->setBackgroundTypeForDisabled(CommonButtonPupple);
