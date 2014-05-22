@@ -153,7 +153,7 @@ void StartSettingPopup::setMain()
 {
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-22.f));
+	main_case->setPosition(ccp(240,160-22.f+8));
 	addChild(main_case, kStartSettingPopupZorder_main);
 	
 	
