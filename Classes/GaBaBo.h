@@ -46,6 +46,7 @@ public:
 	void update(float dt);
 	void initGameTime()
 	{
+//		m_remainTime = 5.f;
 		m_remainTime = 5.f;
 		m_gababoCountShowing = false;
 	}
