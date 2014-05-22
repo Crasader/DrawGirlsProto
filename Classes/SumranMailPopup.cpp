@@ -380,7 +380,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 	{
 
 		CCLabelTTF* title;
-		CCMenuItemLambda* sendBtn;
+//		CCMenuItemLambda* sendBtn;
+		CommonButton* btnReceive;
 		CCLabelTTF* score;
 		//Json::Reader reader;
 		//Json::Value contentObj;
@@ -435,36 +436,35 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		switch(type)
 		{
 			case kGift:
-				comment =mail.get("regDate","Event").asString().c_str();
-				sendBtn = CCMenuItemImageLambda::create
-				("postbox_cell_receive.png", "postbox_cell_receive.png",
-				 [=](CCObject* sender)
-				 {
-					 //						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-					 //						 int idx = (int)obj->getUserData();
-					 
-					 Json::Value p;
-					 int mailNo = mail["no"].asInt();
-					 
-					 p["giftBoxNo"] = mailNo;
-					 p["memberID"] = mail["memberID"].asInt64();
-					 
-					 
-					 //삭제요청
-					 this->removeMessage (mailNo, mail["memberID"].asInt64(),
-																[=](Json::Value r)
+				comment = mail.get("regDate","Event").asString().c_str();
+				btnReceive = CommonButton::create("받기", 12.f, CCSizeMake(60, 35), CommonButtonYellow, -200);
+				btnReceive->setTitleColor(ccc3(50, 20, 0));
+				btnReceive->setFunction([=](CCObject*)
 																{
-																	if(r["error"]["code"].asInt() != GDSUCCESS) {
-																		return;
-																	}
-																	//여기서 r["list"] 참고하여 재화 정보 업데이트하기
+																	//						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+																	//						 int idx = (int)obj->getUserData();
+																	
+																	Json::Value p;
+																	int mailNo = mail["no"].asInt();
+																	
+																	p["giftBoxNo"] = mailNo;
+																	p["memberID"] = mail["memberID"].asInt64();
 																	
 																	
-																	
+																	//삭제요청
+																	this->removeMessage (mailNo, mail["memberID"].asInt64(),
+																											 [=](Json::Value r)
+																											 {
+																												 if(r["error"]["code"].asInt() != GDSUCCESS) {
+																													 return;
+																												 }
+																												 //여기서 r["list"] 참고하여 재화 정보 업데이트하기
+																												 
+																												 
+																												 
+																											 });
 																});
-				 }
-				 );
-				_menu->addChild(sendBtn,2);
+				cell->addChild(btnReceive, kMP_MT_getheart);
 				break;
 //			case kHeart:
 //				comment = myLoc->getLocalForKey(kMyLocalKey_arriveHeart);
@@ -1253,10 +1253,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		score->setTag(kMP_MT_score);
 		setFormSetter(score);
 		cell->addChild(score,2);
-
-		sendBtn->setUserData((void *)idx);
-		sendBtn->setPosition(ccp(174.5,23.5));
-		setFormSetter(sendBtn);
+		btnReceive->setUserData((void*)idx);
+		btnReceive->setPosition(ccp(174.5,23.5));
+//		sendBtn->setUserData((void *)idx);
+//		sendBtn->setPosition(ccp(174.5,23.5));
+//		setFormSetter(sendBtn);
 		return cell;
 	};
 	bool odd = false;
