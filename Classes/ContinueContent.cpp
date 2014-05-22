@@ -262,6 +262,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	counting_label->setAnchorPoint(ccp(0.5f,0.5f));
 	counting_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height/2.f));
 	back_in->addChild(counting_label);
+	counting_label->setVisible(false);
 	
 	
 	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_offContinue), mySGD->getFont().c_str(), 15);

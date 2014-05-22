@@ -156,16 +156,18 @@ void TakeCardToDiary::ingPage()
 
 void TakeCardToDiary::startHiding()
 {
+	recent_right_img->removeFromParent();
+	
 	addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
 										   {
 											   gray->setOpacity(t*255);
 											   KS::setOpacity(recent_left_img, t*255);
-											   KS::setOpacity(recent_right_img, t*255);
+//											   KS::setOpacity(recent_right_img, t*255);
 										   }, [=](float t)
 										   {
 											   gray->setOpacity(0);
 											   KS::setOpacity(recent_left_img, 0);
-											   KS::setOpacity(recent_right_img, 0);
+//											   KS::setOpacity(recent_right_img, 0);
 											   end_func();
 											   removeFromParent();
 										   }));

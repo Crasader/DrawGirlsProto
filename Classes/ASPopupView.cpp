@@ -152,7 +152,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 	return t_popup;
 }
 
-ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func)
+ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func, function<void()> cancel_func)
 {
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	
@@ -224,7 +224,10 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 								  }, [=](int t)
 								  {
 									  gray->setOpacity(0);
-									  KS::setOpacity(t_container, 0); t_popup->removeFromParent();
+									  KS::setOpacity(t_container, 0);
+									  if(cancel_func != nullptr)
+										  cancel_func();
+									  t_popup->removeFromParent();
 								  }));
 							  });
 	t_container->addChild(close_button);
