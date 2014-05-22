@@ -1,4 +1,5 @@
 #include "OnePercentGame.h"
+#include "FormSetter.h"
 
 OnePercentGame::OnePercentGame()
 {
@@ -30,7 +31,7 @@ bool OnePercentGame::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
 bool OnePercentGame::init()
 {
 	CCLayer::init();
-	
+	startFormSetter(this);
 	return true;
 }
 
