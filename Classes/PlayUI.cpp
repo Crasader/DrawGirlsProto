@@ -1928,6 +1928,7 @@ void PlayUI::lifeBonus ()
 	}
 	else
 	{
+		CCLOG("keep percentage2 : %.4f", keep_percentage.getV());
 		int grade_value = 1;
 		if(is_exchanged && keep_percentage.getV() >= 1.f)	grade_value = 4;
 		else if(keep_percentage.getV() >= 1.f)				grade_value = 3;
@@ -2045,6 +2046,8 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 	
 	if(jack_life > 0)
 	{
+		CCLOG("keep percentage : %.4f", keep_percentage.getV());
+		keep_percentage = t_percent;
 		createBonusScore();
 	}
 	else
