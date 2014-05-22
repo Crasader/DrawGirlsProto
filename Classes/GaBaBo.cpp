@@ -36,7 +36,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 {
 	CCLayerColor::initWithColor(ccc4(255, 255, 255, 0));
 
-
+	startFormSetter(this);
 	//  그라디언트 텍스트.
 	//CCClippingNode* cNode = CCClippingNode::create();
 	//CCLabelTTF* testTTF = CCLabelTTF::create("TEXT TEXT", mySGD->getFont().c_str(), 100.f);
@@ -88,47 +88,95 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 	addChild(leftReward);
 	leftReward->setPosition(ccp(60, 130));
 
-	
 	m_currentRewardCursor = CCSprite::create("gababo_reward_01.png");
-	addChild(m_currentRewardCursor);
+	addChild(m_currentRewardCursor, 0);
 	m_currentRewardCursor->setPosition(ccp(60, 46));
-
-	
-	KSLabelTTF* lbl0Win = KSLabelTTF::create("보상", mySGD->getFont().c_str(), 12.f);
-	addChild(lbl0Win);
-	lbl0Win->setPosition(ccp(60, 67));
-	
-	KSLabelTTF* lbl1Win = KSLabelTTF::create("1승", mySGD->getFont().c_str(), 12.f);
-	addChild(lbl1Win);
-	lbl1Win->setPosition(ccp(60, 123));
-
-	
-	KSLabelTTF* lbl2Win = KSLabelTTF::create("2승", mySGD->getFont().c_str(), 12.f);
-	addChild(lbl2Win);
-	lbl2Win->setPosition(ccp(60, 179));
-
-	
-	KSLabelTTF* lbl3Win = KSLabelTTF::create("3승", mySGD->getFont().c_str(), 12.f);
-	addChild(lbl3Win);
-	lbl3Win->setPosition(ccp(60, 235));
-
-	CCSprite* spr0Win = CCSprite::create(rewards[0].spriteName.c_str());
-	addChild(spr0Win);
-	spr0Win->setPosition(ccp(60, 26));
+	KSLabelTTF* lbl0WinReward = KSLabelTTF::create(rewards[0].desc.c_str(), mySGD->getFont().c_str(), 12.f);
+	addChild(lbl0WinReward);
+	lbl0WinReward->setColor(ccc3(254, 250, 50));
+	lbl0WinReward->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+//	setFormSetter(lbl0WinReward);
 	
 	CCSprite* spr1Win = CCSprite::create(rewards[1].spriteName.c_str());
 	addChild(spr1Win);
 	spr1Win->setPosition(ccp(60, 26 + 56));
 	
+	KSLabelTTF* lbl1WinReward = KSLabelTTF::create(rewards[1].desc.c_str(), mySGD->getFont().c_str(), 12.f);
+	addChild(lbl1WinReward);
+	lbl1WinReward->setColor(ccc3(254, 250, 50));
+	lbl1WinReward->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+//	setFormSetter(lbl1WinReward);
 	CCSprite* spr2Win = CCSprite::create(rewards[2].spriteName.c_str());
 	addChild(spr2Win);
 	spr2Win->setPosition(ccp(60, 26 + 56 + 56));
 	
+	KSLabelTTF* lbl2WinReward = KSLabelTTF::create(rewards[2].desc.c_str(), mySGD->getFont().c_str(), 12.f);
+	addChild(lbl2WinReward);
+	lbl2WinReward->setColor(ccc3(254, 250, 50));
+	lbl2WinReward->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+//	setFormSetter(lbl2WinReward);
 	CCSprite* spr3Win = CCSprite::create(rewards[3].spriteName.c_str());
 	addChild(spr3Win);
 	spr3Win->setPosition(ccp(60, 26 + 56 + 56 + 56));
 	
+	KSLabelTTF* lbl3WinReward = KSLabelTTF::create(rewards[3].desc.c_str(), mySGD->getFont().c_str(), 12.f);
+	addChild(lbl3WinReward);
+	lbl3WinReward->setColor(ccc3(254, 250, 50));
+	lbl3WinReward->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+//	setFormSetter(lbl3WinReward);
 
+	lbl0WinReward->setPosition(ccp(60.0,28.5)); 			// dt (60.0,28.5)
+	lbl1WinReward->setPosition(ccp(60.0,85.0)); 			// dt (60.0,85.0)
+	lbl2WinReward->setPosition(ccp(60.0,140.5)); 			// dt (60.0,140.5)
+	lbl3WinReward->setPosition(ccp(60.0,195.5)); 			// dt (60.0,195.5)
+	
+	KSLabelTTF* lbl0Win = KSLabelTTF::create("보상", mySGD->getFont().c_str(), 12.f);
+	addChild(lbl0Win);
+	lbl0Win->setPosition(ccp(60, 67));
+	
+	lbl0Win->setColor(ccc3(253, 147, 60));
+	lbl0Win->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+	
+	KSLabelTTF* lbl1Win = KSLabelTTF::create("1승", mySGD->getFont().c_str(), 12.f);
+	addChild(lbl1Win);
+	lbl1Win->setPosition(ccp(60, 123));
+	lbl1Win->setColor(ccc3(253, 147, 60));
+	lbl1Win->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+	
+	KSLabelTTF* lbl2Win = KSLabelTTF::create("2승", mySGD->getFont().c_str(), 12.f);
+	addChild(lbl2Win);
+	lbl2Win->setPosition(ccp(60, 179));
+
+	lbl2Win->setColor(ccc3(253, 147, 60));
+	lbl2Win->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+	
+	KSLabelTTF* lbl3Win = KSLabelTTF::create("3승", mySGD->getFont().c_str(), 12.f);
+	addChild(lbl3Win);
+	lbl3Win->setPosition(ccp(60, 235));
+	lbl3Win->setColor(ccc3(253, 147, 60));
+	lbl3Win->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+
+	CCSprite* spr0Win = CCSprite::create(rewards[0].spriteName.c_str());
+	addChild(spr0Win);
+	spr0Win->setPosition(ccp(60, 26));
+
+	
+	
+	
+	
+	
+	setFormSetter(spr0Win);
+	setFormSetter(spr1Win);
+	setFormSetter(spr2Win);
+	setFormSetter(spr3Win);
+	spr3Win->setScale(0.7f);
+	spr3Win->setPosition(ccp(60, 201));
+	spr2Win->setScale(0.7f);
+	spr2Win->setPosition(ccp(60, 201 - 56));
+	spr1Win->setScale(0.7f);
+	spr1Win->setPosition(ccp(60, 201 - 56 - 56));
+	spr0Win->setScale(0.7f);
+	spr0Win->setPosition(ccp(60, 201 - 56 - 56 - 56));
 	loadImage(m_step);
 
 	m_thinkSprite = CCSprite::create("gababo_think.png");
@@ -190,6 +238,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 	m_resultShowing = false;
 	
 	m_remainTimeFnt = CCLabelBMFont::create("", "allfont.fnt");
+	m_remainTimeFnt->setVisible(false);
 	addChild(m_remainTimeFnt, 1);
 	m_remainTimeFnt->setPosition(ccp(30, 260));
 
@@ -391,7 +440,9 @@ void GaBaBo::update(float dt)
 				
 				if(m_winCount == 3)
 				{
-					showResult();
+					addChild(KSTimer::create(0.7f, [=](){
+						showResult();
+					}));
 				}
 				else
 				{

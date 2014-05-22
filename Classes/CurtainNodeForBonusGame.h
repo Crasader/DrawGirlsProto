@@ -10,6 +10,7 @@ USING_NS_CC;
 #include "CommonButton.h"
 #include "DataStorageHub.h"
 #include "KSUtil.h"
+#include "FormSetter.h"
 //#include "GaBaBo.h"
 USING_NS_CC_EXT;
 
@@ -177,29 +178,55 @@ public:
 		addChild(m_rightCurtain, kBonusGameZorder_curtain);
 		
 		
-		m_contentBack = CCScale9Sprite::create("ui_game_clear_back.png", CCRectMake(0, 0, 157, 30),
-																					 CCRectMake(43, 6, 66, 20));
-		m_contentBack->setContentSize(CCSizeMake(310, 150));
-		m_contentBack->setPosition(ccp(650,150));
+		m_contentBack = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		m_contentBack->setPosition(ccp(240.0,155.0)); 			// dt (0.0,5.0)
+		m_contentBack->setContentSize(CCSizeMake(288.0,204.5)); 			// dt (-22.0,54.5)
 		addChild(m_contentBack, kBonusGameZorder_content);
 		CCSprite* rName = CCSprite::create(reward.spriteName.c_str());
+		
+		CCScale9Sprite* inner_right = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		
+		inner_right->setPosition(ccp(144.0,84.0)); 			// dt (-203.0,-41.0)
+		inner_right->setContentSize(CCSizeMake(280.5,157.0)); 			// dt (30.5,-78.0)
+		m_contentBack->addChild(inner_right);
 		
 		rName->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
 		m_contentBack->addChild(rName);
 		
 		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 16.f);
 		rLabel->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
+		rLabel->setColor(ccc3(254, 250, 50));
+		rLabel->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 		m_contentBack->addChild(rLabel);
 		
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
-		m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
-																			 buttonBack, m_touchPriority - 1);
-		m_startMenu->setPosition(ccp(240, -200));
+//		m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
+//																			 buttonBack, m_touchPriority - 1);
+		m_startMenu = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
+																			 CommonButtonLightPupple, m_touchPriority - 1);
+		m_startMenu->setPosition(ccp(240, 84.f));
 		addChild(m_startMenu, kBonusGameZorder_menu);
 		showPopup(onCloseCompleted);
 		m_startMenu->setFunction([=](CCObject* t){
 			menuAction(onOpenCompleted);
 		});
+	
+		KSLabelTTF* rewardConfirm = KSLabelTTF::create("보상 확인", mySGD->getFont().c_str(), 20.f);
+		rewardConfirm->setColor(ccc3(255, 155, 0));
+		m_contentBack->addChild(rewardConfirm);
+		rewardConfirm->setPosition(ccp(52.5,178.0)); 			// dt (52.5,178.0)
+		startFormSetter(this);
+		
+		StyledLabelTTF* sltObtain = StyledLabelTTF::create("<font color=970 size=18>획득</font><font color=999 size=18> 하였습니다.</font>",
+																											 mySGD->getFont().c_str(), 18, 999, StyledAlignment::kCenterAlignment);
+		m_contentBack->addChild(sltObtain);
+		sltObtain->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
+		sltObtain->setPositionY(74.f);
+		
+		setFormSetter(m_startMenu);
+		
+		
+		
 		return true;
 	}
 
