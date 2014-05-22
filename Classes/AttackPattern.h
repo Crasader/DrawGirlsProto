@@ -784,7 +784,7 @@ public:
 	//	CCPoint m_position; // 공격 당시의 보스의 위치
 	Well512 m_well512;
 	CCSpriteBatchNode* batchNode;
-	
+	CCNode* missileNode;
 };
 
 

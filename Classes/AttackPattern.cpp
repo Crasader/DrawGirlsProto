@@ -7,7 +7,7 @@
 //
 #include "AttackPattern.h"
 #include "SilhouetteData.h"
-
+#include "MissileUnitCCB.h"
 void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
@@ -63,6 +63,10 @@ void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::stri
 		
 	batchNode->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(batchNode);
+	
+	missileNode = CCNode::create();
+	addChild(missileNode);
+	
 	AudioEngine::sharedInstance()->playEffect("se_missile.mp3", true);
 	scheduleUpdate();
 }
@@ -155,9 +159,13 @@ void CommonBulletPattern::update(float dt)
 					}
 					else
 					{
-						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
-																																					imgFileName.c_str(), t_mSize,0, 0);
-						batchNode->addChild(t_mu);
+//						MissileUnitCCB* t_mu = MissileUnitCCB::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
+//																																					"ingame_missile.ccbi", t_mSize,0, 0);
+//						missileNode->addChild(t_mu);
+//						t_mu->setScale(0.8f);
+						MissileUnit* t_mu2 = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
+																																					"ingame_missile.ccbi", t_mSize,0, 0);
+						batchNode->addChild(t_mu2);
 					}
 					gun.fireCount++;
 				}
@@ -180,7 +188,7 @@ void CommonBulletPattern::update(float dt)
 
 void CommonBulletPattern::selfRemoveSchedule()
 {
-	if(batchNode->getChildrenCount() == 0)
+	if(batchNode->getChildrenCount() == 0 && missileNode->getChildrenCount() == 0)
 	{
 		removeFromParentAndCleanup(true);
 	}
