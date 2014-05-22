@@ -1003,7 +1003,7 @@ void StartSettingPopup::startItemGacha()
 																		t_shop->setShopCode(kSC_gold);
 																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																		addChild(t_shop, kStartSettingPopupZorder_popup);
-																	}), 9999);
+																	}, [=](){is_menu_enable = true;}), 9999);
 				return;
 			}
 			
@@ -1024,7 +1024,7 @@ void StartSettingPopup::startItemGacha()
 																		t_shop->setShopCode(kSC_gold);
 																		t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																		addChild(t_shop, kStartSettingPopupZorder_popup);
-																	}), 9999);
+																	}, [=](){is_menu_enable = true;}), 9999);
 				return;
 			}
 			
@@ -1456,7 +1456,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																									t_shop->setShopCode(kSC_gold);
 																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																									addChild(t_shop, kStartSettingPopupZorder_popup);
-																								}), 9999);
+																								}, [=](){is_menu_enable = true;}), 9999);
 											
 											is_menu_enable = true;
 										}
@@ -1499,7 +1499,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																									t_shop->setShopCode(kSC_ruby);
 																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																									addChild(t_shop, kStartSettingPopupZorder_popup);
-																								}), 9999);
+																								}, [=](){is_menu_enable = true;}), 9999);
 											
 											is_menu_enable = true;
 										}

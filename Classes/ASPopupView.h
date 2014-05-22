@@ -70,7 +70,7 @@ public:
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func);
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func);
 
-	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func);
+	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func, function<void()> cancel_func = nullptr);
 	
 	bool is_menu_enable;
 	vector<function<void()>> button_func_list;
