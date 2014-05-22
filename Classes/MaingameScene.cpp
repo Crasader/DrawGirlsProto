@@ -284,6 +284,7 @@ void Maingame::onEnterTransitionDidFinish()
 		
 		CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
 		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+		curtain_node->setScale(myDSH->screen_convert_rate);
 		addChild(curtain_node, introZorder);
 	}
 	else
@@ -343,7 +344,7 @@ void Maingame::endIntro()
 	gamenode_moving_direction = kGNMD_up;
 	
 	touch_img = CCSprite::create("touch_before_start.png");
-	touch_img->setPosition(ccp(240,myDSH->ui_center_y-50));
+	touch_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(touch_img, myPMZorder);
 	
 	CCFadeTo* fade1 = CCFadeTo::create(1.f, 0);

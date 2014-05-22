@@ -816,7 +816,7 @@ void MapScanner::setTopBottomBlock()
 			float sub_value = top_y+block_size.height-430;
 			for(int i=0;i<10;i++) // float 문제때문에
 			{
-				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, 0, block_size.width, block_size.height-sub_value));
+				CCSprite* t_block = CCSprite::createWithTexture(top_block_manager->getTexture(), CCRectMake(0, sub_value, block_size.width, block_size.height-sub_value));
 				t_block->setAnchorPoint(ccp(0,0));
 				t_block->setPosition(ccp(i*block_size.width, top_y+2));
 				t_block->setTag(top_cnt*10+i); // float 문제때문에

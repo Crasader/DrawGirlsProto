@@ -310,7 +310,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
 	ko->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
-	ko->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ko->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	ko->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	ko->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	ko->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -880,7 +880,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
 	
-	en->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	en->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	en->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	en->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	en->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -1452,7 +1452,7 @@ void MyLocal::initLocal()
 	
 	
 	
-	ja->setObject(CCString::create("<font color=990 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ja->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	ja->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	ja->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	ja->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);

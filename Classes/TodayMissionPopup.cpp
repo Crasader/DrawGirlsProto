@@ -259,10 +259,10 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	progress_bar->setVisible(false);
 	m_container->addChild(progress_bar);
 	
-	KSLabelTTF* progress_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 15.5f);
-	progress_label->setAnchorPoint(ccp(0,0.5));
-	progress_label->setPosition(ccp(-progress_bar->getSprite()->getContentSize().width/2.f+10, -11));
-	m_container->addChild(progress_label);
+//	KSLabelTTF* progress_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 15.5f);
+//	progress_label->setAnchorPoint(ccp(0,0.5));
+//	progress_label->setPosition(ccp(-progress_bar->getSprite()->getContentSize().width/2.f+10, -11));
+//	m_container->addChild(progress_label);
 	
 	
 	if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())

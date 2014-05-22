@@ -803,7 +803,7 @@ void AreaScroll::showArrow ()
 	for(int i=0;i<8;i++)
 	{
 		CCSprite* t_down = CCSprite::create("area_scroll_down.png");
-		t_down->setPosition(ccp(65+i*50, myDSH->ui_center_y-18));
+		t_down->setPosition(ccp(65+i*50, myDSH->ui_center_y-30));
 		t_down->setOpacity(0);
 		addChild(t_down);
 		
@@ -815,7 +815,7 @@ void AreaScroll::showArrow ()
 		
 		
 		CCSprite* t_up = CCSprite::create("area_scroll_up.png");
-		t_up->setPosition(ccp(65+i*50, myDSH->ui_center_y+18));
+		t_up->setPosition(ccp(65+i*50, myDSH->ui_center_y+30));
 		t_up->setOpacity(0);
 		addChild(t_up);
 		
@@ -849,7 +849,7 @@ void ChangeCard::startMyAction()
 }
 void ChangeCard::myInit ()
 {
-	setPosition(ccp(240,myDSH->ui_top*0.67f));
+	setPosition(ccp(240,myDSH->ui_center_y));
 	
 	schedule(schedule_selector(ChangeCard::startMyAction));
 }

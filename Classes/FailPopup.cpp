@@ -298,20 +298,20 @@ bool FailPopup::init()
 	if(fail_code == kFC_timeover)
 	{
 		CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_timeover_%s.png", myLoc->getSupportLocalCode())->getCString());
-		title->setPosition(ccp(132,240));
-		main_case->addChild(title, kZ_FP_img);
+		title->setPosition(ccp(inner_left->getContentSize().width/2.f,210));
+		inner_left->addChild(title, kZ_FP_img);
 	}
 	else if(fail_code == kFC_missionfail)
 	{
 		CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_missionfail_%s.png", myLoc->getSupportLocalCode())->getCString());
-		title->setPosition(ccp(132,240));
-		main_case->addChild(title, kZ_FP_img);
+		title->setPosition(ccp(inner_left->getContentSize().width/2.f,210));
+		inner_left->addChild(title, kZ_FP_img);
 	}
 	else
 	{
 		CCSprite* title = CCSprite::create(CCString::createWithFormat("ending_gameover_%s.png", myLoc->getSupportLocalCode())->getCString());
-		title->setPosition(ccp(132,240));
-		main_case->addChild(title, kZ_FP_img);
+		title->setPosition(ccp(inner_left->getContentSize().width/2.f,210));
+		inner_left->addChild(title, kZ_FP_img);
 	}
 	
 	CCSprite* stage_tab = CCSprite::create("ending_tab.png");

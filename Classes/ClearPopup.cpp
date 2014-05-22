@@ -268,8 +268,8 @@ bool ClearPopup::init()
 	
 	title = CCSprite::create(CCString::createWithFormat("ending_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
 	title->setScale(0);
-	title->setPosition(ccp(132,240));
-	main_case->addChild(title, kZ_CP_menu);
+	title->setPosition(ccp(inner_left->getContentSize().width/2.f,210));
+	inner_left->addChild(title, kZ_CP_menu);
 	
 	
 	CCSprite* stage_tab = CCSprite::create("ending_tab.png");
