@@ -124,6 +124,10 @@ bool CardViewScene::init()
 	else
 		s_morphing->setColor(ccGRAY);
 	
+	buy_morphing_menu = CCMenuLambda::create();
+	buy_morphing_menu->setPosition(ccp(445,myDSH->ui_top-35-40));
+	addChild(buy_morphing_menu, kCV_Z_next_button);
+	
 	CCMenuItemLambda* morphing_item = CCMenuItemSpriteLambda::create(n_morphing, s_morphing, [=](CCObject* sender)
 																	 {
 																		 if(!is_actioned)
@@ -138,16 +142,14 @@ bool CardViewScene::init()
 																					
 																					n_morphing->setGray(false);
 																					s_morphing->setColor(ccGRAY);
+																					
+																					buy_morphing_menu->setEnabled(false);
 																				});
 																				addChild(t_popup, 999);
-																				
-																				// show popup
 																			}
 																	 });
 	
-	buy_morphing_menu = CCMenuLambda::createWithItem(morphing_item);
-	buy_morphing_menu->setPosition(ccp(445,myDSH->ui_top-35-40));
-	addChild(buy_morphing_menu, kCV_Z_next_button);
+	buy_morphing_menu->addChild(morphing_item);
 	
 	buy_morphing_menu->setTouchPriority(-160);
 	
