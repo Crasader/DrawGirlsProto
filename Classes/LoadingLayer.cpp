@@ -51,6 +51,12 @@ void LoadingLayer::myInit(int t_touch_priority, bool is_ingame)
 	setTouchEnabled(true);
 }
 
+void LoadingLayer::setPositions(CCPoint t_position)
+{
+	gray->setPosition(t_position);
+	loading_label->setPosition(t_position);
+}
+
 void LoadingLayer::onEnter()
 {
 	CCLayer::onEnter();

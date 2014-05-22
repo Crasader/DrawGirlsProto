@@ -486,6 +486,10 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
 	ko->setObject(CCString::create("일"), kMyLocalKey_attendanceDay);
 	
+	ko->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
+	ko->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	ko->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1042,6 +1046,10 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	en->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
 	en->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
+	
+	en->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
+	en->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	en->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1622,6 +1630,10 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	ja->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
 	ja->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
+	
+	ja->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
+	ja->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	ja->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

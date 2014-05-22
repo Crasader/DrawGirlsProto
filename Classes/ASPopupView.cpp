@@ -21,7 +21,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 }
 
 
-ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func)
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position)
 {
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	startFormSetter(t_popup);
@@ -38,14 +38,26 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, st
 		height_value = myDSH->ui_top;
 	
 	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-	t_popup->setDimmedPosition(ccp(240, 160));
-	t_popup->setBasePosition(ccp(240, 160));
 	
-	if(mySGD->is_on_maingame)
+	if(t_position.equals(CCPointZero))
 	{
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		if(mySGD->is_on_maingame)
+		{
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		}
+		else
+		{
+			t_popup->setDimmedPosition(ccp(240, 160));
+			t_popup->setBasePosition(ccp(240, 160));
+		}
 	}
+	else
+	{
+		t_popup->setDimmedPosition(t_position);
+		t_popup->setBasePosition(t_position);
+	}
+	
 	
 	CCNode* t_container = CCNode::create();
 	t_popup->setContainerNode(t_container);
@@ -90,7 +102,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, st
 }
 
 
-ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func)
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func, CCPoint t_position)
 {
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	startFormSetter(t_popup);
@@ -107,13 +119,24 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 		height_value = myDSH->ui_top;
 	
 	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-	t_popup->setDimmedPosition(ccp(240, 160));
-	t_popup->setBasePosition(ccp(240, 160));
 	
-	if(mySGD->is_on_maingame)
+	if(t_position.equals(CCPointZero))
 	{
-		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		if(mySGD->is_on_maingame)
+		{
+			t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		}
+		else
+		{
+			t_popup->setDimmedPosition(ccp(240, 160));
+			t_popup->setBasePosition(ccp(240, 160));
+		}
+	}
+	else
+	{
+		t_popup->setDimmedPosition(t_position);
+		t_popup->setBasePosition(t_position);
 	}
 	
 	CCNode* t_container = CCNode::create();

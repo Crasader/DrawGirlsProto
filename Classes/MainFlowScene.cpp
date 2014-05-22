@@ -2004,13 +2004,13 @@ void MainFlowScene::setBottom()
 		CCSprite* n_cgp = CCSprite::create("mainflow_event.png");
 		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		n_cgp_label->enableOuterStroke(ccBLACK, 1.f);
-		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 7));
+		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 15));
 		n_cgp->addChild(n_cgp_label);
 		CCSprite* s_cgp = CCSprite::create("mainflow_event.png");
 		s_cgp->setColor(ccGRAY);
 		KSLabelTTF* s_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		s_cgp_label->enableOuterStroke(ccBLACK, 1.f);
-		s_cgp_label->setPosition(ccp(s_cgp->getContentSize().width/2.f, 7));
+		s_cgp_label->setPosition(ccp(s_cgp->getContentSize().width/2.f, 15));
 		s_cgp->addChild(s_cgp_label);
 		
 		CCMenuLambda* cgp_menu = CCMenuLambda::create();
@@ -2033,7 +2033,7 @@ void MainFlowScene::setBottom()
 			etc_frame->addChild(etc_img);
 			KSLabelTTF* etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 			etc_label->enableOuterStroke(ccBLACK, 1.f);
-			etc_label->setPosition(ccp(etc_img->getContentSize().width/2.f, 7));
+			etc_label->setPosition(ccp(etc_img->getContentSize().width/2.f, 12));
 			etc_frame->addChild(etc_label);
 		});
 		
@@ -2206,7 +2206,7 @@ void MainFlowScene::setBottom()
 		etc_frame->addChild(etc_img);
 		KSLabelTTF* etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		etc_label->enableOuterStroke(ccBLACK, 1.f);
-		etc_label->setPosition(ccp(etc_img->getContentSize().width/2.f, 7));
+		etc_label->setPosition(ccp(etc_img->getContentSize().width/2.f, 15));
 		etc_frame->addChild(etc_label);
 	}
 }

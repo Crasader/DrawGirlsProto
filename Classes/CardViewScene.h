@@ -56,6 +56,8 @@ private:
 	
 	void nextScene();
 	
+	bool is_morphing;
+	
 	CCSprite* zoom_img;
 	CCMenuLambda* buy_morphing_menu;
 	GraySprite* n_morphing;
