@@ -230,6 +230,8 @@ enum SDS_KEY
 	kSDS_CI_int1_silImgInfoImg_s,
 	kSDS_CI_int1_profile_s,
 	kSDS_CI_int1_name_s,
+	kSDS_CI_int1_mPrice_ruby_i,
+	kSDS_CI_int1_mPrice_pass_i,
 	kSDS_CI_end = 3999,
 	kSDS_AI_base = 4000,
 	kSDS_AI_version_i,

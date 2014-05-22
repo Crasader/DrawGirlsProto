@@ -600,7 +600,7 @@ int StarGoldData::getNextCardNumber( int recent_card_number )
 	int found_number = -1;
 	for(int i=0;i<t_size;i++)
 	{
-		if(recent_card_number == has_gotten_cards[i].card_number)
+		if(recent_card_number == has_gotten_cards[i].card_number.getV())
 		{
 			found_number = i;
 			break;
@@ -611,9 +611,9 @@ int StarGoldData::getNextCardNumber( int recent_card_number )
 		return -1;
 
 	if(found_number >= t_size-1)
-		return has_gotten_cards[0].card_number;
+		return has_gotten_cards[0].card_number.getV();
 	else
-		return has_gotten_cards[found_number+1].card_number;
+		return has_gotten_cards[found_number+1].card_number.getV();
 }
 
 int StarGoldData::getNextStageCardNumber( int recent_card_number )
@@ -653,7 +653,7 @@ int StarGoldData::getPreCardNumber( int recent_card_number )
 	int found_number = -1;
 	for(int i=0;i<t_size;i++)
 	{
-		if(recent_card_number == has_gotten_cards[i].card_number)
+		if(recent_card_number == has_gotten_cards[i].card_number.getV())
 		{
 			found_number = i;
 			break;
@@ -664,9 +664,9 @@ int StarGoldData::getPreCardNumber( int recent_card_number )
 		return -1;
 
 	if(found_number <= 0)
-		return has_gotten_cards[t_size-1].card_number;
+		return has_gotten_cards[t_size-1].card_number.getV();
 	else
-		return has_gotten_cards[found_number-1].card_number;
+		return has_gotten_cards[found_number-1].card_number.getV();
 }
 
 int StarGoldData::getPreStageCardNumber( int recent_card_number )
@@ -705,7 +705,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortDefault{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.card_number < b.card_number;
+				return a.card_number.getV() < b.card_number.getV();
 			}
 		} pred;
 
@@ -716,7 +716,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number > b.take_number;
+				return a.take_number.getV() > b.take_number.getV();
 			}
 		} pred;
 
@@ -727,7 +727,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number < b.take_number;
+				return a.take_number.getV() < b.take_number.getV();
 			}
 		} pred;
 		
@@ -738,7 +738,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortGradeUp{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank > b.rank;
+				return a.rank.getV() > b.rank.getV();
 			}
 		} pred;
 
@@ -749,7 +749,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortGradeDown{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank < b.rank;
+				return a.rank.getV() < b.rank.getV();
 			}
 		} pred;
 
@@ -764,8 +764,8 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 	CardSortInfo t_info;
 	t_info.card_number = card_number;
 	t_info.take_number = has_gotten_cards.size()+1;
-	t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number);
-	t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
+	t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number.getV());
+	t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number.getV());
 	has_gotten_cards.push_back(t_info);
 
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
@@ -773,13 +773,13 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 	CCLOG("input %d, sort", card_number);
 	for(int i=0;i<has_gotten_cards.size();i++)
 	{
-		CCLOG("%d", has_gotten_cards[i].card_number);
+		CCLOG("%d", has_gotten_cards[i].card_number.getV());
 	}
 }
 
 int StarGoldData::getHasGottenCardsDataCardNumber( int index )
 {
-	return has_gotten_cards[index].card_number;
+	return has_gotten_cards[index].card_number.getV();
 }
 
 CardSortInfo StarGoldData::getHasGottenCardData(int index)
@@ -838,7 +838,7 @@ string StarGoldData::getCardComment(int t_card_number)
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
 		if(i->card_number == t_card_number)
-			return i->user_ment;
+			return i->user_ment.getV();
 	}
 	
 	return "";
@@ -853,12 +853,32 @@ void StarGoldData::setCardComment(int t_card_number, string comment)
 	}
 }
 
+bool StarGoldData::isCardMorphing(int card_number)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number.getV() == card_number)
+			return i->is_morphing.getV();
+	}
+	
+	return false;
+}
+
+void StarGoldData::onCardMorphing(int card_number)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number.getV() == card_number)
+			i->is_morphing = true;
+	}
+}
+
 int StarGoldData::isHasGottenCards(int t_card_number)
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
 		if(i->card_number == t_card_number)
-			return i->card_number;
+			return i->card_number.getV();
 	}
 	
 	return 0;
@@ -868,8 +888,8 @@ int StarGoldData::isHasGottenCards( int t_stage, int t_grade )
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(NSDS_GI(kSDS_CI_int1_stage_i, i->card_number) == t_stage && i->grade == t_grade)
-			return i->card_number;
+		if(NSDS_GI(kSDS_CI_int1_stage_i, i->card_number.getV()) == t_stage && i->grade.getV() == t_grade)
+			return i->card_number.getV();
 	}
 
 	return 0;
@@ -879,7 +899,7 @@ void StarGoldData::resetHasGottenCards()
 {
 	for(int i=0;i<has_gotten_cards.size();i++)
 	{
-		int card_number = has_gotten_cards[i].card_number;
+		int card_number = has_gotten_cards[i].card_number.getV();
 		has_gotten_cards[i].grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
 		has_gotten_cards[i].rank = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
 	}
@@ -905,6 +925,7 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		t_info.grade = 0;
 		t_info.rank = 0;
 		t_info.user_ment = card_info["comment"].asString();
+		t_info.is_morphing = card_info["isMorphing"].asBool();
 		has_gotten_cards.push_back(t_info);
 		
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
@@ -1486,6 +1507,8 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "p4";
 	else if(t_type == kGoodsType_pass5)
 		return_value = "p5";
+	else if(t_type == kGoodsType_pass6)
+		return_value = "p6";
 	else if(t_type == kGoodsType_pz)
 		return_value = "pz";
 	else if(t_type == kGoodsType_pc)

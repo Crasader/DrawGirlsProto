@@ -15,6 +15,8 @@
 #include "CommonButton.h"
 #include "bustMorphing.h"
 #include "RankUpPopup.h"
+#include "GraySprite.h"
+#include "CCMenuLambda.h"
 
 #define CV_SCROLL_SPEED_MAX_BASE	20
 #define CV_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -107,6 +109,17 @@ bool CardViewScene::init()
 	zoom_img = CCSprite::create("ending_expand.png");
 	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
 	addChild(zoom_img, kCV_Z_next_button);
+	
+	n_morphing = GraySprite::create("cardsetting_morphing.png");
+	s_morphing = GraySprite::create("cardsetting_morphing.png");
+	
+	
+	
+	CCMenuItemLambda* morphing_item = CCMenuItemSpriteLambda::create(n_morphing, s_morphing, [=](CCObject* sender)
+																	 {
+																		 
+																	 });
+	
 	
 	
 	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(80,50), CommonButtonYellow, -160);

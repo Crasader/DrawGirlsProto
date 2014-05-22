@@ -73,11 +73,12 @@ enum CardSortType{
 
 class CardSortInfo{
 public:
-	int card_number;
-	long long int take_number;
-	int grade;
-	int rank;
-	string user_ment;
+	KSProtectVar<int> card_number;
+	KSProtectVar<long long int> take_number;
+	KSProtectVar<int> grade;
+	KSProtectVar<int> rank;
+	KSProtectStr user_ment;
+	KSProtectVar<bool> is_morphing;
 };
 
 class PuzzleHistory{
@@ -156,6 +157,7 @@ enum GoodsType
 	kGoodsType_pass3,
 	kGoodsType_pass4,
 	kGoodsType_pass5,
+	kGoodsType_pass6,
 	kGoodsType_end,
 	kGoodsType_pz,
 	kGoodsType_pc,
@@ -374,6 +376,8 @@ public:
 	
 	int getHasGottenCardsDataCardNumber(int index);
 	CardSortInfo getHasGottenCardData(int index);
+	bool isCardMorphing(int card_number);
+	void onCardMorphing(int card_number);
 	
 	int getHasGottenCardsSize();
 	
