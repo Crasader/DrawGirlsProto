@@ -156,6 +156,7 @@ void CommonBulletPattern::update(float dt)
 																					  imgFileName.c_str(), t_mSize,
 																					  m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE);
 						batchNode->addChild(t_mu);
+						t_mu->setOpacity(200);
 					}
 					else
 					{
@@ -166,6 +167,7 @@ void CommonBulletPattern::update(float dt)
 						MissileUnit* t_mu2 = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
 																																					imgFileName.c_str(), t_mSize,0, 0);
 						batchNode->addChild(t_mu2);
+						t_mu2->setOpacity(200);
 					}
 					gun.fireCount++;
 				}

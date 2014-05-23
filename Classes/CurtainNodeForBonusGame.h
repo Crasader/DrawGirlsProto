@@ -58,7 +58,10 @@ public:
 	bool init(BonusGameCode gameCode, int tPrior, std::function<void(void)> onPressStartButton)
 	{
 		CCLayer::init();
-
+		startFormSetter(this);
+		setFormSetterGuide("_0514_start_1.png");
+		
+		
 		m_touchPriority = tPrior;
 		m_gameCode = gameCode;
 		m_onPressStartButton = onPressStartButton;
@@ -82,16 +85,17 @@ public:
 		//m_titleBonusGame->setVisible(false);
 		m_titleStr = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 13.f);
 		m_titleStr->setPosition(ccp(240, 500));
-		m_titleStr->setColor(ccc3(50, 250, 0));
+		m_titleStr->setColor(ccc3(29, 10, 0));
 		addChild(m_titleStr, kBonusGameZorder_title);
 		m_contentBack = CCScale9Sprite::create("ui_game_clear_back.png", CCRectMake(0, 0, 157, 30),
 																					CCRectMake(43, 6, 66, 20));
-		m_contentBack->setContentSize(CCSizeMake(310, 100));
+		m_contentBack->setContentSize(CCSizeMake(310, 72.f));
 		m_contentBack->setPosition(ccp(650,150));
 		addChild(m_contentBack, kBonusGameZorder_content);
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
-		m_startMenu = CommonButton::create("게임시작", 23.f, CCSizeMake(160, 50), 
+		m_startMenu = CommonButton::create("게임시작", 23.f, CCSizeMake(175.f, 55.f),
 																			buttonBack, m_touchPriority - 1);
+		m_startMenu->setTitleColor(ccc3(37, 18, 0));
 		m_startMenu->setPosition(ccp(240, -200));
 		addChild(m_startMenu, kBonusGameZorder_menu);
 		m_startMenu->setFunction([=](CCObject* t){
@@ -110,6 +114,10 @@ public:
 
 		desc->setPosition(ccp(m_contentBack->getContentSize().width/2.f, m_contentBack->getContentSize().height/2.f+20));
 		m_contentBack->addChild(desc);
+		
+
+		
+		
 		if(m_gameCode == kBonusGameCode_gababo)
 		{
 			KSLabelTTF* title_gamename = KSLabelTTF::create("가위! 바위! 보!", mySGD->getFont().c_str(), 33.f);
@@ -126,6 +134,9 @@ public:
 			}, StyledAlignment::kCenterAlignment);
 			content_front->setPosition(ccp(m_contentBack->getContentSize().width/2.f, m_contentBack->getContentSize().height/2.f-2));
 			m_contentBack->addChild(content_front);
+			
+
+
 		}
 		if(m_gameCode == kBonusGameCode_touchtouch)
 		{
@@ -204,7 +215,7 @@ public:
 //																			 buttonBack, m_touchPriority - 1);
 		m_startMenu = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
 																			 CommonButtonLightPupple, m_touchPriority - 1);
-		m_startMenu->setPosition(ccp(240, 84.f));
+		m_startMenu->setPosition(ccp(240, -200.f));
 		addChild(m_startMenu, kBonusGameZorder_menu);
 		showPopup(onCloseCompleted);
 		m_startMenu->setFunction([=](CCObject* t){
@@ -217,13 +228,13 @@ public:
 		rewardConfirm->setPosition(ccp(52.5,178.0)); 			// dt (52.5,178.0)
 		startFormSetter(this);
 		
-		StyledLabelTTF* sltObtain = StyledLabelTTF::create("<font color=970 size=18>획득</font><font color=999 size=18> 하였습니다.</font>",
-																											 mySGD->getFont().c_str(), 18, 999, StyledAlignment::kCenterAlignment);
-		m_contentBack->addChild(sltObtain);
-		sltObtain->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
-		sltObtain->setPositionY(74.f);
+//		StyledLabelTTF* sltObtain = StyledLabelTTF::create("<font color=970 size=18>획득</font><font color=999 size=18> 하였습니다.</font>",
+//																											 mySGD->getFont().c_str(), 18, 999, StyledAlignment::kCenterAlignment);
+//		m_contentBack->addChild(sltObtain);
+//		sltObtain->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
+//		sltObtain->setPositionY(74.f);
 		
-		setFormSetter(m_startMenu);
+
 		
 		
 		
@@ -305,25 +316,25 @@ public:
 
 		if(m_titleBonusGame)
 		{
-			CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 270));
+			CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 257.5f));
 			m_titleBonusGame->runAction(title_move);
 		}
 		
 		if(m_titleStr)
 			
 		{
-			CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 270));
+			CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 257.5f));
 			m_titleStr->runAction(title_move2);
 	
 		}
 		
 		if(m_contentBack)
 		{
-			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(240, 150));
+			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(240, 144.5));
 			m_contentBack->runAction(content_move);
 		}
 		
-		addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, 65), 0.3f,
+		addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, 65.f), 0.3f,
 																						 [=](CCPoint t){
 																							 m_startMenu->setPosition(t);
 																						 },
