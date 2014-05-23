@@ -169,7 +169,7 @@ public:
 		deleList.push_back(obj);
 	}
 	
-	bool cehckTarget(CCObject *obj){
+	bool checkTarget(CCObject *obj){
 		CCLOG("checkDelegator");
 		if(obj==NULL)return false;
 		vector<CCObject*>::iterator it;
@@ -204,7 +204,7 @@ public:
 		addTarget(target);
 		function<void(Json::Value)> sFunc = [=](Json::Value value){
 			CCLOG("checkDelegator sFunc call");
-			if(GraphDog::get()->cehckTarget(target))func(value);
+			if(GraphDog::get()->checkTarget(target))func(value);
 		};
 		
 		return command(action,param,sFunc);

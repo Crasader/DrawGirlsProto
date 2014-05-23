@@ -444,7 +444,7 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObjec
 	GraphDog::get()->addTarget(target);
 	function<void(Json::Value)> sFunc = [=](Json::Value value){
 		CCLOG("checkDelegator sFunc call");
-		if(GraphDog::get()->cehckTarget(target))
+		if(GraphDog::get()->checkTarget(target))
 			func(value);
 	};
 	checkCGP(param, callbackParam, sFunc);
@@ -500,7 +500,7 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam, 
 	GraphDog::get()->addTarget(target);
 	function<void(Json::Value)> sFunc = [=](Json::Value value){
 		CCLOG("checkDelegator sFunc call");
-		if(GraphDog::get()->cehckTarget(target))
+		if(GraphDog::get()->checkTarget(target))
 			func(value);
 	};
 	purchaseProduct(param, callbackParam, sFunc);

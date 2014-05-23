@@ -311,7 +311,7 @@ void StyledLabelTTF::setStringByTag(const char* text){
 			}
 			if(str[i]!='>')i++;
 			CCLog("tagName is %s at %d",tagName.c_str(),labelNo);
-			sData[labelNo]["tag"]=tagName;
+			sData[labelNo]["tagName"]=tagName;
 			
 			//내용을 포함하는 태그종류는 현재번호를 등록해놓기
 			if(tagName=="font")lastIncludeContentTagNo=labelNo;
@@ -470,6 +470,8 @@ void StyledLabelTTF::setStringByTag(const char* text){
 	for(int k = 0;k<sData.size();k++){
 		Json::Value p;
 		int rgb = sData[k].get("color", m_fontColor).asInt();
+		p["tagName"]=sData[k].get("tagName", "").asString();
+		p["img"]=sData[k].get("src", "").asString();
 		p["fillcolor"]=StyledLabelTTF::makeRGB((rgb/100)/9.f*255, (rgb/10%10)/9.f*255, (rgb%10)/9.f*255);
 		p["size"]=sData[k].get("size", m_fontSize).asInt();
 		p["tag"]=sData[k].get("tag", 0).asInt();
@@ -478,7 +480,7 @@ void StyledLabelTTF::setStringByTag(const char* text){
 
 		p["strokecolor"]=StyledLabelTTF::makeRGB((strokeColor/100)/9.f*255, (strokeColor/10%10)/9.f*255, (strokeColor%10)/9.f*255);
 		p["strokesize"]=sData[k].get("strokesize", 0.f).asFloat(); 
-		texts.push_back({sData[k]["content"].asString(),p.toStyledString()});
+		texts.push_back({sData[k].get("content", "").asString(),p.toStyledString()});
 		
 		//CCLog("ok new ttf is %s and %s",sData[k]["content"].asString().c_str(),p.toStyledString().c_str());
 		if(sData[k].get("newline",0).asInt()>0){
