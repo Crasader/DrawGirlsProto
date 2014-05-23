@@ -268,7 +268,7 @@ bool ClearPopup::init()
 	
 	title = CCSprite::create(CCString::createWithFormat("ending_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
 	title->setScale(0);
-	title->setPosition(ccp(inner_left->getContentSize().width/2.f,210));
+	title->setPosition(ccp(inner_left->getContentSize().width/2.f,186));
 	inner_left->addChild(title, kZ_CP_menu);
 	
 	
@@ -420,6 +420,13 @@ bool ClearPopup::init()
 	
 	
 	CCSprite* n_ok = CCSprite::create("ending_button.png");
+	
+	KSLabelTTF* n_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	n_ok_label2->setColor(ccWHITE);
+	n_ok_label2->setOpacity(100);
+	n_ok_label2->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-4));
+	n_ok->addChild(n_ok_label2);
+	
 	KSLabelTTF* n_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	n_ok_label->setColor(ccc3(50, 30, 5));
 //	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
@@ -428,6 +435,13 @@ bool ClearPopup::init()
 	
 	CCSprite* s_ok = CCSprite::create("ending_button.png");
 	s_ok->setColor(ccGRAY);
+	
+	KSLabelTTF* s_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	s_ok_label2->setColor(ccWHITE);
+	s_ok_label2->setOpacity(100);
+	s_ok_label2->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-4));
+	s_ok->addChild(s_ok_label2);
+	
 	KSLabelTTF* s_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	s_ok_label->setColor(ccc3(50, 30, 5));
 //	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
@@ -446,6 +460,13 @@ bool ClearPopup::init()
 //	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
 //	{
 		CCSprite* n_replay = CCSprite::create("ending_button.png");
+	
+	KSLabelTTF* n_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
+	n_replay_label2->setColor(ccWHITE);
+	n_replay_label2->setOpacity(100);
+	n_replay_label2->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-4));
+	n_replay->addChild(n_replay_label2);
+	
 	KSLabelTTF* n_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	n_replay_label->setColor(ccc3(50, 30, 5));
 //	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
@@ -453,6 +474,13 @@ bool ClearPopup::init()
 	n_replay->addChild(n_replay_label);
 		CCSprite* s_replay = CCSprite::create("ending_button.png");
 		s_replay->setColor(ccGRAY);
+	
+	KSLabelTTF* s_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
+	s_replay_label2->setColor(ccWHITE);
+	s_replay_label2->setOpacity(100);
+	s_replay_label2->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-4));
+	s_replay->addChild(s_replay_label2);
+	
 	KSLabelTTF* s_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	s_replay_label->setColor(ccc3(50, 30, 5));
 //	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);

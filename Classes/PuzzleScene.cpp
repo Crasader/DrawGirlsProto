@@ -1795,6 +1795,20 @@ void PuzzleScene::setRight()
 	}
 	
 	CCSprite* n_ready = CCSprite::create("puzzle_right_ready.png");
+	
+	CCLabelTTF* n_stage2 = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
+											 mySGD->getFont().c_str(), 12);
+	n_stage2->setColor(ccWHITE);
+	n_stage2->setOpacity(100);
+	n_stage2->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+12));
+	n_ready->addChild(n_stage2);
+	
+	KSLabelTTF* n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
+	n_ready_label2->setColor(ccWHITE);
+	n_ready_label2->setOpacity(100);
+	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f-1));
+	n_ready->addChild(n_ready_label2);
+	
 	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 12);
 	n_stage->setColor(ccBLACK);
@@ -1808,6 +1822,20 @@ void PuzzleScene::setRight()
 	
 	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
 	s_ready->setColor(ccGRAY);
+	
+	CCLabelTTF* s_stage2 = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
+											  mySGD->getFont().c_str(), 12);
+	s_stage2->setColor(ccWHITE);
+	s_stage2->setOpacity(100);
+	s_stage2->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+12));
+	s_ready->addChild(s_stage2);
+	
+	KSLabelTTF* s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
+	s_ready_label2->setColor(ccWHITE);
+	s_ready_label2->setOpacity(100);
+	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f-1));
+	s_ready->addChild(s_ready_label2);
+	
 	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 12);
 	s_stage->setColor(ccBLACK);
