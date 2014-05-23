@@ -214,6 +214,8 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 		title_string = myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought);
 	else if(t_type == kGoodsType_gold)
 		title_string = myLoc->getLocalForKey(kMyLocalKey_goldNotEnought);
+	else if(t_type == kGoodsType_money)
+		title_string = myLoc->getLocalForKey(kMyLocalKey_heartNotEnought);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));

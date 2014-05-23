@@ -641,7 +641,7 @@ bool ShopPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-22.f-450));
+	main_case->setPosition(ccp(240,160-14.f-450));
 	addChild(main_case, kSP_Z_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 15);
@@ -814,7 +814,7 @@ bool ShopPopup::init()
 void ShopPopup::showPopup()
 {
 	setTouchEnabled(true);
-	CCMoveTo* main_move = CCMoveTo::create(0.3f, ccp(240,160-22.f));
+	CCMoveTo* main_move = CCMoveTo::create(0.3f, ccp(240,160-14.f));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -836,7 +836,7 @@ void ShopPopup::hidePopup()
 {
 	is_menu_enable = false;
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
