@@ -450,7 +450,7 @@ public:
 				if(m_resultGacha)
 				{
 //					m_resultGacha(recent_percent); // 원래 가차 수치로 ~!
-					m_resultGacha(1.f); // 원래 가차 수치로 ~!
+					m_resultGacha(recent_percent); // 원래 가차 수치로 ~!
 
 					removeFromParent();
 				}
