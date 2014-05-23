@@ -843,8 +843,31 @@ void PuzzleScene::pumpPuzzle()
 
 void PuzzleScene::endSuccessPuzzleEffect()
 {
-	mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
-	startBacking();
+	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
+		//		if(m_gameCode == kMiniGameCode_gababo)
+		{
+			BonusGameReward gr1;
+			gr1.spriteName = "shop_ruby2.png";
+			gr1.desc = "루우비~!";
+			
+			BonusGameReward gr2;
+			gr2.spriteName = "shop_ruby2.png";
+			gr2.desc = "루우비~!";
+			BonusGameReward gr3;
+			gr3.spriteName = "shop_ruby2.png";
+			gr3.desc = "루우비~!";
+			BonusGameReward gr4;
+			gr4.spriteName = "shop_ruby2.png";
+			gr4.desc = "루우비~!";
+			GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+										 {
+											 mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
+											 startBacking();
+										 });
+			addChild(gbb, (int)Curtain::kBonusGame);
+		}
+	});
+	addChild(bonusGame, (int)Curtain::kCurtain);
 	
 //	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 }
