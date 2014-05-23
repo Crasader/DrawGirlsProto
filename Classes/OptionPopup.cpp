@@ -32,6 +32,8 @@
 #include "EffectSprite.h"
 #include "FlagSelector.h"
 
+#include "CouponPopup.h"
+
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -901,7 +903,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_coupon)
 	{
-		is_menu_enable = true;
+		CouponPopup* t_popup = CouponPopup::create(-300, [=](){is_menu_enable = true;});
+		addChild(t_popup, kOP_Z_popup);
 	}
 	else if(tag == kOP_MT_community)
 	{
