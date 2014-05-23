@@ -199,27 +199,38 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 	int missileNumbersInt = floor(missileNumbers);
 	if(stoneType == StoneType::kStoneType_guided)
 	{
+		addChild(KSSchedule::create([=](float dt)
+																{
+																	return false; // stop
+																}));
 		for(int i=0; i<missileNumbersInt; i++)
 		{
-			string fileName = boost::str(boost::format("jack_missile_%||.png") % ((grade - 1) * 5 + level));
-			KSCumberBase* target = nullptr;
-			std::vector<KSCumberBase*> targets;
-			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
-			targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
-			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
-			
-			int random_value = rand()%7 - 3;
-			float random_float = random_value/10.f;
-			bool selfRotation = false;
-			if(grade == 1 || grade == 4)
-				selfRotation = true;
-			GuidedMissile* gm = GuidedMissile::create(target, initPosition,
-																								fileName,
-																								1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
-																								ao, selfRotation
-																							 );
-			gm->beautifier(grade, level);
-			jack_missile_node->addChild(gm);
+			auto creator = [=](){
+				string fileName = boost::str(boost::format("jack_missile_%||.png") % ((grade - 1) * 5 + level));
+				KSCumberBase* target = nullptr;
+				std::vector<KSCumberBase*> targets;
+				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
+				targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
+				target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+				
+				int random_value = rand()%7 - 3;
+				float random_float = random_value/10.f;
+				bool selfRotation = false;
+				if(grade == 1 || grade == 4)
+					selfRotation = true;
+				random_float = 0.f;
+				
+				GuidedMissile* gm = GuidedMissile::create(target, myGD->getJackPoint().convertToCCP(),
+																									fileName,
+																									1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
+																									ao, selfRotation
+																									);
+				gm->beautifier(grade, level);
+				jack_missile_node->addChild(gm);
+			};
+			addChild(KSTimer::create(0.15 * (i + 1), [=](){
+				creator();
+			}));
 		}
 	}
 	else if(stoneType == StoneType::kStoneType_mine)

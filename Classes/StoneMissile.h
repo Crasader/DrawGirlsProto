@@ -1173,7 +1173,7 @@ public:
 			
 			int random_value = rand()%21 - 10; // -10~10
 			float random_float = 1.f + random_value/100.f;
-			
+			random_float = 1.f;
 			m_initRad = atan2f(diff.y, diff.x) * random_float;
 			m_currentRad = m_initRad; // + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
 			scheduleUpdate();
