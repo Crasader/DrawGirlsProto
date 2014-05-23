@@ -144,14 +144,40 @@ bool CardViewScene::init()
 																					s_morphing->setColor(ccGRAY);
 																					
 																					buy_morphing_menu->setEnabled(false);
+																					
+																					CCTouch* t_touch = new CCTouch();
+																					t_touch->setTouchInfo(0, 0, 0);
+																					t_touch->autorelease();
+																					
+																					first_img->ccTouchEnded(t_touch, NULL);
 																				});
 																				addChild(t_popup, 999);
 																			}
 																	 });
-	
 	buy_morphing_menu->addChild(morphing_item);
-	
+	buy_morphing_menu->setEnabled(!is_morphing);
 	buy_morphing_menu->setTouchPriority(-160);
+	
+	if(!is_morphing)
+	{
+		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, [=]()
+															 {
+																 is_actioned = false;
+																 is_morphing = true;
+																 
+																 n_morphing->setGray(false);
+																 s_morphing->setColor(ccGRAY);
+																 
+																 buy_morphing_menu->setEnabled(false);
+																 
+																 CCTouch* t_touch = new CCTouch();
+																 t_touch->setTouchInfo(0, 0, 0);
+																 t_touch->autorelease();
+																 
+																 first_img->ccTouchEnded(t_touch, NULL);
+															 });
+		addChild(t_popup, 999);
+	}
 	
 	
 	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(80,50), CommonButtonYellow, -160);

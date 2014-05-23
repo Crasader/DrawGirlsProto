@@ -1765,77 +1765,18 @@ void StartSettingPopup::callStart()
 	}
 	else
 	{
-		ASPopupView* t_popup = ASPopupView::create(touch_priority-100);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		float height_value = 320.f;
-		if(myDSH->screen_convert_rate < 1.f)
-			height_value = 320.f/myDSH->screen_convert_rate;
-		
-		if(height_value < myDSH->ui_top)
-			height_value = myDSH->ui_top;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-		t_popup->setDimmedPosition(ccp(240, 160));
-		t_popup->setBasePosition(ccp(240, 160));
-		
-		CCNode* t_container = CCNode::create();
-		t_popup->setContainerNode(t_container);
-		addChild(t_popup, kStartSettingPopupZorder_popup);
-		
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		case_back->setPosition(ccp(0,0));
-		t_container->addChild(case_back);
-		
-		case_back->setContentSize(CCSizeMake(220, 190));
-		
-		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		content_back->setPosition(ccp(0,25));
-		t_container->addChild(content_back);
-		
-		content_back->setContentSize(CCSizeMake(200, 120));
-		
-		CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartNotEnought), mySGD->getFont().c_str(), 15);
-		ment1_label->setPosition(ccp(0,35));
-		t_container->addChild(ment1_label);
-		
-		CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goToShop), mySGD->getFont().c_str(), 15);
-		ment2_label->setPosition(ccp(0,15));
-		t_container->addChild(ment2_label);
-		
-		
-		
-		CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-		cancel_button->setPosition(ccp(100,85));
-		cancel_button->setFunction([=](CCObject* sender)
-								   {
-									   is_menu_enable = true;
-									   t_popup->removeFromParent();
-								   });
-		t_container->addChild(cancel_button);
-		
-		
-		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-		ok_button->setPosition(ccp(0,-65));
-		ok_button->setFunction([=](CCObject* sender)
-							   {
-								   ShopPopup* t_shop = ShopPopup::create();
-								   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-								   if(mySGD->is_endless_mode)
-									   t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
-								   else
-									   t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-								   t_shop->setShopCode(kSC_heart);
-								   t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-								   addChild(t_shop, kStartSettingPopupZorder_popup);
-								   t_popup->removeFromParent();
-							   });
-		t_container->addChild(ok_button);
-		
+		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_money, [=]()
+															{
+																ShopPopup* t_shop = ShopPopup::create();
+																t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+																if(mySGD->is_endless_mode)
+																	t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																else
+																	t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																t_shop->setShopCode(kSC_heart);
+																t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																addChild(t_shop, kStartSettingPopupZorder_popup);
+															}, [=](){is_menu_enable = true;}), 9999);
 	}
 }
 

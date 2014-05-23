@@ -92,7 +92,7 @@ void EndlessModeResult::setMain()
 {
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-22.f));
+	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kEndlessModeResultZorder_back);
 	
 	main_case->setScaleY(0.f);
@@ -228,6 +228,13 @@ void EndlessModeResult::setMain()
 	//왼쪽 버튼은 포기하기 버튼으로. 계속 이겨서 왔더라도 패 가 올라가도록 함. 결국 무조건 1패는 생기는 구조. 라고 HS가 강력히 주장
 	
 	CCSprite* n_stop = CCSprite::create("endless_ready.png");
+	
+	KSLabelTTF* n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	n_stop_label2->setColor(ccWHITE);
+	n_stop_label2->setOpacity(100);
+	n_stop_label2->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-2));
+	n_stop->addChild(n_stop_label2);
+	
 	KSLabelTTF* n_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
 	n_stop_label->setColor(ccc3(50, 30, 5));
 	n_stop_label->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-1));
@@ -235,6 +242,13 @@ void EndlessModeResult::setMain()
 	
 	CCSprite* s_stop = CCSprite::create("endless_ready.png");
 	s_stop->setColor(ccGRAY);
+	
+	KSLabelTTF* s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	s_stop_label2->setColor(ccWHITE);
+	s_stop_label2->setOpacity(100);
+	s_stop_label2->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-2));
+	s_stop->addChild(s_stop_label2);
+	
 	KSLabelTTF* s_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
 	s_stop_label->setColor(ccc3(50, 30, 5));
 	s_stop_label->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-1));
@@ -660,6 +674,13 @@ void EndlessModeResult::setMain()
 	
 	
 	CCSprite* n_next = CCSprite::create("endless_ready.png");
+	
+	KSLabelTTF* n_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	n_next_label2->setColor(ccWHITE);
+	n_next_label2->setOpacity(100);
+	n_next_label2->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-2));
+	n_next->addChild(n_next_label2);
+	
 	KSLabelTTF* n_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	n_next_label->setColor(ccc3(50, 30, 5));
 	n_next_label->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-1));
@@ -667,6 +688,13 @@ void EndlessModeResult::setMain()
 	
 	CCSprite* s_next = CCSprite::create("endless_ready.png");
 	s_next->setColor(ccGRAY);
+	
+	KSLabelTTF* s_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	s_next_label2->setColor(ccWHITE);
+	s_next_label2->setOpacity(100);
+	s_next_label2->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-2));
+	s_next->addChild(s_next_label2);
+	
 	KSLabelTTF* s_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	s_next_label->setColor(ccc3(50, 30, 5));
 	s_next_label->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-1));

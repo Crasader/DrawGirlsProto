@@ -83,7 +83,7 @@ void EndlessModeOpening::setMain()
 {
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-22.f));
+	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kEndlessModeOpeningZorder_back);
 	
 	main_case->setScaleY(0.f);
@@ -283,17 +283,29 @@ void EndlessModeOpening::setMain()
 	
 	
 	CCSprite* n_ready = CCSprite::create("endless_ready.png");
+	
+	KSLabelTTF* n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	n_ready_label2->setColor(ccWHITE);
+	n_ready_label2->setOpacity(100);
+	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-2));
+	n_ready->addChild(n_ready_label2);
+	
 	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	n_ready_label->setColor(ccc3(50, 30, 5));
-//	n_ready_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-1));
 	n_ready->addChild(n_ready_label);
 	
 	CCSprite* s_ready = CCSprite::create("endless_ready.png");
 	s_ready->setColor(ccGRAY);
+	
+	KSLabelTTF* s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	s_ready_label2->setColor(ccWHITE);
+	s_ready_label2->setOpacity(100);
+	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-2));
+	s_ready->addChild(s_ready_label2);
+	
 	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	s_ready_label->setColor(ccc3(50, 30, 5));
-//	s_ready_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-1));
 	s_ready->addChild(s_ready_label);
 	

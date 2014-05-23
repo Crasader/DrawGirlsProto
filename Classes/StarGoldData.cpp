@@ -407,6 +407,11 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 	
 	float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
 	
+	if(mySD->getClearCondition() == kCLEAR_timeLimit)
+	{
+		play_limit_time -= mySD->getClearConditionTimeLimit();
+	}
+	
 	score = t_score + t_score*stage_grade.getV()*0.5f + t_score*((play_limit_time-t_game_time)/play_limit_time);
 
 	game_time = t_game_time;
