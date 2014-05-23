@@ -266,7 +266,7 @@ public:
 		
 		if(m_contentBack)
 		{
-			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(-170, 150));
+			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(-190, 150));
 			m_contentBack->runAction(content_move);
 		}
 		

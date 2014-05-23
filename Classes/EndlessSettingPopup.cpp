@@ -49,7 +49,7 @@ bool EndlessSettingPopup::init()
 	
 	gray->runAction(CCFadeTo::create(0.5f, 255));
 
-main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-22.f));
 	addChild(main_case, kEndlessStartSettingPopupZorder_main);
