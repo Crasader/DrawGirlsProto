@@ -1,8 +1,10 @@
 #include "CumberEmotion.h"
+#include "ProbSelector.h"
 
 CumberEmotion::CumberEmotion()
 {
 	m_currentEmotion = nullptr;
+	m_boredTimer = 0.f;
 }
 CumberEmotion::~CumberEmotion()
 {
@@ -26,7 +28,7 @@ CumberEmotion::~CumberEmotion()
 bool CumberEmotion::init()
 {
 	CCNode::init();
-	
+	scheduleUpdate();
 	return true;
 }
 
@@ -64,6 +66,15 @@ void CumberEmotion::onKillingJack()
 		m_emotionState = EmotionState::kRidicule;
 	}
 }
+
+void CumberEmotion::toBored()
+{
+	if(m_emotionState != EmotionState::kBored)
+	{
+		presentationEmotion("emotion_joy.ccbi");
+		m_emotionState = EmotionState::kBored;
+	}
+}
 void CumberEmotion::presentationEmotion(const std::string& emotion)
 {
 	if(m_currentEmotion)
@@ -79,4 +90,22 @@ void CumberEmotion::presentationEmotion(const std::string& emotion)
 		m_emotionState = EmotionState::kNone;
 	});
 	addChild(m_currentEmotion);
+	
+	m_boredTimer = 0.f;
+}
+void CumberEmotion::update(float dt)
+{
+	if(m_emotionState == EmotionState::kNone)
+	{
+		m_boredTimer += 1.f / 60.f;
+		if(m_boredTimer >= 4.f)
+		{
+			ProbSelector ps = {0.05, 0.95};
+			if(ps.getResult() == 0)
+			{
+				toBored();
+			}
+		}
+	}
+	
 }

@@ -12,7 +12,8 @@ enum class EmotionState
 	kRidicule = 3,
 	kSad = 4,
 	kJoy = 5,
-	kNone = 6
+	kNone = 6,
+	kBored = 7
 };
 class CumberEmotion : public CCNode
 {
@@ -31,10 +32,13 @@ public:
 	void goStun();
 	void releaseStun();
 	void onKillingJack();
+	void toBored();
 	void presentationEmotion(const std::string& emotion);
+	void update(float dt);
 protected:
 	CCSprite* m_currentEmotion;
 	EmotionState m_emotionState;
+	float m_boredTimer; // 감정 없는 상태로 얼마나 지속되었는지.
 	//virtual void registerWithTouchDispatcher();
 };
 
