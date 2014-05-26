@@ -935,6 +935,8 @@ float PlayUI::getPercentage ()
 }
 void PlayUI::setPercentage (float t_p, bool t_b)
 {
+	float last_get_percentage = 0;
+	
 	if(isFirst)
 	{
 		isFirst = false;
@@ -959,6 +961,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				
 //				myGD->communication("Main_goldGettingEffect", jackPosition, int(floorf((t_p-t_beforePercentage)*200.f)));
 				myGD->communication("GIM_showPercentFloatingCoin", t_p-t_beforePercentage);
+				
+				last_get_percentage = t_p-t_beforePercentage;
 				
 				if(clr_cdt_type == kCLEAR_bigArea || clr_cdt_type == kCLEAR_perfect)
 				{
@@ -1128,6 +1132,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			runAction(t_seq);
 			
 			endGame(t_p < 1.f && t_p > 0.99f);
+			
+			myGD->communication("GIM_startClearFloatingCoin", last_get_percentage);
 		}
 		else
 		{

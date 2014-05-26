@@ -240,7 +240,7 @@ private:
 class FloatingCoin : public CCNode
 {
 public:
-	static FloatingCoin* create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point);
+	static FloatingCoin* create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
 	
 	void hideAction();
 private:
@@ -248,6 +248,9 @@ private:
 	int m_gold;
 	float moving_direction; // -180 <= ~ < 180
 	float moving_speed; // 2 <= ~ < 5
+	
+	bool auto_take;
+	int auto_take_frame;
 	
 	int ing_frame;
 	bool is_locked;
@@ -277,13 +280,13 @@ private:
 	function<void(CCPoint)> take_func;
 	void takeIt();
 	
-	void myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point);
+	void myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take);
 };
 
 class FloatingCoinCreator : public CCNode
 {
 public:
-	static FloatingCoinCreator* create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point);
+	static FloatingCoinCreator* create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
 	
 private:
 	int m_frame;
@@ -294,10 +297,11 @@ private:
 	int ing_count;
 	CCNode* add_parent;
 	function<void(CCPoint)> take_func;
+	bool auto_take;
 	
 	void startCreate();
 	void creating();
-	void myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point);
+	void myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take);
 };
 
 class FloatingCoinParent : public CCNode
@@ -308,6 +312,7 @@ public:
 	void showPercentFloatingCoin(float t_percent);
 	void showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count);
 	void hideAllFloatingCoin();
+	void startClearFloatCoin(float t_percent);
 	
 private:
 	CCNode* coin_node;

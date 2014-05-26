@@ -526,6 +526,14 @@ void StageListDown::changeTipMent()
 
 void StageListDown::outOpenning()
 {
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.28f, [=](float t)
+										   {
+											   KS::setOpacity(talk_label, 255-t*255);
+										   }, [=](float t)
+										   {
+											   KS::setOpacity(talk_label, 0);
+										   }));
+	
 	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 										   {
 											   state_ment->setVisible(false);
@@ -926,10 +934,14 @@ void StageListDown::successAction()
 				loading_progress->runAction(t_fromto);
 			}
 		}
-		if(success_func == nullptr)
-			(target_success->*delegate_success)();
-		else
-			outOpenning();
+		
+		addChild(KSTimer::create(0.3f, [=]()
+		{
+			if(success_func == nullptr)
+				(target_success->*delegate_success)();
+			else
+				outOpenning();
+		}));
 		
 //		removeFromParent();
 	}

@@ -734,11 +734,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					cell->addChild(t_card_menu);
 					t_card_menu->setTouchPriority(-180-3);
 					
-					GraySprite* morphing_mark = GraySprite::create("cardsetting_morphing.png");
-					morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
-					cell->addChild(morphing_mark);
-					
-					morphing_mark->setGray(!mySGD->isCardMorphing(card_number));
+					if(mySGD->isCardMorphing(card_number))
+					{
+						GraySprite* morphing_mark = GraySprite::create("cardsetting_morphing.png");
+						morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
+						cell->addChild(morphing_mark);
+					}
 					
 //					CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
 //					
@@ -861,11 +862,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			cell->addChild(t_card_menu);
 			t_card_menu->setTouchPriority(-180-3);
 			
-			GraySprite* morphing_mark = GraySprite::create("cardsetting_morphing.png");
-			morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
-			cell->addChild(morphing_mark);
-			
-			morphing_mark->setGray(!mySGD->isCardMorphing(card_number));
+			if(mySGD->isCardMorphing(card_number))
+			{
+				GraySprite* morphing_mark = GraySprite::create("cardsetting_morphing.png");
+				morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
+				cell->addChild(morphing_mark);
+			}
 			
 //			CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
 //			
