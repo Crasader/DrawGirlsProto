@@ -22,13 +22,16 @@
 
 
 USING_NS_CC;
-
+class CumberEmotion;
 struct SnakeTrace
 {
 	CCPoint position; // 자취의 위치와
 	float directionRad; // 자취의 방향.
 };
-
+enum CumberZorder
+{
+	kEmotion = 15
+};
 struct AttackProperty
 {
 	enum AttackDisposition
@@ -273,6 +276,7 @@ public:
 	float getSpeed();
 	void setSpeedRatioForStone(CCNode* stonePointer, float speedRatio);
 	CCNode* getSlowStonePointer();
+	virtual void attachEmotion() = 0;
 public:
 	struct FollowMoving
 	{
@@ -324,6 +328,11 @@ public:
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 	CUMBER_STATE m_state;
+	vector<ChargeParent*> m_charges;
+	vector<ChargeParent*>& getCharges()
+	{
+		return m_charges;
+	}
 protected:
 	float m_cumberTimer;
 	//선그을때 공격하는걸 제한하는 카운터
@@ -496,6 +505,7 @@ protected:
 		
 	}m_damageData;
 	
+
 	
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
 	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
@@ -507,11 +517,7 @@ protected:
 	CC_SYNTHESIZE(float, m_damageMeasure, DamageMeasure);
 	CC_SYNTHESIZE(float, m_remainHp, RemainHp);
 	CC_SYNTHESIZE(float, m_totalHp, TotalHp);
-	vector<ChargeParent*> m_charges;
-	vector<ChargeParent*>& getCharges()
-	{
-		return m_charges;
-	}
+	CC_SYNTHESIZE(CumberEmotion*, m_emotion, Emotion);
 
 //	CC_SYNTHESIZE(vector<ChargeParent*>, m_charges, Charges);
 //	vector<ChargeParent*> m_charges;

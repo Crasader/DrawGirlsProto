@@ -18,7 +18,7 @@
 #include "Jack.h"
 #include "RandomSelector.h"
 #include "StageImgLoader.h"
-
+#include "CumberEmotion.h"
 
 KSSnakeBase::~KSSnakeBase()
 {
@@ -826,6 +826,13 @@ float KSSnakeBase::getRadius()
 	return RADIUS;
 }
 
+void KSSnakeBase::attachEmotion()
+{
+	CumberEmotion* ce = CumberEmotion::create();
+	
+	m_headImg->addChild(ce, CumberZorder::kEmotion);
+	m_emotion = ce;
+}
 IntPoint KSSnakeBase::getMapPoint( CCPoint c )
 {
 	return IntPoint(round((c.x - 1) / pixelSize + 1.f),

@@ -1270,7 +1270,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString(), false, true);
-		
+		myGD->toFun();
 		myGD->communication("UI_writeDie");
 		
 		myGD->communication("CP_onJackDie");

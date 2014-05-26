@@ -14,7 +14,7 @@
 #include "KSSnakeBase.h"
 #include <functional>
 #include <memory>
-
+#include "CumberEmotion.h"
 
 
 void CumberParent::onStartGame()
@@ -349,11 +349,6 @@ void CumberParent::createSubCumber(IntPoint s_p)
 		t_SC->assignBossData(root[i]); // 주니어 정보 대입.
 		t_SC->applyPassiveData(mySD->getPassiveData());
 		t_SC->applyAutoBalance();
-		
-//		IntPoint mapPoint;
-//		bool finded;
-//		t_SC->getRandomPosition(&mapPoint, &finded);
-//		t_SC->setPosition(ip2ccp(mapPoint));
 		t_SC->startAnimationNoDirection();
 		t_SC->onStartGame();
 		addChild(t_SC);
@@ -454,51 +449,13 @@ void CumberParent::myInit()
 	isGameover = false;
 	
 	
-	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
-	myGD->V_V["CP_onJackDrawLine"] = std::bind(&CumberParent::onJackDrawLine, this);
-	myGD->V_CCO["CP_removeSubCumber"] = std::bind(&CumberParent::removeSubCumber, this, _1);
-	myGD->I_V["CP_getSubCumberCount"] = std::bind(&CumberParent::getSubCumberCount, this);
-	myGD->V_Ip["CP_createSubCumber"] = std::bind(&CumberParent::createSubCumber, this, _1);
-	myGD->V_I["CP_setMainCumberState"] = std::bind(&CumberParent::setMainCumberState, this, _1);
-	//myGD->CCN_V["CP_getMainCumberPointer"] = std::bind(&CumberParent::getMainCumberPointer, this);
-	//myGD->CCA_V["CP_getSubCumberArrayPointer"] = std::bind(&CumberParent::getSubCumberArrayPointer, this);
-	myGD->getMainCumberVector = std::bind(&CumberParent::getMainCumbers, this);
-	myGD->getSubCumberVector = std::bind(&CumberParent::getSubCumberArrayPointer, this);
-//	myGD->B_CCOFF["CP_decreaseLifeForSubCumber"] = std::bind(&CumberParent::decreaseLifeForSubCumber, this, _1, _2, _3);
-	
-	myGD->V_V["CP_setGameover"] = std::bind(&CumberParent::setGameover, this);
-	myGD->V_V["CP_tickingOn"] = std::bind(&CumberParent::tickingOn, this);
-	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
-	myGD->V_V["CP_subCumberReplication"] = std::bind(&CumberParent::subCumberReplication, this);
-	myGD->B_CCOFFBB["CP_startDamageReaction"] =
-		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3, _4, _5);
-	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
-
-	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
-	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
-//	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
-//	myGD->V_B["CP_setCasting"] = std::bind(&CumberParent::setCasting, this, _1);
-	myGD->V_V["CP_stopMovingMainCumber"] = std::bind(&CumberParent::stopMovingMainCumber, this);
-	myGD->V_V["CP_jackCrashDie"] = std::bind(&CumberParent::jackCrashDie, this);
-//	myGD->V_I["CP_mainCumberShowEmotion"] = std::bind(&CumberParent::mainCumberShowEmotion, this, _1);
-	myGD->V_V["CP_startDieAnimation"] = std::bind(&CumberParent::startDieAnimation, this);
-	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
-//	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
-	myGD->V_V["CP_onStartGame"] = std::bind(&CumberParent::onStartGame, this);
-	//myGD->V_V["CP_onPatternEnd"]= std::bind(&CumberParent::onPatternEnd, this);
-	myGD->V_CCO["CP_onPatternEndOf"] = std::bind(&CumberParent::onPatternEndOf, this, _1);
-	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
-	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
-	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
-	myGD->V_Str["CP_chagePassiveData"] = std::bind(&CumberParent::changePassiveData, this, _1);
-	myGD->hideBosses = std::bind(&CumberParent::hideBosses, this);
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
 
+	mappingFunctor();
 	for (unsigned int i = 0; i < root.size(); ++i)
 	{
-		/* code */
 		Json::Value boss = root[i];
 
 		std::string bossShape = boss.get("shape", "circle").asString();
@@ -520,7 +477,7 @@ void CumberParent::myInit()
 		{
 			mainCumber = KSSnakeBase::create(bossType);
 		}	
-
+		mainCumber->attachEmotion();
 		mainCumber->assignBossData(root[i]);
 		mainCumber->applyPassiveData(mySD->getPassiveData());
 		mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
@@ -609,6 +566,55 @@ void CumberParent::myInit()
 //	addChild(myEP);
 }
 
+void CumberParent::mappingFunctor()
+{
+	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
+	myGD->V_V["CP_onJackDrawLine"] = std::bind(&CumberParent::onJackDrawLine, this);
+	myGD->V_CCO["CP_removeSubCumber"] = std::bind(&CumberParent::removeSubCumber, this, _1);
+	myGD->I_V["CP_getSubCumberCount"] = std::bind(&CumberParent::getSubCumberCount, this);
+	myGD->V_Ip["CP_createSubCumber"] = std::bind(&CumberParent::createSubCumber, this, _1);
+	myGD->V_I["CP_setMainCumberState"] = std::bind(&CumberParent::setMainCumberState, this, _1);
+	//myGD->CCN_V["CP_getMainCumberPointer"] = std::bind(&CumberParent::getMainCumberPointer, this);
+	//myGD->CCA_V["CP_getSubCumberArrayPointer"] = std::bind(&CumberParent::getSubCumberArrayPointer, this);
+	myGD->getMainCumberVector = std::bind(&CumberParent::getMainCumbers, this);
+	myGD->getSubCumberVector = std::bind(&CumberParent::getSubCumberArrayPointer, this);
+//	myGD->B_CCOFF["CP_decreaseLifeForSubCumber"] = std::bind(&CumberParent::decreaseLifeForSubCumber, this, _1, _2, _3);
+	
+	myGD->V_V["CP_setGameover"] = std::bind(&CumberParent::setGameover, this);
+	myGD->V_V["CP_tickingOn"] = std::bind(&CumberParent::tickingOn, this);
+	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
+	myGD->V_V["CP_subCumberReplication"] = std::bind(&CumberParent::subCumberReplication, this);
+	myGD->B_CCOFFBB["CP_startDamageReaction"] =
+		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3, _4, _5);
+	myGD->I_V["CP_getMainCumberSheild"] = std::bind(&CumberParent::getMainCumberSheild, this);
+
+	myGD->V_B["CP_slowItem"] = std::bind(&CumberParent::slowItem, this, _1);
+	myGD->V_B["CP_silenceItem"] = std::bind(&CumberParent::silenceItem, this, _1);
+//	myGD->V_V["CP_furyModeOn"] = std::bind(&CumberParent::furyModeOn, this);
+//	myGD->V_B["CP_setCasting"] = std::bind(&CumberParent::setCasting, this, _1);
+	myGD->V_V["CP_stopMovingMainCumber"] = std::bind(&CumberParent::stopMovingMainCumber, this);
+	myGD->V_V["CP_jackCrashDie"] = std::bind(&CumberParent::jackCrashDie, this);
+//	myGD->V_I["CP_mainCumberShowEmotion"] = std::bind(&CumberParent::mainCumberShowEmotion, this, _1);
+	myGD->V_V["CP_startDieAnimation"] = std::bind(&CumberParent::startDieAnimation, this);
+	myGD->V_F["CP_changeMaxSize"] = std::bind(&CumberParent::changeMaxSize, this, _1);
+//	myGD->V_V["CP_checkingJackCrash"] = std::bind(&CumberParent::checkingJackCrash, this);
+	myGD->V_V["CP_onStartGame"] = std::bind(&CumberParent::onStartGame, this);
+	//myGD->V_V["CP_onPatternEnd"]= std::bind(&CumberParent::onPatternEnd, this);
+	myGD->V_CCO["CP_onPatternEndOf"] = std::bind(&CumberParent::onPatternEndOf, this, _1);
+	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
+	myGD->V_V["CP_onJackDie"] = std::bind(&CumberParent::onJackDie, this);
+	myGD->V_V["CP_onJackRevived"] = std::bind(&CumberParent::onJackRevived, this);
+	myGD->V_Str["CP_chagePassiveData"] = std::bind(&CumberParent::changePassiveData, this, _1);
+	myGD->hideBosses = std::bind(&CumberParent::hideBosses, this);
+	myGD->toFun = std::bind(&CumberParent::toFun, this);
+}
+void CumberParent::toFun()
+{
+	for(auto mainCumber : mainCumbers)
+	{
+		mainCumber->getEmotion()->onKillingJack(); // 비웃음.
+	}
+}
 void CumberParent::hideBosses()
 {
 	for(auto mainCumber : mainCumbers)
