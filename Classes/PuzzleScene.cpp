@@ -2368,7 +2368,7 @@ void PuzzleScene::setTop()
 	
 	achievement_count_case = CCSprite::create("todaymission_percent_back.png");
 	achievement_count_case->setPosition(ccp(441,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-16));
-	addChild(achievement_count_case, kPuzzleZorder_top);
+	addChild(achievement_count_case, kPuzzleZorder_top+1);
 	
 	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f));

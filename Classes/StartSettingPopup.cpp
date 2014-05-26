@@ -186,30 +186,44 @@ void StartSettingPopup::setMain()
 	
 	int stage_number;
 	
-	if(mySGD->is_before_selected_event_stage)
+	if(mySGD->is_endless_mode)
 	{
-		stage_number = mySD->getSilType();
-		
-		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 15);
 		stage_number_label->setColor(ccc3(255, 170, 20));
 		stage_number_label->setPosition(ccp(65, 256));
 		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
 		
-		is_before_selected_event_stage = true;
 		mySGD->is_before_selected_event_stage = false;
+		is_before_selected_event_stage = false;
 	}
 	else
 	{
-		stage_number = mySD->getSilType();
-		
-		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
-		setFormSetter(piece_number_label);
-		piece_number_label->setColor(ccc3(255, 170, 20));
-		piece_number_label->setPosition(ccp(65, 256));
-		main_case->addChild(piece_number_label);
-		
-		is_before_selected_event_stage = false;
+		if(mySGD->is_before_selected_event_stage)
+		{
+			stage_number = mySD->getSilType();
+			
+			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+			stage_number_label->setColor(ccc3(255, 170, 20));
+			stage_number_label->setPosition(ccp(65, 256));
+			setFormSetter(stage_number_label);
+			main_case->addChild(stage_number_label);
+			
+			is_before_selected_event_stage = true;
+			mySGD->is_before_selected_event_stage = false;
+		}
+		else
+		{
+			stage_number = mySD->getSilType();
+			
+			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
+			setFormSetter(piece_number_label);
+			piece_number_label->setColor(ccc3(255, 170, 20));
+			piece_number_label->setPosition(ccp(65, 256));
+			main_case->addChild(piece_number_label);
+			
+			is_before_selected_event_stage = false;
+		}
 	}
 	
 	CCRect mission_size = CCRectMake(0, 0, 210, 22);
