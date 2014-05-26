@@ -736,7 +736,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					
 					if(mySGD->isCardMorphing(card_number))
 					{
-						GraySprite* morphing_mark = GraySprite::create("cardsetting_morphing.png");
+						CCSprite* morphing_mark = KS::loadCCBI<CCSprite*>(this, "morphing_card.ccbi").first;
 						morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
 						cell->addChild(morphing_mark);
 					}
@@ -864,7 +864,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			
 			if(mySGD->isCardMorphing(card_number))
 			{
-				GraySprite* morphing_mark = GraySprite::create("cardsetting_morphing.png");
+				CCSprite* morphing_mark = KS::loadCCBI<CCSprite*>(this, "morphing_card.ccbi").first;
 				morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
 				cell->addChild(morphing_mark);
 			}
