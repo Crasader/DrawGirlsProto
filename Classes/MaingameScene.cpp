@@ -476,6 +476,16 @@ void Maingame::finalSetting()
 	
 //	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
 	
+	
+	FloatingCoinParent* floating_coin_parent = FloatingCoinParent::create([=](CCPoint t_point)
+																		  {
+																			  myGIM->showTakeItemEffect(t_point);
+																		  });
+	game_node->addChild(floating_coin_parent, clearGoldZorder);
+	myGD->V_F["Main_startClearFloatingCoin"] = std::bind(&FloatingCoinParent::startClearFloatCoin, floating_coin_parent, std::placeholders::_1);
+	
+	
+	
 	myMS->scanMap();
 	myGD->communication("VS_setSceneNode", this);
 	

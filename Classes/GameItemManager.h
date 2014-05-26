@@ -340,6 +340,8 @@ public:
 	void showBeautyStone();
 	void removeBeautyStone();
 	
+	void showTakeItemEffect(CCPoint t_p);
+	
 private:
 	
 	int counting_value;
@@ -355,8 +357,6 @@ private:
 	bool is_on_addTime;
 	
 	bool isChangeAllInner();
-	
-	void showTakeItemEffect(CCPoint t_p);
 	
 	vector<ITEM_CODE> creatable_list;
 	vector<CCNode*> beauty_stone_list;

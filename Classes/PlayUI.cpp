@@ -1133,7 +1133,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			endGame(t_p < 1.f && t_p > 0.99f);
 			
-			myGD->communication("GIM_startClearFloatingCoin", last_get_percentage);
+			myGD->communication("Main_startClearFloatingCoin", last_get_percentage);
 		}
 		else
 		{

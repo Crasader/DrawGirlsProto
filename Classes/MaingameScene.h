@@ -33,7 +33,7 @@ enum Mainzorder{
 	attackItemZorder,
 	myCPZorder,
 	myJackZorder,
-	controlImgZorder,
+	clearGoldZorder,
 	countingLabelZorder,
 	conditionLabelZorder,
 	goldZorder,
@@ -62,6 +62,7 @@ enum GameNodeMovingDirection{
 class SearchEye;
 class CumberShowWindow;
 class EffectSprite;
+class FloatingCoinParent;
 class Maingame : public CCLayer
 {
 public:
@@ -288,6 +289,7 @@ private:
 	CCLabelTTF* replay_continue_label;
 	
 	void hideThumb();
+	FloatingCoinParent* floating_coin_parent;
 	
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
