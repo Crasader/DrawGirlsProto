@@ -65,7 +65,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	m_container->addChild(back_case);
 	
 	
-	CCScale9Sprite* back_center = CCScale9Sprite::create("achievement_cellback_reward.png", CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+	CCScale9Sprite* back_center = CCScale9Sprite::create("missile_upgrade_back.png", CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
 	back_center->setContentSize(CCSizeMake(back_case->getContentSize().width-30, 110));
 	back_center->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-10));
 	back_case->addChild(back_center);

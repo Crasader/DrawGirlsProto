@@ -24,7 +24,7 @@ ComboView * ComboView::create (int combo)
 void ComboView::changeCombo (int combo)
 {
 	combo_label->setString(CCString::createWithFormat("%d", combo)->getCString());
-	combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-10,0));
+	combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 }
 void ComboView::setPercentage (float t_percent)
 {
@@ -43,12 +43,12 @@ void ComboView::myInit (int combo)
 	
 	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 	combo_label->setAnchorPoint(ccp(1,0.5f));
-	combo_label->setPosition(ccp(-22,-15));
+	combo_label->setPosition(ccp(-22,-17));
 	addChild(combo_label);
 	
 	combo_front = CCSprite::create("combo_front.png");
 	combo_front->setAnchorPoint(ccp(1,0.5f));
-	combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-10,0));
+	combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 	addChild(combo_front);
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)

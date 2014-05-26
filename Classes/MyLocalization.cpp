@@ -502,6 +502,9 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("쿠폰을 찾을 수 없습니다."), kMyLocalKey_couponDontfind);
 	ko->setObject(CCString::create("통신이 원활하지 않습니다. 잠시후 다시 시도해주세요."), kMyLocalKey_couponOtherError);
 	
+	ko->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle);
+	ko->setObject(CCString::create("<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요."), kMyLocalKey_notOpenPuzzleNotEnoughtStarContent);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1074,6 +1077,9 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("잘못된 사용입니다."), kMyLocalKey_couponOserror);
 	en->setObject(CCString::create("쿠폰을 찾을 수 없습니다."), kMyLocalKey_couponDontfind);
 	en->setObject(CCString::create("통신이 원활하지 않습니다. 잠시후 다시 시도해주세요."), kMyLocalKey_couponOtherError);
+	
+	en->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle);
+	en->setObject(CCString::create("<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요."), kMyLocalKey_notOpenPuzzleNotEnoughtStarContent);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1670,6 +1676,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("잘못된 사용입니다."), kMyLocalKey_couponOserror);
 	ja->setObject(CCString::create("쿠폰을 찾을 수 없습니다."), kMyLocalKey_couponDontfind);
 	ja->setObject(CCString::create("통신이 원활하지 않습니다. 잠시후 다시 시도해주세요."), kMyLocalKey_couponOtherError);
+	
+	ja->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle);
+	ja->setObject(CCString::create("<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요."), kMyLocalKey_notOpenPuzzleNotEnoughtStarContent);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

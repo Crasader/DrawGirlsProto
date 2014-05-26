@@ -561,7 +561,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_couponExpire,
 	kMyLocalKey_couponOserror,
 	kMyLocalKey_couponDontfind,
-	kMyLocalKey_couponOtherError
+	kMyLocalKey_couponOtherError,
+	kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle,
+	kMyLocalKey_notOpenPuzzleNotEnoughtStarContent
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

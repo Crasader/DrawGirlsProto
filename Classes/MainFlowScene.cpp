@@ -1365,7 +1365,146 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																											  target_parent->addChild(heart_time, 0, heart_time_tag);
 																										  }
 																										  
-																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){endUnlockAnimation();}, true);
+																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=]()
+																										  {
+																											  if(!is_puzzle_enter_list[idx].is_base_condition_success)
+																												{
+																													ASPopupView* t_popup = ASPopupView::create(-999);
+																													
+																													CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																													float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																													if(screen_scale_x < 1.f)
+																														screen_scale_x = 1.f;
+																													
+																													float height_value = 320.f;
+																													if(myDSH->screen_convert_rate < 1.f)
+																														height_value = 320.f/myDSH->screen_convert_rate;
+																													
+																													if(height_value < myDSH->ui_top)
+																														height_value = myDSH->ui_top;
+																													
+																													t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+																													t_popup->setDimmedPosition(ccp(240, 160));
+																													t_popup->setBasePosition(ccp(240, 160));
+																													
+																													CCNode* t_container = CCNode::create();
+																													t_popup->setContainerNode(t_container);
+																													addChild(t_popup, kMainFlowZorder_popup);
+																													
+																													CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+																													back_case->setContentSize(CCSizeMake(240,180));
+																													back_case->setPosition(ccp(0,0));
+																													t_container->addChild(back_case);
+																													
+																													CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+																													back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+																													back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+																													back_case->addChild(back_in);
+																													
+																													KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 15);
+																													title_label->setColor(ccc3(255, 170, 20));
+																													title_label->setAnchorPoint(ccp(0,0.5f));
+																													title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
+																													t_container->addChild(title_label);
+																													
+																													KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
+																													sub_label->setAnchorPoint(ccp(0,0.5f));
+																													sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,10));
+																													t_container->addChild(sub_label);
+																													
+																													CCSprite* gray = t_popup->getDimmedSprite();
+																													
+//																													CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//																													close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+//																													close_button->setFunction([=](CCObject* sender)
+//																																			  {
+//																																				  if(!t_popup->is_menu_enable)
+//																																					  return;
+//																																				  
+//																																				  t_popup->is_menu_enable = false;
+//																																				  
+//																																				  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+//																																					  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+//																																				  
+//																																				  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+//																																																{
+//																																																	gray->setOpacity(t);
+//																																																	KS::setOpacity(t_container, t);
+//																																																}, [=](int t)
+//																																																{
+//																																																	gray->setOpacity(0);
+//																																																	KS::setOpacity(t_container, 0);
+//																																																	endUnlockAnimation();
+//																																																	t_popup->removeFromParent();
+//																																																}));
+//																																			  });
+//																													t_container->addChild(close_button);
+																													
+																													t_popup->button_func_list.clear();
+																													
+																													t_popup->button_func_list.push_back([=](){
+																														if(!t_popup->is_menu_enable)
+																															return;
+																														
+																														t_popup->is_menu_enable = false;
+																														
+																														t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																															t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+																														
+																														t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+																																									  {
+																																										  gray->setOpacity(t);
+																																										  KS::setOpacity(t_container, t);
+																																									  }, [=](int t)
+																																									  {
+																																										  gray->setOpacity(0);
+																																										  KS::setOpacity(t_container, 0);
+																																										  endUnlockAnimation();
+																																										  t_popup->removeFromParent();
+																																									  }));
+																														
+																													});
+																													
+																													CCLabelTTF* t2_label = CCLabelTTF::create();
+																													
+																													KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+																													ok_label->setPosition(ccp(0,0));
+																													t2_label->addChild(ok_label);
+																													
+																													CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+																													
+																													CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
+																													ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
+																													ok_button->setTag(0);
+																													ok_button->setPreferredSize(CCSizeMake(110,45));
+																													ok_button->setPosition(ccp(0,-40));
+																													t_container->addChild(ok_button);
+																													
+																													ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+																													
+																													
+																													t_container->setScaleY(0.f);
+																													
+																													t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+																														t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+																															t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+																													
+																													t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+																																								  {
+																																									  gray->setOpacity(t);
+																																									  KS::setOpacity(t_container, t);
+																																								  }, [=](int t)
+																																								  {
+																																									  gray->setOpacity(255);
+																																									  KS::setOpacity(t_container, 255);
+																																									  t_popup->is_menu_enable = true;
+																																								  }));
+																												}
+																											  else
+																												{
+																													endUnlockAnimation();
+																												}
+																										  }, true);
 																										  addChild(t_popup, kMainFlowZorder_popup);
 																										  
 																										  mySGD->setIsUnlockPuzzle(0);
