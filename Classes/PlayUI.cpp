@@ -10,6 +10,7 @@
 #include "EnumDefine.h"
 #include "GraySprite.h"
 #include "OnePercentGame.h"
+#include "FlagSelector.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -69,7 +70,7 @@ void ComboParent::showCombo (int t_combo)
 	{
 		ComboView* t_cv = ComboView::create(t_combo);
 		t_cv->setScale(1.f/1.5f);
-		t_cv->setPosition(ccpAdd(score_label->getPosition(), ccp(20,-45)));
+		t_cv->setPosition(ccpAdd(ccp(480-8,myDSH->ui_top-13), ccp(20,-45)));
 		addChild(t_cv,0,1);// 1 : ComboView
 	}
 	
@@ -388,7 +389,14 @@ void GoldLabel::myInit ()
 	stopIncreasing();
 	setAnchorPoint(ccp(1.f,0.5));
 	
-	setPosition(ccp(480-8, myDSH->ui_top-50));
+	if(mySGD->is_endless_mode)
+	{
+		setPosition(ccp(480-8, myDSH->ui_top-25));
+	}
+	else
+	{
+		setPosition(ccp(480-8, myDSH->ui_top-50));
+	}
 //	if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											setPosition(ccp((480-myGD->boarder_value*2)*1.1f/4.f,myDSH->ui_top-15));
@@ -1178,7 +1186,7 @@ void PlayUI::conditionClear ()
 //	addChild(condition_clear);
 	
 	CCNode* success_node = CCNode::create();
-	success_node->setPosition(ccp(240,myDSH->ui_top*0.67f));
+	success_node->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(success_node);
 	
 	
@@ -2176,25 +2184,59 @@ void PlayUI::myInit ()
 	addChild(gold_label);
 	gold_label->setString("0");
 	
-	addChild(KSGradualValue<float>::create(myDSH->ui_top-50+UI_OUT_DISTANCE, myDSH->ui_top-50, UI_IN_TIME, [=](float t){gold_label->setPositionY(t);}, [=](float t){gold_label->setPositionY(myDSH->ui_top-50);}));
+	CCPoint gold_origin_position = gold_label->getPosition();
+	
+	addChild(KSGradualValue<float>::create(gold_origin_position.y+UI_OUT_DISTANCE, gold_origin_position.y, UI_IN_TIME, [=](float t){gold_label->setPositionY(t);}, [=](float t){gold_label->setPositionY(gold_origin_position.y);}));
 	
 	CCSprite* gold_img = CCSprite::create("ui_gold_img.png");
 	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-50,9)));
 	addChild(gold_img);
 	
-	addChild(KSGradualValue<float>::create(myDSH->ui_top-50+9+UI_OUT_DISTANCE, myDSH->ui_top-50+9, UI_IN_TIME, [=](float t){gold_img->setPositionY(t);}, [=](float t){gold_img->setPositionY(myDSH->ui_top-50+9);}));
+	CCPoint gold_img_origin_position = gold_img->getPosition();
+	
+	addChild(KSGradualValue<float>::create(gold_img_origin_position.y+UI_OUT_DISTANCE, gold_img_origin_position.y, UI_IN_TIME, [=](float t){gold_img->setPositionY(t);}, [=](float t){gold_img->setPositionY(gold_img_origin_position.y);}));
+	
+	thumb_node = CCNode::create();
+	addChild(thumb_node);
 	
 	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 	((CountingBMLabel*)score_label)->onChangeScale(false);
-	score_label->setAnchorPoint(ccp(1,1));
-	score_label->setPosition(ccp(480-8,myDSH->ui_top-13+UI_OUT_DISTANCE));
 	
-	addChild(KSGradualValue<float>::create(myDSH->ui_top-13+UI_OUT_DISTANCE, myDSH->ui_top-13, UI_IN_TIME, [=](float t){score_label->setPositionY(t);}, [=](float t){score_label->setPositionY(myDSH->ui_top-13);}));
+	if(mySGD->is_endless_mode)
+	{
+		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
+		
+		score_label->setAnchorPoint(ccp(0.5f,0.5f));
+		score_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(0,-215.f*0.17f+10));
+		
+		addChild(KSGradualValue<float>::create(40-UI_OUT_DISTANCE, 40, UI_IN_TIME, [=](float t){score_label->setPositionX(t);}, [=](float t){score_label->setPositionX(40);}));
+		
+		string flag = myDSH->getStringForKey(kDSH_Key_flag);
+		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+		selectedFlagSpr->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8));
+		selectedFlagSpr->setScale(0.5f);
+		thumb_node->addChild(selectedFlagSpr);
+		
+		addChild(KSGradualValue<float>::create(40-20-UI_OUT_DISTANCE, 40-20, UI_IN_TIME, [=](float t){selectedFlagSpr->setPositionX(t);}, [=](float t){selectedFlagSpr->setPositionX(40-20);}));
+		
+		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 10);
+		nick_label->setAnchorPoint(ccp(0,0.5f));
+		nick_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
+		thumb_node->addChild(nick_label);
+		
+		addChild(KSGradualValue<float>::create(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2-UI_OUT_DISTANCE, 40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
+											   UI_IN_TIME, [=](float t){nick_label->setPositionX(t);}, [=](float t){nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);}));
+		thumb_node->addChild(score_label);
+	}
+	else
+	{
+		score_label->setAnchorPoint(ccp(1,1));
+		score_label->setPosition(ccp(480-8,myDSH->ui_top-13+UI_OUT_DISTANCE));
+		
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-13+UI_OUT_DISTANCE, myDSH->ui_top-13, UI_IN_TIME, [=](float t){score_label->setPositionY(t);}, [=](float t){score_label->setPositionY(myDSH->ui_top-13);}));
+		addChild(score_label);
+	}
 	
-//	if(myGD->gamescreen_type == kGT_leftUI)			score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+50+myGD->boarder_value,myDSH->ui_top-15));
-//	else if(myGD->gamescreen_type == kGT_rightUI)	score_label->setPosition(ccp((480-50-myGD->boarder_value*2)/2.f+myGD->boarder_value,myDSH->ui_top-15));
-//	else											score_label->setPosition(ccp(240,myDSH->ui_top-15));
-	addChild(score_label);
 	
 	top_center_node = CCNode::create();
 	
@@ -2599,6 +2641,18 @@ void PlayUI::myInit ()
 	vector<GraySprite*> using_item_vectors;
 	using_item_vectors.clear();
 	
+	float item_scale = 0.4f;
+	CCPoint item_base_position = ccpAdd(ccp(460, myDSH->ui_center_y), ccpMult(ccp(0,25), (using_item_cnt-1)/2.f));
+	CCPoint distance_position = ccp(0,-25);
+	CCNode* add_target = this;
+	if(mySGD->is_endless_mode)
+	{
+		item_scale = 0.18f;
+		item_base_position = ccp(40, myDSH->ui_center_y) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
+		distance_position = ccp(14,0);
+		add_target = thumb_node;
+	}
+	
 	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 	{
 		if(mySGD->isUsingItem((ITEM_CODE)i))
@@ -2606,12 +2660,14 @@ void PlayUI::myInit ()
 			using_item_cnt++;
 			
 			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", i)->getCString());
-			item_img->setScale(0.4f);
-			addChild(item_img);
+			item_img->setScale(item_scale);
+			item_img->setOpacity(150);
+			add_target->addChild(item_img);
 			
 			CCSprite* item_case = CCSprite::create("ingame_itembox.png");
 			item_case->setPosition(ccp(item_img->getContentSize().width/2.f, item_img->getContentSize().height/2.f));
-			item_case->setScale(1.f/item_img->getScale());
+			item_case->setScale(1.f/0.4f);
+			item_case->setOpacity(150);
 			item_img->addChild(item_case, -1);
 			
 			using_item_sprites[i] = item_img;
@@ -2619,15 +2675,18 @@ void PlayUI::myInit ()
 		}
 	}
 	
-	CCPoint item_base_position = ccpAdd(ccp(460, myDSH->ui_center_y), ccpMult(ccp(0,25), (using_item_cnt-1)/2.f));
+	float signed_distance = UI_OUT_DISTANCE;
+	if(mySGD->is_endless_mode)
+		signed_distance *= -1.f;
 	
 	for(int i=0;i<using_item_vectors.size();i++)
 	{
-		using_item_vectors[i]->setPosition(ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)));
-		using_item_vectors[i]->setPositionX(using_item_vectors[i]->getPositionX()+UI_OUT_DISTANCE);
-		addChild(KSGradualValue<float>::create(ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)).x+UI_OUT_DISTANCE, ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)).x, UI_IN_TIME,
+		using_item_vectors[i]->setPosition(ccpAdd(item_base_position, ccpMult(distance_position, i)));
+		
+		using_item_vectors[i]->setPositionX(using_item_vectors[i]->getPositionX()+signed_distance);
+		addChild(KSGradualValue<float>::create(ccpAdd(item_base_position, ccpMult(distance_position, i)).x+signed_distance, ccpAdd(item_base_position, ccpMult(distance_position, i)).x, UI_IN_TIME,
 											   [=](float t){using_item_vectors[i]->setPositionX(t);},
-											   [=](float t){using_item_vectors[i]->setPositionX(ccpAdd(item_base_position, ccpMult(ccp(0,-25), i)).x);}));
+											   [=](float t){using_item_vectors[i]->setPositionX(ccpAdd(item_base_position, ccpMult(distance_position, i)).x);}));
 	}
 	
 	
@@ -2660,6 +2719,11 @@ void PlayUI::myInit ()
 	myGD->V_I["UI_writeGameOver"] = std::bind(&PlayUI::writeGameOver, this, _1);
 	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
 	myGD->V_V["UI_takeSilenceItem"] = std::bind(&PlayUI::takeSilenceItem, this);
+}
+
+void PlayUI::hideThumb()
+{
+	thumb_node->setVisible(false);
 }
 
 bool PlayUI::isExchanged ()

@@ -331,15 +331,15 @@ bool CardSettingPopup::init()
 	}
 	
 	
-	CommonButton* event_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_event), 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
-	event_menu->setPosition(ccp(400,256));
-	main_case->addChild(event_menu, kCSS_Z_alignButton);
-	event_menu->setFunction([=](CCObject* sender)
-								 {
-									 CCNode* t_node = CCNode::create();
-									 t_node->setTag(kCSS_MT_event);
-									 menuAction(t_node);
-								 });
+//	CommonButton* event_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_event), 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
+//	event_menu->setPosition(ccp(400,256));
+//	main_case->addChild(event_menu, kCSS_Z_alignButton);
+//	event_menu->setFunction([=](CCObject* sender)
+//								 {
+//									 CCNode* t_node = CCNode::create();
+//									 t_node->setTag(kCSS_MT_event);
+//									 menuAction(t_node);
+//								 });
 	
 	
 //	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");

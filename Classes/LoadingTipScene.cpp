@@ -180,14 +180,14 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
 	mission_img->addChild(mission_img_label);
 	
-	ok_img = KS::loadCCBI<CCSprite*>(this, "tutorial_nextbutton.ccbi").first;
+	ok_img = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("button_ok_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
 	ok_img->setPosition(ccp(mission_back->getContentSize().width*0.7f, mission_back->getContentSize().height*0.18f));
 	mission_back->addChild(ok_img);
 	ok_img->setVisible(false);
 	
-	CCSprite* n_ok = CCSprite::create("tutorial_next.png");
+	CCSprite* n_ok = CCSprite::create(CCString::createWithFormat("button_ok_%s.png", myLoc->getLocalCode()->getCString())->getCString());
 	n_ok->setOpacity(0);
-	CCSprite* s_ok = CCSprite::create("tutorial_next.png");
+	CCSprite* s_ok = CCSprite::create(CCString::createWithFormat("button_ok_%s.png", myLoc->getLocalCode()->getCString())->getCString());
 	s_ok->setOpacity(0);
 	
 	CCMenuItemLambda* ok_item = CCMenuItemSpriteLambda::create(n_ok, s_ok, [=](CCObject* sender)
@@ -201,10 +201,10 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	ok_menu->setTouchPriority(-600);
 	
 	
-	no_review = CommonButton::create("다시보지않기", 13, CCSizeMake(100, 50), CommonButtonGreen, -600);
-	no_review->setPosition(ccp(mission_back->getContentSize().width*0.3f, mission_back->getContentSize().height*0.18f));
-	mission_back->addChild(no_review);
-	no_review->setVisible(false);
+//	no_review = CommonButton::create("다시보지않기", 13, CCSizeMake(100, 50), CommonButtonGreen, -600);
+//	no_review->setPosition(ccp(mission_back->getContentSize().width*0.3f, mission_back->getContentSize().height*0.18f));
+//	mission_back->addChild(no_review);
+//	no_review->setVisible(false);
 	
 	int stage_number = mySD->getSilType();
 	int mission_type = NSDS_GI(stage_number, kSDS_SI_missionType_i);
@@ -217,32 +217,15 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	
 	if(mission_type == kCLEAR_bossLifeZero)
 	{
-//		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-//		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-//		mission_back->addChild(t_condition_label);
-		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
 		mission_back->addChild(main_ment);
 		
-//		CCLabelTTF* main1_ment = CCLabelTTF::create("공격으로 보스몹의 에너지를", mySGD->getFont().c_str(), 17);
-//		main1_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+18));
-//		mission_back->addChild(main1_ment);
-//		
-//		CCLabelTTF* main2_ment = CCLabelTTF::create("모두 소진시키세요.", mySGD->getFont().c_str(), 17);
-//		main2_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-7));
-//		mission_back->addChild(main2_ment);
-//		
-//		CCLabelTTF* sub_ment = CCLabelTTF::create("보스의 에너지가 다 소진되어도 게임은 계속...", mySGD->getFont().c_str(), 12);
-//		sub_ment->setColor(ccc3(125, 125, 125));
-//		sub_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-37));
-//		mission_back->addChild(sub_ment);
-		
-		no_review->setFunction([=](CCObject* sender)
-							   {
-								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_bossLifeZero, true);
-								   onMinimumTime();
-							   });
+//		no_review->setFunction([=](CCObject* sender)
+//							   {
+//								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_bossLifeZero, true);
+//								   onMinimumTime();
+//							   });
 	}
 	else if(mission_type == kCLEAR_subCumberCatch)
 	{
@@ -256,24 +239,11 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
-//		CCSprite* catch_count_img = CCSprite::create("mission_catch_count.png");
-//		catch_count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-30, mission_back->getContentSize().height/2.f+13));
-//		mission_back->addChild(catch_count_img);
-//		
-//		CCLabelTTF* count_label = CCLabelTTF::create(CCString::createWithFormat("%d마리", catch_count)->getCString(), mySGD->getFont().c_str(), 23);
-//		count_label->setColor(ccc3(255, 240, 0));
-//		count_label->setPosition(ccp(mission_back->getContentSize().width/2.f+50, mission_back->getContentSize().height/2.f+13));
-//		mission_back->addChild(count_label);
-//		
-//		CCLabelTTF* main_ment = CCLabelTTF::create("부하몹을 가두어 잡으세요.", mySGD->getFont().c_str(), 17);
-//		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-23));
-//		mission_back->addChild(main_ment);
-		
-		no_review->setFunction([=](CCObject* sender)
-							   {
-								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_subCumberCatch, true);
-								   onMinimumTime();
-							   });
+//		no_review->setFunction([=](CCObject* sender)
+//							   {
+//								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_subCumberCatch, true);
+//								   onMinimumTime();
+//							   });
 	}
 	else if(mission_type == kCLEAR_bigArea)
 	{
@@ -288,24 +258,11 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
-//		CCSprite* count_img = CCSprite::create("mission_count.png");
-//		count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-40, mission_back->getContentSize().height/2.f+13));
-//		mission_back->addChild(count_img);
-//		
-//		CCLabelTTF* count_label = CCLabelTTF::create(CCString::createWithFormat("%d%% x %d", percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 23);
-//		count_label->setColor(ccc3(255, 240, 0));
-//		count_label->setPosition(ccp(mission_back->getContentSize().width/2.f+60, mission_back->getContentSize().height/2.f+13));
-//		mission_back->addChild(count_label);
-//		
-//		CCLabelTTF* main_ment = CCLabelTTF::create(CCString::createWithFormat("한번에 %d%%이상 영역을 %d번 획득하세요!", percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 17);
-//		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-23));
-//		mission_back->addChild(main_ment);
-		
-		no_review->setFunction([=](CCObject* sender)
-							   {
-								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_bigArea, true);
-								   onMinimumTime();
-							   });
+//		no_review->setFunction([=](CCObject* sender)
+//							   {
+//								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_bigArea, true);
+//								   onMinimumTime();
+//							   });
 	}
 	else if(mission_type == kCLEAR_itemCollect)
 	{
@@ -319,24 +276,11 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
-//		CCSprite* count_img = CCSprite::create("mission_count2.png");
-//		count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-30, mission_back->getContentSize().height/2.f+13));
-//		mission_back->addChild(count_img);
-//		
-//		CCLabelTTF* count_label = CCLabelTTF::create(CCString::createWithFormat("%d개", count_value)->getCString(), mySGD->getFont().c_str(), 23);
-//		count_label->setColor(ccc3(255, 240, 0));
-//		count_label->setPosition(ccp(mission_back->getContentSize().width/2.f+40, mission_back->getContentSize().height/2.f+13));
-//		mission_back->addChild(count_label);
-//		
-//		CCLabelTTF* main_ment = CCLabelTTF::create(CCString::createWithFormat("%d개의 아이템을 획득하세요.", count_value)->getCString(), mySGD->getFont().c_str(), 17);
-//		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-23));
-//		mission_back->addChild(main_ment);
-		
-		no_review->setFunction([=](CCObject* sender)
-							   {
-								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_itemCollect, true);
-								   onMinimumTime();
-							   });
+//		no_review->setFunction([=](CCObject* sender)
+//							   {
+//								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_itemCollect, true);
+//								   onMinimumTime();
+//							   });
 	}
 	else if(mission_type == kCLEAR_perfect)
 	{
@@ -360,11 +304,11 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		sub_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-33));
 		mission_back->addChild(sub_ment);
 		
-		no_review->setFunction([=](CCObject* sender)
-							   {
-								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_perfect, true);
-								   onMinimumTime();
-							   });
+//		no_review->setFunction([=](CCObject* sender)
+//							   {
+//								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_perfect, true);
+//								   onMinimumTime();
+//							   });
 	}
 	else if(mission_type == kCLEAR_timeLimit)
 	{
@@ -378,11 +322,11 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
-		no_review->setFunction([=](CCObject* sender)
-							   {
-								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_timeLimit, true);
-								   onMinimumTime();
-							   });
+//		no_review->setFunction([=](CCObject* sender)
+//							   {
+//								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_timeLimit, true);
+//								   onMinimumTime();
+//							   });
 	}
 	else if(mission_type == kCLEAR_sequenceChange)
 	{
@@ -390,37 +334,11 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
 		mission_back->addChild(main_ment);
 		
-//		CCLabelTTF* main1_ment = CCLabelTTF::create("게임 중 나오는 ", mySGD->getFont().c_str(), 17);
-//		main1_ment->setAnchorPoint(ccp(1,0.5));
-//		main1_ment->setPosition(ccp(mission_back->getContentSize().width/2.f-13, mission_back->getContentSize().height/2.f+20));
-//		mission_back->addChild(main1_ment);
-//		
-//		for(int i=0;i<6;i++)
-//		{
-//			CCSprite* t_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", i+1)->getCString());
-//			t_img->setPosition(ccp(main1_ment->getPositionX() + 9 + 18*i, mission_back->getContentSize().height/2.f+20));
-//			mission_back->addChild(t_img);
-//		}
-//		
-//		CCLabelTTF* main2_ment = CCLabelTTF::create("를", mySGD->getFont().c_str(), 17);
-//		main2_ment->setAnchorPoint(ccp(0,0.5));
-//		main2_ment->setPosition(ccp(main1_ment->getPositionX() + 18*6, mission_back->getContentSize().height/2.f+20));
-//		mission_back->addChild(main2_ment);
-//		
-//		CCLabelTTF* main3_ment = CCLabelTTF::create("순서대로 획득하세요!", mySGD->getFont().c_str(), 17);
-//		main3_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-6));
-//		mission_back->addChild(main3_ment);
-//		
-//		CCLabelTTF* sub_ment = CCLabelTTF::create("이 미션에서는 1단계 카드를 얻을 수 없어요!", mySGD->getFont().c_str(), 12);
-//		sub_ment->setColor(ccc3(125, 125, 125));
-//		sub_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-33));
-//		mission_back->addChild(sub_ment);
-		
-		no_review->setFunction([=](CCObject* sender)
-							   {
-								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_sequenceChange, true);
-								   onMinimumTime();
-							   });
+//		no_review->setFunction([=](CCObject* sender)
+//							   {
+//								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_sequenceChange, true);
+//								   onMinimumTime();
+//							   });
 	}
 	
 //	mission_back->setScale(1.5f);
@@ -1011,7 +929,7 @@ void LoadingTipScene::showButton()
 	{
 		ok_img->setVisible(true);
 		ok_menu->setVisible(true);
-		no_review->setVisible(true);
+//		no_review->setVisible(true);
 	}
 }
 
@@ -1041,7 +959,7 @@ void LoadingTipScene::startLoading()
 void LoadingTipScene::countingFunc(CCObject *sender)
 {
 	ing_load_img++;
-	progress_label->setString(CCString::createWithFormat("%d\t%d", ing_load_img, total_load_img)->getCString());
+	progress_label->setString(CCString::createWithFormat("%.0f", (100.f*ing_load_img)/total_load_img)->getCString());
 	
 	if(ing_load_img == total_load_img && is_minimum_time)
 	{

@@ -70,6 +70,9 @@ private:
 	KSLabelTTF* straight_content;
 	KSLabelTTF* record_content;
 	
+	KSLabelTTF* n_ready_label2;
+	KSLabelTTF* s_ready_label2;
+	
 	CCSprite* rank_percent_case;
 	KSLabelTTF* percent_label;
 	CCScale9Sprite* left_back;

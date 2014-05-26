@@ -1401,15 +1401,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
 																													back_case->addChild(back_in);
 																													
-																													KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 15);
+																													KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle), mySGD->getFont().c_str(), 15);
 																													title_label->setColor(ccc3(255, 170, 20));
 																													title_label->setAnchorPoint(ccp(0,0.5f));
 																													title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
 																													t_container->addChild(title_label);
 																													
-																													KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
-																													sub_label->setAnchorPoint(ccp(0,0.5f));
-																													sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,10));
+																													StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+																													sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,30));
 																													t_container->addChild(sub_label);
 																													
 																													CCSprite* gray = t_popup->getDimmedSprite();
@@ -1477,7 +1476,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
 																													ok_button->setTag(0);
 																													ok_button->setPreferredSize(CCSizeMake(110,45));
-																													ok_button->setPosition(ccp(0,-40));
+																													ok_button->setPosition(ccp(0,-50));
 																													t_container->addChild(ok_button);
 																													
 																													ok_button->setTouchPriority(t_popup->getTouchPriority()-5);

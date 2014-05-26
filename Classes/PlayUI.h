@@ -254,6 +254,7 @@ public:
 	void setComboCnt (int t_combo);
 	int getUseTime ();
 	void takeSilenceItem();
+	void hideThumb();
 	
 private:
 	KSProtectVar<float> score_value;
@@ -337,6 +338,8 @@ private:
 	void addResultClearCCB();
 	void addResultCCB(string ccb_filename);
 	KSProtectVar<float> keep_percentage;
+	
+	CCNode* thumb_node;
 	
 	bool is_used_heartUpItem;
 	bool is_used_longTimeItem;

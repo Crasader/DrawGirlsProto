@@ -1386,6 +1386,7 @@ bool PlayTutorial::init()
 	
 	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
 	curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+	curtain_node->setScale(myDSH->screen_convert_rate);
 	addChild(curtain_node, 200);
 	
 	StoryManager* t_sm = StoryManager::create(-500);
