@@ -1695,7 +1695,7 @@ void ClearPopup::startCalcAnimation()
 		main_case->addChild(KSTimer::create(5.f/30.f, [=](){
 			main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
 				star_bonus_label->setScale(1.3f-t*0.8f);
-				star_bonus_label->setPosition(ccpAdd(ccp(125,195), ccpMult(ccp(65,-113), t)));
+				star_bonus_label->setPosition(ccpAdd(ccp(125,195), ccpMult(ccp(65,-108), t)));
 				
 			}, [=](float t){
 				star_bonus_label->setScale(0.5f);
@@ -1714,7 +1714,7 @@ void ClearPopup::startCalcAnimation()
 					KSLabelTTF* time_bonus_label = KSLabelTTF::create("타임 보너스", mySGD->getFont().c_str(), 13);
 					time_bonus_label->setColor(ccc3(50, 250, 255));
 					time_bonus_label->enableOuterStroke(ccBLACK, 1.f);
-					time_bonus_label->setPosition(ccp(170,148)); // 170 148
+					time_bonus_label->setPosition(ccp(170,153)); // 170 148
 					main_case->addChild(time_bonus_label, kZ_CP_table);
 					
 					time_bonus_label->setScale(0.5f);
@@ -1730,11 +1730,11 @@ void ClearPopup::startCalcAnimation()
 						main_case->addChild(KSTimer::create(5.f/30.f, [=](){
 							main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
 								time_bonus_label->setScale(1.3f-t*0.8f);
-								time_bonus_label->setPosition(ccpAdd(ccp(170,148), ccpMult(ccp(20,-66), t)));
+								time_bonus_label->setPosition(ccpAdd(ccp(170,153), ccpMult(ccp(20,-66), t)));
 								
 							}, [=](float t){
 								time_bonus_label->setScale(0.5f);
-								time_bonus_label->setPosition(ccp(190,82));
+								time_bonus_label->setPosition(ccp(190,87));
 							}));
 						}));
 						
@@ -1749,7 +1749,7 @@ void ClearPopup::startCalcAnimation()
 									CCSprite* high_score = CCSprite::create("ending_highscore.png");
 									high_score->setScale(0.5f);
 									high_score->setOpacity(0);
-									high_score->setPosition(ccp(120,82));
+									high_score->setPosition(ccp(120,87));
 									main_case->addChild(high_score, kZ_CP_table);
 									
 									main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){

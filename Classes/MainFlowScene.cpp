@@ -55,7 +55,7 @@ CCScene* MainFlowScene::scene()
 	layer->setAnchorPoint(ccp(0.5,0));
 	layer->setScale(myDSH->screen_convert_rate);
 	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
-    scene->addChild(layer);
+    scene->addChild(layer, 0, 1);
 	
     return scene;
 }

@@ -43,6 +43,7 @@ private:
 	int hide_frame;
 	CCLabelBMFont * combo_label;
 	CCSprite* combo_str;
+	CCSprite* combo_front;
 //	CCProgressTimer * combo_timer;
 	void myInit (int combo);
 };
