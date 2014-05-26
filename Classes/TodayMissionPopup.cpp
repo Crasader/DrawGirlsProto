@@ -222,30 +222,6 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		}
 	}
 	
-	if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())
-	{
-		string reward_ment;
-		GoodsType reward_type = mySGD->getGoodsKeyToType(mySGD->today_mission_info.reward_type.getV());
-		
-		if(reward_type == kGoodsType_pass1)
-			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass1);
-		else if(reward_type == kGoodsType_pass2)
-			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass2);
-		else if(reward_type == kGoodsType_pass3)
-			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass3);
-		else if(reward_type == kGoodsType_pass4)
-			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass4);
-		else if(reward_type == kGoodsType_pass5)
-			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass5);
-		
-		StyledLabelTTF* under_label = StyledLabelTTF::create({
-			{reward_ment.c_str(), value1.toStyledString()},
-			{"", value5.toStyledString()}
-		}, StyledAlignment::kCenterAlignment);
-		under_label->setPosition(ccp(0, -30));
-		m_container->addChild(under_label);
-	}
-	
 	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
 	progress_back->setPosition(ccp(0,-10));
 	m_container->addChild(progress_back);
@@ -264,12 +240,36 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 //	progress_label->setPosition(ccp(-progress_bar->getSprite()->getContentSize().width/2.f+10, -11));
 //	m_container->addChild(progress_label);
 	
+	CCSprite* present_img = CCSprite::create("mission_present.png");
+	present_img->setPosition(ccp(progress_bar->getSprite()->getContentSize().width/2.f, -10));
+	m_container->addChild(present_img);
+	
 	
 	if(mySGD->today_mission_info.ing_count.getV() >= mySGD->today_mission_info.goal_count.getV())
 	{
+		string reward_ment;
+		reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessCommon);
+		//		GoodsType reward_type = mySGD->getGoodsKeyToType(mySGD->today_mission_info.reward_type.getV());
+		//
+		//		if(reward_type == kGoodsType_pass1)
+		//			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass1);
+		//		else if(reward_type == kGoodsType_pass2)
+		//			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass2);
+		//		else if(reward_type == kGoodsType_pass3)
+		//			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass3);
+		//		else if(reward_type == kGoodsType_pass4)
+		//			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass4);
+		//		else if(reward_type == kGoodsType_pass5)
+		//			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass5);
+		
+		StyledLabelTTF* under_label = StyledLabelTTF::create(reward_ment.c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		under_label->setPosition(ccp(0, -45));
+		m_container->addChild(under_label);
+		
+		
 		CCScale9Sprite* stamp_case = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 		stamp_case->setContentSize(CCSizeMake(75, 45));
-		stamp_case->setPosition(ccp(100,0));
+		stamp_case->setPosition(ccp(0,-10));
 		stamp_case->setRotation(-15);
 		m_container->addChild(stamp_case);
 		
@@ -279,27 +279,29 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		complete_label->setPosition(ccp(37.5f,22.5f));
 		stamp_case->addChild(complete_label);
 	}
-	
-	long long sub_value = mySGD->today_mission_info.resetTimestamp.getV() - graphdog->getServerTimestamp();
-	string ment_string;
-	if(sub_value >= 3600)
-		ment_string = myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTime);
 	else
-		ment_string = myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute);
-	
-	StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-	remain_label->setPosition(ccp(-100, -65));
-	m_container->addChild(remain_label);
-	
-	string ment_string2;
-	if(sub_value >= 3600)
-		ment_string2 = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTime2), (int)(sub_value/3600.f))->getCString();
-	else
-		ment_string2 = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute2), (int)(sub_value/60.f))->getCString();
-	
-	StyledLabelTTF* remain_label2 = StyledLabelTTF::create(ment_string2.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-	remain_label2->setPosition(ccp(0, -65));
-	m_container->addChild(remain_label2);
+	{
+		long long sub_value = mySGD->today_mission_info.resetTimestamp.getV() - graphdog->getServerTimestamp();
+		string ment_string;
+		if(sub_value >= 3600)
+			ment_string = myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTime);
+		else
+			ment_string = myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute);
+		
+		StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+		remain_label->setPosition(ccp(-100, -65));
+		m_container->addChild(remain_label);
+		
+		string ment_string2;
+		if(sub_value >= 3600)
+			ment_string2 = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTime2), (int)(sub_value/3600.f))->getCString();
+		else
+			ment_string2 = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute2), (int)(sub_value/60.f))->getCString();
+		
+		StyledLabelTTF* remain_label2 = StyledLabelTTF::create(ment_string2.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+		remain_label2->setPosition(ccp(0, -65));
+		m_container->addChild(remain_label2);
+	}
 	
 	
 //	CCLabelTTF* c_label = CCLabelTTF::create();

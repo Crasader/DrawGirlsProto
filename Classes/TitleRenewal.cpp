@@ -297,8 +297,10 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 
 void TitleRenewalScene::successLogin()
 {
-	
-	AudioEngine::sharedInstance()->preloadEffectScene("Title");
+	addChild(KSTimer::create(1.f/60.f, [=]()
+	{
+		AudioEngine::sharedInstance()->preloadEffectScene("Title");
+	}));
 	
 	if(myLog->getLogCount() > 0)
 	{

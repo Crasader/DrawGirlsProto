@@ -86,19 +86,6 @@ void EndlessModeOpening::setMain()
 	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kEndlessModeOpeningZorder_back);
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
-										 {
-											 KS::setOpacity(main_case, 255);
-											 
-											 is_menu_enable = true;
-										 }));
-	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0,0.5f));
@@ -128,7 +115,20 @@ void EndlessModeOpening::setMain()
 								  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
 									  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
 								  
-								  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
+								  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+								  {
+									  KS::setOpacity(main_case, t);
+									  if(t > 100)
+										{
+											this->n_ready_label2->setOpacity(100);
+											this->s_ready_label2->setOpacity(100);
+										}
+								  }, [=](int t)
+								  {
+									  KS::setOpacity(main_case, 0);
+									  this->n_ready_label2->setOpacity(0);
+									  this->s_ready_label2->setOpacity(0);
+								  }));
 							  });
 	main_case->addChild(close_button);
 	
@@ -284,7 +284,7 @@ void EndlessModeOpening::setMain()
 	
 	CCSprite* n_ready = CCSprite::create("endless_ready.png");
 	
-	KSLabelTTF* n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	n_ready_label2->setColor(ccWHITE);
 	n_ready_label2->setOpacity(100);
 	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-2));
@@ -298,7 +298,7 @@ void EndlessModeOpening::setMain()
 	CCSprite* s_ready = CCSprite::create("endless_ready.png");
 	s_ready->setColor(ccGRAY);
 	
-	KSLabelTTF* s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	s_ready_label2->setColor(ccWHITE);
 	s_ready_label2->setOpacity(100);
 	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-2));
@@ -329,6 +329,29 @@ void EndlessModeOpening::setMain()
 	ready_menu->setPosition(ccp(right_back->getContentSize().width/2.f,-25));
 	ready_menu->setTouchPriority(touch_priority);
 	right_back->addChild(ready_menu);
+	
+	main_case->setScaleY(0.f);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
+	
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+	{
+		KS::setOpacity(main_case, t);
+		if(t > 100)
+		{
+			n_ready_label2->setOpacity(100);
+			s_ready_label2->setOpacity(100);
+		}
+	}, [=](int t)
+										 {
+											 KS::setOpacity(main_case, 255);
+											 n_ready_label2->setOpacity(100);
+											 s_ready_label2->setOpacity(100);
+											 
+											 is_menu_enable = true;
+										 }));
 }
 
 void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)

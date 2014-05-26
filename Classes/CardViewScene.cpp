@@ -111,52 +111,58 @@ bool CardViewScene::init()
 	
 	
 	zoom_img = CCSprite::create("ending_expand.png");
-	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
+	zoom_img->setPosition(ccp(480-35-35,myDSH->ui_top-35));
 	addChild(zoom_img, kCV_Z_next_button);
 	
-	n_morphing = GraySprite::create("cardsetting_morphing.png");
-	if(!is_morphing)
-		n_morphing->setGray(true);
+	CCPoint morphing_position = ccp(435,45);
 	
-	s_morphing = GraySprite::create("cardsetting_morphing.png");
+	string morphing_filename;
 	if(!is_morphing)
-		s_morphing->setColor(ccc3(30, 30, 30));
+	{
+		buy_morphing = CommonButton::create("", 10, CCSizeMake(80, 50), CommonButtonLightPupple, -160);
+		buy_morphing->setPosition(morphing_position);
+		buy_morphing->setFunction([=](CCObject* sender)
+								  {
+									  if(!is_actioned)
+									  {
+										  is_actioned = true;
+										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+										  
+										  BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, [=]()
+																							   {
+																								   is_actioned = false;
+																								   is_morphing = true;
+																								   
+																								   buy_morphing->removeFromParent();
+																								   
+																								   morphing_img->removeFromParent();
+																								   morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
+																								   morphing_img->setPosition(morphing_position);
+																								   addChild(morphing_img, kCV_Z_next_button);
+																								   
+																								   CCTouch* t_touch = new CCTouch();
+																								   t_touch->setTouchInfo(0, 0, 0);
+																								   t_touch->autorelease();
+																								   
+																								   first_img->ccTouchEnded(t_touch, NULL);
+																							   });
+										  addChild(t_popup, 999);
+									  }
+								  });
+		addChild(buy_morphing, kCV_Z_next_button);
+		
+		morphing_filename = "morphing_heart_off.ccbi";
+	}
 	else
-		s_morphing->setColor(ccGRAY);
+	{
+		morphing_filename = "morphing_heart_on.ccbi";
+	}
 	
-	buy_morphing_menu = CCMenuLambda::create();
-	buy_morphing_menu->setPosition(ccp(445,myDSH->ui_top-35-40));
-	addChild(buy_morphing_menu, kCV_Z_next_button);
 	
-	CCMenuItemLambda* morphing_item = CCMenuItemSpriteLambda::create(n_morphing, s_morphing, [=](CCObject* sender)
-																	 {
-																		 if(!is_actioned)
-																			{
-																				is_actioned = true;
-																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																				
-																				BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, [=]()
-																				{
-																					is_actioned = false;
-																					is_morphing = true;
-																					
-																					n_morphing->setGray(false);
-																					s_morphing->setColor(ccGRAY);
-																					
-																					buy_morphing_menu->setEnabled(false);
-																					
-																					CCTouch* t_touch = new CCTouch();
-																					t_touch->setTouchInfo(0, 0, 0);
-																					t_touch->autorelease();
-																					
-																					first_img->ccTouchEnded(t_touch, NULL);
-																				});
-																				addChild(t_popup, 999);
-																			}
-																	 });
-	buy_morphing_menu->addChild(morphing_item);
-	buy_morphing_menu->setEnabled(!is_morphing);
-	buy_morphing_menu->setTouchPriority(-160);
+	
+	morphing_img = KS::loadCCBI<CCSprite*>(this, morphing_filename.c_str()).first;
+	morphing_img->setPosition(morphing_position);
+	addChild(morphing_img, kCV_Z_next_button);
 	
 	if(!is_morphing)
 	{
@@ -165,10 +171,12 @@ bool CardViewScene::init()
 																 is_actioned = false;
 																 is_morphing = true;
 																 
-																 n_morphing->setGray(false);
-																 s_morphing->setColor(ccGRAY);
+																 buy_morphing->removeFromParent();
 																 
-																 buy_morphing_menu->setEnabled(false);
+																 morphing_img->removeFromParent();
+																 morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
+																 morphing_img->setPosition(morphing_position);
+																 addChild(morphing_img, kCV_Z_next_button);
 																 
 																 CCTouch* t_touch = new CCTouch();
 																 t_touch->setTouchInfo(0, 0, 0);
@@ -180,10 +188,9 @@ bool CardViewScene::init()
 	}
 	
 	
-	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(80,50), CommonButtonYellow, -160);
-	next_button->setTitleColor(ccc3(50, 20, 0));
+	next_button = CommonButton::createCloseButton(-160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
-	next_button->setPosition(ccp(480-50,30));
+	next_button->setPosition(ccp(480-35,myDSH->ui_top-35));
 	next_button->setVisible(false);
 	addChild(next_button, kCV_Z_next_button);
 	

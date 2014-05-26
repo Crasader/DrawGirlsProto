@@ -48,6 +48,11 @@ private:
 	
 	LoadingLayer* ready_loading;
 	
+	KSLabelTTF* n_stop_label2;
+	KSLabelTTF* s_stop_label2;
+	KSLabelTTF* n_next_label2;
+	KSLabelTTF* s_next_label2;
+	
 	vector<DownloadFile> df_list;
 	vector<CopyFile> cf_list;
 	

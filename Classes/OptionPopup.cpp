@@ -33,6 +33,7 @@
 #include "FlagSelector.h"
 
 #include "CouponPopup.h"
+#include "StyledLabelTTF.h"
 
 USING_NS_CC_EXT;
 
@@ -80,6 +81,7 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
+	
 	
 //	Json::Value param;
 //	param["productid"] = "g_10289_001";

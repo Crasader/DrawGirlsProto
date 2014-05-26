@@ -39,6 +39,7 @@
 #include "OnePercentGame.h"
 #include "ControlTipContent.h"
 #include "EndlessStartContent.h"
+#include "FlagSelector.h"
 
 //#include "ScreenSide.h"
 
@@ -475,6 +476,16 @@ void Maingame::finalSetting()
 	
 //	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
 	
+	
+	FloatingCoinParent* floating_coin_parent = FloatingCoinParent::create([=](CCPoint t_point)
+																		  {
+																			  myGIM->showTakeItemEffect(t_point);
+																		  });
+	game_node->addChild(floating_coin_parent, clearGoldZorder);
+	myGD->V_F["Main_startClearFloatingCoin"] = std::bind(&FloatingCoinParent::startClearFloatCoin, floating_coin_parent, std::placeholders::_1);
+	
+	
+	
 	myMS->scanMap();
 	myGD->communication("VS_setSceneNode", this);
 	
@@ -663,16 +674,61 @@ void Maingame::finalSetting()
 		
 		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size() > 0)
 		{
-			replay_score = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+			replay_score = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 			replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
 			replay_all_node->addChild(replay_score);
 			
 			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		}
 		
-//		CCLabelTTF* replay_nick = CCLabelTTF::create(mySGD->getAcceptChallengeNick().c_str(), mySGD->getFont().c_str(), 10);
-//		replay_nick->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,215.f*thumb_scale-10)));
-//		replay_all_node->addChild(replay_nick);
+		
+		string flag = mySGD->endless_flag.getV();
+		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+		selectedFlagSpr->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8));
+		selectedFlagSpr->setScale(0.5f);
+		replay_all_node->addChild(selectedFlagSpr);
+		
+		addChild(KSGradualValue<float>::create(480-40+20+100, 480-40+20, 0.5f, [=](float t){selectedFlagSpr->setPositionX(t);}, [=](float t){selectedFlagSpr->setPositionX(480-40+20);}));
+		
+		KSLabelTTF* nick_label = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 10);
+		nick_label->setAnchorPoint(ccp(0,0.5f));
+		nick_label->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
+		replay_all_node->addChild(nick_label);
+		
+		addChild(KSGradualValue<float>::create(480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2+100, 480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
+											   0.5f, [=](float t){nick_label->setPositionX(t);}, [=](float t){nick_label->setPositionX(480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);}));
+		
+		int use_item_cnt = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_useItemCnt), Json::Value()).asInt();
+		if(use_item_cnt > 0)
+		{
+			float item_scale = 0.18f;
+			CCPoint item_base_position = ccp(480-40, myDSH->ui_center_y) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
+			CCPoint distance_position = ccp(14,0);
+			float signed_distance = 100.f;
+			
+			for(int i=0;i<use_item_cnt;i++)
+			{
+				ITEM_CODE t_code = ITEM_CODE(mySGD->replay_playing_info.get(CCString::createWithFormat(mySGD->getReplayKey(kReplayKey_useItem_int1_itemCode).c_str(), i+1)->getCString(), Json::Value()).asInt());
+				
+				GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", t_code)->getCString());
+				item_img->setScale(item_scale);
+				item_img->setOpacity(150);
+				replay_all_node->addChild(item_img);
+				
+				CCSprite* item_case = CCSprite::create("ingame_itembox.png");
+				item_case->setPosition(ccp(item_img->getContentSize().width/2.f, item_img->getContentSize().height/2.f));
+				item_case->setScale(1.f/0.4f);
+				item_case->setOpacity(150);
+				item_img->addChild(item_case, -1);
+				
+				item_img->setPosition(ccpAdd(item_base_position, ccpMult(distance_position, i)));
+				item_img->setPositionX(item_img->getPositionX()+signed_distance);
+				replay_all_node->addChild(KSGradualValue<float>::create(ccpAdd(item_base_position, ccpMult(distance_position, i)).x+signed_distance, ccpAdd(item_base_position, ccpMult(distance_position, i)).x, 0.5f,
+													   [=](float t){item_img->setPositionX(t);},
+													   [=](float t){item_img->setPositionX(ccpAdd(item_base_position, ccpMult(distance_position, i)).x);}));
+			}
+		}
+		
 	}
 	
 	if(mySGD->is_endless_mode)
@@ -2250,6 +2306,7 @@ void Maingame::failScenario2()
 				  {
 					  CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
 					  curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+					  curtain_node->setScale(myDSH->screen_convert_rate);
 					  addChild(curtain_node, shutterZorder+5);
 					  
 					  CCDelayTime* t_delay = CCDelayTime::create(1.f);
@@ -3318,6 +3375,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 
 void Maingame::hideThumb()
 {
+	myUI->hideThumb();
 	sil_thumb->setVisible(false);
 	
 	for(int i=0;i<search_eye_vector.size();i++)

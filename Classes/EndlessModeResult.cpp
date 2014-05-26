@@ -95,19 +95,6 @@ void EndlessModeResult::setMain()
 	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kEndlessModeResultZorder_back);
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
-										 {
-											 KS::setOpacity(main_case, 255);
-											 
-											 is_menu_enable = true;
-										 }));
-	
 	CCScale9Sprite* left_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	left_back->setContentSize(CCSizeMake((main_case->getContentSize().width-30)/2.f, 212));
 	left_back->setPosition(ccp(10+left_back->getContentSize().width/2.f, 165));
@@ -229,7 +216,7 @@ void EndlessModeResult::setMain()
 	
 	CCSprite* n_stop = CCSprite::create("endless_ready.png");
 	
-	KSLabelTTF* n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
 	n_stop_label2->setColor(ccWHITE);
 	n_stop_label2->setOpacity(100);
 	n_stop_label2->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-2));
@@ -243,7 +230,7 @@ void EndlessModeResult::setMain()
 	CCSprite* s_stop = CCSprite::create("endless_ready.png");
 	s_stop->setColor(ccGRAY);
 	
-	KSLabelTTF* s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
 	s_stop_label2->setColor(ccWHITE);
 	s_stop_label2->setOpacity(100);
 	s_stop_label2->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-2));
@@ -397,7 +384,24 @@ void EndlessModeResult::setMain()
 																																											  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
 																																												  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
 																																											  
-																																											  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
+																																											  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+																																											  {
+																																												  KS::setOpacity(main_case, t);
+																																												  if(t > 100)
+																																													{
+																																														n_stop_label2->setOpacity(100);
+																																														s_stop_label2->setOpacity(100);
+																																														n_next_label2->setOpacity(100);
+																																														s_next_label2->setOpacity(100);
+																																													}
+																																											  }, [=](int t)
+																																											  {
+																																												  KS::setOpacity(main_case, 0);
+																																												  n_stop_label2->setOpacity(0);
+																																												  s_stop_label2->setOpacity(0);
+																																												  n_next_label2->setOpacity(0);
+																																												  s_next_label2->setOpacity(0);
+																																											  }));
 																																										  }
 																																									  }));
 																																  
@@ -512,7 +516,24 @@ void EndlessModeResult::setMain()
 																														addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
 																															addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
 																														
-																														addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
+																														addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+																														{
+																															KS::setOpacity(main_case, t);
+																															if(t > 100)
+																															{
+																																n_stop_label2->setOpacity(100);
+																																s_stop_label2->setOpacity(100);
+																																n_next_label2->setOpacity(100);
+																																s_next_label2->setOpacity(100);
+																															}
+																														}, [=](int t)
+																														{
+																															KS::setOpacity(main_case, 0);
+																															n_stop_label2->setOpacity(0);
+																															s_stop_label2->setOpacity(0);
+																															n_next_label2->setOpacity(0);
+																															s_next_label2->setOpacity(0);
+																														}));
 																													}
 																												}));
 																			
@@ -675,7 +696,7 @@ void EndlessModeResult::setMain()
 	
 	CCSprite* n_next = CCSprite::create("endless_ready.png");
 	
-	KSLabelTTF* n_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	n_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	n_next_label2->setColor(ccWHITE);
 	n_next_label2->setOpacity(100);
 	n_next_label2->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-2));
@@ -689,7 +710,7 @@ void EndlessModeResult::setMain()
 	CCSprite* s_next = CCSprite::create("endless_ready.png");
 	s_next->setColor(ccGRAY);
 	
-	KSLabelTTF* s_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	s_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	s_next_label2->setColor(ccWHITE);
 	s_next_label2->setOpacity(100);
 	s_next_label2->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-2));
@@ -732,6 +753,33 @@ void EndlessModeResult::setMain()
 	CCSprite* vs_img = CCSprite::create("endless_vs.png");
 	vs_img->setPosition(ccp(main_case->getContentSize().width/2.f, 210));
 	main_case->addChild(vs_img);
+	
+	main_case->setScaleY(0.f);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
+	
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+	{
+		KS::setOpacity(main_case, t);
+		if(t > 100)
+		{
+			n_stop_label2->setOpacity(100);
+			s_stop_label2->setOpacity(100);
+			n_next_label2->setOpacity(100);
+			s_next_label2->setOpacity(100);
+		}
+	}, [=](int t)
+										 {
+											 KS::setOpacity(main_case, 255);
+											 n_stop_label2->setOpacity(100);
+											 s_stop_label2->setOpacity(100);
+											 n_next_label2->setOpacity(100);
+											 s_next_label2->setOpacity(100);
+											 
+											 is_menu_enable = true;
+										 }));
 }
 
 void EndlessModeResult::reSetEndlessRank()
@@ -1158,5 +1206,22 @@ void EndlessModeResult::successGetStageInfo()
 	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
 		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
 	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
+	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+	{
+		KS::setOpacity(main_case, t);
+		if(t > 100)
+		{
+			n_stop_label2->setOpacity(100);
+			s_stop_label2->setOpacity(100);
+			n_next_label2->setOpacity(100);
+			s_next_label2->setOpacity(100);
+		}
+	}, [=](int t)
+	{
+		KS::setOpacity(main_case, 0);
+		n_stop_label2->setOpacity(0);
+		s_stop_label2->setOpacity(0);
+		n_next_label2->setOpacity(0);
+		s_next_label2->setOpacity(0);
+	}));
 }

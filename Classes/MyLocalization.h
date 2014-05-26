@@ -427,6 +427,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_todaymissionSuccessPass3,
 	kMyLocalKey_todaymissionSuccessPass4,
 	kMyLocalKey_todaymissionSuccessPass5,
+	kMyLocalKey_todaymissionSuccessCommon,
 	kMyLocalKey_free,
 	kMyLocalKey_areaReGacha,
 	kMyLocalKey_pleaseClickButton,
@@ -552,7 +553,17 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_buyMorphingContent,
 	kMyLocalKey_buyMorphingBuy,
 	kMyLocalKey_couponTitle,
-	kMyLocalKey_couponContent
+	kMyLocalKey_couponContent,
+	kMyLocalKey_couponSuccess,
+	kMyLocalKey_couponGiftbox,
+	kMyLocalKey_couponFail,
+	kMyLocalKey_couponAlready,
+	kMyLocalKey_couponExpire,
+	kMyLocalKey_couponOserror,
+	kMyLocalKey_couponDontfind,
+	kMyLocalKey_couponOtherError,
+	kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle,
+	kMyLocalKey_notOpenPuzzleNotEnoughtStarContent
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

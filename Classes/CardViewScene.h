@@ -59,9 +59,9 @@ private:
 	bool is_morphing;
 	
 	CCSprite* zoom_img;
-	CCMenuLambda* buy_morphing_menu;
-	GraySprite* n_morphing;
-	GraySprite* s_morphing;
+	
+	CCSprite* morphing_img;
+	CommonButton* buy_morphing;
 	
 	float minimum_scale;
 	CCSize screen_size;

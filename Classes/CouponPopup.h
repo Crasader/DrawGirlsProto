@@ -51,6 +51,8 @@ private:
     virtual void editBoxEditingDidEnd(CCEditBox* editBox);
     virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);
     virtual void editBoxReturn(CCEditBox* editBox);
+	
+	void createResultPopup(string title, string content);
 };
 
 #endif /* defined(__DGproto__CouponPopup__) */

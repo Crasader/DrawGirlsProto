@@ -74,6 +74,8 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_originalScore)							return_value = "os";
 	else if(t_key == kReplayKey_win)									return_value = "win";
 	else if(t_key == kReplayKey_lose)									return_value = "lose";
+	else if(t_key == kReplayKey_useItemCnt)								return_value = "uic";
+	else if(t_key == kReplayKey_useItem_int1_itemCode)					return_value = "ui%dic";
 	
 	return return_value;
 }
@@ -331,6 +333,19 @@ void StarGoldData::setGameStart()
 	replay_write_info.clear();
 	replay_write_info[getReplayKey(kReplayKey_isChangedMap)] = true;
 	replay_write_info[getReplayKey(kReplayKey_isChangedScore)] = true;
+	
+	int use_item_cnt = 0;
+	for(int i=0;i<is_using_item.size();i++)
+	{
+		if(is_using_item[i])
+		{
+			use_item_cnt++;
+			replay_write_info[CCString::createWithFormat(getReplayKey(kReplayKey_useItem_int1_itemCode).c_str(), use_item_cnt)->getCString()] = i;
+		}
+	}
+	
+	replay_write_info[getReplayKey(kReplayKey_useItemCnt)] = use_item_cnt;
+	
 	
 //	ingame_before_stage_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
 	is_not_cleared_stage = !mySGD->isClearPiece(mySD->getSilType());

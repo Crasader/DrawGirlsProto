@@ -140,7 +140,9 @@ enum ReplayKey
 	kReplayKey_totalScore,
 	kReplayKey_originalScore,
 	kReplayKey_win,
-	kReplayKey_lose
+	kReplayKey_lose,
+	kReplayKey_useItemCnt,
+	kReplayKey_useItem_int1_itemCode
 };
 
 enum GoodsType
