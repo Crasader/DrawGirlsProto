@@ -112,6 +112,8 @@ private:
 	void setCasting(bool t_b);
 	void removeSubCumber(CCObject* r_sc);
 	void myInit();
+	void mappingFunctor();
+	void toFun();
 };
 
 #endif

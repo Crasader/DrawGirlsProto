@@ -11,6 +11,7 @@
 #include "Jack.h"
 #include "PlayUI.h"
 #include <chrono>
+#include "CumberEmotion.h"
 
 class KSJuniorBase;
 template <class _Tp>
@@ -151,7 +152,10 @@ void KSCumberBase::randomMoving(float dt)
 				//                        CCLOG("collision!!");
 				//                        myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				{
 					myGD->communication("SW_createSW", checkPosition);
+					m_emotion->onTouchingLine();
+				}
 				//                                                                        callfuncI_selector(MetalSnake::showEmotion)); //##
 				m_directionAngleDegree += m_well512.GetValue(90, 270);
 				if(m_directionAngleDegree < 0)                        m_directionAngleDegree += 360;
@@ -338,7 +342,10 @@ void KSCumberBase::straightMoving(float dt)
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				{
 					myGD->communication("SW_createSW", checkPosition);
+					m_emotion->onTouchingLine();
+				}
 				degree = degreeSelector(cnt, degree);
 				
 				if(degree < 0)			degree += 360;
@@ -548,7 +555,10 @@ void KSCumberBase::followMoving(float dt)
 				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 								
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				{
 					myGD->communication("SW_createSW", checkPosition);
+					m_emotion->onTouchingLine();
+				}
 			}
 			
 			else if(collisionCode == kCOLLISION_NONE)
@@ -714,7 +724,10 @@ void KSCumberBase::rightAngleMoving(float dt)
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				{
 					myGD->communication("SW_createSW", checkPosition);
+					m_emotion->onTouchingLine();
+				}
 				
 				int changeDirection = m_well512.GetValue(3);
 				
@@ -884,7 +897,10 @@ void KSCumberBase::circleMoving(float dt)
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				{
 					myGD->communication("SW_createSW", checkPosition);
+					m_emotion->onTouchingLine();
+				}
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				// m_circle 변수를 재지정 ...
@@ -1047,7 +1063,10 @@ void KSCumberBase::snakeMoving(float dt)
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				{
 					myGD->communication("SW_createSW", checkPosition);
+					m_emotion->onTouchingLine();
+				}
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
 				// m_snake 변수를 재지정 ...
