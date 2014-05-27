@@ -83,6 +83,7 @@ private:
 	CCSprite* postbox_count_case;
 //	CCLabelTTF* postbox_count_label;
 	CCSprite* achievement_count_case;
+	KSLabelTTF* achievement_count_label;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();

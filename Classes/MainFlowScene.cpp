@@ -2748,9 +2748,13 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(achieve_menu);
 
-	achievement_count_case = CCSprite::create("mainflow_new.png");
+	achievement_count_case = CCSprite::create("todaymission_percent_back.png");
 	achievement_count_case->setPosition(ccp(441,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-16));
-	addChild(achievement_count_case, kMainFlowZorder_top);
+	addChild(achievement_count_case, kMainFlowZorder_top+1);
+	
+	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f));
+	achievement_count_case->addChild(achievement_count_label);
 	
 	CCScaleTo* t_scale5 = CCScaleTo::create(0.1f, 1.3f);
 	CCScaleTo* t_scale6 = CCScaleTo::create(0.2f, 1.f);
@@ -2767,9 +2771,9 @@ void MainFlowScene::setTop()
 	achievement_count_case->addChild(KSSchedule::create([=](float dt)
 													{
 														if(achieve_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-															achievement_count_case->setOpacity(0);
+															KS::setOpacity(achievement_count_case, 0);
 														else
-															achievement_count_case->setOpacity(255);
+															KS::setOpacity(achievement_count_case, 255);
 														return true;
 													}));
 	
@@ -2828,6 +2832,7 @@ void MainFlowScene::countingAchievement()
 	if(reward_count > 0)
 	{
 		achievement_count_case->setVisible(true);
+		achievement_count_label->setString(CCString::createWithFormat("%d", reward_count)->getCString());
 	}
 }
 
