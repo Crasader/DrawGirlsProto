@@ -66,7 +66,8 @@ public:
 		m_filteredMailList = obj["list"];
 		m_mailTableView = CCTableView::create(this, CCSizeMake(215, 179));
 
-		CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
+		CCScale9Sprite* bar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																								 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
 		m_scrollBar = ScrollBar::createScrollbar(m_mailTableView, -2 - 10, NULL, bar);
 		m_scrollBar->setDynamicScrollSize(false);
 		m_scrollBar->setVisible(false);

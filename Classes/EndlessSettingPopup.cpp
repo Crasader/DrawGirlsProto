@@ -304,7 +304,7 @@ void EndlessSettingPopup::addRankingTable(CCNode* node)
 																							 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
 	
 	m_scrollBar = ScrollBar::createScrollbar(m_rankingTable, 2, NULL, bar);
-	m_scrollBar->setDynamicScrollSize(false);
+	m_scrollBar->setDynamicScrollSize(true);
 	m_scrollBar->setVisible(true);
 	m_rankingTable->setAnchorPoint(CCPointZero);
 	
