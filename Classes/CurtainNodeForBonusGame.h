@@ -213,12 +213,12 @@ public:
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
 //		m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
 //																			 buttonBack, m_touchPriority - 1);
-		m_startMenu = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
+		m_obtainReward = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
 																			 CommonButtonLightPupple, m_touchPriority - 1);
-		m_startMenu->setPosition(ccp(240, -200.f));
-		addChild(m_startMenu, kBonusGameZorder_menu);
+		m_obtainReward->setPosition(ccp(240, -200.f));
+		addChild(m_obtainReward, kBonusGameZorder_menu);
 		showPopup(onCloseCompleted);
-		m_startMenu->setFunction([=](CCObject* t){
+		m_obtainReward->setFunction([=](CCObject* t){
 			menuAction(onOpenCompleted);
 		});
 	
@@ -245,10 +245,10 @@ public:
 	void menuAction(std::function<void(void)> callback)
 	{
 		
-		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(-80,160));
+		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(-80 - 20,160));
 		m_leftCurtain->runAction(left_move);
 
-		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(560,160));
+		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(560 + 20,160));
 		m_rightCurtain->runAction(right_move);
 
 		if(m_titleBonusGame)
@@ -270,19 +270,37 @@ public:
 			m_contentBack->runAction(content_move);
 		}
 		
-
-		addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, -200), 0.3f,
-																						 [=](CCPoint t){
-																							 m_startMenu->setPosition(t);
-																						 },
-																						 [=](CCPoint t){
-																							 m_startMenu->setPosition(t);
-																							 if(callback)
-																							 {
-																								 callback();
-																							 }
-																						 }));
+		if(m_startMenu)
+		{
+			
+			addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, -200), 0.4f,
+																							 [=](CCPoint t){
+																								 m_startMenu->setPosition(t);
+																							 },
+																							 [=](CCPoint t){
+																								 m_startMenu->setPosition(t);
+																								 if(callback)
+																								 {
+																									 callback();
+																								 }
+																							 }));
+		}
 		
+		if(m_obtainReward)
+		{
+			
+			addChild(KSGradualValue<CCPoint>::create(m_obtainReward->getPosition(), ccp(240, -200), 0.4f,
+																							 [=](CCPoint t){
+																								 m_obtainReward->setPosition(t);
+																							 },
+																							 [=](CCPoint t){
+																								 m_obtainReward->setPosition(t);
+																								 if(callback)
+																								 {
+																									 callback();
+																								 }
+																							 }));
+		}
 //		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, -200));
 //		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::startGame));
 //		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
@@ -333,18 +351,34 @@ public:
 			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(240, 144.5));
 			m_contentBack->runAction(content_move);
 		}
-		
-		addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, 65.f), 0.3f,
-																						 [=](CCPoint t){
-																							 m_startMenu->setPosition(t);
-																						 },
-																						 [=](CCPoint t){
-																							 m_startMenu->setPosition(t);
-																							 if(callback)
-																							 {
-																								 callback();
-																							 }
-																						 }));
+		if(m_startMenu)
+		{
+			addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, 65.f), 0.3f,
+																							 [=](CCPoint t){
+																								 m_startMenu->setPosition(t);
+																							 },
+																							 [=](CCPoint t){
+																								 m_startMenu->setPosition(t);
+																								 if(callback)
+																								 {
+																									 callback();
+																								 }
+																							 }));
+		}
+		if(m_obtainReward)
+		{
+			addChild(KSGradualValue<CCPoint>::create(m_obtainReward->getPosition(), ccp(240, 85.f), 0.3f,
+																							 [=](CCPoint t){
+																								 m_obtainReward->setPosition(t);
+																							 },
+																							 [=](CCPoint t){
+																								 m_obtainReward->setPosition(t);
+																								 if(callback)
+																								 {
+																									 callback();
+																								 }
+																							 }));
+		}
 //		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, 65));
 //		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::endShowPopup));
 //		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
@@ -368,6 +402,7 @@ protected:
 	KSLabelTTF* m_titleStr;
 	CCScale9Sprite* m_contentBack;
 	CommonButton* m_startMenu;
+	CommonButton* m_obtainReward;
 	BonusGameCode m_gameCode;
 	std::function<void(void)> m_onPressStartButton;
 	

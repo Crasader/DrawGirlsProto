@@ -7,6 +7,7 @@ CurtainNodeForBonusGame::CurtainNodeForBonusGame()
 	m_contentBack = nullptr;
 	 m_startMenu = nullptr;
 	m_onPressStartButton = nullptr;
+	m_obtainReward = nullptr;
 }
 CurtainNodeForBonusGame::~CurtainNodeForBonusGame()
 {
