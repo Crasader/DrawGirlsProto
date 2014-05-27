@@ -33,7 +33,7 @@ enum Mainzorder{
 	attackItemZorder,
 	myCPZorder,
 	myJackZorder,
-	controlImgZorder,
+	clearGoldZorder,
 	countingLabelZorder,
 	conditionLabelZorder,
 	goldZorder,
@@ -62,6 +62,7 @@ enum GameNodeMovingDirection{
 class SearchEye;
 class CumberShowWindow;
 class EffectSprite;
+class FloatingCoinParent;
 class Maingame : public CCLayer
 {
 public:
@@ -273,7 +274,7 @@ private:
 	CCRenderTexture* replay_thumb_texture;
 	void refreshReplayThumb(int temp_time);
 	
-	CCLabelTTF* replay_score;
+	CountingBMLabel* replay_score;
 	void refreshReplayScore(int temp_time);
 	
 	CCSprite* replay_character;
@@ -282,11 +283,13 @@ private:
 	void refreshReplayPosition(int temp_time);
 	
 	CCNode* replay_all_node;
+	EffectSprite* replay_sil_thumb;
 	
 	int replay_continue_count;
 	CCLabelTTF* replay_continue_label;
 	
 	void hideThumb();
+	FloatingCoinParent* floating_coin_parent;
 	
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
@@ -301,6 +304,8 @@ private:
 	
 	void showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
 	void continueAction();
+	
+	void checkTutorial();
 	
 	void initJackPosition(CCPoint jack_position);
 	

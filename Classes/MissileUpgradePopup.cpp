@@ -65,7 +65,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	m_container->addChild(back_case);
 	
 	
-	CCScale9Sprite* back_center = CCScale9Sprite::create("achievement_cellback_reward.png", CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+	CCScale9Sprite* back_center = CCScale9Sprite::create("missile_upgrade_back.png", CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
 	back_center->setContentSize(CCSizeMake(back_case->getContentSize().width-30, 110));
 	back_center->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-10));
 	back_case->addChild(back_center);
@@ -238,17 +238,20 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
 		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
-		mySGD->addChangeGoods(kGoodsType_pass3, -1, "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 		
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		t_history.level = t_history.level.getV() + 1;
+		mySGD->addChangeGoods("cu_p", kGoodsType_cu, mySGD->getSelectedCharacterHistory().characterNo.getV());
 		
-		vector<CommandParam> command_list;
-		command_list.clear();
-		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+		mySGD->changeGoods(json_selector(this, MissileUpgradePopup::resultSaveUserData));
 		
-		
-		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
+//		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+//		t_history.level = t_history.level.getV() + 1;
+//		
+//		vector<CommandParam> command_list;
+//		command_list.clear();
+//		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+//		
+//		
+//		mySGD->changeGoodsTransaction(command_list, );
 	}
 	else
 	{
@@ -271,17 +274,42 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
 		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
-		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getSelectedCharacterHistory().nextPrice.getV(), "미사일업그레이드", CCString::createWithFormat("%d", missile_level)->getCString());
 		
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		t_history.level = t_history.level.getV() + 1;
+		vector<ChangeGoodsDataDetail> t_list;
 		
-		vector<CommandParam> command_list;
-		command_list.clear();
-		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+		ChangeGoodsDataDetail t_detail;
+		t_detail.m_type = kGoodsType_gold;
+		t_detail.m_value = -upgrade_price;
+		t_detail.m_statsID = "";
+		t_detail.m_statsValue = "";
+		t_detail.m_content = "";
+		t_detail.m_isPurchase = false;
 		
+		t_list.push_back(t_detail);
 		
-		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
+		ChangeGoodsDataDetail t_detail2;
+		t_detail2.m_type = kGoodsType_cu;
+		t_detail2.m_value = mySGD->getSelectedCharacterHistory().characterNo.getV();
+		t_detail2.m_statsID = "";
+		t_detail2.m_statsValue = "";
+		t_detail2.m_content = "";
+		t_detail2.m_isPurchase = false;
+		
+		t_list.push_back(t_detail2);
+		
+		mySGD->addChangeGoods("cu_g", t_list);
+		
+		mySGD->changeGoods(json_selector(this, MissileUpgradePopup::resultSaveUserData));
+		
+//		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+//		t_history.level = t_history.level.getV() + 1;
+//		
+//		vector<CommandParam> command_list;
+//		command_list.clear();
+//		command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, nullptr));
+//		
+//		
+//		mySGD->changeGoodsTransaction(command_list, json_selector(this, MissileUpgradePopup::resultSaveUserData));
 	}
 }
 
@@ -431,7 +459,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 		upgrade_button->setEnabled(false);
 		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString());
 		price_type->removeFromParent();
-		price_back->setPosition(ccp(upgrade_label->getContentSize().width/2.f, upgrade_label->getContentSize().height/2.f));
+//		price_back->setPosition(ccp(upgrade_label->getContentSize().width/2.f, upgrade_label->getContentSize().height/2.f));
 		price_back->setContentSize(CCSizeMake(120, 30));
 		price_label->setString(myLoc->getLocalForKey(kMyLocalKey_endUpgrade));
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f, price_back->getContentSize().height/2.f));
@@ -469,7 +497,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	addChild(KSTimer::create(0.1f, [=](){
 		CCSprite* upgrade_effect_2 = CCSprite::create("missile_upgrade_2.png");
 		upgrade_effect_2->setScaleX(0.f);
-		upgrade_effect_2->setPosition(ccp(99,-14));
+		upgrade_effect_2->setPosition(ccp(80,-14));
 		m_container->addChild(upgrade_effect_2);
 		
 		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont2().c_str(), 13);
@@ -488,12 +516,12 @@ void MissileUpgradePopup::setAfterUpgrade()
 		}, [=](float t){
 			upgrade_effect_2->setScaleX(1.f);
 			
-			CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(99, 12));
-			CCMoveTo* t_move2 = CCMoveTo::create(0.15f, ccp(99, -8));
+			CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(80, 12));
+			CCMoveTo* t_move2 = CCMoveTo::create(0.15f, ccp(80, -8));
 			CCSequence* t_seq1 = CCSequence::createWithTwoActions(t_move1, t_move2);
 			CCRepeat* t_repeat = CCRepeat::create(t_seq1, 3);
 			
-			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(99, 12));
+			CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(80, 12));
 			CCScaleTo* t_scale = CCScaleTo::create(0.3f, 0.f, 1.f);
 			CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_move, t_scale);
 			

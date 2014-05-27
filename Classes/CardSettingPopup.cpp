@@ -93,7 +93,7 @@ bool CardSettingPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-22.f-450));
+	main_case->setPosition(ccp(240,160-14.f-450));
 	addChild(main_case, kCSS_Z_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 15);
@@ -331,15 +331,15 @@ bool CardSettingPopup::init()
 	}
 	
 	
-	CommonButton* event_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_event), 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
-	event_menu->setPosition(ccp(400,256));
-	main_case->addChild(event_menu, kCSS_Z_alignButton);
-	event_menu->setFunction([=](CCObject* sender)
-								 {
-									 CCNode* t_node = CCNode::create();
-									 t_node->setTag(kCSS_MT_event);
-									 menuAction(t_node);
-								 });
+//	CommonButton* event_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_event), 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
+//	event_menu->setPosition(ccp(400,256));
+//	main_case->addChild(event_menu, kCSS_Z_alignButton);
+//	event_menu->setFunction([=](CCObject* sender)
+//								 {
+//									 CCNode* t_node = CCNode::create();
+//									 t_node->setTag(kCSS_MT_event);
+//									 menuAction(t_node);
+//								 });
 	
 	
 //	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
@@ -371,7 +371,7 @@ void CardSettingPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -419,7 +419,7 @@ void CardSettingPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -734,6 +734,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					cell->addChild(t_card_menu);
 					t_card_menu->setTouchPriority(-180-3);
 					
+					if(mySGD->isCardMorphing(card_number))
+					{
+						CCSprite* morphing_mark = KS::loadCCBI<CCSprite*>(this, "morphing_card.ccbi").first;
+						morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
+						cell->addChild(morphing_mark);
+					}
+					
 //					CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
 //					
 //					CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d", myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number))->getCString(),
@@ -854,6 +861,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			t_card_menu->setPosition(card_position);
 			cell->addChild(t_card_menu);
 			t_card_menu->setTouchPriority(-180-3);
+			
+			if(mySGD->isCardMorphing(card_number))
+			{
+				CCSprite* morphing_mark = KS::loadCCBI<CCSprite*>(this, "morphing_card.ccbi").first;
+				morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
+				cell->addChild(morphing_mark);
+			}
 			
 //			CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
 //			

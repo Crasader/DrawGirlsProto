@@ -10,6 +10,8 @@
 #include <cocos-ext.h>
 #include "StageImgLoader.h"
 #include "KSUtil.h"
+#include "CumberEmotion.h"
+
 bool KSCircleBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
@@ -84,6 +86,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		{
 			m_state = kCumberStateDamaging;
 			schedule(schedule_selector(ThisClassType::damageReaction));
+			getEmotion()->goStun();
 		}
 	}
 
@@ -138,6 +141,7 @@ void KSCircleBase::damageReaction(float)
 		if((m_state & kCumberStateMoving) == 0)
 		{
 			m_state = kCumberStateMoving;
+			getEmotion()->releaseStun();
 			unschedule(schedule_selector(KSCircleBase::damageReaction));
 			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 			m_furyMode.furyFrameCount = m_furyMode.totalFrame;
@@ -627,7 +631,13 @@ float KSCircleBase::getRadius()
 {
 	return RADIUS;
 }
-
+void KSCircleBase::attachEmotion()
+{
+	CumberEmotion* ce = CumberEmotion::create();
+	
+	m_headImg->addChild(ce, CumberZorder::kEmotion);
+	m_emotion = ce;
+}
 void KSCircleBase::update( float dt )
 {
 	CCNode* endP = myGD->getCommunicationNode("Main_gameNodePointer");

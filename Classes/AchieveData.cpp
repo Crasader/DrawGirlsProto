@@ -239,7 +239,7 @@ int AchieveConditionReward::isHaveRewardCount()
 	int count = 0;
 	for(auto iter = data_map.begin(); iter!=data_map.end() ; iter++)
 	{
-		if(!(iter->second.isCompleted()) && iter->second. getIngCount() >= iter->second.getCondition())
+		if(!(iter->second.isCompleted()) && isAchieve(iter->first))
 			count++;
 	}
 	

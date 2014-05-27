@@ -22,6 +22,8 @@ USING_NS_CC_EXT;
 #include <boost/format.hpp>
 #include "FormSetter.h"
 #include "EasingAction.h"
+#include "StageImgLoader.h"
+#include "FormSetter.h"
 enum OnePercentGameZorder
 {
 	kOnePercentGame_Z_gray = 1,
@@ -54,6 +56,7 @@ public:
 	bool init(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha)
 	{
 		CCLayer::init();
+//		startFormSetter(this);
 		setTouchEnabled(true);
 		m_cancelGacha = cancelGacha;
 		m_resultGacha = tryGacha;
@@ -219,8 +222,15 @@ public:
 		CCNode* tempNode = CCNode::create();
 		CCClippingNode* cNode = CCClippingNode::create();
 		cNode->setStencil(CCSprite::create("one_percent_gacha_color.png"));
-		CCSprite* girl = CCSprite::create("ga1.png");
+		
+		int t_grade = 3;
+		if(mySGD->is_exchanged)
+			t_grade = 4;
+		
+		CCSprite* girl = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))->getCString());
 		cNode->addChild(girl);
+		girl->setScale(130 / girl->getContentSize().width);
+//		setFormSetter(girl);
 		cNode->setAlphaThreshold(0.1f);
 		tempNode->addChild(cNode, kOnePercentGame_Z_content);
 
@@ -265,7 +275,7 @@ public:
 				LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 				addChild(t_loading, 9999);
 
-				mySGD->addChangeGoods(kGoodsType_pass5, -1, "99프로가챠");
+				mySGD->addChangeGoods("g_99_p");
 
 				mySGD->changeGoods([=](Json::Value result_data){
 					t_loading->removeFromParent();
@@ -290,7 +300,7 @@ public:
 				LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 				addChild(t_loading, 9999);
 
-				mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getGachaOnePercentFee(), "99프로가챠");
+				mySGD->addChangeGoods("g_99_r");
 
 				mySGD->changeGoods([=](Json::Value result_data){
 					t_loading->removeFromParent();
@@ -440,7 +450,7 @@ public:
 				if(m_resultGacha)
 				{
 //					m_resultGacha(recent_percent); // 원래 가차 수치로 ~!
-					m_resultGacha(1.f); // 원래 가차 수치로 ~!
+					m_resultGacha(recent_percent); // 원래 가차 수치로 ~!
 
 					removeFromParent();
 				}

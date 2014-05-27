@@ -345,7 +345,7 @@ void ZoomScript::menuAction(CCObject *sender)
 					take_grade = 3;
 			}
 			
-			if(!is_rankup)
+			if(!mySGD->is_endless_mode && !is_rankup)
 			{
 				is_rankup = true;
 				
@@ -478,8 +478,15 @@ void ZoomScript::menuAction(CCObject *sender)
 
 void ZoomScript::nextScene()
 {
-	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
-	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+	if(mySGD->is_endless_mode)
+	{
+		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+	}
+	else
+	{
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
+		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+	}
 }
 
 void ZoomScript::showtimeFirstAction()

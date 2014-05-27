@@ -72,6 +72,7 @@ private:
 	bool clear_is_first_puzzle_success;
 	bool clear_is_first_perfect;
 	bool clear_is_stage_unlock;
+	bool clear_is_perfect_piece;
 	
 	bool is_menu_enable;
 	
@@ -82,6 +83,7 @@ private:
 	CCSprite* postbox_count_case;
 //	CCLabelTTF* postbox_count_label;
 	CCSprite* achievement_count_case;
+	KSLabelTTF* achievement_count_label;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();

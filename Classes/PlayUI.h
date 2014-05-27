@@ -33,7 +33,7 @@ USING_NS_CC;
 #define t_tta 0xD9
 #define LZZ_INLINE inline
 class KSLabelTTF;
-class ComboView : public CCSprite
+class ComboView : public CCNode
 {
 public:
 	static ComboView * create (int combo);
@@ -41,8 +41,9 @@ public:
 	void setPercentage (float t_percent);
 private:
 	int hide_frame;
-	KSLabelTTF * combo_label;
+	CCLabelBMFont * combo_label;
 	CCSprite* combo_str;
+	CCSprite* combo_front;
 //	CCProgressTimer * combo_timer;
 	void myInit (int combo);
 };
@@ -147,7 +148,7 @@ private:
 	void selfRemove ();
 	void myInit (float t_gp, bool is_item);
 };
-class TakeSpeedUp : public KSLabelTTF
+class TakeSpeedUp : public CCNode
 {
 public:
 	static TakeSpeedUp * create (int t_step, std::function<void()> t_end_func);
@@ -253,6 +254,7 @@ public:
 	void setComboCnt (int t_combo);
 	int getUseTime ();
 	void takeSilenceItem();
+	void hideThumb();
 	
 private:
 	KSProtectVar<float> score_value;
@@ -336,6 +338,8 @@ private:
 	void addResultClearCCB();
 	void addResultCCB(string ccb_filename);
 	KSProtectVar<float> keep_percentage;
+	
+	CCNode* thumb_node;
 	
 	bool is_used_heartUpItem;
 	bool is_used_longTimeItem;

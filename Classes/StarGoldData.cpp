@@ -16,6 +16,8 @@ void StarGoldData::withdraw()
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
+	endless_my_victory_on = false;
+	
 	star_label = NULL;
 	gold_label = NULL;
 	
@@ -65,6 +67,15 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_isChangedMap)							return_value = "icm";
 	else if(t_key == kReplayKey_isChangedScore)							return_value = "ics";
 	else if(t_key == kReplayKey_playIndex)								return_value = "pi";
+	else if(t_key == kReplayKey_clearGrade)								return_value = "cg";
+	else if(t_key == kReplayKey_gameTime)								return_value = "gt";
+	else if(t_key == kReplayKey_takeGold)								return_value = "tg";
+	else if(t_key == kReplayKey_totalScore)								return_value = "tts";
+	else if(t_key == kReplayKey_originalScore)							return_value = "os";
+	else if(t_key == kReplayKey_win)									return_value = "win";
+	else if(t_key == kReplayKey_lose)									return_value = "lose";
+	else if(t_key == kReplayKey_useItemCnt)								return_value = "uic";
+	else if(t_key == kReplayKey_useItem_int1_itemCode)					return_value = "ui%dic";
 	
 	return return_value;
 }
@@ -163,20 +174,12 @@ CCSprite* StarGoldData::getLoadingImg()
 string StarGoldData::getFont()
 {
 	
-	if(myLoc->getSupportLocalCode() == "ja")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-		return "meiryo";
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-		return "fonts/meiryo.ttc"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
-#endif
-	}
 	
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixJGoB";
+	font_name = "RixGoEB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+	font_name = "fonts/RixGoEB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
 	
 	return font_name;
@@ -184,20 +187,12 @@ string StarGoldData::getFont()
 
 string StarGoldData::getFont2() // Jrnaver
 {
-	if(myLoc->getSupportLocalCode() == "ja")
-	{
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-		return "meiryo";
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-		return "fonts/meiryo.ttc"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
-#endif
-	}
 
 	string font_name;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixJGoB";
+	font_name = "RixGoEB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "fonts/RixJGoB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+	font_name = "fonts/RixGoEB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
 	
 //	string font_name;
@@ -339,6 +334,19 @@ void StarGoldData::setGameStart()
 	replay_write_info[getReplayKey(kReplayKey_isChangedMap)] = true;
 	replay_write_info[getReplayKey(kReplayKey_isChangedScore)] = true;
 	
+	int use_item_cnt = 0;
+	for(int i=0;i<is_using_item.size();i++)
+	{
+		if(is_using_item[i])
+		{
+			use_item_cnt++;
+			replay_write_info[CCString::createWithFormat(getReplayKey(kReplayKey_useItem_int1_itemCode).c_str(), use_item_cnt)->getCString()] = i;
+		}
+	}
+	
+	replay_write_info[getReplayKey(kReplayKey_useItemCnt)] = use_item_cnt;
+	
+	
 //	ingame_before_stage_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
 	is_not_cleared_stage = !mySGD->isClearPiece(mySD->getSilType());
 	
@@ -413,6 +421,11 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 	base_score = t_score;
 	
 	float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
+	
+	if(mySD->getClearCondition() == kCLEAR_timeLimit)
+	{
+		play_limit_time -= mySD->getClearConditionTimeLimit();
+	}
 	
 	score = t_score + t_score*stage_grade.getV()*0.5f + t_score*((play_limit_time-t_game_time)/play_limit_time);
 
@@ -607,7 +620,7 @@ int StarGoldData::getNextCardNumber( int recent_card_number )
 	int found_number = -1;
 	for(int i=0;i<t_size;i++)
 	{
-		if(recent_card_number == has_gotten_cards[i].card_number)
+		if(recent_card_number == has_gotten_cards[i].card_number.getV())
 		{
 			found_number = i;
 			break;
@@ -618,9 +631,9 @@ int StarGoldData::getNextCardNumber( int recent_card_number )
 		return -1;
 
 	if(found_number >= t_size-1)
-		return has_gotten_cards[0].card_number;
+		return has_gotten_cards[0].card_number.getV();
 	else
-		return has_gotten_cards[found_number+1].card_number;
+		return has_gotten_cards[found_number+1].card_number.getV();
 }
 
 int StarGoldData::getNextStageCardNumber( int recent_card_number )
@@ -660,7 +673,7 @@ int StarGoldData::getPreCardNumber( int recent_card_number )
 	int found_number = -1;
 	for(int i=0;i<t_size;i++)
 	{
-		if(recent_card_number == has_gotten_cards[i].card_number)
+		if(recent_card_number == has_gotten_cards[i].card_number.getV())
 		{
 			found_number = i;
 			break;
@@ -671,9 +684,9 @@ int StarGoldData::getPreCardNumber( int recent_card_number )
 		return -1;
 
 	if(found_number <= 0)
-		return has_gotten_cards[t_size-1].card_number;
+		return has_gotten_cards[t_size-1].card_number.getV();
 	else
-		return has_gotten_cards[found_number-1].card_number;
+		return has_gotten_cards[found_number-1].card_number.getV();
 }
 
 int StarGoldData::getPreStageCardNumber( int recent_card_number )
@@ -712,7 +725,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortDefault{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.card_number < b.card_number;
+				return a.card_number.getV() < b.card_number.getV();
 			}
 		} pred;
 
@@ -723,7 +736,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number > b.take_number;
+				return a.take_number.getV() > b.take_number.getV();
 			}
 		} pred;
 
@@ -734,7 +747,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number < b.take_number;
+				return a.take_number.getV() < b.take_number.getV();
 			}
 		} pred;
 		
@@ -745,7 +758,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortGradeUp{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank > b.rank;
+				return a.rank.getV() > b.rank.getV();
 			}
 		} pred;
 
@@ -756,7 +769,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 		struct t_CardSortGradeDown{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank < b.rank;
+				return a.rank.getV() < b.rank.getV();
 			}
 		} pred;
 
@@ -771,8 +784,8 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 	CardSortInfo t_info;
 	t_info.card_number = card_number;
 	t_info.take_number = has_gotten_cards.size()+1;
-	t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number);
-	t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number);
+	t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number.getV());
+	t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number.getV());
 	has_gotten_cards.push_back(t_info);
 
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
@@ -780,13 +793,13 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 	CCLOG("input %d, sort", card_number);
 	for(int i=0;i<has_gotten_cards.size();i++)
 	{
-		CCLOG("%d", has_gotten_cards[i].card_number);
+		CCLOG("%d", has_gotten_cards[i].card_number.getV());
 	}
 }
 
 int StarGoldData::getHasGottenCardsDataCardNumber( int index )
 {
-	return has_gotten_cards[index].card_number;
+	return has_gotten_cards[index].card_number.getV();
 }
 
 CardSortInfo StarGoldData::getHasGottenCardData(int index)
@@ -845,7 +858,7 @@ string StarGoldData::getCardComment(int t_card_number)
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
 		if(i->card_number == t_card_number)
-			return i->user_ment;
+			return i->user_ment.getV();
 	}
 	
 	return "";
@@ -860,12 +873,32 @@ void StarGoldData::setCardComment(int t_card_number, string comment)
 	}
 }
 
+bool StarGoldData::isCardMorphing(int card_number)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number.getV() == card_number)
+			return i->is_morphing.getV();
+	}
+	
+	return false;
+}
+
+void StarGoldData::onCardMorphing(int card_number)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number.getV() == card_number)
+			i->is_morphing = true;
+	}
+}
+
 int StarGoldData::isHasGottenCards(int t_card_number)
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
 		if(i->card_number == t_card_number)
-			return i->card_number;
+			return i->card_number.getV();
 	}
 	
 	return 0;
@@ -875,8 +908,8 @@ int StarGoldData::isHasGottenCards( int t_stage, int t_grade )
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(NSDS_GI(kSDS_CI_int1_stage_i, i->card_number) == t_stage && i->grade == t_grade)
-			return i->card_number;
+		if(NSDS_GI(kSDS_CI_int1_stage_i, i->card_number.getV()) == t_stage && i->grade.getV() == t_grade)
+			return i->card_number.getV();
 	}
 
 	return 0;
@@ -886,7 +919,7 @@ void StarGoldData::resetHasGottenCards()
 {
 	for(int i=0;i<has_gotten_cards.size();i++)
 	{
-		int card_number = has_gotten_cards[i].card_number;
+		int card_number = has_gotten_cards[i].card_number.getV();
 		has_gotten_cards[i].grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
 		has_gotten_cards[i].rank = NSDS_GI(kSDS_CI_int1_rank_i, card_number);
 	}
@@ -912,6 +945,7 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		t_info.grade = 0;
 		t_info.rank = 0;
 		t_info.user_ment = card_info["comment"].asString();
+		t_info.is_morphing = card_info["isMorphing"].asBool();
 		has_gotten_cards.push_back(t_info);
 		
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
@@ -1016,6 +1050,19 @@ void StarGoldData::setPuzzleHistoryForNotSave(PuzzleHistory t_history)
 	
 	if(!is_found)
 		puzzle_historys.push_back(t_history);
+}
+
+void StarGoldData::resultUpdatePuzzleHistory(Json::Value result_data)
+{
+	Json::Value history_data = result_data["data"];
+	int puzzle_no = history_data["puzzleNo"].asInt();
+	
+	PuzzleHistory t_history = getPuzzleHistory(puzzle_no);
+	t_history.is_open = history_data["openDate"].asInt64() != 0;
+	t_history.is_clear = history_data["clearDate"].asInt64() != 0;
+	t_history.is_perfect = history_data["perfectDate"].asInt64() != 0;
+	
+	setPuzzleHistoryForNotSave(t_history);
 }
 
 void StarGoldData::initPuzzleHistory(Json::Value history_list)
@@ -1123,6 +1170,34 @@ void StarGoldData::setPieceHistoryForNotSave(PieceHistory t_history)
 	{
 		piece_historys.push_back(t_history);
 	}
+}
+
+void StarGoldData::resultUpdatePieceHistory(Json::Value result_data)
+{
+	Json::Value history_data = result_data["data"];
+	int piece_no = history_data["pieceNo"].asInt();
+	
+	PieceHistory t_history = getPieceHistory(piece_no);
+	t_history.is_open = history_data["openDate"].asInt64() != 0;
+	if(!history_data["clearDateList"].isNull())
+	{
+		for(int i=0;i<4;i++)
+		{
+			t_history.is_clear[i] = history_data["clearDateList"][i].asInt64() != 0;
+		}
+	}
+	else
+	{
+		for(int i=0;i<4;i++)
+		{
+			t_history.is_clear[i] = false;
+		}
+	}
+	t_history.open_type = history_data["openType"].asString();
+	t_history.try_count = history_data.get("tryCount", Json::Value()).asInt();
+	t_history.clear_count = history_data.get("clearCount", Json::Value()).asInt();
+	
+	setPieceHistoryForNotSave(t_history);
 }
 
 void StarGoldData::setPieceHistory(PieceHistory t_history, jsonSelType call_back)
@@ -1452,6 +1527,14 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "p4";
 	else if(t_type == kGoodsType_pass5)
 		return_value = "p5";
+	else if(t_type == kGoodsType_pass6)
+		return_value = "p6";
+	else if(t_type == kGoodsType_pz)
+		return_value = "pz";
+	else if(t_type == kGoodsType_pc)
+		return_value = "pc";
+	else if(t_type == kGoodsType_cu)
+		return_value = "cu";
 	
 	return return_value;
 }
@@ -1515,64 +1598,93 @@ void StarGoldData::addChangeGoodsIngameGold(int t_value)
 		ingame_gold_label->setString(CCString::createWithFormat("%d", ingame_gold.getV())->getCString());
 }
 
-void StarGoldData::addChangeGoods(GoodsType t_type, int t_value, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
+void StarGoldData::addChangeGoods(string t_exchangeID, GoodsType t_type/* = kGoodsType_begin*/, int t_value/* = 0*/, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
 {
-	// add
-	for(int i=0;i<change_goods_list.size();i++)
-	{
-		if(change_goods_list[i].m_type == t_type)
-		{
-			change_goods_list[i].m_value = change_goods_list[i].m_value.getV() + t_value;
-			if(t_statsID != "")
-				change_goods_list[i].m_statsID += " | " + t_statsID;
-			if(t_statsValue != "")
-				change_goods_list[i].m_statsValue += " | " + t_statsValue;
-			if(t_content != "")
-				change_goods_list[i].m_content += " | " + t_content;
-			change_goods_list[i].m_isPurchase = t_isPurchase;
-			return;
-		}
-	}
-	
-	// insert
 	ChangeGoodsData t_data;
-	t_data.m_type = t_type;
-	t_data.m_value = t_value;
-	t_data.m_statsID = t_statsID;
-	t_data.m_statsValue = t_statsValue;
-	t_data.m_content = t_content;
-	t_data.m_isPurchase = t_isPurchase;
+	t_data.is_renewal = true;
+	t_data.m_exchangeID = t_exchangeID;
+	
+	ChangeGoodsDataDetail t_detail;
+	t_detail.m_type = t_type;
+	t_detail.m_value = t_value;
+	t_detail.m_statsID = t_statsID;
+	t_detail.m_statsValue = t_statsValue;
+	t_detail.m_content = t_content;
+	t_detail.m_isPurchase = t_isPurchase;
+	t_data.detail_list.push_back(t_detail);
 	
 	change_goods_list.push_back(t_data);
 }
 
-void StarGoldData::updateChangeGoods(GoodsType t_type, int t_value, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
+void StarGoldData::addChangeGoods(string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list)
 {
-	// modify
-	for(int i=0;i<change_goods_list.size();i++)
-	{
-		if(change_goods_list[i].m_type == t_type)
-		{
-			change_goods_list[i].m_value = t_value;
-			change_goods_list[i].m_statsID = t_statsID;
-			change_goods_list[i].m_statsValue = t_statsValue;
-			change_goods_list[i].m_content = t_content;
-			change_goods_list[i].m_isPurchase = t_isPurchase;
-			return;
-		}
-	}
-	
-	// insert
 	ChangeGoodsData t_data;
-	t_data.m_type = t_type;
-	t_data.m_value = t_value;
-	t_data.m_statsID = t_statsID;
-	t_data.m_statsValue = t_statsValue;
-	t_data.m_content = t_content;
-	t_data.m_isPurchase = t_isPurchase;
+	t_data.is_renewal = true;
+	t_data.m_exchangeID = t_exchangeID;
+	
+	t_data.detail_list = t_detail_list;
 	
 	change_goods_list.push_back(t_data);
 }
+
+//void StarGoldData::addChangeGoods(GoodsType t_type, int t_value, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
+//{
+//	// add
+//	for(int i=0;i<change_goods_list.size();i++)
+//	{
+//		if(change_goods_list[i].m_type == t_type)
+//		{
+//			change_goods_list[i].m_value = change_goods_list[i].m_value.getV() + t_value;
+//			if(t_statsID != "")
+//				change_goods_list[i].m_statsID += " | " + t_statsID;
+//			if(t_statsValue != "")
+//				change_goods_list[i].m_statsValue += " | " + t_statsValue;
+//			if(t_content != "")
+//				change_goods_list[i].m_content += " | " + t_content;
+//			change_goods_list[i].m_isPurchase = t_isPurchase;
+//			return;
+//		}
+//	}
+//	
+//	// insert
+//	ChangeGoodsData t_data;
+//	t_data.m_type = t_type;
+//	t_data.m_value = t_value;
+//	t_data.m_statsID = t_statsID;
+//	t_data.m_statsValue = t_statsValue;
+//	t_data.m_content = t_content;
+//	t_data.m_isPurchase = t_isPurchase;
+//	
+//	change_goods_list.push_back(t_data);
+//}
+//
+//void StarGoldData::updateChangeGoods(GoodsType t_type, int t_value, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
+//{
+//	// modify
+//	for(int i=0;i<change_goods_list.size();i++)
+//	{
+//		if(change_goods_list[i].m_type == t_type)
+//		{
+//			change_goods_list[i].m_value = t_value;
+//			change_goods_list[i].m_statsID = t_statsID;
+//			change_goods_list[i].m_statsValue = t_statsValue;
+//			change_goods_list[i].m_content = t_content;
+//			change_goods_list[i].m_isPurchase = t_isPurchase;
+//			return;
+//		}
+//	}
+//	
+//	// insert
+//	ChangeGoodsData t_data;
+//	t_data.m_type = t_type;
+//	t_data.m_value = t_value;
+//	t_data.m_statsID = t_statsID;
+//	t_data.m_statsValue = t_statsValue;
+//	t_data.m_content = t_content;
+//	t_data.m_isPurchase = t_isPurchase;
+//	
+//	change_goods_list.push_back(t_data);
+//}
 
 void StarGoldData::clearChangeGoods()
 {
@@ -1588,7 +1700,7 @@ void StarGoldData::changeGoods(jsonSelType t_callback)
 void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback)
 {
 	if(ingame_gold.getV() > 0)
-		addChangeGoods(kGoodsType_gold, ingame_gold.getV(), "인게임", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+		addChangeGoods("stageGold", kGoodsType_gold, ingame_gold.getV(), "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	
 	vector<CommandParam> transaction_list;
 	
@@ -1597,7 +1709,13 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 	
 	transaction_list.push_back(CommandParam("starttransaction", transaction_param, t_callback));
 	if(isChangedGoods())
-		transaction_list.push_back(getChangeGoodsParam(json_selector(this, StarGoldData::saveChangeGoodsTransaction)));
+	{
+		vector<CommandParam> t_list = getChangeGoodsParam(json_selector(this, StarGoldData::saveChangeGoodsTransaction));
+		for(int i=0;i<t_list.size();i++)
+		{
+			transaction_list.push_back(t_list[i]);
+		}
+	}
 	
 	for(int i=0;i<command_list.size();i++)
 	{
@@ -1605,6 +1723,23 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 	}
 	
 	hspConnector::get()->command(transaction_list);
+}
+
+void StarGoldData::linkChangeHistory(Json::Value result_data)
+{
+	string t_type = result_data["type"].asString();
+	if(t_type == "pc")
+	{
+		resultUpdatePieceHistory(result_data["result"]);
+	}
+	else if(t_type == "pz")
+	{
+		resultUpdatePuzzleHistory(result_data["result"]);
+	}
+	else if(t_type == "cu")
+	{
+		resultUpdateCharacterHistory(result_data["result"]);
+	}
 }
 
 void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
@@ -1620,7 +1755,64 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 		for(int i=0;i<result_list.size();i++)
 		{
 			GoodsType t_type = getGoodsKeyToType(result_list[i]["type"].asString());
-			int t_count = result_list[i]["count"].asInt();
+			
+			if(t_type != kGoodsType_end)
+			{
+				int t_count = result_list[i]["count"].asInt();
+				int before_value = goods_data[t_type].getV();
+				goods_data[t_type] = t_count;
+				
+				if(t_type == kGoodsType_ruby && star_label)
+				{
+					star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+					
+					if(before_value < t_count)
+					{
+						for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+						{
+							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+							   t_count >= myAchieve->getCondition((AchievementCode)i))
+							{
+								myAchieve->changeIngCount(AchievementCode(i), 1);
+								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+							}
+						}
+					}
+				}
+				else if(t_type == kGoodsType_gold && gold_label)
+				{
+					gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+					
+					if(before_value < t_count)
+					{
+						for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+						{
+							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+							   t_count >= myAchieve->getCondition((AchievementCode)i))
+							{
+								myAchieve->changeIngCount(AchievementCode(i), 1);
+								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				linkChangeHistory(result_list[i]);
+			}
+		}
+		
+		ingame_gold = 0;
+	}
+	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
+	{
+		GoodsType t_type = getGoodsKeyToType(result_data["minusType"].asString());
+		if(t_type != kGoodsType_end)
+		{
+			int t_count = result_data["minusCount"].asInt();
 			int before_value = goods_data[t_type].getV();
 			goods_data[t_type] = t_count;
 			
@@ -1661,13 +1853,22 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				}
 			}
 		}
-		
-		ingame_gold = 0;
+		else
+		{
+			linkChangeHistory(result_data);
+		}
 	}
-	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
+	else
 	{
-		GoodsType t_type = getGoodsKeyToType(result_data["minusType"].asString());
-		int t_count = result_data["minusCount"].asInt();
+		
+	}
+}
+
+void StarGoldData::refreshGoodsData(string t_key, int t_count)
+{
+	GoodsType t_type = getGoodsKeyToType(t_key);
+	if(t_type != kGoodsType_end)
+	{
 		int before_value = goods_data[t_type].getV();
 		goods_data[t_type] = t_count;
 		
@@ -1707,56 +1908,10 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				}
 			}
 		}
-		
-		ingame_gold = 0;
 	}
 	else
 	{
-		
-	}
-}
-
-void StarGoldData::refreshGoodsData(string t_key, int t_count)
-{
-	GoodsType t_type = getGoodsKeyToType(t_key);
-	int before_value = goods_data[t_type].getV();
-	goods_data[t_type] = t_count;
-	
-	if(t_type == kGoodsType_ruby && star_label)
-	{
-		star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
-		
-		if(before_value < t_count)
-		{
-			for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
-			{
-				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-				   t_count >= myAchieve->getCondition((AchievementCode)i))
-				{
-					myAchieve->changeIngCount(AchievementCode(i), 1);
-					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-				}
-			}
-		}
-	}
-	else if(t_type == kGoodsType_gold && gold_label)
-	{
-		gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
-		
-		if(before_value < t_count)
-		{
-			for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
-			{
-				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-				   t_count >= myAchieve->getCondition((AchievementCode)i))
-				{
-					myAchieve->changeIngCount(AchievementCode(i), 1);
-					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-				}
-			}
-		}
+		// ?
 	}
 }
 
@@ -1765,30 +1920,45 @@ bool StarGoldData::isChangedGoods()
 	return change_goods_list.size() > 0;
 }
 
-CommandParam StarGoldData::getChangeGoodsParam(jsonSelType t_callback)
+vector<CommandParam> StarGoldData::getChangeGoodsParam(jsonSelType t_callback)
 {
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getSocialID();
-	
-	Json::Value p_list;
+	vector<CommandParam> command_list;
+	command_list.clear();
 	
 	for(int i=0;i<change_goods_list.size();i++)
 	{
-		p_list[i]["type"] = getGoodsTypeToKey(change_goods_list[i].m_type);
-		p_list[i]["count"] = change_goods_list[i].m_value.getV();
-		if(change_goods_list[i].m_statsID != "")
-			p_list[i]["statsID"] = change_goods_list[i].m_statsID;
-		if(change_goods_list[i].m_statsValue != "")
-			p_list[i]["statsValue"] = change_goods_list[i].m_statsValue;
-		if(change_goods_list[i].m_content != "")
-			p_list[i]["content"] = change_goods_list[i].m_content;
-		if(change_goods_list[i].m_type == kGoodsType_ruby)
-			p_list[i]["isPurchase"] = change_goods_list[i].m_isPurchase;
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getSocialID();
+		param["exchangeID"] = change_goods_list[i].m_exchangeID.getV();
+		
+		if(change_goods_list[i].detail_list.size() > 0 && change_goods_list[i].detail_list[0].m_value.getV() != 0)
+		{
+			Json::Value p_list;
+			for(int j=0;j<change_goods_list[i].detail_list.size();j++)
+			{
+				p_list[j]["type"] = getGoodsTypeToKey(change_goods_list[i].detail_list[j].m_type);
+				if(change_goods_list[i].detail_list[j].m_value.getV() != 0)
+					p_list[j]["count"] = change_goods_list[i].detail_list[j].m_value.getV();
+				if(change_goods_list[i].detail_list[j].m_statsID != "")
+					p_list[j]["statsID"] = change_goods_list[i].detail_list[j].m_statsID;
+				if(change_goods_list[i].detail_list[j].m_statsValue != "")
+					p_list[j]["statsValue"] = change_goods_list[i].detail_list[j].m_statsValue;
+				if(change_goods_list[i].detail_list[j].m_content != "")
+					p_list[j]["content"] = change_goods_list[i].detail_list[j].m_content;
+				if(change_goods_list[i].detail_list[j].m_type == kGoodsType_ruby)
+					p_list[j]["isPurchase"] = change_goods_list[i].detail_list[j].m_isPurchase;
+			}
+			param["list"] = p_list;
+		}
+		
+		command_list.push_back(CommandParam("exchange", param, t_callback));
 	}
 	
-	param["list"] = p_list;
+	CCLOG("change goods size : %d", int(command_list.size()));
 	
-	return CommandParam("changeuserproperties", param, t_callback);
+	return command_list;
+//
+//	return CommandParam("changeuserproperties", param, t_callback);
 }
 
 void StarGoldData::retryChangeGoods()
@@ -1801,28 +1971,29 @@ void StarGoldData::retryChangeGoods()
 	}
 	else
 	{
-		Json::Value param;
-		param["memberID"] = hspConnector::get()->getSocialID();
-		
-		Json::Value p_list;
-		
-		for(int i=0;i<change_goods_list.size();i++)
-		{
-			p_list[i]["type"] = getGoodsTypeToKey(change_goods_list[i].m_type);
-			p_list[i]["count"] = change_goods_list[i].m_value.getV();
-			if(change_goods_list[i].m_statsID != "")
-				p_list[i]["statsID"] = change_goods_list[i].m_statsID;
-			if(change_goods_list[i].m_statsValue != "")
-				p_list[i]["statsValue"] = change_goods_list[i].m_statsValue;
-			if(change_goods_list[i].m_content != "")
-				p_list[i]["content"] = change_goods_list[i].m_content;
-			if(change_goods_list[i].m_type == kGoodsType_ruby)
-				p_list[i]["isPurchase"] = change_goods_list[i].m_isPurchase;
-		}
-		
-		param["list"] = p_list;
-		
-		hspConnector::get()->command("changeuserproperties", param, json_selector(this, StarGoldData::resultChangeGoods));
+		myHSP->command(getChangeGoodsParam(json_selector(this, StarGoldData::resultChangeGoods)));
+//		Json::Value param;
+//		param["memberID"] = hspConnector::get()->getSocialID();
+//		
+//		Json::Value p_list;
+//		
+//		for(int i=0;i<change_goods_list.size();i++)
+//		{
+//			p_list[i]["type"] = getGoodsTypeToKey(change_goods_list[i].m_type);
+//			p_list[i]["count"] = change_goods_list[i].m_value.getV();
+//			if(change_goods_list[i].m_statsID != "")
+//				p_list[i]["statsID"] = change_goods_list[i].m_statsID;
+//			if(change_goods_list[i].m_statsValue != "")
+//				p_list[i]["statsValue"] = change_goods_list[i].m_statsValue;
+//			if(change_goods_list[i].m_content != "")
+//				p_list[i]["content"] = change_goods_list[i].m_content;
+//			if(change_goods_list[i].m_type == kGoodsType_ruby)
+//				p_list[i]["isPurchase"] = change_goods_list[i].m_isPurchase;
+//		}
+//		
+//		param["list"] = p_list;
+//		
+//		hspConnector::get()->command("changeuserproperties", param, json_selector(this, StarGoldData::resultChangeGoods));
 	}
 }
 
@@ -1839,8 +2010,65 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 		for(int i=0;i<result_list.size();i++)
 		{
 			GoodsType t_type = getGoodsKeyToType(result_list[i]["type"].asString());
-			int t_count = result_list[i]["count"].asInt();
+			if(t_type != kGoodsType_end)
+			{
+				int t_count = result_list[i]["count"].asInt();
+				int before_value = goods_data[t_type].getV();
+				goods_data[t_type] = t_count;
+				
+				if(t_type == kGoodsType_ruby && star_label)
+				{
+					star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+					
+					if(before_value < t_count)
+					{
+						for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
+						{
+							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+							   t_count >= myAchieve->getCondition((AchievementCode)i))
+							{
+								myAchieve->changeIngCount(AchievementCode(i), 1);
+								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+							}
+						}
+					}
+				}
+				else if(t_type == kGoodsType_gold && gold_label)
+				{
+					gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+					
+					if(before_value < t_count)
+					{
+						for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
+						{
+							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+							   t_count >= myAchieve->getCondition((AchievementCode)i))
+							{
+								myAchieve->changeIngCount(AchievementCode(i), 1);
+								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				linkChangeHistory(result_list[i]);
+			}
+		}
+		
+		change_goods_callback(result_data);
+	}
+	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
+	{
+		GoodsType t_type = getGoodsKeyToType(result_data["minusType"].asString());
+		if(t_type != kGoodsType_end)
+		{
 			int before_value = goods_data[t_type].getV();
+			int t_count = result_data["minusCount"].asInt();
+			
 			goods_data[t_type] = t_count;
 			
 			if(t_type == kGoodsType_ruby && star_label)
@@ -1880,52 +2108,9 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 				}
 			}
 		}
-		
-		change_goods_callback(result_data);
-	}
-	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
-	{
-		GoodsType t_type = getGoodsKeyToType(result_data["minusType"].asString());
-		int before_value = goods_data[t_type].getV();
-		int t_count = result_data["minusCount"].asInt();
-		
-		goods_data[t_type] = t_count;
-		
-		if(t_type == kGoodsType_ruby && star_label)
+		else
 		{
-			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
-			
-			if(before_value < t_count)
-			{
-				for(int i=kAchievementCode_ruby1;i<=kAchievementCode_ruby3;i++)
-				{
-					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-					   t_count >= myAchieve->getCondition((AchievementCode)i))
-					{
-						myAchieve->changeIngCount(AchievementCode(i), 1);
-						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-					}
-				}
-			}
-		}
-		else if(t_type == kGoodsType_gold && gold_label)
-		{
-			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
-			
-			if(before_value < t_count)
-			{
-				for(int i=kAchievementCode_gold1;i<=kAchievementCode_gold3;i++)
-				{
-					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-					   t_count >= myAchieve->getCondition((AchievementCode)i))
-					{
-						myAchieve->changeIngCount(AchievementCode(i), 1);
-						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-					}
-				}
-			}
+			linkChangeHistory(result_data);
 		}
 		
 		change_goods_callback(result_data);
@@ -2132,6 +2317,25 @@ void StarGoldData::initTodayMission(Json::Value t_info)
 	is_today_mission_first = t_info["isFirstCheck"].asBool();
 }
 
+void StarGoldData::initAttendance(Json::Value result_data)
+{
+	if(result_data["sendGift"].asBool())
+	{
+		is_on_attendance = true;
+		attendance_data = result_data;
+	}
+	else
+	{
+		is_on_attendance = false;
+	}
+}
+
+void StarGoldData::resetAttendance()
+{
+	is_on_attendance = false;
+	attendance_data.clear();
+}
+
 string StarGoldData::getAppType()
 {
 	return app_type;
@@ -2145,6 +2349,10 @@ void StarGoldData::myInit()
 {
 	app_type = "light1";
 	app_version = 2;
+	
+	is_on_attendance = false;
+	is_endless_mode = false;
+	endless_my_victory_on = false;
 	
 	suitable_stage = -1;
 	is_on_maingame = false;

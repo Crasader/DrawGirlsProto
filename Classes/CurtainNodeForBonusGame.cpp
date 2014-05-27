@@ -2,7 +2,11 @@
 
 CurtainNodeForBonusGame::CurtainNodeForBonusGame()
 {
-	
+	m_titleBonusGame = nullptr;
+	m_titleStr = nullptr;
+	m_contentBack = nullptr;
+	 m_startMenu = nullptr;
+	m_onPressStartButton = nullptr;
 }
 CurtainNodeForBonusGame::~CurtainNodeForBonusGame()
 {

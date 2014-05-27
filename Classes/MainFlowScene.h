@@ -60,6 +60,7 @@ public:
 
 class CountingBMLabel;
 class HeartTime;
+class KSLabelTTF;
 class MainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -75,6 +76,9 @@ public:
 	HeartTime* heart_time;
 	
 	virtual ~MainFlowScene();
+	
+	void showEndlessOpening();
+	void showEndlessResult();
 	
 private:
 	
@@ -141,6 +145,7 @@ private:
 	CCSprite* postbox_count_case;
 //	CCLabelTTF* postbox_count_label;
 	CCSprite* achievement_count_case;
+	KSLabelTTF* achievement_count_label;
 	
 	vector<CCNode*> top_list;
 	void topOnLight();

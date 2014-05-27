@@ -27,20 +27,13 @@
 #include "hspConnector.h"
 #include "TitleRenewal.h"
 
-#include "FirstPurchasePopup.h"
-#include "EmptyItemSalePopup.h"
-#include "MileagePopup.h"
-#include "EventShopPopup.h"
-#include "LevelupGuidePopup.h"
-#include "CardLockedPopup.h"
-
 #include "KSLabelTTF.h"
 #include "PopCake.h"
 #include "EffectSprite.h"
 #include "FlagSelector.h"
-#include "BugTestScene1.h"
-#include "BugTestScene2.h"
 
+#include "CouponPopup.h"
+#include "StyledLabelTTF.h"
 
 USING_NS_CC_EXT;
 
@@ -89,12 +82,6 @@ bool OptionPopup::init()
 		return false;
 	}
 	
-//	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-999, [=](){}, [=](){});
-//	EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-999, [=](){}, [=](){});
-//	MileagePopup* t_popup = MileagePopup::create(-999, [=](){}, 5);
-//	EventShopPopup* t_popup = EventShopPopup::create(-999, [=](){});
-//	LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-999, [=](){}, [=](){});
-//	addChild(t_popup, 999);
 	
 //	Json::Value param;
 //	param["productid"] = "g_10289_001";
@@ -111,24 +98,6 @@ bool OptionPopup::init()
 //		}
 //		KS::KSLog("in-app test \n%", v);
 //	});
-	
-//	CommonButton* test1 = CommonButton::createCloseButton(-999);
-//	test1->setPosition(ccp(200, 300));
-//	addChild(test1, 999);
-//	test1->setFunction([=](CCObject* sender)
-//					   {
-//						   CCDirector::sharedDirector()->replaceScene(BugTestScene1::scene());
-//					   });
-//	
-//	CommonButton* test2 = CommonButton::createCloseButton(-999);
-//	test2->setPosition(ccp(280, 300));
-//	addChild(test2, 999);
-//	test2->setFunction([=](CCObject* sender)
-//					   {
-//						   CCDirector::sharedDirector()->replaceScene(BugTestScene2::scene());
-//					   });
-	
-	
 	
 	setTouchEnabled(true);
 	
@@ -153,7 +122,7 @@ bool OptionPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-450));
+	main_case->setPosition(ccp(240,160-14.f-450));
 	addChild(main_case, kOP_Z_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_option), mySGD->getFont().c_str(), 15);
@@ -584,7 +553,7 @@ void OptionPopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -602,7 +571,7 @@ void OptionPopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -804,50 +773,59 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_popup->setContainerNode(t_container);
 		addChild(t_popup, kOP_Z_popup);
 		
-		CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+		CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		case_back->setContentSize(CCSizeMake(250, 180));
 		case_back->setPosition(ccp(0,0));
 		t_container->addChild(case_back);
 		
-		case_back->setContentSize(CCSizeMake(280, 250));
+		CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		back_in->setContentSize(CCSizeMake(case_back->getContentSize().width-10, case_back->getContentSize().height-46));
+		back_in->setPosition(ccp(case_back->getContentSize().width/2.f, case_back->getContentSize().height/2.f-17));
+		case_back->addChild(back_in);
 		
-		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-		content_back->setPosition(ccp(0,25));
-		t_container->addChild(content_back);
 		
-		content_back->setContentSize(CCSizeMake(260, 180));
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawTitle), mySGD->getFont().c_str(), 15);
+		title_label->setColor(ccc3(255, 170, 20));
+		title_label->setAnchorPoint(ccp(0,0.5f));
+		title_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17, case_back->getContentSize().height/2.f-25));
+		t_container->addChild(title_label);
 		
-		CCLabelTTF* ment1_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent1),	mySGD->getFont().c_str(), 15);
-		ment1_label->setPosition(ccp(0,70));
+		KSLabelTTF* ment1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent1), mySGD->getFont().c_str(), 12);
+		ment1_label->setAnchorPoint(ccp(0,0.5f));
+		ment1_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17,30));
 		t_container->addChild(ment1_label);
 		
-		CCLabelTTF* ment2_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent2),	mySGD->getFont().c_str(), 15);
-		ment2_label->setPosition(ccp(0,35));
+		KSLabelTTF* ment2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent2), mySGD->getFont().c_str(), 12);
+		ment2_label->setAnchorPoint(ccp(0,0.5f));
+		ment2_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17,8));
 		t_container->addChild(ment2_label);
 		
-		CCLabelTTF* ment3_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent3),	mySGD->getFont().c_str(), 15);
-		ment3_label->setPosition(ccp(0,-15));
+		KSLabelTTF* ment3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent3), mySGD->getFont().c_str(), 12);
+		ment3_label->setColor(ccc3(255, 170, 20));
+		ment3_label->setAnchorPoint(ccp(0,0.5f));
+		ment3_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17,-14));
 		t_container->addChild(ment3_label);
 		
 		
+		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+		close_button->setPosition(ccp(case_back->getContentSize().width/2.f-25, case_back->getContentSize().height/2.f-25));
+		close_button->setFunction([=](CCObject* sender)
+								  {
+									  is_menu_enable = true;
+									  t_popup->removeFromParent();
+								  });
+		t_container->addChild(close_button);
 		
-		CommonButton* cancel_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cancel), 15, CCSizeMake(110, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
-		cancel_button->setPosition(ccp(-65,-95));
-		cancel_button->setFunction([=](CCObject* sender)
-															 {
-																 is_menu_enable = true;
-																 t_popup->removeFromParent();
-															 });
-		t_container->addChild(cancel_button);
 		
-		
-		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-		ok_button->setPosition(ccp(65,-95));
+		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_doWithdraw), 15, CCSizeMake(100, 45), CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2)), t_popup->getTouchPriority()-5);
+		ok_button->setTitleColor(ccBLACK);
+		ok_button->setPosition(ccp(0,-53));
 		ok_button->setFunction([=](CCObject* sender)
 													 {
-														 cancel_button->setEnabled(false);
+														 close_button->setEnabled(false);
 														 ok_button->setEnabled(false);
 														 
-														 cancel_button->setVisible(false);
+														 close_button->setVisible(false);
 														 ok_button->setVisible(false);
 														 
 														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -874,10 +852,10 @@ void OptionPopup::menuAction(CCObject* pSender)
 																														else
 																														{
 																															loading_progress_img->removeFromParent();
-																															cancel_button->setEnabled(true);
+																															close_button->setEnabled(true);
 																															ok_button->setEnabled(true);
 																															
-																															cancel_button->setVisible(true);
+																															close_button->setVisible(true);
 																															ok_button->setVisible(true);
 																															
 																															CCLOG("fail dropoutuser");
@@ -927,7 +905,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_coupon)
 	{
-		is_menu_enable = true;
+		CouponPopup* t_popup = CouponPopup::create(-300, [=](){is_menu_enable = true;});
+		addChild(t_popup, kOP_Z_popup);
 	}
 	else if(tag == kOP_MT_community)
 	{

@@ -947,60 +947,74 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	
 	addChild(particle);
 	
-	int animation_cnt = 0;
-	
-	if(jm_type == kElementCode_life)
-	{
-		if(element_level == 8)
-			animation_cnt = 3;
-		else
-			animation_cnt = 2;
-	}
-	else if(jm_type == kElementCode_fire)
-	{
-		animation_cnt = 2;
-	}
-	else if(jm_type == kElementCode_water)
-	{
-		if(element_level == 6 || element_level == 9)
-			animation_cnt = 4;
-		else if(element_level == 8)
-			animation_cnt = 6;
-		else
-			animation_cnt = 3;
-	}
-	else if(jm_type == kElementCode_empty)
-	{
-		if(element_level == 1)
-			animation_cnt = 2;
-		else if(element_level == 4)
-			animation_cnt = 4;
-		else
-			animation_cnt = 3;
-	}
-	
-	CCTexture2D* missile_main_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat((type_name + "%d_main.png").c_str(), element_level)->getCString());
-	
-	CCSize animation_cut_size = CCSizeMake(missile_main_texture->getContentSize().width/animation_cnt, missile_main_texture->getContentSize().height);
-	
-	mainImg = CCSprite::createWithTexture(missile_main_texture, CCRectMake(0, 0, animation_cut_size.width, animation_cut_size.height));
-	ccBlendFunc t_blend;
-	t_blend.src = GL_SRC_ALPHA;
-	t_blend.dst = GL_ONE;
-	mainImg->setBlendFunc(t_blend);
-	mainImg->setPosition(particlePosition);
-	mainImg->setScale(1.f/myGD->game_scale);
-	addChild(mainImg);
-	
-	CCAnimation* main_animation = CCAnimation::create();
-	main_animation->setDelayPerUnit(0.1f);
-	for(int i=0;i<animation_cnt;i++)
-		main_animation->addSpriteFrameWithTexture(missile_main_texture, CCRectMake(i*animation_cut_size.width, 0, animation_cut_size.width, animation_cut_size.height));
-	
-	CCAnimate* main_animate = CCAnimate::create(main_animation);
-	CCRepeatForever* main_repeat = CCRepeatForever::create(main_animate);
-	
-	mainImg->runAction(main_repeat);
+    if(is_one_die)
+    {
+        mainImg = CCSprite::create("jack_missile_30.png");
+        ccBlendFunc t_blend;
+        t_blend.src = GL_SRC_ALPHA;
+        t_blend.dst = GL_ONE;
+        mainImg->setBlendFunc(t_blend);
+        mainImg->setPosition(particlePosition);
+        mainImg->setScale(1.f/myGD->game_scale);
+        addChild(mainImg);
+    }
+    else
+    {
+        int animation_cnt = 0;
+        
+        if(jm_type == kElementCode_life)
+        {
+            if(element_level == 8)
+                animation_cnt = 3;
+            else
+                animation_cnt = 2;
+        }
+        else if(jm_type == kElementCode_fire)
+        {
+            animation_cnt = 2;
+        }
+        else if(jm_type == kElementCode_water)
+        {
+            if(element_level == 6 || element_level == 9)
+                animation_cnt = 4;
+            else if(element_level == 8)
+                animation_cnt = 6;
+            else
+                animation_cnt = 3;
+        }
+        else if(jm_type == kElementCode_empty)
+        {
+            if(element_level == 1)
+                animation_cnt = 2;
+            else if(element_level == 4)
+                animation_cnt = 4;
+            else
+                animation_cnt = 3;
+        }
+        
+        CCTexture2D* missile_main_texture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat((type_name + "%d_main.png").c_str(), element_level)->getCString());
+        
+        CCSize animation_cut_size = CCSizeMake(missile_main_texture->getContentSize().width/animation_cnt, missile_main_texture->getContentSize().height);
+        
+        mainImg = CCSprite::createWithTexture(missile_main_texture, CCRectMake(0, 0, animation_cut_size.width, animation_cut_size.height));
+        ccBlendFunc t_blend;
+        t_blend.src = GL_SRC_ALPHA;
+        t_blend.dst = GL_ONE;
+        mainImg->setBlendFunc(t_blend);
+        mainImg->setPosition(particlePosition);
+        mainImg->setScale(1.f/myGD->game_scale);
+        addChild(mainImg);
+        
+        CCAnimation* main_animation = CCAnimation::create();
+        main_animation->setDelayPerUnit(0.1f);
+        for(int i=0;i<animation_cnt;i++)
+            main_animation->addSpriteFrameWithTexture(missile_main_texture, CCRectMake(i*animation_cut_size.width, 0, animation_cut_size.width, animation_cut_size.height));
+        
+        CCAnimate* main_animate = CCAnimate::create(main_animation);
+        CCRepeatForever* main_repeat = CCRepeatForever::create(main_animate);
+        
+        mainImg->runAction(main_repeat);
+    }
 	
 	is_spin = false;
 }

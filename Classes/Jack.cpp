@@ -1270,7 +1270,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString(), false, true);
-		
+		myGD->toFun();
 		myGD->communication("UI_writeDie");
 		
 		myGD->communication("CP_onJackDie");
@@ -1279,94 +1279,94 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		{
 			myLog->addLog(kLOG_die_other, myGD->getCommunication("UI_getUseTime"));
 			
-			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupCrashArea))
-			{
-				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupCrashArea, true);
-				CCNode* exit_target = getParent()->getParent();
-				exit_target->onExit();
-				
-				ASPopupView* t_popup = ASPopupView::create(-200);
-				
-				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-				if(screen_scale_x < 1.f)
-					screen_scale_x = 1.f;
-				
-				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-				t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-				t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-				
-				CCNode* t_container = CCNode::create();
-				t_popup->setContainerNode(t_container);
-				exit_target->getParent()->addChild(t_popup);
-				
-//				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-//				case_back->setPosition(CCPointZero);
-//				t_container->addChild(case_back);
+//			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupCrashArea))
+//			{
+//				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupCrashArea, true);
+//				CCNode* exit_target = getParent()->getParent();
+//				exit_target->onExit();
 //				
-//				case_back->setContentSize(CCSizeMake(348, 245));
-				
-				CCSprite* content_back = CCSprite::create("tutorial_popup3.png");
-				content_back->setPosition(ccp(0,0));
-				t_container->addChild(content_back);
-				
-				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial3), mySGD->getFont().c_str(), 12.5f);
-				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
-				content_label->setAnchorPoint(ccp(0,0.5));
-				content_label->setPosition(ccp(60,35));
-				content_back->addChild(content_label);
-				
-//				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
-//				title_img->setPosition(ccp(0, 102));
-//				t_container->addChild(title_img);
-				
-//				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏘는 미사일중에는\n획득영역을 지우는 것도 있어요.", mySGD->getFont().c_str(), 11);
-//				content_label->setPosition(ccp(12,-65));
-//				t_container->addChild(content_label);
-				
-				CCSprite* n_close = CCSprite::create("whitePaper.png");
-				n_close->setOpacity(0);
-				CCSprite* s_close = CCSprite::create("whitePaper.png");
-				s_close->setOpacity(0);
-				
-				CCMenuLambda* close_menu = CCMenuLambda::create();
-				
-				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-				close_menu->setPosition(ccp(240, myDSH->ui_center_y));
-				close_menu->setVisible(false);
-				t_popup->addChild(close_menu);
-				
-				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
-																					{
-																						close_menu->setVisible(false);
-																						
-																						t_container->addChild(KSTimer::create(0.2f, [=](){
-																							exit_target->onEnter();
-																							((Maingame*)exit_target)->controlStunOff();
-																							t_popup->removeFromParent();
-																						}));
-																						
-																						t_container->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-																							t_container->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-																						
-																						t_container->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 0);}));
-																						
-																						
-																					});
-				
-				close_menu->addChild(close_item);
-				
-				
-				
-				t_container->setScaleY(0.f);
-				
-				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
-							close_menu->setVisible(true);}));}));}));
-				
-				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
-			}
+//				ASPopupView* t_popup = ASPopupView::create(-200);
+//				
+//				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//				if(screen_scale_x < 1.f)
+//					screen_scale_x = 1.f;
+//				
+//				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+//				t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+//				t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+//				
+//				CCNode* t_container = CCNode::create();
+//				t_popup->setContainerNode(t_container);
+//				exit_target->getParent()->addChild(t_popup);
+//				
+////				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
+////				case_back->setPosition(CCPointZero);
+////				t_container->addChild(case_back);
+////				
+////				case_back->setContentSize(CCSizeMake(348, 245));
+//				
+//				CCSprite* content_back = CCSprite::create("tutorial_popup3.png");
+//				content_back->setPosition(ccp(0,0));
+//				t_container->addChild(content_back);
+//				
+//				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial3), mySGD->getFont().c_str(), 12.5f);
+//				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+//				content_label->setAnchorPoint(ccp(0,0.5));
+//				content_label->setPosition(ccp(60,35));
+//				content_back->addChild(content_label);
+//				
+////				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
+////				title_img->setPosition(ccp(0, 102));
+////				t_container->addChild(title_img);
+//				
+////				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏘는 미사일중에는\n획득영역을 지우는 것도 있어요.", mySGD->getFont().c_str(), 11);
+////				content_label->setPosition(ccp(12,-65));
+////				t_container->addChild(content_label);
+//				
+//				CCSprite* n_close = CCSprite::create("whitePaper.png");
+//				n_close->setOpacity(0);
+//				CCSprite* s_close = CCSprite::create("whitePaper.png");
+//				s_close->setOpacity(0);
+//				
+//				CCMenuLambda* close_menu = CCMenuLambda::create();
+//				
+//				close_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+//				close_menu->setPosition(ccp(240, myDSH->ui_center_y));
+//				close_menu->setVisible(false);
+//				t_popup->addChild(close_menu);
+//				
+//				CCMenuItemSpriteLambda* close_item = CCMenuItemSpriteLambda::create(n_close, s_close, [=](CCObject* sender)
+//																					{
+//																						close_menu->setVisible(false);
+//																						
+//																						t_container->addChild(KSTimer::create(0.2f, [=](){
+//																							exit_target->onEnter();
+//																							((Maingame*)exit_target)->controlStunOff();
+//																							t_popup->removeFromParent();
+//																						}));
+//																						
+//																						t_container->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+//																							t_container->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+//																						
+//																						t_container->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 0);}));
+//																						
+//																						
+//																					});
+//				
+//				close_menu->addChild(close_item);
+//				
+//				
+//				
+//				t_container->setScaleY(0.f);
+//				
+//				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+//					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+//						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
+//							close_menu->setVisible(true);}));}));}));
+//				
+//				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
+//			}
 		}
 		else if(die_type == DieType::kDieType_missileToLine)
 		{

@@ -19,6 +19,7 @@ class LoadingLayer : public CCLayer
 public:
 	static LoadingLayer* create(int t_touch_priority = -500, bool is_ingame = false);
 	void startLoading();
+	void setPositions(CCPoint t_position);
 	virtual void onEnter();
 private:
 	CCSprite* gray;

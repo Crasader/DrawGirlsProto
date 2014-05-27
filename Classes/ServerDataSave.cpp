@@ -713,6 +713,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_pID_s)			rv = "sp%dpID";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_exchangeID_s)	rv = "sp%dxcID";
 	else if(t_key == kSDS_GI_shopItem_int1_countName_s)			rv = "si%dcntName";
+	else if(t_key == kSDS_GI_shopItem_int1_price_i)				rv = "si%dprice";
 	else if(t_key == kSDS_GI_shopItem_int1_priceType_s)			rv = "si%dprcType";
 	else if(t_key == kSDS_GI_shopItem_int1_priceName_s)			rv = "si%dprcName";
 	else if(t_key == kSDS_GI_shopItem_int1_sale_s)				rv = "si%dsale";
@@ -784,6 +785,8 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_silImgInfoImg_s)				rv = "%d_silImgInfo_img";
 	else if(t_key == kSDS_CI_int1_profile_s)			rv = "%d_profile";
 	else if(t_key == kSDS_CI_int1_name_s)			rv = "%d_name";
+	else if(t_key == kSDS_CI_int1_mPrice_ruby_i)				rv = "%d_mPrice_ruby";
+	else if(t_key == kSDS_CI_int1_mPrice_pass_i)				rv = "%d_mPrice_pass";
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 	

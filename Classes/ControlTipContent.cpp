@@ -78,7 +78,7 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, getCCBfilenameForTipNumber(t_code).c_str());
 	
-	area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
+	area_take_sample = CCClippingNode::create(CCSprite::create("tutorial_ccb_mask.png"));
 	area_take_sample->setAlphaThreshold(0.1f);
 	t_ccb.first->setPosition(ccp(0,0));
 	area_take_sample->addChild(t_ccb.first);
@@ -93,7 +93,7 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	close_button->setVisible(false);
 	addChild(close_button);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 17.5f);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 15.f); // 17.5f는 너무 큼
 	title_label->setColor(ccYELLOW);
 	title_label->setPosition(ccp(0, 80));
 	addChild(title_label);

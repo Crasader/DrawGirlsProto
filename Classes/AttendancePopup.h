@@ -31,11 +31,11 @@ private:
 	bool is_menu_enable;
 	
 	TouchSuctionLayer* suction;
-	TouchSuctionLayer* add_suction;
 	
+	CCSprite* gray;
 	CCNode* m_container;
-//	CCScale9Sprite* back_case;
-//	CCControlButton* close_button;
+	CCScale9Sprite* back_case;
+	CCControlButton* close_button;
 	
 	void closeAction();
 	

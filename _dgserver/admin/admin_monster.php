@@ -19,8 +19,23 @@ include "header.php";
 				{"field":"size","type":"text","datatype":"int"}					
 			]
 			}'>resourceInfo</th>
+			<th field="script" viewer='{"type":"text"}'  editor='{"type":"dictionary","element":
+			[
+				{"field":"ko","type":"dictionary","element":[
+															{"type":"text","field":"start"},
+															{"type":"text","field":"clear"},
+															{"type":"text","field":"fail"}
+															]
+				},
+				{"field":"en","type":"dictionary","element":[
+															{"type":"text","field":"start"},
+															{"type":"text","field":"clear"},
+															{"type":"text","field":"fail"}
+															]
+				}
+			]
+			}'>script</a>
 			<th field="comment" viewer='{"type":"text"}' editor='{"type":"textarea"}'>comment</th>
-			
 			<th manage="delete update insert">manage</th>
 			
 		</tr>

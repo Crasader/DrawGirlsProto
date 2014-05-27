@@ -28,13 +28,13 @@ $(document).ready(function(){
 </table>
 
 <br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CharacterHistory" dbFunc='{"select":"getHistory"}' dbWhere='' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CharacterHistory" dbWhere='' name="datatable" border=1>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>
 			<th field="name" viewer='{"type":"text"}'>name</th>
 			<th field="level" viewer='{"type":"text"}'>level</th>
-			<th field="isSelected" viewer='{"type":"text"}'>isSelected</th>
+			<th field="regDate" viewer='{"type":"text"}'>regDate</th>
 		</tr>
 	</thead>
 	<tbody datazone>

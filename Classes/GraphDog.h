@@ -40,9 +40,13 @@ enum GDRESULT{
 	GDALREADYMEMBER = 2010,
 	GDLONGNAME = 2011,
 	GDSHORTNAME = 2012,
-	GDFAILTRANJACTION = 2013,
+	GDFAILTRANSACTION = 2013,
 	GDDONTSAVE = 2014,
 	GDPROPERTYISMINUS = 2015,
+	GDNOTINGWORK = 2016,
+	GDALREADY = 2017,
+	GDEXPIRE = 2018,
+	GDOSERROR = 2019,
 	GDHTTPGATEWAYERROR = 3001,
 	GDCMDNOERROR = 4001,
 	GDDUPLICATEDDEVICE = 4002,
@@ -165,7 +169,7 @@ public:
 		deleList.push_back(obj);
 	}
 	
-	bool cehckTarget(CCObject *obj){
+	bool checkTarget(CCObject *obj){
 		CCLOG("checkDelegator");
 		if(obj==NULL)return false;
 		vector<CCObject*>::iterator it;
@@ -200,7 +204,7 @@ public:
 		addTarget(target);
 		function<void(Json::Value)> sFunc = [=](Json::Value value){
 			CCLOG("checkDelegator sFunc call");
-			if(GraphDog::get()->cehckTarget(target))func(value);
+			if(GraphDog::get()->checkTarget(target))func(value);
 		};
 		
 		return command(action,param,sFunc);

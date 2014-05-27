@@ -31,7 +31,8 @@ bool THIS::init(CCScrollView* sv, float offset, const std::string& h, const std:
 	dynamicScrollSize = false;
 	touchPriority = _touchPriority;
 	scrollView = sv;
-	CCLayerColor::initWithColor(ccc4(0, 255, 0, 0));
+	CCLayer::init();
+//	CCLayerColor::initWithColor(ccc4(0, 255, 0, 0));
 	marginOffset = offset;
 	CCScrollViewDirection type = sv->getDirection();
 	setTouchEnabled(true);
@@ -91,7 +92,8 @@ bool THIS::init(CCScrollView* sv, float offset, CCScale9Sprite* h9, CCScale9Spri
 	dynamicScrollSize = true;
 	touchPriority = _touchPriority;
 	scrollView = sv;
-	CCLayerColor::initWithColor(ccc4(0, 255, 0, 0));
+	CCLayer::init();
+//	CCLayerColor::initWithColor(ccc4(0, 255, 0, 0));
 	marginOffset = offset;
 	setTouchEnabled(true);
 //

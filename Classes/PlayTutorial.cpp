@@ -17,6 +17,8 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "LoadingLayer.h"
+#include "StyledLabelTTF.h"
+#include "TouchSuctionLayer.h"
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
@@ -1384,6 +1386,7 @@ bool PlayTutorial::init()
 	
 	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
 	curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+	curtain_node->setScale(myDSH->screen_convert_rate);
 	addChild(curtain_node, 200);
 	
 	StoryManager* t_sm = StoryManager::create(-500);
@@ -1417,7 +1420,7 @@ bool PlayTutorial::init()
 		AudioEngine::sharedInstance()->playEffect("ment_tutorial3.mp3", false, true);
 		
 		addChild(KSTimer::create(2.6f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial4.mp3", false, true);
-			addChild(KSTimer::create(3.3f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial5.mp3", false, true);
+			addChild(KSTimer::create(3.7f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial5.mp3", false, true);
 				
 			}));
 		}));
@@ -1460,15 +1463,15 @@ void PlayTutorial::nextStep()
 		
 		controler->buttonSetVisible(true);
 		
-		area_take_sample = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 330, 210)));
+		area_take_sample = CCClippingNode::create(CCSprite::create("tutorial_ccb_mask.png"));
 		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
 		area_take_sample->addChild(t_ccbi);
 		area_take_sample->setPosition(ccp(240,200));
 		addChild(area_take_sample, 101);
 		
 		AudioEngine::sharedInstance()->playEffect("ment_tutorial6.mp3", false, true);
-		addChild(KSTimer::create(2.f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial7.mp3", false, true);
-			addChild(KSTimer::create(5.f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial8.mp3", false, true);
+		addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial7.mp3", false, true);
+			addChild(KSTimer::create(5.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial8.mp3", false, true);
 				
 			}));
 		}));
@@ -1522,11 +1525,13 @@ void PlayTutorial::nextStep()
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial6), [=]()
 					  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 					  {
+						  t_sm->cleanSM();
+						  
 						  view_img->stopSilhouette();
 						  ui_percent->stopAllActions();
 						  ui_percent->setVisible(true);
 						  
-						  CCSprite* clear_condition = CCSprite::create("play_tutorial_gage_guide.png");
+						  CCSprite* clear_condition = CCSprite::create(CCString::createWithFormat("play_tutorial_gage_guide_%s.png", myLoc->getLocalCode()->getCString())->getCString());
 						  clear_condition->setPosition(ccp(240,myDSH->ui_top-58));
 						  addChild(clear_condition, 4);
 						  
@@ -1536,69 +1541,144 @@ void PlayTutorial::nextStep()
 						  
 						  CCLabelBMFont* time_label = CCLabelBMFont::create("100", "timefont.fnt");
 						  time_label->setColor(ccYELLOW);
-						  time_label->setPosition(ccp(240,35));
+						  time_label->setPosition(ccp(240,5));
 						  addChild(time_label, 4);
 						  
 						  CCSequence* t_seq2 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
 						  CCRepeat* t_repeat2 = CCRepeat::create(t_seq2, 3);
 						  time_label->runAction(t_repeat2);
 						  
-						  CCSprite* time_case = CCSprite::create("play_tutorial_time_guide.png");
-						  time_case->setPosition(ccp(240,52));
+						  CCSprite* time_case = CCSprite::create(CCString::createWithFormat("play_tutorial_time_guide_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+						  time_case->setPosition(ccp(240,37));
 						  addChild(time_case, 4);
 						  
 						  CCSequence* t_seq3 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);
 						  CCRepeat* t_repeat3 = CCRepeat::create(t_seq3, 3);
 						  time_case->runAction(t_repeat3);
 						  
-						  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial7), [=]()
-										//"제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
-										{
-//											LoadingLayer* t_loading = LoadingLayer::create(-9999);
-//											addChild(t_loading, 9999);
-//											
-//											mySGD->addChangeGoods(kGoodsType_gold, mySGD->getIngameTutorialRewardGold(), "컨트롤튜토리얼보상");
-//											mySGD->changeGoods([=](Json::Value result_data){
-//												t_loading->removeFromParent();
-//												if(result_data["result"]["code"].asInt() == GDSUCCESS)
-//												{
-													clear_condition->stopAllActions();
-													clear_condition->setVisible(true);
-													
-													time_label->stopAllActions();
-													time_label->setVisible(true);
-													
-													time_case->stopAllActions();
-													time_case->setVisible(true);
-													
-													
-													AudioEngine::sharedInstance()->playEffect("ment_tutorial10.mp3", false, true);
-													addChild(KSTimer::create(1.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial11.mp3", false, true);
-														addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial12.mp3", false, true);
-															
-														}));
-													}));
-													
-													t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
-																  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
-																  {
-																	  AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-																	  t_sm->removeFromParent();
-																	  mySGD->setNextSceneName("maingame");
-																	  
-																	  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
-																	  
-																	  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-																	  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
-																	  addChild(loading_tip, 999);
-																  });
-//												}
-//												else
-//												{
+						  CCScale9Sprite* ment_box = CCScale9Sprite::create("talk_mentbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(12, 12, 23-12, 23-12));
+						  ment_box->setContentSize(CCSizeMake(350, 60));
+						  ment_box->setPosition(ccp(240,myDSH->ui_center_y));
+						  addChild(ment_box, 4);
+						  
+						  StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_tutorial7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						  ment_label->setPosition(ccp(ment_box->getContentSize().width/2.f, ment_box->getContentSize().height/2.f));
+						  ment_box->addChild(ment_label);
+						  
+						  CCLabelTTF* next_label = CCLabelTTF::create("TAP_", mySGD->getFont().c_str(), 12);
+						  next_label->setAnchorPoint(ccp(1,0));
+						  next_label->setPosition(ccp(ment_box->getContentSize().width-12, 12));
+						  next_label->setVisible(false);
+						  ment_box->addChild(next_label);
+						  
+						  addChild(KSTimer::create(0.5f, [=]()
+						  {
+							  ment_label->setVisible(false);
+							  addChild(KSTimer::create(0.5f, [=]()
+							  {
+								  ment_label->setVisible(true);
+								  addChild(KSTimer::create(0.5f, [=]()
+								  {
+									  ment_label->setVisible(false);
+									  addChild(KSTimer::create(0.5f, [=]()
+									  {
+										  ment_label->setVisible(true);
+										  next_label->setVisible(true);
+										  
+										  TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-600);
+										  t_suction->touch_began_func = [=]()
+										  {
+											  ment_box->removeFromParent();
+											  
+											  clear_condition->stopAllActions();
+											  clear_condition->setVisible(true);
+											  
+											  time_label->stopAllActions();
+											  time_label->setVisible(true);
+											  
+											  time_case->stopAllActions();
+											  time_case->setVisible(true);
+											  
+											  
+											  AudioEngine::sharedInstance()->playEffect("ment_tutorial10.mp3", false, true);
+											  addChild(KSTimer::create(1.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial11.mp3", false, true);
+												  addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial12.mp3", false, true);
+													  
+												  }));
+											  }));
+											  
+											  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
+															//"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
+															{
+																AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+																t_sm->removeFromParent();
+																mySGD->setNextSceneName("maingame");
+																
+																AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+																
+																LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+																loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
+																addChild(loading_tip, 999);
+															});
+											  
+											  t_suction->removeFromParent();
+										  };
+										  t_suction->is_on_touch_began_func = true;
+										  t_suction->setTouchEnabled(true);
+										  addChild(t_suction);
+									  }));
+								  }));
+							  }));
+						  }));
+						  
+//						  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial7), [=]()
+//										//"제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
+//										{
+////											LoadingLayer* t_loading = LoadingLayer::create(-9999);
+////											addChild(t_loading, 9999);
+////											
+////											mySGD->addChangeGoods(kGoodsType_gold, mySGD->getIngameTutorialRewardGold(), "컨트롤튜토리얼보상");
+////											mySGD->changeGoods([=](Json::Value result_data){
+////												t_loading->removeFromParent();
+////												if(result_data["result"]["code"].asInt() == GDSUCCESS)
+////												{
+//													clear_condition->stopAllActions();
+//													clear_condition->setVisible(true);
 //													
-//												}
-//											});
-										}, CCSizeMake(350,100), ccp(0,0), 12);
+//													time_label->stopAllActions();
+//													time_label->setVisible(true);
+//													
+//													time_case->stopAllActions();
+//													time_case->setVisible(true);
+//													
+//													
+//													AudioEngine::sharedInstance()->playEffect("ment_tutorial10.mp3", false, true);
+//													addChild(KSTimer::create(1.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial11.mp3", false, true);
+//														addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial12.mp3", false, true);
+//															
+//														}));
+//													}));
+//													
+//													t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
+//																  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
+//																  {
+//																	  AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+//																	  t_sm->removeFromParent();
+//																	  mySGD->setNextSceneName("maingame");
+//																	  
+//																	  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+//																	  
+//																	  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+//																	  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
+//																	  addChild(loading_tip, 999);
+//																  });
+////												}
+////												else
+////												{
+////													
+////												}
+////											});
+//										}, CCSizeMake(350,60), ccp(0,0), 12);
 					  });
 	}
 }
@@ -1843,6 +1923,7 @@ void PlayTutorial::resetRects()
 	}
 	
 	view_img->setDrawRects(rects);
+	AudioEngine::sharedInstance()->playEffect("se_area.mp3", false);
 }
 
 IntRect* PlayTutorial::newRectChecking(IntMoveState start)

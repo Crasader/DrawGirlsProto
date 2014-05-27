@@ -58,30 +58,39 @@ SumranMailPopup * SumranMailPopup::create (CCObject * t_close, SEL_CallFunc d_cl
 //}
 void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh)
 {
+	
 	DimmedPopup::init();
+	
+	
+	
 	this->setHideFinalAction(t_close, d_close);
 	CCScale9Sprite* main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-450));
+	setFormSetter(main_case);
 //	addChild(main_case, 0);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(40,256));
+	title_label->setPosition(ccp(38.0,253.0));
+	setFormSetter(title_label);
 	main_case->addChild(title_label);
 	
 	m_nothingMessage = CCLabelTTF::create("받은 메세지가 없습니다.", mySGD->getFont().c_str(), 14);
 	m_nothingMessage->setPosition(ccpMult(main_case->getContentSize(),0.5));
 	main_case->addChild(m_nothingMessage, 1);
+	setFormSetter(m_nothingMessage);
 	m_nothingMessage->setVisible(false);	
 	
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_inner->setContentSize(CCSizeMake(460, 232));
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);
+	setFormSetter(main_inner);
 	main_case->addChild(main_inner);
 
 	this->setBackground(main_case);
 	
+	startFormSetter(this);
 //	target_close = t_close;
 //	delegate_close = d_close;
 	m_heartRefresh = heartRefresh;
@@ -111,8 +120,9 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 			
 	});
 	//FormSetter::get()->addObject("testksoo2", allReceive);
-	allReceive->setPosition(ccp(380, 32));
+	allReceive->setPosition(ccp(410.0,33.0));
 	allReceive->setEnabled(false);
+	setFormSetter(allReceive);
 	this->addChild(allReceive, 1);
 	
 
@@ -258,6 +268,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 		this->hidePopup();
 	});
 	closeBtn->setPosition(ccp(450, 255));
+	setFormSetter(closeBtn);
 	this->addChild(closeBtn);
 	
 	
@@ -309,6 +320,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	CCScale9Sprite* barBack = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
 	barBack->setContentSize(CCSizeMake(7, 160.f));
 	barBack->setPosition(ccp(453, 140));
+	setFormSetter(barBack);
 //	FormSetter::get()->addObject("testksoo", barBack);
 	addChild(barBack, kMP_Z_mailTable - 1);
 	//320x320 테이블 뷰 생성
@@ -320,10 +332,10 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	m_scrollBar->setDynamicScrollSize(false);
 	m_scrollBar->setVisible(true);	
 	mailTableView->setAnchorPoint(CCPointZero);
-	
+	setFormSetter(m_scrollBar);
 	//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
 	mailTableView->setDirection(kCCScrollViewDirectionVertical);
-	
+	setFormSetter(mailTableView);
 	//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
 	mailTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
@@ -368,7 +380,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 	{
 
 		CCLabelTTF* title;
-		CCMenuItemLambda* sendBtn;
+//		CCMenuItemLambda* sendBtn;
+		CommonButton* btnReceive;
 		CCLabelTTF* score;
 		//Json::Reader reader;
 		//Json::Value contentObj;
@@ -383,12 +396,12 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		//	KS::KSLog("%", contentObj["puzzlenumber"].asInt());
 
 		CCNode* cell = CCNode::create();
-
+		setFormSetter(cell);
 		std::string cellBackFile = "achievement_cellback_normal.png";
 
 		CCScale9Sprite* listCellCase = CCScale9Sprite::create(cellBackFile.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(5, 5, 34, 34));
-		listCellCase->setContentSize(CCSizeMake(200.f, 46.f));
-		
+		listCellCase->setContentSize(CCSizeMake(210.0,46.0));
+		setFormSetter(listCellCase);
 		CCScale9Sprite* bg = listCellCase;
 		bg->setPosition(CCPointZero);
 		bg->setAnchorPoint(CCPointZero);
@@ -397,10 +410,10 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		CCSprite* profileImg = CCSprite::create("postbox_present.png"); // GDWebSprite::create((mail)["profile_image_url"].asString(), "ending_noimg.png");
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
 		profileImg->setTag(kMP_MT_profileImg);
-		profileImg->setPosition(ccp(23, 23));
+		profileImg->setPosition(ccp(23.5,24.0));
 		//profileImg->setScale(30.f / profileImg->getContentSize().width);
 		cell->addChild(profileImg, kMP_Z_profileImg);
-
+		setFormSetter(profileImg);
 
 		CCMenuLambda* _menu = CCMenuLambda::create();
 		_menu->setPosition(ccp(0, 0));
@@ -411,10 +424,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 		title = CCLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(),12); // "님의"
-		title->setPosition(ccp(38,20));
+		title->setPosition(ccp(48.0,22.5));
 		title->setColor(ccc3(20, 0, 0));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);
+		setFormSetter(title);
 		cell->addChild(title,2);
 		std::string comment;
 		int type = kGift;
@@ -422,38 +436,35 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		switch(type)
 		{
 			case kGift:
-				comment =mail.get("sender","Event").asString().c_str();
-				sendBtn = CCMenuItemImageLambda::create
-				("postbox_cell_receive.png", "postbox_cell_receive.png",
-				 [=](CCObject* sender)
-				 {
-					 //						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
-					 //						 int idx = (int)obj->getUserData();
-					 
-					 Json::Value p;
-					 int mailNo = mail["no"].asInt();
-					 
-					 p["giftBoxNo"] = mailNo;
-					 p["memberID"] = mail["memberID"].asInt64();
-					 
-					 
-					 //삭제요청
-					 this->removeMessage (mailNo, mail["memberID"].asInt64(),
-																[=](Json::Value r)
+				comment = mail.get("regDate","Event").asString().c_str();
+				btnReceive = CommonButton::create("받기", 12.f, CCSizeMake(60, 35), CommonButtonYellow, -200);
+				btnReceive->setTitleColor(ccc3(50, 20, 0));
+				btnReceive->setFunction([=](CCObject*)
 																{
-																	if(r["error"]["code"].asInt() != GDSUCCESS) {
-																		return;
-																	}
-																	//여기서 r["list"] 참고하여 재화 정보 업데이트하기
+																	//						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
+																	//						 int idx = (int)obj->getUserData();
+																	
+																	Json::Value p;
+																	int mailNo = mail["no"].asInt();
+																	
+																	p["giftBoxNo"] = mailNo;
+																	p["memberID"] = mail["memberID"].asInt64();
 																	
 																	
-																	
+																	//삭제요청
+																	this->removeMessage (mailNo, mail["memberID"].asInt64(),
+																											 [=](Json::Value r)
+																											 {
+																												 if(r["error"]["code"].asInt() != GDSUCCESS) {
+																													 return;
+																												 }
+																												 //여기서 r["list"] 참고하여 재화 정보 업데이트하기
+																												 
+																												 
+																												 
+																											 });
 																});
-				 }
-				 );
-				sendBtn->setPosition(ccp(155, 22));
-				
-				_menu->addChild(sendBtn,2);
+				cell->addChild(btnReceive, kMP_MT_getheart);
 				break;
 //			case kHeart:
 //				comment = myLoc->getLocalForKey(kMyLocalKey_arriveHeart);
@@ -1237,14 +1248,16 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 		score = CCLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 10);
 		score->setColor(ccc3(20, 0, 0));
-		score->setPosition(ccp(38,5));
+		score->setPosition(ccp(47.5,7.5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);
+		setFormSetter(score);
 		cell->addChild(score,2);
-
-		sendBtn->setUserData((void *)idx);
-		sendBtn->setPosition(ccp(157, 22));
-
+		btnReceive->setUserData((void*)idx);
+		btnReceive->setPosition(ccp(174.5,23.5));
+//		sendBtn->setUserData((void *)idx);
+//		sendBtn->setPosition(ccp(174.5,23.5));
+//		setFormSetter(sendBtn);
 		return cell;
 	};
 	bool odd = false;
@@ -1529,6 +1542,8 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
 			NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].asString(), false);
 			NSDS_SS(kSDS_CI_int1_name_s, t_card["no"].asInt(), t_card["name"].asString(), false);
+			NSDS_SI(kSDS_CI_int1_mPrice_ruby_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_ruby)].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_mPrice_pass_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_pass6)].asInt(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
 			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);

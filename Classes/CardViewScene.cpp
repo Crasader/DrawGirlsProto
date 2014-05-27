@@ -15,6 +15,9 @@
 #include "CommonButton.h"
 #include "bustMorphing.h"
 #include "RankUpPopup.h"
+#include "GraySprite.h"
+#include "CCMenuLambda.h"
+#include "BuyMorphingPopup.h"
 
 #define CV_SCROLL_SPEED_MAX_BASE	20
 #define CV_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -66,6 +69,9 @@ bool CardViewScene::init()
 	addChild(game_node, kCV_Z_first_img);
 	
 	int card_number = mySGD->selected_collectionbook;
+	
+	is_morphing = mySGD->isCardMorphing(card_number);
+	
 	CCLog("why two2");
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
 
@@ -105,13 +111,86 @@ bool CardViewScene::init()
 	
 	
 	zoom_img = CCSprite::create("ending_expand.png");
-	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
+	zoom_img->setPosition(ccp(480-35-35,myDSH->ui_top-35));
 	addChild(zoom_img, kCV_Z_next_button);
 	
+	CCPoint morphing_position = ccp(435,45);
 	
-	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(80,50), CommonButtonYellow, -160);
+	string morphing_filename;
+	if(!is_morphing)
+	{
+		buy_morphing = CommonButton::create("", 10, CCSizeMake(80, 50), CommonButtonLightPupple, -160);
+		buy_morphing->setPosition(morphing_position);
+		buy_morphing->setFunction([=](CCObject* sender)
+								  {
+									  if(!is_actioned)
+									  {
+										  is_actioned = true;
+										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+										  
+										  BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, [=]()
+																							   {
+																								   is_actioned = false;
+																								   is_morphing = true;
+																								   
+																								   buy_morphing->removeFromParent();
+																								   
+																								   morphing_img->removeFromParent();
+																								   morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
+																								   morphing_img->setPosition(morphing_position);
+																								   addChild(morphing_img, kCV_Z_next_button);
+																								   
+																								   CCTouch* t_touch = new CCTouch();
+																								   t_touch->setTouchInfo(0, 0, 0);
+																								   t_touch->autorelease();
+																								   
+																								   first_img->ccTouchEnded(t_touch, NULL);
+																							   });
+										  addChild(t_popup, 999);
+									  }
+								  });
+		addChild(buy_morphing, kCV_Z_next_button);
+		
+		morphing_filename = "morphing_heart_off.ccbi";
+	}
+	else
+	{
+		morphing_filename = "morphing_heart_on.ccbi";
+	}
+	
+	
+	
+	morphing_img = KS::loadCCBI<CCSprite*>(this, morphing_filename.c_str()).first;
+	morphing_img->setPosition(morphing_position);
+	addChild(morphing_img, kCV_Z_next_button);
+	
+	if(!is_morphing)
+	{
+		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, [=]()
+															 {
+																 is_actioned = false;
+																 is_morphing = true;
+																 
+																 buy_morphing->removeFromParent();
+																 
+																 morphing_img->removeFromParent();
+																 morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
+																 morphing_img->setPosition(morphing_position);
+																 addChild(morphing_img, kCV_Z_next_button);
+																 
+																 CCTouch* t_touch = new CCTouch();
+																 t_touch->setTouchInfo(0, 0, 0);
+																 t_touch->autorelease();
+																 
+																 first_img->ccTouchEnded(t_touch, NULL);
+															 });
+		addChild(t_popup, 999);
+	}
+	
+	
+	next_button = CommonButton::createCloseButton(-160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
-	next_button->setPosition(ccp(480-50,30));
+	next_button->setPosition(ccp(480-35,myDSH->ui_top-35));
 	next_button->setVisible(false);
 	addChild(next_button, kCV_Z_next_button);
 	
@@ -179,13 +258,15 @@ void CardViewScene::moveChecking()
 	
 	if(is_scrolling)
 	{
-		first_img->movingDistance(ccpSub(after_position, save_position));
+		if(is_morphing)
+			first_img->movingDistance(ccpSub(after_position, save_position));
 		is_before_scrolling = is_scrolling;
 	}
 	else if(is_before_scrolling)
 	{
 		is_before_scrolling = false;
-		first_img->movingDistance(CCPointZero);
+		if(is_morphing)
+			first_img->movingDistance(CCPointZero);
 	}
 	save_position = after_position;
 }
@@ -493,7 +574,8 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				
 				if((int)touch == first_touch_p && (((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
-					first_img->ccTouchEnded(touch, pEvent);
+					if(is_morphing)
+						first_img->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{

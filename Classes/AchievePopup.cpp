@@ -67,7 +67,7 @@ bool AchievePopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-450));
+	main_case->setPosition(ccp(240,160-14.f-450));
 	addChild(main_case, kAchievePopupZorder_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achievement), mySGD->getFont().c_str(), 15);
@@ -159,7 +159,7 @@ void AchievePopup::showPopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(AchievePopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -193,7 +193,7 @@ void AchievePopup::hidePopup()
 	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
 	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(AchievePopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -482,26 +482,8 @@ void AchievePopup::cellAction( CCObject* sender )
 	addChild(loading_layer, kAchievePopupZorder_popup);
 	
 	keep_tag = tag;
-	AchieveRewardType reward_type = myAchieve->getRewardType(achieve_list[keep_tag]);
-	int reward_value = myAchieve->getRewardValue(achieve_list[keep_tag]);
 	
-	if(reward_type == kAchieveRewardType_ruby)
-		mySGD->addChangeGoods(kGoodsType_ruby, reward_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString(), "", false);
-	else if(reward_type == kAchieveRewardType_gold)
-		mySGD->addChangeGoods(kGoodsType_gold, reward_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString());
-	else if(reward_type == kAchieveRewardType_package)
-	{
-		for(int i=0;i<reward_value;i++)
-		{
-			AchieveRewardType t_type = myAchieve->getRewardTypeForIndex(achieve_list[keep_tag], i);
-			int t_value = myAchieve->getRewardValueForIndex(achieve_list[keep_tag], i);
-			
-			if(t_type == kAchieveRewardType_ruby)
-				mySGD->addChangeGoods(kGoodsType_ruby, t_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString(), "", false);
-			else if(t_type == kAchieveRewardType_gold)
-				mySGD->addChangeGoods(kGoodsType_gold, t_value, "업적", CCString::createWithFormat("%d", achieve_list[keep_tag])->getCString());
-		}
-	}
+	mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", achieve_list[keep_tag])->getCString());
 	
 	myAchieve->changeComplete(achieve_list[keep_tag]);
 	
@@ -935,61 +917,19 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	
 	is_menu_enable = false;
 	
-	keep_value_list.clear();
-	
-	keep_take_gold = 0;
-	keep_take_ruby = 0;
-	
-	string ruby_stats_value = "";
-	string gold_stats_value = "";
-	
+	bool is_have = false;
 	for(int i=0;i<achieve_list.size();i++)
 	{
 		if(!myAchieve->isCompleted(achieve_list[i]) && myAchieve->isAchieve(achieve_list[i]))
 		{
-			AchieveRewardType reward_type = myAchieve->getRewardType(achieve_list[i]);
-			int reward_value = myAchieve->getRewardValue(achieve_list[i]);
-			
-			if(reward_type == kAchieveRewardType_ruby)
-			{
-				keep_take_ruby += reward_value;
-				ruby_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
-			}
-			else if(reward_type == kAchieveRewardType_gold)
-			{
-				keep_take_gold += reward_value;
-				gold_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
-			}
-			else if(reward_type == kAchieveRewardType_package)
-			{
-				for(int i=0;i<reward_value;i++)
-				{
-					AchieveRewardType t_type = myAchieve->getRewardTypeForIndex(achieve_list[keep_tag], i);
-					int t_value = myAchieve->getRewardValueForIndex(achieve_list[keep_tag], i);
-					
-					if(t_type == kAchieveRewardType_ruby)
-					{
-						keep_take_ruby += t_value;
-						ruby_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
-					}
-					else if(t_type == kAchieveRewardType_gold)
-					{
-						keep_take_gold += t_value;
-						gold_stats_value += CCString::createWithFormat(" | %d", achieve_list[i])->getCString();
-					}
-				}
-			}
+			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", achieve_list[i])->getCString());
 			
 			myAchieve->changeComplete(achieve_list[i]);
+			is_have = true;
 		}
 	}
 	
-	if(keep_take_ruby > 0)
-		mySGD->addChangeGoods(kGoodsType_ruby, keep_take_ruby, "업적", ruby_stats_value);
-	if(keep_take_gold > 0)
-		mySGD->addChangeGoods(kGoodsType_gold, keep_take_gold, "업적", gold_stats_value);
-	
-	if(keep_take_ruby > 0 || keep_take_gold > 0)
+	if(is_have)
 	{
 		loading_layer = LoadingLayer::create();
 		addChild(loading_layer, kAchievePopupZorder_popup);

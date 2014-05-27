@@ -20,10 +20,70 @@ echo"</center>";
 	<?php
 }
 
+
+if($_GET["mode"]=="abc"){
+
+	while($rData = UserData::getRowByQuery()){
+		$userStorage = new UserStorage($rData["memberID"]);
+		$userStorage->save();
+	}
+}
+
+exit;
+
 // if($_GET["mode"]!="card")exit;
 
 
-// echo "start make card";
+// echo "start make card2";
+// $cards[]="p1_nhn1_1.png";
+// $cards[]="p1_nhn2_1.png";
+// $cards[]="p1_nhn3_1.png";
+// $cards[]="p1_nhn4_1.png";
+// $cards[]="p1_nhn5_1.png";
+// $cards[]="p1_nhn6_1.png";
+// $cards[]="p1_nhn7_1.png";
+// $cards[]="p1_nhn8_1.png";
+// $cards[]="p1_nhn9_1.png";
+// $cards[]="p1_nhn10_1.png";
+// $cards[]="p1_nhn11_1.png";
+// $cards[]="p1_nhn12_1.png";
+// $cards[]="p1_nhn13_1.png";
+// $cards[]="p1_nhn14_1.png";
+// $cards[]="p1_nhn15_1.png";
+// $cards[]="p1_nhn16_1.png";
+
+// $school=5;
+// $sc=1;
+// for($set =0;$set<count($cards);$set++){
+// 	echo "test";
+// 	$cardinfo = explode("_",$cards[$set]);
+// 	$puzzleNo = ceil($set/5.0);
+// 	$cardname = $cardinfo[1];
+// 	for($rank=1;$rank<=4;$rank++){
+// 		$cardNo = 12000+$school*100+$sc*10+$rank;
+// 		$nCard = new Card($cardNo);
+// 		$nCard->no = $cardNo;
+// 		$nCard->rank = $rank;
+// 		$nCard->durability=5;
+// 		$nCard->ability="[]";
+// 		$nCard->language="kr";
+// 		$imagename = "p7_".$cardname."_".$rank;
+// 		$nCard->imgInfo='{"img":"card/'.$imagename.'.png","size":200}';
+// 		$nCard->silImgInfo='{"isSil":"1","img":"card/'.$imagename.'s.png","size":15}';
+// 		$nCard->aniInfo='{"isAni":0}';
+// 		$nCard->reward=$rank*250;
+// 		$nCard->grade=$rank;
+// 		$nCard->script='{"en":"script","ja":"この部分にキャラクターのセリフが入る予定です。","ko":"이곳에 스크립트가 들어갈 예정입니다."}';
+// 		$nCard->name = '{"en":"cardname","ja":"cardname","ko":"cardname"}';
+// 		//$nCard->version = $nCard->version + 1;
+// 		echo json_encode($nCard->getArrayData());
+// 		if($nCard->save(true))echo"true<br>";
+// 		else echo mysql_error();
+// 	}
+// 	$sc++;
+// 	if($sc>5){$sc=1; $school+=1;}
+// }
+
 
 // $cards[]="1_chihaya_1.png";
 // $cards[]="1_kanzaki_1.png";
@@ -327,7 +387,7 @@ srand(1);
 $cPattern = array();
 {
 $crash=array();
-$crash["data"] = json_decode('{"atype":"crash","target":"yes","number":7,"area":13,"speed":50,"pattern":"112"}',true);
+$crash["data"] = json_decode('{"name","야호","atype":"crash","target":"yes","number":7,"area":13,"speed":50,"pattern":"112"}',true);
 $crash["option"] = "number";
 $crash["option_max"] = 7;
 $crash["option_min"] = 1;
@@ -673,7 +733,7 @@ function getCrashPatternByNo($no){
 	global $cPattern;
 	$number = (int)($no/2);
 	$level = (int)($number/count($cPattern));
-	return getCrashPattern($no,$level);
+	return getCrashPattern($no,$level,$stageNo*2/3.0);
 }
 
 function getSpecialPattern($number,$level,$stageLevel){
@@ -722,7 +782,7 @@ function getMissilePattern($number,$level){
 	if($pattern["castframe"]) $frameName = $pattern["castframe"];
 	$data[$frameName] = $frame;
 	$data["color"]=rand(1,9);
-	$data["percent"]=3;
+	$data["percent"]=2;
 	return $data;
 
 }
@@ -764,12 +824,12 @@ function getPattern($stageNo,$stageLevel){
 	}
 	
 	if(($sType==1 && $stageLevel>4) || $stageLevel>15){
-		$sp2 = getSpecialPattern($stageNo+rand(1,100),$high);
+		$sp2 = getSpecialPattern($stageNo+rand(1,100),$high,$stageLevel);
 		$p[]=$sp2;
 	}
 
 	if($sType==2 && $stageLevel>5){
-		$cp2 = getCrashPattern($stageNo+rand(1,100),$high);
+		$cp2 = getCrashPattern($stageNo+rand(1,100),$high,$stageLevel);
 		$p[]=$cp2;
 	}
 
@@ -810,7 +870,7 @@ function getCircleBoss($stageNo,$stageLevel){
 	$boss["movement"]=array("normal"=>$movement,"draw"=>$movement); // 1~4
 	
 	//autoBalance로 조절되는 놈. level에 따라조절
-	$boss["attackpercent"]= (0.3-0.15)/(float)10.0*$level+0.15; //0.1~0.4;
+	$boss["attackpercent"]= 0.005*$level+0.15; //0.1~0.4;
 
 
 	//나머지
@@ -819,19 +879,19 @@ function getCircleBoss($stageNo,$stageLevel){
 	$high = 0.5*$stageLevel;
 	$low = 0.25*$stageLevel;
 	if($sType==0){ //hp형 보스
-		$boss["hp"]=ceil(200+150*$stageNo);
+		$boss["hp"]=ceil(30+60*$stageNo);
 		$boss["agi"]=ceil(5*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$low+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
 		$boss["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  
 	}else if($sType==1){ //회피형 보스
-		$boss["hp"]=ceil(200+100*$stageNo);
+		$boss["hp"]=ceil(30+40*$stageNo);
 		$boss["agi"]=ceil(10*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$low+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
 		$boss["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  
 	}else{ //speed형 보스
-		$boss["hp"]=ceil(200+100*$stageNo);
+		$boss["hp"]=ceil(30+40*$stageNo);
 		$boss["agi"]=ceil(5*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$high+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
@@ -863,7 +923,6 @@ function getJuniors($stageNo,$stageLevel,$boss){
 	//$jrNo = $stageNo%10+1;
 	//$jrName = "jr_".$jrNo;
 	//if($jrNo<10)$jrName="jr_0".$jrNo;
-	
 	for($i=0;$i<$jCnt;$i++){
 		$junior=array();
 		$junior["type"] = $jrName;
@@ -871,6 +930,7 @@ function getJuniors($stageNo,$stageLevel,$boss){
 		$junior["scale"] = array("min"=>0.5,"start"=>0.5,"max"=>0.5);
 		$junior["movement"] = array("normal"=>$movement,"draw"=>$movement);
 		$junior["hp"] = (int)($boss["hp"]*0.2);
+		if($jCnt>=5)$junior["hp"]=(int)($boss["hp"]/$jCnt);
 		$junior["agi"] = (int)($boss["agi"]*0.5);
 		$junior["ai"] = (int)($boss["ai"]*0.5);
 

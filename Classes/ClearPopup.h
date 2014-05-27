@@ -69,6 +69,10 @@ private:
 	CCScale9Sprite* main_case;
 	
 	CCSprite* title;
+	KSLabelTTF* n_ok_label2;
+	KSLabelTTF* s_ok_label2;
+	KSLabelTTF* n_replay_label2;
+	KSLabelTTF* s_replay_label2;
 	
 	Json::Value rank_data;
 	

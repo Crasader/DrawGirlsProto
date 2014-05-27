@@ -21,6 +21,8 @@ using namespace std;
 class CommonButton;
 class MyNode;
 class EffectSprite;
+class GraySprite;
+class CCMenuLambda;
 class CardViewScene : public CCLayer
 {
 public:
@@ -54,8 +56,12 @@ private:
 	
 	void nextScene();
 	
+	bool is_morphing;
+	
 	CCSprite* zoom_img;
 	
+	CCSprite* morphing_img;
+	CommonButton* buy_morphing;
 	
 	float minimum_scale;
 	CCSize screen_size;

@@ -1186,10 +1186,10 @@ void FeverCoinParent::myInit()
 }
 
 
-FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point)
+FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	FloatingCoin* t_fc = new FloatingCoin();
-	t_fc->myInit(t_take_func, t_gold, t_start_point);
+	t_fc->myInit(t_take_func, t_gold, t_start_point, t_auto_take);
 	t_fc->autorelease();
 	return t_fc;
 }
@@ -1263,8 +1263,14 @@ void FloatingCoin::startFloating()
 void FloatingCoin::floating()
 {
 	ing_frame++;
-	if(ing_frame == 20)
+	if(ing_frame == 20 && !auto_take)
 		startAbsorbChecking();
+	
+	if(auto_take && ing_frame == auto_take_frame)
+	{
+		takeIt();
+		return;
+	}
 	
 	bool is_found = false;
 	CCPoint after_position;
@@ -1279,7 +1285,7 @@ void FloatingCoin::floating()
 		is_found = true;
 		after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*moving_speed, sinf(moving_direction/180.f*M_PI)*moving_speed);
 		
-		if(after_position.x > 320.f || after_position.x < 0.f || after_position.y > 430.f || after_position.y < 0.f)
+		if(after_position.x > 319.f || after_position.x < 1.f || after_position.y > 429.f || after_position.y < 1.f)
 		{
 			is_found = false;
 			if(search_direction == 0)
@@ -1307,21 +1313,24 @@ void FloatingCoin::floating()
 	setPosition(after_position);
 	getParent()->reorderChild(this, 431-int(getPositionY()));
 	
-	IntPoint check_point = IntPoint::convertToIntPoint(after_position);
-	if(ing_frame > 20 && myGD->mapState[check_point.x][check_point.y] == mapEmpty &&
-	   myGD->mapState[check_point.x-1][check_point.y-1] == mapEmpty &&
-	   myGD->mapState[check_point.x-1][check_point.y+1] == mapEmpty &&
-	   myGD->mapState[check_point.x+1][check_point.y-1] == mapEmpty &&
-	   myGD->mapState[check_point.x+1][check_point.y+1] == mapEmpty)
+	if(!auto_take)
 	{
-		unschedule(schedule_selector(FloatingCoin::floating));
-		if(isAsLong())
+		IntPoint check_point = IntPoint::convertToIntPoint(after_position);
+		if(ing_frame > 20 && myGD->mapState[check_point.x][check_point.y] == mapEmpty &&
+		   myGD->mapState[check_point.x-1][check_point.y-1] == mapEmpty &&
+		   myGD->mapState[check_point.x-1][check_point.y+1] == mapEmpty &&
+		   myGD->mapState[check_point.x+1][check_point.y-1] == mapEmpty &&
+		   myGD->mapState[check_point.x+1][check_point.y+1] == mapEmpty)
 		{
-			startAsLonging();
-		}
-		else
-		{
-			onLock();
+			unschedule(schedule_selector(FloatingCoin::floating));
+			if(isAsLong())
+			{
+				startAsLonging();
+			}
+			else
+			{
+				onLock();
+			}
 		}
 	}
 }
@@ -1330,7 +1339,7 @@ bool FloatingCoin::isAsLong()
 {
 	CCPoint after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*moving_speed, sinf(moving_direction/180.f*M_PI)*moving_speed);
 	
-	if(after_position.x > 320.f || after_position.x < 0.f || after_position.y > 430.f || after_position.y < 0.f)
+	if(after_position.x > 319.f || after_position.x < 1.f || after_position.y > 429.f || after_position.y < 1.f)
 	{
 		return false;
 	}
@@ -1355,7 +1364,7 @@ void FloatingCoin::asLonging()
 {
 	CCPoint after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*moving_speed, sinf(moving_direction/180.f*M_PI)*moving_speed);
 	
-	if(after_position.x > 320.f || after_position.x < 0.f || after_position.y > 430.f || after_position.y < 0.f)
+	if(after_position.x > 319.f || after_position.x < 1.f || after_position.y > 429.f || after_position.y < 1.f)
 	{
 		unschedule(schedule_selector(FloatingCoin::asLonging));
 		onLock();
@@ -1400,11 +1409,14 @@ void FloatingCoin::ting()
 	
 	start_speed -= 0.3f;
 }
-void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point)
+void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	take_func = t_take_func;
 	is_locked = false;
+	auto_take = t_auto_take;
 	m_gold = t_gold;
+	
+	auto_take_frame = rand()%10+20;
 	
 	moving_direction = rand()%360 - 180;
 	moving_speed = rand()%10 / 10.f + 1.f;
@@ -1435,10 +1447,10 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	startFloating();
 }
 
-FloatingCoinCreator* FloatingCoinCreator::create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point)
+FloatingCoinCreator* FloatingCoinCreator::create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	FloatingCoinCreator* t_fcc = new FloatingCoinCreator();
-	t_fcc->myInit(t_add_parent, t_take_func, t_frame, t_count, t_gold, t_start_point);
+	t_fcc->myInit(t_add_parent, t_take_func, t_frame, t_count, t_gold, t_start_point, t_auto_take);
 	t_fcc->autorelease();
 	return t_fcc;
 }
@@ -1457,7 +1469,15 @@ void FloatingCoinCreator::creating()
 		ing_frame = 0;
 		ing_count++;
 		
-		add_parent->addChild(FloatingCoin::create(take_func, m_gold, start_point));
+		if(auto_take)
+		{
+			CCPoint boss_position = myGD->getMainCumberVector()[0]->getPosition();
+			add_parent->addChild(FloatingCoin::create(take_func, m_gold, boss_position, auto_take));
+		}
+		else
+		{
+			add_parent->addChild(FloatingCoin::create(take_func, m_gold, start_point, auto_take));
+		}
 		
 		if(ing_count >= m_count)
 		{
@@ -1466,7 +1486,7 @@ void FloatingCoinCreator::creating()
 		}
 	}
 }
-void FloatingCoinCreator::myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point)
+void FloatingCoinCreator::myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	take_func = t_take_func;
 	add_parent = t_add_parent;
@@ -1474,6 +1494,7 @@ void FloatingCoinCreator::myInit(CCNode* t_add_parent, function<void(CCPoint)> t
 	m_count = t_count;
 	m_gold = t_gold;
 	start_point = t_start_point;
+	auto_take = t_auto_take;
 	
 	startCreate();
 }
@@ -1512,6 +1533,19 @@ void FloatingCoinParent::hideAllFloatingCoin()
         }
     }
 }
+
+void FloatingCoinParent::startClearFloatCoin(float t_percent)
+{
+	float t_d = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f;
+	
+	int t_coin_count = roundf(t_percent/t_d);
+	
+	float clear_reward = 50.f;
+	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10));
+	
+	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), ccp(0,0), true));
+}
+
 void FloatingCoinParent::myInit(function<void(CCPoint)> t_take_func)
 {
 	take_func = t_take_func;
@@ -1875,6 +1909,7 @@ void GameItemManager::myInit()
 	myGD->V_F["GIM_showPercentFloatingCoin"] = std::bind(&FloatingCoinParent::showPercentFloatingCoin, floating_coin_parent, std::placeholders::_1);
 	myGD->V_CCPI["GIM_showAttackFloatingCoin"] = std::bind(&FloatingCoinParent::showAttackFloatingCoin, floating_coin_parent, std::placeholders::_1, std::placeholders::_2);
 	myGD->V_V["GIM_hideAllFloatingCoin"] = std::bind(&FloatingCoinParent::hideAllFloatingCoin, floating_coin_parent);
+	myGD->V_F["GIM_startClearFloatingCoin"] = std::bind(&FloatingCoinParent::startClearFloatCoin, floating_coin_parent, std::placeholders::_1);
 }
 
 //class GameItemPlasma : public GameItemBase

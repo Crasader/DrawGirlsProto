@@ -7,25 +7,21 @@ USING_NS_CC;
 #include "DataStorageHub.h"
 #include "CCMenuLambda.h"
 #include "EasingAction.h"
-
+#include "CurtainNodeForBonusGame.h"
 
 static int 	kAttackGa = 1;
 static int	kAttackBa = 2;
 static int	kAttackBo = 3;
 
-struct GababoReward
-{
-	std::string spriteName;
-	std::string desc;
-};
+
 class GaBaBo : public CCLayerColor
 {
 public:
 	GaBaBo();
 	virtual ~GaBaBo();
 	bool ccTouchBegan(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent);
-	virtual bool init(int touchPriority, const std::vector<GababoReward>& rewards, std::function<void(int)> endFunction);
-	static GaBaBo* create(int prior, const std::vector<GababoReward>& rewards, std::function<void(int)> endFunction)
+	virtual bool init(int touchPriority, const std::vector<BonusGameReward>& rewards, std::function<void(int)> endFunction);
+	static GaBaBo* create(int prior, const std::vector<BonusGameReward>& rewards, std::function<void(int)> endFunction)
 	{
 		GaBaBo* t = new GaBaBo();
 		t->init(prior, rewards, endFunction);
@@ -46,9 +42,11 @@ public:
 //		scene->addChild(layer);
 //		return scene;
 //	}
+	void showResult();
 	void update(float dt);
 	void initGameTime()
 	{
+//		m_remainTime = 5.f;
 		m_remainTime = 5.f;
 		m_gababoCountShowing = false;
 	}
@@ -73,6 +71,7 @@ protected:
 	long long m_lastChangeTime;
 	int m_winCount, m_drawCount, m_loseCount;
 	int m_touchPriority;
+	CCSprite* m_currentRewardCursor;
 };
 
 #endif

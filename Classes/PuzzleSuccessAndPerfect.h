@@ -32,7 +32,7 @@ private:
 	bool is_success;
 	
 	TouchSuctionLayer* suction;
-	
+	CCSprite* gray;
 	CCNode* m_container;
 	
 	void myInit(int t_touch_priority, function<void()> t_end_func, bool t_is_success);

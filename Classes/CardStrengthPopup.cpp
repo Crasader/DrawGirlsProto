@@ -206,7 +206,7 @@ bool CardStrengthPopup::init()
 	
 	for(int i=0;i<offering_list.size();i++)
 	{
-		if(strength_card_number == offering_list[i].card_number)
+		if(strength_card_number == offering_list[i].card_number.getV())
 		{
 			strength_idx = i;
 			break;
@@ -636,7 +636,7 @@ void CardStrengthPopup::alignOfferingList(CardStrengthAlign t_align)
 		struct t_CardSortGradeUp{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank > b.rank;
+				return a.rank.getV() > b.rank.getV();
 			}
 		} pred;
 		
@@ -647,7 +647,7 @@ void CardStrengthPopup::alignOfferingList(CardStrengthAlign t_align)
 		struct t_CardSortGradeDown{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank < b.rank;
+				return a.rank.getV() < b.rank.getV();
 			}
 		} pred;
 		
@@ -658,7 +658,7 @@ void CardStrengthPopup::alignOfferingList(CardStrengthAlign t_align)
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number > b.take_number;
+				return a.take_number.getV() > b.take_number.getV();
 			}
 		} pred;
 		
@@ -669,7 +669,7 @@ void CardStrengthPopup::alignOfferingList(CardStrengthAlign t_align)
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number < b.take_number;
+				return a.take_number.getV() < b.take_number.getV();
 			}
 		} pred;
 		
@@ -683,12 +683,12 @@ CCTableViewCell* CardStrengthPopup::tableCellAtIndex(CCTableView *table, unsigne
 	cell->init();
 	cell->autorelease();
 	
-	CCSprite* offering_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", offering_list[idx].card_number)->getCString()));
+	CCSprite* offering_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", offering_list[idx].card_number.getV())->getCString()));
 	offering_card->setScale(0.75f);
 	offering_card->setPosition(ccp(30, 39));
 	cell->addChild(offering_card);
 	
-	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_list[idx].card_number);
+	int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, offering_list[idx].card_number.getV());
 	string case_type;
 	if(card_grade == 1)
 		case_type = "bronze";
@@ -741,7 +741,7 @@ void CardStrengthPopup::tableCellTouched(CCTableView* table, CCTableViewCell* ce
 	if(!is_menu_enable)
 		return;
 	
-	int clicked_card_number = offering_list[cell->getIdx()].card_number;
+	int clicked_card_number = offering_list[cell->getIdx()].card_number.getV();
 	if(clicked_card_number == offering_card_number)
 	{
 		// 재료 카드 해제
@@ -924,7 +924,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			else if(myDSH->getIntegerForKey(kDSH_Key_selectedCard) > 0)
 				mySGD->selected_collectionbook = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 			else
-				mySGD->selected_collectionbook = offering_list[0].card_number;
+				mySGD->selected_collectionbook = offering_list[0].card_number.getV();
 			
 			CollectionBookPopup* t_popup = CollectionBookPopup::create();
 			t_popup->setHideFinalAction(target_final, delegate_final);

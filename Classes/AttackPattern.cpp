@@ -7,7 +7,7 @@
 //
 #include "AttackPattern.h"
 #include "SilhouetteData.h"
-
+#include "MissileUnitCCB.h"
 void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
@@ -61,8 +61,12 @@ void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::stri
 	else
 		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
 		
-	batchNode->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//	batchNode->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	addChild(batchNode);
+	
+	missileNode = CCNode::create();
+	addChild(missileNode);
+	
 	AudioEngine::sharedInstance()->playEffect("se_missile.mp3", true);
 	scheduleUpdate();
 }
@@ -152,12 +156,18 @@ void CommonBulletPattern::update(float dt)
 																					  imgFileName.c_str(), t_mSize,
 																					  m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE);
 						batchNode->addChild(t_mu);
+						t_mu->setOpacity(200);
 					}
 					else
 					{
-						MissileUnit* t_mu = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
+//						MissileUnitCCB* t_mu = MissileUnitCCB::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
+//																																					"ingame_missile.ccbi", t_mSize,0, 0);
+//						missileNode->addChild(t_mu);
+//						t_mu->setScale(0.8f);
+						MissileUnit* t_mu2 = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
 																																					imgFileName.c_str(), t_mSize,0, 0);
-						batchNode->addChild(t_mu);
+						batchNode->addChild(t_mu2);
+						t_mu2->setOpacity(200);
 					}
 					gun.fireCount++;
 				}
@@ -180,7 +190,7 @@ void CommonBulletPattern::update(float dt)
 
 void CommonBulletPattern::selfRemoveSchedule()
 {
-	if(batchNode->getChildrenCount() == 0)
+	if(batchNode->getChildrenCount() == 0 && missileNode->getChildrenCount() == 0)
 	{
 		removeFromParentAndCleanup(true);
 	}

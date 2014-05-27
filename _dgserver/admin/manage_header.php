@@ -69,12 +69,16 @@ if(!$gid){
 <td><a href=manage_pieceHistory.php?gid=<?=$gid?>>pieceHistory<br><font color=red>피스정보</font></a></td>
 <td><a href=manage_cardHistory.php?gid=<?=$gid?>>cardHistory<br><font color=red>카드정보</font></a></td>
 <td><a href=manage_message.php?gid=<?=$gid?>>Message<br><font color=red>수신함관리</font></a></td>
-<td><a href=manage_userProperty.php?gid=<?=$gid?>>userProperty<br><font color=red>보관함관리</font></a></td>
+<td><a href=manage_userStorage.php?gid=<?=$gid?>>userStorage<br><font color=red>보관함관리</font></a></td>
 <td><a href=manage_userPropertyHistory.php?gid=<?=$gid?>>userPropertyHistory<br><font color=red>보관함히스토리</font></a></td>
 <td><a href=manage_archivementHistory.php?gid=<?=$gid?>>archivementHistory<br><font color=red>업적히스토리</font></a></td>
 <td><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>giftBoxHistory<br><font color=red>선물함히스토리</font></a></td>
 <td><a href=manage_balance.php?gid=<?=$gid?>>balance<br><font color=red>벨런스</font></a></td>
 <td><a href=manage_notice.php?gid=<?=$gid?>>notice<br><font color=red>공지</font></a></td>
+<td><a href=manage_loginEvent.php?gid=<?=$gid?>>loginEvent<br><font color=red>로그인이벤트</font></a></td>
+<td><a href=manage_attendenceEvent.php?gid=<?=$gid?>>attendenceEvent<br><font color=red>출석이벤트</font></a></td>
+<td><a href=manage_cuponManager.php?gid=<?=$gid?>>cuponManager<br><font color=red>쿠폰관리</font></a></td>
+<td><a href=manage_cuponCode.php?gid=<?=$gid?>>cuponCode<br><font color=red>쿠폰코드</font></a></td>
 </tr>
 </table>
 

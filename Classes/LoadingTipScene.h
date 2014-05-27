@@ -58,11 +58,9 @@ private:
 	
 	CCSprite* ok_img;
 	CCMenuLambda* ok_menu;
-	CommonButton* no_review;
+//	CommonButton* no_review;
 	
 	void endLoadingTip();
-	
-	void popRootScene();
 	
 	void showButton();
 	

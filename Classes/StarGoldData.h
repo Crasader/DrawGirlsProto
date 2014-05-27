@@ -73,11 +73,12 @@ enum CardSortType{
 
 class CardSortInfo{
 public:
-	int card_number;
-	long long int take_number;
-	int grade;
-	int rank;
-	string user_ment;
+	KSProtectVar<int> card_number;
+	KSProtectVar<long long int> take_number;
+	KSProtectVar<int> grade;
+	KSProtectVar<int> rank;
+	KSProtectStr user_ment;
+	KSProtectVar<bool> is_morphing;
 };
 
 class PuzzleHistory{
@@ -132,7 +133,16 @@ enum ReplayKey
 	kReplayKey_scoreData,
 	kReplayKey_isChangedMap,
 	kReplayKey_isChangedScore,
-	kReplayKey_playIndex
+	kReplayKey_playIndex,
+	kReplayKey_clearGrade,
+	kReplayKey_gameTime,
+	kReplayKey_takeGold,
+	kReplayKey_totalScore,
+	kReplayKey_originalScore,
+	kReplayKey_win,
+	kReplayKey_lose,
+	kReplayKey_useItemCnt,
+	kReplayKey_useItem_int1_itemCode
 };
 
 enum GoodsType
@@ -149,10 +159,14 @@ enum GoodsType
 	kGoodsType_pass3,
 	kGoodsType_pass4,
 	kGoodsType_pass5,
-	kGoodsType_end
+	kGoodsType_pass6,
+	kGoodsType_end,
+	kGoodsType_pz,
+	kGoodsType_pc,
+	kGoodsType_cu
 };
 
-class ChangeGoodsData
+class ChangeGoodsDataDetail
 {
 public:
 	GoodsType m_type;
@@ -161,6 +175,21 @@ public:
 	string m_statsValue;
 	string m_content;
 	bool m_isPurchase;
+};
+
+class ChangeGoodsData
+{
+public:
+	vector<ChangeGoodsDataDetail> detail_list;
+	
+	bool is_renewal;
+	KSProtectStr m_exchangeID;
+	
+	ChangeGoodsData()
+	{
+		is_renewal = false;
+		detail_list.clear();
+	}
 };
 
 enum UserdataType
@@ -349,6 +378,8 @@ public:
 	
 	int getHasGottenCardsDataCardNumber(int index);
 	CardSortInfo getHasGottenCardData(int index);
+	bool isCardMorphing(int card_number);
+	void onCardMorphing(int card_number);
 	
 	int getHasGottenCardsSize();
 	
@@ -378,6 +409,7 @@ public:
 	PuzzleHistory getPuzzleHistory(int puzzle_number);
 	void setPuzzleHistory(PuzzleHistory t_history, jsonSelType call_back);
 	void setPuzzleHistoryForNotSave(PuzzleHistory t_history);
+	void resultUpdatePuzzleHistory(Json::Value result_data);
 	void initPuzzleHistory(Json::Value history_list);
 	
 	CommandParam getUpdatePieceHistoryParam(PieceHistory t_history, jsonSelType call_back);
@@ -388,6 +420,7 @@ public:
 	PieceHistory getPieceHistory(int stage_number);
 	void setPieceHistoryForNotSave(PieceHistory t_history);
 	void setPieceHistory(PieceHistory t_history, jsonSelType call_back);
+	void resultUpdatePieceHistory(Json::Value result_data);
 	void initPieceHistory(Json::Value history_list);
 	
 	void initSelectedCharacterNo(int t_i);
@@ -641,6 +674,26 @@ public:
 	bool is_play_replay;
 	Json::Value replay_playing_info;
 	
+	bool is_endless_mode;
+	KSProtectVar<bool> endless_my_victory_on;
+	KSProtectVar<int> endless_my_victory;
+	KSProtectVar<int> endless_my_total_score;
+	KSProtectVar<int> endless_my_level;
+	KSProtectVar<int> endless_my_high_victory;
+	KSProtectVar<int> endless_my_lose;
+	KSProtectVar<int> endless_my_high_score;
+	KSProtectVar<int> endless_my_win;
+	KSProtectVar<int> endless_memberID;
+	KSProtectStr endless_nick;
+	KSProtectStr endless_flag;
+	KSProtectVar<int> endless_victory;
+	KSProtectVar<int> endless_autoLevel;
+	KSProtectVar<int> endless_level;
+	KSProtectVar<int> endless_score;
+	KSProtectVar<long long> endless_regDate;
+	KSProtectVar<int> endless_lose;
+	KSProtectVar<int> endless_win;
+	
 	void setReplayPlayingInfo(Json::Value t_data)
 	{
 		is_play_replay = true;
@@ -673,15 +726,19 @@ public:
 	GoodsType getGoodsKeyToType(string t_key);
 	GoodsType getItemCodeToGoodsType(ITEM_CODE t_code);
 	void addChangeGoodsIngameGold(int t_value);
-	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
-	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+	void addChangeGoods(string t_exchangeID, GoodsType t_type = kGoodsType_begin, int t_value = 0, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+	void addChangeGoods(string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list);
+//	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
+//	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void clearChangeGoods();
 	void changeGoods(jsonSelType t_callback);
 	void changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback);
 	void refreshGoodsData(string t_key, int t_count);
-	CommandParam getChangeGoodsParam(jsonSelType t_callback);
+	vector<CommandParam> getChangeGoodsParam(jsonSelType t_callback);
 	void saveChangeGoodsTransaction(Json::Value result_data);
 	bool isChangedGoods();
+	
+	void linkChangeHistory(Json::Value result_data);
 	
 	int getGoodsValue(GoodsType t_type);
 	
@@ -708,6 +765,11 @@ public:
 	int getCatchCumberCount();
 	
 	CommandParam getUpdateTodayMissionParam(jsonSelType t_callback);
+	
+	bool is_on_attendance;
+	Json::Value attendance_data;
+	void initAttendance(Json::Value result_data);
+	void resetAttendance();
 	
 private:
 	bool is_not_cleared_stage;

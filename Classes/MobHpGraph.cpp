@@ -57,7 +57,7 @@ void MobHpGraph::graphing ()
 		last_life = target_node->getLife();
 	}
 	
-	setPosition(ccpAdd(target_node->getPosition(), ccp(0,-20)));
+	setPosition(ccpAdd(target_node->getPosition(), ccp(0,-10)));
 }
 void MobHpGraph::realHidingAction ()
 {

@@ -36,9 +36,13 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 		m_container->addChild(KSGradualValue<float>::create(-0.5f, 1.f, 0.6f, [=](float t){
 			if(t >= 0)
 			{
+				item_title->setOpacity(255-t*255);
+				item_ment->setOpacity(255-t*255);
 				KS::setOpacity(question_img, 255-t*255);
 			}
 		}, [=](float t){
+			item_title->setOpacity(0);
+			item_ment->setOpacity(0);
 			KS::setOpacity(question_img, 0);
 		}));
 		
@@ -120,18 +124,13 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 						item_img->setScale(0.6f);
 						m_container->addChild(item_img);
 						
-						
-						
-						item_title = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
-						item_title->setColor(ccYELLOW);
-						item_title->setPosition(ccp(0,-20));
+						item_title->setColor(ccc3(255, 170, 20));
+						item_title->setString(title_str.c_str());
 						item_title->setOpacity(0);
-						m_container->addChild(item_title);
 						
-						item_ment = KSLabelTTF::create(ment_str.c_str(), mySGD->getFont().c_str(), 12);
-						item_ment->setPosition(ccp(0,-35));
+						item_ment->setColor(ccWHITE);
+						item_ment->setString(ment_str.c_str());
 						item_ment->setOpacity(0);
-						m_container->addChild(item_ment);
 						
 						m_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t){
 							item_img->setScale(0.6f + t*0.4f);
@@ -209,6 +208,18 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	end_func = t_end_func;
 	gacha_on_func = t_gacha_on_func;
 	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray);
+	
 	suction = TouchSuctionLayer::create(touch_priority+1);
 	addChild(suction);
 	
@@ -218,15 +229,16 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-	back_case->setContentSize(CCSizeMake(350,280));
+	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_case->setContentSize(CCSizeMake(300,260));
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 21);
-	title_label->setColor(ccc3(50, 250, 255));
-	title_label->setPosition(ccp(0,95));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setAnchorPoint(ccp(0,0.5f));
+	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");
@@ -243,20 +255,30 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	m_container->addChild(question_box);
 	
 	
+	item_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent1), mySGD->getFont().c_str(), 12);
+	item_title->setPosition(ccp(0,-20));
+	m_container->addChild(item_title);
+	
+	item_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent2), mySGD->getFont().c_str(), 12);
+	item_ment->setColor(ccc3(255, 170, 20));
+	item_ment->setPosition(ccp(0,-35));
+	m_container->addChild(item_ment);
+	
+	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
 	regacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemRegacha), mySGD->getFont().c_str(), 13);
 	regacha_label->setPosition(ccp(0,10));
 	r_label->addChild(regacha_label);
 	
+	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
+	price_back->setContentSize(CCSizeMake(82, 26));
+	price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
+	regacha_label->addChild(price_back);
+	
 	if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0)
 	{
 		is_stamp = true;
-		
-		CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
-		price_back->setContentSize(CCSizeMake(80, 30));
-		price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
-		regacha_label->addChild(price_back);
 		
 		CCSize stamp_size = CCSizeMake(50,20);
 		
@@ -284,11 +306,6 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	{
 		is_stamp = false;
 		
-		CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
-		price_back->setContentSize(CCSizeMake(80, 30));
-		price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
-		regacha_label->addChild(price_back);
-		
 		CCSprite* price_type = CCSprite::create("pass_ticket4.png");
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
@@ -298,7 +315,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	}
 	
 	
-	CCScale9Sprite* regacha_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* regacha_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	
 	regacha_button = CCControlButton::create(r_label, regacha_back);
 	regacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::regachaAction), CCControlEventTouchUpInside);
@@ -312,7 +329,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	
 	KSLabelTTF* use_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_thisItemUse), mySGD->getFont().c_str(), 13);
-	CCScale9Sprite* use_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* use_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	use_button = CCControlButton::create(use_label, use_back);
 	use_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::useAction), CCControlEventTouchUpInside);
 	use_button->setPreferredSize(CCSizeMake(120,65));
@@ -331,8 +348,13 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
 			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
 	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t)
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
 										 {
+											 gray->setOpacity(255);
 											 KS::setOpacity(m_container, 255);
 											 question_manager->runAnimationsForSequenceNamed("Default Timeline");
 											 AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
@@ -349,7 +371,15 @@ void ItemGachaPopup::useAction(CCObject* sender, CCControlEvent t_event)
 	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
 		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
 	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t){KS::setOpacity(m_container, 0); end_func(); removeFromParent();}));
+	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
+	{
+		gray->setOpacity(0);
+		KS::setOpacity(m_container, 0); end_func(); removeFromParent();
+	}));
 }
 
 void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
@@ -364,7 +394,7 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
-		mySGD->addChangeGoods(kGoodsType_pass4, -1, "아이템뽑기");
+		mySGD->addChangeGoods("g_i_p");
 		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
 	}
 	else
@@ -382,7 +412,7 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
-		mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaReplayGoldFee(), "아이템뽑기");
+		mySGD->addChangeGoods("g_i_gr");
 		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
 	}
 }
@@ -398,8 +428,6 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		
 		KS::setOpacity(question_img, 255);
 		item_img->removeFromParent();
-		item_title->removeFromParent();
-		item_ment->removeFromParent();
 		regacha_button->setPosition(ccp(-65,-85-100));
 		regacha_button->setVisible(false);
 		

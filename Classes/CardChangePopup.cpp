@@ -369,7 +369,7 @@ void CardChangePopup::alignHaveCardList(CardChangeAlign t_align)
 		struct t_CardSortGradeUp{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank > b.rank;
+				return a.rank.getV() > b.rank.getV();
 			}
 		} pred;
 		
@@ -380,7 +380,7 @@ void CardChangePopup::alignHaveCardList(CardChangeAlign t_align)
 		struct t_CardSortGradeDown{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.rank < b.rank;
+				return a.rank.getV() < b.rank.getV();
 			}
 		} pred;
 		
@@ -391,7 +391,7 @@ void CardChangePopup::alignHaveCardList(CardChangeAlign t_align)
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number > b.take_number;
+				return a.take_number.getV() > b.take_number.getV();
 			}
 		} pred;
 		
@@ -402,7 +402,7 @@ void CardChangePopup::alignHaveCardList(CardChangeAlign t_align)
 		struct t_CardSortTake{
 			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
 			{
-				return a.take_number < b.take_number;
+				return a.take_number.getV() < b.take_number.getV();
 			}
 		} pred;
 		
@@ -435,7 +435,7 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 	}
 	else
 	{
-		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, have_card_list[idx-1].card_number);
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, have_card_list[idx-1].card_number.getV());
 		string case_type;
 		if(card_grade == 1)
 			case_type = "bronze";
@@ -444,7 +444,7 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 		else if(card_grade == 3)
 			case_type = "gold";
 		
-		CCSprite* have_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", have_card_list[idx-1].card_number)->getCString()));
+		CCSprite* have_card = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", have_card_list[idx-1].card_number.getV())->getCString()));
 		have_card->setScale(0.73f);
 		have_card->setPosition(card_center_position);
 		cell->addChild(have_card, kCardChangeTableCellZorder_img);
@@ -475,7 +475,7 @@ CCTableViewCell* CardChangePopup::tableCellAtIndex(CCTableView *table, unsigned 
 			cell->addChild(clicked_img, kCardChangeTableCellZorder_touched);
 		}
 		
-		cell->setTag(have_card_list[idx-1].card_number);
+		cell->setTag(have_card_list[idx-1].card_number.getV());
 	}
 	
 	return cell;
@@ -490,7 +490,7 @@ void CardChangePopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell
 	TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 	if(recent_step == kTutorialFlowStep_targetCardClick)
 	{
-		int touched_card_number = have_card_list[cell->getIdx()-1].card_number;
+		int touched_card_number = have_card_list[cell->getIdx()-1].card_number.getV();
 		setSelectedCard(touched_card_number);
 		table->updateCellAtIndex(cell->getIdx());
 		
@@ -536,7 +536,7 @@ void CardChangePopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell
 		}
 		else
 		{
-			int touched_card_number = have_card_list[cell->getIdx()-1].card_number;
+			int touched_card_number = have_card_list[cell->getIdx()-1].card_number.getV();
 			if(touched_card_number == clicked_card_number)
 				return;
 			

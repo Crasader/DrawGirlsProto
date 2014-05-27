@@ -326,6 +326,7 @@ bool PuzzleScene::init()
 		bool is_not_empty_card[3] = {false,};
 		
 		clear_is_empty_piece = true;
+		clear_is_perfect_piece = true;
 		int played_stage_number = mySD->getSilType();
 		int stage_card_count = 4;//NSDS_GI(played_stage_number, kSDS_SI_cardCount_i);
 		for(int i=1;i<=stage_card_count;i++)
@@ -334,6 +335,10 @@ bool PuzzleScene::init()
 			{
 				clear_is_empty_piece = false;
 				is_not_empty_card[i-1] = true;
+			}
+			else
+			{
+				clear_is_perfect_piece = false;
 			}
 		}
 		
@@ -703,26 +708,78 @@ void PuzzleScene::showGetStar()
 
 void PuzzleScene::endGetStar()
 {
-	if(clear_is_first_puzzle_success)
+	if(clear_is_perfect_piece)
 	{
-		showSuccessPuzzleEffect();
+		CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
+			//		if(m_gameCode == kMiniGameCode_gababo)
+			{
+				BonusGameReward gr1;
+				gr1.spriteName = "shop_ruby2.png";
+				gr1.desc = "루우비~!";
+				
+				BonusGameReward gr2;
+				gr2.spriteName = "shop_ruby2.png";
+				gr2.desc = "루우비~!";
+				BonusGameReward gr3;
+				gr3.spriteName = "shop_ruby2.png";
+				gr3.desc = "루우비~!";
+				BonusGameReward gr4;
+				gr4.spriteName = "shop_ruby2.png";
+				gr4.desc = "루우비~!";
+				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+											 {
+												 if(clear_is_first_puzzle_success)
+												 {
+													 showSuccessPuzzleEffect();
+												 }
+												 else
+												 {
+													 if(clear_is_first_perfect)
+													 {
+														 showPerfectPuzzleEffect();
+													 }
+													 else
+													 {
+														 if(clear_is_stage_unlock)
+														 {
+															 showUnlockEffect();
+														 }
+														 else
+														 {
+															 addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
+															 is_menu_enable = true;
+														 }
+													 }
+												 }
+											 });
+				addChild(gbb, (int)Curtain::kBonusGame);
+			}
+		});
+		addChild(bonusGame, (int)Curtain::kCurtain);
 	}
 	else
 	{
-		if(clear_is_first_perfect)
+		if(clear_is_first_puzzle_success)
 		{
-			showPerfectPuzzleEffect();
+			showSuccessPuzzleEffect();
 		}
 		else
 		{
-			if(clear_is_stage_unlock)
+			if(clear_is_first_perfect)
 			{
-				showUnlockEffect();
+				showPerfectPuzzleEffect();
 			}
 			else
 			{
-				addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
-				is_menu_enable = true;
+				if(clear_is_stage_unlock)
+				{
+					showUnlockEffect();
+				}
+				else
+				{
+					addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
+					is_menu_enable = true;
+				}
 			}
 		}
 	}
@@ -786,20 +843,20 @@ void PuzzleScene::pumpPuzzle()
 
 void PuzzleScene::endSuccessPuzzleEffect()
 {
-	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kMiniGameCode_gababo, -500, [=](){
+	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
 		//		if(m_gameCode == kMiniGameCode_gababo)
 		{
-			GababoReward gr1;
+			BonusGameReward gr1;
 			gr1.spriteName = "shop_ruby2.png";
 			gr1.desc = "루우비~!";
 			
-			GababoReward gr2;
+			BonusGameReward gr2;
 			gr2.spriteName = "shop_ruby2.png";
 			gr2.desc = "루우비~!";
-			GababoReward gr3;
+			BonusGameReward gr3;
 			gr3.spriteName = "shop_ruby2.png";
 			gr3.desc = "루우비~!";
-			GababoReward gr4;
+			BonusGameReward gr4;
 			gr4.spriteName = "shop_ruby2.png";
 			gr4.desc = "루우비~!";
 			GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
@@ -807,10 +864,10 @@ void PuzzleScene::endSuccessPuzzleEffect()
 											 mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
 											 startBacking();
 										 });
-			addChild(gbb, 990);
+			addChild(gbb, (int)Curtain::kBonusGame);
 		}
 	});
-	addChild(bonusGame, 999);
+	addChild(bonusGame, (int)Curtain::kCurtain);
 	
 //	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 }
@@ -1531,6 +1588,12 @@ void PuzzleScene::openSettingPopup()
 	
 	mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 	
+//<<<<<<< HEAD
+////	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
+////	addChild(t_popup, kPuzzleZorder_popup);
+//	
+//=======
+//>>>>>>> refs/remotes/origin/standAlone
 	StartSettingPopup* t_popup = StartSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 	addChild(t_popup, kPuzzleZorder_popup);
@@ -1789,6 +1852,20 @@ void PuzzleScene::setRight()
 	}
 	
 	CCSprite* n_ready = CCSprite::create("puzzle_right_ready.png");
+	
+	CCLabelTTF* n_stage2 = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
+											 mySGD->getFont().c_str(), 12);
+	n_stage2->setColor(ccWHITE);
+	n_stage2->setOpacity(100);
+	n_stage2->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+12));
+	n_ready->addChild(n_stage2);
+	
+	KSLabelTTF* n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
+	n_ready_label2->setColor(ccWHITE);
+	n_ready_label2->setOpacity(100);
+	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f-1));
+	n_ready->addChild(n_ready_label2);
+	
 	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 12);
 	n_stage->setColor(ccBLACK);
@@ -1802,6 +1879,20 @@ void PuzzleScene::setRight()
 	
 	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
 	s_ready->setColor(ccGRAY);
+	
+	CCLabelTTF* s_stage2 = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
+											  mySGD->getFont().c_str(), 12);
+	s_stage2->setColor(ccWHITE);
+	s_stage2->setOpacity(100);
+	s_stage2->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+12));
+	s_ready->addChild(s_stage2);
+	
+	KSLabelTTF* s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
+	s_ready_label2->setColor(ccWHITE);
+	s_ready_label2->setOpacity(100);
+	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f-1));
+	s_ready->addChild(s_ready_label2);
+	
 	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 12);
 	s_stage->setColor(ccBLACK);
@@ -1840,7 +1931,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		Json::Value user_list = result_data["list"];
 		
 		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
-		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,220));
+		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,213));
 		right_body->addChild(graph_back);
 		
 		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -1881,7 +1972,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("puzzle_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(10+115,220));
+		rank_percent_case->setPosition(ccp(10+115,213));
 		right_body->addChild(rank_percent_case);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 11);
@@ -1890,7 +1981,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,220));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,213));
 		rank_percent_case->runAction(t_move);
 		
 //		delay_index = 0;
@@ -2275,9 +2366,13 @@ void PuzzleScene::setTop()
 	
 	top_list.push_back(achieve_menu);
 	
-	achievement_count_case = CCSprite::create("mainflow_new.png");
+	achievement_count_case = CCSprite::create("todaymission_percent_back.png");
 	achievement_count_case->setPosition(ccp(441,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-16));
-	addChild(achievement_count_case, kPuzzleZorder_top);
+	addChild(achievement_count_case, kPuzzleZorder_top+1);
+	
+	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f));
+	achievement_count_case->addChild(achievement_count_label);
 	
 	CCScaleTo* t_scale5 = CCScaleTo::create(0.1f, 1.3f);
 	CCScaleTo* t_scale6 = CCScaleTo::create(0.2f, 1.f);
@@ -2294,9 +2389,9 @@ void PuzzleScene::setTop()
 	achievement_count_case->addChild(KSSchedule::create([=](float dt)
 														{
 															if(achieve_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-																achievement_count_case->setOpacity(0);
+																KS::setOpacity(achievement_count_case, 0);
 															else
-																achievement_count_case->setOpacity(255);
+																KS::setOpacity(achievement_count_case, 255);
 															return true;
 														}));
 	
@@ -2345,6 +2440,7 @@ void PuzzleScene::countingAchievement()
 	if(reward_count > 0)
 	{
 		achievement_count_case->setVisible(true);
+		achievement_count_label->setString(CCString::createWithFormat("%d", reward_count)->getCString());
 	}
 }
 

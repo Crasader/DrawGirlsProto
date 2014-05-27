@@ -36,6 +36,7 @@ private:
 	
 	TouchSuctionLayer* suction;
 	
+	CCSprite* gray;
 	CCNode* m_container;
 	CCScale9Sprite* back_case;
 	CCControlButton* giveup_button;

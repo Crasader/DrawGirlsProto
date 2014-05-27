@@ -31,6 +31,7 @@ enum StartSettingPopupZorder{
 
 class LoadingLayer;
 class CommonButton;
+class KSLabelTTF;
 class StartSettingPopup : public CCLayer
 {
 public:
@@ -57,6 +58,8 @@ private:
 	CCNode* tutorial_node;
 	
 	CCNode* missile_img;
+	
+	KSLabelTTF* n_start_label2;
 	
 	void setMain();
 	CCScale9Sprite* main_case;

@@ -8,20 +8,31 @@ USING_NS_CC;
 #include "KSLabelTTF.h"
 #include "StyledLabelTTF.h"
 #include "CommonButton.h"
-#include "GaBaBo.h"
+#include "DataStorageHub.h"
+#include "KSUtil.h"
+#include "FormSetter.h"
+//#include "GaBaBo.h"
 USING_NS_CC_EXT;
 
-enum MiniGameZorder{
-	kMiniGameZorder_game = 1,
-	kMiniGameZorder_curtain,
-	kMiniGameZorder_title,
-	kMiniGameZorder_content,
-	kMiniGameZorder_menu
+enum BonusGameZorder{
+	kBonusGameZorder_game = 1,
+	kBonusGameZorder_curtain,
+	kBonusGameZorder_title,
+	kBonusGameZorder_content,
+	kBonusGameZorder_menu
 };
-enum MiniGameCode{
-	kMiniGameCode_gababo = 0,
-	kMiniGameCode_touchtouch = 1
+enum BonusGameCode{
+	kBonusGameCode_gababo = 0,
+	kBonusGameCode_touchtouch = 1
 };
+
+struct BonusGameReward
+{
+	std::string spriteName;
+	std::string desc;
+};
+
+
 class CurtainNodeForBonusGame : public CCLayer
 {
 public:
@@ -37,17 +48,20 @@ public:
 		//return t;
 	//}
 
-	static CurtainNodeForBonusGame* create(MiniGameCode gameCode, int tPrior, std::function<void(void)> onPressStartButton)
+	static CurtainNodeForBonusGame* create(BonusGameCode gameCode, int tPrior, std::function<void(void)> onPressStartButton)
 	{
 		CurtainNodeForBonusGame* t = new CurtainNodeForBonusGame();
 		t->init(gameCode, tPrior, onPressStartButton);
 		t->autorelease();
 		return t;
 	}
-	bool init(MiniGameCode gameCode, int tPrior, std::function<void(void)> onPressStartButton)
+	bool init(BonusGameCode gameCode, int tPrior, std::function<void(void)> onPressStartButton)
 	{
 		CCLayer::init();
-
+		startFormSetter(this);
+		setFormSetterGuide("_0514_start_1.png");
+		
+		
 		m_touchPriority = tPrior;
 		m_gameCode = gameCode;
 		m_onPressStartButton = onPressStartButton;
@@ -56,35 +70,36 @@ public:
 		m_leftCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
 		m_leftCurtain->setAnchorPoint(ccp(1.f, 0.5f));
 		m_leftCurtain->setPosition(ccp(-80, 160));
-		addChild(m_leftCurtain, kMiniGameZorder_curtain);
+		addChild(m_leftCurtain, kBonusGameZorder_curtain);
 
 		m_rightCurtain = CCSprite::create("curtain_left.png");
 		m_rightCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
 		m_rightCurtain->setFlipX(true);
 		m_rightCurtain->setAnchorPoint(ccp(0.f, 0.5f));
 		m_rightCurtain->setPosition(ccp(560,160));
-		addChild(m_rightCurtain, kMiniGameZorder_curtain);
+		addChild(m_rightCurtain, kBonusGameZorder_curtain);
 
 		m_titleBonusGame = CCSprite::create("gababo_bonus.png");
 		m_titleBonusGame->setPosition(ccp(240, 500));
-		addChild(m_titleBonusGame, kMiniGameZorder_title);
+		addChild(m_titleBonusGame, kBonusGameZorder_title);
 		//m_titleBonusGame->setVisible(false);
 		m_titleStr = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 13.f);
 		m_titleStr->setPosition(ccp(240, 500));
-		m_titleStr->setColor(ccc3(50, 250, 0));
-		addChild(m_titleStr, kMiniGameZorder_title);
+		m_titleStr->setColor(ccc3(29, 10, 0));
+		addChild(m_titleStr, kBonusGameZorder_title);
 		m_contentBack = CCScale9Sprite::create("ui_game_clear_back.png", CCRectMake(0, 0, 157, 30),
 																					CCRectMake(43, 6, 66, 20));
-		m_contentBack->setContentSize(CCSizeMake(310, 100));
+		m_contentBack->setContentSize(CCSizeMake(310, 72.f));
 		m_contentBack->setPosition(ccp(650,150));
-		addChild(m_contentBack, kMiniGameZorder_content);
+		addChild(m_contentBack, kBonusGameZorder_content);
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
-		m_startMenu = CommonButton::create("게임시작", 23.f, CCSizeMake(160, 50), 
+		m_startMenu = CommonButton::create("게임시작", 23.f, CCSizeMake(175.f, 55.f),
 																			buttonBack, m_touchPriority - 1);
+		m_startMenu->setTitleColor(ccc3(37, 18, 0));
 		m_startMenu->setPosition(ccp(240, -200));
-		addChild(m_startMenu, kMiniGameZorder_menu);
+		addChild(m_startMenu, kBonusGameZorder_menu);
 		m_startMenu->setFunction([=](CCObject* t){
-			menuAction(t);
+			menuAction(nullptr);
 
 		});
 		Json::Value value1, value2, value3, value4, value5, value6;
@@ -99,7 +114,11 @@ public:
 
 		desc->setPosition(ccp(m_contentBack->getContentSize().width/2.f, m_contentBack->getContentSize().height/2.f+20));
 		m_contentBack->addChild(desc);
-		if(m_gameCode == kMiniGameCode_gababo)
+		
+
+		
+		
+		if(m_gameCode == kBonusGameCode_gababo)
 		{
 			KSLabelTTF* title_gamename = KSLabelTTF::create("가위! 바위! 보!", mySGD->getFont().c_str(), 33.f);
 			title_gamename->setColor(ccc3(255, 230, 0));
@@ -115,8 +134,11 @@ public:
 			}, StyledAlignment::kCenterAlignment);
 			content_front->setPosition(ccp(m_contentBack->getContentSize().width/2.f, m_contentBack->getContentSize().height/2.f-2));
 			m_contentBack->addChild(content_front);
+			
+
+
 		}
-		if(m_gameCode == kMiniGameCode_touchtouch)
+		if(m_gameCode == kBonusGameCode_touchtouch)
 		{
 			KSLabelTTF* title_gamename = KSLabelTTF::create("터치! 터치!", mySGD->getFont().c_str(), 24.f);
 
@@ -132,9 +154,95 @@ public:
 			content_front->setPosition(ccp(m_contentBack->getContentSize().width/2.f, m_contentBack->getContentSize().height/2.f-2));
 			m_contentBack->addChild(content_front);
 		}
+		
+		showPopup(nullptr);
 		return true;
 	}
-	void menuAction(CCObject* pSender)
+	static CurtainNodeForBonusGame* createForEnding(int priority, BonusGameReward reward,
+																									std::function<void(void)> onCloseCompleted, std::function<void(void)> onOpenCompleted)
+	{
+		CurtainNodeForBonusGame* t = new CurtainNodeForBonusGame();
+		t->initForEnding(priority, reward, onCloseCompleted, onOpenCompleted);
+		t->autorelease();
+		return t;
+	}
+	bool initForEnding(int priority, BonusGameReward reward,
+										 std::function<void(void)> onCloseCompleted, std::function<void(void)> onOpenCompleted)
+	{
+		CCLayer::init();
+		
+		m_touchPriority = priority;
+		m_onCloseCompleted = onCloseCompleted;
+		m_onOpenCompleted = onOpenCompleted;
+		setTouchEnabled(true);
+		m_leftCurtain = CCSprite::create("curtain_left.png");
+		m_leftCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+		m_leftCurtain->setAnchorPoint(ccp(1.f, 0.5f));
+		m_leftCurtain->setPosition(ccp(-80, 160));
+		addChild(m_leftCurtain, kBonusGameZorder_curtain);
+		
+		m_rightCurtain = CCSprite::create("curtain_left.png");
+		m_rightCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+		m_rightCurtain->setFlipX(true);
+		m_rightCurtain->setAnchorPoint(ccp(0.f, 0.5f));
+		m_rightCurtain->setPosition(ccp(560,160));
+		addChild(m_rightCurtain, kBonusGameZorder_curtain);
+		
+		
+		m_contentBack = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		m_contentBack->setPosition(ccp(240.0,155.0)); 			// dt (0.0,5.0)
+		m_contentBack->setContentSize(CCSizeMake(288.0,204.5)); 			// dt (-22.0,54.5)
+		addChild(m_contentBack, kBonusGameZorder_content);
+		CCSprite* rName = CCSprite::create(reward.spriteName.c_str());
+		
+		CCScale9Sprite* inner_right = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		
+		inner_right->setPosition(ccp(144.0,84.0)); 			// dt (-203.0,-41.0)
+		inner_right->setContentSize(CCSizeMake(280.5,157.0)); 			// dt (30.5,-78.0)
+		m_contentBack->addChild(inner_right);
+		
+		rName->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
+		m_contentBack->addChild(rName);
+		
+		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 16.f);
+		rLabel->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
+		rLabel->setColor(ccc3(254, 250, 50));
+		rLabel->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+		m_contentBack->addChild(rLabel);
+		
+		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
+//		m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
+//																			 buttonBack, m_touchPriority - 1);
+		m_startMenu = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
+																			 CommonButtonLightPupple, m_touchPriority - 1);
+		m_startMenu->setPosition(ccp(240, -200.f));
+		addChild(m_startMenu, kBonusGameZorder_menu);
+		showPopup(onCloseCompleted);
+		m_startMenu->setFunction([=](CCObject* t){
+			menuAction(onOpenCompleted);
+		});
+	
+		KSLabelTTF* rewardConfirm = KSLabelTTF::create("보상 확인", mySGD->getFont().c_str(), 20.f);
+		rewardConfirm->setColor(ccc3(255, 155, 0));
+		m_contentBack->addChild(rewardConfirm);
+		rewardConfirm->setPosition(ccp(52.5,178.0)); 			// dt (52.5,178.0)
+		startFormSetter(this);
+		
+//		StyledLabelTTF* sltObtain = StyledLabelTTF::create("<font color=970 size=18>획득</font><font color=999 size=18> 하였습니다.</font>",
+//																											 mySGD->getFont().c_str(), 18, 999, StyledAlignment::kCenterAlignment);
+//		m_contentBack->addChild(sltObtain);
+//		sltObtain->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
+//		sltObtain->setPositionY(74.f);
+		
+
+		
+		
+		
+		return true;
+	}
+
+	
+	void menuAction(std::function<void(void)> callback)
 	{
 		
 		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(-80,160));
@@ -143,22 +251,51 @@ public:
 		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(560,160));
 		m_rightCurtain->runAction(right_move);
 
-		CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 500));
-		m_titleBonusGame->runAction(title_move);
+		if(m_titleBonusGame)
+		{
+			CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 500));
+			m_titleBonusGame->runAction(title_move);
+		}
+		
+		if(m_titleStr)
+		{
+			CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 500));
+			m_titleStr->runAction(title_move2);
+	
+		}
+		
+		if(m_contentBack)
+		{
+			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(-190, 150));
+			m_contentBack->runAction(content_move);
+		}
+		
 
-		CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 500));
-		m_titleStr->runAction(title_move2);
-
-		CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(-170, 150));
-		m_contentBack->runAction(content_move);
-
-		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, -200));
-		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::startGame));
-		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
-		m_startMenu->runAction(menu_seq);
+		addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, -200), 0.3f,
+																						 [=](CCPoint t){
+																							 m_startMenu->setPosition(t);
+																						 },
+																						 [=](CCPoint t){
+																							 m_startMenu->setPosition(t);
+																							 if(callback)
+																							 {
+																								 callback();
+																							 }
+																						 }));
+		
+//		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, -200));
+//		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::startGame));
+//		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
+//		m_startMenu->runAction(menu_seq);
 		// 커튼을 치기 전에 미리 생성해놈.
 		if(m_onPressStartButton)
 			m_onPressStartButton();
+	}
+	void removeCurtain()
+	{
+		
+		
+
 	}
 	void startGame()
 	{
@@ -169,7 +306,7 @@ public:
 		m_contentBack->removeFromParent();
 		// mini_game->startGame();
 	}
-	void showPopup()
+	void showPopup(std::function<void(void)> callback)
 	{
 		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(240,160));
 		m_leftCurtain->runAction(left_move);
@@ -177,18 +314,41 @@ public:
 		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(240,160));
 		m_rightCurtain->runAction(right_move);
 
-		CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 270));
-		m_titleBonusGame->runAction(title_move);
-
-		CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 270));
-		m_titleStr->runAction(title_move2);
-		CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(240, 150));
-		m_contentBack->runAction(content_move);
-
-		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, 65));
-		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::endShowPopup));
-		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
-		m_startMenu->runAction(menu_seq);
+		if(m_titleBonusGame)
+		{
+			CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 257.5f));
+			m_titleBonusGame->runAction(title_move);
+		}
+		
+		if(m_titleStr)
+			
+		{
+			CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 257.5f));
+			m_titleStr->runAction(title_move2);
+	
+		}
+		
+		if(m_contentBack)
+		{
+			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(240, 144.5));
+			m_contentBack->runAction(content_move);
+		}
+		
+		addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, 65.f), 0.3f,
+																						 [=](CCPoint t){
+																							 m_startMenu->setPosition(t);
+																						 },
+																						 [=](CCPoint t){
+																							 m_startMenu->setPosition(t);
+																							 if(callback)
+																							 {
+																								 callback();
+																							 }
+																						 }));
+//		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, 65));
+//		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::endShowPopup));
+//		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
+//		m_startMenu->runAction(menu_seq);
 	}
 	void endShowPopup()
 	{
@@ -197,7 +357,7 @@ public:
 	{
 		CCLayer::onEnter();
 
-		showPopup();
+		
 	}
 	virtual void registerWithTouchDispatcher();
 protected:
@@ -208,8 +368,11 @@ protected:
 	KSLabelTTF* m_titleStr;
 	CCScale9Sprite* m_contentBack;
 	CommonButton* m_startMenu;
-	MiniGameCode m_gameCode;
+	BonusGameCode m_gameCode;
 	std::function<void(void)> m_onPressStartButton;
+	
+	std::function<void(void)> m_onCloseCompleted;
+	std::function<void(void)> m_onOpenCompleted;
 	//std::function<void(void)> startMiniGame;
 };
 

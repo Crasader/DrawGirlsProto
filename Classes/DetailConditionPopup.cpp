@@ -32,6 +32,18 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
 	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray);
+	
 	suction = TouchSuctionLayer::create(touch_priority+1);
 	addChild(suction);
 	
@@ -41,14 +53,27 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-	back_case->setContentSize(CCSizeMake(300,240));
+	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_case->setContentSize(CCSizeMake(250,200));
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	StyledLabelTTF* title_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
-	title_label->setPosition(ccp(0,70));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	back_case->addChild(back_in);
+	
+	
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setAnchorPoint(ccp(0,0.5f));
+	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
+	
+	
+	StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kLeftAlignment);
+	content_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,40));
+	m_container->addChild(content_label);
 	
 	
 
@@ -107,12 +132,12 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	ok_label->setPosition(ccp(0,0));
 	t_label->addChild(ok_label);
 	
-	CCScale9Sprite* ok_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	
 	CCControlButton* ok_button = CCControlButton::create(t_label, ok_back);
 	ok_button->addTargetWithActionForControlEvents(this, cccontrol_selector(DetailConditionPopup::closeAction), CCControlEventTouchUpInside);
 	ok_button->setPreferredSize(CCSizeMake(100,45));
-	ok_button->setPosition(ccp(0,-70));
+	ok_button->setPosition(ccp(0,-65));
 	m_container->addChild(ok_button);
 	
 	ok_button->setTouchPriority(touch_priority);
@@ -124,7 +149,15 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
 			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
 	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t){KS::setOpacity(m_container, 255);is_menu_enable = true;}));
+	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
+	{
+		gray->setOpacity(255);
+		KS::setOpacity(m_container, 255);is_menu_enable = true;
+	}));
 }
 
 void DetailConditionPopup::closeAction(CCObject* sender, CCControlEvent t_event)
@@ -139,5 +172,13 @@ void DetailConditionPopup::closeAction(CCObject* sender, CCControlEvent t_event)
 	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
 		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
 	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t){KS::setOpacity(m_container, 0); end_func(); removeFromParent();}));
+	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+	{
+		gray->setOpacity(t);
+		KS::setOpacity(m_container, t);
+	}, [=](int t)
+	{
+		gray->setOpacity(0);
+		KS::setOpacity(m_container, 0); end_func(); removeFromParent();
+	}));
 }

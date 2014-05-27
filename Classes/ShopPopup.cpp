@@ -641,7 +641,7 @@ bool ShopPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-22.f-450));
+	main_case->setPosition(ccp(240,160-14.f-450));
 	addChild(main_case, kSP_Z_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 15);
@@ -814,7 +814,7 @@ bool ShopPopup::init()
 void ShopPopup::showPopup()
 {
 	setTouchEnabled(true);
-	CCMoveTo* main_move = CCMoveTo::create(0.3f, ccp(240,160-22.f));
+	CCMoveTo* main_move = CCMoveTo::create(0.3f, ccp(240,160-14.f));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endShowPopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -836,7 +836,7 @@ void ShopPopup::hidePopup()
 {
 	is_menu_enable = false;
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-22.f-450));
+	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
 	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endHidePopup));
 	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
 	main_case->runAction(main_seq);
@@ -957,7 +957,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									addChild(loading_layer, kSP_Z_popup);
 									
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-									mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, tag-kSP_MT_content1), "루비구매(IOS-인앱결제)", "", "", true);
+									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopRuby_int1_exchangeID_s, tag-kSP_MT_content1));
 									
 									mySGD->changeGoods([=](Json::Value result_data){
 										loading_layer->removeFromParent();
@@ -1007,8 +1007,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										mySGD->addChangeGoods(kGoodsType_ruby, -index_to_gold[tag-kSP_MT_content1].getV(), "골드구매");
-										mySGD->addChangeGoods(kGoodsType_gold, ruby_to_gold[index_to_gold[tag-kSP_MT_content1].getV()].getV(), "루비로구매");
+										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopGold_int1_exchangeID_s, tag-kSP_MT_content1));
 										
 										fail_func = [=]()
 										{
@@ -1039,8 +1038,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										mySGD->addChangeGoods(kGoodsType_ruby, -index_to_heart[tag-kSP_MT_content1].getV(), "하트구매");
-										
+										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopCoin_int1_exchangeID_s, tag-kSP_MT_content1));
 										
 										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 										
@@ -1850,42 +1848,114 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 	t_popup->setContainerNode(t_container);
 	addChild(t_popup, kSP_Z_popup);
 	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	case_back->setPosition(ccp(0,0));
-	t_container->addChild(case_back);
+	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+	back_case->setContentSize(CCSizeMake(240,140));
+	back_case->setPosition(ccp(0,0));
+	t_container->addChild(back_case);
 	
-	case_back->setContentSize(CCSizeMake(220, 190));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	back_case->addChild(back_in);
 	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	content_back->setPosition(ccp(0,25));
-	t_container->addChild(content_back);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setAnchorPoint(ccp(0,0.5f));
+	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
+	t_container->addChild(title_label);
 	
-	content_back->setContentSize(CCSizeMake(200, 120));
+	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
+	sub_label->setAnchorPoint(ccp(0,0.5f));
+	sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,10));
+	t_container->addChild(sub_label);
 	
-	CCLabelTTF* ment_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy),	mySGD->getFont().c_str(), 15);
-	ment_label->setPosition(ccp(0,25));
-	t_container->addChild(ment_label);
+	CCSprite* gray = t_popup->getDimmedSprite();
 	
+	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+	close_button->setFunction([=](CCObject* sender)
+							  {
+								  if(!t_popup->is_menu_enable)
+									  return;
+								  
+								  t_popup->is_menu_enable = false;
+								  
+								  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+									  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+								  
+								  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+																				{
+																					gray->setOpacity(t);
+																					KS::setOpacity(t_container, t);
+																				}, [=](int t)
+																				{
+																					gray->setOpacity(0);
+																					KS::setOpacity(t_container, 0);
+																					is_menu_enable = true;
+																					t_popup->removeFromParent();
+																				}));
+							  });
+	t_container->addChild(close_button);
 	
+	t_popup->button_func_list.clear();
 	
-	CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	cancel_button->setPosition(ccp(100,85));
-	cancel_button->setFunction([=](CCObject* sender)
-							   {
-								   is_menu_enable = true;
-								   t_popup->removeFromParent();
-							   });
-	t_container->addChild(cancel_button);
+	t_popup->button_func_list.push_back([=](){
+		if(!t_popup->is_menu_enable)
+			return;
+		
+		t_popup->is_menu_enable = false;
+		
+		t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+		
+		t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+													  {
+														  gray->setOpacity(t);
+														  KS::setOpacity(t_container, t);
+													  }, [=](int t)
+													  {
+														  gray->setOpacity(0);
+														  KS::setOpacity(t_container, 0);
+														  buy_action();
+														  t_popup->removeFromParent();
+													  }));
+		
+	});
 	
+	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
-	CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-	ok_button->setPosition(ccp(0,-65));
-	ok_button->setFunction([=](CCObject* sender)
-						   {
-							   buy_action();
-							   t_popup->removeFromParent();
-						   });
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	ok_label->setPosition(ccp(0,0));
+	t2_label->addChild(ok_label);
+	
+	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	
+	CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
+	ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
+	ok_button->setTag(0);
+	ok_button->setPreferredSize(CCSizeMake(110,45));
+	ok_button->setPosition(ccp(0,-30));
 	t_container->addChild(ok_button);
+	
+	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+	
+	
+	t_container->setScaleY(0.f);
+	
+	t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+		t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+			t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+	
+	t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+												  {
+													  gray->setOpacity(t);
+													  KS::setOpacity(t_container, t);
+												  }, [=](int t)
+												  {
+													  gray->setOpacity(255);
+													  KS::setOpacity(t_container, 255);
+													  t_popup->is_menu_enable = true;
+												  }));
 }
 
 void ShopPopup::startCardGacha()

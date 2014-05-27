@@ -126,6 +126,7 @@ public:
 	virtual void onTargetingJack(CCPoint jackPosition);
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition);
 	float getRadius();
+	void attachEmotion();
 protected:
 	const float RADIUS;
 	const float BODY_RADIUS;

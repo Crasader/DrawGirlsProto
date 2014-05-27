@@ -67,12 +67,15 @@ public:
 	}
 	
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment);
-	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func);
-	
-	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero);
+
+	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func, function<void()> cancel_func = nullptr);
 	
 	bool is_menu_enable;
 	vector<function<void()>> button_func_list;
+	
+	void buttonAction(CCObject* sender, CCControlEvent t_event);
 	
 protected:
 	CCSprite* dimmed_sprite;
@@ -92,10 +95,8 @@ protected:
 		
 		base_position = ccp(240,160);
 		
-		dimmed_sprite = CCSprite::create("whitePaper.png");
+		dimmed_sprite = CCSprite::create("back_gray.png");
 		dimmed_sprite->setPosition(base_position);
-		dimmed_sprite->setColor(ccc3(0, 0, 0));
-		dimmed_sprite->setOpacity(100);
 		addChild(dimmed_sprite);
 	}
 	
@@ -122,8 +123,6 @@ protected:
 	{
 		
 	}
-	
-	void buttonAction(CCObject* sender, CCControlEvent t_event);
 };
 
 #endif /* defined(__DGproto__ASPopupView__) */
