@@ -300,7 +300,8 @@ void EndlessSettingPopup::addRankingTable(CCNode* node)
 	
 	m_rankingTable = CCTableView::create(this, CCSizeMake(245, 159));
 	
-	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
+	CCScale9Sprite* bar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																							 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
 	
 	m_scrollBar = ScrollBar::createScrollbar(m_rankingTable, 2, NULL, bar);
 	m_scrollBar->setDynamicScrollSize(false);

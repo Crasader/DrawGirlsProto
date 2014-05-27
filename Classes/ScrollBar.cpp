@@ -179,11 +179,10 @@ void THIS::setBarRefreshH()
 //	int scrollBarNarrowBorder = 10;
 //	viewSize.width -= scrollBarNarrowSize;
 	float total = sv->getContainer()->getContentSize().width - viewSize.width;
-	float scrollBarSize = viewSize.width * viewSize.width / total;
-	
+	float scrollBarSize = viewSize.width * viewSize.width / sv->getContainer()->getContentSize().width;
 	if(dynamicScrollSize)
 	{
-		barH->setContentSize(CCSizeMake(scrollBarSize, barH->getContentSize().height));
+		barH->setContentSize(CCSizeMake(clampf(scrollBarSize, 40, viewSize.width), barH->getContentSize().height));
 	}
 	else
 	{
@@ -209,10 +208,13 @@ void THIS::setBarRefreshV()
 	CCSize viewSize = sv->getViewSize();
 //	viewSize.height -= scrollBarNarrowSize;
 	float total = sv->getContainer()->getContentSize().height - viewSize.height;
-	float scrollBarSize = viewSize.height * viewSize.height / total;
+//	float total = sv->getContainer()->getContentSize().height / viewSize.height;
+	float scrollBarSize = viewSize.height * viewSize.height / sv->getContainer()->getContentSize().height;
+//	float scrollBarSize = viewSize.height * viewSize.height / total;
+//	scrollBarSize = viewSize.height;
 	if(dynamicScrollSize)
 	{
-		barV->setContentSize(CCSizeMake(barV->getContentSize().width, scrollBarSize));
+		barV->setContentSize(CCSizeMake(barV->getContentSize().width, clampf(scrollBarSize, 40, viewSize.height)));
 	}
 	else
 	{
