@@ -564,7 +564,15 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_couponOtherError,
 	kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle,
 	kMyLocalKey_notOpenPuzzleNotEnoughtStarContent,
-	kMyLocalKey_endlessStartSettingTitle
+	kMyLocalKey_endlessStartSettingTitle,
+	kMyLocalKey_endlessCalcTitleAreaScore,
+	kMyLocalKey_endlessCalcTitleDamageScore,
+	kMyLocalKey_endlessCalcTitleComboScore,
+	kMyLocalKey_endlessCalcTitleLifeScore,
+	kMyLocalKey_endlessCalcTitleTimeScore,
+	kMyLocalKey_endlessCalcTitleGradeScore,
+	kMyLocalKey_endlessCalcTitleTakeGold,
+	kMyLocalKey_endlessCalcTitleTakeArea
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()

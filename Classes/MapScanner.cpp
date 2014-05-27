@@ -303,6 +303,8 @@ void MapScanner::scanMap()
 //	int addScore = newInsideCnt*rate;
 	int addScore = (sil_inside_cnt*2 + empty_inside_cnt)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*rate;
 	
+	mySGD->area_score = mySGD->area_score.getV() + addScore;
+	
 	myGD->communication("UI_addScore", addScore);
 	
 	resetRects(true);

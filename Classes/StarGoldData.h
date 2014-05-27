@@ -142,7 +142,12 @@ enum ReplayKey
 	kReplayKey_win,
 	kReplayKey_lose,
 	kReplayKey_useItemCnt,
-	kReplayKey_useItem_int1_itemCode
+	kReplayKey_useItem_int1_itemCode,
+	kReplayKey_areaScore,
+	kReplayKey_damageScore,
+	kReplayKey_comboScore,
+	kReplayKey_lifeBonusCnt,
+	kReplayKey_takeArea
 };
 
 enum GoodsType
@@ -770,6 +775,16 @@ public:
 	Json::Value attendance_data;
 	void initAttendance(Json::Value result_data);
 	void resetAttendance();
+	
+	KSProtectVar<int> area_score;
+	KSProtectVar<int> damage_score;
+	KSProtectVar<int> combo_score;
+	void resetIngameDetailScore();
+	
+	KSProtectVar<float> temp_endless_play_limit_time;
+	Json::Value temp_replay_data;
+	KSProtectStr temp_endless_nick;
+	KSProtectStr temp_endless_flag;
 	
 private:
 	bool is_not_cleared_stage;

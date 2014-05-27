@@ -507,6 +507,8 @@ void Maingame::finalSetting()
 		search_eye_vector.push_back(t_search_eye);
 	}
 	
+	mySGD->resetIngameDetailScore();
+	
 	startScene();
 	
 	float thumb_scale = 0.17f;
@@ -514,19 +516,19 @@ void Maingame::finalSetting()
 	thumb_case = CCScale9Sprite::create("minimap_back.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
 	thumb_case->setContentSize(CCSizeMake(320*thumb_scale, 430*thumb_scale));
 	thumb_case->setPosition(ccp(40,myDSH->ui_center_y));
-	addChild(thumb_case, myUIZorder);
+	addChild(thumb_case, clearshowtimeZorder);
 	
 	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)*0.7f);
 	sil_thumb->setScale(thumb_scale);
 	sil_thumb->setPosition(ccp(40,myDSH->ui_center_y));
-	addChild(sil_thumb, clearshowtimeZorder);
+	addChild(sil_thumb, searchEyeZorder);
 	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
 	thumb_texture->setPosition(ccp(40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
-	addChild(thumb_texture, myUIZorder);
+	addChild(thumb_texture, clearshowtimeZorder);
 	
 	
 	
@@ -604,7 +606,7 @@ void Maingame::finalSetting()
 	character_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 	character_thumb->setColor(ccGREEN);
 	character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_scale)));
-	addChild(character_thumb, myUIZorder);
+	addChild(character_thumb, clearshowtimeZorder);
 	
 	sub_thumbs = new CCArray(1);
 	
@@ -612,7 +614,7 @@ void Maingame::finalSetting()
 	{
 		replay_all_node = CCNode::create();
 		replay_all_node->setPosition(CCPointZero);
-		addChild(replay_all_node, myUIZorder);
+		addChild(replay_all_node, clearshowtimeZorder);
 		
 		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 		{
@@ -676,7 +678,7 @@ void Maingame::finalSetting()
 		{
 			replay_score = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 			replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
-			replay_all_node->addChild(replay_score);
+			replay_all_node->addChild(replay_score, 99);
 			
 			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		}
@@ -688,15 +690,15 @@ void Maingame::finalSetting()
 		selectedFlagSpr->setScale(0.5f);
 		replay_all_node->addChild(selectedFlagSpr);
 		
-		addChild(KSGradualValue<float>::create(480-40+20+100, 480-40+20, 0.5f, [=](float t){selectedFlagSpr->setPositionX(t);}, [=](float t){selectedFlagSpr->setPositionX(480-40+20);}));
+		addChild(KSGradualValue<float>::create(480-40-20+100, 480-40-20, 0.5f, [=](float t){selectedFlagSpr->setPositionX(t);}, [=](float t){selectedFlagSpr->setPositionX(480-40-20);}));
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 10);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
 		replay_all_node->addChild(nick_label);
 		
-		addChild(KSGradualValue<float>::create(480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2+100, 480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
-											   0.5f, [=](float t){nick_label->setPositionX(t);}, [=](float t){nick_label->setPositionX(480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);}));
+		addChild(KSGradualValue<float>::create(480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2+100, 480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
+											   0.5f, [=](float t){nick_label->setPositionX(t);}, [=](float t){nick_label->setPositionX(480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);}));
 		
 		int use_item_cnt = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_useItemCnt), Json::Value()).asInt();
 		if(use_item_cnt > 0)
@@ -3163,7 +3165,7 @@ void Maingame::refreshThumb()
 	{
 		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 		sub_position_img->setColor(ccYELLOW);
-		addChild(sub_position_img, myUIZorder);
+		addChild(sub_position_img, clearshowtimeZorder);
 		
 		sub_thumbs->addObject(sub_position_img);
 	}

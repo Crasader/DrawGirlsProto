@@ -20,8 +20,8 @@ void MobHpGraph::setGameover ()
 	t_case->stopAllActions();
 	hp_progress->stopAllActions();
 	
-	t_case->setVisible(true);
-	hp_progress->setVisible(true);
+	t_case->setVisible(false);
+	hp_progress->setVisible(false);
 	
 	CCProgressFromTo* progress_to = CCProgressFromTo::create(0.3f, last_life/max_life*100.f, 0.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(MobHpGraph::realHidingAction));

@@ -940,14 +940,14 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	int my_rank = myrank.getV();
 	
 	string case_name;
-	if(my_rank == idx+1)
-	{
-		case_name = "mainpopup_pupple1.png";
-	}
-	else
-	{
+//	if(my_rank == idx+1)
+//	{
+//		case_name = "mainpopup_pupple1.png";
+//	}
+//	else
+//	{
 		case_name = "rank_normal.png";
-	}
+//	}
 	
 	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	list_cell_case->setContentSize(CCSizeMake(225, 37));
