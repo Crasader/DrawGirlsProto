@@ -226,46 +226,49 @@ void StartSettingPopup::setMain()
 		}
 	}
 	
-	CCRect mission_size = CCRectMake(0, 0, 210, 22);
-	CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+92, main_case->getContentSize().height+2-26);
-	
-	//	CCSprite* temp_mission = CCSprite::create("whitePaper.png", mission_size);
-	//	temp_mission->setOpacity(100);
-	//	temp_mission->setPosition(mission_position);
-	//	main_case->addChild(temp_mission);
-	
-	LabelTTFMarquee* mission_label = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, mySD->getConditionContent(stage_number).c_str());
-	setFormSetter(mission_label);
-	mission_label->setAnchorPoint(ccp(0.5,0.5));
-	mission_label->setPosition(mission_position);
-	main_case->addChild(mission_label);
-	mission_label->setFontSize(13);
-	mission_label->startMarquee();
-	
-	if(mySD->getClearCondition(stage_number) != kCLEAR_default)
+	if(!mySGD->is_endless_mode)
 	{
-		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
-		CCHide* t_hide = CCHide::create();
-		CCDelayTime* t_delay2 = CCDelayTime::create(0.2f);
-		CCShow* t_show = CCShow::create();
-		CCSequence* t_seq = CCSequence::create(t_delay1, t_hide, t_delay2, t_show, NULL);
-		CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
-		mission_label->runAction(t_repeat);
+		CCRect mission_size = CCRectMake(0, 0, 210, 22);
+		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+92, main_case->getContentSize().height+2-26);
+		
+		//	CCSprite* temp_mission = CCSprite::create("whitePaper.png", mission_size);
+		//	temp_mission->setOpacity(100);
+		//	temp_mission->setPosition(mission_position);
+		//	main_case->addChild(temp_mission);
+	
+		LabelTTFMarquee* mission_label = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, mySD->getConditionContent(stage_number).c_str());
+		setFormSetter(mission_label);
+		mission_label->setAnchorPoint(ccp(0.5,0.5));
+		mission_label->setPosition(mission_position);
+		main_case->addChild(mission_label);
+		mission_label->setFontSize(13);
+		mission_label->startMarquee();
+		
+		if(mySD->getClearCondition(stage_number) != kCLEAR_default)
+		{
+			CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+			CCHide* t_hide = CCHide::create();
+			CCDelayTime* t_delay2 = CCDelayTime::create(0.2f);
+			CCShow* t_show = CCShow::create();
+			CCSequence* t_seq = CCSequence::create(t_delay1, t_hide, t_delay2, t_show, NULL);
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+			mission_label->runAction(t_repeat);
+		}
+		
+		CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+		setFormSetter(mission_img);
+		mission_img->setContentSize(CCSizeMake(65, 22));
+		mission_img->setPosition(ccp(198,255));
+		main_case->addChild(mission_img);
+		
+		KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
+		mission_img_label->setColor(ccc3(255, 170, 20));
+		mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
+		mission_img->addChild(mission_img_label);
+		//	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
+		//	mission_img->setPosition(ccp(198,255));
+		//	main_case->addChild(mission_img);
 	}
-	
-	CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
-	setFormSetter(mission_img);
-	mission_img->setContentSize(CCSizeMake(65, 22));
-	mission_img->setPosition(ccp(198,255));
-	main_case->addChild(mission_img);
-	
-	KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
-	mission_img_label->setColor(ccc3(255, 170, 20));
-	mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
-	mission_img->addChild(mission_img_label);
-//	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
-//	mission_img->setPosition(ccp(198,255));
-//	main_case->addChild(mission_img);
 	
 	
 	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);

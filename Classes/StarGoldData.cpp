@@ -76,6 +76,11 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_lose)									return_value = "lose";
 	else if(t_key == kReplayKey_useItemCnt)								return_value = "uic";
 	else if(t_key == kReplayKey_useItem_int1_itemCode)					return_value = "ui%dic";
+	else if(t_key == kReplayKey_areaScore)								return_value = "as";
+	else if(t_key == kReplayKey_damageScore)							return_value = "ds";
+	else if(t_key == kReplayKey_comboScore)								return_value = "cs";
+	else if(t_key == kReplayKey_lifeBonusCnt)							return_value = "lbc";
+	else if(t_key == kReplayKey_takeArea)								return_value = "ta";
 	
 	return return_value;
 }
@@ -314,6 +319,13 @@ int StarGoldData::getCatchCumberCount()
 	return catch_cumber_count.getV();
 }
 
+void StarGoldData::resetIngameDetailScore()
+{
+	area_score = 0;
+	damage_score = 0;
+	combo_score = 0;
+}
+
 void StarGoldData::setGameStart()
 {
 	gacha_item = kIC_emptyEnd;
@@ -431,6 +443,14 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 	game_time = t_game_time;
 	
+	if(is_write_replay)
+	{
+		replay_write_info[getReplayKey(kReplayKey_areaScore)] = area_score.getV();
+		replay_write_info[getReplayKey(kReplayKey_damageScore)] = damage_score.getV();
+		replay_write_info[getReplayKey(kReplayKey_comboScore)] = combo_score.getV();
+		replay_write_info[getReplayKey(kReplayKey_takeArea)] = t_percentage;
+	}
+	
 //	if(!mySGD->isClearPiece(mySD->getSilType()))
 //	{
 //		myDSH->setIntegerForKey(kDSH_Key_clearStageCnt, myDSH->getIntegerForKey(kDSH_Key_clearStageCnt)+1);
@@ -453,10 +473,22 @@ void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time 
 		is_using_item[i] = false;
 	}
 
+	is_cleared = false;
+	stage_grade = 0;
+	
 	base_score = t_score;
 	score = t_score;
 	percentage = t_percentage;
 	game_time = t_game_time;
+	
+	if(is_write_replay)
+	{
+		replay_write_info[getReplayKey(kReplayKey_areaScore)] = area_score.getV();
+		replay_write_info[getReplayKey(kReplayKey_damageScore)] = damage_score.getV();
+		replay_write_info[getReplayKey(kReplayKey_comboScore)] = combo_score.getV();
+		replay_write_info[getReplayKey(kReplayKey_takeArea)] = t_percentage;
+	}
+	
 	myGD->setIsGameover(true);
 }
 

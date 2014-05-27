@@ -1961,6 +1961,9 @@ void PlayUI::lifeBonus ()
 void PlayUI::removeParticle (CCObject * sender)
 {
 	((CCParticleSystemQuad*)sender)->setDuration(0);
+	
+	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)] = mySGD->replay_write_info.get(mySGD->getReplayKey(kReplayKey_lifeBonusCnt), Json::Value()).asInt() + 1;
+	
 	addScore(getScore()*0.1f);
 	lifeBonus();
 }

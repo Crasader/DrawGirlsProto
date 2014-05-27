@@ -65,14 +65,59 @@ bool EndlessModeResult::init()
 	
 	if(mySGD->endless_my_victory_on.getV())
 	{
+		is_calc = true;
 		mySGD->endless_my_victory_on = false;
 		
-		if(mySGD->getScore() > mySGD->endless_score.getV())
+		float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
+		
+		if(mySD->getClearCondition() == kCLEAR_timeLimit)
+		{
+			play_limit_time -= mySD->getClearConditionTimeLimit();
+		}
+		mySGD->temp_endless_play_limit_time = play_limit_time;
+		mySGD->temp_replay_data = mySGD->replay_playing_info;
+		mySGD->temp_endless_nick = mySGD->endless_nick.getV();
+		mySGD->temp_endless_flag = mySGD->endless_flag.getV();
+		
+		int left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
+		float left_life_decrease_score = left_life_base_score*(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*0.1f);
+		float left_time_base_score = left_life_base_score + left_life_decrease_score;
+		float left_time_decrease_score = left_time_base_score*(play_limit_time-mySGD->getGameTime())/play_limit_time;
+		float left_grade_base_score = left_time_base_score + left_time_decrease_score;
+		float left_grade_decrease_score = left_time_base_score*mySGD->getStageGrade()*0.5f;
+		
+		int left_total_score = left_grade_base_score + left_grade_decrease_score;
+		
+		
+		int right_area_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_areaScore), Json::Value()).asInt();
+		int right_damage_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_damageScore), Json::Value()).asInt();
+		int right_combo_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_comboScore), Json::Value()).asInt();
+		
+		int right_life_cnt = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_lifeBonusCnt), Json::Value()).asInt();
+		int right_game_time = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_gameTime), Json::Value()).asInt();
+		int right_clear_grade = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_clearGrade), Json::Value()).asInt();
+		
+		
+		int right_life_base_score = right_area_score + right_damage_score + right_combo_score;
+		float right_life_decrease_score = right_life_base_score*(right_life_cnt*0.1f);
+		float right_time_base_score = right_life_base_score + right_life_decrease_score;
+		float right_time_decrease_score = right_time_base_score*(play_limit_time-right_game_time)/play_limit_time;
+		float right_grade_base_score = right_time_base_score + right_time_decrease_score;
+		float right_grade_decrease_score = right_time_base_score*right_clear_grade*0.5f;
+		
+		int right_total_score = right_grade_base_score + right_grade_decrease_score;
+		
+		if(left_total_score > right_total_score)
 		{
 			mySGD->endless_my_victory = mySGD->endless_my_victory.getV() + 1;
 		}
 		
 		mySGD->endless_my_total_score = mySGD->endless_my_total_score.getV() + mySGD->getScore();
+	}
+	else
+	{
+//		is_calc = true;
+		is_calc = false;
 	}
 	
 	setMain();
@@ -113,11 +158,62 @@ void EndlessModeResult::setMain()
 	}
 	
 	int star_count = mySGD->getStageGrade();
+	
+	vector<function<void()>> left_star_animation_list;
+	left_star_animation_list.clear();
+	
 	for(int i=0;i<star_count;i++)
 	{
 		CCSprite* t_star = CCSprite::create("ending_star_gold.png");
 		t_star->setPosition(ccp(30+i*48,left_star_back->getContentSize().height/2.f));
 		left_star_back->addChild(t_star);
+		
+		if(is_calc)
+		{
+			t_star->setScale(2.f);
+			t_star->setRotation(-200);
+			t_star->setVisible(false);
+			
+			CCSprite* t_star2 = CCSprite::create("ending_star_gold.png");
+			t_star2->setPosition(ccp(t_star->getContentSize().width/2.f, t_star->getContentSize().height/2.f));
+			t_star2->setScale(2.f);
+			t_star->addChild(t_star2);
+			
+			function<void()> t_animation;
+			t_animation = [=]()
+			{
+				t_star->addChild(KSTimer::create(0.1f+i*0.2f, [=]()
+												 {
+													 AudioEngine::sharedInstance()->playEffect("se_resultstar.mp3", false);
+													 t_star->setOpacity(0);
+													 t_star2->setOpacity(0);
+													 t_star->setVisible(true);
+													 t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																									{
+																										t_star->setScale(2.f-t);
+																										t_star->setRotation(-200+t*200);
+																										t_star->setOpacity(t*255);
+																									}, [=](float t)
+																									{
+																										t_star->setScale(1.f);
+																										t_star->setRotation(0);
+																										t_star->setOpacity(255);
+																										t_star2->setOpacity(255);
+																										
+																										t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																																					   {
+																																						   t_star2->setScale(2.f-t);
+																																						   t_star2->setOpacity(255-t*55);
+																																					   }, [=](float t)
+																																					   {
+																																						   t_star2->removeFromParent();
+																																					   }));
+																									}));
+												 }));
+			};
+			
+			left_star_animation_list.push_back(t_animation);
+		}
 	}
 	
 	CCSprite* left_title = CCSprite::create("endless_nickname.png");
@@ -134,85 +230,152 @@ void EndlessModeResult::setMain()
 	left_nick->setPosition(ccp(97, 24));
 	left_title->addChild(left_nick);
 	
-	CCScale9Sprite* left_score_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	left_score_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
-	left_score_back->setPosition(ccp(left_back->getContentSize().width/2.f, 111.f));
-	left_back->addChild(left_score_back);
+	left_top_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	left_top_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
+	left_top_back->setPosition(ccp(left_back->getContentSize().width/2.f, 111.f));
+	left_back->addChild(left_top_back);
 	
-	KSLabelTTF* left_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 13);
-	left_score_title->setAnchorPoint(ccp(0,0.5f));
-	left_score_title->setPosition(ccp(10, left_score_back->getContentSize().height/2.f));
-	left_score_back->addChild(left_score_title);
+	string start_top_title, start_center_title, start_bottom_title;
+	string start_top_left_content, start_top_right_content, start_center_left_content, start_center_right_content, start_bottom_left_content, start_bottom_right_content;
+	string start_total_left_content, start_total_right_content;
 	
-	CCSprite* left_score_img = CCSprite::create("ending_mark_score.png");
-	left_score_img->setPosition(ccp(10 + left_score_title->getContentSize().width + 15,left_score_back->getContentSize().height/2.f));
-	left_score_back->addChild(left_score_img);
+	float play_limit_time = mySGD->temp_endless_play_limit_time.getV();
 	
-	KSLabelTTF* left_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", int(mySGD->getBaseScore()))->getCString(), mySGD->getFont().c_str(), 13);
-	left_score_content->setAnchorPoint(ccp(1,0.5f));
-	left_score_content->setPosition(ccp(left_score_back->getContentSize().width-10, left_score_back->getContentSize().height/2.f));
-	left_score_back->addChild(left_score_content);
+	int left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
+	float left_life_decrease_score = left_life_base_score*(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*0.1f);
+	float left_time_base_score = left_life_base_score + left_life_decrease_score;
+	float left_time_decrease_score = left_time_base_score*(play_limit_time-mySGD->getGameTime())/play_limit_time;
+	float left_grade_base_score = left_time_base_score + left_time_decrease_score;
+	float left_grade_decrease_score = left_time_base_score*mySGD->getStageGrade()*0.5f;
 	
-	
-	CCScale9Sprite* left_time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	left_time_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
-	left_time_back->setPosition(ccp(left_back->getContentSize().width/2.f, 81.f));
-	left_back->addChild(left_time_back);
-	
-	KSLabelTTF* left_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 13);
-	left_time_title->setAnchorPoint(ccp(0,0.5f));
-	left_time_title->setPosition(ccp(10, left_time_back->getContentSize().height/2.f));
-	left_time_back->addChild(left_time_title);
-	
-	CCSprite* left_time_img = CCSprite::create("ending_mark_time.png");
-	left_time_img->setPosition(ccp(10 + left_time_title->getContentSize().width + 15,left_time_back->getContentSize().height/2.f));
-	left_time_back->addChild(left_time_img);
-	
-	KSLabelTTF* left_time_content = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString(), mySGD->getFont().c_str(), 13);
-	left_time_content->setAnchorPoint(ccp(1,0.5f));
-	left_time_content->setPosition(ccp(left_time_back->getContentSize().width-10, left_time_back->getContentSize().height/2.f));
-	left_time_back->addChild(left_time_content);
+	int left_total_score = left_grade_base_score + left_grade_decrease_score;
 	
 	
-	CCScale9Sprite* left_gold_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	left_gold_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
-	left_gold_back->setPosition(ccp(left_back->getContentSize().width/2.f, 51.f));
-	left_back->addChild(left_gold_back);
+	int right_area_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_areaScore), Json::Value()).asInt();
+	int right_damage_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_damageScore), Json::Value()).asInt();
+	int right_combo_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_comboScore), Json::Value()).asInt();
 	
-	KSLabelTTF* left_gold_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 13);
-	left_gold_title->setAnchorPoint(ccp(0,0.5f));
-	left_gold_title->setPosition(ccp(10, left_gold_back->getContentSize().height/2.f));
-	left_gold_back->addChild(left_gold_title);
-	
-	CCSprite* left_gold_img = CCSprite::create("ending_mark_gold.png");
-	left_gold_img->setPosition(ccp(10 + left_gold_title->getContentSize().width + 15,left_gold_back->getContentSize().height/2.f));
-	left_gold_back->addChild(left_gold_img);
-	
-	KSLabelTTF* left_gold_content = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), mySGD->getFont().c_str(), 13);
-	left_gold_content->setAnchorPoint(ccp(1,0.5f));
-	left_gold_content->setPosition(ccp(left_gold_back->getContentSize().width-10, left_gold_back->getContentSize().height/2.f));
-	left_gold_back->addChild(left_gold_content);
+	int right_life_cnt = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_lifeBonusCnt), Json::Value()).asInt();
+	int right_game_time = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_gameTime), Json::Value()).asInt();
+	int right_clear_grade = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_clearGrade), Json::Value()).asInt();
 	
 	
-	CCScale9Sprite* left_total_score_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	left_total_score_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
-	left_total_score_back->setPosition(ccp(left_back->getContentSize().width/2.f, 21));
-	left_back->addChild(left_total_score_back);
+	int right_life_base_score = right_area_score + right_damage_score + right_combo_score;
+	float right_life_decrease_score = right_life_base_score*(right_life_cnt*0.1f);
+	float right_time_base_score = right_life_base_score + right_life_decrease_score;
+	float right_time_decrease_score = right_time_base_score*(play_limit_time-right_game_time)/play_limit_time;
+	float right_grade_base_score = right_time_base_score + right_time_decrease_score;
+	float right_grade_decrease_score = right_time_base_score*right_clear_grade*0.5f;
 	
-	KSLabelTTF* left_total_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
-	left_total_score_title->setColor(ccc3(255, 170, 20));
-	left_total_score_title->setAnchorPoint(ccp(0,0.5f));
-	left_total_score_title->setPosition(ccp(10, left_total_score_back->getContentSize().height/2.f));
-	left_total_score_back->addChild(left_total_score_title);
+	int right_total_score = right_grade_base_score + right_grade_decrease_score;
 	
-	KSLabelTTF* left_total_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", int(mySGD->getScore()))->getCString(), mySGD->getFont().c_str(), 15);
-	left_total_score_content->setColor(ccc3(255, 170, 20));
-	left_total_score_content->setAnchorPoint(ccp(1,0.5f));
-	left_total_score_content->setPosition(ccp(left_total_score_back->getContentSize().width-10, left_total_score_back->getContentSize().height/2.f));
-	left_total_score_back->addChild(left_total_score_content);
+	if(is_calc)
+	{
+		start_top_title = myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleAreaScore);
+		start_center_title = myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleDamageScore);
+		start_bottom_title = myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleComboScore);
+		
+		start_top_left_content = CCString::createWithFormat("%d", mySGD->area_score.getV())->getCString();
+		start_center_left_content = CCString::createWithFormat("%d", mySGD->damage_score.getV())->getCString();
+		start_bottom_left_content = CCString::createWithFormat("%d", mySGD->combo_score.getV())->getCString();
+		start_total_left_content = "0";
+		
+		start_top_right_content = CCString::createWithFormat("%d", right_area_score)->getCString();
+		start_center_right_content = CCString::createWithFormat("%d", right_damage_score)->getCString();
+		start_bottom_right_content = CCString::createWithFormat("%d", right_combo_score)->getCString();
+		start_total_right_content = "0";
+	}
+	else
+	{
+		start_top_title = myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold);
+		start_center_title = myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea);
+		start_bottom_title = "";
+		
+		start_top_left_content = CCString::createWithFormat("%d", mySGD->getStageGold())->getCString();
+		start_center_left_content = CCString::createWithFormat("%d", int(mySGD->getPercentage()*100.f))->getCString();
+		start_bottom_left_content = "";
+		start_total_left_content = CCString::createWithFormat("%d", left_total_score)->getCString();
+		
+		start_top_right_content = CCString::createWithFormat("%d", mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt())->getCString();
+		start_center_right_content = CCString::createWithFormat("%.0f", mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeArea), Json::Value()).asFloat())->getCString();
+		start_bottom_right_content = "";
+		start_total_right_content = CCString::createWithFormat("%d", right_total_score)->getCString();
+	}
+	
+	left_top_title = KSLabelTTF::create(start_top_title.c_str(), mySGD->getFont().c_str(), 13);
+	left_top_title->setAnchorPoint(ccp(0,0.5f));
+	left_top_title->setPosition(ccp(10, left_top_back->getContentSize().height/2.f));
+	left_top_back->addChild(left_top_title);
+	
+//	CCSprite* left_score_img = CCSprite::create("ending_mark_score.png");
+//	left_score_img->setPosition(ccp(10 + left_score_title->getContentSize().width + 15,left_score_back->getContentSize().height/2.f));
+//	left_score_back->addChild(left_score_img);
+	
+	left_top_content = KSLabelTTF::create(start_top_left_content.c_str(), mySGD->getFont().c_str(), 13);
+	left_top_content->setAnchorPoint(ccp(1,0.5f));
+	left_top_content->setPosition(ccp(left_top_back->getContentSize().width-10, left_top_back->getContentSize().height/2.f));
+	left_top_back->addChild(left_top_content);
 	
 	
-	//왼쪽 버튼은 포기하기 버튼으로. 계속 이겨서 왔더라도 패 가 올라가도록 함. 결국 무조건 1패는 생기는 구조. 라고 HS가 강력히 주장
+	left_center_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	left_center_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
+	left_center_back->setPosition(ccp(left_back->getContentSize().width/2.f, 81.f));
+	left_back->addChild(left_center_back);
+	
+	left_center_title = KSLabelTTF::create(start_center_title.c_str(), mySGD->getFont().c_str(), 13);
+	left_center_title->setAnchorPoint(ccp(0,0.5f));
+	left_center_title->setPosition(ccp(10, left_center_back->getContentSize().height/2.f));
+	left_center_back->addChild(left_center_title);
+	
+//	CCSprite* left_time_img = CCSprite::create("ending_mark_time.png");
+//	left_time_img->setPosition(ccp(10 + left_time_title->getContentSize().width + 15,left_time_back->getContentSize().height/2.f));
+//	left_time_back->addChild(left_time_img);
+	
+	left_center_content = KSLabelTTF::create(start_center_left_content.c_str(), mySGD->getFont().c_str(), 13);
+	left_center_content->setAnchorPoint(ccp(1,0.5f));
+	left_center_content->setPosition(ccp(left_center_back->getContentSize().width-10, left_center_back->getContentSize().height/2.f));
+	left_center_back->addChild(left_center_content);
+	
+	
+	left_bottom_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	left_bottom_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
+	left_bottom_back->setPosition(ccp(left_back->getContentSize().width/2.f, 51.f));
+	left_back->addChild(left_bottom_back);
+	
+	left_bottom_title = KSLabelTTF::create(start_bottom_title.c_str(), mySGD->getFont().c_str(), 13);
+	left_bottom_title->setAnchorPoint(ccp(0,0.5f));
+	left_bottom_title->setPosition(ccp(10, left_bottom_back->getContentSize().height/2.f));
+	left_bottom_back->addChild(left_bottom_title);
+	
+//	CCSprite* left_gold_img = CCSprite::create("ending_mark_gold.png");
+//	left_gold_img->setPosition(ccp(10 + left_gold_title->getContentSize().width + 15,left_gold_back->getContentSize().height/2.f));
+//	left_gold_back->addChild(left_gold_img);
+	
+	left_bottom_content = KSLabelTTF::create(start_bottom_left_content.c_str(), mySGD->getFont().c_str(), 13);
+	left_bottom_content->setAnchorPoint(ccp(1,0.5f));
+	left_bottom_content->setPosition(ccp(left_bottom_back->getContentSize().width-10, left_bottom_back->getContentSize().height/2.f));
+	left_bottom_back->addChild(left_bottom_content);
+	
+	
+	CCScale9Sprite* left_total_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	left_total_back->setContentSize(CCSizeMake(left_back->getContentSize().width-20, 35));
+	left_total_back->setPosition(ccp(left_back->getContentSize().width/2.f, 21));
+	left_back->addChild(left_total_back);
+	
+	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
+	left_total_title->setColor(ccc3(255, 170, 20));
+	left_total_title->setAnchorPoint(ccp(0,0.5f));
+	left_total_title->setPosition(ccp(10, left_total_back->getContentSize().height/2.f));
+	left_total_back->addChild(left_total_title);
+	
+	left_total_content = KSLabelTTF::create(start_total_left_content.c_str(), mySGD->getFont().c_str(), 15);
+	left_total_content->setColor(ccc3(255, 170, 20));
+	left_total_content->setAnchorPoint(ccp(1,0.5f));
+	left_total_content->setPosition(ccp(left_total_back->getContentSize().width-10, left_total_back->getContentSize().height/2.f));
+	left_total_back->addChild(left_total_content);
+	
+	
+	
 	
 	CCSprite* n_stop = CCSprite::create("endless_ready.png");
 	
@@ -585,108 +748,157 @@ void EndlessModeResult::setMain()
 		right_star_back->addChild(t_star);
 	}
 	
-	int right_star_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_clearGrade), Json::Value()).asInt(); // 상대방 별 갯수
+	int right_star_count = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_clearGrade), Json::Value()).asInt(); // 상대방 별 갯수
+	
+	vector<function<void()>> right_star_animation_list;
+	right_star_animation_list.clear();
+	
 	for(int i=0;i<right_star_count;i++)
 	{
 		CCSprite* t_star = CCSprite::create("ending_star_gold.png");
 		t_star->setPosition(ccp(30+i*48,right_star_back->getContentSize().height/2.f));
 		right_star_back->addChild(t_star);
+		
+		if(is_calc)
+		{
+			t_star->setScale(2.f);
+			t_star->setRotation(-200);
+			t_star->setVisible(false);
+			
+			CCSprite* t_star2 = CCSprite::create("ending_star_gold.png");
+			t_star2->setPosition(ccp(t_star->getContentSize().width/2.f, t_star->getContentSize().height/2.f));
+			t_star2->setScale(2.f);
+			t_star->addChild(t_star2);
+			
+			function<void()> t_animation;
+			t_animation = [=]()
+			{
+				t_star->addChild(KSTimer::create(0.1f+i*0.2f, [=]()
+												 {
+													 if(i >= star_count)
+														 AudioEngine::sharedInstance()->playEffect("se_resultstar.mp3", false);
+													 t_star->setOpacity(0);
+													 t_star2->setOpacity(0);
+													 t_star->setVisible(true);
+													 t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																									{
+																										t_star->setScale(2.f-t);
+																										t_star->setRotation(-200+t*200);
+																										t_star->setOpacity(t*255);
+																									}, [=](float t)
+																									{
+																										t_star->setScale(1.f);
+																										t_star->setRotation(0);
+																										t_star->setOpacity(255);
+																										t_star2->setOpacity(255);
+																										
+																										t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																																					   {
+																																						   t_star2->setScale(2.f-t);
+																																						   t_star2->setOpacity(255-t*55);
+																																					   }, [=](float t)
+																																					   {
+																																						   t_star2->removeFromParent();
+																																					   }));
+																									}));
+												 }));
+			};
+			
+			right_star_animation_list.push_back(t_animation);
+		}
 	}
 	
 	CCSprite* right_title = CCSprite::create("endless_nickname.png");
 	right_title->setPosition(ccp(right_back->getContentSize().width/2.f, 193.5f));
 	right_back->addChild(right_title);
 	
-	string t_right_flag = mySGD->endless_flag.getV();
+	string t_right_flag = mySGD->temp_endless_flag.getV();
 	CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(t_right_flag).c_str());
 	right_flag->setPosition(ccp(25,26));
 	right_title->addChild(right_flag);
 	
-	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->temp_endless_nick.getV().c_str(), mySGD->getFont().c_str(), 13);
 	right_nick->enableOuterStroke(ccBLACK, 1.f);
 	right_nick->setPosition(ccp(97, 24));
 	right_title->addChild(right_nick);
 	
-	CCScale9Sprite* right_score_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	right_score_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
-	right_score_back->setPosition(ccp(right_back->getContentSize().width/2.f, 111.f));
-	right_back->addChild(right_score_back);
+	right_top_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_top_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_top_back->setPosition(ccp(right_back->getContentSize().width/2.f, 111.f));
+	right_back->addChild(right_top_back);
 	
-	KSLabelTTF* right_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 13);
-	right_score_title->setAnchorPoint(ccp(0,0.5f));
-	right_score_title->setPosition(ccp(10, right_score_back->getContentSize().height/2.f));
-	right_score_back->addChild(right_score_title);
+	right_top_title = KSLabelTTF::create(start_top_title.c_str(), mySGD->getFont().c_str(), 13);
+	right_top_title->setAnchorPoint(ccp(0,0.5f));
+	right_top_title->setPosition(ccp(10, right_top_back->getContentSize().height/2.f));
+	right_top_back->addChild(right_top_title);
 	
-	CCSprite* right_score_img = CCSprite::create("ending_mark_score.png");
-	right_score_img->setPosition(ccp(10 + right_score_title->getContentSize().width + 15,right_score_back->getContentSize().height/2.f));
-	right_score_back->addChild(right_score_img);
+//	CCSprite* right_score_img = CCSprite::create("ending_mark_score.png");
+//	right_score_img->setPosition(ccp(10 + right_score_title->getContentSize().width + 15,right_score_back->getContentSize().height/2.f));
+//	right_score_back->addChild(right_score_img);
 	
-	KSLabelTTF* right_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_originalScore), Json::Value()).asInt())->getCString(), mySGD->getFont().c_str(), 13);
-	right_score_content->setAnchorPoint(ccp(1,0.5f));
-	right_score_content->setPosition(ccp(right_score_back->getContentSize().width-10, right_score_back->getContentSize().height/2.f));
-	right_score_back->addChild(right_score_content);
-	
-	
-	CCScale9Sprite* right_time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	right_time_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
-	right_time_back->setPosition(ccp(right_back->getContentSize().width/2.f, 81.f));
-	right_back->addChild(right_time_back);
-	
-	KSLabelTTF* right_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 13);
-	right_time_title->setAnchorPoint(ccp(0,0.5f));
-	right_time_title->setPosition(ccp(10, right_time_back->getContentSize().height/2.f));
-	right_time_back->addChild(right_time_title);
-	
-	CCSprite* right_time_img = CCSprite::create("ending_mark_time.png");
-	right_time_img->setPosition(ccp(10 + right_time_title->getContentSize().width + 15,right_time_back->getContentSize().height/2.f));
-	right_time_back->addChild(right_time_img);
-	
-	int right_game_time = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_gameTime), Json::Value()).asInt();// 상대방 게임 시간
-	KSLabelTTF* right_time_content = KSLabelTTF::create(CCString::createWithFormat("%d", right_game_time)->getCString(), mySGD->getFont().c_str(), 13);
-	right_time_content->setAnchorPoint(ccp(1,0.5f));
-	right_time_content->setPosition(ccp(right_time_back->getContentSize().width-10, right_time_back->getContentSize().height/2.f));
-	right_time_back->addChild(right_time_content);
+	right_top_content = KSLabelTTF::create(start_top_right_content.c_str(), mySGD->getFont().c_str(), 13);
+	right_top_content->setAnchorPoint(ccp(1,0.5f));
+	right_top_content->setPosition(ccp(right_top_back->getContentSize().width-10, right_top_back->getContentSize().height/2.f));
+	right_top_back->addChild(right_top_content);
 	
 	
-	CCScale9Sprite* right_gold_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	right_gold_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
-	right_gold_back->setPosition(ccp(right_back->getContentSize().width/2.f, 51.f));
-	right_back->addChild(right_gold_back);
+	right_center_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_center_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_center_back->setPosition(ccp(right_back->getContentSize().width/2.f, 81.f));
+	right_back->addChild(right_center_back);
 	
-	KSLabelTTF* right_gold_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 13);
-	right_gold_title->setAnchorPoint(ccp(0,0.5f));
-	right_gold_title->setPosition(ccp(10, right_gold_back->getContentSize().height/2.f));
-	right_gold_back->addChild(right_gold_title);
+	right_center_title = KSLabelTTF::create(start_center_title.c_str(), mySGD->getFont().c_str(), 13);
+	right_center_title->setAnchorPoint(ccp(0,0.5f));
+	right_center_title->setPosition(ccp(10, right_center_back->getContentSize().height/2.f));
+	right_center_back->addChild(right_center_title);
 	
-	CCSprite* right_gold_img = CCSprite::create("ending_mark_gold.png");
-	right_gold_img->setPosition(ccp(10 + right_gold_title->getContentSize().width + 15,right_gold_back->getContentSize().height/2.f));
-	right_gold_back->addChild(right_gold_img);
+//	CCSprite* right_time_img = CCSprite::create("ending_mark_time.png");
+//	right_time_img->setPosition(ccp(10 + right_time_title->getContentSize().width + 15,right_time_back->getContentSize().height/2.f));
+//	right_time_back->addChild(right_time_img);
 	
-	int right_gold = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt();// 상대방 획득 골드
-	KSLabelTTF* right_gold_content = KSLabelTTF::create(CCString::createWithFormat("%d", right_gold)->getCString(), mySGD->getFont().c_str(), 13);
-	right_gold_content->setAnchorPoint(ccp(1,0.5f));
-	right_gold_content->setPosition(ccp(right_gold_back->getContentSize().width-10, right_gold_back->getContentSize().height/2.f));
-	right_gold_back->addChild(right_gold_content);
-	
-	
-	CCScale9Sprite* right_total_score_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	right_total_score_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
-	right_total_score_back->setPosition(ccp(right_back->getContentSize().width/2.f, 21));
-	right_back->addChild(right_total_score_back);
-	
-	KSLabelTTF* right_total_score_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
-	right_total_score_title->setColor(ccc3(255, 170, 20));
-	right_total_score_title->setAnchorPoint(ccp(0,0.5f));
-	right_total_score_title->setPosition(ccp(10, right_total_score_back->getContentSize().height/2.f));
-	right_total_score_back->addChild(right_total_score_title);
+	right_center_content = KSLabelTTF::create(start_center_right_content.c_str(), mySGD->getFont().c_str(), 13);
+	right_center_content->setAnchorPoint(ccp(1,0.5f));
+	right_center_content->setPosition(ccp(right_center_back->getContentSize().width-10, right_center_back->getContentSize().height/2.f));
+	right_center_back->addChild(right_center_content);
 	
 	
-	int right_total_score = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_totalScore), Json::Value()).asInt(); // 상대방 총점
-	KSLabelTTF* right_total_score_content = KSLabelTTF::create(CCString::createWithFormat("%d", right_total_score)->getCString(), mySGD->getFont().c_str(), 15);
-	right_total_score_content->setColor(ccc3(255, 170, 20));
-	right_total_score_content->setAnchorPoint(ccp(1,0.5f));
-	right_total_score_content->setPosition(ccp(right_total_score_back->getContentSize().width-10, right_total_score_back->getContentSize().height/2.f));
-	right_total_score_back->addChild(right_total_score_content);
+	right_bottom_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_bottom_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_bottom_back->setPosition(ccp(right_back->getContentSize().width/2.f, 51.f));
+	right_back->addChild(right_bottom_back);
+	
+	right_bottom_title = KSLabelTTF::create(start_bottom_title.c_str(), mySGD->getFont().c_str(), 13);
+	right_bottom_title->setAnchorPoint(ccp(0,0.5f));
+	right_bottom_title->setPosition(ccp(10, right_bottom_back->getContentSize().height/2.f));
+	right_bottom_back->addChild(right_bottom_title);
+	
+//	CCSprite* right_gold_img = CCSprite::create("ending_mark_gold.png");
+//	right_gold_img->setPosition(ccp(10 + right_gold_title->getContentSize().width + 15,right_gold_back->getContentSize().height/2.f));
+//	right_gold_back->addChild(right_gold_img);
+	
+	right_bottom_content = KSLabelTTF::create(start_bottom_right_content.c_str(), mySGD->getFont().c_str(), 13);
+	right_bottom_content->setAnchorPoint(ccp(1,0.5f));
+	right_bottom_content->setPosition(ccp(right_bottom_back->getContentSize().width-10, right_bottom_back->getContentSize().height/2.f));
+	right_bottom_back->addChild(right_bottom_content);
+	
+	
+	CCScale9Sprite* right_total_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	right_total_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 35));
+	right_total_back->setPosition(ccp(right_back->getContentSize().width/2.f, 21));
+	right_back->addChild(right_total_back);
+	
+	KSLabelTTF* right_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
+	right_total_title->setColor(ccc3(255, 170, 20));
+	right_total_title->setAnchorPoint(ccp(0,0.5f));
+	right_total_title->setPosition(ccp(10, right_total_back->getContentSize().height/2.f));
+	right_total_back->addChild(right_total_title);
+	
+	
+	right_total_content = KSLabelTTF::create(start_total_right_content.c_str(), mySGD->getFont().c_str(), 15);
+	right_total_content->setColor(ccc3(255, 170, 20));
+	right_total_content->setAnchorPoint(ccp(1,0.5f));
+	right_total_content->setPosition(ccp(right_total_back->getContentSize().width-10, right_total_back->getContentSize().height/2.f));
+	right_total_back->addChild(right_total_content);
 	
 	
 	
@@ -737,7 +949,7 @@ void EndlessModeResult::setMain()
 																 });
 	next_item->setPosition(ccp(-main_case->getContentSize().width/2.f+right_back->getPositionX(), 0));
 	
-	CCMenuLambda* bottom_menu = CCMenuLambda::create();
+	bottom_menu = CCMenuLambda::create();
 	bottom_menu->setPosition(ccp(main_case->getContentSize().width/2.f,35));
 	bottom_menu->setTouchPriority(touch_priority);
 	main_case->addChild(bottom_menu);
@@ -748,6 +960,77 @@ void EndlessModeResult::setMain()
 	if(mySGD->getScore() <= mySGD->endless_score.getV())
 	{
 		next_item->setVisible(false);
+	}
+	
+	if(is_calc)
+	{
+		bottom_menu->setVisible(false);
+	}
+	else
+	{
+		if(left_total_score > right_total_score)
+		{
+			// win
+			
+			CCSprite* win_case = CCSprite::create("endless_winner.png");
+			win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+			main_case->addChild(win_case);
+			
+			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+			win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
+			win_case->addChild(win_label);
+			
+			CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+			win_ment->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f-25));
+			win_case->addChild(win_ment);
+			
+			win_case->setRotation(-15);
+			
+			
+			CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+			particle2->setPositionType(kCCPositionTypeRelative);
+			particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+			particle2->setEmissionRate(80);
+			particle2->setAngle(360.0);
+			particle2->setAngleVar(0.0);
+			ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+			particle2->setBlendFunc(blendFunc);
+			particle2->setDuration(-1.0);
+			particle2->setEmitterMode(kCCParticleModeGravity);
+			particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+			particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+			particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+			particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+			particle2->setStartSize(25.0);
+			particle2->setStartSizeVar(10.0);
+			particle2->setEndSize(0.0);
+			particle2->setEndSizeVar(0.0);
+			particle2->setGravity(ccp(0,0));
+			particle2->setRadialAccel(3.0);
+			particle2->setRadialAccelVar(0.0);
+			particle2->setSpeed(0);
+			particle2->setSpeedVar(0.0);
+			particle2->setTangentialAccel(0);
+			particle2->setTangentialAccelVar(0);
+			particle2->setTotalParticles(10);
+			particle2->setLife(0.8);
+			particle2->setLifeVar(0.25);
+			particle2->setStartSpin(0.0);
+			particle2->setStartSpinVar(50.f);
+			particle2->setEndSpin(0.0);
+			particle2->setEndSpinVar(60.f);
+			particle2->setPosVar(ccp(80,80));
+			particle2->setPosition(win_case->getPosition());
+			main_case->addChild(particle2);
+		}
+		else
+		{
+			// lose
+			
+			CCSprite* win_case = CCSprite::create("endless_loser.png");
+			win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+			main_case->addChild(win_case);
+		}
 	}
 	
 	CCSprite* vs_img = CCSprite::create("endless_vs.png");
@@ -778,8 +1061,969 @@ void EndlessModeResult::setMain()
 											 n_next_label2->setOpacity(100);
 											 s_next_label2->setOpacity(100);
 											 
-											 is_menu_enable = true;
+											 if(is_calc)
+												{
+													for(int i=0;i<left_star_animation_list.size();i++)
+													{
+														left_star_animation_list[i]();
+													}
+													
+													for(int i=0;i<right_star_animation_list.size();i++)
+													{
+														right_star_animation_list[i]();
+													}
+													
+													addChild(KSTimer::create(1.5f, [=](){startCalcAnimation();}));
+												}
+											 else
+												{
+													is_menu_enable = true;
+												}
 										 }));
+}
+
+void EndlessModeResult::startCalcAnimation()
+{
+	is_left_calc_end = is_right_calc_end = false;
+	
+	AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
+	
+	float play_limit_time = mySGD->temp_endless_play_limit_time.getV();
+	
+	int left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
+	float left_life_decrease_score = left_life_base_score*(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*0.1f);
+	float left_time_base_score = left_life_base_score + left_life_decrease_score;
+	float left_time_decrease_score = left_time_base_score*(play_limit_time-mySGD->getGameTime())/play_limit_time;
+	float left_grade_base_score = left_time_base_score + left_time_decrease_score;
+	float left_grade_decrease_score = left_time_base_score*mySGD->getStageGrade()*0.5f;
+	
+	int left_total_score = left_grade_base_score + left_grade_decrease_score;
+	
+	
+	int right_area_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_areaScore), Json::Value()).asInt();
+	int right_damage_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_damageScore), Json::Value()).asInt();
+	int right_combo_score = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_comboScore), Json::Value()).asInt();
+	
+	int right_life_cnt = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_lifeBonusCnt), Json::Value()).asInt();
+	int right_game_time = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_gameTime), Json::Value()).asInt();
+	int right_clear_grade = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_clearGrade), Json::Value()).asInt();
+	
+	int right_take_gold = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt();
+	float right_take_area = mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeArea), Json::Value()).asFloat();
+	
+	int right_life_base_score = right_area_score + right_damage_score + right_combo_score;
+	float right_life_decrease_score = right_life_base_score*(right_life_cnt*0.1f);
+	float right_time_base_score = right_life_base_score + right_life_decrease_score;
+	float right_time_decrease_score = right_time_base_score*(play_limit_time-right_game_time)/play_limit_time;
+	float right_grade_base_score = right_time_base_score + right_time_decrease_score;
+	float right_grade_decrease_score = right_time_base_score*right_clear_grade*0.5f;
+	
+	int right_total_score = right_grade_base_score + right_grade_decrease_score;
+	
+	
+//	startLeftCalcAnimation(mySGD->area_score.getV(), 0, 1.f, left_top_content, [=]()
+//	{
+//		startLeftCalcAnimation(mySGD->damage_score.getV(), mySGD->area_score.getV(), 1.f, left_center_content, [=]()
+//		{
+//			startLeftCalcAnimation(mySGD->combo_score.getV(), mySGD->area_score.getV()+mySGD->damage_score.getV(), 1.f, left_bottom_content, [=]()
+//			{
+//				flipLeft(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleLifeScore), left_life_decrease_score,
+//						 myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTimeScore), left_time_decrease_score,
+//						 myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleGradeScore), left_grade_decrease_score, [=]()
+//				{
+//					startLeftCalcAnimation(left_life_decrease_score, left_life_base_score, 1.f, left_top_content, [=]()
+//					{
+//						startLeftCalcAnimation(left_time_decrease_score, left_time_base_score, 1.f, left_center_content, [=]()
+//						{
+//							startLeftCalcAnimation(left_grade_decrease_score, left_grade_base_score, 1.f, left_bottom_content, [=]()
+//							{
+//								flipLeft(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold), mySGD->getStageGold(),
+//										 myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea), mySGD->getPercentage()*100.f,
+//										 "", 0, [=]()
+//								{
+//									is_left_calc_end = true;
+//									if(is_left_calc_end && is_right_calc_end)
+//									{
+//										AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+//										
+//										if(left_total_score > right_total_score)
+//										{
+//											// win
+//											
+//											CCSprite* win_case = CCSprite::create("endless_winner.png");
+//											win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+//											main_case->addChild(win_case);
+//											
+//											CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+//											win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
+//											win_case->addChild(win_label);
+//											
+//											CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+//											win_ment->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f-25));
+//											win_case->addChild(win_ment);
+//											
+//											win_case->setRotation(-15);
+//											
+//											
+//											KS::setOpacity(win_case, 0);
+//											win_case->setScale(2.5f);
+//											
+//											CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
+//											particle1->setPositionType(kCCPositionTypeRelative);
+//											particle1->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+//											particle1->setEmissionRate(300);
+//											particle1->setAngle(180.0);
+//											particle1->setAngleVar(180.0);
+//											ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+//											particle1->setBlendFunc(blendFunc);
+//											particle1->setDuration(0.3f);
+//											particle1->setEmitterMode(kCCParticleModeGravity);
+//											particle1->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+//											particle1->setStartColorVar(ccc4f(0,0,0,0.f));
+//											particle1->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+//											particle1->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+//											particle1->setStartSize(40.0);
+//											particle1->setStartSizeVar(10.0);
+//											particle1->setEndSize(0.0);
+//											particle1->setEndSizeVar(0.0);
+//											particle1->setGravity(ccp(0,-100));
+//											particle1->setRadialAccel(50.0);
+//											particle1->setRadialAccelVar(20.0);
+//											particle1->setSpeed(50);
+//											particle1->setSpeedVar(30.0);
+//											particle1->setTangentialAccel(0);
+//											particle1->setTangentialAccelVar(0);
+//											particle1->setTotalParticles(100);
+//											particle1->setLife(2.0);
+//											particle1->setLifeVar(0.5);
+//											particle1->setStartSpin(0.0);
+//											particle1->setStartSpinVar(0.f);
+//											particle1->setEndSpin(0.0);
+//											particle1->setEndSpinVar(0.f);
+//											particle1->setPosVar(ccp(90,90));
+//											particle1->setPosition(win_case->getPosition());
+//											particle1->setAutoRemoveOnFinish(true);
+//											main_case->addChild(particle1);
+//											
+//											addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+//																				   {
+//																					   KS::setOpacity(win_case, t*255);
+//																					   win_case->setScale(2.5f-t*1.5f);
+//																				   }, [=](float t)
+//																				   {
+//																					   KS::setOpacity(win_case, 255);
+//																					   win_case->setScale(1.f);
+//																					   
+//																					   CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+//																					   particle2->setPositionType(kCCPositionTypeRelative);
+//																					   particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+//																					   particle2->setEmissionRate(80);
+//																					   particle2->setAngle(360.0);
+//																					   particle2->setAngleVar(0.0);
+//																					   particle2->setBlendFunc(blendFunc);
+//																					   particle2->setDuration(-1.0);
+//																					   particle2->setEmitterMode(kCCParticleModeGravity);
+//																					   particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+//																					   particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+//																					   particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+//																					   particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+//																					   particle2->setStartSize(25.0);
+//																					   particle2->setStartSizeVar(10.0);
+//																					   particle2->setEndSize(0.0);
+//																					   particle2->setEndSizeVar(0.0);
+//																					   particle2->setGravity(ccp(0,0));
+//																					   particle2->setRadialAccel(3.0);
+//																					   particle2->setRadialAccelVar(0.0);
+//																					   particle2->setSpeed(0);
+//																					   particle2->setSpeedVar(0.0);
+//																					   particle2->setTangentialAccel(0);
+//																					   particle2->setTangentialAccelVar(0);
+//																					   particle2->setTotalParticles(10);
+//																					   particle2->setLife(0.8);
+//																					   particle2->setLifeVar(0.25);
+//																					   particle2->setStartSpin(0.0);
+//																					   particle2->setStartSpinVar(50.f);
+//																					   particle2->setEndSpin(0.0);
+//																					   particle2->setEndSpinVar(60.f);
+//																					   particle2->setPosVar(ccp(80,80));
+//																					   particle2->setPosition(win_case->getPosition());
+//																					   main_case->addChild(particle2);
+//																					   
+//																					   
+//																					   is_menu_enable = true;
+//																					   bottom_menu->setVisible(true);
+//																				   }));
+//										}
+//										else
+//										{
+//											// lose
+//											
+//											CCSprite* win_case = CCSprite::create("endless_loser.png");
+//											win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+//											main_case->addChild(win_case);
+//											
+//											KS::setOpacity(win_case, 0);
+//											win_case->setScale(2.5f);
+//											
+//											addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+//																				   {
+//																					   KS::setOpacity(win_case, t*255);
+//																					   win_case->setScale(2.5f-t*1.5f);
+//																				   }, [=](float t)
+//																				   {
+//																					   KS::setOpacity(win_case, 255);
+//																					   win_case->setScale(1.f);
+//																					   
+//																					   is_menu_enable = true;
+//																					   bottom_menu->setVisible(true);
+//																				   }));
+//										}
+//									}
+//								});
+//							});
+//						});
+//					});
+//				});
+//			});
+//		});
+//	});
+	
+	startLeftCalcAnimation(mySGD->area_score.getV(), 0, 0.5f, left_top_content, [=]()
+   {
+	   flipTarget(left_top_back, left_top_title, left_top_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleLifeScore), left_life_decrease_score);
+	   startLeftCalcAnimation(mySGD->damage_score.getV(), mySGD->area_score.getV(), 0.5f, left_center_content, [=]()
+	  {
+		  flipTarget(left_center_back, left_center_title, left_center_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTimeScore), left_time_decrease_score);
+		  startLeftCalcAnimation(mySGD->combo_score.getV(), mySGD->area_score.getV()+mySGD->damage_score.getV(), 0.5f, left_bottom_content, [=]()
+		 {
+			 flipTarget(left_bottom_back, left_bottom_title, left_bottom_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleGradeScore), left_grade_decrease_score);
+			 startLeftCalcAnimation(left_life_decrease_score, left_life_base_score, 0.5f, left_top_content, [=]()
+			{
+				flipTarget(left_top_back, left_top_title, left_top_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold), mySGD->getStageGold());
+				startLeftCalcAnimation(left_time_decrease_score, left_time_base_score, 0.5f, left_center_content, [=]()
+			   {
+				   flipTarget(left_center_back, left_center_title, left_center_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea), mySGD->getPercentage()*100.f);
+				   startLeftCalcAnimation(left_grade_decrease_score, left_grade_base_score, 0.5f, left_bottom_content, [=]()
+				  {
+					  flipTarget(left_bottom_back, left_bottom_title, left_bottom_content, "", 0);
+					  
+					  is_left_calc_end = true;
+					  if(is_left_calc_end && is_right_calc_end)
+					  {
+						  AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+						  
+						  if(left_total_score > right_total_score)
+						  {
+							  // win
+							  
+							  CCSprite* win_case = CCSprite::create("endless_winner.png");
+							  win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+							  main_case->addChild(win_case);
+							  
+							  CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+							  win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
+							  win_case->addChild(win_label);
+							  
+							  CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+							  win_ment->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f-25));
+							  win_case->addChild(win_ment);
+							  
+							  win_case->setRotation(-15);
+							  
+							  
+							  KS::setOpacity(win_case, 0);
+							  win_case->setScale(2.5f);
+							  
+							  CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
+							  particle1->setPositionType(kCCPositionTypeRelative);
+							  particle1->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+							  particle1->setEmissionRate(300);
+							  particle1->setAngle(180.0);
+							  particle1->setAngleVar(180.0);
+							  ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+							  particle1->setBlendFunc(blendFunc);
+							  particle1->setDuration(0.3f);
+							  particle1->setEmitterMode(kCCParticleModeGravity);
+							  particle1->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+							  particle1->setStartColorVar(ccc4f(0,0,0,0.f));
+							  particle1->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+							  particle1->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+							  particle1->setStartSize(40.0);
+							  particle1->setStartSizeVar(10.0);
+							  particle1->setEndSize(0.0);
+							  particle1->setEndSizeVar(0.0);
+							  particle1->setGravity(ccp(0,-100));
+							  particle1->setRadialAccel(50.0);
+							  particle1->setRadialAccelVar(20.0);
+							  particle1->setSpeed(50);
+							  particle1->setSpeedVar(30.0);
+							  particle1->setTangentialAccel(0);
+							  particle1->setTangentialAccelVar(0);
+							  particle1->setTotalParticles(100);
+							  particle1->setLife(2.0);
+							  particle1->setLifeVar(0.5);
+							  particle1->setStartSpin(0.0);
+							  particle1->setStartSpinVar(0.f);
+							  particle1->setEndSpin(0.0);
+							  particle1->setEndSpinVar(0.f);
+							  particle1->setPosVar(ccp(90,90));
+							  particle1->setPosition(win_case->getPosition());
+							  particle1->setAutoRemoveOnFinish(true);
+							  main_case->addChild(particle1);
+							  
+							  addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																	 {
+																		 KS::setOpacity(win_case, t*255);
+																		 win_case->setScale(2.5f-t*1.5f);
+																	 }, [=](float t)
+																	 {
+																		 KS::setOpacity(win_case, 255);
+																		 win_case->setScale(1.f);
+																		 
+																		 CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+																		 particle2->setPositionType(kCCPositionTypeRelative);
+																		 particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+																		 particle2->setEmissionRate(80);
+																		 particle2->setAngle(360.0);
+																		 particle2->setAngleVar(0.0);
+																		 particle2->setBlendFunc(blendFunc);
+																		 particle2->setDuration(-1.0);
+																		 particle2->setEmitterMode(kCCParticleModeGravity);
+																		 particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+																		 particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+																		 particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+																		 particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+																		 particle2->setStartSize(25.0);
+																		 particle2->setStartSizeVar(10.0);
+																		 particle2->setEndSize(0.0);
+																		 particle2->setEndSizeVar(0.0);
+																		 particle2->setGravity(ccp(0,0));
+																		 particle2->setRadialAccel(3.0);
+																		 particle2->setRadialAccelVar(0.0);
+																		 particle2->setSpeed(0);
+																		 particle2->setSpeedVar(0.0);
+																		 particle2->setTangentialAccel(0);
+																		 particle2->setTangentialAccelVar(0);
+																		 particle2->setTotalParticles(10);
+																		 particle2->setLife(0.8);
+																		 particle2->setLifeVar(0.25);
+																		 particle2->setStartSpin(0.0);
+																		 particle2->setStartSpinVar(50.f);
+																		 particle2->setEndSpin(0.0);
+																		 particle2->setEndSpinVar(60.f);
+																		 particle2->setPosVar(ccp(80,80));
+																		 particle2->setPosition(win_case->getPosition());
+																		 main_case->addChild(particle2);
+																		 
+																		 
+																		 is_menu_enable = true;
+																		 bottom_menu->setVisible(true);
+																	 }));
+						  }
+						  else
+						  {
+							  // lose
+							  
+							  CCSprite* win_case = CCSprite::create("endless_loser.png");
+							  win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+							  main_case->addChild(win_case);
+							  
+							  KS::setOpacity(win_case, 0);
+							  win_case->setScale(2.5f);
+							  
+							  addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																	 {
+																		 KS::setOpacity(win_case, t*255);
+																		 win_case->setScale(2.5f-t*1.5f);
+																	 }, [=](float t)
+																	 {
+																		 KS::setOpacity(win_case, 255);
+																		 win_case->setScale(1.f);
+																		 
+																		 is_menu_enable = true;
+																		 bottom_menu->setVisible(true);
+																	 }));
+						  }
+					  }
+				  });
+			   });
+			});
+		 });
+	  });
+   });
+	
+	
+//	startRightCalcAnimation(right_area_score, 0, 1.f, right_top_content, [=]()
+//	{
+//	   startRightCalcAnimation(right_damage_score, right_area_score, 1.f, right_center_content, [=]()
+//	  {
+//		  startRightCalcAnimation(right_combo_score, right_area_score+right_damage_score, 1.f, right_bottom_content, [=]()
+//		 {
+//			 flipRight(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleLifeScore), right_life_decrease_score,
+//					  myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTimeScore), right_time_decrease_score,
+//					  myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleGradeScore), right_grade_decrease_score, [=]()
+//			  {
+//				  startRightCalcAnimation(right_life_decrease_score, right_life_base_score, 1.f, right_top_content, [=]()
+//				 {
+//					 startRightCalcAnimation(right_time_decrease_score, right_time_base_score, 1.f, right_center_content, [=]()
+//					{
+//						startRightCalcAnimation(right_grade_decrease_score, right_grade_base_score, 1.f, right_bottom_content, [=]()
+//					   {
+//						   flipRight(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold), right_take_gold,
+//									myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea), right_take_area*100.f,
+//									"", 0, [=]()
+//									{
+//										is_right_calc_end = true;
+//										if(is_left_calc_end && is_right_calc_end)
+//										{
+//											AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+//											
+//											if(left_total_score > right_total_score)
+//											{
+//												// win
+//												
+//												CCSprite* win_case = CCSprite::create("endless_winner.png");
+//												win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+//												main_case->addChild(win_case);
+//												
+//												CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+//												win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
+//												win_case->addChild(win_label);
+//												
+//												CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+//												win_ment->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f-25));
+//												win_case->addChild(win_ment);
+//												
+//												win_case->setRotation(-15);
+//												
+//												
+//												KS::setOpacity(win_case, 0);
+//												win_case->setScale(2.5f);
+//												
+//												CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
+//												particle1->setPositionType(kCCPositionTypeRelative);
+//												particle1->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+//												particle1->setEmissionRate(300);
+//												particle1->setAngle(180.0);
+//												particle1->setAngleVar(180.0);
+//												ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+//												particle1->setBlendFunc(blendFunc);
+//												particle1->setDuration(0.3f);
+//												particle1->setEmitterMode(kCCParticleModeGravity);
+//												particle1->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+//												particle1->setStartColorVar(ccc4f(0,0,0,0.f));
+//												particle1->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+//												particle1->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+//												particle1->setStartSize(40.0);
+//												particle1->setStartSizeVar(10.0);
+//												particle1->setEndSize(0.0);
+//												particle1->setEndSizeVar(0.0);
+//												particle1->setGravity(ccp(0,-100));
+//												particle1->setRadialAccel(50.0);
+//												particle1->setRadialAccelVar(20.0);
+//												particle1->setSpeed(50);
+//												particle1->setSpeedVar(30.0);
+//												particle1->setTangentialAccel(0);
+//												particle1->setTangentialAccelVar(0);
+//												particle1->setTotalParticles(100);
+//												particle1->setLife(2.0);
+//												particle1->setLifeVar(0.5);
+//												particle1->setStartSpin(0.0);
+//												particle1->setStartSpinVar(0.f);
+//												particle1->setEndSpin(0.0);
+//												particle1->setEndSpinVar(0.f);
+//												particle1->setPosVar(ccp(90,90));
+//												particle1->setPosition(win_case->getPosition());
+//												particle1->setAutoRemoveOnFinish(true);
+//												main_case->addChild(particle1);
+//												
+//												addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+//																					   {
+//																						   KS::setOpacity(win_case, t*255);
+//																						   win_case->setScale(2.5f-t*1.5f);
+//																					   }, [=](float t)
+//																					   {
+//																						   KS::setOpacity(win_case, 255);
+//																						   win_case->setScale(1.f);
+//																						   
+//																						   CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+//																						   particle2->setPositionType(kCCPositionTypeRelative);
+//																						   particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+//																						   particle2->setEmissionRate(80);
+//																						   particle2->setAngle(360.0);
+//																						   particle2->setAngleVar(0.0);
+//																						   particle2->setBlendFunc(blendFunc);
+//																						   particle2->setDuration(-1.0);
+//																						   particle2->setEmitterMode(kCCParticleModeGravity);
+//																						   particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+//																						   particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+//																						   particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+//																						   particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+//																						   particle2->setStartSize(25.0);
+//																						   particle2->setStartSizeVar(10.0);
+//																						   particle2->setEndSize(0.0);
+//																						   particle2->setEndSizeVar(0.0);
+//																						   particle2->setGravity(ccp(0,0));
+//																						   particle2->setRadialAccel(3.0);
+//																						   particle2->setRadialAccelVar(0.0);
+//																						   particle2->setSpeed(0);
+//																						   particle2->setSpeedVar(0.0);
+//																						   particle2->setTangentialAccel(0);
+//																						   particle2->setTangentialAccelVar(0);
+//																						   particle2->setTotalParticles(10);
+//																						   particle2->setLife(0.8);
+//																						   particle2->setLifeVar(0.25);
+//																						   particle2->setStartSpin(0.0);
+//																						   particle2->setStartSpinVar(50.f);
+//																						   particle2->setEndSpin(0.0);
+//																						   particle2->setEndSpinVar(60.f);
+//																						   particle2->setPosVar(ccp(80,80));
+//																						   particle2->setPosition(win_case->getPosition());
+//																						   main_case->addChild(particle2);
+//																						   
+//																						   
+//																						   is_menu_enable = true;
+//																						   bottom_menu->setVisible(true);
+//																					   }));
+//											}
+//											else
+//											{
+//												// lose
+//												
+//												CCSprite* win_case = CCSprite::create("endless_loser.png");
+//												win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+//												main_case->addChild(win_case);
+//												
+//												KS::setOpacity(win_case, 0);
+//												win_case->setScale(2.5f);
+//												
+//												addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+//																					   {
+//																						   KS::setOpacity(win_case, t*255);
+//																						   win_case->setScale(2.5f-t*1.5f);
+//																					   }, [=](float t)
+//																					   {
+//																						   KS::setOpacity(win_case, 255);
+//																						   win_case->setScale(1.f);
+//																						   
+//																						   is_menu_enable = true;
+//																						   bottom_menu->setVisible(true);
+//																					   }));
+//											}
+//										}
+//									});
+//					   });
+//					});
+//				 });
+//			  });
+//		 });
+//	  });
+//	});
+	
+	startRightCalcAnimation(right_area_score, 0, 0.5f, right_top_content, [=]()
+	{
+		flipTarget(right_top_back, right_top_title, right_top_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleLifeScore), right_life_decrease_score);
+		startRightCalcAnimation(right_damage_score, right_area_score, 0.5f, right_center_content, [=]()
+		{
+			flipTarget(right_center_back, right_center_title, right_center_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTimeScore), right_time_decrease_score);
+			startRightCalcAnimation(right_combo_score, right_area_score+right_damage_score, 0.5f, right_bottom_content, [=]()
+			{
+				flipTarget(right_bottom_back, right_bottom_title, right_bottom_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleGradeScore), right_grade_decrease_score);
+				startRightCalcAnimation(right_life_decrease_score, right_life_base_score, 0.5f, right_top_content, [=]()
+				{
+					flipTarget(right_top_back, right_top_title, right_top_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold), right_take_gold);
+					startRightCalcAnimation(right_time_decrease_score, right_time_base_score, 0.5f, right_center_content, [=]()
+					{
+						flipTarget(right_center_back, right_center_title, right_center_content, myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea), right_take_area*100.f);
+						startRightCalcAnimation(right_grade_decrease_score, right_grade_base_score, 0.5f, right_bottom_content, [=]()
+						{
+							flipTarget(right_bottom_back, right_bottom_title, right_bottom_content, "", 0);
+							
+							is_right_calc_end = true;
+							if(is_left_calc_end && is_right_calc_end)
+							{
+								AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+								
+								if(left_total_score > right_total_score)
+								{
+									// win
+									
+									CCSprite* win_case = CCSprite::create("endless_winner.png");
+									win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+									main_case->addChild(win_case);
+									
+									CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+									win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
+									win_case->addChild(win_label);
+									
+									CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+									win_ment->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f-25));
+									win_case->addChild(win_ment);
+									
+									win_case->setRotation(-15);
+									
+									
+									KS::setOpacity(win_case, 0);
+									win_case->setScale(2.5f);
+									
+									CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
+									particle1->setPositionType(kCCPositionTypeRelative);
+									particle1->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+									particle1->setEmissionRate(300);
+									particle1->setAngle(180.0);
+									particle1->setAngleVar(180.0);
+									ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+									particle1->setBlendFunc(blendFunc);
+									particle1->setDuration(0.3f);
+									particle1->setEmitterMode(kCCParticleModeGravity);
+									particle1->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+									particle1->setStartColorVar(ccc4f(0,0,0,0.f));
+									particle1->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+									particle1->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+									particle1->setStartSize(40.0);
+									particle1->setStartSizeVar(10.0);
+									particle1->setEndSize(0.0);
+									particle1->setEndSizeVar(0.0);
+									particle1->setGravity(ccp(0,-100));
+									particle1->setRadialAccel(50.0);
+									particle1->setRadialAccelVar(20.0);
+									particle1->setSpeed(50);
+									particle1->setSpeedVar(30.0);
+									particle1->setTangentialAccel(0);
+									particle1->setTangentialAccelVar(0);
+									particle1->setTotalParticles(100);
+									particle1->setLife(2.0);
+									particle1->setLifeVar(0.5);
+									particle1->setStartSpin(0.0);
+									particle1->setStartSpinVar(0.f);
+									particle1->setEndSpin(0.0);
+									particle1->setEndSpinVar(0.f);
+									particle1->setPosVar(ccp(90,90));
+									particle1->setPosition(win_case->getPosition());
+									particle1->setAutoRemoveOnFinish(true);
+									main_case->addChild(particle1);
+									
+									addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																		   {
+																			   KS::setOpacity(win_case, t*255);
+																			   win_case->setScale(2.5f-t*1.5f);
+																		   }, [=](float t)
+																		   {
+																			   KS::setOpacity(win_case, 255);
+																			   win_case->setScale(1.f);
+																			   
+																			   CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+																			   particle2->setPositionType(kCCPositionTypeRelative);
+																			   particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+																			   particle2->setEmissionRate(80);
+																			   particle2->setAngle(360.0);
+																			   particle2->setAngleVar(0.0);
+																			   particle2->setBlendFunc(blendFunc);
+																			   particle2->setDuration(-1.0);
+																			   particle2->setEmitterMode(kCCParticleModeGravity);
+																			   particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+																			   particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+																			   particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+																			   particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+																			   particle2->setStartSize(25.0);
+																			   particle2->setStartSizeVar(10.0);
+																			   particle2->setEndSize(0.0);
+																			   particle2->setEndSizeVar(0.0);
+																			   particle2->setGravity(ccp(0,0));
+																			   particle2->setRadialAccel(3.0);
+																			   particle2->setRadialAccelVar(0.0);
+																			   particle2->setSpeed(0);
+																			   particle2->setSpeedVar(0.0);
+																			   particle2->setTangentialAccel(0);
+																			   particle2->setTangentialAccelVar(0);
+																			   particle2->setTotalParticles(10);
+																			   particle2->setLife(0.8);
+																			   particle2->setLifeVar(0.25);
+																			   particle2->setStartSpin(0.0);
+																			   particle2->setStartSpinVar(50.f);
+																			   particle2->setEndSpin(0.0);
+																			   particle2->setEndSpinVar(60.f);
+																			   particle2->setPosVar(ccp(80,80));
+																			   particle2->setPosition(win_case->getPosition());
+																			   main_case->addChild(particle2);
+																			   
+																			   
+																			   is_menu_enable = true;
+																			   bottom_menu->setVisible(true);
+																		   }));
+								}
+								else
+								{
+									// lose
+									
+									CCSprite* win_case = CCSprite::create("endless_loser.png");
+									win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+									main_case->addChild(win_case);
+									
+									KS::setOpacity(win_case, 0);
+									win_case->setScale(2.5f);
+									
+									addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																		   {
+																			   KS::setOpacity(win_case, t*255);
+																			   win_case->setScale(2.5f-t*1.5f);
+																		   }, [=](float t)
+																		   {
+																			   KS::setOpacity(win_case, 255);
+																			   win_case->setScale(1.f);
+																			   
+																			   is_menu_enable = true;
+																			   bottom_menu->setVisible(true);
+																		   }));
+								}
+							}
+						});
+					});
+				});
+			});
+		});
+	});
+}
+
+void EndlessModeResult::startLeftCalcAnimation(float t_keep_value, float t_base_value, float t_calc_time, KSLabelTTF* t_decrease_target, function<void()> t_end_func)
+{
+	keep_left_value = t_keep_value;
+	base_left_value = t_base_value;
+	decrease_left_value = keep_left_value;
+	increase_left_value = 0.f;
+	left_calc_time = t_calc_time;
+	left_decrease_target = t_decrease_target;
+	
+	left_end_func = t_end_func;
+	schedule(schedule_selector(EndlessModeResult::leftCalcAnimation));
+}
+void EndlessModeResult::leftCalcAnimation(float dt)
+{
+	if(decrease_left_value > 0)
+	{
+		int decreaseUnit = keep_left_value / left_calc_time * dt;
+		
+		if(decrease_left_value < decreaseUnit)
+		{
+			increase_left_value += decrease_left_value;
+			decrease_left_value = 0;
+		}
+		else {
+			if(decreaseUnit <= 0)
+			{
+				increase_left_value += decrease_left_value;
+				decrease_left_value = 0;
+			}
+			else {
+				decrease_left_value -= decreaseUnit;
+				increase_left_value += decreaseUnit;
+			}
+		}
+//		left_decrease_target->setString(CCString::createWithFormat("%.0f",decrease_left_value)->getCString());
+		left_total_content->setString(CCString::createWithFormat("%.0f",base_left_value + increase_left_value)->getCString());
+	}
+	else
+		stopLeftCalcAnimation();
+}
+void EndlessModeResult::stopLeftCalcAnimation()
+{
+	unschedule(schedule_selector(EndlessModeResult::leftCalcAnimation));
+	left_end_func();
+}
+
+void EndlessModeResult::flipLeft(string t_top_title, int t_top_content, string t_center_title, int t_center_content, string t_bottom_title, int t_bottom_content, function<void()> t_end_func)
+{
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+								  {
+									  left_top_back->setScaleY(1.f-t);
+								  }, [=](float t)
+								  {
+									  left_top_back->setScaleY(0.f);
+									  left_top_title->setString(t_top_title.c_str());
+									  left_top_content->setString(CCString::createWithFormat("%d", t_top_content)->getCString());
+									  
+									  addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																			 {
+																				 left_top_back->setScaleY(t);
+																			 }, [=](float t)
+																			 {
+																				 left_top_back->setScaleY(1.f);
+																			 }));
+								  }));
+	
+	addChild(KSTimer::create(6.f/30.f, [=]()
+							 {
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																		{
+																			left_center_back->setScaleY(1.f-t);
+																		}, [=](float t)
+																		{
+																			left_center_back->setScaleY(0.f);
+																			left_center_title->setString(t_center_title.c_str());
+																			left_center_content->setString(CCString::createWithFormat("%d", t_center_content)->getCString());
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																												   {
+																													   left_center_back->setScaleY(t);
+																												   }, [=](float t)
+																												   {
+																													   left_center_back->setScaleY(1.f);
+																												   }));
+																		}));
+							 }));
+	
+	addChild(KSTimer::create(13.f/30.f, [=]()
+							 {
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																		{
+																			left_bottom_back->setScaleY(1.f-t);
+																		}, [=](float t)
+																		{
+																			left_bottom_back->setScaleY(0.f);
+																			left_bottom_title->setString(t_bottom_title.c_str());
+																			left_bottom_content->setString(CCString::createWithFormat("%d", t_bottom_content)->getCString());
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																												   {
+																													   left_bottom_back->setScaleY(t);
+																												   }, [=](float t)
+																												   {
+																													   left_bottom_back->setScaleY(1.f);
+																													   t_end_func();
+																												   }));
+																		}));
+							 }));
+}
+
+void EndlessModeResult::flipTarget(CCScale9Sprite* t_back, KSLabelTTF* t_title, KSLabelTTF* t_content, string t_flip_title, int t_flip_content)
+{
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+										   {
+											   t_back->setScaleY(1.f-t);
+										   }, [=](float t)
+										   {
+											   t_back->setScaleY(0.f);
+											   t_title->setString(t_flip_title.c_str());
+											   t_content->setString(CCString::createWithFormat("%d", t_flip_content)->getCString());
+											   
+											   addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																					  {
+																						  t_back->setScaleY(t);
+																					  }, [=](float t)
+																					  {
+																						  t_back->setScaleY(1.f);
+																					  }));
+										   }));
+}
+
+void EndlessModeResult::startRightCalcAnimation(float t_keep_value, float t_base_value, float t_calc_time, KSLabelTTF* t_decrease_target, function<void()> t_end_func)
+{
+	keep_right_value = t_keep_value;
+	base_right_value = t_base_value;
+	decrease_right_value = keep_right_value;
+	increase_right_value = 0.f;
+	right_calc_time = t_calc_time;
+	right_decrease_target = t_decrease_target;
+	
+	right_end_func = t_end_func;
+	schedule(schedule_selector(EndlessModeResult::rightCalcAnimation));
+}
+void EndlessModeResult::rightCalcAnimation(float dt)
+{
+	if(decrease_right_value > 0)
+	{
+		int decreaseUnit = keep_right_value / right_calc_time * dt;
+		
+		if(decrease_right_value < decreaseUnit)
+		{
+			increase_right_value += decrease_right_value;
+			decrease_right_value = 0;
+		}
+		else {
+			if(decreaseUnit <= 0)
+			{
+				increase_right_value += decrease_right_value;
+				decrease_right_value = 0;
+			}
+			else {
+				decrease_right_value -= decreaseUnit;
+				increase_right_value += decreaseUnit;
+			}
+		}
+//		right_decrease_target->setString(CCString::createWithFormat("%.0f",decrease_right_value)->getCString());
+		right_total_content->setString(CCString::createWithFormat("%.0f",base_right_value + increase_right_value)->getCString());
+	}
+	else
+		stopRightCalcAnimation();
+}
+void EndlessModeResult::stopRightCalcAnimation()
+{
+	unschedule(schedule_selector(EndlessModeResult::rightCalcAnimation));
+	right_end_func();
+}
+
+void EndlessModeResult::flipRight(string t_top_title, int t_top_content, string t_center_title, int t_center_content, string t_bottom_title, int t_bottom_content, function<void()> t_end_func)
+{
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+										   {
+											   right_top_back->setScaleY(1.f-t);
+										   }, [=](float t)
+										   {
+											   right_top_back->setScaleY(0.f);
+											   right_top_title->setString(t_top_title.c_str());
+											   right_top_content->setString(CCString::createWithFormat("%d", t_top_content)->getCString());
+											   
+											   addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																					  {
+																						  right_top_back->setScaleY(t);
+																					  }, [=](float t)
+																					  {
+																						  right_top_back->setScaleY(1.f);
+																					  }));
+										   }));
+	
+	addChild(KSTimer::create(6.f/30.f, [=]()
+							 {
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																		{
+																			right_center_back->setScaleY(1.f-t);
+																		}, [=](float t)
+																		{
+																			right_center_back->setScaleY(0.f);
+																			right_center_title->setString(t_center_title.c_str());
+																			right_center_content->setString(CCString::createWithFormat("%d", t_center_content)->getCString());
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																												   {
+																													   right_center_back->setScaleY(t);
+																												   }, [=](float t)
+																												   {
+																													   right_center_back->setScaleY(1.f);
+																												   }));
+																		}));
+							 }));
+	
+	addChild(KSTimer::create(13.f/30.f, [=]()
+							 {
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																		{
+																			right_bottom_back->setScaleY(1.f-t);
+																		}, [=](float t)
+																		{
+																			right_bottom_back->setScaleY(0.f);
+																			right_bottom_title->setString(t_bottom_title.c_str());
+																			right_bottom_content->setString(CCString::createWithFormat("%d", t_bottom_content)->getCString());
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																												   {
+																													   right_bottom_back->setScaleY(t);
+																												   }, [=](float t)
+																												   {
+																													   right_bottom_back->setScaleY(1.f);
+																													   t_end_func();
+																												   }));
+																		}));
+							 }));
 }
 
 void EndlessModeResult::reSetEndlessRank()
