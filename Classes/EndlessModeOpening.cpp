@@ -831,7 +831,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10, rest_back->getContentSize().height/2.f));
 		
 		
-		CCRect table_rect = CCRectMake(10, left_back->getContentSize().height/2.f - 150/2.f + 5, 255, 150);
+		CCRect table_rect = CCRectMake(10, left_back->getContentSize().height/2.f - 150/2.f - 30, 255, 150);
 		
 //		CCSprite* table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_rect.size.width, table_rect.size.height));
 //		table_back->setOpacity(100);
@@ -857,7 +857,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 		list_cell_case->setContentSize(CCSizeMake(225, 37));
-		list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,list_cell_case->getContentSize().height/2.f+5));
+		list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
 		left_back->addChild(list_cell_case);
 		
 		CCPoint rank_position = ccp(20,18);
