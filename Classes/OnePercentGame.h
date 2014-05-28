@@ -525,7 +525,7 @@ public:
 	}
 	void showFail()
 	{
-		KSLabelTTF* label = KSLabelTTF::create(boost::str(boost::format("%|4.3|%% 실패") % (m_totalPercent * 100.f)).c_str(), mySGD->getFont().c_str(), 30.f);
+		KSLabelTTF* label = KSLabelTTF::create(boost::str(boost::format("%|4.3|%% %||") % (m_totalPercent * 100.f) % myLoc->getLocalForKey(kMyLocalKey_fail)).c_str(), mySGD->getFont().c_str(), 30.f);
 		label->enableStroke(ccc3(19, 9, 0), 1.f);
 		label->setColor(ccc3(255, 155, 0));
 		m_container->addChild(label, kOnePercentGame_Z_content);
