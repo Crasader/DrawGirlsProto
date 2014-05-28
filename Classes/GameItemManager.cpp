@@ -77,11 +77,13 @@ void GameItemBase::traceCharacter()
 		stopTraceCharacter();
 		if(mySD->getClearCondition() == kCLEAR_itemCollect)
 			myGD->communication("UI_takeItemCollect");
-		
+        
+        CCPoint last_position = item_img->getPosition();
+        
 		item_img->removeFromParentAndCleanup(true);
 		
 		
-		(target_effect->*delegate_effect)(item_img->getPosition());
+		(target_effect->*delegate_effect)(last_position);
 		
 		acting();
 		return;
