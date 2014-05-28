@@ -154,7 +154,8 @@ void KSCumberBase::randomMoving(float dt)
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
 					myGD->communication("SW_createSW", checkPosition);
-					m_emotion->onTouchingLine();
+					if(m_emotion)
+						m_emotion->onTouchingLine();
 				}
 				//                                                                        callfuncI_selector(MetalSnake::showEmotion)); //##
 				m_directionAngleDegree += m_well512.GetValue(90, 270);
@@ -344,7 +345,8 @@ void KSCumberBase::straightMoving(float dt)
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
 					myGD->communication("SW_createSW", checkPosition);
-					m_emotion->onTouchingLine();
+					if(m_emotion)
+						m_emotion->onTouchingLine();
 				}
 				degree = degreeSelector(cnt, degree);
 				
@@ -557,7 +559,8 @@ void KSCumberBase::followMoving(float dt)
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
 					myGD->communication("SW_createSW", checkPosition);
-					m_emotion->onTouchingLine();
+					if(m_emotion)
+						m_emotion->onTouchingLine();
 				}
 			}
 			
@@ -726,7 +729,8 @@ void KSCumberBase::rightAngleMoving(float dt)
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
 					myGD->communication("SW_createSW", checkPosition);
-					m_emotion->onTouchingLine();
+					if(m_emotion)
+						m_emotion->onTouchingLine();
 				}
 				
 				int changeDirection = m_well512.GetValue(3);
@@ -899,7 +903,8 @@ void KSCumberBase::circleMoving(float dt)
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
 					myGD->communication("SW_createSW", checkPosition);
-					m_emotion->onTouchingLine();
+					if(m_emotion)
+						m_emotion->onTouchingLine();
 				}
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				
@@ -1065,7 +1070,8 @@ void KSCumberBase::snakeMoving(float dt)
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
 					myGD->communication("SW_createSW", checkPosition);
-					m_emotion->onTouchingLine();
+					if(m_emotion)
+						m_emotion->onTouchingLine();
 				}
 				//									callfuncI_selector(MetalSnake::showEmotion)); //##
 				

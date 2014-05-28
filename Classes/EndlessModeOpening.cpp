@@ -851,8 +851,9 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		rank_table->setTouchPriority(touch_priority);
 		
-		ScrollBar* m_scrollBar = ScrollBar::createScrollbar(rank_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"), touch_priority-1);
-		m_scrollBar->setDynamicScrollSize(false);
+		ScrollBar* m_scrollBar = ScrollBar::createScrollbar(rank_table, -18, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																																																					CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20)), touch_priority-1);
+		m_scrollBar->setDynamicScrollSize(true);
 		m_scrollBar->setVisible(true);
 		
 		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));

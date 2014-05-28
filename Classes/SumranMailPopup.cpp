@@ -327,9 +327,11 @@ void SumranMailPopup::drawMail (Json::Value obj)
 
 	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
 		
-	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
-	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -2 - 10, NULL, bar);
-	m_scrollBar->setDynamicScrollSize(false);
+//	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
+	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																										 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
+	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -18, NULL, scrollBar, -191);
+	m_scrollBar->setDynamicScrollSize(true);
 	m_scrollBar->setVisible(true);	
 	mailTableView->setAnchorPoint(CCPointZero);
 	setFormSetter(m_scrollBar);

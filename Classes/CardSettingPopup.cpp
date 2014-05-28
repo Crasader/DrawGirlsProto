@@ -156,8 +156,10 @@ bool CardSettingPopup::init()
 	main_case->addChild(card_table, kCSS_Z_content);
 	card_table->setTouchPriority(-180-5);
 	
-	m_scrollBar = ScrollBar::createScrollbar(card_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"), -186);
-	m_scrollBar->setDynamicScrollSize(false);
+	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																										 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
+	m_scrollBar = ScrollBar::createScrollbar(card_table, -18, NULL, scrollBar, -186);
+	m_scrollBar->setDynamicScrollSize(true);
 	m_scrollBar->setVisible(true);
 	
 	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-184);

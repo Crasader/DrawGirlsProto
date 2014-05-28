@@ -58,10 +58,12 @@ public:
 		CCLayer::init();
 //		startFormSetter(this);
 		setTouchEnabled(true);
+		m_validSize = 50;
 		m_cancelGacha = cancelGacha;
 		m_resultGacha = tryGacha;
 
-		recent_percent = originalPercent;
+		m_totalPercent = recent_percent = originalPercent;
+		
 		setTouchEnabled(true);
 
 		m_grayBack = CCSprite::create("back_gray.png");
@@ -203,6 +205,10 @@ public:
 																					 //endShow();
 																				 }));
 
+		m_lblPercent = CCLabelTTF::create(boost::str(boost::format("%||") % m_totalPercent).c_str(), mySGD->getFont().c_str(),
+																			14.f);
+		m_lblPercent->setPosition(ccp(0, 0));
+		m_container->addChild(m_lblPercent, kOnePercentGame_Z_content);
 		this->scheduleUpdate();
 		return true;
 	}
@@ -340,18 +346,30 @@ public:
 			{
 				int pos = m_cursor->getPositionX();
 				unscheduleUpdate();
+				m_99State = 3; // 두번 째 시도로 세팅.
+				m_touchEnable = false;
+				
+				addChild(KSGradualValue<float>::create(m_validSize, m_validSize - 20, 1.f, [=](float t){
+					m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+				}, [=](float t){
+					
+					m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+				}));
+				addChild(KSTimer::create(1.0f, [=](){
+					scheduleUpdate();
+				}));
+				addChild(KSTimer::create(1.5f, [=](){
+					m_touchEnable = true;
+				}));
+				
 				if(fabsf(pos) <= m_validSize / 2.f)
 				{
-					m_99State = 3; // 두번 째 시도로 세팅.
-					m_touchEnable = false;
-					addChild(KSGradualValue<float>::create(0, 30, 1.f, [=](float t){
+					m_totalPercent += 0.3f;
+					addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), m_shutter->getPositionY() + 30, 1.f, [=](float t){
 						m_shutter->setPositionY(t);
 					}, [=](float t){
 						m_shutter->setPositionY(t);
-						scheduleUpdate();
-						addChild(KSTimer::create(0.5f, [=](){
-							m_touchEnable = true;
-						}));
+						
 					}
 					));
 					addChild(KSTimer::create(0.f, [=](){
@@ -360,38 +378,45 @@ public:
 						m_container->addChild(heart, kOnePercentGame_Z_content);
 					}));
 					
-					m_validSize = 30;
-					addChild(KSGradualValue<float>::create(50, 30, 1.f, [=](float t){
-						m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
-					}, [=](float t){
-
-						m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
-					}));
 
 				}
 				else 
 				{
 					// 실패했을 경우.
-					showFail();
+//					showFail();
 				}
+				m_validSize -= 20;
 			}
 			else if(m_99State == 3) // 2nd try
 			{
 
 				unscheduleUpdate();
 				int pos = m_cursor->getPositionX();
+				m_99State = 4; // 세번 째 시도로 세팅.
+				m_touchEnable = false;
+
+				addChild(KSGradualValue<float>::create(m_validSize, m_validSize - 18, 1.f, [=](float t){
+					m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+				}, [=](float t){
+					
+					m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+				}));
+				
+				addChild(KSTimer::create(1.0f, [=](){
+					scheduleUpdate();
+				}));
+				addChild(KSTimer::create(1.5f, [=](){
+					m_touchEnable = true;
+				}));
+
+				
 				if(fabsf(pos) <= m_validSize / 2.f)
 				{
-					m_99State = 4; // 세번 째 시도로 세팅.
-					m_touchEnable = false;
-					addChild(KSGradualValue<float>::create(30, 90, 1.f, [=](float t){
+					m_totalPercent += 0.3f;
+					addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), m_shutter->getPositionY() + 60, 1.f, [=](float t){
 						m_shutter->setPositionY(t);
 					}, [=](float t){
 						m_shutter->setPositionY(t);
-						scheduleUpdate();
-						addChild(KSTimer::create(0.5f, [=](){
-							m_touchEnable = true;
-						}));
 					}
 					));
 					addChild(KSTimer::create(0.f, [=](){
@@ -400,37 +425,42 @@ public:
 						m_container->addChild(heart, kOnePercentGame_Z_content);
 					}));
 					
-					m_validSize = 12;
-					addChild(KSGradualValue<float>::create(30, 12, 1.f, [=](float t){
-						m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
-					}, [=](float t){
-
-						m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
-					}));
 
 				}
 				else 
 				{
 					// 실패했을 경우.
-					showFail();
+//					showFail();
 				}
+				m_validSize -= 18;
 			}
 			else if(m_99State == 4) // 3rd try
 			{
 				unscheduleUpdate();
 				int pos = m_cursor->getPositionX();
+				m_touchEnable = false;
+				m_99State = 999;
+				addChild(KSGradualValue<float>::create(m_validSize, 0, 1.f, [=](float t){
+					m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+				}, [=](float t){
+					
+					m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+				}));
+
 				if(fabsf(pos) <= m_validSize / 2.f)
 				{
-					m_99State = 777; // 성공
-					m_touchEnable = false;
-					addChild(KSGradualValue<float>::create(90, 175, 1.f, [=](float t){
+					m_totalPercent += 0.4f;
+//					m_99State = 777; // 성공
+					float upLimit;
+					if(m_totalPercent >= 1.f)
+						upLimit = 175;
+					else
+						upLimit = m_shutter->getPositionY() + 85;
+					
+					addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
 						m_shutter->setPositionY(t);
 					}, [=](float t){
 						m_shutter->setPositionY(t);
-						addChild(KSTimer::create(0.5f, [=](){
-							m_touchEnable = true;
-							showSuccess();
-						}));
 					}
 					));
 					addChild(KSTimer::create(0.f, [=](){
@@ -442,8 +472,27 @@ public:
 				else 
 				{
 					// 실패했을 경우.
-					showFail();
+//					showFail();
 				}
+				
+				addChild(KSTimer::create(1.5f, [=](){
+					m_touchEnable = true;
+					if(m_totalPercent >= 1.f)
+					{
+						float upLimit = 175;
+						addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
+							m_shutter->setPositionY(t);
+						}, [=](float t){
+							m_shutter->setPositionY(t);
+						}));
+						
+						showSuccess();
+					}
+					else
+					{
+						showFail();
+					}
+				}));
 			}
 			else if(m_99State == 4444) // 닫기
 			{
@@ -463,12 +512,20 @@ public:
 					removeFromParent();
 				}
 			}
+			else if(m_99State == 999) // 마지막 결과
+			{
+				if(m_resultGacha)
+				{
+					m_resultGacha(MAX(1.f, m_totalPercent)); // 100% 로 설정함!
+					removeFromParent();
+				}
+			}
 		}
 		//one_percent_gacha_color.png
 	}
 	void showFail()
 	{
-		KSLabelTTF* label = KSLabelTTF::create(boost::str(boost::format("%|4.3|%% 실패") % (recent_percent * 100.f)).c_str(), mySGD->getFont().c_str(), 30.f);
+		KSLabelTTF* label = KSLabelTTF::create(boost::str(boost::format("%|4.3|%% 실패") % (m_totalPercent * 100.f)).c_str(), mySGD->getFont().c_str(), 30.f);
 		label->enableStroke(ccc3(19, 9, 0), 1.f);
 		label->setColor(ccc3(255, 155, 0));
 		m_container->addChild(label, kOnePercentGame_Z_content);
@@ -479,7 +536,7 @@ public:
 			label->setScale(t);
 		}, elasticOut));
 
-		m_99State = 4444;	
+		m_99State = 999;
 		CCLabelTTF* stopFnt = CCLabelTTF::create("닫기", mySGD->getFont().c_str(), 20.f);
 		stopFnt->setColor(ccc3(22, 11, 0));
 		gacha_button->getTitleLabel()->removeAllChildren();
@@ -500,7 +557,7 @@ public:
 		label->enableStroke(ccc3(19, 9, 0), 1.f);
 		label->setColor(ccc3(255, 155, 0));
 
-		m_99State = 777;	
+		m_99State = 999;
 		CCLabelTTF* stopFnt = CCLabelTTF::create("100% 달성!!", mySGD->getFont().c_str(), 20.f);
 		stopFnt->setColor(ccc3(22, 11, 0));
 		gacha_button->getTitleLabel()->removeAllChildren();
@@ -554,5 +611,7 @@ protected:
 	bool m_touchEnable;
 	std::function<void(void)> m_cancelGacha;
 	std::function<void(float)> m_resultGacha;
+	float m_totalPercent;
+	CCLabelTTF* m_lblPercent;
 };
 #endif
