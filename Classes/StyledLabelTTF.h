@@ -169,6 +169,9 @@ protected:
 	int m_fontColor;
 	std::vector<StyledText> m_texts;
 	StyledAlignment m_currentAlignment;
+	
+	float m_maxWidth;
+	
 public:
 	std::vector<StyledText> getTexts()
 	{
