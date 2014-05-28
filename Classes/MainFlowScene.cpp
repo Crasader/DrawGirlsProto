@@ -725,6 +725,11 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 			}
 		}
 	}
+	
+	if(!is_found)
+	{
+		addChild(KSTimer::create(0.6f, [=](){end_func();}));
+	}
 }
 
 void MainFlowScene::puzzleLoadSuccess()
