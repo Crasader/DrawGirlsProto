@@ -5,6 +5,8 @@
 USING_NS_CC;
 
 #include "GraySprite.h"
+#include <algorithm>
+
 class AsyncSpriteManager
 {
 protected:
