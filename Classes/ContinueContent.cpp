@@ -177,6 +177,8 @@ void ContinueContent::closeAction()
 {
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
+	
 	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
 		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.f);}));}));
 	

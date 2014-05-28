@@ -326,6 +326,7 @@ void EndlessModeOpening::setMain()
 																	  
 																	  Json::Value param;
 																	  param["memberID"] = myHSP->getMemberID();
+//																	  param["no"] = 34;
 																	  myHSP->command("getendlessplaydata", param, json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 																  });
 	

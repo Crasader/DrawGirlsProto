@@ -257,6 +257,8 @@ private:
 	void shaking();
 	void stopShake();
 	
+	void showScoreMissileEffect(CCPoint t_position);
+	
 	KSProtectVar<int> damaged_score;
 	void scoreAttackMissile(int t_damage);
 	
