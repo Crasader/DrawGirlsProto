@@ -181,7 +181,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	mission_img->addChild(mission_img_label);
 	
 	ok_img = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("button_ok_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
-	ok_img->setPosition(ccp(mission_back->getContentSize().width*0.7f, mission_back->getContentSize().height*0.18f));
+	ok_img->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.18f));
 	mission_back->addChild(ok_img);
 	ok_img->setVisible(false);
 	
@@ -195,7 +195,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																   onMinimumTime();
 															   });
 	ok_menu = CCMenuLambda::createWithItem(ok_item);
-	ok_menu->setPosition(ccp(mission_back->getContentSize().width*0.7f, mission_back->getContentSize().height*0.18f));
+	ok_menu->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.18f));
 	mission_back->addChild(ok_menu);
 	ok_menu->setVisible(false);
 	ok_menu->setTouchPriority(-600);

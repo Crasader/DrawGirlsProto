@@ -454,8 +454,10 @@ void AchievePopup::setAchieveTable()
 	main_case->addChild(achieve_table, kAchievePopupZorder_table);
 	achieve_table->setTouchPriority(-190);
 	
-	m_scrollBar = ScrollBar::createScrollbar(achieve_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"), -191);
-	m_scrollBar->setDynamicScrollSize(false);
+	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																										 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
+	m_scrollBar = ScrollBar::createScrollbar(achieve_table, -18, NULL, scrollBar, -191);
+	m_scrollBar->setDynamicScrollSize(true);
 	m_scrollBar->setVisible(true);
 	
 	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-189);

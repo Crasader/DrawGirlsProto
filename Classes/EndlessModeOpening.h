@@ -13,7 +13,8 @@
 #include "cocos-ext.h"
 #include "hspConnector.h"
 #include "KSProtect.h"
-
+#include "ScrollBar.h"
+//#include "CommonButton.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
@@ -37,9 +38,20 @@ class KSLabelTTF;
 class LoadingLayer;
 class DownloadFile;
 class CopyFile;
-class EndlessModeOpening : public CCLayer, public CCTableViewDataSource
+class CommonButton;
+class EndlessModeOpening : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
+	EndlessModeOpening()
+	{
+		currentSelectedCell = nullptr;
+		m_scrollBar = nullptr;
+		currentSelectedIdx = -1;
+	}
+	virtual ~EndlessModeOpening()
+	{
+		myHSP->removeTarget(this);
+	}
 	virtual bool init();
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
@@ -88,7 +100,10 @@ private:
 	
 	vector<DownloadFile> df_list;
 	vector<CopyFile> cf_list;
-	
+	CCScale9Sprite* currentSelectedCell;
+	int currentSelectedIdx;
+	ScrollBar* m_scrollBar;
+	CommonButton* mySelection;
 	void setMain();
 	
 	void resultGetEndlessPlayData(Json::Value result_data);
@@ -111,16 +126,22 @@ private:
 	void menuAction(CCObject* sender);
 	
 	virtual CCSize tableCellSizeForIndex(CCTableView *table, unsigned int idx) {
-        return cellSizeForTable(table);
-    };
-    virtual CCSize cellSizeForTable(CCTableView *table) {
-        return CCSizeMake(225, 34);
-    };
-    virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
-    virtual unsigned int numberOfCellsInTableView(CCTableView *table);
-	
-	virtual void scrollViewDidScroll(CCScrollView* view){}
-    virtual void scrollViewDidZoom(CCScrollView* view){}
+		return cellSizeForTable(table);
+	};
+	virtual CCSize cellSizeForTable(CCTableView *table) {
+		return CCSizeMake(225, 36);
+	};
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
+	virtual unsigned int numberOfCellsInTableView(CCTableView *table);
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
+	virtual void scrollViewDidScroll(CCScrollView* view){
+		if(m_scrollBar)
+		{
+			m_scrollBar->setBarRefresh();
+		}
+	}
+	virtual void scrollViewDidZoom(CCScrollView* view){}
+	void putInformation(Json::Value info);
 };
 
 #endif /* defined(__DGproto__EndlessModeOpening__) */

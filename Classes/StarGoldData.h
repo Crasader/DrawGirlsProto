@@ -142,7 +142,12 @@ enum ReplayKey
 	kReplayKey_win,
 	kReplayKey_lose,
 	kReplayKey_useItemCnt,
-	kReplayKey_useItem_int1_itemCode
+	kReplayKey_useItem_int1_itemCode,
+	kReplayKey_areaScore,
+	kReplayKey_damageScore,
+	kReplayKey_comboScore,
+	kReplayKey_lifeBonusCnt,
+	kReplayKey_takeArea
 };
 
 enum GoodsType
@@ -202,6 +207,9 @@ enum UserdataType
 	kUserdataType_autoLevel,
 	kUserdataType_selectedCharNO,
 	kUserdataType_highScore,
+	kUserdataType_highPiece,
+	kUserdataType_endlessData_ingWin,
+	kUserdataType_endlessData_ingWeek,
 	
 	kUserdataType_achieve_mapGacha,
 	kUserdataType_achieve_noFail,
@@ -575,6 +583,14 @@ public:
 	int getUserdataAutoLevel();
 	void setUserdataHighScore(int t_i);
 	int getUserdataHighScore();
+	
+	void setUserdataHighPiece(int t_i);
+	int getUserdataHighPiece();
+	void setUserdataEndlessIngWin(int t_i);
+	int getUserdataEndlessIngWin();
+	void setUserdataEndlessIngWeek(int t_i);
+	int getUserdataEndlessIngWeek();
+	
 	void setUserdataAchieveMapGacha(int t_i);
 	int getUserdataAchieveMapGacha();
 	void setUserdataAchieveNoFail(int t_i);
@@ -633,6 +649,8 @@ public:
 	
 	void setPuzzlePerfectRewardRuby(int t_i);
 	int getPuzzlePerfectRewardRuby();
+	void setEndlessMinPiece(int t_i);
+	int getEndlessMinPiece();
 	
 	bool is_before_selected_event_stage;
 	
@@ -771,6 +789,18 @@ public:
 	void initAttendance(Json::Value result_data);
 	void resetAttendance();
 	
+	KSProtectVar<int> area_score;
+	KSProtectVar<int> damage_score;
+	KSProtectVar<int> combo_score;
+	void resetIngameDetailScore();
+	
+	KSProtectVar<float> temp_endless_play_limit_time;
+	Json::Value temp_replay_data;
+	KSProtectStr temp_endless_nick;
+	KSProtectStr temp_endless_flag;
+	
+	KSProtectVar<int> recent_week_no;
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -883,6 +913,8 @@ private:
 	KSProtectVar<int> itemGacha_open_stage;
 	
 	KSProtectVar<int> puzzle_perfect_reward_ruby;
+	
+	KSProtectVar<int> endless_min_piece;
 	
 	KSProtectVar<int> rank_up_condition_count;
 	KSProtectVar<float> rank_up_base_rate;

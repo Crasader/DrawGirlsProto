@@ -8,6 +8,52 @@
 
 #include "CommonButton.h"
 
+
+bool CommonButton::init(CCSprite* backSprite, int touchPriority){
+	if(CCNode::init()==false){
+		return false;
+	}
+	m_titleColorNomal=ccc3(255,255,255);
+	m_titleColorDisable=ccc3(255,255,255);
+	
+	m_priceType = PriceTypeNone;
+	m_price=0;
+	
+	m_priceTypeSprite = NULL;
+	m_priceLbl = NULL;
+	
+	m_fontSize=13;
+	m_title="";
+	this->setAnchorPoint(ccp(0.5f,0.5f));
+	
+	m_btnTitle = KSLabelTTF::create(m_title.c_str(), mySGD->getFont().c_str(), m_fontSize);
+	
+	CCLabelTTF* titleNode = CCLabelTTF::create();
+	titleNode->addChild(m_btnTitle);
+	
+	m_btnType = CommonButtonFree;
+	
+	m_btnBack = CCScale9Sprite::create();
+	m_btn = CCControlButton::create(titleNode, m_btnBack);
+	m_btn->setPreferredSize(backSprite->getContentSize());
+	
+	this->setContentSize(m_btn->getContentSize());
+	m_btn->setAnchorPoint(ccp(0.5f,0.5f));
+	m_btn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::callFunc), CCControlEventTouchUpInside);
+	m_btn->setPosition(m_btn->getContentSize().width/2, m_btn->getContentSize().height/2);
+	if(touchPriority!=0)m_btn->setTouchPriority(touchPriority);
+	addChild(m_btn,2);
+	backSprite->setAnchorPoint(ccp(0,0));
+	addChild(backSprite,1);
+	
+	//	CCLayerColor* lc = CCLayerColor::create(ccc4(255, 0, 0, 100), size.width, size.height);
+	//	this->addChild(lc);
+	//	lc->setTag(999);
+	return true;
+}
+
+
+
 bool CommonButton::init(string title, int fontSize, CCSize size,CommonButtonType btnType, int touchPriority){
 	
 	if(CCNode::init()==false){

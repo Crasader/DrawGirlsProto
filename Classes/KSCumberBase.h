@@ -133,8 +133,7 @@ public:
 	m_cumberTimer(0), m_attackPattern(nullptr), m_cobWebAttack(nullptr), m_freezeAttack(nullptr),
 	m_chaosAttack(nullptr), m_sightOutAttack(nullptr),
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
-	m_flipProperty(false)
-
+	m_flipProperty(false), m_emotion(nullptr)
 	{
 		
 	}

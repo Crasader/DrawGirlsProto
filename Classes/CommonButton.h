@@ -127,9 +127,18 @@ public:
 		return btn;
 	}
 	
-	static CommonButton* create(CCSprite* sprite);
-	static CommonButton* create(string title, CCSprite* backSprite);
 	
+	static CommonButton* create(CCSprite* backSprite, int touchPriority){
+		CommonButton* btn = new CommonButton();
+		if(btn->init(backSprite,touchPriority)==false){
+			return NULL;
+		}
+		btn->autorelease();
+		return btn;
+	}
+	
+	bool init(CCSprite* backSprite, int touchPriority);
+
 	bool init(string title, int fontSize, CCSize size,CommonButtonType btnType, int touchPriority);
 	
 	bool init(string title, int fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority);

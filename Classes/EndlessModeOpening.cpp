@@ -15,7 +15,6 @@
 #include "CCMenuLambda.h"
 #include "FlagSelector.h"
 #include "FormSetter.h"
-#include "ScrollBar.h"
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
 #include "DownloadFile.h"
@@ -29,14 +28,14 @@ enum EndlessModeOpeningZorder
 	kEndlessModeOpeningZorder_back,
 	kEndlessModeOpeningZorder_content
 };
-
+const static int kCellCase = 0x45451;
 bool EndlessModeOpening::init()
 {
 	if(!CCLayer::init())
 	{
 		return false;
 	}
-	
+	startFormSetter(this);
 //	FormSetter::get()->start();
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
@@ -122,12 +121,17 @@ void EndlessModeOpening::setMain()
 										{
 											this->n_ready_label2->setOpacity(100);
 											this->s_ready_label2->setOpacity(100);
+											
+											
+											mySelection->setOpacity(0);
 										}
 								  }, [=](int t)
 								  {
 									  KS::setOpacity(main_case, 0);
 									  this->n_ready_label2->setOpacity(0);
 									  this->s_ready_label2->setOpacity(0);
+										
+										mySelection->setOpacity(0);
 								  }));
 							  });
 	main_case->addChild(close_button);
@@ -792,26 +796,6 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			mySGD->endless_my_win = 0;
 		}
 		
-		int win_count = mySGD->endless_my_win.getV();
-		int lose_count = mySGD->endless_my_lose.getV();
-		int win_rate = 100.f*win_count/(win_count + lose_count);
-		
-		record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());
-		highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str());
-		straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), mySGD->endless_my_high_victory.getV())->getCString());
-		
-		float rank_percent = 1.f*myrank.getV()/alluser.getV();
-		
-		percent_label->setString(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString());
-		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(17 + 160.f*rank_percent,15.5f));
-		rank_percent_case->runAction(t_move);
-		
-		CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
-		CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
-		CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
-		percent_label->runAction(t_seq2);
-		
 		int remain_time = remainTime.getV();
 		if(remain_time < 60)
 			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeSecond), remain_time)->getCString());
@@ -829,8 +813,6 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		rest_time_title->setPosition(ccp(10, rest_back->getContentSize().height/2.f));
 		rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10, rest_back->getContentSize().height/2.f));
-		
-		
 		CCRect table_rect = CCRectMake(10, left_back->getContentSize().height/2.f - 150/2.f - 30, 255, 150);
 		
 //		CCSprite* table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_rect.size.width, table_rect.size.height));
@@ -848,18 +830,44 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		rank_table->setVerticalFillOrder(kCCTableViewFillTopDown);
 		rank_table->setPosition(table_rect.origin);
 		left_back->addChild(rank_table);
-		
 		rank_table->setTouchPriority(touch_priority);
+		rank_table->setDelegate(this);
 		
-		ScrollBar* m_scrollBar = ScrollBar::createScrollbar(rank_table, -2 - 10, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png"), touch_priority-1);
-		m_scrollBar->setDynamicScrollSize(false);
+		m_scrollBar = ScrollBar::createScrollbar(rank_table, -18, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																																																					CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20)), touch_priority-1);
+		m_scrollBar->setDynamicScrollSize(true);
 		m_scrollBar->setVisible(true);
 		
 		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 		list_cell_case->setContentSize(CCSizeMake(225, 37));
 		list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+		list_cell_case->setTag(kCellCase);
 		left_back->addChild(list_cell_case);
 		
+		mySelection = CommonButton::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, 225, 37)), touch_priority);
+		mySelection->setOpacity(0);
+		mySelection->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+		setFormSetter(mySelection);
+		mySelection->setFunction([=](CCObject* obj){
+			Json::Value param;
+			param["endlessData"] = Json::Value();
+			param["endlessData"]["victory"] = result_data["myInfo"]["victory"].asInt();
+			param["endlessData"]["lose"] = result_data["myInfo"]["lose"].asInt();
+			param["endlessData"]["win"] = result_data["myInfo"]["win"].asInt();
+			param["endlessData"]["score"] = result_data["myInfo"]["score"].asInt();
+			param["rank"] = result_data["myrank"].asInt();
+			param["alluser"] = result_data["alluser"].asInt();
+			param["level"] = result_data["level"].asInt();
+			
+			putInformation(param);
+			if(currentSelectedCell)
+			{
+				currentSelectedCell->removeFromParent();
+				currentSelectedCell = nullptr;
+				currentSelectedIdx = -1;
+			}
+		});
+		left_back->addChild(mySelection);
 		CCPoint rank_position = ccp(20,18);
 		int my_rank = myrank.getV();
 		if(my_rank == 1)
@@ -915,6 +923,44 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 		victory_label->setPosition(ccp(215,18));
 		list_cell_case->addChild(victory_label);
+		///////////////////////////////////
+		
+		Json::Value param;
+		
+		param["endlessData"] = Json::Value();
+		param["endlessData"]["victory"] = result_data["myInfo"]["victory"].asInt();
+		param["endlessData"]["lose"] = result_data["myInfo"]["lose"].asInt();
+		param["endlessData"]["win"] = result_data["myInfo"]["win"].asInt();
+		param["endlessData"]["score"] = result_data["myInfo"]["score"].asInt();
+		param["rank"] = result_data["myrank"].asInt();
+		param["alluser"] = result_data["alluser"].asInt();
+		param["level"] = result_data["level"].asInt();
+		
+//		param["score"] = result_data["myInfo"]["score"].asInt();
+//		param["victory"] = result_data["myInfo"]["score"].asInt();
+//		param["level"] = result_data["level"].asInt();
+//		param["alluser"] = result_data["alluser"].asInt();
+//		param["rank"] = result_data["rank"].asInt();
+		putInformation(param);
+//		int win_count = mySGD->endless_my_win.getV();
+//		int lose_count = mySGD->endless_my_lose.getV();
+//		int win_rate = 100.f*win_count/(win_count + lose_count);
+//		
+//		record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());
+//		highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str());
+//		straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), mySGD->endless_my_high_victory.getV())->getCString());
+//		
+//		float rank_percent = 1.f*myrank.getV()/alluser.getV();
+//		
+//		percent_label->setString(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString());
+//		
+//		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(17 + 160.f*rank_percent,15.5f));
+//		rank_percent_case->runAction(t_move);
+//		
+//		CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
+//		CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
+//		CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
+//		percent_label->runAction(t_seq2);
 	}
 	else
 	{
@@ -939,14 +985,14 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	int my_rank = myrank.getV();
 	
 	string case_name;
-	if(my_rank == idx+1)
-	{
-		case_name = "mainpopup_pupple1.png";
-	}
-	else
-	{
+//	if(my_rank == idx+1)
+//	{
+//		case_name = "mainpopup_pupple1.png";
+//	}
+//	else
+//	{
 		case_name = "rank_normal.png";
-	}
+//	}
 	
 	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	list_cell_case->setContentSize(CCSizeMake(225, 37));
@@ -1007,6 +1053,75 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 	victory_label->setPosition(ccp(215,18));
 	list_cell_case->addChild(victory_label);
-	
+
+	if(idx == currentSelectedIdx)
+	{
+		if(currentSelectedCell)
+		{
+			currentSelectedCell->removeFromParent();
+		}
+		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+		currentSelectedCell->setPosition(ccp(114.0,15.5)); 			// dt (114.0,15.5)
+		currentSelectedCell->setContentSize(CCSizeMake(231.0,46.5)); 			// dt (6.0,9.5)
+		//	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+		cell->addChild(currentSelectedCell);
+	}
 	return cell;
+}
+
+void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
+{
+	Json::Value param;
+	int tempIndex = clampf(cell->getIdx(), 0, rank_list.size() - 1);
+	param["memberID"] = rank_list[tempIndex].memberID.getV();
+	myHSP->command("getendlessrankinfo", param, this, [=](Json::Value obj){
+		KS::KSLog("%", param);
+//		Json::Value info;
+//		info["score"] = obj["score"].asInt();
+//		info["victory"] = obj["victory"].asInt();
+//		info["level"] = obj["level"].asInt();
+//		info["alluser"] = obj["alluser"].asInt();
+//		info["rank"] =
+		putInformation(obj);
+	});
+	currentSelectedIdx = tempIndex;
+	if(currentSelectedCell)
+	{
+		currentSelectedCell->removeFromParent();
+	}
+	currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+	currentSelectedCell->setPosition(ccp(114.0,15.5)); 			// dt (114.0,15.5)
+	currentSelectedCell->setContentSize(CCSizeMake(231.0,46.5)); 			// dt (6.0,9.5)
+//	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+	cell->addChild(currentSelectedCell);
+	setFormSetter(currentSelectedCell);
+}
+void EndlessModeOpening::putInformation(Json::Value info)
+{
+	KS::KSLog("%", info);
+
+	int win_count = info["endlessData"]["win"].asInt();
+	int lose_count = info["endlessData"]["lose"].asInt();
+	int win_rate = 100.f*win_count/(win_count + lose_count);
+	
+	record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());
+//	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str());
+	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", info["endlessData"]["score"].asInt())->getCString()).c_str());
+//	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), mySGD->endless_my_high_victory.getV())->getCString());
+	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),
+																												 info["endlessData"]["victory"].asInt())->getCString());
+	
+	int	alluser = info["alluser"].asInt();
+	int	myrank = info["rank"].asInt();
+	float rank_percent = 1.f*myrank/alluser;
+	
+	percent_label->setString(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString());
+	
+	CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(17 + 160.f*rank_percent,15.5f));
+	rank_percent_case->runAction(t_move);
+	
+	CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
+	CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
+	CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
+	percent_label->runAction(t_seq2);
 }

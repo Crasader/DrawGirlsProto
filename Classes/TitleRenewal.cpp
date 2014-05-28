@@ -375,6 +375,8 @@ void TitleRenewalScene::successLogin()
 	userdata_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 	
+	command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeInfo)));
+	
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
 	
@@ -690,6 +692,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setItemGachaOpenStage(result_data["itemGachaOpenStage"].asInt());
 		
 		mySGD->setPuzzlePerfectRewardRuby(result_data["puzzlePerfectRewardRuby"].asInt());
+		mySGD->setEndlessMinPiece(result_data["endlessMinPiece"].asInt());
 	}
 	else
 	{
@@ -713,6 +716,22 @@ void TitleRenewalScene::resultCheckAttendanceEvent(Json::Value result_data)
 		Json::Value attendance_param;
 		attendance_param["memberID"] = myHSP->getMemberID();
 		command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetTimeInfo(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->recent_week_no = result_data["weekNo"].asInt();
+	}
+	else
+	{
+		is_receive_fail = true;
+		command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeInfo)));
 	}
 	
 	receive_cnt--;

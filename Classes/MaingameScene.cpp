@@ -242,46 +242,53 @@ void Maingame::onEnterTransitionDidFinish()
 	
 	if(mySGD->getStartMapGachaCnt() == 0)
 	{
-		intro_stencil = CCSprite::create("sight_out.png");
-		intro_stencil->setScale(0.f);
-		intro_stencil->setPosition(ccp(240,myDSH->ui_center_y+5));
-		
-		intro_clipping = CCClippingNode::create(intro_stencil);
-		intro_clipping->setPosition(CCPointZero);
-		addChild(intro_clipping, introZorder);
-		
-		intro_clipping->setInverted(true);
-		intro_clipping->setAlphaThreshold(0.01f);
-		
-		EffectSprite* blur_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
-		blur_img->setColor(ccc3(30, 30, 30));
-		blur_img->setAnchorPoint(ccp(0,0));
-		blur_img->setPosition(ccp(0,0));
-		
-		CCRenderTexture* intro_texture = CCRenderTexture::create(320, 430);
-		intro_texture->beginWithClear(0, 0, 0, 0);
-		blur_img->visit();
-		intro_texture->end();
-		
-		intro_texture->setScale(game_node->getScale());
-		intro_texture->setPosition(ccp(240, 430*game_node->getScale()/2.f));
-		intro_clipping->addChild(intro_texture);
-		
-		intro_out_line = CCSprite::create("sight_out.png");
-		intro_out_line->setScale(0.f);
-		intro_out_line->setPosition(ccp(240,myDSH->ui_center_y+5));
-		intro_clipping->addChild(intro_out_line);
-		
-		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
-		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
-		intro_boss->setScale(1.8f);
-		addChild(intro_boss, introZorder);
-		
-		CCDelayTime* t_delay = CCDelayTime::create(1.f);
-		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
-		CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
-		intro_boss->runAction(t_seq);
+		if(mySGD->is_endless_mode)
+		{
+			addChild(KSTimer::create(0.7f, [=](){endIntro();}));
+		}
+		else
+		{
+			intro_stencil = CCSprite::create("sight_out.png");
+			intro_stencil->setScale(0.f);
+			intro_stencil->setPosition(ccp(240,myDSH->ui_center_y+5));
+			
+			intro_clipping = CCClippingNode::create(intro_stencil);
+			intro_clipping->setPosition(CCPointZero);
+			addChild(intro_clipping, introZorder);
+			
+			intro_clipping->setInverted(true);
+			intro_clipping->setAlphaThreshold(0.01f);
+			
+			EffectSprite* blur_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
+			blur_img->setColor(ccc3(30, 30, 30));
+			blur_img->setAnchorPoint(ccp(0,0));
+			blur_img->setPosition(ccp(0,0));
+			
+			CCRenderTexture* intro_texture = CCRenderTexture::create(320, 430);
+			intro_texture->beginWithClear(0, 0, 0, 0);
+			blur_img->visit();
+			intro_texture->end();
+			
+			intro_texture->setScale(game_node->getScale());
+			intro_texture->setPosition(ccp(240, 430*game_node->getScale()/2.f));
+			intro_clipping->addChild(intro_texture);
+			
+			intro_out_line = CCSprite::create("sight_out.png");
+			intro_out_line->setScale(0.f);
+			intro_out_line->setPosition(ccp(240,myDSH->ui_center_y+5));
+			intro_clipping->addChild(intro_out_line);
+			
+			intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+			intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
+			intro_boss->setScale(1.8f);
+			addChild(intro_boss, introZorder);
+			
+			CCDelayTime* t_delay = CCDelayTime::create(1.f);
+			CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
+			CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
+			intro_boss->runAction(t_seq);
+		}
 		
 		CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
 		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
@@ -507,6 +514,8 @@ void Maingame::finalSetting()
 		search_eye_vector.push_back(t_search_eye);
 	}
 	
+	mySGD->resetIngameDetailScore();
+	
 	startScene();
 	
 	float thumb_scale = 0.17f;
@@ -514,19 +523,19 @@ void Maingame::finalSetting()
 	thumb_case = CCScale9Sprite::create("minimap_back.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
 	thumb_case->setContentSize(CCSizeMake(320*thumb_scale, 430*thumb_scale));
 	thumb_case->setPosition(ccp(40,myDSH->ui_center_y));
-	addChild(thumb_case, myUIZorder);
+	addChild(thumb_case, clearshowtimeZorder);
 	
 	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)*0.7f);
 	sil_thumb->setScale(thumb_scale);
 	sil_thumb->setPosition(ccp(40,myDSH->ui_center_y));
-	addChild(sil_thumb, clearshowtimeZorder);
+	addChild(sil_thumb, searchEyeZorder);
 	
 	thumb_texture = CCRenderTexture::create(320, 430);
 	thumb_texture->setScale(thumb_scale);
 	thumb_texture->setPosition(ccp(40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
-	addChild(thumb_texture, myUIZorder);
+	addChild(thumb_texture, clearshowtimeZorder);
 	
 	
 	
@@ -604,7 +613,7 @@ void Maingame::finalSetting()
 	character_thumb = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 	character_thumb->setColor(ccGREEN);
 	character_thumb->setPosition(ccpAdd(thumb_base_position, ccpMult(myJack->getPosition(), thumb_scale)));
-	addChild(character_thumb, myUIZorder);
+	addChild(character_thumb, clearshowtimeZorder);
 	
 	sub_thumbs = new CCArray(1);
 	
@@ -612,7 +621,7 @@ void Maingame::finalSetting()
 	{
 		replay_all_node = CCNode::create();
 		replay_all_node->setPosition(CCPointZero);
-		addChild(replay_all_node, myUIZorder);
+		addChild(replay_all_node, clearshowtimeZorder);
 		
 		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 		{
@@ -676,7 +685,7 @@ void Maingame::finalSetting()
 		{
 			replay_score = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
 			replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
-			replay_all_node->addChild(replay_score);
+			replay_all_node->addChild(replay_score, 99);
 			
 			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		}
@@ -688,15 +697,15 @@ void Maingame::finalSetting()
 		selectedFlagSpr->setScale(0.5f);
 		replay_all_node->addChild(selectedFlagSpr);
 		
-		addChild(KSGradualValue<float>::create(480-40+20+100, 480-40+20, 0.5f, [=](float t){selectedFlagSpr->setPositionX(t);}, [=](float t){selectedFlagSpr->setPositionX(480-40+20);}));
+		addChild(KSGradualValue<float>::create(480-40-20+100, 480-40-20, 0.5f, [=](float t){selectedFlagSpr->setPositionX(t);}, [=](float t){selectedFlagSpr->setPositionX(480-40-20);}));
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 10);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
 		replay_all_node->addChild(nick_label);
 		
-		addChild(KSGradualValue<float>::create(480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2+100, 480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
-											   0.5f, [=](float t){nick_label->setPositionX(t);}, [=](float t){nick_label->setPositionX(480-40+20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);}));
+		addChild(KSGradualValue<float>::create(480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2+100, 480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
+											   0.5f, [=](float t){nick_label->setPositionX(t);}, [=](float t){nick_label->setPositionX(480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);}));
 		
 		int use_item_cnt = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_useItemCnt), Json::Value()).asInt();
 		if(use_item_cnt > 0)
@@ -1574,16 +1583,31 @@ void Maingame::gameover()
 
 void Maingame::clearScenario()
 {
-	intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
-	intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
-	intro_boss->setScale(1.8f);
-	addChild(intro_boss, introZorder);
-	
-	CCDelayTime* t_delay = CCDelayTime::create(1.f);
-	CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario2));
-	CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
-	intro_boss->runAction(t_seq);
+	if(mySGD->is_endless_mode)
+	{
+		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
+		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+		curtain_node->setScale(myDSH->screen_convert_rate);
+		addChild(curtain_node, shutterZorder+5);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(0.7f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+		curtain_node->runAction(t_seq);
+	}
+	else
+	{
+		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
+		intro_boss->setScale(1.8f);
+		addChild(intro_boss, introZorder);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(1.f);
+		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario2));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
+		intro_boss->runAction(t_seq);
+	}
 }
 
 void Maingame::clearScenario2()
@@ -2285,16 +2309,31 @@ void Maingame::clearScenario3()
 
 void Maingame::failScenario()
 {
-	intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
-	intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
-	intro_boss->setScale(1.8f);
-	addChild(intro_boss, introZorder);
-	
-	CCDelayTime* t_delay = CCDelayTime::create(1.f);
-	CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::failScenario2));
-	CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
-	intro_boss->runAction(t_seq);
+	if(mySGD->is_endless_mode)
+	{
+		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
+		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+		curtain_node->setScale(myDSH->screen_convert_rate);
+		addChild(curtain_node, shutterZorder+5);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(0.7f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+		curtain_node->runAction(t_seq);
+	}
+	else
+	{
+		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
+		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
+		intro_boss->setScale(1.8f);
+		addChild(intro_boss, introZorder);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(1.f);
+		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::failScenario2));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
+		intro_boss->runAction(t_seq);
+	}
 }
 
 void Maingame::failScenario2()
@@ -2309,7 +2348,7 @@ void Maingame::failScenario2()
 					  curtain_node->setScale(myDSH->screen_convert_rate);
 					  addChild(curtain_node, shutterZorder+5);
 					  
-					  CCDelayTime* t_delay = CCDelayTime::create(1.f);
+					  CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 					  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
 					  CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
 					  curtain_node->runAction(t_seq);
@@ -2326,27 +2365,27 @@ void Maingame::closeShutter()
 
 void Maingame::endCloseShutter()
 {
-	if(mySGD->getIsCleared())
+	if(mySGD->is_endless_mode)
 	{
-		AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
-		
-		CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
-		CCDirector::sharedDirector()->replaceScene(t_trans);
+		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 	}
 	else
 	{
-		AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
-		
-		if(mySGD->is_endless_mode)
+		if(mySGD->getIsCleared())
 		{
-			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+			
+			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
+			CCDirector::sharedDirector()->replaceScene(t_trans);
 		}
 		else
 		{
+			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+			
 			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
-//			mySGD->setNextSceneName("newmainflow");
-//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+			//			mySGD->setNextSceneName("newmainflow");
+			//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
 		}
 	}
 }
@@ -3163,7 +3202,7 @@ void Maingame::refreshThumb()
 	{
 		CCSprite* sub_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 4, 4));
 		sub_position_img->setColor(ccYELLOW);
-		addChild(sub_position_img, myUIZorder);
+		addChild(sub_position_img, clearshowtimeZorder);
 		
 		sub_thumbs->addObject(sub_position_img);
 	}
