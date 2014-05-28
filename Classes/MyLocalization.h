@@ -540,6 +540,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessMyInfo,
 	kMyLocalKey_endlessInfoScore,
 	kMyLocalKey_endlessInfoScoreValue,
+	kMyLocalKey_endlessInfoScoreValue2,
 	kMyLocalKey_endlessHighScore,
 	kMyLocalKey_endlessHighStraight,
 	kMyLocalKey_endlessHighStraightValue,
