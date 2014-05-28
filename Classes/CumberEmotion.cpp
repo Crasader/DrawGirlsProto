@@ -106,7 +106,7 @@ void CumberEmotion::presentationEmotion(const std::string& emotion)
 		m_emotionState = EmotionState::kNone;
 	});
 	addChild(m_currentEmotion);
-	
+	m_currentEmotion->setPositionY(m_currentEmotion->getPositionY() + 50);
 	m_boredTimer = 0.f;
 }
 void CumberEmotion::update(float dt)
@@ -116,7 +116,7 @@ void CumberEmotion::update(float dt)
 		m_boredTimer += 1.f / 60.f;
 		if(m_boredTimer >= 4.f)
 		{
-			ProbSelector ps = {0.05, 0.95};
+			ProbSelector ps = {0.10, 0.95};
 			if(ps.getResult() == 0)
 			{
 				toBored();
