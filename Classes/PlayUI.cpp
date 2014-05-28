@@ -881,7 +881,7 @@ PlayUI::~ PlayUI ()
 void PlayUI::addScore (int t_score)
 {
 	score_value = score_value.getV() + t_score;
-	score_label->setString(CCString::createWithFormat("%d", int(score_value.getV()))->getCString());
+	score_label->setString(CCString::createWithFormat("%d", damaged_score.getV() + int(score_value.getV()))->getCString());
 	
 	if(mySGD->is_write_replay)
 	{
@@ -1550,6 +1550,77 @@ bool PlayUI::getIsExchanged ()
 {
 	return is_exchanged;
 }
+
+void PlayUI::addScoreAttack(int t_damage)
+{
+	score_attack_damage = score_attack_damage.getV() + t_damage;
+	score_attack_keep_frame = 0;
+	schedule(schedule_selector(PlayUI::scoreAttackKeep));
+}
+
+void PlayUI::scoreAttackKeep()
+{
+	score_attack_keep_frame++;
+	
+	if(score_attack_keep_frame >= 60)
+	{
+		unschedule(schedule_selector(PlayUI::scoreAttackKeep));
+		
+		myGD->communication("Main_scoreAttackMissile", score_attack_damage.getV());
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_scoreAttackDamage)] = score_attack_damage.getV();
+		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreAttackedValue)] = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_scoreAttackedValue), Json::Value()).asInt() + score_attack_damage.getV();
+		
+		
+		score_attack_damage = 0;
+	}
+}
+
+void PlayUI::scoreAttackMissile(int t_damage)
+{
+	if(t_damage <= 0)
+		return;
+	
+	CCSprite* t_missile = CCSprite::create("blind_drop.png");
+	t_missile->setPosition(ccp(440, myDSH->ui_center_y));
+	addChild(t_missile);
+	
+	t_missile->setScale(0.1f);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+										   {
+											   t_missile->setScale(0.1f+t*0.9f);
+											   t_missile->setPosition(ccp(440-t*400, myDSH->ui_center_y));
+										   }, [=](float t)
+										   {
+											   t_missile->setScale(1.f);
+											   t_missile->setPosition(ccp(40, myDSH->ui_center_y));
+											   myGD->communication("GIM_showTakeItemEffect", ccp(40, myDSH->ui_center_y));
+											   
+											   addChild(KSTimer::create(0.1f, [=]()
+																		{
+																			KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
+																			t_label->enableOuterStroke(ccBLACK, 1.f);
+																			t_label->setPosition(ccp(40, myDSH->ui_center_y));
+																			addChild(t_label);
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																												   {
+																													   t_label->setOpacity(255-t*255);
+																												   }, [=](float t)
+																												   {
+																													   t_label->setOpacity(0);
+																													   t_label->removeFromParent();
+																												   }));
+																			
+																			float before_score = score_value.getV();
+																			damaged_score = damaged_score.getV() - t_damage;
+																			score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
+																		}));
+										   }));
+	
+	mySGD->damaged_score = mySGD->damaged_score.getV() + t_damage;
+}
+
 int PlayUI::getComboCnt ()
 {
 	return combo_cnt;
@@ -1561,6 +1632,11 @@ void PlayUI::setComboCnt (int t_combo)
 	
 	if(before_combo < combo_cnt)
 	{
+		if(combo_cnt%5 == 0)
+		{
+			addScoreAttack(10000);
+		}
+		
 		my_combo->showCombo(t_combo);
 		
 		for(int i=kAchievementCode_comboMania1;i<=kAchievementCode_comboMania3;i++)
@@ -1771,6 +1847,8 @@ void PlayUI::counting ()
 			
 			if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size() > 0)
 				myGD->communication("Main_refreshReplayScore", use_time);
+			
+			scoreAttackMissile(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time].get(mySGD->getReplayKey(kReplayKey_timeStamp_scoreAttackDamage), Json::Value()).asInt());
 		}
 		
 		
@@ -2177,9 +2255,12 @@ void PlayUI::myInit ()
 	isGameover = false;
 	
 	score_value = 0;
+	damaged_score = 0;
 	
 	percentage_decrease_cnt = 0;
 	combo_cnt = 0;
+	
+	score_attack_damage = 0;
 	
 	clearPercentage = 1;
 	

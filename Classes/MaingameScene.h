@@ -22,6 +22,7 @@
 #include "GameItemManager.h"
 #include "ZoomScriptScene.h"
 #include "MissileDamageLabel.h"
+#include "KSProtect.h"
 
 using namespace cocos2d;
 
@@ -255,6 +256,9 @@ private:
 	
 	void shaking();
 	void stopShake();
+	
+	KSProtectVar<int> damaged_score;
+	void scoreAttackMissile(int t_damage);
 	
 	vector<SearchEye*> search_eye_vector;
 //	SearchEye* search_eye;

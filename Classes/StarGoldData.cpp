@@ -60,6 +60,7 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_timeStamp_isContinue)					return_value = "ic";
 	else if(t_key == kReplayKey_timeStamp_isImageChange)				return_value = "iic";
 	else if(t_key == kReplayKey_timeStamp_gameInfo)						return_value = "gi";
+	else if(t_key == kReplayKey_timeStamp_scoreAttackDamage)			return_value = "sad";
 	else if(t_key == kReplayKey_mapTime)								return_value = "mt";
 	else if(t_key == kReplayKey_mapData)								return_value = "md";
 	else if(t_key == kReplayKey_scoreTime)								return_value = "st";
@@ -81,6 +82,7 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_comboScore)								return_value = "cs";
 	else if(t_key == kReplayKey_lifeBonusCnt)							return_value = "lbc";
 	else if(t_key == kReplayKey_takeArea)								return_value = "ta";
+	else if(t_key == kReplayKey_scoreAttackedValue)						return_value = "sav";
 	
 	return return_value;
 }
@@ -392,6 +394,8 @@ void StarGoldData::setGameStart()
 	game_time = 0;
 	start_map_gacha_cnt = 0;
 	clear_reward_gold = 0;
+	
+	damaged_score = 0;
 
 	deque<int> card_options;
 	deque<int>::iterator iter;
