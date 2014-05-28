@@ -211,7 +211,6 @@ enum UserdataType
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
 	
-	
 	kUserdataType_achieve_mapGacha,
 	kUserdataType_achieve_noFail,
 	kUserdataType_achieve_hunter,

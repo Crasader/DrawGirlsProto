@@ -517,6 +517,9 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
 	ko->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
 	
+	ko->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
+	ko->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1104,6 +1107,9 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	en->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
 	en->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
+	
+	en->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
+	en->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1715,6 +1721,9 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	ja->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
 	ja->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
+	
+	ja->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
+	ja->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
