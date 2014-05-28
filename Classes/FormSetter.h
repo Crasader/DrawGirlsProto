@@ -429,6 +429,7 @@ public:
 			m_guideImage->removeFromParentAndCleanup(true);
 		}
 		m_guideImage = CCSprite::create(filename.c_str());
+		if(m_guideImage==nullptr)return;
 		setFormSetter(m_guideImage);
 		this->addChild(m_guideImage);
 		m_guideImage->setPosition(ccp(240,160));
