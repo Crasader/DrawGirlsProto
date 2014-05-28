@@ -965,7 +965,11 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 				cell_action_list[i]();
 		}
 		
-		loading_img->removeFromParent();
+        if(loading_img)
+        {
+            loading_img->removeFromParent();
+            loading_img = NULL;
+        }
 	}
 	else
 	{
