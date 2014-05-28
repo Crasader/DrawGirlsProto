@@ -33,7 +33,7 @@ bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	
 	m_btnType = CommonButtonFree;
 	
-	m_btnBack = CCScale9Sprite::create();
+	m_btnBack = CCScale9Sprite::create("_block.png");
 	m_btnBack->setTag(119);
 	m_btnBack->setContentSize(CCSizeZero);
 	m_btn = CCControlButton::create(titleNode, m_btnBack);
