@@ -573,10 +573,22 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessCalcTitleGradeScore,
 	kMyLocalKey_endlessCalcTitleTakeGold,
 	kMyLocalKey_endlessCalcTitleTakeArea,
+
+	
+	kMyLocalKey_win,
+	kMyLocalKey_gameResult,
+	kMyLocalKey_fail,
+	kMyLocalKey_achieve,
+	kMyLocalKey_close,
+
 	kMyLocalKey_endlessIngWin,
 	kMyLocalKey_endlessOpenConditionTitle,
 	kMyLocalKey_endlessOpenConditionContent
+
 }MyLocalKey;
+
+
+
 
 #define myLoc MyLocal::sharedInstance()
 
@@ -604,6 +616,9 @@ private:
 	}
 	void initLocal();
 	void setLocal();
+	void ko();
+	void en();
+	void ja();
 	CCString* languageType;
 };
 

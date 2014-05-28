@@ -45,7 +45,10 @@ void StyledLabelTTF::updateTexture()
 	m_oneLineContainer = CCNode::create();
 	m_oneLineContainer->setTag(1);
 	addChild(m_oneLineContainer);
-	
+
+	float maxY = 0.f;
+	float minY = 0.f;
+	float maxX = 0.f;
 	Json::Value jsonStyle;
 	for(auto iter = m_texts.begin(); iter != m_texts.end(); ++iter)
 	{
@@ -101,24 +104,29 @@ void StyledLabelTTF::updateTexture()
 				ttf->setTag(jsonStyle.get("tag", 0).asInt());
 				m_currentPosition += ttf->getContentSize().width;
 				m_oneLineSize += ttf->getContentSize().width;
+				maxY = MAX(maxY, m_currentLinePosition + ttf->getContentSize().height / 2.f);
+				minY = MIN(minY, m_currentLinePosition - ttf->getContentSize().height / 2.f);
+				maxX = MAX(maxX, m_oneLineSize);
 			}
 			else
 			{
 				CCSprite* sprite = CCSprite::create(jsonStyle["img"].asString().c_str());
+				sprite->setScale(jsonStyle.get("scale", 1.f).asFloat());
+				
 				m_oneLineContainer->addChild(sprite);
 				sprite->setAnchorPoint(ccp(0.f, 0.5f));
 				sprite->setPosition(ccp(m_currentPosition, m_currentLinePosition));
 				
 				m_currentPosition += sprite->getContentSize().width;
 				m_oneLineSize += sprite->getContentSize().width;
+				maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+				minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+				maxX = MAX(maxX, m_oneLineSize);
 			}
-						
-			
 		}
-		
-
 	}
 	
+	setContentSize(CCSizeMake(maxX, maxY - minY));
 	//	m_oneLineContainer->setPosition(ccp(-m_oneLineSize / 2.f, 0));
 	//	m_oneLineSize = 0.f;
 	//	m_oneLineContainer = CCNode::create();
