@@ -489,7 +489,8 @@ protected:
 		float stiffenSecond;
 		bool setStiffen(float stiffenDuration)
 		{
-			if(stiffenSecond - timer < stiffenDuration) // 들어오는 시간이 더 크다면, 
+			// 들어오는 시간이 더 크거나 스턴이 안걸려 있으면
+			if(stiffenSecond - timer < stiffenDuration || timer < stiffenSecond)
 			{
 				timer = 0;
 				stiffenSecond = stiffenDuration;
