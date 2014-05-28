@@ -175,7 +175,7 @@ public:
 	
 	PriceType getPriceType();
 	
-	void setOpacity(float opacity);
+	void setOpacity(GLubyte opacity);
 	
 };
 #endif /* defined(__DGproto__CommonButton__) */
