@@ -81,7 +81,7 @@ void GameItemBase::traceCharacter()
 		item_img->removeFromParentAndCleanup(true);
 		
 		
-		(target_effect->*delegate_effect)(myPoint.convertToCCP());
+		(target_effect->*delegate_effect)(item_img->getPosition());
 		
 		acting();
 		return;
@@ -428,7 +428,7 @@ void GameItemAttack::acting()
 	int weapon_rank = (weapon_level-1)/5 + 1;
 	weapon_level = (weapon_level-1)%5 + 1;
 	
-	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, myPoint.convertToCCP());
+	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, item_img->getPosition());
 	
 //	string missile_code;
 //	missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
