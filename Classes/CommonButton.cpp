@@ -33,7 +33,9 @@ bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	
 	m_btnType = CommonButtonFree;
 	
-	m_btnBack = CCScale9Sprite::create();
+	m_btnBack = CCScale9Sprite::create("_block.png");
+	m_btnBack->setTag(119);
+	m_btnBack->setContentSize(CCSizeZero);
 	m_btn = CCControlButton::create(titleNode, m_btnBack);
 	m_btn->setPreferredSize(backSprite->getContentSize());
 	
@@ -44,6 +46,7 @@ bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	if(touchPriority!=0)m_btn->setTouchPriority(touchPriority);
 	addChild(m_btn,2);
 	backSprite->setAnchorPoint(ccp(0,0));
+	backSprite->setTag(112);
 	addChild(backSprite,1);
 	
 	//	CCLayerColor* lc = CCLayerColor::create(ccc4(255, 0, 0, 100), size.width, size.height);
@@ -384,8 +387,10 @@ PriceType CommonButton::getPriceType(){
 	return m_priceType;
 }
 
-void CommonButton::setOpacity(float opacity){
-	m_btn->setOpacity(opacity);
+void CommonButton::setOpacity(GLubyte opacity){
+	if(m_btnBack->getTag()!=119)m_btn->setOpacity(opacity);
+	CCSprite* backSprite = (CCSprite*)this->getChildByTag(112);
+	if(backSprite)backSprite->setOpacity(opacity);
 }
 
 KSLabelTTF* CommonButton::getTitleLabel(){

@@ -47,6 +47,8 @@ public:
 		currentSelectedCell = nullptr;
 		m_scrollBar = nullptr;
 		currentSelectedIdx = -1;
+		right_flag = nullptr;
+		right_nick = nullptr;
 	}
 	virtual ~EndlessModeOpening()
 	{
@@ -104,6 +106,9 @@ private:
 	int currentSelectedIdx;
 	ScrollBar* m_scrollBar;
 	CommonButton* mySelection;
+	CCSprite* right_flag;
+	KSLabelTTF* right_nick;
+	CCScale9Sprite* right_back;
 	void setMain();
 	
 	void resultGetEndlessPlayData(Json::Value result_data);
