@@ -14,6 +14,7 @@
 #include "hspConnector.h"
 #include "KSProtect.h"
 #include "ScrollBar.h"
+
 //#include "CommonButton.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -39,6 +40,7 @@ class LoadingLayer;
 class DownloadFile;
 class CopyFile;
 class CommonButton;
+class StyledLabelTTF;
 class EndlessModeOpening : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -49,6 +51,7 @@ public:
 		currentSelectedIdx = -1;
 		right_flag = nullptr;
 		right_nick = nullptr;
+		record_content = nullptr;
 	}
 	virtual ~EndlessModeOpening()
 	{
@@ -73,6 +76,7 @@ private:
 	
 	CCSprite* gray;
 	CCSprite* loading_circle;
+	CCSprite* loading_right_circle;
 	CCScale9Sprite* main_case;
 	
 	KSProtectVar<int> myscore;
@@ -82,7 +86,7 @@ private:
 	KSProtectVar<int> remainTime;
 	KSLabelTTF* highscore_content;
 	KSLabelTTF* straight_content;
-	KSLabelTTF* record_content;
+	StyledLabelTTF* record_content;
 	
 	KSLabelTTF* n_ready_label2;
 	KSLabelTTF* s_ready_label2;
@@ -109,6 +113,7 @@ private:
 	CCSprite* right_flag;
 	KSLabelTTF* right_nick;
 	CCScale9Sprite* right_back;
+	CCScale9Sprite* record_back;
 	void setMain();
 	
 	void resultGetEndlessPlayData(Json::Value result_data);

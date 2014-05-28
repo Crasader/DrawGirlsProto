@@ -13,7 +13,9 @@ enum class EmotionState
 	kSad = 4,
 	kJoy = 5,
 	kNone = 6,
-	kBored = 7
+	kBored = 7,
+	kCry = 8,
+	kAnger = 9
 };
 class CumberEmotion : public CCNode
 {
@@ -33,6 +35,8 @@ public:
 	void releaseStun();
 	void onKillingJack();
 	void toBored();
+	void toCry();
+	void toAnger();
 	void presentationEmotion(const std::string& emotion);
 	void update(float dt);
 protected:

@@ -4,10 +4,6 @@
 #endif
 
 
-enum TestEnum
-{
-	eeeeennn = 3
-};
 void MyLocal::initLocal()
 {	
 	ko();
@@ -1047,7 +1043,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ko->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ko->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
-	ko->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
+	ko->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue);
 	ko->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ko->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
 	ko->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
@@ -1645,7 +1641,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	en->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
 	en->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
-	en->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
+	en->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue);
+	en->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue);
 	en->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	en->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
 	en->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
@@ -2266,7 +2263,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ja->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
 	ja->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
-	ja->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
+	ja->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue);
 	ja->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ja->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
 	ja->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);

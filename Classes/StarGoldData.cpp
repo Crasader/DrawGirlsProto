@@ -2355,8 +2355,8 @@ void StarGoldData::initTodayMission(Json::Value t_info)
 	today_mission_info.today_date = t_info["date"].asInt();
 	today_mission_info.mission_type = t_info["type"].asInt();
 	today_mission_info.ing_count = t_info["count"].asInt();
-	today_mission_info.reward_type = t_info["reward"]["type"].asString();
-	today_mission_info.reward_count = t_info["reward"]["count"].asInt();
+	today_mission_info.reward_type = t_info["reward"][0]["type"].asString();
+	today_mission_info.reward_count = t_info["reward"][0]["count"].asInt();
 	today_mission_info.goal_count = t_info["goal"].asInt();
 	today_mission_info.is_success = t_info["isSuccess"].asBool();
 	today_mission_info.resetTimestamp = t_info["resetTimestamp"].asInt64();
