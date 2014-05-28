@@ -38,7 +38,7 @@ void CumberEmotion::onTouchingLine()
 {
 	if(m_emotionState != EmotionState::kJoy)
 	{
-		presentationEmotion("emotion_joy.ccbi");
+		presentationEmotion("emoticon_pleasant.ccbi");
 		m_emotionState = EmotionState::kJoy;
 	}
 }
@@ -46,7 +46,7 @@ void CumberEmotion::goStun()
 {
 	if(m_emotionState != EmotionState::kStun)
 	{
-		presentationEmotion("emotion_stun.ccbi");
+		presentationEmotion("emoticon_stun.ccbi");
 		m_emotionState = EmotionState::kStun;
 	}
 }
@@ -62,7 +62,7 @@ void CumberEmotion::onKillingJack()
 {
 	if(m_emotionState != EmotionState::kRidicule)
 	{
-		presentationEmotion("emotion_joy.ccbi");
+		presentationEmotion("emoticon_ridicule.ccbi");
 		m_emotionState = EmotionState::kRidicule;
 	}
 }
@@ -71,8 +71,24 @@ void CumberEmotion::toBored()
 {
 	if(m_emotionState != EmotionState::kBored)
 	{
-		presentationEmotion("emotion_joy.ccbi");
+		presentationEmotion("emoticon_yawn.ccbi");
 		m_emotionState = EmotionState::kBored;
+	}
+}
+void CumberEmotion::toCry()
+{
+	if(m_emotionState != EmotionState::kCry)
+	{
+		presentationEmotion("emoticon_cry.ccbi");
+		m_emotionState = EmotionState::kCry;
+	}
+}
+void CumberEmotion::toAnger()
+{
+	if(m_emotionState != EmotionState::kAnger)
+	{
+		presentationEmotion("emoticon_anger.ccbi");
+		m_emotionState = EmotionState::kAnger;
 	}
 }
 void CumberEmotion::presentationEmotion(const std::string& emotion)
