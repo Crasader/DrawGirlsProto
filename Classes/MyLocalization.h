@@ -579,7 +579,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_gameResult,
 	kMyLocalKey_fail,
 	kMyLocalKey_achieve,
-	kMyLocalKey_close
+	kMyLocalKey_close,
 
 	kMyLocalKey_endlessIngWin,
 	kMyLocalKey_endlessOpenConditionTitle,
