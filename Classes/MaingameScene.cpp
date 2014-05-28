@@ -69,6 +69,8 @@ bool Maingame::init()
 	setTag(0);
 	AudioEngine::sharedInstance()->startGame();
 	
+	damaged_score = 0;
+	
 	is_pause = false;
 	is_gohome = false;
 	setKeypadEnabled(true);
@@ -133,6 +135,7 @@ bool Maingame::init()
 	myGD->V_V["Main_showScreenSideWarning"] = std::bind(&Maingame::showScreenSideWarning, this);
 	myGD->V_V["Main_hideScreenSideWarning"] = std::bind(&Maingame::hideScreenSideWarning, this);
 	myGD->V_CCP["Main_initJackPosition"] = std::bind(&Maingame::initJackPosition, this, _1);
+	myGD->V_I["Main_scoreAttackMissile"] = std::bind(&Maingame::scoreAttackMissile, this, _1);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -3156,6 +3159,47 @@ void Maingame::showThumbWarning(CCPoint t_point)
 	t_node->runAction(t_seq);
 }
 
+void Maingame::scoreAttackMissile(int t_damage)
+{
+	CCSprite* t_missile = CCSprite::create("blind_drop.png");
+	t_missile->setPosition(ccp(40, myDSH->ui_center_y));
+	addChild(t_missile, myUIZorder);
+	
+	t_missile->setScale(0.1f);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+										   {
+											   t_missile->setScale(0.1f+t*0.9f);
+											   t_missile->setPosition(ccp(40+t*400, myDSH->ui_center_y));
+										   }, [=](float t)
+										   {
+											   t_missile->setScale(1.f);
+											   t_missile->setPosition(ccp(440, myDSH->ui_center_y));
+											   myGIM->showTakeItemEffect(ccp(440, myDSH->ui_center_y));
+											   
+											   addChild(KSTimer::create(0.1f, [=]()
+																		{
+																			KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
+																			t_label->enableOuterStroke(ccBLACK, 1.f);
+																			t_label->setPosition(ccp(440, myDSH->ui_center_y));
+																			addChild(t_label, myUIZorder);
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																												   {
+																													   t_label->setOpacity(255-t*255);
+																												   }, [=](float t)
+																												   {
+																													   t_label->setOpacity(0);
+																													   t_label->removeFromParent();
+																												   }));
+																			
+																			int before_score = atoi(replay_score->getString());
+																			damaged_score = damaged_score.getV() - t_damage;
+																			replay_score->setString(CCString::createWithFormat("%d", damaged_score.getV() + before_score)->getCString());
+																		}));
+										   }));
+}
+
 void Maingame::refreshThumb()
 {
 	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
@@ -3239,7 +3283,7 @@ void Maingame::refreshReplayScore(int temp_time)
 	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)][score_index].asInt() > temp_time)
 		return;
 	
-	replay_score->setString(CCString::createWithFormat("%d", mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt())->getCString());
+	replay_score->setString(CCString::createWithFormat("%d", damaged_score.getV() + mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt())->getCString());
 }
 
 void Maingame::refreshReplayPosition(int temp_time)

@@ -127,6 +127,7 @@ enum ReplayKey
 	kReplayKey_timeStamp_isContinue,
 	kReplayKey_timeStamp_isImageChange,
 	kReplayKey_timeStamp_gameInfo,
+	kReplayKey_timeStamp_scoreAttackDamage,
 	kReplayKey_mapTime,
 	kReplayKey_mapData,
 	kReplayKey_scoreTime,
@@ -147,7 +148,8 @@ enum ReplayKey
 	kReplayKey_damageScore,
 	kReplayKey_comboScore,
 	kReplayKey_lifeBonusCnt,
-	kReplayKey_takeArea
+	kReplayKey_takeArea,
+	kReplayKey_scoreAttackedValue
 };
 
 enum GoodsType
@@ -793,6 +795,8 @@ public:
 	KSProtectVar<int> damage_score;
 	KSProtectVar<int> combo_score;
 	void resetIngameDetailScore();
+	
+	KSProtectVar<int> damaged_score;
 	
 	KSProtectVar<float> temp_endless_play_limit_time;
 	Json::Value temp_replay_data;

@@ -255,9 +255,12 @@ public:
 	int getUseTime ();
 	void takeSilenceItem();
 	void hideThumb();
+	void addScoreAttack(int t_damage);
 	
 private:
+	KSProtectVar<int> score_attack_damage;
 	KSProtectVar<float> score_value;
+	KSProtectVar<int> damaged_score;
 	int percentage_decrease_cnt;
 //	CCObject * target_main;
 //	SEL_CallFunc delegate_gesture;
@@ -347,6 +350,10 @@ private:
 	map<int, GraySprite*> using_item_sprites;
 	
 	CCMenu* home_menu;
+	
+	int score_attack_keep_frame;
+	void scoreAttackKeep();
+	void scoreAttackMissile(int t_damage);
 	
 	void writeMap();
 	void checkMapTimeVector();
