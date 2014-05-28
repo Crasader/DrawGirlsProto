@@ -1889,8 +1889,8 @@ void MainFlowScene::menuAction(CCObject* sender)
 				title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 				t_container->addChild(title_label);
 				
-				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getUserdataHighPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-				sub_label->setPosition(ccp(0,10));
+				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				sub_label->setPosition(ccp(0,-10));
 				t_container->addChild(sub_label);
 				
 				CCSprite* gray = t_popup->getDimmedSprite();
@@ -2183,7 +2183,7 @@ void MainFlowScene::setBottom()
 	{
 		if(mySGD->getUserdataEndlessIngWeek() != mySGD->recent_week_no.getV())
 		{
-			n_endless->runAction(CCRepeatForever::create(CCSequence::create(CCScaleTo::create(0.4f, 1.2f), CCDelayTime::create(0.1f), CCScaleTo::create(0.4f, 0.85f), CCDelayTime::create(0.1f), NULL)));
+			n_endless->runAction(CCRepeatForever::create(CCSequence::create(CCShow::create(), CCDelayTime::create(0.3f), CCHide::create(), CCDelayTime::create(0.3f), NULL)));
 		}
 		else
 		{
@@ -2907,7 +2907,8 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(achieve_menu);
 
-	achievement_count_case = CCSprite::create("todaymission_percent_back.png");
+	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+	achievement_count_case->setContentSize(CCSizeMake(20, 20));
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
 	addChild(achievement_count_case, kMainFlowZorder_top+1);
 	
@@ -3004,9 +3005,21 @@ void MainFlowScene::countingAchievement()
 	
 	if(reward_count > 0)
 	{
+		int t_count = reward_count;
+		int base_width = 20;
+		while (t_count/10 > 0)
+		{
+			base_width+=5;
+			t_count /= 10;
+		}
+
+		achievement_count_case->setContentSize(CCSizeMake(base_width, 20));
+		
 		achievement_count_case->setVisible(true);
 		achievement_count_label->setString(CCString::createWithFormat("%d", reward_count)->getCString());
 	}
+	
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f-1));
 }
 
 void MainFlowScene::popupClose()

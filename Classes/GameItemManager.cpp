@@ -17,7 +17,7 @@
 //#include "DataStorageHub.h"
 //#include "MissileDamageData.h"
 
-#define ABSORB_DISTANCE 50.f
+#define ABSORB_DISTANCE 225.f
 
 void GameItemBase::selfRemove()
 {

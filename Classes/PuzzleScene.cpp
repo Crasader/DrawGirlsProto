@@ -2367,7 +2367,8 @@ void PuzzleScene::setTop()
 	
 	top_list.push_back(achieve_menu);
 	
-	achievement_count_case = CCSprite::create("todaymission_percent_back.png");
+	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+	achievement_count_case->setContentSize(CCSizeMake(20, 20));
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
 	addChild(achievement_count_case, kPuzzleZorder_top+1);
 	
@@ -2454,9 +2455,21 @@ void PuzzleScene::countingAchievement()
 	
 	if(reward_count > 0)
 	{
+		int t_count = reward_count;
+		int base_width = 20;
+		while (t_count/10 > 0)
+		{
+			base_width+=5;
+			t_count /= 10;
+		}
+		
+		achievement_count_case->setContentSize(CCSizeMake(base_width, 20));
+		
 		achievement_count_case->setVisible(true);
 		achievement_count_label->setString(CCString::createWithFormat("%d", reward_count)->getCString());
 	}
+	
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f-1));
 }
 
 void PuzzleScene::achievePopupClose()
