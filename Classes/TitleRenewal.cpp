@@ -937,6 +937,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			t_index++;
 		}
 		
+		NSDS_SB(kSDS_GI_shop_isEvent_b, result_data["event"].asBool(), false);
 		NSDS_SI(kSDS_GI_shopVersion_i, result_data["version"].asInt());
 	}
 	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
