@@ -78,12 +78,12 @@ void GameItemBase::traceCharacter()
 		if(mySD->getClearCondition() == kCLEAR_itemCollect)
 			myGD->communication("UI_takeItemCollect");
         
-        CCPoint last_position = item_img->getPosition();
+        myPoint = IntPoint::convertToIntPoint(item_img->getPosition());
         
 		item_img->removeFromParentAndCleanup(true);
 		
 		
-		(target_effect->*delegate_effect)(last_position);
+		(target_effect->*delegate_effect)(myPoint.convertToCCP());
 		
 		acting();
 		return;
@@ -430,7 +430,7 @@ void GameItemAttack::acting()
 	int weapon_rank = (weapon_level-1)/5 + 1;
 	weapon_level = (weapon_level-1)%5 + 1;
 	
-	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, item_img->getPosition());
+	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, myPoint.convertToCCP());
 	
 //	string missile_code;
 //	missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
