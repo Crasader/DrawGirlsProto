@@ -77,7 +77,9 @@ void GameItemBase::traceCharacter()
 		stopTraceCharacter();
 		if(mySD->getClearCondition() == kCLEAR_itemCollect)
 			myGD->communication("UI_takeItemCollect");
-		
+        
+        myPoint = IntPoint::convertToIntPoint(item_img->getPosition());
+        
 		item_img->removeFromParentAndCleanup(true);
 		
 		
