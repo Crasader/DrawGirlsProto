@@ -68,6 +68,10 @@ protected:
 	
 	float keep_scale_value;
 	
+	void startTraceCharacter();
+	void traceCharacter();
+	void stopTraceCharacter();
+	
 	void startHide();
 	void setMyPoint(bool is_near);
 };
@@ -188,6 +192,10 @@ private:
 	int directionAngle;
 	float move_speed;
 	
+	void startTraceCharacter();
+	void traceCharacter();
+	void stopTraceCharacter();
+	
 	void startMoving();
 	void endTakeAction();
 	void changeBack();
@@ -268,6 +276,10 @@ private:
 	void asLonging();
 	
 	bool isAsLong();
+	
+	void startTraceCharacter();
+	void traceCharacter();
+	void stopTraceCharacter();
 	
 	void startAbsorbChecking();
 	void absorbChecking();

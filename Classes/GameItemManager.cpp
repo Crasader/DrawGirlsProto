@@ -17,7 +17,7 @@
 //#include "DataStorageHub.h"
 //#include "MissileDamageData.h"
 
-#define ABSORB_DISTANCE 30.f
+#define ABSORB_DISTANCE 50.f
 
 void GameItemBase::selfRemove()
 {
@@ -37,29 +37,17 @@ void GameItemBase::framing()
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
 	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
 	{
-		if(mySD->getClearCondition() == kCLEAR_itemCollect)
-			myGD->communication("UI_takeItemCollect");
-		
-		item_img->removeFromParentAndCleanup(true);
 		unschedule(schedule_selector(GameItemBase::framing));
 		
-		(target_effect->*delegate_effect)(myPoint.convertToCCP());
-		
-		acting();
+		startTraceCharacter();
 		return;
 	}
 	
 	if(getSideCount() > starting_side_cnt)
 	{
-		if(mySD->getClearCondition() == kCLEAR_itemCollect)
-			myGD->communication("UI_takeItemCollect");
-		
-		item_img->removeFromParentAndCleanup(true);
 		unschedule(schedule_selector(GameItemBase::framing));
 		
-		(target_effect->*delegate_effect)(myPoint.convertToCCP());
-		
-		acting();
+		startTraceCharacter();
 		return;
 	}
 	
@@ -69,6 +57,39 @@ void GameItemBase::framing()
 		unschedule(schedule_selector(GameItemBase::framing));
 		startHide();
 	}
+}
+
+void GameItemBase::startTraceCharacter()
+{
+	schedule(schedule_selector(GameItemBase::traceCharacter));
+}
+void GameItemBase::traceCharacter()
+{
+	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+	CCPoint direction_vector = jack_position - item_img->getPosition();
+	
+	CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
+	
+	item_img->setPosition(item_img->getPosition() + move_vector);
+	
+	if(item_img->getPosition().getDistanceSq(jack_position) < 2.f)
+	{
+		stopTraceCharacter();
+		if(mySD->getClearCondition() == kCLEAR_itemCollect)
+			myGD->communication("UI_takeItemCollect");
+		
+		item_img->removeFromParentAndCleanup(true);
+		
+		
+		(target_effect->*delegate_effect)(myPoint.convertToCCP());
+		
+		acting();
+		return;
+	}
+}
+void GameItemBase::stopTraceCharacter()
+{
+	unschedule(schedule_selector(GameItemBase::traceCharacter));
 }
 
 void GameItemBase::acting()
@@ -807,12 +828,22 @@ bool ExchangeCoin::isLocked()
 	return false;
 }
 
-void ExchangeCoin::moving()
+void ExchangeCoin::startTraceCharacter()
+{
+	schedule(schedule_selector(ExchangeCoin::traceCharacter));
+}
+void ExchangeCoin::traceCharacter()
 {
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
-	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
+	CCPoint direction_vector = jack_position - getPosition();
+	
+	CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
+	
+	setPosition(getPosition() + move_vector);
+	
+	if(getPosition().getDistanceSq(jack_position) < 2.f)
 	{
-		stopMoving();
+		stopTraceCharacter();
 		
 		back_img = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", myType)->getCString());
 		back_img->setVisible(false);
@@ -830,7 +861,22 @@ void ExchangeCoin::moving()
 		CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_repeat, t_call3);
 		
 		runAction(t_seq2);
+		return;
+	}
+}
+void ExchangeCoin::stopTraceCharacter()
+{
+	unschedule(schedule_selector(ExchangeCoin::traceCharacter));
+}
+
+void ExchangeCoin::moving()
+{
+	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
+	{
+		stopMoving();
 		
+		startTraceCharacter();
 		return;
 	}
 	
@@ -842,23 +888,7 @@ void ExchangeCoin::moving()
 	{
 		stopMoving();
 		
-		back_img = CCSprite::create(CCString::createWithFormat("exchange_%d_unact.png", myType)->getCString());
-		back_img->setVisible(false);
-		back_img->setScale(1.f/myGD->game_scale);
-		back_img->setPosition(CCPointZero);
-		addChild(back_img);
-		
-		CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.05f, 0.2f, 0, 0, 90, 0, 0);
-		CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::changeBack));
-		CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.05f, 0.2f, 0, -90, 90, 0, 0);
-		CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::changeFront));
-		CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
-		CCRepeat* t_repeat = CCRepeat::create(t_seq, 10);
-		CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(ExchangeCoin::endTakeAction));
-		CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_repeat, t_call3);
-		
-		runAction(t_seq2);
-		
+		startTraceCharacter();
 		return;
 	}
 	
@@ -1236,6 +1266,37 @@ void FloatingCoin::hideAction()
 	
 	coin_img->runAction(CCSequence::createWithTwoActions(CCScaleTo::create(0.3f, 0), CCCallFunc::create(this, callfunc_selector(FloatingCoin::removeFromParent))));
 }
+
+void FloatingCoin::startTraceCharacter()
+{
+	schedule(schedule_selector(FloatingCoin::traceCharacter));
+}
+void FloatingCoin::traceCharacter()
+{
+	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+	CCPoint direction_vector = jack_position - getPosition();
+	
+	CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
+	
+	setPosition(getPosition() + move_vector);
+	
+	if(getPosition().getDistanceSq(jack_position) < 2.f)
+	{
+		stopTraceCharacter();
+		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
+		mySGD->addChangeGoodsIngameGold(m_gold);
+		
+		take_func(getPosition());
+		
+		removeFromParent();
+		return;
+	}
+}
+void FloatingCoin::stopTraceCharacter()
+{
+	unschedule(schedule_selector(FloatingCoin::traceCharacter));
+}
+
 void FloatingCoin::takeIt()
 {
 	unschedule(schedule_selector(FloatingCoin::absorbChecking));
@@ -1243,12 +1304,20 @@ void FloatingCoin::takeIt()
 	unschedule(schedule_selector(FloatingCoin::ting));
 	unschedule(schedule_selector(FloatingCoin::asLonging));
 	
-	AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
-	mySGD->addChangeGoodsIngameGold(m_gold);
-	
-	take_func(getPosition());
-	
-	removeFromParent();
+	if(auto_take)
+	{
+		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
+		mySGD->addChangeGoodsIngameGold(m_gold);
+		
+		take_func(getPosition());
+		
+		removeFromParent();
+		return;
+	}
+	else
+	{
+		startTraceCharacter();
+	}
 }
 void FloatingCoin::onLock()
 {
@@ -1414,31 +1483,54 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	take_func = t_take_func;
 	is_locked = false;
 	auto_take = t_auto_take;
-	m_gold = t_gold;
 	
 	auto_take_frame = rand()%10+20;
 	
 	moving_direction = rand()%360 - 180;
 	moving_speed = rand()%10 / 10.f + 1.f;
 	
-	int start_cut = rand()%6;
-	
-	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
-	coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
-	coin_img->setScale((50 - rand()%20)/100.f);
-	coin_img->setPosition(CCPointZero);
-	addChild(coin_img);
-	CCAnimation* t_animation = CCAnimation::create();
-	t_animation->setDelayPerUnit(0.1f);
-	int add_count = 0;
-	for(int i=start_cut;add_count < 6;i=(i+1)%6)
+	int random_value = rand()%100;
+	if(random_value < 2)
 	{
-		add_count++;
-		t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+		m_gold = t_gold*100;
+		
+		coin_img = CCSprite::create("coin3.png");
+		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+		coin_img->setPosition(CCPointZero);
+		addChild(coin_img);
 	}
-	CCAnimate* t_animate = CCAnimate::create(t_animation);
-	CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-	coin_img->runAction(t_repeat);
+	else if(random_value < 22)
+	{
+		m_gold = t_gold*10;
+		
+		coin_img = CCSprite::create("coin2.png");
+		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+		coin_img->setPosition(CCPointZero);
+		addChild(coin_img);
+	}
+	else
+	{
+		m_gold = t_gold;
+		
+		int start_cut = rand()%6;
+		
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
+		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
+		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+		coin_img->setPosition(CCPointZero);
+		addChild(coin_img);
+		CCAnimation* t_animation = CCAnimation::create();
+		t_animation->setDelayPerUnit(0.1f);
+		int add_count = 0;
+		for(int i=start_cut;add_count < 6;i=(i+1)%6)
+		{
+			add_count++;
+			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+		}
+		CCAnimate* t_animate = CCAnimate::create(t_animation);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+		coin_img->runAction(t_repeat);
+	}
 	
 	startTing();
 	
@@ -1510,7 +1602,11 @@ void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 {
 	float t_d = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f;
 	
-	int t_coin_count = roundf(t_percent/t_d);
+	int t_coin_count;
+	if(mySGD->is_endless_mode)
+		t_coin_count = roundf(t_percent/t_d);
+	else
+		t_coin_count = roundf(t_percent/(t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10)));
 	if(t_coin_count > 0)
 		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), myGD->getJackPoint().convertToCCP()));
 }
@@ -1538,9 +1634,17 @@ void FloatingCoinParent::startClearFloatCoin(float t_percent)
 {
 	float t_d = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f;
 	
-	int t_coin_count = roundf(t_percent/t_d);
-	
+	int t_coin_count;
 	float clear_reward = 50.f;
+	
+	if(mySGD->is_endless_mode)
+		t_coin_count = roundf(t_percent/t_d);
+	else
+	{
+		t_coin_count = roundf(t_percent/(t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10)));
+		clear_reward *= (mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10);
+	}
+	
 	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10));
 	
 	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())*10), ccp(0,0), true));

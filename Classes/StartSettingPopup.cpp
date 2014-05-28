@@ -1805,6 +1805,11 @@ void StartSettingPopup::realStartAction()
 	t_command_list.clear();
 	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
 	
+	if(!mySGD->is_endless_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
+	{
+		mySGD->setUserdataHighPiece(mySD->getSilType());
+	}
+	
 	mySGD->setUserdataTotalPlayCount(mySGD->getUserdataTotalPlayCount()+1);
 	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	

@@ -515,6 +515,7 @@ void MyLocal::initLocal()
 	ko->setObject(CCString::create("등급점수"), kMyLocalKey_endlessCalcTitleGradeScore);
 	ko->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	ko->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
+	ko->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1102,6 +1103,7 @@ void MyLocal::initLocal()
 	en->setObject(CCString::create("등급점수"), kMyLocalKey_endlessCalcTitleGradeScore);
 	en->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	en->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
+	en->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -1712,6 +1714,7 @@ void MyLocal::initLocal()
 	ja->setObject(CCString::create("등급점수"), kMyLocalKey_endlessCalcTitleGradeScore);
 	ja->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	ja->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
+	ja->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

@@ -2179,6 +2179,13 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "autoLevel";
 	else if(t_type == kUserdataType_highScore)
 		return_value = "highScore";
+	else if(t_type == kUserdataType_highPiece)
+		return_value = "highPiece";
+	
+	else if(t_type == kUserdataType_endlessData_ingWin)
+		return_value = "ing_win";
+	else if(t_type == kUserdataType_endlessData_ingWeek)
+		return_value = "ing_week";
 	
 	else if(t_type == kUserdataType_achieve_mapGacha)
 		return_value = "aMapGacha";
@@ -2264,6 +2271,10 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		if(i >= kUserdataType_achieve_mapGacha && i <= kUserdataType_achieve_seqAttendance) // HS가 유저데이터의 업적관련한 정보는 따로 묶겠다고 했음. 그래서 분기
 		{
 			userdata_storage[(UserdataType)i] = result_data["archiveData"][getUserdataTypeToKey((UserdataType)i)].asInt();
+		}
+		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek)
+		{
+			userdata_storage[(UserdataType)i] = result_data["endlessData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 		}
 		else
 		{
@@ -2625,6 +2636,9 @@ int StarGoldData::getItemGachaOpenStage(){	return itemGacha_open_stage.getV();	}
 void StarGoldData::setPuzzlePerfectRewardRuby(int t_i){	puzzle_perfect_reward_ruby = t_i;	}
 int StarGoldData::getPuzzlePerfectRewardRuby(){	return puzzle_perfect_reward_ruby.getV();	}
 
+void StarGoldData::setEndlessMinPiece(int t_i){	endless_min_piece = t_i;	}
+int StarGoldData::getEndlessMinPiece(){	return endless_min_piece.getV();	}
+
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}
 void StarGoldData::setUserdataIsVIP(int t_i)
@@ -2699,6 +2713,48 @@ void StarGoldData::setUserdataHighScore(int t_i)
 	}
 }
 int StarGoldData::getUserdataHighScore(){	return userdata_storage[kUserdataType_highScore].getV();	}
+
+void StarGoldData::setUserdataHighPiece(int t_i)
+{
+	if(userdata_storage[kUserdataType_highPiece].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_highPiece;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataHighPiece(){	return userdata_storage[kUserdataType_highPiece].getV();	}
+
+void StarGoldData::setUserdataEndlessIngWin(int t_i)
+{
+	userdata_storage[kUserdataType_endlessData_ingWin] = t_i;
+//	if(userdata_storage[kUserdataType_endlessData_ingWin].getV() != t_i)
+//	{
+//		is_changed_userdata = true;
+//		ChangeUserdataValue t_change;
+//		t_change.m_type = kUserdataType_endlessData_ingWin;
+//		t_change.m_value = t_i;
+//		changed_userdata_list.push_back(t_change);
+//	}
+}
+int StarGoldData::getUserdataEndlessIngWin(){	return userdata_storage[kUserdataType_endlessData_ingWin].getV();	}
+
+void StarGoldData::setUserdataEndlessIngWeek(int t_i)
+{
+	userdata_storage[kUserdataType_endlessData_ingWeek] = t_i;
+//	if(userdata_storage[kUserdataType_endlessData_ingWeek].getV() != t_i)
+//	{
+//		is_changed_userdata = true;
+//		ChangeUserdataValue t_change;
+//		t_change.m_type = kUserdataType_endlessData_ingWeek;
+//		t_change.m_value = t_i;
+//		changed_userdata_list.push_back(t_change);
+//	}
+}
+int StarGoldData::getUserdataEndlessIngWeek(){	return userdata_storage[kUserdataType_endlessData_ingWeek].getV();	}
+
 void StarGoldData::setUserdataAchieveMapGacha(int t_i)
 {
 	if(userdata_storage[kUserdataType_achieve_mapGacha].getV() != t_i)

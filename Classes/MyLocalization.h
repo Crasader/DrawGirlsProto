@@ -572,7 +572,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessCalcTitleTimeScore,
 	kMyLocalKey_endlessCalcTitleGradeScore,
 	kMyLocalKey_endlessCalcTitleTakeGold,
-	kMyLocalKey_endlessCalcTitleTakeArea
+	kMyLocalKey_endlessCalcTitleTakeArea,
+	kMyLocalKey_endlessIngWin
 }MyLocalKey;
 
 #define myLoc MyLocal::sharedInstance()
