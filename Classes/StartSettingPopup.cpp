@@ -184,7 +184,7 @@ void StartSettingPopup::setMain()
 	main_case->addChild(right_back);
 	
 	
-	int stage_number;
+	int stage_number = mySD->getSilType();
 	
 	if(mySGD->is_endless_mode)
 	{
@@ -201,8 +201,6 @@ void StartSettingPopup::setMain()
 	{
 		if(mySGD->is_before_selected_event_stage)
 		{
-			stage_number = mySD->getSilType();
-			
 			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 			stage_number_label->setColor(ccc3(255, 170, 20));
 			stage_number_label->setPosition(ccp(65, 256));
@@ -214,8 +212,6 @@ void StartSettingPopup::setMain()
 		}
 		else
 		{
-			stage_number = mySD->getSilType();
-			
 			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 			setFormSetter(piece_number_label);
 			piece_number_label->setColor(ccc3(255, 170, 20));
@@ -1804,6 +1800,11 @@ void StartSettingPopup::realStartAction()
 	vector<CommandParam> t_command_list;
 	t_command_list.clear();
 	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
+	
+	if(!mySGD->is_endless_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
+	{
+		mySGD->setUserdataHighPiece(mySD->getSilType());
+	}
 	
 	mySGD->setUserdataTotalPlayCount(mySGD->getUserdataTotalPlayCount()+1);
 	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));

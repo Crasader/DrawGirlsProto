@@ -137,7 +137,29 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle, 
 //	auto mainCumber = *mainCumbers.begin(); // 첫번 째 포인터로 일단 판단
 //	mainCumber->startDamageReaction(userdata);
 	KSCumberBase* cbp = dynamic_cast<KSCumberBase*>(cb);
-	myGD->communication("GIM_showAttackFloatingCoin", cbp->getPosition(), 2);
+	
+	total_damage_to_gold = total_damage_to_gold.getV() + damage;
+	
+	float total_damage = total_damage_to_gold.getV();
+	float max_life = mainCumbers[0]->getTotalLife();
+	float rate;
+	float d_damage;
+	
+	if(mySGD->is_endless_mode)
+		rate = 0.01f;
+	else
+		rate = ((mySGD->getUserdataHighPiece()+10)/(mySD->getSilType()+10)*9.f+1.f)/100.f; // 0.01f ~ 0.1f
+	
+	d_damage = max_life*rate;
+	
+	int gold_count = int(total_damage/d_damage);
+	
+	total_damage_to_gold = total_damage_to_gold.getV() - gold_count*d_damage;
+	
+	if(gold_count > 3)
+		gold_count = 3;
+	
+	myGD->communication("GIM_showAttackFloatingCoin", cbp->getPosition(), gold_count);
 	return cbp->startDamageReaction(damage, angle, castCancel, stiffen);
 }
 
@@ -448,6 +470,7 @@ void CumberParent::myInit()
 	is_die_animationing = false;
 	isGameover = false;
 	
+	total_damage_to_gold = 0;
 	
 	Json::Reader reader;
 	Json::Value root;

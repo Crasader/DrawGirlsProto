@@ -135,6 +135,8 @@ private:
 	
 	void resultGetUserProperties(Json::Value result_data);
 	
+	void resultGetTimeInfo(Json::Value result_data);
+	
 	Json::Value friendList;
 	
 	void resultLoadedCardData(Json::Value result_data);

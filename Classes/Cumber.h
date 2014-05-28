@@ -101,6 +101,7 @@ private:
 	
 	bool isGameover;
 	
+	KSProtectVar<float> total_damage_to_gold;
 	
 	void realStartDieAnimation();
 	void dieAnimation();
