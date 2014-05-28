@@ -172,15 +172,15 @@ void EndlessModeOpening::setMain()
 	rest_time_title->setPosition(ccp(10, rest_back->getContentSize().height/2.f));
 	rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10, rest_back->getContentSize().height/2.f));
 	
-	CCScale9Sprite* right_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+	right_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	right_back->setContentSize(CCSizeMake(205, 180));
 	right_back->setPosition(ccp(main_case->getContentSize().width-10-right_back->getContentSize().width/2.f, 149));
 	main_case->addChild(right_back);
 	
-	KSLabelTTF* right_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMyInfo), mySGD->getFont().c_str(), 18);
-	right_title->setColor(ccc3(255, 170, 0));
-	right_title->setPosition(ccp(right_back->getContentSize().width/2.f, 162));
-	right_back->addChild(right_title);
+//	KSLabelTTF* right_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMyInfo), mySGD->getFont().c_str(), 18);
+//	right_title->setColor(ccc3(255, 170, 0));
+//	right_title->setPosition(ccp(right_back->getContentSize().width/2.f, 162));
+//	right_back->addChild(right_title);
 	
 	CCScale9Sprite* graph_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	graph_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20, 54));
@@ -246,9 +246,11 @@ void EndlessModeOpening::setMain()
 	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 13);
 	record_title->setAnchorPoint(ccp(0,0.5f));
 	record_title->setPosition(ccp(10, record_back->getContentSize().height/2.f));
+	record_title->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	record_back->addChild(record_title);
 	
 	record_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 13);
+	record_content->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	record_content->setAnchorPoint(ccp(1,0.5f));
 	record_content->setPosition(ccp(record_back->getContentSize().width-10, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_content);
@@ -263,10 +265,11 @@ void EndlessModeOpening::setMain()
 	highscore_title->setAnchorPoint(ccp(0,0.5f));
 	highscore_title->setPosition(ccp(10, highscore_back->getContentSize().height/2.f));
 	highscore_back->addChild(highscore_title);
-	
+	highscore_title->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	highscore_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 13);
 	highscore_content->setAnchorPoint(ccp(1,0.5f));
 	highscore_content->setPosition(ccp(highscore_back->getContentSize().width-10, highscore_back->getContentSize().height/2.f));
+	highscore_content->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	highscore_back->addChild(highscore_content);
 	
 	CCScale9Sprite* straight_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
@@ -278,10 +281,12 @@ void EndlessModeOpening::setMain()
 	straight_title->setAnchorPoint(ccp(0,0.5f));
 	straight_title->setPosition(ccp(10, straight_back->getContentSize().height/2.f));
 	straight_back->addChild(straight_title);
+	straight_title->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	
 	straight_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 13);
 	straight_content->setAnchorPoint(ccp(1,0.5f));
 	straight_content->setPosition(ccp(straight_back->getContentSize().width-10, straight_back->getContentSize().height/2.f));
+	straight_content->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	straight_back->addChild(straight_content);
 	
 	
@@ -858,7 +863,8 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			param["rank"] = result_data["myrank"].asInt();
 			param["alluser"] = result_data["alluser"].asInt();
 			param["level"] = result_data["level"].asInt();
-			
+			param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+			param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 			putInformation(param);
 			if(currentSelectedCell)
 			{
@@ -935,7 +941,8 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		param["rank"] = result_data["myrank"].asInt();
 		param["alluser"] = result_data["alluser"].asInt();
 		param["level"] = result_data["level"].asInt();
-		
+		param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 //		param["score"] = result_data["myInfo"]["score"].asInt();
 //		param["victory"] = result_data["myInfo"]["score"].asInt();
 //		param["level"] = result_data["level"].asInt();
@@ -1075,7 +1082,7 @@ void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* c
 	int tempIndex = clampf(cell->getIdx(), 0, rank_list.size() - 1);
 	param["memberID"] = rank_list[tempIndex].memberID.getV();
 	myHSP->command("getendlessrankinfo", param, this, [=](Json::Value obj){
-		KS::KSLog("%", param);
+//		KS::KSLog("%", param);
 //		Json::Value info;
 //		info["score"] = obj["score"].asInt();
 //		info["victory"] = obj["victory"].asInt();
@@ -1124,4 +1131,35 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
 	CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
 	percent_label->runAction(t_seq2);
+	
+	CCNode* flagnick = CCNode::create();
+	if(right_flag)
+	{
+		right_flag->removeFromParent();
+	}
+	
+	right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(info.get("flag", "kr").asString()).c_str());
+	right_flag->setAnchorPoint(ccp(0, 0.5f));
+	flagnick->addChild(right_flag);
+	
+	setFormSetter(right_flag);
+	
+	if(right_nick)
+	{
+		right_nick->removeFromParent();
+	}
+	right_nick = KSLabelTTF::create(info.get("nick", "").asString().c_str(),
+																	mySGD->getFont().c_str(), 15.f);
+	right_nick->setAnchorPoint(ccp(0.f, 0.5f));
+	
+	right_nick->setPosition(ccp(right_flag->getContentSize().width + 15.f, 0));
+	float flagNickWidth = right_flag->getContentSize().width + 15.f + right_nick->getContentSize().width;
+	
+	flagnick->addChild(right_nick);
+	flagnick->setPosition(ccpFromSize(right_back->getContentSize()) / 2.f - ccp(flagNickWidth, 0) / 2.f);
+	flagnick->setPositionY(73 - 45 + 134);
+	right_back->addChild(flagnick);
+	setFormSetter(right_nick);
+	right_nick->setColor(ccc3(255, 155, 0));
+	right_nick->enableOuterStroke(ccc3(0, 0, 0), 1);
 }
