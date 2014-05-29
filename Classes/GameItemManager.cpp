@@ -79,13 +79,11 @@ void GameItemBase::traceCharacter()
 			myGD->communication("UI_takeItemCollect");
         
         myPoint = IntPoint::convertToIntPoint(item_img->getPosition());
-        
+        (target_effect->*delegate_effect)(myPoint.convertToCCP());
+		acting();
+		
 		item_img->removeFromParentAndCleanup(true);
 		
-		
-		(target_effect->*delegate_effect)(myPoint.convertToCCP());
-		
-		acting();
 		return;
 	}
 }

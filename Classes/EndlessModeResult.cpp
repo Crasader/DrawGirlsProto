@@ -170,7 +170,33 @@ bool EndlessModeResult::init()
 	
 	setMain();
 	
+	ready_loading = LoadingLayer::create(-9999);
+	addChild(ready_loading, 9999);
+	
+	send_command_list.clear();
+	
+	if(mySGD->is_changed_userdata)
+		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	tryTransaction();
+	
 	return true;
+}
+
+void EndlessModeResult::tryTransaction()
+{
+	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
+								  {
+									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									  {
+										  ready_loading->removeFromParent();
+										  ready_loading = NULL;
+									  }
+									  else
+									  {
+										  addChild(KSTimer::create(0.1f, [=](){tryTransaction();}));
+									  }
+								  });
 }
 
 void EndlessModeResult::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -950,7 +976,7 @@ void EndlessModeResult::setMain()
 			win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 			main_case->addChild(win_case);
 			
-			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_ing_win.getV())->getCString(), "winfont.fnt");
 			win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
 			win_case->addChild(win_label);
 			
@@ -1139,7 +1165,7 @@ void EndlessModeResult::startCalcAnimation()
 																				   win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 																				   main_case->addChild(win_case);
 																				   
-																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_ing_win.getV())->getCString(), "winfont.fnt");
 																				   win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
 																				   win_case->addChild(win_label);
 																				   
