@@ -12,7 +12,7 @@
 #include "CCMenuLambda.h"
 #include "MaingameScene.h"
 #include "TutorialFlowStep.h"
-
+#include "MyLocalization.h"
 void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 {
 	queue<IntMoveState> bfsArray;

@@ -22,6 +22,8 @@
 #include "StartSettingPopup.h"
 #include "MainFlowScene.h"
 #include "StyledLabelTTF.h"
+#include "MyLocalization.h"
+
 enum EndlessModeOpeningZorder
 {
 	kEndlessModeOpeningZorder_gray = 0,

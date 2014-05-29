@@ -19,7 +19,7 @@
 #include "KSUtil.h"
 #include <random>
 #include "KSLabelTTF.h"
-#include "MyLocalization.h"
+
 
 USING_NS_CC;
 USING_NS_CC_EXT;

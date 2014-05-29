@@ -14,8 +14,6 @@
 #include "cocos-ext.h"
 #include "StarGoldData.h"
 #include "KSUtil.h"
-#include "MyLocalization.h"
-#include "KSLabelTTF.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -52,7 +50,7 @@ enum PriceType{
 	PriceTypeNone
 };
 
-
+class KSLabelTTF;
 class CommonButton : public CCNode {
 	CCControlButton* m_btn;
 	std::function<void(CCObject*)> m_func;

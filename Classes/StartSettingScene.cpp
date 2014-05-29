@@ -39,6 +39,7 @@
 #include "MailPopup.h"
 #include "OptionPopup.h"
 #include "AchievePopup.h"
+#include "MyLocalization.h"
 
 CCScene* StartSettingScene::scene()
 {
