@@ -71,8 +71,8 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingTitle), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(17, back_case->getContentSize().height-25));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(back_case->getContentSize().width / 2.f, back_case->getContentSize().height-25));
 	back_case->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
@@ -103,15 +103,16 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 							  });
 	back_case->addChild(close_button);
 	
-	StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingContent), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kLeftAlignment);
-	content_label->setPosition(ccp(15,back_in->getContentSize().height-20));
+	StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingContent), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+	
+	content_label->setPosition(ccp(back_case->getContentSize().width / 2.f,back_in->getContentSize().height-20));
 	back_in->addChild(content_label);
 	
 	
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	KSLabelTTF* buy_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingBuy), mySGD->getFont().c_str(), 13);
-	buy_label->setAnchorPoint(ccp(0,0.5f));
+	buy_label->setAnchorPoint(ccp(0.0f, 0.5f));
 	r_label->addChild(buy_label);
 	
 	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));

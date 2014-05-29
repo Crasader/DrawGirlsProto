@@ -1397,14 +1397,16 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													addChild(t_popup, kMainFlowZorder_popup);
 																													
 																													CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-																													back_case->setContentSize(CCSizeMake(240,180));
+																													back_case->setContentSize(CCSizeMake(240, 139));
 																													back_case->setPosition(ccp(0,0));
 																													t_container->addChild(back_case);
 																													
+																													startFormSetter(this);
 																													CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 																													back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
 																													back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
 																													back_case->addChild(back_in);
+																													
 																													
 																													KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle), mySGD->getFont().c_str(), 15);
 																													title_label->setColor(ccc3(255, 170, 20));
@@ -1413,40 +1415,20 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													t_container->addChild(title_label);
 																													
 																													StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-																													sub_label->setPosition(ccp(0,30));
+																													sub_label->setPosition(ccp(0.0,-0.5)); 			// dt (0.0,-13.5)
 																													t_container->addChild(sub_label);
 																													
+
+
+																													
+																													setFormSetter(back_case);
+																													setFormSetter(back_in);
+																													setFormSetter(title_label);
+																													setFormSetter(sub_label);
 																													CCSprite* gray = t_popup->getDimmedSprite();
 																													
-//																													CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-//																													close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
-//																													close_button->setFunction([=](CCObject* sender)
-//																																			  {
-//																																				  if(!t_popup->is_menu_enable)
-//																																					  return;
-//																																				  
-//																																				  t_popup->is_menu_enable = false;
-//																																				  
-//																																				  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-//																																					  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-//																																				  
-//																																				  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-//																																																{
-//																																																	gray->setOpacity(t);
-//																																																	KS::setOpacity(t_container, t);
-//																																																}, [=](int t)
-//																																																{
-//																																																	gray->setOpacity(0);
-//																																																	KS::setOpacity(t_container, 0);
-//																																																	endUnlockAnimation();
-//																																																	t_popup->removeFromParent();
-//																																																}));
-//																																			  });
-//																													t_container->addChild(close_button);
-																													
-																													t_popup->button_func_list.clear();
-																													
-																													t_popup->button_func_list.push_back([=](){
+																													CommonButton* ok_button = CommonButton::createCloseButton(t_popup->getTouchPriority() - 5);
+																													ok_button->setFunction([=](CCObject*){
 																														if(!t_popup->is_menu_enable)
 																															return;
 																														
@@ -1468,23 +1450,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																									  }));
 																														
 																													});
-																													
-																													CCLabelTTF* t2_label = CCLabelTTF::create();
-																													
-																													KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
-																													ok_label->setPosition(ccp(0,0));
-																													t2_label->addChild(ok_label);
-																													
-																													CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-																													
-																													CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
-																													ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
-																													ok_button->setTag(0);
-																													ok_button->setPreferredSize(CCSizeMake(110,45));
-																													ok_button->setPosition(ccp(0,-50));
 																													t_container->addChild(ok_button);
-																													
+																													ok_button->setPosition(ccp(97.0,47.0)); 			// dt (1.5,-18.5)
 																													ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+																													setFormSetter(ok_button);
 																													
 																													
 																													t_container->setScaleY(0.f);

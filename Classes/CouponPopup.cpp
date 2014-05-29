@@ -255,33 +255,33 @@ void CouponPopup::createResultPopup(string title, string content)
 	
 	CCSprite* gray = t_popup->getDimmedSprite();
 	
-	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
-	close_button->setFunction([=](CCObject* sender)
-							  {
-								  if(!t_popup->is_menu_enable)
-									  return;
-								  
-								  t_popup->is_menu_enable = false;
-								  
-								  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-									  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-								  
-								  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																				{
-																					gray->setOpacity(t);
-																					KS::setOpacity(t_container, t);
-																				}, [=](int t)
-																				{
-																					gray->setOpacity(0);
-																					KS::setOpacity(t_container, 0);
-																					is_menu_enable = true;
-																					input_text->setVisible(true);
-																					input_text->setEnabled(true);
-																					t_popup->removeFromParent();
-																				}));
-							  });
-	t_container->addChild(close_button);
+//	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+//	close_button->setFunction([=](CCObject* sender)
+//							  {
+//								  if(!t_popup->is_menu_enable)
+//									  return;
+//								  
+//								  t_popup->is_menu_enable = false;
+//								  
+//								  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+//									  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
+//								  
+//								  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+//																				{
+//																					gray->setOpacity(t);
+//																					KS::setOpacity(t_container, t);
+//																				}, [=](int t)
+//																				{
+//																					gray->setOpacity(0);
+//																					KS::setOpacity(t_container, 0);
+//																					is_menu_enable = true;
+//																					input_text->setVisible(true);
+//																					input_text->setEnabled(true);
+//																					t_popup->removeFromParent();
+//																				}));
+//							  });
+//	t_container->addChild(close_button);
 	
 	t_popup->button_func_list.clear();
 	
