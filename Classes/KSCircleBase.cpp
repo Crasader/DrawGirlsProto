@@ -16,7 +16,7 @@ bool KSCircleBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
 	
-	////////////////////////////////////// by hs
+	////////////////////////////////////// by hs.k
 	string ccbiname2 = ccbiName;
 	if(ccbiName.length()<3) {
 		ccbiname2="cherry";
