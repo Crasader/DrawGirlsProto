@@ -76,12 +76,12 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 		ment_string = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectMent);
 	}
 	
-	StyledLabelTTF* title_label = StyledLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 21, 299, StyledAlignment::kLeftAlignment);
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,back_case->getContentSize().height/2.f-25));
+	StyledLabelTTF* title_label = StyledLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 21, 299, StyledAlignment::kCenterAlignment);
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
-	StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kLeftAlignment);
-	ment_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,50));
+	StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	ment_label->setPosition(ccp(0,50));
 	m_container->addChild(ment_label);
 	
 	

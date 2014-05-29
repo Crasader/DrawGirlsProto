@@ -1098,6 +1098,14 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ko->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
+	
+	ko->setObject(CCString::create("그만하기"), kMyLocalKey_endlessKeepWin);
+	
+	ko->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
+	ko->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
+	
+	ko->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1701,6 +1709,14 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	en->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
+	
+	en->setObject(CCString::create("그만하기"), kMyLocalKey_endlessKeepWin);
+	
+	en->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
+	en->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
+	
+	en->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
+	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
 //	en->setObject(CCString::create("This is a game in which you\nhave to gain as much area as\npossible using up, down, left,\nand right gestures."), kMyLocalKey_tutorial1);
@@ -2326,6 +2342,14 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ja->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
+	
+	ja->setObject(CCString::create("그만하기"), kMyLocalKey_endlessKeepWin);
+	
+	ja->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
+	ja->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
+	
+	ja->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
+	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
 //	ja->setObject(CCString::create("上下左右にジェスチャーを利用し、\n多くのエリアを獲得しなければなら\nないゲームです。"), kMyLocalKey_tutorial1);

@@ -296,7 +296,7 @@ void EndlessModeOpening::setMain()
 	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-2));
 	n_ready->addChild(n_ready_label2);
 	
-	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	n_ready_label->setColor(ccc3(50, 30, 5));
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-1));
 	n_ready->addChild(n_ready_label);
@@ -310,7 +310,7 @@ void EndlessModeOpening::setMain()
 	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-2));
 	s_ready->addChild(s_ready_label2);
 	
-	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	s_ready_label->setColor(ccc3(50, 30, 5));
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-1));
 	s_ready->addChild(s_ready_label);
@@ -329,7 +329,7 @@ void EndlessModeOpening::setMain()
 																	  Json::Value param;
 																	  param["memberID"] = myHSP->getMemberID();
 //																	  param["no"] = 34;
-																	  myHSP->command("getendlessplaydata", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
+																	  myHSP->command("startendlessplay", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 																  });
 	
 	CCMenuLambda* ready_menu = CCMenuLambda::createWithItem(ready_item);
@@ -735,7 +735,6 @@ void EndlessModeOpening::successGetStageInfo()
 											   gray->setOpacity(0);
 											   mySGD->is_endless_mode = true;
 											   mySGD->endless_my_victory = 0;
-											   mySGD->endless_my_total_score = 0;
 											   mySD->setSilType(stage_number);
 											   
 											   StartSettingPopup* t_popup = StartSettingPopup::create();
@@ -797,6 +796,17 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			mySGD->endless_my_lose = result_data["myInfo"]["lose"].asInt();
 			mySGD->endless_my_high_score = result_data["myInfo"]["score"].asInt();
 			mySGD->endless_my_win = result_data["myInfo"]["win"].asInt();
+			
+			mySGD->endless_my_ing_win = result_data["myInfo"]["ing_win"].asInt();
+			mySGD->endless_my_ing_score = result_data["myInfo"]["ing_score"].asInt();
+			
+			if(mySGD->endless_my_ing_win.getV() > 0)
+			{
+				n_ready_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString());
+				n_ready_label2->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString());
+				s_ready_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString());
+				s_ready_label2->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString());
+			}
 		}
 		else
 		{

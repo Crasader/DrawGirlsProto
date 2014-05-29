@@ -100,14 +100,14 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,back_case->getContentSize().height/2.f-15));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-15));
 	m_container->addChild(title_label);
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_upgradeSubMent), mySGD->getFont().c_str(), 10);
 	sub_label->enableOuterStroke(ccBLACK, 1.f);
-	sub_label->setAnchorPoint(ccp(0,0.5f));
-	sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,90));
+	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+	sub_label->setPosition(ccp(0,90));
 	m_container->addChild(sub_label);
 	
 	upgrade_action_node = CCNode::create();

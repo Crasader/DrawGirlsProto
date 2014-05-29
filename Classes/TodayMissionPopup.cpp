@@ -16,6 +16,7 @@
 #include "AudioEngine.h"
 #include "StyledLabelTTF.h"
 #include "CommonButton.h"
+#include "FormSetter.h"
 
 TodayMissionPopup* TodayMissionPopup::create(int t_touch_priority, function<void()> t_end_func)
 {
@@ -36,6 +37,8 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
 		screen_scale_x = 1.f;
+	
+	startFormSetter(this);
 	
 	gray = CCSprite::create("back_gray.png");
 	gray->setOpacity(0);
@@ -69,9 +72,10 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	back_case->addChild(back_in);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 15);
+	setFormSetter(title_label);
 	title_label->setColor(ccc3(255,170,20));//50, 250, 255));
 	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
@@ -263,6 +267,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		//			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass5);
 		
 		StyledLabelTTF* under_label = StyledLabelTTF::create(reward_ment.c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		setFormSetter(under_label);
 		under_label->setPosition(ccp(0, -45));
 		m_container->addChild(under_label);
 		

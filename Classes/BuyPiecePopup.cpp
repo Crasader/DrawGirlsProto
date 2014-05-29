@@ -96,8 +96,8 @@ void BuyPiecePopup::myInit(int t_touch_priority, function<void()> t_end_func, fu
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openStage), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openStageContent), mySGD->getFont().c_str(), 12);

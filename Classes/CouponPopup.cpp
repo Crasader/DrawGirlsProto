@@ -97,8 +97,8 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_couponTitle), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,back_case->getContentSize().height/2.f-25));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	CCScale9Sprite* nick_case = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
@@ -244,13 +244,13 @@ void CouponPopup::createResultPopup(string title, string content)
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	t_container->addChild(title_label);
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(content.c_str(), mySGD->getFont().c_str(), 12);
-	sub_label->setAnchorPoint(ccp(0,0.5f));
-	sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,10));
+	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+	sub_label->setPosition(ccp(0,10));
 	t_container->addChild(sub_label);
 	
 	CCSprite* gray = t_popup->getDimmedSprite();

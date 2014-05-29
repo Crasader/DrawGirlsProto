@@ -119,9 +119,18 @@ bool EndlessModeResult::init()
 		is_calc = true;
 		mySGD->endless_my_victory_on = false;
 		if(left_total_score.getV() > right_total_score.getV())
+		{
 			mySGD->endless_my_victory = mySGD->endless_my_victory.getV() + 1;
+			mySGD->endless_my_ing_win = mySGD->endless_my_ing_win.getV() + 1;
+			mySGD->endless_my_ing_score = mySGD->endless_my_ing_score.getV() + int(left_total_score.getV());
+		}
+		else
+		{
+			mySGD->endless_my_ing_win = 0;
+			mySGD->endless_my_ing_score = 0;
+		}
 		
-		mySGD->endless_my_total_score = mySGD->endless_my_total_score.getV() + mySGD->getScore();
+//		mySGD->endless_my_total_score = mySGD->endless_my_total_score.getV() + mySGD->getScore();
 	}
 	
 	
@@ -485,13 +494,13 @@ void EndlessModeResult::setMain()
 	
 	CCSprite* n_stop = CCSprite::create("endless_ready.png");
 	
-	n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	n_stop_label2->setColor(ccWHITE);
 	n_stop_label2->setOpacity(100);
 	n_stop_label2->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-2));
 	n_stop->addChild(n_stop_label2);
 	
-	KSLabelTTF* n_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	n_stop_label->setColor(ccc3(50, 30, 5));
 	n_stop_label->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-1));
 	n_stop->addChild(n_stop_label);
@@ -499,13 +508,13 @@ void EndlessModeResult::setMain()
 	CCSprite* s_stop = CCSprite::create("endless_ready.png");
 	s_stop->setColor(ccGRAY);
 	
-	s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	s_stop_label2->setColor(ccWHITE);
 	s_stop_label2->setOpacity(100);
 	s_stop_label2->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-2));
 	s_stop->addChild(s_stop_label2);
 	
-	KSLabelTTF* s_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	s_stop_label->setColor(ccc3(50, 30, 5));
 	s_stop_label->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-1));
 	s_stop->addChild(s_stop_label);
@@ -516,6 +525,7 @@ void EndlessModeResult::setMain()
 																		  return;
 																	  
 																	  is_menu_enable = false;
+																	  
 																	  
 																	  if(mySGD->getScore() > mySGD->temp_endless_score.getV())
 																		{
@@ -552,16 +562,16 @@ void EndlessModeResult::setMain()
 																			back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
 																			back_case->addChild(back_in);
 																			
-																			KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+																			KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinTitle), mySGD->getFont().c_str(), 15);
 																			title_label->setColor(ccc3(255, 170, 20));
-																			title_label->setAnchorPoint(ccp(0,0.5f));
-																			title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
+																			title_label->setAnchorPoint(ccp(0.5f,0.5f));
+																			title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 																			t_container->addChild(title_label);
 																			
-																			KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessCheckGiveup), mySGD->getFont().c_str(), 12);
-																			sub_label->setHorizontalAlignment(kCCTextAlignmentLeft);
+																			KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinContent), mySGD->getFont().c_str(), 12);
+																			sub_label->setHorizontalAlignment(kCCTextAlignmentCenter);
 																			sub_label->setAnchorPoint(ccp(0,0.5f));
-																			sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,5));
+																			sub_label->setPosition(ccp(0,5));
 																			t_container->addChild(sub_label);
 																			
 																			CCSprite* t_gray = t_popup->getDimmedSprite();
@@ -622,13 +632,12 @@ void EndlessModeResult::setMain()
 																																  Json::Value param;
 																																  param.clear();
 																																  param["memberID"] = myHSP->getMemberID();
-																																  param["score"] = mySGD->endless_my_total_score.getV();
+																																  param["score"] = int(mySGD->getScore());
 																																  param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																																  param["level"] = mySGD->endless_my_level.getV();
 																																  param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																																  param["victory"] = mySGD->endless_my_victory.getV();
+																																  param["victory"] = true;
 																																  
-																																  command_list.push_back(CommandParam("setendlessrank", param, [=](Json::Value result_data)
+																																  command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
 																																									  {
 																																										  if(result_data["result"]["code"].asInt() != GDSUCCESS)
 																																										  {
@@ -754,13 +763,12 @@ void EndlessModeResult::setMain()
 																			Json::Value param;
 																			param.clear();
 																			param["memberID"] = myHSP->getMemberID();
-																			param["score"] = mySGD->endless_my_total_score.getV();
+																			param["score"] = int(mySGD->getScore());
 																			param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																			param["level"] = mySGD->endless_my_level.getV();
 																			param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																			param["victory"] = mySGD->endless_my_victory.getV();
+																			param["victory"] = false;
 																			
-																			command_list.push_back(CommandParam("setendlessrank", param, [=](Json::Value result_data)
+																			command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
 																												{
 																													if(result_data["result"]["code"].asInt() != GDSUCCESS)
 																													{
@@ -866,16 +874,21 @@ void EndlessModeResult::setMain()
 	
 	
 	
+	string next_button_str;
+	if(mySGD->endless_my_ing_win.getV() > 0)
+		next_button_str = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString();
+	else
+		next_button_str = myLoc->getLocalForKey(kMyLocalKey_nextStage);
 	
 	CCSprite* n_next = CCSprite::create("endless_ready.png");
 	
-	n_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	n_next_label2 = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	n_next_label2->setColor(ccWHITE);
 	n_next_label2->setOpacity(100);
 	n_next_label2->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-2));
 	n_next->addChild(n_next_label2);
 	
-	KSLabelTTF* n_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_next_label = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	n_next_label->setColor(ccc3(50, 30, 5));
 	n_next_label->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-1));
 	n_next->addChild(n_next_label);
@@ -883,13 +896,13 @@ void EndlessModeResult::setMain()
 	CCSprite* s_next = CCSprite::create("endless_ready.png");
 	s_next->setColor(ccGRAY);
 	
-	s_next_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	s_next_label2 = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	s_next_label2->setColor(ccWHITE);
 	s_next_label2->setOpacity(100);
 	s_next_label2->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-2));
 	s_next->addChild(s_next_label2);
 	
-	KSLabelTTF* s_next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_next_label = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	s_next_label->setColor(ccc3(50, 30, 5));
 	s_next_label->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-1));
 	s_next->addChild(s_next_label);
@@ -906,7 +919,7 @@ void EndlessModeResult::setMain()
 
 																	 Json::Value param;
 																	 param["memberID"] = myHSP->getMemberID();
-																	 myHSP->command("getendlessplaydata", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData));
+																	 myHSP->command("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData));
 																 });
 	next_item->setPosition(ccp(-main_case->getContentSize().width/2.f+right_back->getPositionX(), 0));
 	
@@ -1869,13 +1882,13 @@ void EndlessModeResult::reSetEndlessRank()
 	Json::Value param;
 	param.clear();
 	param["memberID"] = myHSP->getMemberID();
-	param["score"] = mySGD->endless_my_total_score.getV();
+	param["score"] = int(mySGD->getScore());
 	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 	param["level"] = mySGD->endless_my_level.getV();
 	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-	param["victory"] = mySGD->endless_my_victory.getV();
+	param["victory"] = left_total_score.getV() > right_total_score.getV();
 	
-	myHSP->command("setendlessrank", param, [=](Json::Value result_data)
+	myHSP->command("finishendlessplay", param, [=](Json::Value result_data)
 										{
 											if(result_data["result"]["code"].asInt() != GDSUCCESS)
 											{

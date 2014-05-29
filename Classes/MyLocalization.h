@@ -586,7 +586,14 @@ typedef enum MyLocalKey_ {
 
 	kMyLocalKey_endlessIngWin,
 	kMyLocalKey_endlessOpenConditionTitle,
-	kMyLocalKey_endlessOpenConditionContent
+	kMyLocalKey_endlessOpenConditionContent,
+	
+	kMyLocalKey_endlessKeepWin,
+	
+	kMyLocalKey_endlessKeepWinTitle,
+	kMyLocalKey_endlessKeepWinContent,
+	
+	kMyLocalKey_endlessReadyIngWin
 
 }MyLocalKey;
 
