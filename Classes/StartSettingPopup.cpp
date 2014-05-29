@@ -174,7 +174,7 @@ void StartSettingPopup::setMain()
 	main_case->addChild(left_tab);
 	
 	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 11);
-	tab_label->setColor(ccc3(54, 35, 12));
+	tab_label->setColor(ccc3(50, 30, 10));
 	tab_label->setPosition(ccp(36.5f,12.5f));
 	left_tab->addChild(tab_label);
 	

@@ -2023,11 +2023,11 @@ void MainFlowScene::setBottom()
 	if(NSDS_GB(kSDS_GI_shop_isEvent_b))
 	{
 		CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
-		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height));
+		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+8));
 		n_shop->addChild(n_shop_event);
 		
 		CCSprite* s_shop_event = CCSprite::create("mainflow_new.png");
-		s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height));
+		s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height+8));
 		s_shop->addChild(s_shop_event);
 		s_shop_event->setColor(ccGRAY);
 	}
@@ -2182,23 +2182,23 @@ void MainFlowScene::setBottom()
 			if(ing_win > 0)
 			{
 				CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-				n_win_back->setPosition(ccp(n_endless->getContentSize().width-8, n_endless->getContentSize().height-n_win_back->getContentSize().height));
 				n_endless->addChild(n_win_back);
 				
 				KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
 				n_win_back->addChild(n_win_label);
 				
 				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
+				n_win_back->setPosition(ccp(n_endless->getContentSize().width-8, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
 				n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f));
 				
 				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-				s_win_back->setPosition(ccp(s_endless->getContentSize().width-8, s_endless->getContentSize().height-s_win_back->getContentSize().height));
 				s_endless->addChild(s_win_back);
 				
 				KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
 				s_win_back->addChild(s_win_label);
 				
 				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
+				s_win_back->setPosition(ccp(s_endless->getContentSize().width-8, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
 				s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f));
 			}
 		}
@@ -2223,6 +2223,10 @@ void MainFlowScene::setBottom()
 	etc_frame->setAnchorPoint(ccp(0.5,0));
 	etc_frame->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+11));
 	addChild(etc_frame, kMainFlowZorder_uiButton);
+	
+	KSLabelTTF* event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 12);
+	event_ment->setPosition(ccpFromSize(etc_frame->getContentSize())/2.f + ccp(18,-3));
+	etc_frame->addChild(event_ment);
 	
 	bottom_list.push_back(etc_frame);
 	
