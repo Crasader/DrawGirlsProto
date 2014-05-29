@@ -17,12 +17,14 @@ protected:
 	ccColor3B m_outerStrokeColor;
 	bool m_outerIsStroke;
 	CCSprite* m_outerSprite;
+	GLubyte m_outerStrokeOpacity;
 	CCRenderTexture* m_renderTexture;
 public:
 	KSLabelTTF() : m_outerIsStroke(false), m_outerSprite(nullptr), m_renderTexture(nullptr)
 	{
 	}
 	virtual void enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture = true);
+	virtual void enableOuterStroke(const ccColor3B &strokeColor, float strokeSize,GLubyte strokeOpacity, bool mustUpdateTexture = true);
 	virtual void disableOuterStroke(bool mustUpdateTexture = true);
 	virtual bool updateTexture();
 	virtual void setEnableItalic(float value = 30.f);
@@ -115,7 +117,8 @@ public:
 			m_fFontSize   = fontSize;
 
 			this->setString(string);
-
+			
+			this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)100);
 			return true;
 		}
 
