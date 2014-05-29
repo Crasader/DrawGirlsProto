@@ -2233,8 +2233,10 @@ void PlayUI::endGame (bool is_show_reason)
 			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
 			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
 			CCFiniteTimeAction* nextScene2;
-			
-			nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
+			if(mySGD->is_endless_mode)
+				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha));
+			else
+				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
 			
 			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
 			
