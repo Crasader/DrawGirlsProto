@@ -813,6 +813,10 @@ public:
 	void setEventString(string t_str);
 	string getEventString();
 	
+	void setIsAlwaysSavePlaydata(int t_i);
+	int getIsAlwaysSavePlaydata();
+	
+	
 	bool is_morphing_noti;
 	
 private:
@@ -979,6 +983,7 @@ private:
 	void resultUpdateTodayMission(Json::Value result_data);
 	
 	string event_string;
+	int is_always_save_playdata;
 	
 	string app_type;
 	int app_version;

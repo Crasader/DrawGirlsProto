@@ -695,6 +695,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setEndlessMinPiece(result_data["endlessMinPiece"].asInt());
 		
 		mySGD->setEventString(result_data["eventString"].asString());
+		mySGD->setIsAlwaysSavePlaydata(result_data["isAlwaysSavePlaydata"].asInt());
 	}
 	else
 	{
