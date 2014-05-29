@@ -17,7 +17,7 @@
 #include "TouchSuctionLayer.h"
 #include "FlagSelector.h"
 #include "FormSetter.h"
-
+#include "ScrollBar.h"
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
 	target_final = t_final;
@@ -160,10 +160,19 @@ bool RankNewPopup::init()
 	setFormSetter(rankBack);
 	main_case->addChild(rankBack);
 	
-	
-	rank_table = CCTableView::create(this, CCSizeMake(237, 118));
+	CCScale9Sprite* barBack = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
+	barBack->setPosition(ccp(243.0,98.5)); 			// dt (8.0,-41.5)
+	barBack->setContentSize(CCSizeMake(5.5,116.5)); 			// dt (-1.5,-38.5)
+	//	FormSetter::get()->addObject("testksoo", barBack);
+	main_inner_right->addChild(barBack);
+	setFormSetter(barBack);
+	rank_table = CCTableView::create(this, CCSizeMake(244, 118));
 	rank_table->setPosition(5,40);
 	rank_table->setDelegate(this);
+	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
+																										 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
+	m_scrollBar = ScrollBar::createScrollbar(rank_table, 0, NULL, scrollBar, -191);
+	m_scrollBar->setDynamicScrollSize(true);
 	setFormSetter(rank_table);
 	
 	
@@ -559,5 +568,11 @@ unsigned int  RankNewPopup::numberOfCellsInTableView(CCTableView *table)
 }
 
 
-void RankNewPopup::scrollViewDidScroll(CCScrollView* view){}
+void RankNewPopup::scrollViewDidScroll(CCScrollView* view)
+{
+	if(m_scrollBar)
+	{
+		m_scrollBar->setBarRefresh();
+	}
+}
 void RankNewPopup::scrollViewDidZoom(CCScrollView* view){}

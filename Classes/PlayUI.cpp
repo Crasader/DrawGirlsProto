@@ -11,6 +11,7 @@
 #include "GraySprite.h"
 #include "OnePercentGame.h"
 #include "FlagSelector.h"
+#include "MyLocalization.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;

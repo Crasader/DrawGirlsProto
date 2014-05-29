@@ -7,7 +7,7 @@
 //
 
 #include "TakeCardToDiary.h"
-
+#include "MyLocalization.h"
 TakeCardToDiary* TakeCardToDiary::create(int t_take_card_number, std::function<void()> t_end_func)
 {
 	TakeCardToDiary* t_tctd = new TakeCardToDiary();

@@ -9,6 +9,7 @@
 #include "StyledLabelTTF.h"
 #include "FormSetter.h"
 #include "StageImgLoader.h"
+#include "MyLocalization.h"
 GaBaBo::GaBaBo()
 {
 	

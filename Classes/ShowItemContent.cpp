@@ -8,6 +8,7 @@
 
 #include "ShowItemContent.h"
 
+#include "MyLocalization.h"
 ShowItemContent* ShowItemContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_item_list)
 {
 	ShowItemContent* t_ctc = new ShowItemContent();

@@ -593,6 +593,7 @@ typedef enum MyLocalKey_ {
 
 
 
+
 #define myLoc MyLocal::sharedInstance()
 
 class MyLocal : public CCDictionary

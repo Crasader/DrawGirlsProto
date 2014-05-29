@@ -8,7 +8,9 @@
 
 #include "CommonButton.h"
 
+#include "MyLocalization.h"
 
+#include "KSLabelTTF.h"
 bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	if(CCNode::init()==false){
 		return false;

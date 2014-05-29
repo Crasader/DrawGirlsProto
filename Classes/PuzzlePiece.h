@@ -19,7 +19,6 @@
 #include "hspConnector.h"
 #include "GDWebSprite.h"
 #include "KSLabelTTF.h"
-#include "MyLocalization.h"
 
 USING_NS_CC;
 using namespace std;

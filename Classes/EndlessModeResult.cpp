@@ -23,6 +23,7 @@
 #include "StartSettingPopup.h"
 #include "MainFlowScene.h"
 #include "LoadingTipScene.h"
+#include "MyLocalization.h"
 
 enum EndlessModeResultZorder
 {

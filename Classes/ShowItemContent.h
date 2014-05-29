@@ -16,7 +16,6 @@
 #include "StarGoldData.h"
 #include "KSLabelTTF.h"
 #include "SilhouetteData.h"
-#include "MyLocalization.h"
 #include "CommonButton.h"
 
 USING_NS_CC;
