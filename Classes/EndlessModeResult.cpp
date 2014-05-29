@@ -596,7 +596,7 @@ void EndlessModeResult::setMain()
 																			
 																			KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinContent), mySGD->getFont().c_str(), 12);
 																			sub_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-																			sub_label->setAnchorPoint(ccp(0,0.5f));
+																			sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 																			sub_label->setPosition(ccp(0,5));
 																			t_container->addChild(sub_label);
 																			

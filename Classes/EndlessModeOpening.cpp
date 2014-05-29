@@ -292,6 +292,7 @@ void EndlessModeOpening::setMain()
 	
 	n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	n_ready_label2->setColor(ccWHITE);
+	n_ready_label2->disableOuterStroke();
 	n_ready_label2->setOpacity(100);
 	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-2));
 	n_ready->addChild(n_ready_label2);
@@ -307,6 +308,7 @@ void EndlessModeOpening::setMain()
 	s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
 	s_ready_label2->setColor(ccWHITE);
 	s_ready_label2->setOpacity(100);
+	s_ready_label2->disableOuterStroke();
 	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-2));
 	s_ready->addChild(s_ready_label2);
 	
@@ -1032,7 +1034,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	
 	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	list_cell_case->setContentSize(CCSizeMake(225, 37));
-	list_cell_case->setPosition(ccp(list_cell_case->getContentSize().width/2.f,list_cell_case->getContentSize().height/2.f));
+	list_cell_case->setPosition(ccp(list_cell_case->getContentSize().width/2.f,list_cell_case->getContentSize().height/2.f-5));
 	cell->addChild(list_cell_case);
 	
 	CCPoint rank_position = ccp(20,18);
@@ -1097,7 +1099,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 			currentSelectedCell->removeFromParent();
 		}
 		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		currentSelectedCell->setPosition(ccp(114.0,15.5)); 			// dt (114.0,15.5)
+		currentSelectedCell->setPosition(ccp(114.0,11.5)); 			// dt (114.0,15.5)
 		currentSelectedCell->setContentSize(CCSizeMake(231.0,46.5)); 			// dt (6.0,9.5)
 		//	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
 		cell->addChild(currentSelectedCell);
@@ -1116,8 +1118,10 @@ void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* c
 	myHSP->command("getendlessrankinfo", param, this, [=](Json::Value obj){
 		if(obj["result"]["code"].asInt() == GDSUCCESS)
 		{
-			loading_right_circle->removeFromParent();
-			loading_right_circle = nullptr;
+			if(loading_right_circle){
+				loading_right_circle->removeFromParent();
+				loading_right_circle = nullptr;
+			}
 			putInformation(obj);
 		}
 		else
@@ -1131,7 +1135,7 @@ void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* c
 		currentSelectedCell->removeFromParent();
 	}
 	currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-	currentSelectedCell->setPosition(ccp(114.0,15.5)); 			// dt (114.0,15.5)
+	currentSelectedCell->setPosition(ccp(114.0,11.5)); 			// dt (114.0,15.5)
 	currentSelectedCell->setContentSize(CCSizeMake(231.0,46.5)); 			// dt (6.0,9.5)
 //	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
 	cell->addChild(currentSelectedCell);

@@ -1869,6 +1869,7 @@ void PuzzleScene::setRight()
 	KSLabelTTF* n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	n_ready_label2->setColor(ccWHITE);
 	n_ready_label2->setOpacity(100);
+	n_ready_label2->disableOuterStroke();
 	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f-1));
 	n_ready->addChild(n_ready_label2);
 	

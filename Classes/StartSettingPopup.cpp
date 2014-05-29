@@ -529,6 +529,7 @@ void StartSettingPopup::setMain()
 	setFormSetter(n_start);
 	n_start_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
 	setFormSetter(n_start_label2);
+	n_start_label2->disableOuterStroke();
 	n_start_label2->setColor(ccWHITE);
 	n_start_label2->setOpacity(100);
 	n_start_label2->setPosition(ccp(147.5f,39.5f));
