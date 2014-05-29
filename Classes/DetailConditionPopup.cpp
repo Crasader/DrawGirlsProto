@@ -54,7 +54,7 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	addChild(m_container);
 	
 	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_case->setContentSize(CCSizeMake(250,200));
+	back_case->setContentSize(CCSizeMake(250,120));
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
@@ -126,21 +126,30 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 //	sub5_label->setPosition(ccp(x_value, -25));
 	
 	
-	CCLabelTTF* t_label = CCLabelTTF::create();
-	
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
-	ok_label->setPosition(ccp(0,0));
-	t_label->addChild(ok_label);
-	
-	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-	
-	CCControlButton* ok_button = CCControlButton::create(t_label, ok_back);
-	ok_button->addTargetWithActionForControlEvents(this, cccontrol_selector(DetailConditionPopup::closeAction), CCControlEventTouchUpInside);
-	ok_button->setPreferredSize(CCSizeMake(100,45));
-	ok_button->setPosition(ccp(0,-65));
-	m_container->addChild(ok_button);
-	
-	ok_button->setTouchPriority(touch_priority);
+//	CCLabelTTF* t_label = CCLabelTTF::create();
+//	
+//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+//	ok_label->setPosition(ccp(0,0));
+//	t_label->addChild(ok_label);
+//	
+//	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+//	
+//	CCControlButton* ok_button = CCControlButton::create(t_label, ok_back);
+//	ok_button->addTargetWithActionForControlEvents(this, cccontrol_selector(DetailConditionPopup::closeAction), CCControlEventTouchUpInside);
+//	ok_button->setPreferredSize(CCSizeMake(100,45));
+//	ok_button->setPosition(ccp(0,-65));
+//	m_container->addChild(ok_button);
+//	
+//	ok_button->setTouchPriority(touch_priority);
+
+	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
+	setFormSetter(close_button);
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f - 22, back_case->getContentSize().height/2.f - 22));
+	close_button->setFunction([=](CCObject* sender)
+														{
+															this->closeAction(this,CCControlEventTouchUpInside);
+														});
+	m_container->addChild(close_button);
 	
 	
 	m_container->setScaleY(0.f);
