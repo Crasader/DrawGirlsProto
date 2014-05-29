@@ -497,7 +497,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 															
 																	
 																	StyledLabelTTF* lbl = StyledLabelTTF::create(rewardList.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-																	ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), (CCLabelTTF*)lbl,[=](){
+																	ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), (CCNode*)lbl,[=](){
 																		
 																								Json::Value p;
 																								int mailNo = mail["no"].asInt();

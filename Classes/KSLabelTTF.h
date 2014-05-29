@@ -119,7 +119,7 @@ public:
 
 			this->setString(string);
 			
-			this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)100);
+			this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)200);
 			return true;
 		}
 

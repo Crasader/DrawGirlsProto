@@ -1522,7 +1522,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
 		
 		
-		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800, myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), (CCLabelTTF*)content_label, [=](){is_menu_enable = true;},CCPointZero,true);
+		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800, myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), (CCNode*)content_label, [=](){is_menu_enable = true;},CCPointZero,true);
 		
 	//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
 		addChild(t_popup, kMainFlowZorder_popup);
