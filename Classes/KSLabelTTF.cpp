@@ -2,11 +2,22 @@
 
 void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture)
 {
+	m_outerStrokeOpacity = 255;
 	m_outerIsStroke = true;
 	m_outerStrokeColor = strokeColor;
 	m_outerStrokeSize = strokeSize;
 	updateTexture();
 }
+
+void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, GLubyte strokeOpacity, bool mustUpdateTexture)
+{
+	m_outerStrokeOpacity = strokeOpacity;
+	m_outerIsStroke = true;
+	m_outerStrokeColor = strokeColor;
+	m_outerStrokeSize = strokeSize;
+	updateTexture();
+}
+
 
 void KSLabelTTF::disableOuterStroke(bool mustUpdateTexture)
 {
@@ -96,7 +107,7 @@ bool KSLabelTTF::updateTexture()
 		label->setColor(oColor);
 		label->setBlendFunc(originalBlendFunc);
 		m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
-		m_outerSprite->setOpacity(getOpacity());
+		m_outerSprite->setOpacity(m_outerStrokeOpacity);
 		addChild(m_outerSprite, -1);
 		m_outerSprite->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
 		label->setPosition(oPosition);

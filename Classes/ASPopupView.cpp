@@ -20,7 +20,8 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 	return getCommonNoti(t_touch_priority, t_comment, [](){});
 }
 
-ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CCLabelTTF* ment_label, function<void()> close_func, CCPoint t_position)
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CCLabelTTF* ment_label,
+																				function<void()> close_func, CCPoint t_position, bool Xbutton)
 {
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	startFormSetter(t_popup);
@@ -68,7 +69,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	
 	CCScale9Sprite* content_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	setFormSetter(content_back);
-	content_back->setPosition(ccp(0,-11));
+	content_back->setPosition(ccp(0.0,-15.5)); 			// dt (0.0,-4.5)
 	t_container->addChild(content_back);
 	
 	CCLabelTTF* title_label = CCLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), 16);
@@ -80,38 +81,57 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	setFormSetter(ment_label);
 	if(ment_label->getContentSize().width<150)ment_label->setContentSize(CCSizeMake(150, ment_label->getContentSize().height));
 	if(ment_label->getContentSize().height<20)ment_label->setContentSize(CCSizeMake(ment_label->getContentSize().width,20));
-	
-	ment_label->setPosition(ccp(0,5));
+	ment_label->setPositionX(case_back->getContentSize().width / 2.f);
+	ment_label->setPositionY(-10);
+//	ment_label->setPosition(ccp(0,5));
 	t_container->addChild(ment_label);
 	
-	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+50, ment_label->getContentSize().height + 40+80));
-	content_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+39, ment_label->getContentSize().height+76+10.5));
+	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+50, ment_label->getContentSize().height + 40+80 - 40));
+	content_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+39, ment_label->getContentSize().height+76+2.5 - 40));
 	title_label->setPosition(ccp(0,case_back->getContentSize().height/2-21));
-	
-	CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(70, 40), CommonButtonLightPupple, t_popup->getTouchPriority()-5);
-	setFormSetter(close_button);
-	close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+20+18));
-	close_button->setFunction([=](CCObject* sender)
-														{
-															AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-															close_func();
-															t_popup->removeFromParent();
-														});
-	t_container->addChild(close_button);
+	if(Xbutton)
+	{
+		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+		setFormSetter(close_button);
+		close_button->setPosition(ccp(case_back->getContentSize().width/2.f - 22, case_back->getContentSize().height/2.f - 22));
+		close_button->setFunction([=](CCObject* sender)
+															{
+																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																if(close_func)
+																	close_func();
+																t_popup->removeFromParent();
+															});
+		t_container->addChild(close_button);
+	}
+	else
+	{
+		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(70, 40), CommonButtonLightPupple, t_popup->getTouchPriority()-5);
+		setFormSetter(close_button);
+		close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+20+18));
+		close_button->setFunction([=](CCObject* sender)
+															{
+																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																if(close_func)
+																	close_func();
+																t_popup->removeFromParent();
+															});
+		t_container->addChild(close_button);
+	}
 	
 	return t_popup;
 }
 
 
-ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position)
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position, bool XButton)
 {
 	
 	CCLabelTTF* ment_label = CCLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 12);
-	return ASPopupView::getCommonNoti(t_touch_priority, t_title,ment_label,close_func,t_position);
+	return ASPopupView::getCommonNoti(t_touch_priority, t_title,ment_label,close_func,t_position, XButton);
 }
 
 
-ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func, CCPoint t_position)
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func,
+																				CCPoint t_position, bool Xbutton)
 {
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	startFormSetter(t_popup);
@@ -169,17 +189,34 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 	
 	case_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+60+80, ment_label->getContentSize().height + 40+80));
 	content_back->setContentSize(CCSizeMake(ment_label->getContentSize().width+40+85, ment_label->getContentSize().height+20+85));
-
-	CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(70, 40), CommonButtonLightPupple, t_popup->getTouchPriority()-5);
-	setFormSetter(close_button);
-	close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+20+18));
-	close_button->setFunction([=](CCObject* sender)
-							  {
-								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-								  close_func();
-								  t_popup->removeFromParent();
-							  });
-	t_container->addChild(close_button);
+	
+	if(Xbutton)
+	{
+		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+		setFormSetter(close_button);
+		close_button->setPosition(ccp(case_back->getContentSize().width/2.f, -case_back->getContentSize().height/2.f));
+		close_button->setFunction([=](CCObject* sender)
+															{
+																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																close_func();
+																t_popup->removeFromParent();
+															});
+		t_container->addChild(close_button);
+	}
+	else
+	{
+		
+		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(70, 40), CommonButtonLightPupple, t_popup->getTouchPriority()-5);
+		setFormSetter(close_button);
+		close_button->setPosition(ccp(0, -case_back->getContentSize().height/2.f+20+18));
+		close_button->setFunction([=](CCObject* sender)
+															{
+																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																close_func();
+																t_popup->removeFromParent();
+															});
+		t_container->addChild(close_button);
+	}
 	
 	return t_popup;
 }

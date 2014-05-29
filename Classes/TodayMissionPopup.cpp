@@ -74,7 +74,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 15);
 	setFormSetter(title_label);
 	title_label->setColor(ccc3(255,170,20));//50, 250, 255));
-	title_label->setAnchorPoint(ccp(0,0.5f));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
@@ -94,30 +94,42 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 255, 255);
 	value1["font"] = mySGD->getFont();
 	value1["size"] = 14.f;
+	value1["strokecolor"]=StyledLabelTTF::makeRGB(0, 0, 0);
+	value1["strokesize"]=0.5f;
 	
 	value2["fillcolor"] = StyledLabelTTF::makeRGB(255, 170, 20);
 	value2["font"] = mySGD->getFont();
 	value2["size"] = 14.f;
+	value2["strokecolor"]=StyledLabelTTF::makeRGB(0, 0, 0);
+	value2["strokesize"]=0.5f;
 	
 	value3["fillcolor"] = StyledLabelTTF::makeRGB(255, 255, 255);
 	value3["font"] = mySGD->getFont();
 	value3["size"] = 13.f;
+	value3["strokecolor"]=StyledLabelTTF::makeRGB(0, 0, 0);
+	value3["strokesize"]=0.5f;
 	
 	value4["fillcolor"] = StyledLabelTTF::makeRGB(255, 170, 20);
 	value4["font"] = mySGD->getFont();
 	value4["size"] = 15.f;
+	value4["strokecolor"]=StyledLabelTTF::makeRGB(0, 0, 0);
+	value4["strokesize"]=0.5f;
 	
 	value5["linebreak"] = true;
 	value5["linespacing"] = 10.f;
 	
 	if(mission_type == kTodayMissionType_totalPercent)
 	{
-		StyledLabelTTF* slttf = StyledLabelTTF::create({
-			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent1), value1.toStyledString()},
-			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
-			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent3), value1.toStyledString()},
-			{"", value5.toStyledString()}
-		}, StyledAlignment::kCenterAlignment);
+//		StyledLabelTTF* slttf = StyledLabelTTF::create({
+//			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent1), value1.toStyledString()},
+//			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
+//			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent3), value1.toStyledString()},
+//			{"", value5.toStyledString()}
+//		}, StyledAlignment::kCenterAlignment);
+//		
+
+		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent1),mySGD->today_mission_info.goal_count.getV())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		
 		slttf->setPosition(ccp(0, 35));
 		m_container->addChild(slttf);
 		
@@ -141,12 +153,16 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	}
 	else if(mission_type == kTodayMissionType_totalScore)
 	{
-		StyledLabelTTF* slttf = StyledLabelTTF::create({
-			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore1), value1.toStyledString()},
-			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
-			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore3), value1.toStyledString()},
-			{"", value5.toStyledString()}
-		}, StyledAlignment::kCenterAlignment);
+//		StyledLabelTTF* slttf = StyledLabelTTF::create({
+//			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore1), value1.toStyledString()},
+//			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
+//			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore3), value1.toStyledString()},
+//			{"", value5.toStyledString()}
+//		}, StyledAlignment::kCenterAlignment);
+		
+		
+		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore1),mySGD->today_mission_info.goal_count.getV())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		
 		slttf->setPosition(ccp(0, 35));
 		m_container->addChild(slttf);
 		
@@ -170,11 +186,14 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	}
 	else if(mission_type == kTodayMissionType_totalTakeGold)
 	{
-		StyledLabelTTF* slttf = StyledLabelTTF::create({
-			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold1), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
-			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold2), value1.toStyledString()},
-			{"", value5.toStyledString()}
-		}, StyledAlignment::kCenterAlignment);
+//		StyledLabelTTF* slttf = StyledLabelTTF::create({
+//			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold1), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
+//			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold2), value1.toStyledString()},
+//			{"", value5.toStyledString()}
+//		}, StyledAlignment::kCenterAlignment);
+
+		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold1),mySGD->today_mission_info.goal_count.getV())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		
 		slttf->setPosition(ccp(0, 35));
 		m_container->addChild(slttf);
 		
@@ -189,7 +208,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 			m_container->addChild(under_label);
 			
 			StyledLabelTTF* under_label2 = StyledLabelTTF::create({
-				{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold1), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str())->getCString(), value4.toStyledString()},
+				{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str())->getCString(), value4.toStyledString()},
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kCenterAlignment);
 			under_label2->setPosition(ccp(0, -40));
@@ -198,12 +217,15 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	}
 	else if(mission_type == kTodayMissionType_totalCatch)
 	{
-		StyledLabelTTF* slttf = StyledLabelTTF::create({
-			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch1), value1.toStyledString()},
-			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
-			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch3), value1.toStyledString()},
-			{"", value5.toStyledString()}
-		}, StyledAlignment::kCenterAlignment);
+//		StyledLabelTTF* slttf = StyledLabelTTF::create({
+//			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch1), value1.toStyledString()},
+//			{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.goal_count.getV())->getCString()).c_str())->getCString(), value2.toStyledString()},
+//			{myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch3), value1.toStyledString()},
+//			{"", value5.toStyledString()}
+//		}, StyledAlignment::kCenterAlignment);
+		
+		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch1),mySGD->today_mission_info.goal_count.getV())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		
 		slttf->setPosition(ccp(0, 35));
 		m_container->addChild(slttf);
 		
