@@ -14,6 +14,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "CommonButton.h"
+#include "FormSetter.h"
 
 ControlTipContent* ControlTipContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, int t_code)
 {
@@ -87,12 +88,13 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	
 	t_ccb.second->setDelegate(this);
 	ccb_manager = t_ccb.second;
+	startFormSetter(this);
 	
 	close_button = KS::loadCCBI<CCSprite*>(this, "tutorial_nextbutton.ccbi").first;
-	close_button->setPosition(ccp(160, -120));
+	close_button->setPosition(ccp(145.0,88.0)); 			// dt (25.0,0.0)
 	close_button->setVisible(false);
 	addChild(close_button);
-	
+	setFormSetter(close_button);
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 15.f); // 17.5f는 너무 큼
 	title_label->setColor(ccYELLOW);
 	title_label->setPosition(ccp(0, 80));
@@ -158,7 +160,7 @@ int ControlTipContent::getTitleLocalKeyForTipNumber(int t_code)
 	if(t_code == kSpecialTutorialCode_lineTangle)
 		return_value = kMyLocalKey_controlTip_lineTangle_title;
 	else if(t_code == kSpecialTutorialCode_slimLine)
-		return_value = kMyLocalKey_controlTip_slimLine_content;
+		return_value = kMyLocalKey_controlTip_slimLine_title;
 	
 	return return_value;
 }
