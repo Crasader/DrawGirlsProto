@@ -110,45 +110,55 @@ bool CardViewScene::init()
 	game_node->addChild(right_case, kCV_Z_first_img);
 	
 	
-	zoom_img = CCSprite::create("ending_expand.png");
-	zoom_img->setPosition(ccp(480-35-35,myDSH->ui_top-35));
-	addChild(zoom_img, kCV_Z_next_button);
+//	zoom_img = CCSprite::create("ending_expand.png");
+	
 	
 	CCPoint morphing_position = ccp(435,45);
 	
 	string morphing_filename;
+	auto liveGirl = [=](){
+		is_actioned = false;
+		is_morphing = true;
+		
+		buy_morphing->removeFromParent();
+		
+		morphing_img->removeFromParent();
+		morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
+		morphing_img->setPosition(morphing_position);
+		addChild(morphing_img, kCV_Z_next_button);
+		
+		CCTouch* t_touch = new CCTouch();
+		t_touch->setTouchInfo(0, 0, 0);
+		t_touch->autorelease();
+		
+		first_img->ccTouchEnded(t_touch, NULL);
+		
+		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+		
+		zoom_img = tuto.first;
+		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+		
+		
+		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+		addChild(zoom_img, kCV_Z_next_button);
+	};
 	if(!is_morphing)
 	{
 		buy_morphing = CommonButton::create("", 10, CCSizeMake(80, 50), CommonButtonLightPupple, -160);
 		buy_morphing->setPosition(morphing_position);
 		buy_morphing->setFunction([=](CCObject* sender)
-								  {
-									  if(!is_actioned)
-									  {
-										  is_actioned = true;
-										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-										  
-										  BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, [=]()
-																							   {
-																								   is_actioned = false;
-																								   is_morphing = true;
-																								   
-																								   buy_morphing->removeFromParent();
-																								   
-																								   morphing_img->removeFromParent();
-																								   morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
-																								   morphing_img->setPosition(morphing_position);
-																								   addChild(morphing_img, kCV_Z_next_button);
-																								   
-																								   CCTouch* t_touch = new CCTouch();
-																								   t_touch->setTouchInfo(0, 0, 0);
-																								   t_touch->autorelease();
-																								   
-																								   first_img->ccTouchEnded(t_touch, NULL);
-																							   });
-										  addChild(t_popup, 999);
-									  }
-								  });
+															{
+																if(!is_actioned)
+																{
+																	is_actioned = true;
+																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																	
+																	BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){
+																		is_actioned = false;
+																	}, liveGirl);
+																	addChild(t_popup, 999);
+																}
+															});
 		addChild(buy_morphing, kCV_Z_next_button);
 		
 		morphing_filename = "morphing_heart_off.ccbi";
@@ -156,6 +166,15 @@ bool CardViewScene::init()
 	else
 	{
 		morphing_filename = "morphing_heart_on.ccbi";
+		
+		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+		
+		zoom_img = tuto.first;
+		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+		
+		
+		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+		addChild(zoom_img, kCV_Z_next_button);
 	}
 	
 	
@@ -166,24 +185,7 @@ bool CardViewScene::init()
 	
 	if(!is_morphing)
 	{
-		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, [=]()
-															 {
-																 is_actioned = false;
-																 is_morphing = true;
-																 
-																 buy_morphing->removeFromParent();
-																 
-																 morphing_img->removeFromParent();
-																 morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
-																 morphing_img->setPosition(morphing_position);
-																 addChild(morphing_img, kCV_Z_next_button);
-																 
-																 CCTouch* t_touch = new CCTouch();
-																 t_touch->setTouchInfo(0, 0, 0);
-																 t_touch->autorelease();
-																 
-																 first_img->ccTouchEnded(t_touch, NULL);
-															 });
+		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, liveGirl);
 		addChild(t_popup, 999);
 	}
 	
