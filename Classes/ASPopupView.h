@@ -67,9 +67,9 @@ public:
 	}
 	
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment);
-	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero);
-	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero);
-	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, CCLabelTTF* ment_label, function<void()> close_func, CCPoint t_position = CCPointZero);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero, bool Xbutton = false);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position = CCPointZero, bool XButton = false);
+	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, CCLabelTTF* ment_label, function<void()> close_func, CCPoint t_position = CCPointZero, bool Xbutton = false);
 	static ASPopupView* getNotEnoughtGoodsGoShopPopup(int t_touch_priority, GoodsType t_type, function<void()> goshop_func, function<void()> cancel_func = nullptr);
 
 	bool is_menu_enable;
