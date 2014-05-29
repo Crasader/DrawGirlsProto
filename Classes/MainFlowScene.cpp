@@ -2117,7 +2117,7 @@ void MainFlowScene::setBottom()
 			n_percent_back->setPosition(ccp(n_mission->getContentSize().width-8, n_mission->getContentSize().height-n_percent_back->getContentSize().height));
 			n_mission->addChild(n_percent_back);
 			
-			KSLabelTTF* n_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* n_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
 			n_percent_label->setPosition(ccp(n_percent_back->getContentSize().width/2.f, n_percent_back->getContentSize().height/2.f));
 			n_percent_back->addChild(n_percent_label);
 			
@@ -2125,7 +2125,7 @@ void MainFlowScene::setBottom()
 			s_percent_back->setPosition(ccp(s_mission->getContentSize().width-8, s_mission->getContentSize().height-s_percent_back->getContentSize().height));
 			s_mission->addChild(s_percent_back);
 			
-			KSLabelTTF* s_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* s_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
 			s_percent_label->setPosition(ccp(s_percent_back->getContentSize().width/2.f, s_percent_back->getContentSize().height/2.f));
 			s_percent_back->addChild(s_percent_label);
 		}
@@ -2184,7 +2184,7 @@ void MainFlowScene::setBottom()
 				CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 				n_endless->addChild(n_win_back);
 				
-				KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
+				CCLabelTTF* n_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
 				n_win_back->addChild(n_win_label);
 				
 				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
@@ -2194,7 +2194,7 @@ void MainFlowScene::setBottom()
 				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 				s_endless->addChild(s_win_back);
 				
-				KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
+				CCLabelTTF* s_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
 				s_win_back->addChild(s_win_label);
 				
 				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
@@ -2911,7 +2911,7 @@ void MainFlowScene::setTop()
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
 	addChild(achievement_count_case, kMainFlowZorder_top+1);
 	
-	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f-1));
 	achievement_count_case->addChild(achievement_count_label);
 	
