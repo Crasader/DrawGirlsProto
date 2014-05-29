@@ -24,7 +24,7 @@ class LoadingLayer;
 class DownloadFile;
 class CopyFile;
 class CCMenuLambda;
-class EndlessModeResult : public CCLayer
+class EndlessModeResult : public CCLayer, public CCTableViewDataSource
 {
 public:
 	virtual bool init();
@@ -56,31 +56,58 @@ private:
 	
 	CCMenuLambda* bottom_menu;
 	
-	CCScale9Sprite* left_top_back;
-	KSLabelTTF* left_top_title;
-	KSLabelTTF* left_top_content;
+	virtual CCSize cellSizeForTable(CCTableView *table) {
+        return CCSizeMake((480-30)/2.f-20, 30);
+    };
+    virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
+    virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	
-	CCScale9Sprite* left_center_back;
-	KSLabelTTF* left_center_title;
-	KSLabelTTF* left_center_content;
+	KSProtectVar<int> left_life_base_score;
+	KSProtectVar<float> left_life_decrease_score, left_time_base_score, left_time_decrease_score, left_grade_base_score, left_grade_decrease_score;
+	KSProtectVar<int> left_damaged_score;
+	KSProtectVar<int> left_total_score;
 	
-	CCScale9Sprite* left_bottom_back;
-	KSLabelTTF* left_bottom_title;
-	KSLabelTTF* left_bottom_content;
+	KSProtectVar<int> right_area_score, right_damage_score, right_combo_score, right_life_cnt, right_game_time, right_clear_grade;
+	KSProtectVar<int> right_life_base_score;
+	KSProtectVar<float> right_life_decrease_score, right_time_base_score, right_time_decrease_score, right_grade_base_score, right_grade_decrease_score;
+	KSProtectVar<int> right_damaged_score;
+	KSProtectVar<int> right_total_score;
+	
+	CCScale9Sprite* left_back;
+	CCScale9Sprite* right_back;
+	
+	CCTableView* left_table;
+	CCTableView* right_table;
+	
+	vector<string> title_list;
+	vector<string> left_content_list;
+	vector<string> right_content_list;
+	
+//	CCScale9Sprite* left_top_back;
+//	KSLabelTTF* left_top_title;
+//	KSLabelTTF* left_top_content;
+//	
+//	CCScale9Sprite* left_center_back;
+//	KSLabelTTF* left_center_title;
+//	KSLabelTTF* left_center_content;
+//	
+//	CCScale9Sprite* left_bottom_back;
+//	KSLabelTTF* left_bottom_title;
+//	KSLabelTTF* left_bottom_content;
 	
 	KSLabelTTF* left_total_content;
 	
-	CCScale9Sprite* right_top_back;
-	KSLabelTTF* right_top_title;
-	KSLabelTTF* right_top_content;
-	
-	CCScale9Sprite* right_center_back;
-	KSLabelTTF* right_center_title;
-	KSLabelTTF* right_center_content;
-	
-	CCScale9Sprite* right_bottom_back;
-	KSLabelTTF* right_bottom_title;
-	KSLabelTTF* right_bottom_content;
+//	CCScale9Sprite* right_top_back;
+//	KSLabelTTF* right_top_title;
+//	KSLabelTTF* right_top_content;
+//	
+//	CCScale9Sprite* right_center_back;
+//	KSLabelTTF* right_center_title;
+//	KSLabelTTF* right_center_content;
+//	
+//	CCScale9Sprite* right_bottom_back;
+//	KSLabelTTF* right_bottom_title;
+//	KSLabelTTF* right_bottom_content;
 	
 	KSLabelTTF* right_total_content;
 	
@@ -96,6 +123,8 @@ private:
 	float increase_right_value;
 	float left_calc_time;
 	float right_calc_time;
+	bool is_left_decrease;
+	bool is_right_decrease;
 	KSLabelTTF* left_decrease_target;
 	KSLabelTTF* right_decrease_target;
 	

@@ -627,8 +627,8 @@ void Maingame::finalSetting()
 		replay_all_node->setPosition(CCPointZero);
 		addChild(replay_all_node, clearshowtimeZorder);
 		
-		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
-		{
+//		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
+//		{
 			CCScale9Sprite* replay_thumb_case = CCScale9Sprite::create("minimap_back.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
 			replay_thumb_case->setContentSize(CCSizeMake(320*thumb_scale, 430*thumb_scale));
 			replay_thumb_case->setPosition(ccp(480-40,myDSH->ui_center_y));
@@ -683,16 +683,13 @@ void Maingame::finalSetting()
 			replay_sub = new CCArray(1);
 			
 			myGD->V_I["Main_refreshReplayPosition"] = std::bind(&Maingame::refreshReplayPosition, this, _1);
-		}
+//		}
 		
-		if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size() > 0)
-		{
-			replay_score = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
-			replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
-			replay_all_node->addChild(replay_score, 99);
-			
-			myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
-		}
+		replay_score = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
+		replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
+		replay_all_node->addChild(replay_score, 99);
+		
+		myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		
 		
 		string flag = mySGD->endless_flag.getV();

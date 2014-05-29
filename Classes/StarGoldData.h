@@ -802,6 +802,7 @@ public:
 	Json::Value temp_replay_data;
 	KSProtectStr temp_endless_nick;
 	KSProtectStr temp_endless_flag;
+	KSProtectVar<float> temp_endless_score;
 	
 	KSProtectVar<int> recent_week_no;
 	
