@@ -1410,7 +1410,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 		
 		if(tag == kPuzzleMenuTag_cancel)
 		{
-			//showSuccessPuzzleEffect();
+//			showSuccessPuzzleEffect();
 			startBacking();
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}

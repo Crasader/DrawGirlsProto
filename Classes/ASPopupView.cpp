@@ -270,8 +270,8 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	t_container->addChild(title_label);
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_enoughtGoodsContent), mySGD->getFont().c_str(), 12);
-	sub_label->setAnchorPoint(ccp(0,0.5f));
-	sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,10));
+	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+	sub_label->setPosition(ccp(0,10));
 	t_container->addChild(sub_label);
 	
 	CCSprite* gray = t_popup->getDimmedSprite();
