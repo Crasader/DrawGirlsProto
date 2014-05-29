@@ -810,6 +810,9 @@ public:
 	
 	KSProtectVar<int> recent_week_no;
 	
+	void setEventString(string t_str);
+	string getEventString();
+	
 	bool is_morphing_noti;
 	
 private:
@@ -974,6 +977,8 @@ private:
 	KSProtectVar<int> catch_cumber_count;
 	jsonSelType update_today_mission_callback;
 	void resultUpdateTodayMission(Json::Value result_data);
+	
+	string event_string;
 	
 	string app_type;
 	int app_version;

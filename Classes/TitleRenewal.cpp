@@ -693,6 +693,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setPuzzlePerfectRewardRuby(result_data["puzzlePerfectRewardRuby"].asInt());
 		mySGD->setEndlessMinPiece(result_data["endlessMinPiece"].asInt());
+		
+		mySGD->setEventString(result_data["eventString"].asString());
 	}
 	else
 	{

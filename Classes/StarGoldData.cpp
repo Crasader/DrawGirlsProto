@@ -2645,6 +2645,9 @@ int StarGoldData::getPuzzlePerfectRewardRuby(){	return puzzle_perfect_reward_rub
 void StarGoldData::setEndlessMinPiece(int t_i){	endless_min_piece = t_i;	}
 int StarGoldData::getEndlessMinPiece(){	return endless_min_piece.getV();	}
 
+void StarGoldData::setEventString(string t_str){	event_string = t_str;	}
+string StarGoldData::getEventString(){	return event_string;	}
+
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}
 void StarGoldData::setUserdataIsVIP(int t_i)
