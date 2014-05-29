@@ -141,7 +141,7 @@ private:
 		return cellSizeForTable(table);
 	};
 	virtual CCSize cellSizeForTable(CCTableView *table) {
-		return CCSizeMake(225, 31);
+		return CCSizeMake(225, 32);
 	};
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	virtual unsigned int numberOfCellsInTableView(CCTableView *table);
