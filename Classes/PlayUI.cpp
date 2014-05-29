@@ -1099,8 +1099,6 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				
 			m_areaGage->onChange();
 			
-			myGD->communication("Main_hideThumb");
-			
 			return;
 		}
 		
