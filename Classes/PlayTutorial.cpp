@@ -1466,7 +1466,7 @@ void PlayTutorial::nextStep()
 		area_take_sample = CCClippingNode::create(CCSprite::create("tutorial_ccb_mask.png"));
 		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
 		area_take_sample->addChild(t_ccbi);
-		area_take_sample->setPosition(ccp(240,200));
+		area_take_sample->setPosition(ccp(240,210));
 		addChild(area_take_sample, 101);
 		
 		AudioEngine::sharedInstance()->playEffect("ment_tutorial6.mp3", false, true);

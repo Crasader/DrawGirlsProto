@@ -454,7 +454,7 @@ void MyGold::moving ()
 void MyGold::myInit ()
 {
 	int start_cut = rand()%6;
-	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
+	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_bronze.png");
 	initWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
 	CCAnimation* t_animation = CCAnimation::create();
 	t_animation->setDelayPerUnit(0.1f);
@@ -543,7 +543,7 @@ void GetGold::myInit (CCPoint t_sp, int t_duration_frame)
 	
 	create_frame = duration_frame/60 + 1;
 	
-	batch_node = CCSpriteBatchNode::create("fever_coin.png");//"gold.png");
+	batch_node = CCSpriteBatchNode::create("fever_coin_bronze.png");//"gold.png");
 	batch_node->setPosition(t_sp);
 	addChild(batch_node);
 }

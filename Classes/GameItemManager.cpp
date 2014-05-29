@@ -1094,7 +1094,7 @@ void FeverCoin::myInit(IntPoint t_point, CCObject* t_add, SEL_CallFuncO d_add) /
 	my_point = IntPoint(t_point.x, t_point.y);
 	int start_cut = ((my_point.y-4)/9 + (my_point.x-4)/9)%6;
 	
-	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
+	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_bronze.png");
 	initWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
 	CCAnimation* t_animation = CCAnimation::create();
 	t_animation->setDelayPerUnit(0.1f);
@@ -1211,7 +1211,7 @@ void FeverCoinParent::stopRemove()
 void FeverCoinParent::myInit()
 {
 	is_fevering = false;
-	initWithFile("fever_coin.png", kDefaultSpriteBatchCapacity);
+	initWithFile("fever_coin_bronze.png", kDefaultSpriteBatchCapacity);
 	is_removing = false;
 //	weight_value = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
 	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV());
@@ -1496,19 +1496,57 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	{
 		m_gold = t_gold*100;
 		
-		coin_img = CCSprite::create("coin3.png");
+		int start_cut = rand()%6;
+		
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_gold.png");
+		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
 		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
 		coin_img->setPosition(CCPointZero);
 		addChild(coin_img);
+		CCAnimation* t_animation = CCAnimation::create();
+		t_animation->setDelayPerUnit(0.1f);
+		int add_count = 0;
+		for(int i=start_cut;add_count < 6;i=(i+1)%6)
+		{
+			add_count++;
+			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+		}
+		CCAnimate* t_animate = CCAnimate::create(t_animation);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+		coin_img->runAction(t_repeat);
+		
+//		coin_img = CCSprite::create("coin3.png");
+//		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+//		coin_img->setPosition(CCPointZero);
+//		addChild(coin_img);
 	}
 	else if(random_value < 22)
 	{
 		m_gold = t_gold*10;
 		
-		coin_img = CCSprite::create("coin2.png");
+		int start_cut = rand()%6;
+		
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_silver.png");
+		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
 		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
 		coin_img->setPosition(CCPointZero);
 		addChild(coin_img);
+		CCAnimation* t_animation = CCAnimation::create();
+		t_animation->setDelayPerUnit(0.1f);
+		int add_count = 0;
+		for(int i=start_cut;add_count < 6;i=(i+1)%6)
+		{
+			add_count++;
+			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+		}
+		CCAnimate* t_animate = CCAnimate::create(t_animation);
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+		coin_img->runAction(t_repeat);
+		
+//		coin_img = CCSprite::create("coin2.png");
+//		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+//		coin_img->setPosition(CCPointZero);
+//		addChild(coin_img);
 	}
 	else
 	{
@@ -1516,7 +1554,7 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 		
 		int start_cut = rand()%6;
 		
-		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin.png");
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_bronze.png");
 		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
 		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
 		coin_img->setPosition(CCPointZero);
