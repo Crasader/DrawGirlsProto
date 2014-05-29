@@ -211,7 +211,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	addChild(m_container);
 	
 	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_case->setContentSize(CCSizeMake(300,240));
+	back_case->setContentSize(CCSizeMake(280,240));
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
@@ -223,8 +223,8 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpTitle), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(17,back_case->getContentSize().height-25));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-25));
 	back_case->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
@@ -242,7 +242,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	int take_grade = 1;
 	if(mySGD->is_showtime && mySGD->is_exchanged)
-		take_grade = 4;
+		take_grade = 4-1;
 	else if(mySGD->is_showtime)
 		take_grade = 3;
 	else if(mySGD->is_exchanged)
@@ -323,15 +323,15 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	
 	
-	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
-	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
-	giveup_button = CCControlButton::create(giveup_label, giveup_back);
-	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(RankUpPopup::giveupAction), CCControlEventTouchUpInside);
-	giveup_button->setPreferredSize(CCSizeMake(80,40));
-	giveup_button->setPosition(ccp(-87,-80));
-	m_container->addChild(giveup_button);
-	
-	giveup_button->setTouchPriority(touch_priority);
+//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+//	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
+//	giveup_button = CCControlButton::create(giveup_label, giveup_back);
+//	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(RankUpPopup::giveupAction), CCControlEventTouchUpInside);
+//	giveup_button->setPreferredSize(CCSizeMake(80,40));
+//	giveup_button->setPosition(ccp(-87,-80));
+//	m_container->addChild(giveup_button);
+//	
+//	giveup_button->setTouchPriority(touch_priority);
 	
 	
 	
@@ -348,8 +348,8 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-15,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getRankUpRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+	KSLabelTTF* price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getRankUpRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
+	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+10,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
 	r_label->addChild(rankup_label);
@@ -360,7 +360,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	rankup_button = CCControlButton::create(r_label, rankup_back);
 	rankup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(RankUpPopup::rankupAction), CCControlEventTouchUpInside);
 	rankup_button->setPreferredSize(CCSizeMake(170,44));
-	rankup_button->setPosition(ccp(43,-80));
+	rankup_button->setPosition(ccp(0,-80));
 	m_container->addChild(rankup_button);
 	
 	rankup_label->setPositionX(-rankup_button->getPreferredSize().width/2.f+15);

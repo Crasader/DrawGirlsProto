@@ -87,6 +87,14 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 		m_container->addChild(title_label);
 	}
 	
+	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25, back_case->getContentSize().height/2.f-25));
+	close_button->setFunction([=](CCObject* sender)
+							  {
+								  giveupAction(NULL, CCControlEventTouchUpInside);
+							  });
+	back_case->addChild(close_button);
+	
 	string ment1_str;
 	if(m_type == kPurchaseGuideType_emptyItem)
 		ment1_str = myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent1);
@@ -176,16 +184,16 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	stamp_case->addChild(sale_value_label);
 	
 	
-	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
-	giveup_label->setColor(ccBLACK);
-	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
-	giveup_button = CCControlButton::create(giveup_label, giveup_back);
-	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(EmptyItemSalePopup::giveupAction), CCControlEventTouchUpInside);
-	giveup_button->setPreferredSize(CCSizeMake(80,40));
-	giveup_button->setPosition(ccp(-87,-85));
-	m_container->addChild(giveup_button);
-	
-	giveup_button->setTouchPriority(touch_priority);
+//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+//	giveup_label->setColor(ccBLACK);
+//	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
+//	giveup_button = CCControlButton::create(giveup_label, giveup_back);
+//	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(EmptyItemSalePopup::giveupAction), CCControlEventTouchUpInside);
+//	giveup_button->setPreferredSize(CCSizeMake(80,40));
+//	giveup_button->setPosition(ccp(-87,-85));
+//	m_container->addChild(giveup_button);
+//	
+//	giveup_button->setTouchPriority(touch_priority);
 	
 	
 	
@@ -216,7 +224,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	purchase_button = CCControlButton::create(p_label, purchase_back);
 	purchase_button->addTargetWithActionForControlEvents(this, cccontrol_selector(EmptyItemSalePopup::purchaseAction), CCControlEventTouchUpInside);
 	purchase_button->setPreferredSize(CCSizeMake(170,44));
-	purchase_button->setPosition(ccp(43,-85));
+	purchase_button->setPosition(ccp(0,-85));
 	m_container->addChild(purchase_button);
 	
 	purchase_label->setPositionX(-purchase_button->getPreferredSize().width/2.f+15);

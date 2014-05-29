@@ -810,6 +810,8 @@ public:
 	
 	KSProtectVar<int> recent_week_no;
 	
+	bool is_morphing_noti;
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;

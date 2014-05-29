@@ -82,7 +82,6 @@ bool OptionPopup::init()
 		return false;
 	}
 	
-	
 //	Json::Value param;
 //	param["productid"] = "g_10289_001";
 //	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
@@ -449,7 +448,7 @@ bool OptionPopup::init()
 	main_case->addChild(id_label, kOP_Z_back);
 	
 	
-	CCLabelTTF* my_id_label = CCLabelTTF::create(CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString(), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* my_id_label = KSLabelTTF::create(CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString(), mySGD->getFont().c_str(), 11);
 	my_id_label->setAnchorPoint(ccp(0,0.5));
 	my_id_label->setPosition(ccp(78,45));
 	main_case->addChild(my_id_label, kOP_Z_content);
@@ -683,7 +682,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		
 		content_back->setContentSize(CCSizeMake(220, 140));
 		
-		CCLabelTTF* ment_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkLogout),	mySGD->getFont().c_str(), 15);
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkLogout),	mySGD->getFont().c_str(), 15);
 		ment_label->setPosition(ccp(0,25));
 		t_container->addChild(ment_label);
 		
@@ -786,24 +785,24 @@ void OptionPopup::menuAction(CCObject* pSender)
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawTitle), mySGD->getFont().c_str(), 15);
 		title_label->setColor(ccc3(255, 170, 20));
-		title_label->setAnchorPoint(ccp(0,0.5f));
-		title_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17, case_back->getContentSize().height/2.f-25));
+		title_label->setAnchorPoint(ccp(0.5f,0.5f));
+		title_label->setPosition(ccp(0, case_back->getContentSize().height/2.f-25));
 		t_container->addChild(title_label);
 		
 		KSLabelTTF* ment1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent1), mySGD->getFont().c_str(), 12);
-		ment1_label->setAnchorPoint(ccp(0,0.5f));
-		ment1_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17,30));
+		ment1_label->setAnchorPoint(ccp(0.5f,0.5f));
+		ment1_label->setPosition(ccp(0,30));
 		t_container->addChild(ment1_label);
 		
 		KSLabelTTF* ment2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent2), mySGD->getFont().c_str(), 12);
-		ment2_label->setAnchorPoint(ccp(0,0.5f));
-		ment2_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17,8));
+		ment2_label->setAnchorPoint(ccp(0.5f,0.5f));
+		ment2_label->setPosition(ccp(0,8));
 		t_container->addChild(ment2_label);
 		
 		KSLabelTTF* ment3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent3), mySGD->getFont().c_str(), 12);
 		ment3_label->setColor(ccc3(255, 170, 20));
-		ment3_label->setAnchorPoint(ccp(0,0.5f));
-		ment3_label->setPosition(ccp(-case_back->getContentSize().width/2.f+17,-14));
+		ment3_label->setAnchorPoint(ccp(0.5f,0.5f));
+		ment3_label->setPosition(ccp(0,-14));
 		t_container->addChild(ment3_label);
 		
 		

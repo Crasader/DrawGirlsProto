@@ -1519,7 +1519,12 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 	
 	if(tag == 0)
 	{
-		DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
+		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
+		
+		
+		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800, myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), (CCLabelTTF*)content_label, [=](){is_menu_enable = true;},CCPointZero,true);
+		
+	//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
 	else
@@ -2181,20 +2186,20 @@ void MainFlowScene::setBottom()
 				n_endless->addChild(n_win_back);
 				
 				KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
-				n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f));
 				n_win_back->addChild(n_win_label);
 				
-				n_win_back->setContentSize(CCSizeMake(5+n_win_label->getContentSize().width, 20));
+				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
+				n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f));
 				
 				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 				s_win_back->setPosition(ccp(s_endless->getContentSize().width-8, s_endless->getContentSize().height-s_win_back->getContentSize().height));
 				s_endless->addChild(s_win_back);
 				
 				KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 8);
-				s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f));
 				s_win_back->addChild(s_win_label);
 				
-				s_win_back->setContentSize(CCSizeMake(5+s_win_label->getContentSize().width, 20));
+				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
+				s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f));
 			}
 		}
 	}

@@ -65,6 +65,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	back_case->addChild(back_in);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceTitle), mySGD->getFont().c_str(), 15);
+	title_label->enableOuterStroke(ccBLACK,0.5);
 	setFormSetter(title_label);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0,0.5f));
