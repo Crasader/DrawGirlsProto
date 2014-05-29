@@ -30,6 +30,7 @@ public:
 	virtual void setEnableItalic(float value = 30.f);
 	virtual void setDisableItalic();
 	virtual void setOpacity(GLubyte opacity);
+	virtual void setColor(ccColor3B t_color);
 //	void draw();
 	//virtual void setString(const char *label);
 	static KSLabelTTF * create()

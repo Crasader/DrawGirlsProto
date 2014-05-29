@@ -18,6 +18,16 @@ void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSiz
 	updateTexture();
 }
 
+void KSLabelTTF::setColor(ccColor3B t_color)
+{
+	if(t_color.r + t_color.g + t_color.b < 100)
+	{
+//		enableOuterStroke(ccWHITE, m_outerStrokeSize, m_outerStrokeOpacity);
+		disableOuterStroke();
+	}
+	CCLabelTTF::setColor(t_color);
+}
+
 
 void KSLabelTTF::disableOuterStroke(bool mustUpdateTexture)
 {
