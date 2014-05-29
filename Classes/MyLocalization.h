@@ -124,6 +124,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cgpNormalTitle,
 	kMyLocalKey_cgpNormalContent,
 	kMyLocalKey_getReward,
+	kMyLocalKey_take,
 	kMyLocalKey_cgpAllPopupTitle,
 	kMyLocalKey_shop,
 	kMyLocalKey_ranking,
@@ -186,6 +187,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_noti,
 	kMyLocalKey_pushNoti,
 	kMyLocalKey_messageNoti,
+	kMyLocalKey_giftboxAlert,
 	kMyLocalKey_memberID,
 	kMyLocalKey_gameversion,
 	kMyLocalKey_withdraw,
@@ -574,7 +576,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessCalcTitleGradeScore,
 	kMyLocalKey_endlessCalcTitleTakeGold,
 	kMyLocalKey_endlessCalcTitleTakeArea,
-
+	kMyLocalKey_endlessCalcTitleDamagedScore,
 	
 	kMyLocalKey_win,
 	kMyLocalKey_gameResult,

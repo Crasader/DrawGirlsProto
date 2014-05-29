@@ -79,7 +79,16 @@ void CountingBMLabel::changing(float dt)
 			}
 		}
 		if(is_comma)
-			CCLabelBMFont::setString(KS::insert_separator(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString()).c_str());
+		{
+			if(base_value+increase_value < 0)
+			{
+				CCLabelBMFont::setString(("-" + KS::insert_separator(CCString::createWithFormat(show_format.c_str(),-(base_value+increase_value))->getCString())).c_str());
+			}
+			else
+			{
+				CCLabelBMFont::setString(KS::insert_separator(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString()).c_str());
+			}
+		}
 		else
 			CCLabelBMFont::setString(CCString::createWithFormat(show_format.c_str(),base_value+increase_value)->getCString());
 	}

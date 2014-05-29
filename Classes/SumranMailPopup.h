@@ -96,6 +96,7 @@ class SumranMailPopup : public DimmedPopup, public CCTableViewDataSource, public
 		void removeMessage(int mailNo, long long memberID, std::function<void(Json::Value)> f);
 		void removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> f);
 		void filterWithMailFilter();
+		
 	protected:
 		std::function<void(void)> m_heartRefresh;
 		Json::Value m_mailList; // 이 정보를 기반으로 뿌려줌. 
@@ -112,12 +113,15 @@ class SumranMailPopup : public DimmedPopup, public CCTableViewDataSource, public
 		void resultLoadedCardInfo (Json::Value result_data);
 		vector <DownloadFile> df_list;
 		vector <CopyFile> cf_list;
+		CCSprite* loading_circle;
 
 		int ing_download_cnt;
 		void successAction ();
 		void failAction();
 		void startDownloadCardImage ();
 		void startDownload ();
+	
+
 	
 	bool isLoaded;
 };

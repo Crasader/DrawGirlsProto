@@ -881,6 +881,7 @@ PlayUI::~ PlayUI ()
 void PlayUI::addScore (int t_score)
 {
 	score_value = score_value.getV() + t_score;
+	CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 	score_label->setString(CCString::createWithFormat("%d", damaged_score.getV() + int(score_value.getV()))->getCString());
 	
 	if(mySGD->is_write_replay)
@@ -1594,7 +1595,8 @@ void PlayUI::scoreAttackMissile(int t_damage)
 										   {
 											   t_missile->setScale(1.f);
 											   t_missile->setPosition(ccp(40, myDSH->ui_center_y));
-											   myGD->communication("GIM_showTakeItemEffect", ccp(40, myDSH->ui_center_y));
+											   myGD->communication("Main_showScoreMissileEffect", ccp(40, myDSH->ui_center_y));
+											   t_missile->removeFromParent();
 											   
 											   addChild(KSTimer::create(0.1f, [=]()
 																		{
@@ -1614,6 +1616,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																			
 																			float before_score = score_value.getV();
 																			damaged_score = damaged_score.getV() - t_damage;
+																			CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 																			score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
 																		}));
 										   }));
@@ -1632,9 +1635,9 @@ void PlayUI::setComboCnt (int t_combo)
 	
 	if(before_combo < combo_cnt)
 	{
-		if(combo_cnt%5 == 0)
+		if(mySGD->is_endless_mode && combo_cnt%5 == 0)
 		{
-			addScoreAttack(10000);
+			addScoreAttack(3000);
 		}
 		
 		my_combo->showCombo(t_combo);
@@ -1975,55 +1978,56 @@ void PlayUI::lifeBonus ()
 	if(jack_life > 0)
 	{
 		jack_life--;
-		CCSprite* t_jack = (CCSprite*)jack_array->lastObject();
-		jack_array->removeObject(t_jack);
-		
-		CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(100);
-		t_particle->setPositionType(kCCPositionTypeRelative);
-		t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("bonus_score_particle.png"));
-		t_particle->setEmissionRate(100);
-		t_particle->setAngle(90.0);
-		t_particle->setAngleVar(180.0);
-		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
-		t_particle->setBlendFunc(blendFunc);
-		t_particle->setDuration(-1.f);
-		t_particle->setEmitterMode(kCCParticleModeGravity);
-		t_particle->setStartColor(ccc4f(1.f, 0.8f, 0.4f, 1.f));
-		t_particle->setStartColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
-		t_particle->setEndColor(ccc4f(1.f, 1.f, 1.f, 0.f));
-		t_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
-		t_particle->setStartSize(30.0);
-		t_particle->setStartSizeVar(10.0);
-		t_particle->setEndSize(-1.0);
-		t_particle->setEndSizeVar(0.0);
-		t_particle->setGravity(ccp(0,0));
-		t_particle->setRadialAccel(0.0);
-		t_particle->setRadialAccelVar(0.0);
-		t_particle->setSpeed(40);
-		t_particle->setSpeedVar(20.0);
-		t_particle->setTangentialAccel(0);
-		t_particle->setTangentialAccelVar(0);
-		t_particle->setTotalParticles(100);
-		t_particle->setLife(1.0);
-		t_particle->setLifeVar(0.25);
-		t_particle->setStartSpin(0);
-		t_particle->setStartSpinVar(0);
-		t_particle->setEndSpin(0);
-		t_particle->setEndSpinVar(0);
-		t_particle->setPosVar(ccp(10,10));
-		t_particle->setPosition(ccpAdd(t_jack->getPosition(), t_jack->getParent()->getPosition()));
-		t_particle->setAutoRemoveOnFinish(true);
-		addChild(t_particle);
-		
-		CCMoveTo* particle_move = CCMoveTo::create(0.5f, score_label->getPosition());
-		CCCallFuncO* particle_remove = CCCallFuncO::create(this, callfuncO_selector(PlayUI::removeParticle), t_particle);
-		CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_remove);
-		t_particle->runAction(particle_seq);
-		
-		CCFadeTo* jack_fade = CCFadeTo::create(0.5f, 0);
-		CCCallFunc* jack_remove = CCCallFunc::create(t_jack, callfunc_selector(CCSprite::removeFromParent));
-		CCSequence* jack_seq = CCSequence::createWithTwoActions(jack_fade, jack_remove);
-		t_jack->runAction(jack_seq);
+//		CCSprite* t_jack = (CCSprite*)jack_array->lastObject();
+//		jack_array->removeObject(t_jack);
+//		
+//		CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(100);
+//		t_particle->setPositionType(kCCPositionTypeRelative);
+//		t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("bonus_score_particle.png"));
+//		t_particle->setEmissionRate(100);
+//		t_particle->setAngle(90.0);
+//		t_particle->setAngleVar(180.0);
+//		ccBlendFunc blendFunc = {GL_SRC_ALPHA, GL_ONE};
+//		t_particle->setBlendFunc(blendFunc);
+//		t_particle->setDuration(-1.f);
+//		t_particle->setEmitterMode(kCCParticleModeGravity);
+//		t_particle->setStartColor(ccc4f(1.f, 0.8f, 0.4f, 1.f));
+//		t_particle->setStartColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+//		t_particle->setEndColor(ccc4f(1.f, 1.f, 1.f, 0.f));
+//		t_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+//		t_particle->setStartSize(30.0);
+//		t_particle->setStartSizeVar(10.0);
+//		t_particle->setEndSize(-1.0);
+//		t_particle->setEndSizeVar(0.0);
+//		t_particle->setGravity(ccp(0,0));
+//		t_particle->setRadialAccel(0.0);
+//		t_particle->setRadialAccelVar(0.0);
+//		t_particle->setSpeed(40);
+//		t_particle->setSpeedVar(20.0);
+//		t_particle->setTangentialAccel(0);
+//		t_particle->setTangentialAccelVar(0);
+//		t_particle->setTotalParticles(100);
+//		t_particle->setLife(1.0);
+//		t_particle->setLifeVar(0.25);
+//		t_particle->setStartSpin(0);
+//		t_particle->setStartSpinVar(0);
+//		t_particle->setEndSpin(0);
+//		t_particle->setEndSpinVar(0);
+//		t_particle->setPosVar(ccp(10,10));
+//		t_particle->setPosition(ccpAdd(t_jack->getPosition(), t_jack->getParent()->getPosition()));
+//		t_particle->setAutoRemoveOnFinish(true);
+//		addChild(t_particle);
+//		
+//		CCMoveTo* particle_move = CCMoveTo::create(0.5f, score_label->getPosition());
+//		CCCallFuncO* particle_remove = CCCallFuncO::create(this, callfuncO_selector(PlayUI::removeParticle), t_particle);
+//		CCSequence* particle_seq = CCSequence::createWithTwoActions(particle_move, particle_remove);
+//		t_particle->runAction(particle_seq);
+//		
+//		CCFadeTo* jack_fade = CCFadeTo::create(0.5f, 0);
+//		CCCallFunc* jack_remove = CCCallFunc::create(t_jack, callfunc_selector(CCSprite::removeFromParent));
+//		CCSequence* jack_seq = CCSequence::createWithTwoActions(jack_fade, jack_remove);
+//		t_jack->runAction(jack_seq);
+		removeParticle(NULL);
 	}
 	else
 	{
@@ -2044,7 +2048,8 @@ void PlayUI::lifeBonus ()
 }
 void PlayUI::removeParticle (CCObject * sender)
 {
-	((CCParticleSystemQuad*)sender)->setDuration(0);
+	if(sender)
+		((CCParticleSystemQuad*)sender)->setDuration(0);
 	
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)] = mySGD->replay_write_info.get(mySGD->getReplayKey(kReplayKey_lifeBonusCnt), Json::Value()).asInt() + 1;
 	
@@ -2054,18 +2059,19 @@ void PlayUI::removeParticle (CCObject * sender)
 void PlayUI::createBonusScore ()
 {
 	my_combo->stopKeep();
-	CCSprite* bonus_score = CCSprite::create("bonus_score.png");
-	bonus_score->setOpacity(0);
-	bonus_score->setPosition(ccp(240,myDSH->ui_center_y+50));
-	addChild(bonus_score);
-	
-	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
-	jack_life_node->runAction(t_move);
-	
-	CCFadeTo* t_fade = CCFadeTo::create(1.f, 255);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::lifeBonus));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-	bonus_score->runAction(t_seq);
+//	CCSprite* bonus_score = CCSprite::create("bonus_score.png");
+//	bonus_score->setOpacity(0);
+//	bonus_score->setPosition(ccp(240,myDSH->ui_center_y+50));
+//	addChild(bonus_score);
+//	
+//	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_bottom+20));
+//	jack_life_node->runAction(t_move);
+//	
+//	CCFadeTo* t_fade = CCFadeTo::create(1.f, 255);
+//	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::lifeBonus));
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+//	bonus_score->runAction(t_seq);
+	lifeBonus();
 }
 void PlayUI::endGame (bool is_show_reason)
 {

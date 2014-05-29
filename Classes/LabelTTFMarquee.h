@@ -63,14 +63,14 @@ public:
 		m_text1 = StyledLabelTTF::create("<font color=999 size=12>load..</font>", mySGD->getFont().c_str(),12,999, StyledAlignment::kLeftAlignment);
 		
 		m_text1->setAnchorPoint(ccp(0,0.5));
-		m_text1->setPosition(ccp(m_text1->getContentSize().width*-1,height/2));
+		m_text1->setPosition(ccp(m_text1->getContentSize().width*-1,height/2+6));
 		m_text1->setTag(-2);
 		
 		
 		m_text2 = StyledLabelTTF::create("<font color=999 size=12>load..</font>", mySGD->getFont().c_str(),12,999, StyledAlignment::kLeftAlignment);
 		m_text2->setAnchorPoint(ccp(0,0.5));
 		m_text2->setTag(0);
-		m_text2->setPosition(ccp(0,height/2));
+		m_text2->setPosition(ccp(0,height/2+6));
 		
 		cNode->addChild(m_text1,4);
 		cNode->addChild(m_text2,4);

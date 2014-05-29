@@ -2046,6 +2046,18 @@ void MainFlowScene::setBottom()
 	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
 	s_shop->addChild(s_shop_label);
 	
+	if(NSDS_GB(kSDS_GI_shop_isEvent_b))
+	{
+		CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
+		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height));
+		n_shop->addChild(n_shop_event);
+		
+		CCSprite* s_shop_event = CCSprite::create("mainflow_new.png");
+		s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height));
+		s_shop->addChild(s_shop_event);
+		s_shop_event->setColor(ccGRAY);
+	}
+	
 	CCMenuItem* shop_item = CCMenuItemSprite::create(n_shop, s_shop, this, menu_selector(MainFlowScene::menuAction));
 	shop_item->setTag(kMainFlowMenuTag_shop);
 	

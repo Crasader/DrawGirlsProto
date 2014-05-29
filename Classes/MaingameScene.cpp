@@ -136,6 +136,7 @@ bool Maingame::init()
 	myGD->V_V["Main_hideScreenSideWarning"] = std::bind(&Maingame::hideScreenSideWarning, this);
 	myGD->V_CCP["Main_initJackPosition"] = std::bind(&Maingame::initJackPosition, this, _1);
 	myGD->V_I["Main_scoreAttackMissile"] = std::bind(&Maingame::scoreAttackMissile, this, _1);
+	myGD->V_CCP["Main_showScoreMissileEffect"] = std::bind(&Maingame::showScoreMissileEffect, this, _1);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -3159,6 +3160,18 @@ void Maingame::showThumbWarning(CCPoint t_point)
 	t_node->runAction(t_seq);
 }
 
+void Maingame::showScoreMissileEffect(CCPoint t_position)
+{
+	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+	CCBReader* reader = new CCBReader(nodeLoader);
+	CCSprite* take_effect = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
+	take_effect->setPosition(t_position);
+	addChild(take_effect, myUIZorder);
+	reader->autorelease();
+	
+	addChild(KSTimer::create(22.f/30.f, [=](){take_effect->removeFromParent();}));
+}
+
 void Maingame::scoreAttackMissile(int t_damage)
 {
 	CCSprite* t_missile = CCSprite::create("blind_drop.png");
@@ -3175,7 +3188,8 @@ void Maingame::scoreAttackMissile(int t_damage)
 										   {
 											   t_missile->setScale(1.f);
 											   t_missile->setPosition(ccp(440, myDSH->ui_center_y));
-											   myGIM->showTakeItemEffect(ccp(440, myDSH->ui_center_y));
+											   showScoreMissileEffect(ccp(440, myDSH->ui_center_y));
+											   t_missile->removeFromParent();
 											   
 											   addChild(KSTimer::create(0.1f, [=]()
 																		{

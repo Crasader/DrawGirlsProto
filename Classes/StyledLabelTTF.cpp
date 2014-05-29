@@ -94,7 +94,7 @@ void StyledLabelTTF::updateTexture()
 				unsigned long strokeColor = jsonStyle.get("strokecolor", 0).asUInt();
 				if(strokeSize > 0.f)
 				{
-					ttf->enableStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
+					ttf->enableOuterStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
 				}
 				m_oneLineContainer->addChild(ttf);
 				ttf->setAnchorPoint(ccp(0.f, 0.5f));

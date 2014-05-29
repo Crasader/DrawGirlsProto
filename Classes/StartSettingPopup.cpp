@@ -2040,7 +2040,54 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 	
 	if(is_selectable)
 	{
-		((CCSprite*)item_parent->getChildByTag(kStartSettingPopupItemZorder_clicked))->setVisible(true);
+		item_parent->removeAllChildren();
+		
+		ITEM_CODE t_ic = item_list[t_clicked_item_idx];
+		
+		CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
+		CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
+		n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-6, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-6));
+		n_item_case->addChild(n_mount);
+		
+		CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+		n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
+		n_item_case->addChild(n_img);
+		
+		CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
+		s_item_case->setColor(ccGRAY);
+		CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
+		s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-6, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-6));
+		s_item_case->addChild(s_mount);
+		
+		CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
+		s_img->setColor(ccGRAY);
+		s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
+		s_item_case->addChild(s_img);
+		
+		CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingPopup::itemAction));
+		item_item->setTag(t_clicked_item_idx+1);
+		
+		CCMenu* item_menu = CCMenu::createWithItem(item_item);
+		item_menu->setPosition(CCPointZero);
+		item_parent->addChild(item_menu);
+		item_menu->setTouchPriority(touch_priority);
+		
+		int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
+		
+		CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 11);
+		cnt_label->setPosition(ccp(21, -20));
+		item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
+		
+		CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
+		clicked_img->setVisible(true);
+		clicked_img->setPosition(CCPointZero);
+		item_parent->addChild(clicked_img, kStartSettingPopupItemZorder_clicked, kStartSettingPopupItemZorder_clicked);
+		
+		
+		
+		
+		
+//		((CCSprite*)item_parent->getChildByTag(kStartSettingPopupItemZorder_clicked))->setVisible(true);
 		is_selected_item[t_clicked_item_idx] = true;
 	}
 	
