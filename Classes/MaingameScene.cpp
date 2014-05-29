@@ -2894,7 +2894,7 @@ void Maingame::startExchange()
 	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 	sil_thumb->setScale(t_scale);
 	sil_thumb->setPosition(t_position);
-	addChild(sil_thumb, clearshowtimeZorder);
+	addChild(sil_thumb, searchEyeZorder);
 	
 	if(mySGD->is_play_replay && mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 	{
@@ -3175,11 +3175,11 @@ void Maingame::scoreAttackMissile(int t_damage)
 	t_missile->setPosition(ccp(40, myDSH->ui_center_y));
 	addChild(t_missile, myUIZorder);
 	
-	t_missile->setScale(0.1f);
+	t_missile->setScale(0.3f);
 	
 	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 										   {
-											   t_missile->setScale(0.1f+t*0.9f);
+											   t_missile->setScale(0.3f+t*0.7f);
 											   t_missile->setPosition(ccp(40+t*400, myDSH->ui_center_y));
 										   }, [=](float t)
 										   {

@@ -111,6 +111,9 @@ private:
 	
 	KSLabelTTF* right_total_content;
 	
+	vector<CommandParam> send_command_list;
+	void tryTransaction();
+	
 	void startCalcAnimation();
 	
 	float keep_left_value;

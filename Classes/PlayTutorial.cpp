@@ -1618,6 +1618,7 @@ void PlayTutorial::nextStep()
 																
 																LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
 																loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
+																loading_tip->setScale(myDSH->screen_convert_rate);
 																addChild(loading_tip, 999);
 															});
 											  
