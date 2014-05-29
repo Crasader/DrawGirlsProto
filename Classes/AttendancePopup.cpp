@@ -15,6 +15,7 @@
 #include "MyLocalization.h"
 #include "AudioEngine.h"
 #include "StyledLabelTTF.h"
+#include "FormSetter.h"
 
 AttendancePopup* AttendancePopup::create(int t_touch_priority, function<void()> t_end_func)
 {
@@ -26,6 +27,7 @@ AttendancePopup* AttendancePopup::create(int t_touch_priority, function<void()> 
 
 void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 {
+	startFormSetter(this);
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
@@ -63,11 +65,12 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	back_case->addChild(back_in);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceTitle), mySGD->getFont().c_str(), 15);
+	setFormSetter(title_label);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0,0.5f));
 	title_label->setPosition(ccp(17,back_case->getContentSize().height-25));
 	back_case->addChild(title_label);
-
+	
 	int dayCount = mySGD->attendance_data["dayCount"].asInt();
 	
 	CCSprite* show_ani_img;
@@ -137,6 +140,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	
 	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceContent), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	setFormSetter(slttf);
 	slttf->setPosition(ccp(back_case->getContentSize().width/2.f,80));
 	back_in->addChild(slttf);
 	
