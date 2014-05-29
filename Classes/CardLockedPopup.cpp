@@ -16,6 +16,7 @@
 #include "AudioEngine.h"
 #include "StyledLabelTTF.h"
 #include "CommonButton.h"
+#include "FormSetter.h"
 
 CardLockedPopup* CardLockedPopup::create(int t_touch_priority, function<void()> t_end_func, int t_step)
 {
@@ -27,6 +28,8 @@ CardLockedPopup* CardLockedPopup::create(int t_touch_priority, function<void()> 
 
 void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, int t_step)
 {
+	startFormSetter(this);
+	
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
@@ -54,27 +57,29 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_cardLockedTitle), t_step)->getCString(), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255,170,20));
-	title_label->setAnchorPoint(ccp(0, 0.5f));
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f+17,37));
+	title_label->setAnchorPoint(ccp(0.5f, 0.5f));
+	title_label->setPosition(ccp(0,37));
+	setFormSetter(title_label);
 	m_container->addChild(title_label);
 	
 	
-	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_cardLockedMent1+t_step-1)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kLeftAlignment);
-	slttf->setPosition(ccp(-back_case->getContentSize().width/2.f+19,5));
+	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_cardLockedMent1+t_step-1)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	setFormSetter(slttf);
+	slttf->setPosition(ccp(0,5));
 	m_container->addChild(slttf);
 	
 	if(t_step == 1 || t_step == 3)
 	{
-		slttf->setPosition(ccp(-back_case->getContentSize().width/2.f+19,-14));
+		slttf->setPosition(ccp(0,-14));
 	}
 	else
 	{
 		float distance = 21.f;
-		CCPoint base_position = ccp(-back_case->getContentSize().width/2.f+32, -35);
+		CCPoint base_position = ccp(0, -35);
 		for(int i=1;i<=6;i++)
 		{
 			CCSprite* change_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", i)->getCString());
-			change_img->setPosition(base_position + ccp(distance*(i-1),0));
+			change_img->setPosition(base_position + ccp(distance*(i-4)+10.5,0));
 			m_container->addChild(change_img);
 		}
 	}

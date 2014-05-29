@@ -1410,8 +1410,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 		
 		if(tag == kPuzzleMenuTag_cancel)
 		{
-//			showSuccessPuzzleEffect();
-			startBacking();
+			showSuccessPuzzleEffect();
+//			startBacking();
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
@@ -1685,6 +1685,10 @@ void PuzzleScene::setRight()
 	{
 		right_body->removeFromParent();
 		right_body = NULL;
+		
+		
+		loading_progress_img=NULL;
+		myHSP->removeTarget(this);
 	}
 	
 	right_body = CCScale9Sprite::create("puzzle_right_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
@@ -1697,6 +1701,7 @@ void PuzzleScene::setRight()
 	
 	if(right_mode == kPuzzleRightMode_stage)
 	{
+		
 		PieceHistory t_history = mySGD->getPieceHistory(selected_stage_number);
 		
 		bool is_have_card_list[4] = {false,};
@@ -1838,7 +1843,7 @@ void PuzzleScene::setRight()
 			Json::Value param;
 			param["memberID"] = hspConnector::get()->getSocialID();
 			param["stageNo"] = selected_stage_number;
-			hspConnector::get()->command("getstagerankbyalluser", param, json_selector(this, PuzzleScene::resultGetRank));
+			hspConnector::get()->command("getstagerankbyalluser", param, this,json_selector(this, PuzzleScene::resultGetRank));
 		}
 		else
 		{
