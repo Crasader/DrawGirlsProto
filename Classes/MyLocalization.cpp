@@ -1084,6 +1084,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("등급점수"), kMyLocalKey_endlessCalcTitleGradeScore);
 	ko->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	ko->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
+	ko->setObject(CCString::create("피격점수"), kMyLocalKey_endlessCalcTitleDamagedScore);
+	
 	ko->setObject(CCString::create("승"), kMyLocalKey_win);
 	ko->setObject(CCString::create("게임결과"), kMyLocalKey_gameResult);
 	ko->setObject(CCString::create("실패"), kMyLocalKey_fail);
@@ -1684,6 +1686,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("등급점수"), kMyLocalKey_endlessCalcTitleGradeScore);
 	en->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	en->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
+	en->setObject(CCString::create("피격점수"), kMyLocalKey_endlessCalcTitleDamagedScore);
 	
 	en->setObject(CCString::create("승"), kMyLocalKey_win);
 	en->setObject(CCString::create("게임결과"), kMyLocalKey_gameResult);
@@ -2306,6 +2309,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("등급점수"), kMyLocalKey_endlessCalcTitleGradeScore);
 	ja->setObject(CCString::create("획득골드"), kMyLocalKey_endlessCalcTitleTakeGold);
 	ja->setObject(CCString::create("획득영역"), kMyLocalKey_endlessCalcTitleTakeArea);
+	ja->setObject(CCString::create("피격점수"), kMyLocalKey_endlessCalcTitleDamagedScore);
 	
 	ja->setObject(CCString::create("승"), kMyLocalKey_win);
 	ja->setObject(CCString::create("게임결과"), kMyLocalKey_gameResult);

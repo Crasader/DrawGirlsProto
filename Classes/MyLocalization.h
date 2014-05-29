@@ -574,7 +574,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessCalcTitleGradeScore,
 	kMyLocalKey_endlessCalcTitleTakeGold,
 	kMyLocalKey_endlessCalcTitleTakeArea,
-
+	kMyLocalKey_endlessCalcTitleDamagedScore,
 	
 	kMyLocalKey_win,
 	kMyLocalKey_gameResult,

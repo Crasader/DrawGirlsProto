@@ -1635,7 +1635,7 @@ void PlayUI::setComboCnt (int t_combo)
 	
 	if(before_combo < combo_cnt)
 	{
-		if(combo_cnt%5 == 0)
+		if(mySGD->is_endless_mode && combo_cnt%5 == 0)
 		{
 			addScoreAttack(3000);
 		}
