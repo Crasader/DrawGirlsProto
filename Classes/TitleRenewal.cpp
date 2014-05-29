@@ -171,7 +171,7 @@ void TitleRenewalScene::realInit()
 	title_name->setPosition(ccp(240,10));//240,210));
 	addChild(title_name, 1);
 	
-	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 20, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 15, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
 	state_label->setPosition(ccp(240,190));
 	addChild(state_label, 2);

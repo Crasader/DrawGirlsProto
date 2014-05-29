@@ -67,7 +67,7 @@ bool EndlessModeOpening::init()
 	Json::Value param;
 	param["memberID"] = myHSP->getMemberID();
 	
-	myHSP->command("getendlessrank", param, json_selector(this, EndlessModeOpening::resultGetEndlessRank));
+	myHSP->command("getendlessrank", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessRank));
 	
 	return true;
 }
@@ -97,7 +97,7 @@ void EndlessModeOpening::setMain()
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  is_menu_enable = false;
-								  
+								  myHSP->removeTarget(this);
 								  myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 								  
 								  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
@@ -327,7 +327,7 @@ void EndlessModeOpening::setMain()
 																	  Json::Value param;
 																	  param["memberID"] = myHSP->getMemberID();
 //																	  param["no"] = 34;
-																	  myHSP->command("getendlessplaydata", param, json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
+																	  myHSP->command("getendlessplaydata", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 																  });
 	
 	CCMenuLambda* ready_menu = CCMenuLambda::createWithItem(ready_item);

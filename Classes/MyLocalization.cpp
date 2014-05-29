@@ -594,6 +594,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("CGP 일반 보상"), kMyLocalKey_cgpNormalTitle);
 	ko->setObject(CCString::create("보상받기를 눌러주세요."), kMyLocalKey_cgpNormalContent);
 	ko->setObject(CCString::create("보상받기"), kMyLocalKey_getReward);
+	ko->setObject(CCString::create("받기"), kMyLocalKey_take);
 	ko->setObject(CCString::create("CGP 전체 팝업 보상"), kMyLocalKey_cgpAllPopupTitle);
 	ko->setObject(CCString::create("상점"), kMyLocalKey_shop);
 	ko->setObject(CCString::create("랭킹"), kMyLocalKey_ranking);
@@ -658,6 +659,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("알림"), kMyLocalKey_noti);
 	ko->setObject(CCString::create("푸쉬알림"), kMyLocalKey_pushNoti);
 	ko->setObject(CCString::create("메세지알림"), kMyLocalKey_messageNoti);
+	ko->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	ko->setObject(CCString::create("회원ID : "), kMyLocalKey_memberID);
 	ko->setObject(CCString::create("게임버젼 : "), kMyLocalKey_gameversion);
 	ko->setObject(CCString::create("게임탈퇴"), kMyLocalKey_withdraw);
@@ -1043,7 +1045,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ko->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ko->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
-	ko->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
+	ko->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
 	ko->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
 	ko->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ko->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
@@ -1204,6 +1206,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("CGP 일반 보상"), kMyLocalKey_cgpNormalTitle);
 	en->setObject(CCString::create("Press to receive reward."), kMyLocalKey_cgpNormalContent);
 	en->setObject(CCString::create("Receive reward"), kMyLocalKey_getReward);
+	en->setObject(CCString::create("take"), kMyLocalKey_take);
 	en->setObject(CCString::create("CGP 전체 팝업 보상"), kMyLocalKey_cgpAllPopupTitle);
 	en->setObject(CCString::create("Shop"), kMyLocalKey_shop);
 	en->setObject(CCString::create("Ranking"), kMyLocalKey_ranking);
@@ -1268,6 +1271,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	en->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	en->setObject(CCString::create("Message Alarm"), kMyLocalKey_messageNoti);
+	en->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	en->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);
 	en->setObject(CCString::create("Version : "), kMyLocalKey_gameversion);
 	en->setObject(CCString::create("Secession"), kMyLocalKey_withdraw);
@@ -1644,7 +1648,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	en->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
 	en->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
-	en->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
+	en->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1> 승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
 	en->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
 //	en->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue);
 	en->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
@@ -1814,6 +1818,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("CGP 일반 보상"), kMyLocalKey_cgpNormalTitle);
 	ja->setObject(CCString::create("Press to receive reward."), kMyLocalKey_cgpNormalContent);
 	ja->setObject(CCString::create("Receive reward"), kMyLocalKey_getReward);
+	ja->setObject(CCString::create("take"), kMyLocalKey_take);
 	ja->setObject(CCString::create("CGP 전체 팝업 보상"), kMyLocalKey_cgpAllPopupTitle);
 	ja->setObject(CCString::create("Shop"), kMyLocalKey_shop);
 	ja->setObject(CCString::create("Ranking"), kMyLocalKey_ranking);
@@ -1878,6 +1883,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	ja->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	ja->setObject(CCString::create("Message Alarm"), kMyLocalKey_messageNoti);
+	ja->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	ja->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);
 	ja->setObject(CCString::create("Version : "), kMyLocalKey_gameversion);
 	ja->setObject(CCString::create("Secession"), kMyLocalKey_withdraw);
@@ -2268,7 +2274,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ja->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
 	ja->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
-	ja->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
+	ja->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
 	ja->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
 	ja->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ja->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);

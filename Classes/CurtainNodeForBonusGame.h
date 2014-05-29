@@ -122,7 +122,7 @@ public:
 		{
 			KSLabelTTF* title_gamename = KSLabelTTF::create("가위! 바위! 보!", mySGD->getFont().c_str(), 33.f);
 			title_gamename->setColor(ccc3(255, 230, 0));
-			title_gamename->enableStroke(ccc3(0, 0, 0), 2.f, true);
+			title_gamename->enableOuterStroke(ccc3(0, 0, 0), 2.f, true);
 			title_gamename->setPosition(ccp(m_titleBonusGame->getContentSize().width/2.f, -title_gamename->getContentSize().height/2.f-7));
 			m_titleBonusGame->addChild(title_gamename);
 
