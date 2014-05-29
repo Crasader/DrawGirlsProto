@@ -237,8 +237,8 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,back_case->getContentSize().height/2.f-25));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");
@@ -255,7 +255,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	m_container->addChild(question_box);
 	
 	
-	item_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent1), mySGD->getFont().c_str(), 12);
+	item_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent1), mySGD->getFont().c_str(), 15);
 	item_title->setPosition(ccp(0,-20));
 	m_container->addChild(item_title);
 	

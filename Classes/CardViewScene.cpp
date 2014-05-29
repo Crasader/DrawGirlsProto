@@ -18,6 +18,7 @@
 #include "GraySprite.h"
 #include "CCMenuLambda.h"
 #include "BuyMorphingPopup.h"
+#include "FormSetter.h"
 
 #define CV_SCROLL_SPEED_MAX_BASE	20
 #define CV_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -44,6 +45,7 @@ bool CardViewScene::init()
         return false;
     }
 	
+	startFormSetter(this);
 	CCLayer* top_bottom_layer = CCLayer::create();
 	top_bottom_layer->setPosition(ccp(0, 0));
 	addChild(top_bottom_layer, kCV_Z_back);
@@ -66,6 +68,10 @@ bool CardViewScene::init()
 	
 	game_node = CCNode::create();
 	game_node->setScale(1.5f);
+	game_node->setAnchorPoint(ccp(0.5,0.5));
+	game_node->setContentSize(CCSizeMake(320,460));
+	game_node->setPosition(ccp(240,160));
+	setFormSetter(game_node);
 	addChild(game_node, kCV_Z_first_img);
 	
 	int card_number = mySGD->selected_collectionbook;
@@ -74,12 +80,14 @@ bool CardViewScene::init()
 	
 	CCLog("why two2");
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
-
+	first_img->setAnchorPoint(ccp(0.5,0.5));
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
 	
 	first_img->setPosition(ccp(160,215));
+	first_img->setAnchorPoint(ccp(0.5,0.5));
+	setFormSetter(first_img);
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kCV_Z_first_img);
 	
@@ -216,7 +224,7 @@ bool CardViewScene::init()
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.5f;
 	
-	game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+	//game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	
 	return true;
 }
@@ -314,24 +322,31 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	
 	if(game_node->getScale() <= 1.5f)
 	{
-		if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
-			a_p.x = (480.f-320.f*game_node->getScale())/2.f+40.f;
-		else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
-			a_p.x = (480.f-320.f*game_node->getScale())/2.f-40.f;
+		if(a_p.x > (480.f-320.f*game_node->getScale()/2.f))
+			a_p.x = 480.f-320.f*game_node->getScale()/2.f;
+		else if(a_p.x < 320.f*game_node->getScale()/2.f)
+			a_p.x = 320.f*game_node->getScale()/2.f;
+		
 	}
 	else
 	{
-		if(a_p.x > 40.f)
-			a_p.x = 40.f;
-		else if(a_p.x < 480-320*game_node->getScale()-40.f)
-			a_p.x = 480-320*game_node->getScale()-40.f;
+		if(a_p.x - game_node->getScale()*480 > 480)
+			a_p.x = 480;
+		else if(a_p.x < 0)
+			a_p.x = 0;
+	
 	}
 	
-	if(a_p.y > 0+40.f)
-		a_p.y = 0+40.f;
-	if(a_p.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
-		a_p.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f;
+	if(a_p.y - game_node->getScale()*320 > 320)
+		a_p.y = 320;
+	else if(a_p.y < 0)
+		a_p.y = 0;
 	
+//	if(a_p.y > 0+40.f)
+//		a_p.y = 0+40.f;
+//	if(a_p.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
+//		a_p.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f;
+//	
 	game_node->setPosition(a_p);
 }
 
@@ -481,12 +496,19 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			else if(multiTouchData.size() == 2)
 			{
 				CCPoint sub_point = CCPointZero;
+				CCPoint avg_point = CCPointZero;
 				map<int, CCPoint>::iterator it;
 				for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
 				{
 					sub_point = ccpMult(sub_point, -1);
 					sub_point = ccpAdd(sub_point, it->second);
+					
+					avg_point = ccpAdd(sub_point, it->second);
 				}
+				
+				avg_point = ccpMult(avg_point,1/(float)multiTouchData.size());
+				
+			
 				
 				float before_scale = game_node->getScale();
 				
@@ -496,41 +518,41 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				else if(after_scale < minimum_scale)		after_scale = minimum_scale;
 				zoom_base_distance = changed_distance;
 				game_node->setScale(after_scale);
-				
-				CCPoint a_p;
-				{
-					float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
-					comp_scale = game_node->getScale() - comp_scale;
-					
-					a_p.x = game_node->getPositionX() - 320*comp_scale/2.f;
-				}
-				
-				if(game_node->getScale() <= 1.5f)
-				{
-					if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
-						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f+40.f);
-					else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
-						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f-40.f);
-				}
-				else
-				{
-					game_node->setPositionX(a_p.x);
-					
-					if(game_node->getPositionX() > 40.f)
-						game_node->setPositionX(40.f);
-					else if(game_node->getPositionX() < 480-320*game_node->getScale()-40.f)
-						game_node->setPositionX(480-320*game_node->getScale()-40.f);
-				}
-				
-				float comp_scale = before_scale;
-				comp_scale = game_node->getScale() - comp_scale;
-				
-				game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
-				
-				if(game_node->getPositionY() > 0+40.f)
-					game_node->setPositionY(0+40.f);
-				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
-					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
+				//game_node->setPosition(avg_point);
+//				CCPoint a_p;
+//				{
+//					float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
+//					comp_scale = game_node->getScale() - comp_scale;
+//					
+//					a_p.x = game_node->getPositionX() - 320*comp_scale/2.f;
+//				}
+//				
+//				if(game_node->getScale() <= 1.5f)
+//				{
+//					if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
+//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f+40.f);
+//					else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
+//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f-40.f);
+//				}
+//				else
+//				{
+//					game_node->setPositionX(a_p.x);
+//					
+//					if(game_node->getPositionX() > 40.f)
+//						game_node->setPositionX(40.f);
+//					else if(game_node->getPositionX() < 480-320*game_node->getScale()-40.f)
+//						game_node->setPositionX(480-320*game_node->getScale()-40.f);
+//				}
+//				
+//				float comp_scale = before_scale;
+//				comp_scale = game_node->getScale() - comp_scale;
+//				
+//				game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
+//				
+//				if(game_node->getPositionY() > 0+40.f)
+//					game_node->setPositionY(0+40.f);
+//				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
+//					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
 			}
 		}
 	}
