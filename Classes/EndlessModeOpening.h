@@ -88,7 +88,9 @@ private:
 	KSLabelTTF* straight_content;
 	StyledLabelTTF* record_content;
 	
+	KSLabelTTF* n_ready_label;
 	KSLabelTTF* n_ready_label2;
+	KSLabelTTF* s_ready_label;
 	KSLabelTTF* s_ready_label2;
 	
 	CCSprite* rank_percent_case;

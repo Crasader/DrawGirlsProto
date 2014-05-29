@@ -697,12 +697,16 @@ public:
 	bool is_endless_mode;
 	KSProtectVar<bool> endless_my_victory_on;
 	KSProtectVar<int> endless_my_victory;
-	KSProtectVar<int> endless_my_total_score;
+//	KSProtectVar<int> endless_my_total_score;
 	KSProtectVar<int> endless_my_level;
 	KSProtectVar<int> endless_my_high_victory;
 	KSProtectVar<int> endless_my_lose;
 	KSProtectVar<int> endless_my_high_score;
 	KSProtectVar<int> endless_my_win;
+	
+	KSProtectVar<int> endless_my_ing_win;
+	KSProtectVar<int> endless_my_ing_score;
+	
 	KSProtectVar<int> endless_memberID;
 	KSProtectStr endless_nick;
 	KSProtectStr endless_flag;

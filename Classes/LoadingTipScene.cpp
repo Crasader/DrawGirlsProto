@@ -861,7 +861,7 @@ void LoadingTipScene::readyLoading()
 		default_load_list.push_back("normal_frame_bottom.png");
 		default_load_list.push_back("normal_frame_left.png");
 		default_load_list.push_back("normal_frame_right.png");
-		default_load_list.push_back("fever_coin.png");
+		default_load_list.push_back("fever_coin_bronze.png");
 	}
 	else if(next_scene_name == "newmainflow")
 	{
