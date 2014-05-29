@@ -2306,12 +2306,16 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_sameNick)), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
+																												 myLoc->getLocalForKey(kMyLocalKey_sameNick), nullptr, CCPointZero, true), 999);
+										 
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDFAULTYNICK)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_invalidNick)), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
+																												 myLoc->getLocalForKey(kMyLocalKey_invalidNick), nullptr, CCPointZero, true), 999);
+
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
@@ -2330,12 +2334,16 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDLONGNAME)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_longNick)), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
+																												 myLoc->getLocalForKey(kMyLocalKey_longNick), nullptr, CCPointZero, true), 999);
+										 
+//										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_longNick)), 999);
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDSHORTNAME)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_shortNick)), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
+															myLoc->getLocalForKey(kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
 										 is_menu_enable = true;
 									 }
 									 else
