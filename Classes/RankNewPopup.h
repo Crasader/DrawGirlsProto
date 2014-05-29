@@ -16,7 +16,7 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
-
+class ScrollBar;
 class RankNewPopup : public CCLayer,public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -47,6 +47,7 @@ private:
 	CCSprite* gray;
 	CCNode* rankBack;
 	int delay_index;
+	ScrollBar* m_scrollBar;
 	vector<function<void()>> cell_action_list;
 	
 	void showPopup();
