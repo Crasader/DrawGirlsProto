@@ -1553,6 +1553,59 @@ bool PlayUI::getIsExchanged ()
 
 void PlayUI::addScoreAttack(int t_damage)
 {
+	ccColor4F t_color;
+	if(score_attack_damage.getV() < 3000)
+	{
+		t_color = ccc4f(1.f, 1.f, 1.f, 1.f);
+	}
+	else if(score_attack_damage.getV() < 6000)
+	{
+		t_color = ccc4f(1.f, 1.f, 0.f, 1.f);
+	}
+	else if(score_attack_damage.getV() < 9000)
+	{
+		t_color = ccc4f(1.f, 0.5f, 0.f, 1.f);
+	}
+	else
+	{
+		t_color = ccc4f(1.f, 0.f, 0.f, 1.f);
+	}
+	
+	CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(100);
+	particle2->setPositionType(kCCPositionTypeRelative);
+	particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+	particle2->setEmissionRate(200);
+	particle2->setAngle(180.0);
+	particle2->setAngleVar(180.0);
+	ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+	particle2->setBlendFunc(blendFunc);
+	particle2->setDuration(0.7);
+	particle2->setEmitterMode(kCCParticleModeRadius);
+	particle2->setStartColor(t_color);
+	particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+	particle2->setEndColor(t_color);
+	particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+	particle2->setStartSize(10.0);
+	particle2->setStartSizeVar(5.0);
+	particle2->setEndSize(10.0);
+	particle2->setEndSizeVar(2.0);
+	particle2->setRotatePerSecond(40);
+	particle2->setRotatePerSecondVar(10);
+	particle2->setStartRadius(30);
+	particle2->setStartRadiusVar(10);
+	particle2->setEndRadius(2);
+	particle2->setTotalParticles(100);
+	particle2->setLife(0.5);
+	particle2->setLifeVar(0.3);
+	particle2->setStartSpin(0.0);
+	particle2->setStartSpinVar(50.f);
+	particle2->setEndSpin(0.0);
+	particle2->setEndSpinVar(60.f);
+	particle2->setPosVar(ccp(0,0));
+	particle2->setPosition(ccp(40, myDSH->ui_center_y));
+	particle2->setAutoRemoveOnFinish(true);
+	addChild(particle2);
+	
 	score_attack_damage = score_attack_damage.getV() + t_damage;
 	score_attack_keep_frame = 0;
 	schedule(schedule_selector(PlayUI::scoreAttackKeep));
@@ -1580,45 +1633,110 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	if(t_damage <= 0)
 		return;
 	
-	CCSprite* t_missile = CCSprite::create("blind_drop.png");
-	t_missile->setPosition(ccp(440, myDSH->ui_center_y));
-	addChild(t_missile);
+	int cnt = t_damage/3000;
 	
-	t_missile->setScale(0.1f);
+	for(int i=0;i<cnt;i++)
+	{
+		ccColor4F t_color;
+		if(i < 1)
+		{
+			t_color = ccc4f(1.f, 1.f, 1.f, 1.f);
+		}
+		else if(i < 2)
+		{
+			t_color = ccc4f(1.f, 1.f, 0.f, 1.f);
+		}
+		else if(i < 3)
+		{
+			t_color = ccc4f(1.f, 0.5f, 0.f, 1.f);
+		}
+		else
+		{
+			t_color = ccc4f(1.f, 0.f, 0.f, 1.f);
+		}
+		
+		addChild(KSTimer::create(0.2f*i, [=]()
+								 {
+									 CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(100);
+									 particle2->setPositionType(kCCPositionTypeRelative);
+									 particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+									 particle2->setEmissionRate(200);
+									 particle2->setAngle(180.0);
+									 particle2->setAngleVar(180.0);
+									 ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+									 particle2->setBlendFunc(blendFunc);
+									 particle2->setDuration(0.7);
+									 particle2->setEmitterMode(kCCParticleModeRadius);
+									 particle2->setStartColor(t_color);
+									 particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+									 particle2->setEndColor(t_color);
+									 particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+									 particle2->setStartSize(10.0);
+									 particle2->setStartSizeVar(5.0);
+									 particle2->setEndSize(10.0);
+									 particle2->setEndSizeVar(2.0);
+									 particle2->setRotatePerSecond(40);
+									 particle2->setRotatePerSecondVar(10);
+									 particle2->setStartRadius(30);
+									 particle2->setStartRadiusVar(10);
+									 particle2->setEndRadius(2);
+									 particle2->setTotalParticles(100);
+									 particle2->setLife(0.5);
+									 particle2->setLifeVar(0.3);
+									 particle2->setStartSpin(0.0);
+									 particle2->setStartSpinVar(50.f);
+									 particle2->setEndSpin(0.0);
+									 particle2->setEndSpinVar(60.f);
+									 particle2->setPosVar(ccp(0,0));
+									 particle2->setPosition(ccp(440, myDSH->ui_center_y));
+									 particle2->setAutoRemoveOnFinish(true);
+									 addChild(particle2);
+								 }));
+	}
 	
-	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-										   {
-											   t_missile->setScale(0.1f+t*0.9f);
-											   t_missile->setPosition(ccp(440-t*400, myDSH->ui_center_y));
-										   }, [=](float t)
-										   {
-											   t_missile->setScale(1.f);
-											   t_missile->setPosition(ccp(40, myDSH->ui_center_y));
-											   myGD->communication("Main_showScoreMissileEffect", ccp(40, myDSH->ui_center_y));
-											   t_missile->removeFromParent();
-											   
-											   addChild(KSTimer::create(0.1f, [=]()
+	
+	addChild(KSTimer::create(cnt*0.2f, [=]()
+							 {
+								 CCSprite* t_missile = CCSprite::create("blind_drop.png");
+								 t_missile->setPosition(ccp(440, myDSH->ui_center_y));
+								 addChild(t_missile);
+								 
+								 t_missile->setScale(0.3f);
+								 
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																		{
-																			KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
-																			t_label->enableOuterStroke(ccBLACK, 1.f);
-																			t_label->setPosition(ccp(40, myDSH->ui_center_y));
-																			addChild(t_label);
+																			t_missile->setScale(0.3f+t*0.7f);
+																			t_missile->setPosition(ccp(440-t*400, myDSH->ui_center_y));
+																		}, [=](float t)
+																		{
+																			t_missile->setScale(1.f);
+																			t_missile->setPosition(ccp(40, myDSH->ui_center_y));
+																			myGD->communication("Main_showScoreMissileEffect", ccp(40, myDSH->ui_center_y));
+																			t_missile->removeFromParent();
 																			
-																			addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
-																												   {
-																													   t_label->setOpacity(255-t*255);
-																												   }, [=](float t)
-																												   {
-																													   t_label->setOpacity(0);
-																													   t_label->removeFromParent();
-																												   }));
-																			
-																			float before_score = score_value.getV();
-																			damaged_score = damaged_score.getV() - t_damage;
-																			CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
-																			score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
+																			addChild(KSTimer::create(0.1f, [=]()
+																									 {
+																										 KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
+																										 t_label->enableOuterStroke(ccBLACK, 1.f);
+																										 t_label->setPosition(ccp(40, myDSH->ui_center_y));
+																										 addChild(t_label);
+																										 
+																										 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																																				{
+																																					t_label->setOpacity(255-t*255);
+																																				}, [=](float t)
+																																				{
+																																					t_label->setOpacity(0);
+																																					t_label->removeFromParent();
+																																				}));
+																										 
+																										 float before_score = score_value.getV();
+																										 damaged_score = damaged_score.getV() - t_damage;
+																										 CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
+																										 score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
+																									 }));
 																		}));
-										   }));
+							 }));
 	
 	mySGD->damaged_score = mySGD->damaged_score.getV() + t_damage;
 }
