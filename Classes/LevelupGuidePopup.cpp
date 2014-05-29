@@ -70,8 +70,8 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(17, back_case->getContentSize().height-25));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height-25));
 	back_case->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
@@ -102,26 +102,26 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 							  });
 	back_case->addChild(close_button);
 	
-	KSLabelTTF* ment1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent1), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* ment1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent1), mySGD->getFont().c_str(), 12.5f);
 	ment1_label->setColor(ccc3(255, 170, 20));
-	ment1_label->setAnchorPoint(ccp(0,0.5f));
-	ment1_label->setPosition(ccp(15,back_in->getContentSize().height-20));
+	ment1_label->setAnchorPoint(ccp(0.5f,0.5f));
+	ment1_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-20));
 	back_in->addChild(ment1_label);
 	
-	KSLabelTTF* ment2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent2), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* ment2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent2), mySGD->getFont().c_str(), 12.5f);
 	ment2_label->setColor(ccc3(255, 170, 20));
-	ment2_label->setAnchorPoint(ccp(0,0.5f));
-	ment2_label->setPosition(ccp(15,back_in->getContentSize().height-40));
+	ment2_label->setAnchorPoint(ccp(0.5f,0.5f));
+	ment2_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-40));
 	back_in->addChild(ment2_label);
 	
-	KSLabelTTF* ment3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent3), mySGD->getFont().c_str(), 13);
-	ment3_label->setAnchorPoint(ccp(0,0.5f));
-	ment3_label->setPosition(ccp(15,back_in->getContentSize().height-70));
+	KSLabelTTF* ment3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent3), mySGD->getFont().c_str(), 12.5f);
+	ment3_label->setAnchorPoint(ccp(0.5f,0.5f));
+	ment3_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-70));
 	back_in->addChild(ment3_label);
 	
-	KSLabelTTF* ment4_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent4), mySGD->getFont().c_str(), 13);
-	ment4_label->setAnchorPoint(ccp(0,0.5f));
-	ment4_label->setPosition(ccp(15,back_in->getContentSize().height-90));
+	KSLabelTTF* ment4_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent4), mySGD->getFont().c_str(), 12.5f);
+	ment4_label->setAnchorPoint(ccp(0.5f,0.5f));
+	ment4_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-90));
 	back_in->addChild(ment4_label);
 	
 	
@@ -135,7 +135,7 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 	
 	rightnow_button = CCControlButton::create(r_label, rightnow_back);
 	rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(LevelupGuidePopup::rightnowAction), CCControlEventTouchUpInside);
-	rightnow_button->setPreferredSize(CCSizeMake(100,45));
+	rightnow_button->setPreferredSize(CCSizeMake(120,45));
 	rightnow_button->setPosition(ccp(0,-63));
 	m_container->addChild(rightnow_button);
 	

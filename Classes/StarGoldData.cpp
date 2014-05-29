@@ -17,6 +17,7 @@ void StarGoldData::withdraw()
 	is_perfect_puzzle = 0;
 	
 	endless_my_victory_on = false;
+	is_morphing_noti = true;
 	
 	star_label = NULL;
 	gold_label = NULL;
@@ -2400,6 +2401,7 @@ void StarGoldData::myInit()
 	is_on_attendance = false;
 	is_endless_mode = false;
 	endless_my_victory_on = false;
+	is_morphing_noti = true;
 	
 	suitable_stage = -1;
 	is_on_maingame = false;

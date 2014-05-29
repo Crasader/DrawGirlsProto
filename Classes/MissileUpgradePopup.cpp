@@ -100,6 +100,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
+	title_label->enableOuterStroke(ccBLACK, 0.5f);
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-15));
 	m_container->addChild(title_label);
@@ -145,14 +146,14 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 //	missile_data_level->setColor(ccc3(255, 222, 0));
-//	missile_data_level->enableOuterStroke(ccBLACK, 1.f);
+	missile_data_level->enableOuterStroke(ccBLACK, 0.5f);
 	missile_data_level->setAnchorPoint(ccp(0.5f,0.5f));
 	missile_data_level->setPosition(ccp(level_case->getContentSize().width/2.f-30.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_level);
 	
 	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
 //	missile_data_power->setColor(ccc3(255, 222, 0));
-//	missile_data_power->enableOuterStroke(ccBLACK, 1.f);
+	missile_data_power->enableOuterStroke(ccBLACK, 0.5f);
 	missile_data_power->setAnchorPoint(ccp(0.5f,0.5f));
 	missile_data_power->setPosition(ccp(level_case->getContentSize().width/2.f+28.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_power);
@@ -161,6 +162,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
 	upgrade_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 13);
+	upgrade_label->enableOuterStroke(ccBLACK, 0.5f);
 	upgrade_label->setAnchorPoint(ccp(0,0.5f));
 	upgrade_label->setPosition(ccp(0,0));
 	price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
@@ -173,7 +175,8 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		price_type = CCSprite::create("pass_ticket3.png");
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-27,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
-		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
+		price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
+		price_label->enableOuterStroke(ccBLACK, 0.5f);
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
 	}
@@ -182,7 +185,8 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		price_type = CCSprite::create("price_gold_img.png");
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-27,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
-		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label->enableOuterStroke(ccBLACK, 0.5f);
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
 	}

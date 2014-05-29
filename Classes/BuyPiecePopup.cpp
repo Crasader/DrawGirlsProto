@@ -102,8 +102,8 @@ void BuyPiecePopup::myInit(int t_touch_priority, function<void()> t_end_func, fu
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openStageContent), mySGD->getFont().c_str(), 12);
 	// CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_openGoldValue), NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))->getCString()
-	sub_label->setAnchorPoint(ccp(0,0.5f));
-	sub_label->setPosition(ccp(-back_case->getContentSize().width/2.f + 17,10));
+	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+	sub_label->setPosition(ccp(0,10));
 	m_container->addChild(sub_label);
 	
 	

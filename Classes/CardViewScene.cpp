@@ -150,8 +150,10 @@ bool CardViewScene::init()
 		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 		addChild(zoom_img, kCV_Z_next_button);
 	};
-	if(!is_morphing)
+	if(!is_morphing && mySGD->is_morphing_noti)
 	{
+		mySGD->is_morphing_noti = false;
+		
 		buy_morphing = CommonButton::create("", 10, CCSizeMake(80, 50), CommonButtonLightPupple, -160);
 		buy_morphing->setPosition(morphing_position);
 		buy_morphing->setFunction([=](CCObject* sender)
