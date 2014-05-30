@@ -17,7 +17,7 @@
 //#include "DataStorageHub.h"
 //#include "MissileDamageData.h"
 
-#define ABSORB_DISTANCE 180.f
+#define ABSORB_DISTANCE 150.f
 
 void GameItemBase::selfRemove()
 {
@@ -1345,16 +1345,16 @@ void FloatingCoin::floating()
 	CCPoint after_position;
 	float step = 5.f;
 	int step_count = 0;
-	int search_direction = ing_frame%2;
+	int search_direction = rand()%2;
 	while(!is_found)
 	{
 		if(step <= 0.f)
 			removeFromParent();
 		
 		is_found = true;
-		after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*moving_speed, sinf(moving_direction/180.f*M_PI)*moving_speed);
+		after_position = getPosition() + ccp(cosf(moving_direction/180.f*M_PI)*(moving_speed+5-step), sinf(moving_direction/180.f*M_PI)*(moving_speed+5-step));
 		
-		if(after_position.x > 319.f || after_position.x < 1.f || after_position.y > 429.f || after_position.y < 1.f)
+		if(after_position.x > 318.f || after_position.x < 2.f || after_position.y > 428.f || after_position.y < 2.f)
 		{
 			is_found = false;
 			if(search_direction == 0)

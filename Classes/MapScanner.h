@@ -270,6 +270,8 @@ private:
 	
 	BackFilename getBackInvisibleFilename();
 	
+	void ingNewlineToRealNewline();
+	
 	void setMapImg();
 	
 	CCSprite* top_boarder;

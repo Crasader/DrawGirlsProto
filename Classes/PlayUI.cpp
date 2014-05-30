@@ -1703,7 +1703,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 								 
 								 t_missile->setScale(0.3f);
 								 
-								 addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 																		{
 																			t_missile->setScale(0.3f+t*0.7f);
 																			t_missile->setPosition(ccp(440-t*400, myDSH->ui_center_y));

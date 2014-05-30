@@ -74,7 +74,7 @@ bool LoadingTipScene::init()
 		{
 			CCNode* tip_img = getCurtainTipImage();
 			tip_img->setPosition(ccp(240,160));
-			addChild(tip_img, kLoadingTipZorder_back);
+			addChild(tip_img, kLoadingTipZorder_back, 9999);
 			
 			CCDelayTime* t_delay = CCDelayTime::create(0.6f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::readyLoading));
@@ -85,7 +85,7 @@ bool LoadingTipScene::init()
 		{
 			CCSprite* tip_img = getLoadingTipImage();
 			tip_img->setPosition(ccp(240,160));
-			addChild(tip_img, kLoadingTipZorder_back);
+			addChild(tip_img, kLoadingTipZorder_back, 9999);
 			
 			readyLoading();
 		}
@@ -94,7 +94,7 @@ bool LoadingTipScene::init()
 	{
 		CCNode* tip_img = getMissionTipImage();
 		tip_img->setPosition(ccp(240,160));
-		addChild(tip_img, kLoadingTipZorder_back);
+		addChild(tip_img, kLoadingTipZorder_back, 9999);
 		
 		CCDelayTime* t_delay = CCDelayTime::create(0.6f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::readyLoading));

@@ -62,7 +62,8 @@ enum mapType{
 	mapNewline,
 	mapNewget,
 	mapScaningCheckLine,
-	mapScaningCheckGet
+	mapScaningCheckGet,
+	mapRealNewline
 };
 
 enum JackBaseSpeedTag{

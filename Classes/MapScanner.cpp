@@ -72,6 +72,18 @@ bool MapScanner::isCheckBossLocked()
 	return is_found;
 }
 
+void MapScanner::ingNewlineToRealNewline()
+{
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(myGD->mapState[i][j] == mapNewline)
+				myGD->mapState[i][j] = mapRealNewline;
+		}
+	}
+}
+
 void MapScanner::scanMap()
 {
 //	chrono::time_point<chrono::system_clock> start, end;
@@ -213,7 +225,7 @@ void MapScanner::scanMap()
 		{
 			if(myGD->mapState[i][j] == mapScaningEmptySide)
 				myGD->mapState[i][j] = mapEmpty;
-			else if(myGD->mapState[i][j] == mapNewline)
+			else if(myGD->mapState[i][j] == mapRealNewline)
 			{
 				myGD->mapState[i][j] = mapOldline;
 				newInsideCnt++;
@@ -1106,6 +1118,7 @@ void MapScanner::myInit()
 	myGD->V_V["MS_startRemoveBlock"] = std::bind(&MapScanner::startRemoveBlock, this);
 	myGD->B_V["MS_isCheckBossLocked"] = std::bind(&MapScanner::isCheckBossLocked, this);
 	myGD->V_V["MS_removeEmptyPoint"] = std::bind(&MapScanner::removeEmptyPoint, this);
+	myGD->V_V["MS_ingNewlineToRealNewline"] = std::bind(&MapScanner::ingNewlineToRealNewline, this);
 
 	
 	setMapImg();

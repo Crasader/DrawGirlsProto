@@ -1617,8 +1617,13 @@ void PlayTutorial::nextStep()
 																AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
 																
 																LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-																loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
-																loading_tip->setScale(myDSH->screen_convert_rate);
+																CCNode* t_main_node = loading_tip->getChildByTag(9999);
+																if(t_main_node)
+																{
+																	t_main_node->setScale(myDSH->screen_convert_rate);
+																	t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+																}
+																
 																addChild(loading_tip, 999);
 															});
 											  

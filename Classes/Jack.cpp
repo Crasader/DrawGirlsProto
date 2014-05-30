@@ -671,6 +671,8 @@ void Jack::moveTest()
 				// new rect get !!!
 				myGD->communication("SW_stopAllSW");
 				
+				myGD->communication("MS_ingNewlineToRealNewline");
+				
 				myGD->communication("MS_scanMap");
 				myGD->communication("PM_cleanPath");
 				escapeJack();
