@@ -68,9 +68,9 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	title_label->enableOuterStroke(ccBLACK,0.5);
 	setFormSetter(title_label);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(17,back_case->getContentSize().height-25));
-	back_case->addChild(title_label);
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(0,back_case->getContentSize().height/2-22));
+	m_container->addChild(title_label);
 	
 	int dayCount = mySGD->attendance_data["dayCount"].asInt();
 	

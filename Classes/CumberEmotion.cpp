@@ -107,6 +107,7 @@ void CumberEmotion::presentationEmotion(const std::string& emotion)
 	});
 	addChild(m_currentEmotion);
 	m_currentEmotion->setPositionY(m_currentEmotion->getPositionY() + 50);
+	m_currentEmotion->setPositionX(30);
 	m_boredTimer = 0.f;
 }
 void CumberEmotion::update(float dt)

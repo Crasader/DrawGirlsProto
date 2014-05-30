@@ -523,6 +523,7 @@ void EndlessModeResult::setMain()
 	n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	n_stop_label2->setColor(ccWHITE);
 	n_stop_label2->setOpacity(100);
+	n_stop_label2->disableOuterStroke();
 	n_stop_label2->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-2));
 	n_stop->addChild(n_stop_label2);
 	
@@ -537,6 +538,7 @@ void EndlessModeResult::setMain()
 	s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	s_stop_label2->setColor(ccWHITE);
 	s_stop_label2->setOpacity(100);
+	s_stop_label2->disableOuterStroke();
 	s_stop_label2->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-2));
 	s_stop->addChild(s_stop_label2);
 	
@@ -911,6 +913,7 @@ void EndlessModeResult::setMain()
 	n_next_label2 = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	n_next_label2->setColor(ccWHITE);
 	n_next_label2->setOpacity(100);
+	n_next_label2->disableOuterStroke();
 	n_next_label2->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-2));
 	n_next->addChild(n_next_label2);
 	
@@ -925,6 +928,7 @@ void EndlessModeResult::setMain()
 	s_next_label2 = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	s_next_label2->setColor(ccWHITE);
 	s_next_label2->setOpacity(100);
+	s_next_label2->disableOuterStroke();
 	s_next_label2->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-2));
 	s_next->addChild(s_next_label2);
 	
@@ -945,6 +949,11 @@ void EndlessModeResult::setMain()
 
 																	 vector<CommandParam> command_list;
 																	 command_list.clear();
+																	 
+																	 Json::Value param3;
+																	 param3["memberID"] = myHSP->getMemberID();
+																	 
+																	 command_list.push_back(CommandParam("starttransaction", param3, nullptr));
 																	 
 																	 if(mySGD->getIsAlwaysSavePlaydata() == 1)
 																	{
@@ -979,6 +988,17 @@ void EndlessModeResult::setMain()
 																	 param["memberID"] = myHSP->getMemberID();
 																	 
 																	 command_list.push_back(CommandParam("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
+																	 
+																	 Json::Value param4;
+																	 param4.clear();
+																	 param4["memberID"] = myHSP->getMemberID();
+																	 param4["score"] = int(mySGD->getScore());
+																	 param4["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																	 param4["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																	 param4["victory"] = true;
+																	 
+																	 command_list.push_back(CommandParam("finishendlessplay", param4, nullptr));
+																	 
 																	 
 																	 myHSP->command(command_list);
 																 });

@@ -2262,6 +2262,8 @@ void PlayUI::showGachaOnePercent ()
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
 {
+	myGD->communication("MS_removeEmptyPoint");
+	
 	vector<SaveUserData_Key> save_userdata_list;
 	
 	save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -2312,6 +2314,8 @@ void PlayUI::searchEmptyPosition ()
 }
 void PlayUI::cancelOnePercentGacha ()
 {
+	myGD->communication("MS_removeEmptyPoint");
+	
 	if(jack_life > 0)
 	{
 		createBonusScore();
@@ -2605,7 +2609,7 @@ void PlayUI::myInit ()
 	
 	mission_button = RollingButton::create("");
 	mission_button->setPosition(ccp(68, myDSH->ui_top-22+UI_OUT_DISTANCE));
-	mission_button->setVisible(!mySGD->is_endless_mode);
+//	mission_button->setVisible(!mySGD->is_endless_mode);
 	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_button->setPositionY(t);}, [=](float t){mission_button->setPositionY(myDSH->ui_top-22);}));
 	
 	addChild(mission_button,2);

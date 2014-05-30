@@ -444,6 +444,7 @@ bool FailPopup::init()
 	
 	KSLabelTTF* n_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	n_replay_label2->setColor(ccWHITE);
+	n_replay_label2->disableOuterStroke();
 	n_replay_label2->setOpacity(100);
 	n_replay_label2->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-1));
 	n_replay->addChild(n_replay_label2);
@@ -457,6 +458,7 @@ bool FailPopup::init()
 	
 	KSLabelTTF* s_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	s_replay_label2->setColor(ccWHITE);
+	s_replay_label2->disableOuterStroke();
 	s_replay_label2->setOpacity(100);
 	s_replay_label2->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-1));
 	s_replay->addChild(s_replay_label2);

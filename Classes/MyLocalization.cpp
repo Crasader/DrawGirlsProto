@@ -1103,7 +1103,7 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ko->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
-	
+	 
 	ko->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	ko->setObject(CCString::create("닉네임 오류"), kMyLocalKey_nicknameError);
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);

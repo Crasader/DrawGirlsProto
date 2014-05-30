@@ -237,6 +237,8 @@ public:
 		return visibleImg->getVisibleSprite();
 	}
 	
+	void removeEmptyPoint();
+	
 private:
 	InvisibleSprite* invisibleImg;
 	VisibleParent* visibleImg;

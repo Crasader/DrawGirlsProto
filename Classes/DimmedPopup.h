@@ -72,7 +72,7 @@ public:
 
 		m_back = sprite;
 		m_back->setAnchorPoint(ccp(0.5,0.5));
-		m_back->setPosition(ccp(240,160-450));
+		m_back->setPosition(ccp(240,160-14-450));
 		addChildOnDimmed(m_back, 0);
 	}
 	void setBackground(CCSprite* sprite){
@@ -86,7 +86,7 @@ public:
 	void setBackground(CCSprite* sprite,float yOffset){
 		m_back = sprite;
 		m_back->setAnchorPoint(ccp(0.5,0.5));
-		m_back->setPosition(ccp(240,160+yOffset-450));
+		m_back->setPosition(ccp(240,160-14+yOffset-450));
 		addChildOnDimmed(m_back, 0);
 	}
 	

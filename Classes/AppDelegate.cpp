@@ -10,6 +10,7 @@
 
 #include "GameData.h"
 #include "TitleRenewal.h"
+#include "TextureReloader.h"
 
 using namespace CocosDenshion;
 
@@ -31,7 +32,6 @@ USING_NS_CC;
 
 
 #include "ASPopupView.h"
-#include "TitleRenewal.h"
 #include "GraphDog.h"
 #include "KSUtil.h"
 #include "GaBaBo.h"
@@ -361,6 +361,8 @@ void AppDelegate::applicationDidEnterBackground()
 void AppDelegate::applicationWillEnterForeground()
 {
 	CCDirector::sharedDirector()->startAnimation();
+	
+	myTR->reloadTexture();
 	
 	SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 	SimpleAudioEngine::sharedEngine()->resumeAllEffects();

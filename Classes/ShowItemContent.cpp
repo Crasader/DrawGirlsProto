@@ -127,7 +127,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemTitle), mySGD->getFont().c_str(), 15);
 	title_img->setColor(ccc3(255,170,20));
 	title_img->setAnchorPoint(ccp(0.5f, 0.5f));
-	title_img->setPosition(ccp(case_back->getContentSize().width/2.f, 3+case_back->getContentSize().height/2.f-30));
+	title_img->setPosition(ccp(0, 3+case_back->getContentSize().height/2.f-30));
 	addChild(title_img);
 	
 	KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 12);
