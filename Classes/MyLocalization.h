@@ -597,7 +597,7 @@ typedef enum MyLocalKey_ {
 	
 	kMyLocalKey_endlessReadyIngWin,
 	kMyLocalKey_nicknameError,
-
+	kMyLocalKey_onePercentDesc2
 }MyLocalKey;
 
 
