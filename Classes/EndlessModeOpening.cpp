@@ -388,6 +388,8 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 		mySGD->endless_score = result_data["rival"]["score"].asInt();
 		mySGD->endless_regDate = result_data["rival"]["regDate"].asInt64();
 		
+		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_stageNo)] = result_data["stageInfo"]["realNo"].asInt();
+		
 		saveStageInfo(result_data["stageInfo"]);
 	}
 	else

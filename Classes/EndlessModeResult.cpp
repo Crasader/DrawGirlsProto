@@ -733,6 +733,7 @@ void EndlessModeResult::setMain()
 																																  
 																																  Json::FastWriter writer;
 																																  param2["playData"] = writer.write(mySGD->replay_write_info);
+																																  param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
 																																  
 																																  command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
 																																  
@@ -864,6 +865,7 @@ void EndlessModeResult::setMain()
 																			
 																			Json::FastWriter writer;
 																			param2["playData"] = writer.write(mySGD->replay_write_info);
+																			param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
 																			
 																			command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
 																			
@@ -979,6 +981,7 @@ void EndlessModeResult::setMain()
 																	 
 																	 Json::FastWriter writer;
 																	 param2["playData"] = writer.write(mySGD->replay_write_info);
+																	 param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
 																	 
 																	 command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
 																	}
@@ -1006,7 +1009,7 @@ void EndlessModeResult::setMain()
 	
 	bottom_menu = CCMenuLambda::create();
 	bottom_menu->setPosition(ccp(main_case->getContentSize().width/2.f,35));
-	bottom_menu->setTouchPriority(touch_priority);
+	bottom_menu->setTouchPriority(touch_priority-2);
 	main_case->addChild(bottom_menu);
 	
 	bottom_menu->addChild(stop_item);
@@ -1027,19 +1030,19 @@ void EndlessModeResult::setMain()
 		{
 			// win
 			
-			CCSprite* win_case = CCSprite::create("endless_winner.png");
-			win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
-			main_case->addChild(win_case);
+			result_stamp = CCSprite::create("endless_winner.png");
+			result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+			main_case->addChild(result_stamp);
 			
 			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_ing_win.getV())->getCString(), "winfont.fnt");
-			win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
-			win_case->addChild(win_label);
+			win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
+			result_stamp->addChild(win_label);
 			
 			CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
-			win_ment->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f-25));
-			win_case->addChild(win_ment);
+			win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
+			result_stamp->addChild(win_ment);
 			
-			win_case->setRotation(-15);
+			result_stamp->setRotation(-15);
 			
 			
 			CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
@@ -1075,17 +1078,33 @@ void EndlessModeResult::setMain()
 			particle2->setEndSpin(0.0);
 			particle2->setEndSpinVar(60.f);
 			particle2->setPosVar(ccp(80,80));
-			particle2->setPosition(win_case->getPosition());
+			particle2->setPosition(result_stamp->getPosition());
 			main_case->addChild(particle2);
 		}
 		else
 		{
 			// lose
 			
-			CCSprite* win_case = CCSprite::create("endless_loser.png");
-			win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
-			main_case->addChild(win_case);
+			result_stamp = CCSprite::create("endless_loser.png");
+			result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+			main_case->addChild(result_stamp);
 		}
+		
+		TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+		t_suction_layer->touch_began_func = [=]()
+		{
+			result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																 {
+																	 result_stamp->setOpacity(255-t*155);
+																 }, [=](float t)
+																 {
+																	 result_stamp->setOpacity(100);
+																 }));
+			t_suction_layer->removeFromParent();
+		};
+		t_suction_layer->is_on_touch_began_func = true;
+		addChild(t_suction_layer);
+		t_suction_layer->setTouchEnabled(true);
 	}
 	
 	CCSprite* vs_img = CCSprite::create("endless_vs.png");
@@ -1216,23 +1235,23 @@ void EndlessModeResult::startCalcAnimation()
 																			   {
 																				   // win
 																				   
-																				   CCSprite* win_case = CCSprite::create("endless_winner.png");
-																				   win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
-																				   main_case->addChild(win_case);
+																				   result_stamp = CCSprite::create("endless_winner.png");
+																				   result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+																				   main_case->addChild(result_stamp);
 																				   
 																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_ing_win.getV())->getCString(), "winfont.fnt");
-																				   win_label->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f+10));
-																				   win_case->addChild(win_label);
+																				   win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
+																				   result_stamp->addChild(win_label);
 																				   
 																				   CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
-																				   win_ment->setPosition(ccp(win_case->getContentSize().width/2.f, win_case->getContentSize().height/2.f-25));
-																				   win_case->addChild(win_ment);
+																				   win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
+																				   result_stamp->addChild(win_ment);
 																				   
-																				   win_case->setRotation(-15);
+																				   result_stamp->setRotation(-15);
 																				   
 																				   
-																				   KS::setOpacity(win_case, 0);
-																				   win_case->setScale(2.5f);
+																				   KS::setOpacity(result_stamp, 0);
+																				   result_stamp->setScale(2.5f);
 																				   
 																				   CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
 																				   particle1->setPositionType(kCCPositionTypeRelative);
@@ -1267,18 +1286,18 @@ void EndlessModeResult::startCalcAnimation()
 																				   particle1->setEndSpin(0.0);
 																				   particle1->setEndSpinVar(0.f);
 																				   particle1->setPosVar(ccp(90,90));
-																				   particle1->setPosition(win_case->getPosition());
+																				   particle1->setPosition(result_stamp->getPosition());
 																				   particle1->setAutoRemoveOnFinish(true);
 																				   main_case->addChild(particle1);
 																				   
 																				   addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																														  {
-																															  KS::setOpacity(win_case, t*255);
-																															  win_case->setScale(2.5f-t*1.5f);
+																															  KS::setOpacity(result_stamp, t*255);
+																															  result_stamp->setScale(2.5f-t*1.5f);
 																														  }, [=](float t)
 																														  {
-																															  KS::setOpacity(win_case, 255);
-																															  win_case->setScale(1.f);
+																															  KS::setOpacity(result_stamp, 255);
+																															  result_stamp->setScale(1.f);
 																															  
 																															  CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
 																															  particle2->setPositionType(kCCPositionTypeRelative);
@@ -1312,8 +1331,24 @@ void EndlessModeResult::startCalcAnimation()
 																															  particle2->setEndSpin(0.0);
 																															  particle2->setEndSpinVar(60.f);
 																															  particle2->setPosVar(ccp(80,80));
-																															  particle2->setPosition(win_case->getPosition());
+																															  particle2->setPosition(result_stamp->getPosition());
 																															  main_case->addChild(particle2);
+																															  
+																															  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																															  t_suction_layer->touch_began_func = [=]()
+																															  {
+																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																													   {
+																																														   result_stamp->setOpacity(255-t*155);
+																																													   }, [=](float t)
+																																													   {
+																																														   result_stamp->setOpacity(100);
+																																													   }));
+																																  t_suction_layer->removeFromParent();
+																															  };
+																															  t_suction_layer->is_on_touch_began_func = true;
+																															  addChild(t_suction_layer);
+																															  t_suction_layer->setTouchEnabled(true);
 																															  
 																															  
 																															  is_menu_enable = true;
@@ -1324,21 +1359,37 @@ void EndlessModeResult::startCalcAnimation()
 																			   {
 																				   // lose
 																				   
-																				   CCSprite* win_case = CCSprite::create("endless_loser.png");
-																				   win_case->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
-																				   main_case->addChild(win_case);
+																				   result_stamp = CCSprite::create("endless_loser.png");
+																				   result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+																				   main_case->addChild(result_stamp);
 																				   
-																				   KS::setOpacity(win_case, 0);
-																				   win_case->setScale(2.5f);
+																				   KS::setOpacity(result_stamp, 0);
+																				   result_stamp->setScale(2.5f);
 																				   
 																				   addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																														  {
-																															  KS::setOpacity(win_case, t*255);
-																															  win_case->setScale(2.5f-t*1.5f);
+																															  KS::setOpacity(result_stamp, t*255);
+																															  result_stamp->setScale(2.5f-t*1.5f);
 																														  }, [=](float t)
 																														  {
-																															  KS::setOpacity(win_case, 255);
-																															  win_case->setScale(1.f);
+																															  KS::setOpacity(result_stamp, 255);
+																															  result_stamp->setScale(1.f);
+																															  
+																															  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																															  t_suction_layer->touch_began_func = [=]()
+																															  {
+																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																													   {
+																																														   result_stamp->setOpacity(255-t*155);
+																																													   }, [=](float t)
+																																													   {
+																																														   result_stamp->setOpacity(100);
+																																													   }));
+																																  t_suction_layer->removeFromParent();
+																															  };
+																															  t_suction_layer->is_on_touch_began_func = true;
+																															  addChild(t_suction_layer);
+																															  t_suction_layer->setTouchEnabled(true);
 																															  
 																															  is_menu_enable = true;
 																															  bottom_menu->setVisible(true);
@@ -2022,6 +2073,8 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 		mySGD->endless_level = result_data["rival"]["level"].asInt();
 		mySGD->endless_score = result_data["rival"]["score"].asInt();
 		mySGD->endless_regDate = result_data["rival"]["regDate"].asInt64();
+		
+		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_stageNo)] = result_data["stageInfo"]["realNo"].asInt();
 		
 		saveStageInfo(result_data["stageInfo"]);
 	}

@@ -368,6 +368,7 @@ private:
 	void writeContinue();
 	
 	int draw_button_tutorial_show;
+	CCSprite* bomb_img;
 };
 #undef LZZ_INLINE
 #endif

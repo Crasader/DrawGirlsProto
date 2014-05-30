@@ -84,6 +84,7 @@ string StarGoldData::getReplayKey(ReplayKey t_key)
 	else if(t_key == kReplayKey_lifeBonusCnt)							return_value = "lbc";
 	else if(t_key == kReplayKey_takeArea)								return_value = "ta";
 	else if(t_key == kReplayKey_scoreAttackedValue)						return_value = "sav";
+	else if(t_key == kReplayKey_stageNo)								return_value = "srn";
 	
 	return return_value;
 }
