@@ -19,6 +19,7 @@ enum OnePercentGameZorder
 };
 
 class CommonButton;
+class StyledLabelTTF;
 class OnePercentGame : public CCLayer
 {
 public:
@@ -64,18 +65,21 @@ protected:
 	int m_cursorDirection;
 	static const int leftLimit = -115;
 	static const int rightLimit = 115;
+	static const int graphHeight = 176;
 	int m_99State;
 	CCNode* m_currentGainArea, *m_desc;
 	int m_validSize;
 	CCSprite* m_validArea;
-	CCSprite* m_heart1;
-	CCSprite* m_heart2;
-	CCSprite* m_heart3;
 	CCSprite* m_shutter;
 	bool m_touchEnable;
 	std::function<void(void)> m_cancelGacha;
 	std::function<void(float)> m_resultGacha;
 	float m_totalPercent;
 	CCLabelTTF* m_lblPercent;
+	StyledLabelTTF* m_desc2;
+	CCClippingNode* m_closer;
+	CCNode* m_graphNode;
+	CCNode* m_stencil;
+	CCSprite* m_gradient;
 };
 #endif

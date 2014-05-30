@@ -14,7 +14,24 @@
 CCSprite* StageImgLoader::getLoadedImg(string filename)
 {
 	CCTexture2D* texture = addImage(filename.c_str());
-	return CCSprite::createWithTexture(texture);
+	if(texture)
+	{
+		CCSprite *pobSprite = new CCSprite();
+		if (pobSprite && pobSprite->initWithTexture(texture))
+		{
+			pobSprite->autorelease();
+			return pobSprite;
+		}
+		CC_SAFE_DELETE(pobSprite);
+		
+		return pobSprite;
+	}
+	else
+	{
+		return nullptr;
+	}
+
+//	return CCSprite::createWithTexture(texture);
 }
 CCSprite* StageImgLoader::getLoadedImg(string filename, CCRect t_rect)
 {
