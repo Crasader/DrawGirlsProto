@@ -197,35 +197,220 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 		m_ga->setSelectedIndex(0);
 		m_bo->setSelectedIndex(0);
 	};
-	
-	m_ba = CCMenuItemToggleLambda::createWithTarget(
-													[=](CCObject* obj)
-													{
-														allInActiver();
-														m_ba->setSelectedIndex(1);
-													},
-													CCMenuItemImageLambda::create("ba_inactive.png", "ba_inactive.png", nullptr),
-													CCMenuItemImageLambda::create("ba_active.png", "ba_active.png", nullptr)
-												,NULL);
+	auto gababoStarter = [=](){
+		if(m_gababoCountShowing == false)
+		{
+			auto gababoCountSet = KS::loadCCBI<CCSprite*>(this, "gababo_count.ccbi");
+			CCSprite* gababoCount = gababoCountSet.first;
+			gababoCountSet.second->setAnimationCompletedCallbackLambda(this, [=](){
+				if(m_resultShowing == false)
+				{
+					m_resultShowing = true;
+					m_ba->setEnabled(false);
+					m_ga->setEnabled(false);
+					m_bo->setEnabled(false);
+					int mySelect = 1;
+					if(m_ba->getSelectedIndex() == 1)
+					{
+						mySelect = kAttackBa;
+					}
+					if(m_ga->getSelectedIndex() == 1)
+					{
+						mySelect = kAttackGa;
+					}
+					if(m_bo->getSelectedIndex() == 1)
+					{
+						mySelect = kAttackBo;
+					}
+					
+					int D = mySelect - m_computerThink % 3;
+					std::string resultString;
+					int gameResult = 1;
+					
+					
+					CCSprite* result;
+					if(mySelect == m_computerThink) // Draw
+					{
+						resultString = "Draw";
+						gameResult = 1;
+						auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_draw.ccbi");
+						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+							addChild(KSTimer::create(2.f, [=](){
+								resultPair.first->removeFromParent();
+							}));
+//							resultPair.first->removeFromParent();
+						});
+						result = resultPair.first;
+						result->setPosition(ccp(240, 180));
+						addChild(result, 1);
+						m_drawCount++;
+					}
+					else if(D == 1) // Win
+					{
+						resultString = "You Win";
+						gameResult = 2;
+						auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_win.ccbi");
+						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+							addChild(KSTimer::create(2.f, [=](){
+								resultPair.first->removeFromParent();
+							}));
+//							resultPair.first->removeFromParent();
+						});
+						result = resultPair.first;
+						result->setPosition(ccp(240, 180));
+						addChild(result, 1);
+						m_winCount++;
+					}
+					else // Lose
+					{
+						resultString = "You Lose";
+						gameResult = 3;
+						auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_lose.ccbi");
+						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+							addChild(KSTimer::create(2.f, [=](){
+								resultPair.first->removeFromParent();
+							}));
+//							resultPair.first->removeFromParent();
+						});
+						result = resultPair.first;
+						result->setPosition(ccp(240, 180));
+						addChild(result, 1);
+						m_loseCount++;
+					}
+					
+					if(gameResult == 2)
+					{
+						addChild(KSTimer::create(3.0f, [=](){
+							hidingAnimation();
+						}));
+					}
+					addChild(KSTimer::create(4.f, [=](){
+						
+						// Draw
+						if(gameResult == 1)
+						{
+							initGameTime();
+							m_resultShowing = false;
+							m_ba->setEnabled(true);
+							m_ga->setEnabled(true);
+							m_bo->setEnabled(true);
+							scheduleUpdate();
+							
+						}
+						// Win
+						else if(gameResult == 2)
+						{
+							if(m_winCount == 0)
+							{
+								addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46), 0.6f, [=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								},[=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								}));
+								
+							}
+							else if(m_winCount == 1)
+							{
+								addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46 + 56), 0.6f, [=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								},[=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								}));
+							}
+							else if(m_winCount == 2)
+							{
+								addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46 + 56 + 56), 0.6f, [=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								},[=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								}));
+							}
+							else if(m_winCount == 3)
+							{
+								addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46 + 56 + 56 + 56), 0.6f, [=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								},[=](CCPoint t){
+									m_currentRewardCursor->setPosition(t);
+								}));
+							}
+							
+							if(m_winCount == 3)
+							{
+								addChild(KSTimer::create(0.7f, [=](){
+									showResult();
+								}));
+							}
+							else
+							{
+								addChild(KSTimer::create(0.7f, [=](){
+									auto lightPair = KS::loadCCBI<CCSprite*>(this, "gabaao_effect.ccbi");
+									CCSprite* light = lightPair.first;
+									lightPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+										light->removeFromParent();
+									});
+									light->setPosition(ccp(240, 160));
+									addChild(light, 100);
+									
+									addChild(KSTimer::create(0.9f, [=](){
+										addChild(KSTimer::create(1.3f, [=](){
+											initAnimation();
+										}));
+										m_ba->setEnabled(true);
+										m_ga->setEnabled(true);
+										m_bo->setEnabled(true);
+										initGameTime();
+										m_resultShowing = false;
+										m_step++;
+										this->loadImage(m_step);
+										scheduleUpdate();
+									}));
+								}));
+								
+							}
+						}
+						// Lose
+						else
+						{
+							showResult();
+						}
+					}));
+					unscheduleUpdate();
+				}
+			});
+			gababoCount->setPosition(ccp(240, 160));
+			addChild(gababoCount, 4);
+			m_gababoCountShowing = true;
+		}
+	};
+	m_ba = CCMenuItemToggleLambda::createWithTarget( [=](CCObject* obj) {
+		allInActiver();
+		m_ba->setSelectedIndex(1);
+		gababoStarter();
+	},
+																									CCMenuItemImageLambda::create("ba_inactive.png", "ba_inactive.png", nullptr),
+																									CCMenuItemImageLambda::create("ba_active.png", "ba_active.png", nullptr)
+																									,NULL);
 	gababo->addChild(m_ba, 1);
 
-	m_ga = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
+	m_ga = CCMenuItemToggleLambda::createWithTarget( [=](CCObject* obj){
 		allInActiver();
 		m_ga->setSelectedIndex(1);
+		gababoStarter();
 	}, CCMenuItemImageLambda::create("ga_inactive.png", "ga_inactive.png", nullptr),
-		CCMenuItemImageLambda::create("ga_active.png", "ga_active.png", nullptr), NULL);
+																									CCMenuItemImageLambda::create("ga_active.png", "ga_active.png", nullptr), NULL);
 	gababo->addChild(m_ga, 1);
 
 	m_bo = CCMenuItemToggleLambda::createWithTarget([=](CCObject* obj){
 		allInActiver();
 		m_bo->setSelectedIndex(1);
+		gababoStarter();
 	}, CCMenuItemImageLambda::create("bo_inactive.png", "bo_inactive.png", nullptr),
-		CCMenuItemImageLambda::create("bo_active.png", "bo_active.png", nullptr), NULL);
+																									CCMenuItemImageLambda::create("bo_active.png", "bo_active.png", nullptr), NULL);
 	gababo->addChild(m_bo, 1);
 
 	initAnimation();
 
-	m_ba->setSelectedIndex(1);
+//	m_ba->setSelectedIndex(1);
 	
 	m_computerThinkSprites[kAttackGa] = CCSprite::create("ga.png");
 	m_computerThinkSprites[kAttackBa] = CCSprite::create("ba.png");
@@ -294,25 +479,10 @@ void GaBaBo::update(float dt)
 	}
 		
 	
-	
-	if(m_remainTime <= 3.5f && m_gababoCountShowing == false)
-	{
-		CCSprite* gababoCount = KS::loadCCBI<CCSprite*>(this, "gababo_count.ccbi").first;
-		gababoCount->setPosition(ccp(240, 160));
-		addChild(gababoCount, 4);
-		m_gababoCountShowing = true;
-	}
-	if(ps.getResult() == 0 && m_lastChangeTime + 1 < getCurrentTimeStamp())
+	if(m_lastChangeTime + 0.1f < getCurrentTimeStamp()) // 0.2 초 마다 바뀜
 	{
 		m_lastChangeTime = getCurrentTimeStamp();
-		do
-		{
-			int v = ks19937::getIntValue(1, 3);
-			int oldThink = m_computerThink;
-			m_computerThink = v;
-			if(oldThink != v)
-				break;
-		}while(1);
+		m_computerThink = (m_computerThink + 1) % 3 + 1;
 		for(auto i : m_computerThinkSprites)
 		{
 			i.second->setVisible(false);
@@ -321,170 +491,6 @@ void GaBaBo::update(float dt)
 	}
 
 	m_remainTimeFnt->setString(boost::str(boost::format("%||") % m_remainTime).c_str());
-	if(m_remainTime <= 0 && m_resultShowing == false)
-	{
-		m_resultShowing = true;
-		m_ba->setEnabled(false);
-		m_ga->setEnabled(false);
-		m_bo->setEnabled(false);
-		int mySelect = 1;
-		if(m_ba->getSelectedIndex() == 1)
-		{
-			mySelect = kAttackBa;
-		}
-		if(m_ga->getSelectedIndex() == 1)
-		{
-			mySelect = kAttackGa;
-		}
-		if(m_bo->getSelectedIndex() == 1)
-		{
-			mySelect = kAttackBo;
-		}
-
-		int D = mySelect - m_computerThink % 3;
-		std::string resultString;
-		int gameResult = 1;
-		
-		
-		CCSprite* result;
-		if(mySelect == m_computerThink) // Draw
-		{
-			resultString = "Draw";
-			gameResult = 1;
-			auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_draw.ccbi");
-			resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
-				resultPair.first->removeFromParent();
-			});
-			result = resultPair.first;
-			result->setPosition(ccp(240, 180));
-			addChild(result, 1);
-			m_drawCount++;
-		}
-		else if(D == 1) // Win
-		{
-			resultString = "You Win";
-			gameResult = 2;
-			auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_win.ccbi");
-			resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
-				resultPair.first->removeFromParent();
-			});
-			result = resultPair.first;
-			result->setPosition(ccp(240, 180));
-			addChild(result, 1);
-			m_winCount++;
-		}
-		else // Lose
-		{
-			resultString = "You Lose";
-			gameResult = 3;
-			auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_lose.ccbi");
-			resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
-				resultPair.first->removeFromParent();
-			});
-			result = resultPair.first;
-			result->setPosition(ccp(240, 180));
-			addChild(result, 1);
-			m_loseCount++;
-		}
-		
-		if(gameResult == 2)
-		{
-			addChild(KSTimer::create(3.0f, [=](){
-				hidingAnimation();
-			}));
-		}
-		addChild(KSTimer::create(4.f, [=](){
-			
-			// Draw
-			if(gameResult == 1)
-			{
-				initGameTime();
-				m_resultShowing = false;
-				m_ba->setEnabled(true);
-				m_ga->setEnabled(true);
-				m_bo->setEnabled(true);
-				scheduleUpdate();
-				
-			}
-			// Win
-			else if(gameResult == 2)
-			{
-				if(m_winCount == 0)
-				{
-					addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46), 0.6f, [=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					},[=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					}));
-					
-				}
-				else if(m_winCount == 1)
-				{
-					addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46 + 56), 0.6f, [=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					},[=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					}));
-				}
-				else if(m_winCount == 2)
-				{
-					addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46 + 56 + 56), 0.6f, [=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					},[=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					}));
-				}
-				else if(m_winCount == 3)
-				{
-					addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), ccp(60, 46 + 56 + 56 + 56), 0.6f, [=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					},[=](CCPoint t){
-						m_currentRewardCursor->setPosition(t);
-					}));
-				}
-				
-				if(m_winCount == 3)
-				{
-					addChild(KSTimer::create(0.7f, [=](){
-						showResult();
-					}));
-				}
-				else
-				{
-					addChild(KSTimer::create(0.7f, [=](){
-						auto lightPair = KS::loadCCBI<CCSprite*>(this, "gabaao_effect.ccbi");
-						CCSprite* light = lightPair.first;
-						lightPair.second->setAnimationCompletedCallbackLambda(this, [=](){
-							light->removeFromParent();
-						});
-						light->setPosition(ccp(240, 160));
-						addChild(light, 100);
-						
-						addChild(KSTimer::create(0.9f, [=](){
-							addChild(KSTimer::create(1.3f, [=](){
-								initAnimation();
-							}));
-							m_ba->setEnabled(true);
-							m_ga->setEnabled(true);
-							m_bo->setEnabled(true);
-							initGameTime();
-							m_resultShowing = false;
-							m_step++;
-							this->loadImage(m_step);
-							scheduleUpdate();
-						}));
-					}));
-					
-				}
-			}
-			// Lose
-			else
-			{
-				showResult();
-			}
-		}));
-		unscheduleUpdate();
-	}
 }
 
 void GaBaBo::showResult()

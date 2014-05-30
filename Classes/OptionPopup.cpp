@@ -34,7 +34,8 @@
 
 #include "CouponPopup.h"
 #include "StyledLabelTTF.h"
-
+#include "FormSetter.h"
+#include "OnePercentGame.h"
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -81,22 +82,91 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
-	
-//	Json::Value param;
-//	param["productid"] = "g_10289_001";
-//	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
-//		if(v["issuccess"].asInt())
-//		{
-////			reqItemDelivery(); // ;
-//			Json::Value param;
-//			param["memberID"] = hspConnector::get()->getMemberID();
-//			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
-//				// 여기서 진짜 갱신.
-//				KS::KSLog("refresh !!!!", t);
-//			});
-//		}
-//		KS::KSLog("in-app test \n%", v);
-//	});
+
+//	Json::Value value1, value2, value3, value4, value5, value6;
+//	value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
+//	value1["font"] = mySGD->getFont().c_str();
+//	value1["size"] = 15.f;
+//	value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
+//	value2["font"] = mySGD->getFont().c_str();
+//	value2["size"] = 15.f;
+//
+//	value3["linebreak"] = true;
+//	value3["linespacing"] = 30.f;
+//	
+//	value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
+//	value4["font"] = mySGD->getFont2();
+//	value4["size"] = 20.f;
+//	
+//	value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
+//	value5["font"] = mySGD->getFont2();
+//	value5["size"] = 25.f;
+//	
+//	
+//	StyledLabelTTF* slttf = StyledLabelTTF::create({
+//		{"가을하늘공활한데", value1.toStyledString()},
+//		{"높고구름없이", value2.toStyledString()},
+//		{"", value3.toStyledString()},
+//		{"밝은달은우리가슴", value4.toStyledString()},
+//		{"일편단심일세", value5.toStyledString()},
+//		{"", value3.toStyledString()}
+//	}, StyledAlignment::kCenterAlignment);
+//	slttf->setPosition(ccp(240, 320));
+//	slttf->setOldAnchorPoint();
+//	
+//	startFormSetter(this);
+//	setFormSetter(slttf);
+//	addChild(slttf);
+//	{
+//		Json::Value value1, value2, value3, value4, value5, value6;
+//		value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
+//		value1["font"] = mySGD->getFont().c_str();
+//		value1["size"] = 15.f;
+//		value2["fillcolor"] = StyledLabelTTF::makeRGB(0, 255, 0);
+//		value2["font"] = mySGD->getFont().c_str();
+//		value2["size"] = 15.f;
+//		
+//		value3["linebreak"] = true;
+//		value3["linespacing"] = 30.f;
+//		
+//		value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
+//		value4["font"] = mySGD->getFont2();
+//		value4["size"] = 20.f;
+//		
+//		value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
+//		value5["font"] = mySGD->getFont2();
+//		value5["size"] = 25.f;
+//		
+//		
+//		StyledLabelTTF* slttf = StyledLabelTTF::create({
+//			{"동해물과백두산이", value1.toStyledString()},
+//			{"마르고닳도록", value2.toStyledString()},
+//			{"", value3.toStyledString()},
+//			{"하느님이보우하사", value4.toStyledString()},
+//			{"우리나라만세", value5.toStyledString()},
+//			{"", value3.toStyledString()}
+//		}, StyledAlignment::kLeftAlignment);
+//		slttf->setPosition(ccp(0, 160));
+//		addChild(slttf);
+//	}
+//	OnePercentGame* opg = OnePercentGame::create(0.998, nullptr, nullptr);
+//	addChild(opg, 9999);
+//	return true;
+	Json::Value param;
+	param["productid"] = "g_10289_001";
+	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+		if(v["issuccess"].asInt())
+		{
+//			reqItemDelivery(); // ;
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getMemberID();
+			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
+				// 여기서 진짜 갱신.
+				KS::KSLog("refresh !!!!", t);
+			});
+		}
+		KS::KSLog("in-app test \n%", v);
+	});
 	
 	setTouchEnabled(true);
 	
@@ -544,7 +614,7 @@ bool OptionPopup::init()
 void OptionPopup::onEnter()
 {
 	CCLayer::onEnter();
-	showPopup();
+//	showPopup();
 }
 
 void OptionPopup::showPopup()

@@ -52,7 +52,7 @@ bool OnePercentGame::init()
 bool OnePercentGame::init(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha)
 {
 	CCLayer::init();
-	//		startFormSetter(this);
+	startFormSetter(this);
 	setTouchEnabled(true);
 	m_validSize = 50;
 	m_cancelGacha = cancelGacha;
@@ -96,22 +96,15 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	currentGainArea->setPosition(ccp(0, 80));
 	m_container->addChild(currentGainArea, kOnePercentGame_Z_content);
 	
-	CCSprite* heart1 = CCSprite::create("one_percent_gacha_heart_0.png");
-	m_container->addChild(heart1, kOnePercentGame_Z_content);
+	StyledLabelTTF* desc2 = StyledLabelTTF::create(
+			CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
+			mySGD->getFont().c_str(), 12.f, 0, StyledAlignment::kCenterAlignment);
+	m_container->addChild(desc2, kOnePercentGame_Z_content);
+	desc2->setPosition(ccp(0.0,-36.5)); 			// dt (0.0,-36.5)
+	m_desc2 = desc2;
+	setFormSetter(desc2);
 	
-	CCSprite* heart2 = CCSprite::create("one_percent_gacha_heart_0.png");
-	m_container->addChild(heart2, kOnePercentGame_Z_content);
-	
-	CCSprite* heart3 = CCSprite::create("one_percent_gacha_heart_0.png");
-	m_container->addChild(heart3, kOnePercentGame_Z_content);
-	
-	heart1->setPosition(ccp(-50, -40));
-	heart2->setPosition(ccp(0, -40));
-	heart3->setPosition(ccp(50, -40));
-	
-	m_heart1 = heart1;
-	m_heart2 = heart2;
-	m_heart3 = heart3;
+		
 	CCSprite* progress_back = CCSprite::create("one_percent_gacha_graph_back.png");
 	progress_back->setPosition(ccp(0,10));
 	m_container->addChild(progress_back, kOnePercentGame_Z_content);
@@ -207,6 +200,54 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 																		14.f);
 	m_lblPercent->setPosition(ccp(0, 0));
 	m_container->addChild(m_lblPercent, kOnePercentGame_Z_content);
+	
+//	{
+//		auto stencil = CCScale9Sprite::create("one_percent_gacha_06.png", CCRectMake(0, 0, 13, 176), CCRectMake(5, 5, 3, 165));
+//		stencil->setContentSize(CCSizeMake(13, 100));
+//		
+//		m_container->addChild(stencil, kOnePercentGame_Z_content);
+//	}
+	CCNode* tempNode = CCNode::create();
+	CCSprite* graphBack = CCSprite::create("one_percent_gacha_04.png");
+	tempNode->addChild(graphBack);
+	graphBack->setPosition(ccp(0.0, 0));
+	CCClippingNode* cNode = CCClippingNode::create();
+	m_closer = cNode;
+	auto stencil = CCScale9Sprite::create("one_percent_gacha_06.png", CCRectMake(0, 0, 13, graphHeight), CCRectMake(5, 5, 3, 165));
+	stencil->setContentSize(CCSizeMake(13, graphHeight));
+	stencil->setAnchorPoint(ccp(0.5f, 0.0f));
+
+	cNode->setStencil(stencil);
+	m_stencil = stencil;
+	CCSprite* gradient = CCSprite::create("one_percent_gacha_05.png");
+	cNode->addChild(gradient);
+	m_gradient = gradient;
+	stencil->setPositionY(-gradient->getContentSize().height / 2.f);
+	
+	cNode->setAlphaThreshold(0.1f);
+	tempNode->addChild(cNode, kOnePercentGame_Z_content);
+	m_container->addChild(tempNode, kOnePercentGame_Z_content);
+	tempNode->setPosition(ccp(61.5,22.5)); 			// dt (-33.5,0.0)
+	
+	KSLabelTTF* _100 = KSLabelTTF::create("100.0%", mySGD->getFont().c_str(), 14.f);
+	_100->setColor(ccc3(255, 0, 0));
+	tempNode->addChild(_100, kOnePercentGame_Z_content);
+	KSLabelTTF* _99 = KSLabelTTF::create("99.0%", mySGD->getFont().c_str(), 14.f);
+	_99->setColor(ccc3(255, 255, 0));
+	tempNode->addChild(_99, kOnePercentGame_Z_content);
+	_100->setPosition(ccp(32.0,60.0)); 			// dt (-61.0,-21.5)Cocos2d:
+	_99->setPosition(ccp(32.0,-44.0)); 			// dt (-61.5,-22.0)Cocos2d:
+	stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
+	m_graphNode = tempNode;
+	m_graphNode->setVisible(false);
+	setFormSetter(_100);
+	setFormSetter(_99);
+	setFormSetter(tempNode);
+	setFormSetter(gradient);
+	setFormSetter(cNode);
+	setFormSetter(graphBack);
+	setFormSetter(stencil);
+	
 	this->scheduleUpdate();
 	return true;
 }
@@ -230,8 +271,9 @@ void OnePercentGame::gameUISetting()
 	int t_grade = 3;
 	if(mySGD->is_exchanged)
 		t_grade = 4;
-	
 	CCSprite* girl = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))->getCString());
+	if(girl == nullptr)
+		girl = CCSprite::create("_0514_start_1.png");
 	cNode->addChild(girl);
 	girl->setScale(130 / girl->getContentSize().width);
 	//		setFormSetter(girl);
@@ -252,13 +294,6 @@ void OnePercentGame::gameUISetting()
 	gacha_button->getTitleLabel()->removeAllChildren();
 	
 	gacha_button->getTitleLabel()->addChild(stopFnt);
-	//gacha_button = CCControlButton::create(stopFnt, gacha_back);
-	//gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGame::gachaAction), CCControlEventTouchUpInside);
-	//gacha_button->setPreferredSize(CCSizeMake(170,65));
-	//gacha_button->setPosition(ccp(0, -100));
-	//m_container->addChild(gacha_button, kOnePercentGame_Z_content);
-	//gacha_button->setTouchPriority(-180);
-	
 	m_container->addChild(tempNode, kOnePercentGame_Z_content);
 	tempNode->setPosition(ccp(0, 30));
 	tempNode->setScale(0.7f);
@@ -288,6 +323,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					// 무료 아템으로 구매.
 					gameUISetting();
 					m_99State = 2;
+					m_graphNode->setVisible(true);
 				}
 				else
 				{
@@ -313,6 +349,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					// 루비로 구매.
 					gameUISetting();
 					m_99State = 2;
+					m_graphNode->setVisible(true);
 				}
 				else
 				{
@@ -353,35 +390,62 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				
 				m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
 			}));
-			addChild(KSTimer::create(1.0f, [=](){
-				scheduleUpdate();
-			}));
+			
 			addChild(KSTimer::create(1.5f, [=](){
 				m_touchEnable = true;
 			}));
 			
 			if(fabsf(pos) <= m_validSize / 2.f)
 			{
-				m_totalPercent += 0.3f;
-				addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), m_shutter->getPositionY() + 30, 1.f, [=](float t){
-					m_shutter->setPositionY(t);
-				}, [=](float t){
-					m_shutter->setPositionY(t);
-					
+				m_totalPercent += 0.003f;
+				m_totalPercent = MIN(1.f, m_totalPercent);
+//				auto stencil = CCScale9Sprite::create("one_percent_gacha_06.png", CCRectMake(0, 0, 13, graphHeight), CCRectMake(5, 5, 3, 165));
+//				stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
+//				stencil->setAnchorPoint(ccp(0.5f, 0.0f));
+//				stencil->setPositionY(-m_gradient->getContentSize().height / 2.f);
+//				m_closer->setStencil(stencil);
+				
+				m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
+				if(m_totalPercent >= 1.f)
+				{
+					unscheduleUpdate();
+					m_touchEnable = false;
+					m_99State = 999;
+					addChild(KSTimer::create(1.5f, [=](){
+						m_touchEnable = true;
+						float upLimit = 175;
+						addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
+							m_shutter->setPositionY(t);
+						}, [=](float t){
+							m_shutter->setPositionY(t);
+						}));
+						showSuccess();
+					}));
 				}
-																							 ));
-				addChild(KSTimer::create(0.f, [=](){
-					CCSprite* heart = CCSprite::create("one_percent_gacha_heart_1.png");
-					heart->setPosition(m_heart1->getPosition());
-					m_container->addChild(heart, kOnePercentGame_Z_content);
-				}));
+				else
+				{
+					addChild(KSTimer::create(0.f, [=](){
+						m_desc2->removeFromParent();
+						StyledLabelTTF* desc2 = StyledLabelTTF::create(
+																													 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 2, 0.3f)->getCString(),
+																													 mySGD->getFont().c_str(), 12.f, 0, StyledAlignment::kCenterAlignment);
+						m_container->addChild(desc2, kOnePercentGame_Z_content);
+						m_desc2 = desc2;
+						desc2->setPosition(ccp(0.0,-36.5)); 			// dt (0.0,-36.5)
+					}));
+				}
 				
 				
 			}
 			else
 			{
 				// 실패했을 경우.
-				//					showFail();
+			}
+			if(m_99State != 999)
+			{
+				addChild(KSTimer::create(1.0f, [=](){
+					scheduleUpdate();
+				}));
 			}
 			m_validSize -= 20;
 		}
@@ -400,9 +464,6 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
 			}));
 			
-			addChild(KSTimer::create(1.0f, [=](){
-				scheduleUpdate();
-			}));
 			addChild(KSTimer::create(1.5f, [=](){
 				m_touchEnable = true;
 			}));
@@ -410,25 +471,58 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			
 			if(fabsf(pos) <= m_validSize / 2.f)
 			{
-				m_totalPercent += 0.3f;
-				addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), m_shutter->getPositionY() + 60, 1.f, [=](float t){
-					m_shutter->setPositionY(t);
-				}, [=](float t){
-					m_shutter->setPositionY(t);
+				m_totalPercent += 0.003f;
+				m_totalPercent = MIN(1.f, m_totalPercent);
+				
+//				auto stencil = CCScale9Sprite::create("one_percent_gacha_06.png", CCRectMake(0, 0, 13, graphHeight), CCRectMake(5, 5, 3, 165));
+//				stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
+//				stencil->setAnchorPoint(ccp(0.5f, 0.0f));
+//				stencil->setPositionY(-m_gradient->getContentSize().height / 2.f);
+//				m_closer->setStencil(stencil);
+				m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
+				if(m_totalPercent >= 1.f)
+				{
+					unscheduleUpdate();
+					m_touchEnable = false;
+					m_99State = 999;
+					addChild(KSTimer::create(1.5f, [=](){
+						m_touchEnable = true;
+						float upLimit = 175;
+						addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
+							m_shutter->setPositionY(t);
+						}, [=](float t){
+							m_shutter->setPositionY(t);
+						}));
+						
+						showSuccess();
+					}));
 				}
-																							 ));
-				addChild(KSTimer::create(0.f, [=](){
-					CCSprite* heart = CCSprite::create("one_percent_gacha_heart_1.png");
-					heart->setPosition(m_heart2->getPosition());
-					m_container->addChild(heart, kOnePercentGame_Z_content);
-				}));
+				else
+				{
+					addChild(KSTimer::create(0.f, [=](){
+						m_desc2->removeFromParent();
+						StyledLabelTTF* desc2 = StyledLabelTTF::create(
+																													 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 1, 0.4f)->getCString(),
+																													 mySGD->getFont().c_str(), 12.f, 0, StyledAlignment::kCenterAlignment);
+						m_container->addChild(desc2, kOnePercentGame_Z_content);
+						desc2->setPosition(ccp(0.0,-36.5)); 			// dt (0.0,-36.5)
+						m_desc2 = desc2;
+					}));
+				}
+					
+				
 				
 				
 			}
 			else
 			{
 				// 실패했을 경우.
-				//					showFail();
+			}
+			if(m_99State != 999)
+			{
+				addChild(KSTimer::create(1.0f, [=](){
+					scheduleUpdate();
+				}));
 			}
 			m_validSize -= 18;
 		}
@@ -447,13 +541,20 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			
 			if(fabsf(pos) <= m_validSize / 2.f)
 			{
-				m_totalPercent += 0.4f;
+				m_totalPercent += 0.004f;
+				m_totalPercent = MIN(1.f, m_totalPercent);
+//				auto stencil = CCScale9Sprite::create("one_percent_gacha_06.png", CCRectMake(0, 0, 13, graphHeight), CCRectMake(5, 5, 3, 165));
+//				stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
+//				stencil->setAnchorPoint(ccp(0.5f, 0.0f));
+//				stencil->setPositionY(-m_gradient->getContentSize().height / 2.f);
+//				m_closer->setStencil(stencil);
+				m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
 				//					m_99State = 777; // 성공
 				float upLimit;
 				if(m_totalPercent >= 1.f)
 					upLimit = 175;
 				else
-					upLimit = m_shutter->getPositionY() + 85;
+					upLimit = m_shutter->getPositionY();
 				
 				addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
 					m_shutter->setPositionY(t);
@@ -462,15 +563,11 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				}
 																							 ));
 				addChild(KSTimer::create(0.f, [=](){
-					CCSprite* heart = CCSprite::create("one_percent_gacha_heart_1.png");
-					heart->setPosition(m_heart3->getPosition());
-					m_container->addChild(heart, kOnePercentGame_Z_content);
 				}));
 			}
 			else
 			{
 				// 실패했을 경우.
-				//					showFail();
 			}
 			
 			addChild(KSTimer::create(1.5f, [=](){
@@ -514,7 +611,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 		{
 			if(m_resultGacha)
 			{
-				m_resultGacha(MAX(1.f, m_totalPercent)); // 100% 로 설정함!
+				m_resultGacha(MIN(1.f, m_totalPercent)); // 100% 로 설정함!
 				removeFromParent();
 			}
 		}
