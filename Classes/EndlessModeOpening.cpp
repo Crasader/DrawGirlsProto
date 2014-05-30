@@ -945,7 +945,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		score_label->setColor(ccc3(255, 170, 20));
 		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		score_label->setPosition(ccp(170,18));
+		score_label->setPosition(ccp(180,18));
 		list_cell_case->addChild(score_label);
 		
 		KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
