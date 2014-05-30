@@ -65,6 +65,7 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	
 	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_cardLockedMent1+t_step-1)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 	setFormSetter(slttf);
+	slttf->setOldAnchorPoint();
 	slttf->setPosition(ccp(0,5));
 	m_container->addChild(slttf);
 	

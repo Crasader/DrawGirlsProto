@@ -134,7 +134,7 @@ public:
 			}, StyledAlignment::kCenterAlignment);
 			content_front->setPosition(ccp(m_contentBack->getContentSize().width/2.f, m_contentBack->getContentSize().height/2.f-2));
 			m_contentBack->addChild(content_front);
-			
+			content_front->setOldAnchorPoint();
 
 
 		}
@@ -152,7 +152,9 @@ public:
 				{"", value3.toStyledString()}
 			}, StyledAlignment::kCenterAlignment);
 			content_front->setPosition(ccp(m_contentBack->getContentSize().width/2.f, m_contentBack->getContentSize().height/2.f-2));
+			content_front->setOldAnchorPoint();
 			m_contentBack->addChild(content_front);
+			
 		}
 		
 		showPopup(nullptr);

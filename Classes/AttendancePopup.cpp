@@ -145,6 +145,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	slttf->setPosition(ccp(back_case->getContentSize().width/2.f,80));
 	back_in->addChild(slttf);
 	
+	slttf->setOldAnchorPoint();
 	
 	
 	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);

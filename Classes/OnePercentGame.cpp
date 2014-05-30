@@ -84,11 +84,13 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	
 	StyledLabelTTF* desc = StyledLabelTTF::create("<font color=999 size=11 newline=20>영역뽑기를 통해</font><font color=999 size=11>부족한 영역을 채워 </font><font color=900 size=11>100%에 도전 하세요.</font>",
 																								mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
+	desc->setOldAnchorPoint();
 	m_container->addChild(desc, kOnePercentGame_Z_content);
 	m_desc = desc;
 	desc->setPosition(0, 40);
 	
 	StyledLabelTTF* currentGainArea = StyledLabelTTF::create("<font color=999 size=18>현재 획득영역  </font><font color=990 size=30 strokecolor=000 strokesize=2 tag=1>99.9%</font>", mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
+	currentGainArea->setOldAnchorPoint();
 	m_currentGainArea = currentGainArea;
 	currentGainArea->getLabelByTag(1)->setString(boost::str(boost::format("%|4.3|%%") % (recent_percent * 100.f)).c_str());
 	currentGainArea->setPosition(ccp(0, 80));

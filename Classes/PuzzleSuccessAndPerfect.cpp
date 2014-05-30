@@ -77,10 +77,12 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 	}
 	
 	StyledLabelTTF* title_label = StyledLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 21, 299, StyledAlignment::kCenterAlignment);
+	title_label->setOldAnchorPoint();
 	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	ment_label->setOldAnchorPoint();
 	ment_label->setPosition(ccp(0,50));
 	m_container->addChild(ment_label);
 	
