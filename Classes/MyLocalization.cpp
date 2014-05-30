@@ -659,6 +659,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("알림"), kMyLocalKey_noti);
 	ko->setObject(CCString::create("푸쉬알림"), kMyLocalKey_pushNoti);
 	ko->setObject(CCString::create("메세지알림"), kMyLocalKey_messageNoti);
+	ko->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
+	ko->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ko->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	ko->setObject(CCString::create("회원ID : "), kMyLocalKey_memberID);
 	ko->setObject(CCString::create("게임버젼 : "), kMyLocalKey_gameversion);
@@ -1279,6 +1281,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	en->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	en->setObject(CCString::create("Message Alarm"), kMyLocalKey_messageNoti);
+	en->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
+	en->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	en->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	en->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);
 	en->setObject(CCString::create("Version : "), kMyLocalKey_gameversion);
@@ -1900,6 +1904,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	ja->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	ja->setObject(CCString::create("Message Alarm"), kMyLocalKey_messageNoti);
+	ja->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
+	ja->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ja->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	ja->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);
 	ja->setObject(CCString::create("Version : "), kMyLocalKey_gameversion);

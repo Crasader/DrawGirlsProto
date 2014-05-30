@@ -188,6 +188,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_pushNoti,
 	kMyLocalKey_messageNoti,
 	kMyLocalKey_giftboxAlert,
+	kMyLocalKey_getgift,
+	kMyLocalKey_nogift,
 	kMyLocalKey_memberID,
 	kMyLocalKey_gameversion,
 	kMyLocalKey_withdraw,
