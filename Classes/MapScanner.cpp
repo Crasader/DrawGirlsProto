@@ -1164,11 +1164,11 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 	addChild(t_spr);
 	
-	myTR->addAliveNode(t_spr, [=]()
-					   {
-						   t_spr->setNonEffect();
-						   t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
-					   });
+//	myTR->addAliveNode(t_spr, [=]()
+//					   {
+//						   t_spr->setNonEffect();
+//						   t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+//					   });
 	
 //	CCRenderTexture* t_render = CCRenderTexture::create(320, 430);
 //	t_render->setPosition(ccp(160,215));

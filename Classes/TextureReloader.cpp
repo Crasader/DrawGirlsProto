@@ -35,7 +35,7 @@ void TextureReloader::reloadTexture()
 {
 	for(auto iter = alive_list.begin();iter != alive_list.end();iter++)
 	{
-		(*iter)->reloadAction();
+//		(*iter)->reloadAction();
 	}
 }
 
