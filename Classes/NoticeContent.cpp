@@ -62,6 +62,7 @@ void NoticeContent::loadNotice(){
 		string str = notice_list[ing_close_cnt].get("content", "").asString();
 		
 		stTxt = StyledLabelTTF::create(str.c_str(),mySGD->getFont().c_str(),13,999, StyledAlignment::kCenterAlignment);
+		stTxt->setOldAnchorPoint();
 		stTxt->setPosition(ccp(0, 110));
 		addChild(stTxt,10000);
 		

@@ -1417,7 +1417,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 																													sub_label->setPosition(ccp(0.0,-0.5)); 			// dt (0.0,-13.5)
 																													t_container->addChild(sub_label);
-																													
+																													sub_label->setOldAnchorPoint();
 
 
 																													
@@ -1520,7 +1520,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 	if(tag == 0)
 	{
 		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
-		
+		content_label->setOldAnchorPoint();
 		
 		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800, myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), (CCNode*)content_label, [=](){is_menu_enable = true;},CCPointZero,true);
 		
@@ -1870,6 +1870,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 				
 				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 				sub_label->setPosition(ccp(0,-10));
+				sub_label->setOldAnchorPoint();
 				t_container->addChild(sub_label);
 				
 				CCSprite* gray = t_popup->getDimmedSprite();

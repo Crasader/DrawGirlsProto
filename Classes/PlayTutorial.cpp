@@ -1562,6 +1562,7 @@ void PlayTutorial::nextStep()
 						  addChild(ment_box, 4);
 						  
 						  StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_tutorial7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+							ment_label->setOldAnchorPoint();
 						  ment_label->setPosition(ccp(ment_box->getContentSize().width/2.f, ment_box->getContentSize().height/2.f));
 						  ment_box->addChild(ment_label);
 						  

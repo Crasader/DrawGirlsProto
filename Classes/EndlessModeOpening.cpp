@@ -1159,6 +1159,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	record_content = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue2), win_count, lose_count, win_rate)->getCString(),
 																					mySGD->getFont().c_str(),
 																					13.f, 0, StyledAlignment::kRightAlignment);
+	record_content->setOldAnchorPoint();
 	record_content->setPosition(ccp(record_back->getContentSize().width-10, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_content);
 //	record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());

@@ -218,6 +218,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	if(mission_type == kCLEAR_bossLifeZero)
 	{
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		main_ment->setOldAnchorPoint();
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
 		mission_back->addChild(main_ment);
 		
@@ -232,10 +233,12 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setOldAnchorPoint();
 		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
 		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		main_ment->setOldAnchorPoint();
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
@@ -251,10 +254,12 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setOldAnchorPoint();
 		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
 		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		main_ment->setOldAnchorPoint();
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
@@ -269,10 +274,12 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setOldAnchorPoint();
 		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
 		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		main_ment->setOldAnchorPoint();
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
@@ -315,10 +322,12 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setOldAnchorPoint();
 		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
 		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		main_ment->setOldAnchorPoint();
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 		mission_back->addChild(main_ment);
 		
@@ -331,6 +340,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	else if(mission_type == kCLEAR_sequenceChange)
 	{
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		main_ment->setOldAnchorPoint();
 		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
 		mission_back->addChild(main_ment);
 		
@@ -457,6 +467,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 		if(mission_type == kCLEAR_bossLifeZero)
 		{
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+			main_ment->setOldAnchorPoint();
 			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
 			mission_back->addChild(main_ment);
 			
@@ -478,11 +489,13 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 			int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setOldAnchorPoint();
 			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
 			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
+			main_ment->setOldAnchorPoint();
 			mission_back->addChild(main_ment);
 			
 //			CCSprite* catch_count_img = CCSprite::create("mission_catch_count.png");
@@ -505,10 +518,12 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
+			t_condition_label->setOldAnchorPoint();
 			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
+			main_ment->setOldAnchorPoint();
 			mission_back->addChild(main_ment);
 			
 //			CCSprite* count_img = CCSprite::create("mission_count.png");
@@ -529,10 +544,12 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 			int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setOldAnchorPoint();
 			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
 			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+			main_ment->setOldAnchorPoint();
 			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
 			mission_back->addChild(main_ment);
 			
@@ -577,10 +594,12 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
+			t_condition_label->setOldAnchorPoint();
 			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
+			main_ment->setOldAnchorPoint();
 			mission_back->addChild(main_ment);
 			
 //			CCSprite* count_img = CCSprite::create("mission_time.png");
@@ -601,7 +620,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode()
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
 			mission_back->addChild(main_ment);
-			
+			main_ment->setOldAnchorPoint();
 //			CCLabelTTF* main1_ment = CCLabelTTF::create("게임 중 나오는 ", mySGD->getFont().c_str(), 17);
 //			main1_ment->setAnchorPoint(ccp(1,0.5));
 //			main1_ment->setPosition(ccp(mission_back->getContentSize().width/2.f-13, mission_back->getContentSize().height/2.f+20));

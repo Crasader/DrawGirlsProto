@@ -72,6 +72,7 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	
 	
 	StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
+	content_label->setOldAnchorPoint();
 	content_label->setPosition(ccp(0,40));
 	m_container->addChild(content_label);
 	
