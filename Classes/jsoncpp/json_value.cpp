@@ -939,6 +939,8 @@ Value::asBool() const
    case booleanValue:
       return value_.bool_;
    case stringValue:
+			 if(strcmp(value_.string_,"true"))return true;
+			 if(strcmp(value_.string_,"false"))return false;
       return value_.string_  &&  value_.string_[0] != 0;
    case arrayValue:
    case objectValue:
