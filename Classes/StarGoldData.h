@@ -149,7 +149,8 @@ enum ReplayKey
 	kReplayKey_comboScore,
 	kReplayKey_lifeBonusCnt,
 	kReplayKey_takeArea,
-	kReplayKey_scoreAttackedValue
+	kReplayKey_scoreAttackedValue,
+	kReplayKey_stageNo
 };
 
 enum GoodsType

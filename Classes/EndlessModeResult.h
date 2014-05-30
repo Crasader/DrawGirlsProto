@@ -47,6 +47,8 @@ private:
 	CCSprite* gray;
 	CCScale9Sprite* main_case;
 	
+	CCSprite* result_stamp;
+	
 	LoadingLayer* ready_loading;
 	
 	KSLabelTTF* n_stop_label2;

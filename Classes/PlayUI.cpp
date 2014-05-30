@@ -26,7 +26,8 @@ ComboView * ComboView::create (int combo)
 void ComboView::changeCombo (int combo)
 {
 	combo_label->setString(CCString::createWithFormat("%d", combo)->getCString());
-	combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
+	if(!mySGD->is_endless_mode)
+		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 }
 void ComboView::setPercentage (float t_percent)
 {
@@ -42,16 +43,31 @@ void ComboView::myInit (int combo)
 //	combo_timer->setPosition(ccp(getContentSize().width/2.f-5, getContentSize().height/2.f));
 //	addChild(combo_timer);
 	
-	
-	combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
-	combo_label->setAnchorPoint(ccp(1,0.5f));
-	combo_label->setPosition(ccp(-22,-17));
-	addChild(combo_label);
-	
-	combo_front = CCSprite::create("combo_front.png");
-	combo_front->setAnchorPoint(ccp(1,0.5f));
-	combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
-	addChild(combo_front);
+	if(mySGD->is_endless_mode)
+	{
+		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+		combo_label->setAnchorPoint(ccp(0.5f,0.5f));
+		combo_label->setPosition(ccp(0,0));
+		addChild(combo_label);
+		
+		combo_front = CCSprite::create("combo_front.png");
+		combo_front->setAnchorPoint(ccp(0.5f,0.5f));
+		combo_front->setPosition(ccp(0,-10));
+		combo_front->setScale(0.5f);
+		addChild(combo_front);
+	}
+	else
+	{
+		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+		combo_label->setAnchorPoint(ccp(1,0.5f));
+		combo_label->setPosition(ccp(-22,-17));
+		addChild(combo_label);
+		
+		combo_front = CCSprite::create("combo_front.png");
+		combo_front->setAnchorPoint(ccp(1,0.5f));
+		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
+		addChild(combo_front);
+	}
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
 {
@@ -71,11 +87,15 @@ void ComboParent::showCombo (int t_combo)
 	{
 		ComboView* t_cv = ComboView::create(t_combo);
 		t_cv->setScale(1.f/1.5f);
-		t_cv->setPosition(ccpAdd(ccp(480-8,myDSH->ui_top-13), ccp(20,-45)));
+		
+		if(mySGD->is_endless_mode)
+			t_cv->setPosition(ccp(40,myDSH->ui_center_y+70));
+		else
+			t_cv->setPosition(ccpAdd(ccp(480-8,myDSH->ui_top-13), ccp(20,-45)));
 		addChild(t_cv,0,1);// 1 : ComboView
 	}
 	
-	keeping_frame = 500;
+	keeping_frame = 300;
 	if(!is_keeping)
 		startKeep();
 }
@@ -1553,58 +1573,92 @@ bool PlayUI::getIsExchanged ()
 
 void PlayUI::addScoreAttack(int t_damage)
 {
-	ccColor4F t_color;
-	if(score_attack_damage.getV() < 3000)
+	if(!bomb_img)
 	{
-		t_color = ccc4f(1.f, 1.f, 1.f, 1.f);
-	}
-	else if(score_attack_damage.getV() < 6000)
-	{
-		t_color = ccc4f(1.f, 1.f, 0.f, 1.f);
-	}
-	else if(score_attack_damage.getV() < 9000)
-	{
-		t_color = ccc4f(1.f, 0.5f, 0.f, 1.f);
-	}
-	else
-	{
-		t_color = ccc4f(1.f, 0.f, 0.f, 1.f);
+		bomb_img = CCSprite::create("endless_bomb.png");
+		bomb_img->setPosition(ccp(40, myDSH->ui_center_y+70));
+		bomb_img->setScale(0.f);
+		addChild(bomb_img,-1);
+		
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.2f);
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 0.9f);
+		CCSequence* t_seq1 = CCSequence::create(t_scale1, t_scale2, NULL);
+		
+		CCRotateTo* t_rotate1 = CCRotateTo::create(0.1f, 15);
+		CCRotateTo* t_rotate2 = CCRotateTo::create(0.15f, -10);
+		CCRotateTo* t_rotate3 = CCRotateTo::create(0.1f, 10);
+		CCRotateTo* t_rotate4 = CCRotateTo::create(0.15f, -15);
+		CCSequence* t_seq2 = CCSequence::create(t_rotate1, t_rotate2, t_rotate3, t_rotate4, NULL);
+		
+		CCSpawn* t_spawn = CCSpawn::create(t_seq1, t_seq2, NULL);
+		
+		CCRepeatForever* t_repeat = CCRepeatForever::create(t_spawn);
+		
+		bomb_img->runAction(t_repeat);
+		
+		addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+											   {
+												   if(bomb_img)
+													   bomb_img->setScale(t);
+											   }, [=](float t)
+											   {
+												   if(bomb_img)
+													   bomb_img->setScale(1.f);
+											   }));
 	}
 	
-	CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(100);
-	particle2->setPositionType(kCCPositionTypeRelative);
-	particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
-	particle2->setEmissionRate(200);
-	particle2->setAngle(180.0);
-	particle2->setAngleVar(180.0);
-	ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
-	particle2->setBlendFunc(blendFunc);
-	particle2->setDuration(0.7);
-	particle2->setEmitterMode(kCCParticleModeRadius);
-	particle2->setStartColor(t_color);
-	particle2->setStartColorVar(ccc4f(0,0,0,0.f));
-	particle2->setEndColor(t_color);
-	particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
-	particle2->setStartSize(10.0);
-	particle2->setStartSizeVar(5.0);
-	particle2->setEndSize(10.0);
-	particle2->setEndSizeVar(2.0);
-	particle2->setRotatePerSecond(40);
-	particle2->setRotatePerSecondVar(10);
-	particle2->setStartRadius(30);
-	particle2->setStartRadiusVar(10);
-	particle2->setEndRadius(2);
-	particle2->setTotalParticles(100);
-	particle2->setLife(0.5);
-	particle2->setLifeVar(0.3);
-	particle2->setStartSpin(0.0);
-	particle2->setStartSpinVar(50.f);
-	particle2->setEndSpin(0.0);
-	particle2->setEndSpinVar(60.f);
-	particle2->setPosVar(ccp(0,0));
-	particle2->setPosition(ccp(40, myDSH->ui_center_y));
-	particle2->setAutoRemoveOnFinish(true);
-	addChild(particle2);
+//	ccColor4F t_color;
+//	if(score_attack_damage.getV() < 3000)
+//	{
+//		t_color = ccc4f(1.f, 1.f, 1.f, 1.f);
+//	}
+//	else if(score_attack_damage.getV() < 6000)
+//	{
+//		t_color = ccc4f(1.f, 1.f, 0.f, 1.f);
+//	}
+//	else if(score_attack_damage.getV() < 9000)
+//	{
+//		t_color = ccc4f(1.f, 0.5f, 0.f, 1.f);
+//	}
+//	else
+//	{
+//		t_color = ccc4f(1.f, 0.f, 0.f, 1.f);
+//	}
+//	
+//	CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(100);
+//	particle2->setPositionType(kCCPositionTypeRelative);
+//	particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+//	particle2->setEmissionRate(200);
+//	particle2->setAngle(180.0);
+//	particle2->setAngleVar(180.0);
+//	ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+//	particle2->setBlendFunc(blendFunc);
+//	particle2->setDuration(0.7);
+//	particle2->setEmitterMode(kCCParticleModeRadius);
+//	particle2->setStartColor(t_color);
+//	particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+//	particle2->setEndColor(t_color);
+//	particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+//	particle2->setStartSize(10.0);
+//	particle2->setStartSizeVar(5.0);
+//	particle2->setEndSize(10.0);
+//	particle2->setEndSizeVar(2.0);
+//	particle2->setRotatePerSecond(40);
+//	particle2->setRotatePerSecondVar(10);
+//	particle2->setStartRadius(30);
+//	particle2->setStartRadiusVar(10);
+//	particle2->setEndRadius(2);
+//	particle2->setTotalParticles(100);
+//	particle2->setLife(0.5);
+//	particle2->setLifeVar(0.3);
+//	particle2->setStartSpin(0.0);
+//	particle2->setStartSpinVar(50.f);
+//	particle2->setEndSpin(0.0);
+//	particle2->setEndSpinVar(60.f);
+//	particle2->setPosVar(ccp(0,0));
+//	particle2->setPosition(ccp(40, myDSH->ui_center_y));
+//	particle2->setAutoRemoveOnFinish(true);
+//	addChild(particle2);
 	
 	score_attack_damage = score_attack_damage.getV() + t_damage;
 	score_attack_keep_frame = 0;
@@ -1619,10 +1673,12 @@ void PlayUI::scoreAttackKeep()
 	{
 		unschedule(schedule_selector(PlayUI::scoreAttackKeep));
 		
+		bomb_img->removeFromParent();
+		bomb_img = NULL;
+		
 		myGD->communication("Main_scoreAttackMissile", score_attack_damage.getV());
 		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_scoreAttackDamage)] = score_attack_damage.getV();
 		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreAttackedValue)] = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_scoreAttackedValue), Json::Value()).asInt() + score_attack_damage.getV();
-		
 		
 		score_attack_damage = 0;
 	}
@@ -1703,7 +1759,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 								 
 								 t_missile->setScale(0.3f);
 								 
-								 addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 																		{
 																			t_missile->setScale(0.3f+t*0.7f);
 																			t_missile->setPosition(ccp(440-t*400, myDSH->ui_center_y));
@@ -2383,6 +2439,8 @@ void PlayUI::myInit ()
 {
 	isGameover = false;
 	
+	bomb_img = NULL;
+	
 	score_value = 0;
 	damaged_score = 0;
 	
@@ -2424,11 +2482,13 @@ void PlayUI::myInit ()
 	thumb_node = CCNode::create();
 	addChild(thumb_node);
 	
-	score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
-	((CountingBMLabel*)score_label)->onChangeScale(false);
+	
 	
 	if(mySGD->is_endless_mode)
 	{
+		score_label = CountingBMLabel::create("0", "endless_score.fnt", 2.f, "%d");
+		((CountingBMLabel*)score_label)->onChangeScale(false);
+		
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		score_label->setAnchorPoint(ccp(0.5f,0.5f));
@@ -2455,6 +2515,9 @@ void PlayUI::myInit ()
 	}
 	else
 	{
+		score_label = CountingBMLabel::create("0", "scorefont.fnt", 2.f, "%d");
+		((CountingBMLabel*)score_label)->onChangeScale(false);
+		
 		score_label->setAnchorPoint(ccp(1,1));
 		score_label->setPosition(ccp(480-8,myDSH->ui_top-13+UI_OUT_DISTANCE));
 		
