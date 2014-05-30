@@ -1095,10 +1095,10 @@ void EndlessModeResult::setMain()
 		{
 			result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																 {
-																	 result_stamp->setOpacity(255-t*155);
+																	 KS::setOpacity(result_stamp, 255-t*155);
 																 }, [=](float t)
 																 {
-																	 result_stamp->setOpacity(100);
+																	 KS::setOpacity(result_stamp, 100);
 																 }));
 			t_suction_layer->removeFromParent();
 		};
@@ -1339,10 +1339,10 @@ void EndlessModeResult::startCalcAnimation()
 																															  {
 																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																													   {
-																																														   result_stamp->setOpacity(255-t*155);
+																																														   KS::setOpacity(result_stamp, 255-t*155);
 																																													   }, [=](float t)
 																																													   {
-																																														   result_stamp->setOpacity(100);
+																																														   KS::setOpacity(result_stamp, 100);
 																																													   }));
 																																  t_suction_layer->removeFromParent();
 																															  };
@@ -1380,10 +1380,10 @@ void EndlessModeResult::startCalcAnimation()
 																															  {
 																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																													   {
-																																														   result_stamp->setOpacity(255-t*155);
+																																														   KS::setOpacity(result_stamp, 255-t*155);
 																																													   }, [=](float t)
 																																													   {
-																																														   result_stamp->setOpacity(100);
+																																														   KS::setOpacity(result_stamp, 100);
 																																													   }));
 																																  t_suction_layer->removeFromParent();
 																															  };
