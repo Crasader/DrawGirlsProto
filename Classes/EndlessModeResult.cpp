@@ -523,6 +523,7 @@ void EndlessModeResult::setMain()
 	n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	n_stop_label2->setColor(ccWHITE);
 	n_stop_label2->setOpacity(100);
+	n_stop_label2->disableOuterStroke();
 	n_stop_label2->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-2));
 	n_stop->addChild(n_stop_label2);
 	
@@ -537,6 +538,7 @@ void EndlessModeResult::setMain()
 	s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
 	s_stop_label2->setColor(ccWHITE);
 	s_stop_label2->setOpacity(100);
+	s_stop_label2->disableOuterStroke();
 	s_stop_label2->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-2));
 	s_stop->addChild(s_stop_label2);
 	
@@ -911,6 +913,7 @@ void EndlessModeResult::setMain()
 	n_next_label2 = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	n_next_label2->setColor(ccWHITE);
 	n_next_label2->setOpacity(100);
+	n_next_label2->disableOuterStroke();
 	n_next_label2->setPosition(ccp(n_next->getContentSize().width/2.f, n_next->getContentSize().height/2.f-2));
 	n_next->addChild(n_next_label2);
 	
@@ -925,6 +928,7 @@ void EndlessModeResult::setMain()
 	s_next_label2 = KSLabelTTF::create(next_button_str.c_str(), mySGD->getFont().c_str(), 22);
 	s_next_label2->setColor(ccWHITE);
 	s_next_label2->setOpacity(100);
+	s_next_label2->disableOuterStroke();
 	s_next_label2->setPosition(ccp(s_next->getContentSize().width/2.f, s_next->getContentSize().height/2.f-2));
 	s_next->addChild(s_next_label2);
 	

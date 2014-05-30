@@ -2262,6 +2262,8 @@ void PlayUI::showGachaOnePercent ()
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
 {
+	myGD->communication("MS_removeEmptyPoint");
+	
 	vector<SaveUserData_Key> save_userdata_list;
 	
 	save_userdata_list.push_back(kSaveUserData_Key_star);
@@ -2312,6 +2314,8 @@ void PlayUI::searchEmptyPosition ()
 }
 void PlayUI::cancelOnePercentGacha ()
 {
+	myGD->communication("MS_removeEmptyPoint");
+	
 	if(jack_life > 0)
 	{
 		createBonusScore();

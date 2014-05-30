@@ -12,6 +12,7 @@
 #include "DataStorageHub.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "TextureReloader.h"
 
 bool MapScanner::isCheckBossLocked()
 {
@@ -1066,7 +1067,7 @@ void MapScanner::showEmptyPoint( CCPoint t_point )
 	show_empty_point->setAnchorPoint(ccp(0.5f,0.f));
 	show_empty_point->setPosition(t_point);
 	show_empty_point->setScale(1.f/myGD->game_scale);
-	addChild(show_empty_point, boarderZorder);
+	addChild(show_empty_point, boarderZorder, 99999);
 
 	CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccpAdd(t_point, ccp(0,20)));
 	CCMoveTo* t_move2 = CCMoveTo::create(0.3f, t_point);
@@ -1074,6 +1075,13 @@ void MapScanner::showEmptyPoint( CCPoint t_point )
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 
 	show_empty_point->runAction(t_repeat);
+}
+
+void MapScanner::removeEmptyPoint()
+{
+	CCNode* t_empty_point = getChildByTag(99999);
+	if(t_empty_point)
+		t_empty_point->removeFromParent();
 }
 
 void MapScanner::myInit()
@@ -1097,6 +1105,7 @@ void MapScanner::myInit()
 	myGD->V_V["MS_setTopBottomBlock"] = std::bind(&MapScanner::setTopBottomBlock, this);
 	myGD->V_V["MS_startRemoveBlock"] = std::bind(&MapScanner::startRemoveBlock, this);
 	myGD->B_V["MS_isCheckBossLocked"] = std::bind(&MapScanner::isCheckBossLocked, this);
+	myGD->V_V["MS_removeEmptyPoint"] = std::bind(&MapScanner::removeEmptyPoint, this);
 
 	
 	setMapImg();
@@ -1154,6 +1163,12 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 	addChild(t_spr);
+	
+	myTR->addAliveNode(t_spr, [=]()
+					   {
+						   t_spr->setNonEffect();
+						   t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+					   });
 	
 //	CCRenderTexture* t_render = CCRenderTexture::create(320, 430);
 //	t_render->setPosition(ccp(160,215));

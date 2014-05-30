@@ -67,7 +67,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	this->setHideFinalAction(t_close, d_close);
 	CCScale9Sprite* main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-450));
+	main_case->setPosition(ccp(240,160-14-450));
 	setFormSetter(main_case);
 //	addChild(main_case, 0);
 	
