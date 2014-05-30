@@ -174,7 +174,7 @@ void StartSettingPopup::setMain()
 	main_case->addChild(left_tab);
 	
 	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 11);
-	tab_label->setColor(ccc3(54, 35, 12));
+	tab_label->setColor(ccc3(50, 30, 10));
 	tab_label->setPosition(ccp(36.5f,12.5f));
 	left_tab->addChild(tab_label);
 	
@@ -529,6 +529,7 @@ void StartSettingPopup::setMain()
 	setFormSetter(n_start);
 	n_start_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
 	setFormSetter(n_start_label2);
+	n_start_label2->disableOuterStroke();
 	n_start_label2->setColor(ccWHITE);
 	n_start_label2->setOpacity(100);
 	n_start_label2->setPosition(ccp(147.5f,39.5f));

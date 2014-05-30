@@ -1869,6 +1869,7 @@ void PuzzleScene::setRight()
 	KSLabelTTF* n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
 	n_ready_label2->setColor(ccWHITE);
 	n_ready_label2->setOpacity(100);
+	n_ready_label2->disableOuterStroke();
 	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f-1));
 	n_ready->addChild(n_ready_label2);
 	
@@ -2377,7 +2378,7 @@ void PuzzleScene::setTop()
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
 	addChild(achievement_count_case, kPuzzleZorder_top+1);
 	
-	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f-1));
 	achievement_count_case->addChild(achievement_count_label);
 	

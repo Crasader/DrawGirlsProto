@@ -92,7 +92,7 @@ void StyledLabelTTF::updateTexture()
 				KSLabelTTF* ttf = KSLabelTTF::create(st.m_text.c_str(), jsonStyle.get("font", "").asString().c_str(), jsonStyle.get("size", 12.f).asFloat());
 				float strokeSize = jsonStyle.get("strokesize", 0.f).asFloat();
 				unsigned long strokeColor = jsonStyle.get("strokecolor", 0).asUInt();
-				if(strokeSize > 0.f)
+				if(strokeSize > 0.1f)
 				{
 					ttf->enableOuterStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
 				}

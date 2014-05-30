@@ -596,7 +596,7 @@ void EndlessModeResult::setMain()
 																			
 																			KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinContent), mySGD->getFont().c_str(), 12);
 																			sub_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-																			sub_label->setAnchorPoint(ccp(0,0.5f));
+																			sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 																			sub_label->setPosition(ccp(0,5));
 																			t_container->addChild(sub_label);
 																			
@@ -943,9 +943,44 @@ void EndlessModeResult::setMain()
 																	 ready_loading = LoadingLayer::create(-999);
 																	 addChild(ready_loading, 999);
 
+																	 vector<CommandParam> command_list;
+																	 command_list.clear();
+																	 
+																	 if(mySGD->getIsAlwaysSavePlaydata() == 1)
+																	{
+																	 Json::Value param2;
+																	 param2.clear();
+																	 param2["memberID"] = myHSP->getMemberID();
+																	 param2["score"] = mySGD->getScore();
+																	 param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																	 param2["level"] = mySGD->endless_my_level.getV();
+																	 param2["autoLevel"] = 1;
+																	 param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																	 param2["victory"] = mySGD->endless_my_victory.getV();
+																	 
+																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
+																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
+																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
+																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
+																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
+																	 
+																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
+																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
+																	 
+																	 
+																	 Json::FastWriter writer;
+																	 param2["playData"] = writer.write(mySGD->replay_write_info);
+																	 
+																	 command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
+																	}
+																	 
+																	 
 																	 Json::Value param;
 																	 param["memberID"] = myHSP->getMemberID();
-																	 myHSP->command("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData));
+																	 
+																	 command_list.push_back(CommandParam("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
+																	 
+																	 myHSP->command(command_list);
 																 });
 	next_item->setPosition(ccp(-main_case->getContentSize().width/2.f+right_back->getPositionX(), 0));
 	
