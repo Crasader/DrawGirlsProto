@@ -950,6 +950,11 @@ void EndlessModeResult::setMain()
 																	 vector<CommandParam> command_list;
 																	 command_list.clear();
 																	 
+																	 Json::Value param3;
+																	 param3["memberID"] = myHSP->getMemberID();
+																	 
+																	 command_list.push_back(CommandParam("starttransaction", param3, nullptr));
+																	 
 																	 if(mySGD->getIsAlwaysSavePlaydata() == 1)
 																	{
 																	 Json::Value param2;
@@ -983,6 +988,17 @@ void EndlessModeResult::setMain()
 																	 param["memberID"] = myHSP->getMemberID();
 																	 
 																	 command_list.push_back(CommandParam("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
+																	 
+																	 Json::Value param4;
+																	 param4.clear();
+																	 param4["memberID"] = myHSP->getMemberID();
+																	 param4["score"] = int(mySGD->getScore());
+																	 param4["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																	 param4["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																	 param4["victory"] = true;
+																	 
+																	 command_list.push_back(CommandParam("finishendlessplay", param4, nullptr));
+																	 
 																	 
 																	 myHSP->command(command_list);
 																 });

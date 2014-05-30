@@ -16,7 +16,7 @@ bool KSCircleBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
 	
-	////////////////////////////////////// by hs
+	////////////////////////////////////// by hs.k
 	string ccbiname2 = ccbiName;
 	if(ccbiName.length()<3) {
 		ccbiname2="cherry";
@@ -92,20 +92,22 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 			}
 			else
 			{
-				ProbSelector ps = {1, 1, 1};
-				int r = ps.getResult();
-				if(r == 0)
-				{
-					getEmotion()->goStun();
-				}
-				else if(r == 1)
-				{
-					getEmotion()->toAnger();
-				}
-				else if(r == 2)
-				{
-					getEmotion()->toCry();
-				}
+				getEmotion()->goStun();
+				
+//				ProbSelector ps = {1, 1, 1};
+//				int r = ps.getResult();
+//				if(r == 0)
+//				{
+//					getEmotion()->goStun();
+//				}
+//				else if(r == 1)
+//				{
+//					getEmotion()->toAnger();
+//				}
+//				else if(r == 2)
+//				{
+//					getEmotion()->toCry();
+//				}
 			}
 		}
 	}

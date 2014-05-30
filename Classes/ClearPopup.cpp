@@ -423,6 +423,7 @@ bool ClearPopup::init()
 	
 	n_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	n_ok_label2->setColor(ccWHITE);
+	n_ok_label2->disableOuterStroke();
 	n_ok_label2->setOpacity(100);
 	n_ok_label2->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-1));
 	n_ok->addChild(n_ok_label2);
@@ -438,6 +439,7 @@ bool ClearPopup::init()
 	
 	s_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
 	s_ok_label2->setColor(ccWHITE);
+	s_ok_label2->disableOuterStroke();
 	s_ok_label2->setOpacity(100);
 	s_ok_label2->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-1));
 	s_ok->addChild(s_ok_label2);
@@ -463,6 +465,7 @@ bool ClearPopup::init()
 	
 	n_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	n_replay_label2->setColor(ccWHITE);
+	n_replay_label2->disableOuterStroke();
 	n_replay_label2->setOpacity(100);
 	n_replay_label2->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-1));
 	n_replay->addChild(n_replay_label2);
@@ -478,6 +481,7 @@ bool ClearPopup::init()
 	s_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	s_replay_label2->setColor(ccWHITE);
 	s_replay_label2->setOpacity(100);
+	s_replay_label2->disableOuterStroke();
 	s_replay_label2->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-1));
 	s_replay->addChild(s_replay_label2);
 	

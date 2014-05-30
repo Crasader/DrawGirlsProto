@@ -272,6 +272,15 @@ public:
 		longTimeErrorFunc = func;
 	}
 	
+	std::string IntToString (int number)
+	{
+		std::ostringstream convStream;
+		
+		convStream << number;
+		
+		return convStream.str();
+	}
+	
 	void ReplaceString(std::string & strCallId, const char * pszBefore, const char * pszAfter )
 	{
 		size_t iPos = strCallId.find( pszBefore );
@@ -290,7 +299,7 @@ public:
 		string m = datestring.substr(4,2);
 		string d = datestring.substr(6,2);
 		string h = datestring.substr(8,2);
-		string sh = std::to_string(std::stoi(h)%12);
+		string sh = IntToString(atoi(h.c_str())%12);
 		string i = datestring.substr(10,2);
 		string s = datestring.substr(12,2);
 		

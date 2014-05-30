@@ -2609,7 +2609,7 @@ void PlayUI::myInit ()
 	
 	mission_button = RollingButton::create("");
 	mission_button->setPosition(ccp(68, myDSH->ui_top-22+UI_OUT_DISTANCE));
-	mission_button->setVisible(!mySGD->is_endless_mode);
+//	mission_button->setVisible(!mySGD->is_endless_mode);
 	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_button->setPositionY(t);}, [=](float t){mission_button->setPositionY(myDSH->ui_top-22);}));
 	
 	addChild(mission_button,2);

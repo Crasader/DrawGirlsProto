@@ -212,6 +212,28 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
 				targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
 				target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+							
+				CCPoint minDis = ccp(99999, 99999);
+				KSCumberBase* nearCumber = myGD->getMainCumberVector()[0];
+				for(int i = 0; i<myGD->getMainCumberCount();i++){
+					KSCumberBase* cumber = myGD->getMainCumberVector()[i];
+					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
+					if(ccpLength(nowDis)<ccpLength(minDis))
+					{
+						nearCumber=cumber;
+						minDis = nowDis;
+					}
+				}
+				
+				for(int i = 0; i<myGD->getSubCumberCount();i++){
+					KSCumberBase* cumber = myGD->getSubCumberVector()[i];
+					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
+					if(ccpLength(nowDis)<ccpLength(minDis))
+					{
+						nearCumber=cumber;
+						minDis = nowDis;
+					}
+				}
 				
 				int random_value = rand()%7 - 3;
 				float random_float = random_value/10.f;
@@ -220,7 +242,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 					selfRotation = true;
 				random_float = 0.f;
 				
-				GuidedMissile* gm = GuidedMissile::create(target, myGD->getJackPoint().convertToCCP(),
+				GuidedMissile* gm = GuidedMissile::create(nearCumber, myGD->getJackPoint().convertToCCP(),
 																									fileName,
 																									1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
 																									ao, selfRotation
@@ -228,7 +250,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 				gm->beautifier(grade, level);
 				jack_missile_node->addChild(gm);
 			};
-			addChild(KSTimer::create(0.15 * (i + 1), [=](){
+			addChild(KSTimer::create(0.30 * (i + 1), [=](){
 				creator();
 			}));
 		}

@@ -1341,7 +1341,7 @@ public:
 		float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
 
 		// 몬스터가 맞는 조건
-		if(distance <= 4)
+		if(distance <= 12) // 원래 4
 		{
 			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
 			

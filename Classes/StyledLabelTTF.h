@@ -156,8 +156,11 @@ public:
 	//void setString(const char* text);
 	void setStringByTag(const char* text);
 	KSLabelTTF* getLabelByTag(int tag);
+	void setOldAnchorPoint();
 	//virtual void registerWithTouchDispatcher();
 protected:
+	float m_firstLineMaxY;
+	float m_firstLineMinY;
 	float m_currentPosition;
 	float m_oneLineSize;
 	CCNode* m_oneLineContainer;
