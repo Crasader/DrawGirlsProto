@@ -126,9 +126,9 @@ bool ZoomScript::init()
 	
 	target_node = first_img;
 	
-	zoom_img = CCSprite::create("ending_expand.png");
-	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
-	addChild(zoom_img, kZS_Z_script_case);
+//	zoom_img = CCSprite::create("ending_expand.png");
+//	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
+//	addChild(zoom_img, kZS_Z_script_case);
 	
 	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 16);
 	script_label->setPosition(ccp(210,30));
@@ -222,6 +222,12 @@ void ZoomScript::typingAnimation()
 			target_node->ccTouchEnded(t_touch, NULL);
 			
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
+			
+			auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+			zoom_img = tuto.first;
+			tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+			zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+			addChild(zoom_img, kZS_Z_script_case);
 			(this->*delegate_typing_after)();
 		}
 	}
