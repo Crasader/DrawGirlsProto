@@ -42,14 +42,22 @@ bool StyledLabelTTF::init()
 void StyledLabelTTF::updateTexture()
 {
 	removeAllChildren();
+	std::vector<CCNode*> oneLineContainer;
 	m_oneLineContainer = CCNode::create();
 	m_oneLineContainer->setTag(1);
+	oneLineContainer.push_back(m_oneLineContainer);
 	addChild(m_oneLineContainer);
 
-	float maxY = 0.f;
-	float minY = 0.f;
-	float maxX = 0.f;
+	float maxY = std::numeric_limits<float>::min();
+	float minY = std::numeric_limits<float>::max();
+	float maxX = std::numeric_limits<float>::min();
+	float minX = std::numeric_limits<float>::max();
+	float firstLineMaxY, firstLineMinY;
+	firstLineMaxY = std::numeric_limits<float>::min();
+	firstLineMinY = std::numeric_limits<float>::max();
+	
 	Json::Value jsonStyle;
+	bool lineBreak = false;
 	for(auto iter = m_texts.begin(); iter != m_texts.end(); ++iter)
 	{
 		StyledText t = *iter;
@@ -63,6 +71,7 @@ void StyledLabelTTF::updateTexture()
 		
 		if(jsonStyle.get("linebreak", false).asBool()) // 줄바꿈이거나 마지막 요소이면.
 		{
+			lineBreak = true;
 			if(m_currentAlignment == StyledAlignment::kLeftAlignment)
 			{
 				// default
@@ -70,6 +79,7 @@ void StyledLabelTTF::updateTexture()
 			else if(m_currentAlignment == StyledAlignment::kCenterAlignment)
 			{
 				m_oneLineContainer->setPosition(ccp(-m_oneLineSize / 2.f, 0));
+//				m_oneLineContainer->setPosition(ccp(0.f, 0));
 			}
 			else if(m_currentAlignment == StyledAlignment::kRightAlignment)
 			{
@@ -77,6 +87,7 @@ void StyledLabelTTF::updateTexture()
 			}
 			m_oneLineSize = 0.f;
 			m_oneLineContainer = CCNode::create();
+			oneLineContainer.push_back(m_oneLineContainer);
 			m_oneLineContainer->setTag(1);
 			addChild(m_oneLineContainer);
 			m_currentLinePosition -= jsonStyle.get("linespacing", 18.f).asFloat();
@@ -106,6 +117,11 @@ void StyledLabelTTF::updateTexture()
 				m_oneLineSize += ttf->getContentSize().width;
 				maxY = MAX(maxY, m_currentLinePosition + ttf->getContentSize().height / 2.f);
 				minY = MIN(minY, m_currentLinePosition - ttf->getContentSize().height / 2.f);
+				if(lineBreak == false)
+				{
+					m_firstLineMinY = firstLineMinY = minY;
+					m_firstLineMaxY = firstLineMaxY = maxY;
+				}
 				maxX = MAX(maxX, m_oneLineSize);
 			}
 			else
@@ -122,11 +138,51 @@ void StyledLabelTTF::updateTexture()
 				maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
 				minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
 				maxX = MAX(maxX, m_oneLineSize);
+				if(lineBreak == false)
+				{
+					m_firstLineMinY = firstLineMinY = minY;
+					m_firstLineMaxY = firstLineMaxY = maxY;
+				}
 			}
 		}
 	}
 	
 	setContentSize(CCSizeMake(maxX, maxY - minY));
+	for(auto i : oneLineContainer)
+	{
+		if(m_currentAlignment == StyledAlignment::kLeftAlignment)
+		{
+			// default
+		}
+		else if(m_currentAlignment == StyledAlignment::kCenterAlignment)
+		{
+			i->setPositionX(i->getPositionX() + maxX / 2.f);
+		}
+		else if(m_currentAlignment == StyledAlignment::kRightAlignment)
+		{
+			i->setPositionX(i->getPositionX() + maxX);
+		}
+		
+		
+		i->setPositionY(i->getPositionY() - (firstLineMaxY - firstLineMinY) / 2.f + maxY - minY);
+	}
+	
+	// 기본 앵커 포인트 잡아주기.
+	if(m_currentAlignment == StyledAlignment::kLeftAlignment)
+	{
+		// default
+		setAnchorPoint(ccp(0.f, 1.f));
+	}
+	else if(m_currentAlignment == StyledAlignment::kCenterAlignment)
+	{
+		setAnchorPoint(ccp(0.5f, 1.f));
+	}
+	else if(m_currentAlignment == StyledAlignment::kRightAlignment)
+	{
+		setAnchorPoint(ccp(1.f, 1.f));
+	}
+
+	
 	//	m_oneLineContainer->setPosition(ccp(-m_oneLineSize / 2.f, 0));
 	//	m_oneLineSize = 0.f;
 	//	m_oneLineContainer = CCNode::create();
@@ -532,3 +588,21 @@ KSLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
 
 
 
+void StyledLabelTTF::setOldAnchorPoint()
+{
+	// 기본 앵커 포인트 잡아주기.
+	float firstLineSize = m_firstLineMaxY - m_firstLineMinY;
+	if(m_currentAlignment == StyledAlignment::kLeftAlignment)
+	{
+		// default
+		setAnchorPoint(ccp(0.f, 1.f - (firstLineSize / 2) / getContentSize().height));
+	}
+	else if(m_currentAlignment == StyledAlignment::kCenterAlignment)
+	{
+		setAnchorPoint(ccp(0.5f, 1.f - (firstLineSize / 2) / getContentSize().height));
+	}
+	else if(m_currentAlignment == StyledAlignment::kRightAlignment)
+	{
+		setAnchorPoint(ccp(1.f, 1.f - (firstLineSize / 2) / getContentSize().height));
+	}
+}
