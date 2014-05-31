@@ -847,6 +847,8 @@ public:
 	float getTimeEventFloatValue(TimeEventType t_type);
 	void refreshTimeEvent();
 	
+	Json::Value dummy_list;
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;

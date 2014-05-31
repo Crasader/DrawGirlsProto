@@ -1775,7 +1775,10 @@ void StartSettingPopup::callStart()
 		
 		if(!is_startGame)
 		{
-			is_startGame = ((PuzzleScene*)getParent())->heart_time->startGame();
+			if(mySGD->is_endless_mode)
+				is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
+			else
+				is_startGame = ((PuzzleScene*)getParent())->heart_time->startGame();
 		}
 		
 		if(is_startGame)

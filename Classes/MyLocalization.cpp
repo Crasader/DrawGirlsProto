@@ -1114,6 +1114,12 @@ void MyLocal::ko()
 																								"<font color=999>%.1f%% </font>"
 																								"<font color=950>획득</font>"), kMyLocalKey_onePercentDesc2);
 	
+	ko->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	
+	ko->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
+	ko->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
+	ko->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
