@@ -1751,6 +1751,13 @@ void MyLocal::en()
 																								"<font color=950>회 성공시 </font>"
 																								"<font color=999>%.1f%% </font>"
 																								"<font color=950>획득</font>"), kMyLocalKey_onePercentDesc2);
+	
+	en->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	
+	en->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
+	en->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
+	en->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
+	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
 //	en->setObject(CCString::create("This is a game in which you\nhave to gain as much area as\npossible using up, down, left,\nand right gestures."), kMyLocalKey_tutorial1);
@@ -2398,6 +2405,13 @@ void MyLocal::ja()
 																								"<font color=950>회 성공시 </font>"
 																								"<font color=999>%.1f%% </font>"
 																								"<font color=950>획득</font>"), kMyLocalKey_onePercentDesc2);
+	
+	ja->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	
+	ja->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
+	ja->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
+	ja->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
+	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
 //	ja->setObject(CCString::create("上下左右にジェスチャーを利用し、\n多くのエリアを獲得しなければなら\nないゲームです。"), kMyLocalKey_tutorial1);
