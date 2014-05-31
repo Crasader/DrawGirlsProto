@@ -16,6 +16,8 @@ void StarGoldData::withdraw()
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
+	time_event_list.clear();
+	
 	endless_my_victory_on = false;
 	is_morphing_noti = true;
 	
@@ -2385,6 +2387,116 @@ void StarGoldData::resetAttendance()
 	attendance_data.clear();
 }
 
+void StarGoldData::initTimeEventList(Json::Value t_list)
+{
+	int list_size = t_list.size();
+	
+	for(int i=0;i<list_size;i++)
+	{
+		Json::Value t_time_event = t_list[i];
+		
+		string t_type = t_time_event["type"].asString();
+		
+		TimeEventInfo t_info;
+		t_info.event_type = t_type;
+		t_info.startDate = t_time_event["startDate"].asInt64();
+		t_info.endDate = t_time_event["endDate"].asInt64();
+		t_info.startTime = t_time_event["startTime"].asInt();
+		t_info.endTime = t_time_event["endTime"].asInt();
+		
+		if(t_type == getTimeEventTypeString(kTimeEventType_gold))
+		{
+			t_info.float_value = t_time_event["value"].asFloat();
+		}
+		else if(t_type == getTimeEventTypeString(kTimeEventType_heart))
+		{
+			
+		}
+		else if(t_type == getTimeEventTypeString(kTimeEventType_card))
+		{
+			t_info.int_value = t_time_event["value"].asInt();
+		}
+		else if(t_type == getTimeEventTypeString(kTimeEventType_clear))
+		{
+			t_info.float_value = t_time_event["value"].asFloat();
+		}
+	}
+}
+
+string StarGoldData::getTimeEventTypeString(TimeEventType t_type)
+{
+	string return_value;
+	
+	if(t_type == kTimeEventType_gold)
+		return_value = "gold";
+	else if(t_type == kTimeEventType_heart)
+		return_value = "heart";
+	else if(t_type == kTimeEventType_card)
+		return_value = "card";
+	else if(t_type == kTimeEventType_clear)
+		return_value = "clear";
+	return return_value;
+}
+
+bool StarGoldData::isTimeEvent(TimeEventType t_type)
+{
+	bool is_found = false;
+	string t_type_string = getTimeEventTypeString(t_type);
+	for(int i=0;!is_found && i<time_event_list.size();i++)
+	{
+		if(time_event_list[i].event_type.getV() == t_type_string)
+		{
+			is_found = true;
+		}
+	}
+	
+	return is_found;
+}
+
+int StarGoldData::getTimeEventIntValue(TimeEventType t_type)
+{
+	string t_type_string = getTimeEventTypeString(t_type);
+	for(int i=0;i<time_event_list.size();i++)
+	{
+		if(time_event_list[i].event_type.getV() == t_type_string)
+		{
+			return time_event_list[i].int_value.getV();
+		}
+	}
+	
+	return 0;
+}
+float StarGoldData::getTimeEventFloatValue(TimeEventType t_type)
+{
+	string t_type_string = getTimeEventTypeString(t_type);
+	for(int i=0;i<time_event_list.size();i++)
+	{
+		if(time_event_list[i].event_type.getV() == t_type_string)
+		{
+			return time_event_list[i].float_value.getV();
+		}
+	}
+	
+	return 0.f;
+}
+
+void StarGoldData::refreshTimeEvent()
+{
+	long long recent_date = graphdog->getDate();
+	
+	struct Eraser
+	{
+		Eraser(long long t_date) : m_date(t_date) {}
+		long long m_date;
+		bool operator()(TimeEventInfo i) const
+		{
+			return i.startDate.getV() > m_date || i.endDate.getV() <= m_date;
+		}
+	};
+	
+	time_event_list.erase(std::remove_if(time_event_list.begin(), time_event_list.end(), Eraser(recent_date)), time_event_list.end());
+}
+
 string StarGoldData::getAppType()
 {
 	return app_type;
@@ -2398,6 +2510,8 @@ void StarGoldData::myInit()
 {
 	app_type = "light1";
 	app_version = 2;
+	
+	time_event_list.clear();
 	
 	is_on_attendance = false;
 	is_endless_mode = false;

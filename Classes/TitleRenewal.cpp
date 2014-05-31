@@ -338,6 +338,8 @@ void TitleRenewalScene::successLogin()
 	
 	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
+	command_list.push_back(CommandParam("gettimeevent", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeEvent)));
+	
 	
 	Json::Value attendance_param;
 	attendance_param["memberID"] = myHSP->getMemberID();
@@ -719,6 +721,24 @@ void TitleRenewalScene::resultCheckAttendanceEvent(Json::Value result_data)
 		Json::Value attendance_param;
 		attendance_param["memberID"] = myHSP->getMemberID();
 		command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetTimeEvent(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->initTimeEventList(result_data["list"]);
+		
+		
+	}
+	else
+	{
+		is_receive_fail = true;
+		command_list.push_back(CommandParam("gettimeevent", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeEvent)));
 	}
 	
 	receive_cnt--;

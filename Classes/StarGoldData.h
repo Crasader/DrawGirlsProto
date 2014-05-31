@@ -278,6 +278,26 @@ enum TodayMissionType
 	kTodayMissionType_end
 };
 
+class TimeEventInfo
+{
+public:
+	KSProtectVar<long long> startDate;
+	KSProtectVar<long long> endDate;
+	KSProtectVar<int> startTime;
+	KSProtectVar<int> endTime;
+	KSProtectStr event_type;
+	KSProtectVar<int> int_value;
+	KSProtectVar<float> float_value;
+};
+
+enum TimeEventType
+{
+	kTimeEventType_gold = 1,
+	kTimeEventType_heart,
+	kTimeEventType_card,
+	kTimeEventType_clear
+};
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -820,6 +840,13 @@ public:
 	
 	bool is_morphing_noti;
 	
+	void initTimeEventList(Json::Value t_list);
+	string getTimeEventTypeString(TimeEventType t_type);
+	bool isTimeEvent(TimeEventType t_type);
+	int getTimeEventIntValue(TimeEventType t_type);
+	float getTimeEventFloatValue(TimeEventType t_type);
+	void refreshTimeEvent();
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -982,6 +1009,8 @@ private:
 	KSProtectVar<int> catch_cumber_count;
 	jsonSelType update_today_mission_callback;
 	void resultUpdateTodayMission(Json::Value result_data);
+	
+	vector<TimeEventInfo> time_event_list;
 	
 	string event_string;
 	int is_always_save_playdata;
