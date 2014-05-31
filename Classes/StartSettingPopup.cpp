@@ -1755,17 +1755,25 @@ void StartSettingPopup::callStart()
 		is_startable = ((PuzzleScene*)getParent())->heart_time->isStartable();
 	}
 	
+	if(mySGD->isTimeEvent(kTimeEventType_heart))
+	{
+		is_startable = true;
+	}
+	
 	if(is_startable)
 	{
 		bool is_startGame = false;
+		
+		if(mySGD->isTimeEvent(kTimeEventType_heart))
+			is_startGame = true;
+		
 		if(mySGD->is_endless_mode)
 		{
 			if(mySGD->endless_my_victory.getV() > 0)
 				is_startGame = true;
-			else
-				is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
 		}
-		else
+		
+		if(!is_startGame)
 		{
 			is_startGame = ((PuzzleScene*)getParent())->heart_time->startGame();
 		}

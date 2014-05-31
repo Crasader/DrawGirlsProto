@@ -733,7 +733,7 @@ void TitleRenewalScene::resultGetTimeEvent(Json::Value result_data)
 	{
 		mySGD->initTimeEventList(result_data["list"]);
 		
-		
+		graphdog->setCommandFinishedFunc([](){ mySGD->refreshTimeEvent(); });
 	}
 	else
 	{
