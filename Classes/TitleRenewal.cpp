@@ -287,6 +287,18 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	//	nick_back->runAction(CCEaseBounceOut::create(CCMoveTo::create(0.3, ccp(240,220))));
 		//FormSetter::get()->addObject("t3", ok_menu);
 	}
+	else if(result_data["result"]["code"].asInt() == GDBLOCKEDUSER)
+	{
+		
+		CCLog("ffff %s",result_data["blockReason"].asString().c_str());
+		CCLog("ffff %s",CCString::createWithFormat("%s \n\n %s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString());
+		
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_blocked), CCString::createWithFormat("%s \n%s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString(),[](){
+			//mySGD->resetLabels();
+			//CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+	}
 	else
 	{
 		Json::Value param;

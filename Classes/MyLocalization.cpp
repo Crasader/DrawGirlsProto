@@ -662,6 +662,12 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ko->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ko->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
+	ko->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
+	ko->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
+	ko->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
+	ko->setObject(CCString::create("세션이 종료되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert3);
+	ko->setObject(CCString::create("BLOCKED"), kMyLocalKey_blocked);
+	ko->setObject(CCString::create("계정이 아래의 사유로 정지 되었습니다."), kMyLocalKey_blockedMsg);
 	ko->setObject(CCString::create("회원ID : "), kMyLocalKey_memberID);
 	ko->setObject(CCString::create("게임버젼 : "), kMyLocalKey_gameversion);
 	ko->setObject(CCString::create("게임탈퇴"), kMyLocalKey_withdraw);
@@ -1296,6 +1302,12 @@ void MyLocal::en()
 	en->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	en->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	en->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
+	en->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
+	en->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
+	en->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
+	en->setObject(CCString::create("세션이 종료되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert3);
+	en->setObject(CCString::create("BLOCKED"), kMyLocalKey_blocked);
+	en->setObject(CCString::create("계정이 아래의 사유로 정지 되었습니다."), kMyLocalKey_blockedMsg);
 	en->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);
 	en->setObject(CCString::create("Version : "), kMyLocalKey_gameversion);
 	en->setObject(CCString::create("Secession"), kMyLocalKey_withdraw);
@@ -1924,6 +1936,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ja->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ja->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
+	ja->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
+	ja->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
+	ja->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
+	ja->setObject(CCString::create("세션이 종료되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert3);
+	ja->setObject(CCString::create("BLOCKED"), kMyLocalKey_blocked);
+	ja->setObject(CCString::create("계정이 아래의 사유로 정지 되었습니다."), kMyLocalKey_blockedMsg);
 	ja->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);
 	ja->setObject(CCString::create("Version : "), kMyLocalKey_gameversion);
 	ja->setObject(CCString::create("Secession"), kMyLocalKey_withdraw);
