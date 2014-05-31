@@ -1740,7 +1740,13 @@ void StarGoldData::changeGoods(jsonSelType t_callback)
 void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback)
 {
 	if(ingame_gold.getV() > 0)
-		addChangeGoods("stageGold", kGoodsType_gold, ingame_gold.getV(), "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	{
+		int t_ingame_gold = ingame_gold.getV();
+		if(isTimeEvent(kTimeEventType_gold))
+			t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+		
+		addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	}
 	
 	vector<CommandParam> transaction_list;
 	
