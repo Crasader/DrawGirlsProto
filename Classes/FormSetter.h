@@ -361,7 +361,7 @@ public:
 	void logOnce(int i){
 		CCNode* obj = m_objList[i].obj;
 		if(!m_objList[i].isEdited)return;
-		CCLog("");
+		printf("\n");
 		
 		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
 			printf("%s->setPosition(ccp(%.1f,%.1f)); \t\t\t// dt (%.1f,%.1f)\n",
