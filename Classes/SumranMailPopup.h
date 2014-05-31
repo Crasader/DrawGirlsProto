@@ -14,6 +14,7 @@ using namespace std;
 #include "DownloadFile.h"
 #include "DimmedPopup.h"
 #include "CommonButton.h"
+#include "TouchSuctionLayer.h"
 
 #define LZZ_INLINE inline
 enum SumranMailPopupZorder
@@ -105,6 +106,8 @@ class SumranMailPopup : public DimmedPopup, public CCTableViewDataSource, public
 		ScrollBar * m_scrollBar;
 		SumranMailFilter m_mailFilter;
 		SumranPostBoxState m_popupState;
+		CCScale9Sprite* main_case;
+		TouchSuctionLayer* t_suction;
 		CommonButton* allReceive;
 		CCLabelTTF* m_nothingMessage; // 받은 메시지가 없습니다.
 		int download_card_number;

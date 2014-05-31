@@ -33,6 +33,7 @@
 #include "FormSetter.h"
 #include "MyLocalization.h"
 #include "StyledLabelTTF.h"
+
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -65,7 +66,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 	
 	this->setHideFinalAction(t_close, d_close);
-	CCScale9Sprite* main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-14-450));
 	setFormSetter(main_case);
@@ -77,7 +78,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	setFormSetter(title_label);
 	main_case->addChild(title_label);
 	
-	m_nothingMessage = CCLabelTTF::create("받은 메세지가 없습니다.", mySGD->getFont().c_str(), 14);
+	m_nothingMessage = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nogift), mySGD->getFont().c_str(), 14);
 	m_nothingMessage->setPosition(ccpMult(main_case->getContentSize(),0.5));
 	main_case->addChild(m_nothingMessage, 1);
 	setFormSetter(m_nothingMessage);
@@ -97,7 +98,9 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	m_heartRefresh = heartRefresh;
 	m_mailFilter = SumranMailFilter::kTotal;
 	
-	
+	t_suction = TouchSuctionLayer::create(-999999);
+	t_suction->setTouchEnabled(false);
+	main_case->addChild(t_suction);
 	
 #if 0 // 싹 지우는 루틴..
 	Json::Value p;
@@ -105,7 +108,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	p["type"] = 0;
 	hspConnector::get()->command("removeallmessage",p,this,[](Json::Value r){});
 #endif
-	
+
 	m_popupState = SumranPostBoxState::kNoMenu;
 	setTouchEnabled(true);
 	isLoaded = false;
@@ -116,13 +119,20 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 	allReceive = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), 12, CCSizeMake(100,40), CommonButtonLightPupple, -200);
 	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
-	allReceive->setTitleColor(ccc3(20, 0, 0));
+	allReceive->setTitleColor(ccc3(255, 255, 255));
 	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setFunction([=](CCObject*){
+		
+		t_suction->setTouchEnabled(true);
+		t_suction->setVisible(true);
 		Json::Value p;
 		p["memberID"] = myHSP->getMemberID();
+		
+		
 		myHSP->command("confirmallgiftboxhistory",p,[=](Json::Value p){
-			CCLog("%s",p.toStyledString().c_str());
+			
+			t_suction->setTouchEnabled(false);
+			t_suction->setVisible(false);
 			if(p["result"]["code"].asInt()==GDSUCCESS){
 				
 				{
@@ -300,7 +310,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 	loading_circle = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_circle->setPosition(ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height/2.f));
-	main_case->addChild(loading_circle);
+	t_suction->addChild(loading_circle);
 	
 	
 }
@@ -321,8 +331,9 @@ void SumranMailPopup::loadMail ()
 void SumranMailPopup::drawMail (Json::Value obj)
 {
 	
-	loading_circle->removeFromParent();
-	loading_circle = NULL;
+	t_suction->setTouchEnabled(false);
+	t_suction->setVisible(false);
+	//loading_circle->setVisible(false);
 	
 	m_mailList = obj["list"];
 //	auto app_friends = fInfo["app_friends_info"];
@@ -481,24 +492,47 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																	//						 int idx = (int)obj->getUserData();
 																	CCLog("%s",mail.toStyledString().c_str());
 																	
-																	string rewardList="";
+																	CCNode* itemlist = CCNode::create();
+																	setFormSetter(itemlist);
 																	if(mail["reward"].isArray()){
 																		for(int i=0;i<mail["reward"].size();i++){
 																			string rewardType = mail["reward"][i].get("type","box").asString();
 																			int rewardCount = mail["reward"][i].get("count",1).asInt();
-																			rewardList += CCString::createWithFormat("<img src=icon_%s.png><font>X%d",rewardType.c_str(),rewardCount)->getCString();
-																			if(i<mail["reward"].size()-1)rewardList+=",</font>";
-																			else rewardList+="</font>";
+																			CCScale9Sprite* back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+																			back->setContentSize(CCSizeMake(70, 70));
+																			back->setPosition(ccp(i*75-(mail["reward"].size()-1)/2.f*75,-30));
+																			CCSprite* spr = CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
+																			KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
+																			
+																			count->setPosition(ccp(back->getContentSize().width/2.f,16));
+																			spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
+																			
+																			setFormSetter(back);
+																			setFormSetter(spr);
+																			setFormSetter(count);
+																			back->addChild(count);
+																			back->addChild(spr);
+																			itemlist->addChild(back);
+
 																		}
 																	}else if(mail["reward"].isObject()){
 																	
 																	}
 																	
 															
+																	KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getgift), mySGD->getFont().c_str(), 13);
+																	ment->setPosition(ccp(itemlist->getContentSize().width/2.f,-83));
+																	itemlist->addChild(ment);
+																	setFormSetter(ment);
 																	
-																	StyledLabelTTF* lbl = StyledLabelTTF::create(rewardList.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-																	lbl->setOldAnchorPoint();
-																	ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), (CCNode*)lbl,[=](){
+																	
+//																	StyledLabelTTF* lbl = StyledLabelTTF::create(rewardList.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+//																	setFormSetter(lbl);
+//																	lbl->setOldAnchorPoint();
+//																	lbl->setPosition(ccp(0,-55));
+//																	itemlist->addChild(lbl);
+																	itemlist->setContentSize(CCSizeMake(mail["reward"].size()*80, 100));
+																	ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), itemlist,[=](){
 																		
 																								Json::Value p;
 																								int mailNo = mail["no"].asInt();
@@ -506,14 +540,17 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																								p["giftBoxNo"] = mailNo;
 																								p["memberID"] = mail["memberID"].asInt64();
 																								
-																								
+																								t_suction->setTouchEnabled(true);
+																								t_suction->setVisible(true);
 																								//삭제요청
 																								this->removeMessage (mailNo, mail["memberID"].asInt64(),
 																																		 [=](Json::Value r)
 																																		 {
-																																			 if(r["error"]["code"].asInt() != GDSUCCESS) {
+																																			 if(r["result"]["code"].asInt() != GDSUCCESS) {
 																																				 return;
 																																			 }
+																																			 t_suction->setTouchEnabled(false);
+																																			 t_suction->setVisible(false);
 																																			 //여기서 r["list"] 참고하여 재화 정보 업데이트하기
 																																		 });
 

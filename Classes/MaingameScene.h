@@ -320,6 +320,9 @@ private:
 	CCClippingNode* intro_clipping;
 	CumberShowWindow* intro_boss;
 	
+	CCSprite* replay_bomb;
+	CCBAnimationManager* replay_manager;
+	
 	void startStory();
 	void endIntro();
 	

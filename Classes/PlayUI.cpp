@@ -47,7 +47,7 @@ void ComboView::myInit (int combo)
 	{
 		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 		combo_label->setAnchorPoint(ccp(0.5f,0.5f));
-		combo_label->setPosition(ccp(0,0));
+		combo_label->setPosition(ccp(0,-3));
 		addChild(combo_label);
 		
 		combo_front = CCSprite::create("combo_front.png");
@@ -1573,38 +1573,9 @@ bool PlayUI::getIsExchanged ()
 
 void PlayUI::addScoreAttack(int t_damage)
 {
-	if(!bomb_img)
+	if(bomb_img)// && bomb_manager->getRunningSequenceName() != string("bombcast1"))
 	{
-		bomb_img = CCSprite::create("endless_bomb.png");
-		bomb_img->setPosition(ccp(40, myDSH->ui_center_y+70));
-		bomb_img->setScale(0.f);
-		addChild(bomb_img,-1);
-		
-		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.2f);
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 0.9f);
-		CCSequence* t_seq1 = CCSequence::create(t_scale1, t_scale2, NULL);
-		
-		CCRotateTo* t_rotate1 = CCRotateTo::create(0.1f, 15);
-		CCRotateTo* t_rotate2 = CCRotateTo::create(0.15f, -10);
-		CCRotateTo* t_rotate3 = CCRotateTo::create(0.1f, 10);
-		CCRotateTo* t_rotate4 = CCRotateTo::create(0.15f, -15);
-		CCSequence* t_seq2 = CCSequence::create(t_rotate1, t_rotate2, t_rotate3, t_rotate4, NULL);
-		
-		CCSpawn* t_spawn = CCSpawn::create(t_seq1, t_seq2, NULL);
-		
-		CCRepeatForever* t_repeat = CCRepeatForever::create(t_spawn);
-		
-		bomb_img->runAction(t_repeat);
-		
-		addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
-											   {
-												   if(bomb_img)
-													   bomb_img->setScale(t);
-											   }, [=](float t)
-											   {
-												   if(bomb_img)
-													   bomb_img->setScale(1.f);
-											   }));
+		bomb_manager->runAnimationsForSequenceNamed("bombcast1");
 	}
 	
 //	ccColor4F t_color;
@@ -1672,9 +1643,10 @@ void PlayUI::scoreAttackKeep()
 	if(score_attack_keep_frame >= 60)
 	{
 		unschedule(schedule_selector(PlayUI::scoreAttackKeep));
-		
-		bomb_img->removeFromParent();
-		bomb_img = NULL;
+
+		bomb_manager->runAnimationsForSequenceNamed("Default Timeline");
+//		bomb_img->removeFromParent();
+//		bomb_img = NULL;
 		
 		myGD->communication("Main_scoreAttackMissile", score_attack_damage.getV());
 		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_scoreAttackDamage)] = score_attack_damage.getV();
@@ -1691,107 +1663,175 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	
 	int cnt = t_damage/3000;
 	
-	for(int i=0;i<cnt;i++)
+	CCNode* t_node = CCNode::create();
+	t_node->setPosition(ccp(440,myDSH->ui_center_y+70));
+	t_node->setScale(1.f/1.5f);
+	addChild(t_node);
+	
+	CCLabelBMFont* combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", cnt*5)->getCString(), "combo.fnt");
+	combo_label->setAnchorPoint(ccp(0.5f,0.5f));
+	combo_label->setPosition(ccp(0,-3));
+	t_node->addChild(combo_label);
+	
+	CCSprite* combo_front = CCSprite::create("combo_front.png");
+	combo_front->setAnchorPoint(ccp(0.5f,0.5f));
+	combo_front->setPosition(ccp(0,-10));
+	combo_front->setScale(0.5f);
+	t_node->addChild(combo_front);
+	
+	addChild(KSTimer::create(2.f, [=]()
 	{
-		ccColor4F t_color;
-		if(i < 1)
-		{
-			t_color = ccc4f(1.f, 1.f, 1.f, 1.f);
-		}
-		else if(i < 2)
-		{
-			t_color = ccc4f(1.f, 1.f, 0.f, 1.f);
-		}
-		else if(i < 3)
-		{
-			t_color = ccc4f(1.f, 0.5f, 0.f, 1.f);
-		}
-		else
-		{
-			t_color = ccc4f(1.f, 0.f, 0.f, 1.f);
-		}
-		
-		addChild(KSTimer::create(0.2f*i, [=]()
-								 {
-									 CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(100);
-									 particle2->setPositionType(kCCPositionTypeRelative);
-									 particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
-									 particle2->setEmissionRate(200);
-									 particle2->setAngle(180.0);
-									 particle2->setAngleVar(180.0);
-									 ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
-									 particle2->setBlendFunc(blendFunc);
-									 particle2->setDuration(0.7);
-									 particle2->setEmitterMode(kCCParticleModeRadius);
-									 particle2->setStartColor(t_color);
-									 particle2->setStartColorVar(ccc4f(0,0,0,0.f));
-									 particle2->setEndColor(t_color);
-									 particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
-									 particle2->setStartSize(10.0);
-									 particle2->setStartSizeVar(5.0);
-									 particle2->setEndSize(10.0);
-									 particle2->setEndSizeVar(2.0);
-									 particle2->setRotatePerSecond(40);
-									 particle2->setRotatePerSecondVar(10);
-									 particle2->setStartRadius(30);
-									 particle2->setStartRadiusVar(10);
-									 particle2->setEndRadius(2);
-									 particle2->setTotalParticles(100);
-									 particle2->setLife(0.5);
-									 particle2->setLifeVar(0.3);
-									 particle2->setStartSpin(0.0);
-									 particle2->setStartSpinVar(50.f);
-									 particle2->setEndSpin(0.0);
-									 particle2->setEndSpinVar(60.f);
-									 particle2->setPosVar(ccp(0,0));
-									 particle2->setPosition(ccp(440, myDSH->ui_center_y));
-									 particle2->setAutoRemoveOnFinish(true);
-									 addChild(particle2);
-								 }));
-	}
+		addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+											   {
+												   KS::setOpacity(t_node, 255-t*255);
+											   }, [=](float t)
+											   {
+												   KS::setOpacity(t_node, 0);
+												   t_node->removeFromParent();
+											   }));
+	}));
+	
+//
+//	for(int i=0;i<cnt;i++)
+//	{
+//		addChild(KSTimer::create(0.2f*i, [=]()
+//								 {
+									 myGD->communication("Main_readyBomb");
+//								 }));
+//	}
 	
 	
-	addChild(KSTimer::create(cnt*0.2f, [=]()
+	addChild(KSTimer::create(1.f, [=]()
 							 {
-								 CCSprite* t_missile = CCSprite::create("blind_drop.png");
-								 t_missile->setPosition(ccp(440, myDSH->ui_center_y));
+								 myGD->communication("Main_stopBomb");
+								 
+								 CCPoint origin_position = ccp(440, myDSH->ui_center_y+70);
+								 
+								 CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile.ccbi").first;
+								 t_missile->setPosition(origin_position);
 								 addChild(t_missile);
 								 
-								 t_missile->setScale(0.3f);
+								 CCPoint base_position = ccp(440-70, myDSH->ui_center_y+70+40);
+								 CCPoint random_position = ccp(rand()%41-20, rand()%31-15);
+								 CCPoint sum_position = base_position + random_position;
+								 CCPoint sub_position = sum_position - origin_position;
 								 
-								 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+								 float angle = atan2(sum_position.y - origin_position.y, sum_position.x - origin_position.x)/M_PI*180.f;
+								 t_missile->setRotation(-angle+180);
+								 
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 20.f/30.f, [=](float t)
 																		{
-																			t_missile->setScale(0.3f+t*0.7f);
-																			t_missile->setPosition(ccp(440-t*400, myDSH->ui_center_y));
+																			t_missile->setPosition(origin_position + sub_position*t);
 																		}, [=](float t)
 																		{
-																			t_missile->setScale(1.f);
-																			t_missile->setPosition(ccp(40, myDSH->ui_center_y));
-																			myGD->communication("Main_showScoreMissileEffect", ccp(40, myDSH->ui_center_y));
-																			t_missile->removeFromParent();
+																			t_missile->setPosition(origin_position + sub_position);
+																			CCPoint final_position = ccp(40,myDSH->ui_center_y);
+																			CCPoint t_sub_position = final_position - sum_position;
 																			
-																			addChild(KSTimer::create(0.1f, [=]()
-																									 {
-																										 KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
-																										 t_label->enableOuterStroke(ccBLACK, 1.f);
-																										 t_label->setPosition(ccp(40, myDSH->ui_center_y));
-																										 addChild(t_label);
-																										 
-																										 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
-																																				{
-																																					t_label->setOpacity(255-t*255);
-																																				}, [=](float t)
-																																				{
-																																					t_label->setOpacity(0);
-																																					t_label->removeFromParent();
-																																				}));
-																										 
-																										 float before_score = score_value.getV();
-																										 damaged_score = damaged_score.getV() - t_damage;
-																										 CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
-																										 score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
-																									 }));
+																			float angle2 = atan2(final_position.y - sum_position.y, final_position.x - sum_position.x)/M_PI*180.f;
+																			t_missile->setRotation(-angle2+180);
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 10.f/30.f, [=](float t)
+																												   {
+																													   t_missile->setPosition(sum_position + t_sub_position*t);
+																												   }, [=](float t)
+																												   {
+																													   t_missile->setPosition(sum_position + t_sub_position);
+																													   t_missile->removeFromParent();
+																													   
+																													   CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
+																													   bomb_img->setPosition(ccp(40, myDSH->ui_center_y));
+																													   addChild(bomb_img);
+																													   
+																													   bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
+																													   
+																													   KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
+																													   t_label->setColor(ccRED);
+																													   t_label->enableOuterStroke(ccBLACK, 1.f);
+																													   t_label->setPosition(ccp(40, myDSH->ui_center_y));
+																													   t_label->setScale(0.7f);
+																													   addChild(t_label);
+																													   
+																													   addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+																																							  {
+																																								  t_label->setOpacity(t*255);
+																																								  t_label->setScale(0.7f+t);
+																																							  }, [=](float t)
+																																							  {
+																																								  t_label->setOpacity(255);
+																																								  t_label->setScale(1.7f);
+																																								  addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+																																																		 {
+																																																			 t_label->setScale(1.7f-t*0.5f);
+																																																		 }, [=](float t)
+																																																		 {
+																																																			 t_label->setScale(1.2f);
+																																																			 addChild(KSTimer::create(8.f/30.f, [=]()
+																																																									  {
+																																																										  addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																																																																				 {
+																																																																					 t_label->setPosition(ccp(40, myDSH->ui_center_y-25*t));
+																																																																					 t_label->setScale(1.2f-0.3f*t);
+																																																																					 t_label->setOpacity(255-t*255);
+																																																																				 }, [=](float t)
+																																																																				 {
+																																																																					 t_label->setPosition(ccp(40, myDSH->ui_center_y-25));
+																																																																					 t_label->setScale(0.9f);
+																																																																					 t_label->setOpacity(0);
+																																																																					 t_label->removeFromParent();
+																																																																				 }));
+																																																									  }));
+																																																		 }));
+																																							  }));
+																													   
+																													   float before_score = score_value.getV();
+																													   damaged_score = damaged_score.getV() - t_damage;
+																													   CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
+																													   score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
+																													   
+																												   }));
 																		}));
+								 
+								 
+//								 CCSprite* t_missile = CCSprite::create("blind_drop.png");
+//								 t_missile->setPosition(ccp(440, myDSH->ui_center_y));
+//								 addChild(t_missile);
+//								 
+//								 t_missile->setScale(0.3f);
+//								 
+//								 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+//																		{
+//																			t_missile->setScale(0.3f+t*0.7f);
+//																			t_missile->setPosition(ccp(440-t*400, myDSH->ui_center_y));
+//																		}, [=](float t)
+//																		{
+//																			t_missile->setScale(1.f);
+//																			t_missile->setPosition(ccp(40, myDSH->ui_center_y));
+//																			myGD->communication("Main_showScoreMissileEffect", ccp(40, myDSH->ui_center_y));
+//																			t_missile->removeFromParent();
+//																			
+//																			addChild(KSTimer::create(0.1f, [=]()
+//																									 {
+//																										 KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
+//																										 t_label->enableOuterStroke(ccBLACK, 1.f);
+//																										 t_label->setPosition(ccp(40, myDSH->ui_center_y));
+//																										 addChild(t_label);
+//																										 
+//																										 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+//																																				{
+//																																					t_label->setOpacity(255-t*255);
+//																																				}, [=](float t)
+//																																				{
+//																																					t_label->setOpacity(0);
+//																																					t_label->removeFromParent();
+//																																				}));
+//																										 
+//																										 float before_score = score_value.getV();
+//																										 damaged_score = damaged_score.getV() - t_damage;
+//																										 CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
+//																										 score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
+//																									 }));
+//																		}));
 							 }));
 	
 	mySGD->damaged_score = mySGD->damaged_score.getV() + t_damage;
@@ -2510,7 +2550,16 @@ void PlayUI::myInit ()
 		thumb_node->addChild(nick_label);
 		
 		addChild(KSGradualValue<float>::create(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2-UI_OUT_DISTANCE, 40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
-											   UI_IN_TIME, [=](float t){nick_label->setPositionX(t);}, [=](float t){nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);}));
+											   UI_IN_TIME, [=](float t){nick_label->setPositionX(t);}, [=](float t)
+		{
+			nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);
+			auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb.ccbi");
+			bomb_img = temp.first;
+			bomb_img->setPosition(ccp(40, myDSH->ui_center_y+70));
+			addChild(bomb_img,-1);
+			
+			bomb_manager = temp.second;
+		}));
 		thumb_node->addChild(score_label);
 	}
 	else
