@@ -348,6 +348,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground()
 {
+	lastTime = GraphDog::get()->getTime();
 	if(!mySGD->is_paused && mySGD->is_on_maingame)
 		myGD->communication("Main_showPause");
 	
@@ -360,6 +361,12 @@ void AppDelegate::applicationDidEnterBackground()
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground()
 {
+	long long int nowTime = GraphDog::get()->getTime();
+	if(nowTime-lastTime>60){
+		mySGD->resetLabels();
+		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+	}
+	
 	CCDirector::sharedDirector()->startAnimation();
 	
 	myTR->reloadTexture();
