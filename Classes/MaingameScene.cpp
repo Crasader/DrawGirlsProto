@@ -978,13 +978,13 @@ void Maingame::checkTutorial()
 
 void Maingame::initJackPosition(CCPoint jack_position)
 {
-	addChild(KSGradualValue<CCPoint>::create(ccp(160,getGameNodeToObjectPosition(game_node->getPosition()).y), jack_position, 0.5f,
-											 [=](CCPoint t){
-												 myGD->communication("VS_setMoveGamePosition", t);
-											 },
-											 [=](CCPoint t){
-												 myGD->communication("VS_setMoveGamePosition", jack_position);
-											 }, nullptr, false));
+//	addChild(KSGradualValue<CCPoint>::create(ccp(160,getGameNodeToObjectPosition(game_node->getPosition()).y), jack_position, 0.5f,
+//											 [=](CCPoint t){
+//												 myGD->communication("VS_setMoveGamePosition", t);
+//											 },
+//											 [=](CCPoint t){
+//												 myGD->communication("VS_setMoveGamePosition", jack_position);
+//											 }, nullptr, false));
 	
 	addChild(KSGradualValue<CCPoint>::create(line_particle->getPosition(), jack_position, 0.5f,
 											 [=](CCPoint t){
@@ -997,9 +997,11 @@ void Maingame::initJackPosition(CCPoint jack_position)
 	addChild(KSGradualValue<CCPoint>::create(game_node->getPosition(), getObjectToGameNodePosition(jack_position), 0.5f,
 											 [=](CCPoint t){
 												 game_node->setPosition(t);
+												 myGD->communication("VS_setMoveGamePosition", getGameNodeToObjectPosition(game_node->getPosition()));
 											 },
 											 [=](CCPoint t){
 												 game_node->setPosition(getObjectToGameNodePosition(jack_position));
+												 myGD->communication("VS_setMoveGamePosition", getGameNodeToObjectPosition(game_node->getPosition()));
 											 }, nullptr, false));
 }
 
