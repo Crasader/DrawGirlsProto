@@ -24,6 +24,7 @@
 #include "MainFlowScene.h"
 #include "LoadingTipScene.h"
 #include "MyLocalization.h"
+#include "RivalSelectPopup.h"
 
 enum EndlessModeResultZorder
 {
@@ -2065,12 +2066,10 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 			mySGD->setReplayPlayingInfo(read_data);
 		}
 		
+		mySGD->dummy_list = result_data["dummy"];
+		
 		mySGD->endless_memberID = result_data["rival"]["memberID"].asInt64();
-		mySGD->endless_nick = result_data["rival"]["nick"].asString();
-		mySGD->endless_flag = result_data["rival"]["flag"].asString();
-		mySGD->endless_victory = result_data["rival"]["victory"].asInt();
-		mySGD->endless_autoLevel = result_data["rival"]["autoLevel"].asInt();
-		mySGD->endless_level = result_data["rival"]["level"].asInt();
+	
 		mySGD->endless_score = result_data["rival"]["score"].asInt();
 		mySGD->endless_regDate = result_data["rival"]["regDate"].asInt64();
 		
@@ -2417,40 +2416,44 @@ void EndlessModeResult::successGetStageInfo()
 	ready_loading->removeFromParent();
 	ready_loading = NULL;
 	
-	addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
-										   {
-											   gray->setOpacity(255*t);
-										   }, [=](float t)
-										   {
-											   gray->setOpacity(0);
-											   mySGD->is_endless_mode = true;
-											   mySD->setSilType(stage_number);
-											   
-											   StartSettingPopup* t_popup = StartSettingPopup::create();
-											   t_popup->setHideFinalAction(getParent(), callfunc_selector(MainFlowScene::showEndlessResult));
-											   getParent()->addChild(t_popup, kMainFlowZorder_popup);
-											   removeFromParent();
-										   }));
-	
-	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-	{
-		KS::setOpacity(main_case, t);
-		if(t > 100)
-		{
-			n_stop_label2->setOpacity(100);
-			s_stop_label2->setOpacity(100);
-			n_next_label2->setOpacity(100);
-			s_next_label2->setOpacity(100);
-		}
-	}, [=](int t)
-	{
-		KS::setOpacity(main_case, 0);
-		n_stop_label2->setOpacity(0);
-		s_stop_label2->setOpacity(0);
-		n_next_label2->setOpacity(0);
-		s_next_label2->setOpacity(0);
-	}));
+	RivalSelectPopup* t_popup = RivalSelectPopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=]()
+														 {
+															 addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																									{
+																										gray->setOpacity(255*t);
+																									}, [=](float t)
+																									{
+																										gray->setOpacity(0);
+																										mySGD->is_endless_mode = true;
+																										mySD->setSilType(stage_number);
+																										
+																										StartSettingPopup* t_popup = StartSettingPopup::create();
+																										t_popup->setHideFinalAction(getParent(), callfunc_selector(MainFlowScene::showEndlessResult));
+																										getParent()->addChild(t_popup, kMainFlowZorder_popup);
+																										removeFromParent();
+																									}));
+															 
+															 addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+																 addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
+															 
+															 addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+																								  {
+																									  KS::setOpacity(main_case, t);
+																									  if(t > 100)
+																									  {
+																										  n_stop_label2->setOpacity(100);
+																										  s_stop_label2->setOpacity(100);
+																										  n_next_label2->setOpacity(100);
+																										  s_next_label2->setOpacity(100);
+																									  }
+																								  }, [=](int t)
+																								  {
+																									  KS::setOpacity(main_case, 0);
+																									  n_stop_label2->setOpacity(0);
+																									  s_stop_label2->setOpacity(0);
+																									  n_next_label2->setOpacity(0);
+																									  s_next_label2->setOpacity(0);
+																								  }));
+														 });
+	addChild(t_popup, 999);
 }

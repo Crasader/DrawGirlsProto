@@ -3061,6 +3061,8 @@ void PlayUI::myInit ()
 void PlayUI::hideThumb()
 {
 	thumb_node->setVisible(false);
+	if(mySGD->is_endless_mode)
+		bomb_img->setVisible(false);
 }
 
 bool PlayUI::isExchanged ()

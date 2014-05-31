@@ -147,6 +147,8 @@ private:
 	CCScale9Sprite* achievement_count_case;
 	CCLabelTTF* achievement_count_label;
 	
+	function<void()> refresh_ing_win_func;
+	
 	vector<CCNode*> top_list;
 	void topOnLight();
 	void topOpenning();

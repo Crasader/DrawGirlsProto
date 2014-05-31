@@ -99,12 +99,12 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	left_bottom_back->addChild(left_nick);
 	
 	KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->endless_my_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
-	left_level->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-40));
+	left_level->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-38));
 	left_bottom_back->addChild(left_level);
 	
 	KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 15);
 	left_ing_win->setColor(ccc3(255,170,20));
-	left_ing_win->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-65));
+	left_ing_win->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-53));
 	left_bottom_back->addChild(left_ing_win);
 	
 //	int win_count = mySGD->endless_my_win.getV();
@@ -143,12 +143,12 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	right_bottom_back->addChild(right_nick);
 
 	KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->endless_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
-	right_level->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-40));
+	right_level->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-38));
 	right_bottom_back->addChild(right_level);
 	
 	KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->endless_victory.getV())->getCString(), mySGD->getFont().c_str(), 15);
 	right_ing_win->setColor(ccc3(255,170,20));
-	right_ing_win->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-65));
+	right_ing_win->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-53));
 	right_bottom_back->addChild(right_ing_win);
 	
 //	int right_win_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_win), Json::Value()).asInt();
