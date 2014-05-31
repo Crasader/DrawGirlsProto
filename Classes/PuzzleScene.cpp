@@ -363,6 +363,13 @@ bool PuzzleScene::init()
 		else if(mySGD->is_exchanged)						take_level = 2;
 		else												take_level = 1;
 		
+		if(mySGD->isTimeEvent(kTimeEventType_card))
+		{
+			take_level += mySGD->getTimeEventIntValue(kTimeEventType_card);
+			if(take_level > 4)
+				take_level = 4;
+		}
+		
 		clear_star_take_level = take_level;
 		clear_is_empty_star = !is_not_empty_card[take_level-1];
 		
