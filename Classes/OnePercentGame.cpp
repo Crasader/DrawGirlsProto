@@ -240,6 +240,15 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
 	m_graphNode = tempNode;
 	m_graphNode->setVisible(false);
+	tempNode->setPosition(ccp(59.5,30.5)); 			// dt (-2.0,8.0)
+	tempNode->setScaleX(0.9); 			// dt -0.1
+	tempNode->setScaleY(0.7); 			// dt -0.3
+	_100->setPosition(ccp(32.0,73.5)); 			// dt (0.0,13.5)
+	_100->setScaleX(1.0); 			// dt 0.0
+	_100->setScaleY(1.4); 			// dt 0.4
+	_99->setPosition(ccp(31.0,-75.0)); 			// dt (-1.0,-31.0)
+	_99->setScaleX(1.0); 			// dt -0.0
+	_99->setScaleY(1.4); 			// dt 0.4
 	setFormSetter(_100);
 	setFormSetter(_99);
 	setFormSetter(tempNode);
