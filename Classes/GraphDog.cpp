@@ -597,6 +597,7 @@ void GraphDog::receivedCommand(float dt)
 					//@@if(command.target!=0 && command.selector!=0)
 					//@@((command.target)->*(command.selector))(resultobj);
 					if(command.func!=NULL)command.func(resultobj);
+					if(commandFinishedFunc!=nullptr)commandFinishedFunc();
 				}
 				throw commands.chunk.resultCode;
 			}
@@ -670,6 +671,7 @@ void GraphDog::receivedCommand(float dt)
 						CCLOG("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[END for %s ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",ct.action.c_str());
 					}
 					if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
+					if(commandFinishedFunc!=nullptr)commandFinishedFunc();
 				}
 			}
 			//메모리도 해제

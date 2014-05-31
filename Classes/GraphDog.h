@@ -258,6 +258,11 @@ public:
 	std::function<void(void)> duplicateLoginFunc;
 	std::function<void(void)> cmdNoErrorFunc;
 	std::function<void(void)> longTimeErrorFunc;
+	std::function<void(void)> commandFinishedFunc;
+	
+	void setCommandFinishedFunc(std::function<void(void)> func){
+		commandFinishedFunc = func;
+	}
 	
 	void setDuplicateLoginFunc(std::function<void(void)> func){
 		duplicateLoginFunc = func;
@@ -266,7 +271,6 @@ public:
 	void setCmdNoErrorFunc(std::function<void(void)> func){
 		cmdNoErrorFunc = func;
 	}
-	
 	
 	void setLongTimeErrorFunc(std::function<void(void)> func){
 		longTimeErrorFunc = func;
@@ -416,7 +420,11 @@ private:
 		this->lastCmdNo=0;
 		this->duplicateLoginFunc=nullptr;
 		this->cmdNoErrorFunc=nullptr;
+		this->longTimeErrorFunc=nullptr;
+		this->commandFinishedFunc=nullptr;
 		this->deviceID=0;
+		
+		
 	}
   
 	~GraphDog(){
