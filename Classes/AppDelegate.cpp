@@ -37,6 +37,7 @@ USING_NS_CC;
 #include "GaBaBo.h"
 #include "StarGoldData.h"
 #include "FormSetter.h"
+#include "MyLocalization.h"
 #include <chrono>
 
 //#include <boost/graph/graphviz.hpp>
@@ -294,7 +295,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setDuplicateLoginFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,"재접속", "다른 기기로 연결되었습니다.\n다시 로그인합니다.",[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert1),[](){
 			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
@@ -303,7 +304,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setCmdNoErrorFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,"재접속", "서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다.",[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[](){
 			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
@@ -311,7 +312,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	});
 	
 	GraphDog::get()->setLongTimeErrorFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,"재접속", "세션이 종료되었습니다.\n다시 로그인합니다.",[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert3),[](){
 			mySGD->resetLabels();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
