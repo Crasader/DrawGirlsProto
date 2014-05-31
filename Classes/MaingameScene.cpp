@@ -483,7 +483,11 @@ void Maingame::finalSetting()
 	//OnePercentGame* opg = OnePercentGame::create(0.99, nullptr, nullptr);
 	//addChild(opg, 9999);
 	myUI->setMaxBossLife(mySD->getBossMaxLife());
-	myUI->setClearPercentage(0.85f);
+	
+	if(mySGD->isTimeEvent(kTimeEventType_clear))
+		myUI->setClearPercentage(mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f);
+	else
+		myUI->setClearPercentage(0.85f);
 	
 //	myCP->setUI_forEP(myUI, callfunc_selector(PlayUI::keepBossLife), callfunc_selector(PlayUI::checkBossLife));
 	

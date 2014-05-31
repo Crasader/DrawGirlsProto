@@ -88,7 +88,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	}
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
-	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25, back_case->getContentSize().height/2.f-25));
+	close_button->setPosition(ccp(back_case->getContentSize().width-25, back_case->getContentSize().height-25));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  giveupAction(NULL, CCControlEventTouchUpInside);
