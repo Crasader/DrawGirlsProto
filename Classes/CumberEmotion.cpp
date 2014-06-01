@@ -119,6 +119,7 @@ void CumberEmotion::presentationEmotion(const std::string& emotion)
 			m_emotionState = EmotionState::kNone;
 		}
 	});
+	
 	t1.first->setScale(1.5f);
 	addChild(m_currentEmotion);
 	m_currentEmotion->setPositionY(m_currentEmotion->getPositionY() + 50);
