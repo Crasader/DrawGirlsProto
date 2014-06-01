@@ -73,7 +73,7 @@ bool TitleRenewalScene::init()
 	addChild(white_back);
 	
 	auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
-	splash.second->setAnimationCompletedCallbackLambda(this, [=](){
+	splash.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 		splash.first->removeFromParent();
 		endSplash();
 	});

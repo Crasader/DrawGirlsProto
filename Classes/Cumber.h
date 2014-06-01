@@ -115,6 +115,7 @@ private:
 	void myInit();
 	void mappingFunctor();
 	void toFun();
+	void toScratch();
 };
 
 #endif

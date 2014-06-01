@@ -282,7 +282,7 @@ void OnePercentGame::gameUISetting()
 		t_grade = 4;
 	CCSprite* girl = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))->getCString());
 	if(girl == nullptr)
-		girl = CCSprite::create("_0514_start_1.png");
+		girl = CCSprite::create();
 	cNode->addChild(girl);
 	girl->setScale(130 / girl->getContentSize().width);
 	//		setFormSetter(girl);

@@ -56,6 +56,7 @@ void CumberEmotion::releaseStun()
 	{
 		m_currentEmotion->removeFromParent();
 		m_currentEmotion = nullptr;
+		m_emotionState = EmotionState::kNone;
 	}
 }
 void CumberEmotion::onKillingJack()
@@ -91,6 +92,16 @@ void CumberEmotion::toAnger()
 		m_emotionState = EmotionState::kAnger;
 	}
 }
+
+void CumberEmotion::toScratch()
+{
+	// 특별히 예외로 아무런 감정이 없을 때만 긁음.
+	if(m_emotionState == EmotionState::kNone)
+	{
+		presentationEmotion("emoticon_scratch.ccbi");
+		m_emotionState = EmotionState::kScratch;
+	}
+}
 void CumberEmotion::presentationEmotion(const std::string& emotion)
 {
 	if(m_currentEmotion)
@@ -100,11 +111,15 @@ void CumberEmotion::presentationEmotion(const std::string& emotion)
 	auto t1  = KS::loadCCBI<CCSprite*>(this, emotion.c_str());
 	m_currentEmotion = t1.first;
 	
-	t1.second->setAnimationCompletedCallbackLambda(this, [=](){
-		m_currentEmotion->removeFromParent();
-		m_currentEmotion = nullptr;
-		m_emotionState = EmotionState::kNone;
+	t1.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
+		if(m_emotionState != EmotionState::kStun)
+		{
+			m_currentEmotion->removeFromParent();
+			m_currentEmotion = nullptr;
+			m_emotionState = EmotionState::kNone;
+		}
 	});
+	t1.first->setScale(1.5f);
 	addChild(m_currentEmotion);
 	m_currentEmotion->setPositionY(m_currentEmotion->getPositionY() + 50);
 	m_currentEmotion->setPositionX(30);

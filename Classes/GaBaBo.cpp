@@ -202,7 +202,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 		{
 			auto gababoCountSet = KS::loadCCBI<CCSprite*>(this, "gababo_count.ccbi");
 			CCSprite* gababoCount = gababoCountSet.first;
-			gababoCountSet.second->setAnimationCompletedCallbackLambda(this, [=](){
+			gababoCountSet.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 				if(m_resultShowing == false)
 				{
 					m_resultShowing = true;
@@ -234,7 +234,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 						resultString = "Draw";
 						gameResult = 1;
 						auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_draw.ccbi");
-						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 							addChild(KSTimer::create(2.f, [=](){
 								resultPair.first->removeFromParent();
 							}));
@@ -250,7 +250,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 						resultString = "You Win";
 						gameResult = 2;
 						auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_win.ccbi");
-						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 							addChild(KSTimer::create(2.f, [=](){
 								resultPair.first->removeFromParent();
 							}));
@@ -266,7 +266,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 						resultString = "You Lose";
 						gameResult = 3;
 						auto resultPair = KS::loadCCBI<CCSprite*>(this, "e_lose.ccbi");
-						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+						resultPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 							addChild(KSTimer::create(2.f, [=](){
 								resultPair.first->removeFromParent();
 							}));
@@ -345,7 +345,7 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 								addChild(KSTimer::create(0.7f, [=](){
 									auto lightPair = KS::loadCCBI<CCSprite*>(this, "gabaao_effect.ccbi");
 									CCSprite* light = lightPair.first;
-									lightPair.second->setAnimationCompletedCallbackLambda(this, [=](){
+									lightPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 										light->removeFromParent();
 									});
 									light->setPosition(ccp(240, 160));

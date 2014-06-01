@@ -630,12 +630,20 @@ void CumberParent::mappingFunctor()
 	myGD->V_Str["CP_chagePassiveData"] = std::bind(&CumberParent::changePassiveData, this, _1);
 	myGD->hideBosses = std::bind(&CumberParent::hideBosses, this);
 	myGD->toFun = std::bind(&CumberParent::toFun, this);
+	myGD->toScratch = std::bind(&CumberParent::toScratch, this);
 }
 void CumberParent::toFun()
 {
 	for(auto mainCumber : mainCumbers)
 	{
 		mainCumber->getEmotion()->onKillingJack(); // 비웃음.
+	}
+}
+void CumberParent::toScratch()
+{
+	for(auto mainCumber : mainCumbers)
+	{
+		mainCumber->getEmotion()->toScratch(); // 긁적긁적
 	}
 }
 void CumberParent::hideBosses()
