@@ -61,6 +61,8 @@ public:
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
+	function<void()> refresh_ing_win_func;
+	
 	CREATE_FUNC(EndlessModeOpening);
 	
 private:

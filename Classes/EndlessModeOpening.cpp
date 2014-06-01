@@ -41,6 +41,8 @@ bool EndlessModeOpening::init()
 	startFormSetter(this);
 //	FormSetter::get()->start();
 	
+	refresh_ing_win_func = nullptr;
+	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 	
 	touch_priority = -300;
@@ -831,6 +833,11 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			mySGD->endless_my_win = result_data["myInfo"]["win"].asInt();
 			
 			mySGD->endless_my_ing_win = result_data["myInfo"]["ing_win"].asInt();
+			mySGD->endless_my_victory = result_data["myInfo"]["ing_win"].asInt();
+			
+			if(refresh_ing_win_func != nullptr)
+				refresh_ing_win_func();
+			
 			mySGD->endless_my_ing_score = result_data["myInfo"]["ing_score"].asInt();
 			
 			if(mySGD->endless_my_ing_win.getV() > 0)

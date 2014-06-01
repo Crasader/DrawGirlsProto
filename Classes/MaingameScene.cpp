@@ -3670,9 +3670,10 @@ void Maingame::hideThumb()
 //	thumb_case_left->setVisible(false);
 //	thumb_case_right->setVisible(false);
 	
-	if(mySGD->is_play_replay && mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
+	if(mySGD->is_play_replay)
 	{
 		replay_all_node->setVisible(false);
+		replay_bomb->setVisible(false);
 	}
 }
 

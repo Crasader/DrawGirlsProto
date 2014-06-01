@@ -98,14 +98,23 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	left_nick->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-20));
 	left_bottom_back->addChild(left_nick);
 	
-	int win_count = mySGD->endless_my_win.getV();
-	int lose_count = mySGD->endless_my_lose.getV();
-	int win_rate = 100.f*win_count/(win_count + lose_count);
-	KSLabelTTF* left_info_score = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString(), mySGD->getFont().c_str(), 18);
-	left_info_score->enableOuterStroke(ccBLACK, 1.f);
-	left_info_score->setColor(ccYELLOW);
-	left_info_score->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, 22));
-	left_bottom_back->addChild(left_info_score);
+	KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->endless_my_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	left_level->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-38));
+	left_bottom_back->addChild(left_level);
+	
+	KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 15);
+	left_ing_win->setColor(ccc3(255,170,20));
+	left_ing_win->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-53));
+	left_bottom_back->addChild(left_ing_win);
+	
+//	int win_count = mySGD->endless_my_win.getV();
+//	int lose_count = mySGD->endless_my_lose.getV();
+//	int win_rate = 100.f*win_count/(win_count + lose_count);
+//	KSLabelTTF* left_info_score = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString(), mySGD->getFont().c_str(), 18);
+//	left_info_score->enableOuterStroke(ccBLACK, 1.f);
+//	left_info_score->setColor(ccYELLOW);
+//	left_info_score->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, 22));
+//	left_bottom_back->addChild(left_info_score);
 	
 	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
@@ -132,15 +141,24 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	right_nick->enableOuterStroke(ccBLACK, 1.f);
 	right_nick->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-20));
 	right_bottom_back->addChild(right_nick);
+
+	KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->endless_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	right_level->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-38));
+	right_bottom_back->addChild(right_level);
 	
-	int right_win_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_win), Json::Value()).asInt();
-	int right_lose_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_lose), Json::Value()).asInt();
-	int right_win_rate = 100.f*right_win_count/(right_win_count + right_lose_count);
-	KSLabelTTF* right_info_score = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), right_win_count, right_lose_count, right_win_rate)->getCString(), mySGD->getFont().c_str(), 18);
-	right_info_score->enableOuterStroke(ccBLACK, 1.f);
-	right_info_score->setColor(ccYELLOW);
-	right_info_score->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, 22));
-	right_bottom_back->addChild(right_info_score);
+	KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->endless_victory.getV())->getCString(), mySGD->getFont().c_str(), 15);
+	right_ing_win->setColor(ccc3(255,170,20));
+	right_ing_win->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-53));
+	right_bottom_back->addChild(right_ing_win);
+	
+//	int right_win_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_win), Json::Value()).asInt();
+//	int right_lose_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_lose), Json::Value()).asInt();
+//	int right_win_rate = 100.f*right_win_count/(right_win_count + right_lose_count);
+//	KSLabelTTF* right_info_score = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), right_win_count, right_lose_count, right_win_rate)->getCString(), mySGD->getFont().c_str(), 18);
+//	right_info_score->enableOuterStroke(ccBLACK, 1.f);
+//	right_info_score->setColor(ccYELLOW);
+//	right_info_score->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, 22));
+//	right_bottom_back->addChild(right_info_score);
 	
 	
 	
