@@ -644,13 +644,15 @@ void DeathSwing::myInit (CCPoint t_sp, int t_rotate)
 	swingImg->setRotation(t_rotate);
 	addChild(swingImg);
 }
-void CrashMapObject::crashMapForIntPoint (IntPoint t_p)
+bool CrashMapObject::crashMapForIntPoint (IntPoint t_p)
 {
 	IntPoint jackPoint = myGD->getJackPoint();
-	
-	if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
+	bool crash = false;
+	if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline ||
+													myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
 	{
 		myGD->mapState[t_p.x][t_p.y] = mapEmpty;
+		crash = true;
 		for(int k = -1;k<=1;k++)
 		{
 			for(int l = -1;l<=1;l++)
@@ -678,13 +680,15 @@ void CrashMapObject::crashMapForIntPoint (IntPoint t_p)
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		lineDie(t_p);
 	}
+	
+	return crash;
 }
-void CrashMapObject::crashMapForIntRect (IntRect t_r)
+int CrashMapObject::crashMapForIntRect (IntRect t_r)
 {
 	IntPoint jackPoint = myGD->getJackPoint();
 	
 	bool is_die = false;
-	
+	int crashCount = 0;
 	for(int i=t_r.origin.x;i<t_r.origin.x+t_r.size.width;i++)
 	{
 		for(int j=t_r.origin.y;j<t_r.origin.y+t_r.size.height;j++)
@@ -694,6 +698,7 @@ void CrashMapObject::crashMapForIntRect (IntRect t_r)
 			{
 				myGD->mapState[t_p.x][t_p.y] = mapEmpty;
 				myGD->communication("MFP_createNewFragment", t_p);
+				crashCount++;
 			}
 			
 			if(!is_die && t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
@@ -726,6 +731,8 @@ void CrashMapObject::crashMapForIntRect (IntRect t_r)
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		jackDie();
 	}
+	
+	return crashCount;
 }
 
 WindmillObject * WindmillObject::create (IntPoint t_sp, int t_thornsFrame)
@@ -871,6 +878,11 @@ void ThrowObject::selfRemove ()
 }
 void ThrowObject::stopMyAction ()
 {
+	CCLOG("crashCount  %d ", crashCount);
+	if(crashCount <= 60)
+	{
+		myGD->toScratch();
+	}
 	unschedule(schedule_selector(ThrowObject::myAction));
 	removeFromParentAndCleanup(true);
 }
@@ -892,7 +904,11 @@ void ThrowObject::myAction ()
 		{
 			for(int j=0;j<mSize.width;j++)
 			{
-				crashMapForIntPoint(IntPoint(myPoint.x+j,myPoint.y+i));
+				auto result = crashMapForIntPoint(IntPoint(myPoint.x+j,myPoint.y+i));
+				if(result)
+				{
+					crashCount++;
+				}
 			}
 		}
 	}
@@ -1138,10 +1154,13 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	
 	AudioEngine::sharedInstance()->playEffect("se_meteo_1.mp3");
 }
-FallMeteor * FallMeteor::create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+FallMeteor * FallMeteor::create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame,
+																 IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect,
+																 std::function<void(int)> accum)
 {
 	FallMeteor* t_fm = new FallMeteor();
-	t_fm->myInit(t_imgFilename, imgFrameCnt, imgFrameSize, t_sp, t_fp, t_fallFrame, t_explosionFrame, t_mSize, t_removeEffect, d_removeEffect);
+	t_fm->myInit(t_imgFilename, imgFrameCnt, imgFrameSize, t_sp, t_fp, t_fallFrame,
+							 t_explosionFrame, t_mSize, t_removeEffect, d_removeEffect, accum);
 	t_fm->autorelease();
 	return t_fm;
 }
@@ -1214,6 +1233,7 @@ void FallMeteor::stopFall ()
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call2);
 	runAction(t_seq);
 	
+	accumer(crashCount);
 }
 void FallMeteor::fall ()
 {
@@ -1307,8 +1327,12 @@ void FallMeteor::initParticle ()
 	//		particle->setPosVar(CCPointZero);
 	addChild(particle);
 }
-void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp,
+												 CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize,
+												 CCObject * t_removeEffect, SEL_CallFunc d_removeEffect, std::function<void(int)> accum)
 {
+	crashCount = 0;
+	accumer = accum;
 	target_removeEffect = t_removeEffect;
 	delegate_removeEffect = d_removeEffect;
 	
@@ -4389,7 +4413,13 @@ void RunDownSaw::stopMyAction ()
 		addChild(KSGradualValue<float>::create(1, 0, 0.5f, [=](float t){
 			m_objImg->setScale(t);
 		}, [=](float t){
+			
 			removeFromParentAndCleanup(true);
+			
+			if(m_crashCount <= 40)
+			{
+				myGD->toScratch();
+			}
 		}));
 	}));
 }
@@ -4420,7 +4450,10 @@ void RunDownSaw::myAction (float dt)
 					m_runDown--;
 				}
 
-				crashMapForIntPoint(IntPoint(myPoint.x+j,myPoint.y+i));
+				if(crashMapForIntPoint(IntPoint(myPoint.x+j,myPoint.y+i)))
+				{
+					m_crashCount++;
+				}
 			}
 		}
 	}
@@ -4435,6 +4468,7 @@ void RunDownSaw::myInit (CCPoint t_sp, float t_speed, float t_angle, IntSize t_m
 {
 	// t_sp 자리에서 부터 t_angle 각도로 던짐.
 	//
+	m_crashCount = 0;
 	m_speed = t_speed;
 	m_size = t_mSize;
 	m_runDown = runDown;

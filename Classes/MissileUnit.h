@@ -130,8 +130,8 @@ private:
 class CrashMapObject : public CCNode
 {
 public:
-	void crashMapForIntPoint (IntPoint t_p);
-	void crashMapForIntRect (IntRect t_r);
+	bool crashMapForIntPoint (IntPoint t_p);
+	int crashMapForIntRect (IntRect t_r);
 	virtual void jackDie () = 0;
 	virtual void lineDie (IntPoint t_p) = 0;
 };
@@ -152,6 +152,10 @@ private:
 class ThrowObject : public CrashMapObject
 {
 public:
+	ThrowObject()
+	{
+		crashCount = 0;
+	}
 	virtual ~ThrowObject()
 	{
 		CCLOG("ThrowObject Destroy");
@@ -166,6 +170,7 @@ private:
 	CCPoint dv;
 	CCSprite * objImg;
 	CCPoint b_c_p;
+	int crashCount;
 	void jackDie ();
 	void lineDie (IntPoint t_p);
 	void removeEffect ();
@@ -223,7 +228,9 @@ private:
 class FallMeteor : public CrashMapObject
 {
 public:
-	static FallMeteor * create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	static FallMeteor * create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame,
+															IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect,
+															std::function<void(int)> accum);
 	virtual ~FallMeteor()
 	{
 		CCLOG("FallMeteor~");
@@ -244,6 +251,8 @@ private:
 	CCObject * target_removeEffect;
 	SEL_CallFunc delegate_removeEffect;
 	FM_Targeting* m_targetSprite;
+	std::function<void(int)> accumer;
+	int crashCount;
 	void jackDie ();
 	void lineDie (IntPoint t_p);
 	void finalCrash ();
@@ -251,7 +260,9 @@ private:
 	void fall ();
 	void selfRemove ();
 	void initParticle ();
-	void myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	void myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp,
+							 CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize,
+							 CCObject * t_removeEffect, SEL_CallFunc d_removeEffect, std::function<void(int)> accum);
 };
 class Lazer_Ring : public CCNode
 {
@@ -727,6 +738,7 @@ private:
 	IntSize m_size;
 	CCPoint m_lastSawPosition;
 	CCSprite * m_objImg;
+	int m_crashCount;
 	int m_runDown;
 	void jackDie ();
 	void lineDie (IntPoint t_p);

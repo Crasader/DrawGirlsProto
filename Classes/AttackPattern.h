@@ -236,7 +236,7 @@ private:
 	int totalFrame;
 	int ingFrame;
 	string imgFilename;
-	
+	int crashCount;
 	bool isRemoveEffect;
 	
 	Well512 m_well512;
@@ -249,6 +249,8 @@ private:
 	void myAction();
 	
 	void myInit(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea);
+	
+	void accumCrashCount(int n);
 };
 
 
@@ -716,7 +718,7 @@ public:
 	void lineCrashMap(CCPoint t_sp, float t_angle, int t_width, int t_height);
 	
 	void crashMapForIntPoint(IntPoint t_p);
-	void crashMapForIntRect(IntRect t_r);
+	int crashMapForIntRect(IntRect t_r);
 	
 	CCPoint spinTransform(CCPoint t_tp, CCPoint t_bp, float t_angle); // jack, boss, angle;
 protected:
@@ -738,7 +740,8 @@ protected:
 	float dscale;
 	
 	CCPoint jackPosition;
-	
+	int crashCount;
+	bool attacked;
 };
 class CommonBulletPattern : public AttackPattern
 {

@@ -127,6 +127,7 @@ public:
 	std::function<void(StoneType, int grade, int level, float percent, CCPoint initPosition)> createJackMissileWithStoneFunctor;
 	std::function<void(void)> hideBosses;
 	std::function<void(void)> toFun;
+	std::function<void(void)> toScratch;
 	
 	vector<CCNode*> getMainCumberCCNodeVector()
 	{

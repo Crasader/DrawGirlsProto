@@ -1065,6 +1065,11 @@ void MeteorWrapper::selfRemoveSchedule()
 		//			myGD->communication("EP_stopCrashAction");
 		myGD->communication("MS_resetRects", false);
 		removeFromParentAndCleanup(true);
+		
+		if(crashCount <= 100)
+		{
+			myGD->toScratch();
+		}
 	}
 }
 
@@ -1091,7 +1096,10 @@ void MeteorWrapper::myAction()
 		random_sp.x = random_fp.x + 500;
 		random_sp.y = random_fp.y + 500;
 
-		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(crashArea, crashArea), random_sp, random_fp, 220, 20, IntSize(12, 12), this, callfunc_selector(MeteorWrapper::removeEffect)); // imgSize, crashSize
+		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(crashArea, crashArea), random_sp, random_fp,
+																					220, 20, IntSize(12, 12),
+																					this, callfunc_selector(MeteorWrapper::removeEffect),
+																					bind(&MeteorWrapper::accumCrashCount, this, std::placeholders::_1)); // imgSize, crashSize
 		addChild(t_fm);
 	}
 
@@ -1123,7 +1131,10 @@ void MeteorWrapper::myInit( int t_type, int t_tmCnt, int t_totalFrame, int t_cra
 	imgFilename = "1.png"; // 불돌타입.
 	startMyAction();
 }
-
+void MeteorWrapper::accumCrashCount(int n)
+{
+	crashCount += n;
+}
 
 TornadoWrapper* TornadoWrapper::create( CCPoint t_sp, int tf, int sc )
 {
@@ -2582,6 +2593,12 @@ void CrashLazerWrapper::stopMyAction()
 	startSelfRemoveSchedule();
 	fadeFromToDuration.init(1, 0, 0.2f);
 	schedule(schedule_selector(ThisClassType::hidingAnimation));
+	
+	if(attacked && crashCount <= 30)
+	{
+		myGD->toScratch();
+	}
+	
 }
 
 void CrashLazerWrapper::hidingAnimation( float dt )
@@ -2620,9 +2637,10 @@ void CrashLazerWrapper::hidingAnimation( float dt )
 void CrashLazerWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 //	t_sp = ip2ccp(myGD->getMainCumberPoint(m_cumber));
+	attacked = false;
 	lazer_main = t_bead = NULL;
 	m_cumber = cb;
-
+	crashCount = 0;
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -2747,7 +2765,7 @@ void CrashLazerWrapper::myAction()
 			lazer_main->setPosition(mp);
 
 			addChild(lazer_main);
-
+			
 			
 //			//레이저가 자연스럽게 시작하도록 붙여주는것
 //			{
@@ -2796,6 +2814,7 @@ void CrashLazerWrapper::myAction()
 	}
 	else if(ingFrame <= chargeFrame+crashFrame)
 	{
+		attacked = true;
 		IntPoint jackPoint = myGD->getJackPoint();
 		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 
@@ -2964,7 +2983,7 @@ void CrashLazerWrapper::lineCrashMap( CCPoint t_sp, float t_angle, int t_width, 
 	}
 }
 
-void CrashLazerWrapper::crashMapForIntRect (IntRect t_r)
+int CrashLazerWrapper::crashMapForIntRect (IntRect t_r)
 {
 	IntPoint jackPoint = myGD->getJackPoint();
 	
@@ -2972,6 +2991,7 @@ void CrashLazerWrapper::crashMapForIntRect (IntRect t_r)
 	
 	myGD->communication("VS_divideRects", t_r);
 	
+
 	for(int i=t_r.origin.x;i<t_r.origin.x+t_r.size.width;i++)
 	{
 		for(int j=t_r.origin.y;j<t_r.origin.y+t_r.size.height;j++)
@@ -2981,6 +3001,7 @@ void CrashLazerWrapper::crashMapForIntRect (IntRect t_r)
 			{
 				myGD->mapState[t_p.x][t_p.y] = mapEmpty;
 				myGD->communication("MFP_createNewFragment", t_p);
+				crashCount++;
 			}
 			
 			if(!is_die && t_p.isInnerMap() && myGD->mapState[t_p.x][t_p.y] == mapNewline)
