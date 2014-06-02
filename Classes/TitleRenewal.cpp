@@ -779,25 +779,38 @@ void TitleRenewalScene::resultGetAchieveList(Json::Value result_data)
 	{
 		Json::Value t_list = result_data["list"];
 		int list_size = t_list.size();
-		NSDS_SI(kSDS_AI_count_i, list_size, false);
-		for(int i=0;i<list_size;i++)
+		
+		int real_list_size = 0;
+		
+		for(int i=1;i<list_size;i++)
 		{
-			NSDS_SI(kSDS_AI_int1_id_i, i+1, t_list[i]["id"].asInt(), false);
-			NSDS_SS(kSDS_AI_int1_title_s, t_list[i]["id"].asInt(), t_list[i]["title"].asString(), false);
-			NSDS_SS(kSDS_AI_int1_content_s, t_list[i]["id"].asInt(), t_list[i]["content"].asString(), false);
-			NSDS_SI(kSDS_AI_int1_goal_i, t_list[i]["id"].asInt(), t_list[i]["goal"].asInt(), false);
-			
-			Json::Value t_reward = t_list[i]["reward"];
-			int reward_size = t_reward.size();
-			NSDS_SI(kSDS_AI_int1_reward_count_i, t_list[i]["id"].asInt(), reward_size, false);
-			for(int j=0;j<reward_size;j++)
+			Json::Value achieve_group = t_list[i];
+			int group_size = achieve_group.size();
+			for(int j=0;j<group_size;j++)
 			{
-				NSDS_SS(kSDS_AI_int1_reward_int2_type_s, t_list[i]["id"].asInt(), j+1, t_reward[j]["type"].asString(), false);
-				NSDS_SI(kSDS_AI_int1_reward_int2_count_i, t_list[i]["id"].asInt(), j+1, t_reward[j]["count"].asInt(), false);
+				real_list_size++;
+				
+				Json::Value achieve_info = achieve_group[j];
+				
+				NSDS_SI(kSDS_AI_int1_id_i, real_list_size, achieve_info["id"].asInt(), false);
+				NSDS_SS(kSDS_AI_int1_title_s, achieve_info["id"].asInt(), achieve_info["title"].asString(), false);
+				NSDS_SS(kSDS_AI_int1_content_s, achieve_info["id"].asInt(), achieve_info["content"].asString(), false);
+				NSDS_SI(kSDS_AI_int1_goal_i, achieve_info["id"].asInt(), achieve_info["goal"].asInt(), false);
+				
+				Json::Value t_reward = achieve_info["reward"];
+				int reward_size = t_reward.size();
+				NSDS_SI(kSDS_AI_int1_reward_count_i, achieve_info["id"].asInt(), reward_size, false);
+				for(int k=0;k<reward_size;k++)
+				{
+					NSDS_SS(kSDS_AI_int1_reward_int2_type_s, achieve_info["id"].asInt(), k+1, t_reward[k]["type"].asString(), false);
+					NSDS_SI(kSDS_AI_int1_reward_int2_count_i, achieve_info["id"].asInt(), k+1, t_reward[k]["count"].asInt(), false);
+				}
+				
+				NSDS_SS(kSDS_AI_int1_exchangeID_s, achieve_info["id"].asInt(), achieve_info["exchangeID"].asString(), false);
 			}
-			
-			NSDS_SS(kSDS_AI_int1_exchangeID_s, t_list[i]["id"].asInt(), t_list[i]["exchangeID"].asString(), false);
 		}
+		
+		NSDS_SI(kSDS_AI_count_i, real_list_size, false);
 		
 		NSDS_SI(kSDS_AI_version_i, result_data["version"].asInt(), false);
 		mySDS->fFlush(kSDS_AI_base);
