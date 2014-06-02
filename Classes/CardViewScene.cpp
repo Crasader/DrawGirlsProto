@@ -44,7 +44,7 @@ bool CardViewScene::init()
     {
         return false;
     }
-	
+	buy_morphing = nullptr;
 	startFormSetter(this);
 	CCLayer* top_bottom_layer = CCLayer::create();
 	top_bottom_layer->setPosition(ccp(0, 0));
@@ -128,7 +128,8 @@ bool CardViewScene::init()
 		is_actioned = false;
 		is_morphing = true;
 		
-		buy_morphing->removeFromParent();
+		if(buy_morphing)
+			buy_morphing->removeFromParent();
 		
 		morphing_img->removeFromParent();
 		morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
