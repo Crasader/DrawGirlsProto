@@ -2181,7 +2181,7 @@ void PlayUI::counting ()
 		countingLabel->setColor(ccYELLOW);
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
-		countingLabel->setPosition(ccp(240,5));
+		countingLabel->setPosition(ccp(240,17));
 		countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 	}
 	
