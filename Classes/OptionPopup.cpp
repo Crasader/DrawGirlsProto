@@ -36,6 +36,7 @@
 #include "StyledLabelTTF.h"
 #include "FormSetter.h"
 #include "OnePercentGame.h"
+#include "FiveRocksCpp.h"
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -151,22 +152,41 @@ bool OptionPopup::init()
 //	}
 //	OnePercentGame* opg = OnePercentGame::create(0.998, nullptr, nullptr);
 //	addChild(opg, 9999);
-//	return true;
-//	Json::Value param;
-//	param["productid"] = "g_10289_001";
-//	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
-//		if(v["issuccess"].asInt())
-//		{
-////			reqItemDelivery(); // ;
-//			Json::Value param;
-//			param["memberID"] = hspConnector::get()->getMemberID();
-//			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
-//				// 여기서 진짜 갱신.
-//				KS::KSLog("refresh !!!!", t);
-//			});
-//		}
-//		KS::KSLog("in-app test \n%", v);
-//	});
+	
+
+//	KSLabelTTF* gradient = KSLabelTTF::create("총점", mySGD->getFont().c_str(), 25.f);
+//	gradient->enableOuterStroke(ccc3(0, 0, 0), 1.f);
+////	gradient->disableOuterStroke();
+//	gradient->enableGradation(ccc4(255, 207, 0, 255), ccc4(255, 113, 0, 255), ccp(0, -1));
+//	gradient->setPosition(ccp(100, 100));
+//	addChild(gradient, 9999999);
+	fiverocks::FiveRocksBridge::trackPurchase("RUBY_SINGLE_PACK",  // product identifier
+																 "KRW",               // currency code (ISO 4217)
+																 1000,                // price
+																 nullptr);         // campaignId
+	
+	fiverocks::FiveRocksBridge::trackEvent("Economy",             // Event Category
+											 "EarnRuby",                         // Event Name
+											 "BuySingPack",                      // Event Parameter 1 (Acquisition channel)
+											 "Normal",  // Event Parameter 2 (Type)
+											 1);                                 // Event Value
+	
+	return true;
+	Json::Value param;
+	param["productid"] = "g_10289_001";
+	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+		if(v["issuccess"].asInt())
+		{
+//			reqItemDelivery(); // ;
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getMemberID();
+			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
+				// 여기서 진짜 갱신.
+				KS::KSLog("refresh !!!!", t);
+			});
+		}
+		KS::KSLog("in-app test \n%", v);
+	});
 	
 	setTouchEnabled(true);
 	
@@ -614,7 +634,7 @@ bool OptionPopup::init()
 void OptionPopup::onEnter()
 {
 	CCLayer::onEnter();
-	showPopup();
+//	showPopup();
 }
 
 void OptionPopup::showPopup()
