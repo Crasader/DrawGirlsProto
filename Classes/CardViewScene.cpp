@@ -23,11 +23,12 @@
 #define CV_SCROLL_SPEED_MAX_BASE	20
 #define CV_SCROLL_SPEED_DECEASE_BASE	0.2f
 
-CCScene* CardViewScene::scene()
+CCScene* CardViewScene::scene(function<void()> t_end_func)
 {
     CCScene *scene = CCScene::create();
     CardViewScene *layer = CardViewScene::create();
     scene->addChild(layer);
+	layer->temp_end_func = t_end_func;
 	
     return scene;
 }
@@ -299,7 +300,7 @@ void CardViewScene::menuAction(CCObject *sender)
 		first_img->setTouchEnabled(false);
 		unschedule(schedule_selector(CardViewScene::moveAnimation));
 		
-		
+		temp_end_func();
 		
 //		CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
 		CCDirector::sharedDirector()->popScene();

@@ -1622,10 +1622,10 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 	{
 		mySGD->selected_collectionbook = recent_card_number;
 
-		is_menu_enable = true;
+//		is_menu_enable = true;
 		CCLog("why two?");
 //		CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, CardViewScene::scene());
-		CCDirector::sharedDirector()->pushScene(CardViewScene::scene());
+		CCDirector::sharedDirector()->pushScene(CardViewScene::scene([=](){is_menu_enable = true;}));
 		
 //		DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
 //		t_popup->setHideFinalAction(target_final, delegate_final);

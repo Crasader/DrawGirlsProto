@@ -1773,12 +1773,12 @@ void PuzzleScene::setRight()
 										  if(!is_menu_enable)
 											  return;
 										  
-//										  is_menu_enable = false;
+										  is_menu_enable = false;
 										  
 										  mySGD->selected_collectionbook = step_card_number;
 										  
 //										  CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, CardViewScene::scene());
-										  CCDirector::sharedDirector()->pushScene(CardViewScene::scene());
+										  CCDirector::sharedDirector()->pushScene(CardViewScene::scene([=](){is_menu_enable = true;}));
 										  
 //										  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
 //										  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));

@@ -27,10 +27,12 @@ class CardViewScene : public CCLayer
 {
 public:
 	virtual bool init();
-    static cocos2d::CCScene* scene();
+    static cocos2d::CCScene* scene(function<void()> t_end_func);
     CREATE_FUNC(CardViewScene);
 	
 	virtual void onEnterTransitionDidFinish();
+	
+	function<void()> temp_end_func;
 	
 private:
 	CCNode* game_node;
