@@ -160,18 +160,18 @@ bool OptionPopup::init()
 //	gradient->enableGradation(ccc4(255, 207, 0, 255), ccc4(255, 113, 0, 255), ccp(0, -1));
 //	gradient->setPosition(ccp(100, 100));
 //	addChild(gradient, 9999999);
-	fiverocks::FiveRocksBridge::trackPurchase("RUBY_SINGLE_PACK",  // product identifier
-																 "KRW",               // currency code (ISO 4217)
-																 1000,                // price
-																 nullptr);         // campaignId
+//	fiverocks::FiveRocksBridge::trackPurchase("RUBY_SINGLE_PACK",  // product identifier
+//																 "KRW",               // currency code (ISO 4217)
+//																 1000,                // price
+//																 nullptr);         // campaignId
+//	
+//	fiverocks::FiveRocksBridge::trackEvent("Economy",             // Event Category
+//											 "EarnRuby",                         // Event Name
+//											 "BuySingPack",                      // Event Parameter 1 (Acquisition channel)
+//											 "Normal",  // Event Parameter 2 (Type)
+//											 1);                                 // Event Value
 	
-	fiverocks::FiveRocksBridge::trackEvent("Economy",             // Event Category
-											 "EarnRuby",                         // Event Name
-											 "BuySingPack",                      // Event Parameter 1 (Acquisition channel)
-											 "Normal",  // Event Parameter 2 (Type)
-											 1);                                 // Event Value
-	
-	return true;
+//	return true;
 	Json::Value param;
 	param["productid"] = "g_10289_001";
 	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
