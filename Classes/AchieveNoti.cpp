@@ -8,6 +8,7 @@
 
 #include "AchieveNoti.h"
 #include "StarGoldData.h"
+#include "KSLabelTTF.h"
 
 void AchieveNoti::checkAchieveNotiQueue()
 {
@@ -30,14 +31,53 @@ void AchieveNoti::myInit(AchievementCode t_code)
 		back_img->setPosition(CCPointZero);
 		addChild(back_img);
 		
-		CCLabelTTF* title_label = CCLabelTTF::create(myAchieve->getTitle(t_code).c_str(), mySGD->getFont().c_str(), 13);
+		AchieveGroup t_group = myAchieve->getAchieveGroup(t_code);
+		if(t_group.achieve_list.size() == 1)
+		{
+			CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
+			t_crown->setPosition(ccp(20, back_img->getContentSize().height/2.f+8));
+			back_img->addChild(t_crown);
+		}
+		else if(t_group.achieve_list.size() == 3)
+		{
+			int t_index = 0;
+			for(int i=0;i<t_group.achieve_list.size();i++)
+			{
+				if(t_group.achieve_list[i] == t_code)
+				{
+					t_index = i;
+				}
+			}
+			
+			if(t_index == 0)
+			{
+				CCSprite* t_crown = CCSprite::create("achievement_crown_bronze.png");
+				t_crown->setPosition(ccp(20, back_img->getContentSize().height/2.f+8));
+				back_img->addChild(t_crown);
+			}
+			else if(t_index == 1)
+			{
+				CCSprite* t_crown = CCSprite::create("achievement_crown_silver.png");
+				t_crown->setPosition(ccp(20, back_img->getContentSize().height/2.f+8));
+				back_img->addChild(t_crown);
+			}
+			else if(t_index == 2)
+			{
+				CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
+				t_crown->setPosition(ccp(20, back_img->getContentSize().height/2.f+8));
+				back_img->addChild(t_crown);
+			}
+		}
+		
+		KSLabelTTF* title_label = KSLabelTTF::create(myAchieve->getTitle(t_code).c_str(), mySGD->getFont().c_str(), 12);
+		title_label->setColor(ccc3(255, 170, 20));
 		title_label->setAnchorPoint(ccp(0,0.5));
-		title_label->setPosition(ccp(-60,10));
+		title_label->setPosition(ccp(-60,8));
 		addChild(title_label);
 		
-		CCLabelTTF* content_label = CCLabelTTF::create(myAchieve->getContent(t_code).c_str(), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* content_label = KSLabelTTF::create(myAchieve->getContent(t_code).c_str(), mySGD->getFont().c_str(), 9);
 		content_label->setAnchorPoint(ccp(0,0.5));
-		content_label->setPosition(ccp(-60,-12));
+		content_label->setPosition(ccp(-60,-8));
 		addChild(content_label);
 		
 		CCMoveTo* t_show = CCMoveTo::create(0.5f, ccp(240,30));

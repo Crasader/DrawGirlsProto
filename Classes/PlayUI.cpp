@@ -412,11 +412,11 @@ void GoldLabel::myInit ()
 	
 	if(mySGD->is_endless_mode)
 	{
-		setPosition(ccp(480-8, myDSH->ui_top-25));
+		setPosition(ccp(480-8, myDSH->ui_top-16));
 	}
 	else
 	{
-		setPosition(ccp(480-8, myDSH->ui_top-50));
+		setPosition(ccp(480-8, myDSH->ui_top-41));
 	}
 //	if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));
@@ -2181,7 +2181,7 @@ void PlayUI::counting ()
 		countingLabel->setColor(ccYELLOW);
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
-		countingLabel->setPosition(ccp(240,5));
+		countingLabel->setPosition(ccp(240,17));
 		countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 	}
 	
@@ -2568,9 +2568,9 @@ void PlayUI::myInit ()
 		((CountingBMLabel*)score_label)->onChangeScale(false);
 		
 		score_label->setAnchorPoint(ccp(1,1));
-		score_label->setPosition(ccp(480-8,myDSH->ui_top-13+UI_OUT_DISTANCE));
+		score_label->setPosition(ccp(480-8,myDSH->ui_top-7+UI_OUT_DISTANCE));
 		
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-13+UI_OUT_DISTANCE, myDSH->ui_top-13, UI_IN_TIME, [=](float t){score_label->setPositionY(t);}, [=](float t){score_label->setPositionY(myDSH->ui_top-13);}));
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-7+UI_OUT_DISTANCE, myDSH->ui_top-7, UI_IN_TIME, [=](float t){score_label->setPositionY(t);}, [=](float t){score_label->setPositionY(myDSH->ui_top-7);}));
 		addChild(score_label);
 	}
 	
@@ -2587,7 +2587,7 @@ void PlayUI::myInit ()
 	percentageLabel = CCLabelBMFont::create("0%", "star_gage_font.fnt");
 	percentageLabel->setAnchorPoint(ccp(0.5, 0.5));
 //	percentageLabel->enableOuterStroke(ccBLACK, 1.f);
-	percentageLabel->setPosition(ccp(182,myDSH->ui_top-36));//29
+	percentageLabel->setPosition(ccp(182,myDSH->ui_top-29));//29
 	
 //	if(myGD->gamescreen_type == kGT_leftUI)			percentageLabel->setPosition(ccp(36,myDSH->ui_center_y));
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
@@ -2634,11 +2634,11 @@ void PlayUI::myInit ()
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit.getV()-countingCnt.getV())->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccp(240,5-UI_OUT_DISTANCE));
+	countingLabel->setPosition(ccp(240,17-UI_OUT_DISTANCE));
 	countingLabel->setColor(ccYELLOW);
 	addChild(countingLabel);
 	
-	addChild(KSGradualValue<float>::create(5-UI_OUT_DISTANCE, 5, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(5);}));
+	addChild(KSGradualValue<float>::create(17-UI_OUT_DISTANCE, 17, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(17);}));
 	
 	isFirst = true;
 	//		beforePercentage = 0;

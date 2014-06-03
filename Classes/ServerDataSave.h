@@ -245,6 +245,7 @@ enum SDS_KEY
 	kSDS_AI_int1_reward_int2_type_s,
 	kSDS_AI_int1_reward_int2_count_i,
 	kSDS_AI_int1_exchangeID_s,
+	kSDS_AI_int1_groupNo_i,
 	kSDS_AI_end = 4999
 };
 class SDS_SET

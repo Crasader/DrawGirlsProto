@@ -68,7 +68,7 @@ private:
 	CCTableView* achieve_table;
 	CCLabelTTF* empty_ment;
 	
-	vector<AchievementCode> achieve_list;
+	vector<AchieveGroup> achieve_list;
 	
 	void showPopup();
 	void endShowPopup();
@@ -81,6 +81,8 @@ private:
 	void cellAction(CCObject* sender);
 	int keep_tag;
 	int keep_value;
+	
+	bool isHaveAchieveGroup(vector<AchieveGroup>& t_vector, AchieveGroup t_group);
 	
 //	vector<int> keep_value_list;
 //	
