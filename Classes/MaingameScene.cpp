@@ -706,6 +706,8 @@ void Maingame::finalSetting()
 		myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		
 		
+        CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
+        
 		string flag = mySGD->endless_flag.getV();
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
 		selectedFlagSpr->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8));

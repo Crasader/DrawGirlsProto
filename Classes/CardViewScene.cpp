@@ -164,6 +164,8 @@ bool CardViewScene::init()
 																	is_actioned = true;
 																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																	
+                                                                    CCLOG("11111111");
+                                                                    
 																	BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){
 																		is_actioned = false;
 																	}, liveGirl);
@@ -196,6 +198,8 @@ bool CardViewScene::init()
 	
 	if(!is_morphing)
 	{
+        CCLOG("222222222");
+        
 		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, liveGirl);
 		addChild(t_popup, 999);
 	}
