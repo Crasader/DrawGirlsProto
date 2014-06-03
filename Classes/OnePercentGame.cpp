@@ -196,7 +196,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 																				 //endShow();
 																			 }));
 	
-	m_lblPercent = CCLabelTTF::create(boost::str(boost::format("%||") % m_totalPercent).c_str(), mySGD->getFont().c_str(),
+	m_lblPercent = CCLabelTTF::create(boost::str(boost::format("%|4.3|") % m_totalPercent).c_str(), mySGD->getFont().c_str(),
 																		14.f);
 	m_lblPercent->setPosition(ccp(0, 0));
 	m_container->addChild(m_lblPercent, kOnePercentGame_Z_content);
