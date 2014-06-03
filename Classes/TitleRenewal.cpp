@@ -786,6 +786,7 @@ void TitleRenewalScene::resultGetAchieveList(Json::Value result_data)
 		{
 			Json::Value achieve_group = t_list[i];
 			int group_size = achieve_group.size();
+			
 			for(int j=0;j<group_size;j++)
 			{
 				real_list_size++;
@@ -807,6 +808,7 @@ void TitleRenewalScene::resultGetAchieveList(Json::Value result_data)
 				}
 				
 				NSDS_SS(kSDS_AI_int1_exchangeID_s, achieve_info["id"].asInt(), achieve_info["exchangeID"].asString(), false);
+				NSDS_SI(kSDS_AI_int1_groupNo_i, achieve_info["id"].asInt(), achieve_info["groupNo"].asInt(), false);
 			}
 		}
 		

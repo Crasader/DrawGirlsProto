@@ -608,7 +608,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rivalSearch,
 	kMyLocalKey_rivalLevel,
 	kMyLocalKey_rivalIngWin,
-	kMyLocalKey_rivalSelect
+	kMyLocalKey_rivalSelect,
+	
+	kMyLocalKey_achieveSuccess2
 }MyLocalKey;
 
 

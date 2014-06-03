@@ -204,10 +204,55 @@ vector<CommandParam> AchieveConditionReward::updateAchieveHistoryVectorParam(jso
 	return t_command_list;
 }
 
+AchieveGroup AchieveConditionReward::getAchieveGroup(AchievementCode t_code)
+{
+	for(auto iter=achieve_group_list.begin();iter!=achieve_group_list.end();iter++)
+	{
+		AchieveGroup t_group = iter->second;
+		
+		for(int j=0;j<t_group.achieve_list.size();j++)
+		{
+			if(t_group.achieve_list[j] == t_code)
+			{
+				return t_group;
+			}
+		}
+	}
+	
+	return AchieveGroup();
+}
+
+AchievementCode AchieveConditionReward::getRecentCodeFromGroup(AchievementCode t_code)
+{
+	AchieveGroup t_group = getAchieveGroup(t_code);
+	
+	int state_value = -1; // complete
+	
+	AchievementCode recent_code;
+	
+	for(int i=0;i<t_group.achieve_list.size();i++)
+	{
+		state_value = 0;
+		
+		recent_code = t_group.achieve_list[i];
+		if(myAchieve->isCompleted(recent_code))
+			state_value = -1;
+		else if(myAchieve->isAchieve(recent_code))
+		{
+			state_value = 1;
+			break;
+		}
+		else
+			break;
+	}
+	
+	return recent_code;
+}
 
 void AchieveConditionReward::initAchievement()
 {
 	data_map.clear();
+	achieve_group_list.clear();
 	
 	int list_size = NSDS_GI(kSDS_AI_count_i);
 	for(int i=0;i<list_size;i++)
@@ -219,6 +264,19 @@ void AchieveConditionReward::initAchievement()
 		
 		data_map[t_type] = AchieveConditionRewardData(t_type, t_goal, t_title, t_content);
 		data_map[t_type].initReward(t_type);
+		
+		auto iter = achieve_group_list.find(NSDS_GI(kSDS_AI_int1_groupNo_i, t_type));
+		if(iter == achieve_group_list.end())
+		{
+			AchieveGroup t_group;
+			t_group.achieve_list.push_back(t_type);
+			achieve_group_list[NSDS_GI(kSDS_AI_int1_groupNo_i, t_type)] = t_group;
+		}
+		else
+		{
+			iter->second.achieve_list.push_back(t_type);
+//			achieve_group_list[NSDS_GI(kSDS_AI_int1_groupNo_i, t_type)] = iter->second;
+		}
 	}
 }
 
@@ -251,6 +309,7 @@ void AchieveConditionReward::myInit()
 	data_map.clear();
 	is_changed = false;
 	changed_data.clear();
+	achieve_group_list.clear();
 }
 
 bool AchieveConditionReward::isCompleted(AchievementCode t_code)

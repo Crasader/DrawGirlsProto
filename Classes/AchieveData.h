@@ -134,6 +134,17 @@ private:
 	vector<AchieveRewardClass> reward_list;
 };
 
+class AchieveGroup
+{
+public:
+	vector<AchievementCode> achieve_list;
+	
+	AchieveGroup()
+	{
+		achieve_list.clear();
+	}
+};
+
 class AchieveConditionReward
 {
 public:
@@ -209,6 +220,10 @@ public:
 	
 	void initAchievement();
 	void initHistory(Json::Value t_list);
+	
+	map<int, AchieveGroup> achieve_group_list;
+	AchieveGroup getAchieveGroup(AchievementCode t_code);
+	AchievementCode getRecentCodeFromGroup(AchievementCode t_code);
 	
 private:
 	
