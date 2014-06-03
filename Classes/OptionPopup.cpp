@@ -634,7 +634,7 @@ bool OptionPopup::init()
 void OptionPopup::onEnter()
 {
 	CCLayer::onEnter();
-//	showPopup();
+	showPopup();
 }
 
 void OptionPopup::showPopup()
