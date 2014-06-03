@@ -152,21 +152,21 @@ bool OptionPopup::init()
 //	OnePercentGame* opg = OnePercentGame::create(0.998, nullptr, nullptr);
 //	addChild(opg, 9999);
 //	return true;
-	Json::Value param;
-	param["productid"] = "g_10289_001";
-	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
-		if(v["issuccess"].asInt())
-		{
-//			reqItemDelivery(); // ;
-			Json::Value param;
-			param["memberID"] = hspConnector::get()->getMemberID();
-			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
-				// 여기서 진짜 갱신.
-				KS::KSLog("refresh !!!!", t);
-			});
-		}
-		KS::KSLog("in-app test \n%", v);
-	});
+//	Json::Value param;
+//	param["productid"] = "g_10289_001";
+//	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+//		if(v["issuccess"].asInt())
+//		{
+////			reqItemDelivery(); // ;
+//			Json::Value param;
+//			param["memberID"] = hspConnector::get()->getMemberID();
+//			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
+//				// 여기서 진짜 갱신.
+//				KS::KSLog("refresh !!!!", t);
+//			});
+//		}
+//		KS::KSLog("in-app test \n%", v);
+//	});
 	
 	setTouchEnabled(true);
 	
@@ -614,7 +614,7 @@ bool OptionPopup::init()
 void OptionPopup::onEnter()
 {
 	CCLayer::onEnter();
-//	showPopup();
+	showPopup();
 }
 
 void OptionPopup::showPopup()
