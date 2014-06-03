@@ -836,7 +836,10 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			mySGD->endless_my_victory = result_data["myInfo"]["ing_win"].asInt();
 			
 			if(refresh_ing_win_func != nullptr)
+			{
 				refresh_ing_win_func();
+				refresh_ing_win_func = nullptr;
+			}
 			
 			mySGD->endless_my_ing_score = result_data["myInfo"]["ing_score"].asInt();
 			

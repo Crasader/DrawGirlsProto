@@ -46,6 +46,7 @@
 #include "EndlessModeOpening.h"
 #include "EndlessModeResult.h"
 #include "FormSetter.h"
+#include "AchieveNoti.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -2217,6 +2218,7 @@ void MainFlowScene::setBottom()
 					{
 						n_win_back->removeFromParent();
 						s_win_back->removeFromParent();
+						refresh_ing_win_func = nullptr;
 					}
 				};
 			}

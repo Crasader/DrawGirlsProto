@@ -706,6 +706,8 @@ void Maingame::finalSetting()
 		myGD->V_I["Main_refreshReplayScore"] = std::bind(&Maingame::refreshReplayScore, this, _1);
 		
 		
+        CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
+        
 		string flag = mySGD->endless_flag.getV();
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
 		selectedFlagSpr->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8));
@@ -3554,18 +3556,62 @@ void Maingame::refreshReplayPosition(int temp_time)
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isImageChange)].asBool())
 	{
-		CCLabelTTF* change_label = CCLabelTTF::create("체인지", mySGD->getFont().c_str(), 14);
-		change_label->setColor(ccYELLOW);
-		change_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()+10)));
-		replay_all_node->addChild(change_label);
+		CCSprite* t_continue = CCSprite::create("endless_change.png");
+		t_continue->setScale(0.f);
+		t_continue->setOpacity(0);
+		t_continue->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
+		replay_all_node->addChild(t_continue);
+		
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.3f, 255);
+		CCSpawn* t_spawn1 = CCSpawn::create(t_scale1, t_fade1, NULL);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+		
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 0.f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.3f, 0);
+		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_fade2, NULL);
+		
+		CCCallFunc* t_call = CCCallFunc::create(t_continue, callfunc_selector(CCSprite::removeFromParent));
+		
+		CCSequence* t_seq = CCSequence::create(t_spawn1, t_delay1, t_spawn2, t_call, NULL);
+		
+		t_continue->runAction(t_seq);
+		
+//		CCLabelTTF* change_label = CCLabelTTF::create("체인지", mySGD->getFont().c_str(), 14);
+//		change_label->setColor(ccYELLOW);
+//		change_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()+10)));
+//		replay_all_node->addChild(change_label);
 	}
 	
 	int game_info = position_data[mySGD->getReplayKey(kReplayKey_timeStamp_gameInfo)].asInt();
 	if(game_info == 1)
 	{
-		CCLabelTTF* clear_label = CCLabelTTF::create("클리어", mySGD->getFont().c_str(), 14);
-		clear_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
-		replay_all_node->addChild(clear_label);
+		CCSprite* t_continue = CCSprite::create("endless_clear.png");
+		t_continue->setScale(0.f);
+		t_continue->setOpacity(0);
+		t_continue->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
+		replay_all_node->addChild(t_continue);
+		
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.3f, 255);
+		CCSpawn* t_spawn1 = CCSpawn::create(t_scale1, t_fade1, NULL);
+		
+//		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+//		
+//		CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 0.f);
+//		CCFadeTo* t_fade2 = CCFadeTo::create(0.3f, 0);
+//		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_fade2, NULL);
+//		
+//		CCCallFunc* t_call = CCCallFunc::create(t_continue, callfunc_selector(CCSprite::removeFromParent));
+//		
+//		CCSequence* t_seq = CCSequence::create(t_spawn1, t_delay1, t_spawn2, t_call, NULL);
+		
+		t_continue->runAction(t_spawn1);
+		
+//		CCLabelTTF* clear_label = CCLabelTTF::create("클리어", mySGD->getFont().c_str(), 14);
+//		clear_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
+//		replay_all_node->addChild(clear_label);
 		
 		replay_character->setVisible(false);
 		
@@ -3583,10 +3629,32 @@ void Maingame::refreshReplayPosition(int temp_time)
 	}
 	else if(game_info == -1)
 	{
-		CCLabelTTF* game_over_label = CCLabelTTF::create("게임오버", mySGD->getFont().c_str(), 12);
-		game_over_label->setColor(ccBLACK);
-		game_over_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
-		replay_all_node->addChild(game_over_label);
+		CCSprite* t_continue = CCSprite::create("endless_gameover.png");
+		t_continue->setScale(0.f);
+		t_continue->setOpacity(0);
+		t_continue->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
+		replay_all_node->addChild(t_continue);
+		
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.3f, 255);
+		CCSpawn* t_spawn1 = CCSpawn::create(t_scale1, t_fade1, NULL);
+		
+//		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+//		
+//		CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 0.f);
+//		CCFadeTo* t_fade2 = CCFadeTo::create(0.3f, 0);
+//		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_fade2, NULL);
+//		
+//		CCCallFunc* t_call = CCCallFunc::create(t_continue, callfunc_selector(CCSprite::removeFromParent));
+//		
+//		CCSequence* t_seq = CCSequence::create(t_spawn1, t_delay1, t_spawn2, t_call, NULL);
+		
+		t_continue->runAction(t_spawn1);
+		
+//		CCLabelTTF* game_over_label = CCLabelTTF::create("게임오버", mySGD->getFont().c_str(), 12);
+//		game_over_label->setColor(ccBLACK);
+//		game_over_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale()-10)));
+//		replay_all_node->addChild(game_over_label);
 		
 		replay_character->setVisible(false);
 		
@@ -3605,28 +3673,50 @@ void Maingame::refreshReplayPosition(int temp_time)
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isContinue)].asBool())
 	{
+		CCSprite* t_continue = CCSprite::create("endless_continue.png");
+		t_continue->setScale(0.f);
+		t_continue->setOpacity(0);
+		t_continue->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
+		replay_all_node->addChild(t_continue);
+
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.3f, 255);
+		CCSpawn* t_spawn1 = CCSpawn::create(t_scale1, t_fade1, NULL);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+		
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 0.f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.3f, 0);
+		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_fade2, NULL);
+		
+		CCCallFunc* t_call = CCCallFunc::create(t_continue, callfunc_selector(CCSprite::removeFromParent));
+		
+		CCSequence* t_seq = CCSequence::create(t_spawn1, t_delay1, t_spawn2, t_call, NULL);
+		
+		t_continue->runAction(t_seq);
+		
 		replay_continue_count++;
-		if(!replay_continue_label)
-		{
-			replay_continue_label = CCLabelTTF::create("이어하기 : 1", mySGD->getFont().c_str(), 8);
-			replay_continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), -5)));
-			replay_all_node->addChild(replay_continue_label);
-		}
-		else
-			replay_continue_label->setString(CCString::createWithFormat("이어하기 : %d", replay_continue_count)->getCString());
-		
-		CCLabelTTF* continue_label = CCLabelTTF::create("이어하기!!", mySGD->getFont().c_str(), 10);
-		continue_label->setScale(0.5f);
-		continue_label->setColor(ccMAGENTA);
-		continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
-		replay_all_node->addChild(continue_label);
-		
-		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 5.f);
-		CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
-		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_fade);
-		CCCallFunc* t_call = CCCallFunc::create(continue_label, callfunc_selector(CCLabelTTF::removeFromParent));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
-		continue_label->runAction(t_seq);
+//		if(!replay_continue_label)
+//		{
+//			replay_continue_label = CCLabelTTF::create("이어하기 : 1", mySGD->getFont().c_str(), 8);
+//			replay_continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), -5)));
+//			replay_all_node->addChild(replay_continue_label);
+//		}
+//		else
+//			replay_continue_label->setString(CCString::createWithFormat("이어하기 : %d", replay_continue_count)->getCString());
+//		
+//		CCLabelTTF* continue_label = CCLabelTTF::create("이어하기!!", mySGD->getFont().c_str(), 10);
+//		continue_label->setScale(0.5f);
+//		continue_label->setColor(ccMAGENTA);
+//		continue_label->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
+//		replay_all_node->addChild(continue_label);
+//		
+//		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 5.f);
+//		CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+//		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_fade);
+//		CCCallFunc* t_call = CCCallFunc::create(continue_label, callfunc_selector(CCLabelTTF::removeFromParent));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
+//		continue_label->runAction(t_seq);
 	}
 }
 

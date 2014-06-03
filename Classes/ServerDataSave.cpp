@@ -801,6 +801,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_AI_int1_reward_int2_type_s)			rv = "%d_reward_%d_type";
 	else if(t_key == kSDS_AI_int1_reward_int2_count_i)			rv = "%d_reward_%d_count";
 	else if(t_key == kSDS_AI_int1_exchangeID_s)					rv = "%d_xc";
+	else if(t_key == kSDS_AI_int1_groupNo_i)					rv = "%d_gn";
 	
 	return rv.c_str();
 }
