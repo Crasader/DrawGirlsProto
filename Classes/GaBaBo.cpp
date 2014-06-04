@@ -210,19 +210,29 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 					m_ga->setEnabled(false);
 					m_bo->setEnabled(false);
 					int mySelect = 1;
+					decltype(m_ba) selectedObject = nullptr;
 					if(m_ba->getSelectedIndex() == 1)
 					{
 						mySelect = kAttackBa;
+						selectedObject = m_ba;
 					}
 					if(m_ga->getSelectedIndex() == 1)
 					{
 						mySelect = kAttackGa;
+						selectedObject = m_ga;
 					}
 					if(m_bo->getSelectedIndex() == 1)
 					{
 						mySelect = kAttackBo;
+						selectedObject = m_bo;
 					}
 					
+					addChild(KSGradualValue<CCPoint>::create(selectedObject->getPosition(), selectedObject->getPosition() + ccp(0, 100),
+																									 0.1f, [=](CCPoint t){
+																										 selectedObject->setPosition(t);
+																									 }, [=](CCPoint t){
+																										 selectedObject->setPosition(t);
+																									 }));
 					int D = mySelect - m_computerThink % 3;
 					std::string resultString;
 					int gameResult = 1;
@@ -294,6 +304,12 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 							m_ba->setEnabled(true);
 							m_ga->setEnabled(true);
 							m_bo->setEnabled(true);
+							addChild(KSGradualValue<CCPoint>::create(selectedObject->getPosition(), selectedObject->getPosition() + ccp(0, -100),
+																											 0.1f, [=](CCPoint t){
+																												 selectedObject->setPosition(t);
+																											 }, [=](CCPoint t){
+																												 selectedObject->setPosition(t);
+																											 }));
 							scheduleUpdate();
 							
 						}

@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 package com.nhnent.SKDRAWGIRLSA;
+import io.fiverocks.android.FiveRocks;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -42,9 +44,14 @@ import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
 import com.litqoo.lib.KSActivityBase;
 
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
+	public static final String FiveRocks_AppId = "538c30c400821dfba2000001";
+	public static final String FiveRocks_AppKey = "LxsEDRsKVnr8_Qd_Uffj";
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		
+
 		if(com.litqoo.lib.hspConnector.setup(10289, "SKDRAWGIRLSA", "1.0.0.KG")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
@@ -83,6 +90,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     }
 
     static { 
+    	FiveRocks.loadSharedLibrary();
         System.loadLibrary("cocos2dlua");
     }
     
@@ -110,6 +118,17 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     //    protected void onActivityResult(int requestCode, int resultCode, Intent data){
 //    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
 //    }
+    @Override
+    protected void onStart() {
+      super.onStart();
+      FiveRocks.onActivityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+      FiveRocks.onActivityStop(this);
+      super.onStop();
+    }
 }
 
 class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{

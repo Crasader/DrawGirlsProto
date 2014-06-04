@@ -218,11 +218,8 @@ void ZoomScript::typingAnimation()
 		
 		if(typing_frame == text_length)
 		{
-			CCTouch* t_touch = new CCTouch();
-			t_touch->setTouchInfo(0, 0, 0);
-			t_touch->autorelease();
+						
 			
-			target_node->ccTouchEnded(t_touch, NULL);
 			
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
@@ -231,7 +228,13 @@ void ZoomScript::typingAnimation()
 			tuto.second->runAnimationsForSequenceNamed("Default Timeline");
 			zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 			addChild(zoom_img, kZS_Z_script_case);
-			(this->*delegate_typing_after)();
+			tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
+				(this->*delegate_typing_after)();
+				CCTouch* t_touch = new CCTouch();
+				t_touch->setTouchInfo(0, 0, 0);
+				t_touch->autorelease();
+				target_node->ccTouchEnded(t_touch, NULL);
+			});
 		}
 	}
 	else
