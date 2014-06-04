@@ -1128,6 +1128,10 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("업적완료"), kMyLocalKey_achieveSuccess2);
 	
+	ko->setObject(CCString::create("소녀들의 위치를 파악하고 있습니다."), kMyLocalKey_titleTempScript1);
+	ko->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
+	ko->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1761,6 +1765,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
 	
 	en->setObject(CCString::create("업적완료"), kMyLocalKey_achieveSuccess2);
+	
+	en->setObject(CCString::create("소녀들의 위치를 파악하고 있습니다."), kMyLocalKey_titleTempScript1);
+	en->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
+	en->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2417,6 +2425,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
 	
 	ja->setObject(CCString::create("업적완료"), kMyLocalKey_achieveSuccess2);
+	
+	ja->setObject(CCString::create("소녀들의 위치를 파악하고 있습니다."), kMyLocalKey_titleTempScript1);
+	ja->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
+	ja->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

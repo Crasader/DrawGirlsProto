@@ -1010,6 +1010,20 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			}
 		}
 		
+		for(int i=kAchievementCode_hidden_bigHand1;i<=kAchievementCode_hidden_bigHand2;i++)
+		{
+			if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+			{
+				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+				   t_p == t_beforePercentage + myAchieve->getCondition(AchievementCode(i))/0.001f)
+				{
+					myAchieve->changeIngCount(AchievementCode(i), 1);
+					AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+				}
+			}
+		}
+		
 		if(clr_cdt_type == kCLEAR_bigArea && !is_cleared_cdt && t_p - t_beforePercentage >= clr_cdt_per)
 			takeBigArea();
 		
@@ -1158,6 +1172,30 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			runAction(t_seq);
 			
 			endGame(t_p < 1.f && t_p > 0.99f);
+			
+			for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
+			{
+				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+				   countingCnt.getV() >= myAchieve->getCondition((AchievementCode)i))
+				{
+					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+				}
+			}
+			
+			for(int i=kAchievementCode_hidden_breathtaking1;i<=kAchievementCode_hidden_breathtaking2;i++)
+			{
+				if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+				{
+					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+					   playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
+					{
+						myAchieve->changeIngCount(AchievementCode(i), 1);
+						AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+					}
+				}
+			}
 			
 			myGD->communication("Main_startClearFloatingCoin", last_get_percentage);
 		}
@@ -2512,7 +2550,7 @@ void PlayUI::myInit ()
 	addChild(KSGradualValue<float>::create(gold_origin_position.y+UI_OUT_DISTANCE, gold_origin_position.y, UI_IN_TIME, [=](float t){gold_label->setPositionY(t);}, [=](float t){gold_label->setPositionY(gold_origin_position.y);}));
 	
 	CCSprite* gold_img = CCSprite::create("ui_gold_img.png");
-	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-50,9)));
+	gold_img->setPosition(ccpAdd(gold_label->getPosition(), ccp(-50,0)));
 	addChild(gold_img);
 	
 	CCPoint gold_img_origin_position = gold_img->getPosition();

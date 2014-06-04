@@ -610,7 +610,11 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rivalIngWin,
 	kMyLocalKey_rivalSelect,
 	
-	kMyLocalKey_achieveSuccess2
+	kMyLocalKey_achieveSuccess2,
+	
+	kMyLocalKey_titleTempScript1,
+	kMyLocalKey_titleTempScript2,
+	kMyLocalKey_titleTempScript3
 }MyLocalKey;
 
 

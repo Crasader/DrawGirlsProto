@@ -26,6 +26,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "FirstPurchasePopup.h"
+#include "AchieveNoti.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -807,6 +808,20 @@ bool ShopPopup::init()
 	card_price_low = KSProtectVar<int>(10);
 	
 	showPopup();
+	
+	int i = kAchievementCode_hidden_shopper1;
+	int after_value = myAchieve->getRecentValue(kAchievementCode_hidden_shopper1) + 1;
+	
+	if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+		   after_value >= myAchieve->getCondition(kAchievementCode_hidden_shopper1))
+		{
+			myAchieve->changeIngCount(AchievementCode(i), after_value);
+			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
 	
     return true;
 }

@@ -52,6 +52,8 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+	is_preloaded_effect = false;
+	
 //	std::chrono::time_point<std::chrono::system_clock> recent;
 //    recent = std::chrono::system_clock::now();
 //	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
@@ -153,11 +155,14 @@ void TitleRenewalScene::loadCounting(CCObject* sender)
 
 void TitleRenewalScene::endSplash()
 {
-	CCSprite* ratings = CCSprite::create("game_ratings.png");
-	ratings->setPosition(ccp(240,160));
-	addChild(ratings);
-	
-	addChild(KSTimer::create(1.5f, [=](){realInit();}));
+//	CCSprite* ratings = CCSprite::create("game_ratings.png");
+//	ratings->setPosition(ccp(240,160));
+//	addChild(ratings);
+//	
+//	addChild(KSTimer::create(1.5f, [=]()
+//	{
+		realInit();
+//	}));
 }
 
 void TitleRenewalScene::realInit()
@@ -168,12 +173,17 @@ void TitleRenewalScene::realInit()
 	
 	title_name = CCSprite::create("temp_title_name.png");
 	title_name->setAnchorPoint(ccp(0.5,0));
-	title_name->setPosition(ccp(240,10));//240,210));
+	title_name->setPosition(ccp(240,50));//10));
 	addChild(title_name, 1);
+	
+	CCSprite* ratings = CCSprite::create("game_ratings.png");
+	ratings->setAnchorPoint(ccp(1,1));
+	ratings->setPosition(ccp(480-20,320-15));
+	addChild(ratings, 1);
 	
 	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 15, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
-	state_label->setPosition(ccp(240,190));
+	state_label->setPosition(ccp(240,30)); // 190
 	addChild(state_label, 2);
 	
 	
@@ -311,7 +321,50 @@ void TitleRenewalScene::successLogin()
 {
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
-		AudioEngine::sharedInstance()->preloadEffectScene("Title");
+//		AudioEngine::sharedInstance()->preloadEffectScene("Title");
+		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
+		
+		addChild(KSTimer::create(1.f/60.f, [=]()
+		{
+			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
+			
+			addChild(KSTimer::create(1.f/60.f, [=]()
+			{
+				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
+				
+				addChild(KSTimer::create(1.f/60.f, [=]()
+				{
+					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
+					
+					addChild(KSTimer::create(1.f/60.f, [=]()
+					{
+						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
+						
+						addChild(KSTimer::create(1.f/60.f, [=]()
+						{
+							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
+							
+							addChild(KSTimer::create(1.f/60.f, [=]()
+							{
+								is_preloaded_effect = true;
+								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+								
+								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+								{
+									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+									
+									CCDelayTime* t_delay = CCDelayTime::create(2.f);
+									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+									runAction(t_seq);
+								}
+							}));
+						}));
+					}));
+				}));
+			}));
+		}));
 	}));
 	
 	if(myLog->getLogCount() > 0)
@@ -522,7 +575,7 @@ void TitleRenewalScene::checkReceive()
 				}, [=](float t){
 					black_img->setOpacity(255);
 					
-					state_label->setPosition(ccp(240,130));
+					state_label->setPosition(ccp(240,30));//130
 					
 					title_img->removeFromParent();
 					title_img = CCSprite::create("temp_title_back2.png");
@@ -710,6 +763,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setEventString(result_data["eventString"].asString());
 		mySGD->setIsAlwaysSavePlaydata(result_data["isAlwaysSavePlaydata"].asInt());
+		mySGD->setPlayContinueFeeEndless(result_data["playContinueFeeEndless"].asInt());
 	}
 	else
 	{
@@ -1858,7 +1912,7 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::endingAction()
 {
-	if(is_loaded_cgp && is_loaded_server)
+	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
 	{
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();

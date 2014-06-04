@@ -19,6 +19,7 @@
 #include "LoadingLayer.h"
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h"
+#include "AchieveNoti.h"
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
@@ -1607,6 +1608,20 @@ void PlayTutorial::nextStep()
 													  
 												  }));
 											  }));
+											  
+											  
+											  AchievementCode i = kAchievementCode_tutorial;
+											  
+											  if(!myAchieve->isCompleted(i) && !myAchieve->isAchieve(i))
+											  {
+												  myAchieve->changeIngCount(AchievementCode(i), 1);
+												  
+												  if(!myAchieve->isNoti(AchievementCode(i)))
+												  {
+													  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+													  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+												  }
+											  }
 											  
 											  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
 															//"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()

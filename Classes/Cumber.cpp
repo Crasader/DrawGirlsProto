@@ -15,6 +15,7 @@
 #include <functional>
 #include <memory>
 #include "CumberEmotion.h"
+#include "AchieveNoti.h"
 
 
 void CumberParent::onStartGame()
@@ -156,10 +157,23 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle, 
 	
 	total_damage_to_gold = total_damage_to_gold.getV() - gold_count*d_damage;
 	
-	if(gold_count > 3)
-		gold_count = 3;
+	if(gold_count > 2)
+		gold_count = 2;
 	
 	myGD->communication("GIM_showAttackFloatingCoin", cbp->getPosition(), gold_count);
+	
+	mySGD->stage_attack_count = mySGD->stage_attack_count.getV() + 1;
+	
+	for(int i=kAchievementCode_attacker1;i<=kAchievementCode_attacker3;i++)
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+		   mySGD->stage_attack_count.getV() >= myAchieve->getCondition((AchievementCode)i))
+		{
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
 	return cbp->startDamageReaction(damage, angle, castCancel, stiffen);
 }
 

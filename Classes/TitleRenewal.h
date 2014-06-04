@@ -92,6 +92,8 @@ private:
 	void resultHSLogin(Json::Value result_data);
 	void joinAction();
 	
+	bool is_preloaded_effect;
+	
 	void successLogin();
 	
 	vector<CommandParam> command_list;

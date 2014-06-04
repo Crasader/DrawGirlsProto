@@ -13,6 +13,7 @@
 #include "MaingameScene.h"
 #include "TutorialFlowStep.h"
 #include "MyLocalization.h"
+#include "AchieveNoti.h"
 void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 {
 	queue<IntMoveState> bfsArray;
@@ -1691,6 +1692,18 @@ void Jack::takeSpeedUpItem()
 {
 	if(myGD->jack_base_speed + speed_up_value >= 2.f)
 	{
+		int i = kAchievementCode_hidden_speedMania;
+		
+		if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+		{
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), 1);
+				AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
 		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
 
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
@@ -1887,7 +1900,7 @@ void Jack::dieEffect()
 			}
 			else
 			{
-				if(continue_on_count < 2)
+				if(mySGD->is_endless_mode || continue_on_count < 2)
 				{
 					continue_on_count++;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
@@ -1999,6 +2012,19 @@ void Jack::continueGame()
 
 void Jack::endGame()
 {
+	int i = kAchievementCode_hidden_dieEasy;
+	
+	if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+		   myGD->getCommunication("UI_getUseTime") <= myAchieve->getCondition(AchievementCode(i)))
+		{
+			myAchieve->changeIngCount(AchievementCode(i), 1);
+			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
 	mySGD->fail_code = kFC_gameover;
 	myGD->setIsGameover(true);
 	myGD->communication("Main_allStopSchedule");

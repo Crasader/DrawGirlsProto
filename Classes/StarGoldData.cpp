@@ -341,6 +341,8 @@ void StarGoldData::setGameStart()
 	is_clear_diary = false;
 	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	
+	stage_attack_count = 0;
+	
 	ingame_gold = 0;
 	
 //	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
@@ -2426,7 +2428,11 @@ void StarGoldData::initTimeEventList(Json::Value t_list)
 		{
 			t_info.float_value = t_time_event["value"].asFloat();
 		}
+		
+		time_event_list.push_back(t_info);
 	}
+	
+	refreshTimeEvent();
 }
 
 string StarGoldData::getTimeEventTypeString(TimeEventType t_type)
@@ -2646,6 +2652,7 @@ void StarGoldData::setHeartSendCoolTime(int t_data){	heart_send_cool_time = t_da
 void StarGoldData::setInviteMaxADay(int t_data){	invite_max_a_day = t_data;}
 void StarGoldData::setInviteCoolDay(int t_data){	invite_cool_day = t_data;}
 void StarGoldData::setPlayContinueFee(int t_data){	play_continue_fee = t_data;}
+void StarGoldData::setPlayContinueFeeEndless(int t_data){	play_continue_fee_endless = t_data;	}
 void StarGoldData::setCardDurabilityUpFee(int t_data){	card_durability_up_fee = t_data;}
 void StarGoldData::setGachaMapFee(int t_data){	gacha_map_fee = t_data;}
 void StarGoldData::setRemoveFriendCoolTime(int t_data){	remove_friend_cool_time = t_data;}
@@ -2678,6 +2685,7 @@ int StarGoldData::getHeartSendCoolTime(){	return heart_send_cool_time.getV();}
 int StarGoldData::getInviteMaxADay(){	return invite_max_a_day.getV();}
 int StarGoldData::getInviteCoolDay(){	return invite_cool_day.getV();}
 int StarGoldData::getPlayContinueFee(){	return play_continue_fee.getV();}
+int StarGoldData::getPlayContinueFeeEndless(){	return play_continue_fee_endless.getV();	}
 int StarGoldData::getCardDurabilityUpFee(){	return card_durability_up_fee.getV();}
 int StarGoldData::getGachaMapFee(){	return gacha_map_fee.getV();}
 int StarGoldData::getRemoveFriendCoolTime(){	return remove_friend_cool_time.getV();}

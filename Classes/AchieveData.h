@@ -185,6 +185,17 @@ public:
 	{
 		return data_map[t_code].getCondition();
 	}
+	
+	int getPresentationCondition(AchievementCode t_code)
+	{
+		if(t_code == kAchievementCode_luckySeven1 || t_code == kAchievementCode_luckySeven2 || t_code == kAchievementCode_luckySeven3)
+		{
+			return 1;
+		}
+		else
+			return data_map[t_code].getCondition();
+	}
+	
 	AchieveRewardType getRewardType(AchievementCode t_code)
 	{
 		return data_map[t_code].getRewardType();

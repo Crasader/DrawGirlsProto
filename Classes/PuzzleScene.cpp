@@ -42,6 +42,7 @@
 #include "BuyPiecePopup.h"
 #include "GaBaBo.h"
 #include "CurtainNodeForBonusGame.h"
+#include "AchieveNoti.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -322,9 +323,10 @@ bool PuzzleScene::init()
 	{
 		keep_card_number = 0;
 		
-		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+		if(!mySGD->isTimeEvent(kTimeEventType_heart))
+			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
-		bool is_not_empty_card[3] = {false,};
+		bool is_not_empty_card[4] = {false,};
 		
 		clear_is_empty_piece = true;
 		clear_is_perfect_piece = true;
@@ -363,12 +365,12 @@ bool PuzzleScene::init()
 		else if(mySGD->is_exchanged)						take_level = 2;
 		else												take_level = 1;
 		
-		if(mySGD->isTimeEvent(kTimeEventType_card))
-		{
-			take_level += mySGD->getTimeEventIntValue(kTimeEventType_card);
-			if(take_level > 4)
-				take_level = 4;
-		}
+//		if(mySGD->isTimeEvent(kTimeEventType_card))
+//		{
+//			take_level += mySGD->getTimeEventIntValue(kTimeEventType_card);
+//			if(take_level > 4)
+//				take_level = 4;
+//		}
 		
 		clear_star_take_level = take_level;
 		clear_is_empty_star = !is_not_empty_card[take_level-1];
@@ -542,6 +544,39 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
 										 t_loading->removeFromParent();
+										 
+										 for(int i=kAchievementCode_cardCollection1;i<=kAchievementCode_cardCollection3;i++)
+										 {
+											 if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+												mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
+											 {
+												 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+												 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+											 }
+										 }
+										 
+										 AchievementCode i = kAchievementCode_cardSet;
+										 if(!myAchieve->isCompleted(i) && !myAchieve->isAchieve(i))
+										 {
+											 int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, keep_card_number);
+											 bool is_success = true;
+											 for(int i=1;i<=4 && is_success;i++)
+											 {
+												 int t_card_number = NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, i);
+												 if(!mySGD->isHasGottenCards(t_card_number))
+													 is_success = false;
+											 }
+											 
+											 if(is_success)
+											 {
+												 myAchieve->changeIngCount(i, 1);
+												 if(!myAchieve->isNoti(AchievementCode(i)))
+												 {
+													 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+													 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+												 }
+											 }
+										 }
 									 }
 									 else
 									 {

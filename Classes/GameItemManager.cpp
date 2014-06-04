@@ -17,7 +17,7 @@
 //#include "DataStorageHub.h"
 //#include "MissileDamageData.h"
 
-#define ABSORB_DISTANCE 150.f
+#define ABSORB_DISTANCE 100.f
 
 void GameItemBase::selfRemove()
 {
@@ -67,24 +67,46 @@ void GameItemBase::traceCharacter()
 {
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
 	CCPoint direction_vector = jack_position - item_img->getPosition();
-	
-	CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
-	
-	item_img->setPosition(item_img->getPosition() + move_vector);
-	
-	if(item_img->getPosition().getDistanceSq(jack_position) < 2.f)
+	if(direction_vector.getLength() <= 0)
 	{
 		stopTraceCharacter();
+		
+		CCLOG("take it item!!!");
+		
 		if(mySD->getClearCondition() == kCLEAR_itemCollect)
 			myGD->communication("UI_takeItemCollect");
-        
-        myPoint = IntPoint::convertToIntPoint(item_img->getPosition());
-        (target_effect->*delegate_effect)(myPoint.convertToCCP());
+		
+		myPoint = IntPoint::convertToIntPoint(item_img->getPosition());
+		(target_effect->*delegate_effect)(myPoint.convertToCCP());
 		acting();
 		
 		item_img->removeFromParentAndCleanup(true);
 		
 		return;
+	}
+	else
+	{
+		CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
+		
+		item_img->setPosition(item_img->getPosition() + move_vector);
+		
+		if(item_img->getPosition().getDistanceSq(jack_position) < 2.f)
+		{
+			stopTraceCharacter();
+			
+			CCLOG("take it item!!!");
+			
+			if(mySD->getClearCondition() == kCLEAR_itemCollect)
+				myGD->communication("UI_takeItemCollect");
+			
+			myPoint = IntPoint::convertToIntPoint(item_img->getPosition());
+			(target_effect->*delegate_effect)(myPoint.convertToCCP());
+			acting();
+			
+			item_img->removeFromParentAndCleanup(true);
+			
+			return;
+		}
 	}
 }
 void GameItemBase::stopTraceCharacter()
@@ -871,14 +893,14 @@ void ExchangeCoin::stopTraceCharacter()
 
 void ExchangeCoin::moving()
 {
-	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
-	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
-	{
-		stopMoving();
-		
-		startTraceCharacter();
-		return;
-	}
+//	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
+//	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
+//	{
+//		stopMoving();
+//		
+//		startTraceCharacter();
+//		return;
+//	}
 	
 	if(myGD->mapState[myPoint.x][myPoint.y] != mapEmpty &&
 	   myGD->mapState[myPoint.x-1][myPoint.y] != mapEmpty &&
@@ -1832,7 +1854,7 @@ void GameItemManager::counting()
 {
 	counting_value++;
 	
-	if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2)
+	if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2*(double_item_cnt > 0 ? 2 : 1))
 	{
 		if(rand()%2 == 0)
 		{
@@ -1850,7 +1872,7 @@ void GameItemManager::counting()
 		create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
 		counting_value = 0;
 	}
-	else if(clr_cdt_type == kCLEAR_itemCollect && getChildrenCount()-child_base_cnt < 1)
+	else if(clr_cdt_type == kCLEAR_itemCollect && getChildrenCount()-child_base_cnt < 1*(double_item_cnt > 0 ? 2 : 1))
 	{
 		addItem();
 		
@@ -1860,7 +1882,7 @@ void GameItemManager::counting()
 	
 	if(counting_value >= create_counting_value)
 	{
-		if(getChildrenCount()-child_base_cnt < 6)
+		if(getChildrenCount()-child_base_cnt < 6*(double_item_cnt > 0 ? 2 : 1))
 			addItem();
 		
 		create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;

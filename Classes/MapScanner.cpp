@@ -486,6 +486,9 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 	myGD->mapState[s_p.x][s_p.y] = afterType;
 	bfsArray.push(s_p);
 	
+	vector<BFS_Point> check_new_line_list;
+	check_new_line_list.clear();
+	
 	while(!bfsArray.empty())
 	{
 		BFS_Point t_p = bfsArray.front();
@@ -497,10 +500,18 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 			a_p.x = t_p.x+t_v.x;
 			a_p.y = t_p.y+t_v.y;
 			
-			if(isInnerMap(a_p) && myGD->mapState[a_p.x][a_p.y] == beforeType)
+			if(isInnerMap(a_p))
 			{
-				myGD->mapState[a_p.x][a_p.y] = afterType;
-				bfsArray.push(a_p);
+				if(myGD->mapState[a_p.x][a_p.y] == beforeType)
+				{
+					myGD->mapState[a_p.x][a_p.y] = afterType;
+					bfsArray.push(a_p);
+				}
+				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+				{
+					check_new_line_list.push_back(a_p);
+					bfsArray.push(a_p);
+				}
 			}
 		}
 	}

@@ -29,6 +29,7 @@
 #include "KHAlertView.h"
 #include "CommonButton.h"
 #include "CardCase.h"
+#include "AchieveNoti.h"
 
 #include "HeartTime.h"
 #include "MyLocalization.h"
@@ -262,7 +263,7 @@ bool FailPopup::init()
 	main_case->setPosition(ccp(240,160-14.f-450));
 	addChild(main_case, kZ_FP_back);
 	
-	CCScale9Sprite* inner_left = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+	inner_left = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	inner_left->setContentSize(CCSizeMake(230, 209));
 	inner_left->setPosition(main_case->getContentSize().width*0.26f, main_case->getContentSize().height*0.58f+3);
 	main_case->addChild(inner_left);
@@ -279,22 +280,70 @@ bool FailPopup::init()
 	inner_left->addChild(star_back);
 	
 	
-	CCScale9Sprite* time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	time_back->setContentSize(CCSizeMake(215, 35));
-	time_back->setPosition(ccp(115,93));
-	inner_left->addChild(time_back);
+	play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
 	
+	if(mySD->getClearCondition() == kCLEAR_timeLimit)
+		play_limit_time = play_limit_time.getV() - mySD->getClearConditionTimeLimit();
 	
-	CCScale9Sprite* gold_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	gold_back->setContentSize(CCSizeMake(215, 35));
-	gold_back->setPosition(ccp(115,60));
-	inner_left->addChild(gold_back);
+	left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
+	left_life_decrease_score = left_life_base_score.getV()*(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*0.1f);
+	left_time_base_score = left_life_base_score.getV() + left_life_decrease_score.getV();
+	left_time_decrease_score = left_time_base_score.getV()*(play_limit_time.getV()-mySGD->getGameTime())/play_limit_time.getV();
+	left_grade_base_score = left_time_base_score.getV() + left_time_decrease_score.getV();
+	left_grade_decrease_score = left_time_base_score.getV()*mySGD->getStageGrade()*0.5f;
+	left_damaged_score = -mySGD->damaged_score.getV();
 	
+	left_total_score = left_grade_base_score.getV() + left_grade_decrease_score.getV() + left_damaged_score.getV();
 	
-	CCScale9Sprite* score_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	score_back->setContentSize(CCSizeMake(215, 35));
-	score_back->setPosition(ccp(115,27));
-	inner_left->addChild(score_back);
+	for(int i=kAchievementCode_scoreHigh1;i<=kAchievementCode_scoreHigh3;i++)
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+		   left_total_score.getV() >= myAchieve->getCondition((AchievementCode)i))
+		{
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
+	title_list.clear();
+	left_content_list.clear();
+	
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleAreaScore));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleDamageScore));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleComboScore));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleLifeScore));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTimeScore));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleGradeScore));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleDamagedScore));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold));
+	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea));
+	
+	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->area_score.getV())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->damage_score.getV())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->combo_score.getV())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%.0f", left_life_decrease_score.getV())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%.0f", left_time_decrease_score.getV())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%.0f", left_grade_decrease_score.getV())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%d", left_damaged_score.getV())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
+	left_content_list.push_back(CCString::createWithFormat("%d%%", int(mySGD->getPercentage()*100.f))->getCString());
+	
+//	CCScale9Sprite* time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+//	time_back->setContentSize(CCSizeMake(215, 35));
+//	time_back->setPosition(ccp(115,93));
+//	inner_left->addChild(time_back);
+//	
+//	
+//	CCScale9Sprite* gold_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+//	gold_back->setContentSize(CCSizeMake(215, 35));
+//	gold_back->setPosition(ccp(115,60));
+//	inner_left->addChild(gold_back);
+//	
+//	
+//	CCScale9Sprite* score_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+//	score_back->setContentSize(CCSizeMake(215, 35));
+//	score_back->setPosition(ccp(115,27));
+//	inner_left->addChild(score_back);
 	
 	
 	FailCode fail_code = mySGD->fail_code;
@@ -355,51 +404,107 @@ bool FailPopup::init()
 		setFormSetter(t_star);
 	}
 	
-	KSLabelTTF* time_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 15);
-	time_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-	time_ment->setPosition(ccp(48,153));
-	main_case->addChild(time_ment, kZ_FP_img);
-	setFormSetter(time_ment);
+	CCScale9Sprite* left_total_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	left_total_back->setContentSize(CCSizeMake(inner_left->getContentSize().width-20, 35));
+	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 21));
+	inner_left->addChild(left_total_back);
 	
-	CCSprite* time_img = CCSprite::create("ending_mark_time.png");
-	time_img->setPosition(ccp(80,153));
-	main_case->addChild(time_img, kZ_FP_img);
+	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
+	left_total_title->setColor(ccc3(255, 170, 20));
+	left_total_title->setAnchorPoint(ccp(0,0.5f));
+	left_total_title->setPosition(ccp(10, left_total_back->getContentSize().height/2.f));
+	left_total_back->addChild(left_total_title);
 	
-	time_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
-	time_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-	time_label->setAnchorPoint(ccp(1,0.5));
-	time_label->setPosition(ccp(220,153));
-	main_case->addChild(time_label, kZ_FP_img);
+	string start_total_left_content;
+	start_total_left_content = "0";
 	
-	KSLabelTTF* gold_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 15);
-	gold_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-	gold_ment->setPosition(ccp(48,120));
-	main_case->addChild(gold_ment, kZ_FP_img);
+	left_total_content = KSLabelTTF::create(start_total_left_content.c_str(), mySGD->getFont().c_str(), 15);
+	left_total_content->setColor(ccc3(255, 170, 20));
+	left_total_content->setAnchorPoint(ccp(1,0.5f));
+	left_total_content->setPosition(ccp(left_total_back->getContentSize().width-10, left_total_back->getContentSize().height/2.f));
+	left_total_back->addChild(left_total_content);
 	
-	CCSprite* gold_img = CCSprite::create("ending_mark_gold.png");
-	gold_img->setPosition(ccp(80,120));
-	main_case->addChild(gold_img, kZ_FP_img);
+	CCRect left_rect = CCRectMake(inner_left->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f, (480-30)/2.f-20, 75);
 	
-	gold_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
-	gold_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-	gold_label->setAnchorPoint(ccp(1,0.5));
-	gold_label->setPosition(ccp(220,120));
-	main_case->addChild(gold_label, kZ_FP_img);
+	//	CCSprite* left_size = CCSprite::create("whitePaper.png", CCRectMake(0, 0, left_rect.size.width, left_rect.size.height));
+	//	left_size->setAnchorPoint(CCPointZero);
+	//	left_size->setPosition(left_rect.origin);
+	//	left_back->addChild(left_size);
 	
-	KSLabelTTF* score_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 15);
-	score_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-	score_ment->setPosition(ccp(48,87));
-	main_case->addChild(score_ment, kZ_FP_img);
+	left_table = CCTableView::create(this, left_rect.size);
+	left_table->setVerticalFillOrder(kCCTableViewFillTopDown);
+	left_table->setPosition(left_rect.origin);
+	inner_left->addChild(left_table);
+	left_table->setTouchPriority(-200);
+	left_table->setTouchEnabled(false);
 	
-	CCSprite* score_img = CCSprite::create("ending_mark_score.png");
-	score_img->setPosition(ccp(80,87));
-	main_case->addChild(score_img, kZ_FP_img);
+	left_table->setContentOffset(ccp(0,-9*30));
 	
-	score_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
-	score_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-	score_label->setAnchorPoint(ccp(1,0.5));
-	score_label->setPosition(ccp(220,87));
-	main_case->addChild(score_label, kZ_FP_img);
+//	KSLabelTTF* time_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 15);
+//	time_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
+//	time_ment->setPosition(ccp(48,153));
+//	main_case->addChild(time_ment, kZ_FP_img);
+//	setFormSetter(time_ment);
+//	
+//	CCSprite* time_img = CCSprite::create("ending_mark_time.png");
+//	time_img->setPosition(ccp(80,153));
+//	main_case->addChild(time_img, kZ_FP_img);
+//	
+//	time_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+//	time_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
+//	time_label->setAnchorPoint(ccp(1,0.5));
+//	time_label->setPosition(ccp(220,153));
+//	main_case->addChild(time_label, kZ_FP_img);
+//	
+//	KSLabelTTF* gold_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 15);
+//	gold_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
+//	gold_ment->setPosition(ccp(48,120));
+//	main_case->addChild(gold_ment, kZ_FP_img);
+//	
+//	CCSprite* gold_img = CCSprite::create("ending_mark_gold.png");
+//	gold_img->setPosition(ccp(80,120));
+//	main_case->addChild(gold_img, kZ_FP_img);
+//	
+//	gold_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+//	gold_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
+//	gold_label->setAnchorPoint(ccp(1,0.5));
+//	gold_label->setPosition(ccp(220,120));
+//	main_case->addChild(gold_label, kZ_FP_img);
+//	
+//	if(mySGD->isTimeEvent(kTimeEventType_gold))
+//	{
+//		KSLabelTTF* gold_event = KSLabelTTF::create(CCString::createWithFormat("X%.1f", mySGD->getTimeEventFloatValue(kTimeEventType_gold))->getCString(), mySGD->getFont().c_str(), 14);
+//		gold_event->setColor(ccc3(255, 190, 50));
+//		gold_event->enableOuterStroke(ccBLACK, 1.f);
+//		gold_event->setAnchorPoint(ccp(0,0.5));
+//		gold_event->setPosition(ccp(gold_ment->getContentSize().width+3,gold_ment->getContentSize().height/2.f));
+//		gold_ment->addChild(gold_event);
+//		
+//		KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
+//		
+//		CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+//		event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
+//		event_back->setPosition(ccp(gold_event->getContentSize().width+4+event_back->getContentSize().width/2.f, gold_event->getContentSize().height/2.f));
+//		gold_event->addChild(event_back);
+//		
+//		event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
+//		event_back->addChild(event_label);
+//	}
+//	
+//	KSLabelTTF* score_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 15);
+//	score_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
+//	score_ment->setPosition(ccp(48,87));
+//	main_case->addChild(score_ment, kZ_FP_img);
+//	
+//	CCSprite* score_img = CCSprite::create("ending_mark_score.png");
+//	score_img->setPosition(ccp(80,87));
+//	main_case->addChild(score_img, kZ_FP_img);
+//	
+//	score_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 15);
+//	score_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
+//	score_label->setAnchorPoint(ccp(1,0.5));
+//	score_label->setPosition(ccp(220,87));
+//	main_case->addChild(score_label, kZ_FP_img);
 	
 	
 	CCSprite* n_ok = CCSprite::create("ending_button.png");
@@ -442,7 +547,7 @@ bool FailPopup::init()
 	
 	CCSprite* n_replay = CCSprite::create("ending_button.png");
 	
-	KSLabelTTF* n_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
+	n_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	n_replay_label2->setColor(ccWHITE);
 	n_replay_label2->disableOuterStroke();
 	n_replay_label2->setOpacity(100);
@@ -456,7 +561,7 @@ bool FailPopup::init()
 	CCSprite* s_replay = CCSprite::create("ending_button.png");
 	s_replay->setColor(ccGRAY);
 	
-	KSLabelTTF* s_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
+	s_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
 	s_replay_label2->setColor(ccWHITE);
 	s_replay_label2->disableOuterStroke();
 	s_replay_label2->setOpacity(100);
@@ -947,16 +1052,78 @@ void FailPopup::endHidePopup()
 void FailPopup::startCalcAnimation()
 {
 	AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
-	startTimeAnimation();
+//	startTimeAnimation();
+	
+	function<void(float, float, float, function<void()>)> t_func1 = [=](float before_y, float left_decrease_value, float left_base_value, function<void()> end_func)
+	{
+		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+		
+		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+											   {
+												   left_table->setContentOffset(ccp(0, before_y+30*t));
+											   }, [=](float t)
+											   {
+												   left_table->setContentOffset(ccp(0, before_y+30));
+												   
+												   AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
+												   startLeftCalcAnimation(left_decrease_value, left_base_value, 0.5f, NULL, [=]()
+																		  {
+																			  end_func();
+																		  });
+											   }));
+	};
+	
+	t_func1(-9*30, mySGD->area_score.getV(), 0, [=]()
+	{
+		t_func1(-8*30, mySGD->damage_score.getV(), mySGD->area_score.getV(), [=]()
+		{
+			t_func1(-7*30, mySGD->combo_score.getV(), mySGD->area_score.getV()+mySGD->damage_score.getV(), [=]()
+			{
+				t_func1(-6*30, left_life_decrease_score.getV(), left_life_base_score.getV(), [=]()
+				{
+					t_func1(-5*30, left_time_decrease_score.getV(), left_time_base_score.getV(), [=]()
+					{
+						t_func1(-4*30, left_grade_decrease_score.getV(), left_grade_base_score.getV(), [=]()
+						{
+							t_func1(-3*30, left_damaged_score.getV(), left_grade_base_score.getV()+left_grade_decrease_score.getV(), [=]()
+							{
+								AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
+								
+								addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+								{
+									left_table->setContentOffset(ccp(0, -2*30+60*t));
+								}, [=](float t)
+								{
+									left_table->setContentOffset(ccp(0, -2*30+60));
+									
+									left_table->setTouchEnabled(true);
+								
+									if(is_today_mission_success)
+									{
+										TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
+										addChild(t_popup, kZ_FP_popup);
+									}
+									
+									is_end_popup_animation = true;
+									
+									closePopup();
+								}));
+							});
+						});
+					});
+				});
+			});
+		});
+	});
 }
 
-void FailPopup::startScoreAnimation()
-{
-	keep_score = mySGD->getScore();
-	decrease_score = keep_score;
-	increase_score = 0.f;
-	schedule(schedule_selector(FailPopup::scoreAnimation));
-}
+//void FailPopup::startScoreAnimation()
+//{
+//	keep_score = mySGD->getScore();
+//	decrease_score = keep_score;
+//	increase_score = 0.f;
+//	schedule(schedule_selector(FailPopup::scoreAnimation));
+//}
 
 void FailPopup::closePopup()
 {
@@ -974,126 +1141,190 @@ void FailPopup::closePopup()
 	}
 }
 
-void FailPopup::scoreAnimation(float dt)
+
+void FailPopup::startLeftCalcAnimation(float t_keep_value, float t_base_value, float t_calc_time, KSLabelTTF* t_decrease_target, function<void()> t_end_func)
 {
-	if(decrease_score > 0)
+	if(t_keep_value >= 0.f)
 	{
-		int decreaseUnit = keep_score / 1.f * dt;
+		is_left_decrease = true;
 		
-		if(decrease_score < decreaseUnit)
+		keep_left_value = t_keep_value;
+	}
+	else
+	{
+		is_left_decrease = false;
+		
+		keep_left_value = -t_keep_value;
+	}
+	
+	base_left_value = t_base_value;
+	decrease_left_value = keep_left_value;
+	increase_left_value = 0.f;
+	
+	left_calc_time = t_calc_time;
+	left_decrease_target = t_decrease_target;
+	
+	left_end_func = t_end_func;
+	schedule(schedule_selector(FailPopup::leftCalcAnimation));
+}
+void FailPopup::leftCalcAnimation(float dt)
+{
+	if(decrease_left_value > 0)
+	{
+		int decreaseUnit = keep_left_value / left_calc_time * dt;
+		
+		if(decrease_left_value < decreaseUnit)
 		{
-			increase_score += decrease_score;
-			decrease_score = 0;
+			increase_left_value += decrease_left_value;
+			decrease_left_value = 0;
 		}
 		else {
 			if(decreaseUnit <= 0)
 			{
-				increase_score += decrease_score;
-				decrease_score = 0;
+				increase_left_value += decrease_left_value;
+				decrease_left_value = 0;
 			}
 			else {
-				decrease_score -= decreaseUnit;
-				increase_score += decreaseUnit;
+				decrease_left_value -= decreaseUnit;
+				increase_left_value += decreaseUnit;
 			}
 		}
-		score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f",increase_score)->getCString()).c_str());
+		//		left_decrease_target->setString(CCString::createWithFormat("%.0f",decrease_left_value)->getCString());
+		if(is_left_decrease)
+			left_total_content->setString(CCString::createWithFormat("%.0f",base_left_value + increase_left_value)->getCString());
+		else
+			left_total_content->setString(CCString::createWithFormat("%.0f",base_left_value - increase_left_value)->getCString());
 	}
 	else
-		stopScoreAnimation();
+		stopLeftCalcAnimation();
+}
+void FailPopup::stopLeftCalcAnimation()
+{
+	unschedule(schedule_selector(FailPopup::leftCalcAnimation));
+	left_end_func();
 }
 
-void FailPopup::stopScoreAnimation()
-{
-	unschedule(schedule_selector(FailPopup::scoreAnimation));
-	score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString()).c_str());
-	AudioEngine::sharedInstance()->stopAllEffects();
-}
 
-void FailPopup::startGoldAnimation()
-{
-	keep_gold = mySGD->getStageGold();
-	decrease_gold = keep_gold;
-	increase_gold = 0.f;
-	schedule(schedule_selector(FailPopup::goldAnimation));
-}
-
-void FailPopup::goldAnimation(float dt)
-{
-	if(decrease_gold > 0)
-	{
-		int decreaseUnit = keep_gold / 0.5f * dt;
-		
-		if(decrease_gold < decreaseUnit)
-		{
-			increase_gold += decrease_gold;
-			decrease_gold = 0;
-		}
-		else {
-			if(decreaseUnit <= 0)
-			{
-				increase_gold += decrease_gold;
-				decrease_gold = 0;
-			}
-			else {
-				decrease_gold -= decreaseUnit;
-				increase_gold += decreaseUnit;
-			}
-		}
-		gold_label->setString(CCString::createWithFormat("%.0f",increase_gold)->getCString());
-	}
-	else
-		stopGoldAnimation();
-}
-
-void FailPopup::stopGoldAnimation()
-{
-	unschedule(schedule_selector(FailPopup::goldAnimation));
-	gold_label->setString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
-	startScoreAnimation();
-}
-
-void FailPopup::startTimeAnimation()
-{
-	keep_time = mySGD->getGameTime();
-	decrease_time = keep_time;
-	increase_time = 0.f;
-	schedule(schedule_selector(FailPopup::timeAnimation));
-}
-
-void FailPopup::timeAnimation(float dt)
-{
-	if(decrease_time > 0)
-	{
-		int decreaseUnit = keep_time / 0.5f * dt;
-		
-		if(decrease_time < decreaseUnit)
-		{
-			increase_time += decrease_time;
-			decrease_time = 0;
-		}
-		else {
-			if(decreaseUnit <= 0)
-			{
-				increase_time += decrease_time;
-				decrease_time = 0;
-			}
-			else {
-				decrease_time -= decreaseUnit;
-				increase_time	+= decreaseUnit;
-			}
-		}
-		time_label->setString(CCString::createWithFormat("%.0f",increase_time)->getCString());
-	}
-	else
-		stopTimeAnimation();
-}
-
-void FailPopup::stopTimeAnimation()
-{
-	unschedule(schedule_selector(FailPopup::timeAnimation));
-	time_label->setString(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString());
-	startGoldAnimation();
-}
+//void FailPopup::scoreAnimation(float dt)
+//{
+//	if(decrease_score > 0)
+//	{
+//		int decreaseUnit = keep_score / 1.f * dt;
+//		
+//		if(decrease_score < decreaseUnit)
+//		{
+//			increase_score += decrease_score;
+//			decrease_score = 0;
+//		}
+//		else {
+//			if(decreaseUnit <= 0)
+//			{
+//				increase_score += decrease_score;
+//				decrease_score = 0;
+//			}
+//			else {
+//				decrease_score -= decreaseUnit;
+//				increase_score += decreaseUnit;
+//			}
+//		}
+//		score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f",increase_score)->getCString()).c_str());
+//	}
+//	else
+//		stopScoreAnimation();
+//}
+//
+//void FailPopup::stopScoreAnimation()
+//{
+//	unschedule(schedule_selector(FailPopup::scoreAnimation));
+//	score_label->setString(KS::insert_separator(CCString::createWithFormat("%.0f", mySGD->getScore())->getCString()).c_str());
+//	AudioEngine::sharedInstance()->stopAllEffects();
+//}
+//
+//void FailPopup::startGoldAnimation()
+//{
+//	keep_gold = mySGD->getStageGold();
+//	decrease_gold = keep_gold;
+//	increase_gold = 0.f;
+//	schedule(schedule_selector(FailPopup::goldAnimation));
+//}
+//
+//void FailPopup::goldAnimation(float dt)
+//{
+//	if(decrease_gold > 0)
+//	{
+//		int decreaseUnit = keep_gold / 0.5f * dt;
+//		
+//		if(decrease_gold < decreaseUnit)
+//		{
+//			increase_gold += decrease_gold;
+//			decrease_gold = 0;
+//		}
+//		else {
+//			if(decreaseUnit <= 0)
+//			{
+//				increase_gold += decrease_gold;
+//				decrease_gold = 0;
+//			}
+//			else {
+//				decrease_gold -= decreaseUnit;
+//				increase_gold += decreaseUnit;
+//			}
+//		}
+//		gold_label->setString(CCString::createWithFormat("%.0f",increase_gold)->getCString());
+//	}
+//	else
+//		stopGoldAnimation();
+//}
+//
+//void FailPopup::stopGoldAnimation()
+//{
+//	unschedule(schedule_selector(FailPopup::goldAnimation));
+//	gold_label->setString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
+//	startScoreAnimation();
+//}
+//
+//void FailPopup::startTimeAnimation()
+//{
+//	keep_time = mySGD->getGameTime();
+//	decrease_time = keep_time;
+//	increase_time = 0.f;
+//	schedule(schedule_selector(FailPopup::timeAnimation));
+//}
+//
+//void FailPopup::timeAnimation(float dt)
+//{
+//	if(decrease_time > 0)
+//	{
+//		int decreaseUnit = keep_time / 0.5f * dt;
+//		
+//		if(decrease_time < decreaseUnit)
+//		{
+//			increase_time += decrease_time;
+//			decrease_time = 0;
+//		}
+//		else {
+//			if(decreaseUnit <= 0)
+//			{
+//				increase_time += decrease_time;
+//				decrease_time = 0;
+//			}
+//			else {
+//				decrease_time -= decreaseUnit;
+//				increase_time	+= decreaseUnit;
+//			}
+//		}
+//		time_label->setString(CCString::createWithFormat("%.0f",increase_time)->getCString());
+//	}
+//	else
+//		stopTimeAnimation();
+//}
+//
+//void FailPopup::stopTimeAnimation()
+//{
+//	unschedule(schedule_selector(FailPopup::timeAnimation));
+//	time_label->setString(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString());
+//	startGoldAnimation();
+//}
 
 void FailPopup::resultSavedUserData(Json::Value result_data)
 {
@@ -1495,6 +1726,66 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 	cell->init();
 	cell->autorelease();
 	
+	if(table == left_table)
+	{
+		CCSize cell_size = cellSizeForTable(table);
+		
+		string back_filename;
+		string title = title_list[idx];
+		string content;
+		
+		if(idx < 7)
+		{
+			back_filename = "mainpopup_pupple3.png";
+		}
+		else
+		{
+			back_filename = "mainpopup_pupple2.png";
+		}
+		
+		content = left_content_list[idx];
+		
+		CCScale9Sprite* t_back = CCScale9Sprite::create(back_filename.c_str(), CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+		t_back->setContentSize(CCSizeMake(inner_left->getContentSize().width-20, 35));
+		t_back->setPosition(ccp(cell_size.width/2.f, cell_size.height/2.f));
+		cell->addChild(t_back);
+		
+		KSLabelTTF* title_label = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 13);
+		title_label->setAnchorPoint(ccp(0,0.5f));
+		title_label->setPosition(ccp(10, t_back->getContentSize().height/2.f));
+		t_back->addChild(title_label);
+		
+		if(idx == 7)
+		{
+			if(mySGD->isTimeEvent(kTimeEventType_gold))
+			{
+				KSLabelTTF* gold_event = KSLabelTTF::create(CCString::createWithFormat("X%.1f", mySGD->getTimeEventFloatValue(kTimeEventType_gold))->getCString(), mySGD->getFont().c_str(), 14);
+				gold_event->setColor(ccc3(255, 190, 50));
+				gold_event->enableOuterStroke(ccBLACK, 1.f);
+				gold_event->setAnchorPoint(ccp(0,0.5));
+				gold_event->setPosition(ccp(title_label->getContentSize().width+3,title_label->getContentSize().height/2.f));
+				title_label->addChild(gold_event);
+				
+				KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
+				
+				CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+				event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
+				event_back->setPosition(ccp(gold_event->getContentSize().width+4+event_back->getContentSize().width/2.f, gold_event->getContentSize().height/2.f));
+				gold_event->addChild(event_back);
+				
+				event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
+				event_back->addChild(event_label);
+			}
+		}
+		
+		KSLabelTTF* content_label = KSLabelTTF::create(content.c_str(), mySGD->getFont().c_str(), 13);
+		content_label->setAnchorPoint(ccp(1,0.5f));
+		content_label->setPosition(ccp(t_back->getContentSize().width-10, t_back->getContentSize().height/2.f));
+		t_back->addChild(content_label);
+	}
+	
+	
+	
 //	CCSprite* profileImg = GDWebSprite::create((*member).img_url, "ending_noimg.png");
 //	profileImg->setAnchorPoint(ccp(0.5, 0.5));
 //	profileImg->setTag(kFFC_T_img);
@@ -1673,10 +1964,10 @@ void FailPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 
 CCSize FailPopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake(210, 45);
+	return CCSizeMake((480-30)/2.f-20, 30);//CCSizeMake(210, 45);
 }
 
 unsigned int FailPopup::numberOfCellsInTableView( CCTableView *table )
 {
-	return 0;// friend_list.size();
+	return 9;// friend_list.size();
 }

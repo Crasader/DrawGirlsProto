@@ -51,6 +51,9 @@ private:
 	CommonButton* next_button;
 	CCSprite* showtime_back;
 	MyNode* second_img;
+	
+	MyNode* third_img;
+	
 	EffectSprite* safety_img;
 	MyNode* target_node;
 	CCSprite* white_paper;
@@ -86,8 +89,14 @@ private:
 	void showtimeThirdAction();
 	void showtimeForthAction();
 	
+	void showtimeFifthAction();
+	void showtimeSixthAction();
+	void showtimeSeventhAction();
+	
 	bool is_rankup;
 	void rankupAction();
+	
+	bool is_time_event_card_on;
 	
 	bool isAnimated;
 	CCPoint touch_p;

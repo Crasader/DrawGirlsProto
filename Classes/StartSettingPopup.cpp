@@ -559,6 +559,28 @@ void StartSettingPopup::setMain()
 	main_case->addChild(start_menu);
 	start_menu->setTouchPriority(touch_priority);
 	
+	if(mySGD->isTimeEvent(kTimeEventType_heart))
+	{
+		CCScale9Sprite* n_back = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+		n_back->setContentSize(CCSizeMake(100, 22));
+		n_back->setPosition(start_menu->getPosition() + ccp(0,-22));
+		main_case->addChild(n_back);
+		
+		KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
+		
+		CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+		event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
+		event_back->setPosition(ccp(event_back->getContentSize().width/2.f, n_back->getContentSize().height/2.f));
+		n_back->addChild(event_back);
+		
+		event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
+		event_back->addChild(event_label);
+		
+		KSLabelTTF* free_label = KSLabelTTF::create("FREE", mySGD->getFont().c_str(), 12);
+		free_label->setPosition(ccp(70, event_back->getContentSize().height/2.f));
+		event_back->addChild(free_label);
+	}
+	
 	
 	CCSprite* level_case = CCSprite::create("startsetting_levelbox.png");
 	setFormSetter(level_case);

@@ -25,6 +25,7 @@
 #include "LoadingTipScene.h"
 #include "MyLocalization.h"
 #include "RivalSelectPopup.h"
+#include "AchieveNoti.h"
 
 enum EndlessModeResultZorder
 {
@@ -134,6 +135,15 @@ bool EndlessModeResult::init()
 //		mySGD->endless_my_total_score = mySGD->endless_my_total_score.getV() + mySGD->getScore();
 	}
 	
+	for(int i=kAchievementCode_scoreHigh1;i<=kAchievementCode_scoreHigh3;i++)
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+		   left_total_score.getV() >= myAchieve->getCondition((AchievementCode)i))
+		{
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
 	
 	title_list.clear();
 	left_content_list.clear();
@@ -245,6 +255,29 @@ CCTableViewCell* EndlessModeResult::tableCellAtIndex(CCTableView *table, unsigne
 	title_label->setAnchorPoint(ccp(0,0.5f));
 	title_label->setPosition(ccp(10, t_back->getContentSize().height/2.f));
 	t_back->addChild(title_label);
+	
+	if(idx == 7)
+	{
+		if(mySGD->isTimeEvent(kTimeEventType_gold))
+		{
+			KSLabelTTF* gold_event = KSLabelTTF::create(CCString::createWithFormat("X%.1f", mySGD->getTimeEventFloatValue(kTimeEventType_gold))->getCString(), mySGD->getFont().c_str(), 14);
+			gold_event->setColor(ccc3(255, 190, 50));
+			gold_event->enableOuterStroke(ccBLACK, 1.f);
+			gold_event->setAnchorPoint(ccp(0,0.5));
+			gold_event->setPosition(ccp(title_label->getContentSize().width+3,title_label->getContentSize().height/2.f));
+			title_label->addChild(gold_event);
+			
+			KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
+			
+			CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+			event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
+			event_back->setPosition(ccp(gold_event->getContentSize().width+4+event_back->getContentSize().width/2.f, gold_event->getContentSize().height/2.f));
+			gold_event->addChild(event_back);
+			
+			event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
+			event_back->addChild(event_label);
+		}
+	}
 	
 	KSLabelTTF* content_label = KSLabelTTF::create(content.c_str(), mySGD->getFont().c_str(), 13);
 	content_label->setAnchorPoint(ccp(1,0.5f));

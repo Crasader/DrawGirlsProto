@@ -29,6 +29,11 @@ class BFS_Point
 public:
 	int x;
 	int y;
+	
+	bool operator== (const BFS_Point& a) const
+    {
+        return (a.x == x && a.y == y);
+    }
 };
 
 //class BackObj : public CCSprite

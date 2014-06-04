@@ -74,9 +74,9 @@ private:
 	CCMenu* replay_menu;
 	//	CCMenu* help_menu;
 	
-	KSLabelTTF* score_label;
-	KSLabelTTF* gold_label;
-	KSLabelTTF* time_label;
+//	KSLabelTTF* score_label;
+//	KSLabelTTF* gold_label;
+//	KSLabelTTF* time_label;
 //
 //	CCSprite* friend_point_popup;
 //	void closeFriendPointPopup();
@@ -106,30 +106,61 @@ private:
     virtual CCSize cellSizeForTable(CCTableView *table);
 	
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
-	
 
-	float keep_gold;
-	float decrease_gold;
-	float increase_gold;
+	CCScale9Sprite* inner_left;
 	
-	float keep_score;
-	float decrease_score;
-	float increase_score;
+	CCTableView* left_table;
 	
-	float keep_time;
-	float decrease_time;
-	float increase_time;
+	vector<string> title_list;
+	vector<string> left_content_list;
+	
+	KSProtectVar<int> left_life_base_score;
+	KSProtectVar<float> left_life_decrease_score, left_time_base_score, left_time_decrease_score, left_grade_base_score, left_grade_decrease_score;
+	KSProtectVar<int> left_damaged_score;
+	KSProtectVar<int> left_total_score;
+	KSProtectVar<float> play_limit_time;
+	
+	KSLabelTTF* left_total_content;
+	
+	float keep_left_value;
+	float base_left_value;
+	float decrease_left_value;
+	float increase_left_value;
+	float left_calc_time;
+	bool is_left_decrease;
+	KSLabelTTF* left_decrease_target;
+	
+	function<void()> left_end_func;
+	
+	void startLeftCalcAnimation(float t_keep_value, float t_base_value, float t_calc_time, KSLabelTTF* t_decrease_target, function<void()> t_end_func);
+	void leftCalcAnimation(float dt);
+	void stopLeftCalcAnimation();
+	
+	KSLabelTTF* n_replay_label2;
+	KSLabelTTF* s_replay_label2;
+
+//	float keep_gold;
+//	float decrease_gold;
+//	float increase_gold;
+//	
+//	float keep_score;
+//	float decrease_score;
+//	float increase_score;
+//	
+//	float keep_time;
+//	float decrease_time;
+//	float increase_time;
 	
 	void startCalcAnimation();
-	void startScoreAnimation();
-	void scoreAnimation(float dt);
-	void stopScoreAnimation();
-	void startGoldAnimation();
-	void goldAnimation(float dt);
-	void stopGoldAnimation();
-	void startTimeAnimation();
-	void timeAnimation(float dt);
-	void stopTimeAnimation();
+//	void startScoreAnimation();
+//	void scoreAnimation(float dt);
+//	void stopScoreAnimation();
+//	void startGoldAnimation();
+//	void goldAnimation(float dt);
+//	void stopGoldAnimation();
+//	void startTimeAnimation();
+//	void timeAnimation(float dt);
+//	void stopTimeAnimation();
 	
 	CCPoint getContentPosition(int t_tag);
 	

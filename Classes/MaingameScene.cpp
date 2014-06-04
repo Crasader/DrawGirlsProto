@@ -3540,18 +3540,40 @@ void Maingame::refreshReplayPosition(int temp_time)
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isDie)].asBool())
 	{
-		CCLabelTTF* die_label = CCLabelTTF::create("Life -1", mySGD->getFont().c_str(), 10);
-		die_label->setScale(0.5f);
-		die_label->setColor(ccRED);
-		die_label->setPosition(replay_character->getPosition());
-		replay_all_node->addChild(die_label);
+		CCSprite* t_continue = CCSprite::create("endless_life.png");
+		t_continue->setScale(0.f);
+		t_continue->setOpacity(0);
+		t_continue->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
+		replay_all_node->addChild(t_continue);
 		
-		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 5.f);
-		CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
-		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_fade);
-		CCCallFunc* t_call = CCCallFunc::create(die_label, callfunc_selector(CCLabelTTF::removeFromParent));
-		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
-		die_label->runAction(t_seq);
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
+		CCFadeTo* t_fade1 = CCFadeTo::create(0.3f, 255);
+		CCSpawn* t_spawn1 = CCSpawn::create(t_scale1, t_fade1, NULL);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
+		
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 0.f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.3f, 0);
+		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_fade2, NULL);
+		
+		CCCallFunc* t_call = CCCallFunc::create(t_continue, callfunc_selector(CCSprite::removeFromParent));
+		
+		CCSequence* t_seq = CCSequence::create(t_spawn1, t_delay1, t_spawn2, t_call, NULL);
+		
+		t_continue->runAction(t_seq);
+		
+//		CCLabelTTF* die_label = CCLabelTTF::create("Life -1", mySGD->getFont().c_str(), 10);
+//		die_label->setScale(0.5f);
+//		die_label->setColor(ccRED);
+//		die_label->setPosition(replay_character->getPosition());
+//		replay_all_node->addChild(die_label);
+//		
+//		CCScaleTo* t_scale = CCScaleTo::create(1.5f, 5.f);
+//		CCFadeTo* t_fade = CCFadeTo::create(1.5f, 0);
+//		CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_scale, t_fade);
+//		CCCallFunc* t_call = CCCallFunc::create(die_label, callfunc_selector(CCLabelTTF::removeFromParent));
+//		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
+//		die_label->runAction(t_seq);
 	}
 	
 	if(position_data[mySGD->getReplayKey(kReplayKey_timeStamp_isImageChange)].asBool())

@@ -274,9 +274,9 @@ enum AchievementCode
 	kAchievementCode_noFail2,//	실패란없다2 : 10회연속클리어 완
 	kAchievementCode_noFail3,//	실패란없다3 : 20회연속클리어 완
 	
-	kAchievementCode_attacker1,//	닥치고공격1 : 한판에 20회공격 성공
-	kAchievementCode_attacker2,//	닥치고공격2 : 한판에 30회공격 성공
-	kAchievementCode_attacker3,//	닥치고공격3 : 한판에 40회공격 성공
+	kAchievementCode_attacker1,//	닥치고공격1 : 한판에 20회공격 성공 완
+	kAchievementCode_attacker2,//	닥치고공격2 : 한판에 30회공격 성공 완
+	kAchievementCode_attacker3,//	닥치고공격3 : 한판에 40회공격 성공 완
 	
 	kAchievementCode_hunter1,//	사냥꾼1 : 부하몹 5마리 가두어잡기
 	kAchievementCode_hunter2,//	사냥꾼2 : 부하몹 10마리 가두어잡기
@@ -286,13 +286,13 @@ enum AchievementCode
 	kAchievementCode_dieHard2,//	다이하드2 : 4~9level 에서 한목숨도 안죽고 클리어
 	kAchievementCode_dieHard3,//	다이하드3 : 10level 이상에서 한목숨도 안죽고 클리어
 	
-	kAchievementCode_scoreHigh1,//	경쟁의신1 : 50000점 이상 획득
-	kAchievementCode_scoreHigh2,//	경쟁의신2 : 100000점 이상 획득
-	kAchievementCode_scoreHigh3,//	경쟁의신3 : 150000점 이상 획득
+	kAchievementCode_scoreHigh1,//	경쟁의신1 : 50000점 이상 획득 완
+	kAchievementCode_scoreHigh2,//	경쟁의신2 : 100000점 이상 획득 완
+	kAchievementCode_scoreHigh3,//	경쟁의신3 : 150000점 이상 획득 완
 	
-	kAchievementCode_fastClear1,//	초스피드클리어1 : 30초안에 클리어
-	kAchievementCode_fastClear2,//	초스피드클리어2 : 10초안에 클리어
-	kAchievementCode_fastClear3,//	초스피드클리어3 : 5초안에 클리어
+	kAchievementCode_fastClear1,//	초스피드클리어1 : 30초안에 클리어 완
+	kAchievementCode_fastClear2,//	초스피드클리어2 : 10초안에 클리어 완
+	kAchievementCode_fastClear3,//	초스피드클리어3 : 5초안에 클리어 완
 	
 	kAchievementCode_changeMania1,//	체인지1 : 10회 체인지
 	kAchievementCode_changeMania2,//	체인지2 : 20회 체인지
@@ -302,9 +302,9 @@ enum AchievementCode
 	kAchievementCode_fail2,//	실패는 성공의 어머니2 : 게임실패 50회
 	kAchievementCode_fail3,//	실패는 성공의 어머니3 : 게임실패 100회
 	
-	kAchievementCode_cardCollection1,//	카드컬렉터1: 카드 50장모으기
-	kAchievementCode_cardCollection2,//	카드컬렉터2: 카드 100장모으기
-	kAchievementCode_cardCollection3,//	카드컬렉터3: 카드 200장모으기
+	kAchievementCode_cardCollection1,//	카드컬렉터1: 카드 50장모으기 완
+	kAchievementCode_cardCollection2,//	카드컬렉터2: 카드 100장모으기 완
+	kAchievementCode_cardCollection3,//	카드컬렉터3: 카드 200장모으기 완
 	
 	kAchievementCode_perfect1,//	대단한성과1 : 100%클리어 10회
 	kAchievementCode_perfect2,//	대단한성과2 : 100%클리어 30회
@@ -314,9 +314,9 @@ enum AchievementCode
 	kAchievementCode_seqAttendance2,//	개근2 : 14일 연속출첵
 	kAchievementCode_seqAttendance3,//	개근3 : 21일 연속출첵
 	
-	kAchievementCode_luckyGuy,//	럭키가이 : 시작행운아이템 5회성공
-	kAchievementCode_tutorial,//	초보자 : 튜토리얼다 보기
-	kAchievementCode_cardSet,//	셋트완성 : 한스테이지의 1,2,3단계 카드셋트 완성
+	kAchievementCode_luckyGuy,//	럭키가이 : 시작행운아이템 5회성공 완
+	kAchievementCode_tutorial,//	초보자 : 튜토리얼다 보기 완
+	kAchievementCode_cardSet,//	셋트완성 : 한스테이지의 1,2,3단계 카드셋트 완성 완
 	
 	kAchievementCode_reviewer,//	리뷰어 : 리뷰남겨주기
 	
@@ -324,23 +324,23 @@ enum AchievementCode
 	kAchievementCode_hidden_base,
 	
 	kAchievementCode_hidden_returnee,//	(히든) 오랜만이야 : 일주일만에 접속.
-	kAchievementCode_hidden_bigHand1,//	(히든) 욕심쟁이 : 한번에 먹은 영역이 50%이상일때
-	kAchievementCode_hidden_bigHand2,//	(히든) 욕심쟁이2 : 한번에 먹은 영역이 100%이상일때
+	kAchievementCode_hidden_bigHand1,//	(히든) 욕심쟁이 : 한번에 먹은 영역이 50%이상일때 완
+	kAchievementCode_hidden_bigHand2,//	(히든) 욕심쟁이2 : 한번에 먹은 영역이 100%이상일때 완
 	
 	kAchievementCode_hidden_holder,//	(히든) 잉여킹 : 대기실에 켜놓고 100초 이상 경과
 	
-	kAchievementCode_hidden_noSound,//	(히든) 사운드따윈필요없어 : 설정에 사운드 끄고 플레이후 클리어
+	kAchievementCode_hidden_noSound,//	(히든) 사운드따윈필요없어 : 설정에 사운드 끄고 플레이후 클리어 완
 	
-	kAchievementCode_hidden_shopper1,//	(히든) 쇼핑홀릭 : 상점메뉴 100회 진입시.
+	kAchievementCode_hidden_shopper1,//	(히든) 쇼핑홀릭 : 상점메뉴 100회 진입시. 완
 	kAchievementCode_hidden_shopper2,//	(히든) 쇼핑홀릭2 : 아이템 50번째 구매
 	kAchievementCode_hidden_shopper3,//	(히든) 쇼핑홀릭3 : 아이템 100번째 구매
 	
-	kAchievementCode_hidden_breathtaking1,//	(히든)아슬아슬 : 5초이하로 남기고 클리어
-	kAchievementCode_hidden_breathtaking2,//	(히든)아슬아슬2 : 1초이하로 남기고 클리어
+	kAchievementCode_hidden_breathtaking1,//	(히든)아슬아슬 : 5초이하로 남기고 클리어 완
+	kAchievementCode_hidden_breathtaking2,//	(히든)아슬아슬2 : 1초이하로 남기고 클리어 완
 	
-	kAchievementCode_hidden_dieEasy,//	(히든)다이이지 : 게임시작 5초안에 죽기
+	kAchievementCode_hidden_dieEasy,//	(히든)다이이지 : 게임시작 5초안에 죽기 완
 	
-	kAchievementCode_hidden_speedMania,//	(히든)스피드매니아 : 스피드 max찍기
+	kAchievementCode_hidden_speedMania,//	(히든)스피드매니아 : 스피드 max찍기 완
 	
 	kAchievementCode_hidden_end
 };

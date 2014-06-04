@@ -152,27 +152,25 @@ bool CardViewScene::init()
 		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 		addChild(zoom_img, kCV_Z_next_button);
 	};
-	if(!is_morphing && mySGD->is_morphing_noti)
+	if(!is_morphing)
 	{
-		mySGD->is_morphing_noti = false;
-		
 		buy_morphing = CommonButton::create("", 10, CCSizeMake(80, 50), CommonButtonLightPupple, -160);
 		buy_morphing->setPosition(morphing_position);
 		buy_morphing->setFunction([=](CCObject* sender)
-															{
-																if(!is_actioned)
-																{
-																	is_actioned = true;
-																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																	
-                                                                    CCLOG("11111111");
-                                                                    
-																	BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){
-																		is_actioned = false;
-																	}, liveGirl);
-																	addChild(t_popup, 999);
-																}
-															});
+								  {
+									  if(!is_actioned)
+									  {
+										  is_actioned = true;
+										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+										  
+										  CCLOG("11111111");
+										  
+										  BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){
+											  is_actioned = false;
+										  }, liveGirl);
+										  addChild(t_popup, 999);
+									  }
+								  });
 		addChild(buy_morphing, kCV_Z_next_button);
 		
 		morphing_filename = "morphing_heart_off.ccbi";
@@ -197,8 +195,10 @@ bool CardViewScene::init()
 	morphing_img->setPosition(morphing_position);
 	addChild(morphing_img, kCV_Z_next_button);
 	
-	if(!is_morphing)
+	if(!is_morphing && mySGD->is_morphing_noti)
 	{
+		mySGD->is_morphing_noti = false;
+		
         CCLOG("222222222");
         
 		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, liveGirl);

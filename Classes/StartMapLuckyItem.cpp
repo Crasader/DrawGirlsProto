@@ -3,6 +3,7 @@
 
 #include "StartMapLuckyItem.h"
 #include "KSUtil.h"
+#include "AchieveNoti.h"
 #define LZZ_INLINE inline
 StartMapLuckyItem * StartMapLuckyItem::create (IntPoint t_point)
 {
@@ -24,6 +25,19 @@ void StartMapLuckyItem::checkInnerRect ()
 	   myGD->mapState[my_point.x+1][my_point.y+1] == mapOldget || myGD->mapState[my_point.x+1][my_point.y+1] == mapOldline)
 	{
 		speedUpAction();
+		
+		AchievementCode i = kAchievementCode_luckyGuy;
+		
+		int after_value = myAchieve->getRecentValue((AchievementCode)i) + 1;
+		
+		myAchieve->changeIngCount(AchievementCode(i), after_value);
+		
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+		   after_value >= myAchieve->getCondition((AchievementCode)i))
+		{
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
 	}
 	else
 	{

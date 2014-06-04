@@ -74,6 +74,35 @@ private:
 	KSLabelTTF* n_replay_label2;
 	KSLabelTTF* s_replay_label2;
 	
+	CCScale9Sprite* inner_left;
+	
+	CCTableView* left_table;
+	
+	vector<string> title_list;
+	vector<string> left_content_list;
+	
+	KSProtectVar<int> left_life_base_score;
+	KSProtectVar<float> left_life_decrease_score, left_time_base_score, left_time_decrease_score, left_grade_base_score, left_grade_decrease_score;
+	KSProtectVar<int> left_damaged_score;
+	KSProtectVar<int> left_total_score;
+	KSProtectVar<float> play_limit_time;
+	
+	KSLabelTTF* left_total_content;
+	
+	float keep_left_value;
+	float base_left_value;
+	float decrease_left_value;
+	float increase_left_value;
+	float left_calc_time;
+	bool is_left_decrease;
+	KSLabelTTF* left_decrease_target;
+	
+	function<void()> left_end_func;
+	
+	void startLeftCalcAnimation(float t_keep_value, float t_base_value, float t_calc_time, KSLabelTTF* t_decrease_target, function<void()> t_end_func);
+	void leftCalcAnimation(float dt);
+	void stopLeftCalcAnimation();
+	
 	Json::Value rank_data;
 	
 	bool is_menu_enable;
@@ -92,9 +121,9 @@ private:
 	CCMenu* ok_menu;
 	CCMenu* replay_menu;
 	
-	KSLabelTTF* score_label;
-	KSLabelTTF* gold_label;
-	KSLabelTTF* time_label;
+//	KSLabelTTF* score_label;
+//	KSLabelTTF* gold_label;
+//	KSLabelTTF* time_label;
 	
 	bool is_rank_changed;
 	int before_my_rank;
@@ -128,33 +157,33 @@ private:
 	void checkRentCard();
 	void checkChallengeOrHelp();
 	
-	float keep_gold;
-	float decrease_gold;
-	float increase_gold;
-	void startGoldAnimation();
-	void goldAnimation(float dt);
-	void stopGoldAnimation();
+//	float keep_gold;
+//	float decrease_gold;
+//	float increase_gold;
+//	void startGoldAnimation();
+//	void goldAnimation(float dt);
+//	void stopGoldAnimation();
 	
 	bool is_end_call_score_calc;
 	function<void()> end_score_calc_func;
 	
-	float base_score;
-	float keep_score;
-	float decrease_score;
-	float increase_score;
-	void startScoreAnimation(float t_score);
-	void scoreAnimation(float dt);
-	void stopScoreAnimation();
+//	float base_score;
+//	float keep_score;
+//	float decrease_score;
+//	float increase_score;
+//	void startScoreAnimation(float t_score);
+//	void scoreAnimation(float dt);
+//	void stopScoreAnimation();
 	
 	bool is_high_score;
 	bool is_today_mission_success;
 	
-	float keep_time;
-	float decrease_time;
-	float increase_time;
-	void startTimeAnimation();
-	void timeAnimation(float dt);
-	void stopTimeAnimation();
+//	float keep_time;
+//	float decrease_time;
+//	float increase_time;
+//	void startTimeAnimation();
+//	void timeAnimation(float dt);
+//	void stopTimeAnimation();
 	
 	void startCalcAnimation();
 	

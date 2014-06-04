@@ -533,6 +533,7 @@ public:
 	void setAiAdderOnDrewOrDamaged(float t_data);
 	void setFuryPercent(float t_data);
 	void setSPRentCardThanks(int t_data);
+	void setPlayContinueFeeEndless(int t_data);
 	
 	int getHeartMax();
 	int getHeartCoolTime();
@@ -566,6 +567,7 @@ public:
 	float getAiAdderOnDrewOrDamaged();
 	float getFuryPercent();
 	int getSPRentCardThanks();
+	int getPlayContinueFeeEndless();
 	
 	void setItemGachaGoldFee(int t_i);
 	int getItemGachaGoldFee();
@@ -849,6 +851,8 @@ public:
 	
 	Json::Value dummy_list;
 	
+	KSProtectVar<int> stage_attack_count;
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -963,6 +967,7 @@ private:
 	KSProtectVar<int> puzzle_perfect_reward_ruby;
 	
 	KSProtectVar<int> endless_min_piece;
+	KSProtectVar<int> play_continue_fee_endless;
 	
 	KSProtectVar<int> rank_up_condition_count;
 	KSProtectVar<float> rank_up_base_rate;

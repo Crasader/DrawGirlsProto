@@ -53,6 +53,7 @@ bool ZoomScript::init()
 	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
 	
 	is_rankup = false;
+	is_time_event_card_on = false;
 	
 	CCLayer* top_bottom_layer = CCLayer::create();
 	top_bottom_layer->setPosition(ccp(0, 0));
@@ -82,6 +83,8 @@ bool ZoomScript::init()
 	
 	is_showtime = mySGD->is_showtime;
 	is_exchanged = mySGD->is_exchanged;
+	
+	second_img = NULL;
 	
 	int card_number;
 	
@@ -350,8 +353,102 @@ void ZoomScript::menuAction(CCObject *sender)
 				else
 					take_grade = 3;
 			}
+			else
+			{
+				take_grade = mySGD->getStageGrade();
+			}
 			
-			if(!mySGD->is_endless_mode && !is_rankup)
+			if(mySGD->isTimeEvent(kTimeEventType_card) && take_grade < 4 && !is_time_event_card_on && mySGD->getTimeEventIntValue(kTimeEventType_card) > 0)
+			{
+				is_time_event_card_on = true;
+				int up_value = mySGD->getTimeEventIntValue(kTimeEventType_card);
+				int after_value = take_grade + up_value;
+				if(after_value > 4)
+					after_value = 4;
+				
+				if(up_value == 1)
+				{
+					if(take_grade == 1)
+					{
+						is_exchanged = true;
+						mySGD->is_exchanged = true;
+						mySGD->is_showtime = false;
+					}
+					else if(take_grade == 2)
+					{
+						is_exchanged = false;
+						mySGD->is_exchanged = false;
+						mySGD->setPercentage(1.f);
+						mySGD->is_showtime = true;
+					}
+					else if(take_grade == 3)
+					{
+						is_exchanged = true;
+						mySGD->is_exchanged = true;
+						mySGD->is_showtime = false;
+					}
+				}
+				else if(up_value == 2)
+				{
+					if(take_grade == 1)
+					{
+						mySGD->setPercentage(1.f);
+						mySGD->is_showtime = true;
+					}
+					else if(take_grade >= 2)
+					{
+						is_exchanged = true;
+						mySGD->is_exchanged = true;
+						mySGD->setPercentage(1.f);
+						mySGD->is_showtime = true;
+					}
+				}
+				else if(up_value >= 3)
+				{
+					is_exchanged = true;
+					mySGD->is_exchanged = true;
+					mySGD->setPercentage(1.f);
+					mySGD->is_showtime = true;
+				}
+				
+				mySGD->setStageGrade(after_value);
+				
+				showtime_back = CCSprite::create("event_cardupgrade.png");
+				showtime_back->setScale(10.f);
+				showtime_back->setPosition(ccp(240,myDSH->ui_center_y));
+				showtime_back->setOpacity(0);
+				addChild(showtime_back, kZS_Z_showtime_back);
+				
+				white_paper = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
+				white_paper->setOpacity(0);
+				white_paper->setScaleY(myDSH->ui_top/320.f);
+				white_paper->setPosition(ccp(240,myDSH->ui_center_y));
+				addChild(white_paper, kZS_Z_whitePaper);
+				
+				CCDelayTime* white_paper_delay = CCDelayTime::create(46.f/60.f);
+				CCFadeTo* white_paper_fade = CCFadeTo::create(18.f/60.f, 255);
+				CCSequence* white_paper_seq = CCSequence::createWithTwoActions(white_paper_delay, white_paper_fade);
+				white_paper->runAction(white_paper_seq);
+				
+				CCScaleTo* showtime_scale1 = CCScaleTo::create(28.f/60.f, 1.f);
+				CCDelayTime* showtime_delay1 = CCDelayTime::create(18.f/60.f);
+				CCScaleTo* showtime_scale2 = CCScaleTo::create(18.f/60.f, 12.f);
+				CCSequence* showtime_seq1 = CCSequence::create(showtime_scale1, showtime_delay1, showtime_scale2, NULL);
+				
+				CCFadeTo* showtime_fade1 = CCFadeTo::create(28.f/60.f, 255);
+				CCDelayTime* showtime_delay2 = CCDelayTime::create(18.f/60.f);
+				CCFadeTo* showtime_fade2 = CCFadeTo::create(18.f/60.f, 0);
+				CCSequence* showtime_seq2 = CCSequence::create(showtime_fade1, showtime_delay2, showtime_fade2, NULL);
+				
+				CCSpawn* showtime_spawn = CCSpawn::create(showtime_seq1, showtime_seq2, NULL);
+				CCDelayTime* showtime_delay = CCDelayTime::create(8.f/60.f);
+				
+				CCCallFunc* showtime_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeFifthAction));
+				CCSequence* showtime_seq = CCSequence::create(showtime_spawn, showtime_delay, showtime_call, NULL);
+				
+				showtime_back->runAction(showtime_seq);
+			}
+			else if(!mySGD->is_endless_mode && !is_rankup)
 			{
 				is_rankup = true;
 				
@@ -532,6 +629,7 @@ void ZoomScript::showtimeFirstAction()
 	game_node->setScale(1.5f);
 	game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	first_img->removeFromParentAndCleanup(true);
+	first_img = NULL;
 	
 	int third_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3);
 	
@@ -557,6 +655,77 @@ void ZoomScript::showtimeFirstAction()
 	white_paper->runAction(t_seq);
 }
 
+void ZoomScript::showtimeFifthAction()
+{
+	showtime_back->removeFromParent();
+	
+	script_label->setString("");
+	script_case->setVisible(false);
+	
+	int card_number;
+	
+	if(is_exchanged)
+	{
+		if(mySGD->getPercentage() >= 1.f)
+			card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
+		else
+			card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
+	}
+	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
+	
+	third_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	
+	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
+		third_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+	
+	
+	third_img->setPosition(ccp(160,215));
+	third_img->setTouchEnabled(false);
+	game_node->addChild(third_img, kZS_Z_second_img);
+	
+	if(mySGD->is_safety_mode)
+	{
+		safety_img->removeFromParent();
+		
+		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
+		safety_img->setSilhouetteConvert(0);
+		safety_img->setPosition(ccp(160, 215));
+		game_node->addChild(safety_img, kZS_Z_second_img);
+	}
+	
+	target_node = third_img;
+	
+	game_node->setScale(1.5f);
+	game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+	if(second_img)
+		second_img->removeFromParent();
+	else
+		first_img->removeFromParentAndCleanup(true);
+	
+//	int third_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3);
+//	
+//	if(is_exchanged && NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, third_card_number))
+//	{
+//		eye_ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, third_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, third_card_number));
+//		loop_length = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, third_card_number);
+//		
+//		for(int i=0;i<loop_length;i++)
+//			animation_frame.push_back(NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, third_card_number, i));
+//		
+//		CCTexture2D* eye_texture = mySIL->addImage(CCString::createWithFormat("card%d_animation.png", third_card_number)->getCString());
+//		
+//		CCSprite* eye = CCSprite::createWithTexture(eye_texture, CCRectMake(0, 0, eye_ani_size.width, eye_ani_size.height));
+//		eye->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, third_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, third_card_number)));
+//		second_img->addChild(eye, 1, 1);
+//	}
+//	
+	CCFadeTo* t_fade = CCFadeTo::create(1.f/6.f, 0);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeSixthAction));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+	
+	white_paper->runAction(t_seq);
+}
+
 void ZoomScript::showtimeSecondAction()
 {
 	white_paper->removeFromParent();
@@ -572,6 +741,27 @@ void ZoomScript::showtimeSecondAction()
 //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	CCDelayTime* delay3 = CCDelayTime::create(1.f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeThirdAction));
+	
+	CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
+	
+	game_node->runAction(t_seq);
+}
+
+void ZoomScript::showtimeSixthAction()
+{
+	white_paper->removeFromParent();
+	
+	CCDelayTime* delay1 = CCDelayTime::create(0.5f);
+	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
+	CCDelayTime* delay2 = CCDelayTime::create(1.f);
+	
+	CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
+	CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
+	CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+	
+	//	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+	CCDelayTime* delay3 = CCDelayTime::create(1.f);
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeSeventhAction));
 	
 	CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
 	
@@ -602,7 +792,26 @@ void ZoomScript::showtimeThirdAction()
 	script_label->setVisible(true);
 	script_case->setVisible(true);
 	
-	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 3 : 2)));
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
+	
+	basic_string<wchar_t> result;
+	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
+	text_length = result.length();
+	typing_frame = 0;
+	delegate_typing_after = callfunc_selector(ZoomScript::showtimeForthAction);
+	schedule(schedule_selector(ZoomScript::typingAnimation), 1.f/10.f);
+}
+
+void ZoomScript::showtimeSeventhAction()
+{
+//	if(is_exchanged && NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3)))
+//	{
+//		startStageAnimation();
+//	}
+	script_label->setVisible(true);
+	script_case->setVisible(true);
+	
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
