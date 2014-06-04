@@ -99,13 +99,12 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     protected void onResume()
     {
          super.onResume();     
-         ADBrixManager.startSession(this); // getApplicationContext()에서 activity를 넣어주는 것으로 변경 되었습니다. - 2013-11-13
+         ADBrixManager.startSession(this);
     }
     @Override
     protected void onPause()
     {
          super.onPause();
-         //ADBrixManager.endSession() 은 홈버튼, 전원버튼 등으로 앱을 이탈 및 종료할 때 예외 없이 호출되어야 합니다.
          ADBrixManager.endSession();
     }
     //    protected void onActivityResult(int requestCode, int resultCode, Intent data){
