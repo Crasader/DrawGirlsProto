@@ -820,6 +820,8 @@ bool ShopPopup::init()
 			myAchieve->changeIngCount(AchievementCode(i), after_value);
 			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			
+			myAchieve->updateAchieve(nullptr);
 		}
 	}
 	

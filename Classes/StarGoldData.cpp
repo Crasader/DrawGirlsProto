@@ -1456,6 +1456,7 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
 					}
+					myAchieve->updateAchieve(nullptr);
 				}
 			}
 		}
@@ -1826,6 +1827,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
 						}
+						myAchieve->updateAchieve(nullptr);
 					}
 				}
 				else if(t_type == kGoodsType_gold && gold_label)
@@ -1844,6 +1846,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
 						}
+						myAchieve->updateAchieve(nullptr);
 					}
 				}
 			}
@@ -1880,6 +1883,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
 					}
+					myAchieve->updateAchieve(nullptr);
 				}
 			}
 			else if(t_type == kGoodsType_gold && gold_label)
@@ -1898,6 +1902,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
 					}
+					myAchieve->updateAchieve(nullptr);
 				}
 			}
 		}
@@ -1936,6 +1941,7 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
 				}
+				myAchieve->updateAchieve(nullptr);
 			}
 		}
 		else if(t_type == kGoodsType_gold && gold_label)
@@ -1954,6 +1960,7 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
 				}
+				myAchieve->updateAchieve(nullptr);
 			}
 		}
 	}
@@ -2080,6 +2087,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
 						}
+						myAchieve->updateAchieve(nullptr);
 					}
 				}
 				else if(t_type == kGoodsType_gold && gold_label)
@@ -2098,6 +2106,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
 						}
+						myAchieve->updateAchieve(nullptr);
 					}
 				}
 			}
@@ -2135,6 +2144,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
 					}
+					myAchieve->updateAchieve(nullptr);
 				}
 			}
 			else if(t_type == kGoodsType_gold && gold_label)
@@ -2153,6 +2163,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
 					}
+					myAchieve->updateAchieve(nullptr);
 				}
 			}
 		}

@@ -714,6 +714,12 @@ bool ClearPopup::init()
 		}
 	}
 	
+	vector<CommandParam> t_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
+	for(int i=0;i<t_achieve.size();i++)
+	{
+		send_command_list.push_back(t_achieve[i]);
+	}
+	
 	mySGD->setUserdataFailCount(0);
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));

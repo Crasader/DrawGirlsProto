@@ -544,7 +544,6 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
 										 t_loading->removeFromParent();
-										 
 										 for(int i=kAchievementCode_cardCollection1;i<=kAchievementCode_cardCollection3;i++)
 										 {
 											 if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
@@ -575,8 +574,10 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 													 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 													 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 												 }
+												 myAchieve->updateAchieve(nullptr);
 											 }
 										 }
+										 
 									 }
 									 else
 									 {

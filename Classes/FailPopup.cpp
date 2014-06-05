@@ -629,6 +629,12 @@ bool FailPopup::init()
 	if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
 	mySGD->setUserdataAutoLevel(seq_no_fail_cnt);
 	
+	vector<CommandParam> t_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
+	for(int i=0;i<t_achieve.size();i++)
+	{
+		send_command_list.push_back(t_achieve[i]);
+	}
+	
 	mySGD->setUserdataFailCount(mySGD->getUserdataFailCount()+1);
 	send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
