@@ -166,6 +166,7 @@ string ShowItemContent::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_silence)			return_value = "Silence";
 	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
 	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
+	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetTitle);
 	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
 	
 	return return_value.c_str();

@@ -27,6 +27,7 @@
 #include "MyLocalization.h"
 #include "FirstPurchasePopup.h"
 #include "AchieveNoti.h"
+#include "CommonAnimation.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_back = 1,
@@ -820,6 +821,8 @@ bool ShopPopup::init()
 			myAchieve->changeIngCount(AchievementCode(i), after_value);
 			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			
+			myAchieve->updateAchieve(nullptr);
 		}
 	}
 	
@@ -1955,22 +1958,11 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 	
 	
-	t_container->setScaleY(0.f);
-	
-	t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-		t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-			t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-	
-	t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-												  {
-													  gray->setOpacity(t);
-													  KS::setOpacity(t_container, t);
-												  }, [=](int t)
-												  {
-													  gray->setOpacity(255);
-													  KS::setOpacity(t_container, 255);
-													  t_popup->is_menu_enable = true;
-												  }));
+	CommonAnimation::openPopup(this, t_container, gray, [=](){
+		
+	}, [=](){
+		t_popup->is_menu_enable = true;
+	});
 }
 
 void ShopPopup::startCardGacha()

@@ -43,7 +43,7 @@
 #include "ItemGachaPopup.h"
 #include "MyLocalization.h"
 #include "LevelupGuidePopup.h"
-
+#include "CommonAnimation.h"
 bool StartSettingPopup::init()
 {
     if ( !CCLayer::init() )
@@ -298,7 +298,7 @@ void StartSettingPopup::setMain()
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_longTime && mySGD->getItem8OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
@@ -359,7 +359,7 @@ void StartSettingPopup::setMain()
 			is_unlocked = false;
 		else if(t_ic == kIC_doubleItem && mySGD->getItem6OpenStage() > mySD->getSilType())
 			is_unlocked = false;
-		else if(t_ic == kIC_longTime && mySGD->getItem8OpenStage() > mySD->getSilType())
+		else if(t_ic == kIC_magnet && mySGD->getItem11OpenStage() > mySD->getSilType())
 			is_unlocked = false;
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
@@ -764,35 +764,27 @@ void StartSettingPopup::setMain()
 	option_label->setAnchorPoint(ccp(0.5,0.5));
 	option_label->setPosition(ccp(317,127));
 	main_case->addChild(option_label);
+
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-	{
-		KS::setOpacity(main_case, t);
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
 		n_start_label2->setOpacity(100);
-	}, [=](int t)
-										 {
-											 KS::setOpacity(main_case, 255);
-											 n_start_label2->setOpacity(100);
-											 
-											 is_menu_enable = true;
-											 
-											 if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
-											 {
-												 is_menu_enable = false;
-												 LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
-																										{
-																											is_menu_enable = true;
-																											upgradeAction(NULL);
-																										});
-												 addChild(t_popup, kStartSettingPopupZorder_popup);
-											 }
-										 }));
+		
+	}, [=](){
+		n_start_label2->setOpacity(100);
+		
+		is_menu_enable = true;
+		
+		if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
+		{
+			is_menu_enable = false;
+			LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																														 {
+																															 is_menu_enable = true;
+																															 upgradeAction(NULL);
+																														 });
+			addChild(t_popup, kStartSettingPopupZorder_popup);
+		}
+	});
 }
 
 void StartSettingPopup::gachaMenuCreate()
@@ -2140,6 +2132,7 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_silence)			return_value = "Silence";
 	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
 	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
+	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetTitle);
 	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
 	
 	return return_value.c_str();

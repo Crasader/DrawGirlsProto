@@ -86,9 +86,12 @@ void AchieveConditionReward::updateAchieve(jsonSelType t_callback)
 	}
 	else
 	{
-		Json::Value result_data;
-		result_data["result"]["code"] = GDSUCCESS;
-		t_callback(result_data);
+		if(t_callback != nullptr)
+		{
+			Json::Value result_data;
+			result_data["result"]["code"] = GDSUCCESS;
+			t_callback(result_data);
+		}
 	}
 }
 

@@ -428,7 +428,11 @@ vector<ITEM_CODE> SilhouetteData::getStageItemList( int t_type )
 	int item_cnt = NSDS_GI(t_type, kSDS_SI_shopItemsCnt_i);
 
 	for(int i=0;i<item_cnt;i++)
-		return_value.push_back(ITEM_CODE(NSDS_GI(t_type, kSDS_SI_shopItems_int1_type_i, i)));
+	{
+		ITEM_CODE t_code = ITEM_CODE(NSDS_GI(t_type, kSDS_SI_shopItems_int1_type_i, i));
+		if(t_code == kIC_baseSpeedUp || t_code == kIC_doubleItem || t_code == kIC_magnet)
+			return_value.push_back(ITEM_CODE(NSDS_GI(t_type, kSDS_SI_shopItems_int1_type_i, i)));
+	}
 
 	return return_value;
 }
@@ -446,6 +450,7 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	else if(t_code == kIC_silence)			return_value = "획득시 보스 몬스터가 일정시간동안 공격하지 않는다.";
 	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeContent);
 	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpContent);
+	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetContent);
 	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaContent);
 	else									return_value = "아이템을 사용할 수 있습니다.";
 

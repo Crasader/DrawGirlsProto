@@ -26,6 +26,8 @@
 #include "MyLocalization.h"
 #include "RivalSelectPopup.h"
 #include "AchieveNoti.h"
+#include "CommonAnimation.h"
+
 
 enum EndlessModeResultZorder
 {
@@ -87,11 +89,14 @@ bool EndlessModeResult::init()
 	}
 	
 	left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
-	left_life_decrease_score = left_life_base_score.getV()*(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*0.1f);
+	left_life_decrease_score = (mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	left_time_base_score = left_life_base_score.getV() + left_life_decrease_score.getV();
-	left_time_decrease_score = left_time_base_score.getV()*(mySGD->temp_endless_play_limit_time.getV()-mySGD->getGameTime())/mySGD->temp_endless_play_limit_time.getV();
+	left_time_decrease_score = (mySGD->temp_endless_play_limit_time.getV()-mySGD->getGameTime())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 	left_grade_base_score = left_time_base_score.getV() + left_time_decrease_score.getV();
-	left_grade_decrease_score = left_time_base_score.getV()*mySGD->getStageGrade()*0.5f;
+	if(mySGD->getStageGrade() <= 0)
+		left_grade_decrease_score = left_grade_base_score.getV()*0.f;
+	else
+		left_grade_decrease_score = left_grade_base_score.getV()*(mySGD->getStageGrade()-1);
 	left_damaged_score = -mySGD->damaged_score.getV();
 	
 	left_total_score = left_grade_base_score.getV() + left_grade_decrease_score.getV() + left_damaged_score.getV();
@@ -107,11 +112,14 @@ bool EndlessModeResult::init()
 	
 	
 	right_life_base_score = right_area_score.getV() + right_damage_score.getV() + right_combo_score.getV();
-	right_life_decrease_score = right_life_base_score.getV()*(right_life_cnt.getV()*0.1f);
+	right_life_decrease_score = (right_life_cnt.getV()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	right_time_base_score = right_life_base_score.getV() + right_life_decrease_score.getV();
-	right_time_decrease_score = right_time_base_score.getV()*(mySGD->temp_endless_play_limit_time.getV()-right_game_time.getV())/mySGD->temp_endless_play_limit_time.getV();
+	right_time_decrease_score = (mySGD->temp_endless_play_limit_time.getV()-right_game_time.getV())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 	right_grade_base_score = right_time_base_score.getV() + right_time_decrease_score.getV();
-	right_grade_decrease_score = right_time_base_score.getV()*right_clear_grade.getV()*0.5f;
+	if(right_clear_grade.getV() <= 0)
+		right_grade_decrease_score = right_grade_base_score.getV()*0.f;
+	else
+		right_grade_decrease_score = right_grade_base_score.getV()*(right_clear_grade.getV()-1);
 	right_damaged_score = -mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_scoreAttackedValue), Json::Value()).asInt();
 	
 	right_total_score = right_grade_base_score.getV() + right_grade_decrease_score.getV() + right_damaged_score.getV();
@@ -185,6 +193,12 @@ bool EndlessModeResult::init()
 	addChild(ready_loading, 9999);
 	
 	send_command_list.clear();
+	
+	vector<CommandParam> t_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
+	for(int i=0;i<t_achieve.size();i++)
+	{
+		send_command_list.push_back(t_achieve[i]);
+	}
 	
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
@@ -798,22 +812,11 @@ void EndlessModeResult::setMain()
 																			ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 																			
 																			
-																			t_container->setScaleY(0.f);
-																			
-																			t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-																				t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-																					t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-																			
-																			t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-																														  {
-																															  t_gray->setOpacity(t);
-																															  KS::setOpacity(t_container, t);
-																														  }, [=](int t)
-																														  {
-																															  t_gray->setOpacity(255);
-																															  KS::setOpacity(t_container, 255);
-																															  t_popup->is_menu_enable = true;
-																														  }));
+																			CommonAnimation::openPopup(this, main_case, gray, [=](){
+																				
+																			}, [=](){
+																				t_popup->is_menu_enable = true;
+																			});
 																		}
 																	  else
 																		{
@@ -1154,47 +1157,43 @@ void EndlessModeResult::setMain()
 	
 	addChild(KSTimer::create(0.6f, [=]()
 	{
-		addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-			addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-				addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
 		
-		addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-											 {
-												 KS::setOpacity(main_case, t);
-												 if(t > 100)
-												 {
-													 n_stop_label2->setOpacity(100);
-													 s_stop_label2->setOpacity(100);
-													 n_next_label2->setOpacity(100);
-													 s_next_label2->setOpacity(100);
-												 }
-											 }, [=](int t)
-											 {
-												 KS::setOpacity(main_case, 255);
-												 n_stop_label2->setOpacity(100);
-												 s_stop_label2->setOpacity(100);
-												 n_next_label2->setOpacity(100);
-												 s_next_label2->setOpacity(100);
-												 
-												 if(is_calc)
-												 {
-													 for(int i=0;i<left_star_animation_list.size();i++)
-													 {
-														 left_star_animation_list[i]();
-													 }
-													 
-													 for(int i=0;i<right_star_animation_list.size();i++)
-													 {
-														 right_star_animation_list[i]();
-													 }
-													 
-													 addChild(KSTimer::create(1.5f, [=](){startCalcAnimation();}));
-												 }
-												 else
-												 {
-													 is_menu_enable = true;
-												 }
-											 }));
+		CommonAnimation::openPopup(this, main_case, gray, [=](){
+			
+//			if(t > 100)
+//			{
+//				n_stop_label2->setOpacity(100);
+//				s_stop_label2->setOpacity(100);
+//				n_next_label2->setOpacity(100);
+//				s_next_label2->setOpacity(100);
+//			}
+		}, [=](){
+			n_stop_label2->setOpacity(100);
+			s_stop_label2->setOpacity(100);
+			n_next_label2->setOpacity(100);
+			s_next_label2->setOpacity(100);
+			
+			if(is_calc)
+			{
+				for(int i=0;i<left_star_animation_list.size();i++)
+				{
+					left_star_animation_list[i]();
+				}
+				
+				for(int i=0;i<right_star_animation_list.size();i++)
+				{
+					right_star_animation_list[i]();
+				}
+				
+				addChild(KSTimer::create(1.5f, [=](){startCalcAnimation();}));
+			}
+			else
+			{
+				is_menu_enable = true;
+			}
+		});
+		
+		
 	}));
 }
 

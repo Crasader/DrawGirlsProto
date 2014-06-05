@@ -70,15 +70,20 @@ bool KSLabelTTF::updateTexture()
 		if(i != ' ')
 		{
 			validString = true;
+			setVisible(true);
 			break;
 		}
 	}
 	if(!validString)
 	{
-		
+		setVisible(false);
 		return true;
 	}
-		
+	if(m_outerSprite)
+	{
+		m_outerSprite->removeFromParent();
+		m_outerSprite = nullptr;
+	}
 //	startFormSetter(this);
 	auto textureForGradient = CCSprite::createWithTexture(getTexture());
 	
@@ -86,11 +91,6 @@ bool KSLabelTTF::updateTexture()
 	rect.size   = m_pobTexture->getContentSize();
 	this->setTextureRect(rect);
 	
-	if(m_outerSprite)
-	{
-		m_outerSprite->removeFromParent();
-		m_outerSprite = nullptr;
-	}
 	if(this->m_outerIsStroke)
 	{
 		CCSprite* label = CCSprite::createWithTexture(getTexture());

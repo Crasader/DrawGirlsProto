@@ -18,6 +18,14 @@
 //#include "MissileDamageData.h"
 
 #define ABSORB_DISTANCE 100.f
+#define MAGNET_DISTANCE 1000.f
+
+GameItemBase::GameItemBase()
+{
+	m_absorb_distance = ABSORB_DISTANCE;
+	if(mySGD->isUsingItem(kIC_magnet))
+		m_absorb_distance += MAGNET_DISTANCE;
+}
 
 void GameItemBase::selfRemove()
 {
@@ -35,7 +43,7 @@ void GameItemBase::framing()
 	frame_cnt++;
 	
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
-	if(myPoint.convertToCCP().getDistanceSq(jack_position) < ABSORB_DISTANCE)
+	if(myPoint.convertToCCP().getDistanceSq(jack_position) < m_absorb_distance)
 	{
 		unschedule(schedule_selector(GameItemBase::framing));
 		
@@ -1237,6 +1245,12 @@ void FeverCoinParent::myInit()
 	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV());
 }
 
+FloatingCoin::FloatingCoin()
+{
+	m_absorb_distance = ABSORB_DISTANCE;
+	if(mySGD->isUsingItem(kIC_magnet))
+		m_absorb_distance += MAGNET_DISTANCE;
+}
 
 FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take)
 {
@@ -1255,7 +1269,7 @@ void FloatingCoin::absorbChecking()
 	// 주변에 캐릭터 있는지 체크
 	
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
-	if(getPosition().getDistanceSq(jack_position) < ABSORB_DISTANCE)
+	if(getPosition().getDistanceSq(jack_position) < m_absorb_distance)
 	{
 		takeIt();
 		return;

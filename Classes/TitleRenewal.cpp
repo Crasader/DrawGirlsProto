@@ -178,8 +178,8 @@ void TitleRenewalScene::realInit()
 	
 	CCSprite* ratings = CCSprite::create("game_ratings.png");
 	ratings->setAnchorPoint(ccp(1,1));
-	ratings->setPosition(ccp(480-20,320-15));
-	addChild(ratings, 1);
+	ratings->setPosition(ccpFromSize(title_img->getContentSize()/2.f) + ccp(240-20, 160-15));
+	title_img->addChild(ratings);
 	
 	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 15, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
@@ -755,7 +755,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setItem9OpenStage(result_data["item9OpenStage"].asInt());
 		mySGD->setItem6OpenStage(result_data["item6OpenStage"].asInt());
-		mySGD->setItem8OpenStage(result_data["item8OpenStage"].asInt());
+		mySGD->setItem11OpenStage(result_data["item11OpenStage"].asInt());
 		mySGD->setItemGachaOpenStage(result_data["itemGachaOpenStage"].asInt());
 		
 		mySGD->setPuzzlePerfectRewardRuby(result_data["puzzlePerfectRewardRuby"].asInt());
@@ -979,7 +979,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopItem_int1_exchangeID_s, t_code, t_data["exchangeID"].asString(), false);
 			
 			
-			t_code = kIC_longTime;
+			t_code = kIC_magnet;
 			t_key = CCString::createWithFormat("s_i_%d", t_code)->getCString();
 			
 			t_data.clear();

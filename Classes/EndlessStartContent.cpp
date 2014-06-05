@@ -15,7 +15,7 @@
 #include "MyLocalization.h"
 #include "CommonButton.h"
 #include "FlagSelector.h"
-
+#include "CommonAnimation.h"
 EndlessStartContent* EndlessStartContent::create(int t_touch_priority, function<void(CCObject*)> t_selector)
 {
 	EndlessStartContent* t_ctc = new EndlessStartContent();
@@ -180,15 +180,11 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	addChild(close_menu);
 	
 	
-	setScaleY(0);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){setScaleY(t);}, [=](float t)
-												   {
-													   setScaleY(1.f);
-													   is_menu_enable = true;
-												   }));}));}));
+	CommonAnimation::openPopup(this, this, nullptr, [=](){
+		
+	}, [=](){
+		is_menu_enable = true;
+	});
 	
 //	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
 //										 {

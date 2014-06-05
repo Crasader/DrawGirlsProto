@@ -18,6 +18,7 @@
 #include "MyLocalization.h"
 #include "AudioEngine.h"
 #include "PuzzleScene.h"
+#include "CommonAnimation.h"
 
 ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
 {
@@ -93,25 +94,31 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 						
 						string title_str, ment_str;
 						int random_value = rand()%1000;
-						if(random_value < 250)
+						if(random_value < 200) // 200
 						{
 							item_type = kIC_fast; // 4
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item4title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item4ment);
 						}
-						else if(random_value < 500)
+						else if(random_value < 400) // 200
 						{
 							item_type = kIC_subOneDie; // 5
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item5title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item5ment);
 						}
-						else if(random_value < 800)
+						else if(random_value < 650) // 250
 						{
 							item_type = kIC_silence; // 7
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item7title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item7ment);
 						}
-						else
+						else if(random_value < 900) // 250
+						{
+							item_type = kIC_longTime; // 8
+							title_str = myLoc->getLocalForKey(kMyLocalKey_item8title);
+							ment_str = myLoc->getLocalForKey(kMyLocalKey_item8ment);
+						}
+						else // 100
 						{
 							item_type = kIC_heartUp; // 10
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item10title);
@@ -342,23 +349,12 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	
 	
-	m_container->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-	{
-		gray->setOpacity(t);
-		KS::setOpacity(m_container, t);
-	}, [=](int t)
-										 {
-											 gray->setOpacity(255);
-											 KS::setOpacity(m_container, 255);
-											 question_manager->runAnimationsForSequenceNamed("Default Timeline");
-											 AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
-										 }));
+	CommonAnimation::openPopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		question_manager->runAnimationsForSequenceNamed("Default Timeline");
+		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
+	});
 }
 
 void ItemGachaPopup::useAction(CCObject* sender, CCControlEvent t_event)
@@ -428,6 +424,8 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		
 		KS::setOpacity(question_img, 255);
 		item_img->removeFromParent();
+		item_title->setString("");
+		item_ment->setString("");
 		regacha_button->setPosition(ccp(-65,-85-100));
 		regacha_button->setVisible(false);
 		

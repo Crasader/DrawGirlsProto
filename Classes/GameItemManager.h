@@ -50,11 +50,14 @@ public:
 	virtual void selfRemove();
 	virtual void startFraming();
 	void setTakeEffectFunc(CCObject* t_effect, SEL_CallFuncCCp d_effect);
+	GameItemBase();
 	
 protected:
 	CCObject* target_effect;
 	SEL_CallFuncCCp delegate_effect;
 	virtual void acting();
+	
+	float m_absorb_distance;
 	
 	int holding_time;
 	int frame_cnt;
@@ -251,7 +254,12 @@ public:
 	static FloatingCoin* create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
 	
 	void hideAction();
+	
+	FloatingCoin();
+	
 private:
+	
+	float m_absorb_distance;
 	
 	int m_gold;
 	float moving_direction; // -180 <= ~ < 180

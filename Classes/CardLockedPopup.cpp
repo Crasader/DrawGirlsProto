@@ -17,6 +17,8 @@
 #include "StyledLabelTTF.h"
 #include "CommonButton.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
+
 
 CardLockedPopup* CardLockedPopup::create(int t_touch_priority, function<void()> t_end_func, int t_step)
 {
@@ -106,17 +108,11 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 //	close_button->setTouchPriority(touch_priority);
 	
 	
-	m_container->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t)
-										 {
-											 KS::setOpacity(m_container, 255);
-											 is_menu_enable = true;
-										 }));
+	CommonAnimation::openPopup(this, m_container, nullptr, [=](){
+		
+	}, [=](){
+		is_menu_enable = true;
+	});
 }
 
 void CardLockedPopup::closeAction(CCObject* sender, CCControlEvent t_event)

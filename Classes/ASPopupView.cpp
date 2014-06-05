@@ -13,7 +13,7 @@
 #include "AudioEngine.h"
 #include "MyLocalization.h"
 #include "FormSetter.h"
-
+#include "CommonAnimation.h"
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 {
 	return getCommonNoti(t_touch_priority, t_comment, [](){});
@@ -352,21 +352,11 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	goshop_button->setTouchPriority(t_popup->getTouchPriority()-5);
 	
 	
-	t_container->setScaleY(0.f);
-	
-	t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-		t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-			t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-	
-	t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-	{
-		gray->setOpacity(t);
-		KS::setOpacity(t_container, t);
-	}, [=](int t)
-	{
-		gray->setOpacity(255);
-		KS::setOpacity(t_container, 255);t_popup->is_menu_enable = true;
-	}));
+	CommonAnimation::openPopup(t_popup, t_container, gray, [=](){
+		
+	}, [=](){
+		t_popup->is_menu_enable = true;
+	});
 	
 	
 	return t_popup;

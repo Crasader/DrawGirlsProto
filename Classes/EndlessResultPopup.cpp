@@ -1,6 +1,8 @@
 #include "EndlessResultPopup.h"
 #include "DataStorageHub.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
+
 
 EndlessResultPopup::EndlessResultPopup()
 {
@@ -48,17 +50,10 @@ main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50
 	main_case->setPosition(ccp(240,160-22.f));
 	addChild(main_case, kEndlessResultPopupZorder_main);
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
-	{
-		KS::setOpacity(main_case, 255);
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
 		
-	}));
+	}, [=](){
+	});
 	
 	CCScale9Sprite* inner_left = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 	inner_left->setContentSize(CCSizeMake(230, 215));

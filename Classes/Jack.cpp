@@ -14,6 +14,7 @@
 #include "TutorialFlowStep.h"
 #include "MyLocalization.h"
 #include "AchieveNoti.h"
+#include "CommonAnimation.h"
 void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 {
 	queue<IntMoveState> bfsArray;
@@ -1454,14 +1455,19 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				
 				
 				
-				t_container->setScaleY(0.f);
-				
-				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
-							close_menu->setVisible(true);}));}));}));
-				
-				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
+				CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+					
+				}, [=](){
+					close_menu->setVisible(true);
+				});
+//				t_container->setScaleY(0.f);
+//				
+//				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+//					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+//						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
+//							close_menu->setVisible(true);}));}));}));
+//				
+//				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
 			}
 		}
 		else if(die_type == DieType::kDieType_shockwave)
@@ -1546,15 +1552,12 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				close_menu->addChild(close_item);
 				
 				
+				CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+					
+				}, [=](){
+					close_menu->setVisible(true);
+				});
 				
-				t_container->setScaleY(0.f);
-				
-				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
-							close_menu->setVisible(true);}));}));}));
-				
-				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
 			}
 		}
 		else if(die_type == DieType::kDieType_timeover)
