@@ -37,6 +37,8 @@
 #include "FormSetter.h"
 #include "OnePercentGame.h"
 #include "FiveRocksCpp.h"
+#include "CommonAnimation.h"
+
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -211,7 +213,7 @@ bool OptionPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-14.f-450));
+	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kOP_Z_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_option), mySGD->getFont().c_str(), 15);
@@ -639,13 +641,18 @@ void OptionPopup::onEnter()
 
 void OptionPopup::showPopup()
 {
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
-	gray->runAction(gray_fade);
+//	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
+//	gray->runAction(gray_fade);
+//	
+//	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
+//	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endShowPopup));
+//	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
+//	main_case->runAction(main_seq);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endShowPopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
+		
+	}, bind(&OptionPopup::endShowPopup, this));
 }
 
 void OptionPopup::endShowPopup()
@@ -656,14 +663,10 @@ void OptionPopup::endShowPopup()
 void OptionPopup::hidePopup()
 {
 	is_menu_enable = false;
+	CommonAnimation::closePopup(this, main_case, gray, [=](){
+		
+	}, bind(&OptionPopup::endHidePopup, this));
 	
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
-	gray->runAction(gray_fade);
-	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(OptionPopup::endHidePopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
 }
 
 void OptionPopup::endHidePopup()
