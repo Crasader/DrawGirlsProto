@@ -627,7 +627,7 @@ void Maingame::finalSetting()
 	
 	if(mySGD->is_play_replay)
 	{
-		auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb.ccbi");
+		auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_you.ccbi");
 		replay_bomb = temp.first;
 		replay_bomb->setPosition(ccp(440, myDSH->ui_center_y+70));
 		addChild(replay_bomb,clearshowtimeZorder);
@@ -3194,8 +3194,7 @@ void Maingame::scoreAttackMissile(int t_damage)
 {
 	CCPoint origin_position = ccp(40, myDSH->ui_center_y+70);
 	
-	CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile.ccbi").first;
-	t_missile->setScaleX(-1.f);
+	CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile_me.ccbi").first;
 	t_missile->setPosition(origin_position);
 	addChild(t_missile, myUIZorder);
 	

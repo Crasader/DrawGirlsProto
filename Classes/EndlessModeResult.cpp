@@ -153,6 +153,26 @@ bool EndlessModeResult::init()
 		}
 	}
 	
+	mySGD->setUserdataAchieveHunter(mySGD->getUserdataAchieveHunter()+mySGD->hunt_value.getV());
+	
+	if(mySGD->is_exchanged)
+		mySGD->setUserdataAchieveChangeMania(mySGD->getUserdataAchieveChangeMania() + 1);
+	
+	if(mySGD->is_showtime)
+	{
+		for(int i=kAchievementCode_perfect1;i<=kAchievementCode_perfect3;i++)
+		{
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+			   mySGD->getUserdataAchievePerfect() + 1 >= myAchieve->getCondition((AchievementCode)i))
+			{
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
+		mySGD->setUserdataAchievePerfect(mySGD->getUserdataAchievePerfect() + 1);
+	}
+	
 	title_list.clear();
 	left_content_list.clear();
 	right_content_list.clear();

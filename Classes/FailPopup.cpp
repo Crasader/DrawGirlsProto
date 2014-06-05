@@ -625,6 +625,23 @@ bool FailPopup::init()
 	
 	mySGD->setUserdataAchieveNoFail(0);
 	
+	for(int i=kAchievementCode_fail1;i<=kAchievementCode_fail3;i++)
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+		   mySGD->getUserdataAchieveFail() + 1 >= myAchieve->getCondition((AchievementCode)i))
+		{
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
+	mySGD->setUserdataAchieveFail(mySGD->getUserdataAchieveFail() + 1);
+	
+	mySGD->setUserdataAchieveHunter(mySGD->getUserdataAchieveHunter()+mySGD->hunt_value.getV());
+	
+	if(mySGD->is_exchanged)
+		mySGD->setUserdataAchieveChangeMania(mySGD->getUserdataAchieveChangeMania() + 1);
+	
 	int seq_no_fail_cnt = mySGD->getUserdataAutoLevel()-1;
 	if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
 	mySGD->setUserdataAutoLevel(seq_no_fail_cnt);

@@ -163,11 +163,16 @@ public:
 			mySAE->preloadEffect("ment_stageclear3.mp3");
 			mySAE->preloadEffect("ment_timeover.mp3");
 			mySAE->preloadEffect("ment_unlockmap.mp3");
-		}
-		else if(t_step == 2)
-		{
+			
+			mySAE->preloadEffect("sound_pil_life.mp3");
+			mySAE->preloadEffect("sound_pil_plasma.mp3");
+			mySAE->preloadEffect("sound_pil_fire.mp3");
+			mySAE->preloadEffect("sound_pil_ice.mp3");
+			mySAE->preloadEffect("sound_pil_lightning.mp3");
+			mySAE->preloadEffect("sound_pil_wind.mp3");
 			mySAE->preloadEffect("sound_ready.mp3");
 			mySAE->preloadEffect("sound_go.mp3");
+			
 			mySAE->preloadEffect("sound_get_coin.mp3");
 			mySAE->preloadEffect("sound_basic_missile_shoot.mp3");
 			mySAE->preloadEffect("sound_spin_missile.mp3");
@@ -181,6 +186,9 @@ public:
 			mySAE->preloadEffect("sound_jack_special_missile.mp3");
 			mySAE->preloadEffect("sound_jack_missile_bomb.mp3");
 			mySAE->preloadEffect("sound_crashed_map.mp3");
+		}
+		else if(t_step == 2)
+		{
 			mySAE->preloadEffect("sound_pilsalgi.mp3");
 			mySAE->preloadEffect("sound_bomb_wave.mp3");
 			mySAE->preloadEffect("sound_throw_obj_shot.mp3");
@@ -193,12 +201,6 @@ public:
 			mySAE->preloadEffect("sound_ice_hold.mp3");
 			mySAE->preloadEffect("sound_returntojack.mp3");
 			mySAE->preloadEffect("sound_sleep.mp3");
-			mySAE->preloadEffect("sound_pil_life.mp3");
-			mySAE->preloadEffect("sound_pil_plasma.mp3");
-			mySAE->preloadEffect("sound_pil_fire.mp3");
-			mySAE->preloadEffect("sound_pil_ice.mp3");
-			mySAE->preloadEffect("sound_pil_lightning.mp3");
-			mySAE->preloadEffect("sound_pil_wind.mp3");
 			mySAE->preloadEffect("sound_barrier_pass.mp3");
 			mySAE->preloadEffect("sound_angle_beem.mp3");
 			mySAE->preloadEffect("sound_tickingTimeBomb.mp3");
