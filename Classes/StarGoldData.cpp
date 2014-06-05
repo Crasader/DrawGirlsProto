@@ -449,7 +449,8 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 		play_limit_time -= mySD->getClearConditionTimeLimit();
 	}
 	
-	score = t_score + t_score*stage_grade.getV()*0.5f + t_score*((play_limit_time-t_game_time)/play_limit_time);
+	score = t_score + ((play_limit_time-t_game_time)*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
+	score = score.getV()*stage_grade.getV();
 
 	game_time = t_game_time;
 	
@@ -490,6 +491,13 @@ void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time 
 	score = t_score;
 	percentage = t_percentage;
 	game_time = t_game_time;
+	
+	base_score = base_score.getV()*0;
+	score = score.getV()*0;
+	
+	area_score = area_score.getV()*0;
+	damage_score = damage_score.getV()*0;
+	combo_score = combo_score.getV()*0;
 	
 	if(is_write_replay)
 	{
@@ -1558,8 +1566,8 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "i9";
 	else if(t_type == kGoodsType_item6)
 		return_value = "i6";
-	else if(t_type == kGoodsType_item8)
-		return_value = "i8";
+	else if(t_type == kGoodsType_item11)
+		return_value = "i11";
 	else if(t_type == kGoodsType_pass1)
 		return_value = "p1";
 	else if(t_type == kGoodsType_pass2)
@@ -1602,8 +1610,8 @@ GoodsType StarGoldData::getItemCodeToGoodsType(ITEM_CODE t_code)
 		return_value = kGoodsType_item9;
 	else if(t_code == kIC_doubleItem)
 		return_value = kGoodsType_item6;
-	else if(t_code == kIC_longTime)
-		return_value = kGoodsType_item8;
+	else if(t_code == kIC_magnet)
+		return_value = kGoodsType_item11;
 	return return_value;
 }
 
@@ -2774,8 +2782,8 @@ void StarGoldData::setItem9OpenStage(int t_i){	item9_open_stage = t_i;	}
 int StarGoldData::getItem9OpenStage(){	return item9_open_stage.getV();	}
 void StarGoldData::setItem6OpenStage(int t_i){	item6_open_stage = t_i;	}
 int StarGoldData::getItem6OpenStage(){	return item6_open_stage.getV();	}
-void StarGoldData::setItem8OpenStage(int t_i){	item8_open_stage = t_i;	}
-int StarGoldData::getItem8OpenStage(){	return item8_open_stage.getV();	}
+void StarGoldData::setItem11OpenStage(int t_i){	item11_open_stage = t_i;	}
+int StarGoldData::getItem11OpenStage(){	return item11_open_stage.getV();	}
 void StarGoldData::setItemGachaOpenStage(int t_i){	itemGacha_open_stage = t_i;	}
 int StarGoldData::getItemGachaOpenStage(){	return itemGacha_open_stage.getV();	}
 

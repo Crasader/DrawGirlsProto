@@ -2304,7 +2304,7 @@ void PlayUI::removeParticle (CCObject * sender)
 	
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)] = mySGD->replay_write_info.get(mySGD->getReplayKey(kReplayKey_lifeBonusCnt), Json::Value()).asInt() + 1;
 	
-	addScore(getScore()*0.1f);
+	addScore(30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	lifeBonus();
 }
 void PlayUI::createBonusScore ()

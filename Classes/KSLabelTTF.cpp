@@ -63,7 +63,11 @@ bool KSLabelTTF::updateTexture()
 	this->setTexture(tex);
 	// release it
 	tex->release();
-	
+	if(m_outerSprite)
+	{
+		m_outerSprite->removeFromParent();
+		m_outerSprite = nullptr;
+	}
 	bool validString = false;
 	for(auto i : m_string)
 	{
@@ -86,11 +90,7 @@ bool KSLabelTTF::updateTexture()
 	rect.size   = m_pobTexture->getContentSize();
 	this->setTextureRect(rect);
 	
-	if(m_outerSprite)
-	{
-		m_outerSprite->removeFromParent();
-		m_outerSprite = nullptr;
-	}
+	
 	if(this->m_outerIsStroke)
 	{
 		CCSprite* label = CCSprite::createWithTexture(getTexture());

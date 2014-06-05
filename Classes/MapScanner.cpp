@@ -314,7 +314,11 @@ void MapScanner::scanMap()
 	else							rate = 0.8f; // ^
 	
 //	int addScore = newInsideCnt*rate;
-	int addScore = (sil_inside_cnt*2 + empty_inside_cnt)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*rate;
+//	int addScore = (sil_inside_cnt*2 + empty_inside_cnt)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*rate;
+	
+	float take_area_rate = newInsideCnt*100.f/(160*215);
+	
+	int addScore = (take_area_rate*1000 + sqrtf(take_area_rate/20*1000*4))*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 	
 	mySGD->area_score = mySGD->area_score.getV() + addScore;
 	

@@ -93,25 +93,31 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 						
 						string title_str, ment_str;
 						int random_value = rand()%1000;
-						if(random_value < 250)
+						if(random_value < 200) // 200
 						{
 							item_type = kIC_fast; // 4
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item4title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item4ment);
 						}
-						else if(random_value < 500)
+						else if(random_value < 400) // 200
 						{
 							item_type = kIC_subOneDie; // 5
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item5title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item5ment);
 						}
-						else if(random_value < 800)
+						else if(random_value < 650) // 250
 						{
 							item_type = kIC_silence; // 7
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item7title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item7ment);
 						}
-						else
+						else if(random_value < 900) // 250
+						{
+							item_type = kIC_longTime; // 8
+							title_str = myLoc->getLocalForKey(kMyLocalKey_item8title);
+							ment_str = myLoc->getLocalForKey(kMyLocalKey_item8ment);
+						}
+						else // 100
 						{
 							item_type = kIC_heartUp; // 10
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item10title);
@@ -428,6 +434,8 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		
 		KS::setOpacity(question_img, 255);
 		item_img->removeFromParent();
+		item_title->setString("");
+		item_ment->setString("");
 		regacha_button->setPosition(ccp(-65,-85-100));
 		regacha_button->setVisible(false);
 		

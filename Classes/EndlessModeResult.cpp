@@ -87,11 +87,14 @@ bool EndlessModeResult::init()
 	}
 	
 	left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
-	left_life_decrease_score = left_life_base_score.getV()*(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*0.1f);
+	left_life_decrease_score = (mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	left_time_base_score = left_life_base_score.getV() + left_life_decrease_score.getV();
-	left_time_decrease_score = left_time_base_score.getV()*(mySGD->temp_endless_play_limit_time.getV()-mySGD->getGameTime())/mySGD->temp_endless_play_limit_time.getV();
+	left_time_decrease_score = (mySGD->temp_endless_play_limit_time.getV()-mySGD->getGameTime())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 	left_grade_base_score = left_time_base_score.getV() + left_time_decrease_score.getV();
-	left_grade_decrease_score = left_time_base_score.getV()*mySGD->getStageGrade()*0.5f;
+	if(mySGD->getStageGrade() <= 0)
+		left_grade_decrease_score = left_grade_base_score.getV()*0.f;
+	else
+		left_grade_decrease_score = left_grade_base_score.getV()*(mySGD->getStageGrade()-1);
 	left_damaged_score = -mySGD->damaged_score.getV();
 	
 	left_total_score = left_grade_base_score.getV() + left_grade_decrease_score.getV() + left_damaged_score.getV();
@@ -107,11 +110,14 @@ bool EndlessModeResult::init()
 	
 	
 	right_life_base_score = right_area_score.getV() + right_damage_score.getV() + right_combo_score.getV();
-	right_life_decrease_score = right_life_base_score.getV()*(right_life_cnt.getV()*0.1f);
+	right_life_decrease_score = (right_life_cnt.getV()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	right_time_base_score = right_life_base_score.getV() + right_life_decrease_score.getV();
-	right_time_decrease_score = right_time_base_score.getV()*(mySGD->temp_endless_play_limit_time.getV()-right_game_time.getV())/mySGD->temp_endless_play_limit_time.getV();
+	right_time_decrease_score = (mySGD->temp_endless_play_limit_time.getV()-right_game_time.getV())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 	right_grade_base_score = right_time_base_score.getV() + right_time_decrease_score.getV();
-	right_grade_decrease_score = right_time_base_score.getV()*right_clear_grade.getV()*0.5f;
+	if(right_clear_grade.getV() <= 0)
+		right_grade_decrease_score = right_grade_base_score.getV()*0.f;
+	else
+		right_grade_decrease_score = right_grade_base_score.getV()*(right_clear_grade.getV()-1);
 	right_damaged_score = -mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_scoreAttackedValue), Json::Value()).asInt();
 	
 	right_total_score = right_grade_base_score.getV() + right_grade_decrease_score.getV() + right_damaged_score.getV();

@@ -298,7 +298,7 @@ void StartSettingPopup::setMain()
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_longTime && mySGD->getItem8OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
@@ -359,7 +359,7 @@ void StartSettingPopup::setMain()
 			is_unlocked = false;
 		else if(t_ic == kIC_doubleItem && mySGD->getItem6OpenStage() > mySD->getSilType())
 			is_unlocked = false;
-		else if(t_ic == kIC_longTime && mySGD->getItem8OpenStage() > mySD->getSilType())
+		else if(t_ic == kIC_magnet && mySGD->getItem11OpenStage() > mySD->getSilType())
 			is_unlocked = false;
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
@@ -2140,6 +2140,7 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_silence)			return_value = "Silence";
 	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
 	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
+	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetTitle);
 	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
 	
 	return return_value.c_str();

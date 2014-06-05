@@ -161,7 +161,7 @@ enum GoodsType
 	kGoodsType_gold,
 	kGoodsType_item9,
 	kGoodsType_item6,
-	kGoodsType_item8,
+	kGoodsType_item11,
 	kGoodsType_pass1,
 	kGoodsType_pass2,
 	kGoodsType_pass3,
@@ -667,8 +667,8 @@ public:
 	int getItem9OpenStage();
 	void setItem6OpenStage(int t_i);
 	int getItem6OpenStage();
-	void setItem8OpenStage(int t_i);
-	int getItem8OpenStage();
+	void setItem11OpenStage(int t_i);
+	int getItem11OpenStage();
 	void setItemGachaOpenStage(int t_i);
 	int getItemGachaOpenStage();
 	
@@ -961,7 +961,7 @@ private:
 	
 	KSProtectVar<int> item9_open_stage;
 	KSProtectVar<int> item6_open_stage;
-	KSProtectVar<int> item8_open_stage;
+	KSProtectVar<int> item11_open_stage;
 	KSProtectVar<int> itemGacha_open_stage;
 	
 	KSProtectVar<int> puzzle_perfect_reward_ruby;

@@ -636,6 +636,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("아이템을 빠르게 생성합니다."), kMyLocalKey_doubleItemContent);
 	ko->setObject(CCString::create("시간추가"), kMyLocalKey_longTimeTitle);
 	ko->setObject(CCString::create("게임시간을 증가시킵니다."), kMyLocalKey_longTimeContent);
+	ko->setObject(CCString::create("자석"), kMyLocalKey_magnetTitle);
+	ko->setObject(CCString::create("골드와 아이템을 빨아들입니다."), kMyLocalKey_magnetContent);
 	ko->setObject(CCString::create("아이템 뽑기"), kMyLocalKey_itemGachaTitle);
 	ko->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
 	ko->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
@@ -915,6 +917,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
 	ko->setObject(CCString::create("부활"), kMyLocalKey_item10title);
 	ko->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	ko->setObject(CCString::create("시간추가"), kMyLocalKey_item8title);
+	ko->setObject(CCString::create("제한시간을 늘려줍니다."), kMyLocalKey_item8ment);
 	ko->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
 	ko->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
 	ko->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
@@ -1280,6 +1284,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("The user starts with a fast state."), kMyLocalKey_baseSpeedUpContent);
 	en->setObject(CCString::create("Double items"), kMyLocalKey_doubleItemTitle);
 	en->setObject(CCString::create("Quickly create items."), kMyLocalKey_doubleItemContent);
+	en->setObject(CCString::create("자석"), kMyLocalKey_magnetTitle);
+	en->setObject(CCString::create("골드와 아이템을 빨아들입니다."), kMyLocalKey_magnetContent);
 	en->setObject(CCString::create("Additional time"), kMyLocalKey_longTimeTitle);
 	en->setObject(CCString::create("Game time increases."), kMyLocalKey_longTimeContent);
 	en->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
@@ -1560,6 +1566,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
 	en->setObject(CCString::create("부활"), kMyLocalKey_item10title);
 	en->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	en->setObject(CCString::create("시간추가"), kMyLocalKey_item8title);
+	en->setObject(CCString::create("제한시간을 늘려줍니다."), kMyLocalKey_item8ment);
 	en->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
 	en->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
 	en->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);
@@ -1927,6 +1935,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("The user starts with a fast state."), kMyLocalKey_baseSpeedUpContent);
 	ja->setObject(CCString::create("Double items"), kMyLocalKey_doubleItemTitle);
 	ja->setObject(CCString::create("Quickly create items."), kMyLocalKey_doubleItemContent);
+	ja->setObject(CCString::create("자석"), kMyLocalKey_magnetTitle);
+	ja->setObject(CCString::create("골드와 아이템을 빨아들입니다."), kMyLocalKey_magnetContent);
 	ja->setObject(CCString::create("Additional time"), kMyLocalKey_longTimeTitle);
 	ja->setObject(CCString::create("Game time increases."), kMyLocalKey_longTimeContent);
 	ja->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
@@ -2210,6 +2220,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("잠깐동안 몬스터가 공격을 못하도록 합니다."), kMyLocalKey_item7ment);
 	ja->setObject(CCString::create("부활"), kMyLocalKey_item10title);
 	ja->setObject(CCString::create("마지막 순간에 부활합니다."), kMyLocalKey_item10ment);
+	ja->setObject(CCString::create("시간추가"), kMyLocalKey_item8title);
+	ja->setObject(CCString::create("제한시간을 늘려줍니다."), kMyLocalKey_item8ment);
 	ja->setObject(CCString::create("일시정지"), kMyLocalKey_pause);
 	ja->setObject(CCString::create("계속하기"), kMyLocalKey_continue);
 	ja->setObject(CCString::create("나가기"), kMyLocalKey_ingameOut);

@@ -286,11 +286,11 @@ bool FailPopup::init()
 		play_limit_time = play_limit_time.getV() - mySD->getClearConditionTimeLimit();
 	
 	left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
-	left_life_decrease_score = left_life_base_score.getV()*(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*0.1f);
+	left_life_decrease_score = (mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	left_time_base_score = left_life_base_score.getV() + left_life_decrease_score.getV();
-	left_time_decrease_score = left_time_base_score.getV()*(play_limit_time.getV()-mySGD->getGameTime())/play_limit_time.getV();
+	left_time_decrease_score = (play_limit_time.getV()-mySGD->getGameTime())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 	left_grade_base_score = left_time_base_score.getV() + left_time_decrease_score.getV();
-	left_grade_decrease_score = left_time_base_score.getV()*mySGD->getStageGrade()*0.5f;
+	left_grade_decrease_score = left_grade_base_score.getV()*0.f;
 	left_damaged_score = -mySGD->damaged_score.getV();
 	
 	left_total_score = left_grade_base_score.getV() + left_grade_decrease_score.getV() + left_damaged_score.getV();
@@ -590,12 +590,12 @@ bool FailPopup::init()
 	main_case->addChild(loading_img, kZ_FP_img);
 	reader->release();
 	
-	if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item8) <= 0)
+	if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_emptyItem);
 		addChild(t_popup, kZ_FP_popup+1);
 	}
-	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item8) <= 0 &&
+	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0 &&
 			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount() >= mySGD->getStupidNpuHelpFailCount())
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_stupidNpuHelp);

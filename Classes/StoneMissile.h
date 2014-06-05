@@ -427,8 +427,8 @@ public:
 		int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 		combo_cnt++;
 
-		int damage_score = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
-		int combo_score = damage_score*(combo_cnt-1);
+		int damage_score = (damage/10*5+100)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);//(100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
+		int combo_score = (combo_cnt*10)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d); //damage_score*(combo_cnt-1);
 		
 		mySGD->damage_score = mySGD->damage_score.getV() + damage_score;
 		mySGD->combo_score = mySGD->combo_score.getV() + combo_score;
