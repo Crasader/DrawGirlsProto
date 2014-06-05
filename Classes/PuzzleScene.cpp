@@ -1455,6 +1455,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 		{
 //			showSuccessPuzzleEffect();
 			startBacking();
+			
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
