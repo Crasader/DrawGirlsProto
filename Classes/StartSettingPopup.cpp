@@ -44,6 +44,8 @@
 #include "MyLocalization.h"
 #include "LevelupGuidePopup.h"
 #include "CommonAnimation.h"
+#include "AchieveNoti.h"
+
 bool StartSettingPopup::init()
 {
     if ( !CCLayer::init() )
@@ -2048,6 +2050,20 @@ void StartSettingPopup::popupCloseCardSetting()
 
 void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 {
+	for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
+	{
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+		   mySGD->getUserdataAchieveItemBuyCount() + cnt >= myAchieve->getCondition((AchievementCode)i))
+		{
+			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
+	}
+	
+	mySGD->setUserdataAchieveItemBuyCount(mySGD->getUserdataAchieveItemBuyCount() + cnt);
+	myAchieve->updateAchieve(nullptr);
+	
+	
 	int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[t_clicked_item_idx]));
 	
 	myLog->addLog(kLOG_buyItem_s, -1, convertToItemCodeToItemName(item_list[t_clicked_item_idx]).c_str());

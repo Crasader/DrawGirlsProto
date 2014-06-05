@@ -279,9 +279,9 @@ enum AchievementCode
 	kAchievementCode_attacker2,//	닥치고공격2 : 한판에 30회공격 성공 완
 	kAchievementCode_attacker3,//	닥치고공격3 : 한판에 40회공격 성공 완
 	
-	kAchievementCode_hunter1,//	사냥꾼1 : 부하몹 5마리 가두어잡기
-	kAchievementCode_hunter2,//	사냥꾼2 : 부하몹 10마리 가두어잡기
-	kAchievementCode_hunter3,//	사냥꾼3 : 부하몹 20마리 가두어잡기
+	kAchievementCode_hunter1,//	사냥꾼1 : 부하몹 5마리 가두어잡기 완
+	kAchievementCode_hunter2,//	사냥꾼2 : 부하몹 10마리 가두어잡기 완
+	kAchievementCode_hunter3,//	사냥꾼3 : 부하몹 20마리 가두어잡기 완
 	
 	kAchievementCode_dieHard1,//	다이하드1 : 1~3level 에서 한목숨도 안죽고 클리어
 	kAchievementCode_dieHard2,//	다이하드2 : 4~9level 에서 한목숨도 안죽고 클리어
@@ -295,21 +295,21 @@ enum AchievementCode
 	kAchievementCode_fastClear2,//	초스피드클리어2 : 10초안에 클리어 완
 	kAchievementCode_fastClear3,//	초스피드클리어3 : 5초안에 클리어 완
 	
-	kAchievementCode_changeMania1,//	체인지1 : 10회 체인지
-	kAchievementCode_changeMania2,//	체인지2 : 20회 체인지
-	kAchievementCode_changeMania3,//	체인지3 : 30회 체인지
+	kAchievementCode_changeMania1,//	체인지1 : 10회 체인지 완
+	kAchievementCode_changeMania2,//	체인지2 : 20회 체인지 완
+	kAchievementCode_changeMania3,//	체인지3 : 30회 체인지 완
 	
-	kAchievementCode_fail1,//	실패는 성공의 어머니1 : 게임실패 10회
-	kAchievementCode_fail2,//	실패는 성공의 어머니2 : 게임실패 50회
-	kAchievementCode_fail3,//	실패는 성공의 어머니3 : 게임실패 100회
+	kAchievementCode_fail1,//	실패는 성공의 어머니1 : 게임실패 10회 완
+	kAchievementCode_fail2,//	실패는 성공의 어머니2 : 게임실패 50회 완
+	kAchievementCode_fail3,//	실패는 성공의 어머니3 : 게임실패 100회 완
 	
 	kAchievementCode_cardCollection1,//	카드컬렉터1: 카드 50장모으기 완
 	kAchievementCode_cardCollection2,//	카드컬렉터2: 카드 100장모으기 완
 	kAchievementCode_cardCollection3,//	카드컬렉터3: 카드 200장모으기 완
 	
-	kAchievementCode_perfect1,//	대단한성과1 : 100%클리어 10회
-	kAchievementCode_perfect2,//	대단한성과2 : 100%클리어 30회
-	kAchievementCode_perfect3,//	대단한성과3 : 100%클리어 50회
+	kAchievementCode_perfect1,//	대단한성과1 : 100%클리어 10회 완
+	kAchievementCode_perfect2,//	대단한성과2 : 100%클리어 30회 완
+	kAchievementCode_perfect3,//	대단한성과3 : 100%클리어 50회 완
 	
 	kAchievementCode_seqAttendance1,//	개근1 : 7일 연속출첵
 	kAchievementCode_seqAttendance2,//	개근2 : 14일 연속출첵
@@ -333,8 +333,8 @@ enum AchievementCode
 	kAchievementCode_hidden_noSound,//	(히든) 사운드따윈필요없어 : 설정에 사운드 끄고 플레이후 클리어 완
 	
 	kAchievementCode_hidden_shopper1,//	(히든) 쇼핑홀릭 : 상점메뉴 100회 진입시. 완
-	kAchievementCode_hidden_shopper2,//	(히든) 쇼핑홀릭2 : 아이템 50번째 구매
-	kAchievementCode_hidden_shopper3,//	(히든) 쇼핑홀릭3 : 아이템 100번째 구매
+	kAchievementCode_hidden_shopper2,//	(히든) 쇼핑홀릭2 : 아이템 50번째 구매 완
+	kAchievementCode_hidden_shopper3,//	(히든) 쇼핑홀릭3 : 아이템 100번째 구매 완
 	
 	kAchievementCode_hidden_breathtaking1,//	(히든)아슬아슬 : 5초이하로 남기고 클리어 완
 	kAchievementCode_hidden_breathtaking2,//	(히든)아슬아슬2 : 1초이하로 남기고 클리어 완

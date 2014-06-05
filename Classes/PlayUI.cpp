@@ -1387,6 +1387,16 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 		is_exchanged = true;
 		my_fp->addFeverGage(20);
 		
+		for(int i=kAchievementCode_changeMania1;i<=kAchievementCode_changeMania3;i++)
+		{
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+			   mySGD->getUserdataAchieveChangeMania() + 1 >= myAchieve->getCondition((AchievementCode)i))
+			{
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
 		myGD->communication("Main_startExchange");
 		myGD->communication("Main_showChangeCard");
 		myGD->communication("Jack_positionRefresh");

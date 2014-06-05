@@ -337,6 +337,7 @@ void StarGoldData::setGameStart()
 	gacha_item = kIC_emptyEnd;
 	
 	catch_cumber_count = 0;
+	hunt_value = 0;
 	
 	is_clear_diary = false;
 	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
@@ -2234,7 +2235,9 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "aFail";
 	else if(t_type == kUserdataType_achieve_perfect)
 		return_value = "aPerfect";
-	else if(t_type == kUserdataType_achieve_seqAttendance)
+	else if(t_type == kUserdataType_achieve_itemBuyCount)
+		return_value = "aItByCnt";
+	else if(t_type == kUserdataType_achieve_seqAttendance) // last
 		return_value = "aSeqAtd";
 	
 	return return_value;
@@ -2305,7 +2308,7 @@ void StarGoldData::initUserdata(Json::Value result_data)
 	{
 		if(i >= kUserdataType_achieve_mapGacha && i <= kUserdataType_achieve_seqAttendance) // HS가 유저데이터의 업적관련한 정보는 따로 묶겠다고 했음. 그래서 분기
 		{
-			userdata_storage[(UserdataType)i] = result_data["archiveData"][getUserdataTypeToKey((UserdataType)i)].asInt();
+			userdata_storage[(UserdataType)i] = result_data["archiveData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 		}
 		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek)
 		{
@@ -2999,3 +3002,18 @@ void StarGoldData::setUserdataAchieveSeqAttendance(int t_i)
 	}
 }
 int StarGoldData::getUserdataAchieveSeqAttendance(){	return userdata_storage[kUserdataType_achieve_seqAttendance].getV();	}
+void StarGoldData::setUserdataAchieveItemBuyCount(int t_i)
+{
+	if(userdata_storage[kUserdataType_achieve_itemBuyCount].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_achieve_itemBuyCount;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataAchieveItemBuyCount(){	return userdata_storage[kUserdataType_achieve_itemBuyCount].getV();	}
+
+
+

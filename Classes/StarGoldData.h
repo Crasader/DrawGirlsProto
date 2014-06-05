@@ -220,6 +220,7 @@ enum UserdataType
 	kUserdataType_achieve_changeMania,
 	kUserdataType_achieve_fail,
 	kUserdataType_achieve_perfect,
+	kUserdataType_achieve_itemBuyCount,
 	kUserdataType_achieve_seqAttendance,
 	
 	kUserdataType_end
@@ -630,6 +631,8 @@ public:
 	int getUserdataAchievePerfect();
 	void setUserdataAchieveSeqAttendance(int t_i);
 	int getUserdataAchieveSeqAttendance();
+	void setUserdataAchieveItemBuyCount(int t_i);
+	int getUserdataAchieveItemBuyCount();
 	
 	string getInappProduct(int t_index);
 	string getEventInappProduct(int t_index);
@@ -852,6 +855,7 @@ public:
 	Json::Value dummy_list;
 	
 	KSProtectVar<int> stage_attack_count;
+	KSProtectVar<int> hunt_value;
 	
 private:
 	bool is_not_cleared_stage;

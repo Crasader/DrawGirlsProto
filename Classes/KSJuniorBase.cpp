@@ -13,6 +13,7 @@
 //#include "PlayUI.h"
 #include "MissileDamageData.h"
 #include "StarGoldData.h"
+#include "AchieveNoti.h"
 
 bool KSJuniorBase::init(const string& ccbiName)
 {
@@ -133,6 +134,18 @@ void KSJuniorBase::checkConfine(float dt)
 		 dynamic_cast<KSJuniorBase*>(this))
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+		
+		mySGD->hunt_value = mySGD->hunt_value.getV() + 1;
+		
+		for(int i=kAchievementCode_hunter1;i<=kAchievementCode_hunter3;i++)
+		{
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+			   mySGD->getUserdataAchieveHunter() + mySGD->hunt_value.getV() >= myAchieve->getCondition((AchievementCode)i))
+			{
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
 		
 		int rmCnt = 5;
 		
