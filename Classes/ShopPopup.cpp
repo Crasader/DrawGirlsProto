@@ -1898,20 +1898,12 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 								  
 								  t_popup->is_menu_enable = false;
 								  
-								  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-									  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-								  
-								  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																				{
-																					gray->setOpacity(t);
-																					KS::setOpacity(t_container, t);
-																				}, [=](int t)
-																				{
-																					gray->setOpacity(0);
-																					KS::setOpacity(t_container, 0);
-																					is_menu_enable = true;
-																					t_popup->removeFromParent();
-																				}));
+									CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
+										
+									}, [=](){
+										is_menu_enable = true;
+										t_popup->removeFromParent();
+									});
 							  });
 	t_container->addChild(close_button);
 	
@@ -1923,20 +1915,12 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 		
 		t_popup->is_menu_enable = false;
 		
-		t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-		
-		t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-													  {
-														  gray->setOpacity(t);
-														  KS::setOpacity(t_container, t);
-													  }, [=](int t)
-													  {
-														  gray->setOpacity(0);
-														  KS::setOpacity(t_container, 0);
-														  buy_action();
-														  t_popup->removeFromParent();
-													  }));
+		CommonAnimation::closePopup(this, t_container, gray, [=](){
+			
+		}, [=](){
+			buy_action();
+			t_popup->removeFromParent();
+		});
 		
 	});
 	

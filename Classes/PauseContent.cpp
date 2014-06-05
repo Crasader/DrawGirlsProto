@@ -99,10 +99,11 @@ void PauseContent::startHide()
 		endHide();
 	}));
 	
-	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.f);}));}));
-	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(this, t);}, [=](int t){KS::setOpacity(this, 0);}));
+	CommonAnimation::closePopup(this, this, nullptr, [=](){
+		
+	}, [=](){
+//		end_func(); removeFromParent();
+	});
 }
 
 void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, function<void(void)> t_gohome, function<void(void)> t_replay)

@@ -42,10 +42,15 @@ void PatternTutorialContent::menuAction(CCObject* sender)
 			getParent()->removeFromParent();
 		}));
 		
-		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(1.2f);
-			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(0.f);}));}));
-		
-		addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(show_node, t);}, [=](int t){KS::setOpacity(show_node, 0);}));
+		CommonAnimation::closePopup(this, show_node, nullptr, [=](){
+			
+		}, [=](){
+//			end_func(); removeFromParent();
+		});
+//		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(1.2f);
+//			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(0.f);}));}));
+//		
+//		addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(show_node, t);}, [=](int t){KS::setOpacity(show_node, 0);}));
 	}
 	else
 	{

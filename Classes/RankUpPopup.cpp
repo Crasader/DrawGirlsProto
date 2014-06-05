@@ -383,18 +383,11 @@ void RankUpPopup::giveupAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
-	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
-	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-	{
-		KS::setOpacity(gray, t);
-		KS::setOpacity(m_container, t);
-	}, [=](int t)
-	{
-		KS::setOpacity(gray, 255);
-		KS::setOpacity(m_container, 0); end_func(); removeFromParent();
-	}));
+	CommonAnimation::closePopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		end_func(); removeFromParent();
+	});
 }
 
 void RankUpPopup::rankupAnimation()
