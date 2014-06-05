@@ -50,17 +50,12 @@ void EndlessStartContent::menuAction(CCObject* sender)
 	
 	is_menu_enable = false;
 	
-	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.f);}));}));
-	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-										 {
-											 
-										 }, [=](int t)
-										 {
-											 end_selector(NULL);
-											 getParent()->removeFromParent();
-										 }));
+	CommonAnimation::closePopup(this, this, nullptr, [=](){
+		
+	}, [=](){
+		end_selector(NULL);
+		getParent()->removeFromParent();
+	});
 }
 
 void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector)

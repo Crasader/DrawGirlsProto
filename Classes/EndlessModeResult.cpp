@@ -605,7 +605,7 @@ void EndlessModeResult::setMain()
 																	  
 																	  if(mySGD->getScore() > mySGD->temp_endless_score.getV())
 																		{
-																	  
+																			
 																			ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
 																			
 																			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -655,27 +655,19 @@ void EndlessModeResult::setMain()
 																			CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
 																			close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
 																			close_button->setFunction([=](CCObject* sender)
-																									  {
-																										  if(!t_popup->is_menu_enable)
-																											  return;
-																										  
-																										  t_popup->is_menu_enable = false;
-																										  
-																										  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-																											  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-																										  
-																										  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																																						{
-																																							t_gray->setOpacity(t);
-																																							KS::setOpacity(t_container, t);
-																																						}, [=](int t)
-																																						{
-																																							t_gray->setOpacity(0);
-																																							KS::setOpacity(t_container, 0);
-																																							is_menu_enable = true;
-																																							t_popup->removeFromParent();
-																																						}));
-																									  });
+																																{
+																																	if(!t_popup->is_menu_enable)
+																																		return;
+																																	
+																																	t_popup->is_menu_enable = false;
+																																	
+																																	CommonAnimation::closePopup(t_popup, t_container, t_gray, [=](){
+																																		
+																																	}, [=](){
+																																		is_menu_enable = true;
+																																		t_popup->removeFromParent();
+																																	});
+																																});
 																			t_container->addChild(close_button);
 																			
 																			t_popup->button_func_list.clear();
@@ -686,111 +678,205 @@ void EndlessModeResult::setMain()
 																				
 																				t_popup->is_menu_enable = false;
 																				
+																				CommonAnimation::closePopup(this, t_container, t_gray, [=](){
+																					
+																				}, [=](){
+																					t_gray->setOpacity(0);
+																					KS::setOpacity(t_container, 0);
+																					
+																					
+																					ready_loading = LoadingLayer::create(-999);
+																					addChild(ready_loading, 999);
+																					
+																					vector<CommandParam> command_list;
+																					command_list.clear();
+																					
+																					Json::Value param;
+																					param.clear();
+																					param["memberID"] = myHSP->getMemberID();
+																					param["score"] = int(mySGD->getScore());
+																					param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																					param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																					param["victory"] = true;
+																					
+																					command_list.push_back(CommandParam("finishendlessplay", param,
+																																							[=](Json::Value result_data)
+																																							{
+																																								if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																																								{
+																																									addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
+																																								}
+																																								else
+																																								{
+																																									ready_loading->removeFromParent();
+																																									ready_loading = NULL;
+																																									
+																																									addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f,
+																																																												 [=](float t)
+																																																												 {
+																																																													 gray->setOpacity(255*t);
+																																																												 }, [=](float t)
+																																																												 {
+																																																													 gray->setOpacity(0);
+																																																													 if(target_final && delegate_final)
+																																																														 (target_final->*delegate_final)();
+																																																													 removeFromParent();
+																																																												 }));
+																																									
+																																									addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f,
+																																																												 [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+																																																													 addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f,
+																																																																																	[=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
+																																									
+																																									addChild(KSGradualValue<int>::create(255, 0, 0.15f,
+																																																											 [=](int t)
+																																																											 {
+																																																												 KS::setOpacity(main_case, t);
+																																																												 if(t > 100)
+																																																												 {
+																																																													 n_stop_label2->setOpacity(100);
+																																																													 s_stop_label2->setOpacity(100);
+																																																													 n_next_label2->setOpacity(100);
+																																																													 s_next_label2->setOpacity(100);
+																																																												 }
+																																																											 }, [=](int t)
+																																																											 {
+																																																												 KS::setOpacity(main_case, 0);
+																																																												 n_stop_label2->setOpacity(0);
+																																																												 s_stop_label2->setOpacity(0);
+																																																												 n_next_label2->setOpacity(0);
+																																																												 s_next_label2->setOpacity(0);
+																																																											 }));
+																																								}
+																																							}));
+																					
+																					Json::Value param2;
+																					param2.clear();
+																					param2["memberID"] = myHSP->getMemberID();
+																					param2["score"] = mySGD->getScore();
+																					param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																					param2["level"] = mySGD->endless_my_level.getV();
+																					param2["autoLevel"] = 1;
+																					param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																					param2["victory"] = mySGD->endless_my_victory.getV();
+																					
+																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
+																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
+																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
+																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
+																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
+																					
+																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
+																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
+																					
+																					
+																					Json::FastWriter writer;
+																					param2["playData"] = writer.write(mySGD->replay_write_info);
+																					param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
+																					
+																					command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
+																					
+																					myHSP->command(command_list);
+																					
+																					
+																					
+																					t_popup->removeFromParent();
+																					
+																				});
 																				t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
 																					t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
 																				
 																				t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																															  {
-																																  t_gray->setOpacity(t);
-																																  KS::setOpacity(t_container, t);
-																															  }, [=](int t)
-																															  {
-																																  t_gray->setOpacity(0);
-																																  KS::setOpacity(t_container, 0);
-																																  
-																																  
-																																  ready_loading = LoadingLayer::create(-999);
-																																  addChild(ready_loading, 999);
-																																  
-																																  vector<CommandParam> command_list;
-																																  command_list.clear();
-																																  
-																																  Json::Value param;
-																																  param.clear();
-																																  param["memberID"] = myHSP->getMemberID();
-																																  param["score"] = int(mySGD->getScore());
-																																  param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																																  param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																																  param["victory"] = true;
-																																  
-																																  command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
-																																									  {
-																																										  if(result_data["result"]["code"].asInt() != GDSUCCESS)
-																																										  {
-																																											  addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
-																																										  }
-																																										  else
-																																										  {
-																																											  ready_loading->removeFromParent();
-																																											  ready_loading = NULL;
-																																											  
-																																											  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
-																																																					 {
-																																																						 gray->setOpacity(255*t);
-																																																					 }, [=](float t)
-																																																					 {
-																																																						 gray->setOpacity(0);
-																																																						 if(target_final && delegate_final)
-																																																							 (target_final->*delegate_final)();
-																																																						 removeFromParent();
-																																																					 }));
-																																											  
-																																											  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-																																												  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-																																											  
-																																											  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																																											  {
-																																												  KS::setOpacity(main_case, t);
-																																												  if(t > 100)
-																																													{
-																																														n_stop_label2->setOpacity(100);
-																																														s_stop_label2->setOpacity(100);
-																																														n_next_label2->setOpacity(100);
-																																														s_next_label2->setOpacity(100);
-																																													}
-																																											  }, [=](int t)
-																																											  {
-																																												  KS::setOpacity(main_case, 0);
-																																												  n_stop_label2->setOpacity(0);
-																																												  s_stop_label2->setOpacity(0);
-																																												  n_next_label2->setOpacity(0);
-																																												  s_next_label2->setOpacity(0);
-																																											  }));
-																																										  }
-																																									  }));
-																																  
-																																  Json::Value param2;
-																																  param2.clear();
-																																  param2["memberID"] = myHSP->getMemberID();
-																																  param2["score"] = mySGD->getScore();
-																																  param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																																  param2["level"] = mySGD->endless_my_level.getV();
-																																  param2["autoLevel"] = 1;
-																																  param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																																  param2["victory"] = mySGD->endless_my_victory.getV();
-																																  
-																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
-																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
-																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
-																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
-																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
-																																  
-																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
-																																  mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
-																																  
-																																  
-																																  Json::FastWriter writer;
-																																  param2["playData"] = writer.write(mySGD->replay_write_info);
-																																  param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
-																																  
-																																  command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
-																																  
-																																  myHSP->command(command_list);
-																																  
-																																  
-																																  
-																																  t_popup->removeFromParent();
-																															  }));
+																																											{
+																																												t_gray->setOpacity(t);
+																																												KS::setOpacity(t_container, t);
+																																											}, [=](int t)
+																																											{
+																																												t_gray->setOpacity(0);
+																																												KS::setOpacity(t_container, 0);
+																																												
+																																												
+																																												ready_loading = LoadingLayer::create(-999);
+																																												addChild(ready_loading, 999);
+																																												
+																																												vector<CommandParam> command_list;
+																																												command_list.clear();
+																																												
+																																												Json::Value param;
+																																												param.clear();
+																																												param["memberID"] = myHSP->getMemberID();
+																																												param["score"] = int(mySGD->getScore());
+																																												param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																																												param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																																												param["victory"] = true;
+																																												
+																																												command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
+																																																														{
+																																																															if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																																																															{
+																																																																addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
+																																																															}
+																																																															else
+																																																															{
+																																																																ready_loading->removeFromParent();
+																																																																ready_loading = NULL;
+																																																																
+																																																																addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																																																																																			 {
+																																																																																				 gray->setOpacity(255*t);
+																																																																																			 }, [=](float t)
+																																																																																			 {
+																																																																																				 gray->setOpacity(0);
+																																																																																				 if(target_final && delegate_final)
+																																																																																					 (target_final->*delegate_final)();
+																																																																																				 removeFromParent();
+																																																																																			 }));
+																																																																
+																																																																n_stop_label2->setOpacity(100);
+																																																																s_stop_label2->setOpacity(100);
+																																																																n_next_label2->setOpacity(100);
+																																																																s_next_label2->setOpacity(100);
+																																																																CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+																																																																	
+																																																																}, [=](){
+//																																																																	end_func(); removeFromParent();
+																																																																});
+																																																																
+																																																															}
+																																																														}));
+																																												
+																																												Json::Value param2;
+																																												param2.clear();
+																																												param2["memberID"] = myHSP->getMemberID();
+																																												param2["score"] = mySGD->getScore();
+																																												param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+																																												param2["level"] = mySGD->endless_my_level.getV();
+																																												param2["autoLevel"] = 1;
+																																												param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+																																												param2["victory"] = mySGD->endless_my_victory.getV();
+																																												
+																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
+																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
+																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
+																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
+																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
+																																												
+																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
+																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
+																																												
+																																												
+																																												Json::FastWriter writer;
+																																												param2["playData"] = writer.write(mySGD->replay_write_info);
+																																												param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
+																																												
+																																												command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
+																																												
+																																												myHSP->command(command_list);
+																																												
+																																												
+																																												
+																																												t_popup->removeFromParent();
+																																											}));
 																				
 																			});
 																			
@@ -856,27 +942,15 @@ void EndlessModeResult::setMain()
 																																								   removeFromParent();
 																																							   }));
 																														
-																														addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-																															addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-																														
-																														addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																														{
-																															KS::setOpacity(main_case, t);
-																															if(t > 100)
-																															{
-																																n_stop_label2->setOpacity(100);
-																																s_stop_label2->setOpacity(100);
-																																n_next_label2->setOpacity(100);
-																																s_next_label2->setOpacity(100);
-																															}
-																														}, [=](int t)
-																														{
-																															KS::setOpacity(main_case, 0);
-																															n_stop_label2->setOpacity(0);
-																															s_stop_label2->setOpacity(0);
-																															n_next_label2->setOpacity(0);
-																															s_next_label2->setOpacity(0);
-																														}));
+																														n_stop_label2->setOpacity(100);
+																														s_stop_label2->setOpacity(100);
+																														n_next_label2->setOpacity(100);
+																														s_next_label2->setOpacity(100);
+																														CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+																															
+																														}, [=](){
+//																															end_func(); removeFromParent();
+																														});
 																													}
 																												}));
 																			
@@ -2075,10 +2149,11 @@ void EndlessModeResult::reSetEndlessRank()
 																						   removeFromParent();
 																					   }));
 												
-												addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-													addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-												
-												addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t){KS::setOpacity(main_case, 0);}));
+												CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+													
+												}, [=](){
+//													end_func(); removeFromParent();
+												});
 											}
 										});
 }
@@ -2465,27 +2540,15 @@ void EndlessModeResult::successGetStageInfo()
 																										removeFromParent();
 																									}));
 															 
-															 addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-																 addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-															 
-															 addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																								  {
-																									  KS::setOpacity(main_case, t);
-																									  if(t > 100)
-																									  {
-																										  n_stop_label2->setOpacity(100);
-																										  s_stop_label2->setOpacity(100);
-																										  n_next_label2->setOpacity(100);
-																										  s_next_label2->setOpacity(100);
-																									  }
-																								  }, [=](int t)
-																								  {
-																									  KS::setOpacity(main_case, 0);
-																									  n_stop_label2->setOpacity(0);
-																									  s_stop_label2->setOpacity(0);
-																									  n_next_label2->setOpacity(0);
-																									  s_next_label2->setOpacity(0);
-																								  }));
+															 n_stop_label2->setOpacity(100);
+															 s_stop_label2->setOpacity(100);
+															 n_next_label2->setOpacity(100);
+															 s_next_label2->setOpacity(100);
+															 CommonAnimation::closePopup(this, main_case, gray, [=](){
+																 
+															 }, [=](){
+//																 end_func(); removeFromParent();
+															 });
 														 });
 	addChild(t_popup, 999);
 }

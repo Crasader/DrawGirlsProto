@@ -79,19 +79,11 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 								   
 								   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 								   
-								   addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-									   addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
-								   
-								   addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																		{
-																			KS::setOpacity(gray, t);
-																			KS::setOpacity(m_container, t);
-																		}, [=](int t)
-																		{
-																			KS::setOpacity(gray, 0);
-																			KS::setOpacity(m_container, 0);
-																			end_func(); removeFromParent();
-																		}));
+									 CommonAnimation::closePopup(this, m_container, gray, [=](){
+										 
+									 }, [=](){
+										 end_func(); removeFromParent();
+									 });
 							   });
 	m_container->addChild(cancel_button);
 	
@@ -137,12 +129,12 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	ok_button->setTouchPriority(touch_priority);
 
-	
+	t_back->setOpacity(0);
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
-		t_back->setOpacity(0);
+//		t_back->setOpacity(0);
 		
 	}, [=](){
-		t_back->setOpacity(0);
+//		t_back->setOpacity(0);
 		is_menu_enable = true;
 		input_text->setEnabled(true);
 		input_text->setVisible(true);
@@ -282,22 +274,15 @@ void CouponPopup::createResultPopup(string title, string content)
 		
 		t_popup->is_menu_enable = false;
 		
-		t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-		
-		t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-													  {
-														  gray->setOpacity(t);
-														  KS::setOpacity(t_container, t);
-													  }, [=](int t)
-													  {
-														  gray->setOpacity(0);
-														  KS::setOpacity(t_container, 0);
-														  is_menu_enable = true;
-														  input_text->setVisible(true);
-														  input_text->setEnabled(true);
-														  t_popup->removeFromParent();
-													  }));
+		CommonAnimation::closePopup(this, m_container, gray, [=](){
+			
+		}, [=](){
+			is_menu_enable = true;
+			input_text->setVisible(true);
+			input_text->setEnabled(true);
+			t_popup->removeFromParent();
+			
+		});
 		
 	});
 	

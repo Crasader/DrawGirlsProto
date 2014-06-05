@@ -292,22 +292,13 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 									  return;
 								  
 								  t_popup->is_menu_enable = false;
-								  
-								  t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-									  t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-								  
-								  t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-								  {
-									  gray->setOpacity(t);
-									  KS::setOpacity(t_container, t);
-								  }, [=](int t)
-								  {
-									  gray->setOpacity(0);
-									  KS::setOpacity(t_container, 0);
+									CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
+										
+									}, [=](){
 									  if(cancel_func != nullptr)
 										  cancel_func();
 									  t_popup->removeFromParent();
-								  }));
+									});
 							  });
 	t_container->addChild(close_button);
 	
@@ -319,18 +310,11 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 		
 		t_popup->is_menu_enable = false;
 		
-		t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-		
-		t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-		{
-			gray->setOpacity(t);
-			KS::setOpacity(t_container, t);
-		}, [=](int t)
-		{
-			gray->setOpacity(0);
-			KS::setOpacity(t_container, 0); goshop_func(); t_popup->removeFromParent();
-		}));
+		CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
+			
+		}, [=](){
+			goshop_func(); t_popup->removeFromParent();
+		});
 		
 	});
 	

@@ -15,6 +15,7 @@
 #include "MyLocalization.h"
 #include "CommonButton.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
 
 ControlTipContent* ControlTipContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, int t_code)
 {
@@ -50,24 +51,12 @@ void ControlTipContent::menuAction(CCObject* sender)
 	
 	is_menu_enable = false;
 	
-	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.f);}));}));
-	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-	{
-//		CCSprite* t_stencil = (CCSprite*)area_take_sample->getStencil();
-//		int before_opacity = t_stencil->getOpacity();
-//		KS::setOpacity(this, t);
-//		t_stencil->setOpacity(before_opacity);
-	}, [=](int t)
-	{
-//		CCSprite* t_stencil = (CCSprite*)area_take_sample->getStencil();
-//		int before_opacity = t_stencil->getOpacity();
-//		KS::setOpacity(this, 0);
-//		t_stencil->setOpacity(before_opacity);
+	CommonAnimation::closePopup(this, this, nullptr, [=](){
+		
+	}, [=](){
 		end_selector(NULL);
 		getParent()->removeFromParent();
-	}));
+	});
 }
 
 void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector, int t_code)

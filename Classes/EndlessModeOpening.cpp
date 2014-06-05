@@ -118,28 +118,31 @@ void EndlessModeOpening::setMain()
 																			 removeFromParent();
 																		 }));
 								  
-								  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-									  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-								  
-								  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-								  {
-									  KS::setOpacity(main_case, t);
-									  if(t > 100)
-										{
-											this->n_ready_label2->setOpacity(100);
-											this->s_ready_label2->setOpacity(100);
-											
-											
-										}
-//										mySelection->setOpacity(0);
-								  }, [=](int t)
-								  {
-									  KS::setOpacity(main_case, 0);
-									  this->n_ready_label2->setOpacity(0);
-									  this->s_ready_label2->setOpacity(0);
+									CommonAnimation::closePopup(this, main_case, gray, [=](){
 										
-//										mySelection->setOpacity(0);
-								  }));
+									}, [=](){
+//										end_func(); removeFromParent();
+									});
+//								  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+//									  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
+//								  
+//								  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
+//								  {
+//									  KS::setOpacity(main_case, t);
+//									  if(t > 100)
+//										{
+//											this->n_ready_label2->setOpacity(100);
+//											this->s_ready_label2->setOpacity(100);
+//											
+//											
+//										}
+//								  }, [=](int t)
+//								  {
+//									  KS::setOpacity(main_case, 0);
+//									  this->n_ready_label2->setOpacity(0);
+//									  this->s_ready_label2->setOpacity(0);
+//										
+//								  }));
 							  });
 	main_case->addChild(close_button);
 	
@@ -741,16 +744,21 @@ void EndlessModeOpening::successGetStageInfo()
 																										removeFromParent();
 																									}));
 															 
-															 addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-																 addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-															 
-															 addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){
-																 KS::setOpacity(main_case, t);
-																 //		mySelection->setOpacity(0);
-															 }, [=](int t){
-																 KS::setOpacity(main_case, 0);
-																 //		mySelection->setOpacity(0);
-															 }));
+															 CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+																 
+															 }, [=](){
+//																 end_func(); removeFromParent();
+															 });
+//															 addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+//																 addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
+//															 
+//															 addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){
+//																 KS::setOpacity(main_case, t);
+//																 //		mySelection->setOpacity(0);
+//															 }, [=](int t){
+//																 KS::setOpacity(main_case, 0);
+//																 //		mySelection->setOpacity(0);
+//															 }));
 														 });
 	addChild(t_popup, 999);
 //	

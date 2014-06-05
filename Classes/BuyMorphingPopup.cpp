@@ -87,20 +87,13 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 								  
-								  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-									  addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
-								  
-								  addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																	   {
-																		   gray->setOpacity(t);
-																		   KS::setOpacity(m_container, t);
-																	   }, [=](int t)
-																	   {
-																		   gray->setOpacity(0);
-																		   KS::setOpacity(m_container, 0);
-																		   end_func();
-																		   removeFromParent();
-																	   }));
+									CommonAnimation::closePopup(this, m_container, gray, [=](){
+										
+									}, [=](){
+										end_func();
+										removeFromParent();
+										
+									});
 							  });
 	back_case->addChild(close_button);
 	
@@ -173,10 +166,11 @@ void BuyMorphingPopup::cancelAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
-	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
-	
-	addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t){KS::setOpacity(m_container, 0); end_func(); removeFromParent();}));
+	CommonAnimation::closePopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		end_func(); removeFromParent();
+	});
 }
 
 void BuyMorphingPopup::buyAction(CCObject* sender, CCControlEvent t_event)
@@ -255,11 +249,11 @@ void BuyMorphingPopup::resultBuyMorphing(Json::Value result_data)
 	{
 		mySGD->onCardMorphing(mySGD->selected_collectionbook);
 		
-		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.f);}));}));
-		
-		addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t){KS::setOpacity(m_container, 0); buy_func(); removeFromParent();}));
-		
+		CommonAnimation::closePopup(this, m_container, gray, [=](){
+			
+		}, [=](){
+			buy_func(); removeFromParent();
+		});
 	}
 	else
 	{
