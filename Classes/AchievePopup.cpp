@@ -15,6 +15,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "ScrollBar.h"
+#include "CommonAnimation.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,
@@ -67,7 +68,7 @@ bool AchievePopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-14.f-450));
+	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kAchievePopupZorder_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achievement), mySGD->getFont().c_str(), 15);
@@ -156,13 +157,9 @@ bool AchievePopup::init()
 
 void AchievePopup::showPopup()
 {
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
-	gray->runAction(gray_fade);
-	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(AchievePopup::endShowPopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
+		
+	}, bind(&AchievePopup::endShowPopup, this));
 }
 
 void AchievePopup::endShowPopup()
@@ -190,13 +187,9 @@ void AchievePopup::hidePopup()
 	is_menu_enable = false;
 	achieve_table->setTouchEnabled(false);
 	
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
-	gray->runAction(gray_fade);
-	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(AchievePopup::endHidePopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::closePopup(this, main_case, gray, [=](){
+		
+	}, bind(&AchievePopup::endHidePopup, this));
 }
 
 void AchievePopup::endHidePopup()

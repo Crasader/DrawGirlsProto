@@ -643,7 +643,7 @@ bool ShopPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-14.f-450));
+	main_case->setPosition(ccp(240, 160 - 14));
 	addChild(main_case, kSP_Z_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 15);
@@ -734,6 +734,12 @@ bool ShopPopup::init()
 						   });
 	main_case->addChild(heart_menu, kSP_Z_content);
 	
+	
+	
+	CommonAnimation::openPopup(this, main_case, nullptr, [=](){
+		
+	}, [=](){
+	});
 //	tab_menu = CCMenu::create();
 //	tab_menu->setPosition(CCPointZero);
 //	main_case->addChild(tab_menu, kSP_Z_content);
@@ -832,10 +838,9 @@ bool ShopPopup::init()
 void ShopPopup::showPopup()
 {
 	setTouchEnabled(true);
-	CCMoveTo* main_move = CCMoveTo::create(0.3f, ccp(240,160-14.f));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endShowPopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::openPopup(this, main_case, nullptr, [=](){
+		
+	}, bind(&ShopPopup::endShowPopup, this));
 }
 
 void ShopPopup::endShowPopup()
@@ -854,10 +859,9 @@ void ShopPopup::hidePopup()
 {
 	is_menu_enable = false;
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(ShopPopup::endHidePopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+		
+	}, bind(&ShopPopup::endHidePopup, this));
 }
 
 void ShopPopup::endHidePopup()

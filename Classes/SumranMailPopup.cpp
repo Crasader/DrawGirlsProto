@@ -33,7 +33,7 @@
 #include "FormSetter.h"
 #include "MyLocalization.h"
 #include "StyledLabelTTF.h"
-
+#include "CommonAnimation.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -61,15 +61,25 @@ SumranMailPopup * SumranMailPopup::create (CCObject * t_close, SEL_CallFunc d_cl
 void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh)
 {
 	
-	DimmedPopup::init();
+	CCLayer::init();
 	
 	
-	
-	this->setHideFinalAction(t_close, d_close);
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray, kMP_Z_gray);
+
+	target_final = t_close;
+	delegate_final = d_close;
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-14-450));
-	setFormSetter(main_case);
+	main_case->setPosition(ccp(240,160-14));
 //	addChild(main_case, 0);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
@@ -90,8 +100,13 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	setFormSetter(main_inner);
 	main_case->addChild(main_inner);
 
-	this->setBackground(main_case);
+	addChild(main_case, kMP_Z_back);
 	
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
+		
+	}, [=](){
+//		end_func(); removeFromParent();
+	});
 	startFormSetter(this);
 //	target_close = t_close;
 //	delegate_close = d_close;
@@ -149,13 +164,13 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	allReceive->setPosition(ccp(410.0,33.0));
 	allReceive->setEnabled(false);
 	setFormSetter(allReceive);
-	this->addChild(allReceive, 1);
+	main_case->addChild(allReceive, 1);
 	
 	CCLabelTTF* giftboxAlert = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftboxAlert), mySGD->getFont().c_str(), 12);
 	setFormSetter(giftboxAlert);
 	giftboxAlert->setAnchorPoint(ccp(0,0.5));
 	giftboxAlert->setPosition(ccp(25,33));
-	this->addChild(giftboxAlert, 1);
+	main_case->addChild(giftboxAlert, 1);
 
 	
 	CommonButton* giftFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, -200); // ? 티켓함?이 맞음? From YH To KS
@@ -202,10 +217,6 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	totalFilter->setPosition(ccp(53, 255));
 	this->addChild(totalFilter, 1);
 	
-	
-	
-	
-
 	coinFilter->setBackgroundTypeForDisabled(CommonButtonYellow);
 	coinFilter->setTitleColor(ccc3(200, 200, 200));
 	coinFilter->setTitleColorForDisable(ccc3(20, 0, 0));
@@ -296,11 +307,20 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
 	closeBtn->setFunction([=](CCObject*){
 		hspConnector::get()->removeTarget(this);
-		this->hidePopup();
+		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+		CommonAnimation::closePopup(this, main_case, gray, [=](){
+			
+		}, [=](){
+			(target_final->*delegate_final)();
+			removeFromParent();
+			
+		});
+//		this->hidePopup();
 	});
 	closeBtn->setPosition(ccp(450, 255));
 	setFormSetter(closeBtn);
-	this->addChild(closeBtn);
+	main_case->addChild(closeBtn);
 	
 	
 	allInvisible();
@@ -1664,7 +1684,7 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 			mySGD->addHasGottenCardNumber(download_card_number);
 		}
 		
-		(getTarget()->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
+		(target_final->*callfunc_selector(PuzzleMapScene::resetPuzzle))();
 		
 		if(df_list.size() > 0) // need download
 		{

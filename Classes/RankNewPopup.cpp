@@ -18,6 +18,9 @@
 #include "FlagSelector.h"
 #include "FormSetter.h"
 #include "ScrollBar.h"
+#include "CommonAnimation.h"
+
+
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
 	target_final = t_final;
@@ -58,7 +61,7 @@ bool RankNewPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-14.f - 450));
+	main_case->setPosition(ccp(240,160-14.f));
 	setFormSetter(main_case);
 	addChild(main_case, 1);
 	
@@ -400,13 +403,10 @@ void RankNewPopup::onEnter()
 
 void RankNewPopup::showPopup()
 {
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
-	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(RankNewPopup::endShowPopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
+		
+	}, bind(&RankNewPopup::endShowPopup, this));
 }
 
 void RankNewPopup::endShowPopup()
@@ -418,13 +418,10 @@ void RankNewPopup::hidePopup()
 {
 	is_menu_enable = false;
 	
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
-	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(RankNewPopup::endHidePopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::closePopup(this, main_case, gray, [=](){
+		
+	}, bind(&RankNewPopup::endHidePopup, this));
 }
 
 void RankNewPopup::endHidePopup()

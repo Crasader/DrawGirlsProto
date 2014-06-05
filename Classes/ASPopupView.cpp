@@ -97,9 +97,14 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 		close_button->setFunction([=](CCObject* sender)
 															{
 																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																if(close_func)
-																	close_func();
-																t_popup->removeFromParent();
+																CommonAnimation::closePopup(t_popup, t_container,
+																														t_popup->getDimmedSprite(), nullptr,
+																														[=](){
+																															if(close_func)
+																																close_func();
+																															t_popup->removeFromParent();
+																														});
+																
 															});
 		t_container->addChild(close_button);
 		
@@ -112,9 +117,13 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 		close_button->setFunction([=](CCObject* sender)
 															{
 																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																if(close_func)
-																	close_func();
-																t_popup->removeFromParent();
+																CommonAnimation::closePopup(t_popup, t_container,
+																														t_popup->getDimmedSprite(), nullptr,
+																														[=](){
+																															if(close_func)
+																																close_func();
+																															t_popup->removeFromParent();
+																														});
 															});
 		t_container->addChild(close_button);
 		
@@ -126,6 +135,8 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	title_label->setPosition(ccp(0,case_back->getContentSize().height/2-22));
 	ment_label->setPositionY(content_back->getContentSize().height/2.f-40);
 	
+	t_popup->getDimmedSprite()->setOpacity(0);
+	CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite());
 	return t_popup;
 }
 

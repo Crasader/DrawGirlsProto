@@ -66,7 +66,7 @@ enum class SumranMailFilter
 	kNews,
 	kUnknownFriendRequest
 };
-class SumranMailPopup : public DimmedPopup, public CCTableViewDataSource, public CCTableViewDelegate
+class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 	public:
 		static SumranMailPopup * create (CCObject * t_close, SEL_CallFunc d_close, std::function<void(void)> heartRefresh);
@@ -109,6 +109,9 @@ class SumranMailPopup : public DimmedPopup, public CCTableViewDataSource, public
 		CCScale9Sprite* main_case;
 		TouchSuctionLayer* t_suction;
 		CommonButton* allReceive;
+	CCSprite* gray;
+	CCObject* target_final;
+	SEL_CallFunc delegate_final;
 		CCLabelTTF* m_nothingMessage; // 받은 메시지가 없습니다.
 		int download_card_number;
 		CCNode* loading_card_img;
