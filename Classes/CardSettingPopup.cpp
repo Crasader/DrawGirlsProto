@@ -25,6 +25,7 @@
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
 #include "ScrollBar.h"
+#include "CommonAnimation.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -93,7 +94,7 @@ bool CardSettingPopup::init()
 	
 	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_case->setContentSize(CCSizeMake(480, 280));
-	main_case->setPosition(ccp(240,160-14.f-450));
+	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kCSS_Z_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 15);
@@ -370,13 +371,16 @@ void CardSettingPopup::onEnter()
 
 void CardSettingPopup::showPopup()
 {
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
-	gray->runAction(gray_fade);
-	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endShowPopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::openPopup(this, main_case, nullptr, [=](){
+		
+	}, bind(&CardSettingPopup::endShowPopup, this));
+//	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
+//	gray->runAction(gray_fade);
+//	
+//	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f));
+//	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endShowPopup));
+//	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
+//	main_case->runAction(main_seq);
 }
 
 void CardSettingPopup::endShowPopup()
@@ -417,14 +421,11 @@ void CardSettingPopup::endShowPopup()
 void CardSettingPopup::hidePopup()
 {
 	is_menu_enable = false;
+		
 	
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
-	gray->runAction(gray_fade);
-	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(240,160-14.f-450));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CardSettingPopup::endHidePopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+		
+	}, bind(&CardSettingPopup::endHidePopup, this));
 }
 
 void CardSettingPopup::endHidePopup()

@@ -24,6 +24,8 @@
 #include "KSLabelTTF.h"
 #include "CardViewScene.h"
 #include "styledLabelTTF.h"
+#include "CommonAnimation.h"
+#include "FormSetter.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -306,7 +308,7 @@ bool CollectionBookPopup::init()
     {
         return false;
     }
-    
+	startFormSetter(this);
 	is_menu_enable = false;
 	
 	mySGD->changeSortType(kCST_default);
@@ -324,11 +326,12 @@ bool CollectionBookPopup::init()
 	addChild(gray, kCBP_Z_gray);
 	
 	main_case = CCNode::create();
-	main_case->setPosition(ccp(0,-320));
+	main_case->setPosition(ccp(240, 160));
+	setFormSetter(main_case);
 	addChild(main_case, kCBP_Z_gray);
 	
 	CCSprite* diary_case = CCSprite::create("diary_back_cover.png");
-	diary_case->setPosition(ccp(240,160));
+	diary_case->setPosition(ccp(0, 0));
 	main_case->addChild(diary_case);
 	
 	
@@ -344,7 +347,7 @@ bool CollectionBookPopup::init()
 	
 	recent_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	recent_left_img->setAnchorPoint(ccp(1.f,0.5f));
-	recent_left_img->setPosition(ccp(240,160));
+	recent_left_img->setPosition(ccp(0, 0));
 	main_case->addChild(recent_left_img, kCBP_Z_recent);
 	
 	setLeftPage(recent_left_img, recent_card_number);
@@ -352,7 +355,7 @@ bool CollectionBookPopup::init()
 	
 	recent_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	recent_right_img->setAnchorPoint(ccp(0.f,0.5f));
-	recent_right_img->setPosition(ccp(240,160));
+	recent_right_img->setPosition(ccp(0, 0));
 	main_case->addChild(recent_right_img, kCBP_Z_recent);
 	
 	setRightPage(recent_right_img, recent_card_number);
@@ -417,7 +420,7 @@ bool CollectionBookPopup::init()
 		
 		after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 		after_left_img->setAnchorPoint(ccp(1.f,0.5f));
-		after_left_img->setPosition(ccp(240,160));
+		after_left_img->setPosition(ccp(0, 0));
 		main_case->addChild(after_left_img, kCBP_Z_after);
 		
 		setLeftPage(after_left_img, pre_number);
@@ -427,7 +430,7 @@ bool CollectionBookPopup::init()
 		
 		after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 		after_right_img->setAnchorPoint(ccp(0.f,0.5f));
-		after_right_img->setPosition(ccp(240,160));
+		after_right_img->setPosition(ccp(0, 0));
 		main_case->addChild(after_right_img, kCBP_Z_after);
 		
 		setRightPage(after_right_img, next_number);
@@ -528,13 +531,10 @@ void CollectionBookPopup::onEnter()
 
 void CollectionBookPopup::showPopup()
 {
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
-	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,0));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CollectionBookPopup::endShowPopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
+		
+	}, bind(&CollectionBookPopup::endShowPopup, this));
 }
 
 void CollectionBookPopup::endShowPopup()
@@ -557,13 +557,10 @@ void CollectionBookPopup::hidePopup()
 {
 	is_menu_enable = false;
 	
-	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 0);
-	gray->runAction(gray_fade);
 	
-	CCMoveTo* main_move = CCMoveTo::create(0.5f, ccp(0,-320));
-	CCCallFunc* main_call = CCCallFunc::create(this, callfunc_selector(CollectionBookPopup::endHidePopup));
-	CCSequence* main_seq = CCSequence::createWithTwoActions(main_move, main_call);
-	main_case->runAction(main_seq);
+	CommonAnimation::closePopup(this, main_case, gray, [=](){
+		
+	}, bind(&CollectionBookPopup::endHidePopup, this));
 }
 
 void CollectionBookPopup::endHidePopup()
@@ -727,9 +724,9 @@ void CollectionBookPopup::startNextPage()
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
-	covered_left_img->setPosition(ccp(240,160));
+	covered_left_img->setPosition(ccp(0, 0));
 	main_case->addChild(covered_left_img, kCBP_Z_cover);
-	
+	setFormSetter(main_case);
 	int next_number = mySGD->getNextStageCardNumber(recent_card_number);
 	recent_card_number = next_number;
 	
@@ -788,7 +785,7 @@ void CollectionBookPopup::startNextFullSelectedPage()
 	
 	after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	after_right_img->setAnchorPoint(ccp(0.f,0.5f));
-	after_right_img->setPosition(ccp(240,160));
+	after_right_img->setPosition(ccp(0,0 ));
 	main_case->addChild(after_right_img, kCBP_Z_after);
 	
 	setRightPage(after_right_img, mySGD->selected_collectionbook);
@@ -854,7 +851,7 @@ void CollectionBookPopup::startPreFullSelectedPage()
 	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f,0.5f));
-	after_left_img->setPosition(ccp(240,160));
+	after_left_img->setPosition(ccp(0,0));
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, mySGD->selected_collectionbook);
@@ -897,7 +894,7 @@ void CollectionBookPopup::startPreSelectedPage()
 	
 	covered_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	covered_right_img->setAnchorPoint(ccp(0.f,0.5f));
-	covered_right_img->setPosition(ccp(240,160));
+	covered_right_img->setPosition(ccp(0,0));
 	main_case->addChild(covered_right_img, kCBP_Z_cover);
 	
 	setRightPage(covered_right_img, recent_card_number);
@@ -1003,7 +1000,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 	covered_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	covered_left_img->setAnchorPoint(ccp(1.f,0.5f));
-	covered_left_img->setPosition(ccp(240,160));
+	covered_left_img->setPosition(ccp(0,0));
 	main_case->addChild(covered_left_img, kCBP_Z_cover);
 	
 	recent_card_number = mySGD->selected_collectionbook;
@@ -1083,7 +1080,7 @@ void CollectionBookPopup::endNextPage()
 	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f,0.5f));
-	after_left_img->setPosition(ccp(240,160));
+	after_left_img->setPosition(ccp(0,0));
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
@@ -1108,7 +1105,7 @@ void CollectionBookPopup::endNextPage()
 	
 	after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	after_right_img->setAnchorPoint(ccp(0.f, 0.5f));
-	after_right_img->setPosition(ccp(240,160));
+	after_right_img->setPosition(ccp(0,0));
 	main_case->addChild(after_right_img, kCBP_Z_after);
 	
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
@@ -1170,7 +1167,7 @@ void CollectionBookPopup::endNextSelectedPage()
 	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f,0.5f));
-	after_left_img->setPosition(ccp(240,160));
+	after_left_img->setPosition(ccp(0,0));
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	setLeftPage(after_left_img, pre_number);
@@ -1194,7 +1191,7 @@ void CollectionBookPopup::endNextSelectedPage()
 	
 	after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	after_right_img->setAnchorPoint(ccp(0.f, 0.5f));
-	after_right_img->setPosition(ccp(240,160));
+	after_right_img->setPosition(ccp(0,0));
 	main_case->addChild(after_right_img, kCBP_Z_after);
 	
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
@@ -1258,7 +1255,7 @@ void CollectionBookPopup::startPrePage()
 	
 	covered_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	covered_right_img->setAnchorPoint(ccp(0.f,0.5f));
-	covered_right_img->setPosition(ccp(240,160));
+	covered_right_img->setPosition(ccp(0,0));
 	main_case->addChild(covered_right_img, kCBP_Z_cover);
 	
 	setRightPage(covered_right_img, recent_card_number);
@@ -1362,7 +1359,7 @@ void CollectionBookPopup::endPrePage()
 	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f, 0.5f));
-	after_left_img->setPosition(ccp(240,160));
+	after_left_img->setPosition(ccp(0,0));
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
@@ -1390,7 +1387,7 @@ void CollectionBookPopup::endPrePage()
 	
 	after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	after_right_img->setAnchorPoint(ccp(0.f,0.5f));
-	after_right_img->setPosition(ccp(240,160));
+	after_right_img->setPosition(ccp(0,0));
 	main_case->addChild(after_right_img, kCBP_Z_after);
 	
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
@@ -1466,7 +1463,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f, 0.5f));
-	after_left_img->setPosition(ccp(240,160));
+	after_left_img->setPosition(ccp(0,0));
 	main_case->addChild(after_left_img, kCBP_Z_after);
 	
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
@@ -1494,7 +1491,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	
 	after_right_img = CCSprite::create("diary_back.png", CCRectMake(240, 0, 240, 320));
 	after_right_img->setAnchorPoint(ccp(0.f,0.5f));
-	after_right_img->setPosition(ccp(240,160));
+	after_right_img->setPosition(ccp(0,0));
 	main_case->addChild(after_right_img, kCBP_Z_after);
 	
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
