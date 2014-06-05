@@ -24,6 +24,8 @@
 #include "StyledLabelTTF.h"
 #include "MyLocalization.h"
 #include "RivalSelectPopup.h"
+#include "CommonAnimation.h"
+
 
 enum EndlessModeOpeningZorder
 {
@@ -341,29 +343,19 @@ void EndlessModeOpening::setMain()
 	ready_menu->setTouchPriority(touch_priority);
 	right_back->addChild(ready_menu);
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-	{
-		KS::setOpacity(main_case, t);
-		if(t > 100)
-		{
-			n_ready_label2->setOpacity(100);
-			s_ready_label2->setOpacity(100);
-		}
-//		mySelection->setOpacity(0);
-	}, [=](int t)
-										 {
-											 KS::setOpacity(main_case, 255);
-											 n_ready_label2->setOpacity(100);
-											 s_ready_label2->setOpacity(100);
-//											 mySelection->setOpacity(0);
-											 is_menu_enable = true;
-										 }));
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
+		
+//		if(t > 100)
+//		{
+//			n_ready_label2->setOpacity(100);
+//			s_ready_label2->setOpacity(100);
+//		}
+	}, [=](){
+		n_ready_label2->setOpacity(100);
+		s_ready_label2->setOpacity(100);
+		//											 mySelection->setOpacity(0);
+		is_menu_enable = true;
+	});
 }
 
 void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)

@@ -14,6 +14,7 @@
 #include "CommonButton.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "CommonAnimation.h"
 
 PauseContent* PauseContent::create(int t_touch_priority, function<void(void)> t_resume, function<void(void)> t_gohome, function<void(void)> t_replay)
 {
@@ -25,15 +26,11 @@ PauseContent* PauseContent::create(int t_touch_priority, function<void(void)> t_
 
 void PauseContent::startShow()
 {
-	setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.f);
-				endShow();}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(this, t);}, [=](int t){KS::setOpacity(this, 255);}));
-	
+	CommonAnimation::openPopup(this, this, nullptr, [=](){
+		
+	}, [=](){
+		endShow();
+	});
 	setPosition(ccp(240, myDSH->ui_center_y));
 }
 

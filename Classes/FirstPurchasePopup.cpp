@@ -19,7 +19,7 @@
 #include "AudioEngine.h"
 #include "PuzzleScene.h"
 #include "FormSetter.h"
-
+#include "CommonAnimation.h"
 FirstPurchasePopup* FirstPurchasePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func)
 {
 	FirstPurchasePopup* t_mup = new FirstPurchasePopup();
@@ -217,22 +217,11 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	purchase_button->setTouchPriority(touch_priority);
 	
 	
-	m_container->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-	{
-		gray->setOpacity(t);
-		KS::setOpacity(m_container, t);
-	}, [=](int t)
-										 {
-											 gray->setOpacity(255);
-											 KS::setOpacity(m_container, 255);
-											 is_menu_enable = true;
-										 }));
+	CommonAnimation::openPopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		is_menu_enable = true;
+	});
 }
 
 void FirstPurchasePopup::giveupAction(CCObject* sender, CCControlEvent t_event)

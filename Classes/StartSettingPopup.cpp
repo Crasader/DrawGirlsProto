@@ -43,7 +43,7 @@
 #include "ItemGachaPopup.h"
 #include "MyLocalization.h"
 #include "LevelupGuidePopup.h"
-
+#include "CommonAnimation.h"
 bool StartSettingPopup::init()
 {
     if ( !CCLayer::init() )
@@ -764,35 +764,27 @@ void StartSettingPopup::setMain()
 	option_label->setAnchorPoint(ccp(0.5,0.5));
 	option_label->setPosition(ccp(317,127));
 	main_case->addChild(option_label);
+
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-	{
-		KS::setOpacity(main_case, t);
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
 		n_start_label2->setOpacity(100);
-	}, [=](int t)
-										 {
-											 KS::setOpacity(main_case, 255);
-											 n_start_label2->setOpacity(100);
-											 
-											 is_menu_enable = true;
-											 
-											 if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
-											 {
-												 is_menu_enable = false;
-												 LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
-																										{
-																											is_menu_enable = true;
-																											upgradeAction(NULL);
-																										});
-												 addChild(t_popup, kStartSettingPopupZorder_popup);
-											 }
-										 }));
+		
+	}, [=](){
+		n_start_label2->setOpacity(100);
+		
+		is_menu_enable = true;
+		
+		if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
+		{
+			is_menu_enable = false;
+			LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																														 {
+																															 is_menu_enable = true;
+																															 upgradeAction(NULL);
+																														 });
+			addChild(t_popup, kStartSettingPopupZorder_popup);
+		}
+	});
 }
 
 void StartSettingPopup::gachaMenuCreate()

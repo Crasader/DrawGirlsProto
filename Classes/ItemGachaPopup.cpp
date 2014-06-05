@@ -18,6 +18,7 @@
 #include "MyLocalization.h"
 #include "AudioEngine.h"
 #include "PuzzleScene.h"
+#include "CommonAnimation.h"
 
 ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
 {
@@ -342,23 +343,12 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	
 	
-	m_container->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-	{
-		gray->setOpacity(t);
-		KS::setOpacity(m_container, t);
-	}, [=](int t)
-										 {
-											 gray->setOpacity(255);
-											 KS::setOpacity(m_container, 255);
-											 question_manager->runAnimationsForSequenceNamed("Default Timeline");
-											 AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
-										 }));
+	CommonAnimation::openPopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		question_manager->runAnimationsForSequenceNamed("Default Timeline");
+		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
+	});
 }
 
 void ItemGachaPopup::useAction(CCObject* sender, CCControlEvent t_event)
