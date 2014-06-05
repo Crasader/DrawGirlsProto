@@ -19,6 +19,7 @@
 #include "AudioEngine.h"
 #include "PuzzleScene.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
 
 MileagePopup* MileagePopup::create(int t_touch_priority, function<void()> t_end_func, int t_count)
 {
@@ -87,32 +88,25 @@ void MileagePopup::myInit(int t_touch_priority, function<void()> t_end_func, int
 		}
 	}
 	
-	m_container->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t)
-										 {
-											 KS::setOpacity(m_container, 255);
-											 
-											 CCSprite* mileage_on = CCSprite::create("mileage_on.png");
-											 mileage_on->setPosition(ccp(-90+(mileage_count-1)*45,-55));
-											 m_container->addChild(mileage_on);
-											 mileage_on->setScale(3.f);
-											 mileage_on->setOpacity(0);
-											 
-											 addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
-												 mileage_on->setOpacity(t*255);
-												 mileage_on->setScale(3.f-2.f*t);
-											 }, [=](float t){
-												 mileage_on->setOpacity(255);
-												 mileage_on->setScale(1.f);
-												 
-												 is_menu_enable = true;
-											 }));
-										 }));
+	CommonAnimation::openPopup(this, m_container, nullptr, [=](){
+		
+	}, [=](){
+		CCSprite* mileage_on = CCSprite::create("mileage_on.png");
+		mileage_on->setPosition(ccp(-90+(mileage_count-1)*45,-55));
+		m_container->addChild(mileage_on);
+		mileage_on->setScale(3.f);
+		mileage_on->setOpacity(0);
+		
+		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){
+			mileage_on->setOpacity(t*255);
+			mileage_on->setScale(3.f-2.f*t);
+		}, [=](float t){
+			mileage_on->setOpacity(255);
+			mileage_on->setScale(1.f);
+			
+			is_menu_enable = true;
+		}));
+	});
 }
 
 bool MileagePopup::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )

@@ -14,6 +14,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "CommonButton.h"
+#include "CommonAnimation.h"
 
 PatternTutorialContent* PatternTutorialContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_pattern_list)
 {
@@ -137,12 +138,11 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	
 	show_node->setScaleY(0.f);
 	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){show_node->setScaleY(t);}, [=](float t){show_node->setScaleY(1.f);
-				is_menu_enable = true;}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(show_node, t);}, [=](int t){KS::setOpacity(show_node, 255);}));
+	CommonAnimation::openPopup(this, show_node, nullptr, [=](){
+		
+	}, [=](){
+		is_menu_enable = true;
+	});
 }
 
 int PatternTutorialContent::getTitleLocalKeyForPatternNumber(int t_pattern)

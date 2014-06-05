@@ -14,6 +14,8 @@
 #include "EasingAction.h"
 #include "StageImgLoader.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
+
 OnePercentGame::OnePercentGame()
 {
 	m_cursorDirection = 1;
@@ -184,17 +186,19 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	CCFadeTo* gray_fade = CCFadeTo::create(0.25f, 255);
 	m_grayBack->runAction(gray_fade);
 	
-	m_container->setScaleY(0.f);
+	CommonAnimation::openPopup(this, m_container, nullptr);
 	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t)
-																			 {
-																				 KS::setOpacity(m_container, 255);
-																				 //endShow();
-																			 }));
+//	m_container->setScaleY(0.f);
+//	
+//	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
+//		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
+//			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
+//	
+//	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(m_container, t);}, [=](int t)
+//																			 {
+//																				 KS::setOpacity(m_container, 255);
+//																				 //endShow();
+//																			 }));
 	
 	m_lblPercent = CCLabelTTF::create(boost::str(boost::format("%|4.3|") % m_totalPercent).c_str(), mySGD->getFont().c_str(),
 																		14.f);

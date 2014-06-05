@@ -17,6 +17,7 @@
 #include "AudioEngine.h"
 #include "FormSetter.h"
 #include "FlagSelector.h"
+#include "CommonAnimation.h"
 
 RivalSelectPopup* RivalSelectPopup::create(int t_touch_priority, function<void()> t_cancel_func, function<void()> t_selected_func)
 {
@@ -163,23 +164,11 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 		right_node->addChild(t_question);
 	}
 	
-	m_container->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-										 {
-											 gray->setOpacity(t);
-											 KS::setOpacity(m_container, t);
-										 }, [=](int t)
-										 {
-											 gray->setOpacity(255);
-											 KS::setOpacity(m_container, 255);
-											 startRivalAnimation();
-//											 is_menu_enable = true;
-										 }));
+	CommonAnimation::openPopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		startRivalAnimation();
+	});
 }
 
 void RivalSelectPopup::startRivalAnimation()

@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "KSUtil.h"
-
+#include "CommonAnimation.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -36,17 +36,12 @@ public:
 	
 	void startShow()
 	{
-		setScaleY(0.f);
 		
-		addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.2f);
-			addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(0.8f);
-				addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){setScaleY(t);}, [=](float t){setScaleY(1.f);}));}));}));
-		
-		addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(this, t);}, [=](int t)
-											 {
-												 KS::setOpacity(this, 255);
-												 endShow();
-											 }));
+		CommonAnimation::openPopup(this, this, nullptr, [=](){
+			
+		}, [=](){
+			endShow();
+		});
 		
 //		setScale(0);
 //		

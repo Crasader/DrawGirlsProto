@@ -47,7 +47,7 @@
 #include "EndlessModeResult.h"
 #include "FormSetter.h"
 #include "AchieveNoti.h"
-
+#include "CommonAnimation.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -1457,22 +1457,27 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													setFormSetter(ok_button);
 																													
 																													
-																													t_container->setScaleY(0.f);
-																													
-																													t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-																														t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-																															t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-																													
-																													t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-																																								  {
-																																									  gray->setOpacity(t);
-																																									  KS::setOpacity(t_container, t);
-																																								  }, [=](int t)
-																																								  {
-																																									  gray->setOpacity(255);
-																																									  KS::setOpacity(t_container, 255);
-																																									  t_popup->is_menu_enable = true;
-																																								  }));
+																													CommonAnimation::openPopup(this, t_container, gray, [=](){
+																														
+																													}, [=](){
+																														t_popup->is_menu_enable = true;
+																													});
+//																													t_container->setScaleY(0.f);
+//																													
+//																													t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+//																														t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+//																															t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+//																													
+//																													t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+//																																								  {
+//																																									  gray->setOpacity(t);
+//																																									  KS::setOpacity(t_container, t);
+//																																								  }, [=](int t)
+//																																								  {
+//																																									  gray->setOpacity(255);
+//																																									  KS::setOpacity(t_container, 255);
+//																																									  t_popup->is_menu_enable = true;
+//																																								  }));
 																												}
 																											  else
 																												{
@@ -1902,22 +1907,27 @@ void MainFlowScene::menuAction(CCObject* sender)
 										  });
 				t_container->addChild(close_button);
 				
-				t_container->setScaleY(0.f);
-				
-				t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-					t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-						t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-				
-				t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-															  {
-																  gray->setOpacity(t);
-																  KS::setOpacity(t_container, t);
-															  }, [=](int t)
-															  {
-																  gray->setOpacity(255);
-																  KS::setOpacity(t_container, 255);
-																  t_popup->is_menu_enable = true;
-															  }));
+				CommonAnimation::openPopup(this, t_container, gray, [=](){
+					
+				}, [=](){
+					t_popup->is_menu_enable = true;
+				});
+//				t_container->setScaleY(0.f);
+//				
+//				t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
+//					t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
+//						t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+//				
+//				t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
+//																											{
+//																												gray->setOpacity(t);
+//																												KS::setOpacity(t_container, t);
+//																											}, [=](int t)
+//																											{
+//																												gray->setOpacity(255);
+//																												KS::setOpacity(t_container, 255);
+//																												t_popup->is_menu_enable = true;
+//																											}));
 			}
 			else
 				showEndlessOpening();
@@ -2421,22 +2431,10 @@ void MainFlowScene::setBottom()
 		
 		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
 		
-		t_container->setScaleY(0.f);
-		
-		t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-				t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-		
-		t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
-		
-//		Json::Value rewards = v["rewards"];
-//		for(int i=0; i<rewards.size(); i++)
-//		{
-//			int rewardValue = rewards[i]["rewardvalue"].asInt();
-//			CCLOG("reward !!! : %d", rewardValue);
-//		}
-		
-		//			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
+		CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+			
+		}, [=](){
+		});
 	}
 	// 전체 팝업보상
 	else if(pState == "CGP_PROMOTION_REWARD_EXISTS")
@@ -2491,14 +2489,10 @@ void MainFlowScene::setBottom()
 		
 		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
 		
-		t_container->setScaleY(0.f);
-		
-		t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-			t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-				t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-		
-		t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
-		
+		CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+			
+		}, [=](){
+		});
 		
 		
 		

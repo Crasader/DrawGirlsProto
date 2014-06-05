@@ -10,6 +10,7 @@
 #include "FormSetter.h"
 #include "StageImgLoader.h"
 #include "MyLocalization.h"
+#include "CommonAnimation.h"
 GaBaBo::GaBaBo()
 {
 	
@@ -532,16 +533,10 @@ void GaBaBo::showResult()
 	main_case->setPosition(ccp(240,160));
 	addChild(main_case, 2);
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t) {
-		KS::setOpacity(main_case, 255);
-	}
-																			 ));
+	CommonAnimation::openPopup(this, main_case, nullptr, [=](){
+		
+	}, [=](){
+	});
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	main_inner->setContentSize(CCSizeMake(270, 200));
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);

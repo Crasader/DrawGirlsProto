@@ -17,6 +17,7 @@
 #include "LoadingLayer.h"
 #include "MyLocalization.h"
 #include "CommonButton.h"
+#include "CommonAnimation.h"
 
 CouponPopup* CouponPopup::create(int t_touch_priority, function<void()> t_end_func)
 {
@@ -135,27 +136,17 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	m_container->addChild(ok_button);
 	
 	ok_button->setTouchPriority(touch_priority);
+
 	
-	m_container->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){m_container->setScaleY(t);}, [=](float t){m_container->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-										 {
-											 KS::setOpacity(gray, t);
-											 KS::setOpacity(m_container, t);
-											 t_back->setOpacity(0);
-										 }, [=](int t)
-										 {
-											 KS::setOpacity(gray, 255);
-											 KS::setOpacity(m_container, 255);
-											 t_back->setOpacity(0);
-											 is_menu_enable = true;
-											 input_text->setEnabled(true);
-											 input_text->setVisible(true);
-										 }));
+	CommonAnimation::openPopup(this, m_container, gray, [=](){
+		t_back->setOpacity(0);
+		
+	}, [=](){
+		t_back->setOpacity(0);
+		is_menu_enable = true;
+		input_text->setEnabled(true);
+		input_text->setVisible(true);
+	});
 }
 
 void CouponPopup::couponAction(CCObject* sender, CCControlEvent t_event)
@@ -328,22 +319,11 @@ void CouponPopup::createResultPopup(string title, string content)
 	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 	
 	
-	t_container->setScaleY(0.f);
-	
-	t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-		t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-			t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-	
-	t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-												  {
-													  gray->setOpacity(t);
-													  KS::setOpacity(t_container, t);
-												  }, [=](int t)
-												  {
-													  gray->setOpacity(255);
-													  KS::setOpacity(t_container, 255);
-													  t_popup->is_menu_enable = true;
-												  }));
+	CommonAnimation::openPopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		t_popup->is_menu_enable = true;
+	});
 }
 
 void CouponPopup::editBoxEditingDidBegin(CCEditBox* editBox)

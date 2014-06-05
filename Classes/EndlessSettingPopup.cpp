@@ -6,7 +6,7 @@
 #include "StarGoldData.h"
 #include "MyLocalization.h"
 #include "FlagSelector.h"
-
+#include "CommonAnimation.h"
 
 EndlessSettingPopup::EndlessSettingPopup()
 {
@@ -54,17 +54,10 @@ bool EndlessSettingPopup::init()
 	main_case->setPosition(ccp(240,160-22.f));
 	addChild(main_case, kEndlessStartSettingPopupZorder_main);
 	
-	main_case->setScaleY(0.f);
-	
-	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.8f);
-			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.f);}));}));}));
-	
-	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(main_case, t);}, [=](int t)
-	{
-		KS::setOpacity(main_case, 255);
+	CommonAnimation::openPopup(this, main_case, nullptr, [=](){
 		
-	}));
+	}, [=](){
+	});
 	
 	KSLabelTTF* lblTitle = KSLabelTTF::create("무한모드", mySGD->getFont().c_str(), 15);
 	lblTitle->setPosition(ccp(35, 256));
