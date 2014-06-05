@@ -568,8 +568,8 @@ void AchievePopup::resultSaveUserData(Json::Value result_data)
 		CCLOG("reward get fail!!");
 		
 		addChild(KSTimer::create(0.1f, [=](){
-			vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
-			mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
+			vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(json_selector(this, AchievePopup::resultSaveUserData));
+			mySGD->changeGoodsTransaction(t_command_achieve, nullptr);
 		}));
 		
 //		mySGD->clearChangeGoods();
