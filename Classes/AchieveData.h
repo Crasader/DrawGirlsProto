@@ -236,6 +236,8 @@ public:
 	AchieveGroup getAchieveGroup(AchievementCode t_code);
 	AchievementCode getRecentCodeFromGroup(AchievementCode t_code);
 	
+	bool isChangedAchieve();
+	
 private:
 	
 	bool is_changed;

@@ -54,6 +54,11 @@ void AchieveConditionReward::changeIngCount(AchievementCode t_code, int t_ing_co
 	}
 }
 
+bool AchieveConditionReward::isChangedAchieve()
+{
+	return is_changed;
+}
+
 void AchieveConditionReward::changeComplete(AchievementCode t_code)
 {
 	bool is_found = false;
