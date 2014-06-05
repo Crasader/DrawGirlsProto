@@ -18,7 +18,7 @@
 //#include "MissileDamageData.h"
 
 #define ABSORB_DISTANCE 100.f
-#define MAGNET_DISTANCE 1000.f
+#define MAGNET_DISTANCE 2000.f
 
 GameItemBase::GameItemBase()
 {

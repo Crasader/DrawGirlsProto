@@ -328,7 +328,7 @@ void TitleRenewalScene::successLogin()
 		{
 			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
 			
-			addChild(KSTimer::create(1.f/60.f, [=]()
+			addChild(KSTimer::create(20.f/60.f, [=]()
 			{
 				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
 				
