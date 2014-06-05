@@ -63,33 +63,33 @@ bool KSLabelTTF::updateTexture()
 	this->setTexture(tex);
 	// release it
 	tex->release();
-	if(m_outerSprite)
-	{
-		m_outerSprite->removeFromParent();
-		m_outerSprite = nullptr;
-	}
+	
 	bool validString = false;
 	for(auto i : m_string)
 	{
 		if(i != ' ')
 		{
 			validString = true;
+			setVisible(true);
 			break;
 		}
 	}
 	if(!validString)
 	{
-		
+		setVisible(false);
 		return true;
 	}
-		
+	if(m_outerSprite)
+	{
+		m_outerSprite->removeFromParent();
+		m_outerSprite = nullptr;
+	}
 //	startFormSetter(this);
 	auto textureForGradient = CCSprite::createWithTexture(getTexture());
 	
 	CCRect rect =CCRectZero;
 	rect.size   = m_pobTexture->getContentSize();
 	this->setTextureRect(rect);
-	
 	
 	if(this->m_outerIsStroke)
 	{
