@@ -1755,7 +1755,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 								 
 								 CCPoint origin_position = ccp(440, myDSH->ui_center_y+70);
 								 
-								 CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile.ccbi").first;
+								 CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile_you.ccbi").first;
 								 t_missile->setPosition(origin_position);
 								 addChild(t_missile);
 								 
@@ -2601,7 +2601,7 @@ void PlayUI::myInit ()
 											   UI_IN_TIME, [=](float t){nick_label->setPositionX(t);}, [=](float t)
 		{
 			nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);
-			auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb.ccbi");
+			auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_me.ccbi");
 			bomb_img = temp.first;
 			bomb_img->setPosition(ccp(40, myDSH->ui_center_y+70));
 			addChild(bomb_img,-1);
