@@ -277,7 +277,7 @@ public:
 		longTimeErrorFunc = func;
 	}
 	
-	std::string IntToString (int number)
+	std::string IntToString (long long int number)
 	{
 		std::ostringstream convStream;
 		
@@ -318,6 +318,10 @@ public:
 		ReplaceString(format,"s",s.c_str());
 		
 		return format;
+	}
+	
+	string dateFormat(string format, long long int datestring){
+		return dateFormat(format,IntToString(datestring));
 	}
 	
 	static GraphDog* get()
