@@ -7,6 +7,7 @@
 #include "jni.h"
 #include "platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 #endif
+
 namespace KS
 {
 	string insert_separator(const string& s, char separator, int width)
@@ -18,6 +19,27 @@ namespace KS
 			i = ss.insert(i, separator) - width;
 		
 		return ss;
+	}
+	string insert_separator(const int& s, const string& format, char separator, int width)
+	{
+		if(s < 0)
+			return "-" + insert_separator(CCString::createWithFormat(format.c_str(), -s)->getCString());
+		else
+			return insert_separator(CCString::createWithFormat(format.c_str(), s)->getCString());
+	}
+	string insert_separator(const float& s, const string& format, char separator, int width)
+	{
+		if(s < 0)
+			return "-" + insert_separator(CCString::createWithFormat(format.c_str(), -s)->getCString());
+		else
+			return insert_separator(CCString::createWithFormat(format.c_str(), s)->getCString());
+	}
+	string insert_separator(const double& s, const string& format, char separator, int width)
+	{
+		if(s < 0)
+			return "-" + insert_separator(CCString::createWithFormat(format.c_str(), -s)->getCString());
+		else
+			return insert_separator(CCString::createWithFormat(format.c_str(), s)->getCString());
 	}
 	void setOpacity(CCObject* object, GLubyte opaque)
 	{
