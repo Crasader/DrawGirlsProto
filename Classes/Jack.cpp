@@ -1442,7 +1442,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 																							((Maingame*)exit_target)->controlStunOff();
 																							t_popup->removeFromParent();
 																						}));
-																						CommonAnimation::closePopup(this, t_container, nullptr, [=](){
+																						CommonAnimation::closePopup(t_popup, t_container, nullptr, [=](){
 																							
 																						}, [=](){
 //																							end_func(); removeFromParent();
@@ -1454,7 +1454,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				
 				
 				
-				CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+				CommonAnimation::openPopup(t_popup, t_container, nullptr, [=](){
 					
 				}, [=](){
 					close_menu->setVisible(true);
@@ -1539,7 +1539,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 																							((Maingame*)exit_target)->controlStunOff();
 																							t_popup->removeFromParent();
 																						}));
-																						
+
 																						CommonAnimation::closePopup(t_container, t_container, nullptr, [=](){
 																							
 																						}, [=](){
@@ -1551,7 +1551,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				close_menu->addChild(close_item);
 				
 				
-				CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+				CommonAnimation::openPopup(t_popup, t_container, nullptr, [=](){
 					
 				}, [=](){
 					close_menu->setVisible(true);
