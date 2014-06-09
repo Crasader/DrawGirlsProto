@@ -677,8 +677,8 @@ void PuzzleScene::showGetPuzzle()
 	
 	CCSprite* get_piece_title = CCSprite::create(CCString::createWithFormat("get_piece_title_%s.png", myLoc->getSupportLocalCode())->getCString());
 	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
-	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
-	puzzle_node->addChild(get_piece_title, kPuzzleNodeZorder_getPieceEffect);
+	get_piece_title->setPosition(puzzle_node->getPosition() + ccpAdd(new_piece->getPosition(), ccp(0, 45)));
+	addChild(get_piece_title, kPuzzleZorder_top);
 	
 	new_piece->startGetPieceAnimation(this, callfuncCCp_selector(PuzzleScene::createGetPuzzleParticle));
 	
