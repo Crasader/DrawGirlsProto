@@ -511,6 +511,7 @@ bool FailPopup::init()
 	
 	KSLabelTTF* n_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	n_ok_label2->setColor(ccWHITE);
+	n_ok_label2->disableOuterStroke();
 	n_ok_label2->setOpacity(100);
 	n_ok_label2->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-1));
 	n_ok->addChild(n_ok_label2);
@@ -525,6 +526,7 @@ bool FailPopup::init()
 	
 	KSLabelTTF* s_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 22);
 	s_ok_label2->setColor(ccWHITE);
+	s_ok_label2->disableOuterStroke();
 	s_ok_label2->setOpacity(100);
 	s_ok_label2->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-1));
 	s_ok->addChild(s_ok_label2);

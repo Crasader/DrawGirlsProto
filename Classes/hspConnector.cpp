@@ -29,6 +29,7 @@
 #endif
 #include <string>
 #include <sstream>
+#include <algorithm>
 using namespace std;
 USING_NS_CC;
 
@@ -46,6 +47,9 @@ void Java_com_litqoo_lib_hspConnector_SetupOnAndroid(JNIEnv *env, jobject thiz,i
 	string _gameVersion = revStr2;
 
 	hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
+	
+	
+	//env->ReleaseStringUTFChars(revStr2, revStr);
 
 }
 
@@ -336,6 +340,35 @@ void hspConnector::mappingToAccount(jsonSelType func){
 	}
 #endif
 }
+
+
+string hspConnector::getCountryCode(){
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
+	NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+	string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
+
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getCountryCode", "()Ljava/lang/String;")) {
+		jstring result = t.env->CallStaticLongMethod(t.classID, t.methodID);
+		
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
+		string r = revStr;
+		
+		t.env->DeleteLocalRef(t.classID);
+
+	}
+#endif
+
+	
+	
+	std::transform(r.begin(), r.end(), r.begin(), towlower);
+	
+	return r;
+}
+
 
 void hspConnector::logout(jsonSelType func){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS

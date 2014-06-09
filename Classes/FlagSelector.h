@@ -16,7 +16,7 @@
 #include "GraphDog.h"
 #include "CommonButton.h"
 #include "KSUtil.h"
-
+#include "hspConnector.h"
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
@@ -493,9 +493,13 @@ public:
 			"zm",
 			"zw"};
 		selectedFlagSpr=NULL;
+		selectedFlag="";
+		string country = hspConnector::get()->getCountryCode();
 		
 		for(int i=0; i<sizeof(countries) / sizeof(countries[0]); i++)
 		{
+			if(country == countries[i])selectedFlag = countries[i];
+			
 			countryList.push_back(countries[i]);
 		}
 		
@@ -509,12 +513,14 @@ public:
 		fTable->setDelegate(this);
 		addChild(fTable,2);
 		
-		string lang = KS::getLocalCode();
-		if(lang =="ko")selectedFlag="kr";
-		else if(lang=="ja")selectedFlag="jp";
-		else if(lang=="th")selectedFlag="th";
-		else selectedFlag="kr";
-
+		
+		if(selectedFlag==""){
+			string lang = KS::getLocalCode();
+			if(lang =="ko")selectedFlag="kr";
+			else if(lang=="ja")selectedFlag="jp";
+			else if(lang=="th")selectedFlag="th";
+			else selectedFlag="kr";
+		}
 		selectedFlagSpr = CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",selectedFlag.c_str())->getCString());
 		selectedFlagSpr->setPosition(ccp(100,56));
 		selectedFlagSpr->setScale(1.5);

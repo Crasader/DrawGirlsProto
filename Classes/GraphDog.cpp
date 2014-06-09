@@ -31,7 +31,7 @@
 #include "CipherUtils.h"
 #include "EncryptCharsA.h"
 #include "KSUtil.h"
-
+#include "hspConnector.h"
 
 int AutoIncrease::cnt = 0;
 size_t GraphDog::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp){
@@ -244,7 +244,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	}
 	
 	
-	
+	jsonTotalCmd["country"]=hspConnector::get()->getCountryCode();
 	jsonTotalCmd["memberID"]=getMemberID();
 	jsonTotalCmd["socialID"]=getSocialID();
 	jsonTotalCmd["deviceID"]=this->deviceID;
