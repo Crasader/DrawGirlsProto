@@ -1322,9 +1322,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
 	en->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
 	en->setObject(CCString::create("Resurrection, the invincible challenge your items!"), kMyLocalKey_itemGachaContent);
-	en->setObject(CCString::create("Ruby shop"), kMyLocalKey_rubyShop);
-	en->setObject(CCString::create("Gold shop"), kMyLocalKey_goldShop);
-	en->setObject(CCString::create("Heart shop"), kMyLocalKey_heartShop);
+	en->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
+	en->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);
+	en->setObject(CCString::create("HEART SHOP"), kMyLocalKey_heartShop);
 	en->setObject(CCString::create("구매확인"), kMyLocalKey_checkBuy);
 	en->setObject(CCString::create("Do you want to buy?"), kMyLocalKey_realBuy);
 	en->setObject(CCString::create("Option"), kMyLocalKey_option);
@@ -2002,9 +2002,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
 	ja->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
 	ja->setObject(CCString::create("Resurrection, the invincible challenge your items!"), kMyLocalKey_itemGachaContent);
-	ja->setObject(CCString::create("Ruby shop"), kMyLocalKey_rubyShop);
-	ja->setObject(CCString::create("Gold shop"), kMyLocalKey_goldShop);
-	ja->setObject(CCString::create("Heart shop"), kMyLocalKey_heartShop);
+	ja->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
+	ja->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);
+	ja->setObject(CCString::create("HEART SHOP"), kMyLocalKey_heartShop);
 	ja->setObject(CCString::create("구매확인"), kMyLocalKey_checkBuy);
 	ja->setObject(CCString::create("Do you want to buy?"), kMyLocalKey_realBuy);
 	ja->setObject(CCString::create("Option"), kMyLocalKey_option);
