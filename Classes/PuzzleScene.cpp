@@ -832,11 +832,15 @@ void PuzzleScene::endGetStar()
 void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLOG("success puzzle animation");
-	
-	if(selected_piece_img)
-	{
-		selected_piece_img->runAction(CCFadeTo::create(0.5f, 0));
-	}
+	addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
+		selected_piece_img->setOpacity(t);
+	}, [=](float t){
+		selected_piece_img->setOpacity(t);
+	}));
+//	if(selected_piece_img)
+//	{
+//		selected_piece_img->runAction(CCFadeTo::create(0.5f, 0));
+//	}
 	
 	AudioEngine::sharedInstance()->playEffect("se_puzzleopen_1.mp3", false);
 	
