@@ -1156,7 +1156,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					price_value_label->setPositionX(-(d_width-(t_width+v_width+d_width)/2.f + v_width/2.f));
 					detail_label->setPositionX(price_value_label->getPositionX() + v_width/2.f + d_width/2.f);
 					
-					CCScale9Sprite* detail_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+//					CCScale9Sprite* detail_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png");
 					
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
@@ -1219,7 +1220,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				detail_label->setPosition(ccp(0,0));
 				c_label->addChild(detail_label);
 				
-				CCScale9Sprite* detail_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+//				CCScale9Sprite* detail_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+				CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png");
 				
 				CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 				detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
