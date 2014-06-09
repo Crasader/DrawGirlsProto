@@ -534,13 +534,13 @@ void StartSettingPopup::setMain()
 	n_start_label2->disableOuterStroke();
 	n_start_label2->setColor(ccWHITE);
 	n_start_label2->setOpacity(100);
-	n_start_label2->setPosition(ccp(147.5f,39.5f));
+	n_start_label2->setPosition(ccp(n_start->getContentSize().width/2.f,39.5f));
 	n_start->addChild(n_start_label2);
 	
 	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
 	setFormSetter(n_start_label);
 	n_start_label->setColor(ccc3(47, 30, 6));
-	n_start_label->setPosition(ccp(147.5f,40.5f));
+	n_start_label->setPosition(ccp(n_start->getContentSize().width/2.f,40.5f));
 	n_start->addChild(n_start_label);
 	
 	
@@ -550,7 +550,7 @@ void StartSettingPopup::setMain()
 	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
 	setFormSetter(s_start_label);
 	s_start_label->setColor(ccc3(47, 30, 6));
-	s_start_label->setPosition(ccp(147.5f,40.5f));
+	s_start_label->setPosition(ccp(s_start->getContentSize().width/2.f,40.5f));
 	s_start->addChild(s_start_label);
 	
 	CCMenuItem* start_item = CCMenuItemSprite::create(n_start, s_start, this, menu_selector(StartSettingPopup::menuAction));
@@ -563,24 +563,28 @@ void StartSettingPopup::setMain()
 	
 	if(mySGD->isTimeEvent(kTimeEventType_heart))
 	{
-		CCScale9Sprite* n_back = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
-		n_back->setContentSize(CCSizeMake(100, 22));
-		n_back->setPosition(start_menu->getPosition() + ccp(0,-22));
-		main_case->addChild(n_back);
+		CCSprite* time_event_back = CCSprite::create("startsetting_event.png");
+		time_event_back->setPosition(start_menu->getPosition() + ccp(0,-20));
+		main_case->addChild(time_event_back);
 		
-		KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
+//		CCScale9Sprite* n_back = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+//		n_back->setContentSize(CCSizeMake(100, 22));
+//		n_back->setPosition(start_menu->getPosition() + ccp(0,-22));
+//		main_case->addChild(n_back);
+//		
+//		KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
+//		
+//		CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+//		event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
+//		event_back->setPosition(ccp(event_back->getContentSize().width/2.f, n_back->getContentSize().height/2.f));
+//		n_back->addChild(event_back);
+//		
+//		event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
+//		event_back->addChild(event_label);
 		
-		CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-		event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
-		event_back->setPosition(ccp(event_back->getContentSize().width/2.f, n_back->getContentSize().height/2.f));
-		n_back->addChild(event_back);
-		
-		event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
-		event_back->addChild(event_label);
-		
-		KSLabelTTF* free_label = KSLabelTTF::create("FREE", mySGD->getFont().c_str(), 12);
-		free_label->setPosition(ccp(70, event_back->getContentSize().height/2.f));
-		event_back->addChild(free_label);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 10);
+		free_label->setPosition(ccp(65, time_event_back->getContentSize().height/2.f));
+		time_event_back->addChild(free_label);
 	}
 	
 	
