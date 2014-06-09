@@ -1066,8 +1066,38 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	ko->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
+	ko->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
+	ko->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>루비"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem9);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem6);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem11);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass1);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass2);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass3);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass4);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass5);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass6);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>종류"), kMyLocalKey_attendanceSpecialGoodsTypeMany);
+	
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>루비"), kMyLocalKey_attendanceGoodsTypeRuby);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>종류"), kMyLocalKey_attendanceGoodsTypeMany);
+	
 	ko->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	ko->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	
 	ko->setObject(CCString::create("일"), kMyLocalKey_attendanceDay);
 	
 	ko->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
@@ -1707,6 +1737,35 @@ void MyLocal::en()
 	en->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	en->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	en->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
+	
+	en->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
+	en->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>루비"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem9);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem6);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem11);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass1);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass2);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass3);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass4);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass5);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass6);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>종류"), kMyLocalKey_attendanceSpecialGoodsTypeMany);
+	
+	en->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>루비"), kMyLocalKey_attendanceGoodsTypeRuby);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>종류"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	en->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	en->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
@@ -2371,6 +2430,35 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	ja->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	ja->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
+	
+	ja->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
+	ja->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>루비"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem9);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem6);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem11);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass1);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass2);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass3);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass4);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass5);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>장"), kMyLocalKey_attendanceSpecialGoodsTypePass6);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>종류"), kMyLocalKey_attendanceSpecialGoodsTypeMany);
+	
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>루비"), kMyLocalKey_attendanceGoodsTypeRuby);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>종류"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	ja->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	ja->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
