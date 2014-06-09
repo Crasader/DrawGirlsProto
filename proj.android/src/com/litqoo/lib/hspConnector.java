@@ -319,6 +319,52 @@ public class hspConnector{
 				);
 	}
 
+	public static void mappingToAccount(final int _key){
+
+		hspConnector.handler.post(
+				new Runnable(){
+					public void run() {
+						Activity activity=(Activity)hspConnector.sContext;
+						HSPCore core = HSPCore.getInstance();
+
+						if(core!=null){
+							core.requestMappingToAccount(new HSPCore.HSPRequestMappingToAccountCB() {
+								
+								@Override
+								public void onIdpIDMap(HSPResult result) {
+									// TODO Auto-generated method stub
+									JSONObject r= new JSONObject();
+									JSONObject error = new JSONObject();
+									try {
+										error.put("code", result.getCode());
+										error.put("isSuccess", result.isSuccess());
+										error.put("localizedDescription", result.getDetail());
+										r.put("error", error);
+									} catch (JSONException e) {
+
+									}
+
+
+									mGLView.queueEvent(new KRunnable(_key,r.toString()) {
+										public void run() {
+											hspConnector.SendResult(this.delekey,this.totalSource);
+										}
+									});
+								}
+							});
+							
+						}
+					
+					}
+				}
+				);
+	}
+	
+	public static String getCountryCode(){
+		String r = Locale.getDefault().getCountry();
+		return r;
+	}
+	
 	public static void logout(final int _key){
 		hspConnector.handler.post(
 				new Runnable(){
