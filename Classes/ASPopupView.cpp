@@ -88,7 +88,10 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	
 	case_back->setContentSize(CCSizeMake(pSize.width+50, pSize.height + 40+80 - 40));
 	content_back->setContentSize(CCSizeMake(pSize.width+39, pSize.height+76+2.5 - 40));
-
+	
+	setFormSetter(case_back);
+	setFormSetter(content_back);
+	
 	if(Xbutton)
 	{
 		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
