@@ -102,11 +102,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 
 	addChild(main_case, kMP_Z_back);
 	
-	CommonAnimation::openPopup(this, main_case, gray, [=](){
-		
-	}, [=](){
-//		end_func(); removeFromParent();
-	});
+	
 	startFormSetter(this);
 //	target_close = t_close;
 //	delegate_close = d_close;
@@ -116,7 +112,11 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	t_suction = TouchSuctionLayer::create(-999999);
 	t_suction->setTouchEnabled(false);
 	main_case->addChild(t_suction);
-	
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
+		
+	}, [=](){
+		//		end_func(); removeFromParent();
+	});
 #if 0 // 싹 지우는 루틴..
 	Json::Value p;
 	p["memberID"] = hspConnector::get()->getSocialID();
@@ -384,7 +384,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	barBack->setPosition(ccp(451, 140));
 	setFormSetter(barBack);
 //	FormSetter::get()->addObject("testksoo", barBack);
-	addChild(barBack, kMP_Z_mailTable - 1);
+	main_case->addChild(barBack, kMP_Z_mailTable - 1);
 	//320x320 테이블 뷰 생성
 
 	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
@@ -399,7 +399,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	setFormSetter(m_scrollBar);
 	//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
 	mailTableView->setDirection(kCCScrollViewDirectionVertical);
-	setFormSetter(mailTableView);
+	setFormSetter(this);
 	//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
 	mailTableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	
@@ -410,7 +410,8 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	
 	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 	mailTableView->setDelegate(this);
-	this->addChild(mailTableView, kMP_Z_mailTable);
+//	this->addChild(mailTableView, kMP_Z_mailTable);
+	main_case->addChild(mailTableView, kMP_Z_mailTable);
 	mailTableView->setTouchPriority(-200);
 
 	isLoaded=true;
