@@ -1212,7 +1212,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
-			addResultCCB("ui_missonfair.ccbi");
+			addResultCCB("ui_missonfail.ccbi");
 			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 			
 			endGame(false);
@@ -1297,7 +1297,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
-			addResultCCB("ui_missonfair.ccbi");
+			addResultCCB("ui_missonfail.ccbi");
 			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 			
 			endGame(false);
