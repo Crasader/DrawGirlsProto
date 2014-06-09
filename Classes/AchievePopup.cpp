@@ -843,7 +843,13 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		graph_normal->setPosition(ccp(0,0));
 		graph_back->addChild(graph_normal);
 		
-		graph_normal->setContentSize(CCSizeMake(25+170*rate, 18));
+		if(myAchieve->getRecentValue(recent_code) == 0)
+		{
+			graph_normal->setContentSize(CCSizeMake(0, 18));
+			graph_normal->setVisible(false);
+		}
+		else
+			graph_normal->setContentSize(CCSizeMake(25+170*rate, 18));
 		
 		KSLabelTTF* progress_label = KSLabelTTF::create(CCString::createWithFormat("%d/%d", myAchieve->getRecentValue(recent_code), myAchieve->getPresentationCondition(recent_code))->getCString(), mySGD->getFont().c_str(), 10);
 		progress_label->enableOuterStroke(ccBLACK, 1.f);
@@ -1138,7 +1144,13 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			graph_normal->setPosition(ccp(0,0));
 			graph_back->addChild(graph_normal);
 			
-			graph_normal->setContentSize(CCSizeMake(25+170*rate, 18));
+			if(myAchieve->getRecentValue(recent_code) == 0)
+			{
+				graph_normal->setContentSize(CCSizeMake(0, 18));
+				graph_normal->setVisible(false);
+			}
+			else
+				graph_normal->setContentSize(CCSizeMake(25+170*rate, 18));
 			
 			KSLabelTTF* progress_label = KSLabelTTF::create(CCString::createWithFormat("%d/%d", myAchieve->getRecentValue(recent_code), myAchieve->getPresentationCondition(recent_code))->getCString(), mySGD->getFont().c_str(), 10);
 			progress_label->enableOuterStroke(ccBLACK, 1.f);
