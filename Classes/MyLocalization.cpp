@@ -1111,7 +1111,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ko->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ko->setObject(CCString::create("그만하기"), kMyLocalKey_endlessKeepWin);
+	ko->setObject(CCString::create("도전 실패"), kMyLocalKey_endlessKeepWin);
 	
 	ko->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ko->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -1230,7 +1230,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("OK"), kMyLocalKey_ok);
 	en->setObject(CCString::create("Loading images."), kMyLocalKey_downImgInfo);
 	en->setObject(CCString::create("Information Retrieval Failure"), kMyLocalKey_failLoadInfo);
-	en->setObject(CCString::create("Retry"), kMyLocalKey_replay);
+	en->setObject(CCString::create("RE-TRY"), kMyLocalKey_replay);
 	en->setObject(CCString::create("Downloading %.0f%% : %d/%d"), kMyLocalKey_downloadingProgress);
 	en->setObject(CCString::create("Receive images fail"), kMyLocalKey_downImgFail);
 	en->setObject(CCString::create("Login successful"), kMyLocalKey_successLogin);
@@ -1391,7 +1391,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	en->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	en->setObject(CCString::create("Speed"), kMyLocalKey_speed);
-	en->setObject(CCString::create("Ready"), kMyLocalKey_ready);
+	en->setObject(CCString::create("READY"), kMyLocalKey_ready);
 	en->setObject(CCString::create("God"), kMyLocalKey_rankA);
 	en->setObject(CCString::create("Hero"), kMyLocalKey_rankB);
 	en->setObject(CCString::create("Normal"), kMyLocalKey_rankC);
@@ -2036,7 +2036,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("총점"), kMyLocalKey_totalScore);
 	ja->setObject(CCString::create("The next stage"), kMyLocalKey_nextStage);
 	ja->setObject(CCString::create("again to"), kMyLocalKey_regame);
-	ja->setObject(CCString::create("Main"), kMyLocalKey_toMain);
+	ja->setObject(CCString::create("MAIN"), kMyLocalKey_toMain);
 	ja->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
 	ja->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	ja->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);

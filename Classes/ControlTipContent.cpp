@@ -80,7 +80,7 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	startFormSetter(this);
 	
 	close_button = KS::loadCCBI<CCSprite*>(this, "tutorial_nextbutton.ccbi").first;
-	close_button->setPosition(ccp(145.0,88.0)); 			// dt (25.0,0.0)
+	close_button->setPosition(ccp(145.0,86.0)); 			// dt (25.0,0.0)
 	close_button->setVisible(false);
 	addChild(close_button);
 	setFormSetter(close_button);

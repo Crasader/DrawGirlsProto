@@ -30,7 +30,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	
 	CCLabelTTF* g_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_areaReGacha), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_areaReGacha), mySGD->getFont().c_str(), 15);
 	gacha_label->enableOuterStroke(ccBLACK, 1.f);
 	gacha_label->setPosition(ccp(-35,0));
 	g_label->addChild(gacha_label);
