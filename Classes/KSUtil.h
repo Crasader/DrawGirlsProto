@@ -22,6 +22,7 @@
 #include "cocos-ext.h"
 #include "FromTo.h"
 
+#define ccsf(...) CCString::createWithFormat(__VA_ARGS__)->getCString()
 #define ThisClassType remove_pointer<decltype(this)>::type
 using namespace cocos2d;
 USING_NS_CC_EXT;

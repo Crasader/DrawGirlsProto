@@ -9,6 +9,8 @@
 #include "ShowItemContent.h"
 
 #include "MyLocalization.h"
+#include "FormSetter.h"
+
 ShowItemContent* ShowItemContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_item_list)
 {
 	ShowItemContent* t_ctc = new ShowItemContent();
@@ -90,7 +92,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	
 	
 	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	case_back->setContentSize(CCSizeMake(240, 250));
+	case_back->setContentSize(CCSizeMake(240, 250 - 40));
 	case_back->setPosition(ccp(0,0));
 	addChild(case_back);
 	
@@ -103,7 +105,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	ing_close_cnt = 0;
 	
 	show_content = CCSprite::create(CCString::createWithFormat("item%d.png", item_list[ing_close_cnt])->getCString());
-	show_content->setPosition(ccp(0, 40));
+	show_content->setPosition(ccp(0, 40 - 5));
 	addChild(show_content);
 	
 	item_title = KSLabelTTF::create(convertToItemCodeToItemName((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 12);
@@ -132,7 +134,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	
 	KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 12);
 	bonus_ment_img->setColor(ccc3(255,170,20));
-	bonus_ment_img->setPosition(ccp(0,-55));
+	bonus_ment_img->setPosition(ccp(0,-60));
 	addChild(bonus_ment_img);
 	
 	//		CCSprite* t_tab = CCSprite::create("shop_tab.png");
@@ -144,13 +146,19 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	//		t_tab->addChild(new_label);
 	
 	
-	close_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 13, CCSizeMake(90,40), CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16,16,2,2)), touch_priority-1);
-	close_menu->setPosition(ccp(0,-85));
+	close_menu = CommonButton::createCloseButton(touch_priority-1);
+//	close_menu->setPosition(ccp(0,-85));
 	close_menu->setFunction([=](CCObject* sender)
 							{
 								menuAction(sender);
 							});
 	addChild(close_menu);
+	close_menu->setPosition(ccpFromSize(case_back->getContentSize()) / 2.f - ccp(24, 24));
+	startFormSetter(this);
+	setFormSetter(close_menu);
+	setFormSetter(case_back);
+	setFormSetter(content_back);
+	
 	startShowAnimation();
 }
 
