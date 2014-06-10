@@ -637,60 +637,52 @@ CCNode* RankRewardPopup::getRewardImg(string t_goods_str)
 	if(t_type == kGoodsType_gold)
 	{
 		return_node = CCSprite::create("price_gold_img.png");
-		return_node->setScale(0.7f);
 	}
 	else if(t_type == kGoodsType_ruby)
 	{
 		return_node = CCSprite::create("price_ruby_img.png");
-		return_node->setScale(0.7f);
 	}
 	else if(t_type == kGoodsType_item9)
 	{
-		return_node = CCSprite::create("item9.png");
+		return_node = CCSprite::create(CCString::createWithFormat("icon_%s.png", mySGD->getGoodsTypeToKey(t_type).c_str())->getCString());
 	}
 	else if(t_type == kGoodsType_item6)
 	{
-		return_node = CCSprite::create("item6.png");
+		return_node = CCSprite::create(CCString::createWithFormat("icon_%s.png", mySGD->getGoodsTypeToKey(t_type).c_str())->getCString());
 	}
 	else if(t_type == kGoodsType_item11)
 	{
-		return_node = CCSprite::create("item11.png");
+		return_node = CCSprite::create(CCString::createWithFormat("icon_%s.png", mySGD->getGoodsTypeToKey(t_type).c_str())->getCString());
 	}
 	else if(t_type == kGoodsType_pass1)
 	{
 		return_node = CCSprite::create("pass_ticket1.png");
-		return_node->setScale(0.7f);
 	}
 	else if(t_type == kGoodsType_pass2)
 	{
 		return_node = CCSprite::create("pass_ticket2.png");
-		return_node->setScale(0.7f);
 	}
 	else if(t_type == kGoodsType_pass3)
 	{
 		return_node = CCSprite::create("pass_ticket3.png");
-		return_node->setScale(0.7f);
 	}
 	else if(t_type == kGoodsType_pass4)
 	{
 		return_node = CCSprite::create("pass_ticket4.png");
-		return_node->setScale(0.7f);
 	}
 	else if(t_type == kGoodsType_pass5)
 	{
 		return_node = CCSprite::create("pass_ticket5.png");
-		return_node->setScale(0.7f);
 	}
 	else if(t_type == kGoodsType_pass6)
 	{
 		return_node = CCSprite::create("pass_ticket6.png");
-		return_node->setScale(0.7f);
 	}
 	else
 	{
 		return_node = CCSprite::create("price_package_img.png");
-		return_node->setScale(0.7f);
 	}
+	return_node->setScale(0.6f);
 	
 	return return_node;
 }

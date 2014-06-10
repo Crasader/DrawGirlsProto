@@ -176,9 +176,15 @@ void TitleRenewalScene::realInit()
 	title_name->setPosition(ccp(240,50));//10));
 	addChild(title_name, 1);
 	
+	CCPoint convert_position = CCPointZero;
+	
+	convert_position.x = (480/myDSH->screen_convert_rate - 480)/2.f;
+	if(myDSH->ui_top > 320)
+		convert_position.y = (myDSH->ui_top - 320)/2.f;
+	
 	CCSprite* ratings = CCSprite::create("game_ratings.png");
 	ratings->setAnchorPoint(ccp(1,1));
-	ratings->setPosition(ccpFromSize(title_img->getContentSize()/2.f) + ccp(240-20, 160-15));
+	ratings->setPosition(ccpFromSize(title_img->getContentSize()/2.f) + ccp(240-10, 160-10) + convert_position);
 	title_img->addChild(ratings);
 	
 	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 15, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
