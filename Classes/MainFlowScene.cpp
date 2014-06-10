@@ -67,7 +67,7 @@ bool MainFlowScene::init()
     {
         return false;
     }
-	
+	CCLog("%s %d", __FILE__, __LINE__);
 	setKeypadEnabled(true);
 	
 	is_table_openning = false;
@@ -1157,12 +1157,12 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					detail_label->setPositionX(price_value_label->getPositionX() + v_width/2.f + d_width/2.f);
 					
 //					CCScale9Sprite* detail_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png");
-					
+					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png");		
+
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(10000000 + idx*10000 + is_puzzle_enter_list[idx].need_ruby_value);
-					detail_button->setPreferredSize(CCSizeMake(90,34));
+					detail_button->setPreferredSize(CCSizeMake(80, 30));
 					detail_button->setPosition(ccp(67.5f,93.5f));
 					not_clear_img->addChild(detail_button);
 				}
@@ -1180,7 +1180,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(0);
-					detail_button->setPreferredSize(CCSizeMake(75,34));
+				detail_button->setPreferredSize(CCSizeMake(80, 30));
 					detail_button->setPosition(ccp(67.5f,93.5f));
 					not_clear_img->addChild(detail_button);
 				}
@@ -1226,7 +1226,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 				detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 				detail_button->setTag(0);
-				detail_button->setPreferredSize(CCSizeMake(75,34));
+				detail_button->setPreferredSize(CCSizeMake(80, 30));
 				detail_button->setPosition(ccp(67.5f,93.5f));
 				not_clear_img->addChild(detail_button);
 			}
