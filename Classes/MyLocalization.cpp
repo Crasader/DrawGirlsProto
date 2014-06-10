@@ -623,7 +623,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("스테이지"), kMyLocalKey_stage);
 	ko->setObject(CCString::create("게임에 사용할 아이템을 선택하세요."), kMyLocalKey_selectUseItem);
 	ko->setObject(CCString::create("레벨 %d"), kMyLocalKey_levelValue);
-	ko->setObject(CCString::create("파워 %d"), kMyLocalKey_powerValue);
+	ko->setObject(CCString::create("파워 %s"), kMyLocalKey_powerValue);
 	ko->setObject(CCString::create("레벨 %d 업그레이드"), kMyLocalKey_upgradeLevelValue);
 	ko->setObject(CCString::create("아이템은 최대 3개까지\n선택이 가능합니다."), kMyLocalKey_totalItemSelectCount3);
 	ko->setObject(CCString::create("골드가 부족합니다."), kMyLocalKey_goldNotEnought);
@@ -1336,7 +1336,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Stage"), kMyLocalKey_stage);
 	en->setObject(CCString::create("Choose the items that you will use during the game."), kMyLocalKey_selectUseItem);
 	en->setObject(CCString::create("Level %d"), kMyLocalKey_levelValue);
-	en->setObject(CCString::create("Power %d"), kMyLocalKey_powerValue);
+	en->setObject(CCString::create("Power %s"), kMyLocalKey_powerValue);
 	en->setObject(CCString::create("Level %d Upgrade"), kMyLocalKey_upgradeLevelValue);
 	en->setObject(CCString::create("Up to three items\ncan be selected."), kMyLocalKey_totalItemSelectCount3);
 	en->setObject(CCString::create("You don’t have enough gold"), kMyLocalKey_goldNotEnought);
@@ -2049,7 +2049,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Stage"), kMyLocalKey_stage);
 	ja->setObject(CCString::create("Choose the items that you will use during the game."), kMyLocalKey_selectUseItem);
 	ja->setObject(CCString::create("Level %d"), kMyLocalKey_levelValue);
-	ja->setObject(CCString::create("Power %d"), kMyLocalKey_powerValue);
+	ja->setObject(CCString::create("Power %s"), kMyLocalKey_powerValue);
 	ja->setObject(CCString::create("Level %d Upgrade"), kMyLocalKey_upgradeLevelValue);
 	ja->setObject(CCString::create("Up to three items\ncan be selected."), kMyLocalKey_totalItemSelectCount3);
 	ja->setObject(CCString::create("You don’t have enough gold"), kMyLocalKey_goldNotEnought);
