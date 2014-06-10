@@ -1093,7 +1093,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>종류"), kMyLocalKey_attendanceGoodsTypeMany);
+	ko->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	ko->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	ko->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
@@ -1165,6 +1165,39 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("소녀들의 위치를 파악하고 있습니다."), kMyLocalKey_titleTempScript1);
 	ko->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
 	ko->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
+	
+	ko->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
+	ko->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
+	ko->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
+	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
+	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
+	ko->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
+	ko->setObject(CCString::create("무한모드 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
+	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
+	ko->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
+	ko->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
+	ko->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
+	
+	ko->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardStageRankValue);
+	ko->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardEndlessRankValue);
+	
+	ko->setObject(CCString::create("%s연승"), kMyLocalKey_rankRewardEndlessVictoryScript);
+	ko->setObject(CCString::create("%d위"), kMyLocalKey_rankRewardRankValue);
+	
+	ko->setObject(CCString::create("%s골드"), kMyLocalKey_rankRewardGoodsTypeGold);
+	ko->setObject(CCString::create("%s루비"), kMyLocalKey_rankRewardGoodsTypeRuby);
+	ko->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem9);
+	ko->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem6);
+	ko->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem11);
+	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass1);
+	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass2);
+	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass3);
+	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass4);
+	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass5);
+	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
+	ko->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
+	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1765,7 +1798,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>종류"), kMyLocalKey_attendanceGoodsTypeMany);
+	en->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	en->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	en->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
@@ -1836,6 +1869,39 @@ void MyLocal::en()
 	en->setObject(CCString::create("소녀들의 위치를 파악하고 있습니다."), kMyLocalKey_titleTempScript1);
 	en->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
 	en->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
+	
+	en->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
+	en->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
+	en->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
+	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
+	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
+	en->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
+	en->setObject(CCString::create("무한모드 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
+	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
+	en->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
+	en->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
+	en->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
+	
+	en->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardStageRankValue);
+	en->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardEndlessRankValue);
+	
+	en->setObject(CCString::create("%s연승"), kMyLocalKey_rankRewardEndlessVictoryScript);
+	
+	en->setObject(CCString::create("%d위"), kMyLocalKey_rankRewardRankValue);
+	
+	en->setObject(CCString::create("%s골드"), kMyLocalKey_rankRewardGoodsTypeGold);
+	en->setObject(CCString::create("%s루비"), kMyLocalKey_rankRewardGoodsTypeRuby);
+	en->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem9);
+	en->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem6);
+	en->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem11);
+	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass1);
+	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass2);
+	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass3);
+	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass4);
+	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass5);
+	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
+	en->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2458,7 +2524,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>종류"), kMyLocalKey_attendanceGoodsTypeMany);
+	ja->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	ja->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
 	ja->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
@@ -2529,6 +2595,39 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("소녀들의 위치를 파악하고 있습니다."), kMyLocalKey_titleTempScript1);
 	ja->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
 	ja->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
+	
+	ja->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
+	ja->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
+	ja->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
+	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
+	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
+	ja->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
+	ja->setObject(CCString::create("무한모드 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
+	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
+	ja->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
+	ja->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
+	ja->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
+	
+	ja->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardStageRankValue);
+	ja->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardEndlessRankValue);
+	
+	ja->setObject(CCString::create("%s연승"), kMyLocalKey_rankRewardEndlessVictoryScript);
+	
+	ja->setObject(CCString::create("%d위"), kMyLocalKey_rankRewardRankValue);
+	
+	ja->setObject(CCString::create("%s골드"), kMyLocalKey_rankRewardGoodsTypeGold);
+	ja->setObject(CCString::create("%s루비"), kMyLocalKey_rankRewardGoodsTypeRuby);
+	ja->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem9);
+	ja->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem6);
+	ja->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem11);
+	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass1);
+	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass2);
+	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass3);
+	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass4);
+	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass5);
+	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
+	ja->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
 	
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

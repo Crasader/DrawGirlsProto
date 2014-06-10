@@ -689,7 +689,7 @@ bool FailPopup::init()
 	
 	myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
 	
-	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
+	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode(true);
 	curtain_node->setPosition(ccp(240,160));
 	addChild(curtain_node, kZ_FP_popup+5);
 	

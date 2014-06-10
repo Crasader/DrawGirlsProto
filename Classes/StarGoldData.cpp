@@ -2417,6 +2417,25 @@ void StarGoldData::resetAttendance()
 	attendance_data.clear();
 }
 
+void StarGoldData::initRankReward(Json::Value result_data)
+{
+	if(result_data["sendGift"].asBool())
+	{
+		is_on_rank_reward = true;
+		rank_reward_data = result_data;
+	}
+	else
+	{
+		is_on_rank_reward = false;
+	}
+}
+
+void StarGoldData::resetRankReward()
+{
+	is_on_rank_reward = false;
+	rank_reward_data.clear();
+}
+
 void StarGoldData::initTimeEventList(Json::Value t_list)
 {
 	int list_size = t_list.size();
@@ -2548,6 +2567,7 @@ void StarGoldData::myInit()
 	time_event_list.clear();
 	
 	is_on_attendance = false;
+	is_on_rank_reward = false;
 	is_endless_mode = false;
 	endless_my_victory_on = false;
 	is_morphing_noti = true;

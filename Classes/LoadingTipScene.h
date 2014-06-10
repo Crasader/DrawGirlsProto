@@ -28,7 +28,7 @@ public:
     static cocos2d::CCScene* scene();
 	static CCSprite* getLoadingTipImage();
 	static CCNode* getCurtainTipImage();
-	static CCNode* getOpenCurtainNode();
+	static CCNode* getOpenCurtainNode(bool is_gameover = false);
 	
 	static LoadingTipScene* getLoadingTipSceneLayer();
 	

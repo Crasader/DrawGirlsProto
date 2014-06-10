@@ -349,7 +349,7 @@ CCTableViewCell* AttendancePopup::tableCellAtIndex(CCTableView *table, unsigned 
 			t_goods_node->setPosition(ccp(30,24.f));
 			t_back->addChild(t_goods_node);
 			
-			StyledLabelTTF* script_label = StyledLabelTTF::create(CCString::createWithFormat(getGoodsTypeLocalData("many").c_str(), int(reward_list.size()))->getCString(),
+			StyledLabelTTF* script_label = StyledLabelTTF::create(getGoodsTypeLocalData("many").c_str(),
 																  mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
 			script_label->setPosition(ccp(30,20));
 			t_back->addChild(script_label);
