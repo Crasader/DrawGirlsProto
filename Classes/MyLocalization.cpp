@@ -865,7 +865,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	ko->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	ko->setObject(CCString::create("현재 획득점수 "), kMyLocalKey_todaymissionTotalScore4);
-	ko->setObject(CCString::create("<font color=961>%d골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
+	ko->setObject(CCString::create("<font color=961>%s골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
 	ko->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold2);
 	ko->setObject(CCString::create("현재 획득골드 "), kMyLocalKey_todaymissionTotalTakeGold3);
 	ko->setObject(CCString::create("<font>부하몹</font><font color=961>%d마리</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalCatch1);
@@ -1447,8 +1447,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("Score"), kMyLocalKey_score);
 	en->setObject(CCString::create("총점"), kMyLocalKey_totalScore);
 	en->setObject(CCString::create("The next stage"), kMyLocalKey_nextStage);
-	en->setObject(CCString::create("again to"), kMyLocalKey_regame);
-	en->setObject(CCString::create("Main"), kMyLocalKey_toMain);
+	en->setObject(CCString::create("AGAIN TO"), kMyLocalKey_regame);
+	en->setObject(CCString::create("MAIN"), kMyLocalKey_toMain);
 	en->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
 	en->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
 	en->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
@@ -1578,7 +1578,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	en->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	en->setObject(CCString::create("현재 획득점수"), kMyLocalKey_todaymissionTotalScore4);
-	en->setObject(CCString::create("<font color=961>%d골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
+	en->setObject(CCString::create("<font color=961>%s골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
 	en->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold2);
 	en->setObject(CCString::create("현재 획득골드"), kMyLocalKey_todaymissionTotalTakeGold3);
 	en->setObject(CCString::create("<font>부하몹</font><font color=961>%d마리</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalCatch1);
@@ -1649,7 +1649,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
 	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	en->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
-	en->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
+	en->setObject(CCString::create("COMPLETE"), kMyLocalKey_endUpgrade);
 	en->setObject(CCString::create("%d성 카드 획득방법"), kMyLocalKey_cardLockedTitle);
 	en->setObject(CCString::create("<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent1);
 	en->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent2);
@@ -1844,7 +1844,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	en->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	en->setObject(CCString::create("그만하기"), kMyLocalKey_endlessKeepWin);
+	en->setObject(CCString::create("도전실패"), kMyLocalKey_endlessKeepWin);
 	
 	en->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	en->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -2291,7 +2291,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	ja->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	ja->setObject(CCString::create("현재 획득점수"), kMyLocalKey_todaymissionTotalScore4);
-	ja->setObject(CCString::create("<font color=961>%d골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
+	ja->setObject(CCString::create("<font color=961>%s골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
 	ja->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold2);
 	ja->setObject(CCString::create("현재 획득골드"), kMyLocalKey_todaymissionTotalTakeGold3);
 	ja->setObject(CCString::create("<font>부하몹</font><font color=961>%d마리</font><font>를 사냥하라</font>"), kMyLocalKey_todaymissionTotalCatch1);
@@ -2570,7 +2570,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ja->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ja->setObject(CCString::create("그만하기"), kMyLocalKey_endlessKeepWin);
+	ja->setObject(CCString::create("도전실패"), kMyLocalKey_endlessKeepWin);
 	
 	ja->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ja->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);

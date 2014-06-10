@@ -1207,7 +1207,11 @@ void EndlessModeOpening::putInformation(Json::Value info)
 
 	int win_count = info["endlessData"]["win"].asInt();
 	int lose_count = info["endlessData"]["lose"].asInt();
-	int win_rate = 100.f*win_count/(win_count + lose_count);
+	int win_rate = 0;
+	if(win_count + lose_count != 0)
+	{
+		win_rate = 100.f*win_count/(win_count + lose_count);
+	}
 	
 //	record_content->setAnchorPoint(ccp(1,0.5f));
 	

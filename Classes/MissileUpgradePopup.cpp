@@ -145,7 +145,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	missile_data_level->setPosition(ccp(level_case->getContentSize().width/2.f-30.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_level);
 	
-	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 //	missile_data_power->setColor(ccc3(255, 222, 0));
 	missile_data_power->enableOuterStroke(ccBLACK, 0.5f);
 	missile_data_power->setAnchorPoint(ccp(0.5f,0.5f));
@@ -179,7 +179,10 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		price_type = CCSprite::create("price_gold_img.png");
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-27,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
-		price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label = KSLabelTTF::create(
+					 KS::insert_separator( CCString::createWithFormat("%d",
+												mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString()).c_str(),
+																mySGD->getFont().c_str(), 15);
 		price_label->enableOuterStroke(ccBLACK, 0.5f);
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
@@ -408,7 +411,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	int after_damage = mySGD->getSelectedCharacterHistory().power.getV();
 	
 	missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
-	missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), after_damage)->getCString());
+	missile_data_power->setString(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), after_damage)->getCString()).c_str());
 	
 	CCPoint missile_position;
 	if(missile_img)
@@ -448,7 +451,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString());
 		price_type->removeFromParent();
 		price_back->setContentSize(CCSizeMake(120, 30));
-		price_back->setPosition(ccp(upgrade_label->getContentSize().width/2.f + price_back->getContentSize().width/2.f + 40, upgrade_label->getContentSize().height/2.f));
+		price_back->setPosition(ccp(upgrade_label->getContentSize().width/2.f + price_back->getContentSize().width/2.f + 10 + 30.f, upgrade_label->getContentSize().height/2.f));
 		price_label->setString(myLoc->getLocalForKey(kMyLocalKey_endUpgrade));
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f, price_back->getContentSize().height/2.f));
 	}

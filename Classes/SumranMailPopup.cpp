@@ -144,18 +144,18 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 		p["memberID"] = myHSP->getMemberID();
 		
 		
-		myHSP->command("confirmallgiftboxhistory",p,[=](Json::Value p){
+		myHSP->command("confirmallgiftboxhistory",p,[=](Json::Value r){
 			
 			t_suction->setTouchEnabled(false);
 			t_suction->setVisible(false);
-			if(p["result"]["code"].asInt()==GDSUCCESS){
+			if(r["result"]["code"].asInt()==GDSUCCESS){
 				
 				{
 					//테이블 리로드
 					m_mailList.clear();
 					this->filterWithMailFilter();
 					this->mailTableView->reloadData();
-					
+					mySGD->saveChangeGoodsTransaction(r);
 				}
 			}
 		});
@@ -567,12 +567,13 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																								this->removeMessage (mailNo, mail["memberID"].asInt64(),
 																																		 [=](Json::Value r)
 																																		 {
-																																			 if(r["result"]["code"].asInt() != GDSUCCESS) {
-																																				 return;
-																																			 }
+																																			 
 																																			 t_suction->setTouchEnabled(false);
 																																			 t_suction->setVisible(false);
 																																			 //여기서 r["list"] 참고하여 재화 정보 업데이트하기
+																																			 
+																																			 mySGD->saveChangeGoodsTransaction(r);
+																																			 
 																																		 });
 
 																	});
