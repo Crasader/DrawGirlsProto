@@ -635,7 +635,7 @@ void StartSettingPopup::setMain()
 	missile_data_level->setPosition(ccp(53,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 	setFormSetter(missile_data_power);
 	missile_data_power->setPosition(ccp(111,95));
 	main_case->addChild(missile_data_power);
@@ -726,7 +726,8 @@ void StartSettingPopup::setMain()
 			CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 			n_price_type->setPosition(ccp(25,22));
 			n_upgrade->addChild(n_price_type);
-			CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+			CCLabelTTF* n_price_label = CCLabelTTF::create(KS::insert_separator(
+												ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 18);
 			n_price_label->setColor(ccc3(50, 25, 0));
 			n_price_label->setPosition(ccp(78,22));
 			n_upgrade->addChild(n_price_label);
@@ -734,7 +735,8 @@ void StartSettingPopup::setMain()
 			CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 			s_price_type->setPosition(ccp(25,22));
 			s_upgrade->addChild(s_price_type);
-			CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+			CCLabelTTF* s_price_label = CCLabelTTF::create(KS::insert_separator(
+												ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 18);
 			s_price_label->setColor(ccc3(50, 25, 0));
 			s_price_label->setPosition(ccp(78,22));
 			s_upgrade->addChild(s_price_label);
@@ -901,7 +903,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
 		missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
-		missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString());
+		missile_data_power->setString(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString()).c_str());
 		
 		CCPoint missile_position;
 		if(missile_img)
@@ -1016,7 +1018,8 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				CCSprite* n_price_type = CCSprite::create("price_gold_img.png");
 				n_price_type->setPosition(ccp(25,22));
 				n_upgrade->addChild(n_price_type);
-				CCLabelTTF* n_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+				CCLabelTTF* n_price_label = CCLabelTTF::create(KS::insert_separator(
+												ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 18);
 				n_price_label->setColor(ccc3(50, 25, 0));
 				n_price_label->setPosition(ccp(78,22));
 				n_upgrade->addChild(n_price_label);
@@ -1024,7 +1027,8 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				CCSprite* s_price_type = CCSprite::create("price_gold_img.png");
 				s_price_type->setPosition(ccp(25,22));
 				s_upgrade->addChild(s_price_type);
-				CCLabelTTF* s_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString(), mySGD->getFont().c_str(), 18);
+				CCLabelTTF* s_price_label = CCLabelTTF::create(KS::insert_separator(
+												ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 18);
 				s_price_label->setColor(ccc3(50, 25, 0));
 				s_price_label->setPosition(ccp(78,22));
 				s_upgrade->addChild(s_price_label);
