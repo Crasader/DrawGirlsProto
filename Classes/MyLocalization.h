@@ -644,7 +644,8 @@ typedef enum MyLocalKey_ {
 	
 	kMyLocalKey_titleTempScript1,
 	kMyLocalKey_titleTempScript2,
-	kMyLocalKey_titleTempScript3
+	kMyLocalKey_titleTempScript3,
+	kMyLocalKey_heartFree
 }MyLocalKey;
 
 

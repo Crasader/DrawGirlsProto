@@ -164,13 +164,13 @@ bool RankNewPopup::init()
 	main_case->addChild(rankBack);
 	
 	CCScale9Sprite* barBack = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
-	barBack->setPosition(ccp(243.0,98.5)); 			// dt (8.0,-41.5)
+	barBack->setPosition(ccp(243.0, 76.f));
 	barBack->setContentSize(CCSizeMake(5.5,116.5)); 			// dt (-1.5,-38.5)
 	//	FormSetter::get()->addObject("testksoo", barBack);
 	main_inner_right->addChild(barBack);
 	setFormSetter(barBack);
 	rank_table = CCTableView::create(this, CCSizeMake(244, 118));
-	rank_table->setPosition(5,40);
+	rank_table->setPosition(5, 14);
 	rank_table->setDelegate(this);
 	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
 																										 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
@@ -305,7 +305,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 			list_cell_case->setAnchorPoint(ccp(0,0));
 			list_cell_case->setContentSize(CCSizeMake(225, 37));
-			list_cell_case->setPosition(ccp(241,45));
+			list_cell_case->setPosition(ccp(241, 170.f));
 			rankBack->addChild(list_cell_case, kZ_CP_img);
 			
 			CCPoint rank_position = ccp(20,18);
@@ -361,12 +361,13 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 				CCPoint original_position = list_cell_case->getPosition();
 				list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
 				cell_action_list.push_back([=](){
-					delay_index = 5;
+					delay_index = 0;
 					CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
 					CCMoveTo* t_move = CCMoveTo::create(0.5f, original_position);
 					CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
 					list_cell_case->runAction(t_seq);
 					rankBack->setTag(1);
+					setFormSetter(list_cell_case);
 				});
 			}
 			
@@ -535,7 +536,7 @@ CCTableViewCell* RankNewPopup::tableCellAtIndex(CCTableView *table, unsigned int
 		CCPoint original_position = list_cell_case->getPosition();
 		list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
 		cell_action_list.push_back([=](){
-			delay_index = i;
+			delay_index = i + 1;
 			CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
 			CCMoveTo* t_move = CCMoveTo::create(0.5f, original_position);
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
