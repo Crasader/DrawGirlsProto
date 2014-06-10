@@ -729,7 +729,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setGachaOnePercentFee(result_data["gachaOnePercentFee"].asInt());
 		
 		mySGD->setBonusItemCnt(kIC_doubleItem, result_data["bonusItemCntDoubleItem"].asInt());
-		mySGD->setBonusItemCnt(kIC_longTime, result_data["bonusItemCntLongTime"].asInt());
+		mySGD->setBonusItemCnt(kIC_magnet, result_data["bonusItemCntMagnet"].asInt());
 		mySGD->setBonusItemCnt(kIC_baseSpeedUp, result_data["bonusItemCntBaseSpeedUp"].asInt());
 		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
 		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
