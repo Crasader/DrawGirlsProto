@@ -24,7 +24,7 @@ class LoadingLayer;
 class DownloadFile;
 class CopyFile;
 class CCMenuLambda;
-class EndlessModeResult : public CCLayer, public CCTableViewDataSource
+class EndlessModeResult : public CCLayer, public CCTableViewDataSource, public CCScrollViewDelegate
 {
 public:
 	virtual bool init();
@@ -178,6 +178,9 @@ private:
 	void successGetStageInfo();
 	
 	void menuAction(CCObject* sender);
+	
+	virtual void scrollViewDidScroll(CCScrollView* view);
+	virtual void scrollViewDidZoom(CCScrollView* view);
 };
 
 #endif /* defined(__DGproto__EndlessModeResult__) */
