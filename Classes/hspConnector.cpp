@@ -350,12 +350,13 @@ string hspConnector::getCountryCode(){
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
+	string r;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getCountryCode", "()Ljava/lang/String;")) {
 		jstring result = t.env->CallStaticLongMethod(t.classID, t.methodID);
 		
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
-		string r = revStr;
+		r = revStr;
 		
 		t.env->DeleteLocalRef(t.classID);
 
