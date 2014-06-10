@@ -579,11 +579,11 @@ CCNode* RankRewardPopup::getTakeRewardImg(string t_goods_str)
 	CCNode* return_node = NULL;
 	if(t_type == kGoodsType_gold)
 	{
-		return_node = CCSprite::create("shop_gold6.png");
+		return_node = CCSprite::create("rankpopup_top30_gold.png");
 	}
 	else if(t_type == kGoodsType_ruby)
 	{
-		return_node = CCSprite::create("shop_ruby6.png");
+		return_node = CCSprite::create("rankpopup_top10_ruby.png");
 	}
 	else if(t_type == kGoodsType_item9)
 	{
@@ -623,7 +623,7 @@ CCNode* RankRewardPopup::getTakeRewardImg(string t_goods_str)
 	}
 	else
 	{
-		return_node = CCSprite::create("mainflow_etc_event.png");
+		return_node = CCSprite::create("rankpopup_top50_gift.png");
 	}
 	
 	return return_node;
