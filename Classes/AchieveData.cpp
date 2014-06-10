@@ -138,10 +138,13 @@ void AchieveConditionReward::resultUpdateAchieveHistory(Json::Value result_data)
 		
 	}
 	
-	if(keep_callback != nullptr)
+	if(!keep_callbacks.empty())
 	{
-		keep_callback(result_data);
-		keep_callback = nullptr;
+		if(keep_callbacks[0] != nullptr)
+		{
+			keep_callbacks[0](result_data);
+		}
+		keep_callbacks.pop_front();
 	}
 }
 
@@ -186,8 +189,6 @@ void AchieveConditionReward::resultUpdateAchieveHistoryNotLast(Json::Value resul
 
 vector<CommandParam> AchieveConditionReward::updateAchieveHistoryVectorParam(jsonSelType t_callback)
 {
-	keep_callback = t_callback;
-	
 	vector<CommandParam> t_command_list;
 	t_command_list.clear();
 	for(int i=0;i<changed_data.size();i++)
@@ -204,7 +205,10 @@ vector<CommandParam> AchieveConditionReward::updateAchieveHistoryVectorParam(jso
 			param["count"] = changed_data[i].getIngCount();
 		
 		if(i >= changed_data.size()-1)
+		{
 			t_command_list.push_back(CommandParam("updatearchivementhistory", param, json_selector(this, AchieveConditionReward::resultUpdateAchieveHistory)));
+			keep_callbacks.push_back(t_callback);
+		}
 		else
 			t_command_list.push_back(CommandParam("updatearchivementhistory", param, json_selector(this, AchieveConditionReward::resultUpdateAchieveHistoryNotLast)));
 	}

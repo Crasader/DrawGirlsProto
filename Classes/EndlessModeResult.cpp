@@ -43,6 +43,9 @@ bool EndlessModeResult::init()
 		return false;
 	}
 	
+	left_table = NULL;
+	right_table = NULL;
+	
 	addChild(KSTimer::create(0.1f, [](){FormSetter::get()->start();}));
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
@@ -187,25 +190,25 @@ bool EndlessModeResult::init()
 	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold));
 	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea));
 	
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->area_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->damage_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->combo_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%.0f", left_life_decrease_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%.0f", left_time_decrease_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%.0f", left_grade_decrease_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", left_damaged_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d%%", int(mySGD->getPercentage()*100.f))->getCString());
+	left_content_list.push_back(KS::insert_separator(mySGD->area_score.getV()));
+	left_content_list.push_back(KS::insert_separator(mySGD->damage_score.getV()));
+	left_content_list.push_back(KS::insert_separator(mySGD->combo_score.getV()));
+	left_content_list.push_back(KS::insert_separator(left_life_decrease_score.getV(), "%.0f"));
+	left_content_list.push_back(KS::insert_separator(left_time_decrease_score.getV(), "%.0f"));
+	left_content_list.push_back(KS::insert_separator(left_grade_decrease_score.getV(), "%.0f"));
+	left_content_list.push_back(KS::insert_separator(left_damaged_score.getV()));
+	left_content_list.push_back(KS::insert_separator(mySGD->getStageGold()));
+	left_content_list.push_back(KS::insert_separator(int(mySGD->getPercentage()*100.f)) + "%");
 	
-	right_content_list.push_back(CCString::createWithFormat("%d", right_area_score.getV())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%d", right_damage_score.getV())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%d", right_combo_score.getV())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%.0f", right_life_decrease_score.getV())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%.0f", right_time_decrease_score.getV())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%.0f", right_grade_decrease_score.getV())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%d", right_damaged_score.getV())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%d", mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt())->getCString());
-	right_content_list.push_back(CCString::createWithFormat("%d%%", int(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeArea), Json::Value()).asFloat()*100.f))->getCString());
+	right_content_list.push_back(KS::insert_separator(right_area_score.getV()));
+	right_content_list.push_back(KS::insert_separator(right_damage_score.getV()));
+	right_content_list.push_back(KS::insert_separator(right_combo_score.getV()));
+	right_content_list.push_back(KS::insert_separator(right_life_decrease_score.getV(), "%.0f"));
+	right_content_list.push_back(KS::insert_separator(right_time_decrease_score.getV(), "%.0f"));
+	right_content_list.push_back(KS::insert_separator(right_grade_decrease_score.getV(), "%.0f"));
+	right_content_list.push_back(KS::insert_separator(right_damaged_score.getV()));
+	right_content_list.push_back(KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt()));
+	right_content_list.push_back(KS::insert_separator(int(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeArea), Json::Value()).asFloat()*100.f)) + "%");
 	
 	setMain();
 	
@@ -575,7 +578,7 @@ void EndlessModeResult::setMain()
 	if(is_calc)
 		start_total_left_content = "0";
 	else
-		start_total_left_content = CCString::createWithFormat("%d", left_total_score.getV())->getCString();
+		start_total_left_content = KS::insert_separator(left_total_score.getV());
 	
 	left_total_content = KSLabelTTF::create(start_total_left_content.c_str(), mySGD->getFont().c_str(), 15);
 	left_total_content->setColor(ccc3(255, 170, 20));
@@ -1022,7 +1025,7 @@ void EndlessModeResult::setMain()
 	if(is_calc)
 		start_total_right_content = "0";
 	else
-		start_total_right_content = CCString::createWithFormat("%d", right_total_score.getV())->getCString();
+		start_total_right_content = KS::insert_separator(right_total_score.getV());
 	
 	right_total_content = KSLabelTTF::create(start_total_right_content.c_str(), mySGD->getFont().c_str(), 15);
 	right_total_content->setColor(ccc3(255, 170, 20));
@@ -1279,7 +1282,7 @@ void EndlessModeResult::setMain()
 					right_star_animation_list[i]();
 				}
 				
-				addChild(KSTimer::create(1.5f, [=](){startCalcAnimation();}));
+				addChild(KSTimer::create(1.3f, [=](){startCalcAnimation();}));
 			}
 			else
 			{
@@ -1299,7 +1302,7 @@ void EndlessModeResult::startCalcAnimation()
 		{
 			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 			
-			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.15f, [=](float t)
 												   {
 													   left_table->setContentOffset(ccp(0, before_y+30*t));
 													   right_table->setContentOffset(ccp(0, before_y+30*t));
@@ -1310,12 +1313,12 @@ void EndlessModeResult::startCalcAnimation()
 													   
 													   this->is_left_calc_end = this->is_right_calc_end = false;
 													   AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
-													   startLeftCalcAnimation(left_decrease_value, left_base_value, 0.5f, NULL, [=]()
+													   startLeftCalcAnimation(left_decrease_value, left_base_value, 0.3f, NULL, [=]()
 																			  {
 																				  this->is_left_calc_end = true;
 																				  end_func();
 																			  });
-													   startRightCalcAnimation(right_decrease_value, right_base_value, 0.5f, NULL, [=]()
+													   startRightCalcAnimation(right_decrease_value, right_base_value, 0.3f, NULL, [=]()
 																			   {
 																				   this->is_right_calc_end = true;
 																				   end_func();
@@ -1346,7 +1349,7 @@ void EndlessModeResult::startCalcAnimation()
 								{
 									AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 									
-									addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+									addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
 																		   {
 																			   left_table->setContentOffset(ccp(0, -2*30+60*t));
 																			   right_table->setContentOffset(ccp(0, -2*30+60*t));
@@ -1357,6 +1360,9 @@ void EndlessModeResult::startCalcAnimation()
 																			   
 																			   left_table->setTouchEnabled(true);
 																			   right_table->setTouchEnabled(true);
+																			   
+																			   left_table->CCScrollView::setDelegate(this);
+																			   right_table->CCScrollView::setDelegate(this);
 																			   
 																			   if(left_total_score > right_total_score)
 																			   {
@@ -1913,9 +1919,9 @@ void EndlessModeResult::leftCalcAnimation(float dt)
 		}
 //		left_decrease_target->setString(CCString::createWithFormat("%.0f",decrease_left_value)->getCString());
 		if(is_left_decrease)
-			left_total_content->setString(CCString::createWithFormat("%.0f",base_left_value + increase_left_value)->getCString());
+			left_total_content->setString(KS::insert_separator(base_left_value + increase_left_value, "%.0f").c_str());
 		else
-			left_total_content->setString(CCString::createWithFormat("%.0f",base_left_value - increase_left_value)->getCString());
+			left_total_content->setString(KS::insert_separator(base_left_value - increase_left_value, "%.0f").c_str());
 	}
 	else
 		stopLeftCalcAnimation();
@@ -2059,9 +2065,9 @@ void EndlessModeResult::rightCalcAnimation(float dt)
 		}
 //		right_decrease_target->setString(CCString::createWithFormat("%.0f",decrease_right_value)->getCString());
 		if(is_right_decrease)
-			right_total_content->setString(CCString::createWithFormat("%.0f",base_right_value + increase_right_value)->getCString());
+			right_total_content->setString(KS::insert_separator(base_right_value + increase_right_value, "%.0f").c_str());
 		else
-			right_total_content->setString(CCString::createWithFormat("%.0f",base_right_value - increase_right_value)->getCString());
+			right_total_content->setString(KS::insert_separator(base_right_value - increase_right_value, "%.0f").c_str());
 	}
 	else
 		stopRightCalcAnimation();
@@ -2571,4 +2577,25 @@ void EndlessModeResult::successGetStageInfo()
 															 });
 														 });
 	addChild(t_popup, 999);
+}
+
+void EndlessModeResult::scrollViewDidScroll(CCScrollView* view)
+{
+	if(view == left_table && right_table)
+	{
+		if(!right_table->getContentOffset().equals(left_table->getContentOffset()))
+			right_table->setContentOffset(left_table->getContentOffset());
+		left_table->scrollViewDidScroll(left_table);
+	}
+	else if(view == right_table && left_table)
+	{
+		if(!left_table->getContentOffset().equals(right_table->getContentOffset()))
+			left_table->setContentOffset(right_table->getContentOffset());
+		right_table->scrollViewDidScroll(right_table);
+	}
+}
+
+void EndlessModeResult::scrollViewDidZoom(CCScrollView* view)
+{
+	
 }

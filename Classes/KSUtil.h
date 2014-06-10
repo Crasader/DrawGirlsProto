@@ -22,6 +22,7 @@
 #include "cocos-ext.h"
 #include "FromTo.h"
 
+#define ccsf(...) CCString::createWithFormat(__VA_ARGS__)->getCString()
 #define ThisClassType remove_pointer<decltype(this)>::type
 using namespace cocos2d;
 USING_NS_CC_EXT;
@@ -69,6 +70,9 @@ namespace KS
 	string getLocalCode();
 	
 	string insert_separator(const string& s, char separator = ',', int width = 3);
+	string insert_separator(const int& s, const string& format = "%d", char separator = ',', int width = 3);
+	string insert_separator(const float& s, const string& format = "%f",  char separator = ',', int width = 3);
+	string insert_separator(const double& s, const string& format = "%lf",  char separator = ',', int width = 3);
 	
 	string longLongToStr(long long t);
 	long long strToLongLong(const std::string& t);

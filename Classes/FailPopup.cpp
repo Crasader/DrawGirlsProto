@@ -318,15 +318,15 @@ bool FailPopup::init()
 	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold));
 	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea));
 	
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->area_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->damage_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->combo_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%.0f", left_life_decrease_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%.0f", left_time_decrease_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%.0f", left_grade_decrease_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", left_damaged_score.getV())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString());
-	left_content_list.push_back(CCString::createWithFormat("%d%%", int(mySGD->getPercentage()*100.f))->getCString());
+	left_content_list.push_back(KS::insert_separator(mySGD->area_score.getV()));
+	left_content_list.push_back(KS::insert_separator(mySGD->damage_score.getV()));
+	left_content_list.push_back(KS::insert_separator(mySGD->combo_score.getV()));
+	left_content_list.push_back(KS::insert_separator(left_life_decrease_score.getV(), "%.0f"));
+	left_content_list.push_back(KS::insert_separator(left_time_decrease_score.getV(), "%.0f"));
+	left_content_list.push_back(KS::insert_separator(left_grade_decrease_score.getV(), "%.0f"));
+	left_content_list.push_back(KS::insert_separator(left_damaged_score.getV()));
+	left_content_list.push_back(KS::insert_separator(mySGD->getStageGold()));
+	left_content_list.push_back(KS::insert_separator(int(mySGD->getPercentage()*100.f)) + "%");
 	
 //	CCScale9Sprite* time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 //	time_back->setContentSize(CCSizeMake(215, 35));
@@ -1083,7 +1083,7 @@ void FailPopup::startCalcAnimation()
 	{
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		
-		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.15f, [=](float t)
 											   {
 												   left_table->setContentOffset(ccp(0, before_y+30*t));
 											   }, [=](float t)
@@ -1091,7 +1091,7 @@ void FailPopup::startCalcAnimation()
 												   left_table->setContentOffset(ccp(0, before_y+30));
 												   
 												   AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
-												   startLeftCalcAnimation(left_decrease_value, left_base_value, 0.5f, NULL, [=]()
+												   startLeftCalcAnimation(left_decrease_value, left_base_value, 0.3f, NULL, [=]()
 																		  {
 																			  end_func();
 																		  });
@@ -1114,7 +1114,7 @@ void FailPopup::startCalcAnimation()
 							{
 								AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 								
-								addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+								addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
 								{
 									left_table->setContentOffset(ccp(0, -2*30+60*t));
 								}, [=](float t)
@@ -1216,9 +1216,9 @@ void FailPopup::leftCalcAnimation(float dt)
 		}
 		//		left_decrease_target->setString(CCString::createWithFormat("%.0f",decrease_left_value)->getCString());
 		if(is_left_decrease)
-			left_total_content->setString(CCString::createWithFormat("%.0f",base_left_value + increase_left_value)->getCString());
+			left_total_content->setString(KS::insert_separator(base_left_value + increase_left_value, "%.0f").c_str());
 		else
-			left_total_content->setString(CCString::createWithFormat("%.0f",base_left_value - increase_left_value)->getCString());
+			left_total_content->setString(KS::insert_separator(base_left_value - increase_left_value, "%.0f").c_str());
 	}
 	else
 		stopLeftCalcAnimation();

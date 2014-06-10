@@ -298,6 +298,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
 			
 			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
+			no_label->disableOuterStroke();
 			no_label->setColor(ccc3(60, 60, 60));
 			no_label->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f));
 			no_img->addChild(no_label);

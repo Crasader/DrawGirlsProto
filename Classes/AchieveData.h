@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include <map>
+#include <deque>
 #include "KSProtect.h"
 #include "EnumDefine.h"
 #include "hspConnector.h"
@@ -243,7 +244,7 @@ private:
 	bool is_changed;
 	vector<AchieveConditionRewardData> changed_data;
 	map<AchievementCode, AchieveConditionRewardData> data_map;
-	jsonSelType keep_callback;
+	deque<jsonSelType> keep_callbacks;
 	void myInit();
 };
 

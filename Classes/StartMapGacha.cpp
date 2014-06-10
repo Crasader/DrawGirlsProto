@@ -57,7 +57,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 		price_type->setPosition(ccp(15,15));
 		price_back->addChild(price_type);
 		
-		KSLabelTTF* price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 11);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString()).c_str(), mySGD->getFont().c_str(), 15);
 		price_label->enableOuterStroke(ccBLACK, 1.f);
 		price_label->setPosition(ccp(47,15));
 		price_back->addChild(price_label);

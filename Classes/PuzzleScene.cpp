@@ -677,8 +677,8 @@ void PuzzleScene::showGetPuzzle()
 	
 	CCSprite* get_piece_title = CCSprite::create(CCString::createWithFormat("get_piece_title_%s.png", myLoc->getSupportLocalCode())->getCString());
 	PuzzlePiece* new_piece = (PuzzlePiece*)puzzle_node->getChildByTag(mySD->getSilType());
-	get_piece_title->setPosition(ccpAdd(new_piece->getPosition(), ccp(0, 45)));
-	puzzle_node->addChild(get_piece_title, kPuzzleNodeZorder_getPieceEffect);
+	get_piece_title->setPosition(puzzle_node->getPosition() + ccpAdd(new_piece->getPosition(), ccp(0, 45)));
+	addChild(get_piece_title, kPuzzleZorder_top);
 	
 	new_piece->startGetPieceAnimation(this, callfuncCCp_selector(PuzzleScene::createGetPuzzleParticle));
 	
@@ -832,11 +832,15 @@ void PuzzleScene::endGetStar()
 void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLOG("success puzzle animation");
-	
-	if(selected_piece_img)
-	{
-		selected_piece_img->runAction(CCFadeTo::create(0.5f, 0));
-	}
+	addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
+		selected_piece_img->setOpacity(t);
+	}, [=](float t){
+		selected_piece_img->setOpacity(t);
+	}));
+//	if(selected_piece_img)
+//	{
+//		selected_piece_img->runAction(CCFadeTo::create(0.5f, 0));
+//	}
 	
 	AudioEngine::sharedInstance()->playEffect("se_puzzleopen_1.mp3", false);
 	
@@ -1633,12 +1637,6 @@ void PuzzleScene::openSettingPopup()
 	
 	mySD->setSilType(myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number));
 	
-//<<<<<<< HEAD
-////	EndlessSettingPopup* t_popup = EndlessSettingPopup::create();
-////	addChild(t_popup, kPuzzleZorder_popup);
-//	
-//=======
-//>>>>>>> refs/remotes/origin/standAlone
 	StartSettingPopup* t_popup = StartSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 	addChild(t_popup, kPuzzleZorder_popup);
@@ -1646,7 +1644,7 @@ void PuzzleScene::openSettingPopup()
 
 void PuzzleScene::mailPopupClose()
 {
-	//countingMessage();
+	countingMessage();
 	is_menu_enable = true;
 }
 
