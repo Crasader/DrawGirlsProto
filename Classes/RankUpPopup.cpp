@@ -253,7 +253,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	else
 		content_str = myLoc->getLocalForKey(kMyLocalKey_rankUpSubTitle);
 	
-	KSLabelTTF* sub_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpSubTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_title_label = KSLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 12);
 	sub_title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-60));
 	back_case->addChild(sub_title_label);
 	
@@ -389,7 +389,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	{
 		price_label->setString(myLoc->getLocalForKey(kMyLocalKey_free));
 		CCSprite* event_img = CCSprite::create("puzzle_event.png");
-		event_img->setPosition(price_label->getPosition() + ccp(20,10));
+		event_img->setPosition(price_label->getPosition() + ccp(15,10));
 		price_back->addChild(event_img);
 	}
 	

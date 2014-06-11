@@ -12,6 +12,7 @@
 #include "OnePercentGame.h"
 #include "FlagSelector.h"
 #include "MyLocalization.h"
+#include "KSJuniorBase.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -1176,7 +1177,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
 			{
 				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
-				   countingCnt.getV() >= myAchieve->getCondition((AchievementCode)i))
+				   countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
 				{
 					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
@@ -1249,6 +1250,21 @@ void PlayUI::conditionClear ()
 	is_cleared_cdt = true;
 	mission_button->doClose();
 	mission_button->isSuccessed(true);
+	
+	if(mission_back)
+	{
+		mission_back->removeAllChildren();
+		CCSprite* t_success_img = CCSprite::create(CCString::createWithFormat("ui_mission_clear_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+		t_success_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
+		mission_back->addChild(t_success_img);
+	}
+	
+	for(int i=0;i<mission_clear_remove_nodes.size();i++)
+	{
+		mission_clear_remove_nodes[i]->removeFromParent();
+	}
+	mission_clear_remove_nodes.clear();
+	
 //	((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
 	
 //	CCSprite* condition_clear = CCSprite::create("condition_clear.png");
@@ -2574,7 +2590,7 @@ void PlayUI::catchSubCumber ()
 	ing_cdt_cnt++;
 	
 	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString(), 1);
-//	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
 void PlayUI::takeBigArea ()
@@ -2596,7 +2612,7 @@ void PlayUI::takeItemCollect ()
 	ing_cdt_cnt++;
 	
 	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString(), 1);
-//	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
 
@@ -2846,7 +2862,7 @@ void PlayUI::myInit ()
 	
 	mission_button = RollingButton::create("");
 	mission_button->setPosition(ccp(68, myDSH->ui_top-22+UI_OUT_DISTANCE));
-//	mission_button->setVisible(!mySGD->is_endless_mode);
+	mission_button->setVisible(false); // 원래 주석
 	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_button->setPositionY(t);}, [=](float t){mission_button->setPositionY(myDSH->ui_top-22);}));
 	
 	addChild(mission_button,2);
@@ -2856,13 +2872,13 @@ void PlayUI::myInit ()
 	mission_button->setOpenFunction([&](){
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mission_button->runAction(CCMoveBy::create(0.3,ccp(174,0)));
-		top_center_node->setVisible(false);
+//		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mission_button->runAction(CCMoveBy::create(0.3,ccp(-174,0)));
-		top_center_node->setVisible(true);
+//		top_center_node->setVisible(true);
 	});
 	
 //	CCPoint icon_menu_position;
@@ -2873,6 +2889,9 @@ void PlayUI::myInit ()
 //	CCSprite* condition_back = CCSprite::create("ui_condition_back.png");
 //	condition_back->setPosition(icon_menu_position);
 //	addChild(condition_back);
+	
+	mission_back = NULL;
+	mission_clear_remove_nodes.clear();
 	
 	if(clr_cdt_type == kCLEAR_bossLifeZero)
 	{
@@ -2923,9 +2942,73 @@ void PlayUI::myInit ()
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString());
 		
-//		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-//		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
-//		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-22+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-22);}));
+		
+		CCNode* junior_node = CCNode::create();
+		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-25,0));
+		mission_back->addChild(junior_node);
+		
+		std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
+		
+		Json::Reader reader;
+		Json::Value juniorJson;
+		reader.parse(juniorInfo, juniorJson);
+		
+		int juniorIndex = 0;
+		juniorJson = juniorJson[juniorIndex];
+		{
+			std::string juniorType = juniorJson["type"].asString();
+			std::string ccbiName = juniorType;
+			std::string ccbiname2 = ccbiName;
+			
+			if(ccbiname2.substr(0,1)=="1") {
+				ccbiname2="bear";
+			}
+			////////////////////////////////////////////
+			
+			//		m_directionAngleDegree = m_well512.GetValue(0, 360);
+			
+			//		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+			//		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
+			
+			//		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+			
+			
+			std::string _ccbiName = (ccbiname2 + ".ccbi").c_str();
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(nodeLoader);
+			CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), this);
+			
+			CCSprite* m_juniorSprite = dynamic_cast<CCSprite*>(p);
+//			m_juniorAnimation = reader->getAnimationManager();
+//			m_juniorAnimation->setDelegate(this);
+			reader->release();
+			
+			if(m_juniorSprite != NULL)
+			{
+				junior_node->addChild(m_juniorSprite, 1001);
+				m_juniorSprite->setScale(0.5f);
+				m_juniorSprite->setPosition(CCPointZero);
+			}
+		}
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat("/%d", clr_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(t_condition_label, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+		clr_cdt_label->setColor(ccc3(255, 170, 20));
+		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
 	else if(clr_cdt_type == kCLEAR_bigArea)
 	{
@@ -2977,6 +3060,33 @@ void PlayUI::myInit ()
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString());
+		
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-22+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-22);}));
+		
+		CCSprite* item_img = CCSprite::create("mission_item.png");
+		item_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-25,0));
+		mission_back->addChild(item_img);
+		
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat("/%d", clr_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(t_condition_label, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+		clr_cdt_label->setColor(ccc3(255, 170, 20));
+		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(clr_cdt_label);
+		
 		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
