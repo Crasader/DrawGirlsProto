@@ -105,7 +105,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	ing_close_cnt = 0;
 	
 	show_content = CCSprite::create(CCString::createWithFormat("item%d.png", item_list[ing_close_cnt])->getCString());
-	show_content->setPosition(ccp(0, 40 - 5));
+	show_content->setPosition(ccp(0, 40 - 5 - 10));
 	addChild(show_content);
 	
 	item_title = KSLabelTTF::create(convertToItemCodeToItemName((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 12);
@@ -116,7 +116,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	
 	item_ment = KSLabelTTF::create(mySD->getItemScript((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 12);
 	item_ment->setColor(ccWHITE);
-	item_ment->setPosition(ccp(0,-32));
+	item_ment->setPosition(ccp(0,-32 - 10));
 	addChild(item_ment);
 	
 	if(item_ment->getContentSize().width > 200)
@@ -134,7 +134,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	
 	KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 12);
 	bonus_ment_img->setColor(ccc3(255,170,20));
-	bonus_ment_img->setPosition(ccp(0,-60));
+	bonus_ment_img->setPosition(ccp(0,-60 - 10));
 	addChild(bonus_ment_img);
 	
 	//		CCSprite* t_tab = CCSprite::create("shop_tab.png");

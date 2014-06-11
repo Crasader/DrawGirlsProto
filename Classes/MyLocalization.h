@@ -645,6 +645,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_titleTempScript1,
 	kMyLocalKey_titleTempScript2,
 	kMyLocalKey_titleTempScript3,
+
+	kMyLocalKey_heartFree,
+
 	
 	kMyLocalKey_rankRewardTitle,
 	kMyLocalKey_rankRewardContent,
@@ -677,6 +680,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rankRewardGoodsTypePass6,
 	kMyLocalKey_rankRewardGoodsTypeMany
 	
+
 }MyLocalKey;
 
 

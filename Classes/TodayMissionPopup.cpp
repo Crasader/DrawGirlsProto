@@ -163,8 +163,8 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 //			{"", value5.toStyledString()}
 //		}, StyledAlignment::kCenterAlignment);
 		
-		
-		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore1),mySGD->today_mission_info.goal_count.getV())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		std::string score = KS::insert_separator(ccsf("%d", mySGD->today_mission_info.goal_count.getV()));
+		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore1), score.c_str())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		slttf->setOldAnchorPoint();
 		slttf->setPosition(ccp(0, 35));
 		m_container->addChild(slttf);
