@@ -344,6 +344,21 @@ void StartSettingPopup::setMain()
 															   }, show_item_popup);
 		t_popup->setContainerNode(t_container);
 		addChild(t_popup, kStartSettingPopupZorder_popup);
+		
+		t_container->hide_func = [=](function<void()> end_func)
+		{
+			CommonAnimation::closePopup(t_popup, t_container, t_popup->getDimmedSprite(), [=](){
+				
+			}, [=](){
+				end_func();
+			});
+		};
+		
+		CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite(), [=](){
+			
+		}, [=](){
+			t_container->endShowAnimation();
+		});
 	}
 	
 	clicked_item_idx = -1;
