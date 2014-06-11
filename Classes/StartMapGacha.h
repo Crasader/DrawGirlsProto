@@ -8,6 +8,7 @@
 
 USING_NS_CC;
 USING_NS_CC_EXT;
+using namespace std;
 #define LZZ_INLINE inline
 enum StartMapGachaZorder
 {
@@ -24,6 +25,9 @@ class StartMapGacha : public CCLayer
 {
 public:
   static StartMapGacha * create (CCObject * t_gacha, SEL_CallFunc d_gacha);
+	void outAction();
+	virtual void removeFromParent();
+	function<void()> remove_func;
 private:
   bool is_menu_enable;
 	CCControlButton* gacha_button;

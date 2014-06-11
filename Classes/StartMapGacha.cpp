@@ -144,6 +144,30 @@ void StartMapGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 	removeFromParent();
 }
 
+void StartMapGacha::outAction()
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	gacha_button->setEnabled(false);
+	cancel_menu->setEnabled(false);
+	
+	back->stopAllActions();
+	CCMoveTo* t_move2 = CCMoveTo::create(0.6f, ccp(240,0));
+	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartMapGacha::removeFromParent));
+	CCAction* t_seq = CCSequence::create(t_move2, t_call, NULL);
+	back->runAction(t_seq);
+}
+
+void StartMapGacha::removeFromParent()
+{
+	remove_func();
+	
+	CCLayer::removeFromParent();
+}
+
 void StartMapGacha::menuAction (CCObject * sender)
 {
 	if(!is_menu_enable)

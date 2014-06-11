@@ -73,6 +73,7 @@ bool Maingame::init()
 	
 	is_pause = false;
 	is_gohome = false;
+	t_smg = NULL;
 	setKeypadEnabled(true);
 	
 	warning_count = 0;
@@ -1126,7 +1127,11 @@ void Maingame::counting()
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
 //		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
 //		{
-			StartMapGacha* t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
+			t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
+		t_smg->remove_func = [=]()
+		{
+			t_smg = NULL;
+		};
 			addChild(t_smg, startGachaZorder);
 //		}
 		
@@ -3907,6 +3912,8 @@ void Maingame::showPause()
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		myUI->stopCounting();
+		if(t_smg)
+			t_smg->outAction();
 		goHome();
 		is_pause = false;
 		t_popup->removeFromParent();
