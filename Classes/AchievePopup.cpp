@@ -612,14 +612,25 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	
 	string cell_back_filename;
 	if(state_value == -1)
-		cell_back_filename = "achievement_cellback_success.png";
+		cell_back_filename = "achievement_cell_success.png";
 	else if(state_value == 1)
 		cell_back_filename = "achievement_cellback_reward.png";
 	else
 		cell_back_filename = "achievement_cellback_normal.png";
 	
-	CCScale9Sprite* cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
-	cell_back->setContentSize(CCSizeMake(206, 62));
+	CCScale9Sprite* cell_back;
+	if(state_value == -1)
+	{
+		cell_back = CCScale9Sprite::create(cell_back_filename.c_str()); // , CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+	}
+	else
+	{
+		cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+		cell_back->setContentSize(CCSizeMake(206, 62));
+	}
+	
+	
+	
 	cell_back->setAnchorPoint(CCPointZero);
 	cell_back->setPosition(ccp(0,0));
 	cell->addChild(cell_back);
@@ -705,6 +716,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
 		
 		CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
+		success_img->setOpacity(0);
 		success_img->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
 		cell_back->addChild(success_img);
 		
@@ -915,13 +927,24 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		
 		string cell_back_filename;
 		if(myAchieve->isCompleted(recent_code))
-			cell_back_filename = "achievement_cellback_success.png";
+			cell_back_filename = "achievement_cell_success.png";
 		else if(myAchieve->isAchieve(recent_code))
 			cell_back_filename = "achievement_cellback_reward.png";
 		else
 			cell_back_filename = "achievement_cellback_normal.png";
 		
-		CCScale9Sprite* cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+			
+		CCScale9Sprite* cell_back;
+		if(state_value == -1)
+		{
+			cell_back = CCScale9Sprite::create(cell_back_filename.c_str()); // , CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+		}
+		else
+		{
+			cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+			cell_back->setContentSize(CCSizeMake(206, 62));
+		}
+		
 		cell_back->setContentSize(CCSizeMake(206, 62));
 		cell_back->setAnchorPoint(CCPointZero);
 		cell_back->setPosition(ccp(385-180,0));
@@ -1009,6 +1032,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
 			
 			CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
+			success_img->setOpacity(0);
 			success_img->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
 			cell_back->addChild(success_img);
 			

@@ -1159,7 +1159,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					detail_label->setPositionX(price_value_label->getPositionX() + v_width/2.f + d_width/2.f);
 					
 //					CCScale9Sprite* detail_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png");		
+					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png");
 
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
@@ -2985,7 +2985,7 @@ void MainFlowScene::setTop()
 	addChild(achievement_count_case, kMainFlowZorder_top+1);
 	
 	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
-	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f-1));
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 1.f));
 	achievement_count_case->addChild(achievement_count_label);
 	
 	CCScaleTo* t_scale5 = CCScaleTo::create(0.1f, 1.3f);

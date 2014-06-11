@@ -561,12 +561,17 @@ void StartSettingPopup::setMain()
 	main_case->addChild(start_menu);
 	start_menu->setTouchPriority(touch_priority);
 	
+	startFormSetter(this);
 	if(mySGD->isTimeEvent(kTimeEventType_heart))
 	{
 		CCSprite* time_event_back = CCSprite::create("startsetting_event.png");
-		time_event_back->setPosition(start_menu->getPosition() + ccp(0,-20));
+		time_event_back->setPosition(start_menu->getPosition() + ccp(0,-20) + ccp(88.5f, 20.5f));
 		main_case->addChild(time_event_back);
-		
+		setFormSetter(time_event_back);
+		KSLabelTTF* time_event_back_lbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartFree), mySGD->getFont().c_str(), 10.f);
+		time_event_back_lbl->disableOuterStroke();
+		time_event_back->addChild(time_event_back_lbl);
+		time_event_back_lbl->setPosition(ccpFromSize(time_event_back->getContentSize()) / 2.f + ccp(3, -5.f));
 //		CCScale9Sprite* n_back = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
 //		n_back->setContentSize(CCSizeMake(100, 22));
 //		n_back->setPosition(start_menu->getPosition() + ccp(0,-22));
@@ -582,9 +587,9 @@ void StartSettingPopup::setMain()
 //		event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
 //		event_back->addChild(event_label);
 		
-		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 10);
-		free_label->setPosition(ccp(65, time_event_back->getContentSize().height/2.f));
-		time_event_back->addChild(free_label);
+//		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 10);
+//		free_label->setPosition(ccp(65, time_event_back->getContentSize().height/2.f));
+//		time_event_back->addChild(free_label);
 	}
 	
 	

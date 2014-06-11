@@ -1542,7 +1542,7 @@ void PlayTutorial::nextStep()
 						  
 						  CCLabelBMFont* time_label = CCLabelBMFont::create("100", "timefont.fnt");
 						  time_label->setColor(ccYELLOW);
-						  time_label->setPosition(ccp(240,17));
+						  time_label->setPosition(ccp(240,17 + 5));
 						  addChild(time_label, 4);
 						  
 						  CCSequence* t_seq2 = CCSequence::create(CCDelayTime::create(0.5f), CCHide::create(), CCDelayTime::create(0.5f), CCShow::create(), NULL);

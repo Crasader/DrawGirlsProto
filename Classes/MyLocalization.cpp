@@ -1165,6 +1165,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("소녀들의 위치를 파악하고 있습니다."), kMyLocalKey_titleTempScript1);
 	ko->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
 	ko->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
+	ko->setObject(CCString::create("하트 공짜"), kMyLocalKey_heartFree);
 	
 	ko->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
 	ko->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
@@ -1570,18 +1571,18 @@ void MyLocal::en()
 	en->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
 	en->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
 	en->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
-	en->setObject(CCString::create("<font>누적영역</font><font color=961>%d%%</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalPercent1);
+	en->setObject(CCString::create("<font>누적영역</font><font color=961> %d%%</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalPercent1);
 	en->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
 	en->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
 	en->setObject(CCString::create("현재 획득영역"), kMyLocalKey_todaymissionTotalPercent4);
-	en->setObject(CCString::create("<font>누적점수</font><font color=961>%d%점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
+	en->setObject(CCString::create("<font>누적점수</font><font color=961> %d%점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
 	en->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	en->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	en->setObject(CCString::create("현재 획득점수"), kMyLocalKey_todaymissionTotalScore4);
 	en->setObject(CCString::create("<font color=961>%s골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
 	en->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold2);
 	en->setObject(CCString::create("현재 획득골드"), kMyLocalKey_todaymissionTotalTakeGold3);
-	en->setObject(CCString::create("<font>부하몹</font><font color=961>%d마리</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalCatch1);
+	en->setObject(CCString::create("<font>부하몹</font><font color=961> %d마리</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalCatch1);
 	en->setObject(CCString::create("%s마리"), kMyLocalKey_todaymissionTotalCatch2);
 	en->setObject(CCString::create(" 사냥하라!!"), kMyLocalKey_todaymissionTotalCatch3);
 	en->setObject(CCString::create("현재 잡은 부하몹"), kMyLocalKey_todaymissionTotalCatch4);
@@ -1870,6 +1871,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
 	en->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
 	
+
+	en->setObject(CCString::create("하트 공짜"), kMyLocalKey_heartFree);
+
 	en->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
 	en->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
 	en->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
@@ -1903,6 +1907,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
 	en->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
 	
+
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
 //	en->setObject(CCString::create("This is a game in which you\nhave to gain as much area as\npossible using up, down, left,\nand right gestures."), kMyLocalKey_tutorial1);
@@ -2287,7 +2292,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
 	ja->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
 	ja->setObject(CCString::create("현재 획득영역"), kMyLocalKey_todaymissionTotalPercent4);
-	ja->setObject(CCString::create("<font>누적점수</font><font color=961>%d%점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
+	ja->setObject(CCString::create("<font>누적점수</font><font color=961>%s점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
 	ja->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	ja->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	ja->setObject(CCString::create("현재 획득점수"), kMyLocalKey_todaymissionTotalScore4);
@@ -2596,6 +2601,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("소녀들의 의상을 점검하고 있습니다."), kMyLocalKey_titleTempScript2);
 	ja->setObject(CCString::create("소녀들을 불러모으고 있습니다."), kMyLocalKey_titleTempScript3);
 	
+
+	ja->setObject(CCString::create("하트 공짜"), kMyLocalKey_heartFree);
+
 	ja->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
 	ja->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
 	ja->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
@@ -2629,6 +2637,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
 	ja->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
 	
+
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
 //	ja->setObject(CCString::create("上下左右にジェスチャーを利用し、\n多くのエリアを獲得しなければなら\nないゲームです。"), kMyLocalKey_tutorial1);
