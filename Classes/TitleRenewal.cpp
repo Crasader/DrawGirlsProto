@@ -192,6 +192,10 @@ void TitleRenewalScene::realInit()
 	state_label->setPosition(ccp(240,30)); // 190
 	addChild(state_label, 2);
 	
+	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
+	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+	state_label->runAction(t_repeat);
+	
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;

@@ -23,7 +23,7 @@ class ASPopupView;
 class RankUpPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
-	static RankUpPopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func);
+	static RankUpPopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func, bool t_is_time_event = false);
 	
 	virtual void completedAnimationSequenceNamed (char const * name);
 	
@@ -35,6 +35,7 @@ private:
 	function<void()> fail_func;
 	
 	bool is_menu_enable;
+	bool is_time_event;
 	
 	TouchSuctionLayer* suction;
 	
@@ -52,7 +53,7 @@ private:
 	LoadingLayer* inapp_loading;
 	ASPopupView* t_popup;
 	
-	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_rank_up_func, function<void()> t_success_func, function<void()> t_fail_func);
+	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_rank_up_func, function<void()> t_success_func, function<void()> t_fail_func, bool t_is_time_event);
 	void giveupAction(CCObject* sender, CCControlEvent t_event);
 	void rankupAction(CCObject* sender, CCControlEvent t_event);
 	

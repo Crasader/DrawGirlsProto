@@ -9,6 +9,7 @@
 #include "SilhouetteData.h"
 #include "StageImgLoader.h"
 #include "DataStorageHub.h"
+#include "StarGoldData.h"
 #include "MyLocalization.h"
 
 void SilhouetteData::startSetting()
@@ -341,7 +342,15 @@ std::string SilhouetteData::getConditionContent( int t_type )
 	else if(t_type == kCLEAR_perfect)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription5);
 	else if(t_type == kCLEAR_sequenceChange)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription6);
 	else if(t_type == kCLEAR_timeLimit)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription7);
-	else											return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription0);
+	else
+	{
+		if(mySGD->isTimeEvent(kTimeEventType_clear))
+		{
+			return_value = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_missionDiscription0), mySGD->getTimeEventFloatValue(kTimeEventType_clear))->getCString();
+		}
+		else
+			return_value = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_missionDiscription0), 85.f)->getCString();
+	}
 
 	return return_value;
 }
