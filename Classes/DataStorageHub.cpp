@@ -364,6 +364,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	else if(t_name == kDSH_Key_atTimeShowEventRubyShop)						return_value = "ats_ers";
 	else if(t_name == kDSH_Key_atTimeShowLevelupGuide)						return_value = "ats_lg";
 	
+	else if(t_name == kDSH_Key_stageHighRank_int1)							return_value = "stghr%d";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
