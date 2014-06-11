@@ -3203,6 +3203,13 @@ void Maingame::scoreAttackMissile(int t_damage)
 	t_missile->setPosition(origin_position);
 	addChild(t_missile, myUIZorder);
 	
+	
+	
+	
+	
+	
+	
+	
 	CCPoint base_position = ccp(110, myDSH->ui_center_y+70+40);
 	CCPoint random_position = ccp(rand()%41-20, rand()%31-15);
 	CCPoint sum_position = base_position + random_position;

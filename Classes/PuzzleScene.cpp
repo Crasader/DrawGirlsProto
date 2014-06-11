@@ -1225,6 +1225,13 @@ void PuzzleScene::setPuzzle()
 			have_card_cnt++;
 	}
 	
+	if(NSDS_GB(puzzle_number, kSDS_PZ_isEvent_b))
+	{
+		CCSprite* t_twinkle = KS::loadCCBI<CCSprite*>(this, "puzzle_twinkle.ccbi").first;
+		t_twinkle->setPosition(ccp(0,0));
+		puzzle_node->addChild(t_twinkle, kPuzzleNodeZorder_haveCardCntCase);
+	}
+	
 //	CCLabelTTF* have_card_cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d / %d", have_card_cnt, total_card_cnt)->getCString(), mySGD->getFont().c_str(), 13);
 //	have_card_cnt_label->setPosition(ccp(have_card_cnt_case->getContentSize().width/2.f-20, have_card_cnt_case->getContentSize().height/2.f));
 //	have_card_cnt_case->addChild(have_card_cnt_label);
@@ -1864,6 +1871,13 @@ void PuzzleScene::setRight()
 					CCSprite* t_star = CCSprite::create("puzzle_right_staroff.png");
 					t_star->setPosition(ccpAdd(step_position, ccp(-43.5f+j*13.5f,10)));
 					right_body->addChild(t_star);
+				}
+				
+				if(NSDS_GB(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_isEvent_b))
+				{
+					CCSprite* n_event = CCSprite::create("puzzle_event.png");
+					n_event->setPosition(step_position + ccp(17,11.5f));
+					right_body->addChild(n_event);
 				}
 			}
 		}
