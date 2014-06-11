@@ -110,6 +110,9 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 	}
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
+	close_button->setFunction([=](CCObject* t){
+		closeAction(t);
+	});
 	close_button->setPosition(86.75, 53.75f);
 	m_container->addChild(close_button);
 	setFormSetter(ment_label);
@@ -121,7 +124,7 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 	});
 }
 
-void PuzzleSuccessAndPerfect::closeAction(CCObject* sender, CCControlEvent t_event)
+void PuzzleSuccessAndPerfect::closeAction(CCObject* sender)
 {
 	if(!is_menu_enable)
 		return;
