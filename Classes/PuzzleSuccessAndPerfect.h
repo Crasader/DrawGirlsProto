@@ -36,7 +36,7 @@ private:
 	CCNode* m_container;
 	
 	void myInit(int t_touch_priority, function<void()> t_end_func, bool t_is_success);
-	void closeAction(CCObject* sender, CCControlEvent t_event);
+	void closeAction(CCObject* sender);
 };
 
 #endif /* defined(__DGproto__PuzzleSuccessAndPerfect__) */

@@ -3091,7 +3091,7 @@ void MainFlowScene::countingAchievement()
 		achievement_count_label->setString(CCString::createWithFormat("%d", reward_count)->getCString());
 	}
 	
-	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f-1));
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 1));
 }
 
 void MainFlowScene::popupClose()
