@@ -640,7 +640,7 @@ void StartSettingPopup::setMain()
 	missile_data_level->setPosition(ccp(53,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 	setFormSetter(missile_data_power);
 	missile_data_power->setPosition(ccp(111,95));
 	main_case->addChild(missile_data_power);

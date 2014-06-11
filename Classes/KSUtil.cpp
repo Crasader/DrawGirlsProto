@@ -30,16 +30,60 @@ namespace KS
 	string insert_separator(const float& s, const string& format, char separator, int width)
 	{
 		if(s < 0)
-			return "-" + insert_separator(CCString::createWithFormat(format.c_str(), -s)->getCString());
+		{
+			string t_total = CCString::createWithFormat(format.c_str(), -s)->getCString();
+			size_t pos = t_total.find(".");
+			if(pos != std::string::npos)
+			{
+				return "-" + insert_separator(t_total.substr(0,pos)) + t_total.substr(pos, t_total.length()-pos);
+			}
+			else
+			{
+				return "-" + insert_separator(t_total);
+			}
+		}
 		else
-			return insert_separator(CCString::createWithFormat(format.c_str(), s)->getCString());
+		{
+			string t_total = CCString::createWithFormat(format.c_str(), -s)->getCString();
+			size_t pos = t_total.find(".");
+			if(pos != std::string::npos)
+			{
+				return insert_separator(t_total.substr(0,pos)) + t_total.substr(pos, t_total.length()-pos);
+			}
+			else
+			{
+				return insert_separator(CCString::createWithFormat(format.c_str(), s)->getCString());
+			}
+		}
 	}
 	string insert_separator(const double& s, const string& format, char separator, int width)
 	{
 		if(s < 0)
-			return "-" + insert_separator(CCString::createWithFormat(format.c_str(), -s)->getCString());
+		{
+			string t_total = CCString::createWithFormat(format.c_str(), -s)->getCString();
+			size_t pos = t_total.find(".");
+			if(pos != std::string::npos)
+			{
+				return "-" + insert_separator(t_total.substr(0,pos)) + t_total.substr(pos, t_total.length()-pos);
+			}
+			else
+			{
+				return "-" + insert_separator(t_total);
+			}
+		}
 		else
-			return insert_separator(CCString::createWithFormat(format.c_str(), s)->getCString());
+		{
+			string t_total = CCString::createWithFormat(format.c_str(), -s)->getCString();
+			size_t pos = t_total.find(".");
+			if(pos != std::string::npos)
+			{
+				return insert_separator(t_total.substr(0,pos)) + t_total.substr(pos, t_total.length()-pos);
+			}
+			else
+			{
+				return insert_separator(CCString::createWithFormat(format.c_str(), s)->getCString());
+			}
+		}
 	}
 	void setOpacity(CCObject* object, GLubyte opaque)
 	{

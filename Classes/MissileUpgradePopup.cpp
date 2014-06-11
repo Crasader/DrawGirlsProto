@@ -145,7 +145,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	missile_data_level->setPosition(ccp(level_case->getContentSize().width/2.f-30.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_level);
 	
-	missile_data_power = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 //	missile_data_power->setColor(ccc3(255, 222, 0));
 	missile_data_power->enableOuterStroke(ccBLACK, 0.5f);
 	missile_data_power->setAnchorPoint(ccp(0.5f,0.5f));
@@ -479,7 +479,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 			price_type->setPosition(t_position);
 			parent_node->addChild(price_type);
 			
-			price_label->setString(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString());
+			price_label->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString()).c_str());
 		}
 	}
 	

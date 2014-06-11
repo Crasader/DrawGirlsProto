@@ -64,6 +64,7 @@ class SearchEye;
 class CumberShowWindow;
 class EffectSprite;
 class FloatingCoinParent;
+class StartMapGacha;
 class Maingame : public CCLayer
 {
 public:
@@ -264,6 +265,8 @@ private:
 	
 	vector<SearchEye*> search_eye_vector;
 //	SearchEye* search_eye;
+	
+	StartMapGacha* t_smg;
 	
 	CCNode* screen_node;
 	

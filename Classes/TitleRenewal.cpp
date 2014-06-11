@@ -176,9 +176,15 @@ void TitleRenewalScene::realInit()
 	title_name->setPosition(ccp(240,50));//10));
 	addChild(title_name, 1);
 	
+	CCPoint convert_position = CCPointZero;
+	
+	convert_position.x = (480/myDSH->screen_convert_rate - 480)/2.f;
+	if(myDSH->ui_top > 320)
+		convert_position.y = (myDSH->ui_top - 320)/2.f;
+	
 	CCSprite* ratings = CCSprite::create("game_ratings.png");
 	ratings->setAnchorPoint(ccp(1,1));
-	ratings->setPosition(ccpFromSize(title_img->getContentSize()/2.f) + ccp(240-20, 160-15));
+	ratings->setPosition(ccpFromSize(title_img->getContentSize()/2.f) + ccp(240-10, 160-10) + convert_position);
 	title_img->addChild(ratings);
 	
 	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 15, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
@@ -409,6 +415,10 @@ void TitleRenewalScene::successLogin()
 	Json::Value attendance_param;
 	attendance_param["memberID"] = myHSP->getMemberID();
 	command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
+	
+	Json::Value rank_reward_param;
+	rank_reward_param["memberID"] = myHSP->getMemberID();
+	command_list.push_back(CommandParam("checkweeklyreward", rank_reward_param, json_selector(this, TitleRenewalScene::resultCheckWeeklyReward)));
 	
 	Json::Value achieve_param;
 	achieve_param["memberID"] = myHSP->getSocialID();
@@ -719,7 +729,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setGachaOnePercentFee(result_data["gachaOnePercentFee"].asInt());
 		
 		mySGD->setBonusItemCnt(kIC_doubleItem, result_data["bonusItemCntDoubleItem"].asInt());
-		mySGD->setBonusItemCnt(kIC_longTime, result_data["bonusItemCntLongTime"].asInt());
+		mySGD->setBonusItemCnt(kIC_magnet, result_data["bonusItemCntMagnet"].asInt());
 		mySGD->setBonusItemCnt(kIC_baseSpeedUp, result_data["bonusItemCntBaseSpeedUp"].asInt());
 		mySGD->setAiAdderOnDrewOrDamaged(result_data["aiAdderOnDrewOrDamaged"].asFloat());
 		mySGD->setFuryPercent(result_data["furyPercent"].asFloat());
@@ -787,6 +797,24 @@ void TitleRenewalScene::resultCheckAttendanceEvent(Json::Value result_data)
 		Json::Value attendance_param;
 		attendance_param["memberID"] = myHSP->getMemberID();
 		command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultCheckWeeklyReward(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->initRankReward(result_data);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value rank_reward_param;
+		rank_reward_param["memberID"] = myHSP->getMemberID();
+		command_list.push_back(CommandParam("checkweeklyreward", rank_reward_param, json_selector(this, TitleRenewalScene::resultCheckWeeklyReward)));
 	}
 	
 	receive_cnt--;

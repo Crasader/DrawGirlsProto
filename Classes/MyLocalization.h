@@ -645,7 +645,42 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_titleTempScript1,
 	kMyLocalKey_titleTempScript2,
 	kMyLocalKey_titleTempScript3,
-	kMyLocalKey_heartFree
+
+	kMyLocalKey_heartFree,
+
+	
+	kMyLocalKey_rankRewardTitle,
+	kMyLocalKey_rankRewardContent,
+	kMyLocalKey_rankRewardStageTitle,
+	kMyLocalKey_rankRewardStageScore,
+	kMyLocalKey_rankRewardStageRank,
+	kMyLocalKey_rankRewardStagePlayCount,
+	kMyLocalKey_rankRewardEndlessTitle,
+	kMyLocalKey_rankRewardEndlessScore,
+	kMyLocalKey_rankRewardEndlessRank,
+	kMyLocalKey_rankRewardEndlessVictory,
+	kMyLocalKey_rankRewardStageReward,
+	kMyLocalKey_rankRewardEndlessReward,
+	kMyLocalKey_rankRewardStageRankValue,
+	kMyLocalKey_rankRewardEndlessRankValue,
+	kMyLocalKey_rankRewardEndlessVictoryScript,
+	
+	kMyLocalKey_rankRewardRankValue,
+	
+	kMyLocalKey_rankRewardGoodsTypeGold,
+	kMyLocalKey_rankRewardGoodsTypeRuby,
+	kMyLocalKey_rankRewardGoodsTypeItem9,
+	kMyLocalKey_rankRewardGoodsTypeItem6,
+	kMyLocalKey_rankRewardGoodsTypeItem11,
+	kMyLocalKey_rankRewardGoodsTypePass1,
+	kMyLocalKey_rankRewardGoodsTypePass2,
+	kMyLocalKey_rankRewardGoodsTypePass3,
+	kMyLocalKey_rankRewardGoodsTypePass4,
+	kMyLocalKey_rankRewardGoodsTypePass5,
+	kMyLocalKey_rankRewardGoodsTypePass6,
+	kMyLocalKey_rankRewardGoodsTypeMany
+	
+
 }MyLocalKey;
 
 

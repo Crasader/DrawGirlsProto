@@ -48,6 +48,8 @@
 #include "FormSetter.h"
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
+#include "RankRewardPopup.h"
+
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -2673,17 +2675,56 @@ void MainFlowScene::topOnLight()
 		
 		AttendancePopup* t_popup = AttendancePopup::create(-300, [=]()
 														   {
-															   if(mySGD->is_today_mission_first)
+															   if(mySGD->is_on_rank_reward)
 																{
-																	mySGD->is_today_mission_first = false;
-																	
-																	TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																	RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
+																													   {
+																														   if(mySGD->is_today_mission_first)
+																														   {
+																															   mySGD->is_today_mission_first = false;
+																															   
+																															   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																															   addChild(t_popup, kMainFlowZorder_popup);
+																														   }
+																														   else
+																														   {
+																															   is_menu_enable = true;
+																														   }
+																													   });
 																	addChild(t_popup, kMainFlowZorder_popup);
 																}
 															   else
 																{
-																	is_menu_enable = true;
+																	if(mySGD->is_today_mission_first)
+																	{
+																		mySGD->is_today_mission_first = false;
+																		
+																		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																		addChild(t_popup, kMainFlowZorder_popup);
+																	}
+																	else
+																	{
+																		is_menu_enable = true;
+																	}
 																}
+														   });
+		addChild(t_popup, kMainFlowZorder_popup);
+	}
+	else if(mySGD->is_on_rank_reward)
+	{
+		RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
+														   {
+															   if(mySGD->is_today_mission_first)
+															   {
+																   mySGD->is_today_mission_first = false;
+																   
+																   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																   addChild(t_popup, kMainFlowZorder_popup);
+															   }
+															   else
+															   {
+																   is_menu_enable = true;
+															   }
 														   });
 		addChild(t_popup, kMainFlowZorder_popup);
 	}

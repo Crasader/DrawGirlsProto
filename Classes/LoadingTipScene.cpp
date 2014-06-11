@@ -373,11 +373,11 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	return loading_tip_node;
 }
 
-CCNode* LoadingTipScene::getOpenCurtainNode()
+CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 {
 	CCNode* loading_tip_node = CCNode::create();
 	
-	if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
+	if(!is_gameover && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
 	{
 		CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
 		loading_tip_back->setPosition(ccp(0,0));

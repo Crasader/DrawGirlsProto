@@ -821,6 +821,11 @@ public:
 	void initAttendance(Json::Value result_data);
 	void resetAttendance();
 	
+	bool is_on_rank_reward;
+	Json::Value rank_reward_data;
+	void initRankReward(Json::Value result_data);
+	void resetRankReward();
+	
 	KSProtectVar<int> area_score;
 	KSProtectVar<int> damage_score;
 	KSProtectVar<int> combo_score;
