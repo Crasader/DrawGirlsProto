@@ -411,7 +411,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	int after_damage = mySGD->getSelectedCharacterHistory().power.getV();
 	
 	missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
-	missile_data_power->setString(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), after_damage)->getCString()).c_str());
+	missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(after_damage).c_str())->getCString());
 	
 	CCPoint missile_position;
 	if(missile_img)
