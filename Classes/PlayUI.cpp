@@ -12,6 +12,7 @@
 #include "OnePercentGame.h"
 #include "FlagSelector.h"
 #include "MyLocalization.h"
+#include "KSJuniorBase.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -1176,7 +1177,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
 			{
 				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
-				   countingCnt.getV() >= myAchieve->getCondition((AchievementCode)i))
+				   countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
 				{
 					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
@@ -1249,6 +1250,21 @@ void PlayUI::conditionClear ()
 	is_cleared_cdt = true;
 	mission_button->doClose();
 	mission_button->isSuccessed(true);
+	
+	if(mission_back)
+	{
+		mission_back->removeAllChildren();
+		CCSprite* t_success_img = CCSprite::create(CCString::createWithFormat("ui_mission_clear_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+		t_success_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
+		mission_back->addChild(t_success_img);
+	}
+	
+	for(int i=0;i<mission_clear_remove_nodes.size();i++)
+	{
+		mission_clear_remove_nodes[i]->removeFromParent();
+	}
+	mission_clear_remove_nodes.clear();
+	
 //	((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
 	
 //	CCSprite* condition_clear = CCSprite::create("condition_clear.png");
@@ -1754,91 +1770,168 @@ void PlayUI::scoreAttackMissile(int t_damage)
 								 myGD->communication("Main_stopBomb");
 								 
 								 CCPoint origin_position = ccp(440, myDSH->ui_center_y+70);
+								 CCPoint final_position = ccp(40, myDSH->ui_center_y);
 								 
 								 CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile_you.ccbi").first;
 								 t_missile->setPosition(origin_position);
 								 addChild(t_missile);
 								 
-								 CCPoint base_position = ccp(440-70, myDSH->ui_center_y+70+40);
-								 CCPoint random_position = ccp(rand()%41-20, rand()%31-15);
-								 CCPoint sum_position = base_position + random_position;
-								 CCPoint sub_position = sum_position - origin_position;
+								 float alpha_value = 150.f/180.f*M_PI;
+								 float v_zero = (final_position.x-origin_position.x)/60.f/cosf(alpha_value);
+								 float v_x_zero = v_zero*cosf(alpha_value);
+								 float v_y_zero = v_zero*sinf(alpha_value);
+								 float gravity = (-final_position.y + origin_position.y + v_zero*sinf(alpha_value)*60.f)/3600.f*2.f;
 								 
-								 float angle = atan2(sum_position.y - origin_position.y, sum_position.x - origin_position.x)/M_PI*180.f;
-								 t_missile->setRotation(-angle+180);
-								 
-								 addChild(KSGradualValue<float>::create(0.f, 1.f, 20.f/30.f, [=](float t)
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 																		{
-																			t_missile->setPosition(origin_position + sub_position*t);
+																			CCPoint before_position = t_missile->getPosition();
+																			t_missile->setPosition(ccp(origin_position.x + v_x_zero*t*60, origin_position.y + v_y_zero*t*60 - gravity*t*t*60*60/2));
+																			
+																			t_missile->setRotation(-(t_missile->getPosition() - before_position).getAngle()/M_PI*180.f + 180);
 																		}, [=](float t)
 																		{
-																			t_missile->setPosition(origin_position + sub_position);
-																			CCPoint final_position = ccp(40,myDSH->ui_center_y);
-																			CCPoint t_sub_position = final_position - sum_position;
+																			CCPoint before_position = t_missile->getPosition();
+																			t_missile->setPosition(ccp(origin_position.x + v_x_zero*1.f*60, origin_position.y + v_y_zero*1.f*60 - gravity*1.f*1.f*60*60/2));
 																			
-																			float angle2 = atan2(final_position.y - sum_position.y, final_position.x - sum_position.x)/M_PI*180.f;
-																			t_missile->setRotation(-angle2+180);
+																			t_missile->setRotation(-(t_missile->getPosition() - before_position).getAngle()/M_PI*180.f + 180);
 																			
-																			addChild(KSGradualValue<float>::create(0.f, 1.f, 10.f/30.f, [=](float t)
+																			t_missile->removeFromParent();
+																			
+																			CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
+																			bomb_img->setPosition(ccp(40, myDSH->ui_center_y));
+																			addChild(bomb_img);
+																			
+																			bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
+																			
+																			KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
+																			t_label->setColor(ccRED);
+																			t_label->enableOuterStroke(ccBLACK, 1.f);
+																			t_label->setPosition(ccp(40, myDSH->ui_center_y));
+																			t_label->setScale(0.7f);
+																			addChild(t_label);
+																			
+																			addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
 																												   {
-																													   t_missile->setPosition(sum_position + t_sub_position*t);
+																													   t_label->setOpacity(t*255);
+																													   t_label->setScale(0.7f+t);
 																												   }, [=](float t)
 																												   {
-																													   t_missile->setPosition(sum_position + t_sub_position);
-																													   t_missile->removeFromParent();
-																													   
-																													   CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
-																													   bomb_img->setPosition(ccp(40, myDSH->ui_center_y));
-																													   addChild(bomb_img);
-																													   
-																													   bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
-																													   
-																													   KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
-																													   t_label->setColor(ccRED);
-																													   t_label->enableOuterStroke(ccBLACK, 1.f);
-																													   t_label->setPosition(ccp(40, myDSH->ui_center_y));
-																													   t_label->setScale(0.7f);
-																													   addChild(t_label);
-																													   
-																													   addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+																													   t_label->setOpacity(255);
+																													   t_label->setScale(1.7f);
+																													   addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
 																																							  {
-																																								  t_label->setOpacity(t*255);
-																																								  t_label->setScale(0.7f+t);
+																																								  t_label->setScale(1.7f-t*0.5f);
 																																							  }, [=](float t)
 																																							  {
-																																								  t_label->setOpacity(255);
-																																								  t_label->setScale(1.7f);
-																																								  addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
-																																																		 {
-																																																			 t_label->setScale(1.7f-t*0.5f);
-																																																		 }, [=](float t)
-																																																		 {
-																																																			 t_label->setScale(1.2f);
-																																																			 addChild(KSTimer::create(8.f/30.f, [=]()
+																																								  t_label->setScale(1.2f);
+																																								  addChild(KSTimer::create(8.f/30.f, [=]()
+																																														   {
+																																															   addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																																									  {
-																																																										  addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
-																																																																				 {
-																																																																					 t_label->setPosition(ccp(40, myDSH->ui_center_y-25*t));
-																																																																					 t_label->setScale(1.2f-0.3f*t);
-																																																																					 t_label->setOpacity(255-t*255);
-																																																																				 }, [=](float t)
-																																																																				 {
-																																																																					 t_label->setPosition(ccp(40, myDSH->ui_center_y-25));
-																																																																					 t_label->setScale(0.9f);
-																																																																					 t_label->setOpacity(0);
-																																																																					 t_label->removeFromParent();
-																																																																				 }));
+																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-25*t));
+																																																										  t_label->setScale(1.2f-0.3f*t);
+																																																										  t_label->setOpacity(255-t*255);
+																																																									  }, [=](float t)
+																																																									  {
+																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-25));
+																																																										  t_label->setScale(0.9f);
+																																																										  t_label->setOpacity(0);
+																																																										  t_label->removeFromParent();
 																																																									  }));
-																																																		 }));
+																																														   }));
 																																							  }));
-																													   
-																													   float before_score = score_value.getV();
-																													   damaged_score = damaged_score.getV() - t_damage;
-																													   CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
-																													   score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
-																													   
 																												   }));
+																			
+																			float before_score = score_value.getV();
+																			damaged_score = damaged_score.getV() - t_damage;
+																			CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
+																			score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
+																			
 																		}));
+								 
+								 
+								 
+								 
+//								 CCPoint base_position = ccp(440-70, myDSH->ui_center_y+70+40);
+//								 CCPoint random_position = ccp(rand()%41-20, rand()%31-15);
+//								 CCPoint sum_position = base_position + random_position;
+//								 CCPoint sub_position = sum_position - origin_position;
+//
+//								 float angle = atan2(sum_position.y - origin_position.y, sum_position.x - origin_position.x)/M_PI*180.f;
+//								 t_missile->setRotation(-angle+180);
+//
+//								 addChild(KSGradualValue<float>::create(0.f, 1.f, 20.f/30.f, [=](float t)
+//																		{
+//																			t_missile->setPosition(origin_position + sub_position*t);
+//																		}, [=](float t)
+//																		{
+//																			t_missile->setPosition(origin_position + sub_position);
+//																			CCPoint final_position = ccp(40,myDSH->ui_center_y);
+//																			CCPoint t_sub_position = final_position - sum_position;
+//																			
+//																			float angle2 = atan2(final_position.y - sum_position.y, final_position.x - sum_position.x)/M_PI*180.f;
+//																			t_missile->setRotation(-angle2+180);
+//																			
+//																			addChild(KSGradualValue<float>::create(0.f, 1.f, 10.f/30.f, [=](float t)
+//																												   {
+//																													   t_missile->setPosition(sum_position + t_sub_position*t);
+//																												   }, [=](float t)
+//																												   {
+//																													   t_missile->setPosition(sum_position + t_sub_position);
+//																													   t_missile->removeFromParent();
+//																													   
+//																													   CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
+//																													   bomb_img->setPosition(ccp(40, myDSH->ui_center_y));
+//																													   addChild(bomb_img);
+//																													   
+//																													   bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
+//																													   
+//																													   KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
+//																													   t_label->setColor(ccRED);
+//																													   t_label->enableOuterStroke(ccBLACK, 1.f);
+//																													   t_label->setPosition(ccp(40, myDSH->ui_center_y));
+//																													   t_label->setScale(0.7f);
+//																													   addChild(t_label);
+//																													   
+//																													   addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+//																																							  {
+//																																								  t_label->setOpacity(t*255);
+//																																								  t_label->setScale(0.7f+t);
+//																																							  }, [=](float t)
+//																																							  {
+//																																								  t_label->setOpacity(255);
+//																																								  t_label->setScale(1.7f);
+//																																								  addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+//																																																		 {
+//																																																			 t_label->setScale(1.7f-t*0.5f);
+//																																																		 }, [=](float t)
+//																																																		 {
+//																																																			 t_label->setScale(1.2f);
+//																																																			 addChild(KSTimer::create(8.f/30.f, [=]()
+//																																																									  {
+//																																																										  addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+//																																																																				 {
+//																																																																					 t_label->setPosition(ccp(40, myDSH->ui_center_y-25*t));
+//																																																																					 t_label->setScale(1.2f-0.3f*t);
+//																																																																					 t_label->setOpacity(255-t*255);
+//																																																																				 }, [=](float t)
+//																																																																				 {
+//																																																																					 t_label->setPosition(ccp(40, myDSH->ui_center_y-25));
+//																																																																					 t_label->setScale(0.9f);
+//																																																																					 t_label->setOpacity(0);
+//																																																																					 t_label->removeFromParent();
+//																																																																				 }));
+//																																																									  }));
+//																																																		 }));
+//																																							  }));
+//																													   
+//																													   float before_score = score_value.getV();
+//																													   damaged_score = damaged_score.getV() - t_damage;
+//																													   CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
+//																													   score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
+//																													   
+//																												   }));
+//																		}));
 								 
 								 
 //								 CCSprite* t_missile = CCSprite::create("blind_drop.png");
@@ -2497,7 +2590,7 @@ void PlayUI::catchSubCumber ()
 	ing_cdt_cnt++;
 	
 	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString(), 1);
-//	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
 void PlayUI::takeBigArea ()
@@ -2519,7 +2612,7 @@ void PlayUI::takeItemCollect ()
 	ing_cdt_cnt++;
 	
 	mission_button->setTextAtIndex(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString(), 1);
-//	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString());
+	((CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel))->setString(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString());
 	if(ing_cdt_cnt >= clr_cdt_cnt)		conditionClear();
 }
 
@@ -2769,7 +2862,7 @@ void PlayUI::myInit ()
 	
 	mission_button = RollingButton::create("");
 	mission_button->setPosition(ccp(68, myDSH->ui_top-22+UI_OUT_DISTANCE));
-//	mission_button->setVisible(!mySGD->is_endless_mode);
+	mission_button->setVisible(false); // 원래 주석
 	addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_button->setPositionY(t);}, [=](float t){mission_button->setPositionY(myDSH->ui_top-22);}));
 	
 	addChild(mission_button,2);
@@ -2779,13 +2872,13 @@ void PlayUI::myInit ()
 	mission_button->setOpenFunction([&](){
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mission_button->runAction(CCMoveBy::create(0.3,ccp(174,0)));
-		top_center_node->setVisible(false);
+//		top_center_node->setVisible(false);
 	});
 	
 	mission_button->setCloseFunction([&](){
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		mission_button->runAction(CCMoveBy::create(0.3,ccp(-174,0)));
-		top_center_node->setVisible(true);
+//		top_center_node->setVisible(true);
 	});
 	
 //	CCPoint icon_menu_position;
@@ -2796,6 +2889,9 @@ void PlayUI::myInit ()
 //	CCSprite* condition_back = CCSprite::create("ui_condition_back.png");
 //	condition_back->setPosition(icon_menu_position);
 //	addChild(condition_back);
+	
+	mission_back = NULL;
+	mission_clear_remove_nodes.clear();
 	
 	if(clr_cdt_type == kCLEAR_bossLifeZero)
 	{
@@ -2846,9 +2942,73 @@ void PlayUI::myInit ()
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString());
 		
-//		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
-//		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
-//		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-22+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-22);}));
+		
+		CCNode* junior_node = CCNode::create();
+		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-25,0));
+		mission_back->addChild(junior_node);
+		
+		std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
+		
+		Json::Reader reader;
+		Json::Value juniorJson;
+		reader.parse(juniorInfo, juniorJson);
+		
+		int juniorIndex = 0;
+		juniorJson = juniorJson[juniorIndex];
+		{
+			std::string juniorType = juniorJson["type"].asString();
+			std::string ccbiName = juniorType;
+			std::string ccbiname2 = ccbiName;
+			
+			if(ccbiname2.substr(0,1)=="1") {
+				ccbiname2="bear";
+			}
+			////////////////////////////////////////////
+			
+			//		m_directionAngleDegree = m_well512.GetValue(0, 360);
+			
+			//		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+			//		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
+			
+			//		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+			
+			
+			std::string _ccbiName = (ccbiname2 + ".ccbi").c_str();
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(nodeLoader);
+			CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), this);
+			
+			CCSprite* m_juniorSprite = dynamic_cast<CCSprite*>(p);
+//			m_juniorAnimation = reader->getAnimationManager();
+//			m_juniorAnimation->setDelegate(this);
+			reader->release();
+			
+			if(m_juniorSprite != NULL)
+			{
+				junior_node->addChild(m_juniorSprite, 1001);
+				m_juniorSprite->setScale(0.5f);
+				m_juniorSprite->setPosition(CCPointZero);
+			}
+		}
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat("/%d", clr_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(t_condition_label, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+		clr_cdt_label->setColor(ccc3(255, 170, 20));
+		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
 	else if(clr_cdt_type == kCLEAR_bigArea)
 	{
@@ -2900,6 +3060,33 @@ void PlayUI::myInit ()
 		
 		mission_button->setTextAtIndex(mySD->getConditionContent().c_str(), 0);
 		mission_button->addText(CCString::createWithFormat("%d/%d", ing_cdt_cnt.getV(), clr_cdt_cnt.getV())->getCString());
+		
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-22+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-22);}));
+		
+		CCSprite* item_img = CCSprite::create("mission_item.png");
+		item_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-25,0));
+		mission_back->addChild(item_img);
+		
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat("/%d", clr_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(t_condition_label, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+		clr_cdt_label->setColor(ccc3(255, 170, 20));
+		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-22+UI_OUT_DISTANCE, myDSH->ui_top-22, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-22);}));
+		mission_clear_remove_nodes.push_back(clr_cdt_label);
+		
 		
 //		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", ing_cdt_cnt, clr_cdt_cnt)->getCString(), mySGD->getFont().c_str(), 12);
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));

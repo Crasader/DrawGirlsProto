@@ -537,7 +537,11 @@ float StarGoldData::getPercentage()
 
 void StarGoldData::setStageGrade(int t_i)
 {
+	if(stage_grade.getV() != 0)
+		score = score.getV()/stage_grade.getV();
+	
 	stage_grade = t_i;
+	score = score.getV()*stage_grade.getV();
 }
 int StarGoldData::getStageGrade()
 {

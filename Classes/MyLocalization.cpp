@@ -890,7 +890,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("결벽주의자"), kMyLocalKey_missionTitle6);
 	ko->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
-	ko->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ko->setObject(CCString::create("<font color=961 size=13>%.0f%%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	ko->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	ko->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	ko->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -1198,6 +1198,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass5);
 	ko->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
 	ko->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
+	
+	ko->setObject(CCString::create("카드 승급 이벤트!"), kMyLocalKey_rankUpEventTitle);
+	ko->setObject(CCString::create("승급 비용 공짜! 승급 확률 100%!!"), kMyLocalKey_rankUpEventContent);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -1604,7 +1607,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("비지니스맨"), kMyLocalKey_missionTitle7);
 	
 	
-	en->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	en->setObject(CCString::create("<font color=961 size=13>%.0f%%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	en->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	en->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	en->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -1906,6 +1909,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass5);
 	en->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
 	en->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
+	
+	en->setObject(CCString::create("카드 승급 이벤트!"), kMyLocalKey_rankUpEventTitle);
+	en->setObject(CCString::create("승급 비용 공짜! 승급 확률 100%!!"), kMyLocalKey_rankUpEventContent);
 	
 
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -2323,7 +2329,7 @@ void MyLocal::ja()
 	
 	
 	
-	ja->setObject(CCString::create("<font color=961 size=13>85%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
+	ja->setObject(CCString::create("<font color=961 size=13>%.0f%%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription0);
 	ja->setObject(CCString::create("<font color=999 size=13>보스의 에너지를 모두 소진시켜라!"), kMyLocalKey_missionDiscription1);
 	ja->setObject(CCString::create("<font color=999 size=13>부하 몬스터를 가두어 잡으세요!"), kMyLocalKey_missionDiscription2);
 	ja->setObject(CCString::create("<font color=999 size=13>정해진 횟수만큼 한번에 많이 먹으세요!"), kMyLocalKey_missionDiscription3);
@@ -2636,6 +2642,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass5);
 	ja->setObject(CCString::create("티켓"), kMyLocalKey_rankRewardGoodsTypePass6);
 	ja->setObject(CCString::create("선물상자"), kMyLocalKey_rankRewardGoodsTypeMany);
+	
+	ja->setObject(CCString::create("카드 승급 이벤트!"), kMyLocalKey_rankUpEventTitle);
+	ja->setObject(CCString::create("승급 비용 공짜! 승급 확률 100%!!"), kMyLocalKey_rankUpEventContent);
 	
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);

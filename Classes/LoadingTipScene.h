@@ -38,7 +38,7 @@ public:
 private:
 	
 	string next_scene_name;
-	CCLabelBMFont* progress_label;
+	CCLabelTTF* progress_label;
 	int total_load_img;
 	int ing_load_img;
 	

@@ -343,6 +343,9 @@ private:
 	
 	CCNode* thumb_node;
 	
+	CCSprite* mission_back;
+	vector<CCNode*> mission_clear_remove_nodes;
+	
 	bool is_used_heartUpItem;
 	bool is_used_longTimeItem;
 	

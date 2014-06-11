@@ -21,10 +21,10 @@
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 
-RankUpPopup* RankUpPopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func)
+RankUpPopup* RankUpPopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func, bool t_is_time_event)
 {
 	RankUpPopup* t_mup = new RankUpPopup();
-	t_mup->myInit(t_touch_priority, t_end_func, t_rankup_func, t_success_func, t_fail_func);
+	t_mup->myInit(t_touch_priority, t_end_func, t_rankup_func, t_success_func, t_fail_func, t_is_time_event);
 	t_mup->autorelease();
 	return t_mup;
 }
@@ -38,36 +38,40 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 		if(is_menu_enable)
 			return;
 		
-		bool is_ok = rand()%1000 <= (mySGD->getRankUpBaseRate() + mySGD->getRankUpAddRate())*1000.f;
+		bool is_ok = rand()%1000 <= (mySGD->getRankUpBaseRate() + mySGD->getRankUpAddRate())*1000.f || is_time_event;
 		
 		if(!is_ok)
 			mySGD->setRankUpAddRate(mySGD->getRankUpAddRate() + mySGD->getRankUpRateDistance());
 		else
 		{
 			mySGD->setRankUpAddRate(0.f);
-			int take_grade = 1;
-			if(mySGD->is_showtime && mySGD->is_exchanged)
-				take_grade = 4;
-			else if(mySGD->is_showtime)
-				take_grade = 3;
-			else if(mySGD->is_exchanged)
-				take_grade = 2;
-			else
-				take_grade = 1;
 			
-			if(take_grade == 2)
+			if(!is_time_event)
 			{
-				mySGD->is_showtime = true;
-				mySGD->is_exchanged = false;
-				mySGD->setPercentage(1.f);
-				mySGD->setStageGrade(3);
-			}
-			else if(take_grade == 3)
-			{
-				mySGD->is_showtime = true;
-				mySGD->is_exchanged = true;
-				mySGD->setPercentage(1.f);
-				mySGD->setStageGrade(4);
+				int take_grade = 1;
+				if(mySGD->is_showtime && mySGD->is_exchanged)
+					take_grade = 4;
+				else if(mySGD->is_showtime)
+					take_grade = 3;
+				else if(mySGD->is_exchanged)
+					take_grade = 2;
+				else
+					take_grade = 1;
+				
+				if(take_grade == 2)
+				{
+					mySGD->is_showtime = true;
+					mySGD->is_exchanged = false;
+					mySGD->setPercentage(1.f);
+					mySGD->setStageGrade(3);
+				}
+				else if(take_grade == 3)
+				{
+					mySGD->is_showtime = true;
+					mySGD->is_exchanged = true;
+					mySGD->setPercentage(1.f);
+					mySGD->setStageGrade(4);
+				}
 			}
 		}
 		
@@ -180,9 +184,10 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 	}
 }
 
-void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func)
+void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func, bool t_is_time_event)
 {
 	is_menu_enable = false;
+	is_time_event = t_is_time_event;
 	
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
@@ -221,8 +226,13 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-15));
 	back_case->addChild(back_in);
 	
+	string title_str;
+	if(is_time_event)
+		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpEventTitle);
+	else
+		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpTitle);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpTitle), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-25));
@@ -237,7 +247,13 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	back_case->addChild(close_button);
 	
 	
-	KSLabelTTF* sub_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpSubTitle), mySGD->getFont().c_str(), 12);
+	string content_str;
+	if(is_time_event)
+		content_str = myLoc->getLocalForKey(kMyLocalKey_rankUpEventContent);
+	else
+		content_str = myLoc->getLocalForKey(kMyLocalKey_rankUpSubTitle);
+	
+	KSLabelTTF* sub_title_label = KSLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 12);
 	sub_title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-60));
 	back_case->addChild(sub_title_label);
 	
@@ -276,12 +292,23 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 		m_container->addChild(t_star);
 	}
 	
+	int after_grade;
+	if(is_time_event)
+	{
+		after_grade = take_grade + mySGD->getTimeEventIntValue(kTimeEventType_card);
+		if(after_grade > 4)
+			after_grade = 4;
+	}
+	else
+	{
+		after_grade = take_grade+1;
+	}
 	
 	CCSprite* next_take_card = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 86, 64));
 	next_take_card->setColor(ccc3(100, 100, 100));
 	next_take_card->setRotation(90);
 	
-	CCSprite* next_card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", take_grade+1)->getCString());
+	CCSprite* next_card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", after_grade)->getCString());
 	next_card_case->setPosition(ccp(43, 32));
 	next_take_card->addChild(next_card_case);
 	next_take_card->setPosition(ccp(55,0));
@@ -289,8 +316,8 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	m_container->addChild(next_take_card);
 	
-	base_position = ccp(55-(take_grade)/2.f*distance, -35);
-	for(int i=0;i<take_grade+1;i++)
+	base_position = ccp(55-(after_grade-1)/2.f*distance, -35);
+	for(int i=0;i<after_grade;i++)
 	{
 		CCSprite* t_star = CCSprite::create("gage_star_gold.png");
 		t_star->setPosition(base_position + ccp(i*distance, 0));
@@ -317,7 +344,12 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	rate_ment->setPosition(ccp(rankup_rate_back->getContentSize().width/2.f-5, rankup_rate_back->getContentSize().height/2.f+12));
 	rankup_rate_back->addChild(rate_ment);
 	
-	KSLabelTTF* rate_value_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", (mySGD->getRankUpBaseRate()+mySGD->getRankUpAddRate())*100.f)->getCString(), mySGD->getFont().c_str(), 18);
+	float rate_value = (mySGD->getRankUpBaseRate()+mySGD->getRankUpAddRate())*100.f;
+	
+	if(is_time_event)
+		rate_value = 100.f;
+	
+	KSLabelTTF* rate_value_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rate_value)->getCString(), mySGD->getFont().c_str(), 18);
 	rate_value_label->setColor(ccBLACK);
 	rate_value_label->setPosition(ccp(rankup_rate_back->getContentSize().width/2.f-2, rankup_rate_back->getContentSize().height/2.f-5));
 	rankup_rate_back->addChild(rate_value_label);
@@ -352,6 +384,14 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	KSLabelTTF* price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getRankUpRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+10,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
+	
+	if(is_time_event)
+	{
+		price_label->setString(myLoc->getLocalForKey(kMyLocalKey_free));
+		CCSprite* event_img = CCSprite::create("puzzle_event.png");
+		event_img->setPosition(price_label->getPosition() + ccp(15,10));
+		price_back->addChild(event_img);
+	}
 	
 	r_label->addChild(rankup_label);
 	
@@ -409,7 +449,11 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
-	if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getRankUpRubyFee())
+	if(is_time_event)
+	{
+		rankupAnimation();
+	}
+	else if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getRankUpRubyFee())
 	{
 		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);

@@ -75,6 +75,10 @@ bool ZoomScript::init()
 		}
 	}
 	
+	CCSprite* title_name = CCSprite::create("temp_title_name.png");
+	title_name->setPosition(ccp(240,myDSH->ui_center_y));
+	addChild(title_name, kZS_Z_back);
+	
 	game_node = CCNode::create();
 	game_node->setScale(1.5f);
 	addChild(game_node, kZS_Z_first_img);
@@ -369,89 +373,241 @@ void ZoomScript::menuAction(CCObject *sender)
 				if(after_value > 4)
 					after_value = 4;
 				
-				if(up_value == 1)
+				bool is_chance = false;
+				PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+				if(!t_history.is_clear[after_value-1])
 				{
-					if(take_grade == 1)
-					{
-						is_exchanged = true;
-						mySGD->is_exchanged = true;
-						mySGD->is_showtime = false;
-					}
-					else if(take_grade == 2)
-					{
-						is_exchanged = false;
-						mySGD->is_exchanged = false;
-						mySGD->setPercentage(1.f);
-						mySGD->is_showtime = true;
-					}
-					else if(take_grade == 3)
-					{
-						is_exchanged = true;
-						mySGD->is_exchanged = true;
-						mySGD->is_showtime = false;
-					}
-				}
-				else if(up_value == 2)
-				{
-					if(take_grade == 1)
-					{
-						mySGD->setPercentage(1.f);
-						mySGD->is_showtime = true;
-					}
-					else if(take_grade >= 2)
-					{
-						is_exchanged = true;
-						mySGD->is_exchanged = true;
-						mySGD->setPercentage(1.f);
-						mySGD->is_showtime = true;
-					}
-				}
-				else if(up_value >= 3)
-				{
-					is_exchanged = true;
-					mySGD->is_exchanged = true;
-					mySGD->setPercentage(1.f);
-					mySGD->is_showtime = true;
+					is_chance = true;
 				}
 				
-				mySGD->setStageGrade(after_value);
+				if(is_chance)
+				{
+					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
+															   {
+																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+																   {
+																	   nextScene();
+																   }
+																   else
+																   {
+																	   mySGD->is_clear_diary = true;
+																	   
+																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   
+																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+																	   CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+																	   
+																	   game_node->runAction(t_seq);
+																   }
+															   }, [=](){
+																   
+																   if(up_value == 1)
+																   {
+																	   if(take_grade == 1)
+																	   {
+																		   is_exchanged = true;
+																		   mySGD->is_exchanged = true;
+																		   mySGD->is_showtime = false;
+																	   }
+																	   else if(take_grade == 2)
+																	   {
+																		   is_exchanged = false;
+																		   mySGD->is_exchanged = false;
+																		   mySGD->setPercentage(1.f);
+																		   mySGD->is_showtime = true;
+																	   }
+																	   else if(take_grade == 3)
+																	   {
+																		   is_exchanged = true;
+																		   mySGD->is_exchanged = true;
+																		   mySGD->is_showtime = false;
+																	   }
+																   }
+																   else if(up_value == 2)
+																   {
+																	   if(take_grade == 1)
+																	   {
+																		   mySGD->setPercentage(1.f);
+																		   mySGD->is_showtime = true;
+																	   }
+																	   else if(take_grade >= 2)
+																	   {
+																		   is_exchanged = true;
+																		   mySGD->is_exchanged = true;
+																		   mySGD->setPercentage(1.f);
+																		   mySGD->is_showtime = true;
+																	   }
+																   }
+																   else if(up_value >= 3)
+																   {
+																	   is_exchanged = true;
+																	   mySGD->is_exchanged = true;
+																	   mySGD->setPercentage(1.f);
+																	   mySGD->is_showtime = true;
+																   }
+																   
+																   mySGD->setStageGrade(after_value);
+
+																   
+																   target_node->removeFromParent();
+																   
+																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
+																   
+																   target_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+																   
+																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
+																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+																   
+																   
+																   target_node->setPosition(ccp(160,215));
+																   target_node->setTouchEnabled(false);
+																   game_node->addChild(target_node, kZS_Z_second_img);
+																   
+																   game_node->setScale(1.5f);
+																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+															   }, [=](){
+																   CCDelayTime* delay1 = CCDelayTime::create(0.5f);
+																   CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
+																   CCDelayTime* delay2 = CCDelayTime::create(1.f);
+																   
+																   CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
+																   CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
+																   CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+																   
+																   //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+																   CCDelayTime* delay3 = CCDelayTime::create(1.f);
+																   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::rankupAction));
+																   
+																   CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
+																   
+																   game_node->runAction(t_seq);
+															   }, [=](){
+																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+																   {
+																	   nextScene();
+																   }
+																   else
+																   {
+																	   mySGD->is_clear_diary = true;
+																	   
+																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   
+																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+																	   CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+																	   
+																	   game_node->runAction(t_seq);
+																   }
+															   }, true);
+					addChild(t_popup, kZS_Z_whitePaper+1);
+				}
+				else
+				{
+					if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
+					{
+						nextScene();
+					}
+					else
+					{
+						mySGD->is_clear_diary = true;
+						
+						CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+						CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+						
+						CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+						CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+						CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+						
+						game_node->runAction(t_seq);
+					}
+				}
 				
-				showtime_back = CCSprite::create("event_cardupgrade.png");
-				showtime_back->setScale(10.f);
-				showtime_back->setPosition(ccp(240,myDSH->ui_center_y));
-				showtime_back->setOpacity(0);
-				addChild(showtime_back, kZS_Z_showtime_back);
-				
-				white_paper = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
-				white_paper->setOpacity(0);
-				white_paper->setScaleY(myDSH->ui_top/320.f);
-				white_paper->setPosition(ccp(240,myDSH->ui_center_y));
-				addChild(white_paper, kZS_Z_whitePaper);
-				
-				CCDelayTime* white_paper_delay = CCDelayTime::create(46.f/60.f);
-				CCFadeTo* white_paper_fade = CCFadeTo::create(18.f/60.f, 255);
-				CCSequence* white_paper_seq = CCSequence::createWithTwoActions(white_paper_delay, white_paper_fade);
-				white_paper->runAction(white_paper_seq);
-				
-				CCScaleTo* showtime_scale1 = CCScaleTo::create(28.f/60.f, 1.f);
-				CCDelayTime* showtime_delay1 = CCDelayTime::create(18.f/60.f);
-				CCScaleTo* showtime_scale2 = CCScaleTo::create(18.f/60.f, 12.f);
-				CCSequence* showtime_seq1 = CCSequence::create(showtime_scale1, showtime_delay1, showtime_scale2, NULL);
-				
-				CCFadeTo* showtime_fade1 = CCFadeTo::create(28.f/60.f, 255);
-				CCDelayTime* showtime_delay2 = CCDelayTime::create(18.f/60.f);
-				CCFadeTo* showtime_fade2 = CCFadeTo::create(18.f/60.f, 0);
-				CCSequence* showtime_seq2 = CCSequence::create(showtime_fade1, showtime_delay2, showtime_fade2, NULL);
-				
-				CCSpawn* showtime_spawn = CCSpawn::create(showtime_seq1, showtime_seq2, NULL);
-				CCDelayTime* showtime_delay = CCDelayTime::create(8.f/60.f);
-				
-				CCCallFunc* showtime_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeFifthAction));
-				CCSequence* showtime_seq = CCSequence::create(showtime_spawn, showtime_delay, showtime_call, NULL);
-				
-				showtime_back->runAction(showtime_seq);
+//				if(up_value == 1)
+//				{
+//					if(take_grade == 1)
+//					{
+//						is_exchanged = true;
+//						mySGD->is_exchanged = true;
+//						mySGD->is_showtime = false;
+//					}
+//					else if(take_grade == 2)
+//					{
+//						is_exchanged = false;
+//						mySGD->is_exchanged = false;
+//						mySGD->setPercentage(1.f);
+//						mySGD->is_showtime = true;
+//					}
+//					else if(take_grade == 3)
+//					{
+//						is_exchanged = true;
+//						mySGD->is_exchanged = true;
+//						mySGD->is_showtime = false;
+//					}
+//				}
+//				else if(up_value == 2)
+//				{
+//					if(take_grade == 1)
+//					{
+//						mySGD->setPercentage(1.f);
+//						mySGD->is_showtime = true;
+//					}
+//					else if(take_grade >= 2)
+//					{
+//						is_exchanged = true;
+//						mySGD->is_exchanged = true;
+//						mySGD->setPercentage(1.f);
+//						mySGD->is_showtime = true;
+//					}
+//				}
+//				else if(up_value >= 3)
+//				{
+//					is_exchanged = true;
+//					mySGD->is_exchanged = true;
+//					mySGD->setPercentage(1.f);
+//					mySGD->is_showtime = true;
+//				}
+//				
+//				mySGD->setStageGrade(after_value);
+//
+//				showtime_back = CCSprite::create("event_cardupgrade.png");
+//				showtime_back->setScale(10.f);
+//				showtime_back->setPosition(ccp(240,myDSH->ui_center_y));
+//				showtime_back->setOpacity(0);
+//				addChild(showtime_back, kZS_Z_showtime_back);
+//				
+//				white_paper = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
+//				white_paper->setOpacity(0);
+//				white_paper->setScaleY(myDSH->ui_top/320.f);
+//				white_paper->setPosition(ccp(240,myDSH->ui_center_y));
+//				addChild(white_paper, kZS_Z_whitePaper);
+//				
+//				CCDelayTime* white_paper_delay = CCDelayTime::create(46.f/60.f);
+//				CCFadeTo* white_paper_fade = CCFadeTo::create(18.f/60.f, 255);
+//				CCSequence* white_paper_seq = CCSequence::createWithTwoActions(white_paper_delay, white_paper_fade);
+//				white_paper->runAction(white_paper_seq);
+//				
+//				CCScaleTo* showtime_scale1 = CCScaleTo::create(28.f/60.f, 1.f);
+//				CCDelayTime* showtime_delay1 = CCDelayTime::create(18.f/60.f);
+//				CCScaleTo* showtime_scale2 = CCScaleTo::create(18.f/60.f, 12.f);
+//				CCSequence* showtime_seq1 = CCSequence::create(showtime_scale1, showtime_delay1, showtime_scale2, NULL);
+//				
+//				CCFadeTo* showtime_fade1 = CCFadeTo::create(28.f/60.f, 255);
+//				CCDelayTime* showtime_delay2 = CCDelayTime::create(18.f/60.f);
+//				CCFadeTo* showtime_fade2 = CCFadeTo::create(18.f/60.f, 0);
+//				CCSequence* showtime_seq2 = CCSequence::create(showtime_fade1, showtime_delay2, showtime_fade2, NULL);
+//				
+//				CCSpawn* showtime_spawn = CCSpawn::create(showtime_seq1, showtime_seq2, NULL);
+//				CCDelayTime* showtime_delay = CCDelayTime::create(8.f/60.f);
+//				
+//				CCCallFunc* showtime_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeFifthAction));
+//				CCSequence* showtime_seq = CCSequence::create(showtime_spawn, showtime_delay, showtime_call, NULL);
+//				
+//				showtime_back->runAction(showtime_seq);
 			}
-			else if(!mySGD->is_endless_mode && !is_rankup)
+			else if(!mySGD->is_endless_mode && !is_rankup && !mySGD->isTimeEvent(kTimeEventType_card))
 			{
 				is_rankup = true;
 				

@@ -678,8 +678,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rankRewardGoodsTypePass4,
 	kMyLocalKey_rankRewardGoodsTypePass5,
 	kMyLocalKey_rankRewardGoodsTypePass6,
-	kMyLocalKey_rankRewardGoodsTypeMany
+	kMyLocalKey_rankRewardGoodsTypeMany,
 	
+	kMyLocalKey_rankUpEventTitle,
+	kMyLocalKey_rankUpEventContent
 
 }MyLocalKey;
 
