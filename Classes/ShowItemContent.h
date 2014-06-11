@@ -26,6 +26,8 @@ class ShowItemContent : public CCNode
 {
 public:
 	static ShowItemContent* create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_item_list);
+	void endShowAnimation();
+	function<void(function<void()>)> hide_func;
 	
 private:
 	int touch_priority;
@@ -43,7 +45,6 @@ private:
 	void menuAction(CCObject* sender);
 	
 	void startShowAnimation();
-	void endShowAnimation();
 	
 	void startHideAnimation();
 	void endHideAnimation();

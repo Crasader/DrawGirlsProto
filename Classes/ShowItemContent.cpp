@@ -10,6 +10,7 @@
 
 #include "MyLocalization.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
 
 ShowItemContent* ShowItemContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_item_list)
 {
@@ -60,10 +61,14 @@ void ShowItemContent::endShowAnimation()
 void ShowItemContent::startHideAnimation()
 {
 	is_menu_enable = false;
-	CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ShowItemContent::endHideAnimation));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-	runAction(t_seq);
+	hide_func([=]()
+	{
+		this->endHideAnimation();
+	});
+//	CCScaleTo* t_scale = CCScaleTo::create(0.2f, 0.f);
+//	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ShowItemContent::endHideAnimation));
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
+//	runAction(t_seq);
 }
 void ShowItemContent::endHideAnimation()
 {
@@ -159,7 +164,7 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	setFormSetter(case_back);
 	setFormSetter(content_back);
 	
-	startShowAnimation();
+//	startShowAnimation();
 }
 
 string ShowItemContent::convertToItemCodeToItemName(ITEM_CODE t_code)
