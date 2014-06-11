@@ -261,7 +261,7 @@ void EndlessModeOpening::setMain()
 	
 	
 	record_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	record_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 35 + 3.f));
+	record_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 35));
 	record_back->setPosition(ccp(right_back->getContentSize().width/2.f, 85.5f - 7.5f));
 	right_back->addChild(record_back);
 	
@@ -276,7 +276,7 @@ void EndlessModeOpening::setMain()
 
 	
 	CCScale9Sprite* highscore_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	highscore_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 35 + 3.f));
+	highscore_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 35));
 	highscore_back->setPosition(ccp(right_back->getContentSize().width/2.f + 1.f - 1.f, 55 - 4.5f));
 	right_back->addChild(highscore_back);
 	setFormSetter(highscore_back);
@@ -294,7 +294,7 @@ void EndlessModeOpening::setMain()
 	highscore_back->addChild(highscore_content);
 	
 	CCScale9Sprite* straight_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	straight_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 35 + 3.f));
+	straight_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 35));
 	straight_back->setPosition(ccp(right_back->getContentSize().width/2.f, 24.5f - 1.f));
 	right_back->addChild(straight_back);
 	

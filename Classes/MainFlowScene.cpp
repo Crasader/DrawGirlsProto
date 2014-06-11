@@ -2985,7 +2985,7 @@ void MainFlowScene::setTop()
 	addChild(achievement_count_case, kMainFlowZorder_top+1);
 	
 	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
-	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f - 0.5f));
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
 	achievement_count_case->addChild(achievement_count_label);
 	
 	CCScaleTo* t_scale5 = CCScaleTo::create(0.1f, 1.3f);
@@ -3091,7 +3091,7 @@ void MainFlowScene::countingAchievement()
 		achievement_count_label->setString(CCString::createWithFormat("%d", reward_count)->getCString());
 	}
 	
-	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 1));
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
 }
 
 void MainFlowScene::popupClose()

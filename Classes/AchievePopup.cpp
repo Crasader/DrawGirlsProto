@@ -713,7 +713,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	CCPoint img_position = ccp(170,24);
 	if(myAchieve->isCompleted(recent_code))
 	{
-		cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
+//		cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
+		cell_title->enableOuterStroke(ccc3(0, 0, 0), 1);
 		
 		CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
 		success_img->setOpacity(0);
@@ -1029,8 +1030,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		
 		if(myAchieve->isCompleted(recent_code))
 		{
-			cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
-			
+//			cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
+			cell_title->enableOuterStroke(ccc3(0, 0, 0), 1);
 			CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
 			success_img->setOpacity(0);
 			success_img->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));

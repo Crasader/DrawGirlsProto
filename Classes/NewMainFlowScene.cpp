@@ -2868,7 +2868,7 @@ void NewMainFlowScene::setTop()
 	
 	achievement_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
 	achievement_count_label->setColor(ccc3(95, 60, 30));
-	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f-0.5f, achievement_count_case->getContentSize().height/2.f - 0.5f));
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f-0.5f, achievement_count_case->getContentSize().height/2.f + 0));
 	achievement_count_case->addChild(achievement_count_label);
 	
 	countingAchievement();

@@ -52,19 +52,19 @@ void AchieveNoti::myInit(AchievementCode t_code)
 			if(t_index == 0)
 			{
 				CCSprite* t_crown = CCSprite::create("achievement_crown_bronze.png");
-				t_crown->setPosition(ccp(20 + 5, back_img->getContentSize().height/2.f+8 - 2));
+				t_crown->setPosition(ccp(20 + 3, back_img->getContentSize().height/2.f+8 - 2));
 				back_img->addChild(t_crown);
 			}
 			else if(t_index == 1)
 			{
 				CCSprite* t_crown = CCSprite::create("achievement_crown_silver.png");
-				t_crown->setPosition(ccp(20 + 5, back_img->getContentSize().height/2.f+8 - 2));
+				t_crown->setPosition(ccp(20 + 3, back_img->getContentSize().height/2.f+8 - 2));
 				back_img->addChild(t_crown);
 			}
 			else if(t_index == 2)
 			{
 				CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
-				t_crown->setPosition(ccp(20 + 5, back_img->getContentSize().height/2.f+8 - 2));
+				t_crown->setPosition(ccp(20 + 3, back_img->getContentSize().height/2.f+8 - 2));
 				back_img->addChild(t_crown);
 			}
 		}
