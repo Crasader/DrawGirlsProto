@@ -35,6 +35,7 @@ void EventListDown::resultGetEventList(Json::Value result_data)
 				NSDS_SI(kSDS_GI_eventList_int1_no_i, i+1, event_number, false);
 				NSDS_SS(kSDS_GI_eventList_int1_title_s, i+1, event_list[i]["title"].asString().c_str(), false);
 				NSDS_SS(event_number, kSDS_PZ_title_s, event_list[i]["title"].asString().c_str(), false);
+				NSDS_SB(event_number, kSDS_PZ_isEvent_b, event_list[i]["isEvent"].asBool(), false);
 				NSDS_SI(event_number, kSDS_PZ_startStage_i, event_list[i]["startStage"].asInt(), false);
 				NSDS_SI(event_number, kSDS_PZ_stageCount_i, event_list[i]["stageCount"].asInt(), false);
 				NSDS_SI(event_number, kSDS_PZ_point_i, event_list[i]["point"].asInt(), false);

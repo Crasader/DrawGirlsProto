@@ -40,6 +40,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		
 		NSDS_SS(puzzle_number, kSDS_PZ_title_s, result_data["title"].asString(), false);
 		NSDS_SS(puzzle_number, kSDS_PZ_condition_s, result_data["condition"].asString(), false);
+		NSDS_SB(puzzle_number, kSDS_PZ_isEvent_b, result_data["isEvent"].asBool(), false);
 		
 		NSDS_SI(puzzle_number, kSDS_PZ_color_r_d, result_data["color"]["r"].asInt(), false);
 		NSDS_SI(puzzle_number, kSDS_PZ_color_g_d, result_data["color"]["g"].asInt(), false);

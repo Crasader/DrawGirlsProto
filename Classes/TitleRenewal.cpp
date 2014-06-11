@@ -1754,6 +1754,7 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_number, false);
 				NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str(), false);
 				NSDS_SS(puzzle_number, kSDS_PZ_title_s, puzzle_list[i]["title"].asString().c_str(), false);
+				NSDS_SB(puzzle_number, kSDS_PZ_isEvent_b, puzzle_list[i]["isEvent"].asBool(), false);
 //				NSDS_SI(kSDS_GI_puzzleList_int1_version_i, i+1, puzzle_list[i]["version"].asInt(), false);
 				NSDS_SI(puzzle_number, kSDS_PZ_startStage_i, puzzle_list[i]["startStage"].asInt(), false);
 				NSDS_SI(puzzle_number, kSDS_PZ_stageCount_i, puzzle_list[i]["stageCount"].asInt(), false);
