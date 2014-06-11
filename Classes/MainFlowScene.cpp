@@ -2981,11 +2981,11 @@ void MainFlowScene::setTop()
 
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	achievement_count_case->setContentSize(CCSizeMake(20, 20));
-	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
+	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12, 6));
 	addChild(achievement_count_case, kMainFlowZorder_top+1);
 	
 	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
-	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 1.f));
+	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f - 0.5f));
 	achievement_count_case->addChild(achievement_count_label);
 	
 	CCScaleTo* t_scale5 = CCScaleTo::create(0.1f, 1.3f);
