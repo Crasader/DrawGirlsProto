@@ -217,7 +217,7 @@ void CouponPopup::createResultPopup(string title, string content)
 	
 	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
 	back_case->setContentSize(CCSizeMake(240,140));
-	back_case->setPosition(ccp(0,0));
+//	back_case->setPosition(ccp(0,0));
 	t_container->addChild(back_case);
 	
 	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
@@ -274,7 +274,7 @@ void CouponPopup::createResultPopup(string title, string content)
 		
 		t_popup->is_menu_enable = false;
 		
-		CommonAnimation::closePopup(this, m_container, gray, [=](){
+		CommonAnimation::closePopup(this, t_container, gray, [=](){
 			
 		}, [=](){
 			is_menu_enable = true;
@@ -304,7 +304,7 @@ void CouponPopup::createResultPopup(string title, string content)
 	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 	
 	
-	CommonAnimation::openPopup(this, m_container, gray, [=](){
+	CommonAnimation::openPopup(this, t_container, gray, [=](){
 		
 	}, [=](){
 		t_popup->is_menu_enable = true;
