@@ -427,7 +427,7 @@ void EndlessModeResult::setMain()
 	left_title->addChild(left_nick);
 	
 	
-	CCRect left_rect = CCRectMake(left_back->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f, (480-30)/2.f-20, 88);
+	CCRect left_rect = CCRectMake(left_back->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f, (480-30)/2.f-20, 90);
 	
 //	CCSprite* left_size = CCSprite::create("whitePaper.png", CCRectMake(0, 0, left_rect.size.width, left_rect.size.height));
 //	left_size->setAnchorPoint(CCPointZero);
