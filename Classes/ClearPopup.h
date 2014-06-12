@@ -206,6 +206,7 @@ private:
 	void resultGetRank(Json::Value result_data);
 	void resultGetTime(Json::Value result_data);
 	bool is_go_to_mainflow;
+	std::function<void(void)> frontFlip, backFlip;
 };
 
 #endif /* defined(__DGproto__ClearPopup__) */
