@@ -175,6 +175,8 @@ void StartMapGacha::menuAction (CCObject * sender)
 	if(mySGD->is_paused)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
 	is_menu_enable = false;
 	
 	int tag = ((CCNode*)sender)->getTag();

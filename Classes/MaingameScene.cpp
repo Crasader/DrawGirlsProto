@@ -3956,6 +3956,8 @@ void Maingame::showPause()
 	
 	is_pause = true;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
 	bool t_jack_stun = myJack->isStun;
 	
 	CCNode* exit_target = this;

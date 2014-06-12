@@ -1292,6 +1292,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 	}
 	else
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+		
 		is_menu_enable = false;
 		
 		int tag = ((CCNode*)sender)->getTag();

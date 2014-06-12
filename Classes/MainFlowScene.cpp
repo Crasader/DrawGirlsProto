@@ -1521,6 +1521,8 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
 	if(tag == 0)
 	{
 		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
