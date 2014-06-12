@@ -265,7 +265,7 @@ CCTableViewCell* EndlessModeResult::tableCellAtIndex(CCTableView *table, unsigne
 	string title = title_list[idx];
 	string content;
 	
-	if(idx < 7)
+	if(idx < 9)
 	{
 		back_filename = "mainpopup_pupple3.png";
 	}
