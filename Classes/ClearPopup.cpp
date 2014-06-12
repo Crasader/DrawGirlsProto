@@ -1141,53 +1141,64 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		if(t_list_cell_case_back)
 		{
 			std::string changedRankLbl;
-			if(myrank - before_stage_high_rank < 0)
+			if(before_stage_high_rank == 0 || before_stage_high_rank == myrank)
 			{
-				changedRankLbl = ccsf("▼   %d", myrank - before_stage_high_rank);
+				// nothing to do
 			}
 			else
 			{
-				changedRankLbl = ccsf("▲   %d", myrank - before_stage_high_rank);
+				
+				if(myrank - before_stage_high_rank < 0)
+				{
+					changedRankLbl = ccsf("▼   %d", myrank - before_stage_high_rank);
+				}
+				else
+				{
+					changedRankLbl = ccsf("▲   %d", myrank - before_stage_high_rank);
+				}
+				KSLabelTTF* changedRank = KSLabelTTF::create(changedRankLbl.c_str(), mySGD->getFont().c_str(), 12);
+				changedRank->setPosition(ccpFromSize(t_list_cell_case_back->getContentSize()) / 2.f);
+				changedRank->setColor(ccc3(255, 179, 0));
+				t_list_cell_case_back->addChild(changedRank);
+				
+				float flipDelay = 3.f;
+				t_list_cell_case_back->setScaleY(0);
+				frontFlip = [=](){
+					addChild(KSTimer::create(flipDelay, [=](){
+						addChild(KSGradualValue<float>::create(1.f, 0, spinDuration, [=](float t){
+							t_list_cell_case->setScaleY(t);
+						}, [=](float t){
+							t_list_cell_case->setScaleY(t);
+							
+							addChild(KSGradualValue<float>::create(0.f, 1.f, spinDuration, [=](float t){
+								t_list_cell_case_back->setScaleY(t);
+							}, [=](float t){
+								t_list_cell_case_back->setScaleY(t);
+								backFlip();
+							}));
+						}));
+					}));
+				};
+				backFlip = [=](){
+					addChild(KSTimer::create(flipDelay, [=](){
+						addChild(KSGradualValue<float>::create(1.f, 0, spinDuration, [=](float t){
+							t_list_cell_case_back->setScaleY(t);
+						}, [=](float t){
+							t_list_cell_case_back->setScaleY(t);
+							
+							addChild(KSGradualValue<float>::create(0.f, 1.f, spinDuration, [=](float t){
+								t_list_cell_case->setScaleY(t);
+							}, [=](float t){
+								t_list_cell_case->setScaleY(t);
+								frontFlip();
+							}));
+						}));
+					}));
+				};
+				addChild(KSTimer::create(5.f, [=](){
+					frontFlip();
+				}));
 			}
-			KSLabelTTF* changedRank = KSLabelTTF::create(changedRankLbl.c_str(), mySGD->getFont().c_str(), 12);
-			changedRank->setPosition(ccpFromSize(t_list_cell_case_back->getContentSize()) / 2.f);
-			changedRank->setColor(ccc3(255, 179, 0));
-			t_list_cell_case_back->addChild(changedRank);
-			
-			float flipDelay = 3.f;
-			frontFlip = [=](){
-				addChild(KSTimer::create(flipDelay, [=](){
-					addChild(KSGradualValue<float>::create(1.f, 0, spinDuration, [=](float t){
-						t_list_cell_case->setScaleY(t);
-					}, [=](float t){
-						t_list_cell_case->setScaleY(t);
-						
-						addChild(KSGradualValue<float>::create(0.f, 1.f, spinDuration, [=](float t){
-							t_list_cell_case_back->setScaleY(t);
-						}, [=](float t){
-							t_list_cell_case_back->setScaleY(t);
-							backFlip();
-						}));
-					}));
-				}));
-			};
-			backFlip = [=](){
-				addChild(KSTimer::create(flipDelay, [=](){
-					addChild(KSGradualValue<float>::create(1.f, 0, spinDuration, [=](float t){
-						t_list_cell_case_back->setScaleY(t);
-					}, [=](float t){
-						t_list_cell_case_back->setScaleY(t);
-						
-						addChild(KSGradualValue<float>::create(0.f, 1.f, spinDuration, [=](float t){
-							t_list_cell_case->setScaleY(t);
-						}, [=](float t){
-							t_list_cell_case->setScaleY(t);
-							frontFlip();
-						}));
-					}));
-				}));
-			};
-			frontFlip();
 		}
 		
 		is_saved_user_data = true;
