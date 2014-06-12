@@ -104,7 +104,7 @@
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>130</integer>
+									<integer>180</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -229,7 +229,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.033333335071802139</real>
+									<real>0.0</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -244,7 +244,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.30000001192092896</real>
+									<real>0.26666668057441711</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -304,7 +304,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.2999999523162842</real>
+									<real>1.3333333730697632</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -319,7 +319,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.6000000238418579</real>
+									<real>1.6333333253860474</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -595,7 +595,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.033333335071802139</real>
+									<real>0.0</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -610,7 +610,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.30000001192092896</real>
+									<real>0.26666668057441711</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -670,7 +670,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.2999999523162842</real>
+									<real>1.3333333730697632</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -685,7 +685,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>1.6000000238418579</real>
+									<real>1.6333333253860474</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>

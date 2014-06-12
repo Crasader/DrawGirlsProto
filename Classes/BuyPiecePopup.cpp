@@ -79,6 +79,8 @@ void BuyPiecePopup::myInit(int t_touch_priority, function<void()> t_end_func, fu
 								  
 								  is_menu_enable = false;
 								  
+								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+								  
 									CommonAnimation::closePopup(this, m_container, gray, [=](){
 										
 									}, [=](){

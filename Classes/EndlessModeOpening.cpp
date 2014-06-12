@@ -105,6 +105,9 @@ void EndlessModeOpening::setMain()
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  is_menu_enable = false;
+								  
+								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+								  
 								  myHSP->removeTarget(this);
 								  myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 								  

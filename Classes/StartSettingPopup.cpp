@@ -923,7 +923,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
 		missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
-		missile_data_power->setString(KS::insert_separator(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), mySGD->getSelectedCharacterHistory().power.getV())->getCString()).c_str());
+		missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
 		
 		CCPoint missile_position;
 		if(missile_img)
@@ -1292,6 +1292,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 	}
 	else
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+		
 		is_menu_enable = false;
 		
 		int tag = ((CCNode*)sender)->getTag();
