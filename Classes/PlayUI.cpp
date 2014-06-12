@@ -1098,7 +1098,136 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
-	if(!isGameover && t_p > clearPercentage.getV()) // clear 80%
+	if(mySGD->isTimeEvent(kTimeEventType_clear) && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= 0.85f)
+	{
+		clear_time_event_func([=]()
+							  {
+								  // no
+								  clearPercentage = 0.85f;
+							  }, [=]()
+							  {
+								  // yes
+								  if(!is_exchanged && is_show_exchange_coin && myGD->getCommunicationBool("MS_isCheckBossLocked") && myGD->getCommunicationBool("GIM_isChangeAllInner"))
+								  {
+									  taked_coin_cnt = 6;
+									  
+									  for(int i=1;i<=6;i++)
+									  {
+										  CCSprite* t_coin_spr = (CCSprite*)exchange_dic->objectForKey(i);
+										  CCPoint after_position = t_coin_spr->getPosition();
+										  t_coin_spr->removeFromParentAndCleanup(true);
+										  exchange_dic->removeObjectForKey(i);
+										  
+										  CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", i)->getCString());
+										  new_coin_spr->setPosition(after_position);
+										  top_center_node->addChild(new_coin_spr);
+										  
+										  
+										  exchange_dic->setObject(new_coin_spr, i);
+									  }
+									  
+									  if(clr_cdt_type == kCLEAR_sequenceChange)
+									  {
+										  conditionClear();
+									  }
+									  
+									  isFirst = true;
+									  is_exchanged = true;
+									  my_fp->addFeverGage(20);
+									  
+									  myGD->communication("Main_startExchange");
+									  myGD->communication("Main_showChangeCard");
+									  myGD->communication("Jack_positionRefresh");
+									  
+									  m_areaGage->onChange();
+									  
+									  return;
+								  }
+								  
+								  myGD->communication("GIM_stopCoin");
+								  
+								  if(clr_cdt_type == kCLEAR_timeLimit)
+								  {
+									  //			if(playtime_limit.getV() - countingCnt.getV() >= ing_cdt_cnt.getV())
+									  conditionClear();
+									  //			else
+									  //				conditionFail();
+								  }
+								  
+								  if(clr_cdt_type == kCLEAR_default)
+									  conditionClear();
+								  
+								  if(is_cleared_cdt)
+								  {
+									  int boss_count = myGD->getMainCumberCount();
+									  for(int i=0;i<boss_count;i++)
+									  {
+										  myGD->communication("MP_bombCumber", myGD->getMainCumberCCNodeVector()[i]);
+									  }
+									  
+									  isGameover = true;
+									  myGD->setIsGameover(true);
+									  myGD->communication("CP_setGameover");
+									  stopCounting();
+									  myGD->communication("Main_allStopSchedule");
+									  myGD->communication("Main_startMoveToBossPosition");
+									  myGD->communication("CP_startDieAnimation");
+									  AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+									  
+									  CCDelayTime* t_delay = CCDelayTime::create(1.5f);
+									  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::addResultClearCCB));
+									  CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+									  runAction(t_seq);
+									  
+									  endGame(t_p < 1.f && t_p > 0.99f);
+									  
+									  for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
+									  {
+										  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+											 countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
+										  {
+											  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+											  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+										  }
+									  }
+									  
+									  for(int i=kAchievementCode_hidden_breathtaking1;i<=kAchievementCode_hidden_breathtaking2;i++)
+									  {
+										  if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+										  {
+											  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+												 playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
+											  {
+												  myAchieve->changeIngCount(AchievementCode(i), 1);
+												  AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+												  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+											  }
+										  }
+									  }
+									  
+									  myGD->communication("Main_startClearFloatingCoin", last_get_percentage);
+								  }
+								  else
+								  {
+									  conditionFail();
+									  
+									  mySGD->fail_code = kFC_missionfail;
+									  
+									  stopCounting();
+									  // timeover
+									  isGameover = true;
+									  myGD->communication("CP_setGameover");
+									  myGD->communication("Main_allStopSchedule");
+									  AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+									  
+									  addResultCCB("ui_missonfail.ccbi");
+									  AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+									  
+									  endGame(false);
+								  }
+							  });
+	}
+	else if(!isGameover && t_p > clearPercentage.getV()) // clear 80%
 	{
 		if(!is_exchanged && is_show_exchange_coin && myGD->getCommunicationBool("MS_isCheckBossLocked") && myGD->getCommunicationBool("GIM_isChangeAllInner"))
 		{

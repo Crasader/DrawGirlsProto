@@ -626,7 +626,6 @@ bool OptionPopup::init()
 	//	main_case->addChild(noti_menu, kOP_Z_content);
 	//	noti_menu->setTouchPriority(-171);
 	
-	
 	is_menu_enable = false;
 	
 	

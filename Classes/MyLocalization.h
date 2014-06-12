@@ -681,7 +681,12 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rankRewardGoodsTypeMany,
 	
 	kMyLocalKey_rankUpEventTitle,
-	kMyLocalKey_rankUpEventContent
+	kMyLocalKey_rankUpEventContent,
+	
+	kMyLocalKey_no,
+	kMyLocalKey_yes,
+	kMyLocalKey_clearTimeEventMent,
+	kMyLocalKey_clearTimeEventTitle
 
 }MyLocalKey;
 

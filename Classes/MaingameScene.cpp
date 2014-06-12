@@ -40,6 +40,7 @@
 #include "ControlTipContent.h"
 #include "EndlessStartContent.h"
 #include "FlagSelector.h"
+#include "ClearTimeEventContent.h"
 
 //#include "ScreenSide.h"
 
@@ -481,6 +482,7 @@ void Maingame::finalSetting()
 	
 	myUI = PlayUI::create();
 	addChild(myUI, myUIZorder);
+	myUI->clear_time_event_func = bind(&Maingame::showClearTimeEvent, this, _1, _2);
 	//OnePercentGame* opg = OnePercentGame::create(0.99, nullptr, nullptr);
 	//addChild(opg, 9999);
 	myUI->setMaxBossLife(mySD->getBossMaxLife());
@@ -3944,6 +3946,59 @@ void Maingame::showShop(int t_shopcode)
 //	t_popup->setContainerNode(t_container);
 //	exit_target->getParent()->addChild(t_popup);
 //	t_container->startShow();
+}
+
+void Maingame::showClearTimeEvent(function<void()> no_func, function<void()> yes_func)
+{
+	if(is_gohome)
+		return;
+	
+	if(is_pause)
+		return;
+	
+	is_pause = true;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	bool t_jack_stun = myJack->isStun;
+	
+	CCNode* exit_target = this;
+	mControl->setTouchEnabled(false);
+	exit_target->onExit();
+	
+	ASPopupView* t_popup = ASPopupView::create(-200);
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+	t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+	t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+	
+	ClearTimeEventContent* t_container = ClearTimeEventContent::create(t_popup->getTouchPriority(), [=]()
+																	   {
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+																		   mControl->isStun = false;
+																		   myJack->isStun = t_jack_stun;
+																		   exit_target->onEnter();
+																		   is_pause = false;
+																		   no_func();
+																		   startControl();
+																	   }, [=]()
+																	   {
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+																		   mControl->isStun = false;
+																		   myJack->isStun = t_jack_stun;
+																		   exit_target->onEnter();
+																		   is_pause = false;
+																		   yes_func();
+																		   startControl();
+																	   });
+	t_popup->setContainerNode(t_container);
+	exit_target->getParent()->addChild(t_popup);
+	t_container->startShow();
 }
 
 void Maingame::showPause()

@@ -26,6 +26,7 @@
 #include "styledLabelTTF.h"
 #include "CommonAnimation.h"
 #include "FormSetter.h"
+#include "TouchSuctionLayer.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -489,6 +490,10 @@ bool CollectionBookPopup::init()
 		after_right_img->addChild(a_next_menu, 1, kCBP_MT_next);
 		a_next_menu->setTouchPriority(-191);
 	}
+	
+	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-189);
+	addChild(t_suction);
+	t_suction->setTouchEnabled(true);
 	
     return true;
 }

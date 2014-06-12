@@ -256,6 +256,8 @@ public:
 	void hideThumb();
 	void addScoreAttack(int t_damage);
 	
+	function<void(function<void()>, function<void()>)> clear_time_event_func;
+	
 private:
 	KSProtectVar<int> score_attack_damage;
 	KSProtectVar<float> score_value;

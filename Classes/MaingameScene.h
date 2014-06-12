@@ -303,6 +303,8 @@ private:
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
 	
+	void showClearTimeEvent(function<void()> no_func, function<void()> yes_func);
+	
 	bool is_gohome;
 	bool is_pause;
 	void showPause();
