@@ -1162,7 +1162,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1202,7 +1202,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1245,7 +1245,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1285,7 +1285,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1328,7 +1328,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1368,7 +1368,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1411,7 +1411,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1451,7 +1451,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1494,7 +1494,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1534,7 +1534,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 //			}
 //			else
 //			{
-//				addChild(ASPopupView::getCommonNoti(-310, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+//				addChild(ASPopupView::getCommonNoti(-310, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 //				CCLOG("not enough ruby!!!");
 //			}
 //		}
@@ -1637,7 +1637,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(touch_priority-10, "잼가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+			addChild(ASPopupView::getCommonNoti(touch_priority-10, "잼이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardMid)

@@ -627,7 +627,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("레벨 %d 업그레이드"), kMyLocalKey_upgradeLevelValue);
 	ko->setObject(CCString::create("아이템은 최대 3개까지\n선택이 가능합니다."), kMyLocalKey_totalItemSelectCount3);
 	ko->setObject(CCString::create("골드가 부족합니다."), kMyLocalKey_goldNotEnought);
-	ko->setObject(CCString::create("잼가 부족합니다."), kMyLocalKey_rubyNotEnought);
+	ko->setObject(CCString::create("잼이 부족합니다."), kMyLocalKey_rubyNotEnought);
 	ko->setObject(CCString::create("하트가 부족합니다."), kMyLocalKey_heartNotEnought);
 	ko->setObject(CCString::create("구매하러 가시겠습니까?"), kMyLocalKey_goToShop);
 	ko->setObject(CCString::create("기본속도향상"), kMyLocalKey_baseSpeedUpTitle);
@@ -1258,7 +1258,7 @@ void MyLocal::ko()
 //	ko->setObject(CCString::create("골드가 부족하여 구매할 수 없습니다."), kMyLocalKey_notEnoughGold);
 //	ko->setObject(CCString::create("상점으로 가시겠습니까?"), kMyLocalKey_goShop);
 //	ko->setObject(CCString::create("붓이 부족하여 게임을 시작할 수 없습니다."), kMyLocalKey_notEnoughBrush);
-//	ko->setObject(CCString::create("잼가 부족하여 구매할 수 없습니다."), kMyLocalKey_notEnoughRuby);
+//	ko->setObject(CCString::create("잼이 부족하여 구매할 수 없습니다."), kMyLocalKey_notEnoughRuby);
 //	
 //	ko->setObject(CCString::create("리뷰를 남겨주시면 붓을 가득 채워드립니다."), kMyLocalKey_review);
 //	ko->setObject(CCString::create("갤러리에 등록 되었습니다. 갤러리로 가시겠습니까?"), kMyLocalKey_regiGallery);
