@@ -2136,6 +2136,8 @@ void ClearPopup::startCalcAnimation()
 									
 									if(is_today_mission_success)
 									{
+										mySGD->is_today_mission_first = false;
+										
 										TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
 										addChild(t_popup, kZ_CP_popup);
 									}

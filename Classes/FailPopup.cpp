@@ -668,6 +668,7 @@ bool FailPopup::init()
 																				is_today_mission_success = true;
 																				if(is_today_mission_success)
 																				{
+																					mySGD->is_today_mission_first = false;
 																					TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
 																					addChild(t_popup, kZ_FP_popup);
 																				}

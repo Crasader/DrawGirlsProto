@@ -846,11 +846,12 @@ void PuzzleScene::showSuccessPuzzleEffect()
 	CCLOG("success puzzle animation");
 	if(selected_piece_img)
 	{
-		addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
-			selected_piece_img->setOpacity(t);
-		}, [=](float t){
-			selected_piece_img->setOpacity(t);
-		}));
+		selected_piece_img->setVisible(false);
+//		addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}));
 	}
 //	if(selected_piece_img)
 //	{
@@ -941,11 +942,12 @@ void PuzzleScene::showPerfectPuzzleEffect()
 	
 	if(selected_piece_img)
 	{
-		addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
-			selected_piece_img->setOpacity(t);
-		}, [=](float t){
-			selected_piece_img->setOpacity(t);
-		}));
+		selected_piece_img->setVisible(false);
+//		addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}));
 	}
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);

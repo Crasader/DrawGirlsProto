@@ -2808,7 +2808,7 @@ void PlayUI::myInit ()
 		
 		string flag = myDSH->getStringForKey(kDSH_Key_flag);
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8));
+		selectedFlagSpr->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y-10) + ccp(-20,215.f*0.17f+8));
 		selectedFlagSpr->setScale(0.5f);
 		thumb_node->addChild(selectedFlagSpr);
 		
