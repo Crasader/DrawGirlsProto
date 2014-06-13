@@ -836,6 +836,7 @@ void PuzzleScene::showSuccessPuzzleEffect()
 		selected_piece_img->setOpacity(t);
 	}, [=](float t){
 		selected_piece_img->setOpacity(t);
+		selected_piece_img->setVisible(false);
 	}));
 //	if(selected_piece_img)
 //	{
@@ -1466,7 +1467,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 		{
 //			showSuccessPuzzleEffect();
 			startBacking();
-			
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
@@ -1493,6 +1493,10 @@ void PuzzleScene::menuAction(CCObject* sender)
 			OptionPopup* t_popup = OptionPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 			addChild(t_popup, kPuzzleZorder_popup);
+		}
+		else if(tag == kPuzzleMenuTag_event)
+		{
+			showSuccessPuzzleEffect();
 		}
 		else if(tag == kPuzzleMenuTag_achieve)
 		{
