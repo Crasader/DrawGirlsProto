@@ -429,8 +429,8 @@ void EndlessModeResult::setMain()
 	float left_f_width = left_flag->getContentSize().width * left_flag->getScale();
 	float left_n_width = left_nick->getContentSize().width * left_nick->getScale();
 	
-	left_flag->setPositionX(left_title->getContentSize().width/2.f - left_n_width/2.f);
-	left_nick->setPositionX(left_title->getContentSize().width/2.f + left_f_width/2.f);
+	left_flag->setPositionX(left_title->getContentSize().width/2.f - left_n_width/2.f-3);
+	left_nick->setPositionX(left_title->getContentSize().width/2.f + left_f_width/2.f+3);
 	
 	
 	
@@ -549,8 +549,8 @@ void EndlessModeResult::setMain()
 	float right_f_width = right_flag->getContentSize().width * right_flag->getScale();
 	float right_n_width = right_nick->getContentSize().width * right_nick->getScale();
 	
-	right_flag->setPositionX(right_title->getContentSize().width/2.f - right_n_width/2.f);
-	right_nick->setPositionX(right_title->getContentSize().width/2.f + right_f_width/2.f);
+	right_flag->setPositionX(right_title->getContentSize().width/2.f - right_n_width/2.f-3);
+	right_nick->setPositionX(right_title->getContentSize().width/2.f + right_f_width/2.f+3);
 	
 	
 	
@@ -934,11 +934,11 @@ void EndlessModeResult::setMain()
 																			ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 																			
 																			
-																			CommonAnimation::openPopup(this, main_case, gray, [=](){
-																				
-																			}, [=](){
-																				t_popup->is_menu_enable = true;
-																			});
+//																			CommonAnimation::openPopup(this, main_case, gray, [=](){
+//																				
+//																			}, [=](){
+//																				t_popup->is_menu_enable = true;
+//																			});
 																		}
 																	  else
 																		{

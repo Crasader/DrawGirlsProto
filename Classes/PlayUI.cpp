@@ -1098,8 +1098,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
-	if(mySGD->isTimeEvent(kTimeEventType_clear) && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= 0.85f)
+	if(mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= 0.85f)
 	{
+		is_on_clear_time_event = true;
 		clear_time_event_func([=]()
 							  {
 								  // no
@@ -2748,6 +2749,8 @@ void PlayUI::takeItemCollect ()
 void PlayUI::myInit ()
 {
 	isGameover = false;
+	
+	is_on_clear_time_event = false;
 	
 	bomb_img = NULL;
 	
