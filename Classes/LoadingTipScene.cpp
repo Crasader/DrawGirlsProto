@@ -692,52 +692,27 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		CCSequence* black_seq = CCSequence::create(black_fadein, black_fadeout, black_remove, NULL);
 		black_img->runAction(black_seq);
 		
-//		CCSprite* left_curtain = CCSprite::create("curtain_left.png");
-//		left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-//		left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
-//		left_curtain->setPosition(ccp(0, 0));
-//		loading_tip_node->addChild(left_curtain);
+		KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 12);
+		content_label->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f));
+		loading_tip_back->addChild(content_label);
+		
+//		string tip_filename = "loading_tip_";
+//		if(selected_loading_tip == 0)
+//			tip_filename += "achievement";
+//		else if(selected_loading_tip == 1)
+//			tip_filename += "bosstip1";
+//		else if(selected_loading_tip == 2)
+//			tip_filename += "bosstip2";
+//		else if(selected_loading_tip == 3)
+//			tip_filename += "newpuzzle";
+//		else
+//			tip_filename += "bosstip1";
 //		
-//		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
-//		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
-//		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
-//		left_curtain->runAction(left_seq);
+//		tip_filename += ".png";
 //		
-//		CCSprite* right_curtain = CCSprite::create("curtain_left.png");
-//		right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-//		right_curtain->setFlipX(true);
-//		right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
-//		right_curtain->setPosition(ccp(0,0));
-//		loading_tip_node->addChild(right_curtain);
-//		
-//		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
-//		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
-//		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
-//		right_curtain->runAction(right_seq);
-		
-		//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
-		string tip_filename = "loading_tip_";
-		if(selected_loading_tip == 0)
-			tip_filename += "achievement";
-		else if(selected_loading_tip == 1)
-			tip_filename += "bosstip1";
-		else if(selected_loading_tip == 2)
-			tip_filename += "bosstip2";
-		else if(selected_loading_tip == 3)
-			tip_filename += "newpuzzle";
-		else
-			tip_filename += "bosstip1";
-		
-		tip_filename += ".png";
-		
-		CCSprite* content_img = CCSprite::create(tip_filename.c_str());
-		content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
-		loading_tip_back->addChild(content_img);
-		
-//		CCFadeTo* t_fade = CCFadeTo::create(0.2f, 0);
-//		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.5f);
-//		CCSpawn* t_spawn = CCSpawn::create(t_fade, t_scale, NULL);
-//		content_img->runAction(t_spawn);
+//		CCSprite* content_img = CCSprite::create(tip_filename.c_str());
+//		content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
+//		loading_tip_back->addChild(content_img);
 	}
 	
 	CCDelayTime* t_delay = CCDelayTime::create(0.6f);
@@ -750,7 +725,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 
 CCNode* LoadingTipScene::getCurtainTipImage()
 {
-	int total_loading_tip = 4;
+	int total_loading_tip = kMyLocalKey_titleLoadingEnd - kMyLocalKey_titleLoadingBegin - 1;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCNode* loading_tip_node = CCNode::create();
@@ -807,50 +782,60 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	mySGD->before_curtain_tip_type = selected_loading_tip;
 	
 	//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
-	string tip_filename = "loading_tip_";
-	if(selected_loading_tip == 0)
-		tip_filename += "achievement";
-	else if(selected_loading_tip == 1)
-		tip_filename += "bosstip1";
-	else if(selected_loading_tip == 2)
-		tip_filename += "bosstip2";
-	else if(selected_loading_tip == 3)
-		tip_filename += "newpuzzle";
-	else
-		tip_filename += "bosstip1";
 	
-	tip_filename += ".png";
+	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 12);
+	content_label->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f));
+	loading_tip_back->addChild(content_label);
 	
-	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
-	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
-	loading_tip_back->addChild(content_img);
+//	string tip_filename = "loading_tip_";
+//	if(selected_loading_tip == 0)
+//		tip_filename += "achievement";
+//	else if(selected_loading_tip == 1)
+//		tip_filename += "bosstip1";
+//	else if(selected_loading_tip == 2)
+//		tip_filename += "bosstip2";
+//	else if(selected_loading_tip == 3)
+//		tip_filename += "newpuzzle";
+//	else
+//		tip_filename += "bosstip1";
+//	
+//	tip_filename += ".png";
+//	
+//	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
+//	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
+//	loading_tip_back->addChild(content_img);
 	
 	return loading_tip_node;
 }
 
 CCSprite* LoadingTipScene::getLoadingTipImage()
 {
-	int total_loading_tip = 4;
+	int total_loading_tip = kMyLocalKey_titleLoadingEnd - kMyLocalKey_titleLoadingBegin - 1;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
-	string tip_filename = "loading_tip_";
-	if(selected_loading_tip == 0)
-		tip_filename += "achievement";
-	else if(selected_loading_tip == 1)
-		tip_filename += "bosstip1";
-	else if(selected_loading_tip == 2)
-		tip_filename += "bosstip2";
-	else if(selected_loading_tip == 3)
-		tip_filename += "newpuzzle";
-	else
-		tip_filename += "bosstip1";
 	
-	tip_filename += ".png";
+	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 12);
+	content_label->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f));
+	loading_tip_back->addChild(content_label);
 	
-	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
-	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
-	loading_tip_back->addChild(content_img);
+//	string tip_filename = "loading_tip_";
+//	if(selected_loading_tip == 0)
+//		tip_filename += "achievement";
+//	else if(selected_loading_tip == 1)
+//		tip_filename += "bosstip1";
+//	else if(selected_loading_tip == 2)
+//		tip_filename += "bosstip2";
+//	else if(selected_loading_tip == 3)
+//		tip_filename += "newpuzzle";
+//	else
+//		tip_filename += "bosstip1";
+//	
+//	tip_filename += ".png";
+//	
+//	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
+//	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
+//	loading_tip_back->addChild(content_img);
 	
 	return loading_tip_back;
 }
