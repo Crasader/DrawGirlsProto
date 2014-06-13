@@ -18,6 +18,7 @@ using namespace std;
 
 class CommonButton;
 class CCMenuLambda;
+class KSLabelTTF;
 class LoadingTipScene : public CCLayer
 {
 public:
@@ -38,7 +39,7 @@ public:
 private:
 	
 	string next_scene_name;
-	CCLabelTTF* progress_label;
+	KSLabelTTF* progress_label;
 	int total_load_img;
 	int ing_load_img;
 	

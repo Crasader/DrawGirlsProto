@@ -1142,7 +1142,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ko->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ko->setObject(CCString::create("도전 실패"), kMyLocalKey_endlessKeepWin);
+	ko->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
 	ko->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ko->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -1855,7 +1855,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	en->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	en->setObject(CCString::create("도전실패"), kMyLocalKey_endlessKeepWin);
+	en->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
 	en->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	en->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -2594,7 +2594,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ja->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ja->setObject(CCString::create("도전실패"), kMyLocalKey_endlessKeepWin);
+	ja->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
 	ja->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ja->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);

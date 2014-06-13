@@ -192,7 +192,7 @@ void StartSettingPopup::setMain()
 	{
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 15);
 		stage_number_label->setColor(ccc3(255, 170, 20));
-		stage_number_label->setPosition(ccp(65, 256));
+		stage_number_label->setPosition(ccp(55, 256));
 		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
 		
@@ -205,7 +205,7 @@ void StartSettingPopup::setMain()
 		{
 			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 			stage_number_label->setColor(ccc3(255, 170, 20));
-			stage_number_label->setPosition(ccp(65, 256));
+			stage_number_label->setPosition(ccp(55, 256));
 			setFormSetter(stage_number_label);
 			main_case->addChild(stage_number_label);
 			
@@ -217,7 +217,7 @@ void StartSettingPopup::setMain()
 			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 15);
 			setFormSetter(piece_number_label);
 			piece_number_label->setColor(ccc3(255, 170, 20));
-			piece_number_label->setPosition(ccp(65, 256));
+			piece_number_label->setPosition(ccp(55, 256));
 			main_case->addChild(piece_number_label);
 			
 			is_before_selected_event_stage = false;
@@ -286,21 +286,21 @@ void StartSettingPopup::setMain()
 	for(int i=0;i<item_list.size();i++)
 	{
 		ITEM_CODE t_code = item_list[i];
-		if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySD->getSilType() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
@@ -372,11 +372,11 @@ void StartSettingPopup::setMain()
 		CCPoint item_position = ccp(211.f + i*70.f, 193);
 		
 		bool is_unlocked = true;
-		if(t_ic == kIC_baseSpeedUp && mySGD->getItem9OpenStage() > mySD->getSilType())
+		if(t_ic == kIC_baseSpeedUp && mySGD->getItem9OpenStage() > mySGD->getUserdataHighPiece())
 			is_unlocked = false;
-		else if(t_ic == kIC_doubleItem && mySGD->getItem6OpenStage() > mySD->getSilType())
+		else if(t_ic == kIC_doubleItem && mySGD->getItem6OpenStage() > mySGD->getUserdataHighPiece())
 			is_unlocked = false;
-		else if(t_ic == kIC_magnet && mySGD->getItem11OpenStage() > mySD->getSilType())
+		else if(t_ic == kIC_magnet && mySGD->getItem11OpenStage() > mySGD->getUserdataHighPiece())
 			is_unlocked = false;
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);

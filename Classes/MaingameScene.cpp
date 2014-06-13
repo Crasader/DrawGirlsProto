@@ -604,8 +604,15 @@ void Maingame::finalSetting()
 	screen_side_warning_node->setPosition(CCPointZero);
 	addChild(screen_side_warning_node, screenNodeZorder);
 	
+	if(mySGD->is_endless_mode)
+	{
+		thumb_case->setPositionY(myDSH->ui_center_y-10);
+		sil_thumb->setPositionY(myDSH->ui_center_y-10);
+		thumb_texture->setPositionY(myDSH->ui_center_y-10);
+	}
 	
-	thumb_base_position = ccp(40-160.f*thumb_scale,myDSH->ui_center_y-215.f*thumb_scale);
+	
+	thumb_base_position = ccp(40-160.f*thumb_scale,myDSH->ui_center_y-10-215.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
@@ -632,7 +639,7 @@ void Maingame::finalSetting()
 	{
 		auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_you.ccbi");
 		replay_bomb = temp.first;
-		replay_bomb->setPosition(ccp(440, myDSH->ui_center_y+70));
+		replay_bomb->setPosition(ccp(440, myDSH->ui_center_y+60));
 		addChild(replay_bomb,clearshowtimeZorder);
 		
 		replay_manager = temp.second;
@@ -648,19 +655,19 @@ void Maingame::finalSetting()
 //		{
 			CCScale9Sprite* replay_thumb_case = CCScale9Sprite::create("minimap_back.png", CCRectMake(0, 0, 30, 30), CCRectMake(14, 14, 2, 2));
 			replay_thumb_case->setContentSize(CCSizeMake(320*thumb_scale, 430*thumb_scale));
-			replay_thumb_case->setPosition(ccp(480-40,myDSH->ui_center_y));
+			replay_thumb_case->setPosition(ccp(480-40,myDSH->ui_center_y-10));
 			replay_all_node->addChild(replay_thumb_case);
 			
 			replay_sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))->getCString()));
 			int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 			replay_sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d)*0.7f, NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)*0.7f);
 			replay_sil_thumb->setScale(thumb_scale);
-			replay_sil_thumb->setPosition(ccp(480-40,myDSH->ui_center_y));
+			replay_sil_thumb->setPosition(ccp(480-40,myDSH->ui_center_y-10));
 			replay_all_node->addChild(replay_sil_thumb, -1);
 			
 			replay_thumb_texture = CCRenderTexture::create(320, 430);
 			replay_thumb_texture->setScale(thumb_scale);
-			replay_thumb_texture->setPosition(ccp(480-40,myDSH->ui_center_y));//myDSH->ui_top-90-215.f*thumb_scale));
+			replay_thumb_texture->setPosition(ccp(480-40,myDSH->ui_center_y-10));//myDSH->ui_top-90-215.f*thumb_scale));
 			replay_all_node->addChild(replay_thumb_texture);
 			
 			myGD->V_I["Main_refreshReplayThumb"] = std::bind(&Maingame::refreshReplayThumb, this, _1);
@@ -713,7 +720,7 @@ void Maingame::finalSetting()
         
 		string flag = mySGD->endless_flag.getV();
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8));
+		selectedFlagSpr->setPosition(ccp(480-40,myDSH->ui_center_y-10) + ccp(-20,215.f*0.17f+8));
 		selectedFlagSpr->setScale(0.5f);
 		replay_all_node->addChild(selectedFlagSpr);
 		
@@ -721,7 +728,7 @@ void Maingame::finalSetting()
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 10);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
-		nick_label->setPosition(ccp(480-40,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
+		nick_label->setPosition(ccp(480-40,myDSH->ui_center_y-10) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
 		replay_all_node->addChild(nick_label);
 		
 		addChild(KSGradualValue<float>::create(480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2+100, 480-40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
@@ -731,7 +738,7 @@ void Maingame::finalSetting()
 		if(use_item_cnt > 0)
 		{
 			float item_scale = 0.18f;
-			CCPoint item_base_position = ccp(480-40, myDSH->ui_center_y) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
+			CCPoint item_base_position = ccp(480-40, myDSH->ui_center_y-10) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
 			CCPoint distance_position = ccp(14,0);
 			float signed_distance = 100.f;
 			
@@ -760,7 +767,7 @@ void Maingame::finalSetting()
 		
 	}
 	
-	if(mySGD->is_endless_mode)
+	if(mySGD->is_endless_mode && mySGD->getStartMapGachaCnt() == 0)
 	{
 		CCNode* exit_target = this;
 		exit_target->onExit();
@@ -3199,8 +3206,8 @@ void Maingame::showScoreMissileEffect(CCPoint t_position)
 
 void Maingame::scoreAttackMissile(int t_damage)
 {
-	CCPoint origin_position = ccp(40, myDSH->ui_center_y+70);
-	CCPoint final_position = ccp(440, myDSH->ui_center_y);
+	CCPoint origin_position = ccp(40, myDSH->ui_center_y+60);
+	CCPoint final_position = ccp(440, myDSH->ui_center_y-10);
 	
 	CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile_me.ccbi").first;
 	t_missile->setPosition(origin_position);
@@ -3228,7 +3235,7 @@ void Maingame::scoreAttackMissile(int t_damage)
 											   t_missile->removeFromParent();
 											   
 											   CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
-											   bomb_img->setPosition(ccp(440, myDSH->ui_center_y));
+											   bomb_img->setPosition(ccp(440, myDSH->ui_center_y-10));
 											   addChild(bomb_img, myUIZorder);
 											   
 											   bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
@@ -3236,7 +3243,7 @@ void Maingame::scoreAttackMissile(int t_damage)
 											   KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
 											   t_label->setColor(ccRED);
 											   t_label->enableOuterStroke(ccBLACK, 1.f);
-											   t_label->setPosition(ccp(440, myDSH->ui_center_y));
+											   t_label->setPosition(ccp(440, myDSH->ui_center_y-10));
 											   t_label->setScale(0.7f);
 											   addChild(t_label, myUIZorder);
 											   
@@ -3258,12 +3265,12 @@ void Maingame::scoreAttackMissile(int t_damage)
 																																							  {
 																																								  addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																																		 {
-																																																			 t_label->setPosition(ccp(440, myDSH->ui_center_y-25*t));
+																																																			 t_label->setPosition(ccp(440, myDSH->ui_center_y-35*t));
 																																																			 t_label->setScale(1.2f-0.3f*t);
 																																																			 t_label->setOpacity(255-t*255);
 																																																		 }, [=](float t)
 																																																		 {
-																																																			 t_label->setPosition(ccp(440, myDSH->ui_center_y-25));
+																																																			 t_label->setPosition(ccp(440, myDSH->ui_center_y-35));
 																																																			 t_label->setScale(0.9f);
 																																																			 t_label->setOpacity(0);
 																																																			 t_label->removeFromParent();

@@ -478,6 +478,18 @@ bool PuzzleScene::init()
 			mySGD->is_before_stage_img_download = false;
 			topReopenning();
 		}
+		else
+		{
+			CCSprite* title_name = CCSprite::create("temp_title_name.png");
+			title_name->setPosition(ccp(240,160));
+			title_name->setOpacity(255);
+			addChild(title_name, kPuzzleZorder_back);
+			
+			CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(title_name, callfunc_selector(CCSprite::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+			title_name->runAction(t_seq);
+		}
 		
 		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		
@@ -924,6 +936,16 @@ void PuzzleScene::endSuccessPuzzleEffect()
 void PuzzleScene::showPerfectPuzzleEffect()
 {
 	CCLOG("perfect puzzle animation");
+	
+	if(selected_piece_img)
+	{
+		selected_piece_img->setVisible(false);
+//		addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}));
+	}
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
