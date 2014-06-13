@@ -216,9 +216,9 @@ void RivalSelectPopup::startRivalAnimation()
 								left_nick->setPosition(ccp(0, 5));
 								left_node->addChild(left_nick);
 								
-								KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[0]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
-								left_level->setPosition(ccp(0, -10));
-								left_node->addChild(left_level);
+//								KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[0]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
+//								left_level->setPosition(ccp(0, -10));
+//								left_node->addChild(left_level);
 								
 								KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[0]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 								left_ing_win->setColor(ccc3(255,170,20));
@@ -265,9 +265,9 @@ void RivalSelectPopup::startRivalAnimation()
 													center_nick->setPosition(ccp(0, 5));
 													center_node->addChild(center_nick);
 													
-													KSLabelTTF* center_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[1]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
-													center_level->setPosition(ccp(0, -10));
-													center_node->addChild(center_level);
+//													KSLabelTTF* center_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[1]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
+//													center_level->setPosition(ccp(0, -10));
+//													center_node->addChild(center_level);
 													
 													KSLabelTTF* center_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[1]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 													center_ing_win->setColor(ccc3(255,170,20));
@@ -313,9 +313,9 @@ void RivalSelectPopup::startRivalAnimation()
 																		right_nick->setPosition(ccp(0, 5));
 																		right_node->addChild(right_nick);
 																		
-																		KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[2]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
-																		right_level->setPosition(ccp(0, -10));
-																		right_node->addChild(right_level);
+//																		KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[2]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
+//																		right_level->setPosition(ccp(0, -10));
+//																		right_node->addChild(right_level);
 																		
 																		KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[2]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 																		right_ing_win->setColor(ccc3(255,170,20));

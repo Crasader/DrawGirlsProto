@@ -418,13 +418,20 @@ void EndlessModeResult::setMain()
 	
 	string my_flag = myDSH->getStringForKey(kDSH_Key_flag);
 	CCSprite* left_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(my_flag).c_str());
-	left_flag->setPosition(ccp(25,26));
+	left_flag->setPosition(ccp(0,26));
 	left_title->addChild(left_flag);
 	
 	KSLabelTTF* left_nick = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 13);
 	left_nick->enableOuterStroke(ccBLACK, 1.f);
-	left_nick->setPosition(ccp(97, 24));
+	left_nick->setPosition(ccp(0, 26));
 	left_title->addChild(left_nick);
+	
+	float left_f_width = left_flag->getContentSize().width * left_flag->getScale();
+	float left_n_width = left_nick->getContentSize().width * left_nick->getScale();
+	
+	left_flag->setPositionX(left_title->getContentSize().width/2.f - left_n_width/2.f);
+	left_nick->setPositionX(left_title->getContentSize().width/2.f + left_f_width/2.f);
+	
 	
 	
 	CCRect left_rect = CCRectMake(left_back->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f, (480-30)/2.f-20, 90);
@@ -531,13 +538,19 @@ void EndlessModeResult::setMain()
 	
 	string t_right_flag = mySGD->temp_endless_flag.getV();
 	CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(t_right_flag).c_str());
-	right_flag->setPosition(ccp(25,26));
+	right_flag->setPosition(ccp(0,26));
 	right_title->addChild(right_flag);
 	
 	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->temp_endless_nick.getV().c_str(), mySGD->getFont().c_str(), 13);
 	right_nick->enableOuterStroke(ccBLACK, 1.f);
-	right_nick->setPosition(ccp(97, 24));
+	right_nick->setPosition(ccp(0, 26));
 	right_title->addChild(right_nick);
+	
+	float right_f_width = right_flag->getContentSize().width * right_flag->getScale();
+	float right_n_width = right_nick->getContentSize().width * right_nick->getScale();
+	
+	right_flag->setPositionX(right_title->getContentSize().width/2.f - right_n_width/2.f);
+	right_nick->setPositionX(right_title->getContentSize().width/2.f + right_f_width/2.f);
 	
 	
 	
@@ -1152,6 +1165,7 @@ void EndlessModeResult::setMain()
 	if(mySGD->getScore() <= mySGD->temp_endless_score.getV())
 	{
 		next_item->setVisible(false);
+		stop_item->setPosition(ccp(0, 0));
 	}
 	
 	if(is_calc)

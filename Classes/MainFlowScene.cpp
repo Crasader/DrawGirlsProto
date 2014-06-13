@@ -662,6 +662,13 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 //		mySIL->addImageAsync(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i)-1)->getCString(), this, callfuncO_selector(MainFlowScene::loadTempFunc));
 //	}
 	
+	CCSprite* title_name = CCSprite::create("temp_title_name.png");
+	title_name->setPosition(ccp(240,160));
+	title_name->setOpacity(0);
+	addChild(title_name, kMainFlowZorder_back);
+	
+	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 255);
+	title_name->runAction(t_fade);
 	
 	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	bool is_found = false;
@@ -731,7 +738,10 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 	
 	if(!is_found)
 	{
-		addChild(KSTimer::create(0.6f, [=](){end_func();}));
+		addChild(KSTimer::create(0.6f, [=]()
+		{
+			end_func();
+		}));
 	}
 }
 

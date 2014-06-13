@@ -903,7 +903,8 @@ void LoadingTipScene::readyLoading()
 	total_load_img = sil_load_list.size() + default_load_list.size();
 	ing_load_img = 0;
 	
-	progress_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", (100.f*ing_load_img)/total_load_img)->getCString(), mySGD->getFont().c_str(), 11);
+	progress_label = KSLabelTTF::create(CCString::createWithFormat("%.0f", (100.f*ing_load_img)/total_load_img)->getCString(), mySGD->getFont().c_str(), 11);
+	progress_label->enableOuterStroke(ccBLACK, 1.f);
 	progress_label->setPosition(ccp(240,38));
 	addChild(progress_label, kLoadingTipZorder_content);
 	

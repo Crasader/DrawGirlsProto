@@ -374,7 +374,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				state_ment->setPosition(ccp(240,80));
 				ing_download_cnt = 1;
 				ing_download_per = 0;
-				download_state = CCLabelTTF::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), mySGD->getFont().c_str(), 11);
+				download_state = KSLabelTTF::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), mySGD->getFont().c_str(), 11);
+				download_state->enableOuterStroke(ccBLACK, 1.f);
 				download_state->setPosition(ccp(240,38));
 				addChild(download_state, kSLD_Z_content);
 				is_downloading = true;
@@ -507,7 +508,8 @@ void StageListDown::endOpenning()
 	state_ment->setPosition(ccp(240,80));
 	ing_download_cnt = 1;
 	ing_download_per = 0;
-	download_state = CCLabelTTF::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), mySGD->getFont().c_str(), 11);
+	download_state = KSLabelTTF::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), mySGD->getFont().c_str(), 11);
+	download_state->enableOuterStroke(ccBLACK, 1.f);
 	download_state->setPosition(ccp(240,90));
 	addChild(download_state, kSLD_Z_content);
 	is_downloading = true;

@@ -75,9 +75,9 @@ bool ZoomScript::init()
 		}
 	}
 	
-	CCSprite* title_name = CCSprite::create("temp_title_name.png");
-	title_name->setPosition(ccp(240,myDSH->ui_center_y));
-	addChild(title_name, kZS_Z_back);
+//	CCSprite* title_name = CCSprite::create("temp_title_name.png");
+//	title_name->setPosition(ccp(240,myDSH->ui_center_y));
+//	addChild(title_name, kZS_Z_back);
 	
 	game_node = CCNode::create();
 	game_node->setScale(1.5f);

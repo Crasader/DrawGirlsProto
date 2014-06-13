@@ -90,7 +90,7 @@ void ComboParent::showCombo (int t_combo)
 		t_cv->setScale(1.f/1.5f);
 		
 		if(mySGD->is_endless_mode)
-			t_cv->setPosition(ccp(40,myDSH->ui_center_y+70));
+			t_cv->setPosition(ccp(40,myDSH->ui_center_y+60));
 		else
 			t_cv->setPosition(ccpAdd(ccp(480-8,myDSH->ui_top-13), ccp(20,-45)));
 		addChild(t_cv,0,1);// 1 : ComboView
@@ -1857,7 +1857,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	int cnt = t_damage/3000;
 	
 	CCNode* t_node = CCNode::create();
-	t_node->setPosition(ccp(440,myDSH->ui_center_y+70));
+	t_node->setPosition(ccp(440,myDSH->ui_center_y+60));
 	t_node->setScale(1.f/1.5f);
 	addChild(t_node);
 	
@@ -1898,8 +1898,8 @@ void PlayUI::scoreAttackMissile(int t_damage)
 							 {
 								 myGD->communication("Main_stopBomb");
 								 
-								 CCPoint origin_position = ccp(440, myDSH->ui_center_y+70);
-								 CCPoint final_position = ccp(40, myDSH->ui_center_y);
+								 CCPoint origin_position = ccp(440, myDSH->ui_center_y+60);
+								 CCPoint final_position = ccp(40, myDSH->ui_center_y-10);
 								 
 								 CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile_you.ccbi").first;
 								 t_missile->setPosition(origin_position);
@@ -1927,7 +1927,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																			t_missile->removeFromParent();
 																			
 																			CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
-																			bomb_img->setPosition(ccp(40, myDSH->ui_center_y));
+																			bomb_img->setPosition(ccp(40, myDSH->ui_center_y-10));
 																			addChild(bomb_img);
 																			
 																			bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
@@ -1935,7 +1935,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																			KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
 																			t_label->setColor(ccRED);
 																			t_label->enableOuterStroke(ccBLACK, 1.f);
-																			t_label->setPosition(ccp(40, myDSH->ui_center_y));
+																			t_label->setPosition(ccp(40, myDSH->ui_center_y-10));
 																			t_label->setScale(0.7f);
 																			addChild(t_label);
 																			
@@ -1957,12 +1957,12 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																																														   {
 																																															   addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																																									  {
-																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-25*t));
+																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-35*t));
 																																																										  t_label->setScale(1.2f-0.3f*t);
 																																																										  t_label->setOpacity(255-t*255);
 																																																									  }, [=](float t)
 																																																									  {
-																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-25));
+																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-35));
 																																																										  t_label->setScale(0.9f);
 																																																										  t_label->setOpacity(0);
 																																																										  t_label->removeFromParent();
@@ -2802,7 +2802,7 @@ void PlayUI::myInit ()
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		score_label->setAnchorPoint(ccp(0.5f,0.5f));
-		score_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(0,-215.f*0.17f+10));
+		score_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y-10) + ccp(0,-215.f*0.17f+10));
 		
 		addChild(KSGradualValue<float>::create(40-UI_OUT_DISTANCE, 40, UI_IN_TIME, [=](float t){score_label->setPositionX(t);}, [=](float t){score_label->setPositionX(40);}));
 		
@@ -2816,7 +2816,7 @@ void PlayUI::myInit ()
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 10);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
-		nick_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
+		nick_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y-10) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
 		thumb_node->addChild(nick_label);
 		
 		addChild(KSGradualValue<float>::create(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2-UI_OUT_DISTANCE, 40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
@@ -2825,7 +2825,7 @@ void PlayUI::myInit ()
 			nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);
 			auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_me.ccbi");
 			bomb_img = temp.first;
-			bomb_img->setPosition(ccp(40, myDSH->ui_center_y+70));
+			bomb_img->setPosition(ccp(40, myDSH->ui_center_y+60));
 			addChild(bomb_img,-1);
 			
 			bomb_manager = temp.second;
@@ -3349,7 +3349,7 @@ void PlayUI::myInit ()
 	if(mySGD->is_endless_mode)
 	{
 		item_scale = 0.18f;
-		item_base_position = ccp(40, myDSH->ui_center_y) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
+		item_base_position = ccp(40, myDSH->ui_center_y-10) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
 		distance_position = ccp(14,0);
 		add_target = thumb_node;
 	}

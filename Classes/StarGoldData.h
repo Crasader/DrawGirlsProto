@@ -862,6 +862,7 @@ public:
 	KSProtectVar<int> stage_attack_count;
 	KSProtectVar<int> hunt_value;
 	
+	
 private:
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
