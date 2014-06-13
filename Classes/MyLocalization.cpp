@@ -1106,7 +1106,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
 	
 	ko->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	ko->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
+	ko->setObject(CCString::create("쿠폰 번호"), kMyLocalKey_couponContent);
 	ko->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	ko->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ko->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);

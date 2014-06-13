@@ -37,7 +37,9 @@ private:
 	
 	CCNode* m_container;
 	
-	CCEditBox* input_text;
+	CCEditBox* input_text1;
+	CCEditBox* input_text2;
+	CCEditBox* input_text3;
 	
 	CCScale9Sprite* back_case;
 	LoadingLayer* loading_layer;
@@ -47,6 +49,7 @@ private:
 	void couponAction(CCObject* sender, CCControlEvent t_event);
 	void resultUseCoupon(Json::Value result_data);
 	
+	void initiateEditBox(CCEditBox* editbox);
 	virtual void editBoxEditingDidBegin(CCEditBox* editBox);
     virtual void editBoxEditingDidEnd(CCEditBox* editBox);
     virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);

@@ -18,7 +18,7 @@
 #include "MyLocalization.h"
 #include "CommonButton.h"
 #include "CommonAnimation.h"
-
+#include "FormSetter.h"
 CouponPopup* CouponPopup::create(int t_touch_priority, function<void()> t_end_func)
 {
 	CouponPopup* t_mup = new CouponPopup();
@@ -29,6 +29,7 @@ CouponPopup* CouponPopup::create(int t_touch_priority, function<void()> t_end_fu
 
 void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 {
+	startFormSetter(this);
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
@@ -62,8 +63,6 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	CCScale9Sprite* t_back = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	t_back->setOpacity(0);
 	
 	
 	CommonButton* cancel_button = CommonButton::createCloseButton(touch_priority);
@@ -74,9 +73,14 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 									   return;
 								   
 								   is_menu_enable = false;
-								   this->input_text->setEnabled(false);
-								   this->input_text->removeFromParent();
+								   input_text1->setEnabled(false);
+								   input_text1->removeFromParent();
 								   
+								   input_text2->setEnabled(false);
+								   input_text2->removeFromParent();
+									 
+								   input_text3->setEnabled(false);
+								   input_text3->removeFromParent();
 								   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 								   
 									 CommonAnimation::closePopup(this, m_container, gray, [=](){
@@ -88,32 +92,68 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	m_container->addChild(cancel_button);
 	
 	
+	
+	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_couponTitle), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
-	CCScale9Sprite* nick_case = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	nick_case->setContentSize(CCSizeMake(236,35));
-	nick_case->setPosition(ccp(0,7));
-	m_container->addChild(nick_case);
+	CCScale9Sprite* nick_case1 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	nick_case1->setAnchorPoint(ccp(0, 0.5f));
+	nick_case1->setContentSize(CCSizeMake(70,35));
+	nick_case1->setPosition(ccp(-128.0,9.5)); 			// dt (-128.0,2.5)
+	m_container->addChild(nick_case1);
+	
+	CCScale9Sprite* nick_case2 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	nick_case2->setAnchorPoint(ccp(0, 0.5f));
+	nick_case2->setContentSize(CCSizeMake(70,35));
+	nick_case2->setPosition(ccp(-60.5,10.0)); 			// dt (-60.5,3.0)
+	m_container->addChild(nick_case2);
+	
+	CCScale9Sprite* nick_case3 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	nick_case3->setAnchorPoint(ccp(0, 0.5f));
+	nick_case3->setContentSize(CCSizeMake(70,35));
+	nick_case3->setPosition(ccp(7.5,10.5)); 			// dt (7.5,3.5)
+	m_container->addChild(nick_case3);
+
 	
 	
-	input_text = CCEditBox::create(CCSizeMake(200, 35), t_back);
-	input_text->setPosition(ccp(240,227));
-	input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_couponContent));
-	input_text->setReturnType(kKeyboardReturnTypeDone);
-	input_text->setFont(mySGD->getFont().c_str(), 15);
-	input_text->setInputMode(kEditBoxInputModeSingleLine);
-	input_text->setDelegate(this);
-//	m_container->addChild(input_text);
-	input_text->setTouchPriority(touch_priority);
-	input_text->setEnabled(false);
-	input_text->setVisible(false);
 	
-	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text, 99999);
+	CCScale9Sprite* t_back1 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	t_back1->setOpacity(0);
+	input_text1 = CCEditBox::create(CCSizeMake(45, 35), t_back1);
+	input_text1->setPosition(ccp(117.0,231.0)); 			// dt (117.0,4.0)
+	input_text1->setAnchorPoint(ccp(0, 0.5f));
+	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 	
+	CCScale9Sprite* t_back2 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	t_back2->setOpacity(0);
+	input_text2 = CCEditBox::create(CCSizeMake(45, 35), t_back2);
+	input_text2->setPosition(ccp(184.0,231.0)); 			// dt (184.0,4.0)
+	input_text2->setAnchorPoint(ccp(0, 0.5f));
+	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text2, 99999);
+	
+	CCScale9Sprite* t_back3 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	t_back3->setOpacity(0);
+	input_text3 = CCEditBox::create(CCSizeMake(45, 35), t_back3);
+	input_text3->setPosition(ccp(252.0,234.0)); 			// dt (252.0,7.0)
+	input_text3->setAnchorPoint(ccp(0, 0.5f));
+	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text3, 99999);
+	
+	
+	initiateEditBox(input_text1);
+	initiateEditBox(input_text2);
+	initiateEditBox(input_text3);
+
+	setFormSetter(input_text1);
+	setFormSetter(input_text2);
+	setFormSetter(input_text3);
+	
+	setFormSetter(nick_case1);
+	setFormSetter(nick_case2);
+	setFormSetter(nick_case3);
 		
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
@@ -129,15 +169,20 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	ok_button->setTouchPriority(touch_priority);
 
-	t_back->setOpacity(0);
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
 //		t_back->setOpacity(0);
 		
 	}, [=](){
 //		t_back->setOpacity(0);
 		is_menu_enable = true;
-		input_text->setEnabled(true);
-		input_text->setVisible(true);
+		input_text1->setEnabled(true);
+		input_text1->setVisible(true);
+		
+		input_text2->setEnabled(true);
+		input_text2->setVisible(true);
+		input_text3->setEnabled(true);
+		input_text3->setVisible(true);
+		
 	});
 }
 
@@ -152,9 +197,10 @@ void CouponPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	addChild(loading_layer, 999);
 	
 	Json::Value param;
+	std::string couponText = std::string(input_text1->getText()) + input_text2->getText() + input_text3->getText();
 	param["memberID"] = myHSP->getMemberID();
-	param["cuponCode"] = input_text->getText();
-	
+	param["cuponCode"] = couponText;
+
 	myHSP->command("usecupon", param, json_selector(this, CouponPopup::resultUseCoupon));
 }
 
@@ -190,9 +236,14 @@ void CouponPopup::resultUseCoupon(Json::Value result_data)
 
 void CouponPopup::createResultPopup(string title, string content)
 {
-	input_text->setVisible(false);
-	input_text->setEnabled(false);
+	input_text1->setVisible(false);
+	input_text1->setEnabled(false);
 	
+	input_text2->setVisible(false);
+	input_text2->setEnabled(false);
+	
+	input_text3->setVisible(false);
+	input_text3->setEnabled(false);
 	ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -278,8 +329,14 @@ void CouponPopup::createResultPopup(string title, string content)
 			
 		}, [=](){
 			is_menu_enable = true;
-			input_text->setVisible(true);
-			input_text->setEnabled(true);
+			input_text1->setVisible(true);
+			input_text1->setEnabled(true);
+			
+			input_text2->setVisible(true);
+			input_text2->setEnabled(true);
+			
+			input_text3->setVisible(true);
+			input_text3->setEnabled(true);
 			t_popup->removeFromParent();
 			
 		});
@@ -322,8 +379,33 @@ void CouponPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 void CouponPopup::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
 {
 	CCLOG("edit changed : %s", text.c_str());
+	if(text.size() == 4)
+	{
+		if(editBox == input_text1)
+		{
+			input_text2->touchDownAction(nullptr, CCControlEvent());
+		}
+		else if(editBox == input_text2)
+		{
+			input_text3->touchDownAction(nullptr, CCControlEvent());
+		}
+	}
 }
 void CouponPopup::editBoxReturn(CCEditBox* editBox)
 {
 	CCLOG("edit return");
+}
+void CouponPopup::initiateEditBox(CCEditBox* editbox)
+{
+	editbox->setAnchorPoint(ccp(0, 0.5f));
+	editbox->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_couponContent));
+	editbox->setReturnType(kKeyboardReturnTypeDone);
+	editbox->setFont(mySGD->getFont().c_str(), 15);
+	editbox->setInputMode(kEditBoxInputModeSingleLine);
+	editbox->setDelegate(this);
+//	m_container->addChild(input_text);
+	editbox->setTouchPriority(touch_priority);
+	editbox->setMaxLength(4);
+	editbox->setEnabled(false);
+	editbox->setVisible(false);
 }
