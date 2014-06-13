@@ -936,18 +936,18 @@ private:
 	KSProtectVar<int> challenge_cool_time; // 도전요청 시간제한
 	KSProtectVar<int> msg_remove_day; // 메세지 보관일 수
 	KSProtectVar<int> gacha_gold_fee; // 골드 가챠 가격(골드)
-	KSProtectVar<int> gacha_ruby_fee; // 루비 가챠 가격(루비)
+	KSProtectVar<int> gacha_ruby_fee; // 잼 가챠 가격(잼)
 	KSProtectVar<int> gacha_social_fee; // 소셜 가챠 가격(소셜포인트)
 	KSProtectVar<int> gacha_gold_fee_retry; // 골드 가챠 가격(골드)
-	KSProtectVar<int> gacha_ruby_fee_retry; // 루비 가챠 가격(루비)
+	KSProtectVar<int> gacha_ruby_fee_retry; // 잼 가챠 가격(잼)
 	KSProtectVar<int> gacha_social_fee_retry; // 소셜 가챠 가격(소셜포인트)
 	KSProtectVar<int> card_upgrade_gold_fee; // 카드 일반강화 가격(골드)
-	KSProtectVar<int> card_upgrade_ruby_fee; // 카드 고급강화 가격(루비)
+	KSProtectVar<int> card_upgrade_ruby_fee; // 카드 고급강화 가격(잼)
 	KSProtectVar<int> heart_send_cool_time; // 하트 보내기 쿨타임
 	KSProtectVar<int> invite_max_a_day; // 하루 초대 인원 제한
 	KSProtectVar<int> invite_cool_day; // 한 친구당 친구초대 주기 일수
-	KSProtectVar<int> play_continue_fee; // 이어하기 가격(루비)
-	KSProtectVar<int> card_durability_up_fee; // 카드 내구도 회복 가격(루비)
+	KSProtectVar<int> play_continue_fee; // 이어하기 가격(잼)
+	KSProtectVar<int> card_durability_up_fee; // 카드 내구도 회복 가격(잼)
 	KSProtectVar<int> gacha_map_fee; // 맵 가챠 가격(골드)
 	KSProtectVar<int> remove_friend_cool_time; // 친구 삭제 간격(초)
 	KSProtectVar<int> SP_send_heart; // 소셜포인트 획득량(하트 보낼때)
@@ -957,7 +957,7 @@ private:
 	KSProtectVar<int> SP_send_boast; // 소셜포인트 획득량(자랑하기 보낼때)
 	KSProtectVar<int> SP_get_time; // 받은 메세지 몇초 안에 확인해야 소셜포인트 줄건지 설정
 	KSProtectVar<int> SP_get_heart; // 소셜포인트 획득량(하트온지 SPGetTime초 안에 수락하면 주는 포인트)
-	KSProtectVar<int> gacha_one_percent_fee; // 1프로 가챠 가격(루비)
+	KSProtectVar<int> gacha_one_percent_fee; // 1프로 가챠 가격(잼)
 	KSProtectVar<float> ai_adder_on_drew_or_damaged; //
 	KSProtectVar<float> fury_percent; //
 	KSProtectVar<int> SP_rent_card_thanks; // 소셜포인트 획득량-카드빌리고 보답할때

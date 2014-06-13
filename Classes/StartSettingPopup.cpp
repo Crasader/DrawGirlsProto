@@ -541,10 +541,18 @@ void StartSettingPopup::setMain()
 	setFormSetter(script_box);
 	main_case->addChild(script_box);
 	
-	
+	const char* readyLbl;
+	if(mySGD->is_endless_mode)
+	{
+		readyLbl = myLoc->getLocalForKey(kMyLocalKey_battleStart);
+	}
+	else
+	{
+		readyLbl = myLoc->getLocalForKey(kMyLocalKey_gamestart);
+	}
 	CCSprite* n_start = CCSprite::create("startsetting_start.png");
 	setFormSetter(n_start);
-	n_start_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
+	n_start_label2 = KSLabelTTF::create(readyLbl, mySGD->getFont().c_str(), 30.f);
 	setFormSetter(n_start_label2);
 	n_start_label2->disableOuterStroke();
 	n_start_label2->setColor(ccWHITE);
@@ -552,7 +560,7 @@ void StartSettingPopup::setMain()
 	n_start_label2->setPosition(ccp(n_start->getContentSize().width/2.f,39.5f));
 	n_start->addChild(n_start_label2);
 	
-	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
+	KSLabelTTF* n_start_label = KSLabelTTF::create(readyLbl, mySGD->getFont().c_str(), 30.f);
 	setFormSetter(n_start_label);
 	n_start_label->setColor(ccc3(47, 30, 6));
 	n_start_label->setPosition(ccp(n_start->getContentSize().width/2.f,40.5f));
@@ -562,7 +570,7 @@ void StartSettingPopup::setMain()
 	CCSprite* s_start = CCSprite::create("startsetting_start.png");
 	setFormSetter(s_start);
 	s_start->setColor(ccGRAY);
-	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 30.f);
+	KSLabelTTF* s_start_label = KSLabelTTF::create(readyLbl, mySGD->getFont().c_str(), 30.f);
 	setFormSetter(s_start_label);
 	s_start_label->setColor(ccc3(47, 30, 6));
 	s_start_label->setPosition(ccp(s_start->getContentSize().width/2.f,40.5f));
