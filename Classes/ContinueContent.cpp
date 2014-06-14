@@ -86,6 +86,9 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 							   t_popup->removeFromParent();
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 							   {
+								   giveup_button->setEnabled(false);
+								   continue_button->setEnabled(false);
+								   
 								   is_continue = true;
 								   
 								   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
@@ -126,6 +129,9 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								   t_popup->removeFromParent();
 								   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 								   {
+									   giveup_button->setEnabled(false);
+									   continue_button->setEnabled(false);
+									   
 									   is_continue = true;
 									   
 									   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
@@ -179,6 +185,9 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								   t_popup->removeFromParent();
 								   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 								   {
+									   giveup_button->setEnabled(false);
+									   continue_button->setEnabled(false);
+									   
 									   is_continue = true;
 									   
 									   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
@@ -224,6 +233,11 @@ void ContinueContent::giveupAction(CCObject* sender, CCControlEvent t_event)
 {
 	if(!is_menu_enable)
 		return;
+	
+	is_menu_enable = false;
+	
+	giveup_button->setEnabled(false);
+	continue_button->setEnabled(false);
 	
 	unschedule(schedule_selector(ContinueContent::countingSchedule));
 	closeAction();
@@ -324,7 +338,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_offContinue), mySGD->getFont().c_str(), 15);
 	giveup_label->setColor(ccBLACK);
 	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
-	CCControlButton* giveup_button = CCControlButton::create(giveup_label, giveup_back);
+	giveup_button = CCControlButton::create(giveup_label, giveup_back);
 	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::giveupAction), CCControlEventTouchUpInside);
 	giveup_button->setPreferredSize(CCSizeMake(80,40));
 	giveup_button->setPosition(ccp(back_case->getContentSize().width/2.f-87,back_case->getContentSize().height/2.f-85));
@@ -377,7 +391,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	
 	CCScale9Sprite* c_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	
-	CCControlButton* continue_button = CCControlButton::create(r_label, c_back);
+	continue_button = CCControlButton::create(r_label, c_back);
 	continue_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction), CCControlEventTouchUpInside);
 	continue_button->setPreferredSize(CCSizeMake(170,44));
 	continue_button->setPosition(ccp(back_case->getContentSize().width/2.f+43,back_case->getContentSize().height/2.f-85));

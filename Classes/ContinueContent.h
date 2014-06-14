@@ -88,6 +88,9 @@ private:
 	CCSprite* price_type;
 	CCLabelTTF* price_label;
 	
+	CCControlButton* giveup_button;
+	CCControlButton* continue_button;
+	
 //	void startHide()
 //	{
 //		CCScaleTo* t_scale = CCScaleTo::create(0.3f, 0.f);

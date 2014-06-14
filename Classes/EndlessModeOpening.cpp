@@ -250,7 +250,7 @@ void EndlessModeOpening::setMain()
 	
 	rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 	rank_percent_case->setAnchorPoint(ccp(0.5,0));
-	rank_percent_case->setPosition(ccp(177,15.5f + 6.f)); // 177
+	rank_percent_case->setPosition(ccp(177,15.5f)); // 177
 	graph_back->addChild(rank_percent_case);
 	
 	percent_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 13);
@@ -883,13 +883,14 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		int remain_time = remainTime.getV();
 		if(remain_time < 60)
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeSecond), remain_time)->getCString());
+//			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeSecond), remain_time)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), 0)->getCString());
 		else if(remain_time < 60*60)
 			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), remain_time/60)->getCString());
 		else if(remain_time < 60*60*24)
 			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), remain_time/60/60)->getCString());
 		else
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeDayHour), remain_time/60/60/24, (remain_time%(60*60*24))/60/60)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeDay), remain_time/60/60/24)->getCString());
 		
 		rest_time_value->setVisible(true);
 		

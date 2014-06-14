@@ -90,7 +90,7 @@ void ComboParent::showCombo (int t_combo)
 		t_cv->setScale(1.f/1.5f);
 		
 		if(mySGD->is_endless_mode)
-			t_cv->setPosition(ccp(40,myDSH->ui_center_y+70));
+			t_cv->setPosition(ccp(40,myDSH->ui_center_y+60));
 		else
 			t_cv->setPosition(ccpAdd(ccp(480-8,myDSH->ui_top-13), ccp(20,-45)));
 		addChild(t_cv,0,1);// 1 : ComboView
@@ -1098,7 +1098,137 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
-	if(!isGameover && t_p > clearPercentage.getV()) // clear 80%
+	if(mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= 0.85f)
+	{
+		is_on_clear_time_event = true;
+		clear_time_event_func([=]()
+							  {
+								  // no
+								  clearPercentage = 0.85f;
+							  }, [=]()
+							  {
+								  // yes
+								  if(!is_exchanged && is_show_exchange_coin && myGD->getCommunicationBool("MS_isCheckBossLocked") && myGD->getCommunicationBool("GIM_isChangeAllInner"))
+								  {
+									  taked_coin_cnt = 6;
+									  
+									  for(int i=1;i<=6;i++)
+									  {
+										  CCSprite* t_coin_spr = (CCSprite*)exchange_dic->objectForKey(i);
+										  CCPoint after_position = t_coin_spr->getPosition();
+										  t_coin_spr->removeFromParentAndCleanup(true);
+										  exchange_dic->removeObjectForKey(i);
+										  
+										  CCSprite* new_coin_spr = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", i)->getCString());
+										  new_coin_spr->setPosition(after_position);
+										  top_center_node->addChild(new_coin_spr);
+										  
+										  
+										  exchange_dic->setObject(new_coin_spr, i);
+									  }
+									  
+									  if(clr_cdt_type == kCLEAR_sequenceChange)
+									  {
+										  conditionClear();
+									  }
+									  
+									  isFirst = true;
+									  is_exchanged = true;
+									  my_fp->addFeverGage(20);
+									  
+									  myGD->communication("Main_startExchange");
+									  myGD->communication("Main_showChangeCard");
+									  myGD->communication("Jack_positionRefresh");
+									  
+									  m_areaGage->onChange();
+									  
+									  return;
+								  }
+								  
+								  myGD->communication("GIM_stopCoin");
+								  
+								  if(clr_cdt_type == kCLEAR_timeLimit)
+								  {
+									  //			if(playtime_limit.getV() - countingCnt.getV() >= ing_cdt_cnt.getV())
+									  conditionClear();
+									  //			else
+									  //				conditionFail();
+								  }
+								  
+								  if(clr_cdt_type == kCLEAR_default)
+									  conditionClear();
+								  
+								  if(is_cleared_cdt)
+								  {
+									  int boss_count = myGD->getMainCumberCount();
+									  for(int i=0;i<boss_count;i++)
+									  {
+										  myGD->communication("MP_bombCumber", myGD->getMainCumberCCNodeVector()[i]);
+									  }
+									  
+									  isGameover = true;
+									  myGD->setIsGameover(true);
+									  myGD->communication("CP_setGameover");
+									  stopCounting();
+									  myGD->communication("Main_allStopSchedule");
+									  myGD->communication("Main_startMoveToBossPosition");
+									  myGD->communication("CP_startDieAnimation");
+									  AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+									  
+									  CCDelayTime* t_delay = CCDelayTime::create(1.5f);
+									  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::addResultClearCCB));
+									  CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+									  runAction(t_seq);
+									  
+									  endGame(t_p < 1.f && t_p > 0.99f);
+									  
+									  for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
+									  {
+										  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+											 countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
+										  {
+											  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+											  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+										  }
+									  }
+									  
+									  for(int i=kAchievementCode_hidden_breathtaking1;i<=kAchievementCode_hidden_breathtaking2;i++)
+									  {
+										  if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+										  {
+											  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+												 playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
+											  {
+												  myAchieve->changeIngCount(AchievementCode(i), 1);
+												  AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+												  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+											  }
+										  }
+									  }
+									  
+									  myGD->communication("Main_startClearFloatingCoin", last_get_percentage);
+								  }
+								  else
+								  {
+									  conditionFail();
+									  
+									  mySGD->fail_code = kFC_missionfail;
+									  
+									  stopCounting();
+									  // timeover
+									  isGameover = true;
+									  myGD->communication("CP_setGameover");
+									  myGD->communication("Main_allStopSchedule");
+									  AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+									  
+									  addResultCCB("ui_missonfail.ccbi");
+									  AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+									  
+									  endGame(false);
+								  }
+							  });
+	}
+	else if(!isGameover && t_p > clearPercentage.getV()) // clear 80%
 	{
 		if(!is_exchanged && is_show_exchange_coin && myGD->getCommunicationBool("MS_isCheckBossLocked") && myGD->getCommunicationBool("GIM_isChangeAllInner"))
 		{
@@ -1728,7 +1858,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	int cnt = t_damage/3000;
 	
 	CCNode* t_node = CCNode::create();
-	t_node->setPosition(ccp(440,myDSH->ui_center_y+70));
+	t_node->setPosition(ccp(440,myDSH->ui_center_y+60));
 	t_node->setScale(1.f/1.5f);
 	addChild(t_node);
 	
@@ -1769,8 +1899,8 @@ void PlayUI::scoreAttackMissile(int t_damage)
 							 {
 								 myGD->communication("Main_stopBomb");
 								 
-								 CCPoint origin_position = ccp(440, myDSH->ui_center_y+70);
-								 CCPoint final_position = ccp(40, myDSH->ui_center_y);
+								 CCPoint origin_position = ccp(440, myDSH->ui_center_y+60);
+								 CCPoint final_position = ccp(40, myDSH->ui_center_y-10);
 								 
 								 CCSprite* t_missile = KS::loadCCBI<CCSprite*>(this, "endless_missile_you.ccbi").first;
 								 t_missile->setPosition(origin_position);
@@ -1798,7 +1928,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																			t_missile->removeFromParent();
 																			
 																			CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
-																			bomb_img->setPosition(ccp(40, myDSH->ui_center_y));
+																			bomb_img->setPosition(ccp(40, myDSH->ui_center_y-10));
 																			addChild(bomb_img);
 																			
 																			bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
@@ -1806,7 +1936,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																			KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
 																			t_label->setColor(ccRED);
 																			t_label->enableOuterStroke(ccBLACK, 1.f);
-																			t_label->setPosition(ccp(40, myDSH->ui_center_y));
+																			t_label->setPosition(ccp(40, myDSH->ui_center_y-10));
 																			t_label->setScale(0.7f);
 																			addChild(t_label);
 																			
@@ -1828,12 +1958,12 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																																														   {
 																																															   addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																																									  {
-																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-25*t));
+																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-35*t));
 																																																										  t_label->setScale(1.2f-0.3f*t);
 																																																										  t_label->setOpacity(255-t*255);
 																																																									  }, [=](float t)
 																																																									  {
-																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-25));
+																																																										  t_label->setPosition(ccp(40, myDSH->ui_center_y-35));
 																																																										  t_label->setScale(0.9f);
 																																																										  t_label->setOpacity(0);
 																																																										  t_label->removeFromParent();
@@ -2620,6 +2750,8 @@ void PlayUI::myInit ()
 {
 	isGameover = false;
 	
+	is_on_clear_time_event = false;
+	
 	bomb_img = NULL;
 	
 	score_value = 0;
@@ -2673,13 +2805,13 @@ void PlayUI::myInit ()
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		score_label->setAnchorPoint(ccp(0.5f,0.5f));
-		score_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(0,-215.f*0.17f+10));
+		score_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y-10) + ccp(0,-215.f*0.17f+10));
 		
 		addChild(KSGradualValue<float>::create(40-UI_OUT_DISTANCE, 40, UI_IN_TIME, [=](float t){score_label->setPositionX(t);}, [=](float t){score_label->setPositionX(40);}));
 		
 		string flag = myDSH->getStringForKey(kDSH_Key_flag);
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8));
+		selectedFlagSpr->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y-10) + ccp(-20,215.f*0.17f+8));
 		selectedFlagSpr->setScale(0.5f);
 		thumb_node->addChild(selectedFlagSpr);
 		
@@ -2687,7 +2819,7 @@ void PlayUI::myInit ()
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 10);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
-		nick_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
+		nick_label->setPosition(ccp(40-UI_OUT_DISTANCE,myDSH->ui_center_y-10) + ccp(-20,215.f*0.17f+8) + ccp(selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2, 0));
 		thumb_node->addChild(nick_label);
 		
 		addChild(KSGradualValue<float>::create(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2-UI_OUT_DISTANCE, 40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2,
@@ -2696,7 +2828,7 @@ void PlayUI::myInit ()
 			nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);
 			auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_me.ccbi");
 			bomb_img = temp.first;
-			bomb_img->setPosition(ccp(40, myDSH->ui_center_y+70));
+			bomb_img->setPosition(ccp(40, myDSH->ui_center_y+60));
 			addChild(bomb_img,-1);
 			
 			bomb_manager = temp.second;
@@ -3220,7 +3352,7 @@ void PlayUI::myInit ()
 	if(mySGD->is_endless_mode)
 	{
 		item_scale = 0.18f;
-		item_base_position = ccp(40, myDSH->ui_center_y) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
+		item_base_position = ccp(40, myDSH->ui_center_y-10) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
 		distance_position = ccp(14,0);
 		add_target = thumb_node;
 	}

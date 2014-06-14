@@ -897,13 +897,22 @@ void ClearPopup::resultGetTime(Json::Value result_data)
 		}
 	}
 }
-								
+
+//void ClearPopup::frontFlip()
+//{
+//	
+//}
+//void ClearPopup::backFlip()
+//{
+//	
+//}
 void ClearPopup::resultGetRank(Json::Value result_data)
 {
 	cell_action_list.clear();
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
@@ -933,6 +942,9 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		int alluser = result_data["alluser"].asInt();
 		int myrank = result_data["myrank"].asInt();
 		
+		int before_stage_high_rank = myDSH->getIntegerForKey(kDSH_Key_stageHighRank_int1, mySD->getSilType()); // 이전 기록
+		
+		myDSH->setIntegerForKey(kDSH_Key_stageHighRank_int1, mySD->getSilType(), myrank);
 //		CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", alluser)->getCString(), mySGD->getFont().c_str(), 10);
 //		all_user_label->setColor(ccc3(255, 170, 20));
 //		all_user_label->setAnchorPoint(ccp(1,0.5));
@@ -952,51 +964,73 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		rank_percent_case->setPosition(ccp(257+195,231));
 		main_case->addChild(rank_percent_case, kZ_CP_img);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 13);
 		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
-		percent_label->setOpacity(0);
+//		percent_label->setOpacity(0);
+		
+		// 이까지 그래프 표시하는 부분 코드.
 		
 		
 		cell_action_list.push_back([=](){
 			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,231));
 			rank_percent_case->runAction(t_move);
 			
-//			CCDelayTime* t_delay1 = CCDelayTime::create(1.f);
-//			CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 255);
-//			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
-//			my_rank_label->runAction(t_seq1);
-			
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
-			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
-			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
+//			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, /*t_fade2,*/ NULL);
 			percent_label->runAction(t_seq2);
+			addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
+																						 2.f * (1.f - rank_percent), [=](float t){
+																							 percent_label->setString(ccsf("%.0f%%", t));
+																						 }, [=](float t){
+																							 percent_label->setString(ccsf("%.0f%%", t));
+																						 }));
 		});
 		
 		Json::Value user_list = result_data["list"];
 		
 		delay_index = 0;
 		int limit_count = 3;
+		auto cellSize = CCSizeMake(210, 40);
+	
+		float spinDuration = 0.3f;
+		CCScale9Sprite* t_list_cell_case_back = nullptr;
+		CCScale9Sprite* t_list_cell_case = nullptr;
 		for(int i=0;i<user_list.size() && i<limit_count;i++)
 		{
 			string case_name;
+			bool isMe = false;
 			if(myrank == i+1)
 			{
 				case_name = "mainpopup_pupple1.png";
 				limit_count++;
+				isMe = true;
 			}
 			else
 			{
 				case_name = "rank_normal.png";
 			}
+		
 			
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(210, 40));
-			list_cell_case->setPosition(ccp(355,197-i*36));
+			auto cellPosition = ccp(355, 197 - i*36);
+			list_cell_case->setContentSize(cellSize);
+			list_cell_case->setPosition(cellPosition);
 			main_case->addChild(list_cell_case, kZ_CP_img);
 			
+			if(isMe)
+			{
+				CCScale9Sprite* list_cell_case_back = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+				list_cell_case_back->setContentSize(cellSize);
+				list_cell_case_back->setPosition(cellPosition);
+				t_list_cell_case_back = list_cell_case_back;
+				t_list_cell_case = list_cell_case;
+				main_case->addChild(list_cell_case_back, kZ_CP_img);
+
+			}
 			CCPoint rank_position = ccp(20,20);
 			if(i == 0)
 			{
@@ -1064,6 +1098,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 			list_cell_case->setContentSize(CCSizeMake(210, 40));
 			list_cell_case->setPosition(ccp(355,197-3*36));
+			t_list_cell_case = list_cell_case;
 			main_case->addChild(list_cell_case, kZ_CP_img);
 			
 			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 12);
@@ -1099,6 +1134,78 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 				CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
 				list_cell_case->runAction(t_seq);
 			});
+			
+			if(!(before_stage_high_rank == 0 || before_stage_high_rank == myrank))
+			{
+				CCScale9Sprite* list_cell_case_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+
+				list_cell_case_back->setContentSize(cellSize);
+				list_cell_case_back->setPosition(original_position);
+				t_list_cell_case_back = list_cell_case_back;
+				main_case->addChild(list_cell_case_back, kZ_CP_img);
+			}
+		}
+		if(t_list_cell_case_back)
+		{
+			std::string changedRankLbl;
+			if(before_stage_high_rank == 0 || before_stage_high_rank == myrank)
+			{
+				// nothing to do
+			}
+			else
+			{
+				
+				if(myrank - before_stage_high_rank < 0)
+				{
+					changedRankLbl = ccsf("▼   %d", myrank - before_stage_high_rank);
+				}
+				else
+				{
+					changedRankLbl = ccsf("▲   %d", myrank - before_stage_high_rank);
+				}
+				KSLabelTTF* changedRank = KSLabelTTF::create(changedRankLbl.c_str(), mySGD->getFont().c_str(), 12);
+				changedRank->setPosition(ccpFromSize(t_list_cell_case_back->getContentSize()) / 2.f);
+				changedRank->setColor(ccc3(255, 179, 0));
+				t_list_cell_case_back->addChild(changedRank);
+				
+				float flipDelay = 3.f;
+				t_list_cell_case_back->setScaleY(0);
+				frontFlip = [=](){
+					addChild(KSTimer::create(flipDelay, [=](){
+						addChild(KSGradualValue<float>::create(1.f, 0, spinDuration, [=](float t){
+							t_list_cell_case->setScaleY(t);
+						}, [=](float t){
+							t_list_cell_case->setScaleY(t);
+							
+							addChild(KSGradualValue<float>::create(0.f, 1.f, spinDuration, [=](float t){
+								t_list_cell_case_back->setScaleY(t);
+							}, [=](float t){
+								t_list_cell_case_back->setScaleY(t);
+								backFlip();
+							}));
+						}));
+					}));
+				};
+				backFlip = [=](){
+					addChild(KSTimer::create(flipDelay, [=](){
+						addChild(KSGradualValue<float>::create(1.f, 0, spinDuration, [=](float t){
+							t_list_cell_case_back->setScaleY(t);
+						}, [=](float t){
+							t_list_cell_case_back->setScaleY(t);
+							
+							addChild(KSGradualValue<float>::create(0.f, 1.f, spinDuration, [=](float t){
+								t_list_cell_case->setScaleY(t);
+							}, [=](float t){
+								t_list_cell_case->setScaleY(t);
+								frontFlip();
+							}));
+						}));
+					}));
+				};
+				addChild(KSTimer::create(5.f, [=](){
+					frontFlip();
+				}));
+			}
 		}
 		
 		is_saved_user_data = true;
@@ -2036,6 +2143,8 @@ void ClearPopup::startCalcAnimation()
 									
 									if(is_today_mission_success)
 									{
+										mySGD->is_today_mission_first = false;
+										
 										TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
 										addChild(t_popup, kZ_CP_popup);
 									}

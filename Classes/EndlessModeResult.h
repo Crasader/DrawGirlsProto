@@ -59,7 +59,7 @@ private:
 	CCMenuLambda* bottom_menu;
 	
 	virtual CCSize cellSizeForTable(CCTableView *table) {
-        return CCSizeMake((480-30)/2.f-20, 30);
+        return CCSizeMake((480-30)/2.f-20, 27);
     };
     virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);

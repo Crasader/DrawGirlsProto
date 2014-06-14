@@ -56,7 +56,7 @@ private:
 	
 	KSLabelTTF* talk_label;
 	KSLabelTTF* state_ment;
-	CCLabelTTF* download_state;
+	KSLabelTTF* download_state;
 	
 	CumberShowWindow* loading_character;
 	CCScale9Sprite* talk_box;

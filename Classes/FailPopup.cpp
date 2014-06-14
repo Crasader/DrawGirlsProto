@@ -288,7 +288,7 @@ bool FailPopup::init()
 	left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
 	left_life_decrease_score = (mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	left_time_base_score = left_life_base_score.getV() + left_life_decrease_score.getV();
-	left_time_decrease_score = (play_limit_time.getV()-mySGD->getGameTime())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
+	left_time_decrease_score = 0;//(play_limit_time.getV()-mySGD->getGameTime())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 	left_grade_base_score = left_time_base_score.getV() + left_time_decrease_score.getV();
 	left_grade_decrease_score = left_grade_base_score.getV()*0.f;
 	left_damaged_score = -mySGD->damaged_score.getV();
@@ -668,6 +668,7 @@ bool FailPopup::init()
 																				is_today_mission_success = true;
 																				if(is_today_mission_success)
 																				{
+																					mySGD->is_today_mission_first = false;
 																					TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
 																					addChild(t_popup, kZ_FP_popup);
 																				}
@@ -877,7 +878,13 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		main_case->addChild(rank_percent_case, kZ_FP_img);
 		setFormSetter(rank_percent_case);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 13);
+		addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
+																					 2.f * (1.f - rank_percent), [=](float t){
+																					 percent_label->setString(ccsf("%.0f%%", t));
+		}, [=](float t){
+			percent_label->setString(ccsf("%.0f%%", t));
+		}));
 		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));

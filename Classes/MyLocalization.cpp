@@ -627,7 +627,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("레벨 %d 업그레이드"), kMyLocalKey_upgradeLevelValue);
 	ko->setObject(CCString::create("아이템은 최대 3개까지\n선택이 가능합니다."), kMyLocalKey_totalItemSelectCount3);
 	ko->setObject(CCString::create("골드가 부족합니다."), kMyLocalKey_goldNotEnought);
-	ko->setObject(CCString::create("루비가 부족합니다."), kMyLocalKey_rubyNotEnought);
+	ko->setObject(CCString::create("잼이 부족합니다."), kMyLocalKey_rubyNotEnought);
 	ko->setObject(CCString::create("하트가 부족합니다."), kMyLocalKey_heartNotEnought);
 	ko->setObject(CCString::create("구매하러 가시겠습니까?"), kMyLocalKey_goToShop);
 	ko->setObject(CCString::create("기본속도향상"), kMyLocalKey_baseSpeedUpTitle);
@@ -642,7 +642,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
 	ko->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
 	ko->setObject(CCString::create("부활,무적아이템에 도전하세요!"), kMyLocalKey_itemGachaContent);
-	ko->setObject(CCString::create("루비상점"), kMyLocalKey_rubyShop);
+	ko->setObject(CCString::create("잼상점"), kMyLocalKey_rubyShop);
 	ko->setObject(CCString::create("골드상점"), kMyLocalKey_goldShop);
 	ko->setObject(CCString::create("하트상점"), kMyLocalKey_heartShop);
 	ko->setObject(CCString::create("구매확인"), kMyLocalKey_checkBuy);
@@ -799,13 +799,14 @@ void MyLocal::ko()
 	ko->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
 	
 	ko->setObject(CCString::create("게임시작"), kMyLocalKey_gamestart);
+	ko->setObject(CCString::create("대전 시작"), kMyLocalKey_battleStart);
 	ko->setObject(CCString::create("내 미사일"), kMyLocalKey_mymissile);
 	ko->setObject(CCString::create("파워"), kMyLocalKey_power);
 	ko->setObject(CCString::create("뽑기"), kMyLocalKey_gacha);
 	ko->setObject(CCString::create("일일미션을 완료해보세요!\n선물함으로 선물을 드려요! ^^"), kMyLocalKey_stageListDown);
 	ko->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
 	ko->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
-	ko->setObject(CCString::create("루비로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ko->setObject(CCString::create("잼로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
 	ko->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	ko->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ko->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
@@ -950,7 +951,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font color=961 size=15>모든 피스 획득!"), kMyLocalKey_puzzleSuccessTitle);
 	ko->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 하트를 드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ko->setObject(CCString::create("<font color=961 size=15>놀라워요! <font color=961 size=15>퍼펙트 클리어!!"), kMyLocalKey_puzzlePerfectTitle);
-	ko->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
+	ko->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 잼를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
 	ko->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
 	ko->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
 	ko->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
@@ -961,10 +962,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ko->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ko->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	ko->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
-	ko->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	ko->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
-	ko->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
+	ko->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
+	ko->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
+	ko->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
+	ko->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -1067,10 +1068,11 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	ko->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	ko->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	ko->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
+	ko->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
-	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>루비"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
+	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>잼"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem9);
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem6);
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem11);
@@ -1083,29 +1085,29 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>종류"), kMyLocalKey_attendanceSpecialGoodsTypeMany);
 	
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>루비"), kMyLocalKey_attendanceGoodsTypeRuby);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	ko->setObject(CCString::create("<font size=12>%d<font size=8>잼"), kMyLocalKey_attendanceGoodsTypeRuby);
+	ko->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	ko->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	ko->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem11);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	ko->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
+	ko->setObject(CCString::create("선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	ko->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
-	ko->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	ko->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	
-	ko->setObject(CCString::create("일"), kMyLocalKey_attendanceDay);
+	ko->setObject(CCString::create("일차"), kMyLocalKey_attendanceDay);
 	
 	ko->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
 	ko->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
 	ko->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
 	
 	ko->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	ko->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
+	ko->setObject(CCString::create("쿠폰 번호"), kMyLocalKey_couponContent);
 	ko->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	ko->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ko->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
@@ -1118,7 +1120,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle);
 	ko->setObject(CCString::create("<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요."), kMyLocalKey_notOpenPuzzleNotEnoughtStarContent);
 	
-	ko->setObject(CCString::create("도전 준비"), kMyLocalKey_endlessStartSettingTitle);
+	ko->setObject(CCString::create("대전 준비"), kMyLocalKey_endlessStartSettingTitle);
 	
 	ko->setObject(CCString::create("영역점수"), kMyLocalKey_endlessCalcTitleAreaScore);
 	ko->setObject(CCString::create("공격점수"), kMyLocalKey_endlessCalcTitleDamageScore);
@@ -1141,7 +1143,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ko->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ko->setObject(CCString::create("도전 실패"), kMyLocalKey_endlessKeepWin);
+	ko->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
 	ko->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ko->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -1187,7 +1189,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d위"), kMyLocalKey_rankRewardRankValue);
 	
 	ko->setObject(CCString::create("%s골드"), kMyLocalKey_rankRewardGoodsTypeGold);
-	ko->setObject(CCString::create("%s루비"), kMyLocalKey_rankRewardGoodsTypeRuby);
+	ko->setObject(CCString::create("%s잼"), kMyLocalKey_rankRewardGoodsTypeRuby);
 	ko->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem9);
 	ko->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem6);
 	ko->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem11);
@@ -1202,6 +1204,24 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("카드 승급 이벤트!"), kMyLocalKey_rankUpEventTitle);
 	ko->setObject(CCString::create("승급 비용 공짜! 승급 확률 100%!!"), kMyLocalKey_rankUpEventContent);
 	
+	ko->setObject(CCString::create("아니오"), kMyLocalKey_no);
+	ko->setObject(CCString::create("네"), kMyLocalKey_yes);
+	ko->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
+	ko->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	ko->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	ko->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
+	
+	ko->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
+	ko->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	ko->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	ko->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
+	ko->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
+	ko->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
+	ko->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
+	ko->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
+	ko->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
+	ko->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1252,7 +1272,7 @@ void MyLocal::ko()
 //	ko->setObject(CCString::create("골드가 부족하여 구매할 수 없습니다."), kMyLocalKey_notEnoughGold);
 //	ko->setObject(CCString::create("상점으로 가시겠습니까?"), kMyLocalKey_goShop);
 //	ko->setObject(CCString::create("붓이 부족하여 게임을 시작할 수 없습니다."), kMyLocalKey_notEnoughBrush);
-//	ko->setObject(CCString::create("루비가 부족하여 구매할 수 없습니다."), kMyLocalKey_notEnoughRuby);
+//	ko->setObject(CCString::create("잼이 부족하여 구매할 수 없습니다."), kMyLocalKey_notEnoughRuby);
 //	
 //	ko->setObject(CCString::create("리뷰를 남겨주시면 붓을 가득 채워드립니다."), kMyLocalKey_review);
 //	ko->setObject(CCString::create("갤러리에 등록 되었습니다. 갤러리로 가시겠습니까?"), kMyLocalKey_regiGallery);
@@ -1516,13 +1536,14 @@ void MyLocal::en()
 	en->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
 				
 	en->setObject(CCString::create("START"), kMyLocalKey_gamestart);
+	en->setObject(CCString::create("대전 시작"), kMyLocalKey_battleStart);
 	en->setObject(CCString::create("Missile"), kMyLocalKey_mymissile);
 	en->setObject(CCString::create("Damage"), kMyLocalKey_power);
 	en->setObject(CCString::create("Gacha"), kMyLocalKey_gacha);
 	en->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
 	en->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
 	en->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
-	en->setObject(CCString::create("루비로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	en->setObject(CCString::create("잼로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
 	en->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	en->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	en->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
@@ -1666,7 +1687,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font color=961 size=15>모든 피스 획득!"), kMyLocalKey_puzzleSuccessTitle);
 	en->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 하트를 드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	en->setObject(CCString::create("<font color=961 size=15>놀라워요! <font color=961 size=15>퍼펙트 클리어!!"), kMyLocalKey_puzzlePerfectTitle);
-	en->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
+	en->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 잼를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
 	en->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
 	en->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
 	en->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
@@ -1677,10 +1698,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	en->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	en->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	en->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
-	en->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	en->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
-	en->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
+	en->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
+	en->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
+	en->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
+	en->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1776,10 +1797,11 @@ void MyLocal::en()
 	en->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	en->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	en->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	en->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
+	en->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
-	en->setObject(CCString::create("<font size=13.5>%d<font size=10>루비"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
+	en->setObject(CCString::create("<font size=13.5>%d<font size=10>잼"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem9);
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem6);
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem11);
@@ -1792,20 +1814,20 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>종류"), kMyLocalKey_attendanceSpecialGoodsTypeMany);
 	
 	en->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>루비"), kMyLocalKey_attendanceGoodsTypeRuby);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	en->setObject(CCString::create("<font size=12>%d<font size=8>잼"), kMyLocalKey_attendanceGoodsTypeRuby);
+	en->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	en->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	en->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem11);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	en->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
+	en->setObject(CCString::create("선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	en->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
-	en->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	en->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	en->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
 	en->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
@@ -1826,7 +1848,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle);
 	en->setObject(CCString::create("<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요."), kMyLocalKey_notOpenPuzzleNotEnoughtStarContent);
 	
-	en->setObject(CCString::create("도전 준비"), kMyLocalKey_endlessStartSettingTitle);
+	en->setObject(CCString::create("대전 준비"), kMyLocalKey_endlessStartSettingTitle);
 	
 	en->setObject(CCString::create("영역점수"), kMyLocalKey_endlessCalcTitleAreaScore);
 	en->setObject(CCString::create("공격점수"), kMyLocalKey_endlessCalcTitleDamageScore);
@@ -1848,7 +1870,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	en->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	en->setObject(CCString::create("도전실패"), kMyLocalKey_endlessKeepWin);
+	en->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
 	en->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	en->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -1898,7 +1920,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("%d위"), kMyLocalKey_rankRewardRankValue);
 	
 	en->setObject(CCString::create("%s골드"), kMyLocalKey_rankRewardGoodsTypeGold);
-	en->setObject(CCString::create("%s루비"), kMyLocalKey_rankRewardGoodsTypeRuby);
+	en->setObject(CCString::create("%s잼"), kMyLocalKey_rankRewardGoodsTypeRuby);
 	en->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem9);
 	en->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem6);
 	en->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem11);
@@ -1912,6 +1934,25 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("카드 승급 이벤트!"), kMyLocalKey_rankUpEventTitle);
 	en->setObject(CCString::create("승급 비용 공짜! 승급 확률 100%!!"), kMyLocalKey_rankUpEventContent);
+	
+	en->setObject(CCString::create("아니오"), kMyLocalKey_no);
+	en->setObject(CCString::create("네"), kMyLocalKey_yes);
+	en->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
+	en->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	en->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	en->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
+	
+	en->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
+	en->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	en->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	en->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
+	en->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
+	en->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
+	en->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
+	en->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
+	en->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
+	en->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -2236,13 +2277,14 @@ void MyLocal::ja()
 	ja->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
 	
 	ja->setObject(CCString::create("START"), kMyLocalKey_gamestart);
+	ja->setObject(CCString::create("대전 시작"), kMyLocalKey_battleStart);
 	ja->setObject(CCString::create("Missile"), kMyLocalKey_mymissile);
 	ja->setObject(CCString::create("Damage"), kMyLocalKey_power);
 	ja->setObject(CCString::create("Gacha"), kMyLocalKey_gacha);
 	ja->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
 	ja->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
 	ja->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
-	ja->setObject(CCString::create("루비로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ja->setObject(CCString::create("잼로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
 	ja->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	ja->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ja->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
@@ -2389,7 +2431,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font color=961 size=15>모든 피스 획득!"), kMyLocalKey_puzzleSuccessTitle);
 	ja->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 하트를 드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ja->setObject(CCString::create("<font color=961 size=15>놀라워요! <font color=961 size=15>퍼펙트 클리어!!"), kMyLocalKey_puzzlePerfectTitle);
-	ja->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 루비를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
+	ja->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 잼를 드릴께요!"), kMyLocalKey_puzzlePerfectMent);
 	ja->setObject(CCString::create("이어하시겠습니까?"), kMyLocalKey_doYouWantToContinue);
 	ja->setObject(CCString::create("이어하기"), kMyLocalKey_onContinue);
 	ja->setObject(CCString::create("그만하기"), kMyLocalKey_offContinue);
@@ -2400,10 +2442,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ja->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ja->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	ja->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
-	ja->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	ja->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
-	ja->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
+	ja->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
+	ja->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
+	ja->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
+	ja->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
@@ -2509,10 +2551,11 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	ja->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	ja->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	ja->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
+	ja->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
-	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>루비"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
+	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>잼"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem9);
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem6);
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>개"), kMyLocalKey_attendanceSpecialGoodsTypeItem11);
@@ -2525,20 +2568,20 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>종류"), kMyLocalKey_attendanceSpecialGoodsTypeMany);
 	
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>루비"), kMyLocalKey_attendanceGoodsTypeRuby);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	ja->setObject(CCString::create("<font size=12>%d<font size=8>잼"), kMyLocalKey_attendanceGoodsTypeRuby);
+	ja->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	ja->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	ja->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem11);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	ja->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
+	ja->setObject(CCString::create("선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	ja->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
-	ja->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	ja->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	ja->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
 	ja->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
@@ -2559,7 +2602,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle);
 	ja->setObject(CCString::create("<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요."), kMyLocalKey_notOpenPuzzleNotEnoughtStarContent);
 	
-	ja->setObject(CCString::create("도전 준비"), kMyLocalKey_endlessStartSettingTitle);
+	ja->setObject(CCString::create("대전 준비"), kMyLocalKey_endlessStartSettingTitle);
 	
 	ja->setObject(CCString::create("영역점수"), kMyLocalKey_endlessCalcTitleAreaScore);
 	ja->setObject(CCString::create("공격점수"), kMyLocalKey_endlessCalcTitleDamageScore);
@@ -2581,7 +2624,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ja->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ja->setObject(CCString::create("도전실패"), kMyLocalKey_endlessKeepWin);
+	ja->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
 	ja->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ja->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -2631,7 +2674,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("%d위"), kMyLocalKey_rankRewardRankValue);
 	
 	ja->setObject(CCString::create("%s골드"), kMyLocalKey_rankRewardGoodsTypeGold);
-	ja->setObject(CCString::create("%s루비"), kMyLocalKey_rankRewardGoodsTypeRuby);
+	ja->setObject(CCString::create("%s잼"), kMyLocalKey_rankRewardGoodsTypeRuby);
 	ja->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem9);
 	ja->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem6);
 	ja->setObject(CCString::create("아이템"), kMyLocalKey_rankRewardGoodsTypeItem11);
@@ -2645,6 +2688,25 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("카드 승급 이벤트!"), kMyLocalKey_rankUpEventTitle);
 	ja->setObject(CCString::create("승급 비용 공짜! 승급 확률 100%!!"), kMyLocalKey_rankUpEventContent);
+	
+	ja->setObject(CCString::create("아니오"), kMyLocalKey_no);
+	ja->setObject(CCString::create("네"), kMyLocalKey_yes);
+	ja->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
+	ja->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	ja->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	ja->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
+	
+	ja->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
+	ja->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	ja->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	ja->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
+	ja->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
+	ja->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
+	ja->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
+	ja->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
+	ja->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
+	ja->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);

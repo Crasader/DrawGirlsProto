@@ -327,6 +327,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_titleLoading44,
 	kMyLocalKey_titleLoadingEnd,
 	kMyLocalKey_gamestart,
+	kMyLocalKey_battleStart,
 	kMyLocalKey_mymissile,
 	kMyLocalKey_power,
 	kMyLocalKey_gacha,
@@ -473,7 +474,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_dieTutorial2,
 	kMyLocalKey_dieTutorial3,
 	kMyLocalKey_restTime,
-	kMyLocalKey_restTimeDayHour,
+	kMyLocalKey_restTimeDay,
 	kMyLocalKey_restTimeHour,
 	kMyLocalKey_restTimeMinute,
 	kMyLocalKey_restTimeSecond,
@@ -589,6 +590,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_attendanceGoodsTypeMany,
 	kMyLocalKey_attendanceTitle,
 	kMyLocalKey_attendanceContent,
+	kMyLocalKey_attendanceSeqTitle,
 	kMyLocalKey_attendanceDay,
 	kMyLocalKey_buyMorphingTitle,
 	kMyLocalKey_buyMorphingContent,
@@ -681,7 +683,26 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_rankRewardGoodsTypeMany,
 	
 	kMyLocalKey_rankUpEventTitle,
-	kMyLocalKey_rankUpEventContent
+	kMyLocalKey_rankUpEventContent,
+	
+	kMyLocalKey_no,
+	kMyLocalKey_yes,
+	kMyLocalKey_clearTimeEventMent,
+	kMyLocalKey_clearTimeEventTitle,
+	
+	kMyLocalKey_achieveHiddenTitle,
+	kMyLocalKey_achieveHiddenContent,
+	
+	kMyLocalKey_mainflowDimmed1,
+	kMyLocalKey_mainflowDimmed2,
+	kMyLocalKey_mainflowDimmed3,
+	kMyLocalKey_mainflowDimmed4,
+	kMyLocalKey_mainflowDimmed5,
+	kMyLocalKey_mainflowDimmed6,
+	kMyLocalKey_mainflowDimmed7,
+	kMyLocalKey_mainflowDimmed8,
+	kMyLocalKey_mainflowDimmed9,
+	kMyLocalKey_mainflowDimmed10
 
 }MyLocalKey;
 

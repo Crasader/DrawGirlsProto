@@ -400,8 +400,8 @@ void AchievePopup::setAchieveTable()
 						achieve_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
 					is_reward = true;
 				}
-				else if(myAchieve->isCompleted((AchievementCode)i) ||
-						myAchieve->isAchieve((AchievementCode)i))
+				else// if(myAchieve->isCompleted((AchievementCode)i) ||
+//						myAchieve->isAchieve((AchievementCode)i))
 				{
 					if(!isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
 						another_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
@@ -447,6 +447,19 @@ void AchievePopup::setAchieveTable()
 				   !myAchieve->isAchieve((AchievementCode)i))
 					if(!isHaveAchieveGroup(achieve_list, myAchieve->getAchieveGroup((AchievementCode)i)))
 						achieve_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
+			}
+		}
+		
+		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
+		{
+			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			{
+				if(!myAchieve->isCompleted((AchievementCode)i) &&
+				   !myAchieve->isAchieve((AchievementCode)i))
+				{
+					if(!isHaveAchieveGroup(achieve_list, myAchieve->getAchieveGroup((AchievementCode)i)))
+						achieve_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
+				}
 			}
 		}
 	}
@@ -614,7 +627,12 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	if(state_value == -1)
 		cell_back_filename = "achievement_cell_success.png";
 	else if(state_value == 1)
-		cell_back_filename = "achievement_cellback_reward.png";
+		cell_back_filename = "achievement_cellback_success.png";
+	else if(recent_code > kAchievementCode_hidden_base && recent_code < kAchievementCode_hidden_end)
+	{
+		state_value = 2;
+		cell_back_filename = "achievement_cell_hidden.png";
+	}
 	else
 		cell_back_filename = "achievement_cellback_normal.png";
 	
@@ -622,6 +640,10 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	if(state_value == -1)
 	{
 		cell_back = CCScale9Sprite::create(cell_back_filename.c_str()); // , CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+	}
+	else if(state_value == 2)
+	{
+		cell_back = CCScale9Sprite::create(cell_back_filename.c_str());
 	}
 	else
 	{
@@ -635,325 +657,23 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	cell_back->setPosition(ccp(0,0));
 	cell->addChild(cell_back);
 	
-	if(achieve_list[idx*2].achieve_list.size() == 3)
+	if(state_value == 2)
 	{
-		if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[2]))
-		{
-			CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
-			t_crown->setScale(0.7f);
-			t_crown->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_crown);
-		}
-		else
-		{
-			CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
-			t_back->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_back);
-		}
+		KSLabelTTF* cell_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenTitle), mySGD->getFont().c_str(), 12);
+		cell_title->setAnchorPoint(ccp(0.5f,0.5f));
+		cell_title->setPosition(ccp(cell_back->getContentSize().width/2.f,40));
+		cell_back->addChild(cell_title);
 		
-		if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[1]))
-		{
-			CCSprite* t_crown = CCSprite::create("achievement_crown_silver.png");
-			t_crown->setScale(0.7f);
-			t_crown->setPosition(ccp(cell_back->getContentSize().width-15-21, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_crown);
-		}
-		else
-		{
-			CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
-			t_back->setPosition(ccp(cell_back->getContentSize().width-15-21, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_back);
-		}
-		
-		if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[0]))
-		{
-			CCSprite* t_crown = CCSprite::create("achievement_crown_bronze.png");
-			t_crown->setScale(0.7f);
-			t_crown->setPosition(ccp(cell_back->getContentSize().width-15-42, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_crown);
-		}
-		else
-		{
-			CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
-			t_back->setPosition(ccp(cell_back->getContentSize().width-15-42, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_back);
-		}
-	}
-	else if(achieve_list[idx*2].achieve_list.size() == 1)
-	{
-		if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[0]))
-		{
-			CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
-			t_crown->setScale(0.7f);
-			t_crown->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_crown);
-		}
-		else
-		{
-			CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
-			t_back->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
-			cell_back->addChild(t_back);
-		}
-	}
-	
-	KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s",
-																		   myAchieve->getTitle(recent_code).c_str())->getCString(),
-//																		   myAchieve->getRecentValue(recent_code),
-//																		   myAchieve->getCondition(recent_code))->getCString(),
-																		   mySGD->getFont().c_str(), 12);
-	cell_title->setAnchorPoint(ccp(0,0.5));
-	cell_title->setPosition(ccp(8,48));
-	cell_back->addChild(cell_title);
-	
-	KSLabelTTF* cell_content = KSLabelTTF::create(myAchieve->getContent(recent_code).c_str(), mySGD->getFont().c_str(), 9);
-	cell_content->setAnchorPoint(ccp(0,0.5));
-	cell_content->setPosition(ccp(8,32));
-	cell_back->addChild(cell_content);
-	
-	CCPoint img_position = ccp(170,24);
-	if(myAchieve->isCompleted(recent_code))
-	{
-//		cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
-		cell_title->enableOuterStroke(ccc3(0, 0, 0), 1);
-		
-		CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
-		success_img->setOpacity(0);
-		success_img->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
-		cell_back->addChild(success_img);
-		
-		KSLabelTTF* success_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveSuccess2), mySGD->getFont().c_str(), 10);
-		success_label->enableOuterStroke(ccBLACK, 1.f);
-		success_label->setPosition(ccpFromSize(success_img->getContentSize()/2.f));
-		success_img->addChild(success_label);
-	}
-	else if(myAchieve->isAchieve(recent_code))
-	{
-		cell_title->enableOuterStroke(ccc3(70, 0, 40), 1);
-		
-		CCSprite* n_get = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, cell_back->getContentSize().width, cell_back->getContentSize().height));
-		CCSprite* s_get = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, cell_back->getContentSize().width, cell_back->getContentSize().height));
-		
-		CCMenuItem* get_item = CCMenuItemSprite::create(n_get, s_get, this, menu_selector(AchievePopup::cellAction));
-		get_item->setTag(recent_code);
-		
-		ScrollMenu* get_menu = ScrollMenu::create(get_item, NULL);
-		get_menu->setPosition(ccpFromSize(cell_back->getContentSize()/2.f));
-		cell_back->addChild(get_menu);
-		get_menu->setTouchPriority(-200);
-
-		
-		CCScale9Sprite* graph_back = CCScale9Sprite::create("achievement_graph_back.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
-		graph_back->setContentSize(CCSizeMake(195, 18));
-		graph_back->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
-		cell_back->addChild(graph_back);
-		
-		CCScale9Sprite* graph_complete = CCScale9Sprite::create("achievement_graph_complete.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
-		graph_complete->setAnchorPoint(ccp(0,0));
-		graph_complete->setPosition(ccp(0,0));
-		graph_back->addChild(graph_complete);
-		
-		graph_complete->setContentSize(CCSizeMake(25+170*1, 18));
-		
-		KSLabelTTF* progress_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont().c_str(), 10);
-		progress_label->enableOuterStroke(ccBLACK, 1.f);
-		progress_label->setPosition(ccpFromSize(graph_back->getContentSize()/2.f));
-		graph_back->addChild(progress_label);
-		
-		string reward_type_str;
-		AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
-		if(reward_type == kAchieveRewardType_ruby)
-			reward_type_str = "price_ruby_img.png";
-		else if(reward_type == kAchieveRewardType_gold)
-			reward_type_str = "price_gold_img.png";
-		else if(reward_type == kAchieveRewardType_package)
-			reward_type_str = "price_package_img.png";
-		
-		//		CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
-		//
-		//		KSLabelTTF* ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont2().c_str(), 11);
-		//		ing_label->enableOuterStroke(ccc3(60, 45, 25), 1.f);
-		//		ing_label->setPosition(ccp(ing_back->getContentSize().width/2.f, ing_back->getContentSize().height*0.65f));
-		//		ing_back->addChild(ing_label);
-		//
-		//		ing_back->setPosition(img_position);
-		//		cell_back->addChild(ing_back);
-		
-		CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
-		reward_type_img->setScale(0.8f);
-		reward_type_img->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
-		graph_back->addChild(reward_type_img);
-		
-		KSLabelTTF* reward_value = KSLabelTTF::create(CCString::createWithFormat("+%d", myAchieve->getRewardValue(recent_code))->getCString(),
-													  mySGD->getFont().c_str(), 10);
-		reward_value->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
-		graph_back->addChild(reward_value);
-		
-		
-		
-//		string reward_type_str;
-//		AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
-//		if(reward_type == kAchieveRewardType_ruby)
-//			reward_type_str = "price_ruby_img.png";
-//		else if(reward_type == kAchieveRewardType_gold)
-//			reward_type_str = "price_gold_img.png";
-//		else if(reward_type == kAchieveRewardType_package)
-//			reward_type_str = "price_package_img.png";
-//		
-//		CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
-//		
-//		KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
-//		n_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
-//		n_reward_label->setPosition(ccp(n_reward_img->getContentSize().width/2.f, n_reward_img->getContentSize().height*0.65f));
-//		n_reward_img->addChild(n_reward_label);
-//		
-//		CCSprite* n_reward_type_img = CCSprite::create(reward_type_str.c_str());
-//		n_reward_type_img->setScale(0.5f);
-//		n_reward_type_img->setPosition(ccp(n_reward_img->getContentSize().width/2.f-12, n_reward_img->getContentSize().height/2.f-6.5f));
-//		n_reward_img->addChild(n_reward_type_img);
-//		CCLabelTTF* n_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(recent_code))->getCString(),
-//													  mySGD->getFont().c_str(), 10);
-//		n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+7, n_reward_img->getContentSize().height/2.f-7));
-//		n_reward_img->addChild(n_reward_value);
-//		
-//		CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
-//		s_reward_img->setColor(ccGRAY);
-//		
-//		KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
-//		s_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
-//		s_reward_label->setPosition(ccp(s_reward_img->getContentSize().width/2.f, s_reward_img->getContentSize().height*0.65f));
-//		s_reward_img->addChild(s_reward_label);
-//		
-//		CCSprite* s_reward_type_img = CCSprite::create(reward_type_str.c_str());
-//		s_reward_type_img->setScale(0.5f);
-//		s_reward_type_img->setPosition(ccp(s_reward_img->getContentSize().width/2.f-12, s_reward_img->getContentSize().height/2.f-6.5f));
-//		s_reward_img->addChild(s_reward_type_img);
-//		CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(recent_code))->getCString(),
-//														mySGD->getFont().c_str(), 10);
-//		s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+7, s_reward_img->getContentSize().height/2.f-7));
-//		s_reward_img->addChild(s_reward_value);
-//		
-//		CCMenuItem* reward_get_item = CCMenuItemSprite::create(n_reward_img, s_reward_img, this, menu_selector(AchievePopup::cellAction));
-//		reward_get_item->setTag(recent_code);
-//		
-//		ScrollMenu* reward_get_menu = ScrollMenu::create(reward_get_item, NULL);
-//		reward_get_menu->setPosition(img_position);
-//		cell_back->addChild(reward_get_menu);
-//		reward_get_menu->setTouchPriority(-188);
+		KSLabelTTF* cell_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenContent), mySGD->getFont().c_str(), 9);
+		cell_content->setAnchorPoint(ccp(0.5f,0.5f));
+		cell_content->setPosition(ccp(cell_back->getContentSize().width/2.f,20));
+		cell_back->addChild(cell_content);
 	}
 	else
 	{
-		cell_title->enableOuterStroke(ccc3(70, 40, 0), 1);
-		
-		float rate = 1.f*myAchieve->getRecentValue(recent_code)/myAchieve->getCondition(recent_code);
-		
-		CCScale9Sprite* graph_back = CCScale9Sprite::create("achievement_graph_back.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
-		graph_back->setContentSize(CCSizeMake(195, 18));
-		graph_back->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
-		cell_back->addChild(graph_back);
-		
-		CCScale9Sprite* graph_normal = CCScale9Sprite::create("achievement_graph_normal.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
-		graph_normal->setAnchorPoint(ccp(0,0));
-		graph_normal->setPosition(ccp(0,0));
-		graph_back->addChild(graph_normal);
-		
-		if(myAchieve->getRecentValue(recent_code) == 0)
+		if(achieve_list[idx*2].achieve_list.size() == 3)
 		{
-			graph_normal->setContentSize(CCSizeMake(0, 18));
-			graph_normal->setVisible(false);
-		}
-		else
-			graph_normal->setContentSize(CCSizeMake(25+170*rate, 18));
-		
-		KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getRecentValue(recent_code))->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 10);
-		progress_label->enableOuterStroke(ccBLACK, 1.f);
-		progress_label->setPosition(ccpFromSize(graph_back->getContentSize()/2.f));
-		graph_back->addChild(progress_label);
-		
-		string reward_type_str;
-		AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
-		if(reward_type == kAchieveRewardType_ruby)
-			reward_type_str = "price_ruby_img.png";
-		else if(reward_type == kAchieveRewardType_gold)
-			reward_type_str = "price_gold_img.png";
-		else if(reward_type == kAchieveRewardType_package)
-			reward_type_str = "price_package_img.png";
-		
-//		CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
-//		
-//		KSLabelTTF* ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont2().c_str(), 11);
-//		ing_label->enableOuterStroke(ccc3(60, 45, 25), 1.f);
-//		ing_label->setPosition(ccp(ing_back->getContentSize().width/2.f, ing_back->getContentSize().height*0.65f));
-//		ing_back->addChild(ing_label);
-//		
-//		ing_back->setPosition(img_position);
-//		cell_back->addChild(ing_back);
-		
-		CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
-		reward_type_img->setScale(0.8f);
-		reward_type_img->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
-		graph_back->addChild(reward_type_img);
-		
-		KSLabelTTF* reward_value = KSLabelTTF::create(CCString::createWithFormat("+%d", myAchieve->getRewardValue(recent_code))->getCString(),
-													  mySGD->getFont().c_str(), 10);
-		reward_value->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
-		graph_back->addChild(reward_value);
-	}
-	
-	if(idx*2+1 < achieve_list.size())
-	{
-		int state_value = -1; // complete
-		
-		AchievementCode recent_code;
-		
-		for(int i=0;i<achieve_list[idx*2+1].achieve_list.size();i++)
-		{
-			state_value = 0;
-			
-			recent_code = achieve_list[idx*2+1].achieve_list[i];
-			if(myAchieve->isCompleted(recent_code))
-				state_value = -1;
-			else if(myAchieve->isAchieve(recent_code))
-			{
-				state_value = 1;
-				break;
-			}
-			else
-				break;
-		}
-		
-		if(achieve_list[idx*2+1].achieve_list.size() <= 0)
-		{
-			return cell;
-		}
-		
-		string cell_back_filename;
-		if(myAchieve->isCompleted(recent_code))
-			cell_back_filename = "achievement_cell_success.png";
-		else if(myAchieve->isAchieve(recent_code))
-			cell_back_filename = "achievement_cellback_reward.png";
-		else
-			cell_back_filename = "achievement_cellback_normal.png";
-		
-			
-		CCScale9Sprite* cell_back;
-		if(state_value == -1)
-		{
-			cell_back = CCScale9Sprite::create(cell_back_filename.c_str()); // , CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
-		}
-		else
-		{
-			cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
-			cell_back->setContentSize(CCSizeMake(206, 62));
-		}
-		
-		cell_back->setContentSize(CCSizeMake(206, 62));
-		cell_back->setAnchorPoint(CCPointZero);
-		cell_back->setPosition(ccp(385-180,0));
-		cell->addChild(cell_back);
-		
-		if(achieve_list[idx*2+1].achieve_list.size() == 3)
-		{
-			if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[2]))
+			if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[2]))
 			{
 				CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
 				t_crown->setScale(0.7f);
@@ -967,7 +687,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				cell_back->addChild(t_back);
 			}
 			
-			if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[1]))
+			if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[1]))
 			{
 				CCSprite* t_crown = CCSprite::create("achievement_crown_silver.png");
 				t_crown->setScale(0.7f);
@@ -981,7 +701,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				cell_back->addChild(t_back);
 			}
 			
-			if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[0]))
+			if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[0]))
 			{
 				CCSprite* t_crown = CCSprite::create("achievement_crown_bronze.png");
 				t_crown->setScale(0.7f);
@@ -995,9 +715,9 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				cell_back->addChild(t_back);
 			}
 		}
-		else if(achieve_list[idx*2+1].achieve_list.size() == 1)
+		else if(achieve_list[idx*2].achieve_list.size() == 1)
 		{
-			if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[0]))
+			if(myAchieve->isCompleted(achieve_list[idx*2].achieve_list[0]))
 			{
 				CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
 				t_crown->setScale(0.7f);
@@ -1014,8 +734,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		
 		KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s",
 																			   myAchieve->getTitle(recent_code).c_str())->getCString(),
-//																			   myAchieve->getRecentValue(recent_code),
-//																			   myAchieve->getCondition(recent_code))->getCString(),
+													//																		   myAchieve->getRecentValue(recent_code),
+													//																		   myAchieve->getCondition(recent_code))->getCString(),
 													mySGD->getFont().c_str(), 12);
 		cell_title->setAnchorPoint(ccp(0,0.5));
 		cell_title->setPosition(ccp(8,48));
@@ -1027,11 +747,11 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		cell_back->addChild(cell_content);
 		
 		CCPoint img_position = ccp(170,24);
-		
 		if(myAchieve->isCompleted(recent_code))
 		{
-//			cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
+			//		cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
 			cell_title->enableOuterStroke(ccc3(0, 0, 0), 1);
+			
 			CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
 			success_img->setOpacity(0);
 			success_img->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
@@ -1056,6 +776,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			get_menu->setPosition(ccpFromSize(cell_back->getContentSize()/2.f));
 			cell_back->addChild(get_menu);
 			get_menu->setTouchPriority(-200);
+			
 			
 			CCScale9Sprite* graph_back = CCScale9Sprite::create("achievement_graph_back.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
 			graph_back->setContentSize(CCSizeMake(195, 18));
@@ -1103,55 +824,57 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			reward_value->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
 			graph_back->addChild(reward_value);
 			
-//			string reward_type_str;
-//			AchieveRewardType reward_type = myAchieve->getRewardType(recent_code);
-//			if(reward_type == kAchieveRewardType_ruby)
-//				reward_type_str = "price_ruby_img.png";
-//			else if(reward_type == kAchieveRewardType_gold)
-//				reward_type_str = "price_gold_img.png";
-//			else if(reward_type == kAchieveRewardType_package)
-//				reward_type_str = "price_package_img.png";
-//			
-//			CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
-//			
-//			KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
-//			n_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
-//			n_reward_label->setPosition(ccp(n_reward_img->getContentSize().width/2.f, n_reward_img->getContentSize().height*0.65f));
-//			n_reward_img->addChild(n_reward_label);
-//			
-//			CCSprite* n_reward_type_img = CCSprite::create(reward_type_str.c_str());
-//			n_reward_type_img->setScale(0.5f);
-//			n_reward_type_img->setPosition(ccp(n_reward_img->getContentSize().width/2.f-12, n_reward_img->getContentSize().height/2.f-6.5f));
-//			n_reward_img->addChild(n_reward_type_img);
-//			CCLabelTTF* n_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(recent_code))->getCString(),
-//															mySGD->getFont().c_str(), 10);
-//			n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+7, n_reward_img->getContentSize().height/2.f-7));
-//			n_reward_img->addChild(n_reward_value);
-//			
-//			CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
-//			s_reward_img->setColor(ccGRAY);
-//			
-//			KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
-//			s_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
-//			s_reward_label->setPosition(ccp(s_reward_img->getContentSize().width/2.f, s_reward_img->getContentSize().height*0.65f));
-//			s_reward_img->addChild(s_reward_label);
-//			
-//			CCSprite* s_reward_type_img = CCSprite::create(reward_type_str.c_str());
-//			s_reward_type_img->setScale(0.5f);
-//			s_reward_type_img->setPosition(ccp(s_reward_img->getContentSize().width/2.f-12, s_reward_img->getContentSize().height/2.f-6.5f));
-//			s_reward_img->addChild(s_reward_type_img);
-//			CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", myAchieve->getRewardValue(recent_code))->getCString(),
-//															mySGD->getFont().c_str(), 10);
-//			s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+7, s_reward_img->getContentSize().height/2.f-7));
-//			s_reward_img->addChild(s_reward_value);
-//			
-//			CCMenuItem* reward_get_item = CCMenuItemSprite::create(n_reward_img, s_reward_img, this, menu_selector(AchievePopup::cellAction));
-//			reward_get_item->setTag(recent_code);
-//			
-//			ScrollMenu* reward_get_menu = ScrollMenu::create(reward_get_item, NULL);
-//			reward_get_menu->setPosition(img_position);
-//			cell_back->addChild(reward_get_menu);
-//			reward_get_menu->setTouchPriority(-188);
+			
+			
+			//		string reward_type_str;
+			//		AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
+			//		if(reward_type == kAchieveRewardType_ruby)
+			//			reward_type_str = "price_ruby_img.png";
+			//		else if(reward_type == kAchieveRewardType_gold)
+			//			reward_type_str = "price_gold_img.png";
+			//		else if(reward_type == kAchieveRewardType_package)
+			//			reward_type_str = "price_package_img.png";
+			//
+			//		CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
+			//
+			//		KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+			//		n_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+			//		n_reward_label->setPosition(ccp(n_reward_img->getContentSize().width/2.f, n_reward_img->getContentSize().height*0.65f));
+			//		n_reward_img->addChild(n_reward_label);
+			//
+			//		CCSprite* n_reward_type_img = CCSprite::create(reward_type_str.c_str());
+			//		n_reward_type_img->setScale(0.5f);
+			//		n_reward_type_img->setPosition(ccp(n_reward_img->getContentSize().width/2.f-12, n_reward_img->getContentSize().height/2.f-6.5f));
+			//		n_reward_img->addChild(n_reward_type_img);
+			//		CCLabelTTF* n_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(recent_code))->getCString(),
+			//													  mySGD->getFont().c_str(), 10);
+			//		n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+7, n_reward_img->getContentSize().height/2.f-7));
+			//		n_reward_img->addChild(n_reward_value);
+			//
+			//		CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
+			//		s_reward_img->setColor(ccGRAY);
+			//
+			//		KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+			//		s_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+			//		s_reward_label->setPosition(ccp(s_reward_img->getContentSize().width/2.f, s_reward_img->getContentSize().height*0.65f));
+			//		s_reward_img->addChild(s_reward_label);
+			//
+			//		CCSprite* s_reward_type_img = CCSprite::create(reward_type_str.c_str());
+			//		s_reward_type_img->setScale(0.5f);
+			//		s_reward_type_img->setPosition(ccp(s_reward_img->getContentSize().width/2.f-12, s_reward_img->getContentSize().height/2.f-6.5f));
+			//		s_reward_img->addChild(s_reward_type_img);
+			//		CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(recent_code))->getCString(),
+			//														mySGD->getFont().c_str(), 10);
+			//		s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+7, s_reward_img->getContentSize().height/2.f-7));
+			//		s_reward_img->addChild(s_reward_value);
+			//
+			//		CCMenuItem* reward_get_item = CCMenuItemSprite::create(n_reward_img, s_reward_img, this, menu_selector(AchievePopup::cellAction));
+			//		reward_get_item->setTag(recent_code);
+			//
+			//		ScrollMenu* reward_get_menu = ScrollMenu::create(reward_get_item, NULL);
+			//		reward_get_menu->setPosition(img_position);
+			//		cell_back->addChild(reward_get_menu);
+			//		reward_get_menu->setTouchPriority(-188);
 		}
 		else
 		{
@@ -1210,6 +933,344 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 														  mySGD->getFont().c_str(), 10);
 			reward_value->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
 			graph_back->addChild(reward_value);
+		}
+	}
+	
+	if(idx*2+1 < achieve_list.size())
+	{
+		int state_value = -1; // complete
+		
+		AchievementCode recent_code;
+		
+		for(int i=0;i<achieve_list[idx*2+1].achieve_list.size();i++)
+		{
+			state_value = 0;
+			
+			recent_code = achieve_list[idx*2+1].achieve_list[i];
+			if(myAchieve->isCompleted(recent_code))
+				state_value = -1;
+			else if(myAchieve->isAchieve(recent_code))
+			{
+				state_value = 1;
+				break;
+			}
+			else
+				break;
+		}
+		
+		if(achieve_list[idx*2+1].achieve_list.size() <= 0)
+		{
+			return cell;
+		}
+		
+		string cell_back_filename;
+		if(myAchieve->isCompleted(recent_code))
+			cell_back_filename = "achievement_cell_success.png";
+		else if(myAchieve->isAchieve(recent_code))
+			cell_back_filename = "achievement_cellback_success.png";
+		else if(recent_code > kAchievementCode_hidden_base && recent_code < kAchievementCode_hidden_end)
+		{
+			state_value = 2;
+			cell_back_filename = "achievement_cell_hidden.png";
+		}
+		else
+			cell_back_filename = "achievement_cellback_normal.png";
+		
+			
+		CCScale9Sprite* cell_back;
+		if(state_value == -1)
+		{
+			cell_back = CCScale9Sprite::create(cell_back_filename.c_str()); // , CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+		}
+		else if(state_value == 2)
+		{
+			cell_back = CCScale9Sprite::create(cell_back_filename.c_str());
+		}
+		else
+		{
+			cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
+			cell_back->setContentSize(CCSizeMake(206, 62));
+		}
+		
+		cell_back->setContentSize(CCSizeMake(206, 62));
+		cell_back->setAnchorPoint(CCPointZero);
+		cell_back->setPosition(ccp(385-180,0));
+		cell->addChild(cell_back);
+		
+		if(state_value == 2)
+		{
+			KSLabelTTF* cell_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenTitle), mySGD->getFont().c_str(), 12);
+			cell_title->setAnchorPoint(ccp(0.5f,0.5f));
+			cell_title->setPosition(ccp(cell_back->getContentSize().width/2.f,40));
+			cell_back->addChild(cell_title);
+			
+			KSLabelTTF* cell_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenContent), mySGD->getFont().c_str(), 9);
+			cell_content->setAnchorPoint(ccp(0.5f,0.5f));
+			cell_content->setPosition(ccp(cell_back->getContentSize().width/2.f,20));
+			cell_back->addChild(cell_content);
+		}
+		else
+		{
+			if(achieve_list[idx*2+1].achieve_list.size() == 3)
+			{
+				if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[2]))
+				{
+					CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
+					t_crown->setScale(0.7f);
+					t_crown->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_crown);
+				}
+				else
+				{
+					CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
+					t_back->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_back);
+				}
+				
+				if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[1]))
+				{
+					CCSprite* t_crown = CCSprite::create("achievement_crown_silver.png");
+					t_crown->setScale(0.7f);
+					t_crown->setPosition(ccp(cell_back->getContentSize().width-15-21, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_crown);
+				}
+				else
+				{
+					CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
+					t_back->setPosition(ccp(cell_back->getContentSize().width-15-21, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_back);
+				}
+				
+				if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[0]))
+				{
+					CCSprite* t_crown = CCSprite::create("achievement_crown_bronze.png");
+					t_crown->setScale(0.7f);
+					t_crown->setPosition(ccp(cell_back->getContentSize().width-15-42, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_crown);
+				}
+				else
+				{
+					CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
+					t_back->setPosition(ccp(cell_back->getContentSize().width-15-42, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_back);
+				}
+			}
+			else if(achieve_list[idx*2+1].achieve_list.size() == 1)
+			{
+				if(myAchieve->isCompleted(achieve_list[idx*2+1].achieve_list[0]))
+				{
+					CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
+					t_crown->setScale(0.7f);
+					t_crown->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_crown);
+				}
+				else
+				{
+					CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
+					t_back->setPosition(ccp(cell_back->getContentSize().width-15, cell_back->getContentSize().height-12));
+					cell_back->addChild(t_back);
+				}
+			}
+			
+			KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s",
+																				   myAchieve->getTitle(recent_code).c_str())->getCString(),
+														//																			   myAchieve->getRecentValue(recent_code),
+														//																			   myAchieve->getCondition(recent_code))->getCString(),
+														mySGD->getFont().c_str(), 12);
+			cell_title->setAnchorPoint(ccp(0,0.5));
+			cell_title->setPosition(ccp(8,48));
+			cell_back->addChild(cell_title);
+			
+			KSLabelTTF* cell_content = KSLabelTTF::create(myAchieve->getContent(recent_code).c_str(), mySGD->getFont().c_str(), 9);
+			cell_content->setAnchorPoint(ccp(0,0.5));
+			cell_content->setPosition(ccp(8,32));
+			cell_back->addChild(cell_content);
+			
+			CCPoint img_position = ccp(170,24);
+			
+			if(myAchieve->isCompleted(recent_code))
+			{
+				//			cell_title->enableOuterStroke(ccc3(60, 0, 100), 1);
+				cell_title->enableOuterStroke(ccc3(0, 0, 0), 1);
+				CCSprite* success_img = CCSprite::create("achievement_cell_success.png");
+				success_img->setOpacity(0);
+				success_img->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
+				cell_back->addChild(success_img);
+				
+				KSLabelTTF* success_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveSuccess2), mySGD->getFont().c_str(), 10);
+				success_label->enableOuterStroke(ccBLACK, 1.f);
+				success_label->setPosition(ccpFromSize(success_img->getContentSize()/2.f));
+				success_img->addChild(success_label);
+			}
+			else if(myAchieve->isAchieve(recent_code))
+			{
+				cell_title->enableOuterStroke(ccc3(70, 0, 40), 1);
+				
+				CCSprite* n_get = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, cell_back->getContentSize().width, cell_back->getContentSize().height));
+				CCSprite* s_get = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, cell_back->getContentSize().width, cell_back->getContentSize().height));
+				
+				CCMenuItem* get_item = CCMenuItemSprite::create(n_get, s_get, this, menu_selector(AchievePopup::cellAction));
+				get_item->setTag(recent_code);
+				
+				ScrollMenu* get_menu = ScrollMenu::create(get_item, NULL);
+				get_menu->setPosition(ccpFromSize(cell_back->getContentSize()/2.f));
+				cell_back->addChild(get_menu);
+				get_menu->setTouchPriority(-200);
+				
+				CCScale9Sprite* graph_back = CCScale9Sprite::create("achievement_graph_back.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
+				graph_back->setContentSize(CCSizeMake(195, 18));
+				graph_back->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
+				cell_back->addChild(graph_back);
+				
+				CCScale9Sprite* graph_complete = CCScale9Sprite::create("achievement_graph_complete.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
+				graph_complete->setAnchorPoint(ccp(0,0));
+				graph_complete->setPosition(ccp(0,0));
+				graph_back->addChild(graph_complete);
+				
+				graph_complete->setContentSize(CCSizeMake(25+170*1, 18));
+				
+				KSLabelTTF* progress_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont().c_str(), 10);
+				progress_label->enableOuterStroke(ccBLACK, 1.f);
+				progress_label->setPosition(ccpFromSize(graph_back->getContentSize()/2.f));
+				graph_back->addChild(progress_label);
+				
+				string reward_type_str;
+				AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
+				if(reward_type == kAchieveRewardType_ruby)
+					reward_type_str = "price_ruby_img.png";
+				else if(reward_type == kAchieveRewardType_gold)
+					reward_type_str = "price_gold_img.png";
+				else if(reward_type == kAchieveRewardType_package)
+					reward_type_str = "price_package_img.png";
+				
+				//		CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
+				//
+				//		KSLabelTTF* ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont2().c_str(), 11);
+				//		ing_label->enableOuterStroke(ccc3(60, 45, 25), 1.f);
+				//		ing_label->setPosition(ccp(ing_back->getContentSize().width/2.f, ing_back->getContentSize().height*0.65f));
+				//		ing_back->addChild(ing_label);
+				//
+				//		ing_back->setPosition(img_position);
+				//		cell_back->addChild(ing_back);
+				
+				CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
+				reward_type_img->setScale(0.8f);
+				reward_type_img->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
+				graph_back->addChild(reward_type_img);
+				
+				KSLabelTTF* reward_value = KSLabelTTF::create(CCString::createWithFormat("+%d", myAchieve->getRewardValue(recent_code))->getCString(),
+															  mySGD->getFont().c_str(), 10);
+				reward_value->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
+				graph_back->addChild(reward_value);
+				
+				//			string reward_type_str;
+				//			AchieveRewardType reward_type = myAchieve->getRewardType(recent_code);
+				//			if(reward_type == kAchieveRewardType_ruby)
+				//				reward_type_str = "price_ruby_img.png";
+				//			else if(reward_type == kAchieveRewardType_gold)
+				//				reward_type_str = "price_gold_img.png";
+				//			else if(reward_type == kAchieveRewardType_package)
+				//				reward_type_str = "price_package_img.png";
+				//
+				//			CCSprite* n_reward_img = CCSprite::create("achievement_cell_reward_get.png");
+				//
+				//			KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+				//			n_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+				//			n_reward_label->setPosition(ccp(n_reward_img->getContentSize().width/2.f, n_reward_img->getContentSize().height*0.65f));
+				//			n_reward_img->addChild(n_reward_label);
+				//
+				//			CCSprite* n_reward_type_img = CCSprite::create(reward_type_str.c_str());
+				//			n_reward_type_img->setScale(0.5f);
+				//			n_reward_type_img->setPosition(ccp(n_reward_img->getContentSize().width/2.f-12, n_reward_img->getContentSize().height/2.f-6.5f));
+				//			n_reward_img->addChild(n_reward_type_img);
+				//			CCLabelTTF* n_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", AchieveConditionReward::sharedInstance()->getRewardValue(recent_code))->getCString(),
+				//															mySGD->getFont().c_str(), 10);
+				//			n_reward_value->setPosition(ccp(n_reward_img->getContentSize().width/2.f+7, n_reward_img->getContentSize().height/2.f-7));
+				//			n_reward_img->addChild(n_reward_value);
+				//
+				//			CCSprite* s_reward_img = CCSprite::create("achievement_cell_reward_get.png");
+				//			s_reward_img->setColor(ccGRAY);
+				//
+				//			KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont2().c_str(), 11);
+				//			s_reward_label->enableOuterStroke(ccc3(65, 45, 90), 1.f);
+				//			s_reward_label->setPosition(ccp(s_reward_img->getContentSize().width/2.f, s_reward_img->getContentSize().height*0.65f));
+				//			s_reward_img->addChild(s_reward_label);
+				//
+				//			CCSprite* s_reward_type_img = CCSprite::create(reward_type_str.c_str());
+				//			s_reward_type_img->setScale(0.5f);
+				//			s_reward_type_img->setPosition(ccp(s_reward_img->getContentSize().width/2.f-12, s_reward_img->getContentSize().height/2.f-6.5f));
+				//			s_reward_img->addChild(s_reward_type_img);
+				//			CCLabelTTF* s_reward_value = CCLabelTTF::create(CCString::createWithFormat("%d", myAchieve->getRewardValue(recent_code))->getCString(),
+				//															mySGD->getFont().c_str(), 10);
+				//			s_reward_value->setPosition(ccp(s_reward_img->getContentSize().width/2.f+7, s_reward_img->getContentSize().height/2.f-7));
+				//			s_reward_img->addChild(s_reward_value);
+				//
+				//			CCMenuItem* reward_get_item = CCMenuItemSprite::create(n_reward_img, s_reward_img, this, menu_selector(AchievePopup::cellAction));
+				//			reward_get_item->setTag(recent_code);
+				//
+				//			ScrollMenu* reward_get_menu = ScrollMenu::create(reward_get_item, NULL);
+				//			reward_get_menu->setPosition(img_position);
+				//			cell_back->addChild(reward_get_menu);
+				//			reward_get_menu->setTouchPriority(-188);
+			}
+			else
+			{
+				cell_title->enableOuterStroke(ccc3(70, 40, 0), 1);
+				
+				float rate = 1.f*myAchieve->getRecentValue(recent_code)/myAchieve->getCondition(recent_code);
+				
+				CCScale9Sprite* graph_back = CCScale9Sprite::create("achievement_graph_back.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
+				graph_back->setContentSize(CCSizeMake(195, 18));
+				graph_back->setPosition(ccp(cell_back->getContentSize().width/2.f, 15));
+				cell_back->addChild(graph_back);
+				
+				CCScale9Sprite* graph_normal = CCScale9Sprite::create("achievement_graph_normal.png", CCRectMake(0, 0, 25, 18), CCRectMake(12, 8, 1, 2));
+				graph_normal->setAnchorPoint(ccp(0,0));
+				graph_normal->setPosition(ccp(0,0));
+				graph_back->addChild(graph_normal);
+				
+				if(myAchieve->getRecentValue(recent_code) == 0)
+				{
+					graph_normal->setContentSize(CCSizeMake(0, 18));
+					graph_normal->setVisible(false);
+				}
+				else
+					graph_normal->setContentSize(CCSizeMake(25+170*rate, 18));
+				
+				KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getRecentValue(recent_code))->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 10);
+				progress_label->enableOuterStroke(ccBLACK, 1.f);
+				progress_label->setPosition(ccpFromSize(graph_back->getContentSize()/2.f));
+				graph_back->addChild(progress_label);
+				
+				string reward_type_str;
+				AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
+				if(reward_type == kAchieveRewardType_ruby)
+					reward_type_str = "price_ruby_img.png";
+				else if(reward_type == kAchieveRewardType_gold)
+					reward_type_str = "price_gold_img.png";
+				else if(reward_type == kAchieveRewardType_package)
+					reward_type_str = "price_package_img.png";
+				
+				//		CCSprite* ing_back = CCSprite::create("achievement_cell_reward_view.png");
+				//
+				//		KSLabelTTF* ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont2().c_str(), 11);
+				//		ing_label->enableOuterStroke(ccc3(60, 45, 25), 1.f);
+				//		ing_label->setPosition(ccp(ing_back->getContentSize().width/2.f, ing_back->getContentSize().height*0.65f));
+				//		ing_back->addChild(ing_label);
+				//
+				//		ing_back->setPosition(img_position);
+				//		cell_back->addChild(ing_back);
+				
+				CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
+				reward_type_img->setScale(0.8f);
+				reward_type_img->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
+				graph_back->addChild(reward_type_img);
+				
+				KSLabelTTF* reward_value = KSLabelTTF::create(CCString::createWithFormat("+%d", myAchieve->getRewardValue(recent_code))->getCString(),
+															  mySGD->getFont().c_str(), 10);
+				reward_value->setPosition(ccp(graph_back->getContentSize().width-12, graph_back->getContentSize().height/2.f));
+				graph_back->addChild(reward_value);
+			}
 		}
 	}
 	

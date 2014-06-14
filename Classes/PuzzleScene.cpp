@@ -478,6 +478,18 @@ bool PuzzleScene::init()
 			mySGD->is_before_stage_img_download = false;
 			topReopenning();
 		}
+		else
+		{
+			CCSprite* title_name = CCSprite::create("temp_title_name.png");
+			title_name->setPosition(ccp(240,160));
+			title_name->setOpacity(255);
+			addChild(title_name, kPuzzleZorder_back);
+			
+			CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(title_name, callfunc_selector(CCSprite::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+			title_name->runAction(t_seq);
+		}
 		
 		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		
@@ -836,6 +848,7 @@ void PuzzleScene::showSuccessPuzzleEffect()
 		selected_piece_img->setOpacity(t);
 	}, [=](float t){
 		selected_piece_img->setOpacity(t);
+		selected_piece_img->setVisible(false);
 	}));
 //	if(selected_piece_img)
 //	{
@@ -923,6 +936,16 @@ void PuzzleScene::endSuccessPuzzleEffect()
 void PuzzleScene::showPerfectPuzzleEffect()
 {
 	CCLOG("perfect puzzle animation");
+	
+	if(selected_piece_img)
+	{
+		selected_piece_img->setVisible(false);
+//		addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}, [=](float t){
+//			selected_piece_img->setOpacity(t);
+//		}));
+	}
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -1466,7 +1489,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 		{
 //			showSuccessPuzzleEffect();
 			startBacking();
-			
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
@@ -1493,6 +1515,10 @@ void PuzzleScene::menuAction(CCObject* sender)
 			OptionPopup* t_popup = OptionPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 			addChild(t_popup, kPuzzleZorder_popup);
+		}
+		else if(tag == kPuzzleMenuTag_event)
+		{
+			showSuccessPuzzleEffect();
 		}
 		else if(tag == kPuzzleMenuTag_achieve)
 		{
@@ -2038,7 +2064,13 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		rank_percent_case->setPosition(ccp(10+115,213));
 		right_body->addChild(rank_percent_case);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 11);
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 11);
+		addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
+																					 2.f * (1.f - rank_percent), [=](float t){
+																					 percent_label->setString(ccsf("%.0f%%", t));
+		}, [=](float t){
+			percent_label->setString(ccsf("%.0f%%", t));
+		}));
 		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
@@ -2282,13 +2314,13 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(114,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
+	top_heart->setPosition(ccp(107,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_heart, kPuzzleZorder_top);
 	
 	top_list.push_back(top_heart);
 	
 	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(top_heart->getContentSize().width/2.f-56,top_heart->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(top_heart->getContentSize().width/2.f-53,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");
@@ -2299,19 +2331,19 @@ void PuzzleScene::setTop()
 	heart_item->setTag(kPuzzleMenuTag_heartShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+57,top_heart->getContentSize().height/2.f));
+	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+53,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_menu);
 	
 	
 	CCSprite* top_gold = CCSprite::create("mainflow_top_gold.png");
 	top_gold->setAnchorPoint(ccp(0.5f,1.f));
-	top_gold->setPosition(ccp(227,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
+	top_gold->setPosition(ccp(221.5f,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
 	addChild(top_gold, kPuzzleZorder_top);
 	
 	top_list.push_back(top_gold);
 	
 	CCSprite* gold_img = CCSprite::create("price_gold_img.png");
-	gold_img->setPosition(ccp(top_gold->getContentSize().width/2.f-34.5f, top_gold->getContentSize().height/2.f+1));
+	gold_img->setPosition(ccp(top_gold->getContentSize().width/2.f-39.f, top_gold->getContentSize().height/2.f+1));
 	top_gold->addChild(gold_img);
 	
 	GoodsLight* gold_light = GoodsLight::create(CCSprite::create("price_gold_img_mask.png"));
@@ -2319,7 +2351,7 @@ void PuzzleScene::setTop()
 	gold_img->addChild(gold_light);
 	
 	gold_label = CountingBMLabel::create(CCString::createWithFormat("%d", mySGD->getGoodsValue(kGoodsType_gold))->getCString(), "mainflow_top_font1.fnt", 0.3f, "%d");
-	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f - 1,top_gold->getContentSize().height/2.f-6));
+	gold_label->setPosition(ccp(top_gold->getContentSize().width/2.f,top_gold->getContentSize().height/2.f-6));
 	top_gold->addChild(gold_label);
 	
 	mySGD->setGoldLabel(gold_label);
@@ -2332,7 +2364,7 @@ void PuzzleScene::setTop()
 	gold_item->setTag(kPuzzleMenuTag_goldShop);
 	
 	CCMenu* gold_menu = CCMenu::createWithItem(gold_item);
-	gold_menu->setPosition(ccp(top_gold->getContentSize().width/2.f+35,top_gold->getContentSize().height/2.f));
+	gold_menu->setPosition(ccp(top_gold->getContentSize().width/2.f+40,top_gold->getContentSize().height/2.f));
 	top_gold->addChild(gold_menu);
 	
 	

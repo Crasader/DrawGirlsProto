@@ -642,19 +642,19 @@ void GaBaBo::hidingAnimation()
 			}, [=](CCPoint t){
 				m_thinkSprite->setPosition(t);
 			}));
-			addChild(KSGradualValue<CCPoint>::create(m_ba->getPosition(), m_ba->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+			addChild(KSGradualValue<CCPoint>::create(m_ba->getPosition(), m_ba->getPosition() - ccp(0, 190), 0.4f, [=](CCPoint t){
 				m_ba->setPosition(t);
 			}, [=](CCPoint t){
 				m_ba->setPosition(t);
 			}));
 			addChild(KSTimer::create(0.1f, [=](){
-				addChild(KSGradualValue<CCPoint>::create(m_ga->getPosition(), m_ga->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+				addChild(KSGradualValue<CCPoint>::create(m_ga->getPosition(), m_ga->getPosition() - ccp(0, 190), 0.4f, [=](CCPoint t){
 					m_ga->setPosition(t);
 				}, [=](CCPoint t){
 					m_ga->setPosition(t);
 				}));
 				addChild(KSTimer::create(0.1f, [=](){
-					addChild(KSGradualValue<CCPoint>::create(m_bo->getPosition(), m_bo->getPosition() - ccp(0, 170), 0.4f, [=](CCPoint t){
+					addChild(KSGradualValue<CCPoint>::create(m_bo->getPosition(), m_bo->getPosition() - ccp(0, 190), 0.4f, [=](CCPoint t){
 						m_bo->setPosition(t);
 					}, [=](CCPoint t){
 						m_bo->setPosition(t);
