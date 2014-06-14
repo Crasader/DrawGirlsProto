@@ -67,7 +67,7 @@ private:
 	
 	float minimum_scale;
 	CCSize screen_size;
-	
+	CCPoint old_center_pos;
 	void menuAction(CCObject* sender);
 	
 	void startScript();

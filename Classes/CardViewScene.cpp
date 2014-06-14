@@ -551,6 +551,14 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				else if(after_scale < minimum_scale)		after_scale = minimum_scale;
 				zoom_base_distance = changed_distance;
 				game_node->setScale(after_scale);
+				
+				this->moveListXY(ccpSub(old_center_pos, avg_point));
+				
+				old_center_pos = avg_point;
+				
+				
+				
+				
 				//game_node->setPosition(avg_point);
 //				CCPoint a_p;
 //				{
