@@ -308,20 +308,22 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
 		
 	}, [=](){
-		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																					 {
+//		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																					 {
 //																						 if(!is_reloaded)
 //																							{
 //																								is_reloaded = true;
 //																								reward_table->reloadData();
 //																								day_table->reloadData();
 //																							}
-																					 }, [=](float t)
-																					 {
-																						 
-																					 }));
+//																					 }, [=](float t)
+//																					 {
+//																						 
+//																					 }));
 		
 		is_menu_enable = true;
+		
+		closeAction();
 	});
 }
 

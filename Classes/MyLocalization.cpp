@@ -1212,6 +1212,16 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
 	ko->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
+	ko->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
+	ko->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	ko->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	ko->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
+	ko->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
+	ko->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
+	ko->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
+	ko->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
+	ko->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
+	ko->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1932,6 +1942,17 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
 	en->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
+	
+	en->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
+	en->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	en->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	en->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
+	en->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
+	en->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
+	en->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
+	en->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
+	en->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
+	en->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -2675,6 +2696,17 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
 	ja->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
+	
+	ja->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
+	ja->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	ja->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	ja->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
+	ja->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
+	ja->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
+	ja->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
+	ja->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
+	ja->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
+	ja->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);

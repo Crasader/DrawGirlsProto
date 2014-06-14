@@ -144,7 +144,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_atTimeShowEventRubyShop,
 	kDSH_Key_atTimeShowLevelupGuide,
 	
-	kDSH_Key_stageHighRank_int1
+	kDSH_Key_stageHighRank_int1,
+	
+	kDSH_Key_isShowMainflowDimmed
 }DSH_Key;
 
 enum SpecialTutorialCode{

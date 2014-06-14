@@ -366,6 +366,8 @@ string DataStorageHub::getKey (DSH_Key t_name)
 	
 	else if(t_name == kDSH_Key_stageHighRank_int1)							return_value = "stghr%d";
 	
+	else if(t_name == kDSH_Key_isShowMainflowDimmed)						return_value = "ismfd";
+	
 	return return_value;
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()

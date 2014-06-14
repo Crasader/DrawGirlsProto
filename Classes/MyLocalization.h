@@ -691,7 +691,18 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_clearTimeEventTitle,
 	
 	kMyLocalKey_achieveHiddenTitle,
-	kMyLocalKey_achieveHiddenContent
+	kMyLocalKey_achieveHiddenContent,
+	
+	kMyLocalKey_mainflowDimmed1,
+	kMyLocalKey_mainflowDimmed2,
+	kMyLocalKey_mainflowDimmed3,
+	kMyLocalKey_mainflowDimmed4,
+	kMyLocalKey_mainflowDimmed5,
+	kMyLocalKey_mainflowDimmed6,
+	kMyLocalKey_mainflowDimmed7,
+	kMyLocalKey_mainflowDimmed8,
+	kMyLocalKey_mainflowDimmed9,
+	kMyLocalKey_mainflowDimmed10
 
 }MyLocalKey;
 
