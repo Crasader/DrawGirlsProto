@@ -3468,7 +3468,7 @@ void PuzzleMapScene::endMovingMapNodeNotOpenPuzzle()
 	CCSprite* n_buy_type = CCSprite::create("price_ruby_img.png");
 	n_buy_type->setPosition(ccp(n_buy->getContentSize().width/2.f-20, n_buy->getContentSize().height/2.f));
 	n_buy->addChild(n_buy_type);
-	CCLabelTTF* n_price = CCLabelTTF::create(CCString::createWithFormat("루비 %d", NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 17);
+	CCLabelTTF* n_price = CCLabelTTF::create(CCString::createWithFormat("잼 %d", NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 17);
 	n_price->setPosition(ccp(n_buy->getContentSize().width/2.f+10, n_buy->getContentSize().height/2.f));
 	n_buy->addChild(n_price);
 	
@@ -3477,7 +3477,7 @@ void PuzzleMapScene::endMovingMapNodeNotOpenPuzzle()
 	CCSprite* s_buy_type = CCSprite::create("price_ruby_img.png");
 	s_buy_type->setPosition(ccp(s_buy->getContentSize().width/2.f-20, s_buy->getContentSize().height/2.f));
 	s_buy->addChild(s_buy_type);
-	CCLabelTTF* s_price = CCLabelTTF::create(CCString::createWithFormat("루비 %d", NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 17);
+	CCLabelTTF* s_price = CCLabelTTF::create(CCString::createWithFormat("잼 %d", NSDS_GI(recent_puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 17);
 	s_price->setPosition(ccp(s_buy->getContentSize().width/2.f+10, s_buy->getContentSize().height/2.f));
 	s_buy->addChild(s_price);
 	
@@ -3594,7 +3594,7 @@ void PuzzleMapScene::notOpenPuzzleAction(CCObject* sender)
 				int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 				PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 				t_history.is_open = true;
-				t_history.open_type = "루비소모";
+				t_history.open_type = "잼소모";
 				mySGD->setPuzzleHistory(t_history, nullptr);
 				
 				map_mode_state = kMMS_changeMode;

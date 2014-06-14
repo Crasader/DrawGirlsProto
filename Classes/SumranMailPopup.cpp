@@ -444,10 +444,10 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 	auto createCCNodeFromIdx = [=](int idx)->CCNode*
 	{
 
-		CCLabelTTF* title;
+		KSLabelTTF* title;
 //		CCMenuItemLambda* sendBtn;
 		CommonButton* btnReceive;
-		CCLabelTTF* score;
+		KSLabelTTF* score;
 		//Json::Reader reader;
 		//Json::Value contentObj;
 
@@ -488,9 +488,9 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 
-		title = CCLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(),12); // "님의"
+		title = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(),12); // "님의"
 		title->setPosition(ccp(48.0,22.5));
-		title->setColor(ccc3(20, 0, 0));
+		title->setColor(ccc3(255, 255, 255));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);
 		setFormSetter(title);
@@ -1363,8 +1363,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				///
 		}
 
-		score = CCLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 10);
-		score->setColor(ccc3(20, 0, 0));
+		score = KSLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 10);
+		score->setColor(ccc3(255, 255, 255));
 		score->setPosition(ccp(47.5,7.5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);

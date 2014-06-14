@@ -964,12 +964,12 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		rank_percent_case->setPosition(ccp(257+195,231));
 		main_case->addChild(rank_percent_case, kZ_CP_img);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 13);
 		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
-		percent_label->setOpacity(0);
+//		percent_label->setOpacity(0);
 		
 		// 이까지 그래프 표시하는 부분 코드.
 		
@@ -979,9 +979,15 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			rank_percent_case->runAction(t_move);
 			
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
-			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
-			CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
+//			CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
+			CCSequence* t_seq2 = CCSequence::create(t_delay2, /*t_fade2,*/ NULL);
 			percent_label->runAction(t_seq2);
+			addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
+																						 2.f * (1.f - rank_percent), [=](float t){
+																							 percent_label->setString(ccsf("%.0f%%", t));
+																						 }, [=](float t){
+																							 percent_label->setString(ccsf("%.0f%%", t));
+																						 }));
 		});
 		
 		Json::Value user_list = result_data["list"];
@@ -1129,6 +1135,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 				list_cell_case->runAction(t_seq);
 			});
 			
+			if(!(before_stage_high_rank == 0 || before_stage_high_rank == myrank))
 			{
 				CCScale9Sprite* list_cell_case_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 

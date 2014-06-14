@@ -844,15 +844,12 @@ void PuzzleScene::endGetStar()
 void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLOG("success puzzle animation");
-	if(selected_piece_img)
-	{
+	addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
+		selected_piece_img->setOpacity(t);
+	}, [=](float t){
+		selected_piece_img->setOpacity(t);
 		selected_piece_img->setVisible(false);
-//		addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
-//			selected_piece_img->setOpacity(t);
-//		}, [=](float t){
-//			selected_piece_img->setOpacity(t);
-//		}));
-	}
+	}));
 //	if(selected_piece_img)
 //	{
 //		selected_piece_img->runAction(CCFadeTo::create(0.5f, 0));
@@ -1492,7 +1489,6 @@ void PuzzleScene::menuAction(CCObject* sender)
 		{
 //			showSuccessPuzzleEffect();
 			startBacking();
-			
 //			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
@@ -1519,6 +1515,10 @@ void PuzzleScene::menuAction(CCObject* sender)
 			OptionPopup* t_popup = OptionPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 			addChild(t_popup, kPuzzleZorder_popup);
+		}
+		else if(tag == kPuzzleMenuTag_event)
+		{
+			showSuccessPuzzleEffect();
 		}
 		else if(tag == kPuzzleMenuTag_achieve)
 		{
@@ -2064,7 +2064,13 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		rank_percent_case->setPosition(ccp(10+115,213));
 		right_body->addChild(rank_percent_case);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 11);
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 11);
+		addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
+																					 2.f * (1.f - rank_percent), [=](float t){
+																					 percent_label->setString(ccsf("%.0f%%", t));
+		}, [=](float t){
+			percent_label->setString(ccsf("%.0f%%", t));
+		}));
 		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));

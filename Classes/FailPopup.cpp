@@ -878,7 +878,13 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		main_case->addChild(rank_percent_case, kZ_FP_img);
 		setFormSetter(rank_percent_case);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 13);
+		addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
+																					 2.f * (1.f - rank_percent), [=](float t){
+																					 percent_label->setString(ccsf("%.0f%%", t));
+		}, [=](float t){
+			percent_label->setString(ccsf("%.0f%%", t));
+		}));
 		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));

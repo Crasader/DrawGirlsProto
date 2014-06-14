@@ -11,6 +11,9 @@ USING_NS_CC;
 #include "DataStorageHub.h"
 #include "KSUtil.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
+
+
 //#include "GaBaBo.h"
 USING_NS_CC_EXT;
 
@@ -173,6 +176,7 @@ public:
 	{
 		CCLayer::init();
 		
+		startFormSetter(this);
 		m_touchPriority = priority;
 		m_onCloseCompleted = onCloseCompleted;
 		m_onOpenCompleted = onOpenCompleted;
@@ -191,45 +195,66 @@ public:
 		addChild(m_rightCurtain, kBonusGameZorder_curtain);
 		
 		
-		m_contentBack = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		m_contentBack->setPosition(ccp(240.0,155.0)); 			// dt (0.0,5.0)
-		m_contentBack->setContentSize(CCSizeMake(288.0,204.5)); 			// dt (-22.0,54.5)
-		addChild(m_contentBack, kBonusGameZorder_content);
+		auto contentBack = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		contentBack->setPosition(ccp(240.0,155.0)); 			// dt (0.0,5.0)
+		contentBack->setContentSize(CCSizeMake(288.0,204.5)); 			// dt (-22.0,54.5)
+		addChild(contentBack, kBonusGameZorder_content);
 		CCSprite* rName = CCSprite::create(reward.spriteName.c_str());
 		
 		CCScale9Sprite* inner_right = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 		
 		inner_right->setPosition(ccp(144.0,84.0)); 			// dt (-203.0,-41.0)
 		inner_right->setContentSize(CCSizeMake(280.5,157.0)); 			// dt (30.5,-78.0)
-		m_contentBack->addChild(inner_right);
+		contentBack->addChild(inner_right);
 		
-		rName->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
-		m_contentBack->addChild(rName);
+		rName->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f);
+		contentBack->addChild(rName);
 		
 		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 16.f);
-		rLabel->setPosition(ccpFromSize(m_contentBack->getContentSize()) / 2.f);
+		rLabel->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f);
 		rLabel->setColor(ccc3(254, 250, 50));
 		rLabel->enableOuterStroke(ccc3(0, 0, 0), 1.f);
-		m_contentBack->addChild(rLabel);
+		contentBack->addChild(rLabel);
 		
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
-//		m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
+//		auto m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
 //																			 buttonBack, m_touchPriority - 1);
-		m_obtainReward = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
+//		m_startMenu->setPosition( ccp(240, 65.f) );
+		auto obtainReward = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
 																			 CommonButtonLightPupple, m_touchPriority - 1);
-		m_obtainReward->setPosition(ccp(240, -200.f));
-		addChild(m_obtainReward, kBonusGameZorder_menu);
+		obtainReward->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -50));
+		if(obtainReward)
+		{
+			addChild(KSGradualValue<CCPoint>::create(obtainReward->getPosition(), ccp(240, 85.f), 0.3f,
+																							 [=](CCPoint t){
+																								 //																								 m_obtainReward->setPosition(t);
+																							 },
+																							 [=](CCPoint t){
+																								 //																								 m_obtainReward->setPosition(t);
+																								 if(onCloseCompleted)
+																								 {
+																									 onCloseCompleted();
+																								 }
+																							 }));
+		}
+
+		contentBack->addChild(obtainReward, kBonusGameZorder_menu);
+		setFormSetter(contentBack);
 		showPopup(onCloseCompleted);
-		m_obtainReward->setFunction([=](CCObject* t){
-			menuAction(onOpenCompleted);
+		obtainReward->setFunction([=](CCObject* t){
+			CommonAnimation::closePopup(this, contentBack, nullptr, [=](){},
+																	[=](){
+																		menuAction(onOpenCompleted);
+																	});
+			setFormSetter(obtainReward);
 		});
 	
 		KSLabelTTF* rewardConfirm = KSLabelTTF::create("보상 확인", mySGD->getFont().c_str(), 20.f);
 		rewardConfirm->setColor(ccc3(255, 155, 0));
-		m_contentBack->addChild(rewardConfirm);
+		contentBack->addChild(rewardConfirm);
 		rewardConfirm->setPosition(ccp(52.5,178.0)); 			// dt (52.5,178.0)
-		startFormSetter(this);
-		
+	
+		CommonAnimation::openPopup(this, contentBack, nullptr, nullptr, nullptr);
 //		StyledLabelTTF* sltObtain = StyledLabelTTF::create("<font color=970 size=18>획득</font><font color=999 size=18> 하였습니다.</font>",
 //																											 mySGD->getFont().c_str(), 18, 999, StyledAlignment::kCenterAlignment);
 //		m_contentBack->addChild(sltObtain);
@@ -244,78 +269,10 @@ public:
 	}
 
 	
-	void menuAction(std::function<void(void)> callback)
-	{
-		
-		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(-80 - 20,160));
-		m_leftCurtain->runAction(left_move);
-
-		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(560 + 20,160));
-		m_rightCurtain->runAction(right_move);
-
-		if(m_titleBonusGame)
-		{
-			CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 500));
-			m_titleBonusGame->runAction(title_move);
-		}
-		
-		if(m_titleStr)
-		{
-			CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 500));
-			m_titleStr->runAction(title_move2);
-	
-		}
-		
-		if(m_contentBack)
-		{
-			CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(-190, 150));
-			m_contentBack->runAction(content_move);
-		}
-		
-		if(m_startMenu)
-		{
-			
-			addChild(KSGradualValue<CCPoint>::create(m_startMenu->getPosition(), ccp(240, -200), 0.4f,
-																							 [=](CCPoint t){
-																								 m_startMenu->setPosition(t);
-																							 },
-																							 [=](CCPoint t){
-																								 m_startMenu->setPosition(t);
-																								 if(callback)
-																								 {
-																									 callback();
-																								 }
-																							 }));
-		}
-		
-		if(m_obtainReward)
-		{
-			
-			addChild(KSGradualValue<CCPoint>::create(m_obtainReward->getPosition(), ccp(240, -200), 0.4f,
-																							 [=](CCPoint t){
-																								 m_obtainReward->setPosition(t);
-																							 },
-																							 [=](CCPoint t){
-																								 m_obtainReward->setPosition(t);
-																								 if(callback)
-																								 {
-																									 callback();
-																								 }
-																							 }));
-		}
-//		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, -200));
-//		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::startGame));
-//		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
-//		m_startMenu->runAction(menu_seq);
-		// 커튼을 치기 전에 미리 생성해놈.
-		if(m_onPressStartButton)
-			m_onPressStartButton();
-	}
+	void menuAction(std::function<void(void)> callback);
 	void removeCurtain()
 	{
-		
-		
-
+		removeFromParent();
 	}
 	void startGame()
 	{
@@ -341,7 +298,6 @@ public:
 		}
 		
 		if(m_titleStr)
-			
 		{
 			CCMoveTo* title_move2 = CCMoveTo::create(0.3f, ccp(240, 257.5f));
 			m_titleStr->runAction(title_move2);
@@ -367,20 +323,8 @@ public:
 																								 }
 																							 }));
 		}
-		if(m_obtainReward)
-		{
-			addChild(KSGradualValue<CCPoint>::create(m_obtainReward->getPosition(), ccp(240, 85.f), 0.3f,
-																							 [=](CCPoint t){
-																								 m_obtainReward->setPosition(t);
-																							 },
-																							 [=](CCPoint t){
-																								 m_obtainReward->setPosition(t);
-																								 if(callback)
-																								 {
-																									 callback();
-																								 }
-																							 }));
-		}
+				
+		
 //		CCMoveTo* menu_move = CCMoveTo::create(0.3f, ccp(240, 65));
 //		CCCallFunc* menu_call = CCCallFunc::create(this, callfunc_selector(CurtainNodeForBonusGame::endShowPopup));
 //		CCSequence* menu_seq = CCSequence::createWithTwoActions(menu_move, menu_call);
@@ -396,6 +340,10 @@ public:
 		
 	}
 	virtual void registerWithTouchDispatcher();
+	void removeFromParent()
+	{
+		CCLayer::removeFromParent();
+	}
 protected:
 	int m_touchPriority;
 	CCSprite* m_leftCurtain;
@@ -404,7 +352,7 @@ protected:
 	KSLabelTTF* m_titleStr;
 	CCScale9Sprite* m_contentBack;
 	CommonButton* m_startMenu;
-	CommonButton* m_obtainReward;
+//	CommonButton* m_obtainReward;
 	BonusGameCode m_gameCode;
 	std::function<void(void)> m_onPressStartButton;
 	
