@@ -327,6 +327,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_titleLoading44,
 	kMyLocalKey_titleLoadingEnd,
 	kMyLocalKey_gamestart,
+	kMyLocalKey_battleStart,
 	kMyLocalKey_mymissile,
 	kMyLocalKey_power,
 	kMyLocalKey_gacha,

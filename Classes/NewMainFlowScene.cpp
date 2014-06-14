@@ -1157,7 +1157,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 								int tt_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, open_puzzle_count+1);
 								PuzzleHistory t_history = mySGD->getPuzzleHistory(tt_puzzle_number);
 								t_history.is_open = true;
-								t_history.open_type = "루비소모";
+								t_history.open_type = "잼소모";
 								mySGD->setPuzzleHistory(t_history, nullptr);
 								
 								vector<SaveUserData_Key> save_userdata_list;

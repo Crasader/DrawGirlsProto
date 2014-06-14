@@ -255,9 +255,9 @@ enum AchievementCode
 	kAchievementCode_gold2,//	골드부자 : 10000골드 모으기. 완
 	kAchievementCode_gold3,//	골드재벌 : 100000골드 모으기. 완
 	
-	kAchievementCode_ruby1,//	루비서민 : 10골드모으기. 완
-	kAchievementCode_ruby2,//	루비부자 : 100루비모으기. 완
-	kAchievementCode_ruby3,//	루비재벌 : 1000루비모으기. 완
+	kAchievementCode_ruby1,//	잼서민 : 10골드모으기. 완
+	kAchievementCode_ruby2,//	잼부자 : 100잼모으기. 완
+	kAchievementCode_ruby3,//	잼재벌 : 1000잼모으기. 완
 	
 	kAchievementCode_mapGacha1,//	맵가챠맨1 : 맵가챠 10회 돌리기 완
 	kAchievementCode_mapGacha2,//	맵가챠맨2 : 맵가챠 20회 돌리기 완

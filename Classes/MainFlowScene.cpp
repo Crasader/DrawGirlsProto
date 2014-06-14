@@ -883,7 +883,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 					t_history.is_open = true;
-					t_history.open_type = "루비소모";
+					t_history.open_type = "잼소모";
 					
 					mySGD->changeGoodsTransaction({mySGD->getUpdatePuzzleHistoryParam(t_history, [=](Json::Value result_data)
 																					  {
@@ -1080,7 +1080,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		
 		if(is_puzzle_enter_list[idx].is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
 		{
-			// 루비 구매 혹은 시간이 되야 열림
+			// 잼 구매 혹은 시간이 되야 열림
 			
 //			CCSprite* n_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
 //			CCSprite* s_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
@@ -1554,7 +1554,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
 		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
 		t_history.is_open = true;
-		t_history.open_type = "루비결제";
+		t_history.open_type = "잼결제";
 		
 		mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
 		

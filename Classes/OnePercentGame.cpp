@@ -359,7 +359,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				t_loading->removeFromParent();
 				if(result_data["result"]["code"] == GDSUCCESS)
 				{
-					// 루비로 구매.
+					// 잼로 구매.
 					gameUISetting();
 					m_99State = 2;
 					m_graphNode->setVisible(true);
