@@ -883,13 +883,14 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		int remain_time = remainTime.getV();
 		if(remain_time < 60)
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeSecond), remain_time)->getCString());
+//			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeSecond), remain_time)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), 0)->getCString());
 		else if(remain_time < 60*60)
 			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), remain_time/60)->getCString());
 		else if(remain_time < 60*60*24)
 			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), remain_time/60/60)->getCString());
 		else
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeDayHour), remain_time/60/60/24, (remain_time%(60*60*24))/60/60)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeDay), remain_time/60/60/24)->getCString());
 		
 		rest_time_value->setVisible(true);
 		
