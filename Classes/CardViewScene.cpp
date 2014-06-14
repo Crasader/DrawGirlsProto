@@ -334,27 +334,46 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	
 	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
 	
-	if(game_node->getScale() <= 1.5f)
-	{
-		if(a_p.x > (480.f-320.f*game_node->getScale()/2.f))
-			a_p.x = 480.f-320.f*game_node->getScale()/2.f;
-		else if(a_p.x < 320.f*game_node->getScale()/2.f)
-			a_p.x = 320.f*game_node->getScale()/2.f;
-		
-	}
-	else
-	{
-		if(a_p.x - game_node->getScale()*480 > 480)
-			a_p.x = 480;
-		else if(a_p.x < 0)
-			a_p.x = 0;
-	
+	//왼쪽맞추기
+	if(game_node->getScale()*first_img->getContentSize().width/2.f*-1+50>a_p.x){
+		a_p.x = game_node->getScale()*first_img->getContentSize().width/2.f*-1+50;
 	}
 	
-	if(a_p.y - game_node->getScale()*320 > 320)
-		a_p.y = 320;
-	else if(a_p.y < 0)
-		a_p.y = 0;
+	//오른쪽맞추기
+	if(game_node->getScale()*first_img->getContentSize().width/2.f+screen_size.width/2.f-50<a_p.x){
+		a_p.x = game_node->getScale()*first_img->getContentSize().width/2.f+screen_size.width/2.f-50;
+	}
+	
+	//top
+	if(game_node->getScale()*first_img->getContentSize().height/2.f*-1+50>a_p.y){
+		a_p.y=game_node->getScale()*first_img->getContentSize().height/2.f*-1+50;
+	}
+	//bottom
+	if(game_node->getScale()*first_img->getContentSize().height/2.f+screen_size.height/2.f-50<a_p.y){
+		a_p.y = game_node->getScale()*first_img->getContentSize().height/2.f+screen_size.height/2.f-50;
+	}
+	
+//	if(game_node->getScale() <= 1.5f)
+//	{
+//		if(a_p.x > (480.f-320.f*game_node->getScale()/2.f))
+//			a_p.x = 480.f-320.f*game_node->getScale()/2.f;
+//		else if(a_p.x < 320.f*game_node->getScale()/2.f)
+//			a_p.x = 320.f*game_node->getScale()/2.f;
+//		
+//	}
+//	else
+//	{
+//		if(a_p.x - game_node->getScale()*480 > 480)
+//			a_p.x = 480;
+//		else if(a_p.x < 0)
+//			a_p.x = 0;
+//	
+//	}
+//	
+//	if(a_p.y - game_node->getScale()*320 > 320)
+//		a_p.y = 320;
+//	else if(a_p.y < 0)
+//		a_p.y = 0;
 	
 //	if(a_p.y > 0+40.f)
 //		a_p.y = 0+40.f;
