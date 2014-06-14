@@ -471,7 +471,7 @@ void MainFlowScene::tableOpenning()
 	
 	if(!myDSH->getBoolForKey(kDSH_Key_isShowMainflowDimmed))
 	{
-//		myDSH->setBoolForKey(kDSH_Key_isShowMainflowDimmed, true);
+		myDSH->setBoolForKey(kDSH_Key_isShowMainflowDimmed, true);
 		
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
