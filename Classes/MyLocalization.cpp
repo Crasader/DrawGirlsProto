@@ -962,10 +962,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ko->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ko->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	ko->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
-	ko->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	ko->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
-	ko->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
+	ko->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
+	ko->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
+	ko->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
+	ko->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -1068,7 +1068,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	ko->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	ko->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	ko->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
+	ko->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>잼"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
@@ -1085,21 +1086,21 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>잼"), kMyLocalKey_attendanceGoodsTypeRuby);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
-	ko->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	ko->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	ko->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	ko->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem11);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	ko->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	ko->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
+	ko->setObject(CCString::create("선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	ko->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
-	ko->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	ko->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	
-	ko->setObject(CCString::create("일"), kMyLocalKey_attendanceDay);
+	ko->setObject(CCString::create("일차"), kMyLocalKey_attendanceDay);
 	
 	ko->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
 	ko->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
@@ -1207,6 +1208,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("네"), kMyLocalKey_yes);
 	ko->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	ko->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	ko->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	ko->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -1684,10 +1688,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	en->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	en->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	en->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
-	en->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	en->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
-	en->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
+	en->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
+	en->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
+	en->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
+	en->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -1783,7 +1787,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	en->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	en->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	en->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
+	en->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>잼"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
@@ -1800,19 +1805,19 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>잼"), kMyLocalKey_attendanceGoodsTypeRuby);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
-	en->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	en->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	en->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	en->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem11);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	en->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	en->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
+	en->setObject(CCString::create("선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	en->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
-	en->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	en->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	en->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
 	en->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
@@ -1924,6 +1929,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("네"), kMyLocalKey_yes);
 	en->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	en->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	en->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	en->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -2413,10 +2421,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ja->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ja->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	ja->setObject(CCString::create("%d일 %d시간"), kMyLocalKey_restTimeDayHour);
-	ja->setObject(CCString::create("%d시간"), kMyLocalKey_restTimeHour);
-	ja->setObject(CCString::create("%d분"), kMyLocalKey_restTimeMinute);
-	ja->setObject(CCString::create("%d초"), kMyLocalKey_restTimeSecond);
+	ja->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
+	ja->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
+	ja->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
+	ja->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
 	
 		
 	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
@@ -2522,7 +2530,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	ja->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	ja->setObject(CCString::create("연속출석 일수에 따라 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	ja->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
+	ja->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>잼"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
@@ -2539,19 +2548,19 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>골드"), kMyLocalKey_attendanceGoodsTypeGold);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>잼"), kMyLocalKey_attendanceGoodsTypeRuby);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem9);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem6);
-	ja->setObject(CCString::create("<font size=12>%d<font size=8>개"), kMyLocalKey_attendanceGoodsTypeItem11);
+	ja->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem9);
+	ja->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem6);
+	ja->setObject(CCString::create("개"), kMyLocalKey_attendanceGoodsTypeItem11);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass1);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass2);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass3);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass4);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass5);
 	ja->setObject(CCString::create("<font size=12>%d<font size=8>장"), kMyLocalKey_attendanceGoodsTypePass6);
-	ja->setObject(CCString::create("<font size=12>선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
+	ja->setObject(CCString::create("선물상자"), kMyLocalKey_attendanceGoodsTypeMany);
 	
 	ja->setObject(CCString::create("출석체크"), kMyLocalKey_attendanceTitle);
-	ja->setObject(CCString::create("<font color=961>연속으로 출석<font newline=15>해야 선물을 받으실 수 있어요!<font color=961>출석 선물은 선물함에서 확인<font newline=13>하세요!"), kMyLocalKey_attendanceContent);
+	ja->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	ja->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
 	ja->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
@@ -2663,6 +2672,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("네"), kMyLocalKey_yes);
 	ja->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	ja->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	ja->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	ja->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
