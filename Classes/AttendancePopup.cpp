@@ -322,8 +322,6 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 //																					 }));
 		
 		is_menu_enable = true;
-		
-		closeAction();
 	});
 }
 
