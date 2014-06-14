@@ -688,7 +688,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_no,
 	kMyLocalKey_yes,
 	kMyLocalKey_clearTimeEventMent,
-	kMyLocalKey_clearTimeEventTitle
+	kMyLocalKey_clearTimeEventTitle,
+	
+	kMyLocalKey_achieveHiddenTitle,
+	kMyLocalKey_achieveHiddenContent
 
 }MyLocalKey;
 

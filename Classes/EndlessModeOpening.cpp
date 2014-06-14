@@ -250,7 +250,7 @@ void EndlessModeOpening::setMain()
 	
 	rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 	rank_percent_case->setAnchorPoint(ccp(0.5,0));
-	rank_percent_case->setPosition(ccp(177,15.5f + 6.f)); // 177
+	rank_percent_case->setPosition(ccp(177,15.5f)); // 177
 	graph_back->addChild(rank_percent_case);
 	
 	percent_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 13);

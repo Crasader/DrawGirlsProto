@@ -1209,6 +1209,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	ko->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
 	
+	ko->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	ko->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
+	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1926,6 +1929,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("네"), kMyLocalKey_yes);
 	en->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	en->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	en->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	en->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -2666,6 +2672,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("네"), kMyLocalKey_yes);
 	ja->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	ja->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
+	
+	ja->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
+	ja->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
