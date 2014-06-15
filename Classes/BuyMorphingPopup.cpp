@@ -98,9 +98,30 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	back_case->addChild(close_button);
 	
 	StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingContent), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
-	content_label->setOldAnchorPoint();
-	content_label->setPosition(ccp(back_case->getContentSize().width / 2.f,back_in->getContentSize().height-20));
+	content_label->setPosition(ccp(back_in->getContentSize().width / 2.f,back_in->getContentSize().height-20));
 	back_in->addChild(content_label);
+	
+	
+	CCScale9Sprite* take_case = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	take_case->setContentSize(CCSizeMake(145, 36));
+	take_case->setPosition(ccp(back_in->getContentSize().width/2.f, 70));
+	back_in->addChild(take_case);
+	
+	CCSprite* pass_img = CCSprite::create("pass_ticket6.png");
+	pass_img->setPosition(ccp(20,18));
+	take_case->addChild(pass_img);
+	
+	KSLabelTTF* take_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingTake), mySGD->getFont().c_str(), 14);
+	take_ment->setColor(ccc3(255, 170, 20));
+	take_ment->setAnchorPoint(ccp(0,0.5f));
+	take_ment->setPosition(pass_img->getPosition() + ccp(pass_img->getContentSize().width/2.f+3, 0));
+	take_case->addChild(take_ment);
+	
+	KSLabelTTF* take_value_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass6))) + myLoc->getLocalForKey(kMyLocalKey_buyMorphingTakeValue)).c_str(), mySGD->getFont().c_str(), 14);
+	take_value_label->setColor(ccc3(255,170,20));
+	take_value_label->setAnchorPoint(ccp(1,0.5f));
+	take_value_label->setPosition(ccp(take_case->getContentSize().width-10, take_case->getContentSize().height/2.f));
+	take_case->addChild(take_value_label);
 	
 	
 	
@@ -114,36 +135,36 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	price_back->setPosition(ccp(buy_label->getContentSize().width + price_back->getContentSize().width/2.f + 5, buy_label->getContentSize().height/2.f));
 	buy_label->addChild(price_back);
 	
-	KSProtectVar<int> need_pass, need_ruby;
+	KSProtectVar<int> need_pass;//, need_ruby;
 	need_pass = NSDS_GI(kSDS_CI_int1_mPrice_pass_i, mySGD->selected_collectionbook);
-	need_ruby = NSDS_GI(kSDS_CI_int1_mPrice_ruby_i, mySGD->selected_collectionbook);
+//	need_ruby = NSDS_GI(kSDS_CI_int1_mPrice_ruby_i, mySGD->selected_collectionbook);
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass6) >= need_pass.getV())
-	{
+//	if(mySGD->getGoodsValue(kGoodsType_pass6) >= need_pass.getV())
+//	{
 		CCSprite* price_type = CCSprite::create("pass_ticket6.png");
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
-		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", need_pass.getV())->getCString(), mySGD->getFont().c_str(), 15);
+		CCLabelTTF* price_label = CCLabelTTF::create((string(CCString::createWithFormat("%d", need_pass.getV())->getCString()) + myLoc->getLocalForKey(kMyLocalKey_buyMorphingTakeValue)).c_str(), mySGD->getFont().c_str(), 14);
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
-	}
-	else
-	{
-		CCSprite* price_type = CCSprite::create("price_ruby_img.png");
-		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_type);
-		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", need_ruby.getV())->getCString(), mySGD->getFont().c_str(), 15);
-		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_label);
-	}
+//	}
+//	else
+//	{
+//		CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+//		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
+//		price_back->addChild(price_type);
+//		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", need_ruby.getV())->getCString(), mySGD->getFont().c_str(), 15);
+//		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+//		price_back->addChild(price_label);
+//	}
 	
 	
-	CCScale9Sprite* buy_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* buy_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0,0,40,40), CCRectMake(19, 19, 2, 2));
 	
 	buy_button = CCControlButton::create(r_label, buy_back);
 	buy_button->addTargetWithActionForControlEvents(this, cccontrol_selector(BuyMorphingPopup::buyAction), CCControlEventTouchUpInside);
-	buy_button->setPreferredSize(CCSizeMake(200,50));
-	buy_button->setPosition(ccp(0,-63));
+	buy_button->setPreferredSize(CCSizeMake(160,42));
+	buy_button->setPosition(ccp(0,-69));
 	m_container->addChild(buy_button);
 	
 	buy_label->setPositionX(-buy_button->getPreferredSize().width/2.f+15);
@@ -206,36 +227,47 @@ void BuyMorphingPopup::buyAction(CCObject* sender, CCControlEvent t_event)
 		
 		mySGD->changeGoodsTransaction(command_list, json_selector(this, BuyMorphingPopup::resultBuyMorphing));
 	}
-	else if(mySGD->getGoodsValue(kGoodsType_ruby) >= need_ruby.getV())
-	{
-		buy_loading = LoadingLayer::create(-9999);
-		buy_loading->setPositions(ccp(240,myDSH->ui_center_y));
-		addChild(buy_loading, 9999);
-		
-		mySGD->addChangeGoods("morphing_r", kGoodsType_ruby, -need_ruby.getV(), "", CCString::createWithFormat("%d", mySGD->selected_collectionbook)->getCString());
-		
-		Json::Value param;
-		param["memberID"] = myHSP->getSocialID();
-		param["cardNo"] = mySGD->selected_collectionbook;
-		param["isMorphing"] = true;
-		
-		vector<CommandParam> command_list;
-		command_list.clear();
-		
-		command_list.push_back(CommandParam("updateCardHistory", param, nullptr));
-		
-		mySGD->changeGoodsTransaction(command_list, json_selector(this, BuyMorphingPopup::resultBuyMorphing));
-	}
+//	else if(mySGD->getGoodsValue(kGoodsType_ruby) >= need_ruby.getV())
+//	{
+//		buy_loading = LoadingLayer::create(-9999);
+//		buy_loading->setPositions(ccp(240,myDSH->ui_center_y));
+//		addChild(buy_loading, 9999);
+//		
+//		mySGD->addChangeGoods("morphing_r", kGoodsType_ruby, -need_ruby.getV(), "", CCString::createWithFormat("%d", mySGD->selected_collectionbook)->getCString());
+//		
+//		Json::Value param;
+//		param["memberID"] = myHSP->getSocialID();
+//		param["cardNo"] = mySGD->selected_collectionbook;
+//		param["isMorphing"] = true;
+//		
+//		vector<CommandParam> command_list;
+//		command_list.clear();
+//		
+//		command_list.push_back(CommandParam("updateCardHistory", param, nullptr));
+//		
+//		mySGD->changeGoodsTransaction(command_list, json_selector(this, BuyMorphingPopup::resultBuyMorphing));
+//	}
+//	else
+//	{
+//		ShopPopup* t_popup = ShopPopup::create();
+//		t_popup->setScale(myDSH->screen_convert_rate);
+//		t_popup->setShopCode(kSC_ruby);
+//		t_popup->setCloseFunc([=]()
+//							  {
+//								  is_menu_enable = true;
+//							  });
+//		addChild(t_popup);
+//	}
 	else
 	{
-		ShopPopup* t_popup = ShopPopup::create();
-		t_popup->setScale(myDSH->screen_convert_rate);
-		t_popup->setShopCode(kSC_ruby);
-		t_popup->setCloseFunc([=]()
-							  {
-								  is_menu_enable = true;
-							  });
-		addChild(t_popup);
+		StyledLabelTTF* t_content = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_notEnoughtMorphingContent), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		t_content->setAnchorPoint(ccp(0.5f,0.83f));
+		
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_notEnoughtMorphingTitle), t_content,
+							   [=]()
+							   {
+								   is_menu_enable = true;
+							   }, ccp(240, myDSH->ui_center_y), true), 9999);
 	}
 }
 

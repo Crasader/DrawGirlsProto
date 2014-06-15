@@ -1102,9 +1102,16 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("일차"), kMyLocalKey_attendanceDay);
 	
-	ko->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
-	ko->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
-	ko->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
+	ko->setObject(CCString::create("생명의 돌"), kMyLocalKey_buyMorphingTitle);
+	ko->setObject(CCString::create("<font color=961 newline=18>생명의 돌을 사용하면 카드가 살아납니다.<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_buyMorphingContent);
+	
+	ko->setObject(CCString::create("보유갯수 :"), kMyLocalKey_buyMorphingTake);
+	ko->setObject(CCString::create("개"), kMyLocalKey_buyMorphingTakeValue);
+	
+	ko->setObject(CCString::create("사용하기"), kMyLocalKey_buyMorphingBuy);
+	
+	ko->setObject(CCString::create("생명의 돌이 부족합니다."), kMyLocalKey_notEnoughtMorphingTitle);
+	ko->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	ko->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
 	ko->setObject(CCString::create("쿠폰 번호"), kMyLocalKey_couponContent);
@@ -1830,9 +1837,16 @@ void MyLocal::en()
 	en->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	en->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
-	en->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
-	en->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	en->setObject(CCString::create("생명의 돌"), kMyLocalKey_buyMorphingTitle);
+	en->setObject(CCString::create("<font color=961 newline=18>생명의 돌을 사용하면 카드가 살아납니다.<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_buyMorphingContent);
+	
+	en->setObject(CCString::create("보유갯수 :"), kMyLocalKey_buyMorphingTake);
+	en->setObject(CCString::create("개"), kMyLocalKey_buyMorphingTakeValue);
+	
 	en->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
+	
+	en->setObject(CCString::create("생명의 돌이 부족합니다."), kMyLocalKey_notEnoughtMorphingTitle);
+	en->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	en->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
 	en->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
@@ -2584,9 +2598,16 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("지급된 보상은 수신함에서 확인 가능합니다."), kMyLocalKey_attendanceContent);
 	ja->setObject(CCString::create("DAY"), kMyLocalKey_attendanceDay);
 	
-	ja->setObject(CCString::create("생명 부여하기"), kMyLocalKey_buyMorphingTitle);
-	ja->setObject(CCString::create("<font color=961 newline=20>카드를 만지면<font color=961 newline=30>움직이거나, 소리를 내거나 해유.<font newline=10>카드를 업그레이드 해보세요."), kMyLocalKey_buyMorphingContent);
+	ja->setObject(CCString::create("생명의 돌"), kMyLocalKey_buyMorphingTitle);
+	ja->setObject(CCString::create("<font color=961 newline=18>생명의 돌을 사용하면 카드가 살아납니다.<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_buyMorphingContent);
+	
+	ja->setObject(CCString::create("보유갯수 :"), kMyLocalKey_buyMorphingTake);
+	ja->setObject(CCString::create("개"), kMyLocalKey_buyMorphingTakeValue);
+	
 	ja->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
+	
+	ja->setObject(CCString::create("생명의 돌이 부족합니다."), kMyLocalKey_notEnoughtMorphingTitle);
+	ja->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	ja->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
 	ja->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
