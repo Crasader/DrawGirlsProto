@@ -1767,11 +1767,6 @@ bool PlayUI::getIsExchanged ()
 
 void PlayUI::addScoreAttack(int t_damage)
 {
-	if(bomb_img)// && bomb_manager->getRunningSequenceName() != string("bombcast1"))
-	{
-		bomb_manager->runAnimationsForSequenceNamed("bombcast1");
-	}
-	
 //	ccColor4F t_color;
 //	if(score_attack_damage.getV() < 3000)
 //	{
@@ -1838,9 +1833,9 @@ void PlayUI::scoreAttackKeep()
 	{
 		unschedule(schedule_selector(PlayUI::scoreAttackKeep));
 
-		bomb_manager->runAnimationsForSequenceNamed("Default Timeline");
-//		bomb_img->removeFromParent();
-//		bomb_img = NULL;
+		bomb_img->stopAllActions();
+		bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54)));
+		ing_bomb_value = 0;
 		
 		myGD->communication("Main_scoreAttackMissile", score_attack_damage.getV());
 		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_timeStamp)][use_time][mySGD->getReplayKey(kReplayKey_timeStamp_scoreAttackDamage)] = score_attack_damage.getV();
@@ -2119,9 +2114,20 @@ void PlayUI::setComboCnt (int t_combo)
 	
 	if(before_combo < combo_cnt)
 	{
-		if(mySGD->is_endless_mode && combo_cnt%5 == 0)
+		if(mySGD->is_endless_mode)
 		{
-			addScoreAttack(3000);
+			if(combo_cnt%5 == 0)
+			{
+				ing_bomb_value = 5;
+				addScoreAttack(3000);
+			}
+			else if(ing_bomb_value < combo_cnt%5)
+			{
+				ing_bomb_value = combo_cnt%5;
+			}
+			
+			bomb_img->stopAllActions();
+			bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
 		}
 		
 		my_combo->showCombo(t_combo);
@@ -2139,6 +2145,11 @@ void PlayUI::setComboCnt (int t_combo)
 	}
 	else
 	{
+		ing_bomb_value = combo_cnt;
+		if(ing_bomb_value > 5)
+			ing_bomb_value = 5;
+		bomb_img->stopAllActions();
+		bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
 		myLog->addLog(kLOG_endCombo_i, myGD->getCommunication("UI_getUseTime"), before_combo);
 	}
 }
@@ -2753,6 +2764,7 @@ void PlayUI::myInit ()
 	is_on_clear_time_event = false;
 	
 	bomb_img = NULL;
+	ing_bomb_value = 0;
 	
 	score_value = 0;
 	damaged_score = 0;
@@ -2826,12 +2838,20 @@ void PlayUI::myInit ()
 											   UI_IN_TIME, [=](float t){nick_label->setPositionX(t);}, [=](float t)
 		{
 			nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);
+			
+			CCClippingNode* me_bomb_clipping = CCClippingNode::create(CCSprite::create("endless_bomb_mask.png"));
+			me_bomb_clipping->setAlphaThreshold(0.1f);
+			me_bomb_clipping->setPosition(ccp(40, myDSH->ui_center_y+60));
+			addChild(me_bomb_clipping, -2);
+			
+			CCSprite* me_bomb_img = CCSprite::create("endless_bomb.png");
+			me_bomb_img->setPosition(ccp(40, myDSH->ui_center_y+60));
+			addChild(me_bomb_img, -1);
+			
 			auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_me.ccbi");
 			bomb_img = temp.first;
-			bomb_img->setPosition(ccp(40, myDSH->ui_center_y+60));
-			addChild(bomb_img,-1);
-			
-			bomb_manager = temp.second;
+			bomb_img->setPosition(ccp(0, -54));
+			me_bomb_clipping->addChild(bomb_img);
 		}));
 		thumb_node->addChild(score_label);
 	}

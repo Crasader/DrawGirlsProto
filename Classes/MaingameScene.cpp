@@ -637,15 +637,32 @@ void Maingame::finalSetting()
 	
 	if(mySGD->is_play_replay)
 	{
+		CCClippingNode* you_bomb_clipping = CCClippingNode::create(CCSprite::create("endless_bomb_mask.png"));
+		you_bomb_clipping->setAlphaThreshold(0.1f);
+		you_bomb_clipping->setPosition(ccp(440, myDSH->ui_center_y+60));
+		addChild(you_bomb_clipping, clearshowtimeZorder-1);
+		
+		CCSprite* you_bomb_img = CCSprite::create("endless_bomb.png");
+		you_bomb_img->setPosition(ccp(440, myDSH->ui_center_y+60));
+		addChild(you_bomb_img, clearshowtimeZorder);
+		
 		auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_you.ccbi");
 		replay_bomb = temp.first;
-		replay_bomb->setPosition(ccp(440, myDSH->ui_center_y+60));
-		addChild(replay_bomb,clearshowtimeZorder);
+		replay_bomb->setPosition(ccp(0, -54));
+		you_bomb_clipping->addChild(replay_bomb);
 		
-		replay_manager = temp.second;
-		
-		myGD->V_V["Main_readyBomb"] = [=](){replay_manager->runAnimationsForSequenceNamed("bombcast1");};
-		myGD->V_V["Main_stopBomb"] = [=](){replay_manager->runAnimationsForSequenceNamed("Default Timeline");};
+		myGD->V_V["Main_readyBomb"] = [=]()
+		{
+			replay_bomb->stopAllActions();
+			replay_bomb->runAction(CCMoveTo::create(0.5f, ccp(0, 0)));
+			//replay_manager->runAnimationsForSequenceNamed("bombcast1");
+		};
+		myGD->V_V["Main_stopBomb"] = [=]()
+		{
+			replay_bomb->stopAllActions();
+			replay_bomb->runAction(CCMoveTo::create(0.3f, ccp(0, -54)));
+//			replay_manager->runAnimationsForSequenceNamed("Default Timeline");
+		};
 		
 		replay_all_node = CCNode::create();
 		replay_all_node->setPosition(CCPointZero);

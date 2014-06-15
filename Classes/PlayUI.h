@@ -375,7 +375,7 @@ private:
 	
 	int draw_button_tutorial_show;
 	CCSprite* bomb_img;
-	CCBAnimationManager* bomb_manager;
+	int ing_bomb_value;
 };
 #undef LZZ_INLINE
 #endif
