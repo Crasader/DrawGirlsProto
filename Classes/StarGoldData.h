@@ -862,6 +862,8 @@ public:
 	KSProtectVar<int> stage_attack_count;
 	KSProtectVar<int> hunt_value;
 	
+	KSProtectVar<bool> is_new_puzzle_card;
+	Json::Value new_puzzle_card_info;
 	
 private:
 	bool is_not_cleared_stage;

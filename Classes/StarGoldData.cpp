@@ -20,6 +20,7 @@ void StarGoldData::withdraw()
 	
 	endless_my_victory_on = false;
 	is_morphing_noti = true;
+	is_new_puzzle_card = false;
 	
 	star_label = NULL;
 	gold_label = NULL;
@@ -2569,6 +2570,8 @@ void StarGoldData::myInit()
 	app_version = 2;
 	
 	time_event_list.clear();
+	
+	is_new_puzzle_card = false;
 	
 	is_on_attendance = false;
 	is_on_rank_reward = false;

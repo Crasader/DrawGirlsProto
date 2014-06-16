@@ -27,7 +27,7 @@
 #include "RivalSelectPopup.h"
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
-
+#include "EndlessSeqWinRewardPopup.h"
 
 enum EndlessModeResultZorder
 {
@@ -225,6 +225,58 @@ bool EndlessModeResult::init()
 	
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	Json::Value param;
+	param.clear();
+	param["memberID"] = myHSP->getMemberID();
+	param["score"] = int(mySGD->getScore());
+	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+	param["victory"] = left_total_score.getV() > right_total_score.getV();
+	
+	send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
+											 {
+												 GraphDogLib::JsonToLog("finishendlessplay", result_data);
+												 
+												 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+													{
+														if(result_data["sendGift"].asBool())
+														{
+															is_menu_enable = false;
+															EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, [=](){is_menu_enable = true;}, result_data);
+															addChild(t_popup, 999);
+														}
+													}
+											 }));
+	
+	if(left_total_score.getV() <= right_total_score.getV() || mySGD->getIsAlwaysSavePlaydata() == 1)
+	{
+		Json::Value param2;
+		param2.clear();
+		param2["memberID"] = myHSP->getMemberID();
+		param2["score"] = mySGD->getScore();
+		param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+		param2["level"] = mySGD->endless_my_level.getV();
+		param2["autoLevel"] = 1;
+		param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+		param2["victory"] = mySGD->endless_my_victory.getV();
+		
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
+		
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
+		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
+		
+		
+		Json::FastWriter writer;
+		param2["playData"] = writer.write(mySGD->replay_write_info);
+		param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
+		
+		send_command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
+	}
 	
 	tryTransaction();
 	
@@ -721,199 +773,45 @@ void EndlessModeResult::setMain()
 																					KS::setOpacity(t_container, 0);
 																					
 																					
-																					ready_loading = LoadingLayer::create(-999);
-																					addChild(ready_loading, 999);
+																					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f,
+																														   [=](float t)
+																														   {
+																															   gray->setOpacity(255*t);
+																														   }, [=](float t)
+																														   {
+																															   gray->setOpacity(0);
+																															   if(target_final && delegate_final)
+																																   (target_final->*delegate_final)();
+																															   removeFromParent();
+																														   }));
 																					
-																					vector<CommandParam> command_list;
-																					command_list.clear();
+																					addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f,
+																														   [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+																															   addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f,
+																																									  [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
 																					
-																					Json::Value param;
-																					param.clear();
-																					param["memberID"] = myHSP->getMemberID();
-																					param["score"] = int(mySGD->getScore());
-																					param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																					param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																					param["victory"] = true;
-																					
-																					command_list.push_back(CommandParam("finishendlessplay", param,
-																																							[=](Json::Value result_data)
-																																							{
-																																								if(result_data["result"]["code"].asInt() != GDSUCCESS)
-																																								{
-																																									addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
-																																								}
-																																								else
-																																								{
-																																									ready_loading->removeFromParent();
-																																									ready_loading = NULL;
-																																									
-																																									addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f,
-																																																												 [=](float t)
-																																																												 {
-																																																													 gray->setOpacity(255*t);
-																																																												 }, [=](float t)
-																																																												 {
-																																																													 gray->setOpacity(0);
-																																																													 if(target_final && delegate_final)
-																																																														 (target_final->*delegate_final)();
-																																																													 removeFromParent();
-																																																												 }));
-																																									
-																																									addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f,
-																																																												 [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-																																																													 addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f,
-																																																																																	[=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-																																									
-																																									addChild(KSGradualValue<int>::create(255, 0, 0.15f,
-																																																											 [=](int t)
-																																																											 {
-																																																												 KS::setOpacity(main_case, t);
-																																																												 if(t > 100)
-																																																												 {
-																																																													 n_stop_label2->setOpacity(100);
-																																																													 s_stop_label2->setOpacity(100);
-																																																													 n_next_label2->setOpacity(100);
-																																																													 s_next_label2->setOpacity(100);
-																																																												 }
-																																																											 }, [=](int t)
-																																																											 {
-																																																												 KS::setOpacity(main_case, 0);
-																																																												 n_stop_label2->setOpacity(0);
-																																																												 s_stop_label2->setOpacity(0);
-																																																												 n_next_label2->setOpacity(0);
-																																																												 s_next_label2->setOpacity(0);
-																																																											 }));
-																																								}
-																																							}));
-																					
-																					Json::Value param2;
-																					param2.clear();
-																					param2["memberID"] = myHSP->getMemberID();
-																					param2["score"] = mySGD->getScore();
-																					param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																					param2["level"] = mySGD->endless_my_level.getV();
-																					param2["autoLevel"] = 1;
-																					param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																					param2["victory"] = mySGD->endless_my_victory.getV();
-																					
-																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
-																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
-																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
-																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
-																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
-																					
-																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
-																					mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
-																					
-																					
-																					Json::FastWriter writer;
-																					param2["playData"] = writer.write(mySGD->replay_write_info);
-																					param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
-																					
-																					command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
-																					
-																					myHSP->command(command_list);
-																					
-																					
+																					addChild(KSGradualValue<int>::create(255, 0, 0.15f,
+																														 [=](int t)
+																														 {
+																															 KS::setOpacity(main_case, t);
+																															 if(t > 100)
+																															 {
+																																 n_stop_label2->setOpacity(100);
+																																 s_stop_label2->setOpacity(100);
+																																 n_next_label2->setOpacity(100);
+																																 s_next_label2->setOpacity(100);
+																															 }
+																														 }, [=](int t)
+																														 {
+																															 KS::setOpacity(main_case, 0);
+																															 n_stop_label2->setOpacity(0);
+																															 s_stop_label2->setOpacity(0);
+																															 n_next_label2->setOpacity(0);
+																															 s_next_label2->setOpacity(0);
+																														 }));
 																					
 																					t_popup->removeFromParent();
-																					
 																				});
-																				t_popup->addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-																					t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.f);}));}));
-																				
-																				t_popup->addChild(KSGradualValue<int>::create(255, 0, 0.15f, [=](int t)
-																																											{
-																																												t_gray->setOpacity(t);
-																																												KS::setOpacity(t_container, t);
-																																											}, [=](int t)
-																																											{
-																																												t_gray->setOpacity(0);
-																																												KS::setOpacity(t_container, 0);
-																																												
-																																												
-																																												ready_loading = LoadingLayer::create(-999);
-																																												addChild(ready_loading, 999);
-																																												
-																																												vector<CommandParam> command_list;
-																																												command_list.clear();
-																																												
-																																												Json::Value param;
-																																												param.clear();
-																																												param["memberID"] = myHSP->getMemberID();
-																																												param["score"] = int(mySGD->getScore());
-																																												param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																																												param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																																												param["victory"] = true;
-																																												
-																																												command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
-																																																														{
-																																																															if(result_data["result"]["code"].asInt() != GDSUCCESS)
-																																																															{
-																																																																addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
-																																																															}
-																																																															else
-																																																															{
-																																																																ready_loading->removeFromParent();
-																																																																ready_loading = NULL;
-																																																																
-																																																																addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
-																																																																																			 {
-																																																																																				 gray->setOpacity(255*t);
-																																																																																			 }, [=](float t)
-																																																																																			 {
-																																																																																				 gray->setOpacity(0);
-																																																																																				 if(target_final && delegate_final)
-																																																																																					 (target_final->*delegate_final)();
-																																																																																				 removeFromParent();
-																																																																																			 }));
-																																																																
-																																																																n_stop_label2->setOpacity(100);
-																																																																s_stop_label2->setOpacity(100);
-																																																																n_next_label2->setOpacity(100);
-																																																																s_next_label2->setOpacity(100);
-																																																																CommonAnimation::closePopup(this, main_case, nullptr, [=](){
-																																																																	
-																																																																}, [=](){
-//																																																																	end_func(); removeFromParent();
-																																																																});
-																																																																
-																																																															}
-																																																														}));
-																																												
-																																												Json::Value param2;
-																																												param2.clear();
-																																												param2["memberID"] = myHSP->getMemberID();
-																																												param2["score"] = mySGD->getScore();
-																																												param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																																												param2["level"] = mySGD->endless_my_level.getV();
-																																												param2["autoLevel"] = 1;
-																																												param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																																												param2["victory"] = mySGD->endless_my_victory.getV();
-																																												
-																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
-																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
-																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
-																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
-																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
-																																												
-																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
-																																												mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
-																																												
-																																												
-																																												Json::FastWriter writer;
-																																												param2["playData"] = writer.write(mySGD->replay_write_info);
-																																												param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
-																																												
-																																												command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
-																																												
-																																												myHSP->command(command_list);
-																																												
-																																												
-																																												
-																																												t_popup->removeFromParent();
-																																											}));
-																				
 																			});
 																			
 																			CCLabelTTF* t2_label = CCLabelTTF::create();
@@ -934,89 +832,35 @@ void EndlessModeResult::setMain()
 																			ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 																			
 																			
-//																			CommonAnimation::openPopup(this, main_case, gray, [=](){
-//																				
-//																			}, [=](){
-//																				t_popup->is_menu_enable = true;
-//																			});
+																			t_popup->is_menu_enable = false;
+																			CommonAnimation::openPopup(this, t_container, t_gray, [=](){
+
+																			}, [=](){
+																				t_popup->is_menu_enable = true;
+																			});
 																		}
 																	  else
 																		{
-																			ready_loading = LoadingLayer::create(-999);
-																			addChild(ready_loading, 999);
+																			addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																												   {
+																													   gray->setOpacity(255*t);
+																												   }, [=](float t)
+																												   {
+																													   gray->setOpacity(0);
+																													   if(target_final && delegate_final)
+																														   (target_final->*delegate_final)();
+																													   removeFromParent();
+																												   }));
 																			
-																			vector<CommandParam> command_list;
-																			command_list.clear();
-																			
-																			Json::Value param;
-																			param.clear();
-																			param["memberID"] = myHSP->getMemberID();
-																			param["score"] = int(mySGD->getScore());
-																			param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																			param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																			param["victory"] = false;
-																			
-																			command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
-																												{
-																													if(result_data["result"]["code"].asInt() != GDSUCCESS)
-																													{
-																														addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
-																													}
-																													else
-																													{
-																														ready_loading->removeFromParent();
-																														ready_loading = NULL;
-																														
-																														addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
-																																							   {
-																																								   gray->setOpacity(255*t);
-																																							   }, [=](float t)
-																																							   {
-																																								   gray->setOpacity(0);
-																																								   if(target_final && delegate_final)
-																																									   (target_final->*delegate_final)();
-																																								   removeFromParent();
-																																							   }));
-																														
-																														n_stop_label2->setOpacity(100);
-																														s_stop_label2->setOpacity(100);
-																														n_next_label2->setOpacity(100);
-																														s_next_label2->setOpacity(100);
-																														CommonAnimation::closePopup(this, main_case, nullptr, [=](){
-																															
-																														}, [=](){
-//																															end_func(); removeFromParent();
-																														});
-																													}
-																												}));
-																			
-																			Json::Value param2;
-																			param2.clear();
-																			param2["memberID"] = myHSP->getMemberID();
-																			param2["score"] = mySGD->getScore();
-																			param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																			param2["level"] = mySGD->endless_my_level.getV();
-																			param2["autoLevel"] = 1;
-																			param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																			param2["victory"] = mySGD->endless_my_victory.getV();
-																			
-																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
-																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
-																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
-																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
-																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
-																			
-																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
-																			mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
-																			
-																			
-																			Json::FastWriter writer;
-																			param2["playData"] = writer.write(mySGD->replay_write_info);
-																			param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
-																			
-																			command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
-																			
-																			myHSP->command(command_list);
+																			n_stop_label2->setOpacity(100);
+																			s_stop_label2->setOpacity(100);
+																			n_next_label2->setOpacity(100);
+																			s_next_label2->setOpacity(100);
+																			CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+																				
+																			}, [=](){
+//																				end_func(); removeFromParent();
+																			});
 																		}
 																  });
 	stop_item->setPosition(ccp(-main_case->getContentSize().width/2.f+left_back->getPositionX(), 0));
@@ -1104,51 +948,10 @@ void EndlessModeResult::setMain()
 																	 
 																	 command_list.push_back(CommandParam("starttransaction", param3, nullptr));
 																	 
-																	 if(mySGD->getIsAlwaysSavePlaydata() == 1)
-																	{
-																	 Json::Value param2;
-																	 param2.clear();
-																	 param2["memberID"] = myHSP->getMemberID();
-																	 param2["score"] = mySGD->getScore();
-																	 param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																	 param2["level"] = mySGD->endless_my_level.getV();
-																	 param2["autoLevel"] = 1;
-																	 param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																	 param2["victory"] = mySGD->endless_my_victory.getV();
-																	 
-																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_clearGrade)] = mySGD->getStageGrade();
-																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_gameTime)] = mySGD->getGameTime();
-																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_takeGold)] = mySGD->getStageGold();
-																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_totalScore)] = mySGD->getScore();
-																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_originalScore)] = mySGD->getBaseScore();
-																	 
-																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_win)] = mySGD->endless_my_win.getV() + mySGD->endless_my_victory.getV();
-																	 mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lose)] = mySGD->endless_my_lose.getV() + 1;
-																	 
-																	 
-																	 Json::FastWriter writer;
-																	 param2["playData"] = writer.write(mySGD->replay_write_info);
-																	 param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
-																	 
-																	 command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
-																	}
-																	 
-																	 
 																	 Json::Value param;
 																	 param["memberID"] = myHSP->getMemberID();
 																	 
 																	 command_list.push_back(CommandParam("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
-																	 
-																	 Json::Value param4;
-																	 param4.clear();
-																	 param4["memberID"] = myHSP->getMemberID();
-																	 param4["score"] = int(mySGD->getScore());
-																	 param4["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-																	 param4["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-																	 param4["victory"] = true;
-																	 
-																	 command_list.push_back(CommandParam("finishendlessplay", param4, nullptr));
-																	 
 																	 
 																	 myHSP->command(command_list);
 																 });

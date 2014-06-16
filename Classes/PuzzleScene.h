@@ -166,6 +166,8 @@ private:
 	int saved_ranking_stage_number;
 	Json::Value saved_ranking_data;
 	
+	function<void()> keep_func;
+	
 	void countingMessage();
 	void countingAchievement();
 	

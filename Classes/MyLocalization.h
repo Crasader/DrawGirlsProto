@@ -706,7 +706,27 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_mainflowDimmed7,
 	kMyLocalKey_mainflowDimmed8,
 	kMyLocalKey_mainflowDimmed9,
-	kMyLocalKey_mainflowDimmed10
+	kMyLocalKey_mainflowDimmed10,
+	
+	kMyLocalKey_puzzleClearCardTitle,
+	kMyLocalKey_puzzleClearCardContent,
+	kMyLocalKey_puzzlePerfectCardTitle,
+	kMyLocalKey_puzzlePerfectCardContent,
+	
+	kMyLocalKey_endlessSeqWinRewardTitle,
+	kMyLocalKey_endlessSeqWinRewardContent,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypeGold,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass1,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass2,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass3,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass4,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass5,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass6,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypeMany
 
 }MyLocalKey;
 
