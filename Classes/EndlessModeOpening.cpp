@@ -26,8 +26,8 @@
 #include "RivalSelectPopup.h"
 #include "CommonAnimation.h"
 #include "FormSetter.h"
-
-
+#include "LabelTTFMarquee.h"
+#include "StyledLabelTTF.h"
 enum EndlessModeOpeningZorder
 {
 	kEndlessModeOpeningZorder_gray = 0,
@@ -150,11 +150,28 @@ void EndlessModeOpening::setMain()
 							  });
 	main_case->addChild(close_button);
 	
-	
 	left_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	left_back->setContentSize(CCSizeMake(255, 232));
 	left_back->setPosition(ccp(10+left_back->getContentSize().width/2.f, main_case->getContentSize().height*0.44f));
 	main_case->addChild(left_back);
+	CCScale9Sprite* tipBack = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+	tipBack->setPosition(ccp(173.5,246.0)); 			// dt (173.5,246.0)
+	left_back->addChild(tipBack);
+	tipBack->setContentSize(CCSizeMake(65, 25));
+	KSLabelTTF* tipLbl = KSLabelTTF::create("Tip", mySGD->getFont().c_str(), 14.f);
+	tipLbl->setColor(ccc3(255, 155, 0));
+	tipBack->addChild(tipLbl);
+	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f);
+	
+	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 210, 25,
+																											 "<font size=15>PVP랭킹은 연승이 중요해요.  "
+																											 "연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.  "
+																											 "PVP점수는 기본주간랭킹에 추가되지 않습니다.  "
+																											 "랭킹은 매주 갱신됩니다"
+																											 "</font>");
+	tipMaquee->setPosition(ccp(201.0,236.0)); 			// dt (131.0,232.0)
+	tipMaquee->startMarquee();
+	left_back->addChild(tipMaquee, -1);
 	
 	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessWeeklyranking), mySGD->getFont().c_str(), 15);
 	left_title->setColor(ccc3(255, 170, 20));
@@ -164,6 +181,8 @@ void EndlessModeOpening::setMain()
 	
 	startFormSetter(this);
 	setFormSetter(left_title);
+	setFormSetter(tipBack);
+	setFormSetter(tipMaquee);
 	loading_circle = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_circle->setPosition(ccp(left_back->getContentSize().width/2.f, left_back->getContentSize().height/2.f));
 	left_back->addChild(loading_circle);
@@ -320,14 +339,14 @@ void EndlessModeOpening::setMain()
 	
 	CCSprite* n_ready = CCSprite::create("endless_ready.png");
 	
-	n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), mySGD->getFont().c_str(), 22);
 	n_ready_label2->setColor(ccWHITE);
 	n_ready_label2->disableOuterStroke();
 	n_ready_label2->setOpacity(100);
 	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-2));
 	n_ready->addChild(n_ready_label2);
 	
-	n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), mySGD->getFont().c_str(), 22);
 	n_ready_label->setColor(ccc3(50, 30, 5));
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height/2.f-1));
 	n_ready->addChild(n_ready_label);
@@ -335,14 +354,14 @@ void EndlessModeOpening::setMain()
 	CCSprite* s_ready = CCSprite::create("endless_ready.png");
 	s_ready->setColor(ccGRAY);
 	
-	s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), mySGD->getFont().c_str(), 22);
 	s_ready_label2->setColor(ccWHITE);
 	s_ready_label2->setOpacity(100);
 	s_ready_label2->disableOuterStroke();
 	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-2));
 	s_ready->addChild(s_ready_label2);
 	
-	s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 22);
+	s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), mySGD->getFont().c_str(), 22);
 	s_ready_label->setColor(ccc3(50, 30, 5));
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height/2.f-1));
 	s_ready->addChild(s_ready_label);
@@ -1006,18 +1025,22 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		list_cell_case->addChild(nick_label);
 		
 		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		score_label->setColor(ccc3(255, 170, 20));
+		score_label->setColor(ccc3(255, 255, 255));
 		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		score_label->setPosition(ccp(180,18));
+		score_label->setPosition(ccp(215,18));
+		setFormSetter(score_label);
 		list_cell_case->addChild(score_label);
 		
-		KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
-		
+//		KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
+		StyledLabelTTF* victory_label =
+				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), victory.getV()),
+															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
-		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		victory_label->setPosition(ccp(215,18));
+//		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+		victory_label->setPosition(ccp(152, 18));
 		list_cell_case->addChild(victory_label);
+		setFormSetter(victory_label);
 		///////////////////////////////////
 		
 		Json::Value param;
@@ -1144,16 +1167,19 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	list_cell_case->addChild(nick_label);
 	
 	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_list[idx].score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-	score_label->setColor(ccc3(255, 170, 20));
+	score_label->setColor(ccc3(255, 255, 255));
 	score_label->setAnchorPoint(ccp(1,0.5f));
 	score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-	score_label->setPosition(ccp(180,18));
+	score_label->setPosition(ccp(215,18));
 	list_cell_case->addChild(score_label);
 	
-	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	StyledLabelTTF* victory_label =
+	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), victory.getV()),
+												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
+//	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
-	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-	victory_label->setPosition(ccp(215,18));
+//	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+	victory_label->setPosition(ccp(152,18));
 	list_cell_case->addChild(victory_label);
 
 	if(idx == currentSelectedIdx)
@@ -1238,7 +1264,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 //	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str());
 	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", info["endlessData"]["score"].asInt())->getCString()).c_str());
 //	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), mySGD->endless_my_high_victory.getV())->getCString());
-	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),
+	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue2),
 																												 info["endlessData"]["victory"].asInt())->getCString());
 	
 	setFormSetter(highscore_content);

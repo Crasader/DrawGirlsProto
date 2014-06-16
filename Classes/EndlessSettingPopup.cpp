@@ -59,7 +59,7 @@ bool EndlessSettingPopup::init()
 	}, [=](){
 	});
 	
-	KSLabelTTF* lblTitle = KSLabelTTF::create("무한모드", mySGD->getFont().c_str(), 15);
+	KSLabelTTF* lblTitle = KSLabelTTF::create("PVP", mySGD->getFont().c_str(), 15);
 	lblTitle->setPosition(ccp(35, 256));
 	lblTitle->setColor(ccc3(241, 155, 0));
 	main_case->addChild(lblTitle);
@@ -175,7 +175,7 @@ void EndlessSettingPopup::addMyPosition(CCNode* main_case)
 	//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 	//		rankBack->addChild(my_rank_label, kZ_CP_img);
 	
-	float rank_percent = 1.f*myrank/alluser;
+	float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
 	
 	CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 	rank_percent_case->setAnchorPoint(ccp(0.5,0));
