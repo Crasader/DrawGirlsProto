@@ -233,25 +233,25 @@ void EndlessModeOpening::setMain()
 	graph_back->addChild(graph_img);
 	
 	setFormSetter(graph_img);
-	KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
-	t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_a->setPosition(ccp(33.5f,graph_img->getPositionY()));
-	graph_back->addChild(t_rank_a);
-	
-	KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
-	t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_b->setPosition(ccp(74.5f,graph_img->getPositionY()));
-	graph_back->addChild(t_rank_b);
-	
-	KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
-	t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_c->setPosition(ccp(115.5f,graph_img->getPositionY()));
-	graph_back->addChild(t_rank_c);
-	
-	KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
-	t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_d->setPosition(ccp(156.5f,graph_img->getPositionY()));
-	graph_back->addChild(t_rank_d);
+//	KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+//	t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_a->setPosition(ccp(33.5f,graph_img->getPositionY()));
+//	graph_back->addChild(t_rank_a);
+//	
+//	KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+//	t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_b->setPosition(ccp(74.5f,graph_img->getPositionY()));
+//	graph_back->addChild(t_rank_b);
+//	
+//	KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+//	t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_c->setPosition(ccp(115.5f,graph_img->getPositionY()));
+//	graph_back->addChild(t_rank_c);
+//	
+//	KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+//	t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_d->setPosition(ccp(156.5f,graph_img->getPositionY()));
+//	graph_back->addChild(t_rank_d);
 	
 	
 //	CCLabelTTF* all_user_label = CCLabelTTF::create(CCString::createWithFormat("/%d", 9999)->getCString(), mySGD->getFont().c_str(), 10);

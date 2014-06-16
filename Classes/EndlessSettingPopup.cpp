@@ -127,25 +127,25 @@ void EndlessSettingPopup::addMyPosition(CCNode* main_case)
 	main_case->addChild(graph_back);
 
 
-	KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
-	t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_a->setPosition(ccp(25,8));
-	graph_back->addChild(t_rank_a);
-	
-	KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
-	t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_b->setPosition(ccp(25+49,8));
-	graph_back->addChild(t_rank_b);
-	
-	KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
-	t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_c->setPosition(ccp(25+98,8));
-	graph_back->addChild(t_rank_c);
-	
-	KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
-	t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
-	t_rank_d->setPosition(ccp(25+147,8));
-	graph_back->addChild(t_rank_d);
+//	KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+//	t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_a->setPosition(ccp(25,8));
+//	graph_back->addChild(t_rank_a);
+//	
+//	KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+//	t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_b->setPosition(ccp(25+49,8));
+//	graph_back->addChild(t_rank_b);
+//	
+//	KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+//	t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_c->setPosition(ccp(25+98,8));
+//	graph_back->addChild(t_rank_c);
+//	
+//	KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+//	t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
+//	t_rank_d->setPosition(ccp(25+147,8));
+//	graph_back->addChild(t_rank_d);
 	
 	int alluser = 33; // result_data["alluser"].asInt();
 	int lefttime = 33; // result_data["remainTime"].asInt();
