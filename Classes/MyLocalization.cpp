@@ -1063,7 +1063,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
 	ko->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ko->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
-	ko->setObject(CCString::create("<font size=15 color=950>%d</font><font size=10 color=950>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
+	ko->setObject(CCString::create("<font size=15 color=#FFAA14>%d</font><font size=10 color=#FFAA14>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
 	ko->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue2);
 	ko->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	ko->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
@@ -1821,7 +1821,7 @@ void MyLocal::en()
 //	en->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue);
 	en->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	en->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
-	en->setObject(CCString::create("<font size=15 color=950>%d</font><font size=10 color=961>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
+	en->setObject(CCString::create("<font size=15 color=#FFAA14>%d</font><font size=10 color=#FFAA14>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
 	en->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue2);
 	en->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	en->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
@@ -2604,7 +2604,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
 	ja->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ja->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
-	ja->setObject(CCString::create("<font size=15 color=950>%d</font><font size=10 color=961>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
+	ja->setObject(CCString::create("<font size=15 color=#FFAA14>%d</font><font size=10 color=#FFAA14>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
 	ja->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue2);
 	ja->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	ja->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
