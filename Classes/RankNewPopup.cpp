@@ -274,7 +274,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 //		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 //		rankBack->addChild(my_rank_label, kZ_CP_img);
 		
-		float rank_percent = 1.f*myrank/alluser;
+		float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));

@@ -2057,7 +2057,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 //		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 //		right_body->addChild(my_rank_label);
 		
-		float rank_percent = 1.f*myrank/alluser;
+		float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
 		
 		CCSprite* rank_percent_case = CCSprite::create("puzzle_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
@@ -2125,7 +2125,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 				rank_label->setPosition(rank_position);
 				list_cell_case->addChild(rank_label);
 			}
-			
+
 			Json::Reader reader;
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
