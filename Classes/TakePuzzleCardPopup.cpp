@@ -1,0 +1,147 @@
+//
+//  TakePuzzleCardPopup.cpp
+//  DGproto
+//
+//  Created by 사원3 on 2014. 6. 15..
+//
+//
+
+#include "TakePuzzleCardPopup.h"
+#include "TouchSuctionLayer.h"
+#include "KSUtil.h"
+#include "KSLabelTTF.h"
+#include "DataStorageHub.h"
+#include "MyLocalization.h"
+#include "AudioEngine.h"
+#include "FormSetter.h"
+#include "StarGoldData.h"
+#include "StyledLabelTTF.h"
+#include "CommonAnimation.h"
+#include "StageImgLoader.h"
+
+TakePuzzleCardPopup* TakePuzzleCardPopup::create(int t_touch_priority, function<void()> t_end_func)
+{
+	TakePuzzleCardPopup* t_mup = new TakePuzzleCardPopup();
+	t_mup->myInit(t_touch_priority, t_end_func);
+	t_mup->autorelease();
+	return t_mup;
+}
+
+void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
+{
+	startFormSetter(this);
+	
+	mySGD->is_new_puzzle_card = false;
+	is_menu_enable = false;
+	
+	touch_priority = t_touch_priority;
+	end_func = t_end_func;
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray);
+	
+	suction = TouchSuctionLayer::create(touch_priority+1);
+	addChild(suction);
+	
+	suction->setTouchEnabled(true);
+	
+	m_container = CCNode::create();
+	m_container->setPosition(ccp(240,160));
+	addChild(m_container);
+	
+	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+	back_case->setContentSize(CCSizeMake(260,230));
+	back_case->setPosition(ccp(0,0));
+	m_container->addChild(back_case);
+	setFormSetter(back_case);
+	
+	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	back_case->addChild(back_in);
+	setFormSetter(back_in);
+	
+	bool is_perfect = mySGD->getPuzzleHistory(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)).is_perfect.getV();
+	
+	int new_card_number = mySGD->new_puzzle_card_info["cardNo"].asInt();
+	
+	mySGD->addHasGottenCardNumber(new_card_number);
+	if(mySGD->new_puzzle_card_info["isMorphing"].asBool())
+		mySGD->onCardMorphing(mySGD->new_puzzle_card_info["cardNo"].asInt());
+	
+	string title_str, content_str;
+	if(is_perfect)
+	{
+		title_str = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectCardTitle);
+		content_str = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectCardContent);
+	}
+	else
+	{
+		title_str = myLoc->getLocalForKey(kMyLocalKey_puzzleClearCardTitle);
+		content_str = myLoc->getLocalForKey(kMyLocalKey_puzzleClearCardContent);
+	}
+	
+	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 15);
+	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccp(back_case->getContentSize().width / 2.f, back_case->getContentSize().height-25));
+	back_case->addChild(title_label);
+	
+	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
+	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-25));
+	close_button->setFunction([=](CCObject* sender)
+							  {
+								  if(!is_menu_enable)
+									  return;
+								  
+								  is_menu_enable = false;
+								  
+								  AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+								  
+								  CommonAnimation::closePopup(this, m_container, gray, [=](){
+									  
+								  }, [=](){
+									  end_func();
+									  removeFromParent();
+									  
+								  });
+							  });
+	back_case->addChild(close_button);
+	
+	
+	CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_thumbnail.png", new_card_number));
+	CCSprite* card_case = CCSprite::create("cardsetting_minicase2.png");
+	card_case->setPosition(ccpFromSize(card_img->getContentSize()/2.f));
+	card_img->addChild(card_case);
+	
+	CCSprite* light_img = CCSprite::create("newitem_back.png");
+	light_img->setPosition(card_case->getPosition());
+	card_img->addChild(light_img, -1);
+	
+	light_img->runAction(CCRepeatForever::create(CCRotateBy::create(1.f, 90)));
+	
+	card_img->setPosition(ccp(back_in->getContentSize().width/2.f, 117));
+	back_in->addChild(card_img);
+	setFormSetter(card_img);
+	
+	
+	
+	StyledLabelTTF* content_label = StyledLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	content_label->setPosition(ccp(back_in->getContentSize().width / 2.f, 50));
+	back_in->addChild(content_label);
+		
+	
+	CommonAnimation::openPopup(this, m_container, gray, [=](){
+	}, [=](){
+		is_menu_enable = true;
+	});
+}

@@ -240,6 +240,8 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 
 void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 {
+	GraphDogLib::JsonToLog("resultHSLogin", result_data);
+	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		successLogin();

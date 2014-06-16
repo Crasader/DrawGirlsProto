@@ -904,33 +904,31 @@ void PuzzleScene::pumpPuzzle()
 
 void PuzzleScene::endSuccessPuzzleEffect()
 {
-	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
-		//		if(m_gameCode == kMiniGameCode_gababo)
-		{
-			BonusGameReward gr1;
-			gr1.spriteName = "shop_ruby2.png";
-			gr1.desc = "루우비~!";
-			
-			BonusGameReward gr2;
-			gr2.spriteName = "shop_ruby2.png";
-			gr2.desc = "루우비~!";
-			BonusGameReward gr3;
-			gr3.spriteName = "shop_ruby2.png";
-			gr3.desc = "루우비~!";
-			BonusGameReward gr4;
-			gr4.spriteName = "shop_ruby2.png";
-			gr4.desc = "루우비~!";
-			GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
-										 {
+//	CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
+//		//		if(m_gameCode == kMiniGameCode_gababo)
+//		{
+//			BonusGameReward gr1;
+//			gr1.spriteName = "shop_ruby2.png";
+//			gr1.desc = "루우비~!";
+//			
+//			BonusGameReward gr2;
+//			gr2.spriteName = "shop_ruby2.png";
+//			gr2.desc = "루우비~!";
+//			BonusGameReward gr3;
+//			gr3.spriteName = "shop_ruby2.png";
+//			gr3.desc = "루우비~!";
+//			BonusGameReward gr4;
+//			gr4.spriteName = "shop_ruby2.png";
+//			gr4.desc = "루우비~!";
+//			GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+//										 {
 											 mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
 											 startBacking();
-										 });
-			addChild(gbb, (int)Curtain::kBonusGame);
-		}
-	});
-	addChild(bonusGame, (int)Curtain::kCurtain);
-	
-//	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+//										 });
+//			addChild(gbb, (int)Curtain::kBonusGame);
+//		}
+//	});
+//	addChild(bonusGame, (int)Curtain::kCurtain);
 }
 
 void PuzzleScene::showPerfectPuzzleEffect()
@@ -1221,7 +1219,33 @@ void PuzzleScene::setPuzzle()
 			t_history.is_perfect = true;
 		
 		t_history.is_clear = true;
-		mySGD->setPuzzleHistory(t_history, nullptr);
+		
+		LoadingLayer* t_loading = LoadingLayer::create(-9999);
+		addChild(t_loading, kPuzzleZorder_popup+1);
+		
+		keep_func = [=]()
+		{
+			mySGD->setPuzzleHistory(t_history, [=](Json::Value result_data)
+									{
+										GraphDogLib::JsonToLog("clear or perfect puzzle", result_data);
+										
+										if(result_data["result"]["code"].asInt() == GDSUCCESS)
+										{
+											t_loading->removeFromParent();
+											if(result_data["sendGift"].asBool())
+											{
+												mySGD->new_puzzle_card_info = result_data["giftData"];
+												mySGD->is_new_puzzle_card = true;
+											}
+										}
+										else
+										{
+											this->keep_func();
+										}
+									});
+		};
+		
+		keep_func();
 	}
 	
 	if(must_be_change_selected_stage_number && enable_stage_number != -1) // 현재 선택된 스테이지가 선택 불가 스테이지라면

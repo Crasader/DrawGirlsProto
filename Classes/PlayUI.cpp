@@ -2145,11 +2145,14 @@ void PlayUI::setComboCnt (int t_combo)
 	}
 	else
 	{
-		ing_bomb_value = combo_cnt;
-		if(ing_bomb_value > 5)
-			ing_bomb_value = 5;
-		bomb_img->stopAllActions();
-		bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
+		if(mySGD->is_endless_mode)
+		{
+			ing_bomb_value = combo_cnt;
+			if(ing_bomb_value > 5)
+				ing_bomb_value = 5;
+			bomb_img->stopAllActions();
+			bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
+		}
 		myLog->addLog(kLOG_endCombo_i, myGD->getCommunication("UI_getUseTime"), before_combo);
 	}
 }

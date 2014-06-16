@@ -1230,6 +1230,26 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
 	ko->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
+	ko->setObject(CCString::create("모든 피스 획득!"), kMyLocalKey_puzzleClearCardTitle);
+	ko->setObject(CCString::create("<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzleClearCardContent);
+	ko->setObject(CCString::create("모든 카드 획득!"), kMyLocalKey_puzzlePerfectCardTitle);
+	ko->setObject(CCString::create("<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzlePerfectCardContent);
+	
+	ko->setObject(CCString::create("%d연승 돌파!"), kMyLocalKey_endlessSeqWinRewardTitle);
+	ko->setObject(CCString::create("%d연승을 축하드립니다!"), kMyLocalKey_endlessSeqWinRewardContent);
+	ko->setObject(CCString::create("<font newline=18>%d골드를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeGold);
+	ko->setObject(CCString::create("<font newline=18>%d잼을 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby);
+	ko->setObject(CCString::create("<font newline=18>기본속도업아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9);
+	ko->setObject(CCString::create("<font newline=18>더블아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6);
+	ko->setObject(CCString::create("<font newline=18>자석아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11);
+	ko->setObject(CCString::create("<font newline=18>이어하기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass1);
+	ko->setObject(CCString::create("<font newline=18>맵가챠 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass2);
+	ko->setObject(CCString::create("<font newline=18>업그레이드 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass3);
+	ko->setObject(CCString::create("<font newline=18>아이템뽑기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass4);
+	ko->setObject(CCString::create("<font newline=18>1프로찬스 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass5);
+	ko->setObject(CCString::create("<font newline=18>생명의 돌을 %d개를 드립니다.<font newline=18>생명의 돌은 내카드 다이어리에서 사용하세요."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass6);
+	ko->setObject(CCString::create("<font newline=18>선물상자를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeMany);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1967,6 +1987,26 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
 	en->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
 	en->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
+	
+	en->setObject(CCString::create("모든 피스 획득!"), kMyLocalKey_puzzleClearCardTitle);
+	en->setObject(CCString::create("<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzleClearCardContent);
+	en->setObject(CCString::create("모든 카드 획득!"), kMyLocalKey_puzzlePerfectCardTitle);
+	en->setObject(CCString::create("<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzlePerfectCardContent);
+	
+	en->setObject(CCString::create("%d연승 돌파!"), kMyLocalKey_endlessSeqWinRewardTitle);
+	en->setObject(CCString::create("%d연승을 축하드립니다!"), kMyLocalKey_endlessSeqWinRewardContent);
+	en->setObject(CCString::create("<font newline=18>%d골드를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeGold);
+	en->setObject(CCString::create("<font newline=18>%d잼을 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby);
+	en->setObject(CCString::create("<font newline=18>기본속도업아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9);
+	en->setObject(CCString::create("<font newline=18>더블아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6);
+	en->setObject(CCString::create("<font newline=18>자석아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11);
+	en->setObject(CCString::create("<font newline=18>이어하기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass1);
+	en->setObject(CCString::create("<font newline=18>맵가챠 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass2);
+	en->setObject(CCString::create("<font newline=18>업그레이드 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass3);
+	en->setObject(CCString::create("<font newline=18>아이템뽑기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass4);
+	en->setObject(CCString::create("<font newline=18>1프로찬스 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass5);
+	en->setObject(CCString::create("<font newline=18>생명의 돌을 %d개를 드립니다.<font newline=18>생명의 돌은 내카드 다이어리에서 사용하세요."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass6);
+	en->setObject(CCString::create("<font newline=18>선물상자를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeMany);
 	
 
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -2728,6 +2768,26 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
 	ja->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
 	ja->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
+	
+	ja->setObject(CCString::create("모든 피스 획득!"), kMyLocalKey_puzzleClearCardTitle);
+	ja->setObject(CCString::create("<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzleClearCardContent);
+	ja->setObject(CCString::create("모든 카드 획득!"), kMyLocalKey_puzzlePerfectCardTitle);
+	ja->setObject(CCString::create("<font color=961>모든 카드를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzlePerfectCardContent);
+	
+	ja->setObject(CCString::create("%d연승 돌파!"), kMyLocalKey_endlessSeqWinRewardTitle);
+	ja->setObject(CCString::create("%d연승을 축하드립니다!"), kMyLocalKey_endlessSeqWinRewardContent);
+	ja->setObject(CCString::create("<font newline=18>%d골드를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeGold);
+	ja->setObject(CCString::create("<font newline=18>%d잼을 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby);
+	ja->setObject(CCString::create("<font newline=18>기본속도업아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9);
+	ja->setObject(CCString::create("<font newline=18>더블아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6);
+	ja->setObject(CCString::create("<font newline=18>자석아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11);
+	ja->setObject(CCString::create("<font newline=18>이어하기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass1);
+	ja->setObject(CCString::create("<font newline=18>맵가챠 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass2);
+	ja->setObject(CCString::create("<font newline=18>업그레이드 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass3);
+	ja->setObject(CCString::create("<font newline=18>아이템뽑기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass4);
+	ja->setObject(CCString::create("<font newline=18>1프로찬스 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass5);
+	ja->setObject(CCString::create("<font newline=18>생명의 돌을 %d개를 드립니다.<font newline=18>생명의 돌은 내카드 다이어리에서 사용하세요."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass6);
+	ja->setObject(CCString::create("<font newline=18>선물상자를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeMany);
 	
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);

@@ -32,7 +32,6 @@ BuyMorphingPopup* BuyMorphingPopup::create(int t_touch_priority, function<void()
 
 void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_buy_func)
 {
-	mySGD->showPurchasePopup(kPurchaseGuideType_levelupGuide);
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;

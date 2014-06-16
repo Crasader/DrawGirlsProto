@@ -49,6 +49,7 @@
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
 #include "RankRewardPopup.h"
+#include "TakePuzzleCardPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -1343,8 +1344,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																											  target_parent->addChild(heart_time, 0, heart_time_tag);
 																										  }
 																										  
-																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){endUnlockAnimation();}, true);
-																										  addChild(t_popup, kMainFlowZorder_popup);
+//																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){
+																											  endUnlockAnimation();
+//																										  }, true);
+//																										  addChild(t_popup, kMainFlowZorder_popup);
 																										  
 																										  mySGD->setIsUnlockPuzzle(0);
 																										  is_unlock_puzzle = 0;
@@ -1387,8 +1390,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																											  target_parent->addChild(heart_time, 0, heart_time_tag);
 																										  }
 																										  
-																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=]()
-																										  {
+//																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=]()
+//																										  {
 																											  if(!is_puzzle_enter_list[idx].is_base_condition_success)
 																												{
 																													ASPopupView* t_popup = ASPopupView::create(-999);
@@ -1491,8 +1494,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																												{
 																													endUnlockAnimation();
 																												}
-																										  }, true);
-																										  addChild(t_popup, kMainFlowZorder_popup);
+//																										  }, true);
+//																										  addChild(t_popup, kMainFlowZorder_popup);
 																										  
 																										  mySGD->setIsUnlockPuzzle(0);
 																										  is_unlock_puzzle = 0;
@@ -1510,8 +1513,10 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 							   {
-								   PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-99999, [=](){loading_layer->removeFromParent();}, false);
-								   addChild(t_popup, kMainFlowZorder_popup);
+//								   PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-99999, [=](){
+									   loading_layer->removeFromParent();
+//								   }, false);
+//								   addChild(t_popup, kMainFlowZorder_popup);
 								   
 								   mySGD->setIsPerfectPuzzle(0);
 								   is_perfect_puzzle = 0;
@@ -2983,6 +2988,31 @@ void MainFlowScene::topOnLight()
 																	}
 																}
 														   });
+		addChild(t_popup, kMainFlowZorder_popup);
+	}
+	else if(mySGD->is_new_puzzle_card.getV())
+	{
+		TakePuzzleCardPopup* t_popup = TakePuzzleCardPopup::create(-300, [=]()
+																   {
+																	   if(mySGD->is_on_rank_reward)
+																	   {
+																		   RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
+																															  {
+																																  if(mySGD->is_today_mission_first)
+																																  {
+																																	  mySGD->is_today_mission_first = false;
+																																	  
+																																	  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																																	  addChild(t_popup, kMainFlowZorder_popup);
+																																  }
+																																  else
+																																  {
+																																	  is_menu_enable = true;
+																																  }
+																															  });
+																		   addChild(t_popup, kMainFlowZorder_popup);
+																		}
+																   });
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
 	else if(mySGD->is_on_rank_reward)
