@@ -250,6 +250,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	jsonTotalCmd["deviceID"]=this->deviceID;
 	jsonTotalCmd["lang"]=KS::getLocalCode();
 	
+	
 	#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	jsonTotalCmd["os"]="android";
 	#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
