@@ -16,7 +16,6 @@
 #include "CardCase.h"
 #include "GameData.h"
 #include "DataStorageHub.h"
-#include "StarGoldData.h"
 #include "CardListViewer.h"
 #include "StageSettingPopup.h"
 #include "CardStrengthPopup.h"
@@ -26,6 +25,7 @@
 #include "KSLabelTTF.h"
 #include "ScrollBar.h"
 #include "CommonAnimation.h"
+#include "CCMenuLambda.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -129,10 +129,26 @@ bool CardSettingPopup::init()
 		}
 	
 		server_puzzle_list_count = not_event_puzzle_count;
+	
+	for(int i=0;i<mySGD->getHasGottenCardsSize();i++)
+	{
+		CardSortInfo t_info = mySGD->getHasGottenCardData(i);
+		string card_type = NSDS_GS(kSDS_CI_int1_type_s, t_info.card_number.getV());
+		if(card_type == "")
+			card_type = "normal";
+		
+		if(card_type == "normal")
+		{
+			not_default_card_list.push_back(t_info);
+		}
+	}
 //	}
 	
 	
-	recent_sort_type = kCST_default;// myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+	
+	changeSortType(CardSortType(recent_sort_type));
+	
 	recent_selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	
 	is_menu_enable = false;
@@ -238,16 +254,231 @@ bool CardSettingPopup::init()
 //								   menuAction(t_node);
 //							   });
 	
+	string button_label_string;
+	if(recent_sort_type == kCST_default)
+		button_label_string = myLoc->getLocalForKey(kMyLocalKey_defaultSort);
+	else if(recent_sort_type == kCST_gradeDown)
+		button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲";
+	else if(recent_sort_type == kCST_gradeUp)
+		button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼";
+	else if(recent_sort_type == kCST_take)
+		button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲";
+	else if(recent_sort_type == kCST_takeReverse)
+		button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼";
 	
-	align_default_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), 12, CCSizeMake(70,37), CommonButtonYellowUp, -185);
+	align_default_menu = CommonButton::create(button_label_string.c_str(), 12, CCSizeMake(70,37), CommonButtonYellowUp, -185);
 	align_default_menu->setTitleColor(ccc3(50, 20, 0));
 	align_default_menu->setPosition(ccp(400,256));
 	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
 	align_default_menu->setFunction([=](CCObject* sender)
 								 {
-									 CCNode* t_node = CCNode::create();
-									 t_node->setTag(kCSS_MT_alignDefault);
-									 menuAction(t_node);
+									 if(!is_menu_enable)
+										 return;
+									 
+									 is_menu_enable = false;
+									 
+									 TouchSuctionLayer* tt_suction = TouchSuctionLayer::create(-200);
+									 tt_suction->setTouchEnabled(true);
+									 addChild(tt_suction);
+									 
+									 float t_cell_height = 30;
+									 
+									 CCSprite* t_stencil = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 80, t_cell_height*4 + 6));
+									 t_stencil->setAnchorPoint(ccp(0.5f,1.f));
+									 t_stencil->setPosition(ccp(0,-7));
+									 
+									 CCClippingNode* t_clipping = CCClippingNode::create(t_stencil);
+									 t_clipping->setPosition(ccp(400,256));
+									 main_case->addChild(t_clipping, kCSS_Z_alignList);
+									 
+									 CCScale9Sprite* t_case = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+									 t_case->setContentSize(CCSizeMake(67, t_cell_height*4 + 6));
+									 t_case->setAnchorPoint(ccp(0.5f,0));
+									 t_case->setPosition(ccp(0,0));
+									 t_clipping->addChild(t_case);
+									 
+									 for(int i=1;i<=4-1;i++)
+									 {
+										 CCSprite* t_line = CCSprite::create("cardsetting_line.png");
+										 t_line->setScaleX(55/t_line->getContentSize().width);
+										 t_line->setPosition(ccp(t_case->getContentSize().width/2.f, 3+t_cell_height*i));
+										 t_case->addChild(t_line);
+									 }
+									 
+									 CCMenuLambda* t_menu = CCMenuLambda::create();
+									 t_menu->setPosition(ccp(t_case->getContentSize().width/2.f,t_case->getContentSize().height));
+									 t_case->addChild(t_menu);
+									 t_menu->setTouchPriority(-201);
+									 
+									 vector<string> title_list;
+									 title_list.clear();
+									 
+									 vector<function<void()>> lambda_list;
+									 lambda_list.clear();
+									 
+									 int t_recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+									 if(t_recent_sort_type != kCST_default)
+									 {
+										 title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
+										 lambda_list.push_back([=]()
+															   {
+																   align_default_menu->setTitle(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
+																   this->changeSortType(kCST_default);
+																   card_table->reloadData();
+																   
+																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																										  }, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																											  tt_suction->removeFromParent();
+																											  is_menu_enable = true;
+																										  }));
+																   t_menu->setTouchEnabled(false);
+																   t_menu->removeFromParent();
+															   });
+									 }
+									 
+									 if(t_recent_sort_type != kCST_gradeDown)
+									 {
+										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
+										 lambda_list.push_back([=]()
+															   {
+																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
+																   this->changeSortType(kCST_gradeDown);
+																   card_table->reloadData();
+																   
+																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																										  }, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																											  tt_suction->removeFromParent();
+																											  is_menu_enable = true;
+																										  }));
+																   t_menu->setTouchEnabled(false);
+																   t_menu->removeFromParent();
+															   });
+									 }
+									 
+									 if(t_recent_sort_type != kCST_gradeUp)
+									 {
+										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
+										 lambda_list.push_back([=]()
+															   {
+																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
+																   this->changeSortType(kCST_gradeUp);
+																   card_table->reloadData();
+																   
+																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																										  }, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																											  tt_suction->removeFromParent();
+																											  is_menu_enable = true;
+																										  }));
+																   t_menu->setTouchEnabled(false);
+																   t_menu->removeFromParent();
+															   });
+									 }
+									 
+									 if(t_recent_sort_type != kCST_take)
+									 {
+										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
+										 lambda_list.push_back([=]()
+															   {
+																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
+																   this->changeSortType(kCST_take);
+																   card_table->reloadData();
+																   
+																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																										  }, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																											  tt_suction->removeFromParent();
+																											  is_menu_enable = true;
+																										  }));
+																   t_menu->setTouchEnabled(false);
+																   t_menu->removeFromParent();
+															   });
+									 }
+									 
+									 if(t_recent_sort_type != kCST_takeReverse)
+									 {
+										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
+										 lambda_list.push_back([=]()
+															   {
+																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
+																   this->changeSortType(kCST_takeReverse);
+																   card_table->reloadData();
+																   
+																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																										  }, [=](float t)
+																										  {
+																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																											  tt_suction->removeFromParent();
+																											  is_menu_enable = true;
+																										  }));
+																   t_menu->setTouchEnabled(false);
+																   t_menu->removeFromParent();
+															   });
+									 }
+									 
+									 for(int i=0;i<title_list.size();i++)
+									 {
+										 KSLabelTTF* t_label = KSLabelTTF::create(title_list[i].c_str(), mySGD->getFont().c_str(), 10);
+										 t_label->setPosition(ccp(t_case->getContentSize().width/2.f,t_case->getContentSize().height) + ccp(0,-3-t_cell_height/2.f - i*t_cell_height));
+										 t_case->addChild(t_label);
+										 
+										 CCSprite* n_sprite = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 67, t_cell_height));
+										 CCSprite* s_sprite = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 67, t_cell_height));
+										 
+										 CCMenuItemSpriteLambda* t_item = CCMenuItemSpriteLambda::create(n_sprite, s_sprite, [=](CCObject* sender)
+																										 {
+																											 lambda_list[i]();
+																										 });
+										 t_item->setPosition(ccp(0,-3-t_cell_height/2.f - i*t_cell_height));
+										 t_menu->addChild(t_item);
+									 }
+									 
+									 t_menu->setEnabled(false);
+									 addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																			{
+																				t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																			}, [=](float t)
+																			{
+																				t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																				
+																				tt_suction->touch_began_func = [=]()
+																				{
+																					tt_suction->is_on_touch_began_func = false;
+																					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																														   {
+																															   t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																														   }, [=](float t)
+																														   {
+																															   t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																															   tt_suction->removeFromParent();
+																															   is_menu_enable = true;
+																														   }));
+																				};
+																				tt_suction->is_on_touch_began_func = true;
+																				t_menu->setEnabled(true);
+																			}));
+									 
+									 
+									 
+//									 CCNode* t_node = CCNode::create();
+//									 t_node->setTag(kCSS_MT_alignDefault);
+//									 menuAction(t_node);
 								 });
 	align_default_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
@@ -396,6 +627,69 @@ bool CardSettingPopup::init()
     return true;
 }
 
+void CardSettingPopup::changeSortType( CardSortType t_type )
+{
+	recent_sort_type = t_type;
+	myDSH->setIntegerForKey(kDSH_Key_cardSortType, t_type);
+	mySGD->changeSortType(t_type);
+	
+	if(t_type == kCST_default)
+	{
+		struct t_CardSortDefault{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.card_number.getV() < b.card_number.getV();
+			}
+		} pred;
+		
+		sort(not_default_card_list.begin(), not_default_card_list.end(), pred);
+	}
+	else if(t_type == kCST_take)
+	{
+		struct t_CardSortTake{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.take_number.getV() > b.take_number.getV();
+			}
+		} pred;
+		
+		sort(not_default_card_list.begin(), not_default_card_list.end(), pred);
+	}
+	else if(t_type == kCST_takeReverse)
+	{
+		struct t_CardSortTake{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.take_number.getV() < b.take_number.getV();
+			}
+		} pred;
+		
+		sort(not_default_card_list.begin(), not_default_card_list.end(), pred);
+	}
+	else if(t_type == kCST_gradeUp) // rank
+	{
+		struct t_CardSortGradeUp{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.rank.getV() > b.rank.getV();
+			}
+		} pred;
+		
+		sort(not_default_card_list.begin(), not_default_card_list.end(), pred);
+	}
+	else if(t_type == kCST_gradeDown) // rank
+	{
+		struct t_CardSortGradeDown{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.rank.getV() < b.rank.getV();
+			}
+		} pred;
+		
+		sort(not_default_card_list.begin(), not_default_card_list.end(), pred);
+	}
+}
+
 void CardSettingPopup::onEnter()
 {
 	CCLayer::onEnter();
@@ -537,9 +831,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_default)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_default);
-				recent_sort_type = kCST_default;
-				mySGD->changeSortType(kCST_default);
+				changeSortType(kCST_default);
 				alignChange();
 			}
 			
@@ -549,16 +841,12 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_gradeDown)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_gradeDown);
-				recent_sort_type = kCST_gradeDown;
-				mySGD->changeSortType(kCST_gradeDown);
+				changeSortType(kCST_gradeDown);
 				alignChange();
 			}
 			else
 			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_gradeUp);
-				recent_sort_type = kCST_gradeUp;
-				mySGD->changeSortType(kCST_gradeUp);
+				changeSortType(kCST_gradeUp);
 				alignChange();
 			}
 			
@@ -576,16 +864,12 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_take)
 			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_take);
-				recent_sort_type = kCST_take;
-				mySGD->changeSortType(kCST_take);
+				changeSortType(kCST_take);
 				alignChange();
 			}
 			else
 			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSortType, kCST_takeReverse);
-				recent_sort_type = kCST_takeReverse;
-				mySGD->changeSortType(kCST_takeReverse);
+				changeSortType(kCST_takeReverse);
 				alignChange();
 			}
 			
@@ -1069,37 +1353,41 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 	}
 	else
 	{
-		for(int i=idx*5;i<idx*5+5 && i<mySGD->getHasGottenCardsSize();i++)
+		for(int i=idx*9;i<idx*9+9 && i<not_default_card_list.size();i++)
 		{
-			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
+			int card_number = not_default_card_list[i].card_number.getV();
 //			int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
-			CCPoint card_position = ccp(42.f + (i-idx*5)*(81.f), 50.f);
+			CCPoint card_position = ccp(30.f + (i-idx*9)*(48.f), cellSizeForTable(table).height/2.f);
 			
-			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+			string card_type = NSDS_GS(kSDS_CI_int1_type_s, card_number);
+			if(card_type == "")
+				card_type = "normal";
 			
 			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
+			n_card->setScale(0.6f);
 //			n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
-			CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", card_grade)->getCString());
+			CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", card_type.c_str())->getCString());
 			n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
 			n_card->addChild(n_case);
 			
-			CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width, n_card->getContentSize().height));
+			CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
 			n_node->setOpacity(0);
 			n_card->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
 			n_node->addChild(n_card);
 			
 			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
+			s_card->setScale(0.6f);
 //			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
 //				s_card->setColor(ccc3(60, 60, 60));
 //			else
 				s_card->setColor(ccGRAY);
-			CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", card_grade)->getCString());
+			CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", card_type.c_str())->getCString());
 			s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
 			s_card->addChild(s_case);
 			
-			CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width, s_card->getContentSize().height));
+			CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
 			s_node->setOpacity(0);
 			s_card->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
 			s_node->addChild(s_card);
@@ -1115,7 +1403,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			if(mySGD->isCardMorphing(card_number))
 			{
 				CCSprite* morphing_mark = KS::loadCCBI<CCSprite*>(this, "morphing_card.ccbi").first;
-				morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
+				morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f*n_card->getScale()-10, -n_card->getContentSize().height/2.f*n_card->getScale()+10));
 				cell->addChild(morphing_mark);
 			}
 			
@@ -1178,7 +1466,11 @@ unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )
 	}
 	else
 	{
-		return (mySGD->getHasGottenCardsSize()-1)/6+1;
+		int have_card_count = not_default_card_list.size();
+		if(have_card_count == 0)
+			return 0;
+		else
+			return (have_card_count-1)/9+1;
 	}
 }
 

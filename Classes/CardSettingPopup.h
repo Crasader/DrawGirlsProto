@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "StarGoldData.h"
 
 //#include <deque>
 #include <map>
@@ -83,6 +84,7 @@ private:
 	vector<int> server_puzzle_stage_count;
 	vector<int> server_puzzle_start_stage;
 	vector<DefaultCardCellInfo> default_cell_info;
+	vector<CardSortInfo> not_default_card_list;
 	
 	int recent_selected_card_number;
 	
@@ -113,6 +115,8 @@ private:
 	void alignChange();
 //	void addMountedCase();
 //	void removeMountedCase();
+	
+	void changeSortType( CardSortType t_type );
 	
 	bool is_menu_enable;
 	
