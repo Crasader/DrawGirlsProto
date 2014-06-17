@@ -67,6 +67,8 @@ enum SDS_KEY
 	kSDS_PZ_color_g_d,
 	kSDS_PZ_color_b_d,
 	kSDS_PZ_isEvent_b,
+	kSDS_PZ_clearCard_i,
+	kSDS_PZ_perfectCard_i,
 	kSDS_PZ_end = 999,
 	kSDS_GI_base = 1000,
 	kSDS_GI_puzzleListVersion_i,
