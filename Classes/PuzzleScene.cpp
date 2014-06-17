@@ -83,6 +83,9 @@ bool PuzzleScene::init()
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	
+	mySGD->is_endless_mode = false;
+	mySGD->resetReplayPlayingInfo();
+	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 		before_scene_name = "clear";
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
@@ -1053,6 +1056,14 @@ void PuzzleScene::puzzleOpenning()
 
 void PuzzleScene::puzzleBacking()
 {
+	CCSprite* title_name = CCSprite::create("temp_title_name.png");
+	title_name->setPosition(ccp(240,160));
+	title_name->setOpacity(0);
+	addChild(title_name, kPuzzleZorder_back);
+	
+	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 255);
+	title_name->runAction(t_fade);
+	
 	CCPoint original_position = puzzle_node->getPosition();
 	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 										   {
@@ -1133,7 +1144,6 @@ void PuzzleScene::setPuzzle()
 			}
 		}
 		
-		
 		if(is_stage_piece)
 		{
 			int stage_level = SDS_GI(kSDF_puzzleInfo, puzzle_number, CCString::createWithFormat("stage%d_level", stage_number)->getCString());
@@ -1143,7 +1153,7 @@ void PuzzleScene::setPuzzle()
 			{
 				PieceHistory t_history = mySGD->getPieceHistory(stage_number);
 				
-				if(!t_history.is_clear[0] || !t_history.is_clear[1] || !t_history.is_clear[2] || !t_history.is_clear[3])
+				if(NSDS_GS(stage_number, kSDS_SI_type_s) == "normal" && (!t_history.is_clear[0] || !t_history.is_clear[1] || !t_history.is_clear[2] || !t_history.is_clear[3]))
 					clear_is_first_perfect = false;
 				
 				if(mySGD->isClearPiece(stage_number))
@@ -1156,7 +1166,8 @@ void PuzzleScene::setPuzzle()
 				}
 				else // empty
 				{
-					is_puzzle_clear = false;
+					if(NSDS_GS(stage_number, kSDS_SI_type_s) == "normal")
+						is_puzzle_clear = false;
 					
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
@@ -1168,7 +1179,8 @@ void PuzzleScene::setPuzzle()
 			}
 			else
 			{
-				is_puzzle_clear = false;
+				if(NSDS_GS(stage_number, kSDS_SI_type_s) == "normal")
+					is_puzzle_clear = false;
 				
 				if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) <= 0 || mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
 				{
