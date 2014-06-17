@@ -17,7 +17,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 class ScrollBar;
-class RankNewPopup : public CCLayer,public CCTableViewDataSource, public CCTableViewDelegate
+class RankNewPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -47,7 +47,7 @@ private:
 	CCSprite* gray;
 	CCNode* rankBack;
 	int delay_index;
-	ScrollBar* m_scrollBar;
+	ScrollBar* m_scrollBar, *m_rewardScrollBar;
 	vector<function<void()>> cell_action_list;
 	
 	void showPopup();
@@ -56,6 +56,7 @@ private:
 	void endHidePopup();
 	
 	bool is_menu_enable;
+	CCTableView* reward_table;
 //	
 //	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
 //	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);
@@ -64,6 +65,8 @@ private:
 //	virtual void registerWithTouchDispatcher ();
 	
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
+	virtual CCTableViewCell* rankTableCellAtIndex(CCTableView *table, unsigned int idx);
+	virtual CCTableViewCell* rewardTableCellAtIndex(CCTableView *table, unsigned int idx);
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
 	virtual CCSize cellSizeForTable(CCTableView *table);
 	virtual unsigned int numberOfCellsInTableView(CCTableView *table);
@@ -74,6 +77,7 @@ private:
 	Json::Value rank_data;
 	CCSprite* loading_img;
 	void resultGetRank(Json::Value result_data);
+
 };
 
 
