@@ -558,7 +558,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessInfoScoreValue2,
 	kMyLocalKey_endlessHighScore,
 	kMyLocalKey_endlessHighStraight,
-	kMyLocalKey_endlessHighStraightValue,
+	kMyLocalKey_endlessHighStraightValue1,
+	kMyLocalKey_endlessHighStraightValue2,
 	kMyLocalKey_endlessServerError,
 	kMyLocalKey_endlessDownloadFail,
 	kMyLocalKey_endlessCheckGiveup,
@@ -729,8 +730,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessSeqWinRewardGoodsTypeMany,
 	
 	kMyLocalKey_cardSettingMyCardContent,
-	kMyLocalKey_cardSettingMyCardToSpecial
+	kMyLocalKey_cardSettingMyCardToSpecial,
 
+	kMyLocalKey_endlessReady
 }MyLocalKey;
 
 

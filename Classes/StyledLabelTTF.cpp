@@ -374,7 +374,6 @@ void StyledLabelTTF::setStringByTag(const char* text){
 				if(overCount>100)assert("tag name over");
 			}
 			if(str[i]!='>')i++;
-			CCLog("tagName is %s at %d",tagName.c_str(),labelNo);
 			sData[labelNo]["tagName"]=tagName;
 			
 			//내용을 포함하는 태그종류는 현재번호를 등록해놓기
@@ -412,7 +411,6 @@ void StyledLabelTTF::setStringByTag(const char* text){
 				
 				
 				
-				CCLog("tagOption is %s = %s , i = %d",optionName.c_str(),optionValue.c_str(),i);
 				//i=i+ti+oi;
 				if(optionName!="")sData[labelNo-1][optionName.c_str()]=optionValue.c_str();
 				
@@ -421,11 +419,9 @@ void StyledLabelTTF::setStringByTag(const char* text){
 				overCount++;
 				if(overCount>10000)assert("tag option over");
 			}
-			CCLog("tag number %d ok , i = %d",labelNo-1,i);
 		//내용모으기 및 적용
 		}else{
 			//int ti=0;
-			CCLog("take content %d",i);
 			std::string content="";
 			while(str[i]!='<'){
 				if(i>str.length())break;
@@ -436,113 +432,61 @@ void StyledLabelTTF::setStringByTag(const char* text){
 			i--;
 			
 			if(lastIncludeContentTagNo>=0)sData[lastIncludeContentTagNo]["content"]=content;
-			else CCLog("dont find set content");
+			
 		}
 		
 		
-//		
-//		
-//		
-//		
-//		
-//		
-//		if(i==str.length()-1 || ((str[i]=='<' && isSetMode==false))){
-//			
-//			if(isSameStringAtIndex(str, i, "</")){
-//				//닫는태그처리
-//				int ti=1;
-//				while(str[i+ti]!='>'){
-//					if(ti>100)break;
-//					ti++;
-//				}
-//				i+=ti;
-//				continue;
-//			}
-//			
-//			if(i==str.length()-1)content+=str[i];
-//			sData[labelNo]["content"]=content;
-//			if(i==str.length()-1)break;
-//			
-//			if(i!=0)labelNo++;
-//			
-//			isSetMode=true;
-//			content="";
-//			optionNo=0;
-//			optionName="";
-//			//i++;
-//			
-//			int ti=1;
-//			std::string tagName="";
-//			while(str[i+ti]!=' ' && str[i+ti]!='>'){
-//				tagName+=str[i+ti];
-//				if(ti>100)break;
-//				ti++;
-//			}
-//			i+=ti-1;
-//			sData[labelNo]["tagname"]=tagName;
-//			continue;
-//		}
-//		
-//		
-//		
-//		if(isSetMode){
-//			if(str[i]==' ' || str[i]=='>'){
-//				//모은옵션스트링저장하기
-////				if(optionNo==0)sData[labelNo]["option"]["color"]=std::atoi(option.c_str());
-////				else if(optionNo==1)sData[labelNo]["option"]["size"]=std::atoi(option.c_str());
-////				else if(optionNo==2)sData[labelNo]["option"]["newline"]=std::atoi(option.c_str());
-////				else if(optionNo==3)sData[labelNo]["option"]["tag"]=std::atoi(option.c_str());
-////				
-//				if(optionName!="")sData[labelNo][optionName]=option.c_str();
-//				//CCLog("option : %s -> value : %s",optionName.c_str(),option.c_str());
-//				option="";
-//				optionName="";
-//				optionNo++;
-//				
-//				
-//				if(str[i]=='>'){
-//					isSetMode=false;
-//					continue;
-//				}
-//				continue;
-//			}
-//			
-//
-//			if(isSameStringAtIndex(str, i, "size=")){optionName="size"; i+=4; continue;}
-//			if(isSameStringAtIndex(str, i, "color=")){optionName="color"; i+=5; continue;}
-//			if(isSameStringAtIndex(str, i, "tag=")){optionName="tag"; i+=3; continue;}
-//			if(isSameStringAtIndex(str, i, "font=")){optionName="font"; i+=4; continue;}
-//			if(isSameStringAtIndex(str, i, "newline=")){optionName="newline"; i+=7; continue;}
-//			
-//			if(str[i]==' ')continue;
-//			
-//			option+=str[i];
-//			
-//		}else{
-//			if(str[i]=='\n')continue;
-//			//if(isSameStringAtIndex(str, i, "</font>")){i+=6; continue;}
-//			//if(isSameStringAtIndex(str, i, "<br>")){};
-//			content+=str[i];
-//			
-//		}
 	}
 	
 	
-	CCLog("ok go - %s",sData.toStyledString().c_str());
+//	CCLog("ok go - %s",sData.toStyledString().c_str());
 	
 	std::vector<StyledText> texts;
 	for(int k = 0;k<sData.size();k++){
 		Json::Value p;
-		int rgb = sData[k].get("color", m_fontColor).asInt();
+		
+		
+		int xr,xg,xb;
+		if(sData[k].get("color", m_fontColor).asString().substr(0,1)=="#"){
+			std::string r = sData[k].get("color", m_fontColor).asString().substr(1,2);
+			std::string g = sData[k].get("color", m_fontColor).asString().substr(3,2);
+			std::string b = sData[k].get("color", m_fontColor).asString().substr(5,2);
+			
+			xr = std::stoul(r, nullptr, 16);
+			xg = std::stoul(g, nullptr, 16);
+			xb = std::stoul(b, nullptr, 16);
+		}else{
+			int rgb = sData[k].get("color", m_fontColor).asInt();
+			xr = (rgb/100)/9.f*255;
+			xg = (rgb/10%10)/9.f*255;
+			xb = (rgb%10)/9.f*255;
+		}
+		
+		
 		p["tagName"]=sData[k].get("tagName", "").asString();
 		p["img"]=sData[k].get("src", "").asString();
-		p["fillcolor"]=StyledLabelTTF::makeRGB((rgb/100)/9.f*255, (rgb/10%10)/9.f*255, (rgb%10)/9.f*255);
+		p["fillcolor"]=StyledLabelTTF::makeRGB(xr, xg, xb);
 		p["size"]=sData[k].get("size", m_fontSize).asInt();
 		p["tag"]=sData[k].get("tag", 0).asInt();
 		p["font"]=sData[k].get("font", m_font).asString();
-		auto strokeColor = sData[k].get("strokecolor", 0).asUInt();
-
-		p["strokecolor"]=StyledLabelTTF::makeRGB((strokeColor/100)/9.f*255, (strokeColor/10%10)/9.f*255, (strokeColor%10)/9.f*255);
+		
+		
+		if(sData[k].get("strokecolor", m_fontColor).asString().substr(0,1)=="#"){
+			std::string r = sData[k].get("strokecolor", m_fontColor).asString().substr(1,2);
+			std::string g = sData[k].get("strokecolor", m_fontColor).asString().substr(3,2);
+			std::string b = sData[k].get("strokecolor", m_fontColor).asString().substr(5,2);
+			
+			xr = std::stoul(r, nullptr, 16);
+			xg = std::stoul(g, nullptr, 16);
+			xb = std::stoul(b, nullptr, 16);
+		}else{
+			int rgb = sData[k].get("strokecolor", m_fontColor).asInt();
+			xr = (rgb/100)/9.f*255;
+			xg = (rgb/10%10)/9.f*255;
+			xb = (rgb%10)/9.f*255;
+		}
+		
+		p["strokecolor"]=StyledLabelTTF::makeRGB(xr, xg, xb);
 		p["strokesize"]=sData[k].get("strokesize", 0.f).asFloat(); 
 		texts.push_back({sData[k].get("content", "").asString(),p.toStyledString()});
 		

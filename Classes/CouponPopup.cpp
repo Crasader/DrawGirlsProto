@@ -101,45 +101,49 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	m_container->addChild(title_label);
 	
 	CCScale9Sprite* nick_case1 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	nick_case1->setAnchorPoint(ccp(0, 0.5f));
+	nick_case1->setAnchorPoint(ccp(0.5f, 0.5f));
 	nick_case1->setContentSize(CCSizeMake(70,35));
-	nick_case1->setPosition(ccp(-128.0,9.5)); 			// dt (-128.0,2.5)
+	nick_case1->setPosition(ccp(-80.f, 9.5)); 			// dt (-128.0,2.5)
 	m_container->addChild(nick_case1);
 	
 	CCScale9Sprite* nick_case2 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	nick_case2->setAnchorPoint(ccp(0, 0.5f));
+	nick_case2->setAnchorPoint(ccp(0.5f, 0.5f));
 	nick_case2->setContentSize(CCSizeMake(70,35));
-	nick_case2->setPosition(ccp(-60.5,10.0)); 			// dt (-60.5,3.0)
+	nick_case2->setPosition(ccp(0.f, 10.0)); 			// dt (-60.5,3.0)
 	m_container->addChild(nick_case2);
 	
 	CCScale9Sprite* nick_case3 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	nick_case3->setAnchorPoint(ccp(0, 0.5f));
+	nick_case3->setAnchorPoint(ccp(0.5f, 0.5f));
 	nick_case3->setContentSize(CCSizeMake(70,35));
-	nick_case3->setPosition(ccp(7.5,10.5)); 			// dt (7.5,3.5)
+	nick_case3->setPosition(ccp(80.5f,10.5)); 			// dt (7.5,3.5)
 	m_container->addChild(nick_case3);
 
+	CCSprite* seperateBar1 = CCSprite::create("coupon_bar.png");
+	seperateBar1->setPosition(ccp(-40, 10.5f));
+	m_container->addChild(seperateBar1);
 	
 	
+	CCSprite* seperateBar2 = CCSprite::create("coupon_bar.png");
+	seperateBar2->setPosition(ccp(40, 10.5f));
+	m_container->addChild(seperateBar2);
 	
 	CCScale9Sprite* t_back1 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	t_back1->setOpacity(0);
 	input_text1 = CCEditBox::create(CCSizeMake(45, 35), t_back1);
-	input_text1->setPosition(ccp(117.0,231.0)); 			// dt (117.0,4.0)
-	input_text1->setAnchorPoint(ccp(0, 0.5f));
+	input_text1->setPosition(ccp(127.0,230.0)); 			// dt (10.0,-1.0)
+//	input_text1->setPosition(ccp(117.0,231.0)); 			// dt (117.0,4.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 	
 	CCScale9Sprite* t_back2 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	t_back2->setOpacity(0);
 	input_text2 = CCEditBox::create(CCSizeMake(45, 35), t_back2);
-	input_text2->setPosition(ccp(184.0,231.0)); 			// dt (184.0,4.0)
-	input_text2->setAnchorPoint(ccp(0, 0.5f));
+	input_text2->setPosition(ccp(206.5,230.0)); 			// dt (22.5,0.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text2, 99999);
 	
 	CCScale9Sprite* t_back3 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	t_back3->setOpacity(0);
 	input_text3 = CCEditBox::create(CCSizeMake(45, 35), t_back3);
-	input_text3->setPosition(ccp(252.0,234.0)); 			// dt (252.0,7.0)
-	input_text3->setAnchorPoint(ccp(0, 0.5f));
+	input_text3->setPosition(ccp(286.5,230.0)); 			// dt (34.5,-3.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text3, 99999);
 	
 	

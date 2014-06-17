@@ -85,6 +85,20 @@ namespace KS
 			}
 		}
 	}
+	string replaceAll(const string &str, const string &pattern, const string &replace)
+	{
+    string result = str;
+    string::size_type pos = 0;
+    string::size_type offset = 0;
+		
+    while((pos = result.find(pattern, offset)) != string::npos)
+    {
+			result.replace(result.begin() + pos, result.begin() + pos + pattern.size(), replace);
+			offset = pos + replace.size();
+    }
+		
+    return result;
+	}
 	void setOpacity(CCObject* object, GLubyte opaque)
 	{
 		CCArray* childs = NULL;

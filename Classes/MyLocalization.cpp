@@ -742,6 +742,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("보상"), kMyLocalKey_reward);
 	ko->setObject(CCString::create("스피드"), kMyLocalKey_speed);
 	ko->setObject(CCString::create("준비하기"), kMyLocalKey_ready);
+	ko->setObject(CCString::create("상대찾기"), kMyLocalKey_endlessReady);
 	ko->setObject(CCString::create("지존"), kMyLocalKey_rankA);
 	ko->setObject(CCString::create("영웅"), kMyLocalKey_rankB);
 	ko->setObject(CCString::create("평민"), kMyLocalKey_rankC);
@@ -1054,15 +1055,16 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ko->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	ko->setObject(CCString::create("무한모드"), kMyLocalKey_endlessMode);
-	ko->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
+	ko->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	ko->setObject(CCString::create("주간 연승 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ko->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ko->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
 	ko->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
 	ko->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
 	ko->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ko->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
-	ko->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
+	ko->setObject(CCString::create("<font size=15 color=#FFAA14>%d</font><font size=10 color=#FFAA14>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
+	ko->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue2);
 	ko->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	ko->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	ko->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
@@ -1147,8 +1149,8 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
 	
-	ko->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
-	ko->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
+	ko->setObject(CCString::create("PVP 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
+	ko->setObject(CCString::create("<font color=961 newline=16>PVP는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
 	ko->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
@@ -1167,7 +1169,7 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	ko->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
-	ko->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
+	ko->setObject(CCString::create("대전상대를 선택해주세요."), kMyLocalKey_rivalSelect);
 	
 	ko->setObject(CCString::create("업적완료"), kMyLocalKey_achieveSuccess2);
 	
@@ -1182,7 +1184,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
 	ko->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
-	ko->setObject(CCString::create("무한모드 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	ko->setObject(CCString::create("PVP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
 	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	ko->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
@@ -1509,6 +1511,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	en->setObject(CCString::create("Speed"), kMyLocalKey_speed);
 	en->setObject(CCString::create("READY"), kMyLocalKey_ready);
+	en->setObject(CCString::create("상대찾기"), kMyLocalKey_endlessReady);
 	en->setObject(CCString::create("God"), kMyLocalKey_rankA);
 	en->setObject(CCString::create("Hero"), kMyLocalKey_rankB);
 	en->setObject(CCString::create("Normal"), kMyLocalKey_rankC);
@@ -1812,8 +1815,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	en->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	en->setObject(CCString::create("무한모드"), kMyLocalKey_endlessMode);
-	en->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
+	en->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	en->setObject(CCString::create("주간 연승 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	en->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
 	en->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
 	en->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1> 승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
@@ -1821,7 +1824,8 @@ void MyLocal::en()
 //	en->setObject(CCString::create("<font color=999 strokecolor=0 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=0 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue);
 	en->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	en->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
-	en->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
+	en->setObject(CCString::create("<font size=15 color=#FFAA14>%d</font><font size=10 color=#FFAA14>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
+	en->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue2);
 	en->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	en->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	en->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
@@ -1904,8 +1908,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("닫기"), kMyLocalKey_close);
 	en->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
 	
-	en->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
-	en->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
+	en->setObject(CCString::create("PVP 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
+	en->setObject(CCString::create("<font color=961 newline=16>PVP는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
 	en->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
@@ -1925,7 +1929,7 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	en->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
-	en->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
+	en->setObject(CCString::create("대전상대를 선택해주세요."), kMyLocalKey_rivalSelect);
 	
 	en->setObject(CCString::create("업적완료"), kMyLocalKey_achieveSuccess2);
 	
@@ -1942,7 +1946,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
 	en->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
-	en->setObject(CCString::create("무한모드 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	en->setObject(CCString::create("PVP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
 	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	en->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
@@ -2279,6 +2283,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	ja->setObject(CCString::create("Speed"), kMyLocalKey_speed);
 	ja->setObject(CCString::create("Ready"), kMyLocalKey_ready);
+	ja->setObject(CCString::create("상대찾기"), kMyLocalKey_endlessReady);
 	ja->setObject(CCString::create("God"), kMyLocalKey_rankA);
 	ja->setObject(CCString::create("Hero"), kMyLocalKey_rankB);
 	ja->setObject(CCString::create("Normal"), kMyLocalKey_rankC);
@@ -2596,15 +2601,16 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ja->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	ja->setObject(CCString::create("무한모드"), kMyLocalKey_endlessMode);
-	ja->setObject(CCString::create("주간 랭킹"), kMyLocalKey_endlessWeeklyranking);
+	ja->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	ja->setObject(CCString::create("주간 연승 랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ja->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
 	ja->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
 	ja->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1>승률%d%%</font>"), kMyLocalKey_endlessInfoScoreValue2);
 	ja->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
 	ja->setObject(CCString::create("최고점수"), kMyLocalKey_endlessHighScore);
 	ja->setObject(CCString::create("최고연승"), kMyLocalKey_endlessHighStraight);
-	ja->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue);
+	ja->setObject(CCString::create("<font size=15 color=#FFAA14>%d</font><font size=10 color=#FFAA14>연승</font>"), kMyLocalKey_endlessHighStraightValue1);
+	ja->setObject(CCString::create("%d연승"), kMyLocalKey_endlessHighStraightValue2);
 	ja->setObject(CCString::create("뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), kMyLocalKey_endlessServerError);
 	ja->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_endlessDownloadFail);
 	ja->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
@@ -2687,8 +2693,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("닫기"), kMyLocalKey_close);
 	ja->setObject(CCString::create("%d연승중"), kMyLocalKey_endlessIngWin);
 	
-	ja->setObject(CCString::create("무한모드 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
-	ja->setObject(CCString::create("<font color=961 newline=16>무한모드는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
+	ja->setObject(CCString::create("PVP 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
+	ja->setObject(CCString::create("<font color=961 newline=16>PVP는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
 	ja->setObject(CCString::create("대전실패"), kMyLocalKey_endlessKeepWin);
 	
@@ -2708,7 +2714,7 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	ja->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
-	ja->setObject(CCString::create("상대를 선택해주세요."), kMyLocalKey_rivalSelect);
+	ja->setObject(CCString::create("대전상대를 선택해주세요."), kMyLocalKey_rivalSelect);
 	
 	ja->setObject(CCString::create("업적완료"), kMyLocalKey_achieveSuccess2);
 	
@@ -2725,7 +2731,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
 	ja->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
-	ja->setObject(CCString::create("무한모드 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	ja->setObject(CCString::create("PVP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
 	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	ja->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
