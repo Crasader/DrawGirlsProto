@@ -439,7 +439,7 @@ void StyledLabelTTF::setStringByTag(const char* text){
 	}
 	
 	
-	CCLog("ok go - %s",sData.toStyledString().c_str());
+//	CCLog("ok go - %s",sData.toStyledString().c_str());
 	
 	std::vector<StyledText> texts;
 	for(int k = 0;k<sData.size();k++){
