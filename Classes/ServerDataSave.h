@@ -194,6 +194,7 @@ enum SDS_KEY
 	kSDS_SI_junior_s,
 	kSDS_SI_autoBalanceTry_i,
 	kSDS_SI_minigame_b,
+	kSDS_SI_type_s,
 	kSDS_SI_end = 2999,
 	kSDS_CI_base = 3000,
 	kSDS_CI_int1_rank_i, // 1,2,3,4 or 3,4,5,6 etc..
@@ -234,6 +235,7 @@ enum SDS_KEY
 	kSDS_CI_int1_name_s,
 	kSDS_CI_int1_mPrice_ruby_i,
 	kSDS_CI_int1_mPrice_pass_i,
+	kSDS_CI_int1_type_s,
 	kSDS_CI_end = 3999,
 	kSDS_AI_base = 4000,
 	kSDS_AI_version_i,

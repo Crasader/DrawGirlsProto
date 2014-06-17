@@ -294,6 +294,16 @@ bool MainFlowScene::init()
 	{
 		bottomOpenning();
 		topOnLight();
+		
+		CCSprite* title_name = CCSprite::create("temp_title_name.png");
+		title_name->setPosition(ccp(240,160));
+		title_name->setOpacity(255);
+		addChild(title_name, kMainFlowZorder_back);
+		
+		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+		CCCallFunc* t_call = CCCallFunc::create(title_name, callfunc_selector(CCSprite::removeFromParent));
+		CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+		title_name->runAction(t_seq);
 	}
 	
 	is_menu_enable = true;
@@ -2990,31 +3000,31 @@ void MainFlowScene::topOnLight()
 														   });
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
-	else if(mySGD->is_new_puzzle_card.getV())
-	{
-		TakePuzzleCardPopup* t_popup = TakePuzzleCardPopup::create(-300, [=]()
-																   {
-																	   if(mySGD->is_on_rank_reward)
-																	   {
-																		   RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
-																															  {
-																																  if(mySGD->is_today_mission_first)
-																																  {
-																																	  mySGD->is_today_mission_first = false;
-																																	  
-																																	  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
-																																	  addChild(t_popup, kMainFlowZorder_popup);
-																																  }
-																																  else
-																																  {
-																																	  is_menu_enable = true;
-																																  }
-																															  });
-																		   addChild(t_popup, kMainFlowZorder_popup);
-																		}
-																   });
-		addChild(t_popup, kMainFlowZorder_popup);
-	}
+//	else if(mySGD->is_new_puzzle_card.getV())
+//	{
+//		TakePuzzleCardPopup* t_popup = TakePuzzleCardPopup::create(-300, [=]()
+//																   {
+//																	   if(mySGD->is_on_rank_reward)
+//																	   {
+//																		   RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
+//																															  {
+//																																  if(mySGD->is_today_mission_first)
+//																																  {
+//																																	  mySGD->is_today_mission_first = false;
+//																																	  
+//																																	  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+//																																	  addChild(t_popup, kMainFlowZorder_popup);
+//																																  }
+//																																  else
+//																																  {
+//																																	  is_menu_enable = true;
+//																																  }
+//																															  });
+//																		   addChild(t_popup, kMainFlowZorder_popup);
+//																		}
+//																   });
+//		addChild(t_popup, kMainFlowZorder_popup);
+//	}
 	else if(mySGD->is_on_rank_reward)
 	{
 		RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()

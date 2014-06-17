@@ -750,6 +750,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_boss_s)					rv = "boss";
 	else if(t_key == kSDS_SI_junior_s)					rv = "junior";
 	else if(t_key == kSDS_SI_autoBalanceTry_i)			rv = "%d_autoBalanceTry";
+	else if(t_key == kSDS_SI_type_s)					rv = "type";
 	
 	else if(t_key == kSDS_CI_int1_rank_i)						rv = "%d_grade";
 	else if(t_key == kSDS_CI_int1_grade_i)						rv = "%d_rank";
@@ -789,6 +790,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_name_s)			rv = "%d_name";
 	else if(t_key == kSDS_CI_int1_mPrice_ruby_i)				rv = "%d_mPrice_ruby";
 	else if(t_key == kSDS_CI_int1_mPrice_pass_i)				rv = "%d_mPrice_pass";
+	else if(t_key == kSDS_CI_int1_type_s)						rv = "%d_type";
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 	

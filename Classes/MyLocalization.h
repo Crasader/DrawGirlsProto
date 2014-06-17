@@ -726,7 +726,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessSeqWinRewardGoodsTypePass4,
 	kMyLocalKey_endlessSeqWinRewardGoodsTypePass5,
 	kMyLocalKey_endlessSeqWinRewardGoodsTypePass6,
-	kMyLocalKey_endlessSeqWinRewardGoodsTypeMany
+	kMyLocalKey_endlessSeqWinRewardGoodsTypeMany,
+	
+	kMyLocalKey_cardSettingMyCardContent,
+	kMyLocalKey_cardSettingMyCardToSpecial
 
 }MyLocalKey;
 

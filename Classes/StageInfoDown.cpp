@@ -20,6 +20,7 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 		NSDS_SD(mySD->getSilType(), kSDS_SI_scoreRate_d, result_data["scoreRate"].asDouble(), false);
 		NSDS_SD(mySD->getSilType(), kSDS_SI_scale_d, result_data["scale"].asDouble(), false);
 		NSDS_SB(mySD->getSilType(), kSDS_SI_minigame_b, result_data["minigame"].asBool(), false);
+		NSDS_SS(mySD->getSilType(), kSDS_SI_type_s, result_data["type"].asString(), false);
 		
 		Json::Value t_mission = result_data["mission"];
 		NSDS_SI(mySD->getSilType(), kSDS_SI_missionType_i, t_mission["type"].asInt(), false);
@@ -224,6 +225,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 			NSDS_SS(kSDS_CI_int1_name_s, t_card["no"].asInt(), t_card["name"].asString(), false);
 			NSDS_SI(kSDS_CI_int1_mPrice_ruby_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_ruby)].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_mPrice_pass_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_pass6)].asInt(), false);
+			
+			NSDS_SS(kSDS_CI_int1_type_s, t_card["no"].asInt(), t_card["type"].asString(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
 			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
@@ -555,6 +558,8 @@ void StageInfoDown::resultLoadedCardData( Json::Value result_data )
 			NSDS_SS(kSDS_CI_int1_name_s, t_card["no"].asInt(), t_card["name"].asString(), false);
 			NSDS_SI(kSDS_CI_int1_mPrice_ruby_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_ruby)].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_mPrice_pass_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_pass6)].asInt(), false);
+			
+			NSDS_SS(kSDS_CI_int1_type_s, t_card["no"].asInt(), t_card["type"].asString(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
 			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
