@@ -364,7 +364,7 @@ public:
 		printf("\n");
 		
 		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
-			printf("%s->setPosition(ccp(%.1f,%.1f)); \t\t\t// dt (%.1f,%.1f)\n",
+			printf("%s->setPosition(ccp(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)\n",
 						obj->getStringData().c_str(),
 						obj->getPosition().x,
 						obj->getPosition().y,
@@ -396,7 +396,7 @@ public:
 				
 		}
 		if(m_objList[i].originalData["w"].asFloat()!=obj->getContentSize().width || m_objList[i].originalData["h"].asFloat()!=obj->getContentSize().height)
-			printf("%s->setContentSize(CCSizeMake(%.1f,%.1f)); \t\t\t// dt (%.1f,%.1f)\n",
+			printf("%s->setContentSize(CCSizeMake(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)\n",
 						obj->getStringData().c_str(),
 						obj->getContentSize().width,
 						obj->getContentSize().height,
