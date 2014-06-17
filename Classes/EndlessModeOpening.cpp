@@ -834,15 +834,214 @@ void EndlessModeOpening::successGetStageInfo()
 //	}));
 }
 
+class RewardTableDelegator : public CCNode, public CCTableViewDataSource, public CCTableViewDelegate
+{
+public:
+	Json::Value m_rewardData;
+//	virtual CCSize tableCellSizeForIndex(CCTableView *table, unsigned int idx)
+//	{
+//		
+//	}
+	virtual CCSize cellSizeForTable(CCTableView *table)
+	{
+		return CCSizeMake(171, 42);
+	}
+	virtual unsigned int numberOfCellsInTableView(CCTableView *table)
+	{
+		return m_rewardData.size();
+	}
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell)
+	{
+		
+	}
+	virtual void scrollViewDidScroll(CCScrollView* view)
+	{
+		
+	}
+	virtual void scrollViewDidZoom(CCScrollView* view)
+	{
+		
+	}
+
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx)
+	{
+		CCTableViewCell* cell = new CCTableViewCell();
+		cell->init();
+		cell->autorelease();
+		CCLog("idx = %d", idx);
+		CCNode* A, *B, *C;
+		A = B = C = nullptr;
+		
+		CCScale9Sprite* rewardBack2 = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+		rewardBack2->setPosition(ccp(0.f, 0.f));
+		rewardBack2->setAnchorPoint(ccp(0.f, 0.0f));
+		rewardBack2->setContentSize(CCSizeMake(171, 42));
+		//			rewardBack2->setPosition(105,175);
+		setFormSetter(rewardBack2);
+		cell->addChild(rewardBack2);
+		
+		auto titleHanger = [=, &A](){
+			std::string left1 = m_rewardData[idx]["left1"].asString();
+			std::string left2 = m_rewardData[idx]["left2"].asString();
+			//		left1 = KS::replaceAll(left1, "%", "%");
+			//		left2 = KS::replaceAll(left2, "%", "%");
+			StyledLabelTTF* reward2Title = StyledLabelTTF::create(
+																														ccsf("<font color=#FFAA14 newline=15>%s</font><font color=#FFAA14>%s</font>",
+																																 left1.c_str(), left2.c_str()),
+																														mySGD->getFont().c_str(), 15,
+																														999, StyledAlignment::kCenterAlignment);
+			reward2Title->setAnchorPoint(ccp(0.5f, 0.5f));
+			A = reward2Title;
+			rewardBack2->addChild(reward2Title);
+		};
+		if(m_rewardData[idx]["left1"].asString() == "TOP")
+		{
+			int r = m_rewardData[idx]["left2"].asInt();
+			if( r == 1 )
+			{
+				CCSprite* goldImg = CCSprite::create("rank_gold.png");
+				A = goldImg;
+				rewardBack2->addChild(goldImg);
+			}
+			else if(r == 2)
+			{
+				
+				CCSprite* goldImg = CCSprite::create("rank_silver.png");
+				A = goldImg;
+				rewardBack2->addChild(goldImg);
+			}
+			else if(r == 3)
+			{
+				CCSprite* goldImg = CCSprite::create("rank_bronze.png");
+				A = goldImg;
+				rewardBack2->addChild(goldImg);
+			}
+			
+			else
+			{
+				titleHanger();
+			}
+		}
+		else
+		{
+			titleHanger();
+		}
+		
+		std::string titleStr = m_rewardData[idx]["title"].asString();
+		std::string contentStr = m_rewardData[idx]["content"].asString();
+		
+		//	contentStr = KS::replaceAll(contentStr, "%", "%");
+		StyledLabelTTF* reward2Lbl = StyledLabelTTF::create(
+																												ccsf("<font color=#FFAA14 size=11 newline=10>%s</font>"
+																														 "<font color=999 size=9>%s</font>",
+																														 titleStr.c_str(), contentStr.c_str()),
+																												mySGD->getFont().c_str(),
+																												15.f, 999, StyledAlignment::kLeftAlignment);
+		rewardBack2->addChild(reward2Lbl);
+		
+		CCSprite* reward2Img = CCSprite::create("mainflow_event.png");
+		B = reward2Lbl;
+		rewardBack2->addChild(reward2Img);
+		KSLabelTTF* reward2Detail = KSLabelTTF::create(ccsf("X %d", m_rewardData[idx]["reward"][0]["count"].asInt()), mySGD->getFont().c_str(), 12.f);
+		reward2Detail->setPosition(ccpFromSize(reward2Img->getContentSize()) / 2.f + ccp(0, -20));
+		C = reward2Img;
+		reward2Detail->setColor(ccc3(255, 170, 22));
+		reward2Img->addChild(reward2Detail);
+		
+		if(A)
+		{
+			A->setPosition(ccp(26.0,19.0)); 			// dt (26.0,19.0)
+		}
+		if(B)
+		{
+			
+			B->setPosition(ccp(51.5,32.5)); 			// dt (9.5,-6.0)
+		}
+		if(C)
+		{
+			C->setPosition(ccp(148.0,27.5)); 			// dt (-0.5,0.5)
+		}
+		return cell;
+	}
+	
+};
 void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 {
 	loading_circle->removeFromParent();
 	loading_circle = NULL;
 	
 	GraphDogLib::JsonToLog("getendlessrank", result_data);
-	
+
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		CommonButton* rewardInfo = CommonButton::create("보상내용", 12.f, CCSizeMake(60, 35),
+																										CommonButtonYellow, touch_priority-1);
+		rewardInfo->getTitleLabel()->setColor(ccc3(37, 15, 0));
+		rewardInfo->setPosition(ccp(218.5, 211.5));
+		left_back->addChild(rewardInfo);
+		setFormSetter(rewardInfo);
+		rewardInfo->setFunction([=](CCObject*){
+			ASPopupView* rewardInfoPopup = ASPopupView::createDimmed(touch_priority - 2);
+			CCNode* container = CCNode::create();
+			
+			rewardInfoPopup->setContainerNode(container);
+			
+			RewardTableDelegator* rtd = new RewardTableDelegator();
+			rtd->init();
+			rtd->autorelease();
+			container->addChild(rtd);
+			rtd->m_rewardData = result_data["rewardInfo"];
+			auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+			auto front = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+			
+			back->setContentSize(CCSizeMake(203, 242));
+			back->setPosition(ccp(0, 0));
+			
+			//		front->setContentSize(back->getContentSize() - CCSizeMake(20, 50));
+			front->setContentSize(CCSizeMake(187, 197));
+//			front->setPosition(ccpFromSize(back->getContentSize()) / 2.f - ccp(0, -15 - 29.5 - 59.0));
+			front->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -18.5));
+			//		front->setPosition(ccpFromSize(back->getContentSize()) / 2.f);
+			
+			rtd->addChild(back);
+			back->addChild(front);
+			
+			CommonButton* closeButton = CommonButton::createCloseButton(touch_priority - 2);
+			closeButton->setFunction([=](CCObject*){
+				CommonAnimation::closePopup(this, container, rewardInfoPopup->getDimmedSprite(), [=](){
+					
+				}, [=](){
+					rewardInfoPopup->removeFromParent();
+				});
+			});
+			closeButton->setPosition(ccp(179.0, 218.0)); 			// dt (179.0, 218.0)
+			back->addChild(closeButton);
+			addChild(rewardInfoPopup);
+			
+			KSLabelTTF* rewardLbl = KSLabelTTF::create("보상내용", mySGD->getFont().c_str(), 15.f);
+			rewardLbl->setColor(ccc3(255, 170, 20));
+			rewardLbl->setPosition(ccp(46.5, 216.0)); 			// dt (46.5, 219.0)
+			back->addChild(rewardLbl);
+			setFormSetter(closeButton);
+			setFormSetter(rewardLbl);
+			setFormSetter(front);
+			setFormSetter(back);
+			
+			reward_table = CCTableView::create(rtd, CCSizeMake(187, 180));
+			reward_table->setPosition(ccp(7.5, 9.0)); 			// dt (7.5, 9.0)
+			
+			reward_table->setTouchPriority(touch_priority - 2);
+			front->addChild(reward_table);
+			reward_table->setDirection(kCCScrollViewDirectionVertical);
+			
+			//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
+			reward_table->setVerticalFillOrder(kCCTableViewFillTopDown);
+			reward_table->setDelegate(rtd);
+			setFormSetter(reward_table);
+
+			CommonAnimation::openPopup(this, container, rewardInfoPopup->getDimmedSprite());
+			//		setFormSetter(closeButton);
+		});
 		rank_list.clear();
 		
 		Json::Value t_list = result_data["list"];
@@ -916,8 +1115,8 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		rest_time_value->setVisible(true);
 		
-		rest_back->setContentSize(CCSizeMake(rest_time_title->getContentSize().width + rest_time_value->getContentSize().width + 20 + 23.5, 22));
-		rest_back->setPosition(ccp(left_back->getContentSize().width-10-rest_back->getContentSize().width/2.f - 17.5 + 13.5f,left_back->getContentSize().height-20));
+		rest_back->setContentSize(CCSizeMake(rest_time_title->getContentSize().width + rest_time_value->getContentSize().width + 20 + 5, 22));
+		rest_back->setPosition(ccp(left_back->getContentSize().width-60-rest_back->getContentSize().width/2.f - 17.5 + 13.5f,left_back->getContentSize().height-20));
 		
 		rest_time_title->setPosition(ccp(10, rest_back->getContentSize().height/2.f));
 		rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10, rest_back->getContentSize().height/2.f));

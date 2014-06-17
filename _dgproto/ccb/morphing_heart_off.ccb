@@ -47,8 +47,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.60000002384185791</real>
-										<real>0.60000002384185791</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 								<dict>
@@ -65,8 +65,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.80000001192092896</real>
-										<real>0.80000001192092896</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -85,8 +85,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.80000001192092896</real>
-										<real>0.80000001192092896</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -105,8 +105,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.60000002384185791</real>
-										<real>0.60000002384185791</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 								<dict>
@@ -123,8 +123,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.80000001192092896</real>
-										<real>0.80000001192092896</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -143,8 +143,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.80000001192092896</real>
-										<real>0.80000001192092896</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -163,8 +163,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.60000002384185791</real>
-										<real>0.60000002384185791</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 								<dict>
@@ -181,8 +181,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.80000001192092896</real>
-										<real>0.80000001192092896</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -201,8 +201,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.80000001192092896</real>
-										<real>0.80000001192092896</real>
+										<real>1.2000000476837158</real>
+										<real>1.2000000476837158</real>
 									</array>
 								</dict>
 								<dict>
@@ -221,8 +221,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.60000002384185791</real>
-										<real>0.60000002384185791</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 							</array>
@@ -270,9 +270,9 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>0.60000002384185791</real>
-							<real>0.60000002384185791</real>
-							<true/>
+							<real>1</real>
+							<real>1</real>
+							<false/>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -321,7 +321,7 @@
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>0</integer>
+									<integer>255</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -366,7 +366,7 @@
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>0</integer>
+									<integer>255</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -422,8 +422,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.60000002384185791</real>
-										<real>0.60000002384185791</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 								<dict>
@@ -440,8 +440,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.2000000476837158</real>
-										<real>1.2000000476837158</real>
+										<real>2</real>
+										<real>2</real>
 									</array>
 								</dict>
 								<dict>
@@ -458,8 +458,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>0.60000002384185791</real>
-										<real>0.60000002384185791</real>
+										<real>1</real>
+										<real>1</real>
 									</array>
 								</dict>
 								<dict>
@@ -476,8 +476,8 @@
 									<integer>4</integer>
 									<key>value</key>
 									<array>
-										<real>1.2000000476837158</real>
-										<real>1.2000000476837158</real>
+										<real>2</real>
+										<real>2</real>
 									</array>
 								</dict>
 							</array>
@@ -525,9 +525,9 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1.2000000476837158</real>
-							<real>1.2000000476837158</real>
-							<true/>
+							<real>2</real>
+							<real>2</real>
+							<false/>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -669,7 +669,7 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>0.059783935546875</real>
 			<key>position</key>
 			<real>0.89999997615814209</real>
 			<key>resolution</key>
