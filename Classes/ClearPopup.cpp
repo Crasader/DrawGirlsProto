@@ -1151,17 +1151,18 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			if(before_stage_high_rank == 0 || before_stage_high_rank == myrank)
 			{
 				// nothing to do
+				t_list_cell_case_back->setVisible(false);
 			}
 			else
 			{
 				
-				if(myrank - before_stage_high_rank < 0)
+				if(before_stage_high_rank - myrank >= 0)
 				{
-					changedRankLbl = ccsf("▼   %d", myrank - before_stage_high_rank);
+					changedRankLbl = ccsf("▲   %d", before_stage_high_rank - myrank);
 				}
 				else
 				{
-					changedRankLbl = ccsf("▲   %d", myrank - before_stage_high_rank);
+					changedRankLbl = ccsf("▼   %d", before_stage_high_rank - myrank);
 				}
 				KSLabelTTF* changedRank = KSLabelTTF::create(changedRankLbl.c_str(), mySGD->getFont().c_str(), 12);
 				changedRank->setPosition(ccpFromSize(t_list_cell_case_back->getContentSize()) / 2.f);
