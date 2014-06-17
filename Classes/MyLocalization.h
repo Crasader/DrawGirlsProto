@@ -731,6 +731,8 @@ typedef enum MyLocalKey_ {
 	
 	kMyLocalKey_cardSettingMyCardContent,
 	kMyLocalKey_cardSettingMyCardToSpecial,
+	kMyLocalKey_cardSettingClearCardMent,
+	kMyLocalKey_cardSettingPerfectCardMent,
 
 	kMyLocalKey_endlessReady
 }MyLocalKey;
