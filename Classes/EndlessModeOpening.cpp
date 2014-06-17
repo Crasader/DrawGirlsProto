@@ -933,7 +933,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		scroll_back->setContentSize(CCSizeMake(7, table_rect.size.height-20));
 		scroll_back->setPosition(ccpAdd(table_rect.origin, ccp(table_rect.size.width-23, table_rect.size.height/2.f)));
 		left_back->addChild(scroll_back);
-		
+		scroll_back->setVisible(false);
 		rank_table = CCTableView::create(this, table_rect.size);
 		rank_table->setVerticalFillOrder(kCCTableViewFillTopDown);
 		rank_table->setPosition(table_rect.origin);
@@ -944,7 +944,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		m_scrollBar = ScrollBar::createScrollbar(rank_table, -18, NULL, CCScale9Sprite::create("cardsetting_scrollbutton.png",
 																																																					CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20)), touch_priority-1);
 		m_scrollBar->setDynamicScrollSize(true);
-		m_scrollBar->setVisible(true);
+		m_scrollBar->setVisible(false);
 		
 		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 		list_cell_case->setContentSize(CCSizeMake(225, 37));
@@ -984,7 +984,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			setFormSetter(currentSelectedCell);
 		});
 		left_back->addChild(mySelection);
-		CCPoint rank_position = ccp(20,18);
+		CCPoint rank_position = ccp(28,18);
 		int my_rank = myrank.getV();
 		if(my_rank == 1)
 		{
@@ -992,6 +992,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			//gold_medal->setScale(0.75f);
 			gold_medal->setPosition(rank_position);
 			list_cell_case->addChild(gold_medal);
+			
 		}
 		else if(my_rank == 2)
 		{
@@ -1018,13 +1019,14 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		string flag = myDSH->getStringForKey(kDSH_Key_flag);
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(50,18));
+		selectedFlagSpr->setPosition(ccp(50 + 13.5, 18));
+		selectedFlagSpr->setScale(0.8f);
 		list_cell_case->addChild(selectedFlagSpr);
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		nick_label->setPosition(ccp(70,19));
+		nick_label->setPosition(ccp(79,19));
 		list_cell_case->addChild(nick_label);
 		
 		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
@@ -1041,7 +1043,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
 //		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		victory_label->setPosition(ccp(152, 18));
+		victory_label->setPosition(ccp(152 + 12, 18));
 		list_cell_case->addChild(victory_label);
 		setFormSetter(victory_label);
 		///////////////////////////////////
@@ -1127,13 +1129,14 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	list_cell_case->setPosition(ccp(list_cell_case->getContentSize().width/2.f,list_cell_case->getContentSize().height/2.f-5));
 	cell->addChild(list_cell_case);
 	
-	CCPoint rank_position = ccp(20,18);
+	CCPoint rank_position = ccp(28,18);
 	if(idx == 0)
 	{
 		CCSprite* gold_medal = CCSprite::create("rank_gold.png");
 		//gold_medal->setScale(0.75f);
 		gold_medal->setPosition(rank_position);
 		list_cell_case->addChild(gold_medal);
+		setFormSetter(gold_medal);
 	}
 	else if(idx == 1)
 	{
@@ -1160,15 +1163,17 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-	selectedFlagSpr->setPosition(ccp(50,18));
+	selectedFlagSpr->setPosition(ccp(50 + 13.5,18));
+	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);
-	
+	setFormSetter(selectedFlagSpr);
 	KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12);
 	nick_label->setAnchorPoint(ccp(0,0.5f));
 	nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-	nick_label->setPosition(ccp(70,19));
+	nick_label->setPosition(ccp(79,19));
 	list_cell_case->addChild(nick_label);
 	
+	setFormSetter(nick_label);
 	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_list[idx].score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 	score_label->setColor(ccc3(255, 255, 255));
 	score_label->setAnchorPoint(ccp(1,0.5f));
@@ -1182,7 +1187,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 //	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
 //	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-	victory_label->setPosition(ccp(152,18));
+	victory_label->setPosition(ccp(152 + 12,18));
 	list_cell_case->addChild(victory_label);
 
 	if(idx == currentSelectedIdx)

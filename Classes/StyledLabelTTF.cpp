@@ -2,6 +2,8 @@
 #include "jsoncpp/json.h"
 #include "ks19937.h"
 #include "KSLabelTTF.h"
+#include <string>
+
 using namespace boost;
 
 StyledLabelTTF::StyledLabelTTF() :
@@ -452,9 +454,9 @@ void StyledLabelTTF::setStringByTag(const char* text){
 			std::string g = sData[k].get("color", m_fontColor).asString().substr(3,2);
 			std::string b = sData[k].get("color", m_fontColor).asString().substr(5,2);
 			
-			xr = std::stoul(r, nullptr, 16);
-			xg = std::stoul(g, nullptr, 16);
-			xb = std::stoul(b, nullptr, 16);
+			xr = std::strtoul(r.c_str(), nullptr, 16);
+			xg = std::strtoul(g.c_str(), nullptr, 16);
+			xb = std::strtoul(b.c_str(), nullptr, 16);
 		}else{
 			int rgb = sData[k].get("color", m_fontColor).asInt();
 			xr = (rgb/100)/9.f*255;
@@ -476,9 +478,9 @@ void StyledLabelTTF::setStringByTag(const char* text){
 			std::string g = sData[k].get("strokecolor", m_fontColor).asString().substr(3,2);
 			std::string b = sData[k].get("strokecolor", m_fontColor).asString().substr(5,2);
 			
-			xr = std::stoul(r, nullptr, 16);
-			xg = std::stoul(g, nullptr, 16);
-			xb = std::stoul(b, nullptr, 16);
+			xr = std::strtoul(r.c_str(), nullptr, 16);
+			xg = std::strtoul(g.c_str(), nullptr, 16);
+			xb = std::strtoul(b.c_str(), nullptr, 16);
 		}else{
 			int rgb = sData[k].get("strokecolor", m_fontColor).asInt();
 			xr = (rgb/100)/9.f*255;

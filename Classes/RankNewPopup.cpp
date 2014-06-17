@@ -359,6 +359,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
 		rank_percent_case->setPosition(ccp(455.5f, 214.5)); 			// dt (-2.5,-15.5)
+		
 		rankBack->addChild(rank_percent_case, kZ_CP_img);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 13);
@@ -373,7 +374,8 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
 		setFormSetter(rank_percent_case);
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
+
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(266 + (451 - 266)*rank_percent, 215.5f));
 		rank_percent_case->runAction(t_move);
 		
 		rank_data = result_data;

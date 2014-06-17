@@ -863,7 +863,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
 	ko->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
 	ko->setObject(CCString::create("현재 획득영역 "), kMyLocalKey_todaymissionTotalPercent4);
-	ko->setObject(CCString::create("<font>누적점수</font><font color=961>%d%점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
+	ko->setObject(CCString::create("<font>누적점수</font><font color=961>%s점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
 	ko->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	ko->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	ko->setObject(CCString::create("현재 획득점수 "), kMyLocalKey_todaymissionTotalScore4);
@@ -1635,7 +1635,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
 	en->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
 	en->setObject(CCString::create("현재 획득영역"), kMyLocalKey_todaymissionTotalPercent4);
-	en->setObject(CCString::create("<font>누적점수</font><font color=961> %d%점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
+	en->setObject(CCString::create("<font>누적점수</font><font color=961> %s점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
 	en->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	en->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	en->setObject(CCString::create("현재 획득점수"), kMyLocalKey_todaymissionTotalScore4);
