@@ -322,6 +322,9 @@ bool CardSettingPopup::init()
 										 title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
 										 lambda_list.push_back([=]()
 															   {
+																   tt_suction->is_on_touch_began_func = false;
+																   tt_suction->touch_began_func = [](){};
+																   
 																   align_default_menu->setTitle(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
 																   this->changeSortType(kCST_default);
 																   card_table->reloadData();
@@ -345,6 +348,9 @@ bool CardSettingPopup::init()
 										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
 										 lambda_list.push_back([=]()
 															   {
+																   tt_suction->is_on_touch_began_func = false;
+																   tt_suction->touch_began_func = [](){};
+																   
 																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
 																   this->changeSortType(kCST_gradeDown);
 																   card_table->reloadData();
@@ -368,6 +374,9 @@ bool CardSettingPopup::init()
 										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
 										 lambda_list.push_back([=]()
 															   {
+																   tt_suction->is_on_touch_began_func = false;
+																   tt_suction->touch_began_func = [](){};
+																   
 																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
 																   this->changeSortType(kCST_gradeUp);
 																   card_table->reloadData();
@@ -391,6 +400,9 @@ bool CardSettingPopup::init()
 										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
 										 lambda_list.push_back([=]()
 															   {
+																   tt_suction->is_on_touch_began_func = false;
+																   tt_suction->touch_began_func = [](){};
+																   
 																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
 																   this->changeSortType(kCST_take);
 																   card_table->reloadData();
@@ -414,6 +426,9 @@ bool CardSettingPopup::init()
 										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
 										 lambda_list.push_back([=]()
 															   {
+																   tt_suction->is_on_touch_began_func = false;
+																   tt_suction->touch_began_func = [](){};
+																   
 																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
 																   this->changeSortType(kCST_takeReverse);
 																   card_table->reloadData();
@@ -460,6 +475,7 @@ bool CardSettingPopup::init()
 																				tt_suction->touch_began_func = [=]()
 																				{
 																					tt_suction->is_on_touch_began_func = false;
+																					tt_suction->touch_began_func = [](){};
 																					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
 																														   {
 																															   t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
