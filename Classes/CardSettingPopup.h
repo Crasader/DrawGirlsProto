@@ -19,6 +19,29 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
+enum DefaultCardCellType
+{
+	kTitle = 0,
+	kStage
+};
+
+enum DefaultCardCellInCellType
+{
+	kPuzzle = -1,
+	kEmpty = 0
+};
+
+class DefaultCardCellInfo
+{
+public:
+	DefaultCardCellType m_type; // title or stage
+	int first_cell_in_cell_type; // stage or DefaultCardCellInCellType::kPuzzle
+	int second_cell_in_cell_type; // stage or DefaultCardCellInCellType::kPuzzle or DefaultCardCellInCellType::kEmpty
+	int puzzle_number;
+	
+	DefaultCardCellInfo() : m_type(DefaultCardCellType::kTitle), first_cell_in_cell_type(0), second_cell_in_cell_type(0), puzzle_number(0){}
+};
+
 class CardListViewer;
 class ListViewerScroll;
 class IntPoint;
@@ -59,6 +82,7 @@ private:
 	vector<int> server_puzzle_list_no;
 	vector<int> server_puzzle_stage_count;
 	vector<int> server_puzzle_start_stage;
+	vector<DefaultCardCellInfo> default_cell_info;
 	
 	int recent_selected_card_number;
 	
@@ -91,6 +115,8 @@ private:
 //	void removeMountedCase();
 	
 	bool is_menu_enable;
+	
+	void addDefaultAlignCard(int t_card_number, CCPoint t_position, CCNode* t_node, string t_ment);
 	
 	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
 	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);
