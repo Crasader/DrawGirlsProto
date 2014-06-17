@@ -13,6 +13,8 @@
 #include "cocos-ext.h"
 #include "StarGoldData.h"
 #include "KSLabelTTF.h"
+#include "DataStorageHub.h"
+
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
@@ -27,7 +29,29 @@ public:
 		t_popup->autorelease();
 		return t_popup;
 	}
+	static ASPopupView* createDimmed(int t_touch_priority)
+	{
+		ASPopupView* t_popup = new ASPopupView();
+		t_popup->myInit(t_touch_priority);
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
 	
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		t_popup->setBasePosition(ccp(240, 160));
+
+		t_popup->autorelease();
+		return t_popup;
+	}
 	void setDimmedPosition(CCPoint t_point)
 	{
 		dimmed_sprite->setPosition(t_point);

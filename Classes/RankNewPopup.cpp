@@ -700,8 +700,8 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 		titleHanger();
 	}
 	
-	std::string titleStr =rank_data["rewardInfo"][idx]["title"].asString();
-	std::string contentStr =rank_data["rewardInfo"][idx]["content"].asString();
+	std::string titleStr = rank_data["rewardInfo"][idx]["title"].asString();
+	std::string contentStr = rank_data["rewardInfo"][idx]["content"].asString();
 
 //	contentStr = KS::replaceAll(contentStr, "%", "%");
 	StyledLabelTTF* reward2Lbl = StyledLabelTTF::create(

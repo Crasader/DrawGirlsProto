@@ -118,6 +118,7 @@ private:
 	KSLabelTTF* right_nick;
 	CCScale9Sprite* right_back;
 	CCScale9Sprite* record_back;
+	CCTableView* reward_table;
 	void setMain();
 	
 	void resultGetEndlessPlayData(Json::Value result_data);
