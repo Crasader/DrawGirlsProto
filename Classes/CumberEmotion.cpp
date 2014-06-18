@@ -54,9 +54,12 @@ void CumberEmotion::releaseStun()
 {
 	if(m_currentEmotion)
 	{
-		m_currentEmotion->removeFromParent();
-		m_currentEmotion = nullptr;
-		m_emotionState = EmotionState::kNone;
+		if(m_emotionState == EmotionState::kStun)
+		{
+			m_currentEmotion->removeFromParent();
+			m_currentEmotion = nullptr;
+			m_emotionState = EmotionState::kNone;
+		}
 	}
 }
 void CumberEmotion::onKillingJack()
