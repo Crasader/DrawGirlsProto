@@ -1766,7 +1766,7 @@ CCTableViewCell* FailPopup::tableCellAtIndex( CCTableView *table, unsigned int i
 		string title = title_list[idx];
 		string content;
 		
-		if(idx < 7)
+		if(idx < 9)
 		{
 			back_filename = "mainpopup_pupple3.png";
 		}
