@@ -92,22 +92,22 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 			}
 			else
 			{
-				getEmotion()->goStun();
+//				getEmotion()->goStun();
 				
-//				ProbSelector ps = {1, 1, 1};
-//				int r = ps.getResult();
+				ProbSelector ps = {1.0, 1.0, 7.0};
+				int r = ps.getResult();
 //				if(r == 0)
 //				{
 //					getEmotion()->goStun();
 //				}
-//				else if(r == 1)
-//				{
-//					getEmotion()->toAnger();
-//				}
-//				else if(r == 2)
-//				{
-//					getEmotion()->toCry();
-//				}
+				if(r == 0)
+				{
+					getEmotion()->toAnger();
+				}
+				else if(r == 1)
+				{
+					getEmotion()->toCry();
+				}
 			}
 		}
 	}
