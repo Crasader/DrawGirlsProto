@@ -1601,6 +1601,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 												  t_shop->targetHeartTime(heart_time);
 												  t_shop->setShopCode(kSC_ruby);
 												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+												  t_shop->addGray();
 												  addChild(t_shop, kMainFlowZorder_popup);
 											  }), 9999);
 											  
@@ -1691,6 +1692,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			t_shop->targetHeartTime(heart_time);
 			t_shop->setShopCode(kSC_ruby);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			t_shop->addGray();
 			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_goldShop)
@@ -1700,6 +1702,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			t_shop->targetHeartTime(heart_time);
 			t_shop->setShopCode(kSC_gold);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			t_shop->addGray();
 			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_heartShop)
@@ -1709,6 +1712,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			t_shop->targetHeartTime(heart_time);
 			t_shop->setShopCode(kSC_heart);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			t_shop->addGray();
 			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_friendPointContent)
@@ -1806,6 +1810,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			t_shop->targetHeartTime(heart_time);
 			t_shop->setShopCode(kSC_ruby);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			t_shop->addGray();
 			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_cardSetting)

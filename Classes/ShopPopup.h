@@ -58,12 +58,16 @@ public:
 	void targetHeartTime(HeartTime* t_heartTime);
 	void setShopBeforeCode(ShopBeforeCode t_code);
 	
+	void addGray();
+	
 	void setShopCode(ShopCode t_code);
 	
 private:
-	
+	bool is_add_gray;
 	bool is_set_close_func;
 	function<void(void)> close_func;
+	
+	CCSprite* gray;
 	
 	ShopBeforeCode before_code;
 	ShopCode recent_shop_code;

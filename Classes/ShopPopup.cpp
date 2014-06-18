@@ -30,7 +30,8 @@
 #include "CommonAnimation.h"
 
 enum ShopPopup_Zorder{
-	kSP_Z_back = 1,
+	kSP_Z_gray = 0,
+	kSP_Z_back,
 	kSP_Z_content,
 	kSP_Z_popup
 };
@@ -631,6 +632,8 @@ bool ShopPopup::init()
         return false;
     }
 	
+	is_add_gray = false;
+	
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -835,6 +838,31 @@ bool ShopPopup::init()
     return true;
 }
 
+void ShopPopup::addGray()
+{
+	is_add_gray = true;
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	gray = CCSprite::create("back_gray.png");
+	gray->setOpacity(0);
+	gray->setPosition(ccp(240,160));
+	gray->setScaleX(screen_scale_x);
+	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+	addChild(gray, kSP_Z_gray);
+	
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.25f, [=](float t)
+										   {
+											   gray->setOpacity(255*t);
+										   }, [=](float t)
+										   {
+											   gray->setOpacity(255*t);
+										   }));
+}
+
 void ShopPopup::showPopup()
 {
 	setTouchEnabled(true);
@@ -858,6 +886,18 @@ void ShopPopup::endShowPopup()
 void ShopPopup::hidePopup()
 {
 	is_menu_enable = false;
+	
+	if(is_add_gray)
+	{
+		addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+											{
+												gray->setOpacity(255*t);
+											}, [=](float t)
+											{
+												gray->setOpacity(255*t);
+												gray->removeFromParent();
+											}));
+	}
 	
 	CommonAnimation::closePopup(this, main_case, nullptr, [=](){
 		

@@ -63,6 +63,7 @@ bool CardSettingPopup::init()
 	
 		default_align_number_of_cell = 0;
 		default_cell_info.clear();
+		special_card_list.clear();
 		
 		int not_event_puzzle_count = 0;
 		for(int i=1;i<=server_puzzle_list_count;i++)
@@ -128,6 +129,19 @@ bool CardSettingPopup::init()
 			}
 		}
 	
+	for(int i=0;i<mySGD->getHasGottenCardsSize();i++)
+	{
+		int t_card_number = mySGD->getHasGottenCardsDataCardNumber(i);
+		string t_card_type = NSDS_GS(kSDS_CI_int1_type_s, t_card_number);
+		if(t_card_type == "")
+			t_card_type = "normal";
+		
+		if(t_card_type != "normal" && t_card_type != "nPuzzle")
+		{
+			special_card_list.push_back(mySGD->getHasGottenCardData(i));
+		}
+	}
+	
 		server_puzzle_list_count = not_event_puzzle_count;
 	
 	for(int i=0;i<mySGD->getHasGottenCardsSize();i++)
@@ -143,7 +157,7 @@ bool CardSettingPopup::init()
 		}
 	}
 //	}
-	
+	is_special_align_reverse = false;
 	
 	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
 	
@@ -172,9 +186,10 @@ bool CardSettingPopup::init()
 	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kCSS_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 15);
+	title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(40,256));
+	title_label->setAnchorPoint(ccp(0,0.5f));
+	title_label->setPosition(ccp(25,256));
 	main_case->addChild(title_label);
 	
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
@@ -206,6 +221,8 @@ bool CardSettingPopup::init()
 //			total_stage_cnt += stage_count;
 //		}
 //	}
+	
+	is_normal_table = true;
 	
 	CCSize table_size = CCSizeMake(457, 175);
 	CCPoint table_position = ccp(4, 13);
@@ -270,242 +287,245 @@ bool CardSettingPopup::init()
 	align_default_menu->setTitleColor(ccc3(50, 20, 0));
 	align_default_menu->setPosition(ccp(400,256));
 	main_case->addChild(align_default_menu, kCSS_Z_alignButton);
-	align_default_menu->setFunction([=](CCObject* sender)
-								 {
-									 if(!is_menu_enable)
-										 return;
-									 
-									 is_menu_enable = false;
-									 
-									 TouchSuctionLayer* tt_suction = TouchSuctionLayer::create(-200);
-									 tt_suction->setTouchEnabled(true);
-									 addChild(tt_suction);
-									 
-									 float t_cell_height = 30;
-									 
-									 CCSprite* t_stencil = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 80, t_cell_height*4 + 6));
-									 t_stencil->setAnchorPoint(ccp(0.5f,1.f));
-									 t_stencil->setPosition(ccp(0,-7));
-									 
-									 CCClippingNode* t_clipping = CCClippingNode::create(t_stencil);
-									 t_clipping->setPosition(ccp(400,256));
-									 main_case->addChild(t_clipping, kCSS_Z_alignList);
-									 
-									 CCScale9Sprite* t_case = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-									 t_case->setContentSize(CCSizeMake(67, t_cell_height*4 + 6));
-									 t_case->setAnchorPoint(ccp(0.5f,0));
-									 t_case->setPosition(ccp(0,0));
-									 t_clipping->addChild(t_case);
-									 
-									 for(int i=1;i<=4-1;i++)
-									 {
-										 CCSprite* t_line = CCSprite::create("cardsetting_line.png");
-										 t_line->setScaleX(55/t_line->getContentSize().width);
-										 t_line->setPosition(ccp(t_case->getContentSize().width/2.f, 3+t_cell_height*i));
-										 t_case->addChild(t_line);
-									 }
-									 
-									 CCMenuLambda* t_menu = CCMenuLambda::create();
-									 t_menu->setPosition(ccp(t_case->getContentSize().width/2.f,t_case->getContentSize().height));
-									 t_case->addChild(t_menu);
-									 t_menu->setTouchPriority(-201);
-									 
-									 vector<string> title_list;
-									 title_list.clear();
-									 
-									 vector<function<void()>> lambda_list;
-									 lambda_list.clear();
-									 
-									 int t_recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
-									 if(t_recent_sort_type != kCST_default)
-									 {
-										 title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
-										 lambda_list.push_back([=]()
-															   {
-																   tt_suction->is_on_touch_began_func = false;
-																   tt_suction->touch_began_func = [](){};
-																   
-																   align_default_menu->setTitle(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
-																   this->changeSortType(kCST_default);
-																   card_table->reloadData();
-																   
-																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																										  }, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																											  tt_suction->removeFromParent();
-																											  is_menu_enable = true;
-																										  }));
-																   t_menu->setTouchEnabled(false);
-																   t_menu->removeFromParent();
-															   });
-									 }
-									 
-									 if(t_recent_sort_type != kCST_gradeDown)
-									 {
-										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
-										 lambda_list.push_back([=]()
-															   {
-																   tt_suction->is_on_touch_began_func = false;
-																   tt_suction->touch_began_func = [](){};
-																   
-																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
-																   this->changeSortType(kCST_gradeDown);
-																   card_table->reloadData();
-																   
-																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																										  }, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																											  tt_suction->removeFromParent();
-																											  is_menu_enable = true;
-																										  }));
-																   t_menu->setTouchEnabled(false);
-																   t_menu->removeFromParent();
-															   });
-									 }
-									 
-									 if(t_recent_sort_type != kCST_gradeUp)
-									 {
-										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
-										 lambda_list.push_back([=]()
-															   {
-																   tt_suction->is_on_touch_began_func = false;
-																   tt_suction->touch_began_func = [](){};
-																   
-																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
-																   this->changeSortType(kCST_gradeUp);
-																   card_table->reloadData();
-																   
-																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																										  }, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																											  tt_suction->removeFromParent();
-																											  is_menu_enable = true;
-																										  }));
-																   t_menu->setTouchEnabled(false);
-																   t_menu->removeFromParent();
-															   });
-									 }
-									 
-									 if(t_recent_sort_type != kCST_take)
-									 {
-										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
-										 lambda_list.push_back([=]()
-															   {
-																   tt_suction->is_on_touch_began_func = false;
-																   tt_suction->touch_began_func = [](){};
-																   
-																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
-																   this->changeSortType(kCST_take);
-																   card_table->reloadData();
-																   
-																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																										  }, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																											  tt_suction->removeFromParent();
-																											  is_menu_enable = true;
-																										  }));
-																   t_menu->setTouchEnabled(false);
-																   t_menu->removeFromParent();
-															   });
-									 }
-									 
-									 if(t_recent_sort_type != kCST_takeReverse)
-									 {
-										 title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
-										 lambda_list.push_back([=]()
-															   {
-																   tt_suction->is_on_touch_began_func = false;
-																   tt_suction->touch_began_func = [](){};
-																   
-																   align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
-																   this->changeSortType(kCST_takeReverse);
-																   card_table->reloadData();
-																   
-																   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																										  }, [=](float t)
-																										  {
-																											  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																											  tt_suction->removeFromParent();
-																											  is_menu_enable = true;
-																										  }));
-																   t_menu->setTouchEnabled(false);
-																   t_menu->removeFromParent();
-															   });
-									 }
-									 
-									 for(int i=0;i<title_list.size();i++)
-									 {
-										 KSLabelTTF* t_label = KSLabelTTF::create(title_list[i].c_str(), mySGD->getFont().c_str(), 10);
-										 t_label->setPosition(ccp(t_case->getContentSize().width/2.f,t_case->getContentSize().height) + ccp(0,-3-t_cell_height/2.f - i*t_cell_height));
-										 t_case->addChild(t_label);
-										 
-										 CCSprite* n_sprite = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 67, t_cell_height));
-										 CCSprite* s_sprite = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 67, t_cell_height));
-										 
-										 CCMenuItemSpriteLambda* t_item = CCMenuItemSpriteLambda::create(n_sprite, s_sprite, [=](CCObject* sender)
-																										 {
-																											 lambda_list[i]();
-																										 });
-										 t_item->setPosition(ccp(0,-3-t_cell_height/2.f - i*t_cell_height));
-										 t_menu->addChild(t_item);
-									 }
-									 
-									 t_menu->setEnabled(false);
-									 addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+	
+	function<void(CCObject*)> align_func = [=](CCObject* sender)
+	{
+		if(!is_menu_enable)
+			return;
+		
+		is_menu_enable = false;
+		
+		TouchSuctionLayer* tt_suction = TouchSuctionLayer::create(-200);
+		tt_suction->setTouchEnabled(true);
+		addChild(tt_suction);
+		
+		float t_cell_height = 30;
+		
+		CCSprite* t_stencil = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 80, t_cell_height*4 + 6));
+		t_stencil->setAnchorPoint(ccp(0.5f,1.f));
+		t_stencil->setPosition(ccp(0,-7));
+		
+		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil);
+		t_clipping->setPosition(ccp(400,256));
+		main_case->addChild(t_clipping, kCSS_Z_alignList);
+		
+		CCScale9Sprite* t_case = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+		t_case->setContentSize(CCSizeMake(67, t_cell_height*4 + 6));
+		t_case->setAnchorPoint(ccp(0.5f,0));
+		t_case->setPosition(ccp(0,0));
+		t_clipping->addChild(t_case);
+		
+		for(int i=1;i<=4-1;i++)
+		{
+			CCSprite* t_line = CCSprite::create("cardsetting_line.png");
+			t_line->setScaleX(55/t_line->getContentSize().width);
+			t_line->setPosition(ccp(t_case->getContentSize().width/2.f, 3+t_cell_height*i));
+			t_case->addChild(t_line);
+		}
+		
+		CCMenuLambda* t_menu = CCMenuLambda::create();
+		t_menu->setPosition(ccp(t_case->getContentSize().width/2.f,t_case->getContentSize().height));
+		t_case->addChild(t_menu);
+		t_menu->setTouchPriority(-201);
+		
+		vector<string> title_list;
+		title_list.clear();
+		
+		vector<function<void()>> lambda_list;
+		lambda_list.clear();
+		
+		int t_recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+		if(t_recent_sort_type != kCST_default)
+		{
+			title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
+			lambda_list.push_back([=]()
+								  {
+									  tt_suction->is_on_touch_began_func = false;
+									  tt_suction->touch_began_func = [](){};
+									  
+									  align_default_menu->setTitle(myLoc->getLocalForKey(kMyLocalKey_defaultSort));
+									  this->changeSortType(kCST_default);
+									  card_table->reloadData();
+									  
+									  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																			 }, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																				 tt_suction->removeFromParent();
+																				 is_menu_enable = true;
+																			 }));
+									  t_menu->setTouchEnabled(false);
+									  t_menu->removeFromParent();
+								  });
+		}
+		
+		if(t_recent_sort_type != kCST_gradeDown)
+		{
+			title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
+			lambda_list.push_back([=]()
+								  {
+									  tt_suction->is_on_touch_began_func = false;
+									  tt_suction->touch_began_func = [](){};
+									  
+									  align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲");
+									  this->changeSortType(kCST_gradeDown);
+									  card_table->reloadData();
+									  
+									  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																			 }, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																				 tt_suction->removeFromParent();
+																				 is_menu_enable = true;
+																			 }));
+									  t_menu->setTouchEnabled(false);
+									  t_menu->removeFromParent();
+								  });
+		}
+		
+		if(t_recent_sort_type != kCST_gradeUp)
+		{
+			title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
+			lambda_list.push_back([=]()
+								  {
+									  tt_suction->is_on_touch_began_func = false;
+									  tt_suction->touch_began_func = [](){};
+									  
+									  align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼");
+									  this->changeSortType(kCST_gradeUp);
+									  card_table->reloadData();
+									  
+									  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																			 }, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																				 tt_suction->removeFromParent();
+																				 is_menu_enable = true;
+																			 }));
+									  t_menu->setTouchEnabled(false);
+									  t_menu->removeFromParent();
+								  });
+		}
+		
+		if(t_recent_sort_type != kCST_take)
+		{
+			title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
+			lambda_list.push_back([=]()
+								  {
+									  tt_suction->is_on_touch_began_func = false;
+									  tt_suction->touch_began_func = [](){};
+									  
+									  align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲");
+									  this->changeSortType(kCST_take);
+									  card_table->reloadData();
+									  
+									  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																			 }, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																				 tt_suction->removeFromParent();
+																				 is_menu_enable = true;
+																			 }));
+									  t_menu->setTouchEnabled(false);
+									  t_menu->removeFromParent();
+								  });
+		}
+		
+		if(t_recent_sort_type != kCST_takeReverse)
+		{
+			title_list.push_back(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
+			lambda_list.push_back([=]()
+								  {
+									  tt_suction->is_on_touch_began_func = false;
+									  tt_suction->touch_began_func = [](){};
+									  
+									  align_default_menu->setTitle(string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼");
+									  this->changeSortType(kCST_takeReverse);
+									  card_table->reloadData();
+									  
+									  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																			 }, [=](float t)
+																			 {
+																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																				 tt_suction->removeFromParent();
+																				 is_menu_enable = true;
+																			 }));
+									  t_menu->setTouchEnabled(false);
+									  t_menu->removeFromParent();
+								  });
+		}
+		
+		for(int i=0;i<title_list.size();i++)
+		{
+			KSLabelTTF* t_label = KSLabelTTF::create(title_list[i].c_str(), mySGD->getFont().c_str(), 10);
+			t_label->setPosition(ccp(t_case->getContentSize().width/2.f,t_case->getContentSize().height) + ccp(0,-3-t_cell_height/2.f - i*t_cell_height));
+			t_case->addChild(t_label);
+			
+			CCSprite* n_sprite = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 67, t_cell_height));
+			CCSprite* s_sprite = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 67, t_cell_height));
+			
+			CCMenuItemSpriteLambda* t_item = CCMenuItemSpriteLambda::create(n_sprite, s_sprite, [=](CCObject* sender)
 																			{
-																				t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																			}, [=](float t)
-																			{
-																				t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																				
-																				tt_suction->touch_began_func = [=]()
-																				{
-																					tt_suction->is_on_touch_began_func = false;
-																					tt_suction->touch_began_func = [](){};
-																					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
-																														   {
-																															   t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																														   }, [=](float t)
-																														   {
-																															   t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																															   tt_suction->removeFromParent();
-																															   is_menu_enable = true;
-																														   }));
-																				};
-																				tt_suction->is_on_touch_began_func = true;
-																				t_menu->setEnabled(true);
-																			}));
-									 
-									 
-									 
-//									 CCNode* t_node = CCNode::create();
-//									 t_node->setTag(kCSS_MT_alignDefault);
-//									 menuAction(t_node);
-								 });
+																				lambda_list[i]();
+																			});
+			t_item->setPosition(ccp(0,-3-t_cell_height/2.f - i*t_cell_height));
+			t_menu->addChild(t_item);
+		}
+		
+		t_menu->setEnabled(false);
+		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+											   {
+												   t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+											   }, [=](float t)
+											   {
+												   t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+												   
+												   tt_suction->touch_began_func = [=]()
+												   {
+													   tt_suction->is_on_touch_began_func = false;
+													   tt_suction->touch_began_func = [](){};
+													   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
+																							  {
+																								  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																							  }, [=](float t)
+																							  {
+																								  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
+																								  tt_suction->removeFromParent();
+																								  is_menu_enable = true;
+																							  }));
+												   };
+												   tt_suction->is_on_touch_began_func = true;
+												   t_menu->setEnabled(true);
+											   }));
+		
+		
+		
+		//									 CCNode* t_node = CCNode::create();
+		//									 t_node->setTag(kCSS_MT_alignDefault);
+		//									 menuAction(t_node);
+	};
+	
+	align_default_menu->setFunction(align_func);
 	align_default_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
 	
 	
 //	string sign_str;
-//	
+//
 //	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_take)
 //		sign_str = "▼";
 //	else
 //		sign_str = "▲";
-//	
+//
 //	align_take_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str, 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
 //	align_take_menu->setTitleColor(ccc3(50, 20, 0));
 //	align_take_menu->setPosition(ccp(280,256));
@@ -517,13 +537,13 @@ bool CardSettingPopup::init()
 //										menuAction(t_node);
 //									});
 //	align_take_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
-//	
-//	
+//
+//
 //	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_gradeUp)
 //		sign_str = "▼";
 //	else
 //		sign_str = "▲";
-//	
+//
 //	align_rank_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str, 12, CCSizeMake(65,37), CommonButtonYellowUp, -185);
 //	align_rank_menu->setTitleColor(ccc3(50, 20, 0));
 //	align_rank_menu->setPosition(ccp(340,256));
@@ -566,7 +586,7 @@ bool CardSettingPopup::init()
 		}
 	}
 	
-	CCScale9Sprite* take_count_back = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+	take_count_back = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
 	take_count_back->setContentSize(CCSizeMake(90, 22));
 	take_count_back->setPosition(ccp(112,256));
 	main_case->addChild(take_count_back, kCSS_Z_content);
@@ -585,7 +605,7 @@ bool CardSettingPopup::init()
 	take_card_count->setPosition(ccp(take_count_back->getContentSize().width/2.f - total_card_count->getContentSize().width/2.f, 4));
 	
 	
-	KSLabelTTF* title_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardContent), mySGD->getFont().c_str(), 12);
+	title_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardContent), mySGD->getFont().c_str(), 12);
 	title_content->setAnchorPoint(ccp(0,0.5f));
 	title_content->setPosition(ccp(160,256));
 	main_case->addChild(title_content, kCSS_Z_content);
@@ -606,14 +626,103 @@ bool CardSettingPopup::init()
 		diary_menu->setTouchPriority(-185);
 	}
 	
-	CCSprite* gold_button_img = CCSprite::create("cardsetting_goldbutton.png");
-	gold_button_img->setPosition(ccp(main_case->getContentSize().width/2.f, 24.5f));
-	main_case->addChild(gold_button_img, kCSS_Z_content);
+	CCMenuLambda* change_mode_menu = CCMenuLambda::create();
+	change_mode_menu->setPosition(ccp(main_case->getContentSize().width/2.f, 24.5f));
+	main_case->addChild(change_mode_menu, kCSS_Z_content);
+	change_mode_menu->setTouchPriority(-185);
 	
-	KSLabelTTF* special_show_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardToSpecial), mySGD->getFont().c_str(), 13);
-	special_show_label->enableOuterStroke(ccBLACK, 1.f);
-	special_show_label->setPosition(ccpFromSize(gold_button_img->getContentSize()/2.f));
-	gold_button_img->addChild(special_show_label);
+	CCSprite* n_gold_button_img = CCSprite::create("cardsetting_goldbutton.png");
+	
+	n_special_show_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardToSpecial), mySGD->getFont().c_str(), 13);
+	n_special_show_label->enableOuterStroke(ccBLACK, 1.f);
+	n_special_show_label->setPosition(ccpFromSize(n_gold_button_img->getContentSize()/2.f));
+	n_gold_button_img->addChild(n_special_show_label);
+	
+	CCSprite* s_gold_button_img = CCSprite::create("cardsetting_goldbutton.png");
+	s_gold_button_img->setColor(ccGRAY);
+	
+	s_special_show_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardToSpecial), mySGD->getFont().c_str(), 13);
+	s_special_show_label->enableOuterStroke(ccBLACK, 1.f);
+	s_special_show_label->setPosition(ccpFromSize(n_gold_button_img->getContentSize()/2.f));
+	s_gold_button_img->addChild(s_special_show_label);
+	
+	CCMenuItemSpriteLambda* gold_button_item = CCMenuItemSpriteLambda::create(n_gold_button_img, s_gold_button_img, [=](CCObject* sender)
+																			  {
+																				  if(!is_menu_enable)
+																					  return;
+																				  
+																				  is_menu_enable = false;
+																				  
+																				  if(is_normal_table)
+																				  {
+																					  title_label->setString(myLoc->getLocalForKey(kMyLocalKey_cardSettingSpecialCardTitle));
+																					  take_count_back->setVisible(false);
+																					  title_content->setString(myLoc->getLocalForKey(kMyLocalKey_cardSettingSpecialCardContent));
+																					  title_content->setPositionX(100);
+																					  
+																					  n_special_show_label->setString(myLoc->getLocalForKey(kMyLocalKey_cardSettingSpecialCardToMyCard));
+																					  s_special_show_label->setString(myLoc->getLocalForKey(kMyLocalKey_cardSettingSpecialCardToMyCard));
+																					  
+																					  string t_button_label_string;
+																					  if(is_special_align_reverse)
+																						  t_button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼";
+																					  else
+																						  t_button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲";
+																					  
+																					  align_default_menu->setTitle(t_button_label_string.c_str());
+																					  align_default_menu->setFunction([=](CCObject* sender)
+																													  {
+																														  if(!is_menu_enable)
+																															  return;
+																														  
+																														  is_menu_enable = false;
+																														  
+																														  this->specialChangeSortType(!is_special_align_reverse);
+																														  card_table->reloadData();
+																														  
+																														  is_menu_enable = true;
+																													  });
+																					  
+																					  is_normal_table = false;
+																					  card_table->reloadData();
+																					  
+																					  is_menu_enable = true;
+																				  }
+																				  else
+																				  {
+																					  title_label->setString(myLoc->getLocalForKey(kMyLocalKey_mycard));
+																					  take_count_back->setVisible(true);
+																					  title_content->setString(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardContent));
+																					  title_content->setPositionX(160);
+																					  
+																					  n_special_show_label->setString(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardToSpecial));
+																					  s_special_show_label->setString(myLoc->getLocalForKey(kMyLocalKey_cardSettingMyCardToSpecial));
+																					  
+																					  
+																					  string t_button_label_string;
+																					  if(recent_sort_type == kCST_default)
+																						  t_button_label_string = myLoc->getLocalForKey(kMyLocalKey_defaultSort);
+																					  else if(recent_sort_type == kCST_gradeDown)
+																						  t_button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▲";
+																					  else if(recent_sort_type == kCST_gradeUp)
+																						  t_button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_gradeOrder)) + "▼";
+																					  else if(recent_sort_type == kCST_take)
+																						  t_button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲";
+																					  else if(recent_sort_type == kCST_takeReverse)
+																						  t_button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼";
+																					  
+																					  align_default_menu->setTitle(t_button_label_string.c_str());
+																					  align_default_menu->setFunction(align_func);
+																					  
+																					  is_normal_table = true;
+																					  card_table->reloadData();
+																					  
+																					  is_menu_enable = true;
+																				  }
+																			  });
+	change_mode_menu->addChild(gold_button_item);
+	
+	
 	
 //	CommonButton* event_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_event), 12, CCSizeMake(65,37), CommonButtonLightPupple, -185);
 //	event_menu->setPosition(ccp(400,256));
@@ -641,6 +750,36 @@ bool CardSettingPopup::init()
 	
 	
     return true;
+}
+
+void CardSettingPopup::specialChangeSortType(bool is_reverse)
+{
+	is_special_align_reverse = is_reverse;
+	
+	if(!is_special_align_reverse)
+	{
+		align_default_menu->setTitle((string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼").c_str());
+		struct t_CardSortTake{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.take_number.getV() > b.take_number.getV();
+			}
+		} pred;
+		
+		sort(special_card_list.begin(), special_card_list.end(), pred);
+	}
+	else
+	{
+		align_default_menu->setTitle((string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▲").c_str());
+		struct t_CardSortTake{
+			bool operator() (const CardSortInfo& a, const CardSortInfo& b)
+			{
+				return a.take_number.getV() < b.take_number.getV();
+			}
+		} pred;
+		
+		sort(special_card_list.begin(), special_card_list.end(), pred);
+	}
 }
 
 void CardSettingPopup::changeSortType( CardSortType t_type )
@@ -715,7 +854,7 @@ void CardSettingPopup::onEnter()
 
 void CardSettingPopup::showPopup()
 {
-	CommonAnimation::openPopup(this, main_case, nullptr, [=](){
+	CommonAnimation::openPopup(this, main_case, gray, [=](){
 		
 	}, bind(&CardSettingPopup::endShowPopup, this));
 //	CCFadeTo* gray_fade = CCFadeTo::create(0.4f, 255);
@@ -767,7 +906,7 @@ void CardSettingPopup::hidePopup()
 	is_menu_enable = false;
 		
 	
-	CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+	CommonAnimation::closePopup(this, main_case, gray, [=](){
 		
 	}, bind(&CardSettingPopup::endHidePopup, this));
 }
@@ -1092,288 +1231,207 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 	cell->init();
 	cell->autorelease();
 	
-	CardSortType sort_type = (CardSortType)recent_sort_type;
-	
-	if(sort_type == kCST_default)
+	if(is_normal_table)
 	{
-		DefaultCardCellInfo t_cell_info = default_cell_info[idx];
+		CardSortType sort_type = (CardSortType)recent_sort_type;
 		
-		if(t_cell_info.m_type == DefaultCardCellType::kTitle)
+		if(sort_type == kCST_default)
 		{
-			if(idx != 0)
-			{
-				CCSprite* line_img = CCSprite::create("cardsetting_line.png");
-				line_img->setScaleX(450/line_img->getContentSize().width);
-				line_img->setPosition(ccpFromSize(cellSizeForTable(table)/2.f) + ccp(0,15));
-				cell->addChild(line_img);
-			}
+			DefaultCardCellInfo t_cell_info = default_cell_info[idx];
 			
-			CCSprite* title_back = CCSprite::create("cardsetting_title.png");
-			title_back->setPosition(ccp(70,cellSizeForTable(table).height/2.f - 10));
-			cell->addChild(title_back);
-			
-			KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(t_cell_info.puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 12);
-			title_label->enableOuterStroke(ccBLACK, 1.f);
-			title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,1));
-			title_back->addChild(title_label);
-		}
-		else if(t_cell_info.m_type == DefaultCardCellType::kStage)
-		{
-			CCPoint distance_position = ccp(45,0);
-			CCPoint base_position = ccp(23, cellSizeForTable(table).height/2.f);
-			if(t_cell_info.first_cell_in_cell_type == DefaultCardCellInCellType::kPuzzle)
+			if(t_cell_info.m_type == DefaultCardCellType::kTitle)
 			{
-				// puzzle
-				
-				KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.puzzle_number), mySGD->getFont().c_str(), 13);
-				number_label->enableOuterStroke(ccBLACK, 1.f);
-				number_label->setColor(ccc3(255, 170, 20));
-				number_label->setPosition(base_position + ccp(0, 8));
-				cell->addChild(number_label);
-				
-				KSLabelTTF* unit_label = KSLabelTTF::create("PUZZLE", mySGD->getFont().c_str(), 12);
-				unit_label->enableOuterStroke(ccBLACK, 1.f);
-				unit_label->setPosition(base_position + ccp(0,-7));
-				cell->addChild(unit_label);
-				
-				addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_clearCard_i), base_position + distance_position, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingClearCardMent));
-				addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_perfectCard_i), base_position + distance_position*2, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingPerfectCardMent));
-			}
-			else if(t_cell_info.first_cell_in_cell_type != DefaultCardCellInCellType::kEmpty)
-			{
-				// stage
-				
-				KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.first_cell_in_cell_type), mySGD->getFont().c_str(), 13);
-				number_label->enableOuterStroke(ccBLACK, 1.f);
-				number_label->setColor(ccc3(255, 170, 20));
-				number_label->setPosition(base_position + ccp(0, 8));
-				cell->addChild(number_label);
-				
-				KSLabelTTF* unit_label = KSLabelTTF::create("STAGE", mySGD->getFont().c_str(), 12);
-				unit_label->enableOuterStroke(ccBLACK, 1.f);
-				unit_label->setPosition(base_position + ccp(0,-7));
-				cell->addChild(unit_label);
-				
-				int stage_card_count = 4;
-				
-				for(int i=1;i<=stage_card_count;i++)
+				if(idx != 0)
 				{
-					string t_condition_text;
-					if(i == 1)
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine1);
-					else if(i == 2)
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine2);
-					else if(i == 3)
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine3);
-					else
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine4);
+					CCSprite* line_img = CCSprite::create("cardsetting_line.png");
+					line_img->setScaleX(450/line_img->getContentSize().width);
+					line_img->setPosition(ccpFromSize(cellSizeForTable(table)/2.f) + ccp(0,15));
+					cell->addChild(line_img);
+				}
+				
+				CCSprite* title_back = CCSprite::create("cardsetting_title.png");
+				title_back->setPosition(ccp(70,cellSizeForTable(table).height/2.f - 10));
+				cell->addChild(title_back);
+				
+				KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(t_cell_info.puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 12);
+				title_label->enableOuterStroke(ccBLACK, 1.f);
+				title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,1));
+				title_back->addChild(title_label);
+			}
+			else if(t_cell_info.m_type == DefaultCardCellType::kStage)
+			{
+				CCPoint distance_position = ccp(45,0);
+				CCPoint base_position = ccp(23, cellSizeForTable(table).height/2.f);
+				if(t_cell_info.first_cell_in_cell_type == DefaultCardCellInCellType::kPuzzle)
+				{
+					// puzzle
 					
-					addDefaultAlignCard(NSDS_GI(t_cell_info.first_cell_in_cell_type, kSDS_SI_level_int1_card_i, i), base_position + distance_position*i, cell, t_condition_text);
+					KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.puzzle_number), mySGD->getFont().c_str(), 13);
+					number_label->enableOuterStroke(ccBLACK, 1.f);
+					number_label->setColor(ccc3(255, 170, 20));
+					number_label->setPosition(base_position + ccp(0, 8));
+					cell->addChild(number_label);
+					
+					KSLabelTTF* unit_label = KSLabelTTF::create("PUZZLE", mySGD->getFont().c_str(), 12);
+					unit_label->enableOuterStroke(ccBLACK, 1.f);
+					unit_label->setPosition(base_position + ccp(0,-7));
+					cell->addChild(unit_label);
+					
+					addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_clearCard_i), base_position + distance_position, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingClearCardMent));
+					addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_perfectCard_i), base_position + distance_position*2, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingPerfectCardMent));
+				}
+				else if(t_cell_info.first_cell_in_cell_type != DefaultCardCellInCellType::kEmpty)
+				{
+					// stage
+					
+					KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.first_cell_in_cell_type), mySGD->getFont().c_str(), 13);
+					number_label->enableOuterStroke(ccBLACK, 1.f);
+					number_label->setColor(ccc3(255, 170, 20));
+					number_label->setPosition(base_position + ccp(0, 8));
+					cell->addChild(number_label);
+					
+					KSLabelTTF* unit_label = KSLabelTTF::create("STAGE", mySGD->getFont().c_str(), 12);
+					unit_label->enableOuterStroke(ccBLACK, 1.f);
+					unit_label->setPosition(base_position + ccp(0,-7));
+					cell->addChild(unit_label);
+					
+					int stage_card_count = 4;
+					
+					for(int i=1;i<=stage_card_count;i++)
+					{
+						string t_condition_text;
+						if(i == 1)
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine1);
+						else if(i == 2)
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine2);
+						else if(i == 3)
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine3);
+						else
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine4);
+						
+						addDefaultAlignCard(NSDS_GI(t_cell_info.first_cell_in_cell_type, kSDS_SI_level_int1_card_i, i), base_position + distance_position*i, cell, t_condition_text);
+					}
+				}
+				
+				base_position = ccpFromSize(cellSizeForTable(table)/2.f) + ccp(23,0);
+				if(t_cell_info.second_cell_in_cell_type == DefaultCardCellInCellType::kPuzzle)
+				{
+					// puzzle
+					
+					KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.puzzle_number), mySGD->getFont().c_str(), 13);
+					number_label->enableOuterStroke(ccBLACK, 1.f);
+					number_label->setColor(ccc3(255, 170, 20));
+					number_label->setPosition(base_position + ccp(0, 8));
+					cell->addChild(number_label);
+					
+					KSLabelTTF* unit_label = KSLabelTTF::create("PUZZLE", mySGD->getFont().c_str(), 12);
+					unit_label->enableOuterStroke(ccBLACK, 1.f);
+					unit_label->setPosition(base_position + ccp(0,-7));
+					cell->addChild(unit_label);
+					
+					addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_clearCard_i), base_position + distance_position, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingClearCardMent));
+					addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_perfectCard_i), base_position + distance_position*2, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingPerfectCardMent));
+				}
+				else if(t_cell_info.second_cell_in_cell_type != DefaultCardCellInCellType::kEmpty)
+				{
+					// stage
+					
+					KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.second_cell_in_cell_type), mySGD->getFont().c_str(), 13);
+					number_label->enableOuterStroke(ccBLACK, 1.f);
+					number_label->setColor(ccc3(255, 170, 20));
+					number_label->setPosition(base_position + ccp(0, 8));
+					cell->addChild(number_label);
+					
+					KSLabelTTF* unit_label = KSLabelTTF::create("STAGE", mySGD->getFont().c_str(), 12);
+					unit_label->enableOuterStroke(ccBLACK, 1.f);
+					unit_label->setPosition(base_position + ccp(0,-7));
+					cell->addChild(unit_label);
+					
+					int stage_card_count = 4;
+					
+					for(int i=1;i<=stage_card_count;i++)
+					{
+						string t_condition_text;
+						if(i == 1)
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine1);
+						else if(i == 2)
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine2);
+						else if(i == 3)
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine3);
+						else
+							t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine4);
+						
+						addDefaultAlignCard(NSDS_GI(t_cell_info.second_cell_in_cell_type, kSDS_SI_level_int1_card_i, i), base_position + distance_position*i, cell, t_condition_text);
+					}
 				}
 			}
-			
-			base_position = ccpFromSize(cellSizeForTable(table)/2.f) + ccp(23,0);
-			if(t_cell_info.second_cell_in_cell_type == DefaultCardCellInCellType::kPuzzle)
+		}
+		else
+		{
+			for(int i=idx*9;i<idx*9+9 && i<not_default_card_list.size();i++)
 			{
-				// puzzle
+				int card_number = not_default_card_list[i].card_number.getV();
+				CCPoint card_position = ccp(30.f + (i-idx*9)*(48.f), cellSizeForTable(table).height/2.f);
 				
-				KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.puzzle_number), mySGD->getFont().c_str(), 13);
-				number_label->enableOuterStroke(ccBLACK, 1.f);
-				number_label->setColor(ccc3(255, 170, 20));
-				number_label->setPosition(base_position + ccp(0, 8));
-				cell->addChild(number_label);
+				string card_type = NSDS_GS(kSDS_CI_int1_type_s, card_number);
+				if(card_type == "")
+					card_type = "normal";
 				
-				KSLabelTTF* unit_label = KSLabelTTF::create("PUZZLE", mySGD->getFont().c_str(), 12);
-				unit_label->enableOuterStroke(ccBLACK, 1.f);
-				unit_label->setPosition(base_position + ccp(0,-7));
-				cell->addChild(unit_label);
+				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																											  card_number)->getCString()));
+				n_card->setScale(0.6f);
+				CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", card_type.c_str())->getCString());
+				n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
+				n_card->addChild(n_case);
 				
-				addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_clearCard_i), base_position + distance_position, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingClearCardMent));
-				addDefaultAlignCard(NSDS_GI(t_cell_info.puzzle_number, kSDS_PZ_perfectCard_i), base_position + distance_position*2, cell, myLoc->getLocalForKey(kMyLocalKey_cardSettingPerfectCardMent));
-			}
-			else if(t_cell_info.second_cell_in_cell_type != DefaultCardCellInCellType::kEmpty)
-			{
-				// stage
+				CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
+				n_node->setOpacity(0);
+				n_card->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
+				n_node->addChild(n_card);
 				
-				KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.second_cell_in_cell_type), mySGD->getFont().c_str(), 13);
-				number_label->enableOuterStroke(ccBLACK, 1.f);
-				number_label->setColor(ccc3(255, 170, 20));
-				number_label->setPosition(base_position + ccp(0, 8));
-				cell->addChild(number_label);
+				GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																											  card_number)->getCString()));
+				s_card->setScale(0.6f);
+				s_card->setColor(ccGRAY);
+				CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", card_type.c_str())->getCString());
+				s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
+				s_card->addChild(s_case);
 				
-				KSLabelTTF* unit_label = KSLabelTTF::create("STAGE", mySGD->getFont().c_str(), 12);
-				unit_label->enableOuterStroke(ccBLACK, 1.f);
-				unit_label->setPosition(base_position + ccp(0,-7));
-				cell->addChild(unit_label);
+				CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
+				s_node->setOpacity(0);
+				s_card->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
+				s_node->addChild(s_card);
 				
-				int stage_card_count = 4;
+				CCMenuItem* t_card_item = CCMenuItemSprite::create(n_node, s_node, this, menu_selector(CardSettingPopup::menuAction));
+				t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
 				
-				for(int i=1;i<=stage_card_count;i++)
+				ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
+				t_card_menu->setPosition(card_position);
+				cell->addChild(t_card_menu);
+				t_card_menu->setTouchPriority(-180-3);
+				
+				if(mySGD->isCardMorphing(card_number))
 				{
-					string t_condition_text;
-					if(i == 1)
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine1);
-					else if(i == 2)
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine2);
-					else if(i == 3)
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine3);
-					else
-						t_condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine4);
-					
-					addDefaultAlignCard(NSDS_GI(t_cell_info.second_cell_in_cell_type, kSDS_SI_level_int1_card_i, i), base_position + distance_position*i, cell, t_condition_text);
+					CCSprite* morphing_mark = KS::loadCCBI<CCSprite*>(this, "morphing_card.ccbi").first;
+					morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f*n_card->getScale()-10, -n_card->getContentSize().height/2.f*n_card->getScale()+10));
+					cell->addChild(morphing_mark);
+				}
+				
+				if(recent_selected_card_number == card_number)
+				{
+					CCSprite* select_img = CCSprite::create("card_check.png");
+					select_img->setPosition(card_position);
+					cell->addChild(select_img);
 				}
 			}
 		}
-		
-//		int puzzle_count = server_puzzle_list_count;
-//		
-//		int found_stage1 = -1;
-//		int selected_cnt = 0;
-//		for(int i=1;i<=puzzle_count && found_stage1 == -1;i++)
-//		{
-//			int stage_count = server_puzzle_stage_count[i];
-//			
-//			if(idx >= selected_cnt && idx < selected_cnt+stage_count)
-//			{
-//				int start_stage = server_puzzle_start_stage[i];
-//				found_stage1 = idx-selected_cnt+start_stage;
-//			}
-//			else
-//				selected_cnt += stage_count;
-//		}
-//		
-//		if(found_stage1 != -1)
-//		{
-//			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", found_stage1)->getCString(), mySGD->getFont().c_str(), 20);
-//			stage_number_label->setColor(ccc3(255, 150, 50));
-//			stage_number_label->enableOuterStroke(ccBLACK, 1.f);
-//			stage_number_label->setAnchorPoint(ccp(0,0.5));
-//			stage_number_label->setPosition(ccp(10,67));
-//			cell->addChild(stage_number_label);
-//			
-//			KSLabelTTF* stage_ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 13);
-//			stage_ment_label->enableOuterStroke(ccBLACK, 1.f);
-//			stage_ment_label->setAnchorPoint(ccp(0,0.5));
-//			stage_ment_label->setPosition(ccp(10,47));
-//			cell->addChild(stage_ment_label);
-//			
-//			int stage_card_count = 4;//NSDS_GI(found_stage1, kSDS_SI_cardCount_i);
-//			for(int i=1;i<=stage_card_count;i++)
-//			{
-//				bool is_cleared = mySGD->getPieceHistory(found_stage1).is_clear[i-1].getV();
-//				int card_number = NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i);
-//				CCPoint card_position = ccp(100.f + (i-1)*(81.f), 50.f);
-//				if(is_cleared)
-//				{
-//					GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
-//																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-//					CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
-//					n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
-//					n_card->addChild(n_case);
-//					
-//					CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width, n_card->getContentSize().height));
-//					n_node->setOpacity(0);
-//					n_card->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
-//					n_node->addChild(n_card);
-//					
-//					GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
-//																												  NSDS_GI(found_stage1, kSDS_SI_level_int1_card_i, i))->getCString()));
-//					s_card->setColor(ccGRAY);
-//					CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
-//					s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
-//					s_card->addChild(s_case);
-//					
-//					CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width, s_card->getContentSize().height));
-//					s_node->setOpacity(0);
-//					s_card->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
-//					s_node->addChild(s_card);
-//					
-//					CCMenuItem* t_card_item = CCMenuItemSprite::create(n_node, s_node, this, menu_selector(CardSettingPopup::menuAction));
-//					t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
-//					
-//					ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
-//					t_card_menu->setPosition(card_position);
-//					cell->addChild(t_card_menu);
-//					t_card_menu->setTouchPriority(-180-3);
-//					
-//					if(mySGD->isCardMorphing(card_number))
-//					{
-//						CCSprite* morphing_mark = KS::loadCCBI<CCSprite*>(this, "morphing_card.ccbi").first;
-//						morphing_mark->setPosition(card_position + ccp(n_card->getContentSize().width/2.f-10, -n_card->getContentSize().height/2.f+10));
-//						cell->addChild(morphing_mark);
-//					}
-//					
-//					if(recent_selected_card_number == card_number)
-//					{
-//						CCSprite* select_img = CCSprite::create("card_check.png");
-//						select_img->setPosition(card_position);
-//						cell->addChild(select_img);
-//					}
-//				}
-//				else
-//				{
-//					CCSprite* n_card_img = CCSprite::create("cardsetting_blank.png");
-//					
-//					string condition_text;
-//					if(i == 1)
-//						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine1);
-//					else if(i == 2)
-//						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine2);
-//					else if(i == 3)
-//						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine3);
-//					else
-//						condition_text = myLoc->getLocalForKey(kMyLocalKey_conditionTwoLine4);
-//					
-//					KSLabelTTF* n_condition = KSLabelTTF::create(condition_text.c_str(), mySGD->getFont().c_str(), 14);
-//					n_condition->enableOuterStroke(ccBLACK, 1.f);
-//					n_condition->setPosition(ccp(n_card_img->getContentSize().width/2.f, n_card_img->getContentSize().height/2.f));
-//					n_card_img->addChild(n_condition);
-//					
-//					CCSprite* n_case_img = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
-//					n_case_img->setPosition(ccp(n_card_img->getContentSize().width/2.f, n_card_img->getContentSize().height/2.f));
-//					n_card_img->addChild(n_case_img);
-//					
-//					CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card_img->getContentSize().width, n_card_img->getContentSize().height));
-//					n_node->setOpacity(0);
-//					n_card_img->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
-//					n_node->addChild(n_card_img);
-//					
-//					
-//					CCSprite* s_card_img = CCSprite::create("cardsetting_blank.png");
-//					
-//					KSLabelTTF* s_condition = KSLabelTTF::create(condition_text.c_str(), mySGD->getFont().c_str(), 14);
-//					s_condition->enableOuterStroke(ccBLACK, 1.f);
-//					s_condition->setPosition(ccp(s_card_img->getContentSize().width/2.f, s_card_img->getContentSize().height/2.f));
-//					s_card_img->addChild(s_condition);
-//					
-//					CCSprite* s_case_img = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", i)->getCString());
-//					s_case_img->setPosition(ccp(s_card_img->getContentSize().width/2.f, s_card_img->getContentSize().height/2.f));
-//					s_card_img->addChild(s_case_img);
-//					s_card_img->setColor(ccGRAY);
-//					
-//					CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card_img->getContentSize().width, s_card_img->getContentSize().height));
-//					s_node->setOpacity(0);
-//					s_card_img->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
-//					s_node->addChild(s_card_img);
-//					
-//					CCMenuItem* t_card_item = CCMenuItemSprite::create(n_node, s_node, this, menu_selector(CardSettingPopup::menuAction));
-//					t_card_item->setTag(kCSS_MT_noCardBase+card_number);
-//					
-//					ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
-//					t_card_menu->setPosition(card_position);
-//					cell->addChild(t_card_menu);
-//					t_card_menu->setTouchPriority(-180-3);
-//				}
-//			}
-//		}
 	}
 	else
 	{
-		for(int i=idx*9;i<idx*9+9 && i<not_default_card_list.size();i++)
+		for(int i=idx*5;i<idx*5+5 && i<special_card_list.size();i++)
 		{
-			int card_number = not_default_card_list[i].card_number.getV();
-//			int card_durability = myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number);
-			CCPoint card_position = ccp(30.f + (i-idx*9)*(48.f), cellSizeForTable(table).height/2.f);
+			int card_number = special_card_list[i].card_number.getV();
+			CCPoint card_position = ccp(45.f + (i-idx*5)*(60.f), cellSizeForTable(table).height/2.f);
 			
 			string card_type = NSDS_GS(kSDS_CI_int1_type_s, card_number);
 			if(card_type == "")
@@ -1381,8 +1439,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			
 			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
-			n_card->setScale(0.6f);
-//			n_card->setGray(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0);
+//			n_card->setScale(0.6f);
 			CCSprite* n_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", card_type.c_str())->getCString());
 			n_case->setPosition(ccp(n_card->getContentSize().width/2.f, n_card->getContentSize().height/2.f));
 			n_card->addChild(n_case);
@@ -1394,11 +1451,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			
 			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
-			s_card->setScale(0.6f);
-//			if(myDSH->getIntegerForKey(kDSH_Key_cardDurability_int1, card_number) <= 0)
-//				s_card->setColor(ccc3(60, 60, 60));
-//			else
-				s_card->setColor(ccGRAY);
+//			s_card->setScale(0.6f);
+			s_card->setColor(ccGRAY);
 			CCSprite* s_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", card_type.c_str())->getCString());
 			s_case->setPosition(ccp(s_card->getContentSize().width/2.f, s_card->getContentSize().height/2.f));
 			s_card->addChild(s_case);
@@ -1423,20 +1477,6 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				cell->addChild(morphing_mark);
 			}
 			
-//			CCPoint no_minus_half_size = ccp(-n_card->getContentSize().width/2.f, -n_card->getContentSize().height/2.f);
-//			
-//			CCLabelTTF* t_durability = CCLabelTTF::create(CCString::createWithFormat("%d", card_durability)->getCString(),
-//														  mySGD->getFont().c_str(), 7);
-//			t_durability->setAnchorPoint(ccp(0.5f,0.5f));
-//			t_durability->setPosition(ccpAdd(card_position, ccp(20, no_minus_half_size.y+14)));
-//			cell->addChild(t_durability);
-//			
-//			
-//			CCLabelTTF* t_card_level_label = CCLabelTTF::create(CCString::createWithFormat("Lv.%d", myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, card_number))->getCString(), mySGD->getFont().c_str(), 8);
-//			t_card_level_label->setPosition(ccpSub(card_position, ccpAdd(no_minus_half_size, ccp(48,73))));
-//			cell->addChild(t_card_level_label);
-			
-
 			if(recent_selected_card_number == card_number)
 			{
 				CCSprite* select_img = CCSprite::create("card_check.png");
@@ -1469,24 +1509,37 @@ void CardSettingPopup::tableCellTouched( CCTableView* table, CCTableViewCell* ce
 
 CCSize CardSettingPopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake(457, 60);
+	if(is_normal_table)
+		return CCSizeMake(457, 60);
+	else
+		return CCSizeMake(457, 100);
 }
 
 unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )
 {
 	CardSortType sort_type = CardSortType(recent_sort_type);
 	
-	if(sort_type == kCST_default)
+	if(is_normal_table)
 	{
-		return default_align_number_of_cell;
+		if(sort_type == kCST_default)
+		{
+			return default_align_number_of_cell;
+		}
+		else
+		{
+			int have_card_count = not_default_card_list.size();
+			if(have_card_count == 0)
+				return 0;
+			else
+				return (have_card_count-1)/9+1;
+		}
 	}
 	else
 	{
-		int have_card_count = not_default_card_list.size();
-		if(have_card_count == 0)
+		if(special_card_list.empty())
 			return 0;
 		else
-			return (have_card_count-1)/9+1;
+			return (special_card_list.size()-1)/5+1;
 	}
 }
 
