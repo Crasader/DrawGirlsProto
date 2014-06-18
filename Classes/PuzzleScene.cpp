@@ -1572,6 +1572,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 					gr4.desc = "루우비~!";
 					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 																			 {
+																				 is_menu_enable = true;
 																			 });
 					addChild(gbb, (int)Curtain::kBonusGame);
 				}
