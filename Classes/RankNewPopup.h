@@ -77,6 +77,7 @@ private:
 	Json::Value rank_data;
 	CCSprite* loading_img;
 	void resultGetRank(Json::Value result_data);
+	CCScale9Sprite* m_main_inner_right;
 
 };
 

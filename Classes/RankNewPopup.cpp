@@ -67,7 +67,7 @@ bool RankNewPopup::init()
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(70,253));
+	title_label->setPosition(ccp(63.5, 255.5)); 			// dt (-2.5, -1.5)
 	setFormSetter(title_label);
 	main_case->addChild(title_label);
 	
@@ -78,8 +78,9 @@ bool RankNewPopup::init()
 	main_case->addChild(main_inner_left);
 	
 	CCScale9Sprite* main_inner_right = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	m_main_inner_right = main_inner_right;
 	main_inner_right->setContentSize(CCSizeMake(272,234));
-	main_inner_right->setPosition(ccp(144.0,123.5)); 			// dt (0.0,-0.5)
+	main_inner_right->setPosition(ccp(144.0 + 3.0,123.5)); 			// dt (0.0,-0.5)
 	setFormSetter(main_inner_right);
 	main_case->addChild(main_inner_right);
 	
@@ -92,7 +93,7 @@ bool RankNewPopup::init()
 	
 	
 	{
-		reward_table = CCTableView::create(this, CCSizeMake(187, 195));
+		reward_table = CCTableView::create(this, CCSizeMake(187, 191));
 		reward_table->setDirection(kCCScrollViewDirectionVertical);
 		
 		//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
@@ -116,7 +117,7 @@ bool RankNewPopup::init()
 		
 		reward_table->setTouchPriority(-184);
 		
-		KSLabelTTF* rewardTitle = KSLabelTTF::create("보상내용", mySGD->getFont().c_str(), 15.f);
+		KSLabelTTF* rewardTitle = KSLabelTTF::create("보상내용", mySGD->getFont().c_str(), 13.f);
 		rewardTitle->setPosition(ccp(40.5f, 214.5f));
 		rewardTitle->setColor(ccc3(255, 170, 22));
 		main_inner_left->addChild(rewardTitle);
@@ -226,7 +227,8 @@ bool RankNewPopup::init()
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-185);
-	close_menu->setPosition(ccp(main_case->getContentSize().width-29,main_case->getContentSize().height-27));
+	close_menu->setPosition(ccp(main_case->getContentSize().width-29,
+															main_case->getContentSize().height-27 + 2));
 	close_menu->setFunction([=](CCObject* sender)
 							{
 								CCNode* t_node = CCNode::create();
@@ -261,8 +263,10 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		//cell_action_list.clear();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
-		CCSprite* graph_back = CCSprite::create("ending_graph.png");
-		graph_back->setPosition(ccp(359.5,213.5)); 			// dt (19.0,-1.5)
+		CCSprite* graph_back = CCSprite::create("rankreward_graph.png");
+		graph_back->setPosition(ccp(361,213.5)); 			// dt (19.0,-1.5)
+//		graph_back->setPosition(ccpFromSize(m_main_inner_right->getContentSize() / 2.f));
+		graph_back->setPositionY(213.5);
 		rankBack->addChild(graph_back, kZ_CP_img);
 		setFormSetter(graph_back);
 //		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -302,14 +306,14 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		rest_back->setContentSize(CCSizeMake(100, 22));
 		rankBack->addChild(rest_back);
 		KSLabelTTF* lefttime_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
-		lefttime_label->setPosition(ccp(77.5,11.0)); 			// dt (77.5,11.0)
+		lefttime_label->setPosition(ccp(77.5 + 5.f,11.0)); 			// dt (77.5,11.0)
 		lefttime_label->setColor(ccc3(255, 170, 20));
 		lefttime_label->setAnchorPoint(ccp(1,0.5));
 		rest_back->addChild(lefttime_label); // , kZ_CP_img);
 		setFormSetter(rest_back);
 		
 		KSLabelTTF* rest_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_restTime), mySGD->getFont().c_str(), 11);
-		rest_time_title->setColor(ccc3(255, 170, 0));
+		rest_time_title->setColor(ccc3(255, 255, 255));
 		rest_time_title->setAnchorPoint(ccp(0,0.5f));
 		rest_time_title->setPosition(ccp(10, rest_back->getContentSize().height / 2.f));
 		rest_back->addChild(rest_time_title);
@@ -326,7 +330,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeDay), lefttime/60/60/24)->getCString());
 		
 		CCScale9Sprite* tipBack = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
-		tipBack->setPosition(ccp(173.5,254.5f)); 			// dt (173.5,246.0)
+		tipBack->setPosition(ccp(173.5,255.5f)); 			// dt (173.5,246.0)
 		main_case->addChild(tipBack, 2);
 		tipBack->setContentSize(CCSizeMake(65, 25));
 		KSLabelTTF* tipLbl = KSLabelTTF::create("Tip", mySGD->getFont().c_str(), 14.f);
@@ -334,11 +338,10 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		tipBack->addChild(tipLbl);
 		tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f);
 		
-		LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 210, 25,
-																												 "<font size=15>무한모드 점수는 합산되지 않습니다. "
-																												 "이번주 플레이 누적 점수입니다. "
-																												 "</font>");
-		tipMaquee->setPosition(ccp(199.5, 245.f));
+		LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 210, 25, "");
+		tipMaquee->addText("<font size=13>무한모드 점수는 합산되지 않습니다.</font>");
+		tipMaquee->addText("<font size=13>이번주 플레이 누적 점수입니다.</font>");
+		tipMaquee->setPosition(ccp(199.5, 246.f));
 		tipMaquee->startMarquee();
 		main_case->addChild(tipMaquee, 1);
 		setFormSetter(tipBack);
@@ -397,7 +400,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			list_cell_case->setPosition(ccp(231.0,168.0));
 			rankBack->addChild(list_cell_case, kZ_CP_img);
 			
-			CCPoint rank_position = ccp(20,18);
+			CCPoint rank_position = ccp(28,18);
 			
 			int i = rank_data.get("myrank", 999).asInt()-1;
 			
@@ -421,7 +424,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 13);
 				rank_label->enableOuterStroke(ccBLACK, 1);
 				rank_label->setPosition(rank_position);
 				list_cell_case->addChild(rank_label);
@@ -429,21 +432,22 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(50,18));
+			selectedFlagSpr->setScale(0.8f);
+			selectedFlagSpr->setPosition(ccp(50 + 13.5,19));
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			
 			KSLabelTTF* nick_label = KSLabelTTF::create(mynick.c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
 			nick_label->setAnchorPoint(ccp(0,0.5f));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(70,19));
+			nick_label->setPosition(ccp(79 + 2,19));
 			list_cell_case->addChild(nick_label);
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 14);
 			score_label->setColor(ccc3(255, 170, 20));
 			score_label->setAnchorPoint(ccp(1,0.5f));
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(215,18));
+			score_label->setPosition(ccp(215 + 20.f + 15, 18));
 			list_cell_case->addChild(score_label);
 			
 			if(rankBack->getTag()!=1){
@@ -553,73 +557,74 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	int i = rank_data["list"].size()-idx-1;
 
 	string case_name;
-		if(myrank == i+1)
-		{
-			case_name = "mainpopup_pupple1.png";
-			limit_count++;
-		}
-		else
-		{
-			case_name = "rank_normal.png";
-		}
-		
-		CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		list_cell_case->setAnchorPoint(ccp(0,0));
-		list_cell_case->setContentSize(CCSizeMake(260, 37));
-		list_cell_case->setPosition(ccp(10,-3));
-		cell->addChild(list_cell_case, kZ_CP_img);
-		
-		CCPoint rank_position = ccp(20,18);
-		if(i == 0)
-		{
-			CCSprite* gold_medal = CCSprite::create("rank_gold.png");
-			//gold_medal->setScale(0.75f);
-			gold_medal->setPosition(rank_position);
-			list_cell_case->addChild(gold_medal);
-		}
-		else if(i == 1)
-		{
-			CCSprite* silver_medal = CCSprite::create("rank_silver.png");
-			//silver_medal->setScale(0.75f);
-			silver_medal->setPosition(rank_position);
-			list_cell_case->addChild(silver_medal);
-		}
-		else if(i == 2)
-		{
-			CCSprite* bronze_medal = CCSprite::create("rank_bronze.png");
-			//bronze_medal->setScale(0.75f);
-			bronze_medal->setPosition(rank_position);
-			list_cell_case->addChild(bronze_medal);
-		}
-		else
-		{
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
-			rank_label->enableOuterStroke(ccBLACK, 1);
-			rank_label->setPosition(rank_position);
-			list_cell_case->addChild(rank_label);
-		}
-		
-		Json::Reader reader;
-		Json::Value read_data;
-		reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
-		string flag = read_data.get("flag", "kr").asString().c_str();
-
-		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(50,18));
-		list_cell_case->addChild(selectedFlagSpr);
+	if(myrank == i+1)
+	{
+		case_name = "mainpopup_pupple1.png";
+		limit_count++;
+	}
+	else
+	{
+		case_name = "rank_normal.png";
+	}
 	
-		KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
-		nick_label->setAnchorPoint(ccp(0,0.5f));
-		nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		nick_label->setPosition(ccp(70,19));
-		list_cell_case->addChild(nick_label);
-		
-		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		score_label->setColor(ccc3(255, 170, 20));
-		score_label->setAnchorPoint(ccp(1,0.5f));
-		score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		score_label->setPosition(ccp(215,18));
-		list_cell_case->addChild(score_label);
+	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+	list_cell_case->setAnchorPoint(ccp(0,0));
+	list_cell_case->setContentSize(CCSizeMake(260, 37));
+	list_cell_case->setPosition(ccp(10,-3));
+	cell->addChild(list_cell_case, kZ_CP_img);
+	
+	CCPoint rank_position = ccp(28,18);
+	if(i == 0)
+	{
+		CCSprite* gold_medal = CCSprite::create("rank_gold.png");
+		//gold_medal->setScale(0.75f);
+		gold_medal->setPosition(rank_position);
+		list_cell_case->addChild(gold_medal);
+	}
+	else if(i == 1)
+	{
+		CCSprite* silver_medal = CCSprite::create("rank_silver.png");
+		//silver_medal->setScale(0.75f);
+		silver_medal->setPosition(rank_position);
+		list_cell_case->addChild(silver_medal);
+	}
+	else if(i == 2)
+	{
+		CCSprite* bronze_medal = CCSprite::create("rank_bronze.png");
+		//bronze_medal->setScale(0.75f);
+		bronze_medal->setPosition(rank_position);
+		list_cell_case->addChild(bronze_medal);
+	}
+	else
+	{
+		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
+		rank_label->enableOuterStroke(ccBLACK, 1);
+		rank_label->setPosition(rank_position);
+		list_cell_case->addChild(rank_label);
+	}
+	
+	Json::Reader reader;
+	Json::Value read_data;
+	reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
+	string flag = read_data.get("flag", "kr").asString().c_str();
+	
+	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+	selectedFlagSpr->setPosition(ccp(50 + 13.5, 19));
+	selectedFlagSpr->setScale(0.8f);
+	list_cell_case->addChild(selectedFlagSpr);
+	
+	KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+	nick_label->setAnchorPoint(ccp(0,0.5f));
+	nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
+	nick_label->setPosition(ccp(79 + 2,19));
+	list_cell_case->addChild(nick_label);
+	
+	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+	score_label->setColor(ccc3(255, 170, 20));
+	score_label->setAnchorPoint(ccp(1,0.5f));
+	score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+	score_label->setPosition(ccp(215 + 35,18));
+	list_cell_case->addChild(score_label);
 	
 	if(rankBack->getTag()!=1){
 		CCPoint original_position = list_cell_case->getPosition();
@@ -659,13 +664,15 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 //		left1 = KS::replaceAll(left1, "%", "%");
 //		left2 = KS::replaceAll(left2, "%", "%");
 		StyledLabelTTF* reward2Title = StyledLabelTTF::create(
-																													ccsf("<font color=#FFAA14 newline=15>%s</font><font color=#FFAA14>%s</font>",
+																													ccsf("<font color=#FFAA14 newline=13>%s</font><font color=#FFAA14>%s</font>",
 																															 left1.c_str(), left2.c_str()),
-																													mySGD->getFont().c_str(), 15,
+																													mySGD->getFont().c_str(), 11,
 																													999, StyledAlignment::kCenterAlignment);
 		reward2Title->setAnchorPoint(ccp(0.5f, 0.5f));
+
 		A = reward2Title;
 		rewardBack2->addChild(reward2Title);
+		setFormSetter(reward2Title);
 	};
 	if(rank_data["rewardInfo"][idx]["left1"].asString() == "TOP")
 	{
@@ -705,25 +712,55 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 
 //	contentStr = KS::replaceAll(contentStr, "%", "%");
 	StyledLabelTTF* reward2Lbl = StyledLabelTTF::create(
-												ccsf("<font color=#FFAA14 size=11 newline=10>%s</font>"
+												ccsf("<font color=#FFAA14 size=11 newline=13>%s</font>"
 																											"<font color=999 size=9>%s</font>",
 														 titleStr.c_str(), contentStr.c_str()),
 																											mySGD->getFont().c_str(),
 																											15.f, 999, StyledAlignment::kLeftAlignment);
 	rewardBack2->addChild(reward2Lbl);
+	int rubyCount = rank_data["rewardInfo"][idx]["reward"][0]["count"].asInt();
+	std::string rubyImgFileName;
+	if(rubyCount >= 300)
+	{
+		rubyImgFileName = "shop_ruby6.png";
+	}
+	else if(rubyCount >= 200)
+	{
+		rubyImgFileName = "shop_ruby5.png";
+	}
+	else if(rubyCount >= 100)
+	{
+		rubyImgFileName = "shop_ruby4.png";
+	}
+	else if(rubyCount >= 30)
+	{
+		rubyImgFileName = "shop_ruby3.png";
+	}
+	else if(rubyCount >= 5)
+	{
+		rubyImgFileName = "shop_ruby2.png";
+	}
+	else if(rubyCount >= 1)
+	{
+		rubyImgFileName = "shop_ruby1.png";
+	}
 	
-	CCSprite* reward2Img = CCSprite::create("mainflow_event.png");
+	CCSprite* reward2Img = CCSprite::create(rubyImgFileName.c_str());
+	reward2Img->setScale(0.5f);
 	B = reward2Lbl;
 	rewardBack2->addChild(reward2Img);
-	KSLabelTTF* reward2Detail = KSLabelTTF::create(ccsf("X %d", rank_data["rewardInfo"][idx]["reward"][0]["count"].asInt()), mySGD->getFont().c_str(), 12.f);
-	reward2Detail->setPosition(ccpFromSize(reward2Img->getContentSize()) / 2.f + ccp(0, -20));
+	KSLabelTTF* reward2Detail = KSLabelTTF::create(ccsf("x %d", rubyCount), mySGD->getFont().c_str(), 10.f);
+	reward2Detail->setScale(2.0f);
+	reward2Detail->setPosition(ccpFromSize(reward2Img->getContentSize()) / 2.f + ccp(0, -20 + 6));
+	setFormSetter(reward2Img);
 	C = reward2Img;
-	reward2Detail->setColor(ccc3(255, 170, 22));
+	reward2Detail->setColor(ccc3(255, 255, 255));
+	reward2Detail->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	reward2Img->addChild(reward2Detail);
 
 	if(A)
 	{
-		A->setPosition(ccp(26.0,19.0)); 			// dt (26.0,19.0)
+		A->setPosition(ccp(26.0,19.0 + 2.f)); 			// dt (26.0,19.0)
 	}
 	if(B)
 	{
@@ -732,7 +769,7 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 	}
 	if(C)
 	{
-		C->setPosition(ccp(148.0,27.5)); 			// dt (-0.5,0.5)
+		C->setPosition(ccp(148.0,27.5 - 10.5)); 			// dt (-0.5,0.5)
 	}
 	return cell;
 }
@@ -762,11 +799,11 @@ void  RankNewPopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 CCSize  RankNewPopup::cellSizeForTable(CCTableView *table)
 {
 	if(table == rank_table)
-		return CCSizeMake(230, 30);
+		return CCSizeMake(230, 33);
 	else if(table == reward_table)
-		return CCSizeMake(171, 42);
+		return CCSizeMake(171, 41);
 	
-	return CCSizeMake(230, 30);
+	return CCSizeMake(230, 34);
 }
 unsigned int  RankNewPopup::numberOfCellsInTableView(CCTableView *table)
 {
