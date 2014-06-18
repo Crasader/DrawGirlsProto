@@ -506,7 +506,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				
 				
 				btnReceive = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_take), 12.f, CCSizeMake(60, 40), CommonButtonYellow, -200);
-				btnReceive->setTitleColor(ccc3(50, 20, 0));
+				btnReceive->setTitleColor(ccc3(255, 255, 255));
 				btnReceive->setFunction([=](CCObject*)
 																{
 																	//						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
