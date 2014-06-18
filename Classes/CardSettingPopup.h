@@ -48,6 +48,7 @@ class ListViewerScroll;
 class IntPoint;
 class CommonButton;
 class ScrollBar;
+class KSLabelTTF;
 class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -86,6 +87,10 @@ private:
 	vector<DefaultCardCellInfo> default_cell_info;
 	vector<CardSortInfo> not_default_card_list;
 	
+	vector<CardSortInfo> special_card_list;
+	
+	bool is_special_align_reverse;
+	
 	int recent_selected_card_number;
 	
 	int recent_sort_type;
@@ -94,6 +99,14 @@ private:
 	
 	unsigned int default_align_number_of_cell;
 	CCTableView* card_table;
+	
+	CCScale9Sprite* take_count_back;
+	KSLabelTTF* title_content;
+	KSLabelTTF* title_label;
+	KSLabelTTF* n_special_show_label;
+	KSLabelTTF* s_special_show_label;
+	
+	bool is_normal_table;
 	
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
@@ -116,6 +129,7 @@ private:
 //	void addMountedCase();
 //	void removeMountedCase();
 	
+	void specialChangeSortType(bool is_reverse);
 	void changeSortType( CardSortType t_type );
 	
 	bool is_menu_enable;

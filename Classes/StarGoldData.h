@@ -79,6 +79,8 @@ public:
 	KSProtectVar<int> rank;
 	KSProtectStr user_ment;
 	KSProtectVar<bool> is_morphing;
+	
+	CardSortInfo() : card_number(0){}
 };
 
 class PuzzleHistory{
@@ -410,6 +412,7 @@ public:
 	
 	int getHasGottenCardsDataCardNumber(int index);
 	CardSortInfo getHasGottenCardData(int index);
+	CardSortInfo getHasGottenCardDataForCardNumber(int t_card_number);
 	bool isCardMorphing(int card_number);
 	void onCardMorphing(int card_number);
 	
@@ -430,6 +433,7 @@ public:
 	void setCardComment(int t_card_number, string comment);
 	int isHasGottenCards(int t_card_number);
 	int isHasGottenCards(int t_stage, int t_grade);
+	int isHasGottenCardsToIndex(int t_card_number);
 	
 	void resetHasGottenCards();
 	void initTakeCardInfo(Json::Value card_list, vector<int>& card_data_load_list);

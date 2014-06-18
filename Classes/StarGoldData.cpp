@@ -858,6 +858,17 @@ int StarGoldData::getHasGottenCardsDataCardNumber( int index )
 	return has_gotten_cards[index].card_number.getV();
 }
 
+CardSortInfo StarGoldData::getHasGottenCardDataForCardNumber(int t_card_number)
+{
+	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
+	{
+		if(i->card_number.getV() == t_card_number)
+			return *i;
+	}
+	
+	return CardSortInfo();
+}
+
 CardSortInfo StarGoldData::getHasGottenCardData(int index)
 {
 	return has_gotten_cards[index];
@@ -913,7 +924,7 @@ string StarGoldData::getCardComment(int t_card_number)
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(i->card_number == t_card_number)
+		if(i->card_number.getV() == t_card_number)
 			return i->user_ment.getV();
 	}
 	
@@ -924,7 +935,7 @@ void StarGoldData::setCardComment(int t_card_number, string comment)
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(i->card_number == t_card_number)
+		if(i->card_number.getV() == t_card_number)
 			i->user_ment = comment;
 	}
 }
@@ -953,11 +964,22 @@ int StarGoldData::isHasGottenCards(int t_card_number)
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(i->card_number == t_card_number)
+		if(i->card_number.getV() == t_card_number)
 			return i->card_number.getV();
 	}
 	
 	return 0;
+}
+
+int StarGoldData::isHasGottenCardsToIndex(int t_card_number)
+{
+	for(int i = 0;i<has_gotten_cards.size();i++)
+	{
+		if(has_gotten_cards[i].card_number.getV() == t_card_number)
+			return i;
+	}
+	
+	return -1;
 }
 
 int StarGoldData::isHasGottenCards( int t_stage, int t_grade )

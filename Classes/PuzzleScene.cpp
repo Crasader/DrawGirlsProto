@@ -1812,8 +1812,7 @@ void PuzzleScene::setRight()
 	
 	if(right_mode == kPuzzleRightMode_stage)
 	{
-		
-		PieceHistory t_history = mySGD->getPieceHistory(selected_stage_number);
+//		PieceHistory t_history = mySGD->getPieceHistory(selected_stage_number);
 		
 		bool is_have_card_list[4] = {false,};
 		
@@ -1821,7 +1820,7 @@ void PuzzleScene::setRight()
 		for(int i=1;i<=stage_card_count && i <= 4;i++)
 		{
 			int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
-			is_have_card_list[i-1] = t_history.is_clear[i-1].getV();
+			is_have_card_list[i-1] = mySGD->isHasGottenCards(step_card_number);
 			
 			CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-(i-1)*46.5f);
 			
