@@ -553,7 +553,35 @@ void hspConnector::openUrl(const std::string& url)
 #endif
 }
 
+void hspConnector::openHSPUrl(const std::string& url)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPUrl", "()V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+#endif
+}
 
+void hspConnector::openHSPNotice()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPNotice", "(Ljava/lang/String;)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+	
+}
 void hspConnector::openKakaoMsg()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
