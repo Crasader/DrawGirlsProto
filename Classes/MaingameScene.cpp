@@ -4010,6 +4010,7 @@ void Maingame::showClearTimeEvent(function<void()> no_func, function<void()> yes
 																		   is_pause = false;
 																		   no_func();
 																		   startControl();
+																		   ((ControlJoystickButton*)mControl)->resetTouch();
 																	   }, [=]()
 																	   {
 																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
@@ -4019,6 +4020,7 @@ void Maingame::showClearTimeEvent(function<void()> no_func, function<void()> yes
 																		   is_pause = false;
 																		   yes_func();
 																		   startControl();
+																		   ((ControlJoystickButton*)mControl)->resetTouch();
 																	   });
 	t_popup->setContainerNode(t_container);
 	exit_target->getParent()->addChild(t_popup);
