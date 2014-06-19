@@ -18,10 +18,10 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
 
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPMessage;
+import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.cgp.HSPCGP;
 import com.hangame.hsp.itemdelivery.HSPItemDelivery;
@@ -265,7 +265,7 @@ public class hspConnector{
 
 
 
-							core.login(activity,manualLogin,new HSPCore.HSPLoginCB() {
+							core.login(activity,HSPOAuthProvider.GUEST,new HSPCore.HSPLoginCB() {
 
 								public void onLogin(final HSPResult result, boolean isPlayable) {
 									//Log.d("litqoo", "BEGIN - HSPLoginCB");
