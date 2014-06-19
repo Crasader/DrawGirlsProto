@@ -150,29 +150,30 @@ void EndlessModeOpening::setMain()
 //										
 //								  }));
 							  });
-	main_case->addChild(close_button);
+	main_case->addChild(close_button, 2);
 	
 	left_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	left_back->setContentSize(CCSizeMake(255, 232));
 	left_back->setPosition(ccp(10+left_back->getContentSize().width/2.f, main_case->getContentSize().height*0.44f));
 	main_case->addChild(left_back);
 	CCScale9Sprite* tipBack = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
-	tipBack->setPosition(ccp(173.5,246.0)); 			// dt (173.5,246.0)
-	left_back->addChild(tipBack);
+	tipBack->setPosition(ccp(173.5,255.5f)); 			// dt (173.5,246.0)
+	main_case->addChild(tipBack, 2);
 	tipBack->setContentSize(CCSizeMake(65, 26));
 	KSLabelTTF* tipLbl = KSLabelTTF::create("Tip", mySGD->getFont().c_str(), 14.f);
 	tipLbl->setColor(ccc3(255, 155, 0));
 	tipBack->addChild(tipLbl);
 	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f);
 	
-	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 210, 25, "");
+	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 245, 25, "");
 	tipMaquee->addText("<font size=13>PVP랭킹은 연승이 중요해요.</font>");
 	tipMaquee->addText("<font size=13>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>");
 	tipMaquee->addText("<font size=13>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>");
 	tipMaquee->addText("<font size=13>랭킹은 매주 갱신됩니다.</font>");
-	tipMaquee->setPosition(ccp(201.0,237.0)); 			// dt (131.0,232.0)
+//	tipMaquee->setPosition(ccp(201.0,237.0)); 			// dt (131.0,232.0)
+	tipMaquee->setPosition(ccp(199.5, 246.f));
 	tipMaquee->startMarquee();
-	left_back->addChild(tipMaquee, -1);
+	main_case->addChild(tipMaquee, 1);
 	
 	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessWeeklyranking), mySGD->getFont().c_str(), 13);
 	left_title->setColor(ccc3(255, 170, 20));
