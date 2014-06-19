@@ -1,6 +1,5 @@
 package com.litqoo.lib;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
@@ -11,9 +10,9 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.hangame.hsp.HSPResult;
-import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.itemdelivery.HSPItemDelivery.RequestItemDeliveryCallback;
-import com.hangame.hsp.itemdelivery.model.ItemInfo;
+import com.hangame.hsp.itemdelivery.HSPItemInfo;
+import com.hangame.hsp.xdr.hsp13.response.ItemInfo;
 
 public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallback{
 	protected int m_key;
@@ -24,7 +23,7 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 		m_glView = glView;
 	}
 	@Override
-	public void onRequestItemDelivery(HSPResult hspResult, long transactionId, List<ItemInfo> itemInfoList, String receipt)
+	public void onRequestItemDelivery(HSPResult hspResult, long transactionId, List<HSPItemInfo> itemInfoList, String receipt)
 	{
 		JSONObject r = new JSONObject();
 		
@@ -48,7 +47,7 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 //				ArrayList<Long> itemSeq = new ArrayList<Long>();
 				JSONArray jsonItemSeq = new JSONArray();
 				
-				for(ItemInfo i : itemInfoList)
+				for(HSPItemInfo i : itemInfoList)
 				{
 //					itemSeq.add(i.getItemSequence());
 					jsonItemSeq.put(i.getItemSequence());

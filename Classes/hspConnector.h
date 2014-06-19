@@ -235,6 +235,8 @@ public:
 	void purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	void purchaseProduct(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func);
 	void openUrl(const std::string& url);
+	void openHSPUrl(const std::string& url);
+	void openHSPNotice();
 	void launchPromotion();
 	void openKakaoMsg();
 	//void loadMyInfo(Json::Value obj);

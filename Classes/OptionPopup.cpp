@@ -1001,6 +1001,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_community)
 	{
+		myHSP->openHSPUrl("http://naver.com");
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tip)

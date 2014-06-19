@@ -18,14 +18,19 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
 
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPMessage;
+import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.cgp.HSPCGP;
 import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.payment.HSPPayment;
+import com.hangame.hsp.ui.HSPUiFactory;
+import com.hangame.hsp.ui.HSPUiLauncher;
+import com.hangame.hsp.ui.HSPUiUri;
+import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
+import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -155,7 +160,31 @@ public class hspConnector{
 				);
 		
 	}
-	
+	public static void openHSPNotice()
+	{
+		HSPUiUri uri = HSPUiFactory.getUiUri(HSPUiUri.HSPUiUriAction.SUPPORTS_NOTICE);
+		HSPUiLauncher.getInstance().launch(uri); 
+//		URI에 파라미터를 추가하는 경우 아래와 같이 추가할 수 있습니다.
+		uri.setParameter(HSPUiUriParameterKey.TOPBAR_SHOW, HSPUiUriParameterValue.TRUE);
+		uri.setParameter(HSPUiUriParameterKey.GNB_SHOW, HSPUiUriParameterValue.TRUE);
+	}
+	public static void openHSPUrl(final String url)
+	{
+		// 내 정보 URI Action(WEBVIEW)으로 HSPUiUri 인스턴스를 생성한다 HSPUri*
+		HSPUiUri uriWebview =  HSPUiFactory.getUiUri(HSPUiUri.HSPUiUriAction.WEBVIEW);
+		 
+//		3.     접속하고자 하는 Web Page Url을 파라미터로 설정한다.
+		 
+		uriWebview.setParameter(HSPUiUri.HSPUiUriParameterKey.WEB_URL, url);
+		 
+//		4.     생성된 HSPUiUri 인스턴스를 이용하여 HSPUiLauncher에 launch 요청을 한다.
+
+		// 게임 위에 해당 HSPUiUri 인스턴스에 해당하는 HSP화면을 출력한다.
+		HSPUiLauncher.getInstance().launch(uriWebview);
+
+		
+		
+	}	
 	public static void openKakaoMsg(){
 
 			/**
@@ -265,7 +294,7 @@ public class hspConnector{
 
 
 
-							core.login(activity,manualLogin,new HSPCore.HSPLoginCB() {
+							core.login(activity,HSPOAuthProvider.GUEST,new HSPCore.HSPLoginCB() {
 
 								public void onLogin(final HSPResult result, boolean isPlayable) {
 									//Log.d("litqoo", "BEGIN - HSPLoginCB");

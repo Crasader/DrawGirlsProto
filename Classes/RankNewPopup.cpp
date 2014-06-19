@@ -235,7 +235,7 @@ bool RankNewPopup::init()
 								menuAction(t_node);
 							});
 	setFormSetter(close_menu);
-	main_case->addChild(close_menu);
+	main_case->addChild(close_menu, 2);
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
@@ -338,7 +338,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		tipBack->addChild(tipLbl);
 		tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f);
 		
-		LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 210, 25, "");
+		LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 240, 25, "");
 		tipMaquee->addText("<font size=13>무한모드 점수는 합산되지 않습니다.</font>");
 		tipMaquee->addText("<font size=13>이번주 플레이 누적 점수입니다.</font>");
 		tipMaquee->setPosition(ccp(199.5, 246.f));
@@ -361,7 +361,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(455.5f, 214.5)); 			// dt (-2.5,-15.5)
+		rank_percent_case->setPosition(ccp(477.f, 214.5)); 			// dt (-2.5,-15.5)
 		
 		rankBack->addChild(rank_percent_case, kZ_CP_img);
 		
@@ -378,7 +378,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
 		setFormSetter(rank_percent_case);
 
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(266 + (451 - 266)*rank_percent, 215.5f));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(244 + (477 - 244)*rank_percent, 215.5f));
 		rank_percent_case->runAction(t_move);
 		
 		rank_data = result_data;
