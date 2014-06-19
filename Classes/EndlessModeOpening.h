@@ -119,6 +119,9 @@ private:
 	CCScale9Sprite* right_back;
 	CCScale9Sprite* record_back;
 	CCTableView* reward_table;
+	float current_rank_percent;
+	CCNode* animation_node1;
+	CCNode* animation_node2;
 	void setMain();
 	
 	void resultGetEndlessPlayData(Json::Value result_data);
