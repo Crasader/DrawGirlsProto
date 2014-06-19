@@ -119,7 +119,12 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	
 	CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_thumbnail.png", new_card_number));
-	CCSprite* card_case = CCSprite::create("cardsetting_minicase2.png");
+	
+	string t_card_type = NSDS_GS(kSDS_CI_int1_type_s, new_card_number);
+	if(t_card_type == "")
+		t_card_type = "normal";
+	
+	CCSprite* card_case = CCSprite::create(ccsf("cardsetting_minicase_%s.png", t_card_type.c_str()));
 	card_case->setPosition(ccpFromSize(card_img->getContentSize()/2.f));
 	card_img->addChild(card_case);
 	

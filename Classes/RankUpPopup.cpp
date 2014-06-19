@@ -267,11 +267,15 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	else
 		take_grade = 1;
 	
+	int t_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_grade);
+	string t_card_type = NSDS_GS(kSDS_CI_int1_type_s, t_card_number);
+	if(t_card_type == "")
+		t_card_type = "normal";
 	
 	CCSprite* recent_take_card = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png",
-																				NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_grade))->getCString());
+																				t_card_number)->getCString());
 	recent_take_card->setScale(0.8f);
-	CCSprite* card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", take_grade)->getCString());
+	CCSprite* card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", t_card_type.c_str())->getCString());
 	card_case->setPosition(ccp(recent_take_card->getContentSize().width/2.f, recent_take_card->getContentSize().height/2.f));
 	recent_take_card->addChild(card_case);
 	recent_take_card->setPosition(ccp(-55,0));
@@ -308,7 +312,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	next_take_card->setColor(ccc3(100, 100, 100));
 	next_take_card->setRotation(90);
 	
-	CCSprite* next_card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase%d.png", after_grade)->getCString());
+	CCSprite* next_card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", t_card_type.c_str())->getCString());
 	next_card_case->setPosition(ccp(43, 32));
 	next_take_card->addChild(next_card_case);
 	next_take_card->setPosition(ccp(55,0));
