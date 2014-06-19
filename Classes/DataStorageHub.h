@@ -146,7 +146,8 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_stageHighRank_int1,
 	
-	kDSH_Key_isShowMainflowDimmed
+	kDSH_Key_isShowMainflowDimmed,
+	kDSH_Key_isShowEndlessModeTutorial
 }DSH_Key;
 
 enum SpecialTutorialCode{

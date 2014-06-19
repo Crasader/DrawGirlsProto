@@ -1262,6 +1262,24 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이벤트를 통해 얻을 수 있는 카드입니다."), kMyLocalKey_cardSettingSpecialCardContent);
 	ko->setObject(CCString::create("내 카드 보기"), kMyLocalKey_cardSettingSpecialCardToMyCard);
 	
+	ko->setObject(CCString::create("<font newline=16>PVP모드가<font newline=16>오픈되었어요!"), kMyLocalKey_endlessTutorialMent1);
+	ko->setObject(CCString::create("<font newline=16>내 정보 입니다."), kMyLocalKey_endlessTutorialMent2);
+	ko->setObject(CCString::create("<font>목록에서 <font color=961>다른 친구를 선택<font newline=16>해보세요.<font newline=16>다른 친구의 정보를 볼 수 있어요."), kMyLocalKey_endlessTutorialMent3);
+	ko->setObject(CCString::create("<font color=961>대전준비를 눌러보세요."), kMyLocalKey_endlessTutorialMent4);
+	ko->setObject(CCString::create("<font color=961>대전시작을 눌러보세요."), kMyLocalKey_endlessTutorialMent5);
+	ko->setObject(CCString::create("<font color=961>내 미니맵"), kMyLocalKey_endlessTutorialMent6);
+	ko->setObject(CCString::create("<font color=961>내 점수"), kMyLocalKey_endlessTutorialMent7);
+	ko->setObject(CCString::create("<font color=961>내 장착아이템"), kMyLocalKey_endlessTutorialMent8);
+	ko->setObject(CCString::create("<font color=961>상대 정보"), kMyLocalKey_endlessTutorialMent9);
+	ko->setObject(CCString::create("<font color=961 newline=16>5콤보 달성시 마다<font color=961 newline=16>미사일을 발사하여<font color=961 newline=16>상대의 점수를 깍습니다."), kMyLocalKey_endlessTutorialMent10);
+	ko->setObject(CCString::create("화면을 터치하면 게임 진행됩니다."), kMyLocalKey_endlessTutorialMent11);
+	ko->setObject(CCString::create("<font color=961>나의 결과"), kMyLocalKey_endlessTutorialMent12);
+	ko->setObject(CCString::create("<font color=961>상대방 결과"), kMyLocalKey_endlessTutorialMent13);
+	ko->setObject(CCString::create("<font>스크롤하면 점수 내역을 볼 수 있어요."), kMyLocalKey_endlessTutorialMent14);
+	ko->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
+	ko->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
+	ko->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);

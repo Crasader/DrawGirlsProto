@@ -28,6 +28,7 @@
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
 #include "EndlessSeqWinRewardPopup.h"
+#include "StyledLabelTTF.h"
 
 enum EndlessModeResultZorder
 {
@@ -1284,8 +1285,25 @@ void EndlessModeResult::startCalcAnimation()
 																															  particle2->setPosition(result_stamp->getPosition());
 																															  main_case->addChild(particle2);
 																															  
-																															  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																															  t_suction_layer->touch_began_func = [=]()
+																															  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																															  {
+																																  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																  t_suction_layer->touch_began_func = [=]()
+																																  {
+																																	  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																														   {
+																																															   KS::setOpacity(result_stamp, 255-t*155);
+																																														   }, [=](float t)
+																																														   {
+																																															   KS::setOpacity(result_stamp, 100);
+																																														   }));
+																																	  t_suction_layer->removeFromParent();
+																																  };
+																																  t_suction_layer->is_on_touch_began_func = true;
+																																  addChild(t_suction_layer);
+																																  t_suction_layer->setTouchEnabled(true);
+																															  }
+																															  else
 																															  {
 																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																													   {
@@ -1294,11 +1312,7 @@ void EndlessModeResult::startCalcAnimation()
 																																													   {
 																																														   KS::setOpacity(result_stamp, 100);
 																																													   }));
-																																  t_suction_layer->removeFromParent();
-																															  };
-																															  t_suction_layer->is_on_touch_began_func = true;
-																															  addChild(t_suction_layer);
-																															  t_suction_layer->setTouchEnabled(true);
+																															  }
 																															  
 																															  
 																															  is_menu_enable = true;
@@ -1325,8 +1339,25 @@ void EndlessModeResult::startCalcAnimation()
 																															  KS::setOpacity(result_stamp, 255);
 																															  result_stamp->setScale(1.f);
 																															  
-																															  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																															  t_suction_layer->touch_began_func = [=]()
+																															  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																															  {
+																																  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																  t_suction_layer->touch_began_func = [=]()
+																																  {
+																																	  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																														   {
+																																															   KS::setOpacity(result_stamp, 255-t*155);
+																																														   }, [=](float t)
+																																														   {
+																																															   KS::setOpacity(result_stamp, 100);
+																																														   }));
+																																	  t_suction_layer->removeFromParent();
+																																  };
+																																  t_suction_layer->is_on_touch_began_func = true;
+																																  addChild(t_suction_layer);
+																																  t_suction_layer->setTouchEnabled(true);
+																															  }
+																															  else
 																															  {
 																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																													   {
@@ -1335,16 +1366,230 @@ void EndlessModeResult::startCalcAnimation()
 																																													   {
 																																														   KS::setOpacity(result_stamp, 100);
 																																													   }));
-																																  t_suction_layer->removeFromParent();
-																															  };
-																															  t_suction_layer->is_on_touch_began_func = true;
-																															  addChild(t_suction_layer);
-																															  t_suction_layer->setTouchEnabled(true);
+																															  }
 																															  
 																															  is_menu_enable = true;
 																															  bottom_menu->setVisible(true);
 																														  }));
 																			   }
+																			   
+																			   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+																				{
+																					CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																					float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																					if(screen_scale_x < 1.f)
+																						screen_scale_x = 1.f;
+																					
+																					CCNode* t_stencil_node = CCNode::create();
+																					CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+																					t_stencil1->setContentSize(left_back->getContentSize() + CCSizeMake(10, 10));
+																					t_stencil1->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + left_back->getPosition());
+																					t_stencil_node->addChild(t_stencil1);
+																					
+																					CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+																					t_clipping->setAlphaThreshold(0.1f);
+																					
+																					float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																					
+																					float change_scale = 1.f;
+																					CCPoint change_origin = ccp(0,0);
+																					if(screen_scale_x > 1.f)
+																					{
+																						change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+																						change_scale = screen_scale_x;
+																					}
+																					if(screen_scale_y > 1.f)
+																						change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+																					CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+																					t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+																					
+																					
+																					CCSprite* t_gray = CCSprite::create("back_gray.png");
+																					t_gray->setScaleX(screen_scale_x);
+																					t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+																					t_gray->setOpacity(0);
+																					t_gray->setPosition(ccp(240,160));
+																					t_clipping->addChild(t_gray);
+																					
+																					CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+																					t_arrow1->setRotation(180);
+																					t_arrow1->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 10));
+																					t_clipping->addChild(t_arrow1);
+																					
+																					StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent12), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																					t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+																					t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+																					t_clipping->addChild(t_ment1);
+																					
+																					CCNode* scroll_ment_node = CCNode::create();
+																					scroll_ment_node->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + right_back->getPosition() + ccpFromSize(right_back->getContentSize()/(-2.f)) +
+																												  right_table->getPosition() + ccp(right_back->getContentSize().width-20, 90)/2.f);
+																					t_clipping->addChild(scroll_ment_node);
+																					
+																					CCSprite* scroll_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+																					scroll_arrow1->setPosition(ccp(0,20));
+																					scroll_ment_node->addChild(scroll_arrow1);
+																					
+																					CCSprite* scroll_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
+																					scroll_arrow2->setRotation(180);
+																					scroll_arrow2->setPosition(ccp(0,-20));
+																					scroll_ment_node->addChild(scroll_arrow2);
+																					
+																					StyledLabelTTF* scroll_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent14), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																					scroll_label->setAnchorPoint(ccp(0.5f,0.5f));
+																					scroll_label->setPosition(ccp(0,0));
+																					scroll_ment_node->addChild(scroll_label);
+																					
+																					
+																					TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																					addChild(t_suction);
+																					t_suction->setTouchEnabled(true);
+																					
+																					t_clipping->setInverted(true);
+																					addChild(t_clipping, 9999);
+																					
+																					addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																														   {
+																															   t_gray->setOpacity(t*255);
+																														   }, [=](float t)
+																														   {
+																															   t_gray->setOpacity(255);
+																															   
+																															   t_suction->touch_began_func = [=]()
+																															   {
+																																   t_suction->is_on_touch_began_func = false;
+																																   
+																																   t_arrow1->removeFromParent();
+																																   t_ment1->removeFromParent();
+																																   
+																																   t_stencil1->setContentSize(right_back->getContentSize() + CCSizeMake(10, 10));
+																																   t_stencil1->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + right_back->getPosition());
+																																   
+																																   CCSprite* t_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
+																																   t_arrow2->setRotation(180);
+																																   t_arrow2->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 10));
+																																   t_clipping->addChild(t_arrow2);
+																																   
+																																   StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent13), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+																																   t_ment2->setAnchorPoint(ccp(0.5f,0.f));
+																																   t_ment2->setPosition(t_arrow2->getPosition() + ccp(0, t_arrow2->getContentSize().height/2.f + 3));
+																																   t_clipping->addChild(t_ment2);
+																																   
+																																   scroll_ment_node->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + left_back->getPosition() + ccpFromSize(left_back->getContentSize()/(-2.f)) +
+																																								 left_table->getPosition() + ccp((480-30)/2.f-20, 90)/2.f);
+																																   
+																																   t_suction->touch_began_func = [=]()
+																																   {
+																																	   t_suction->is_on_touch_began_func = false;
+																																	   
+																																	   t_arrow2->removeFromParent();
+																																	   t_ment2->removeFromParent();
+																																	   
+																																	   scroll_ment_node->removeFromParent();
+																																	   
+																																	   t_stencil1->setContentSize(CCSizeMake(200, 55) + CCSizeMake(10, 10));
+																																	   t_stencil1->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + bottom_menu->getPosition() + ccp(-main_case->getContentSize().width/2.f+right_back->getPositionX(), 0));
+																																	   
+																																	   CCSprite* t_arrow3 = CCSprite::create("main_tutorial_arrow1.png");
+																																	   t_arrow3->setRotation(180);
+																																	   t_arrow3->setPosition(t_stencil1->getPosition() + ccp(0, t_stencil1->getContentSize().height/2.f + 15));
+																																	   t_clipping->addChild(t_arrow3);
+																																	   
+																																	   StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent15), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																																	   t_ment3->setAnchorPoint(ccp(0.5f,0.f));
+																																	   t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, t_arrow3->getContentSize().height/2.f + 3));
+																																	   t_clipping->addChild(t_ment3);
+																																	   
+																																	   t_suction->touch_began_func = [=]()
+																																	   {
+																																		   t_suction->is_on_touch_began_func = false;
+																																		   
+																																		   t_arrow3->removeFromParent();
+																																		   t_ment3->removeFromParent();
+																																		   
+																																		   t_stencil1->setContentSize(CCSizeMake(10, 10));
+																																		   t_stencil1->setPosition(ccp(-500,-500));
+																																		   
+																																		   CCNode* t_popup_node = CCNode::create();
+																																		   t_popup_node->setPosition(ccp(240,160));
+																																		   t_clipping->addChild(t_popup_node);
+																																		   
+																																		   CCScale9Sprite* out_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+																																		   out_back->setContentSize(CCSizeMake(250, 130));
+																																		   out_back->setPosition(ccp(0,0));
+																																		   t_popup_node->addChild(out_back);
+																																		   
+																																		   KSLabelTTF* t_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent16), mySGD->getFont().c_str(), 15);
+																																		   t_title_label->setColor(ccc3(255,170,20));
+																																		   t_title_label->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height-25));
+																																		   out_back->addChild(t_title_label);
+																																		   
+																																		   CommonButton* t_close_button = CommonButton::createCloseButton(-99999);
+																																		   t_close_button->setPosition(ccp(out_back->getContentSize().width - 25, out_back->getContentSize().height - 25));
+																																		   t_close_button->setFunction([=](CCObject* sender)
+																																									   {
+																																										   if(!is_menu_enable)
+																																											   return;
+																																										   
+																																										   is_menu_enable = false;
+																																										   
+																																										   t_close_button->setEnabled(false);
+																																										   CommonAnimation::closePopup(this, t_popup_node, NULL);
+																																										   addChild(KSGradualValue<float>::create(255, 0, 0.25f, [=](float t)
+																																																				  {
+																																																					  t_gray->setOpacity(t);
+																																																				  }, [=](float t)
+																																																				  {
+																																																					  t_gray->setOpacity(0);
+																																																					  
+																																																					  myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
+																																																					  
+																																																					  ready_loading = LoadingLayer::create(-999);
+																																																					  addChild(ready_loading, 999);
+																																																					  
+																																																					  vector<CommandParam> command_list;
+																																																					  command_list.clear();
+																																																					  
+																																																					  Json::Value param3;
+																																																					  param3["memberID"] = myHSP->getMemberID();
+																																																					  
+																																																					  command_list.push_back(CommandParam("starttransaction", param3, nullptr));
+																																																					  
+																																																					  Json::Value param;
+																																																					  param["memberID"] = myHSP->getMemberID();
+																																																					  
+																																																					  command_list.push_back(CommandParam("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
+																																																					  
+																																																					  myHSP->command(command_list);
+																																																					  
+																																																					  t_suction->removeFromParent();
+																																																					  
+																																																					  t_clipping->removeFromParent();
+																																																				  }));
+																																									   });
+																																		   out_back->addChild(t_close_button);
+																																		   t_close_button->setEnabled(false);
+																																		   
+																																		   CCScale9Sprite* in_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+																																		   in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-15.5f));
+																																		   in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-11, -41.5f));
+																																		   out_back->addChild(in_back);
+																																		   
+																																		   StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																																		   t_content_label->setAnchorPoint(ccp(0.5f, 0.5f));
+																																		   t_content_label->setPosition(ccpFromSize(in_back->getContentSize()/2.f));
+																																		   in_back->addChild(t_content_label);
+																																		   
+																																		   CommonAnimation::openPopup(this, t_popup_node, NULL, nullptr, [=](){t_close_button->setEnabled(true);});
+																																	   };
+																																	   t_suction->is_on_touch_began_func = true;
+																																   };
+																																   t_suction->is_on_touch_began_func = true;
+																															   };
+																															   t_suction->is_on_touch_began_func = true;
+																															   
+																														   }));
+																				}
 
 																		   }));
 								}

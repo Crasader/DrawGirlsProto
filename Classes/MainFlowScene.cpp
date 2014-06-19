@@ -3017,12 +3017,273 @@ void MainFlowScene::topOnLight()
 																																  {
 																																	  mySGD->is_today_mission_first = false;
 																																	  
-																																	  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																																	  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+																																	  {
+																																		  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+																																		  {
+																																			  myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+																																			  
+																																			  CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																																			  float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																																			  if(screen_scale_x < 1.f)
+																																				  screen_scale_x = 1.f;
+																																			  
+																																			  CCNode* t_stencil_node = CCNode::create();
+																																			  CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+																																			  t_stencil1->setContentSize(CCSizeMake(50, 50));
+																																			  t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																																			  t_stencil_node->addChild(t_stencil1);
+																																			  
+																																			  CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+																																			  t_clipping->setAlphaThreshold(0.1f);
+																																			  
+																																			  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																																			  
+																																			  float change_scale = 1.f;
+																																			  CCPoint change_origin = ccp(0,0);
+																																			  if(screen_scale_x > 1.f)
+																																			  {
+																																				  change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+																																				  change_scale = screen_scale_x;
+																																			  }
+																																			  if(screen_scale_y > 1.f)
+																																				  change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+																																			  CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+																																			  t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+																																			  
+																																			  
+																																			  CCSprite* t_gray = CCSprite::create("back_gray.png");
+																																			  t_gray->setScaleX(screen_scale_x);
+																																			  t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+																																			  t_gray->setOpacity(0);
+																																			  t_gray->setPosition(ccp(240,160));
+																																			  t_clipping->addChild(t_gray);
+																																			  
+																																			  CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+																																			  t_arrow1->setRotation(180);
+																																			  t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+																																			  t_clipping->addChild(t_arrow1);
+																																			  
+																																			  StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																																			  t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+																																			  t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+																																			  t_clipping->addChild(t_ment1);
+																																			  
+																																			  TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																																			  addChild(t_suction);
+																																			  t_suction->setTouchEnabled(true);
+																																			  //
+																																			  //		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																																			  //		n_button->setOpacity(0);
+																																			  //		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																																			  //		s_button->setOpacity(0);
+																																			  //		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
+																																			  //																			   {
+																																			  //																				   if(!is_menu_enable)
+																																			  //																					   return;
+																																			  //
+																																			  //																				   is_menu_enable = false;
+																																			  //
+																																			  //																				   t_arrow1->removeFromParent();
+																																			  //																				   t_ment1->removeFromParent();
+																																			  //																				   
+																																			  //																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																			  //																														  {
+																																			  //																															  t_gray->setOpacity(t*255);
+																																			  //																														  }, [=](float t)
+																																			  //																														  {
+																																			  //																															  t_gray->setOpacity(t*255);
+																																			  //																															  
+																																			  //																															  t_suction->removeFromParent();
+																																			  //																															  
+																																			  //																															  showEndlessOpening();
+																																			  //																															  t_clipping->removeFromParent();
+																																			  //																														  }));
+																																			  //																			   });
+																																			  //		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
+																																			  //		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																																			  //		t_clipping->addChild(t_lambda_menu);
+																																			  //		t_lambda_menu->setTouchPriority(-10000);
+																																			  //		
+																																			  //		t_lambda_menu->addChild(t_lambda_item);
+																																			  
+																																			  t_clipping->setInverted(true);
+																																			  addChild(t_clipping, 9999);
+																																			  
+																																			  addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																																													 {
+																																														 t_gray->setOpacity(t*255);
+																																													 }, [=](float t)
+																																													 {
+																																														 t_gray->setOpacity(255);
+																																														 is_menu_enable = true;
+																																														 
+																																														 t_suction->touch_began_func = [=]()
+																																														 {
+																																															 t_suction->is_on_touch_began_func = false;
+																																															 if(!is_menu_enable)
+																																																 return;
+																																															 
+																																															 is_menu_enable = false;
+																																															 
+																																															 t_arrow1->removeFromParent();
+																																															 t_ment1->removeFromParent();
+																																															 
+																																															 addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																																									{
+																																																										t_gray->setOpacity(t*255);
+																																																									}, [=](float t)
+																																																									{
+																																																										t_gray->setOpacity(t*255);
+																																																										
+																																																										t_suction->removeFromParent();
+																																																										
+																																																										showEndlessOpening();
+																																																										t_clipping->removeFromParent();
+																																																									}));
+																																															 
+																																														 };
+																																														 t_suction->is_on_touch_began_func = true;
+																																														 
+																																													 }));
+																																		  }
+																																		  else
+																																			  is_menu_enable = true;
+																																	  });
 																																	  addChild(t_popup, kMainFlowZorder_popup);
 																																  }
 																																  else
 																																  {
-																																	  is_menu_enable = true;
+																																	  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+																																	  {
+																																		  myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+																																		  
+																																		  CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																																		  float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																																		  if(screen_scale_x < 1.f)
+																																			  screen_scale_x = 1.f;
+																																		  
+																																		  CCNode* t_stencil_node = CCNode::create();
+																																		  CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+																																		  t_stencil1->setContentSize(CCSizeMake(50, 50));
+																																		  t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																																		  t_stencil_node->addChild(t_stencil1);
+																																		  
+																																		  CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+																																		  t_clipping->setAlphaThreshold(0.1f);
+																																		  
+																																		  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																																		  
+																																		  float change_scale = 1.f;
+																																		  CCPoint change_origin = ccp(0,0);
+																																		  if(screen_scale_x > 1.f)
+																																		  {
+																																			  change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+																																			  change_scale = screen_scale_x;
+																																		  }
+																																		  if(screen_scale_y > 1.f)
+																																			  change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+																																		  CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+																																		  t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+																																		  
+																																		  
+																																		  CCSprite* t_gray = CCSprite::create("back_gray.png");
+																																		  t_gray->setScaleX(screen_scale_x);
+																																		  t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+																																		  t_gray->setOpacity(0);
+																																		  t_gray->setPosition(ccp(240,160));
+																																		  t_clipping->addChild(t_gray);
+																																		  
+																																		  CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+																																		  t_arrow1->setRotation(180);
+																																		  t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+																																		  t_clipping->addChild(t_arrow1);
+																																		  
+																																		  StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																																		  t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+																																		  t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+																																		  t_clipping->addChild(t_ment1);
+																																		  
+																																		  TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																																		  addChild(t_suction);
+																																		  t_suction->setTouchEnabled(true);
+																																		  //
+																																		  //		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																																		  //		n_button->setOpacity(0);
+																																		  //		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																																		  //		s_button->setOpacity(0);
+																																		  //		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
+																																		  //																			   {
+																																		  //																				   if(!is_menu_enable)
+																																		  //																					   return;
+																																		  //
+																																		  //																				   is_menu_enable = false;
+																																		  //
+																																		  //																				   t_arrow1->removeFromParent();
+																																		  //																				   t_ment1->removeFromParent();
+																																		  //
+																																		  //																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																		  //																														  {
+																																		  //																															  t_gray->setOpacity(t*255);
+																																		  //																														  }, [=](float t)
+																																		  //																														  {
+																																		  //																															  t_gray->setOpacity(t*255);
+																																		  //																															  
+																																		  //																															  t_suction->removeFromParent();
+																																		  //																															  
+																																		  //																															  showEndlessOpening();
+																																		  //																															  t_clipping->removeFromParent();
+																																		  //																														  }));
+																																		  //																			   });
+																																		  //		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
+																																		  //		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																																		  //		t_clipping->addChild(t_lambda_menu);
+																																		  //		t_lambda_menu->setTouchPriority(-10000);
+																																		  //		
+																																		  //		t_lambda_menu->addChild(t_lambda_item);
+																																		  
+																																		  t_clipping->setInverted(true);
+																																		  addChild(t_clipping, 9999);
+																																		  
+																																		  addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																																												 {
+																																													 t_gray->setOpacity(t*255);
+																																												 }, [=](float t)
+																																												 {
+																																													 t_gray->setOpacity(255);
+																																													 is_menu_enable = true;
+																																													 
+																																													 t_suction->touch_began_func = [=]()
+																																													 {
+																																														 t_suction->is_on_touch_began_func = false;
+																																														 if(!is_menu_enable)
+																																															 return;
+																																														 
+																																														 is_menu_enable = false;
+																																														 
+																																														 t_arrow1->removeFromParent();
+																																														 t_ment1->removeFromParent();
+																																														 
+																																														 addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																																								{
+																																																									t_gray->setOpacity(t*255);
+																																																								}, [=](float t)
+																																																								{
+																																																									t_gray->setOpacity(t*255);
+																																																									
+																																																									t_suction->removeFromParent();
+																																																									
+																																																									showEndlessOpening();
+																																																									t_clipping->removeFromParent();
+																																																								}));
+																																														 
+																																													 };
+																																													 t_suction->is_on_touch_began_func = true;
+																																													 
+																																												 }));
+																																	  }
+																																	  else
+																																		  is_menu_enable = true;
 																																  }
 																															  });
 																		   addChild(t_popup, kMainFlowZorder_popup);
@@ -3038,12 +3299,273 @@ void MainFlowScene::topOnLight()
 															   {
 																   mySGD->is_today_mission_first = false;
 																   
-																   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+																   {
+																	   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+																	   {
+																		   myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+																		   
+																		   CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																		   float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																		   if(screen_scale_x < 1.f)
+																			   screen_scale_x = 1.f;
+																		   
+																		   CCNode* t_stencil_node = CCNode::create();
+																		   CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+																		   t_stencil1->setContentSize(CCSizeMake(50, 50));
+																		   t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																		   t_stencil_node->addChild(t_stencil1);
+																		   
+																		   CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+																		   t_clipping->setAlphaThreshold(0.1f);
+																		   
+																		   float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																		   
+																		   float change_scale = 1.f;
+																		   CCPoint change_origin = ccp(0,0);
+																		   if(screen_scale_x > 1.f)
+																		   {
+																			   change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+																			   change_scale = screen_scale_x;
+																		   }
+																		   if(screen_scale_y > 1.f)
+																			   change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+																		   CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+																		   t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+																		   
+																		   
+																		   CCSprite* t_gray = CCSprite::create("back_gray.png");
+																		   t_gray->setScaleX(screen_scale_x);
+																		   t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+																		   t_gray->setOpacity(0);
+																		   t_gray->setPosition(ccp(240,160));
+																		   t_clipping->addChild(t_gray);
+																		   
+																		   CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+																		   t_arrow1->setRotation(180);
+																		   t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+																		   t_clipping->addChild(t_arrow1);
+																		   
+																		   StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																		   t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+																		   t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+																		   t_clipping->addChild(t_ment1);
+																		   
+																		   TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																		   addChild(t_suction);
+																		   t_suction->setTouchEnabled(true);
+																		   //
+																		   //		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																		   //		n_button->setOpacity(0);
+																		   //		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																		   //		s_button->setOpacity(0);
+																		   //		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
+																		   //																			   {
+																		   //																				   if(!is_menu_enable)
+																		   //																					   return;
+																		   //
+																		   //																				   is_menu_enable = false;
+																		   //
+																		   //																				   t_arrow1->removeFromParent();
+																		   //																				   t_ment1->removeFromParent();
+																		   //
+																		   //																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																		   //																														  {
+																		   //																															  t_gray->setOpacity(t*255);
+																		   //																														  }, [=](float t)
+																		   //																														  {
+																		   //																															  t_gray->setOpacity(t*255);
+																		   //
+																		   //																															  t_suction->removeFromParent();
+																		   //
+																		   //																															  showEndlessOpening();
+																		   //																															  t_clipping->removeFromParent();
+																		   //																														  }));
+																		   //																			   });
+																		   //		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
+																		   //		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																		   //		t_clipping->addChild(t_lambda_menu);
+																		   //		t_lambda_menu->setTouchPriority(-10000);
+																		   //		
+																		   //		t_lambda_menu->addChild(t_lambda_item);
+																		   
+																		   t_clipping->setInverted(true);
+																		   addChild(t_clipping, 9999);
+																		   
+																		   addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																												  {
+																													  t_gray->setOpacity(t*255);
+																												  }, [=](float t)
+																												  {
+																													  t_gray->setOpacity(255);
+																													  is_menu_enable = true;
+																													  
+																													  t_suction->touch_began_func = [=]()
+																													  {
+																														  t_suction->is_on_touch_began_func = false;
+																														  if(!is_menu_enable)
+																															  return;
+																														  
+																														  is_menu_enable = false;
+																														  
+																														  t_arrow1->removeFromParent();
+																														  t_ment1->removeFromParent();
+																														  
+																														  addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																								 {
+																																									 t_gray->setOpacity(t*255);
+																																								 }, [=](float t)
+																																								 {
+																																									 t_gray->setOpacity(t*255);
+																																									 
+																																									 t_suction->removeFromParent();
+																																									 
+																																									 showEndlessOpening();
+																																									 t_clipping->removeFromParent();
+																																								 }));
+																														  
+																													  };
+																													  t_suction->is_on_touch_began_func = true;
+																													  
+																												  }));
+																	   }
+																	   else
+																		   is_menu_enable = true;
+																   });
 																   addChild(t_popup, kMainFlowZorder_popup);
 															   }
 															   else
 															   {
-																   is_menu_enable = true;
+																   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+																   {
+																	   myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+																	   
+																	   CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																	   float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																	   if(screen_scale_x < 1.f)
+																		   screen_scale_x = 1.f;
+																	   
+																	   CCNode* t_stencil_node = CCNode::create();
+																	   CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+																	   t_stencil1->setContentSize(CCSizeMake(50, 50));
+																	   t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																	   t_stencil_node->addChild(t_stencil1);
+																	   
+																	   CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+																	   t_clipping->setAlphaThreshold(0.1f);
+																	   
+																	   float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																	   
+																	   float change_scale = 1.f;
+																	   CCPoint change_origin = ccp(0,0);
+																	   if(screen_scale_x > 1.f)
+																	   {
+																		   change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+																		   change_scale = screen_scale_x;
+																	   }
+																	   if(screen_scale_y > 1.f)
+																		   change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+																	   CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+																	   t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+																	   
+																	   
+																	   CCSprite* t_gray = CCSprite::create("back_gray.png");
+																	   t_gray->setScaleX(screen_scale_x);
+																	   t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+																	   t_gray->setOpacity(0);
+																	   t_gray->setPosition(ccp(240,160));
+																	   t_clipping->addChild(t_gray);
+																	   
+																	   CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+																	   t_arrow1->setRotation(180);
+																	   t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+																	   t_clipping->addChild(t_arrow1);
+																	   
+																	   StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																	   t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+																	   t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+																	   t_clipping->addChild(t_ment1);
+																	   
+																	   TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																	   addChild(t_suction);
+																	   t_suction->setTouchEnabled(true);
+																	   //
+																	   //		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																	   //		n_button->setOpacity(0);
+																	   //		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																	   //		s_button->setOpacity(0);
+																	   //		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
+																	   //																			   {
+																	   //																				   if(!is_menu_enable)
+																	   //																					   return;
+																	   //
+																	   //																				   is_menu_enable = false;
+																	   //
+																	   //																				   t_arrow1->removeFromParent();
+																	   //																				   t_ment1->removeFromParent();
+																	   //
+																	   //																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																	   //																														  {
+																	   //																															  t_gray->setOpacity(t*255);
+																	   //																														  }, [=](float t)
+																	   //																														  {
+																	   //																															  t_gray->setOpacity(t*255);
+																	   //
+																	   //																															  t_suction->removeFromParent();
+																	   //
+																	   //																															  showEndlessOpening();
+																	   //																															  t_clipping->removeFromParent();
+																	   //																														  }));
+																	   //																			   });
+																	   //		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
+																	   //		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																	   //		t_clipping->addChild(t_lambda_menu);
+																	   //		t_lambda_menu->setTouchPriority(-10000);
+																	   //		
+																	   //		t_lambda_menu->addChild(t_lambda_item);
+																	   
+																	   t_clipping->setInverted(true);
+																	   addChild(t_clipping, 9999);
+																	   
+																	   addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																											  {
+																												  t_gray->setOpacity(t*255);
+																											  }, [=](float t)
+																											  {
+																												  t_gray->setOpacity(255);
+																												  is_menu_enable = true;
+																												  
+																												  t_suction->touch_began_func = [=]()
+																												  {
+																													  t_suction->is_on_touch_began_func = false;
+																													  if(!is_menu_enable)
+																														  return;
+																													  
+																													  is_menu_enable = false;
+																													  
+																													  t_arrow1->removeFromParent();
+																													  t_ment1->removeFromParent();
+																													  
+																													  addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																							 {
+																																								 t_gray->setOpacity(t*255);
+																																							 }, [=](float t)
+																																							 {
+																																								 t_gray->setOpacity(t*255);
+																																								 
+																																								 t_suction->removeFromParent();
+																																								 
+																																								 showEndlessOpening();
+																																								 t_clipping->removeFromParent();
+																																							 }));
+																													  
+																												  };
+																												  t_suction->is_on_touch_began_func = true;
+																												  
+																											  }));
+																   }
+																   else
+																	   is_menu_enable = true;
 															   }
 														   });
 		addChild(t_popup, kMainFlowZorder_popup);
@@ -3054,8 +3576,268 @@ void MainFlowScene::topOnLight()
 		
 		mySGD->is_today_mission_first = false;
 		
-		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+			{
+				myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+				
+				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+				if(screen_scale_x < 1.f)
+					screen_scale_x = 1.f;
+				
+				CCNode* t_stencil_node = CCNode::create();
+				CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+				t_stencil1->setContentSize(CCSizeMake(50, 50));
+				t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+				t_stencil_node->addChild(t_stencil1);
+				
+				CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+				t_clipping->setAlphaThreshold(0.1f);
+				
+				float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+				
+				float change_scale = 1.f;
+				CCPoint change_origin = ccp(0,0);
+				if(screen_scale_x > 1.f)
+				{
+					change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+					change_scale = screen_scale_x;
+				}
+				if(screen_scale_y > 1.f)
+					change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+				CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+				t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+				
+				
+				CCSprite* t_gray = CCSprite::create("back_gray.png");
+				t_gray->setScaleX(screen_scale_x);
+				t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+				t_gray->setOpacity(0);
+				t_gray->setPosition(ccp(240,160));
+				t_clipping->addChild(t_gray);
+				
+				CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+				t_arrow1->setRotation(180);
+				t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+				t_clipping->addChild(t_arrow1);
+				
+				StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+				t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+				t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+				t_clipping->addChild(t_ment1);
+				
+				TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+				addChild(t_suction);
+				t_suction->setTouchEnabled(true);
+				//
+				//		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+				//		n_button->setOpacity(0);
+				//		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+				//		s_button->setOpacity(0);
+				//		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
+				//																			   {
+				//																				   if(!is_menu_enable)
+				//																					   return;
+				//
+				//																				   is_menu_enable = false;
+				//
+				//																				   t_arrow1->removeFromParent();
+				//																				   t_ment1->removeFromParent();
+				//
+				//																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+				//																														  {
+				//																															  t_gray->setOpacity(t*255);
+				//																														  }, [=](float t)
+				//																														  {
+				//																															  t_gray->setOpacity(t*255);
+				//
+				//																															  t_suction->removeFromParent();
+				//
+				//																															  showEndlessOpening();
+				//																															  t_clipping->removeFromParent();
+				//																														  }));
+				//																			   });
+				//		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
+				//		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+				//		t_clipping->addChild(t_lambda_menu);
+				//		t_lambda_menu->setTouchPriority(-10000);
+				//
+				//		t_lambda_menu->addChild(t_lambda_item);
+				
+				t_clipping->setInverted(true);
+				addChild(t_clipping, 9999);
+				
+				addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+													   {
+														   t_gray->setOpacity(t*255);
+													   }, [=](float t)
+													   {
+														   t_gray->setOpacity(255);
+														   is_menu_enable = true;
+														   
+														   t_suction->touch_began_func = [=]()
+														   {
+															   t_suction->is_on_touch_began_func = false;
+															   if(!is_menu_enable)
+																   return;
+															   
+															   is_menu_enable = false;
+															   
+															   t_arrow1->removeFromParent();
+															   t_ment1->removeFromParent();
+															   
+															   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																									  {
+																										  t_gray->setOpacity(t*255);
+																									  }, [=](float t)
+																									  {
+																										  t_gray->setOpacity(t*255);
+																										  
+																										  t_suction->removeFromParent();
+																										  
+																										  showEndlessOpening();
+																										  t_clipping->removeFromParent();
+																									  }));
+															   
+														   };
+														   t_suction->is_on_touch_began_func = true;
+														   
+													   }));
+			}
+			else
+				is_menu_enable = true;
+		});
 		addChild(t_popup, kMainFlowZorder_popup);
+	}
+	else if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+	{
+		myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCNode* t_stencil_node = CCNode::create();
+		CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+		t_stencil1->setContentSize(CCSizeMake(50, 50));
+		t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+		t_stencil_node->addChild(t_stencil1);
+		
+		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+		t_clipping->setAlphaThreshold(0.1f);
+		
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		
+		float change_scale = 1.f;
+		CCPoint change_origin = ccp(0,0);
+		if(screen_scale_x > 1.f)
+		{
+			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+			change_scale = screen_scale_x;
+		}
+		if(screen_scale_y > 1.f)
+			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		
+		
+		CCSprite* t_gray = CCSprite::create("back_gray.png");
+		t_gray->setScaleX(screen_scale_x);
+		t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+		t_gray->setOpacity(0);
+		t_gray->setPosition(ccp(240,160));
+		t_clipping->addChild(t_gray);
+		
+		CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+		t_arrow1->setRotation(180);
+		t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+		t_clipping->addChild(t_arrow1);
+		
+		StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+		t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+		t_clipping->addChild(t_ment1);
+		
+		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+		addChild(t_suction);
+		t_suction->setTouchEnabled(true);
+//		
+//		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+//		n_button->setOpacity(0);
+//		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+//		s_button->setOpacity(0);
+//		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
+//																			   {
+//																				   if(!is_menu_enable)
+//																					   return;
+//																				   
+//																				   is_menu_enable = false;
+//																				   
+//																				   t_arrow1->removeFromParent();
+//																				   t_ment1->removeFromParent();
+//																				   
+//																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+//																														  {
+//																															  t_gray->setOpacity(t*255);
+//																														  }, [=](float t)
+//																														  {
+//																															  t_gray->setOpacity(t*255);
+//																															  
+//																															  t_suction->removeFromParent();
+//																															  
+//																															  showEndlessOpening();
+//																															  t_clipping->removeFromParent();
+//																														  }));
+//																			   });
+//		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
+//		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+//		t_clipping->addChild(t_lambda_menu);
+//		t_lambda_menu->setTouchPriority(-10000);
+//		
+//		t_lambda_menu->addChild(t_lambda_item);
+		
+		t_clipping->setInverted(true);
+		addChild(t_clipping, 9999);
+		
+		addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+											   {
+												   t_gray->setOpacity(t*255);
+											   }, [=](float t)
+											   {
+												   t_gray->setOpacity(255);
+												   is_menu_enable = true;
+												   
+												   t_suction->touch_began_func = [=]()
+												   {
+													   t_suction->is_on_touch_began_func = false;
+													   if(!is_menu_enable)
+														   return;
+													   
+													   is_menu_enable = false;
+													   
+													   t_arrow1->removeFromParent();
+													   t_ment1->removeFromParent();
+													   
+													   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																							  {
+																								  t_gray->setOpacity(t*255);
+																							  }, [=](float t)
+																							  {
+																								  t_gray->setOpacity(t*255);
+																								  
+																								  t_suction->removeFromParent();
+																								  
+																								  showEndlessOpening();
+																								  t_clipping->removeFromParent();
+																							  }));
+
+												   };
+												   t_suction->is_on_touch_began_func = true;
+												   
+											   }));
 	}
 }
 

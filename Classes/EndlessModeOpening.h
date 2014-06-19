@@ -74,6 +74,9 @@ private:
 	
 	TouchSuctionLayer* suction;
 	
+	function<void()> tutorial_success_func;
+	function<void()> tutorial_fail_func;
+	
 	bool is_menu_enable;
 	
 	CCSprite* gray;

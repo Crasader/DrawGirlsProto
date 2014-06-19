@@ -738,7 +738,25 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardSettingSpecialCardContent,
 	kMyLocalKey_cardSettingSpecialCardToMyCard,
 
-	kMyLocalKey_endlessReady
+	kMyLocalKey_endlessReady,
+	
+	kMyLocalKey_endlessTutorialMent1,
+	kMyLocalKey_endlessTutorialMent2,
+	kMyLocalKey_endlessTutorialMent3,
+	kMyLocalKey_endlessTutorialMent4,
+	kMyLocalKey_endlessTutorialMent5,
+	kMyLocalKey_endlessTutorialMent6,
+	kMyLocalKey_endlessTutorialMent7,
+	kMyLocalKey_endlessTutorialMent8,
+	kMyLocalKey_endlessTutorialMent9,
+	kMyLocalKey_endlessTutorialMent10,
+	kMyLocalKey_endlessTutorialMent11,
+	kMyLocalKey_endlessTutorialMent12,
+	kMyLocalKey_endlessTutorialMent13,
+	kMyLocalKey_endlessTutorialMent14,
+	kMyLocalKey_endlessTutorialMent15,
+	kMyLocalKey_endlessTutorialMent16,
+	kMyLocalKey_endlessTutorialMent17
 }MyLocalKey;
 
 

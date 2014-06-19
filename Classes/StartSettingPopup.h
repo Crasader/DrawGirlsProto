@@ -57,6 +57,9 @@ private:
 	
 	CCNode* tutorial_node;
 	
+	function<void()> tutorial_success_func;
+	function<void()> tutorial_fail_func;
+	
 	CCNode* missile_img;
 	
 	KSLabelTTF* n_start_label2;

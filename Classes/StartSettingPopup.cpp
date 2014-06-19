@@ -318,7 +318,7 @@ void StartSettingPopup::setMain()
 	
 	
 	
-	if(!show_item_popup.empty())
+	if(!show_item_popup.empty() && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
 	{
 		ASPopupView* t_popup = ASPopupView::create(touch_priority-100);
 		
@@ -810,7 +810,109 @@ void StartSettingPopup::setMain()
 		
 		is_menu_enable = true;
 		
-		if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() && mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
+		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+		{
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			CCNode* t_stencil_node = CCNode::create();
+			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+			t_stencil1->setContentSize(n_start->getContentSize() + CCSizeMake(10, 10));
+			t_stencil1->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + start_menu->getPosition());
+			t_stencil_node->addChild(t_stencil1);
+			
+			CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+			t_clipping->setAlphaThreshold(0.1f);
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			float change_scale = 1.f;
+			CCPoint change_origin = ccp(0,0);
+			if(screen_scale_x > 1.f)
+			{
+				change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+				change_scale = screen_scale_x;
+			}
+			if(screen_scale_y > 1.f)
+				change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+			CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+			t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+			
+			
+			CCSprite* t_gray = CCSprite::create("back_gray.png");
+			t_gray->setScaleX(screen_scale_x);
+			t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+			t_gray->setOpacity(0);
+			t_gray->setPosition(ccp(240,160));
+			t_clipping->addChild(t_gray);
+			
+			CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+			t_arrow1->setRotation(180);
+			t_arrow1->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 15));
+			t_clipping->addChild(t_arrow1);
+			
+			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent5), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+			t_clipping->addChild(t_ment1);
+			
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+			addChild(t_suction);
+			t_suction->setTouchEnabled(true);
+			
+			t_clipping->setInverted(true);
+			addChild(t_clipping, 9999);
+			
+			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+												   {
+													   t_gray->setOpacity(t*255);
+												   }, [=](float t)
+												   {
+													   t_gray->setOpacity(255);
+													   is_menu_enable = true;
+													   
+													   t_suction->touch_began_func = [=]()
+													   {
+														   t_suction->is_on_touch_began_func = false;
+														   if(!is_menu_enable)
+															   return;
+														   
+														   is_menu_enable = false;
+														   
+														   tutorial_success_func = [=]()
+														   {
+															   t_arrow1->removeFromParent();
+															   t_ment1->removeFromParent();
+															   
+															   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
+																									  {
+																										  t_gray->setOpacity(255*t);
+																									  }, [=](float t)
+																									  {
+																										  t_gray->setOpacity(255*t);
+																										  
+																										  t_suction->removeFromParent();
+																										  
+																										  t_clipping->removeFromParent();
+																									  }));
+														   };
+														   
+														   tutorial_fail_func = [=]()
+														   {
+															   t_suction->is_on_touch_began_func = true;
+															   is_menu_enable = true;
+														   };
+														   
+														   callStart();
+													   };
+													   t_suction->is_on_touch_began_func = true;
+													   
+												   }));
+		}
+		else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() &&
+				mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
 		{
 			is_menu_enable = false;
 			LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -1789,6 +1891,8 @@ void StartSettingPopup::callStart()
 		
 		if(!is_open)
 		{
+			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+				tutorial_fail_func();
 			is_go_to_mainflow = true;
 			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_timeOutFrame)), 9999);
 			closeAction();
@@ -1837,9 +1941,13 @@ void StartSettingPopup::callStart()
 		}
 		
 		if(is_startGame)
+		{
 			realStartAction();
+		}
 		else
 		{
+			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+				tutorial_fail_func();
 			is_menu_enable = true;
 		}
 	}
@@ -1856,7 +1964,12 @@ void StartSettingPopup::callStart()
 																t_shop->setShopCode(kSC_heart);
 																t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 																addChild(t_shop, kStartSettingPopupZorder_popup);
-															}, [=](){is_menu_enable = true;}), 9999);
+															}, [=]()
+		{
+			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+				tutorial_fail_func();
+			is_menu_enable = true;
+		}), 9999);
 	}
 }
 
@@ -2041,6 +2154,9 @@ void StartSettingPopup::cancelGame()
 		
 		mySGD->resetUsingItem();
 		
+		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+			tutorial_fail_func();
+		
 		is_menu_enable = true;
 	}
 }
@@ -2063,6 +2179,8 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+			tutorial_success_func();
 		goToGame();
 	}
 	else
