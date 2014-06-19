@@ -564,6 +564,7 @@ void hspConnector::openHSPUrl(const std::string& url)
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 }
 
@@ -578,7 +579,7 @@ void hspConnector::openHSPNotice()
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 	
 }
