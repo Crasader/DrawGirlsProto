@@ -144,9 +144,21 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	content_label->setPosition(ccp(back_in->getContentSize().width / 2.f, 50));
 	back_in->addChild(content_label);
 		
-	
-	CommonAnimation::openPopup(this, m_container, gray, [=](){
-	}, [=](){
-		is_menu_enable = true;
-	});
+	if(!is_perfect)
+	{
+		addChild(KSTimer::create(1.f, [=]()
+								 {
+									 CommonAnimation::openPopup(this, m_container, gray, [=](){
+									 }, [=](){
+										 is_menu_enable = true;
+									 });
+								 }));
+	}
+	else
+	{
+		CommonAnimation::openPopup(this, m_container, gray, [=](){
+		}, [=](){
+			is_menu_enable = true;
+		});
+	}
 }

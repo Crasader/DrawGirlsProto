@@ -327,6 +327,8 @@ private:
 	
 	CCSprite* replay_bomb;
 	
+	CCNode* endless_you_bomb_node;
+	
 	void startStory();
 	void endIntro();
 	

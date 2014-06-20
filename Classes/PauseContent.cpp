@@ -194,6 +194,9 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	gohome_button->setTouchPriority(touch_priority-1);
 	
+	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+		gohome_button->setEnabled(false);
+	
 //	CommonButton* gohome_menu = CommonButton::create("나가기", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
 //	gohome_menu->setPosition(ccp(0, 11));
 //	gohome_menu->setFunction([=](CCObject* sender)

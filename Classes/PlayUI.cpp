@@ -2845,14 +2845,18 @@ void PlayUI::myInit ()
 		{
 			nick_label->setPositionX(40-20+selectedFlagSpr->getContentSize().width/2.f*selectedFlagSpr->getScale()+2);
 			
+			endless_me_bomb_node = CCNode::create();
+			endless_me_bomb_node->setPosition(ccp(40, myDSH->ui_center_y+60));
+			addChild(endless_me_bomb_node, -1);
+			
 			CCClippingNode* me_bomb_clipping = CCClippingNode::create(CCSprite::create("endless_bomb_mask.png"));
 			me_bomb_clipping->setAlphaThreshold(0.1f);
-			me_bomb_clipping->setPosition(ccp(40, myDSH->ui_center_y+60));
-			addChild(me_bomb_clipping, -2);
+			me_bomb_clipping->setPosition(ccp(0, 0));
+			endless_me_bomb_node->addChild(me_bomb_clipping, -1);
 			
 			CCSprite* me_bomb_img = CCSprite::create("endless_bomb.png");
-			me_bomb_img->setPosition(ccp(40, myDSH->ui_center_y+60));
-			addChild(me_bomb_img, -1);
+			me_bomb_img->setPosition(ccp(0, 0));
+			endless_me_bomb_node->addChild(me_bomb_img);
 			
 			auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_me.ccbi");
 			bomb_img = temp.first;
@@ -3455,7 +3459,10 @@ void PlayUI::hideThumb()
 {
 	thumb_node->setVisible(false);
 	if(mySGD->is_endless_mode)
-		bomb_img->setVisible(false);
+	{
+		endless_me_bomb_node->setVisible(false);
+//		bomb_img->setVisible(false);
+	}
 }
 
 bool PlayUI::isExchanged ()

@@ -639,14 +639,18 @@ void Maingame::finalSetting()
 	
 	if(mySGD->is_play_replay)
 	{
+		endless_you_bomb_node = CCNode::create();
+		endless_you_bomb_node->setPosition(ccp(440, myDSH->ui_center_y+60));
+		addChild(endless_you_bomb_node, clearshowtimeZorder);
+		
 		CCClippingNode* you_bomb_clipping = CCClippingNode::create(CCSprite::create("endless_bomb_mask.png"));
 		you_bomb_clipping->setAlphaThreshold(0.1f);
-		you_bomb_clipping->setPosition(ccp(440, myDSH->ui_center_y+60));
-		addChild(you_bomb_clipping, clearshowtimeZorder-1);
+		you_bomb_clipping->setPosition(ccp(0,0));
+		endless_you_bomb_node->addChild(you_bomb_clipping, -1);
 		
 		CCSprite* you_bomb_img = CCSprite::create("endless_bomb.png");
-		you_bomb_img->setPosition(ccp(440, myDSH->ui_center_y+60));
-		addChild(you_bomb_img, clearshowtimeZorder);
+		you_bomb_img->setPosition(ccp(0, 0));
+		endless_you_bomb_node->addChild(you_bomb_img);
 		
 		auto temp = KS::loadCCBI<CCSprite*>(this, "endless_bomb_you.ccbi");
 		replay_bomb = temp.first;
@@ -4086,6 +4090,10 @@ void Maingame::refreshReplayPosition(int temp_time)
 
 void Maingame::hideThumb()
 {
+	if(mySGD->is_endless_mode)
+	{
+		endless_you_bomb_node->setVisible(false);
+	}
 	myUI->hideThumb();
 	sil_thumb->setVisible(false);
 	

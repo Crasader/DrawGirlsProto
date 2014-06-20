@@ -92,6 +92,9 @@ bool EndlessModeResult::init()
 		is_calc = false;
 	}
 	
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+		mySGD->area_score = mySGD->area_score.getV() + 100;
+	
 	left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
 	left_life_decrease_score = (mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	left_time_base_score = left_life_base_score.getV() + left_life_decrease_score.getV();
@@ -250,7 +253,7 @@ bool EndlessModeResult::init()
 													}
 											 }));
 	
-	if(left_total_score.getV() <= right_total_score.getV() || mySGD->getIsAlwaysSavePlaydata() == 1)
+	if(left_total_score.getV() > right_total_score.getV() || mySGD->getIsAlwaysSavePlaydata() == 1)
 	{
 		Json::Value param2;
 		param2.clear();
@@ -966,11 +969,15 @@ void EndlessModeResult::setMain()
 	bottom_menu->addChild(stop_item);
 	bottom_menu->addChild(next_item);
 	
-	if(mySGD->getScore() <= mySGD->temp_endless_score.getV())
+	if(left_total_score.getV() <= right_total_score.getV())
 	{
 		next_item->setVisible(false);
 		stop_item->setPosition(ccp(0, 0));
 	}
+	
+	CCSprite* vs_img = CCSprite::create("endless_vs.png");
+	vs_img->setPosition(ccp(main_case->getContentSize().width/2.f, 210));
+	main_case->addChild(vs_img);
 	
 	if(is_calc)
 	{
@@ -978,7 +985,7 @@ void EndlessModeResult::setMain()
 	}
 	else
 	{
-		if(left_total_score > right_total_score)
+		if(left_total_score.getV() > right_total_score.getV())
 		{
 			// win
 			
@@ -1059,16 +1066,14 @@ void EndlessModeResult::setMain()
 		t_suction_layer->setTouchEnabled(true);
 	}
 	
-	CCSprite* vs_img = CCSprite::create("endless_vs.png");
-	vs_img->setPosition(ccp(main_case->getContentSize().width/2.f, 210));
-	main_case->addChild(vs_img);
-	
 	main_case->setScaleY(0.f);
 	
-	
-	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
-	curtain_node->setPosition(ccp(240,160));
-	addChild(curtain_node, 999);
+	if(is_calc)
+	{
+		CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode();
+		curtain_node->setPosition(ccp(240,160));
+		addChild(curtain_node, 999);
+	}
 	
 	addChild(KSTimer::create(0.6f, [=]()
 	{
@@ -1182,7 +1187,7 @@ void EndlessModeResult::startCalcAnimation()
 																			   left_table->CCScrollView::setDelegate(this);
 																			   right_table->CCScrollView::setDelegate(this);
 																			   
-																			   if(left_total_score > right_total_score)
+																			   if(left_total_score.getV() > right_total_score.getV())
 																			   {
 																				   // win
 																				   
