@@ -1538,6 +1538,37 @@ void Maingame::removeConditionLabel()
 		t_ment3->setPosition(t_arrow3->getPosition() + ccp(t_arrow3->getContentSize().width/2.f + 3, 0));
 		t_clipping->addChild(t_ment3);
 		
+		
+		float item_scale = 0.18f;
+		CCPoint item_base_position = ccp(40, myDSH->ui_center_y-10) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
+		CCPoint distance_position = ccp(14,0);
+		
+		CCNode* temp_item_node = CCNode::create();
+		tutorial_node->addChild(temp_item_node);
+		
+		vector<ITEM_CODE> t_vec_list;
+		t_vec_list.clear();
+		t_vec_list.push_back(kIC_baseSpeedUp);
+		t_vec_list.push_back(kIC_doubleItem);
+		t_vec_list.push_back(kIC_magnet);
+		t_vec_list.push_back(kIC_heartUp);
+		
+		for(int i=0;i<t_vec_list.size();i++)
+		{
+			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", t_vec_list[i])->getCString());
+			item_img->setScale(item_scale);
+			item_img->setOpacity(150);
+			item_img->setPosition(ccpAdd(item_base_position, ccpMult(distance_position, i)));
+			temp_item_node->addChild(item_img);
+			
+			CCSprite* item_case = CCSprite::create("ingame_itembox.png");
+			item_case->setPosition(ccp(item_img->getContentSize().width/2.f, item_img->getContentSize().height/2.f));
+			item_case->setScale(1.f/0.4f);
+			item_case->setOpacity(150);
+			item_img->addChild(item_case, -1);
+		}
+		
+		
 		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
 		tutorial_node->addChild(t_suction);
 		t_suction->setTouchEnabled(true);
@@ -1555,6 +1586,8 @@ void Maingame::removeConditionLabel()
 												   t_suction->touch_began_func = [=]()
 												   {
 													   t_suction->is_on_touch_began_func = false;
+													   
+													   temp_item_node->removeFromParent();
 													   
 													   t_arrow1->removeFromParent();
 													   t_ment1->removeFromParent();

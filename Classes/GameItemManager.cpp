@@ -1806,6 +1806,11 @@ void GameItemManager::startCounting()
 	schedule(schedule_selector(GameItemManager::counting), 1.f);
 }
 
+void GameItemManager::stopCounting()
+{
+	unschedule(schedule_selector(GameItemManager::counting));
+}
+
 void GameItemManager::dieCreateItem()
 {
 	for(int i=0;i<5;i++)
@@ -2089,6 +2094,7 @@ void GameItemManager::myInit()
 	myGD->V_CCPI["GIM_showAttackFloatingCoin"] = std::bind(&FloatingCoinParent::showAttackFloatingCoin, floating_coin_parent, std::placeholders::_1, std::placeholders::_2);
 	myGD->V_V["GIM_hideAllFloatingCoin"] = std::bind(&FloatingCoinParent::hideAllFloatingCoin, floating_coin_parent);
 	myGD->V_F["GIM_startClearFloatingCoin"] = std::bind(&FloatingCoinParent::startClearFloatCoin, floating_coin_parent, std::placeholders::_1);
+	myGD->V_V["GIM_stopCounting"] = std::bind(&GameItemManager::stopCounting, this);
 }
 
 //class GameItemPlasma : public GameItemBase

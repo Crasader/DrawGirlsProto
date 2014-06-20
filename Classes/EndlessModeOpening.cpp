@@ -562,15 +562,8 @@ void EndlessModeOpening::setMain()
 													   
 												   }));
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-//		is_menu_enable = true;
+		else
+			is_menu_enable = true;
 	});
 }
 

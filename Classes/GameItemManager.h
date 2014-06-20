@@ -349,6 +349,7 @@ public:
 	static GameItemManager* create();
 	void startItemSetting();
 	void startCounting();
+	void stopCounting();
 	void dieCreateItem();
 	void showCoin(CCObject* t_ui, SEL_CallFuncCCpI d_takeExchangeCoin);
 	void stopCoin();

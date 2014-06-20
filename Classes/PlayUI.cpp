@@ -2573,6 +2573,9 @@ void PlayUI::createBonusScore ()
 }
 void PlayUI::endGame (bool is_show_reason)
 {
+	myGD->communication("GIM_stopCounting");
+	//123123123 보스 움직임 완전 정지 시켜야 함, 패턴도
+	
 	AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
 	//		myGD->communication("CP_setGameover");
