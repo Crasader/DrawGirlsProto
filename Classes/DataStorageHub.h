@@ -147,7 +147,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_stageHighRank_int1,
 	
 	kDSH_Key_isShowMainflowDimmed,
-	kDSH_Key_isShowEndlessModeTutorial
+	kDSH_Key_isShowEndlessModeTutorial,
+	kSDH_Key_isShowOnePercentTutorial
 }DSH_Key;
 
 enum SpecialTutorialCode{
@@ -241,6 +242,7 @@ public:
 	void setPuzzleMapSceneShowType (int t_type);
 	void fFlush ();
 	void removeCache();
+	void initReturnPair();
 private:
 	map<string, KSProtectVar<bool>> dsh_cache_bool;
 	map<string, KSProtectVar<bool>>::iterator iter_bool;
@@ -248,7 +250,7 @@ private:
 	map<string, KSProtectVar<int>>::iterator iter_int;
 	map<string, KSProtectStr> dsh_cache_string;
 	map<string, KSProtectStr>::iterator iter_string;
-	
+	map<DSH_Key, string> return_value;
 //	map<string, bool> dsh_cache_bool;
 //	map<string, bool>::iterator iter_bool;
 //	map<string, int> dsh_cache_int;

@@ -224,152 +224,7 @@ CCPoint DataStorageHub::wideWidthFixTouch (CCPoint t_p)
 {	return ccp(t_p.x*mult_point.x + add_point.x, t_p.y*mult_point.y + add_point.y);	}
 string DataStorageHub::getKey (DSH_Key t_name)
 {
-	string return_value;
-	if(t_name == kDSH_Key_notFirstExe)								return_value = "nfe";
-	
-	else if(t_name == kDSH_Key_bgmOff)								return_value = "bgmoff";
-	else if(t_name == kDSH_Key_effectOff)							return_value = "effoff";
-	else if(t_name == kDSH_Key_uiType)								return_value = "uitype";
-	
-	else if(t_name == kDSH_Key_savedStar)							return_value = "ss";
-	else if(t_name == kDSH_Key_savedGold)							return_value = "sg";
-	else if(t_name == kDSH_Key_haveItemCnt_int1)					return_value = "hic%d";
-	else if(t_name == kDSH_Key_isShowItem_int1)						return_value = "isi%d";
-	
-	else if(t_name == kDSH_Key_heartCnt)							return_value = "hc";
-	else if(t_name == kDSH_Key_heartTime)							return_value = "ht";
-	
-	else if(t_name == kDSH_Key_puzzleMode)							return_value = "pm";
-	else if(t_name == kDSH_Key_selectedPuzzleNumber)				return_value = "spn";
-	else if(t_name == kDSH_Key_lastSelectedStageForPuzzle_int1)		return_value = "lssfp%d";
-	
-//	else if(t_name == kDSH_Key_endPlayedStage)						return_value = "eps";
-//	else if(t_name == kDSH_Key_stageClearRank_int1)					return_value = "scr%d";
-	
-	else if(t_name == kDSH_Key_selectedCharacter_int1_weaponSlot_int2)		return_value = "sc%dws%d"; // 0~(n-1)번째 캐릭터의 1~n번째 슬롯에 장착된 뷰티스톤의 id
-	else if(t_name == kDSH_Key_selfBeautyStoneID)					return_value = "sbsid"; // 1~n 의 뷰티스톤의 id
-	else if(t_name == kDSH_Key_haveBeautyStoneCnt)					return_value = "hbscnt"; // 0~n 의 뷰티스톤 개수
-	else if(t_name == kDSH_Key_haveBeautyStoneID_int1)				return_value = "hbsid%d"; // 1~haveBeautyStoneCnt 의 뷰티스톤 id
-	else if(t_name == kDSH_Key_beautyStoneType_int1)				return_value = "bstype%d"; // 1~selfBeautyStoneID 의 뷰티스톤 type
-	else if(t_name == kDSH_Key_beautyStoneRank_int1)				return_value = "bsrank%d"; // 1~selfBeautyStoneID 의 뷰티스톤 rank
-	else if(t_name == kDSH_Key_beautyStoneLevel_int1)				return_value = "bslevel%d"; // 1~selfBeautyStoneID 의 뷰티스톤 level
-	
-	
-	else if(t_name == kDSH_Key_selectedCard)						return_value = "scard";
-	else if(t_name == kDSH_Key_cardSortType)						return_value = "cst";
-		
-	else if(t_name == kDSH_Key_allHighScore)						return_value = "ahs";
-	
-	else if(t_name == kDSH_Key_jackBaseSpeed)						return_value = "jbs";
-	
-	else if(t_name == kDSH_Key_haveTicketCnt)						return_value = "htc";
-	else if(t_name == kDSH_Key_ticketUserId_int1)					return_value = "tui%d";
-	
-//	else if(t_name == kDSH_Key_openStageCnt)						return_value = "osc";
-//	else if(t_name == kDSH_Key_openStageNumber_int1)				return_value = "osn%d";
-//	else if(t_name == kDSH_Key_isOpenStage_int1)					return_value = "ios%d";
-//	else if(t_name == kDSH_Key_clearStageCnt)						return_value = "csc";
-//	else if(t_name == kDSH_Key_clearStageNumber_int1)				return_value = "csn%d";
-//	else if(t_name == kDSH_Key_isClearStage_int1)					return_value = "ics%d";
-	
-	else if(t_name == kDSH_Key_nick)								return_value = "nick";
-	else if(t_name == kDSH_Key_flag)								return_value = "flag";
-	
-	else if(t_name == kDSH_Key_wasTutorialPopupShockWave)			return_value = "wtpsw";
-	else if(t_name == kDSH_Key_wasTutorialPopupMissileTrace)		return_value = "wtpmt";
-	else if(t_name == kDSH_Key_wasTutorialPopupCrashArea)			return_value = "wtpca";
-	
-	else if(t_name == kDSH_Key_controlJoystickDirection)			return_value = "cjd";
-	else if(t_name == kDSH_Key_isEnableIrregularDirection)			return_value = "idid";
-	else if(t_name == kDSH_Key_isDisableDrawButton)					return_value = "iddb";
-	else if(t_name == kDSH_Key_isAlwaysInvisibleJoystick)				return_value = "iavj";
-	else if(t_name == kDSH_Key_isAlwaysCenterCharacter)				return_value = "iacc";
-	else if(t_name == kDSH_Key_isDisableLineOver)					return_value = "idlo";
-	else if(t_name == kDSH_Key_isJoystickCenterNotFixed)			return_value = "ijcnf";
-	
-	else if(t_name == kDSH_Key_hasShowTutorial_int1)				return_value = "hst%d";
-	else if(t_name == kDSH_Key_isControlJoystickNotFixed)				return_value = "icjf";
-	
-	else if(t_name == kDSH_Key_selectedCharacter)					return_value = "scharacter";
-	else if(t_name == kDSH_Key_weaponLevelForCharacter_int1)		return_value = "wplfc%d";
-	else if(t_name == kDSH_Key_isCharacterUnlocked_int1)			return_value = "icu%d";
-	
-	else if(t_name == kDSH_Key_noticeViewDate_int1)					return_value = "ntcvdt%d";
-	
-	else if(t_name == kDSH_Key_achieveDataCnt)						return_value = "adc";
-	else if(t_name == kDSH_Key_achieveData_int1_code)				return_value = "ad%dcode"; // 1 ~ cnt
-	else if(t_name == kDSH_Key_achieveData_int1_value)				return_value = "ad%dvalue"; // code
-	
-	else if(t_name == kDSH_Key_achieve_sendHeartCnt)				return_value = "achieve_shc";
-	else if(t_name == kDSH_Key_achieve_playBonusGameCnt)			return_value = "achieve_pbgc";
-	else if(t_name == kDSH_Key_achieve_mapGachaCnt)					return_value = "achieve_mgc";
-	else if(t_name == kDSH_Key_achieve_totalFeverCnt)				return_value = "achieve_tfc";
-	else if(t_name == kDSH_Key_achieve_seqNoFailCnt)				return_value = "achieve_snfc";
-	else if(t_name == kDSH_Key_achieve_catchMonsterCnt)				return_value = "achieve_cmc";
-	else if(t_name == kDSH_Key_achieve_continueCnt)					return_value = "achieve_cnc";
-	else if(t_name == kDSH_Key_achieve_attendanceCnt)				return_value = "achieve_ac";
-	else if(t_name == kDSH_Key_achieve_changeCnt)					return_value = "achieve_chc";
-	else if(t_name == kDSH_Key_achieve_failCnt)						return_value = "achieve_fc";
-	else if(t_name == kDSH_Key_achieve_inviteCnt)					return_value = "achieve_ic";
-	else if(t_name == kDSH_Key_achieve_challengeCnt)				return_value = "achieve_clc";
-	else if(t_name == kDSH_Key_achieve_helpCnt)						return_value = "achieve_hc";
-	else if(t_name == kDSH_Key_achieve_helpAcceptCnt)				return_value = "achieve_hac";
-	else if(t_name == kDSH_Key_achieve_challengeAcceptCnt)			return_value = "achieve_cac";
-	else if(t_name == kDSH_Key_achieve_upgradeSuccessCnt)			return_value = "achieve_usc";
-	else if(t_name == kDSH_Key_achieve_perfectClearCnt)				return_value = "achieve_pcc";
-	else if(t_name == kDSH_Key_achieve_seqAttendanceCnt)			return_value = "achieve_sac";
-	else if(t_name == kDSH_Key_achieve_gacha1Cnt)					return_value = "achieve_g1c";
-	else if(t_name == kDSH_Key_achieve_gacha2Cnt)					return_value = "achieve_g2c";
-	else if(t_name == kDSH_Key_achieve_gacha3Cnt)					return_value = "achieve_g3c";
-	else if(t_name == kDSH_Key_achieve_gacha4Cnt)					return_value = "achieve_g4c";
-	else if(t_name == kDSH_Key_achieve_weeklyTopCnt)				return_value = "achieve_wtc";
-	else if(t_name == kDSH_Key_achieve_startLuckyCnt)				return_value = "achieve_slc";
-	else if(t_name == kDSH_Key_achieve_enterShopCnt)				return_value = "achieve_esc";
-	else if(t_name == kDSH_Key_achieve_itemBuyCnt)					return_value = "achieve_ibc";
-	
-	else if(t_name == kDSH_Key_tutorial_flowStep)					return_value = "ttrl_fs";
-	
-	else if(t_name == kDSH_Key_minigame_playedCnt)					return_value = "mngm_pc";
-	else if(t_name == kDSH_Key_minigame_int1_stageNumber)			return_value = "mngm_%d_sn";
-	else if(t_name == kDSH_Key_minigame_int1_isPlayed)				return_value = "mngm_%d_ip";
-	
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_achievement)	return_value = "wotd_a";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_cardchange)	return_value = "wotd_cc";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_cardsetting)	return_value = "wotd_cset";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_cardstrength)	return_value = "wotd_cstr";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_friendoption_invite)		return_value = "wotd_fi";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_friendoption_list)			return_value = "wotd_fl";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_friendoption_surch)		return_value = "wotd_fs";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_main)						return_value = "wotd_m";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_rank)						return_value = "wotd_r";
-	else if(t_name == kDSH_Key_was_opened_tutorial_dimed_startsetting)				return_value = "wotd_s";
-	
-	else if(t_name == kDSH_Key_mission_willNeverWatch_bossLifeZero)			return_value = "mswnw_blz";
-	else if(t_name == kDSH_Key_mission_willNeverWatch_subCumberCatch)		return_value = "mswnw_scc";
-	else if(t_name == kDSH_Key_mission_willNeverWatch_bigArea)				return_value = "mswnw_ba";
-	else if(t_name == kDSH_Key_mission_willNeverWatch_itemCollect)			return_value = "mswnw_ic";
-	else if(t_name == kDSH_Key_mission_willNeverWatch_perfect)				return_value = "mswnw_pf";
-	else if(t_name == kDSH_Key_mission_willNeverWatch_timeLimit)			return_value = "mswnw_tl";
-	else if(t_name == kDSH_Key_mission_willNeverWatch_sequenceChange)		return_value = "mswnw_sqc";
-	
-	else if(t_name == kDSH_Key_storyReadPoint)								return_value = "srp";
-	
-	else if(t_name == kDSH_Key_isSafetyMode)								return_value = "ism";
-	else if(t_name == kDSH_Key_isPushOff)									return_value = "ipo";
-	else if(t_name == kDSH_Key_isMessageOff)								return_value = "imo";
-	
-	else if(t_name == kDSH_Key_atTimeShowFirstPurchase)						return_value = "ats_fp";
-	else if(t_name == kDSH_Key_atTimeShowEmptyItem)							return_value = "ats_ei";
-	else if(t_name == kDSH_Key_atTimeShowStupidNpuHelp)						return_value = "ats_snh";
-	else if(t_name == kDSH_Key_atTimeShowEventRubyShop)						return_value = "ats_ers";
-	else if(t_name == kDSH_Key_atTimeShowLevelupGuide)						return_value = "ats_lg";
-	
-	else if(t_name == kDSH_Key_stageHighRank_int1)							return_value = "stghr%d";
-	
-	else if(t_name == kDSH_Key_isShowMainflowDimmed)						return_value = "ismfd";
-	else if(t_name == kDSH_Key_isShowEndlessModeTutorial)					return_value = "isemt";
-	
-	return return_value;
+	return return_value[t_name];
 }
 Json::Value DataStorageHub::getSaveAllUserDataParam ()
 {
@@ -752,5 +607,152 @@ void DataStorageHub::myInit ()
 	is_cheat_key_enabled = false;
 	puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
 	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
+	initReturnPair();
+}
+
+void DataStorageHub::initReturnPair()
+{
+	return_value[kDSH_Key_notFirstExe] = "nfe";
+	return_value[kDSH_Key_bgmOff] = "bgmoff";
+	return_value[kDSH_Key_effectOff] = "effoff";
+	return_value[kDSH_Key_uiType] = "uitype";
+	
+	return_value[kDSH_Key_savedStar] = "ss";
+	return_value[kDSH_Key_savedGold] = "sg";
+	return_value[kDSH_Key_haveItemCnt_int1] = "hic%d";
+	return_value[kDSH_Key_isShowItem_int1] = "isi%d";
+	
+	return_value[kDSH_Key_heartCnt] = "hc";
+	return_value[kDSH_Key_heartTime] = "ht";
+	
+	return_value[kDSH_Key_puzzleMode] = "pm";
+	return_value[kDSH_Key_selectedPuzzleNumber] = "spn";
+	return_value[kDSH_Key_lastSelectedStageForPuzzle_int1] = "lssfp%d";
+	
+	//	return_value[kDSH_Key_endPlayedStage] = "eps";
+	//	return_value[kDSH_Key_stageClearRank_int1] = "scr%d";
+	
+	return_value[kDSH_Key_selectedCharacter_int1_weaponSlot_int2] = "sc%dws%d"; // 0~(n-1)번째 캐릭터의 1~n번째 슬롯에 장착된 뷰티스톤의 id
+	return_value[kDSH_Key_selfBeautyStoneID] = "sbsid"; // 1~n 의 뷰티스톤의 id
+	return_value[kDSH_Key_haveBeautyStoneCnt] = "hbscnt"; // 0~n 의 뷰티스톤 개수
+	return_value[kDSH_Key_haveBeautyStoneID_int1] = "hbsid%d"; // 1~haveBeautyStoneCnt 의 뷰티스톤 id
+	return_value[kDSH_Key_beautyStoneType_int1] = "bstype%d"; // 1~selfBeautyStoneID 의 뷰티스톤 type
+	return_value[kDSH_Key_beautyStoneRank_int1] = "bsrank%d"; // 1~selfBeautyStoneID 의 뷰티스톤 rank
+	return_value[kDSH_Key_beautyStoneLevel_int1] = "bslevel%d"; // 1~selfBeautyStoneID 의 뷰티스톤 level
+	
+	
+	return_value[kDSH_Key_selectedCard] = "scard";
+	return_value[kDSH_Key_cardSortType] = "cst";
+	
+	return_value[kDSH_Key_allHighScore] = "ahs";
+	
+	return_value[kDSH_Key_jackBaseSpeed] = "jbs";
+	
+	return_value[kDSH_Key_haveTicketCnt] = "htc";
+	return_value[kDSH_Key_ticketUserId_int1] = "tui%d";
+	
+	//	return_value[kDSH_Key_openStageCnt] = "osc";
+	//	return_value[kDSH_Key_openStageNumber_int1] = "osn%d";
+	//	return_value[kDSH_Key_isOpenStage_int1] = "ios%d";
+	//	return_value[kDSH_Key_clearStageCnt] = "csc";
+	//	return_value[kDSH_Key_clearStageNumber_int1] = "csn%d";
+	//	return_value[kDSH_Key_isClearStage_int1] = "ics%d";
+	
+	return_value[kDSH_Key_nick] = "nick";
+	return_value[kDSH_Key_flag] = "flag";
+	
+	return_value[kDSH_Key_wasTutorialPopupShockWave] = "wtpsw";
+	return_value[kDSH_Key_wasTutorialPopupMissileTrace] = "wtpmt";
+	return_value[kDSH_Key_wasTutorialPopupCrashArea] = "wtpca";
+	
+	return_value[kDSH_Key_controlJoystickDirection] = "cjd";
+	return_value[kDSH_Key_isEnableIrregularDirection] = "idid";
+	return_value[kDSH_Key_isDisableDrawButton] = "iddb";
+	return_value[kDSH_Key_isAlwaysInvisibleJoystick] = "iavj";
+	return_value[kDSH_Key_isAlwaysCenterCharacter] = "iacc";
+	return_value[kDSH_Key_isDisableLineOver] = "idlo";
+	return_value[kDSH_Key_isJoystickCenterNotFixed] = "ijcnf";
+	
+	return_value[kDSH_Key_hasShowTutorial_int1] = "hst%d";
+	return_value[kDSH_Key_isControlJoystickNotFixed] = "icjf";
+	
+	return_value[kDSH_Key_selectedCharacter] = "scharacter";
+	return_value[kDSH_Key_weaponLevelForCharacter_int1] = "wplfc%d";
+	return_value[kDSH_Key_isCharacterUnlocked_int1] = "icu%d";
+	
+	return_value[kDSH_Key_noticeViewDate_int1] = "ntcvdt%d";
+	
+	return_value[kDSH_Key_achieveDataCnt] = "adc";
+	return_value[kDSH_Key_achieveData_int1_code] = "ad%dcode"; // 1 ~ cnt
+	return_value[kDSH_Key_achieveData_int1_value] = "ad%dvalue"; // code
+	
+	return_value[kDSH_Key_achieve_sendHeartCnt] = "achieve_shc";
+	return_value[kDSH_Key_achieve_playBonusGameCnt] = "achieve_pbgc";
+	return_value[kDSH_Key_achieve_mapGachaCnt] = "achieve_mgc";
+	return_value[kDSH_Key_achieve_totalFeverCnt] = "achieve_tfc";
+	return_value[kDSH_Key_achieve_seqNoFailCnt] = "achieve_snfc";
+	return_value[kDSH_Key_achieve_catchMonsterCnt] = "achieve_cmc";
+	return_value[kDSH_Key_achieve_continueCnt] = "achieve_cnc";
+	return_value[kDSH_Key_achieve_attendanceCnt] = "achieve_ac";
+	return_value[kDSH_Key_achieve_changeCnt] = "achieve_chc";
+	return_value[kDSH_Key_achieve_failCnt] = "achieve_fc";
+	return_value[kDSH_Key_achieve_inviteCnt] = "achieve_ic";
+	return_value[kDSH_Key_achieve_challengeCnt] = "achieve_clc";
+	return_value[kDSH_Key_achieve_helpCnt] = "achieve_hc";
+	return_value[kDSH_Key_achieve_helpAcceptCnt] = "achieve_hac";
+	return_value[kDSH_Key_achieve_challengeAcceptCnt] = "achieve_cac";
+	return_value[kDSH_Key_achieve_upgradeSuccessCnt] = "achieve_usc";
+	return_value[kDSH_Key_achieve_perfectClearCnt] = "achieve_pcc";
+	return_value[kDSH_Key_achieve_seqAttendanceCnt] = "achieve_sac";
+	return_value[kDSH_Key_achieve_gacha1Cnt] = "achieve_g1c";
+	return_value[kDSH_Key_achieve_gacha2Cnt] = "achieve_g2c";
+	return_value[kDSH_Key_achieve_gacha3Cnt] = "achieve_g3c";
+	return_value[kDSH_Key_achieve_gacha4Cnt] = "achieve_g4c";
+	return_value[kDSH_Key_achieve_weeklyTopCnt] = "achieve_wtc";
+	return_value[kDSH_Key_achieve_startLuckyCnt] = "achieve_slc";
+	return_value[kDSH_Key_achieve_enterShopCnt] = "achieve_esc";
+	return_value[kDSH_Key_achieve_itemBuyCnt] = "achieve_ibc";
+	
+	return_value[kDSH_Key_tutorial_flowStep] = "ttrl_fs";
+	
+	return_value[kDSH_Key_minigame_playedCnt] = "mngm_pc";
+	return_value[kDSH_Key_minigame_int1_stageNumber] = "mngm_%d_sn";
+	return_value[kDSH_Key_minigame_int1_isPlayed] = "mngm_%d_ip";
+	
+	return_value[kDSH_Key_was_opened_tutorial_dimed_achievement] = "wotd_a";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_cardchange] = "wotd_cc";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_cardsetting] = "wotd_cset";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_cardstrength] = "wotd_cstr";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_friendoption_invite] = "wotd_fi";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_friendoption_list] = "wotd_fl";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_friendoption_surch] = "wotd_fs";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_main] = "wotd_m";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_rank] = "wotd_r";
+	return_value[kDSH_Key_was_opened_tutorial_dimed_startsetting] = "wotd_s";
+	
+	return_value[kDSH_Key_mission_willNeverWatch_bossLifeZero] = "mswnw_blz";
+	return_value[kDSH_Key_mission_willNeverWatch_subCumberCatch] = "mswnw_scc";
+	return_value[kDSH_Key_mission_willNeverWatch_bigArea] = "mswnw_ba";
+	return_value[kDSH_Key_mission_willNeverWatch_itemCollect] = "mswnw_ic";
+	return_value[kDSH_Key_mission_willNeverWatch_perfect] = "mswnw_pf";
+	return_value[kDSH_Key_mission_willNeverWatch_timeLimit] = "mswnw_tl";
+	return_value[kDSH_Key_mission_willNeverWatch_sequenceChange] = "mswnw_sqc";
+	
+	return_value[kDSH_Key_storyReadPoint] = "srp";
+	
+	return_value[kDSH_Key_isSafetyMode] = "ism";
+	return_value[kDSH_Key_isPushOff] = "ipo";
+	return_value[kDSH_Key_isMessageOff] = "imo";
+	
+	return_value[kDSH_Key_atTimeShowFirstPurchase] = "ats_fp";
+	return_value[kDSH_Key_atTimeShowEmptyItem] = "ats_ei";
+	return_value[kDSH_Key_atTimeShowStupidNpuHelp] = "ats_snh";
+	return_value[kDSH_Key_atTimeShowEventRubyShop] = "ats_ers";
+	return_value[kDSH_Key_atTimeShowLevelupGuide] = "ats_lg";
+	
+	return_value[kDSH_Key_stageHighRank_int1] = "stghr%d";
+	
+	return_value[kDSH_Key_isShowMainflowDimmed] = "ismfd";
+	return_value[kDSH_Key_isShowEndlessModeTutorial] = "isemt";
 }
 #undef LZZ_INLINE
