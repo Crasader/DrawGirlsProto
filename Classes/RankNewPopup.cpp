@@ -452,7 +452,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			
 			if(rankBack->getTag()!=1){
 				CCPoint original_position = list_cell_case->getPosition();
-				list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
+				list_cell_case->setPosition(ccpAdd(original_position, ccp(-500, 0)));
 				cell_action_list.push_back([=](){
 					delay_index = 0;
 					CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);
@@ -628,7 +628,7 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	
 	if(rankBack->getTag()!=1){
 		CCPoint original_position = list_cell_case->getPosition();
-		list_cell_case->setPosition(ccpAdd(original_position, ccp(500, 0)));
+		list_cell_case->setPosition(ccpAdd(original_position, ccp(-500, 0)));
 		cell_action_list.push_back([=](){
 			delay_index = i + 1;
 			CCDelayTime* t_delay = CCDelayTime::create(delay_index*0.2f);

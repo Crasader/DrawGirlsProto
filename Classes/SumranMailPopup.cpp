@@ -518,6 +518,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																	if(mail["reward"].isArray()){
 																		for(int i=0;i<mail["reward"].size();i++){
 																			string rewardType = mail["reward"][i].get("type","box").asString();
+																			if(rewardType=="fr" || rewardType=="pr")rewardType="r";
 																			int rewardCount = mail["reward"][i].get("count",1).asInt();
 																			CCScale9Sprite* back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 																			back->setContentSize(CCSizeMake(70, 70));
