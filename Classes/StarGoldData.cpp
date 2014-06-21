@@ -2805,6 +2805,8 @@ void StarGoldData::setRankUpRubyFee(int t_i){	rank_up_ruby_fee = t_i;}
 int StarGoldData::getRankUpRubyFee(){	return rank_up_ruby_fee.getV();}
 void StarGoldData::setRankUpAddRate(float t_f){	rank_up_add_rate = t_f;}
 float StarGoldData::getRankUpAddRate(){	return rank_up_add_rate.getV();}
+void StarGoldData::setSessionTime(int t_i){	sessionTime = t_i;}
+int StarGoldData::getSessionTime(){	return sessionTime.getV();}
 
 void StarGoldData::setFirstPurchasePlayCount(int t_i){	first_purchase_play_count = t_i;	}
 int StarGoldData::getFirstPurchasePlayCount(){	return first_purchase_play_count.getV();	}

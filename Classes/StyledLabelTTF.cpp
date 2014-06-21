@@ -505,7 +505,7 @@ void StyledLabelTTF::setStringByTag(const char* text){
 	
 	nl["linebreak"]=true;
 	nl["linespacing"]=1;
-	texts.push_back({"",nl.toStyledString()});
+	//texts.push_back({"",nl.toStyledString()});
 	
 	m_texts.clear();
 	

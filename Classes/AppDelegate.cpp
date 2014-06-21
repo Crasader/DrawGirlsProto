@@ -363,7 +363,11 @@ void AppDelegate::applicationDidEnterBackground()
 void AppDelegate::applicationWillEnterForeground()
 {
 	long long int nowTime = GraphDog::get()->getTime();
-	if(nowTime-lastTime>60){
+	int time = mySGD->getSessionTime();
+	if(!time)time=180;
+	
+	
+	if(nowTime-lastTime>time){
 		mySGD->resetLabels();
 		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 	}

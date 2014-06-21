@@ -539,6 +539,8 @@ public:
 	void setFuryPercent(float t_data);
 	void setSPRentCardThanks(int t_data);
 	void setPlayContinueFeeEndless(int t_data);
+	void setSessionTime(int t_i);
+	int getSessionTime();
 	
 	int getHeartMax();
 	int getHeartCoolTime();
@@ -968,6 +970,7 @@ private:
 	KSProtectVar<float> ai_adder_on_drew_or_damaged; //
 	KSProtectVar<float> fury_percent; //
 	KSProtectVar<int> SP_rent_card_thanks; // 소셜포인트 획득량-카드빌리고 보답할때
+	KSProtectVar<int> sessionTime; // 세션타임
 	
 	KSProtectVar<int> item_gacha_gold_fee; // 아이템 가챠 가격
 	KSProtectVar<int> item_gacha_replay_gold_fee; // 아이템 가챠 다시뽑기 가격

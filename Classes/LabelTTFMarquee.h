@@ -183,6 +183,7 @@ public:
 			float nextP = lastLabel->getPositionX() + lastLabel->getContentSize().width + 100;
 			if(nextP < this->getContentSize().width)nextP = this->getContentSize().width;
 			firstLabel->setPositionX(nextP);
+			
 			int strIndex = this->getNextTextIndex();
 			firstLabel->setTag(strIndex);
 			firstLabel->setStringByTag(m_texts[strIndex].c_str());
