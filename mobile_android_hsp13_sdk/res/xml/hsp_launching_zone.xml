@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launchingZoneList>
+
+    <launchingZone
+        name="PLATFORMQA-KR"
+        address="http://alpha-platform-lnc.m.hangame.com:10080/hsp/lnc"
+        isRealZone="false"
+        locale="KR" />
+    <launchingZone
+        name="PLATFORMQA-JP"
+        address="http://alpha-platform-lnc.m.hangame.com:10080/hsp/lnc"
+        isRealZone="false"
+        locale="JP" />
+    <launchingZone
+        name="PLATFORMQA-GLOBAL"
+        address="http://alpha-platform-lnc.m.hangame.com:10080/hsp/lnc"
+        isRealZone="false"
+        locale="GLOBAL" />
+    <launchingZone
+        name="ALPHA-KR"
+        address="http://alpha-lnc.m.hangame.com:10080/hsp/lnc"
+        isRealZone="false"
+        locale="KR" />
+    <launchingZone
+        name="ALPHA-US"
+        address="http://alpha-lnc.usp.toastoven.net:10080/hsp/lnc"
+        isRealZone="false"
+        locale="GLOBAL" />
+    <launchingZone
+        name="REAL-KR"
+        address="http://lnc.m.hangame.com:10080/hsp/lnc"
+        isRealZone="true"
+        locale="KR" />
+    <launchingZone
+        name="ALPHA-JP"
+        address="http://119.235.233.104:10080/hsp/lnc"
+        isRealZone="false"
+        locale="JP" />
+    <launchingZone
+        name="REAL-JP"
+        address="http://lnc.m.hangame.co.jp:10080/hsp/lnc"
+        isRealZone="true"
+        locale="JP" />
+    <launchingZone
+        name="ALPHA-GLOBAL-KR"
+        address="http://alpha-lnc.m.hangame.com:10080/hsp/lnc"
+        isRealZone="false"
+        locale="GLOBAL" />
+    <launchingZone
+        name="REAL-GLOBAL-KR"
+        address="http://lnc.m.hangame.com:10080/hsp/lnc"
+        isRealZone="true"
+        locale="GLOBAL" />
+    <launchingZone
+        name="ALPHA-LINEGAME"
+        address="http://alpha-lnc.linegame.jp:10080/hsp/lnc"
+        isRealZone="false"
+        locale="GLOBAL" />
+    <launchingZone
+        name="LINEGAME"
+        address="http://lnc.linegame.jp:10080/hsp/lnc"
+        isRealZone="true"
+        locale="GLOBAL" />
+    <launchingZone
+        name="KAKAOGAME"
+        address="http://lnc.kakao.hangame.com:10080/hsp/lnc"
+        isRealZone="true"
+        locale="GLOBAL" />
+    <launchingZone
+        name="ALPHA-CN"
+        address="http://10.97.23.243:10080/hsp/lnc"
+        isRealZone="false"
+        locale="GLOBAL" />
+    <launchingZone
+        name="ALPHA-GLOBAL-SG"
+        address="http://125.209.255.120:10080/hsp/lnc"
+        isRealZone="false"
+        locale="GLOBAL" />
+    <launchingZone
+        name="REAL-GLOBAL-SG"
+        address="http://lnc.hsp.gsquare.com:10080/hsp/lnc"
+        isRealZone="true"
+        locale="GLOBAL" />
+    <launchingZone
+        name="REAL-GLOBALGAME-MB"
+        address="http://lnc.mb.hangame.com:10080/hsp/lnc"
+        isRealZone="true"
+        locale="GLOBAL" />
+    <launchingZone
+        name="REAL-US"
+        address="http://lnc.usp.toastoven.net:10080/hsp/lnc"
+        isRealZone="true"
+        locale="GLOBAL" />
+    <launchingZone
+        name="DEVELOPER-LNC"
+        address="http://10.77.33.69:10080/hsp/lnc"
+        isRealZone="false"
+        locale="KR" />
+
+</launchingZoneList>
