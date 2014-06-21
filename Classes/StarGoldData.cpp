@@ -492,7 +492,16 @@ void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time 
 	base_score = t_score;
 	score = t_score;
 	percentage = t_percentage;
-	game_time = t_game_time;
+//	game_time = t_game_time;
+	
+	float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
+	
+	if(mySD->getClearCondition() == kCLEAR_timeLimit)
+	{
+		play_limit_time -= mySD->getClearConditionTimeLimit();
+	}
+	
+	game_time = play_limit_time;
 	
 	base_score = base_score.getV()*0;
 	score = score.getV()*0;

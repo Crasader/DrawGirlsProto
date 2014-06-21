@@ -89,6 +89,8 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 	close_button->setPosition(ccp(back_case->getContentSize().width-25, back_case->getContentSize().height-25));
 	close_button->setFunction([=](CCObject* sender)
 							  {
+								  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+									  return;
 								  if(!is_menu_enable)
 									  return;
 								  

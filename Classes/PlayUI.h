@@ -346,6 +346,8 @@ private:
 	
 	CCNode* thumb_node;
 	
+	CCNode* endless_me_bomb_node;
+	
 	CCSprite* mission_back;
 	vector<CCNode*> mission_clear_remove_nodes;
 	
