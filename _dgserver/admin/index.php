@@ -21,15 +21,7 @@ echo"</center>";
 }
 
 
-if($_GET["mode"]=="abc"){
 
-	while($rData = UserData::getRowByQuery()){
-		$userStorage = new UserStorage($rData["memberID"]);
-		$userStorage->save();
-	}
-}
-
-exit;
 
 // if($_GET["mode"]!="card")exit;
 
@@ -879,19 +871,19 @@ function getCircleBoss($stageNo,$stageLevel){
 	$high = 0.5*$stageLevel;
 	$low = 0.25*$stageLevel;
 	if($sType==0){ //hp형 보스
-		$boss["hp"]=ceil(30+60*$stageNo);
+		$boss["hp"]=ceil(1000+60*$stageNo);
 		$boss["agi"]=ceil(5*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$low+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
 		$boss["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  
 	}else if($sType==1){ //회피형 보스
-		$boss["hp"]=ceil(30+40*$stageNo);
+		$boss["hp"]=ceil(1000+40*$stageNo);
 		$boss["agi"]=ceil(10*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$low+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
 		$boss["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  
 	}else{ //speed형 보스
-		$boss["hp"]=ceil(30+40*$stageNo);
+		$boss["hp"]=ceil(1000+40*$stageNo);
 		$boss["agi"]=ceil(5*$stageNo);
 		$maxSpeed = (1.3-0.3)/(float)10.0*$high+0.3;
 		if($maxSpeed>1.5)$maxSpeed=1.5;
