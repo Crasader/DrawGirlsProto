@@ -1434,21 +1434,21 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		string flag = myDSH->getStringForKey(kDSH_Key_flag);
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(50 + 13.5 - 8,18));
+		selectedFlagSpr->setPosition(ccp(50 + 13.5 - 4.5, 18));
 		selectedFlagSpr->setScale(0.8f);
 		list_cell_case->addChild(selectedFlagSpr);
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		nick_label->setPosition(ccp(79 - 7,19));
+		nick_label->setPosition(ccp(79 - 3.5,19));
 		list_cell_case->addChild(nick_label);
 		
 		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 		score_label->setColor(ccc3(255, 255, 255));
 		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		score_label->setPosition(ccp(223.5, 18.0));
+		score_label->setPosition(ccp(215 + 9.5,18));
 		setFormSetter(score_label);
 		list_cell_case->addChild(score_label);
 		
@@ -1458,7 +1458,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
 //		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		victory_label->setPosition(ccp(137.0, 18.0));
+		victory_label->setPosition(ccp(152 + 12 + 3.0, 18));
 		list_cell_case->addChild(victory_label);
 		setFormSetter(victory_label);
 		///////////////////////////////////
@@ -1578,24 +1578,24 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-	selectedFlagSpr->setPosition(ccp(50 + 13.5 - 8,18));
+	selectedFlagSpr->setPosition(ccp(50 + 13.5 - 4.5,18));
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);
 	setFormSetter(selectedFlagSpr);
 	KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12);
 	nick_label->setAnchorPoint(ccp(0,0.5f));
 	nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-	nick_label->setPosition(ccp(79 - 7,19));
+	nick_label->setPosition(ccp(79 - 3.5,19));
 	list_cell_case->addChild(nick_label);
 	
 	setFormSetter(nick_label);
 	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_list[idx].score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 	score_label->setColor(ccc3(255, 255, 255));
 	score_label->setAnchorPoint(ccp(1,0.5f));
-	score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-	score_label->setHorizontalAlignment(kCCTextAlignmentRight);
+	score_label->setPosition(ccp(215 + 9.5,18));
+	//score_label->setHorizontalAlignment(kCCTextAlignmentRight);
 	//score_label->setPosition(ccp(160,18));
-	score_label->setPosition(ccp(223.5, 18.0));
+	//score_label->setPosition(ccp(223.5, 18.0));
 	list_cell_case->addChild(score_label);
 	
 	setFormSetter(score_label);
@@ -1607,7 +1607,8 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	victory_label->setAnchorPoint(ccp(1,0.5f));
 //	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 //	victory_label->setPosition(ccp(190,18));
-	victory_label->setPosition(ccp(137.0, 18.0));
+	victory_label->setPosition(ccp(152 + 12 + 3.0,18));
+
 	list_cell_case->addChild(victory_label);
 	
 	setFormSetter(victory_label);
@@ -1686,7 +1687,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	
 	setFormSetter(record_content);
 	record_content->setOldAnchorPoint();
-	record_content->setPosition(ccp(record_back->getContentSize().width-10-87.5, record_back->getContentSize().height/2.f));
+	record_content->setPosition(ccp(record_back->getContentSize().width-10, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_content);
 	setFormSetter(record_back);
 //	record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());
