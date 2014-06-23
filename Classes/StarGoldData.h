@@ -301,6 +301,58 @@ enum TimeEventType
 	kTimeEventType_clear
 };
 
+class CollectionCardInfo
+{
+public:
+	KSProtectVar<int> puzzle_number;
+	KSProtectVar<int> stage_number;
+	KSProtectVar<bool> is_puzzle_card;
+	KSProtectVar<int> grade1_card_number;
+	KSProtectVar<int> grade2_card_number;
+	KSProtectVar<int> grade3_card_number; // or clear_card
+	KSProtectVar<int> grade4_card_number; // or perfect_card
+	
+	int getHighCardNumber()
+	{
+		int return_value = grade4_card_number.getV();
+		if(return_value < 0)
+			return_value = grade3_card_number.getV();
+		else
+			return return_value;
+		if(return_value < 0)
+			return_value = grade2_card_number.getV();
+		else
+			return return_value;
+		if(return_value < 0)
+			return_value = grade1_card_number.getV();
+		else
+			return return_value;
+		return return_value;
+	}
+	
+	vector<int> getCardSet()
+	{
+		vector<int> return_value;
+		return_value.clear();
+		return_value.push_back(grade1_card_number.getV());
+		return_value.push_back(grade2_card_number.getV());
+		return_value.push_back(grade3_card_number.getV());
+		return_value.push_back(grade4_card_number.getV());
+		return return_value;
+	}
+	
+	CollectionCardInfo() :
+	stage_number(-1),
+	is_puzzle_card(false),
+	grade1_card_number(-1),
+	grade2_card_number(-1),
+	grade3_card_number(-1),
+	grade4_card_number(-1)
+	{
+		
+	}
+};
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -405,6 +457,8 @@ public:
 	int getPreCardNumber(int recent_card_number);
 	
 	int getPreStageCardNumber(int recent_card_number);
+	
+	vector<int> getCollectionCardSet(int recent_card_number);
 	
 	void changeSortType(CardSortType t_type);
 	
@@ -869,7 +923,14 @@ public:
 	KSProtectVar<bool> is_new_puzzle_card;
 	Json::Value new_puzzle_card_info;
 	
+	void initCollectionBook();
+	
 private:
+	
+	vector<CollectionCardInfo> normal_puzzle_cards;
+	vector<CollectionCardInfo> event_puzzle_cards;
+	vector<CollectionCardInfo> special_cards;
+	
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
 	int is_perfect_puzzle;

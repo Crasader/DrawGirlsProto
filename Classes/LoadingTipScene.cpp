@@ -783,7 +783,7 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	
 	//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	
-	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 15, CCSizeMake(350, 200), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 	content_label->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f));
 	loading_tip_back->addChild(content_label);
 	

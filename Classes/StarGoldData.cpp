@@ -677,108 +677,555 @@ void StarGoldData::resetUsingItem()
 
 int StarGoldData::getNextCardNumber( int recent_card_number )
 {
-	int t_size = has_gotten_cards.size();
-
-	if(t_size == 1)
-		return -1;
-
-	int found_number = -1;
-	for(int i=0;i<t_size;i++)
+	int find_index;
+	bool is_normal = false;
+	bool is_event = false;
+	bool is_special = false;
+	
+	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	
+	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
 	{
-		if(recent_card_number == has_gotten_cards[i].card_number.getV())
+		bool is_found = false;
+		
+		for(int i=0;!is_found && i<target_vector.size();i++)
 		{
-			found_number = i;
-			break;
+			if(target_vector[i].grade1_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade2_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade3_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade4_card_number.getV() == recent_card_number)
+			{
+				is_found = true;
+				found_func(i);
+			}
+		}
+	};
+	
+	if(card_type == "gift")
+	{
+		find_func(special_cards, [&](int t_index)
+				  {
+					  is_special = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "ePuzzle" || card_type == "event")
+	{
+		find_func(event_puzzle_cards, [&](int t_index)
+				  {
+					  is_event = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "nPuzzle" || card_type == "normal" || card_type == "special")
+	{
+		find_func(normal_puzzle_cards, [&](int t_index)
+				  {
+					  is_normal = true;
+					  find_index = t_index;
+				  });
+	}
+	
+	if(is_normal)
+	{
+		if(normal_puzzle_cards.size() == 1)
+			return -1;
+		else
+		{
+			if(find_index == normal_puzzle_cards.size()-1)
+				return normal_puzzle_cards[0].getHighCardNumber();
+			else
+				return normal_puzzle_cards[find_index+1].getHighCardNumber();
 		}
 	}
-
-	if(found_number == -1) // not found
-		return -1;
-
-	if(found_number >= t_size-1)
-		return has_gotten_cards[0].card_number.getV();
 	else
-		return has_gotten_cards[found_number+1].card_number.getV();
+	{
+		if(event_puzzle_cards.size() + special_cards.size() == 1)
+			return -1;
+		else
+		{
+			if(is_event)
+			{
+				if(find_index == event_puzzle_cards.size()-1)
+				{
+					if(!special_cards.empty())
+						return special_cards[0].getHighCardNumber();
+					else
+						return event_puzzle_cards[0].getHighCardNumber();
+				}
+				else
+					return event_puzzle_cards[find_index+1].getHighCardNumber();
+			}
+			else
+			{
+				if(find_index == special_cards.size()-1)
+				{
+					if(!event_puzzle_cards.empty())
+						return event_puzzle_cards[0].getHighCardNumber();
+					else
+						return special_cards[0].getHighCardNumber();
+				}
+				else
+					return special_cards[find_index+1].getHighCardNumber();
+			}
+		}
+	}
+	
+//	int t_size = has_gotten_cards.size();
+//
+//	if(t_size == 1)
+//		return -1;
+//
+//	int found_number = -1;
+//	for(int i=0;i<t_size;i++)
+//	{
+//		if(recent_card_number == has_gotten_cards[i].card_number.getV())
+//		{
+//			found_number = i;
+//			break;
+//		}
+//	}
+//
+//	if(found_number == -1) // not found
+//		return -1;
+//
+//	if(found_number >= t_size-1)
+//		return has_gotten_cards[0].card_number.getV();
+//	else
+//		return has_gotten_cards[found_number+1].card_number.getV();
 }
 
 int StarGoldData::getNextStageCardNumber( int recent_card_number )
 {
-	int ing_card_number = recent_card_number;
-	bool is_found = false;
-	do{
-		ing_card_number = getNextCardNumber(ing_card_number);
-		if(ing_card_number == -1)		break;
-		if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
-			is_found = true;
-	}while(!is_found && ing_card_number != recent_card_number);
-
-	if(!is_found)
-		return -1;
+	int find_index;
+	bool is_normal = false;
+	bool is_event = false;
+	bool is_special = false;
+	
+	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	
+	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
+	{
+		bool is_found = false;
+		
+		for(int i=0;!is_found && i<target_vector.size();i++)
+		{
+			if(target_vector[i].grade1_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade2_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade3_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade4_card_number.getV() == recent_card_number)
+			{
+				is_found = true;
+				found_func(i);
+			}
+		}
+	};
+	
+	if(card_type == "gift")
+	{
+		find_func(special_cards, [&](int t_index)
+				  {
+					  is_special = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "ePuzzle" || card_type == "event")
+	{
+		find_func(event_puzzle_cards, [&](int t_index)
+				  {
+					  is_event = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "nPuzzle" || card_type == "normal" || card_type == "special")
+	{
+		find_func(normal_puzzle_cards, [&](int t_index)
+				  {
+					  is_normal = true;
+					  find_index = t_index;
+				  });
+	}
+	
+	if(is_normal)
+	{
+		if(normal_puzzle_cards.size() == 1)
+			return -1;
+		else
+		{
+			if(find_index == normal_puzzle_cards.size()-1)
+				return normal_puzzle_cards[0].getHighCardNumber();
+			else
+				return normal_puzzle_cards[find_index+1].getHighCardNumber();
+		}
+	}
 	else
 	{
-		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-		if(mySGD->isHasGottenCards(ing_card_stage, 4) > 0)
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
-		else if(mySGD->isHasGottenCards(ing_card_stage, 3) > 0)
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
-		else if(mySGD->isHasGottenCards(ing_card_stage, 2) > 0)
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
+		if(event_puzzle_cards.size() + special_cards.size() == 1)
+			return -1;
 		else
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
+		{
+			if(is_event)
+			{
+				if(find_index == event_puzzle_cards.size()-1)
+				{
+					if(!special_cards.empty())
+						return special_cards[0].getHighCardNumber();
+					else
+						return event_puzzle_cards[0].getHighCardNumber();
+				}
+				else
+					return event_puzzle_cards[find_index+1].getHighCardNumber();
+			}
+			else
+			{
+				if(find_index == special_cards.size()-1)
+				{
+					if(!event_puzzle_cards.empty())
+						return event_puzzle_cards[0].getHighCardNumber();
+					else
+						return special_cards[0].getHighCardNumber();
+				}
+				else
+					return special_cards[find_index+1].getHighCardNumber();
+			}
+		}
 	}
+	
+	
+	
+//	int ing_card_number = recent_card_number;
+//	bool is_found = false;
+//	do{
+//		ing_card_number = getNextCardNumber(ing_card_number);
+//		if(ing_card_number == -1)		break;
+//		if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
+//			is_found = true;
+//	}while(!is_found && ing_card_number != recent_card_number);
+//
+//	if(!is_found)
+//		return -1;
+//	else
+//	{
+//		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
+//		if(mySGD->isHasGottenCards(ing_card_stage, 4) > 0)
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
+//		else if(mySGD->isHasGottenCards(ing_card_stage, 3) > 0)
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
+//		else if(mySGD->isHasGottenCards(ing_card_stage, 2) > 0)
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
+//		else
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
+//	}
 }
 
 int StarGoldData::getPreCardNumber( int recent_card_number )
 {
-	int t_size = has_gotten_cards.size();
-
-	if(t_size == 1)
-		return -1;
-
-	int found_number = -1;
-	for(int i=0;i<t_size;i++)
+	int find_index;
+	bool is_normal = false;
+	bool is_event = false;
+	bool is_special = false;
+	
+	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	
+	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
 	{
-		if(recent_card_number == has_gotten_cards[i].card_number.getV())
+		bool is_found = false;
+		
+		for(int i=0;!is_found && i<target_vector.size();i++)
 		{
-			found_number = i;
-			break;
+			if(target_vector[i].grade1_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade2_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade3_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade4_card_number.getV() == recent_card_number)
+			{
+				is_found = true;
+				found_func(i);
+			}
+		}
+	};
+	
+	if(card_type == "gift")
+	{
+		find_func(special_cards, [&](int t_index)
+				  {
+					  is_special = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "ePuzzle" || card_type == "event")
+	{
+		find_func(event_puzzle_cards, [&](int t_index)
+				  {
+					  is_event = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "nPuzzle" || card_type == "normal" || card_type == "special")
+	{
+		find_func(normal_puzzle_cards, [&](int t_index)
+				  {
+					  is_normal = true;
+					  find_index = t_index;
+				  });
+	}
+	
+	if(is_normal)
+	{
+		if(normal_puzzle_cards.size() == 1)
+			return -1;
+		else
+		{
+			if(find_index == 0)
+				return normal_puzzle_cards[normal_puzzle_cards.size()-1].getHighCardNumber();
+			else
+				return normal_puzzle_cards[find_index-1].getHighCardNumber();
 		}
 	}
-
-	if(found_number == -1) // not found
-		return -1;
-
-	if(found_number <= 0)
-		return has_gotten_cards[t_size-1].card_number.getV();
 	else
-		return has_gotten_cards[found_number-1].card_number.getV();
+	{
+		if(event_puzzle_cards.size() + special_cards.size() == 1)
+			return -1;
+		else
+		{
+			if(is_event)
+			{
+				if(find_index == 0)
+				{
+					if(!special_cards.empty())
+						return special_cards[special_cards.size()-1].getHighCardNumber();
+					else
+						return event_puzzle_cards[event_puzzle_cards.size()-1].getHighCardNumber();
+				}
+				else
+					return event_puzzle_cards[find_index-1].getHighCardNumber();
+			}
+			else
+			{
+				if(find_index == 0)
+				{
+					if(!event_puzzle_cards.empty())
+						return event_puzzle_cards[event_puzzle_cards.size()-1].getHighCardNumber();
+					else
+						return special_cards[special_cards.size()-1].getHighCardNumber();
+				}
+				else
+					return special_cards[find_index-1].getHighCardNumber();
+			}
+		}
+	}
+	
+	
+	
+	
+	
+//	int t_size = has_gotten_cards.size();
+//
+//	if(t_size == 1)
+//		return -1;
+//
+//	int found_number = -1;
+//	for(int i=0;i<t_size;i++)
+//	{
+//		if(recent_card_number == has_gotten_cards[i].card_number.getV())
+//		{
+//			found_number = i;
+//			break;
+//		}
+//	}
+//
+//	if(found_number == -1) // not found
+//		return -1;
+//
+//	if(found_number <= 0)
+//		return has_gotten_cards[t_size-1].card_number.getV();
+//	else
+//		return has_gotten_cards[found_number-1].card_number.getV();
+}
+
+vector<int> StarGoldData::getCollectionCardSet(int recent_card_number)
+{
+	int find_index;
+	bool is_normal = false;
+	bool is_event = false;
+	bool is_special = false;
+	
+	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	
+	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
+	{
+		bool is_found = false;
+		
+		for(int i=0;!is_found && i<target_vector.size();i++)
+		{
+			if(target_vector[i].grade1_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade2_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade3_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade4_card_number.getV() == recent_card_number)
+			{
+				is_found = true;
+				found_func(i);
+			}
+		}
+	};
+	
+	if(card_type == "gift")
+	{
+		find_func(special_cards, [&](int t_index)
+				  {
+					  is_special = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "ePuzzle" || card_type == "event")
+	{
+		find_func(event_puzzle_cards, [&](int t_index)
+				  {
+					  is_event = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "nPuzzle" || card_type == "normal" || card_type == "special")
+	{
+		find_func(normal_puzzle_cards, [&](int t_index)
+				  {
+					  is_normal = true;
+					  find_index = t_index;
+				  });
+	}
+	
+	if(is_normal)
+		return normal_puzzle_cards[find_index].getCardSet();
+	else if(is_event)
+		return event_puzzle_cards[find_index].getCardSet();
+	else if(is_special)
+		return special_cards[find_index].getCardSet();
 }
 
 int StarGoldData::getPreStageCardNumber( int recent_card_number )
 {
-	int ing_card_number = recent_card_number;
-	bool is_found = false;
-	do{
-		ing_card_number = getPreCardNumber(ing_card_number);
-		if(ing_card_number == -1)		break;
-		if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
-			is_found = true;
-	}while(!is_found && ing_card_number != recent_card_number);
-
-	if(!is_found)
-		return -1;
+	int find_index;
+	bool is_normal = false;
+	bool is_event = false;
+	bool is_special = false;
+	
+	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	
+	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
+	{
+		bool is_found = false;
+		
+		for(int i=0;!is_found && i<target_vector.size();i++)
+		{
+			if(target_vector[i].grade1_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade2_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade3_card_number.getV() == recent_card_number ||
+			   target_vector[i].grade4_card_number.getV() == recent_card_number)
+			{
+				is_found = true;
+				found_func(i);
+			}
+		}
+	};
+	
+	if(card_type == "gift")
+	{
+		find_func(special_cards, [&](int t_index)
+				  {
+					  is_special = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "ePuzzle" || card_type == "event")
+	{
+		find_func(event_puzzle_cards, [&](int t_index)
+				  {
+					  is_event = true;
+					  find_index = t_index;
+				  });
+	}
+	else if(card_type == "nPuzzle" || card_type == "normal" || card_type == "special")
+	{
+		find_func(normal_puzzle_cards, [&](int t_index)
+				  {
+					  is_normal = true;
+					  find_index = t_index;
+				  });
+	}
+	
+	if(is_normal)
+	{
+		if(normal_puzzle_cards.size() == 1)
+			return -1;
+		else
+		{
+			if(find_index == 0)
+				return normal_puzzle_cards[normal_puzzle_cards.size()-1].getHighCardNumber();
+			else
+				return normal_puzzle_cards[find_index-1].getHighCardNumber();
+		}
+	}
 	else
 	{
-		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
-		if(mySGD->isHasGottenCards(ing_card_stage, 4) > 0)
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
-		else if(mySGD->isHasGottenCards(ing_card_stage, 3) > 0)
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
-		else if(mySGD->isHasGottenCards(ing_card_stage, 2) > 0)
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
+		if(event_puzzle_cards.size() + special_cards.size() == 1)
+			return -1;
 		else
-			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
+		{
+			if(is_event)
+			{
+				if(find_index == 0)
+				{
+					if(!special_cards.empty())
+						return special_cards[special_cards.size()-1].getHighCardNumber();
+					else
+						return event_puzzle_cards[event_puzzle_cards.size()-1].getHighCardNumber();
+				}
+				else
+					return event_puzzle_cards[find_index-1].getHighCardNumber();
+			}
+			else
+			{
+				if(find_index == 0)
+				{
+					if(!event_puzzle_cards.empty())
+						return event_puzzle_cards[event_puzzle_cards.size()-1].getHighCardNumber();
+					else
+						return special_cards[special_cards.size()-1].getHighCardNumber();
+				}
+				else
+					return special_cards[find_index-1].getHighCardNumber();
+			}
+		}
 	}
+	
+	
+	
+	
+	
+	
+	
+//	int ing_card_number = recent_card_number;
+//	bool is_found = false;
+//	do{
+//		ing_card_number = getPreCardNumber(ing_card_number);
+//		if(ing_card_number == -1)		break;
+//		if(NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number) != NSDS_GI(kSDS_CI_int1_stage_i, recent_card_number))
+//			is_found = true;
+//	}while(!is_found && ing_card_number != recent_card_number);
+//
+//	if(!is_found)
+//		return -1;
+//	else
+//	{
+//		int ing_card_stage = NSDS_GI(kSDS_CI_int1_stage_i, ing_card_number);
+//		if(mySGD->isHasGottenCards(ing_card_stage, 4) > 0)
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 4);
+//		else if(mySGD->isHasGottenCards(ing_card_stage, 3) > 0)
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 3);
+//		else if(mySGD->isHasGottenCards(ing_card_stage, 2) > 0)
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 2);
+//		else
+//			return NSDS_GI(ing_card_stage, kSDS_SI_level_int1_card_i, 1);
+//	}
 }
 
 void StarGoldData::changeSortType( CardSortType t_type )
@@ -1012,6 +1459,287 @@ void StarGoldData::resetHasGottenCards()
 	}
 	
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
+}
+
+void StarGoldData::initCollectionBook()
+{
+	normal_puzzle_cards.clear();
+	event_puzzle_cards.clear();
+	special_cards.clear();
+	
+	map<int, IntPoint> puzzle_stage_info;
+	puzzle_stage_info.clear();
+	
+	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	for(int i=0;i<puzzle_count;i++)
+	{
+		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+		puzzle_stage_info[puzzle_number] = IntPoint(NSDS_GI(puzzle_number, kSDS_PZ_startStage_i), NSDS_GI(puzzle_number, kSDS_PZ_stageCount_i));
+	}
+	
+	function<void(int)> after_log = [&](int t_type)
+	{
+		CCLOG("=============================[after lists]===========================");
+		if(t_type == 0 || t_type == 1)
+		{
+			CCLOG("normal_puzzle_cards");
+			for(int i=0;i<normal_puzzle_cards.size();i++)
+			{
+				CCLOG("puzzle_number : %d , stage_number : %d, is_event_puzzle : %d, card1 : %d, card2 : %d, card3 : %d, card4 : %d", normal_puzzle_cards[i].puzzle_number.getV(), normal_puzzle_cards[i].stage_number.getV(), normal_puzzle_cards[i].is_puzzle_card.getV(), normal_puzzle_cards[i].grade1_card_number.getV(), normal_puzzle_cards[i].grade2_card_number.getV(), normal_puzzle_cards[i].grade3_card_number.getV(), normal_puzzle_cards[i].grade4_card_number.getV());
+			}
+		}
+		
+		if(t_type == 0 || t_type == 2)
+		{
+			CCLOG("event_puzzle_cards");
+			for(int i=0;i<event_puzzle_cards.size();i++)
+			{
+				CCLOG("puzzle_number : %d , stage_number : %d, is_event_puzzle : %d, card1 : %d, card2 : %d, card3 : %d, card4 : %d", event_puzzle_cards[i].puzzle_number.getV(), event_puzzle_cards[i].stage_number.getV(), event_puzzle_cards[i].is_puzzle_card.getV(), event_puzzle_cards[i].grade1_card_number.getV(), event_puzzle_cards[i].grade2_card_number.getV(), event_puzzle_cards[i].grade3_card_number.getV(), event_puzzle_cards[i].grade4_card_number.getV());
+			}
+		}
+		
+		if(t_type == 0 || t_type == 3)
+		{
+			CCLOG("special_cards");
+			for(int i=0;i<special_cards.size();i++)
+			{
+				CCLOG("puzzle_number : %d , stage_number : %d, is_event_puzzle : %d, card1 : %d, card2 : %d, card3 : %d, card4 : %d", special_cards[i].puzzle_number.getV(), special_cards[i].stage_number.getV(), special_cards[i].is_puzzle_card.getV(), special_cards[i].grade1_card_number.getV(), special_cards[i].grade2_card_number.getV(), special_cards[i].grade3_card_number.getV(), special_cards[i].grade4_card_number.getV());
+			}
+		}
+		
+		CCLOG("=============================[end]===========================");
+	};
+	
+	function<void(vector<CollectionCardInfo>&, int, int, function<void()>)> t_puzzle_func = [](vector<CollectionCardInfo>& target_vector, int t_puzzle_number, int t_card_number, function<void()> log_func)
+	{
+		bool is_insert = false;
+		bool is_found = false;
+		for(int j=0;!is_found && j<target_vector.size();j++)
+		{
+			if(target_vector[j].puzzle_number.getV() == t_puzzle_number && target_vector[j].is_puzzle_card.getV())
+			{
+				is_found = true;
+				
+				if(t_card_number == NSDS_GI(t_puzzle_number, kSDS_PZ_clearCard_i))
+					target_vector[j].grade3_card_number = t_card_number;
+				else if(t_card_number == NSDS_GI(t_puzzle_number, kSDS_PZ_perfectCard_i))
+					target_vector[j].grade4_card_number = t_card_number;
+				is_insert = true;
+				log_func();
+			}
+		}
+		
+		if(!is_found)
+		{
+			// find insert point
+			for(auto iter = target_vector.begin();iter!=target_vector.end();iter++)
+			{
+				if(iter->puzzle_number.getV() > t_puzzle_number)
+				{
+					CollectionCardInfo t_info;
+					t_info.puzzle_number = t_puzzle_number;
+					t_info.grade1_card_number = -2;
+					t_info.grade2_card_number = -2;
+					
+					if(t_card_number == NSDS_GI(t_puzzle_number, kSDS_PZ_clearCard_i))
+						t_info.grade3_card_number = t_card_number;
+					else if(t_card_number == NSDS_GI(t_puzzle_number, kSDS_PZ_perfectCard_i))
+						t_info.grade4_card_number = t_card_number;
+					
+					target_vector.insert(iter, t_info);
+					is_insert = true;
+					log_func();
+					break;
+				}
+			}
+		}
+		
+		if(!is_insert)
+		{
+			CollectionCardInfo t_info;
+			t_info.puzzle_number = t_puzzle_number;
+			t_info.grade1_card_number = -2;
+			t_info.grade2_card_number = -2;
+			
+			if(t_card_number == NSDS_GI(t_puzzle_number, kSDS_PZ_clearCard_i))
+				t_info.grade3_card_number = t_card_number;
+			else if(t_card_number == NSDS_GI(t_puzzle_number, kSDS_PZ_perfectCard_i))
+				t_info.grade4_card_number = t_card_number;
+			
+			target_vector.push_back(t_info);
+			is_insert = true;
+			log_func();
+		}
+	};
+	
+	function<void(vector<CollectionCardInfo>&, vector<CollectionCardInfo>::iterator&, int, int, int, function<void()>)> insert_func = [](vector<CollectionCardInfo>& target_vector, vector<CollectionCardInfo>::iterator& iter, int t_puzzle_number, int t_stage_number, int t_card_number, function<void()> log_func)
+	{
+		CollectionCardInfo t_info;
+		t_info.puzzle_number = t_puzzle_number;
+		t_info.stage_number = t_stage_number;
+		
+		int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
+		
+		if(card_grade == 1)
+			t_info.grade1_card_number = t_card_number;
+		else if(card_grade == 2)
+			t_info.grade2_card_number = t_card_number;
+		else if(card_grade == 3)
+			t_info.grade3_card_number = t_card_number;
+		else if(card_grade == 4)
+			t_info.grade4_card_number = t_card_number;
+		
+		target_vector.insert(iter, t_info);
+		log_func();
+	};
+	
+	
+	function<void(vector<CollectionCardInfo>&, int, int, int, function<void(vector<CollectionCardInfo>&, vector<CollectionCardInfo>::iterator&, int, int, int, function<void()>)>, function<void()>)> puzzle_find_func = [](vector<CollectionCardInfo>& target_vector, int t_puzzle_number, int t_stage_number, int t_card_number, function<void(vector<CollectionCardInfo>&, vector<CollectionCardInfo>::iterator&, int, int, int, function<void()>)> insert_func, function<void()> log_func)
+	{
+		bool is_insert = false;
+		bool is_found = false;
+		for(int j=0;!is_found && j<target_vector.size();j++)
+		{
+			if(target_vector[j].puzzle_number.getV() == t_puzzle_number && !target_vector[j].is_puzzle_card.getV() && target_vector[j].stage_number.getV() == t_stage_number)
+			{
+				is_found = true;
+				
+				int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
+				
+				if(card_grade == 1)
+					target_vector[j].grade1_card_number = t_card_number;
+				else if(card_grade == 2)
+					target_vector[j].grade2_card_number = t_card_number;
+				else if(card_grade == 3)
+					target_vector[j].grade3_card_number = t_card_number;
+				else if(card_grade == 4)
+					target_vector[j].grade4_card_number = t_card_number;
+				is_insert = true;
+				log_func();
+			}
+		}
+		
+		if(!is_found)
+		{
+			// find insert point
+			for(auto iter = target_vector.begin();iter!=target_vector.end();iter++)
+			{
+				if(iter->puzzle_number.getV() > t_puzzle_number)
+				{
+					insert_func(target_vector, iter, t_puzzle_number, t_stage_number, t_card_number, log_func);
+					is_insert = true;
+					break;
+				}
+				else if(iter->puzzle_number.getV() == t_puzzle_number)
+				{
+					int iter_stage_number = iter->stage_number.getV();
+					if(iter_stage_number == -1)
+					{
+						insert_func(target_vector, iter, t_puzzle_number, t_stage_number, t_card_number, log_func);
+						is_insert = true;
+						break;
+					}
+					else if(iter_stage_number > t_stage_number)
+					{
+						insert_func(target_vector, iter, t_puzzle_number, t_stage_number, t_card_number, log_func);
+						is_insert = true;
+						break;
+					}
+				}
+				else
+				{
+					
+				}
+			}
+		}
+		
+		if(!is_insert)
+		{
+			CollectionCardInfo t_info;
+			t_info.puzzle_number = t_puzzle_number;
+			t_info.stage_number = t_stage_number;
+			
+			int card_grade = NSDS_GI(kSDS_CI_int1_grade_i, t_card_number);
+			
+			if(card_grade == 1)
+				t_info.grade1_card_number = t_card_number;
+			else if(card_grade == 2)
+				t_info.grade2_card_number = t_card_number;
+			else if(card_grade == 3)
+				t_info.grade3_card_number = t_card_number;
+			else if(card_grade == 4)
+				t_info.grade4_card_number = t_card_number;
+			
+			target_vector.push_back(t_info);
+			log_func();
+		}
+	};
+	
+	for(int i=0;i<has_gotten_cards.size();i++)
+	{
+		int card_number = has_gotten_cards[i].card_number.getV();
+		
+		string card_type = NSDS_GS(kSDS_CI_int1_type_s, card_number);
+		CCLOG("card_type : %s, card_number : %d", card_type.c_str(), card_number);
+		if(card_type == "gift")
+		{
+			CollectionCardInfo t_info;
+			t_info.grade4_card_number = card_number;
+			
+			special_cards.push_back(t_info);
+			after_log(3);
+		}
+		else
+		{
+			int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+			
+			int puzzle_number = -1;
+			
+			for(auto iter = puzzle_stage_info.begin();puzzle_number == -1 && iter!=puzzle_stage_info.end();iter++)
+			{
+				if(iter->second.x <= stage_number && iter->second.x + iter->second.y > stage_number)
+				{
+					puzzle_number = iter->first;
+				}
+			}
+			
+			if(puzzle_number != -1)
+			{
+				if(card_type == "nPuzzle")
+				{
+					t_puzzle_func(normal_puzzle_cards, puzzle_number, card_number, [=](){after_log(1);});
+				}
+				else if(card_type == "ePuzzle")
+				{
+					t_puzzle_func(event_puzzle_cards, puzzle_number, card_number, [=](){after_log(2);});
+				}
+				else if(card_type == "event")
+				{
+					puzzle_find_func(event_puzzle_cards, puzzle_number, stage_number, card_number, insert_func, [=](){after_log(2);});
+				}
+				else if(card_type == "special")
+				{
+					puzzle_find_func(normal_puzzle_cards, puzzle_number, stage_number, card_number, insert_func, [=](){after_log(1);});
+				}
+				else if(card_type == "normal")
+				{
+					puzzle_find_func(normal_puzzle_cards, puzzle_number, stage_number, card_number, insert_func, [=](){after_log(1);});
+				}
+				else // nothing
+				{
+					
+				}
+				
+//				bool is_event_puzzle = NSDS_GB(puzzle_number, kSDS_PZ_isEvent_b);
+			}
+			else
+			{
+				CCLOG("not found puzzle | card_number : %d, stage_number : %d", card_number, stage_number);
+			}
+		}
+	}
+	
+	CCLOG("total card : %d", int(has_gotten_cards.size()));
 }
 
 void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_data_load_list)

@@ -54,8 +54,6 @@ bool TitleRenewalScene::init()
 	
 	is_preloaded_effect = false;
 	
-	myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
-	
 //	std::chrono::time_point<std::chrono::system_clock> recent;
 //    recent = std::chrono::system_clock::now();
 //	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
@@ -256,6 +254,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
+		state_label->setVisible(false);
 		
 		
 		nick_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));// CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
@@ -333,6 +332,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 
 void TitleRenewalScene::successLogin()
 {
+	state_label->setVisible(true);
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
 //		AudioEngine::sharedInstance()->preloadEffectScene("Title");

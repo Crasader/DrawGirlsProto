@@ -115,6 +115,7 @@ private:
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
     virtual CCSize cellSizeForTable(CCTableView *table);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
+	virtual CCSize tableCellSizeForIndex(CCTableView *table, unsigned int idx);
 	
 	void showPopup();
 	void endShowPopup();

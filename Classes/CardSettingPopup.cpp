@@ -1241,22 +1241,24 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			
 			if(t_cell_info.m_type == DefaultCardCellType::kTitle)
 			{
-				if(idx != 0)
-				{
-					CCSprite* line_img = CCSprite::create("cardsetting_line.png");
-					line_img->setScaleX(450/line_img->getContentSize().width);
-					line_img->setPosition(ccpFromSize(cellSizeForTable(table)/2.f) + ccp(0,15));
-					cell->addChild(line_img);
-				}
-				
 				CCSprite* title_back = CCSprite::create("cardsetting_title.png");
-				title_back->setPosition(ccp(70,cellSizeForTable(table).height/2.f - 10));
+				title_back->setPosition(ccp(70,tableCellSizeForIndex(table, idx).height/2.f));
 				cell->addChild(title_back);
 				
 				KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(t_cell_info.puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 12);
 				title_label->enableOuterStroke(ccBLACK, 1.f);
 				title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,1));
 				title_back->addChild(title_label);
+				
+				if(idx != 0)
+				{
+					title_back->setPosition(ccp(70,tableCellSizeForIndex(table, idx).height/2.f - 8));
+					
+					CCSprite* line_img = CCSprite::create("cardsetting_line.png");
+					line_img->setScaleX(450/line_img->getContentSize().width);
+					line_img->setPosition(ccpFromSize(tableCellSizeForIndex(table, idx)/2.f) + ccp(0,8));
+					cell->addChild(line_img);
+				}
 			}
 			else if(t_cell_info.m_type == DefaultCardCellType::kStage)
 			{
@@ -1513,6 +1515,37 @@ CCSize CardSettingPopup::cellSizeForTable( CCTableView *table )
 		return CCSizeMake(457, 60);
 	else
 		return CCSizeMake(457, 100);
+}
+
+CCSize CardSettingPopup::tableCellSizeForIndex(CCTableView *table, unsigned int idx)
+{
+	if(is_normal_table)
+	{
+		CardSortType sort_type = (CardSortType)recent_sort_type;
+		
+		if(sort_type == kCST_default)
+		{
+			DefaultCardCellInfo t_cell_info = default_cell_info[idx];
+			
+			if(t_cell_info.m_type == DefaultCardCellType::kTitle)
+			{
+				if(idx == 0)
+				{
+					return CCSizeMake(457, 25);
+				}
+				else
+				{
+					return CCSizeMake(457, 40);
+				}
+			}
+			else
+				return cellSizeForTable(table);
+		}
+		else
+			return cellSizeForTable(table);
+	}
+	else
+		return cellSizeForTable(table);
 }
 
 unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )

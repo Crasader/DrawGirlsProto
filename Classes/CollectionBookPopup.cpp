@@ -121,13 +121,13 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	
 	
 	float mul_value = 0.88f;
-    int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-    int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+//    int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+//    int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
 	
 	int position_index = 1;
 	
-	int stage_card_count = NSDS_GI(stage_number, kSDS_SI_cardCount_i);
-	target->setTag(stage_card_count);
+//	int stage_card_count = NSDS_GI(stage_number, kSDS_SI_cardCount_i);
+//	target->setTag(stage_card_count);
 	
 	random_device rd;
 	default_random_engine e1(rd());
@@ -138,12 +138,12 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	uniform_int_distribution<int> uniform_dist_type(1, 3);
 	uniform_int_distribution<int> uniform_dist_rotate(-90,90);
 	
-	for(int i=1;i<=stage_card_count;i++)
+	vector<int> card_set = mySGD->getCollectionCardSet(card_number);
+	
+	for(int j=0;j<card_set.size();j++)
 	{
-		if(i == level_number)
+		if(card_set[j] == card_number)
 			continue;
-		
-		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, i);
 		
 		int rotation_value;
 		CCPoint position_value;
@@ -164,9 +164,9 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			position_value = ccpAdd(getContentPosition(kCBP_MT_forth), ccp(0,uniform_dist(e1)));
 		}
 		
-		if(mySGD->isHasGottenCards(check_card_number) != 0)
+		if(card_set[j] > 0)
 		{
-			CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
+			CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", card_set[j])->getCString());
             second_img->setScale(mul_value);
 			second_img->setRotation(rotation_value);
             second_img->setPosition(position_value);
@@ -202,7 +202,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			}
 			
 			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			second_item->setTag(kCBP_MT_cardBase + check_card_number);
+			second_item->setTag(kCBP_MT_cardBase + card_set[j]);
 			second_item->setRotation(rotation_value);
 			
 			CCMenu* second_menu = CCMenu::createWithItem(second_item);
@@ -210,7 +210,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 			target->addChild(second_menu, 1, kCBP_MT_second+position_index-1);
 			second_menu->setTouchPriority(-191);
 		}
-		else
+		else if(card_set[j] == -1)
 		{
 			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
 			
@@ -257,13 +257,31 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		position_index++;
 	}
 	
-	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
-	r_stage_label->setAnchorPoint(ccp(0,0.5f));
-	r_stage_label->setPosition(ccp(138, 287));
-	r_stage_label->setColor(ccBLACK);
-	r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-	r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-	target->addChild(r_stage_label);
+	if(card_set[0] == -2)
+	{
+		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
+		
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
+		r_stage_label->setAnchorPoint(ccp(0,0.5f));
+		r_stage_label->setPosition(ccp(138, 287));
+		r_stage_label->setColor(ccBLACK);
+		r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
+		r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+		target->addChild(r_stage_label);
+	}
+	else
+	{
+		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+		
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
+		r_stage_label->setAnchorPoint(ccp(0,0.5f));
+		r_stage_label->setPosition(ccp(138, 287));
+		r_stage_label->setColor(ccBLACK);
+		r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
+		r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+		target->addChild(r_stage_label);
+	}
 }
 
 void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
@@ -313,6 +331,8 @@ bool CollectionBookPopup::init()
 	startFormSetter(this);
 	is_menu_enable = false;
 	
+	mySGD->initCollectionBook();
+	
 	mySGD->changeSortType(kCST_default);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -342,7 +362,7 @@ bool CollectionBookPopup::init()
 	int next_number = mySGD->getNextStageCardNumber(recent_card_number);
 	int pre_number = mySGD->getPreStageCardNumber(recent_card_number);
 	
-	if(next_number == -1 || pre_number == -1)
+	if(next_number < 0 || pre_number < 0)
 		is_enable_pageturn = false;
 	else
 		is_enable_pageturn = true;
