@@ -18,8 +18,11 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.hangame.hsp.HSPCore;
+import com.hangame.hsp.HSPMappingType;
 import com.hangame.hsp.HSPMessage;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
@@ -92,7 +95,6 @@ public class hspConnector{
 		hspConnector.sPackageName = applicationInfo.packageName;
 		hspConnector.sFileDirectory = pContext.getFilesDir().getAbsolutePath();
 		hspConnector.sAssetManager = pContext.getAssets();
-
 	}
 
 	// ===========================================================
@@ -114,6 +116,7 @@ public class hspConnector{
 	}
 	public static boolean purchaseProduct(final int _key, final String productId)
 	{
+			
 		hspConnector.handler.post(
 				new Runnable(){
 					public void run() {
@@ -158,6 +161,82 @@ public class hspConnector{
 					}
 				}
 				);
+		
+	}
+	public static void hspMappingToAccount(final int _key, final int mt)
+	{
+//		hspConnector.handler.post(
+//				new Runnable(){
+//					public void run() {
+					
+						HSPCore core = HSPCore.getInstance();
+						if (core != null) {
+
+							
+							
+							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
+							//    Boolean isOverWriteMapping = false;     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
+
+							HSPMappingType mt2 = HSPMappingType.values()[mt];
+							HSPCore.getInstance().requestMappingToAccount(mt2, isOverWriteMapping, new HSPCore.HSPRequestMappingToAccountCB() {
+
+								@Override
+								public void onIdpIDMap(HSPResult result) {
+									Log.d("mapping", "@@@@@@ HSPCore.login callback => " + result);
+									JSONObject r = new JSONObject();
+									JSONObject error = new JSONObject();
+									// 매핑을 성공한 케이스
+									if (result.isSuccess() == true) {
+										Toast.makeText(hspConnector.sContext, "Remapping Success", Toast.LENGTH_LONG).show();
+
+									} else { // 매핑을 실패한 케이스
+										Log.d("mapping", "HSP Remapping Failed - error = " + result);
+
+										// 상세 에러코드 확인
+										Log.d("mapping", "Detail Error code = " + result.getCode() + ", domain = " + result.getDomain()
+												+ ", detail = " + result.getDetail());
+
+										Toast.makeText(hspConnector.sContext, " Remapping Failed: " + result, Toast.LENGTH_LONG).show();
+									}
+									Log.d("mapping", "END - HSPRequestMappingToAccountCB ");
+
+									if (result.isSuccess() == false) {
+										//Log.i("litqoo", "HSP Login Error = " + result);
+
+										// 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
+										int errorCode = result.getCode();
+										String errorDescription = result.getDetail();
+
+										//Log.i("litqoo", "code = " + errorCode + ", message = " + errorDescription);
+									}else{
+										//Log.i("litqoo", "success");
+									}
+
+									try {
+										r.put("account", mt);
+										error.put("code", result.getCode());
+										error.put("isSuccess", result.isSuccess());
+										error.put("localizedDescription", result.getDetail());
+										r.put("error", error);
+									} catch (JSONException e) {
+
+									}
+									mGLView.queueEvent(new KRunnable(_key, r.toString()) {
+										public void run() {
+											hspConnector.SendResult(this.delekey,this.totalSource);
+										}
+									});
+
+								}
+							});
+
+						} else {
+							// 초기화가 되지 않은 경우
+							Log.d("mapping", "HSPCore.getInstance() is NULL");
+						}	
+//					}
+//				});
+
 		
 	}
 	public static void openHSPNotice()

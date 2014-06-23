@@ -46,6 +46,11 @@ if($mode){
     CurrentUserInfo::$memberID = $param["memberID"];
     CurrentUserInfo::$socialID = $param["socialID"];
     CurrentUserInfo::$os = $param["os"];
+    CurrentUserInfo::$country = $param["country"];
+
+
+    if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["hspMemberNo"];
+    if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["memberNo"];
     // if(!is_array($param)){
     //     $param = json_decode(trim(preg_replace("/'/","\"", $paramoriginal)),true);
     //     LogManager::get()->addLog("ok --> ".$paramoriginal);
@@ -77,8 +82,12 @@ if(!$stopCommand){
             CommitManager::get()->begin($commitMemberID);
             $commitCmdName = $cmd;
         }else if(method_exists($command,$a)){
-            if(!($a=="login" || $a=="join") && $p["memberID"] && $checkUserdata==false){
-                $userdata = new UserData($p["memberID"]);
+            if(!CurrentUserInfo::$memberID && $p["memberID"]){
+                CurrentUserInfo::$memberID = $p["memberID"];
+            }
+
+            if(!($a=="login" || $a=="join") && CurrentUserInfo::$memberID && $checkUserdata==false){
+                $userdata = new UserData(CurrentUserInfo::$memberID);
                 LogManager::get()->addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
                 LogManager::get()->addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
 
@@ -144,9 +153,7 @@ if(!$stopCommand){
 
             
             $p2 = array();
-            $p2["memberID"]= $param["memberID"];
-            if(!$p2["memberID"])$p2["memberID"]= $param["hspMemberNo"];
-            if(!$p2["memberID"])$p2["memberID"]= $param["memberNo"];
+            $p2["memberID"]= CurrentUserInfo::$memberID;
         
 
             $r["log"] = LogManager::get()->getLog();
@@ -171,9 +178,7 @@ if(!$stopCommand){
             
             
             $p2=array();
-            $p2["memberID"]= $param["memberID"];  
-            if(!$p2["memberID"])$p2["memberID"]= $param["hspMemberNo"];
-            if(!$p2["memberID"])$p2["memberID"]= $param["memberNo"];
+            $p2["memberID"]= CurrentUserInfo::$memberID;
                     
             $p2["category"]=$p["api"];
             $p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
@@ -202,7 +207,7 @@ if(!$stopCommand){
         }
 
         $p2["category"]="starttransaction";
-        $p2["content"]='{"memberID":"'.$memberID.'"}';
+        $p2["content"]='{"memberID":"'.CurrentUserInfo::$memberID.'"}';
         $p2["output"]=$allResult[$commitCmdName];
         $command->writelog($p2);
     }

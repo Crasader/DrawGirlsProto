@@ -1,28 +1,19 @@
 <?php
 include "manage_header.php";
 ?>
-
-<center>
+<script>
+var viewer_image = function(value,option){
+	value = s2j(value);
+	var neditor = $("<img>").attr("src","../images/"+value["img"]).attr("width",100);
+	return neditor;
+}
+</script>
 <input name="gid" value="<?=$gid?>" type="hidden">
 
-
 <br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Notice" dbWhere='' name="datatable" border=1>
+<h2 id="tables-contextual-classes">|게임 공지</h2>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Notice" dbWhere='' autoSetting="true" name="datatable" editRowOnly="true" editType="form" border=1>
 	<thead>
-		<tr>
-			<th field="no" viewer='{"type":"text"}' primary>no</th>
-			<th field="title" viewer='{"type":"text"}' editor='{"type":"text"}'>title</th>
-			<th field="startDate" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>startDate</th>
-			<th field="endDate" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>endDate</th>
-			<th field="os" viewer='{"type":"text"}' editor='{"type":"select","element":["all","android","ios"]}'>os</th>
-			<th field="language" viewer='{"type":"text"}' editor='{"type":"text"}'>language</th>	
-			<th field="type" viewer='{"type":"text"}' editor='{"type":"select","element":["image","text","긴급"]}'>type</th>
-			<th field="imgInfo" viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}'>imgInfo</th>
-			<th field="linkURL" viewer='{"type":"text"}' editor='{"type":"text"}'>linkURL</th>
-			<th field="content" viewer='{"type":"text"}' editor='{"type":"textarea"}'>content</th>
-			<th field="order" viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}'>order</th>
-			<th manage="delete update insert">manage</th>
-		</tr>
 	</thead>
 	<tbody datazone>
 

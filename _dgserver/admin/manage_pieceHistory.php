@@ -4,47 +4,68 @@ include "manage_header.php";
 <script>
 
 $(document).ready(function(){
-	$('body').on('click','.findUser',function(){
+
+	$('body').on('click','#findUserInfo',function(){
 		
-		var datatable = getDataTable("datatable");
-		var idType = $("input[name=type]").val();
-		var id = $("input[name=findNo]").val();
-		 
-		datatable.attr("dbWhere",'{"type":"'+idType+'","id":"'+id+'"}');
-		loadDataTable(datatable);
+		var dataview = getDataTable("datatable");
+		var id = $("#findNo").val();
+		var selectType = $('.active[id=findType]').val();
+		dataview.attr("dbWhere",'{"type":"'+selectType+'","id":"'+id+'"}');
+		loadDataTable(dataview);
 	});
 });
 
-</script>
-<center>
-<input name="gid" value="<?=$gid?>" type="hidden">
-<table border=1>
-	<tr>
-		<td>조회대상</td>
-		<td><input type="radio" name="type" value="fb">페이스북ID <input type="radio" name="type" value="pc">Payco ID <input type="radio" name="type" value="sno" checked>회원번호 </td>
-		<td><input type="text" name="findNo"><td>
-		<td><input type="submit" value="조회" class="findUser"></td>
-	</tr>
-</table>
+var commenter = function(value,option){
+	return "변경이유 : <input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
+}
+var commenter_value = function(obj){
+	return obj.val();
+} 
 
+var clearList = function(value,option){
+	value = s2j(value);
+	var pushData = '<table class="table table-boarded">';
+	for(i in value){
+		var n = i*1+1;
+			pushData+='<tr><td>'+n+'등급</td>';
+
+			if(value[i]>0)pushData+='<td> 클리어 ('+datetimeFormat(value[i],'Y/m/d h:i:s')+')</td></tr>';
+			else pushData+='<td>-</td></tr>';
+	}
+	pushData+="</table>";
+
+	return pushData;
+}
+</script>
+<input name="gid" value="<?=$gid?>" type="hidden">
 <br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PieceHistory" dbWhere='' name="datatable" border=1>
+<div class="table-responsive">
+	<table align=center><tr><td>
+<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">
+			  <button id="findType" type="button" value="nick" class="btn btn-default" data-toggle="button">닉네임</button>
+			  <button id="findType" type="button" value="fb" class="btn btn-default" data-toggle="button">페이스북</button>
+			  <button id="findType" type="button" value="pc" class="btn btn-default" data-toggle="button">Payco</button>
+			  <button id="findType" type="button" value="sno" class="btn btn-default active" data-toggle="button">회원번호</button>
+			</div>
+		</td><td>
+			<div class="input-group">
+	      		<input type="text" class="form-control" id="findNo">
+	      		<span class="input-group-btn">
+	        		<button class="btn btn-default" type="button" id="findUserInfo">조회</button>
+	      		</span>
+      		</div>
+		</td></tr></table>
+</div>
+<br><br>
+
+<h2 id="tables-contextual-classes">|피스정보조회</h2>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PieceHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
-		<tr>
-			<th field="no" viewer='{"type":"text"}' primary>no</th>
-			<th field="pieceNo" viewer='{"type":"text"}'>피스번호</th>
-			<th field="openDate" viewer='{"type":"text"}'>최초오픈일시</th>
-			<th field="firstClearDate" viewer='{"type":"text"}'>최초클리어일시</th>
-			<th field="tryCount" viewer='{"type":"text"}'>시도횟수</th>
-			<th field="clearDateList" viewer='{"type":"text"}'>진행상태</th>
-			<th field="reward" viewer='{"type":"text"}'>보상</th>
-		</tr>
 	</thead>
 	<tbody datazone>
 
 	</tbody>
 </table>
-
 
 
 <?php

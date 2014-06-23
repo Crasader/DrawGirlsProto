@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/hsp.common.background.transparency"
+    android:layoutAnimation="@anim/hsp_auth_bridge_animation"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/hsp.auth.bridge.toast"
+        android:layout_width="fill_parent"
+        android:layout_height="57dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="#CCFFFFFF"
+        android:tag="hsp.auth.bridge.toast" >
+        
+        <ImageView 
+            android:layout_width="28dp"
+            android:layout_height="32dp"
+            android:layout_marginRight="9dp"
+            android:tag="toast.image.view"
+            android:src="@drawable/hsp_auth_bridge_hangame_logo"
+            android:layout_alignRight="@+id/hsp.auth.bridge.toast.description"
+            />
+
+        <TextView
+            android:id="@+id/hsp.auth.bridge.toast.description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:includeFontPadding="false"
+            android:tag="hsp.auth.bridge.toast.description"
+            android:textColor="@color/hsp.common.black"
+            android:textStyle="bold"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+</LinearLayout>

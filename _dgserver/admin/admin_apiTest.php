@@ -9,24 +9,43 @@ include "../command/cmd2.php";
 ?>
  <script>
 var categoryName = "";
+
+var changeDis = function(){
+	var obj = $(".custom-combobox-input");
+	var divName = obj.val();
+	log("on div"+divName);
+
+	categoryName = divName;
+
+	if($("div[name="+divName+"]").attr("value")!="ok")return;
+
+	$("div").css("display","none");
+	$("div[name="+divName+"]").css("display","block");
+
+	var datatable = getDataTable("datatable");
+	datatable.attr("dbWhere",'{"category":"'+divName+'","limit":20}');
+	loadDataTable(datatable,"reload");
+}
+
 $(document).ready(function(){
-	$('body').on('change','select[class=LQEditor]',function(){
-		var divName = $(this).val();
-		log("on div"+divName);
 
-		categoryName = divName;
+	$('body').on('input','.custom-combobox-input',function(){
+		//if(!$(this).hasClass('LQEditor'))return;
 
-		$("div").css("display","none");
-		$("div[name="+divName+"]").css("display","block");
-
-		var datatable = getDataTable("datatable");
-		datatable.attr("dbWhere",'{"category":"'+divName+'","limit":20}');
-		loadDataTable(datatable,"reload");
+		changeDis();
 
 	});
 
+
+    $(".custom-combobox-input").change(function(){
+ 
+        alert ("change event occured with value: " + document.getElementById("txtchange").value);
+ 
+  });
+ 
+
 	$('body').on('click','.doAction',function(){
-		var api = getLQEditorValue("a");
+		var api = $(".custom-combobox-input").val();
 		var pdata = getLQEditorValue("p");
 		var param = {"mode":"nodes","version":"2"};
 		var apiurl = "http://182.162.201.147:10010/data.php";
@@ -54,7 +73,7 @@ $(document).ready(function(){
 					}
 					,
 					error: function(e) {
-					    	alert("error : " + j2s(e));
+					    	alert("error",j2s(e));
 					    }
 					});
 
@@ -65,10 +84,145 @@ $(document).ready(function(){
 });
 
 </script>
+  <script>
+  (function( $ ) {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<span>" )
+          .addClass( "custom-combobox" )
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+        this._createShowAllButton();
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),
+          value = selected.val() ? selected.text() : "";
+ 
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )
+          .addClass( "custom-combobox-input form-control form-control-inline" )
+          .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: $.proxy( this, "_source" ),
+          })
+          .tooltip({
+            tooltipClass: "ui-state-highlight"
+          });
+ 
+        this._on( this.input, {
+        	autocompleteclose:function( event, ui ) {
+        		changeDis();
+        	},
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+            //changeDis();
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      _createShowAllButton: function() {
+        var input = this.input,
+          wasOpen = false;
+ 
+        $( "<button>" )
+          .attr( "tabIndex", -1 )
+          .attr( "title", "Show All Items" )
+          .tooltip()
+          .appendTo( this.wrapper )
+       	  .html("select")
+          .removeClass( "ui-corner-all" )
+          .addClass( "custom-combobox-toggle btn btn-primary" )
+          .mousedown(function() {
+            wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+          })
+          .click(function() {
+            input.focus();
+            // Close if already visible
+            if ( wasOpen ) {
+              return;
+            }
+ 
+            // Pass empty string as value to search for, displaying all results
+            input.autocomplete( "search", "" );
+          });
+      },
+ 
+      _source: function( request, response ) {
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+ 
+        // Selected an item, nothing to do
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // Search for a match (case-insensitive)
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // Found a match, nothing to do
+        if ( valid ) {
+          return;
+        }
+ 
+        // Remove invalid value
+        this.input
+          .val( "" )
+          .attr( "title", value + " didn't match any item" )
+          .tooltip( "open" );
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.data( "ui-autocomplete" ).term = "";
+      	//changeDis();
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+  })( jQuery );
+ 
+  $(function() {
+    $( "#combobox" ).combobox();
 
+  });
+
+  </script>
 
 <center>
- <table class="LQDataForm" border=1 width=50%>
+ <table class="LQDataEditor" border=1 width=50%>
  	<tr>
  		<td colspan=2>
  			<?php
@@ -81,12 +235,14 @@ $class_methods = get_class_methods($command);
 $apiList=array();
 
 $apiList[]="-----select api-------";
+$optionList="<option value=''></option>";
 foreach ($class_methods as $method_name) {
     if(strpos($method_name,"help_")  !== false){
 	    $realName = str_replace("help_","",$method_name);
 	    $mInfo = $command->$method_name();
 	    $apiList[]=$realName;
-	    echo "<div name='".$realName."'' style='display:none'>";
+	    $optionList.="<option value='$realName'>$realName</option>";
+	    echo "<div name='".$realName."'' style='display:none' value='ok'>";
 	    echo "<font size=6 color=blue>".$realName."</font><br>";
 	    echo "<b>".$mInfo["description"]."</b><br><br>";
 	    echo "* parameter <br>";
@@ -116,7 +272,7 @@ foreach ($class_methods as $method_name) {
 }
 
 $apiListStr = json_encode($apiList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
+	
  			?>
 
  		</td>
@@ -124,7 +280,13 @@ $apiListStr = json_encode($apiList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
  	</tr>
  	<tr>
 		<td>api</td>	
-		<td field="a" editor='{"type":"select","element":<?=$apiListStr?>}'></td>
+		<td> 
+		 <select id="combobox" class="LQEditor">
+		 		<?php
+		 			echo $optionList;
+		 		?>
+			  </select>
+</td>
 	</tr>
 	<tr>
 		<td>param</td>
@@ -143,31 +305,12 @@ $apiListStr = json_encode($apiList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	}
 </script> 
 <br><br>
-<b>--최근로그--</b><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbWhere='' name="datatable" border=1>
+<h2 id="tables-contextual-classes">|최근 로그</h2>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbWhere='' dbSort='{"no":"desc"}' autoSetting="true" dbLimit="10" name="datatable" border=1>
 	<thead>
-		<tr>
-			<th field="no" viewer='{"type":"text"}' primary>no</th>
-			<th field="category" viewer='{"type":"text"}'>category</th>
-			<th field="ip" viewer='{"type":"text"}'>ip</th>
-			<th field="input" viewer='{"type":"custom","func":"textareaViewer"}'>input</th>
-			<th field="output" viewer='{"type":"custom","func":"textareaViewer"}'>output</th>
-			<th field="regDate" viewer='{"type":"text"}'>regDate</th>
-			<th field="regTime" viewer='{"type":"text"}'>regtime</th>
-			<th field="execTime" viewer='{"type":"text"}'>exectime</th>
-		</tr>
 	</thead>
 	<tbody datazone>
-
 	</tbody>
-
-	<tfoot>
-		<tr>
-			<td colspan="8" align="center">
-				<a href="#next" class="LQLoadNext">Next</a>
-			</td>
-		</tr>
-	</tfoot>
 </table>
 
 </center>

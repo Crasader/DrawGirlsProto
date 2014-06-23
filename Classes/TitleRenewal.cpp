@@ -735,6 +735,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setSPGetTime(result_data["SPGetTime"].asInt());
 		mySGD->setSPGetHeart(result_data["SPGetHeart"].asInt());
 		mySGD->setGachaOnePercentFee(result_data["gachaOnePercentFee"].asInt());
+		mySGD->setSessionTime(result_data["sessionTime"].asInt());
 		
 		mySGD->setBonusItemCnt(kIC_doubleItem, result_data["bonusItemCntDoubleItem"].asInt());
 		mySGD->setBonusItemCnt(kIC_magnet, result_data["bonusItemCntMagnet"].asInt());

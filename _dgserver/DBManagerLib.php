@@ -2,11 +2,34 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CurrentUserInfo{
 	static public $os;
-	static public $language;
+	static public $language="ko";
 	static public $memberID;
 	static public $socialID;
+	static public $country="kr";
+
+	static public function getLocalizedValueInData($data){
+		return $data[CurrentUserInfo::$language]?$data[CurrentUserInfo::$language]:$data["en"];	
+	}
 }
 
+class DataTableUtil{
+	static function editor_text(){
+		return json_decode('{"type":"text"}',true);
+	}
+
+	static function viewer_text(){
+		return json_decode('{"type":"text"}',true);
+	}
+
+	static function viewer_listViewer($obj,$keyField,$valueField){
+		$listViewer=array("type"=>"select");
+		while($pData = Monster::getRowByQuery("",null,$keyField.",".$valueField)){
+			$listViewer["element"][] = $pData[$keyField]."-".json_decode($pData["valueField "],true)["ko"];
+			$listViewer["value"][]=$pData["no"];
+		}
+
+	}
+}
 class TimeManager{
 	public $m_timeOffset=32400;
 	private static $m_instance=NULL;
@@ -42,20 +65,24 @@ class TimeManager{
 	} 
 	
 	public function getCurrentWeekNo(){
-		$y = date("Y",$this->getTime());
-		$w = date("W",$this->getTime());
+		return $this->getWeekNo($this->getTime());
+	}
+	
+	public function getWeekNo($time){
+		$y = date("Y",$time);
+		$w = date("W",$time);
 		if($w<10)$w="0".$w;
 		
 		return $y.$w;
 	}
-	
+
 	public function getRemainTimeForWeeklyRank(){
 		return strtotime("next Sunday")-time();
 	}
 
-	public function getWeekNo($timestamp){
-		return date("W",$timestamp);
-	}
+	// public function getWeekNo($timestamp){
+	// 	return date("W",$timestamp);
+	// }
 	
 	public function getDateTime($timestamp){
 		return date("YmdHis",$timestamp);
@@ -66,7 +93,7 @@ class TimeManager{
 	}
 
 	public function getCurrentTime(){
-  		return date("Hi",$this->getTime());
+  		return date("His",$this->getTime());
 	}
 	public function getWeekDayNo($timestamp){
 		return date("w",$timestamp);
@@ -87,7 +114,6 @@ class TimeManager{
   	public function getYesterDayDate(){
   		return date("Ymd",strtotime(TimeManager::get()->getCurrentDate())-24*60*60);
   	}
-
 }
 
 
@@ -177,6 +203,8 @@ class ResultState{
 	const GDNOTINGWORK 			= 2016;
 	const GDALREADY 			= 2017;
 	const GDEXPIRE 				= 2018;
+	const GDOSERROR				= 2019;
+	const GDBLOCKEDUSER				= 2020;
 
 	const GDHTTPGATEWAYERROR	= 3001;
 
@@ -293,8 +321,9 @@ class ResultState{
 		}
 	}
 	
-	public static function successToArray(){
+	public static function successToArray($message=null){
 		$a["code"]=1;
+		if($message)$a["message"]=$message;
 		return $a;
 	}
 	
@@ -387,7 +416,7 @@ class DBManager{
 	
 	//초기화 
 	public function __construct(){
-
+		$this->m_shardDBInfoList[]=null;
 
 
 		//테이블 설정		
@@ -414,6 +443,7 @@ class DBManager{
 		self::$m_shardTables["characterhistory"]="CharacterHistory";
 		self::$m_shardTables["endlessrank"]="EndlessRank";
 		self::$m_shardTables["endlessplaylist"]="EndlessPlayList";
+		self::$m_shardTables["modifyhistory"]="ModifyHistory";
 
 		self::$m_mainTables["userindex"]="aUserShardIndex";
 		self::$m_mainTables["commonsetting"]="aCommonSetting";
@@ -437,6 +467,8 @@ class DBManager{
 		self::$m_mainTables["keyintvalue"]="aKeyIntValue";
 		self::$m_mainTables["keystringvalue"]="aKeyStringValue";
 		self::$m_mainTables["shop"]="aShopTable";
+		self::$m_mainTables["shopevent"]="aShopEventTable";
+		self::$m_mainTables["timeevent"]="aTimeEventTable";
 		self::$m_mainTables["worklist"]="aWorkList";
 		self::$m_mainTables["formsetter"]="aFormSetter";
 		self::$m_mainTables["userdata"]="UserDataTable";
@@ -565,6 +597,7 @@ class DBManager{
 		return $this->m_shardDBInfoList[$index];
 	}
 
+
 	public function getConnectionByShardKey($shardKey){
 		
 		
@@ -586,13 +619,16 @@ class DBManager{
 		return count($this->m_shardDBInfoList);
 	}
 	public function getDBIndexByShardKey($shardKey){
-		return $shardKey%$this->getShardDBCount();
+		return abs(($shardKey%($this->getShardDBCount()-1))+1);
+	}
+	public function getDBIndexByShardString($shardString){
+		return $this->getDBIndexByShardKey(crc32($shardString));
 	}
 	
 	public function closeShardDB(){
 		//for문 돌면서 close
 		foreach($this->m_shardDBInfoList as &$dbInfo){
-			$dbInfo->closeConnection();
+			if($dbInfo)$dbInfo->closeConnection();
 		}
 	}
 	
@@ -976,28 +1012,13 @@ class DBTable{
 	public $m__isLoaded=false;
 	public $m__isMainClass=true;
 	static public $m__qResult = null;
-	static public $m__qCnt = 0;
+	static public $m__qCnt = 1;
 	private $m__LQTableSelectCustomFunction=null;
 	private $m__LQTableInsertCustomFunction=null;
 	private $m__LQTableUpdateCustomFunction=null;
 	private $m__LQTableDeleteCustomFunction=null;
 	private $m__LQTableSelectQueryCustomFunction=null;
 
-	public function setLQTableSelectQueryCustomFunction($func){
-		$this->m__LQTableSelectQueryCustomFunction=$func;
-	}
-	public function setLQTableSelectCustomFunction($func){
-		$this->m__LQTableSelectCustomFunction = $func;
-	}
-	public function setLQTableInsertCustomFunction($func){
-		$this->m__LQTableInsertCustomFunction = $func;
-	}
-	public function setLQTableUpdateCustomFunction($func){
-		$this->m__LQTableUpdateCustomFunction = $func;
-	}
-	public function setLQTableDeleteCustomFunction($func){
-		$this->m__LQTableDeleteCustomFunction = $func;
-	}
 
 	public function __construct(){
 		$this->m__DBTable = DBManager::getST(get_called_class());
@@ -1038,9 +1059,9 @@ class DBTable{
 	}
 	
 	public function getArrayData($isIncludePrimaryKey=false,$keyList=null){
-
-
 		$arraydata=array();
+		
+		if(!$this->m__data || !is_array($this->m__data))return $arraydata;
 
 		foreach($this->m__data as $name=>$value){
 			if(!$keyList || in_array($name,$keyList)){
@@ -1065,9 +1086,6 @@ class DBTable{
 	}
 	
 	public function save($isIncludePrimaryKey=false){
-
-
-
 		LogManager::get()->addLog("DBRow save function");
 		if(!$this->m__DBInfo)return false;
 
@@ -1086,6 +1104,7 @@ class DBTable{
 			}
 			
 			if(mysql_query($query,$this->getDBConnection())){
+				LogManager::get()->addLog("what?->".mysql_error());
 				LogManager::get()->addLog("query ok ");
 				if($isInsert && $this->m__autoIncreaseKey){
 					$this->{$this->m__autoIncreaseKey}=mysql_insert_id($this->getDBConnection());
@@ -1170,12 +1189,25 @@ class DBTable{
 	public function &getRef($key){
 		return $this->m__data[$key];
 	}
+	public function setRef($field,$key,$value){
+		return $this->m__data[$field][$key]=$value;	
+	}
 	public function getField($key){
 		return $this->m__data[$key];
 	}
 
 	public function setField($key,$value){
 		$this->m__data[$key]=$value;
+	}
+
+	public function getlocalizedValue($key){
+		$data = $this->$key;
+		if(!is_array($data))$data = json_decode($data,true);
+		return $this->getLocalizedValueInData($data);
+	}
+
+	public function getLocalizedValueInData($data){
+		return $data[CurrentUserInfo::$language]?$data[CurrentUserInfo::$language]:$data["en"];	
 	}
 
 	public function __get($name) {
@@ -1215,11 +1247,31 @@ class DBTable{
         unset($this->m__data[$key]);
     }
 	
+
+
+    // lqdatatable 관련
+
+	public function setLQTableSelectQueryCustomFunction($func){
+		$this->m__LQTableSelectQueryCustomFunction=$func;
+	}
+	public function setLQTableSelectCustomFunction($func){
+		$this->m__LQTableSelectCustomFunction = $func;
+	}
+	public function setLQTableInsertCustomFunction($func){
+		$this->m__LQTableInsertCustomFunction = $func;
+	}
+	public function setLQTableUpdateCustomFunction($func){
+		$this->m__LQTableUpdateCustomFunction = $func;
+	}
+	public function setLQTableDeleteCustomFunction($func){
+		$this->m__LQTableDeleteCustomFunction = $func;
+	}
+
 	public function loadWithDataTable($p){
 		if($this->isMainDBClass()){
 			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::get()->getMainConnection());
 		}else{
-			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::get()->getConnectionByShardIndex(0));
+			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::get()->getConnectionByShardIndex(1));
 		}
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
@@ -1232,39 +1284,83 @@ class DBTable{
 			$data["head"][]=$fInfo;
 		}
 
+		$data["result"]=ResultState::successToArray();
+
 		return $data;
 	}
 
 	public function selectWithLQTable($param){
 		$dataList = array();
 
+
+		//쿼리 만들기
 		$query = "";
 		if($this->m__LQTableSelectQueryCustomFunction){
 			$func = $this->m__LQTableSelectQueryCustomFunction;
 			$query = $func($param);
 		}
 
+
+		//정렬쿼리 붙이기
+		$orderStr="";
+		if($param["sort"]){
+			$orderInfo = $param["sort"];
+			LogManager::get()->addLog("sort info".$param["sort"]);
+			if($orderInfo){
+				$orderStr=" order by";
+				$cc=1;
+				$orderCnt=count($orderInfo);
+				if($orderCnt>0){
+					foreach ($orderInfo as $key => $value) {
+						if($value=="desc")$orderType="desc";
+						else $orderType="asc";
+						$orderStr.=" ".$key." ".$orderType;
+
+						if($orderCnt!=$cc)$orderStr.=",";
+						$cc++;
+					}
+				}
+			}
+		}
+		$query.=$orderStr;
+
+		//limit 쿼리붙이기
+		if($param["limit"]){
+			if(!$param["where"] || !$param["where"]["start"])$param["where"]["start"]=0;
+			$query .= " limit ".$param["where"]["start"].",".$param["limit"];
+			$result["nextInfo"]=array("start"=>$param["where"]["start"]+$param["limit"]);
+		}	
+
+	    //결과 뽑기
+	    $cnt=0; 
 	    while($rData = self::getRowByQuery($query)){
+	    	$rData["shardIndex"]=self::getShardIndexNow();
 	    	$func = $this->m__LQTableSelectCustomFunction;
 			if($func)$dataList[]=$func($rData);
 			else $dataList[]=$rData;
+			$cnt++;
 	    }
 
 	    $result["param"]=$param;
 	    $result["data"]=$dataList;
-	    $result["result"]="ok";
+	    if(count($dataList)<=0){
+	    	$result["result"]=ResultState::toArray(ResultState::GDDONTFIND,"데이터를 찾을 수 없습니다.");
+	    	return $result;
+	    }
+		$result["result"]=ResultState::successToArray();
 	    return $result;
 	}
 
 	public function insertWithLQTable($param){
+		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
-			if(!$this->isMainDBClass() && $param["data"]["memberID"]){
-				$this->m__userIndex = UserIndex::create($param["data"]["memberID"]);
-				$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			if(!$this->isMainDBClass() && $shardIndex){
+				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
 			}else{
 				$this->setDBInfo(DBManager::get()->getMainDBInfo());
 			}
 		}
+
 		$loadQuery=-1;
 		if($this->m__LQTableInsertCustomFunction){
 			$func = $this->m__LQTableInsertCustomFunction;
@@ -1277,33 +1373,36 @@ class DBTable{
 		}
 
 		LogManager::get()->addLog("loadQuery:".$loadQuery);
+		LogManager::get()->addLog("param check ".json_encode($param["data"],true));
 		if($loadQuery!=-1)$this->load($loadQuery);
 
 		if($this->isLoaded()){
-			$r["result"]="fail1";
+			$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE,"로드실패");
 			return $r;
 		}
 
 		foreach ($param["data"] as $key => $value) {
 			$this->$key = $value;
+			LogManager::get()->addLog("foreach $key -".json_encode($value,true));
 		}
 
 		if($this->save()){
 			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
+			$r["shardIndex"]=$shardIndex;
+			$r["result"]=ResultState::successToArray();
 			return $r;
 		}
 
-		$r["result"]="fail";
+		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE,"저장할수없습니다.");
 		return $r;
 	}
 
 
 	public function updateWithLQTable($param){
+		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
-			if(!$this->isMainDBClass() && $param["data"]["memberID"]){
-				$this->m__userIndex = UserIndex::create($param["data"]["memberID"]);
-				$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			if(!$this->isMainDBClass() && $shardIndex){
+				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
 			}else{
 				$this->setDBInfo(DBManager::get()->getMainDBInfo());
 			}
@@ -1324,8 +1423,7 @@ class DBTable{
 		unset($param["data"][$pkey]);
 		
 		if(!$this->isLoaded()){
-			$r["result"]="fail";
-			$r["message"]="로드실패";
+			$r["result"]=ResultState::toArray(ResultState::GDMYSQLQUERY,"로드실패");
 			return $r;
 		}
 
@@ -1335,19 +1433,22 @@ class DBTable{
 
 		if($this->save()){
 			$r["data"] = $this->getArrayData(true);
-			$r["result"]="ok";
+			$func = $this->m__LQTableSelectCustomFunction;
+			if($func)$r["data"]=$func($r["data"]);
+			$r["shardIndex"]=$shardIndex;
+			$r["result"]=ResultState::successToArray();
 			return $r;
 		}
 
-		$r["result"]="fail";
+		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
 		return $r;
 	}
 
 	public function deleteWithLQTable($param){
+		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
-			if(!$this->isMainDBClass() && $param["data"]["memberID"]){
-				$this->m__userIndex = UserIndex::create($param["data"]["memberID"]);
-				$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			if(!$this->isMainDBClass() && $shardIndex){
+				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
 			}else{
 				$this->setDBInfo(DBManager::get()->getMainDBInfo());
 			}
@@ -1365,17 +1466,16 @@ class DBTable{
 		$this->load($loadQuery);
 
 		if(!$this->isLoaded()){
-			$r["result"]="fail";
+			$r["result"]=ResultState::toArray(ResultState::GDMYSQLQUERY,"로드실패");
 			return $r;
 		}
 
 		if($this->remove()){
-			$r["result"]="ok";
+			$r["result"]=ResultState::successToArray();
 			return $r;
-
 		}
 
-		$r["result"]="fail";
+		$r["result"]=ResultState::toArray(ResultState::GDMYSQLQUERY,"삭제실패");
 		return $r;
 
 
@@ -1400,7 +1500,7 @@ class DBTable{
 
 
 		if(self::$m__qCnt>=count($dbInfoList)){
-			self::$m__qCnt=0;
+			self::$m__qCnt=1;
 			return false;
 		}
 		
@@ -1417,11 +1517,13 @@ class DBTable{
 		
 		return $result;
 	}
-
-	static public function getRowByQuery($where="",$dbcon=NULL){
+	static public function getShardIndexNow(){
+		return self::$m__qCnt;
+	}
+	static public function getRowByQuery($where="",$dbcon=NULL,$fields="*"){
 		if(self::isMainDBClass()){
-			if(!self::$m__qResult)self::$m__qResult = mysql_query("select * from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
-			LogManager::get()->addLog("select * from ".DBManager::getMT(get_called_class())." ".$where);
+			if(!self::$m__qResult)self::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+			LogManager::get()->addLog("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where);
 			if(self::$m__qResult)$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
 			if(!$result)self::$m__qResult=null;
 			return $result;
@@ -1429,7 +1531,7 @@ class DBTable{
 
 		$dbInfoList = self::getShardDBInfoList();
 		if(self::$m__qCnt>=count($dbInfoList)){
-			self::$m__qCnt=0;
+			self::$m__qCnt=1;
 			return false;
 		}
 		
@@ -1437,8 +1539,8 @@ class DBTable{
 			if($dbcon==NULL)$dbconn = $dbInfoList[self::$m__qCnt]->getConnection();
 			else $dbconn = $dbcon;
 
-			self::$m__qResult = mysql_query("select * from ".DBManager::getST(get_called_class())." ".$where,$dbconn);
-			LogManager::get()->addLog("ok go select * from ".DBManager::getST(get_called_class())." ".$where);
+			self::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getST(get_called_class())." ".$where,$dbconn);
+			LogManager::get()->addLog("ok go select ".$fields." from ".DBManager::getST(get_called_class())." ".$where);
 		}
 
 		$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
@@ -1451,21 +1553,41 @@ class DBTable{
 		return self::getRowByQuery($where);
 	}
 
+	static public function getObjectByQuery($where="",$dbcon=NULL,$fields="*"){
+		$rowData = self::getRowByQuery($where,$dbcon,$fields);
+		$obj=null;
+		if($rowData){
+			$cls = get_called_class();
+			$obj = new $cls();
+			$obj->m__data = $rowData;
+			$obj->setLoaded(true);
+		}
+		return $obj;
+	}
+
 	static public function removeRowByQuery($where="",$dbcon=NULL){
-		if(!$where)return;
+		if(!$where)return false;
 
 		if(self::isMainDBClass()){
 			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
-			return;
+			return $result;
+ 		}
+
+		if($dbcon){
+			$table = DBManager::getMT(get_called_class());
+			if(!$table)$table=DBManager::getST(get_called_class());
+			$result=mysql_query("delete from ".$table." ".$where,$dbcon);
+			LogManager::get()->addLog("delete gogo is ".$result);
+			return $result;
 		}
 
 		$dbInfoList = self::getShardDBInfoList();
-		for($i=0;$i<count($dbInfoList);$i++){
+		for($i=1;$i<count($dbInfoList);$i++){
 			$dbconn = $dbInfoList[$i]->getConnection();
 			$result=mysql_query("delete from ".DBManager::getST(get_called_class())." ".$where,$dbconn);
 		}
 
-		return;
+		return true;
 	}
 
 

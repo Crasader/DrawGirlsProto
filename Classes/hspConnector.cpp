@@ -559,7 +559,7 @@ void hspConnector::openHSPUrl(const std::string& url)
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPUrl", "()V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -568,13 +568,37 @@ void hspConnector::openHSPUrl(const std::string& url)
 #endif
 }
 
+void hspConnector::mappingToAccount(enum HSPMapping mt, jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	int dkey = jsonDelegator::get()->add(func, 0, 0);
+	jsonSelType nextFunc = [=](Json::Value obj){
+		int delekey = dkey;
+		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+		if(delsel.func){
+			delsel.func(obj);
+		}
+		jsonDelegator::get()->remove(delekey);
+	};
+	
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "hspMappingToAccount", "(II)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, (int)mt);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+#endif
+}
 void hspConnector::openHSPNotice()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPNotice", "(Ljava/lang/String;)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		t.env->CallStaticObjectMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS

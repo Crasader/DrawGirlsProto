@@ -281,7 +281,7 @@ public:
 			
 			int mode = m_modeBtn->getTag();
 			mode++;
-			if(mode>4)mode=0;
+			if(mode>5)mode=0;
 			m_modeBtn->setTag(mode);
 			
 			setInfomation();
@@ -296,6 +296,8 @@ public:
 			CCNode* obj =  m_objList[m_selectedObjNumber].obj;
 			obj->setPosition(m_objList[m_selectedObjNumber].originalData["x"].asFloat(),m_objList[m_selectedObjNumber].originalData["y"].asFloat());
 			obj->setContentSize(CCSizeMake(m_objList[m_selectedObjNumber].originalData["w"].asFloat(),m_objList[m_selectedObjNumber].originalData["h"].asFloat()));
+			obj->setAnchorPoint(CCSizeMake(m_objList[m_selectedObjNumber].originalData["ax"].asFloat(),m_objList[m_selectedObjNumber].originalData["ay"].asFloat()));
+
 			obj->setScaleX(m_objList[m_selectedObjNumber].originalData["sx"].asFloat());
 			obj->setScaleY(m_objList[m_selectedObjNumber].originalData["sy"].asFloat());
 			if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(obj)){
@@ -421,7 +423,14 @@ public:
 							checkobj->getOpacity()-m_objList[i].originalData["opacity"].asInt()
 							);
 		}
-		
+		if(m_objList[i].originalData["ax"].asFloat()!=obj->getAnchorPoint().x || m_objList[i].originalData["ay"].asFloat()!=obj->getAnchorPoint().y)
+			printf("%s->setAnchorPoint(ccp(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)\n",
+						 obj->getStringData().c_str(),
+						 obj->getAnchorPoint().x,
+						 obj->getAnchorPoint().y,
+						 obj->getAnchorPoint().x-m_objList[i].originalData["ax"].asFloat(),
+						 obj->getAnchorPoint().y-m_objList[i].originalData["ay"].asFloat()
+						 );
 	}
 	
 	void setGuideImage(string filename){
@@ -473,6 +482,8 @@ public:
 		newobj.originalData["h"]= obj->getContentSize().height;
 		newobj.originalData["sx"]=obj->getScaleX();
 		newobj.originalData["sy"]=obj->getScaleY();
+		newobj.originalData["ax"]=obj->getAnchorPoint().x;
+		newobj.originalData["ay"]=obj->getAnchorPoint().y;
 		
 		if(CCNodeRGBA* checkobj = dynamic_cast<CCNodeRGBA*>(obj)){
 			newobj.originalData["opacity"]=checkobj->getOpacity();
@@ -533,6 +544,10 @@ public:
 			}else{
 				m_objInfo->setString("do not support");
 			}
+		}else if(m_modeBtn->getTag()==5){
+			m_modeBtn->setTitle("anchorpoint");
+			m_objInfo->setString(CCString::createWithFormat("x:%f\ny:%f",selectedObj->getAnchorPoint().x,selectedObj->getAnchorPoint().y)->getCString());
+
 		}else{
 			m_modeBtn->setTitle("none");
 		}
@@ -596,6 +611,11 @@ public:
 					if(newopa<0)newopa=0;
 					checkobj->setOpacity(newopa);
 				}
+			}else if(m_modeBtn->getTag()==5){
+				CCPoint dtPos = ccpMult(ccpSub(pTouch->getLocation(),m_startPosition),0.1f);
+				dtPos.x = ((int)(dtPos.x*10*10)/(int)10)/(double)500;
+				dtPos.y = ((int)(dtPos.y*10*10)/(int)10)/(double)500;
+				selectedObj->setAnchorPoint(ccpAdd(selectedObj->getAnchorPoint(),dtPos));
 			}
 			
 			setInfomation();
