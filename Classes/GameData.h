@@ -128,7 +128,7 @@ public:
 	std::function<void(void)> hideBosses;
 	std::function<void(void)> toFun;
 	std::function<void(void)> toScratch;
-	
+	std::function<void(void)> removeAllPattern;
 	vector<CCNode*> getMainCumberCCNodeVector()
 	{
 		vector<KSCumberBase*> t_vector = getMainCumberVector();

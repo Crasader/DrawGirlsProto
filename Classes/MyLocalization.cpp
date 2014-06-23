@@ -1159,11 +1159,10 @@ void MyLocal::ko()
 	 
 	ko->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	ko->setObject(CCString::create("닉네임 오류"), kMyLocalKey_nicknameError);
-	ko->setObject(CCString::create("<font color=950>남은 판수 </font>"
-																								"<font color=999>%d </font>"
-																								"<font color=950>회 성공시 </font>"
-																								"<font color=999>%.1f%% </font>"
-																								"<font color=950>획득</font>"), kMyLocalKey_onePercentDesc2);
+	ko->setObject(CCString::create("<font color=#FFFFFF>남은 판수 </font>"
+																								"<font color=#FFAA14 size=14>%d회 / </font>"
+																								"<font color=#FFFFFF>성공시 </font>"
+																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
 	ko->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
 	
@@ -1946,11 +1945,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	
 	en->setObject(CCString::create("닉네임 오류"), kMyLocalKey_nicknameError);
-	en->setObject(CCString::create("<font color=950>남은 판수 </font>"
-																								"<font color=999>%d </font>"
-																								"<font color=950>회 성공시 </font>"
-																								"<font color=999>%.1f%% </font>"
-																								"<font color=950>획득</font>"), kMyLocalKey_onePercentDesc2);
+	en->setObject(CCString::create("<font color=#FFFFFF>남은 판수 </font>"
+																								"<font color=#FFAA14 size=14>%d회 / </font>"
+																								"<font color=#FFFFFF>성공시 </font>"
+																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
 	en->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
 	
@@ -2758,11 +2756,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	
 	ja->setObject(CCString::create("닉네임 오류"), kMyLocalKey_nicknameError);
-	ja->setObject(CCString::create("<font color=950>남은 판수 </font>"
-																								"<font color=999>%d </font>"
-																								"<font color=950>회 성공시 </font>"
-																								"<font color=999>%.1f%% </font>"
-																								"<font color=950>획득</font>"), kMyLocalKey_onePercentDesc2);
+	ja->setObject(CCString::create("<font color=#FFFFFF>남은 판수 </font>"
+																								"<font color=#FFAA14 size=14>%d회 / </font>"
+																								"<font color=#FFFFFF>성공시 </font>"
+																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
 	ja->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
 	

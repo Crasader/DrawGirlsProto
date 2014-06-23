@@ -665,7 +665,8 @@ void CumberParent::hideBosses()
 	for(auto mainCumber : mainCumbers)
 	{
 		mainCumber->setVisible(false);
-		mainCumber->stopAllActions();
-		mainCumber->unscheduleAllSelectors();
+		mainCumber->onExit();
+//		mainCumber->stopAllActions();
+//		mainCumber->unscheduleAllSelectors();
 	}
 }
