@@ -610,15 +610,16 @@ void Maingame::finalSetting()
 	screen_side_warning_node->setPosition(CCPointZero);
 	addChild(screen_side_warning_node, screenNodeZorder);
 	
+	thumb_base_position = ccp(40-160.f*thumb_scale,myDSH->ui_center_y-215.f*thumb_scale);
+	
 	if(mySGD->is_endless_mode)
 	{
 		thumb_case->setPositionY(myDSH->ui_center_y-10);
 		sil_thumb->setPositionY(myDSH->ui_center_y-10);
 		thumb_texture->setPositionY(myDSH->ui_center_y-10);
+		thumb_base_position.y -= 10;
 	}
 	
-	
-	thumb_base_position = ccp(40-160.f*thumb_scale,myDSH->ui_center_y-10-215.f*thumb_scale);
 	
 	CCDelayTime* thumb_delay = CCDelayTime::create(0.3f);
 	CCCallFunc* thumb_call = CCCallFunc::create(this, callfunc_selector(Maingame::refreshThumb));
