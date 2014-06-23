@@ -25,16 +25,20 @@ echo $lname[1];
 	var gid = '<?=$gid?>';
 </script>
 		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/black-tie/jquery-ui.css">
+		<script src="jquery-ui-timepicker-addon.js"></script>
 		<script src="lib.js"></script>
 		<script src="LQDataTable.js"></script>
+		<link rel="stylesheet" href="LQDataTable.css">
 		<!-- Latest compiled and minified CSS -->
 
-<!-- Bootstrap styles -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-<!-- Generic page styles -->
-<link rel="stylesheet" href="jqueryupload/css/style.css">
-<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-<link rel="stylesheet" href="jqueryupload/css/jquery.fileupload.css">
+		<!-- Bootstrap styles -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+		<!-- Generic page styles -->
+		<link rel="stylesheet" href="jqueryupload/css/style.css">
+		<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+		<link rel="stylesheet" href="jqueryupload/css/jquery.fileupload.css">
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 </head>

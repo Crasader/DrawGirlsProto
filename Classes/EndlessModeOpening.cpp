@@ -722,7 +722,7 @@ void EndlessModeOpening::saveStageInfo(Json::Value result_data)
 		NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 		
 		NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
-		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
+//		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
 		NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 		
 		Json::Value t_card_missile = t_card["missile"];
@@ -1592,9 +1592,13 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_list[idx].score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 	score_label->setColor(ccc3(255, 255, 255));
 	score_label->setAnchorPoint(ccp(1,0.5f));
-	score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 	score_label->setPosition(ccp(215 + 9.5,18));
+	//score_label->setHorizontalAlignment(kCCTextAlignmentRight);
+	//score_label->setPosition(ccp(160,18));
+	//score_label->setPosition(ccp(223.5, 18.0));
 	list_cell_case->addChild(score_label);
+	
+	setFormSetter(score_label);
 	
 	StyledLabelTTF* victory_label =
 	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), victory.getV()),
@@ -1602,9 +1606,12 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 //	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
 //	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
+//	victory_label->setPosition(ccp(190,18));
 	victory_label->setPosition(ccp(152 + 12 + 3.0,18));
-	list_cell_case->addChild(victory_label);
 
+	list_cell_case->addChild(victory_label);
+	
+	setFormSetter(victory_label);
 	if(idx == currentSelectedIdx)
 	{
 		if(currentSelectedCell)

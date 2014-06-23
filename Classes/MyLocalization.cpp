@@ -1279,6 +1279,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
 	ko->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
 	
+	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -2065,6 +2067,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	en->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
 	en->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	
+	en->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2874,6 +2878,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	ja->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
 	ja->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	
+	ja->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

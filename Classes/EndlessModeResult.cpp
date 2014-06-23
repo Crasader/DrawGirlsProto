@@ -656,18 +656,22 @@ void EndlessModeResult::setMain()
 	left_total_back->addChild(left_total_content);
 	
 	
-	
+	string stop_string;
+	if(left_total_score.getV() <= right_total_score.getV())
+		stop_string = myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin);
+	else
+		stop_string = myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinTitle);
 	
 	CCSprite* n_stop = CCSprite::create("endless_ready.png");
 	
-	n_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
+	n_stop_label2 = KSLabelTTF::create(stop_string.c_str(), mySGD->getFont().c_str(), 22);
 	n_stop_label2->setColor(ccWHITE);
 	n_stop_label2->setOpacity(100);
 	n_stop_label2->disableOuterStroke();
 	n_stop_label2->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-2));
 	n_stop->addChild(n_stop_label2);
 	
-	KSLabelTTF* n_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* n_stop_label = KSLabelTTF::create(stop_string.c_str(), mySGD->getFont().c_str(), 22);
 	n_stop_label->setColor(ccc3(50, 30, 5));
 	n_stop_label->setPosition(ccp(n_stop->getContentSize().width/2.f, n_stop->getContentSize().height/2.f-1));
 	n_stop->addChild(n_stop_label);
@@ -675,14 +679,14 @@ void EndlessModeResult::setMain()
 	CCSprite* s_stop = CCSprite::create("endless_ready.png");
 	s_stop->setColor(ccGRAY);
 	
-	s_stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
+	s_stop_label2 = KSLabelTTF::create(stop_string.c_str(), mySGD->getFont().c_str(), 22);
 	s_stop_label2->setColor(ccWHITE);
 	s_stop_label2->setOpacity(100);
 	s_stop_label2->disableOuterStroke();
 	s_stop_label2->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-2));
 	s_stop->addChild(s_stop_label2);
 	
-	KSLabelTTF* s_stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWin), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* s_stop_label = KSLabelTTF::create(stop_string.c_str(), mySGD->getFont().c_str(), 22);
 	s_stop_label->setColor(ccc3(50, 30, 5));
 	s_stop_label->setPosition(ccp(s_stop->getContentSize().width/2.f, s_stop->getContentSize().height/2.f-1));
 	s_stop->addChild(s_stop_label);
@@ -2392,7 +2396,7 @@ void EndlessModeResult::saveStageInfo(Json::Value result_data)
 		NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 		
 		NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
-		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
+//		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
 		NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 		
 		Json::Value t_card_missile = t_card["missile"];

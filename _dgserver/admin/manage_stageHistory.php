@@ -8,7 +8,7 @@ $(document).ready(function(){
 		
 		var datatable = getDataTable("datatable");
 		var idType = $("input[name=type]").val();
-		var id = $("input[name=findNo]").val();
+		var id = $("#findNo").val();
 		 
 		datatable.attr("dbWhere",'{"type":"'+idType+'","id":"'+id+'"}');
 		loadDataTable(datatable);
@@ -22,7 +22,7 @@ $(document).ready(function(){
 	<tr>
 		<td>조회대상</td>
 		<td><input type="radio" name="type" value="fb">페이스북ID <input type="radio" name="type" value="pc">Payco ID <input type="radio" name="type" value="sno" checked>회원번호 </td>
-		<td><input type="text" name="findNo"><td>
+		<td><input type="text" id="findNo"><td>
 		<td><input type="submit" value="조회" class="findUser"></td>
 	</tr>
 </table>
