@@ -34,15 +34,17 @@ public:
 		t->autorelease();
 		return t;
 	}
-	static OnePercentGame* create(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha)
+	static OnePercentGame* create(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha,
+																bool openEffect = true)
 	{
 
 		OnePercentGame* t = new OnePercentGame();
-		t->init(originalPercent, cancelGacha, tryGacha);
+		t->init(originalPercent, cancelGacha, tryGacha, openEffect);
 		t->autorelease();
 		return t;
 	}
-	bool init(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha);
+	bool init(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha,
+						bool openEffect);
 	void gameUISetting() ;
 	void gachaAction(CCObject* sender, CCControlEvent t_event) ;
 	void showFail() ;
@@ -81,5 +83,8 @@ protected:
 	CCNode* m_graphNode;
 	CCNode* m_stencil;
 	CCSprite* m_gradient;
+	std::function<void(void)> m_toDown, m_toUp;
+	CCNode* m_tutorialBox, *m_desc3;
+//	CCNode* m_command1;
 };
 #endif

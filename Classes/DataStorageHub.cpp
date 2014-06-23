@@ -749,10 +749,9 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_atTimeShowStupidNpuHelp] = "ats_snh";
 	return_value[kDSH_Key_atTimeShowEventRubyShop] = "ats_ers";
 	return_value[kDSH_Key_atTimeShowLevelupGuide] = "ats_lg";
-	
 	return_value[kDSH_Key_stageHighRank_int1] = "stghr%d";
-	
 	return_value[kDSH_Key_isShowMainflowDimmed] = "ismfd";
 	return_value[kDSH_Key_isShowEndlessModeTutorial] = "isemt";
+	return_value[kSDH_Key_isShowOnePercentTutorial] = "issopt";
 }
 #undef LZZ_INLINE
