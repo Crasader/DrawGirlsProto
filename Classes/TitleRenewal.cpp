@@ -419,7 +419,6 @@ void TitleRenewalScene::successLogin()
 	
 	command_list.push_back(CommandParam("gettimeevent", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeEvent)));
 	
-	
 	Json::Value attendance_param;
 	attendance_param["memberID"] = myHSP->getMemberID();
 	command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
@@ -459,6 +458,10 @@ void TitleRenewalScene::successLogin()
 	Json::Value userdata_param;
 	userdata_param["memberID"] = hspConnector::get()->getSocialID();
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
+	
+	Json::Value heart_param;
+	heart_param["memberID"] = myHSP->getMemberID();
+	command_list.push_back(CommandParam("getheart", heart_param, json_selector(this, TitleRenewalScene::resultGetHeart)));
 	
 	command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeInfo)));
 	
@@ -788,6 +791,24 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 	{
 		is_receive_fail = true;
 		command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
+void TitleRenewalScene::resultGetHeart(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->heartRefreshSuccess(result_data);
+	}
+	else
+	{
+		is_receive_fail = true;
+		Json::Value heart_param;
+		heart_param["memberID"] = myHSP->getMemberID();
+		command_list.push_back(CommandParam("getheart", heart_param, json_selector(this, TitleRenewalScene::resultGetHeart)));
 	}
 	
 	receive_cnt--;

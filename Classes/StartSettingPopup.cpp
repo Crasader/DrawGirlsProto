@@ -1901,26 +1901,26 @@ void StartSettingPopup::callStart()
 		}
 	}
 	
-	bool is_startable = false;
-	if(mySGD->is_endless_mode)
-	{
-		if(mySGD->endless_my_victory.getV() > 0)
-			is_startable = true;
-		else
-			is_startable = ((MainFlowScene*)getParent())->heart_time->isStartable();
-	}
-	else
-	{
-		is_startable = ((PuzzleScene*)getParent())->heart_time->isStartable();
-	}
-	
-	if(mySGD->isTimeEvent(kTimeEventType_heart))
-	{
-		is_startable = true;
-	}
-	
-	if(is_startable)
-	{
+//	bool is_startable = false;
+//	if(mySGD->is_endless_mode)
+//	{
+//		if(mySGD->endless_my_victory.getV() > 0)
+//			is_startable = true;
+//		else
+//			is_startable = ((MainFlowScene*)getParent())->heart_time->isStartable();
+//	}
+//	else
+//	{
+//		is_startable = ((PuzzleScene*)getParent())->heart_time->isStartable();
+//	}
+//	
+//	if(mySGD->isTimeEvent(kTimeEventType_heart))
+//	{
+//		is_startable = true;
+//	}
+//	
+//	if(is_startable)
+//	{
 		bool is_startGame = false;
 		
 		if(mySGD->isTimeEvent(kTimeEventType_heart))
@@ -1932,48 +1932,48 @@ void StartSettingPopup::callStart()
 				is_startGame = true;
 		}
 		
-		if(!is_startGame)
-		{
-			if(mySGD->is_endless_mode)
-				is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
-			else
-				is_startGame = ((PuzzleScene*)getParent())->heart_time->startGame();
-		}
+//		if(!is_startGame)
+//		{
+//			if(mySGD->is_endless_mode)
+//				is_startGame = ((MainFlowScene*)getParent())->heart_time->startGame();
+//			else
+//				is_startGame = ((PuzzleScene*)getParent())->heart_time->startGame();
+//		}
 		
-		if(is_startGame)
-		{
-			realStartAction();
-		}
-		else
-		{
-			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
-				tutorial_fail_func();
-			is_menu_enable = true;
-		}
-	}
-	else
-	{
-		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_money, [=]()
-															{
-																ShopPopup* t_shop = ShopPopup::create();
-																t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																if(mySGD->is_endless_mode)
-																	t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
-																else
-																	t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-																t_shop->setShopCode(kSC_heart);
-																t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-																addChild(t_shop, kStartSettingPopupZorder_popup);
-															}, [=]()
-		{
-			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
-				tutorial_fail_func();
-			is_menu_enable = true;
-		}), 9999);
-	}
+//		if(is_startGame)
+//		{
+			realStartAction(!is_startGame);
+//		}
+//		else
+//		{
+//			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+//				tutorial_fail_func();
+//			is_menu_enable = true;
+//		}
+//	}
+//	else
+//	{
+//		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_money, [=]()
+//															{
+//																ShopPopup* t_shop = ShopPopup::create();
+//																t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+//																if(mySGD->is_endless_mode)
+//																	t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+//																else
+//																	t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+//																t_shop->setShopCode(kSC_heart);
+//																t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+//																addChild(t_shop, kStartSettingPopupZorder_popup);
+//															}, [=]()
+//		{
+//			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+//				tutorial_fail_func();
+//			is_menu_enable = true;
+//		}), 9999);
+//	}
 }
 
-void StartSettingPopup::realStartAction()
+void StartSettingPopup::realStartAction(bool is_use_heart)
 {
 	finalSetting();
 	
@@ -1995,6 +1995,40 @@ void StartSettingPopup::realStartAction()
 	mySGD->setPieceHistoryForNotSave(t_history);
 	
 	t_command_list.push_back(CommandParam("updatePieceHistory", mySGD->getSavePieceHistoryParam(t_history), nullptr));
+	
+	
+	Json::Value heart_param;
+	heart_param["memberID"] = myHSP->getMemberID();
+	if(is_use_heart)
+		heart_param["use"] = is_use_heart;
+	t_command_list.push_back(CommandParam("getheart", heart_param, [=](Json::Value result_data)
+										  {
+											  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+											  {
+												  mySGD->heartRefreshSuccess(result_data);
+											  }
+											  else if(result_data["result"]["code"].asInt() == GDEXPIRE)
+											  {
+												  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_money, [=]()
+																									  {
+																										  ShopPopup* t_shop = ShopPopup::create();
+																										  t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+																										  if(mySGD->is_endless_mode)
+																											  t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																										  else
+																											  t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																										  t_shop->setShopCode(kSC_heart);
+																										  t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																										  addChild(t_shop, kStartSettingPopupZorder_popup);
+																									  }, [=]()
+																									  {
+																										  if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+																											  tutorial_fail_func();
+																										  is_menu_enable = true;
+																									  }), 9999);
+
+											  }
+										  }));
 	
 	mySGD->changeGoodsTransaction(t_command_list, json_selector(this, StartSettingPopup::finalStartAction));
 }

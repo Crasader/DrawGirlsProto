@@ -123,6 +123,8 @@ private:
 	vector<DownloadFile> monster_download_list;
 	int monster_download_version;
 	
+	void resultGetHeart(Json::Value result_data);
+	
 	void resultGetUserData(Json::Value result_data);
 	
 	void resultCheckAttendanceEvent(Json::Value result_data);
