@@ -75,6 +75,7 @@ public:
 	enum PATTERN_RET_CODE{INVALID=0, VALID=1, NOCAST=2};
 	int attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe);
 	int getJackMissileCnt();
+	void removeAllPattern();
 private:
 	
 	SW_Parent* mySW;
@@ -88,6 +89,7 @@ private:
 	void removeChargeInArray(CCObject* remove_charge);
 	void movingMainCumber();
 	void myInit(CCNode* boss_eye);
+	CCNode* pattern_container;
 };
 
 #endif

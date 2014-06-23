@@ -13,6 +13,7 @@
 #include "FlagSelector.h"
 #include "MyLocalization.h"
 #include "KSJuniorBase.h"
+#include "OnePercentTutorial.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -1169,6 +1170,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 									  isGameover = true;
 									  myGD->setIsGameover(true);
 									  myGD->communication("CP_setGameover");
+										myGD->removeAllPattern();
 									  stopCounting();
 									  myGD->communication("Main_allStopSchedule");
 									  myGD->communication("Main_startMoveToBossPosition");
@@ -1218,6 +1220,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 									  // timeover
 									  isGameover = true;
 									  myGD->communication("CP_setGameover");
+										myGD->removeAllPattern();
 									  myGD->communication("Main_allStopSchedule");
 									  AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 									  
@@ -1291,6 +1294,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			isGameover = true;
 			myGD->setIsGameover(true);
 			myGD->communication("CP_setGameover");
+			myGD->removeAllPattern();
 			stopCounting();
 			myGD->communication("Main_allStopSchedule");
 			myGD->communication("Main_startMoveToBossPosition");
@@ -1340,6 +1344,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			// timeover
 			isGameover = true;
 			myGD->communication("CP_setGameover");
+			myGD->removeAllPattern();
 			myGD->communication("Main_allStopSchedule");
 			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 			
@@ -2640,9 +2645,23 @@ void PlayUI::endGame (bool is_show_reason)
 void PlayUI::showGachaOnePercent ()
 {
 	//OnePercentGacha* t_popup = OnePercentGacha::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha), this, callfuncF_selector(PlayUI::gachaOnOnePercent), keep_percentage.getV());
-	OnePercentGame* t_popup = OnePercentGame::create(keep_percentage.getV(), bind(&PlayUI::cancelOnePercentGacha, this), bind(&PlayUI::gachaOnOnePercent, this, _1) );
+//	OnePercentGame* t_popup = OnePercentGame::create(keep_percentage.getV(), bind(&PlayUI::cancelOnePercentGacha, this), bind(&PlayUI::gachaOnOnePercent, this, _1) );
+//
+//	getParent()->addChild(t_popup, 9999);
+	auto tt = myDSH->getIntegerForKey(kSDH_Key_isShowOnePercentTutorial);
+	if(myDSH->getIntegerForKey(kSDH_Key_isShowOnePercentTutorial))
+	{
+		OnePercentGame* t_popup = OnePercentGame::create(keep_percentage.getV(), bind(&PlayUI::cancelOnePercentGacha, this), bind(&PlayUI::gachaOnOnePercent, this, _1), true );
+		
+		getParent()->addChild(t_popup, 9999);
+	
+	}
+	else
+	{
+		OnePercentTutorial* t_popup = OnePercentTutorial::create(keep_percentage.getV(), bind(&PlayUI::cancelOnePercentGacha, this), bind(&PlayUI::gachaOnOnePercent, this, _1) );
+		getParent()->addChild(t_popup, 9999);
+	}
 
-	getParent()->addChild(t_popup, 9999);
 }
 void PlayUI::gachaOnOnePercent (float t_percent)
 {
@@ -3453,6 +3472,8 @@ void PlayUI::myInit ()
 	myGD->V_I["UI_writeGameOver"] = std::bind(&PlayUI::writeGameOver, this, _1);
 	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
 	myGD->V_V["UI_takeSilenceItem"] = std::bind(&PlayUI::takeSilenceItem, this);
+	
+	
 }
 
 void PlayUI::hideThumb()
