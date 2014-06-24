@@ -193,6 +193,14 @@ bool CardViewScene::init()
 		
 		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 		addChild(zoom_img, kCV_Z_next_button);
+		
+		tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
+//			(this->*delegate_typing_after)();
+			CCTouch* t_touch = new CCTouch();
+			t_touch->setTouchInfo(0, 0, 0);
+			t_touch->autorelease();
+			first_img->ccTouchEnded(t_touch, NULL);
+		});
 	}
 	
 	
