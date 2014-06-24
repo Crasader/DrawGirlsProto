@@ -803,6 +803,11 @@ void ControlJoystickButton::resetTouch()
 	offButton();
 	myJack->willBackTracking = false;
 	myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
+	myJack->isDrawingOn = false;
+	if(myJack->getJackState() == jackStateDrawing && !myJack->isStun)
+	{
+		(target_main->*delegate_readyBack)();
+	}
 }
 
 void ControlJoystickButton::invisibleControl()

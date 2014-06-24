@@ -1838,7 +1838,6 @@ void PlayUI::scoreAttackKeep()
 	{
 		unschedule(schedule_selector(PlayUI::scoreAttackKeep));
 
-		bomb_img->stopAllActions();
 		bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54)));
 		ing_bomb_value = 0;
 		
@@ -2131,7 +2130,6 @@ void PlayUI::setComboCnt (int t_combo)
 				ing_bomb_value = combo_cnt%5;
 			}
 			
-			bomb_img->stopAllActions();
 			bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
 		}
 		
@@ -2155,7 +2153,7 @@ void PlayUI::setComboCnt (int t_combo)
 			ing_bomb_value = combo_cnt;
 			if(ing_bomb_value > 5)
 				ing_bomb_value = 5;
-			bomb_img->stopAllActions();
+			
 			bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
 		}
 		myLog->addLog(kLOG_endCombo_i, myGD->getCommunication("UI_getUseTime"), before_combo);

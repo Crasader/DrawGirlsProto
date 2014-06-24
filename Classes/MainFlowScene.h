@@ -142,8 +142,8 @@ private:
 	void countingMessage();
 	void countingAchievement();
 	
-	CCSprite* postbox_count_case;
-//	CCLabelTTF* postbox_count_label;
+	CCScale9Sprite* postbox_count_case;
+	CCLabelTTF* postbox_count_label;
 	CCScale9Sprite* achievement_count_case;
 	CCLabelTTF* achievement_count_label;
 	

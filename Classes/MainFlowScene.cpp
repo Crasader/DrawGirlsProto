@@ -4035,7 +4035,25 @@ void MainFlowScene::setTop()
 	
 	top_list.push_back(postbox_menu);
 	
-	postbox_count_case = CCSprite::create("mainflow_new.png");//"mainflow_postbox_count.png");
+	
+
+	
+	CCSprite* n_achieve = CCSprite::create("mainflow_new_achievement.png");
+	CCSprite* s_achieve = CCSprite::create("mainflow_new_achievement.png");
+	s_achieve->setColor(ccGRAY);
+	
+	CCMenuItem* achieve_item = CCMenuItemSprite::create(n_achieve, s_achieve, this, menu_selector(MainFlowScene::menuAction));
+	achieve_item->setTag(kMainFlowMenuTag_achievement);
+	
+	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
+	achieve_menu->setPosition(ccp(398,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22)); // 429
+	addChild(achieve_menu, kMainFlowZorder_top);
+	
+	top_list.push_back(achieve_menu);
+
+	
+	postbox_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));//"mainflow_new.png");
+	postbox_count_case->setContentSize(CCSizeMake(20, 20));
 	postbox_count_case->setPosition(postbox_menu->getPosition() + ccp(12,6));
 	addChild(postbox_count_case, kMainFlowZorder_top);
 	
@@ -4052,35 +4070,23 @@ void MainFlowScene::setTop()
 	postbox_count_case->setVisible(false);
 	
 	postbox_count_case->addChild(KSSchedule::create([=](float dt)
-					   {
-						   if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-							   postbox_count_case->setOpacity(0);
-						   else
-							   postbox_count_case->setOpacity(255);
-						   return true;
-					   }));
+													{
+														if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
+															postbox_count_case->setOpacity(0);
+														else
+															postbox_count_case->setOpacity(255);
+														return true;
+													}));
 	
-//	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
-//	postbox_count_label->setColor(ccc3(95, 60, 30));
-//	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
-//	postbox_count_case->addChild(postbox_count_label);
+	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+	postbox_count_label->setColor(ccc3(255, 255, 255));
+	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
+	postbox_count_case->addChild(postbox_count_label);
 	
 	countingMessage();
-
 	
-	CCSprite* n_achieve = CCSprite::create("mainflow_new_achievement.png");
-	CCSprite* s_achieve = CCSprite::create("mainflow_new_achievement.png");
-	s_achieve->setColor(ccGRAY);
 	
-	CCMenuItem* achieve_item = CCMenuItemSprite::create(n_achieve, s_achieve, this, menu_selector(MainFlowScene::menuAction));
-	achieve_item->setTag(kMainFlowMenuTag_achievement);
 	
-	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
-	achieve_menu->setPosition(ccp(398,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22)); // 429
-	addChild(achieve_menu, kMainFlowZorder_top);
-	
-	top_list.push_back(achieve_menu);
-
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	achievement_count_case->setContentSize(CCSizeMake(20, 20));
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12, 6));
@@ -4167,8 +4173,24 @@ void MainFlowScene::countingMessage()
 									 if(r["result"]["code"].asInt() != GDSUCCESS)
 										 return;
 									 
-									 postbox_count_case->setVisible(r.get("haveNewGift", false).asBool());
+									 int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
 									 
+									 if(message_cnt > 0)
+									 {
+										 int t_count = message_cnt;
+										 int base_width = 20;
+										 while (t_count/10 > 0)
+										 {
+											 base_width+=5;
+											 t_count /= 10;
+										 }
+										 
+										 postbox_count_case->setContentSize(CCSizeMake(base_width, 20));
+									 }
+									 
+									 postbox_count_case->setVisible(message_cnt > 0);
+									 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
+									 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
 								 });
 }
 

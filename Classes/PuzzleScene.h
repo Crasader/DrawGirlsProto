@@ -80,8 +80,8 @@ private:
 	CountingBMLabel* gold_label;
 	CountingBMLabel* friend_point_label;
 	
-	CCSprite* postbox_count_case;
-//	CCLabelTTF* postbox_count_label;
+	CCScale9Sprite* postbox_count_case;
+	CCLabelTTF* postbox_count_label;
 	CCScale9Sprite* achievement_count_case;
 	CCLabelTTF* achievement_count_label;
 	

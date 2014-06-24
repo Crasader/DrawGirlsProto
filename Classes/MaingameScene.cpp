@@ -664,13 +664,11 @@ void Maingame::finalSetting()
 		
 		myGD->V_V["Main_readyBomb"] = [=]()
 		{
-			replay_bomb->stopAllActions();
 			replay_bomb->runAction(CCMoveTo::create(0.5f, ccp(0, 0)));
 			//replay_manager->runAnimationsForSequenceNamed("bombcast1");
 		};
 		myGD->V_V["Main_stopBomb"] = [=]()
 		{
-			replay_bomb->stopAllActions();
 			replay_bomb->runAction(CCMoveTo::create(0.3f, ccp(0, -54)));
 //			replay_manager->runAnimationsForSequenceNamed("Default Timeline");
 		};
