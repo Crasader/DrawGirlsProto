@@ -73,6 +73,7 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	TouchSuctionLayer* suction;
+	TouchSuctionLayer* t_suction;
 	
 	function<void()> tutorial_success_func;
 	function<void()> tutorial_fail_func;

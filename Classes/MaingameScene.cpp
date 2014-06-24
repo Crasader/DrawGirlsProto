@@ -1590,6 +1590,8 @@ void Maingame::removeConditionLabel()
 											   {
 												   t_gray->setOpacity(255);
 												   
+												   
+												   t_suction->is_on_touch_began_func = true;
 												   t_suction->touch_began_func = [=]()
 												   {
 													   t_suction->is_on_touch_began_func = false;
@@ -1617,6 +1619,7 @@ void Maingame::removeConditionLabel()
 													   t_ment4->setPosition(t_arrow4->getPosition() + ccp(-t_arrow4->getContentSize().width/2.f - 3, 0));
 													   t_clipping->addChild(t_ment4);
 													   
+													   t_suction->is_on_touch_began_func = true;
 													   t_suction->touch_began_func = [=]()
 													   {
 														   t_suction->is_on_touch_began_func = false;
@@ -1649,6 +1652,7 @@ void Maingame::removeConditionLabel()
 														   t_ment5->setPosition(t_arrow5->getPosition() + ccp(t_arrow5->getContentSize().width/2.f + 3, 0));
 														   t_clipping->addChild(t_ment5);
 														   
+														   t_suction->is_on_touch_began_func = true;
 														   t_suction->touch_began_func = [=]()
 														   {
 															   t_suction->is_on_touch_began_func = false;
@@ -1667,6 +1671,7 @@ void Maingame::removeConditionLabel()
 															   t_final_label->setPosition(ccp(240, 50));
 															   t_clipping->addChild(t_final_label);
 															   
+															   t_suction->is_on_touch_began_func = true;
 															   t_suction->touch_began_func = [=]()
 															   {
 																   t_suction->is_on_touch_began_func = false;
@@ -1689,13 +1694,9 @@ void Maingame::removeConditionLabel()
 																															 tutorial_node->removeFromParent();
 																														 }));
 															   };
-															   t_suction->is_on_touch_began_func = true;
 														   };
-														   t_suction->is_on_touch_began_func = true;
 													   };
-													   t_suction->is_on_touch_began_func = true;
 												   };
-												   t_suction->is_on_touch_began_func = true;
 												   
 											   }));
 	}
