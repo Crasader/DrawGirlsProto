@@ -797,7 +797,7 @@ int StarGoldData::getNextCardNumber( int recent_card_number )
 
 int StarGoldData::getNextStageCardNumber( int recent_card_number )
 {
-	int find_index;
+	int find_index = -1;
 	bool is_normal = false;
 	bool is_event = false;
 	bool is_special = false;
@@ -845,6 +845,9 @@ int StarGoldData::getNextStageCardNumber( int recent_card_number )
 					  find_index = t_index;
 				  });
 	}
+	
+	if(find_index == -1)
+		return -1;
 	
 	if(is_normal)
 	{

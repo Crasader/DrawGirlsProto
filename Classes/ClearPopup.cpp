@@ -422,7 +422,7 @@ bool ClearPopup::init()
 	
 	CCScale9Sprite* left_total_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	left_total_back->setContentSize(CCSizeMake(inner_left->getContentSize().width-20, 35));
-	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 21));
+	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 24));
 	inner_left->addChild(left_total_back);
 	
 	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
@@ -440,7 +440,7 @@ bool ClearPopup::init()
 	left_total_content->setPosition(ccp(left_total_back->getContentSize().width-10, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_content);
 	
-	CCRect left_rect = CCRectMake(inner_left->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f, (480-30)/2.f-20, 75);
+	CCRect left_rect = CCRectMake(inner_left->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f+3, (480-30)/2.f-20, 72);
 	
 	//	CCSprite* left_size = CCSprite::create("whitePaper.png", CCRectMake(0, 0, left_rect.size.width, left_rect.size.height));
 //	left_size->setAnchorPoint(CCPointZero);
@@ -454,7 +454,7 @@ bool ClearPopup::init()
 	left_table->setTouchPriority(-200);
 	left_table->setTouchEnabled(false);
 	
-	left_table->setContentOffset(ccp(0,-9*30));
+	left_table->setContentOffset(ccp(0,-9*28));
 	
 	
 //	KSLabelTTF* time_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 15);
@@ -1064,14 +1064,14 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			
 			string flag = read_data.get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(42,20));
-			selectedFlagSpr->setScale(0.5);
+			selectedFlagSpr->setPosition(ccp(45,20));
+			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
 			nick_label->setAnchorPoint(ccp(0,0.5));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(55,20));
+			nick_label->setPosition(ccp(60,20));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
@@ -1108,14 +1108,14 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(42,20));
-			selectedFlagSpr->setScale(0.5);
+			selectedFlagSpr->setPosition(ccp(45,20));
+			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
 			nick_label->setAnchorPoint(ccp(0,0.5));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(55,20));
+			nick_label->setPosition(ccp(60,20));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
@@ -2104,10 +2104,10 @@ void ClearPopup::startCalcAnimation()
 		
 		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.15f, [=](float t)
 	   {
-		   left_table->setContentOffset(ccp(0, before_y+30*t));
+		   left_table->setContentOffset(ccp(0, before_y+28*t));
 	   }, [=](float t)
 	   {
-		   left_table->setContentOffset(ccp(0, before_y+30));
+		   left_table->setContentOffset(ccp(0, before_y+28));
 		   
 		   AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
 		   startLeftCalcAnimation(left_decrease_value, left_base_value, 0.3f, NULL, [=]()
@@ -2117,28 +2117,28 @@ void ClearPopup::startCalcAnimation()
 	   }));
 	};
 	
-	t_func1(-9*30, mySGD->area_score.getV(), 0, [=]()
+	t_func1(-9*28, mySGD->area_score.getV(), 0, [=]()
 	{
-		t_func1(-8*30, mySGD->damage_score.getV(), mySGD->area_score.getV(), [=]()
+		t_func1(-8*28, mySGD->damage_score.getV(), mySGD->area_score.getV(), [=]()
 		{
-			t_func1(-7*30, mySGD->combo_score.getV(), mySGD->area_score.getV()+mySGD->damage_score.getV(), [=]()
+			t_func1(-7*28, mySGD->combo_score.getV(), mySGD->area_score.getV()+mySGD->damage_score.getV(), [=]()
 			{
-				t_func1(-6*30, left_life_decrease_score.getV(), left_life_base_score.getV(), [=]()
+				t_func1(-6*28, left_life_decrease_score.getV(), left_life_base_score.getV(), [=]()
 				{
-					t_func1(-5*30, left_time_decrease_score.getV(), left_time_base_score.getV(), [=]()
+					t_func1(-5*28, left_time_decrease_score.getV(), left_time_base_score.getV(), [=]()
 					{
-						t_func1(-4*30, left_grade_decrease_score.getV(), left_grade_base_score.getV(), [=]()
+						t_func1(-4*28, left_grade_decrease_score.getV(), left_grade_base_score.getV(), [=]()
 						{
-							t_func1(-3*30, left_damaged_score.getV(), left_grade_base_score.getV()+left_grade_decrease_score.getV(), [=]()
+							t_func1(-3*28, left_damaged_score.getV(), left_grade_base_score.getV()+left_grade_decrease_score.getV(), [=]()
 							{
 								AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 								
 								addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
 								{
-									left_table->setContentOffset(ccp(0, -2*30+60*t));
+									left_table->setContentOffset(ccp(0, -2*28+56*t));
 								}, [=](float t)
 								{
-									left_table->setContentOffset(ccp(0, -2*30+60));
+									left_table->setContentOffset(ccp(0, -2*28+56));
 									
 									left_table->setTouchEnabled(true);
 									
@@ -2867,7 +2867,7 @@ void ClearPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 
 CCSize ClearPopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake((480-30)/2.f-20, 30);//CCSizeMake(210, 45);
+	return CCSizeMake((480-30)/2.f-20, 28);//CCSizeMake(210, 45);
 }
 
 unsigned int ClearPopup::numberOfCellsInTableView( CCTableView *table )

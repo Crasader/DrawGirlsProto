@@ -938,7 +938,7 @@ void EndlessModeOpening::successAction()
 
 void EndlessModeOpening::failAction()
 {
-	addChild(ASPopupView::getCommonNoti(-1000, myLoc->getLocalForKey(kMyLocalKey_endlessDownloadFail), [=]()
+	addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_endlessDownloadFail), [=]()
 							   {
 								   startDownload();
 							   }));
