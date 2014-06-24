@@ -518,9 +518,9 @@ void StyledLabelTTF::setStringByTag(const char* text){
 	m_string=text;
 	
 	
-	auto oldAnchor = getAnchorPoint();
+	//auto oldAnchor = getAnchorPoint();
 	updateTexture();
-	setAnchorPoint(oldAnchor);
+	//setAnchorPoint(oldAnchor);
 }
 
 KSLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
