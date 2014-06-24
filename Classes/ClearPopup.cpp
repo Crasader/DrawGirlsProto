@@ -2483,7 +2483,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 				addChild(t_star_node, kZ_CP_popup);
 				
 				CCSprite* total_star = KS::loadCCBI<CCSprite*>(this, "main_star.ccbi").first;
-				total_star->setPosition(ccp(0,0));
+				total_star->setPosition(ccp(-2,0));
 				t_star_node->addChild(total_star);
 				
 				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade())->getCString(), mySGD->getFont().c_str(), 12);

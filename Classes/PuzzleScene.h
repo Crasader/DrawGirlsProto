@@ -64,6 +64,8 @@ private:
 	int keep_card_number;
 	void updateCardHistory(CCNode* t_loading);
 	
+	int call_rank_stage_number;
+	
 	void heartRefresh();
 	
 	bool clear_is_empty_piece;

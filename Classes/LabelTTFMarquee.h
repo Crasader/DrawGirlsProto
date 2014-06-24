@@ -187,6 +187,7 @@ public:
 			int strIndex = this->getNextTextIndex();
 			firstLabel->setTag(strIndex);
 			firstLabel->setStringByTag(m_texts[strIndex].c_str());
+			if(m_texts.size()>2)firstLabel->setPositionY(firstLabel->getPositionY()+1);
 		}
 	}
 };
