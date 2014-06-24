@@ -348,7 +348,12 @@ bool StyledLabelTTF::isSameStringAtIndex(std::string str, int idx, std::string o
 
 
 void StyledLabelTTF::setStringByTag(const char* text){
-	if(m_string==text)return;
+	m_currentPosition = (0.f);
+	m_oneLineSize = (0.f);
+	m_currentLinePosition = (0.f);
+	
+	if(m_string==text)
+		return;
 	
 	//<|rgb|size|newline|tag>   ex)   <|900|15|15|>안녕하세요   ->빨간색 15 사이즈 텍스트
 	std::string str = text;
@@ -511,8 +516,11 @@ void StyledLabelTTF::setStringByTag(const char* text){
 	
 	m_texts=texts;
 	m_string=text;
-	updateTexture();
 	
+	
+	auto oldAnchor = getAnchorPoint();
+	updateTexture();
+	setAnchorPoint(oldAnchor);
 }
 
 KSLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
