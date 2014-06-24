@@ -700,7 +700,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		loading_tip_back->addChild(content_back);
 		
 		CCSprite* tip_title = CCSprite::create("loading_tip.png");
-		tip_title->setPosition(ccp(40, content_back->getContentSize().height-5));
+		tip_title->setPosition(ccp(35, content_back->getContentSize().height-5));
 		content_back->addChild(tip_title);
 		
 		//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
@@ -799,7 +799,7 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	loading_tip_back->addChild(content_back);
 	
 	CCSprite* tip_title = CCSprite::create("loading_tip.png");
-	tip_title->setPosition(ccp(40, content_back->getContentSize().height-5));
+	tip_title->setPosition(ccp(35, content_back->getContentSize().height-5));
 	content_back->addChild(tip_title);
 	
 	mySGD->before_curtain_tip_type = selected_loading_tip;
