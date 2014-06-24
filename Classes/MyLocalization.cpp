@@ -609,10 +609,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("퍼즐 오픈"), kMyLocalKey_puzzleOpenTitle);
 	ko->setObject(CCString::create("새로운 퍼즐이\n오픈 되었습니다."), kMyLocalKey_puzzleOpenContent);
 	ko->setObject(CCString::create("보기"), kMyLocalKey_view);
-	ko->setObject(CCString::create("땅 85%"), kMyLocalKey_condition1);
-	ko->setObject(CCString::create("땅 85% + 체인지"), kMyLocalKey_condition2);
-	ko->setObject(CCString::create("땅 100%"), kMyLocalKey_condition3);
-	ko->setObject(CCString::create("땅 100% + 체인지"), kMyLocalKey_condition4);
+	ko->setObject(CCString::create("영역 85%"), kMyLocalKey_condition1);
+	ko->setObject(CCString::create("영역 85% + 체인지"), kMyLocalKey_condition2);
+	ko->setObject(CCString::create("영역 100%"), kMyLocalKey_condition3);
+	ko->setObject(CCString::create("영역 100% + 체인지"), kMyLocalKey_condition4);
 	ko->setObject(CCString::create("85%"), kMyLocalKey_conditionTwoLine1);
 	ko->setObject(CCString::create("85%\n+ 체인지"), kMyLocalKey_conditionTwoLine2);
 	ko->setObject(CCString::create("100%"), kMyLocalKey_conditionTwoLine3);
@@ -947,8 +947,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent4);
 	ko->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTime);
 	ko->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
-	ko->setObject(CCString::create("<font color=961 size=15>%d시간"), kMyLocalKey_todaymissionRemainTime2);
-	ko->setObject(CCString::create("<font color=961 size=15>%d분"), kMyLocalKey_todaymissionRemainTimeMinute2);
+	ko->setObject(CCString::create("<font color=961 size=15>%dHour"), kMyLocalKey_todaymissionRemainTime2);
+	ko->setObject(CCString::create("<font color=961 size=15>%dMinute"), kMyLocalKey_todaymissionRemainTimeMinute2);
 	ko->setObject(CCString::create("<font color=961 size=15>모든 피스 획득!"), kMyLocalKey_puzzleSuccessTitle);
 	ko->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 하트를 드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ko->setObject(CCString::create("<font color=961 size=15>놀라워요! <font color=961 size=15>퍼펙트 클리어!!"), kMyLocalKey_puzzlePerfectTitle);
@@ -1741,8 +1741,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent4);
 	en->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTime);
 	en->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
-	en->setObject(CCString::create("<font color=961 size=15>%d시간"), kMyLocalKey_todaymissionRemainTime2);
-	en->setObject(CCString::create("<font color=961 size=15>%d분"), kMyLocalKey_todaymissionRemainTimeMinute2);
+	en->setObject(CCString::create("<font color=961 size=15>%dHour"), kMyLocalKey_todaymissionRemainTime2);
+	en->setObject(CCString::create("<font color=961 size=15>%dMinute"), kMyLocalKey_todaymissionRemainTimeMinute2);
 	en->setObject(CCString::create("<font color=961 size=15>모든 피스 획득!"), kMyLocalKey_puzzleSuccessTitle);
 	en->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 하트를 드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	en->setObject(CCString::create("<font color=961 size=15>놀라워요! <font color=961 size=15>퍼펙트 클리어!!"), kMyLocalKey_puzzlePerfectTitle);
@@ -2542,8 +2542,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent4);
 	ja->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTime);
 	ja->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
-	ja->setObject(CCString::create("<font color=961 size=15>%d시간"), kMyLocalKey_todaymissionRemainTime2);
-	ja->setObject(CCString::create("<font color=961 size=15>%d분"), kMyLocalKey_todaymissionRemainTimeMinute2);
+	ja->setObject(CCString::create("<font color=961 size=15>%dHour"), kMyLocalKey_todaymissionRemainTime2);
+	ja->setObject(CCString::create("<font color=961 size=15>%dMinute"), kMyLocalKey_todaymissionRemainTimeMinute2);
 	ja->setObject(CCString::create("<font color=961 size=15>모든 피스 획득!"), kMyLocalKey_puzzleSuccessTitle);
 	ja->setObject(CCString::create("<font newline=18>모든 스테이지의<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 하트를 드릴께요!"), kMyLocalKey_puzzleSuccessMent);
 	ja->setObject(CCString::create("<font color=961 size=15>놀라워요! <font color=961 size=15>퍼펙트 클리어!!"), kMyLocalKey_puzzlePerfectTitle);

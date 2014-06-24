@@ -424,7 +424,7 @@ bool FailPopup::init()
 	left_total_content->setPosition(ccp(left_total_back->getContentSize().width-10, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_content);
 	
-	CCRect left_rect = CCRectMake(inner_left->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f+3, (480-30)/2.f-20, 72);
+	CCRect left_rect = CCRectMake(inner_left->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f+4, (480-30)/2.f-20, 72);
 	
 	//	CCSprite* left_size = CCSprite::create("whitePaper.png", CCRectMake(0, 0, left_rect.size.width, left_rect.size.height));
 	//	left_size->setAnchorPoint(CCPointZero);

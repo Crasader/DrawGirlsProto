@@ -67,13 +67,13 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	
 	CCScale9Sprite* left_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	left_back->setContentSize(CCSizeMake(200, 140));
+	left_back->setContentSize(CCSizeMake(180, 120));
 	left_back->setPosition(ccp(-120, 0));
 	addChild(left_back);
 	
 	CCScale9Sprite* left_flag_back = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	left_flag_back->setContentSize(CCSizeMake(60, 45));
-	left_flag_back->setPosition(ccp(left_back->getContentSize().width/2.f, 103));
+	left_flag_back->setPosition(ccp(left_back->getContentSize().width/2.f, 88));
 	left_back->addChild(left_flag_back);
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
@@ -84,13 +84,13 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	left_flag_back->addChild(left_flag);
 	
 	CCScale9Sprite* left_bottom_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	left_bottom_back->setContentSize(CCSizeMake(left_back->getContentSize().width-15, 70));
-	left_bottom_back->setPosition(ccp(left_back->getContentSize().width/2.f, 42));
+	left_bottom_back->setContentSize(CCSizeMake(left_back->getContentSize().width-15, 55));
+	left_bottom_back->setPosition(ccp(left_back->getContentSize().width/2.f, 36));
 	left_back->addChild(left_bottom_back);
 	
 	KSLabelTTF* left_nick = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 15);
 	left_nick->enableOuterStroke(ccBLACK, 1.f);
-	left_nick->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-20));
+	left_nick->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-18));
 	left_bottom_back->addChild(left_nick);
 	
 //	KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->endless_my_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
@@ -99,7 +99,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 15);
 	left_ing_win->setColor(ccc3(255,170,20));
-	left_ing_win->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-53));
+	left_ing_win->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-38));
 	left_bottom_back->addChild(left_ing_win);
 	
 //	int win_count = mySGD->endless_my_win.getV();
@@ -113,13 +113,13 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	right_back->setContentSize(CCSizeMake(200, 140));
+	right_back->setContentSize(CCSizeMake(180, 120));
 	right_back->setPosition(ccp(120, 0));
 	addChild(right_back);
 	
 	CCScale9Sprite* right_flag_back = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	right_flag_back->setContentSize(CCSizeMake(60, 45));
-	right_flag_back->setPosition(ccp(right_back->getContentSize().width/2.f, 103));
+	right_flag_back->setPosition(ccp(right_back->getContentSize().width/2.f, 88));
 	right_back->addChild(right_flag_back);
 	
 	CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->endless_flag.getV()).c_str());
@@ -128,13 +128,13 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	right_flag_back->addChild(right_flag);
 	
 	CCScale9Sprite* right_bottom_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	right_bottom_back->setContentSize(CCSizeMake(right_back->getContentSize().width-15, 70));
-	right_bottom_back->setPosition(ccp(right_back->getContentSize().width/2.f, 42));
+	right_bottom_back->setContentSize(CCSizeMake(right_back->getContentSize().width-15, 55));
+	right_bottom_back->setPosition(ccp(right_back->getContentSize().width/2.f, 36));
 	right_back->addChild(right_bottom_back);
 	
 	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 15);
 	right_nick->enableOuterStroke(ccBLACK, 1.f);
-	right_nick->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-20));
+	right_nick->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-18));
 	right_bottom_back->addChild(right_nick);
 
 //	KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->endless_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
@@ -143,7 +143,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->endless_victory.getV())->getCString(), mySGD->getFont().c_str(), 15);
 	right_ing_win->setColor(ccc3(255,170,20));
-	right_ing_win->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-53));
+	right_ing_win->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-38));
 	right_bottom_back->addChild(right_ing_win);
 	
 //	int right_win_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_win), Json::Value()).asInt();
