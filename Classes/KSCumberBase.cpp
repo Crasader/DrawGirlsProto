@@ -2373,12 +2373,12 @@ void KSCumberBase::settingFuryRule()
 	//		m_furyRule
 }
 
-void KSCumberBase::applyAutoBalance()
+void KSCumberBase::applyAutoBalance(bool isExchange)
 {
 	
-	
+
 	bool isClear = mySGD->isClearPiece(mySD->getSilType());
-	if(isClear){
+	if(isClear && !isExchange){
 		
 		CCLOG("############ clear stage, dont autobalance ################");
 		//return;
@@ -2401,7 +2401,7 @@ void KSCumberBase::applyAutoBalance()
 	CCLOG("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
 	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
 
-	if(autobalanceTry==0){
+	if(autobalanceTry==0 && !isExchange){
 		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
         settingFuryRule();
 		return;
@@ -2414,7 +2414,14 @@ void KSCumberBase::applyAutoBalance()
 		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.025;
 	}
 	
-	
+	if(isExchange){
+		m_aiValue *=2;
+		if(m_aiValue<50)m_aiValue=50;
+		
+		m_attackPercent *=1.1f;
+		if(m_attackPercent<0.3)m_attackPercent=0.3;
+		
+	}
 
 	settingFuryRule();
 	

@@ -587,8 +587,46 @@ void MapScanner::exchangeMS()
 
 	invisibleImg = InvisibleSprite::create(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false);
 	invisibleImg->setPosition(CCPointZero);
-	addChild(invisibleImg, invisibleZorder);
+//	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+//	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+	invisibleImg->runAction(CCRepeatForever::create(CCSequence::create(CCFadeOut::create(0.5f),CCFadeIn::create(0.5f),nullptr)));
+	
 
+	addChild(invisibleImg, invisibleZorder);
+	
+	// ######################## hs code bbu woo~ ##############################
+	EffectSprite* t_spr = (EffectSprite*)invisibleImg->getChildByTag(8706);
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	int orir =NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d);
+	int orig =NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d);
+	int orib =NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d);
+	
+	float rm = orir/20.f;
+	float gm =  orig/20.f;
+	float bm = orib/20.f;
+	addChild(KSSchedule::create([=](float dt){
+		static float r=0;
+		static float g=0;
+		static float b=0;
+		static int mark=1;
+		if(mark){
+			r+=rm;
+			g+=gm;
+			b+=bm;
+			if(r>orir)mark=0;
+		}else{
+			r-=rm;
+			g-=gm;
+			b-=bm;
+			if(r<0)mark=1;
+		}
+		
+		t_spr->setColorSilhouette(r, g, b);
+		return true;
+	}));
+	// ######################## hs code bbu woo~ ##############################
+	
+	
 	CCArray* t_rect_array = new CCArray();
 
 	if(visibleImg)
@@ -1190,6 +1228,11 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 	t_spr->setPosition(ccp(160,215));
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+
+	// ######################## hs code bbu woo~ ##############################
+	t_spr->setTag(8706);
+	// ######################## hs code bbu woo~ ##############################
+	
 	addChild(t_spr);
 	
 //	myTR->addAliveNode(t_spr, [=]()

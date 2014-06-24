@@ -235,7 +235,7 @@ public:
 	// ??
 	void applyPassiveData(const std::string& passive);
 	// 오토 밸런스 적용
-	void applyAutoBalance();
+	void applyAutoBalance(bool isExchange=false);
 	// 분노룰 세팅
 	void settingFuryRule();
 	// 지능 세팅
