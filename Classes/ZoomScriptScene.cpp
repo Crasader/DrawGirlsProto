@@ -392,7 +392,7 @@ void ZoomScript::menuAction(CCObject *sender)
 					
 					t_node->setPosition(ccp(160,215));
 					t_node->setTouchEnabled(false);
-					game_node->addChild(target_node, -1);
+					game_node->addChild(t_node, -1);
 					
 					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
 															   {
@@ -643,7 +643,7 @@ void ZoomScript::menuAction(CCObject *sender)
 					
 					t_node->setPosition(ccp(160,215));
 					t_node->setTouchEnabled(false);
-					game_node->addChild(target_node, -1);
+					game_node->addChild(t_node, -1);
 					
 					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
 															   {
