@@ -43,6 +43,7 @@
 #include "GaBaBo.h"
 #include "CurtainNodeForBonusGame.h"
 #include "AchieveNoti.h"
+#include "JsGababo.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -1570,7 +1571,12 @@ void PuzzleScene::menuAction(CCObject* sender)
 					BonusGameReward gr4;
 					gr4.spriteName = "shop_ruby2.png";
 					gr4.desc = "루우비~!";
-					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+//					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+//																			 {
+//																				 is_menu_enable = true;
+//																			 });
+//					addChild(gbb, (int)Curtain::kBonusGame);
+					JsGababo* gbb = JsGababo::create(-500, {gr1, gr2, gr3, gr4}, [=](int t_i)
 																			 {
 																				 is_menu_enable = true;
 																			 });
