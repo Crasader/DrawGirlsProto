@@ -2526,9 +2526,9 @@ void PuzzleScene::setTop()
 	postbox_count_case->addChild(KSSchedule::create([=](float dt)
 													{
 														if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-															postbox_count_case->setOpacity(0);
+															KS::setOpacity(postbox_count_case, 0);
 														else
-															postbox_count_case->setOpacity(255);
+															KS::setOpacity(postbox_count_case, 255);
 														return true;
 													}));
 	

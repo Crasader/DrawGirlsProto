@@ -26,6 +26,7 @@ public:
 	void setSwallowRect(CCRect t_rect);
 	void setSwallowMent(string t_ment);
 	virtual ~TouchSuctionLayer();
+	void touchFuncOn();
 private:
 	void myInit(int t_touch_priority);
 	int touch_priority;
