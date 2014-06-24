@@ -319,6 +319,11 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	}
 	else
 	{
+		CCSprite* line_img = CCSprite::create("cardsetting_line.png");
+		line_img->setPosition(ccp(0,-52.5f));
+		m_container->addChild(line_img);
+		line_img->setScaleX(210/line_img->getContentSize().width);
+		
 		long long sub_value = mySGD->today_mission_info.resetTimestamp.getV() - graphdog->getServerTimestamp();
 		string ment_string;
 		if(sub_value >= 3600)
@@ -328,7 +333,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		
 		StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 		remain_label->setOldAnchorPoint();
-		remain_label->setPosition(ccp(-100, -65));
+		remain_label->setPosition(ccp(-99, -65));
 		m_container->addChild(remain_label);
 		
 		string ment_string2;

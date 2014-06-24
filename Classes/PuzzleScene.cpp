@@ -83,6 +83,8 @@ bool PuzzleScene::init()
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	
+	call_rank_stage_number = -1;
+	
 	mySGD->is_endless_mode = false;
 	mySGD->resetReplayPlayingInfo();
 	
@@ -1985,10 +1987,12 @@ void PuzzleScene::setRight()
 			Json::Value param;
 			param["memberID"] = hspConnector::get()->getSocialID();
 			param["stageNo"] = selected_stage_number;
+			call_rank_stage_number = selected_stage_number;
 			hspConnector::get()->command("getstagerankbyalluser", param, this,json_selector(this, PuzzleScene::resultGetRank));
 		}
 		else
 		{
+			call_rank_stage_number = saved_ranking_stage_number;
 			resultGetRank(saved_ranking_data);
 		}
 	}
@@ -2079,6 +2083,10 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		
 		saved_ranking_data = result_data;
 		saved_ranking_stage_number = result_data["stageNo"].asInt();
+		
+		if(saved_ranking_stage_number != call_rank_stage_number)
+			return;
+		
 		Json::Value user_list = result_data["list"];
 		
 		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
@@ -2127,7 +2135,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		right_body->addChild(rank_percent_case);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 11);
-		addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
+		percent_label->addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
 																					 2.f * (1.f - rank_percent), [=](float t){
 																					 percent_label->setString(ccsf("%.0f%%", t));
 		}, [=](float t){

@@ -350,7 +350,7 @@ GoldLabel * GoldLabel::create ()
 }
 void GoldLabel::setString (char const * after_gold)
 {
-	stopAllActions();
+//	stopAllActions();
 	if(is_incresing)
 		stopIncreasing();
 	startIncreasing();
@@ -358,10 +358,10 @@ void GoldLabel::setString (char const * after_gold)
 void GoldLabel::startIncreasing ()
 {
 	is_incresing = true;
-	CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
-	CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 1.f);
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale1, t_scale2);
-	runAction(t_seq);
+//	CCScaleTo* t_scale1 = CCScaleTo::create(0.2f, 1.5f);
+//	CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 1.f);
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale1, t_scale2);
+//	runAction(t_seq);
 	
 	int stageGold = mySGD->getStageGold();
 	
