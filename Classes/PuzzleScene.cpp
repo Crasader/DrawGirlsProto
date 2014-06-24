@@ -326,8 +326,8 @@ bool PuzzleScene::init()
 	{
 		keep_card_number = 0;
 		
-		if(!mySGD->isTimeEvent(kTimeEventType_heart))
-			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+//		if(!mySGD->isTimeEvent(kTimeEventType_heart))
+//			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
 		bool is_not_empty_card[4] = {false,};
 		

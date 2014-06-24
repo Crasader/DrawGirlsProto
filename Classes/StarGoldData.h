@@ -926,6 +926,7 @@ public:
 	Json::Value new_puzzle_card_info;
 	
 	void initCollectionBook();
+	void heartRefreshSuccess(Json::Value result_data);
 	
 private:
 	

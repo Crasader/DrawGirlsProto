@@ -112,7 +112,7 @@ private:
 	bool was_end_removeMessage;
 	LoadingLayer* start_loading;
 	void callStart();
-	void realStartAction();
+	void realStartAction(bool is_use_heart = true);
 	void acceptStartAction();
 	void finalSetting();
 	void finalRemoveMessage(Json::Value result_data);

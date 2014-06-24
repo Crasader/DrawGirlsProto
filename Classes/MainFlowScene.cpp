@@ -1340,9 +1340,9 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																									  {
 																										  cell_node->setScale(1.f);
 																										  
-																										  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < 5)
+																										  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
 																										  {
-																											  myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+																											  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
 																											  
 																											  CCNode* target_parent = heart_time->getParent();
 																											  CCPoint heart_time_position = heart_time->getPosition();
@@ -1386,9 +1386,9 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																									  {
 																										  cell_node->setScale(1.f);
 																										  
-																										  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < 5)
+																										  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
 																										  {
-																											  myDSH->setIntegerForKey(kDSH_Key_heartCnt, 5);
+																											  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
 																											  
 																											  CCNode* target_parent = heart_time->getParent();
 																											  CCPoint heart_time_position = heart_time->getPosition();
