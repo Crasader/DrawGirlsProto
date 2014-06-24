@@ -124,83 +124,83 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	left_graph_back->setPosition(ccp(left_back->getContentSize().width/2.f, 193.5));
 	left_back->addChild(left_graph_back);
 	
-	CCSprite* left_graph_case = CCSprite::create("rankreward_graph.png");
+	CCSprite* left_graph_case = CCSprite::create("ending_graph.png");//"rankreward_graph.png");
 	left_graph_case->setPosition(ccp(left_graph_back->getContentSize().width/2.f, 21));
 	left_graph_back->addChild(left_graph_case);
 	
 	Json::Value stage_reward_list = mySGD->rank_reward_data["stage"]["rewardList"];
 	
-	Json::Value stage_top10_reward = stage_reward_list["t10"]["reward"];
-	if(stage_top10_reward.size() >= 2)
-	{
-		CCNode* reward_img = getRewardImg("many");
-		reward_img->setPosition(ccp(13.5, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-	}
-	else
-	{
-		CCNode* reward_img = getRewardImg(stage_top10_reward[0]["type"].asString());
-		reward_img->setPosition(ccp(13.5, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-		
-		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_top10_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
-		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
-		left_graph_case->addChild(count_label);
-	}
-	
-	Json::Value stage_p30_reward = stage_reward_list["p30"]["reward"];
-	if(stage_p30_reward.size() >= 2)
-	{
-		CCNode* reward_img = getRewardImg("many");
-		reward_img->setPosition(ccp(49.5, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-	}
-	else
-	{
-		CCNode* reward_img = getRewardImg(stage_p30_reward[0]["type"].asString());
-		reward_img->setPosition(ccp(49.5, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-		
-		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_p30_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
-		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
-		left_graph_case->addChild(count_label);
-	}
-	
-	Json::Value stage_p50_reward = stage_reward_list["p50"]["reward"];
-	if(stage_p50_reward.size() >= 2)
-	{
-		CCNode* reward_img = getRewardImg("many");
-		reward_img->setPosition(ccp(92, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-	}
-	else
-	{
-		CCNode* reward_img = getRewardImg(stage_p50_reward[0]["type"].asString());
-		reward_img->setPosition(ccp(92, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-		
-		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_p50_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
-		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
-		left_graph_case->addChild(count_label);
-	}
-	
-	Json::Value stage_p100_reward = stage_reward_list["p100"]["reward"];
-	if(stage_p100_reward.size() >= 2)
-	{
-		CCNode* reward_img = getRewardImg("many");
-		reward_img->setPosition(ccp(150, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-	}
-	else
-	{
-		CCNode* reward_img = getRewardImg(stage_p100_reward[0]["type"].asString());
-		reward_img->setPosition(ccp(150, left_graph_case->getContentSize().height/2.f));
-		left_graph_case->addChild(reward_img);
-		
-		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_p100_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
-		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
-		left_graph_case->addChild(count_label);
-	}
+//	Json::Value stage_top10_reward = stage_reward_list["t10"]["reward"];
+//	if(stage_top10_reward.size() >= 2)
+//	{
+//		CCNode* reward_img = getRewardImg("many");
+//		reward_img->setPosition(ccp(13.5, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//	}
+//	else
+//	{
+//		CCNode* reward_img = getRewardImg(stage_top10_reward[0]["type"].asString());
+//		reward_img->setPosition(ccp(13.5, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//		
+//		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_top10_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
+//		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
+//		left_graph_case->addChild(count_label);
+//	}
+//	
+//	Json::Value stage_p30_reward = stage_reward_list["p30"]["reward"];
+//	if(stage_p30_reward.size() >= 2)
+//	{
+//		CCNode* reward_img = getRewardImg("many");
+//		reward_img->setPosition(ccp(49.5, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//	}
+//	else
+//	{
+//		CCNode* reward_img = getRewardImg(stage_p30_reward[0]["type"].asString());
+//		reward_img->setPosition(ccp(49.5, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//		
+//		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_p30_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
+//		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
+//		left_graph_case->addChild(count_label);
+//	}
+//	
+//	Json::Value stage_p50_reward = stage_reward_list["p50"]["reward"];
+//	if(stage_p50_reward.size() >= 2)
+//	{
+//		CCNode* reward_img = getRewardImg("many");
+//		reward_img->setPosition(ccp(92, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//	}
+//	else
+//	{
+//		CCNode* reward_img = getRewardImg(stage_p50_reward[0]["type"].asString());
+//		reward_img->setPosition(ccp(92, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//		
+//		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_p50_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
+//		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
+//		left_graph_case->addChild(count_label);
+//	}
+//	
+//	Json::Value stage_p100_reward = stage_reward_list["p100"]["reward"];
+//	if(stage_p100_reward.size() >= 2)
+//	{
+//		CCNode* reward_img = getRewardImg("many");
+//		reward_img->setPosition(ccp(150, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//	}
+//	else
+//	{
+//		CCNode* reward_img = getRewardImg(stage_p100_reward[0]["type"].asString());
+//		reward_img->setPosition(ccp(150, left_graph_case->getContentSize().height/2.f));
+//		left_graph_case->addChild(reward_img);
+//		
+//		KSLabelTTF* count_label = KSLabelTTF::create(("+" + KS::insert_separator(stage_p100_reward[0]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 8);
+//		count_label->setPosition(reward_img->getPosition() + ccp(0,-5));
+//		left_graph_case->addChild(count_label);
+//	}
 	
 	float stage_rank_percent = 1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt();
 	

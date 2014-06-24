@@ -382,6 +382,18 @@ void ZoomScript::menuAction(CCObject *sender)
 				
 				if(is_chance)
 				{
+					int t_card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, after_value);
+					
+					MyNode* t_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString()));
+					
+					if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()))
+						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+					
+					
+					t_node->setPosition(ccp(160,215));
+					t_node->setTouchEnabled(false);
+					game_node->addChild(target_node, -1);
+					
 					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
 															   {
 																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
@@ -453,17 +465,18 @@ void ZoomScript::menuAction(CCObject *sender)
 																   
 																   target_node->removeFromParent();
 																   
-																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
-																   
-																   target_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
-																   
-																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
-																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
-																   
-																   
-																   target_node->setPosition(ccp(160,215));
-																   target_node->setTouchEnabled(false);
-																   game_node->addChild(target_node, kZS_Z_second_img);
+//																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
+//																   
+																   target_node = t_node;//MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+//																   
+//																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
+//																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+//																   
+//																   
+//																   target_node->setPosition(ccp(160,215));
+//																   target_node->setTouchEnabled(false);
+//																   game_node->addChild(target_node, kZS_Z_second_img);
+																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
 																   game_node->setScale(1.5f);
 																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
@@ -620,6 +633,18 @@ void ZoomScript::menuAction(CCObject *sender)
 				
 				if(is_rank_up_chance)
 				{
+					int t_card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade()+1);
+					
+					MyNode* t_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString()));
+					
+					if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()))
+						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+					
+					
+					t_node->setPosition(ccp(160,215));
+					t_node->setTouchEnabled(false);
+					game_node->addChild(target_node, -1);
+					
 					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
 															   {
 																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
@@ -642,17 +667,18 @@ void ZoomScript::menuAction(CCObject *sender)
 															   }, [=](){
 																   target_node->removeFromParent();
 																   
-																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
-																   
-																   target_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
-
-																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
-																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
-
-																   
-																   target_node->setPosition(ccp(160,215));
-																   target_node->setTouchEnabled(false);
-																   game_node->addChild(target_node, kZS_Z_second_img);
+//																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
+//																   
+																   target_node = t_node;//MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+//
+//																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
+//																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
+//
+//																   
+//																   target_node->setPosition(ccp(160,215));
+//																   target_node->setTouchEnabled(false);
+//																   game_node->addChild(target_node, kZS_Z_second_img);
+																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
 																   game_node->setScale(1.5f);
 																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));

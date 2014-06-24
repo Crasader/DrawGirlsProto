@@ -211,11 +211,11 @@ void RivalSelectPopup::startRivalAnimation()
 								
 								CCSprite* left_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->dummy_list[0]["flag"].asString()).c_str());
 								left_flag->setScale(1.2f);
-								left_flag->setPosition(ccp(0, 30));
+								left_flag->setPosition(ccp(0, 22));
 								left_node->addChild(left_flag);
 								
 								KSLabelTTF* left_nick = KSLabelTTF::create(mySGD->dummy_list[0]["nick"].asString().c_str(), mySGD->getFont().c_str(), 14);
-								left_nick->setPosition(ccp(0, 5));
+								left_nick->setPosition(ccp(0, -3));
 								left_node->addChild(left_nick);
 								
 //								KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[0]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
@@ -260,11 +260,11 @@ void RivalSelectPopup::startRivalAnimation()
 													
 													CCSprite* center_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->dummy_list[1]["flag"].asString()).c_str());
 													center_flag->setScale(1.2f);
-													center_flag->setPosition(ccp(0, 30));
+													center_flag->setPosition(ccp(0, 22));
 													center_node->addChild(center_flag);
 													
 													KSLabelTTF* center_nick = KSLabelTTF::create(mySGD->dummy_list[1]["nick"].asString().c_str(), mySGD->getFont().c_str(), 14);
-													center_nick->setPosition(ccp(0, 5));
+													center_nick->setPosition(ccp(0, -3));
 													center_node->addChild(center_nick);
 													
 //													KSLabelTTF* center_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[1]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
@@ -308,11 +308,11 @@ void RivalSelectPopup::startRivalAnimation()
 																		
 																		CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->dummy_list[2]["flag"].asString()).c_str());
 																		right_flag->setScale(1.2f);
-																		right_flag->setPosition(ccp(0, 30));
+																		right_flag->setPosition(ccp(0, 22));
 																		right_node->addChild(right_flag);
 																		
 																		KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->dummy_list[2]["nick"].asString().c_str(), mySGD->getFont().c_str(), 14);
-																		right_nick->setPosition(ccp(0, 5));
+																		right_nick->setPosition(ccp(0, -3));
 																		right_node->addChild(right_nick);
 																		
 //																		KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[2]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
