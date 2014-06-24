@@ -6,6 +6,8 @@
 #if !defined(JSON_IS_AMALGAMATION)
 # include "value.h"
 # include "writer.h"
+# include "reader.h"
+
 # ifndef JSON_USE_SIMPLE_INTERNAL_ALLOCATOR
 #  include "json_batchallocator.h"
 # endif // #ifndef JSON_USE_SIMPLE_INTERNAL_ALLOCATOR
@@ -673,9 +675,13 @@ Value::asString() const
 			 oss << value_.uint_;
 			 return oss.str();
 		 }
+	 case arrayValue:
+	 case objectValue:
+		 {
+			 return toStyledString().c_str();
+		 }
+			
    case realValue:
-   case arrayValue:
-   case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to string" );
    default:
       JSON_ASSERT_UNREACHABLE;
@@ -1175,6 +1181,13 @@ Value &
 Value::resolveReference( const char *key, 
                          bool isStatic )
 {
+	if(type_ == stringValue){
+		Json::Reader r;
+		Json::Value other;
+		r.parse(value_.string_, other);
+		swap( other );
+	}
+	
    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
    if ( type_ == nullValue )
       *this = Value( objectValue );
