@@ -753,5 +753,6 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_isShowMainflowDimmed] = "ismfd";
 	return_value[kDSH_Key_isShowEndlessModeTutorial] = "isemt";
 	return_value[kSDH_Key_isShowOnePercentTutorial] = "issopt";
+	return_value[kDSH_Key_isShowGababoTutorial] = "issgt";
 }
 #undef LZZ_INLINE

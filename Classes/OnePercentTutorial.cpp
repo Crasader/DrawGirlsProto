@@ -172,6 +172,7 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 {
 	if(m_tutorialStep == 1)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		m_gachaDesc->removeFromParent();
 		
 		m_gachaDesc = StyledLabelTTF::create("<font color=#FFFFFF size=12 newline=15>아래 게이지바에서 분홍색 영역을 맞히면</font>"
@@ -185,6 +186,7 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 	}
 	else if(m_tutorialStep == 2)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		myDSH->setIntegerForKey(kSDH_Key_isShowOnePercentTutorial, 1);
 		OnePercentGame* opg = OnePercentGame::create(m_originalPercent, m_cancelGacha, m_tryGacha, false);
 		getParent()->addChild(opg, getZOrder());

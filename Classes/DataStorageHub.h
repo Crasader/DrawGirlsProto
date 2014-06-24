@@ -148,7 +148,8 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_isShowMainflowDimmed,
 	kDSH_Key_isShowEndlessModeTutorial,
-	kSDH_Key_isShowOnePercentTutorial
+	kSDH_Key_isShowOnePercentTutorial,
+	kDSH_Key_isShowGababoTutorial
 }DSH_Key;
 
 enum SpecialTutorialCode{

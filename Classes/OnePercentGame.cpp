@@ -463,6 +463,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			
 			if(fabsf(pos) <= m_validSize / 2.f)
 			{
+				AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
 				m_totalPercent += 0.003f;
 				m_totalPercent = MIN(1.f, m_totalPercent);
 //				auto stencil = CCScale9Sprite::create("one_percent_gacha_06.png", CCRectMake(0, 0, 13, graphHeight), CCRectMake(5, 5, 3, 165));
@@ -506,6 +507,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			else
 			{
 				// 실패했을 경우.
+				AudioEngine::sharedInstance()->playEffect("se_fail.mp3", false);
 			}
 			if(m_99State != 999)
 			{
@@ -537,6 +539,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			
 			if(fabsf(pos) <= m_validSize / 2.f)
 			{
+				AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
 				m_totalPercent += 0.003f;
 				m_totalPercent = MIN(1.f, m_totalPercent);
 				
@@ -583,6 +586,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			else
 			{
 				// 실패했을 경우.
+				AudioEngine::sharedInstance()->playEffect("se_fail.mp3", false);
 			}
 			if(m_99State != 999)
 			{
@@ -607,6 +611,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			
 			if(fabsf(pos) <= m_validSize / 2.f)
 			{
+				AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
 				m_totalPercent += 0.004f;
 				m_totalPercent = MIN(1.f, m_totalPercent);
 //				auto stencil = CCScale9Sprite::create("one_percent_gacha_06.png", CCRectMake(0, 0, 13, graphHeight), CCRectMake(5, 5, 3, 165));
@@ -634,6 +639,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 			else
 			{
 				// 실패했을 경우.
+				AudioEngine::sharedInstance()->playEffect("se_fail.mp3", false);
 			}
 			
 			addChild(KSTimer::create(1.5f, [=](){
@@ -689,6 +695,7 @@ void OnePercentGame::showFail()
 	CCSprite* failBox = CCSprite::create("one_percent_gacha_failbox.png");
 	m_container->addChild(failBox, kOnePercentGame_Z_content);
 	KSLabelTTF* failTitle = KSLabelTTF::create("100% 달성 실패", mySGD->getFont().c_str(), 20.f);
+	AudioEngine::sharedInstance()->playEffect("ment_gameover1.mp3", false);
 	failTitle->setPosition(ccp(0.0, 14.5)); 			// dt (0.0, 14.5)
 	failTitle->setColor(ccc3(255, 0, 0));
 	setFormSetter(failTitle);
@@ -722,6 +729,7 @@ void OnePercentGame::showFail()
 void OnePercentGame::showSuccess()
 {
 	KSLabelTTF* label = KSLabelTTF::create("100% 달성!!", mySGD->getFont().c_str(), 30.f);
+	AudioEngine::sharedInstance()->playEffect("ment_rankup.mp3", false);
 	m_container->addChild(label, kOnePercentGame_Z_content);
 	label->setScale(0);
 	addChild(KSGradualValue<float>::create(0, 1.f, 0.3f, [=](float t){
