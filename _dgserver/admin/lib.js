@@ -12,7 +12,7 @@
 	var imageSelector = function(value,option){
 		var img;
 		
-		if(value)img = "src='../images/"+value+"'";
+		if(value)img = "src='"+value+"'";
 		else img=""
 		
 		if(value)_val = value;
@@ -20,6 +20,10 @@
 		
 		var op="<input type='image' value='"+_val+"' "+img+" class='imageSelector LQEditor' width=100>";
 		return op;
+	}
+
+	var imageSelector_value = function(obj){
+		return obj.attr("value");
 	}
 	
 	var resourceSelector = function(value,option){	
@@ -35,7 +39,7 @@
 	var imageViewer = function(value,option){
 		var img;
 		
-		if(value)img = "<img src='../images/"+value+"' width=100>";
+		if(value)img = "<img src='"+value+"' width=100>";
 		else img=""
 		
 		return img;
@@ -46,7 +50,7 @@
 		var obj = delegator2[input];
 		
 		
-		obj.attr("src","../images/"+value);
+		obj.attr("src",value);
 		obj.attr("value",value);
 		obj.val(value);
 		
@@ -62,7 +66,7 @@
 		var obj = delegator2[input];
 		
 		
-		obj.attr("src","../images/"+value);
+		obj.attr("src",value);
 		obj.attr("value",value);
 		obj.val(value);
 		
