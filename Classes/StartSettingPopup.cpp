@@ -941,6 +941,8 @@ void StartSettingPopup::gachaMenuCreate()
 																		   
 																		   is_menu_enable = false;
 																		   
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   
 																		   if(clicked_item_idx != -1)
 																		   {
 																			   CCNode* before_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingPopupMenuTag_itemBase+clicked_item_idx);
@@ -1181,6 +1183,8 @@ void StartSettingPopup::startItemGacha()
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 	{

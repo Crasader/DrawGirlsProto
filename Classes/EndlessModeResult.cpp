@@ -701,6 +701,7 @@ void EndlessModeResult::setMain()
 																	  
 																	  is_menu_enable = false;
 																	  
+																	  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																	  
 																	  if(left_total_score.getV() > right_total_score.getV())
 																		{
@@ -760,6 +761,8 @@ void EndlessModeResult::setMain()
 																																	
 																																	t_popup->is_menu_enable = false;
 																																	
+																																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																	
 																																	CommonAnimation::closePopup(t_popup, t_container, t_gray, [=](){
 																																		
 																																	}, [=](){
@@ -776,6 +779,8 @@ void EndlessModeResult::setMain()
 																					return;
 																				
 																				t_popup->is_menu_enable = false;
+																				
+																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																				
 																				CommonAnimation::closePopup(this, t_container, t_gray, [=](){
 																					
@@ -947,6 +952,8 @@ void EndlessModeResult::setMain()
 																		 return;
 																	 
 																	 is_menu_enable = false;
+																	 
+																	 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																	 
 																	 ready_loading = LoadingLayer::create(-999);
 																	 addChild(ready_loading, 999);
@@ -1547,6 +1554,8 @@ void EndlessModeResult::startCalcAnimation()
 																																											   return;
 																																										   
 																																										   is_menu_enable = false;
+																																										   
+																																										   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																																										   
 																																										   t_close_button->setEnabled(false);
 																																										   CommonAnimation::closePopup(this, t_popup_node, NULL);

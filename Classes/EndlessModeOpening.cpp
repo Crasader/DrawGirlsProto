@@ -375,6 +375,8 @@ void EndlessModeOpening::setMain()
 																	  
 																	  is_menu_enable = false;
 																	  
+																	  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																	  
 																	  ready_loading = LoadingLayer::create(-99999);
 																	  addChild(ready_loading, 99999);
 																	  

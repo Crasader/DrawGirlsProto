@@ -220,6 +220,8 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
 	if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
 	{
 		loading_layer = LoadingLayer::create(touch_priority-100);
