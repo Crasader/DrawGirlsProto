@@ -138,11 +138,14 @@ bool EndlessModeResult::init()
 		if(left_total_score.getV() > right_total_score.getV())
 		{
 			mySGD->endless_my_victory = mySGD->endless_my_victory.getV() + 1;
+			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = mySGD->endless_my_ing_win.getV() + 1;
 			mySGD->endless_my_ing_score = mySGD->endless_my_ing_score.getV() + int(left_total_score.getV());
 		}
 		else
 		{
+			mySGD->endless_my_victory = 0;
+			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = 0;
 			mySGD->endless_my_ing_score = 0;
 		}

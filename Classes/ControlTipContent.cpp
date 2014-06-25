@@ -119,7 +119,6 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	
 	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
 	{
-		CCLOG("1");
 //		CCSprite* t_stencil = (CCSprite*)area_take_sample->getStencil();
 //		int before_opacity = t_stencil->getOpacity();
 //		KS::setOpacity(this, t);
