@@ -515,7 +515,7 @@ void JsGababo::setupHands()
 {
 	CCSprite* me = CCSprite::create("one_percent_gacha_me.png");
 	m_back->addChild(me);
-	me->setPosition(ccp(53, 254));
+	me->setPosition(ccp(53, 250));
 	KSLabelTTF* meLbl = KSLabelTTF::create("나", mySGD->getFont().c_str(), 14.f);
 	meLbl->setColor(ccc3(255, 170, 20));
 	me->addChild(meLbl);
@@ -611,8 +611,9 @@ void JsGababo::onPressConfirm(CCObject* t)
 				lightPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 					light->removeFromParent();
 				});
-				light->setPosition(ccp(240, 160));
-				addChild(light, 100);
+//				light->setPosition(ccp(240, 195));
+				light->setPosition(m_stepSprite->getPosition());
+				m_back->addChild(light, 100);
 				addChild(KSTimer::create(2.2f, [=](){
 					loadImage(m_winCount);
 				}));
@@ -677,20 +678,20 @@ void JsGababo::showHandsMotionWrapper()
 		functor[2] = bind(&JsGababo::drawSkill, this, std::placeholders::_1);
 		if(m_winCount == 0)
 		{
-			// 이길 확률 70 % 질 확률 15% 비길 확률 15%
-			ProbSelector ps = {70.f, 15.f, 15.f};
+			// 이길 확률 70 % 질 확률 15% 비길 확률 50%
+			ProbSelector ps = {70.f, 15.f, 50.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 1)
 		{
-			// 이길 확률 60% 질 확률 20% 비길 확률 20%
-			ProbSelector ps = {60.f, 20.f, 20.f};
+			// 이길 확률 60% 질 확률 20% 비길 확률 60%
+			ProbSelector ps = {60.f, 20.f, 60.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 2)
 		{
-			// 이길 확률 50 % 질 확률 25% 비길 확률 25%
-			ProbSelector ps = {50.f, 25.f, 25.f};
+			// 이길 확률 50 % 질 확률 25% 비길 확률 30%
+			ProbSelector ps = {50.f, 25.f, 30.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		
