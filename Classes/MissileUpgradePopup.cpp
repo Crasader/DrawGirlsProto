@@ -157,11 +157,11 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	upgrade_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 13);
 	upgrade_label->enableOuterStroke(ccBLACK, 0.5f);
-	upgrade_label->setAnchorPoint(ccp(0,0.5f));
+	upgrade_label->setAnchorPoint(ccp(0.5f,0.5f));
 	upgrade_label->setPosition(ccp(0,0));
 	price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
 	price_back->setContentSize(CCSizeMake(82, 26));
-	price_back->setPosition(ccp(upgrade_label->getContentSize().width + price_back->getContentSize().width/2.f + 10, upgrade_label->getContentSize().height/2.f));
+	price_back->setPosition(ccp(upgrade_label->getContentSize().width + price_back->getContentSize().width/2.f + 20, upgrade_label->getContentSize().height/2.f));
 	upgrade_label->addChild(price_back);
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
@@ -202,7 +202,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	upgrade_button->setTouchPriority(touch_priority);
 	
-	upgrade_label->setPositionX(-upgrade_button->getPreferredSize().width/2.f + 15);
+	upgrade_label->setPositionX(-upgrade_button->getPreferredSize().width/2.f + upgrade_label->getContentSize().width/2.f + 18);
 	
 	
 	
@@ -491,13 +491,13 @@ void MissileUpgradePopup::setAfterUpgrade()
 		upgrade_effect_2->setPosition(ccp(80,-14));
 		m_container->addChild(upgrade_effect_2);
 		
-		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont2().c_str(), 13);
+		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont2().c_str(), 11);
 		effect_label->enableOuterStroke(ccBLACK, 1.f);
 		effect_label->setPosition(ccp(38,47));
 		upgrade_effect_2->addChild(effect_label);
 		
-		KSLabelTTF* upper_damage = KSLabelTTF::create(CCString::createWithFormat("+%d", after_damage-before_damage)->getCString(), mySGD->getFont().c_str(), 13);
-		upper_damage->setColor(ccc3(255,246,0));
+		KSLabelTTF* upper_damage = KSLabelTTF::create(CCString::createWithFormat("+%d", after_damage-before_damage)->getCString(), mySGD->getFont().c_str(), 20);
+		upper_damage->setColor(ccc3(0,222,255));
 		upper_damage->enableOuterStroke(ccBLACK, 1.f);
 		upper_damage->setPosition(ccp(upgrade_effect_2->getContentSize().width/2.f, upgrade_effect_2->getContentSize().height/2.f-8));
 		upgrade_effect_2->addChild(upper_damage);
