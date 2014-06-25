@@ -587,6 +587,12 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 		else
 			lastCastNum = mapper[atype];
 
+		int result = mAnimationManager->getSequenceId(ccsf("cast%dstart"));
+		if(result == -1)
+		{
+			lastCastNum = 1;
+		}
+		
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 
 		std::string target = _pattern.get("target", "no").asString();
