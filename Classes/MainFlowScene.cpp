@@ -3923,7 +3923,7 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(107,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10)); // 114
+	top_heart->setPosition(ccp(109,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10)); // 114
 	addChild(top_heart, kMainFlowZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -3939,7 +3939,7 @@ void MainFlowScene::setTop()
 //	top_case->addChild(top_case2);
 	
 	heart_time = HeartTime::create();
-	heart_time->setPosition(ccp(top_heart->getContentSize().width/2.f-53,top_heart->getContentSize().height/2.f));
+	heart_time->setPosition(ccp(top_heart->getContentSize().width/2.f-49.f,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");
@@ -3950,7 +3950,7 @@ void MainFlowScene::setTop()
 	heart_item->setTag(kMainFlowMenuTag_heartShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+53,top_heart->getContentSize().height/2.f));
+	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+50.5f,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_menu);
 	
 	
@@ -4030,6 +4030,17 @@ void MainFlowScene::setTop()
 //	top_case->addChild(friend_point_menu);
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
+	CCSprite* s_option = CCSprite::create("mainflow_new_option.png");
+	s_option->setColor(ccGRAY);
+	
+	CCMenuItem* option_item = CCMenuItemSprite::create(n_option, s_option, this, menu_selector(MainFlowScene::menuAction));
+	option_item->setTag(kMainFlowMenuTag_option);
+	
+	CCMenu* option_menu = CCMenu::createWithItem(option_item);
+	option_menu->setPosition(ccp(428,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22)); // 461
+	addChild(option_menu, kMainFlowZorder_top);
+	
 	
 	CCNode* achieve_node = CCNode::create();
 	addChild(achieve_node, kMainFlowZorder_top);
@@ -4063,6 +4074,8 @@ void MainFlowScene::setTop()
 	top_list.push_back(postbox_node);
 	
 	top_list.push_back(achieve_node);
+	
+	top_list.push_back(option_menu);
 	
 	
 	postbox_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));//"mainflow_new.png");
@@ -4131,19 +4144,6 @@ void MainFlowScene::setTop()
 //													}));
 	
 	countingAchievement();
-	
-	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");
-	CCSprite* s_option = CCSprite::create("mainflow_new_option.png");
-	s_option->setColor(ccGRAY);
-	
-	CCMenuItem* option_item = CCMenuItemSprite::create(n_option, s_option, this, menu_selector(MainFlowScene::menuAction));
-	option_item->setTag(kMainFlowMenuTag_option);
-	
-	CCMenu* option_menu = CCMenu::createWithItem(option_item);
-	option_menu->setPosition(ccp(428,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22)); // 461
-	addChild(option_menu, kMainFlowZorder_top);
-	
-	top_list.push_back(option_menu);
 	
 	
 	CCSprite* n_event = CCSprite::create("mainflow_new_event.png");
