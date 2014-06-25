@@ -375,6 +375,8 @@ void EndlessModeOpening::setMain()
 																	  
 																	  is_menu_enable = false;
 																	  
+																	  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																	  
 																	  ready_loading = LoadingLayer::create(-99999);
 																	  addChild(ready_loading, 99999);
 																	  
@@ -963,7 +965,7 @@ void EndlessModeOpening::successGetStageInfo()
 																									{
 																										gray->setOpacity(0);
 																										mySGD->is_endless_mode = true;
-																										mySGD->endless_my_victory = 0;
+//																										mySGD->endless_my_victory = 0;
 																										mySD->setSilType(stage_number);
 																										
 																										StartSettingPopup* t_popup = StartSettingPopup::create();
@@ -1294,6 +1296,8 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			mySGD->endless_my_ing_win = result_data["myInfo"]["ing_win"].asInt();
 			mySGD->endless_my_victory = result_data["myInfo"]["ing_win"].asInt();
 			
+			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
+			
 			if(refresh_ing_win_func != nullptr)
 			{
 				refresh_ing_win_func();
@@ -1444,7 +1448,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		nick_label->setPosition(ccp(79 - 3.5,19));
 		list_cell_case->addChild(nick_label);
 		
-		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 		score_label->setColor(ccc3(255, 255, 255));
 		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
@@ -1454,7 +1458,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 //		KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 		StyledLabelTTF* victory_label =
-				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), victory.getV()),
+				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), mySGD->endless_my_high_victory.getV()),
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
 //		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);

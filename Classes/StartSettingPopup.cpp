@@ -941,6 +941,8 @@ void StartSettingPopup::gachaMenuCreate()
 																		   
 																		   is_menu_enable = false;
 																		   
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   
 																		   if(clicked_item_idx != -1)
 																		   {
 																			   CCNode* before_item_parent = (CCNode*)main_case->getChildByTag(kStartSettingPopupMenuTag_itemBase+clicked_item_idx);
@@ -958,7 +960,7 @@ void StartSettingPopup::gachaMenuCreate()
 //																			   buy_button->removeFromParent();
 																		   
 																		   CCRect title_size = CCRectMake(0, 0, 200, 20);
-																		   CCPoint title_position = ccp(188, 147);
+																		   CCPoint title_position = ccp(188, 143);
 																		   
 																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 14, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 																			 setFormSetter(item_title_label);
@@ -1181,6 +1183,8 @@ void StartSettingPopup::startItemGacha()
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 	{
@@ -1566,7 +1570,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 //			buy_button->removeFromParent();
 		
 		CCRect title_size = CCRectMake(0, 0, 200, 20);
-		CCPoint title_position = ccp(188, 147);
+		CCPoint title_position = ccp(188, 143);
 		
 		//		CCSprite* title_rect = CCSprite::create("whitePaper.png", title_size);
 		//		title_rect->setOpacity(100);

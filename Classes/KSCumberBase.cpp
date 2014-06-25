@@ -2418,8 +2418,29 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		m_aiValue *=2;
 		if(m_aiValue<50)m_aiValue=50;
 		
-		m_attackPercent *=1.1f;
+		m_attackPercent *=1.2f;
 		if(m_attackPercent<0.3)m_attackPercent=0.3;
+		
+		int sumpercent = 0;
+		int crashCnt= 0;
+		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+		{
+			if( (*iter)["atype"].asString() == "crash" )crashCnt++;
+			else sumpercent+=(*iter)["percent"].asInt();
+		}
+		
+		//2번중 1번은 부수기공격나오도록
+		sumpercent=sumpercent/crashCnt;
+		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+		{
+			if( (*iter)["atype"].asString() == "crash" )
+			{
+				CCLOG("before %s type %d attack percent is %f / %d",(*iter)["atype"].asString().c_str(),(*iter)["pattern"].asInt(),(*iter)["percent"].asFloat(),sumpercent*crashCnt);
+				if((*iter)["percent"].asInt()<sumpercent)(*iter)["percent"]=sumpercent;
+				CCLOG("after %s type %d attack percent is %f",(*iter)["atype"].asString().c_str(),(*iter)["pattern"].asInt(),(*iter)["percent"].asFloat());
+			}
+		}
+		
 		
 	}
 

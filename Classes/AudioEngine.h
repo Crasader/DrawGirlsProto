@@ -52,6 +52,8 @@ public:
 	}
 	void stopSound()
 	{
+		CCLOG("stop sound!! : %s", playing_sound_name.c_str());
+		
 		playing_sound_name = "";
 		mySAE->stopBackgroundMusic();
 	}
@@ -64,12 +66,16 @@ public:
 		}
 		else
 		{
+			CCLOG("sound off!!");
+			
 			mySAE->setBackgroundMusicVolume(0.0);
 		}
 	}
 	
 	void setEffectOnOff(bool t_b)
 	{
+		if(!t_b)
+			CCLOG("effect off!!");
 		effectOn = t_b;
 	}
 	bool is_preloaded;
@@ -654,7 +660,10 @@ public:
 	{
 		if(effectOn == false)
 			return;
-	
+		
+		if(back_down)
+			CCLOG("will not play effect. back down!!");
+		
 		// loop 와 cancut 이 둘다 false 여야 그냥 재생만.
 		// 아니면은 일단 저장해야 됨.
 		// loop = false && cancut == true 일 때,

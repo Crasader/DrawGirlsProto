@@ -96,6 +96,8 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 								  
 								  is_menu_enable = false;
 								  
+								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+								  
 								  select_menu->setEnabled(false);
 								  select_menu->removeAllChildren();
 								  
@@ -409,6 +411,9 @@ void RivalSelectPopup::selectRival(int t_index)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
 	select_menu->setEnabled(false);
 	select_menu->removeAllChildren();
 	

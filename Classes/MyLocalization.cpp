@@ -1116,7 +1116,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	ko->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	ko->setObject(CCString::create("쿠폰 번호"), kMyLocalKey_couponContent);
+	ko->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	ko->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	ko->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ko->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
@@ -1164,7 +1164,7 @@ void MyLocal::ko()
 																								"<font color=#FFFFFF>성공시 </font>"
 																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
-	ko->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	ko->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
 	ko->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	ko->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
@@ -1902,7 +1902,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	en->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	en->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
+	en->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	en->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	en->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	en->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
@@ -1950,7 +1950,7 @@ void MyLocal::en()
 																								"<font color=#FFFFFF>성공시 </font>"
 																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
-	en->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	en->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
 	en->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	en->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
@@ -2713,7 +2713,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	ja->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	ja->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
+	ja->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	ja->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	ja->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ja->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
@@ -2761,7 +2761,7 @@ void MyLocal::ja()
 																								"<font color=#FFFFFF>성공시 </font>"
 																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
-	ja->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	ja->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
 	ja->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	ja->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);

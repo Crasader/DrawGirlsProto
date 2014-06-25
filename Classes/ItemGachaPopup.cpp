@@ -364,6 +364,8 @@ void ItemGachaPopup::useAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
 	CommonAnimation::closePopup(this, m_container, gray, [=](){
 		
 	}, [=](){
@@ -377,6 +379,8 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 	{

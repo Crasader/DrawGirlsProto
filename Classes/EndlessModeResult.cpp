@@ -138,11 +138,14 @@ bool EndlessModeResult::init()
 		if(left_total_score.getV() > right_total_score.getV())
 		{
 			mySGD->endless_my_victory = mySGD->endless_my_victory.getV() + 1;
+			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = mySGD->endless_my_ing_win.getV() + 1;
 			mySGD->endless_my_ing_score = mySGD->endless_my_ing_score.getV() + int(left_total_score.getV());
 		}
 		else
 		{
+			mySGD->endless_my_victory = 0;
+			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = 0;
 			mySGD->endless_my_ing_score = 0;
 		}
@@ -698,8 +701,9 @@ void EndlessModeResult::setMain()
 																	  
 																	  is_menu_enable = false;
 																	  
+																	  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																	  
-																	  if(mySGD->getScore() > mySGD->temp_endless_score.getV())
+																	  if(left_total_score.getV() > right_total_score.getV())
 																		{
 																			
 																			ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
@@ -757,6 +761,8 @@ void EndlessModeResult::setMain()
 																																	
 																																	t_popup->is_menu_enable = false;
 																																	
+																																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																	
 																																	CommonAnimation::closePopup(t_popup, t_container, t_gray, [=](){
 																																		
 																																	}, [=](){
@@ -773,6 +779,8 @@ void EndlessModeResult::setMain()
 																					return;
 																				
 																				t_popup->is_menu_enable = false;
+																				
+																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																				
 																				CommonAnimation::closePopup(this, t_container, t_gray, [=](){
 																					
@@ -944,6 +952,8 @@ void EndlessModeResult::setMain()
 																		 return;
 																	 
 																	 is_menu_enable = false;
+																	 
+																	 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																	 
 																	 ready_loading = LoadingLayer::create(-999);
 																	 addChild(ready_loading, 999);
@@ -1544,6 +1554,8 @@ void EndlessModeResult::startCalcAnimation()
 																																											   return;
 																																										   
 																																										   is_menu_enable = false;
+																																										   
+																																										   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																																										   
 																																										   t_close_button->setEnabled(false);
 																																										   CommonAnimation::closePopup(this, t_popup_node, NULL);
