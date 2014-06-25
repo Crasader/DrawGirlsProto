@@ -418,7 +418,7 @@ void GoldLabel::myInit ()
 	}
 	else
 	{
-		setPosition(ccp(480-8, myDSH->ui_top-41));
+		setPosition(ccp(480-8, myDSH->ui_top-39));
 	}
 //	if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));

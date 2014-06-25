@@ -911,7 +911,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			}
 			
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(210, 40));
+			list_cell_case->setContentSize(CCSizeMake(217, 40));
 			list_cell_case->setPosition(ccp(355,197-i*36));
 			main_case->addChild(list_cell_case, kZ_FP_img);
 			setFormSetter(list_cell_case);
@@ -949,14 +949,14 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			
 			string flag = read_data.get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(45,20));
+			selectedFlagSpr->setPosition(ccp(52,20));
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
 			nick_label->setAnchorPoint(ccp(0,0.5));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(60,20));
+			nick_label->setPosition(ccp(67,20));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
@@ -978,7 +978,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		if(myrank > 3)
 		{
 			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(210, 40));
+			list_cell_case->setContentSize(CCSizeMake(217, 40));
 			list_cell_case->setPosition(ccp(355,197-3*36));
 			main_case->addChild(list_cell_case, kZ_FP_img);
 			
@@ -989,14 +989,14 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(45,20));
+			selectedFlagSpr->setPosition(ccp(52,20));
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
 			nick_label->setAnchorPoint(ccp(0,0.5));
 			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(60,20));
+			nick_label->setPosition(ccp(67,20));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 12);

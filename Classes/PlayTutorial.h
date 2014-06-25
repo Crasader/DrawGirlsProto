@@ -460,7 +460,7 @@ private:
 	TutoControler* controler;
 	TutoPathManager* path_manager;
 	
-	CCLabelTTF* top_label;
+	KSLabelTTF* top_label;
 	CCSprite* mark_img;
 	
 	CCClippingNode* area_take_sample;

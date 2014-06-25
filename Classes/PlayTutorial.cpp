@@ -1371,7 +1371,9 @@ bool PlayTutorial::init()
 	
 	character->controlerStop = [=](){controler->stopMySchedule(); controler->resetTouch();};
 	
-	top_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 14);
+	top_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 18);
+	top_label->setColor(ccc3(255, 170, 20));
+	top_label->enableOuterStroke(ccBLACK, 2);
 	top_label->setPosition(ccp(240, myDSH->ui_top-30));
 	addChild(top_label, 6);
 	
