@@ -794,6 +794,34 @@
 									<key>type</key>
 									<integer>5</integer>
 								</dict>
+								<key>position</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>position</string>
+											<key>time</key>
+											<real>1.5</real>
+											<key>type</key>
+											<integer>3</integer>
+											<key>value</key>
+											<array>
+												<real>4.5</real>
+												<real>3</real>
+											</array>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>position</string>
+									<key>type</key>
+									<integer>3</integer>
+								</dict>
 								<key>scale</key>
 								<dict>
 									<key>keyframes</key>
@@ -857,6 +885,11 @@
 						<key>properties</key>
 						<array>
 							<dict>
+								<key>baseValue</key>
+								<array>
+									<real>4.5</real>
+									<real>116.81172180175781</real>
+								</array>
 								<key>name</key>
 								<string>position</string>
 								<key>type</key>
@@ -927,8 +960,6 @@
 								<integer>0</integer>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -974,6 +1005,34 @@
 									<string>opacity</string>
 									<key>type</key>
 									<integer>5</integer>
+								</dict>
+								<key>position</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>position</string>
+											<key>time</key>
+											<real>2.4333333969116211</real>
+											<key>type</key>
+											<integer>3</integer>
+											<key>value</key>
+											<array>
+												<real>-48</real>
+												<real>1</real>
+											</array>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>position</string>
+									<key>type</key>
+									<integer>3</integer>
 								</dict>
 								<key>scale</key>
 								<dict>
@@ -1038,6 +1097,11 @@
 						<key>properties</key>
 						<array>
 							<dict>
+								<key>baseValue</key>
+								<array>
+									<real>-48</real>
+									<real>-124.86804962158203</real>
+								</array>
 								<key>name</key>
 								<string>position</string>
 								<key>type</key>
@@ -1108,8 +1172,6 @@
 								<integer>0</integer>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1350,8 +1412,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1549,8 +1609,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -3096,8 +3154,8 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<real>52.430789947509766</real>
-									<real>4.9893689155578613</real>
+									<real>4.5</real>
+									<real>3</real>
 								</array>
 								<key>name</key>
 								<string>position</string>
@@ -3154,8 +3212,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -3765,7 +3821,7 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<real>116</real>
+									<real>199.99241638183594</real>
 									<real>-12</real>
 								</array>
 								<key>name</key>
@@ -3838,8 +3894,6 @@
 								<integer>0</integer>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -4000,13 +4054,13 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.11251950263977051</real>
+			<real>0.0</real>
 			<key>position</key>
 			<real>4</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>252.09129333496094</real>
+			<real>200.51826477050781</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>
