@@ -259,6 +259,8 @@ void ZoomScript::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
+	script_case->setVisible(true);
+	script_case->setVisible(true);
 //	mode_button->setVisible(true);
 	
 //	target_node->setTouchEnabled(true);
@@ -298,6 +300,8 @@ void ZoomScript::menuAction(CCObject *sender)
 		
 		is_actioned = true;
 		next_button->setVisible(false);
+		script_case->setVisible(false);
+		script_label->setVisible(false);
 		mode_button->setVisible(false);
 		setTouchEnabled(false);
 		target_node->setTouchEnabled(false);
@@ -392,6 +396,7 @@ void ZoomScript::menuAction(CCObject *sender)
 					
 					t_node->setPosition(ccp(160,215));
 					t_node->setTouchEnabled(false);
+					t_node->setVisible(false);
 					game_node->addChild(t_node, -1);
 					
 					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
@@ -468,6 +473,7 @@ void ZoomScript::menuAction(CCObject *sender)
 //																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
 //																   
 																   target_node = t_node;//MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+																   t_node->setVisible(true);
 //																   
 //																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 //																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
@@ -643,6 +649,7 @@ void ZoomScript::menuAction(CCObject *sender)
 					
 					t_node->setPosition(ccp(160,215));
 					t_node->setTouchEnabled(false);
+					t_node->setVisible(false);
 					game_node->addChild(t_node, -1);
 					
 					RankUpPopup* t_popup = RankUpPopup::create(-350, [=]()
@@ -678,6 +685,7 @@ void ZoomScript::menuAction(CCObject *sender)
 //																   target_node->setPosition(ccp(160,215));
 //																   target_node->setTouchEnabled(false);
 //																   game_node->addChild(target_node, kZS_Z_second_img);
+																   t_node->setVisible(true);
 																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
 																   game_node->setScale(1.5f);
@@ -783,6 +791,7 @@ void ZoomScript::showtimeFirstAction()
 	
 	script_label->setString("");
 	script_case->setVisible(false);
+	script_label->setVisible(false);
 	
 	int card_number;
 	
@@ -846,6 +855,7 @@ void ZoomScript::showtimeFifthAction()
 	
 	script_label->setString("");
 	script_case->setVisible(false);
+	script_label->setVisible(false);
 	
 	int card_number;
 	
@@ -1012,6 +1022,8 @@ void ZoomScript::showtimeForthAction()
 	is_showtime = false;
 //	is_touched_menu = false;
 	next_button->setVisible(true);
+	script_case->setVisible(true);
+	script_label->setVisible(true);
 //	mode_button->setVisible(true);
 	setTouchEnabled(true);
 	schedule(schedule_selector(ZoomScript::moveChecking));

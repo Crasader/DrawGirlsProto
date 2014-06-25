@@ -2488,7 +2488,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 				
 				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade())->getCString(), mySGD->getFont().c_str(), 12);
 				star_count->enableOuterStroke(ccBLACK, 0.8f);
-				star_count->setPosition(ccp(0,0));
+				star_count->setPosition(ccp(-2,0));
 				t_star_node->addChild(star_count);
 				
 				addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t){

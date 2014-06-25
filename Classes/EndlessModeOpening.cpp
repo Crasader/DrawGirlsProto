@@ -171,7 +171,7 @@ void EndlessModeOpening::setMain()
 	tipMaquee->addText("<font size=13>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>");
 	tipMaquee->addText("<font size=13>랭킹은 매주 갱신됩니다.</font>");
 //	tipMaquee->setPosition(ccp(201.0,237.0)); 			// dt (131.0,232.0)
-	tipMaquee->setPosition(ccp(199.5, 246.f));
+	tipMaquee->setPosition(ccp(199.5, 244.f));
 	tipMaquee->startMarquee();
 	main_case->addChild(tipMaquee, 1);
 	

@@ -2712,8 +2712,8 @@ void MainFlowScene::topOnLight()
 		
 		CCNode* t_stencil_node = CCNode::create();
 		CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		t_stencil1->setContentSize(CCSizeMake(126, 220));
-		t_stencil1->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f + 63,172));
+		t_stencil1->setContentSize(CCSizeMake(50, 50));
+		t_stencil1->setPosition(ccp(23, (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 		t_stencil_node->addChild(t_stencil1);
 		
 		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
@@ -2745,14 +2745,114 @@ void MainFlowScene::topOnLight()
 		addChild(t_clipping, 9999);
 		
 		CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
-		t_arrow1->setRotation(-90);
-		t_arrow1->setPosition(ccp(135,160));
+		t_arrow1->setRotation(0);
+		t_arrow1->setPosition(ccp(25, (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40));
 		t_clipping->addChild(t_arrow1);
 		
-		StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
-		t_ment1->setAnchorPoint(ccp(0,0.5f));
-		t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().width/2.f + 3, 0));
-		t_clipping->addChild(t_ment1);
+		StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+		t_ment2->setAnchorPoint(ccp(0,1));
+		t_ment2->setPosition(t_arrow1->getPosition() + ccp(-20, -t_arrow1->getContentSize().height/2.f - 3));
+		t_clipping->addChild(t_ment2);
+		
+		
+		
+		CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+		t_stencil2->setContentSize(CCSizeMake(134, 50));
+		t_stencil2->setPosition(ccp(413,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+		t_stencil_node->addChild(t_stencil2);
+		
+		CCSprite* t_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
+		t_arrow2->setPosition(ccp(368,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40));
+		t_clipping->addChild(t_arrow2);
+		
+		StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment3->setAnchorPoint(ccp(0.5f,1));
+		t_ment3->setPosition(t_arrow2->getPosition() + ccp(0, -t_arrow2->getContentSize().height/2.f - 3));
+		t_clipping->addChild(t_ment3);
+		
+		
+		CCSprite* t_arrow3 = CCSprite::create("main_tutorial_arrow2.png");
+		t_arrow3->setAnchorPoint(ccp(0.5f,1));
+		t_arrow3->setPosition(ccp(398,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40 + t_arrow2->getContentSize().height/2.f));
+		t_clipping->addChild(t_arrow3);
+		
+		StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment4->setAnchorPoint(ccp(0.5f,1));
+		t_ment4->setPosition(t_arrow3->getPosition() + ccp(0, -t_arrow3->getContentSize().height - 3));
+		t_clipping->addChild(t_ment4);
+		
+		
+		CCSprite* t_arrow4 = CCSprite::create("main_tutorial_arrow1.png");
+		t_arrow4->setPosition(ccp(428,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40));
+		t_clipping->addChild(t_arrow4);
+		
+		StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed5), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment5->setAnchorPoint(ccp(0.5f,1));
+		t_ment5->setPosition(t_arrow4->getPosition() + ccp(0, -t_arrow4->getContentSize().height/2.f - 3));
+		t_clipping->addChild(t_ment5);
+		
+		
+		CCSprite* t_arrow5 = CCSprite::create("main_tutorial_arrow2.png");
+		t_arrow5->setAnchorPoint(ccp(0.5f,1));
+		t_arrow5->setPosition(ccp(458,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40 + t_arrow2->getContentSize().height/2.f));
+		t_clipping->addChild(t_arrow5);
+		
+		StyledLabelTTF* t_ment6 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed6), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment6->setAnchorPoint(ccp(0.5f,1));
+		t_ment6->setPosition(t_arrow5->getPosition() + ccp(0, -t_arrow5->getContentSize().height - 3));
+		t_clipping->addChild(t_ment6);
+		
+		
+		
+		CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+		t_stencil3->setContentSize(CCSizeMake(210, 50));
+		t_stencil3->setPosition(ccp(125,-(myDSH->puzzle_ui_top-320.f)/2.f+38));
+		t_stencil_node->addChild(t_stencil3);
+		
+		CCSprite* t_arrow6 = CCSprite::create("main_tutorial_arrow1.png");
+		t_arrow6->setPosition(ccp(43,-(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+		t_arrow6->setRotation(180);
+		t_clipping->addChild(t_arrow6);
+		
+		StyledLabelTTF* t_ment7 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed7), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment7->setAnchorPoint(ccp(0.5f,0));
+		t_ment7->setPosition(t_arrow6->getPosition() + ccp(0, t_arrow6->getContentSize().height/2.f + 3));
+		t_clipping->addChild(t_ment7);
+		
+		
+		CCSprite* t_arrow7 = CCSprite::create("main_tutorial_arrow1.png");
+		t_arrow7->setPosition(ccp(43+214.f/4.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+		t_arrow7->setRotation(180);
+		t_clipping->addChild(t_arrow7);
+		
+		StyledLabelTTF* t_ment8 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment8->setAnchorPoint(ccp(0.5f,0));
+		t_ment8->setPosition(t_arrow7->getPosition() + ccp(0, t_arrow7->getContentSize().height/2.f + 3));
+		t_clipping->addChild(t_ment8);
+		
+		
+		CCSprite* t_arrow8 = CCSprite::create("main_tutorial_arrow1.png");
+		t_arrow8->setPosition(ccp(43+214.f/4.f*2.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+		t_arrow8->setRotation(180);
+		t_clipping->addChild(t_arrow8);
+		
+		StyledLabelTTF* t_ment9 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed9), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment9->setAnchorPoint(ccp(0.5f,0));
+		t_ment9->setPosition(t_arrow8->getPosition() + ccp(0, t_arrow8->getContentSize().height/2.f + 3));
+		t_clipping->addChild(t_ment9);
+		
+		
+		CCSprite* t_arrow9 = CCSprite::create("main_tutorial_arrow1.png");
+		t_arrow9->setPosition(ccp(43+214.f/4.f*3.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+		t_arrow9->setRotation(180);
+		t_clipping->addChild(t_arrow9);
+		
+		StyledLabelTTF* t_ment10 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed10), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_ment10->setAnchorPoint(ccp(0.5f,0));
+		t_ment10->setPosition(t_arrow9->getPosition() + ccp(0, t_arrow9->getContentSize().height/2.f + 3));
+		t_clipping->addChild(t_ment10);
+		
+		
 		
 		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
 		addChild(t_suction);
@@ -2767,116 +2867,40 @@ void MainFlowScene::topOnLight()
 												   t_suction->touch_began_func = [=]()
 												   {
 													   t_suction->is_on_touch_began_func = false;
-													   t_ment1->removeFromParent();
 													   
-													   t_stencil1->setContentSize(CCSizeMake(50, 50));
-													   t_stencil1->setPosition(ccp(25, (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+													   t_stencil1->setContentSize(CCSizeMake(126, 220));
+													   t_stencil1->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f + 63,172));
 													   
-													   t_arrow1->setRotation(0);
-													   t_arrow1->setPosition(ccp(25, (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40));
+													   t_arrow1->setRotation(-90);
+													   t_arrow1->setPosition(ccp(135,160));
 													   
-													   StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
-													   t_ment2->setAnchorPoint(ccp(0,1));
-													   t_ment2->setPosition(t_arrow1->getPosition() + ccp(-20, -t_arrow1->getContentSize().height/2.f - 3));
-													   t_clipping->addChild(t_ment2);
+													   StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+													   t_ment1->setAnchorPoint(ccp(0,0.5f));
+													   t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().width/2.f + 3, 0));
+													   t_clipping->addChild(t_ment1);
 													   
+													   t_stencil2->removeFromParent();
+													   t_stencil3->removeFromParent();
 													   
+													   t_arrow2->removeFromParent();
+													   t_arrow3->removeFromParent();
+													   t_arrow4->removeFromParent();
+													   t_arrow5->removeFromParent();
+													   t_arrow6->removeFromParent();
+													   t_arrow7->removeFromParent();
+													   t_arrow8->removeFromParent();
+													   t_arrow9->removeFromParent();
 													   
-													   CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-													   t_stencil2->setContentSize(CCSizeMake(134, 50));
-													   t_stencil2->setPosition(ccp(413,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
-													   t_stencil_node->addChild(t_stencil2);
+													   t_ment2->removeFromParent();
+													   t_ment3->removeFromParent();
+													   t_ment4->removeFromParent();
+													   t_ment5->removeFromParent();
+													   t_ment6->removeFromParent();
+													   t_ment7->removeFromParent();
+													   t_ment8->removeFromParent();
+													   t_ment9->removeFromParent();
+													   t_ment10->removeFromParent();
 													   
-													   CCSprite* t_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
-													   t_arrow2->setPosition(ccp(368,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40));
-													   t_clipping->addChild(t_arrow2);
-													   
-													   StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment3->setAnchorPoint(ccp(0.5f,1));
-													   t_ment3->setPosition(t_arrow2->getPosition() + ccp(0, -t_arrow2->getContentSize().height/2.f - 3));
-													   t_clipping->addChild(t_ment3);
-													   
-													   
-													   CCSprite* t_arrow3 = CCSprite::create("main_tutorial_arrow2.png");
-													   t_arrow3->setAnchorPoint(ccp(0.5f,1));
-													   t_arrow3->setPosition(ccp(398,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40 + t_arrow2->getContentSize().height/2.f));
-													   t_clipping->addChild(t_arrow3);
-													   
-													   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment4->setAnchorPoint(ccp(0.5f,1));
-													   t_ment4->setPosition(t_arrow3->getPosition() + ccp(0, -t_arrow3->getContentSize().height - 3));
-													   t_clipping->addChild(t_ment4);
-													   
-													   
-													   CCSprite* t_arrow4 = CCSprite::create("main_tutorial_arrow1.png");
-													   t_arrow4->setPosition(ccp(428,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40));
-													   t_clipping->addChild(t_arrow4);
-													   
-													   StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed5), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment5->setAnchorPoint(ccp(0.5f,1));
-													   t_ment5->setPosition(t_arrow4->getPosition() + ccp(0, -t_arrow4->getContentSize().height/2.f - 3));
-													   t_clipping->addChild(t_ment5);
-													   
-													   
-													   CCSprite* t_arrow5 = CCSprite::create("main_tutorial_arrow2.png");
-													   t_arrow5->setAnchorPoint(ccp(0.5f,1));
-													   t_arrow5->setPosition(ccp(458,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40 + t_arrow2->getContentSize().height/2.f));
-													   t_clipping->addChild(t_arrow5);
-													   
-													   StyledLabelTTF* t_ment6 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed6), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment6->setAnchorPoint(ccp(0.5f,1));
-													   t_ment6->setPosition(t_arrow5->getPosition() + ccp(0, -t_arrow5->getContentSize().height - 3));
-													   t_clipping->addChild(t_ment6);
-													   
-													   
-													   
-													   CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-													   t_stencil3->setContentSize(CCSizeMake(210, 50));
-													   t_stencil3->setPosition(ccp(125,-(myDSH->puzzle_ui_top-320.f)/2.f+38));
-													   t_stencil_node->addChild(t_stencil3);
-													   
-													   CCSprite* t_arrow6 = CCSprite::create("main_tutorial_arrow1.png");
-													   t_arrow6->setPosition(ccp(43,-(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
-													   t_arrow6->setRotation(180);
-													   t_clipping->addChild(t_arrow6);
-													   
-													   StyledLabelTTF* t_ment7 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed7), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment7->setAnchorPoint(ccp(0.5f,0));
-													   t_ment7->setPosition(t_arrow6->getPosition() + ccp(0, t_arrow6->getContentSize().height/2.f + 3));
-													   t_clipping->addChild(t_ment7);
-													   
-													   
-													   CCSprite* t_arrow7 = CCSprite::create("main_tutorial_arrow1.png");
-													   t_arrow7->setPosition(ccp(43+214.f/4.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
-													   t_arrow7->setRotation(180);
-													   t_clipping->addChild(t_arrow7);
-													   
-													   StyledLabelTTF* t_ment8 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment8->setAnchorPoint(ccp(0.5f,0));
-													   t_ment8->setPosition(t_arrow7->getPosition() + ccp(0, t_arrow7->getContentSize().height/2.f + 3));
-													   t_clipping->addChild(t_ment8);
-													   
-													   
-													   CCSprite* t_arrow8 = CCSprite::create("main_tutorial_arrow1.png");
-													   t_arrow8->setPosition(ccp(43+214.f/4.f*2.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
-													   t_arrow8->setRotation(180);
-													   t_clipping->addChild(t_arrow8);
-													   
-													   StyledLabelTTF* t_ment9 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed9), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment9->setAnchorPoint(ccp(0.5f,0));
-													   t_ment9->setPosition(t_arrow8->getPosition() + ccp(0, t_arrow8->getContentSize().height/2.f + 3));
-													   t_clipping->addChild(t_ment9);
-													   
-													   
-													   CCSprite* t_arrow9 = CCSprite::create("main_tutorial_arrow1.png");
-													   t_arrow9->setPosition(ccp(43+214.f/4.f*3.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
-													   t_arrow9->setRotation(180);
-													   t_clipping->addChild(t_arrow9);
-													   
-													   StyledLabelTTF* t_ment10 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed10), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-													   t_ment10->setAnchorPoint(ccp(0.5f,0));
-													   t_ment10->setPosition(t_arrow9->getPosition() + ccp(0, t_arrow9->getContentSize().height/2.f + 3));
-													   t_clipping->addChild(t_ment10);
 													   
 													   addChild(KSTimer::create(0.2f, [=]()
 																				{
@@ -2885,24 +2909,8 @@ void MainFlowScene::topOnLight()
 																						t_suction->is_on_touch_began_func = false;
 																						
 																						t_arrow1->removeFromParent();
-																						t_arrow2->removeFromParent();
-																						t_arrow3->removeFromParent();
-																						t_arrow4->removeFromParent();
-																						t_arrow5->removeFromParent();
-																						t_arrow6->removeFromParent();
-																						t_arrow7->removeFromParent();
-																						t_arrow8->removeFromParent();
-																						t_arrow9->removeFromParent();
+																						t_ment1->removeFromParent();
 																						
-																						t_ment2->removeFromParent();
-																						t_ment3->removeFromParent();
-																						t_ment4->removeFromParent();
-																						t_ment5->removeFromParent();
-																						t_ment6->removeFromParent();
-																						t_ment7->removeFromParent();
-																						t_ment8->removeFromParent();
-																						t_ment9->removeFromParent();
-																						t_ment10->removeFromParent();
 																						
 																						addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																															   {
@@ -3908,7 +3916,7 @@ void MainFlowScene::setTop()
 	
 	KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount())->getCString(), mySGD->getFont().c_str(), 12);
 	star_count->enableOuterStroke(ccBLACK, 0.8f);
-	star_count->setPosition(ccp(0,0));
+	star_count->setPosition(ccp(-2,0));
 	t_star_node->addChild(star_count);
 	
 	top_list.push_back(t_star_node);
@@ -4022,21 +4030,9 @@ void MainFlowScene::setTop()
 //	top_case->addChild(friend_point_menu);
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	CCSprite* n_postbox = CCSprite::create("mainflow_new_postbox.png");
-	CCSprite* s_postbox = CCSprite::create("mainflow_new_postbox.png");
-	s_postbox->setColor(ccGRAY);
 	
-	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(MainFlowScene::menuAction));
-	postbox_item->setTag(kMainFlowMenuTag_postbox);
-	
-	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
-	postbox_menu->setPosition(ccp(368,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22)); // 397
-	addChild(postbox_menu, kMainFlowZorder_top);
-	
-	top_list.push_back(postbox_menu);
-	
-	
-
+	CCNode* achieve_node = CCNode::create();
+	addChild(achieve_node, kMainFlowZorder_top);
 	
 	CCSprite* n_achieve = CCSprite::create("mainflow_new_achievement.png");
 	CCSprite* s_achieve = CCSprite::create("mainflow_new_achievement.png");
@@ -4047,15 +4043,32 @@ void MainFlowScene::setTop()
 	
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
 	achieve_menu->setPosition(ccp(398,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22)); // 429
-	addChild(achieve_menu, kMainFlowZorder_top);
+	achieve_node->addChild(achieve_menu);
 	
-	top_list.push_back(achieve_menu);
 
+	CCNode* postbox_node = CCNode::create();
+	addChild(postbox_node, kMainFlowZorder_top);
+	
+	CCSprite* n_postbox = CCSprite::create("mainflow_new_postbox.png");
+	CCSprite* s_postbox = CCSprite::create("mainflow_new_postbox.png");
+	s_postbox->setColor(ccGRAY);
+	
+	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(MainFlowScene::menuAction));
+	postbox_item->setTag(kMainFlowMenuTag_postbox);
+	
+	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
+	postbox_menu->setPosition(ccp(368,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22)); // 397
+	postbox_node->addChild(postbox_menu);
+	
+	top_list.push_back(postbox_node);
+	
+	top_list.push_back(achieve_node);
+	
 	
 	postbox_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));//"mainflow_new.png");
 	postbox_count_case->setContentSize(CCSizeMake(20, 20));
 	postbox_count_case->setPosition(postbox_menu->getPosition() + ccp(12,6));
-	addChild(postbox_count_case, kMainFlowZorder_top);
+	postbox_node->addChild(postbox_count_case);
 	
 	CCScaleTo* t_scale1 = CCScaleTo::create(0.1f, 1.3f);
 	CCScaleTo* t_scale2 = CCScaleTo::create(0.2f, 1.f);
@@ -4069,14 +4082,14 @@ void MainFlowScene::setTop()
 	
 	postbox_count_case->setVisible(false);
 	
-	postbox_count_case->addChild(KSSchedule::create([=](float dt)
-													{
-														if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-															KS::setOpacity(postbox_count_case, 0);
-														else
-															KS::setOpacity(postbox_count_case, 255);
-														return true;
-													}));
+//	postbox_count_case->addChild(KSSchedule::create([=](float dt)
+//													{
+//														if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
+//															KS::setOpacity(postbox_count_case, 0);
+//														else
+//															KS::setOpacity(postbox_count_case, 255);
+//														return true;
+//													}));
 	
 	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
 	postbox_count_label->setColor(ccc3(255, 255, 255));
@@ -4090,7 +4103,7 @@ void MainFlowScene::setTop()
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	achievement_count_case->setContentSize(CCSizeMake(20, 20));
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12, 6));
-	addChild(achievement_count_case, kMainFlowZorder_top+1);
+	achieve_node->addChild(achievement_count_case);
 	
 	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
@@ -4108,14 +4121,14 @@ void MainFlowScene::setTop()
 	
 	achievement_count_case->setVisible(false);
 	
-	achievement_count_case->addChild(KSSchedule::create([=](float dt)
-													{
-														if(achieve_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-															KS::setOpacity(achievement_count_case, 0);
-														else
-															KS::setOpacity(achievement_count_case, 255);
-														return true;
-													}));
+//	achievement_count_case->addChild(KSSchedule::create([=](float dt)
+//													{
+//														if(achieve_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
+//															KS::setOpacity(achievement_count_case, 0);
+//														else
+//															KS::setOpacity(achievement_count_case, 255);
+//														return true;
+//													}));
 	
 	countingAchievement();
 	
