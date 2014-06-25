@@ -378,7 +378,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 {
 	CCNode* loading_tip_node = CCNode::create();
 	
-	if(!is_gameover && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
+	if(!mySGD->is_endless_mode && !is_gameover && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
 	{
 		CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
 		loading_tip_back->setPosition(ccp(0,0));

@@ -414,7 +414,7 @@ void GoldLabel::myInit ()
 	
 	if(mySGD->is_endless_mode)
 	{
-		setPosition(ccp(480-8, myDSH->ui_top-16));
+		setPosition(ccp(480-8, myDSH->ui_top-25));
 	}
 	else
 	{
