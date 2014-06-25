@@ -297,7 +297,6 @@ function help_getnoticelist(){
 
 function getnoticelist($p){
 
-	global $nowurl;
 	
 	$mainConn = DBManager::get()->getMainConnection();
 	
@@ -310,8 +309,7 @@ function getnoticelist($p){
 
 	LogManager::get()->addLog("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."') order by `order` asc");
 	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."') order by `order` asc")){
-		$rData[imgInfo]=json_decode($rData[imgInfo],true);
-		$rData[imgInfo][img]=$nowurl."/images/".$rData[imgInfo][img];		
+		$rData[imgInfo]=json_decode($rData[imgInfo],true);	
 		$r["list"][]=$rData;
 	}
 
@@ -341,7 +339,6 @@ function help_getcharacterlist(){
 }
 
 function getcharacterlist($p){
-	global $nowurl;
 
 	$mainConn = DBManager::get()->getMainConnection();
 	
@@ -367,9 +364,6 @@ function getcharacterlist($p){
 			$charInfo[purchaseInfo]=json_decode($charInfo[purchaseInfo],true);
 			$charInfo[statInfo]=json_decode($charInfo[statInfo],true);
 			$charInfo[resourceInfo]=json_decode($charInfo[resourceInfo],true);
-			$charInfo[resourceInfo][ccbi]=$nowurl."/".$charInfo[resourceInfo][ccbi];
-			$charInfo[resourceInfo][plist]=$nowurl."/".$charInfo[resourceInfo][plist];
-			$charInfo[resourceInfo][pvrccz]=$nowurl."/".$charInfo[resourceInfo][pvrccz];
 
 
 			$script=json_decode($charInfo[name],true);
@@ -407,7 +401,6 @@ function help_getshoplist(){
 }
 
 function getshoplist($p){
-	global $nowurl;
 
 	$mainConn = DBManager::get()->getMainConnection();
 	
@@ -483,7 +476,6 @@ function help_getmonsterlist(){
 }
 
 function getmonsterlist($p){
-	global $nowurl;
 
 	$mainConn = DBManager::get()->getMainConnection();
 	
@@ -511,9 +503,6 @@ function getmonsterlist($p){
 				
 			
 			$mobInfo[resourceInfo]=json_decode($mobInfo[resourceInfo],true);
-			$mobInfo[resourceInfo][ccbi]=$nowurl."/".$mobInfo[resourceInfo][ccbi];
-			$mobInfo[resourceInfo][plist]=$nowurl."/".$mobInfo[resourceInfo][plist];
-			$mobInfo[resourceInfo][pvrccz]=$nowurl."/".$mobInfo[resourceInfo][pvrccz];
 	
 			$list[]=$mobInfo;
 	}
@@ -546,7 +535,6 @@ function help_getstageinfo(){
 }
 
 function getstageinfo($p,$pTable=""){
-	global $nowurl;
 	if(!$pTable)$pTable=DBManager::get()->getMT("stage");
 	
 	$stageVer=0;
@@ -658,7 +646,6 @@ function help_getcardlist(){
 }
 
 function getcardlist($p){
-	global $nowurl;
 	$cardlist="";
 	
 	if(is_array($p["noList"]))
@@ -681,9 +668,6 @@ function getcardlist($p){
 			$cardInfo[aniInfo]=json_decode($cardInfo[aniInfo],true);
 			$cardInfo[imgInfo]=json_decode($cardInfo[imgInfo],true);
 			$cardInfo[silImgInfo]=json_decode($cardInfo[silImgInfo],true);		
-			$cardInfo[imgInfo][img]=$nowurl."/images/".$cardInfo[imgInfo][img];
-			$cardInfo[aniInfo][detail][img]=$nowurl."/images/".$cardInfo[aniInfo][detail][img];
-			$cardInfo[silImgInfo][img]=$nowurl."/images/".$cardInfo[silImgInfo][img];
 			$cardInfo[mPrice]=json_decode($cardInfo[mPrice]);
 			//$cardInfo[profile]=json_decode($cardInfo[profile],true);
 
@@ -719,7 +703,6 @@ function help_getcardinfobyrand(){
 }
 
 function getcardinfobyrand($p){
-	global $nowurl;
 	
 
 	$cType = $p["type"];
@@ -750,9 +733,6 @@ function getcardinfobyrand($p){
 	$cardInfo[aniInfo]=json_decode($cardInfo[aniInfo],true);
 	$cardInfo[imgInfo]=json_decode($cardInfo[imgInfo],true);
 	$cardInfo[silImgInfo]=json_decode($cardInfo[silImgInfo],true);		
-	$cardInfo[imgInfo][img]=$nowurl."/images/".$cardInfo[imgInfo][img];
-	$cardInfo[aniInfo][detail][img]=$nowurl."/images/".$cardInfo[aniInfo][detail][img];
-	$cardInfo[silImgInfo][img]=$nowurl."/images/".$cardInfo[silImgInfo][img];
 	$cardInfo[mPrice]=json_decode($cardInfo[mPrice]);
 	//$cardInfo[profile]=json_decode($cardInfo[profile],true);
 
@@ -766,25 +746,7 @@ function getcardinfobyrand($p){
 	$r["state"]="ok";
 	$r["result"]=ResultState::successToArray();
 	return $r;
-	// $list = array();
-	// while($cardInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
-	// 	if($cardInfo){
-	// 		$cardInfo[ability]=json_decode($cardInfo[ability],true);
-	// 		$cardInfo[missile]=json_decode($cardInfo[missile],true);
-	// 		$cardInfo[aniInfo]=json_decode($cardInfo[aniInfo],true);
-	// 		$cardInfo[imgInfo]=json_decode($cardInfo[imgInfo],true);
-	// 		$cardInfo[silImgInfo]=json_decode($cardInfo[silImgInfo],true);		
-	// 		$cardInfo[imgInfo][img]=$nowurl."/images/".$cardInfo[imgInfo][img];
-	// 		$cardInfo[aniInfo][detail][img]=$nowurl."/images/".$cardInfo[aniInfo][detail][img];
-	// 		$cardInfo[silImgInfo][img]=$nowurl."/images/".$cardInfo[silImgInfo][img];
-	// 		$list[]=$cardInfo;
-	// 	}
-	// }
-	
-	// $r["list"]= $list; //json_decode(json_encode($list,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),true);
-	// $r["state"]="ok";
-	// $r["result"]=ResultState::successToArray();
-	// return $r;
+
 
 }
 
@@ -811,7 +773,6 @@ function help_getpuzzleinfo(){
 }
 
 function getpuzzleinfo($p){
-	global $nowurl;
 	global $ERRORCODE;
 	
 	
@@ -898,7 +859,6 @@ function help_geteventpuzzlelist(){
 }
 
 function geteventpuzzlelist($p){
-	global $nowurl;
 	global $ERRORCODE;
 	
 	
@@ -934,15 +894,6 @@ function geteventpuzzlelist($p){
 			}
 			
 			$pData[thumbnail]=json_decode($pData[thumbnail],true);
-			//$pData[pathInfo]=json_decode($pData[pathInfo],true);
-			$pData[thumbnail][image]=$nowurl."/images/".$pData[thumbnail][image];
-
-			// $pData[center] = json_decode($pData[center],true);
-			// $pData[center][image]=$nowurl."/images/".$pData[center][image];
-			// $pData[original] = json_decode($pData[original],true);
-			// $pData[original][image]=$nowurl."/images/".$pData[original][image];
-			// $pData[face] = json_decode($pData[face],true);
-			// $pData[face][image]=$nowurl."/images/".$pData[face][image];
 			$list[]=$pData;
 			$cnt++;
 		}
@@ -976,7 +927,6 @@ function help_getpuzzlelist(){
 }
 
 function getpuzzlelist($p){
-	global $nowurl;
 	global $ERRORCODE;
 	
 	
@@ -1013,7 +963,6 @@ function getpuzzlelist($p){
 			
 			//$pData[version]=kvManager::get("puzzleVer_".$pData[no],1);
 			$pData[thumbnail]=json_decode($pData[thumbnail],true);
-			$pData[thumbnail][image]=$nowurl."/images/".$pData[thumbnail][image];
 			$pData[pathInfo]=json_decode($pData[pathInfo],true);
 			$pData[cardInfo]=json_decode($pData[cardInfo],true);
 			$pData[rewardInfo]=json_decode($pData[rewardInfo],true);
@@ -1029,13 +978,9 @@ function getpuzzlelist($p){
 			
 			$pData[clearReward]=json_decode($pData[clearReward],true);
 			$pData[center] = json_decode($pData[center],true);
-			$pData[center][image]=$nowurl."/images/".$pData[center][image];
 			$pData[original] = json_decode($pData[original],true);
-			$pData[original][image]=$nowurl."/images/".$pData[original][image];
 			$pData[face] = json_decode($pData[face],true);
-			$pData[face][image]=$nowurl."/images/".$pData[face][image];
 			$pData[map] = json_decode($pData[map],true);
-			$pData[map][image]=$nowurl."/images/".$pData[map][image];
 			$list[]=$pData;
 			$cnt++;
 		}
@@ -1081,7 +1026,6 @@ function help_getbookinfo(){
 }
 
 function getbookinfo($p){
-	global $nowurl;
 	global $ERRORCODE;
 	
 	
@@ -1114,15 +1058,10 @@ function getbookinfo($p){
 
 	//$puzzleInfo[version]=$puzzleVer;
 	$puzzleInfo[center] = json_decode($puzzleInfo[center],true);
-	$puzzleInfo[center][image]=$nowurl."/images/".$puzzleInfo[center][image];
 	$puzzleInfo[face] = json_decode($puzzleInfo[face],true);
-	$puzzleInfo[face][image]=$nowurl."/images/".$puzzleInfo[face][image];
 	$puzzleInfo[original] = json_decode($puzzleInfo[original],true);
-	$puzzleInfo[original][image]=$nowurl."/images/".$puzzleInfo[original][image];
 	$puzzleInfo[thumbnail] = json_decode($puzzleInfo[thumbnail],true);
-	$puzzleInfo[thumbnail][image]=$nowurl."/images/".$puzzleInfo[thumbnail][image];
 	$puzzleInfo[map] = json_decode($puzzleInfo[map],true);
-	$puzzleInfo[map][image]=$nowurl."/images/".$puzzleInfo[map][image];
 	$puzzleInfo[pathInfo] = json_decode($puzzleInfo[pathInfo],true);
 	$puzzleInfo[coordinateInfo] = json_decode($puzzleInfo[coordinateInfo],true);
 	$puzzleInfo[startPosition]=json_decode($puzzleInfo[startPosition],true);
@@ -1149,36 +1088,6 @@ function getbookinfo($p){
 			if($myCard->isLoaded()){
 				$card[]=$myCard->getArrayDataForClient();
 			}
-
-			// $cardInfo = mysql_fetch_array(mysql_query("select * from ".DBManager::get()->getMT("card")." where no=".$stageInfo[cards][$i],$mainConn),MYSQL_ASSOC);
-			// if($cardInfo){
-
-			// 	$cardInfo[stage]=$stageInfo[no];
-			// 	$cardInfo[grade]=$i+1;
-			// 	$cardInfo[ability]=json_decode($cardInfo[ability],true);
-			// 	$cardInfo[missile]=json_decode($cardInfo[missile],true);
-			// 	$cardInfo[aniInfo]=json_decode($cardInfo[aniInfo],true);
-			// 	$cardInfo[imgInfo]=json_decode($cardInfo[imgInfo],true);
-			// 	$cardInfo[thumbnailInfo]=json_decode($cardInfo[thumbnailInfo],true);
-			// 	$cardInfo[silImgInfo]=json_decode($cardInfo[silImgInfo],true);
-			// 	$cardInfo[mPrice]=json_decode($cardInfo[mPrice]);
-			// 	//$cardInfo[profile]=json_decode($cardInfo[profile],true);
-				
-			// 	$cardInfo[thumbnailInfo][img]=$nowurl."/images/".$cardInfo[thumbnailInfo][img];
-			// 	$cardInfo[imgInfo][img]=$nowurl."/images/".$cardInfo[imgInfo][img];
-			// 	$cardInfo[aniInfo][detail][img]=$nowurl."/images/".$cardInfo[aniInfo][detail][img];
-			// 	$cardInfo[silImgInfo][img]=$nowurl."/images/".$cardInfo[silImgInfo][img];
-
-			// 	$script=json_decode($cardInfo["name"],true);
-			// 	$cardInfo["name"] = $script[CurrentUserInfo::$language]?$script[CurrentUserInfo::$language]:$script["en"];
-
-			// 	$script=json_decode($cardInfo[script],true);
-			// 	$cardInfo["script"] = $script[CurrentUserInfo::$language]?$script[CurrentUserInfo::$language]:$script["en"];
-			
-
-
-			// 	$card[]=$cardInfo;
-			// }
 			
 		}
 		
@@ -1214,7 +1123,6 @@ function help_geteventbooklist(){
 }
 
 function geteventbooklist($p){
-		global $nowurl;
 	global $ERRORCODE;
 	
 	
@@ -1250,15 +1158,7 @@ function geteventbooklist($p){
 			}
 			
 			$pData[thumbnail]=json_decode($pData[thumbnail],true);
-			//$pData[pathInfo]=json_decode($pData[pathInfo],true);
-			$pData[thumbnail][image]=$nowurl."/images/".$pData[thumbnail][image];
 
-			// $pData[center] = json_decode($pData[center],true);
-			// $pData[center][image]=$nowurl."/images/".$pData[center][image];
-			// $pData[original] = json_decode($pData[original],true);
-			// $pData[original][image]=$nowurl."/images/".$pData[original][image];
-			// $pData[face] = json_decode($pData[face],true);
-			// $pData[face][image]=$nowurl."/images/".$pData[face][image];
 			$list[]=$pData;
 			$cnt++;
 		}
@@ -1292,7 +1192,6 @@ function help_getbooklist(){
 }
 
 function getbooklist($p){
-	global $nowurl;
 	global $ERRORCODE;
 	
 	
@@ -1329,7 +1228,6 @@ function getbooklist($p){
 			
 			//$pData[version]=kvManager::get("puzzleVer_".$pData[no],1);
 			$pData[thumbnail]=json_decode($pData[thumbnail],true);
-			$pData[thumbnail][image]=$nowurl."/images/".$pData[thumbnail][image];
 			$pData[pathInfo]=json_decode($pData[pathInfo],true);
 			$pData[cardInfo]=json_decode($pData[cardInfo],true);
 			$pData[rewardInfo]=json_decode($pData[rewardInfo],true);
@@ -1340,13 +1238,9 @@ function getbooklist($p){
 			$pData[endPosition]=json_decode($pData[endPosition],true);
 
 			$pData[center] = json_decode($pData[center],true);
-			$pData[center][image]=$nowurl."/images/".$pData[center][image];
 			$pData[original] = json_decode($pData[original],true);
-			$pData[original][image]=$nowurl."/images/".$pData[original][image];
 			$pData[face] = json_decode($pData[face],true);
-			$pData[face][image]=$nowurl."/images/".$pData[face][image];
 			$pData[map] = json_decode($pData[map],true);
-			$pData[map][image]=$nowurl."/images/".$pData[map][image];
 			$list[]=$pData;
 			$cnt++;
 		}
@@ -1388,7 +1282,6 @@ function help_getpathinfo(){
 }
 
 function getpathinfo($p){
-	global $nowurl;
 	global $ERRORCODE;
 	
 	
@@ -1426,12 +1319,6 @@ function getpathinfo($p){
 			
 			$nData[]=$puzzleData;
 			
-			// $pData[version]=kvManager::get("puzzleVer_".$pData[no],1);
-			// $pData[thumbnail]=json_decode($pData[thumbnail],true);
-			// $pData[thumbnail][image]=$nowurl."/images/".$pData[thumbnail][image];
-			// $pData[no]=$pData[puzzleNo];
-			// $list[]=$pData;
-			// $cnt++;
 		}
 		
 		$puzzleInfo["puzzlelist"]=$nData;
@@ -1465,7 +1352,6 @@ function help_geteventstagelist(){
 }
 
 function geteventstagelist($p){
-	global $nowurl;
 	
 	
 	$mainConn = DBManager::get()->getMainConnection();
@@ -1487,7 +1373,6 @@ function geteventstagelist($p){
 	$cnt=0;
 	while($stageList = mysql_fetch_array($query,MYSQL_ASSOC)){
 		$stageList[thumbnail]=json_decode($stageList[thumbnail],true);
-		$stageList[thumbnail][image]=$nowurl."/images/".$stageList[thumbnail][image];
 		$list[]=$stageList;
 		$cnt++;
 	}
@@ -1776,6 +1661,7 @@ function join($p){
     LogManager::get()->addLog("join2 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
 
 	if($user->m__userIndex->save()){
+		$user->setDBInfo($user->m__userIndex->getShardDBInfo());
 		if($user->save()){
 			$r["data"] = $user->getArrayData(true);
 			$r["result"]=ResultState::successToArray();
@@ -2839,7 +2725,7 @@ function checkweeklyreward($p){
 		$nrinfo[]=$value;
 	}
 	$r["rewardInfo"]=$nrinfo;
-
+	$rewards=$rewardInfo->value;
 	CommitManager::get()->begin($memberID);
 	$userInfo = new UserData($memberID);
 	if(!$userInfo->eventCheckWeek){
@@ -2863,7 +2749,12 @@ function checkweeklyreward($p){
 		}
 
 		$rewardType = "";
+
+
 		$pc = $sResult["myrank"]/$sResult["alluser"]*100;
+
+		LogManager::get()->addLog("weeklyscore rank is".$sResult["myrank"]);
+		LogManager::get()->addLog("weeklyscore pc is".$pc);
 		if($sResult["myrank"]==1)$rewardType="t1";
 		else if($sResult["myrank"]==2)$rewardType="t2";
 		else if($sResult["myrank"]==3)$rewardType="t3";
@@ -2883,12 +2774,12 @@ function checkweeklyreward($p){
 		$sResult["rewardList"]=$r["reward"]; //############## 임시 추후 삭제
 
 		if($rewardType){
-			$sResult["reward"]=$r["reward"][$rewardType]["reward"];
+			$sResult["reward"]=$rewards[$rewardType]["reward"];
 			$param["memberID"]=$memberID;
 			$param["sender"]="WeeklyRank";
-			$param["content"]=$r["reward"][$rewardType]["content"];
-			$param["exchangeID"]=$r["reward"][$rewardType]["exchangeID"];
-			$param["reward"]=$r["reward"][$rewardType]["reward"];
+			$param["content"]=$rewards[$rewardType]["content"];
+			$param["exchangeID"]=$rewards[$rewardType]["exchangeID"];
+			$param["reward"]=$rewards[$rewardType]["reward"];
 			$sR = $this->sendgiftboxhistory($param);
 			
 			if(!ResultState::successCheck($sR["result"])){
@@ -2913,12 +2804,14 @@ function checkweeklyreward($p){
 
 		
 		$rewardType = "";
-		$pc = $sResult["myrank"]/$sResult["alluser"]*100;
-		if($sResult["myrank"]==1)$rewardType="t1";
-		else if($sResult["myrank"]==2)$rewardType="t2";
-		else if($sResult["myrank"]==3)$rewardType="t3";
-		else if($sResult["myrank"]<=10)$rewardType="t10";
-		else if($sResult["myrank"]<=50)$rewardType="t50";
+		$pc = $eResult["myrank"]/$eResult["alluser"]*100;
+		LogManager::get()->addLog("EndlessRank rank is".$eResult["myrank"]);
+		LogManager::get()->addLog("EndlessRank pc is".$pc);
+		if($eResult["myrank"]==1)$rewardType="t1";
+		else if($eResult["myrank"]==2)$rewardType="t2";
+		else if($eResult["myrank"]==3)$rewardType="t3";
+		else if($eResult["myrank"]<=10)$rewardType="t10";
+		else if($eResult["myrank"]<=50)$rewardType="t50";
 		else if($pc<2)$rewardType="p1";
 		else if($pc<6)$rewardType="p5";
 		else if($pc<11)$rewardType="p10";
@@ -2932,12 +2825,12 @@ function checkweeklyreward($p){
 		$eResult["rewardList"]=$r["reward"]; //##############  임시 추후 삭제
 
 		if($rewardType){
-			$eResult["reward"]=$r["reward"][$rewardType]["reward"];
+			$eResult["reward"]=$rewards[$rewardType]["reward"];
 			$param["memberID"]=$memberID;
 			$param["sender"]="WeeklyRank";
-			$param["content"]=$r["reward"][$rewardType]["content"];
-			$param["exchangeID"]=$r["reward"][$rewardType]["exchangeID"];
-			$param["reward"]=$r["reward"][$rewardType]["reward"];
+			$param["content"]=$rewards[$rewardType]["content"];
+			$param["exchangeID"]=$rewards[$rewardType]["exchangeID"];
+			$param["reward"]=$rewards[$rewardType]["reward"];
 			$sR = $this->sendgiftboxhistory($param);
 			
 			if(!ResultState::successCheck($sR["result"])){
@@ -3751,6 +3644,7 @@ function updateuserpropertyhistory($p){
 	$userHistory->total = $p["total"];
 	$userHistory->content = $p["content"];
 	$userHistory->sender = $p["sender"];
+	$userHistory->exchangeID = $p["exchangeID"];
 	$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
 
 
@@ -3846,6 +3740,7 @@ function changeuserproperties($p){
 				$param["statsID"]=$value["statsID"];
 				$param["statsValue"]=$value["statsValue"];
 				$param["content"]=$value["content"];
+				$param["exchangeID"]=$p["exchangeID"];
 				$param["sender"]="user";
 
 				$result = $this->updateuserpropertyhistory($param);	
@@ -3880,6 +3775,7 @@ function changeuserproperties($p){
 						$userHistory->total = $userStorage->fr;
 						$userHistory->content = $value["content"];
 						$userHistory->sender = "user";
+						$userHistory->exchangeID=$p["exchangeID"];
 						$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
 						CommitManager::get()->setSuccess($memberID,$userHistory->save());
 
@@ -3895,6 +3791,7 @@ function changeuserproperties($p){
 							$userHistory1->total = 0;
 							$userHistory1->content = $value["content"];
 							$userHistory1->sender = "user";
+							$userHistory->exchangeID=$p["exchangeID"];
 							$userHistory1->regDate = TimeManager::get()->getCurrentDateTime();
 							CommitManager::get()->setSuccess($memberID,$userHistory1->save());
 						}
@@ -3912,6 +3809,7 @@ function changeuserproperties($p){
 							$userHistory2->total = $userStorage->pr;
 							$userHistory2->content = $value["content"];
 							$userHistory2->sender = "user";
+							$userHistory->exchangeID=$p["exchangeID"];
 							$userHistory2->regDate = TimeManager::get()->getCurrentDateTime();
 							CommitManager::get()->setSuccess($memberID,$userHistory2->save());
 						}
@@ -3985,6 +3883,7 @@ function changeuserproperties($p){
 				$param["statsValue"]=$value["statsValue"];
 				$param["content"]=$value["content"];
 				$param["sender"]="user";
+				$param["exchangeID"]=$p["exchangeID"];
 
 				$result = $this->updateuserpropertyhistory($param);	
 				if(!ResultState::successCheck($result["result"])){
@@ -4731,12 +4630,18 @@ function checkgiftboxhistory($p){
 
 	$where = "where memberID=".$memberID;
 	$where = $where." and confirmDate='' limit 1";
-	$checked = false;
-    while($rData = GiftBoxHistory::getRowByQuery($where)){
-    	if($rData["no"])$checked = true;
+
+	$userInfo = new UserData($memberID);
+	LogManager::get()->addLog("select count(*) from ".DBManager::getST("giftboxhistory")." ".$where);
+	$cnt = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("giftboxhistory")." ".$where,$userInfo->getUserIndex()->getShardConnection()));
+    if($cnt[0]>0){
+    	$r["haveNewGift"] = true;
+    	$r["haveNewGiftCnt"]=$cnt[0];
+    }else{
+    	$r["haveNewGift"] = false;
+    	$r["haveNewGiftCnt"]=0;
     }
 
-    $r["haveNewGift"]=$checked;
 	$r["result"]=ResultState::successToArray();
 	return $r;
 }
@@ -5069,6 +4974,7 @@ function exchange($p){
 	if(!$exchange->isLoaded())return ResultState::makeReturn(2003,"dont find exchangeID");
 
 	$pByExchange["memberID"]=$memberID;
+	$pByExchange["exchangeID"]=$p["exchangeID"];
 	
 
 	if(is_array($p["list"])){
@@ -5878,6 +5784,132 @@ function gettimeevent($p){
 	$r["list"]=$eList;
 	$r["result"]=ResultState::successToArray();
 	return $r;
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function help_getheart(){
+
+	$r["description"] = "현재생명갯수 정보를 가져옵니다";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"int or string","description"=>"memberID");
+	$r["param"][] = array("name"=>"use","type"=>"bool","description"=>"한개 깍을건지 여부");
+	//$r["param"][] = array("name"=>"os","type"=>"text","description"=>"os");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(1001,"저장오류");
+	$r["result"][]=ResultState::toArray(2002,"memberID");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"fail to load commonsetting");
+	$r["result"][]=ResultState::toArray(ResultState::GDEXPIRE,"하트모자람");
+
+	return $r;
+}
+
+function getheart($p){
+
+	$memberID=$p["memberID"];
+	$use = $p["use"];
+	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
+
+	$now = TimeManager::get()->getTime();
+	
+
+	$cooltime = new CommonSetting("heartCoolTime");
+	$heartMax = new CommonSetting("heartMax");
+	if(!$cooltime->isLoaded() || !$heartMax->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);
+
+	CommitManager::get()->begin($memberID);
+	$userInfo = new UserData($memberID);
+	$userStorage = new UserStorage($memberID);
+	if(!$userInfo->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);
+	$userInfo->lastHeartTime;
+	if($userStorage->h>$heartMax->value){
+		$userInfo->lastHeartTime=$now;
+		if($use){
+			///////////////////////////////////////////////////////여기서 exchange useHeart
+			$ep["memberID"]=$memberID;
+			$ep["exchangeID"]="useHeart";
+			$er=$this->exchange($ep);
+			CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
+			
+			if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
+				CommitManager::get()->rollback($memberID);
+				$r = ResultState::makeReturn(ResultState::GDEXPIRE);
+				$r["leftTime"]=$cooltime->value-$m;
+				$r["max"]=$heartMax->value;
+				return $r;
+			}
+
+			// $userStorage->h-=1;
+			// if($userStorage->h<0){
+			// 	CommitManager::get()->commit($memberID);
+			// 	return ResultState::makeReturn(ResultState::GDEXPIRE);
+			// }
+		}
+		CommitManager::get()->setSuccess($memberID,$userInfo->save());
+		//CommitManager::get()->setSuccess($memberID,$userStorage->save());	
+		$r["leftTime"]=$cooltime->value;	
+	}else{
+		$m = $now-$userInfo->lastHeartTime;
+
+		$nHeart = floor($m/$cooltime->value);
+		$m = $m%$cooltime->value;
+		
+		
+		if($nHeart>0 || $use){
+			$userInfo->lastHeartTime = $now-$m;
+
+			// $userStorage->h += $nHeart;
+			if($userStorage->h+$nHeart>$heartMax->value)$nHeart=$heartMax->value-$userStorage->h;
+
+			$ep["memberID"]=$memberID;
+			$ep["exchangeID"]="getHeart";
+			$ep["list"][]=array("type"=>"h","count"=>$nHeart);
+			$er=$this->exchange($ep);
+			CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
+
+			///////////////////////////////////////////////////////여기서 exchange getHeart
+
+			if($use){
+				$ep["memberID"]=$memberID;
+				$ep["exchangeID"]="useHeart";
+				unset($ep["list"]);
+				$er=$this->exchange($ep);
+				CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
+
+				if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
+					CommitManager::get()->rollback($memberID);
+					$r = ResultState::makeReturn(ResultState::GDEXPIRE);
+					$r["leftTime"]=$cooltime->value-$m;
+					$r["max"]=$heartMax->value;
+					return $r;
+				}
+				// $userStorage->h-=1;
+				// if($userStorage->h<0){
+				// 	///////////////////////////////////////////////////////여기서 exchange useHeart
+				// 	CommitManager::get()->commit($memberID);
+				// 	return ResultState::makeReturn(ResultState::GDEXPIRE);
+				// }
+			}
+			CommitManager::get()->setSuccess($memberID,$userInfo->save());
+			//CommitManager::get()->setSuccess($memberID,$userStorage->save());
+			$r["leftTime"]=$cooltime->value-$m;
+		}else{
+			$r["leftTime"]=$cooltime->value-$m;			
+		}
+	}
+	$r["max"]=$heartMax->value;
+	$r["heart"] = $userStorage->h;
+
+	if(CommitManager::get()->commit($memberID)){
+		$r["result"]=ResultState::successToArray();
+	}else{
+		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
+	}
+
+	return $r;
+
+
 
 }
 

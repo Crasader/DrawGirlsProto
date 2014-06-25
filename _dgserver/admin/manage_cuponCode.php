@@ -36,6 +36,9 @@ function CuponMaker(value,option){
 		var nBtn2 = $("<button>").addClass("btn btn-info").append("수동생성").on("click",{"obj":obj},function(event){event.data.obj.manualMake()});		
 		$("<tr>").append($("<td>").append(nBtn2)).appendTo(this.editTable);
 
+		var nBtn3 = $("<button>").addClass("btn btn-info").append("파일생성").on("click",{"obj":obj},function(event){event.data.obj.fileMake()});		
+		$("<tr>").append($("<td>").append(nBtn3)).appendTo(this.editTable);
+
 		editor.append(editTable);
 		//추가모드
 		return this.editor;
@@ -54,6 +57,30 @@ function CuponMaker(value,option){
 		this.editTable = editorFunc_array("",{"type":"array","element":{"type":"text"}});
 		this.editor.append(this.editTable);
 
+	}
+
+	this.fileMake = function(){
+		value="";
+		option = {"type":"excelMemberList","uploadFile":"./processupload/processupload.php","uploadDir":"../images/","excelReturn":true, "removeFile":true};
+		var newobj = new FileUploader(value,option);
+		newobj.callbackFunc = this.getDataByFile;
+		var neditor = newobj.createForm();
+		neditor.attr("editor",j2s(option));
+
+		this.editor.html("").append(neditor);
+	}
+
+	this.getDataByFile = function(result){
+		log(j2s(result));
+		var list = s2j(result);
+		list = list["excelData"][0];
+
+
+		this.editor.attr("mode","manual");
+		this.editor.html("");
+
+		this.editTable = editorFunc_array(list,{"type":"array","element":{"type":"text"}});
+		this.editor.append(this.editTable);
 	}
 
 }

@@ -21,7 +21,34 @@ echo"</center>";
 }
 
 
+// if($_GET["mode"]!="card")exit;
 
+
+// while($obj = Character::getObjectByQuery()){
+// 	// echo json_encode($obj->getArrayData());
+
+// 	// echo"<br><br>";
+
+// 	// $a1 = json_decode($obj->imgInfo,true);
+// 	// $a1["img"]='http://182.162.201.147:10010/images/'.$a1["img"];
+// 	// $obj->imgInfo = $a1;
+
+// 	// $a2 = json_decode($obj->resourceInfo,true);
+// 	// $a2["plist"]='http://182.162.201.147:10010/'.$a2["plist"]; //str_replace("/images/","/",$a2["plist"]); //'http://182.162.201.147:10010/'.$a2["plist"];
+// 	// $a2["pvrccz"]='http://182.162.201.147:10010/'.$a2["pvrccz"];//str_replace("/images/","/",$a2["pvrccz"]);//'http://182.162.201.147:10010/'.$a2["pvrccz"];
+// 	// $a2["ccbi"]='http://182.162.201.147:10010/'.$a2["ccbi"];//str_replace("/images/","/",$a2["ccbi"]);
+// 	// $obj->resourceInfo = $a2;
+
+// 	//   echo json_encode($obj->getArrayData(),true);
+	
+// 	//   $obj->save();
+
+// 	//  echo"<br><br>";
+// 	// echo"<br><br>";
+// 	// echo"<br><br>";
+// }
+
+// exit;
 
 // if($_GET["mode"]!="card")exit;
 
@@ -137,7 +164,7 @@ echo"</center>";
 // exit;
 
  if($_GET["mode"]!="balance")exit;
-
+ 
 // $n = strtotime("next Sunday");
 // $c = time();
 // $m = $n-$c;

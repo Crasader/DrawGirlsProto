@@ -30,6 +30,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/black-tie/jquery-ui.css">
 		<script src="jquery-ui-timepicker-addon.js"></script>
+		<script src="jquery.form.js"></script>
 		<script src="lib.js"></script>
 		<script src="LQDataTable.js"></script>
 

@@ -81,7 +81,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	auto tuto1 = StyledLabelTTF::create("<font color=#FFFFFF size=12 newline=14>가위 바위 보 중</font>"
 																			"<font color=#FFAA14 size=12>하나를 선택 해 주세요.</font>",
 																			mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-	tuto1->setPosition(ccp(5.0, 29.0)); 			// dt (-52.0, -24.0)
+	tuto1->setPosition(ccp(57.0, 54.5)); 			// dt (52.0, 25.5)
 	front->addChild(tuto1);
 	
 	auto onSelection = [=]() // 바위 가위 보 셋중 하나 눌렀을 때~
@@ -513,7 +513,15 @@ void JsGababo::setupCongMessage()
 
 void JsGababo::setupHands()
 {
+	CCSprite* me = CCSprite::create("one_percent_gacha_me.png");
+	m_back->addChild(me);
+	me->setPosition(ccp(53, 250));
+	KSLabelTTF* meLbl = KSLabelTTF::create("나", mySGD->getFont().c_str(), 14.f);
+	meLbl->setColor(ccc3(255, 170, 20));
+	me->addChild(meLbl);
+	meLbl->setPosition(ccpFromSize(me->getContentSize()) / 2.f + ccp(0, 10));
 	
+	setFormSetter(me);
 	float timeMul = 2.f;
 	{
 		CCNode* handContainer = CCNode::create();
@@ -598,13 +606,14 @@ void JsGababo::onPressConfirm(CCObject* t)
 		{
 			contextSwitching(m_front3, m_front1, [=](){
 				rollBack();
-				auto lightPair = KS::loadCCBI<CCSprite*>(this, "gabaao_effect.ccbi");
+				auto lightPair = KS::loadCCBI<CCSprite*>(this, "gababo_change.ccbi");
 				CCSprite* light = lightPair.first;
 				lightPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 					light->removeFromParent();
 				});
-				light->setPosition(ccp(240, 160));
-				addChild(light, 100);
+//				light->setPosition(ccp(240, 195));
+				light->setPosition(m_stepSprite->getPosition());
+				m_back->addChild(light, 100);
 				addChild(KSTimer::create(2.2f, [=](){
 					loadImage(m_winCount);
 				}));
@@ -664,25 +673,25 @@ void JsGababo::showHandsMotionWrapper()
 		// m_winCount : 0, 1, 2
 		int computer = 1;
 		std::map<int, std::function<int(int)>> functor;
-		functor[0] = bind(&JsGababo::winSkill, this, std::placeholders::_1);
-		functor[1] = bind(&JsGababo::loseSkill, this, std::placeholders::_1);
+		functor[0] = bind(&JsGababo::loseSkill, this, std::placeholders::_1);
+		functor[1] = bind(&JsGababo::winSkill, this, std::placeholders::_1);
 		functor[2] = bind(&JsGababo::drawSkill, this, std::placeholders::_1);
 		if(m_winCount == 0)
 		{
-			// 이길 확률 70 % 질 확률 15% 비길 확률 15%
-			ProbSelector ps = {70.f, 15.f, 15.f};
+			// 이길 확률 70 % 질 확률 15% 비길 확률 50%
+			ProbSelector ps = {70.f, 15.f, 50.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 1)
 		{
-			// 이길 확률 60% 질 확률 20% 비길 확률 20%
-			ProbSelector ps = {60.f, 20.f, 20.f};
+			// 이길 확률 60% 질 확률 20% 비길 확률 60%
+			ProbSelector ps = {60.f, 20.f, 60.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 2)
 		{
-			// 이길 확률 50 % 질 확률 25% 비길 확률 25%
-			ProbSelector ps = {50.f, 25.f, 25.f};
+			// 이길 확률 50 % 질 확률 25% 비길 확률 30%
+			ProbSelector ps = {50.f, 25.f, 30.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		
