@@ -1164,7 +1164,7 @@ void MyLocal::ko()
 																								"<font color=#FFFFFF>성공시 </font>"
 																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
-	ko->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	ko->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
 	ko->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	ko->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
@@ -1950,7 +1950,7 @@ void MyLocal::en()
 																								"<font color=#FFFFFF>성공시 </font>"
 																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
-	en->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	en->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
 	en->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	en->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);
@@ -2761,7 +2761,7 @@ void MyLocal::ja()
 																								"<font color=#FFFFFF>성공시 </font>"
 																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
-	ja->setObject(CCString::create("대결할 상대를 검색중입니다."), kMyLocalKey_rivalSearch);
+	ja->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
 	ja->setObject(CCString::create("%d레벨"), kMyLocalKey_rivalLevel);
 	ja->setObject(CCString::create("%d 연승 중"), kMyLocalKey_rivalIngWin);

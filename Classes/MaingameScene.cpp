@@ -4309,7 +4309,8 @@ void Maingame::showPause()
 	bool t_jack_stun = myJack->isStun;
 	
 	CCNode* exit_target = this;
-	mControl->setTouchEnabled(false);
+	if(mControl)
+		mControl->setTouchEnabled(false);
 	exit_target->onExit();
 	
 	ASPopupView* t_popup = ASPopupView::create(-200);
@@ -4326,7 +4327,8 @@ void Maingame::showPause()
 	PauseContent* t_container = PauseContent::create(t_popup->getTouchPriority(), [=]()
 	{
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
-		mControl->isStun = false;
+		if(mControl)
+			mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		cancelHome();
@@ -4335,7 +4337,8 @@ void Maingame::showPause()
 	}, [=]()
 	{
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
-		mControl->isStun = false;
+		if(mControl)
+			mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		myUI->stopCounting();
@@ -4347,7 +4350,8 @@ void Maingame::showPause()
 	}, [=]()
 	{
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
-		mControl->isStun = false;
+		if(mControl)
+			mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
 		goReplay();
