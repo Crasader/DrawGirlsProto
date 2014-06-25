@@ -129,21 +129,21 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	CCScale9Sprite* t_back1 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	t_back1->setOpacity(0);
-	input_text1 = CCEditBox::create(CCSizeMake(45, 35), t_back1);
-	input_text1->setPosition(ccp(127.0,230.0)); 			// dt (10.0,-1.0)
+	input_text1 = CCEditBox::create(CCSizeMake(55, 35), t_back1);
+	input_text1->setPosition(ccp(130.0 + 30.f,229.5f)); 			// dt (10.0,-1.0)
 //	input_text1->setPosition(ccp(117.0,231.0)); 			// dt (117.0,4.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 	
 	CCScale9Sprite* t_back2 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	t_back2->setOpacity(0);
-	input_text2 = CCEditBox::create(CCSizeMake(45, 35), t_back2);
-	input_text2->setPosition(ccp(206.5,230.0)); 			// dt (22.5,0.0)
+	input_text2 = CCEditBox::create(CCSizeMake(55, 35), t_back2);
+	input_text2->setPosition(ccp(209.5 + 30.f,229.5f)); 			// dt (22.5,0.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text2, 99999);
 	
 	CCScale9Sprite* t_back3 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	t_back3->setOpacity(0);
-	input_text3 = CCEditBox::create(CCSizeMake(45, 35), t_back3);
-	input_text3->setPosition(ccp(286.5,230.0)); 			// dt (34.5,-3.0)
+	input_text3 = CCEditBox::create(CCSizeMake(55, 35), t_back3);
+	input_text3->setPosition(ccp(289.5 + 30.f,229.5f)); 			// dt (34.5,-3.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text3, 99999);
 	
 	
@@ -401,11 +401,12 @@ void CouponPopup::editBoxReturn(CCEditBox* editBox)
 }
 void CouponPopup::initiateEditBox(CCEditBox* editbox)
 {
-	editbox->setAnchorPoint(ccp(0, 0.5f));
+	editbox->setAnchorPoint(ccp(0.5f, 0.5f));
 	editbox->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_couponContent));
 	editbox->setReturnType(kKeyboardReturnTypeDone);
 	editbox->setFont(mySGD->getFont().c_str(), 15);
 	editbox->setInputMode(kEditBoxInputModeSingleLine);
+	editbox->setInputFlag(cocos2d::extension::EditBoxInputFlag::kEditBoxInputFlagInitialCapsAllCharacters);
 	editbox->setDelegate(this);
 //	m_container->addChild(input_text);
 	editbox->setTouchPriority(touch_priority);
