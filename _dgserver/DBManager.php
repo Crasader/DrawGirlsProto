@@ -165,7 +165,7 @@ class UserIndex extends DBTable{
 		}else if($memberID){
 			//parent::load("memberID=".$memberID);
 
-		 	if(parent::load("memberID=".$memberID)){
+		 	if(parent::load("memberID='".$memberID."'")){
 		 		//$this->autoMatching($this->m__result);
 		 		LogManager::get()->addLog("load success userindex shardIndex is".$this->shardIndex);
 		 	}else{
@@ -264,7 +264,7 @@ class UserLog extends DBTable{
 		}
 
 		if($memberID && $no){
-			parent::load("no=".$no." and memberID=".$memberID);
+			parent::load("no=".$no." and memberID='".$memberID."'");
 			// if(parent::load("no=".$no." and memberID=".$memberID)){
 			// 	$this->autoMatching($this->m__result);
 			// }
@@ -436,15 +436,34 @@ class SendItem extends DBTable{
 		$rList = array();
 		foreach ($data["memberList"] as $mID => $nick) {
 			CommitManager::get()->begin($mID);
-			$param["memberID"]=$mID;
-			$param["sender"]="GM";
-			$param["content"]=$data["sendType"]["message"];
-			$param["exchangeID"]=$exchange->id;
-			$param["reward"]=$exchange->list;
-			$cmd = new commandClass();
-			$sR = $cmd->sendgiftboxhistory($param);
-			CommitManager::get()->setSuccess($mID,ResultState::successCheck($sR["result"]));
+			
+			$userInfo = new UserData($mID);
 
+			if(!$userInfo->isLoaded()){
+				$rList[$mID]=array("result"=>"fail","nick"=>$nick);
+				continue;
+			}
+
+			//선물상자로 지급
+			if($data["sendType"]["type"]=="giftbox"){
+				$param["memberID"]=$mID;
+				$param["sender"]="GM";
+				$param["content"]=$data["sendType"]["message"];
+				$param["exchangeID"]=$exchange->id;
+				$param["reward"]=$exchange->list;
+				$cmd = new commandClass();
+				$sR = $cmd->sendgiftboxhistory($param);
+				CommitManager::get()->setSuccess($mID,ResultState::successCheck($sR["result"]));
+			
+			//바로지급
+			}else{
+
+				$param["memberID"]=$mID;
+				$param["exchangeID"]=$exchange->id;
+				$cmd = new commandClass();
+				$sR = $cmd->exchange($param);
+				CommitManager::get()->setSuccess($mID,ResultState::successCheck($sR["result"]));
+			}
 
 			if($param["comment"]){
 				$mh = new ModifyHistory($mID);
@@ -495,9 +514,9 @@ class UserData extends DBTable{
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
 			//LogManager::get()->addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
-			if($this->m__userIndex)$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			if($this->m__userIndex->isLoaded())$this->setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
-				if(parent::load("memberID=".$this->m__userIndex->memberID)){
+				if(parent::load("memberID='".$this->m__userIndex->memberID."'")){
 					//$this->autoMatching($this->m__result);
 					$this->archiveData = json_decode($this->archiveData,true);
 					$this->eventCheckData = json_decode($this->eventCheckData,true);
@@ -839,26 +858,7 @@ class Puzzle extends DBTable{
 	}
 
 	public function getArrayDataForClient(){
-		global $nowurl;
 		$objInfo = $this->getArrayData(true);
-
-		//$objInfo[center] = json_decode($objInfo[center],true);
-		$objInfo[center][image]=$nowurl."/images/".$objInfo[center][image];
-		//$objInfo[face] = json_decode($objInfo[face],true);
-		$objInfo[face][image]=$nowurl."/images/".$objInfo[face][image];
-		//$objInfo[original] = json_decode($objInfo[original],true);
-		$objInfo[original][image]=$nowurl."/images/".$objInfo[original][image];
-		//$objInfo[thumbnail] = json_decode($objInfo[thumbnail],true);
-		$objInfo[thumbnail][image]=$nowurl."/images/".$objInfo[thumbnail][image];
-		//$objInfo[map] = json_decode($objInfo[map],true);
-		$objInfo[map][image]=$nowurl."/images/".$objInfo[map][image];
-		//$objInfo[pathInfo] = json_decode($objInfo[pathInfo],true);
-		//$objInfo[coordinateInfo] = json_decode($objInfo[coordinateInfo],true);
-		//$objInfo[startPosition]=json_decode($objInfo[startPosition],true);
-		//$objInfo[endPosition]=json_decode($objInfo[endPosition],true);
-		//$objInfo[color]=json_decode($objInfo[color],true);
-		//$objInfo[clearReward]=json_decode($objInfo[clearReward],true);
-		//$objInfo[title]=json_decode($objInfo[title],true);
 		$objInfo[title]=$this->getLocalizedValue("title");
 
 		if($objInfo["clearReward"]["normal"]){
@@ -893,7 +893,7 @@ class Puzzle extends DBTable{
 		$textareaEditor = array("type"=>"textarea");
 		$dictEditor = array("type"=>"dictionary");
 		$osEditor = json_decode('{"type":"select","element":["all","android","ios"]}',true);
-		$imgEditor = json_decode('{"type":"dictionary","element":[{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}',true);
+		$imgEditor = json_decode('{"type":"dictionary","element":[{"field":"image","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}',true);
 		$eventEditor = json_decode('{"type":"select","element":["일반","이벤트","미노출"],"value":[0,1,2]}',true);
 		$langEditor = json_decode('{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}',true);
 		$coordinateEditor = json_decode('{"type":"table","element":[
@@ -942,6 +942,7 @@ class Puzzle extends DBTable{
 
 
 	public function updateWithLQTable($p){
+		reloadPuzzleInfo();
 		$p["data"]["version"]+=1;
 		$r = parent::updateWithLQTable($p);
 		kvManager::increase("puzzleListVer");
@@ -950,6 +951,7 @@ class Puzzle extends DBTable{
 	}
 
 	public function insertWithLQTable($p){
+		reloadPuzzleInfo();
 		$r = parent::insertWithLQTable($p);
 		kvManager::increase("puzzleListVer");
 		return $r;
@@ -982,7 +984,6 @@ class Piece extends DBTable{
 	}
 	
 	public function getArrayDataForClient(){
-		global $nowurl;
 		$stageInfo = $this->getArrayData(true);
 		$stageInfo["condition"] = json_decode($stageInfo["condition"],true);
 		$stageInfo[shopItems]=json_decode($stageInfo[shopItems],true);
@@ -1253,15 +1254,10 @@ class Card extends DBTable{
 	}
 
 	public function getArrayDataForClient(){
-		global $nowurl;
 		$cardInfo = $this->getArrayData(true);
 		$cardInfo[stage]=$stageInfo[no];
-		$cardInfo[grade]=$i+1;
+		
 
-		$cardInfo[thumbnailInfo][img]=$nowurl."/images/".$cardInfo[thumbnailInfo][img];
-		$cardInfo[imgInfo][img]=$nowurl."/images/".$cardInfo[imgInfo][img];
-		$cardInfo[aniInfo][detail][img]=$nowurl."/images/".$cardInfo[aniInfo][detail][img];
-		$cardInfo[silImgInfo][img]=$nowurl."/images/".$cardInfo[silImgInfo][img];
 		
 		$cardInfo["name"] = $this->getLocalizedValue("name");
 		$cardInfo["script"] = $this->getLocalizedValue("script");
@@ -2110,6 +2106,7 @@ class UserPropertyHistory extends DBTable{
 	public function loadWithDataTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"종류","field"=>"type","viewer"=>json_decode('{"type":"custom","func":"propChange"}',true));
+		$data["head"][]=array("title"=>"교환ID","field"=>"exchangeID","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"변화량","field"=>"count","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"총개수","field"=>"total","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"내용","field"=>"content","viewer"=>json_decode('{"type":"text"}',true));
@@ -2704,6 +2701,7 @@ class WeeklyScore extends DBTable{
 class StageScore extends DBTable{
 	
 
+	public $m__userIndex;
 
 	public function __construct($memberID=null,$stageNo=null,$where=null){
 		
@@ -2712,10 +2710,13 @@ class StageScore extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-
-		$this->setDBInfo(DBManager::get()->getDBInfoByShardKey($stageNo));
 		$this->stageNo=$stageNo;
-		$this->memberID=$memberID;
+
+		if($memberID){
+			$this->m__userIndex = UserIndex::create($memberID);
+			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			$this->memberID=$memberID;
+		}
 		
 		if($memberID || $where){
 			if($where)$q_where = $where;
@@ -2733,31 +2734,79 @@ class StageScore extends DBTable{
 		}
 		return parent::save($p);
 	}
-	public function getTop4(){
-		$topquery = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4",$this->getDBConnection());
-		
-		LogManager::get()->addLog("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4");
-		$rank=1;
-		$rdata = array(); 
-		while($data = mysql_fetch_assoc($topquery)){
-			$data["rank"]=$rank++;
-			$rdata[]=$data;
-		}
 
+	public function getTop4(){
+		// $topquery = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4",$this->getDBConnection());
+		
+		// LogManager::get()->addLog("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4");
+		// $rank=1;
+		// $rdata = array(); 
+		// while($data = mysql_fetch_assoc($topquery)){
+		// 	$data["rank"]=$rank++;
+		// 	$rdata[]=$data;
+		// }
+
+		// return $rdata;
+		return $this->getTopRank(1,4);
+	}
+
+	public function getTopRank($start=1,$count=50){
+		$rdata = array(); 
+		$start-=1;
+		$query = "where stageNo=".$this->stageNo." order by score desc limit $start,$count";
+		$rl=0;
+		while($data = StageScore::getRowByQuery($query)){
+			$rl++;
+			$l=0;
+			if(count($rdata)==0){
+				$rdata[]=$data;
+				continue;
+			}
+
+			if($rdata[$count-1]["score"]>$data["score"]){
+				StageScore::$m__qResult=null;
+				StageScore::$m__qCnt++;
+			}
+			for($i=0;$i<count($rdata);$i++){
+				if($rdata[$i]["score"]<$data["score"])break;
+				$l++;
+			}
+
+			array_splice($rdata, $l, 0, array($data));
+			array_splice($rdata, $count, 1);
+		}
 		return $rdata;
 	}
 
 	public function getAllUser(){
-		$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo,$this->getDBConnection()));
-		$alluser=$mresult[0];
+		// $mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo,$this->getDBConnection()));
+		// $alluser=$mresult[0];
+		// return $alluser;
+
+		$alluser=0;
+		while($result = StageScore::getQueryResult("select count(*) from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo)){
+			$data = mysql_fetch_array($result);
+			$alluser+=$data[0];
+		}
+
 		return $alluser;
 	}
 
 	public function getMyRank(){
+		// if($this->score<=0)return -1;
+		// $mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." and score>".$this->score,$this->getDBConnection()));
+		// $myrank=$mresult[0]+1;
+		// return $myrank;
+
 		if($this->score<=0)return -1;
-		$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." and score>".$this->score,$this->getDBConnection()));
-		$myrank=$mresult[0]+1;
-		return $myrank;
+		
+		$alluser=0;
+		while($result = StageScore::getQueryResult("select count(*) from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." and score>".$this->score)){			
+			$data =mysql_fetch_array($result);
+			$alluser+=$data[0];
+		}
+		
+		return $alluser+1;
 	}
 
 }
@@ -2785,7 +2834,6 @@ class Character extends DBTable{
 
 
 	public function updateWithLQTable($p){
-		$p["data"]["version"]+=1;
 		$r = parent::updateWithLQTable($p);
 		kvManager::increase("charListVer");
 		return $r;
@@ -3671,6 +3719,21 @@ class TimeEvent extends DBTable{
 public function __construct($no=null){
 
 		parent::__construct();
+		
+		$this->setLQTableSelectCustomFunction(function($rData){
+			$now = TimeManager::get()->getCurrentDateTime();
+			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
+				$rData["state"]="진행중";	
+			}else if($r["startDate"]>=$now){
+				$rData["state"]="대기";
+			}else{
+				$rData["state"]="종료";
+			}
+
+
+			
+			return $rData;
+		});
 
 		$this->setPrimarykey("no",true);
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
@@ -3694,6 +3757,7 @@ public function __construct($no=null){
 		$exchangeListEditor = json_decode('{"type":"array","element":{"type":"dictionary","element":[{"type":"text","field":"type"},{"type":"text","field":"count","datatype":"int"},{"type":"text","field":"statsID"},{"type":"text","field":"statsValue","datatype":"int"},{"type":"text","field":"content"}]}}',true);
 		
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
+		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
 		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
