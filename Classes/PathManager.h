@@ -114,31 +114,36 @@ private:
 	
 	void tracing()
 	{
-		if(pre_img)
+		bool is_end = false;
+		for(int i=0;!is_end && i<2;i++)//2배속
 		{
-			pre_it--;
-			if(pre_it > 0)
-				pre_img->setPosition((*plinked_list)[pre_it].convertToCCP());
-			else
+			if(pre_img)
 			{
-				pre_img->removeFromParent();
-				pre_img = NULL;
+				pre_it--;
+				if(pre_it > 0)
+					pre_img->setPosition((*plinked_list)[pre_it].convertToCCP());
+				else
+				{
+					pre_img->removeFromParent();
+					pre_img = NULL;
+				}
 			}
-		}
-		
-		if(next_img)
-		{
-			next_it++;
 			
-			if(next_it < plinked_list->size()-1)
-				next_img->setPosition((*plinked_list)[next_it].convertToCCP());
-			else
+			if(next_img)
 			{
-				getParent()->setTag(pathBreakingStateFalse);
-				myGD->communication("Jack_startDieEffect", DieType::kDieType_missileToLine);
-				unschedule(schedule_selector(PathBreakingParent::tracing));
-				removeFromParent();
-				return;
+				next_it++;
+				
+				if(next_it < plinked_list->size()-1)
+					next_img->setPosition((*plinked_list)[next_it].convertToCCP());
+				else
+				{
+					getParent()->setTag(pathBreakingStateFalse);
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_missileToLine);
+					unschedule(schedule_selector(PathBreakingParent::tracing));
+					is_end = true;
+					removeFromParent();
+					return;
+				}
 			}
 		}
 	}

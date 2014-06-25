@@ -1588,7 +1588,7 @@ void PlayUI::setMaxBossLife (float t_life)
 void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
-	m_areaGage = AreaGage::create(clearPercentage.getV());
+	m_areaGage = AreaGage::create(0.85f);//clearPercentage.getV());
 	m_areaGage->setPosition(ccp(240,myDSH->ui_top-29));
 	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());

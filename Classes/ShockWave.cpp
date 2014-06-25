@@ -52,6 +52,7 @@ void ShockWave::ingSW ()
 	if(ing_frame%15 == 0 && getChildrenCount() < 3)
 	{
 		CCSprite* t_sw = CCSprite::create("shock_wave.png");
+		t_sw->setColor(ccc3(200, 200, 200));
 		t_sw->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		t_sw->setScale(0);
 		addChild(t_sw);
@@ -62,9 +63,9 @@ void ShockWave::ingSW ()
 	for(int i=0;i<getChildrenCount();i++)
 	{
 		CCSprite* t_child = (CCSprite*)my_child->objectAtIndex(i);
-		t_child->setScale(t_child->getScale()+0.03f);
+		t_child->setScale(t_child->getScale()+0.06f);
 	}
-	radius += 80.f*0.03f;
+	radius += 80.f*0.06f;
 	
 	IntPoint jackPoint = myGD->getJackPoint();
 	CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
