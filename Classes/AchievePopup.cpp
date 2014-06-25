@@ -87,6 +87,7 @@ bool AchievePopup::init()
 	all_reward_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allRewardGet), 13, CCSizeMake(100,35), CommonButtonLightPupple, -190);
 	all_reward_menu->setPosition(ccp(395,32));
 	all_reward_menu->setBackgroundTypeForDisabled(CommonButtonGray);
+	all_reward_menu->setTitleColorForDisable(ccc3(90, 60, 30));
 	main_case->addChild(all_reward_menu, kAchievePopupZorder_menu);
 	all_reward_menu->setFunction([=](CCObject* sender)
 						  {
@@ -660,11 +661,13 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	if(state_value == 2)
 	{
 		KSLabelTTF* cell_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenTitle), mySGD->getFont().c_str(), 12);
+		cell_title->setColor(ccc3(210, 190, 160));
 		cell_title->setAnchorPoint(ccp(0.5f,0.5f));
 		cell_title->setPosition(ccp(cell_back->getContentSize().width/2.f,40));
 		cell_back->addChild(cell_title);
 		
 		KSLabelTTF* cell_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenContent), mySGD->getFont().c_str(), 9);
+		cell_content->setColor(ccc3(160, 130, 90));
 		cell_content->setAnchorPoint(ccp(0.5f,0.5f));
 		cell_content->setPosition(ccp(cell_back->getContentSize().width/2.f,20));
 		cell_back->addChild(cell_content);
@@ -1000,11 +1003,13 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		if(state_value == 2)
 		{
 			KSLabelTTF* cell_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenTitle), mySGD->getFont().c_str(), 12);
+			cell_title->setColor(ccc3(210, 190, 160));
 			cell_title->setAnchorPoint(ccp(0.5f,0.5f));
 			cell_title->setPosition(ccp(cell_back->getContentSize().width/2.f,40));
 			cell_back->addChild(cell_title);
 			
 			KSLabelTTF* cell_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveHiddenContent), mySGD->getFont().c_str(), 9);
+			cell_content->setColor(ccc3(160, 130, 90));
 			cell_content->setAnchorPoint(ccp(0.5f,0.5f));
 			cell_content->setPosition(ccp(cell_back->getContentSize().width/2.f,20));
 			cell_back->addChild(cell_content);

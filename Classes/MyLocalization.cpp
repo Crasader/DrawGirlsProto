@@ -1116,7 +1116,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	ko->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	ko->setObject(CCString::create("쿠폰 번호"), kMyLocalKey_couponContent);
+	ko->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	ko->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	ko->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ko->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
@@ -1902,7 +1902,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	en->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	en->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
+	en->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	en->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	en->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	en->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
@@ -2713,7 +2713,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
 	
 	ja->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
-	ja->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponContent);
+	ja->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	ja->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
 	ja->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ja->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
