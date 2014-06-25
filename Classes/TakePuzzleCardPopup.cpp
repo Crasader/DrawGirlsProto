@@ -146,8 +146,10 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		
 	if(!is_perfect)
 	{
+		this->setVisible(false);
 		addChild(KSTimer::create(1.f, [=]()
 								 {
+									 this->setVisible(true);
 									 CommonAnimation::openPopup(this, m_container, gray, [=](){
 									 }, [=](){
 										 is_menu_enable = true;

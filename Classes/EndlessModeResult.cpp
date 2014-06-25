@@ -1464,6 +1464,7 @@ void EndlessModeResult::startCalcAnimation()
 																														   {
 																															   t_gray->setOpacity(255);
 																															   
+																															   t_suction->is_on_touch_began_func = true;
 																															   t_suction->touch_began_func = [=]()
 																															   {
 																																   t_suction->is_on_touch_began_func = false;
@@ -1487,6 +1488,7 @@ void EndlessModeResult::startCalcAnimation()
 																																   scroll_ment_node->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + left_back->getPosition() + ccpFromSize(left_back->getContentSize()/(-2.f)) +
 																																								 left_table->getPosition() + ccp((480-30)/2.f-20, 90)/2.f);
 																																   
+																																   t_suction->is_on_touch_began_func = true;
 																																   t_suction->touch_began_func = [=]()
 																																   {
 																																	   t_suction->is_on_touch_began_func = false;
@@ -1509,6 +1511,7 @@ void EndlessModeResult::startCalcAnimation()
 																																	   t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, t_arrow3->getContentSize().height/2.f + 3));
 																																	   t_clipping->addChild(t_ment3);
 																																	   
+																																	   t_suction->is_on_touch_began_func = true;
 																																	   t_suction->touch_began_func = [=]()
 																																	   {
 																																		   t_suction->is_on_touch_began_func = false;
@@ -1591,11 +1594,8 @@ void EndlessModeResult::startCalcAnimation()
 																																		   
 																																		   CommonAnimation::openPopup(this, t_popup_node, NULL, nullptr, [=](){t_close_button->setEnabled(true);});
 																																	   };
-																																	   t_suction->is_on_touch_began_func = true;
 																																   };
-																																   t_suction->is_on_touch_began_func = true;
 																															   };
-																															   t_suction->is_on_touch_began_func = true;
 																															   
 																														   }));
 																				}

@@ -2477,19 +2477,9 @@ void PuzzleScene::setTop()
 	top_ruby->addChild(ruby_menu);
 	
 	
-	CCSprite* n_postbox = CCSprite::create("mainflow_new_postbox.png");
-	CCSprite* s_postbox = CCSprite::create("mainflow_new_postbox.png");
-	s_postbox->setColor(ccGRAY);
 	
-	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(PuzzleScene::menuAction));
-	postbox_item->setTag(kPuzzleMenuTag_postbox);
-	
-	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
-	postbox_menu->setPosition(ccp(368,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
-	addChild(postbox_menu, kPuzzleZorder_top);
-	
-	top_list.push_back(postbox_menu);
-	
+	CCNode* achieve_node = CCNode::create();
+	addChild(achieve_node, kPuzzleZorder_top);
 	
 	CCSprite* n_achieve = CCSprite::create("mainflow_new_achievement.png");
 	CCSprite* s_achieve = CCSprite::create("mainflow_new_achievement.png");
@@ -2500,15 +2490,31 @@ void PuzzleScene::setTop()
 	
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
 	achieve_menu->setPosition(ccp(398,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
-	addChild(achieve_menu, kPuzzleZorder_top);
+	achieve_node->addChild(achieve_menu);
 	
-	top_list.push_back(achieve_menu);
+	CCNode* postbox_node = CCNode::create();
+	addChild(postbox_node, kPuzzleZorder_top);
+	
+	CCSprite* n_postbox = CCSprite::create("mainflow_new_postbox.png");
+	CCSprite* s_postbox = CCSprite::create("mainflow_new_postbox.png");
+	s_postbox->setColor(ccGRAY);
+	
+	CCMenuItem* postbox_item = CCMenuItemSprite::create(n_postbox, s_postbox, this, menu_selector(PuzzleScene::menuAction));
+	postbox_item->setTag(kPuzzleMenuTag_postbox);
+	
+	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
+	postbox_menu->setPosition(ccp(368,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	postbox_node->addChild(postbox_menu);
+	
+	top_list.push_back(postbox_node);
+	
+	top_list.push_back(achieve_node);
 	
 	
 	postbox_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	postbox_count_case->setContentSize(CCSizeMake(20, 20));
 	postbox_count_case->setPosition(postbox_menu->getPosition() + ccp(12,6));
-	addChild(postbox_count_case, kPuzzleZorder_top);
+	postbox_node->addChild(postbox_count_case);
 	postbox_count_case->setVisible(false);
 	
 	CCScaleTo* t_scale1 = CCScaleTo::create(0.1f, 1.3f);
@@ -2523,14 +2529,14 @@ void PuzzleScene::setTop()
 	
 	postbox_count_case->setVisible(false);
 	
-	postbox_count_case->addChild(KSSchedule::create([=](float dt)
-													{
-														if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-															postbox_count_case->setOpacity(0);
-														else
-															postbox_count_case->setOpacity(255);
-														return true;
-													}));
+//	postbox_count_case->addChild(KSSchedule::create([=](float dt)
+//													{
+//														if(postbox_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
+//															KS::setOpacity(postbox_count_case, 0);
+//														else
+//															KS::setOpacity(postbox_count_case, 255);
+//														return true;
+//													}));
 	
 	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
 	postbox_count_label->setColor(ccc3(255, 255, 255));
@@ -2544,7 +2550,7 @@ void PuzzleScene::setTop()
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	achievement_count_case->setContentSize(CCSizeMake(20, 20));
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
-	addChild(achievement_count_case, kPuzzleZorder_top+1);
+	achieve_node->addChild(achievement_count_case);
 	
 	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
@@ -2562,14 +2568,14 @@ void PuzzleScene::setTop()
 	
 	achievement_count_case->setVisible(false);
 	
-	achievement_count_case->addChild(KSSchedule::create([=](float dt)
-														{
-															if(achieve_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
-																KS::setOpacity(achievement_count_case, 0);
-															else
-																KS::setOpacity(achievement_count_case, 255);
-															return true;
-														}));
+//	achievement_count_case->addChild(KSSchedule::create([=](float dt)
+//														{
+//															if(achieve_menu->getPositionY() >= (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)
+//																KS::setOpacity(achievement_count_case, 0);
+//															else
+//																KS::setOpacity(achievement_count_case, 255);
+//															return true;
+//														}));
 	
 	countingAchievement();
 	

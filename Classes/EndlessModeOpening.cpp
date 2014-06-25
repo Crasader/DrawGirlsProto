@@ -171,7 +171,7 @@ void EndlessModeOpening::setMain()
 	tipMaquee->addText("<font size=13>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>");
 	tipMaquee->addText("<font size=13>랭킹은 매주 갱신됩니다.</font>");
 //	tipMaquee->setPosition(ccp(201.0,237.0)); 			// dt (131.0,232.0)
-	tipMaquee->setPosition(ccp(199.5, 246.f));
+	tipMaquee->setPosition(ccp(199.5, 244.f));
 	tipMaquee->startMarquee();
 	main_case->addChild(tipMaquee, 1);
 	
@@ -449,7 +449,7 @@ void EndlessModeOpening::setMain()
 			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
 			t_clipping->addChild(t_ment1);
 			
-			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+			t_suction = TouchSuctionLayer::create(-10000);
 			addChild(t_suction);
 			t_suction->setTouchEnabled(true);
 			
@@ -462,15 +462,16 @@ void EndlessModeOpening::setMain()
 												   }, [=](float t)
 												   {
 													   t_gray->setOpacity(255);
-													   is_menu_enable = true;
+													   this->is_menu_enable = true;
 													   
-													   t_suction->touch_began_func = [=]()
+													   this->t_suction->is_on_touch_began_func = true;
+													   this->t_suction->touch_began_func = [=]()
 													   {
-														   t_suction->is_on_touch_began_func = false;
-														   if(!is_menu_enable)
+														   this->t_suction->is_on_touch_began_func = false;
+														   if(!this->is_menu_enable)
 															   return;
 														   
-														   is_menu_enable = false;
+														   this->is_menu_enable = false;
 														   
 														   t_arrow1->removeFromParent();
 														   t_ment1->removeFromParent();
@@ -488,13 +489,16 @@ void EndlessModeOpening::setMain()
 														   t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().width/2.f + 3, 0));
 														   t_clipping->addChild(t_ment2);
 														   
-														   t_suction->touch_began_func = [=]()
+														   this->is_menu_enable = true;
+														   this->t_suction->touchFuncOn();
+														   this->t_suction->touch_began_func = [=]()
 														   {
-															   t_suction->is_on_touch_began_func = false;
-															   if(!is_menu_enable)
+															   this->t_suction->is_on_touch_began_func = false;
+															   if(!this->is_menu_enable)
 																   return;
 															   
-															   is_menu_enable = false;
+															   
+															   this->is_menu_enable = false;
 															   
 															   t_arrow2->removeFromParent();
 															   t_ment2->removeFromParent();
@@ -512,15 +516,17 @@ void EndlessModeOpening::setMain()
 															   t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, t_arrow3->getContentSize().height/2.f + 3));
 															   t_clipping->addChild(t_ment3);
 															   
-															   t_suction->touch_began_func = [=]()
+															   this->is_menu_enable = true;
+															   this->t_suction->is_on_touch_began_func = true;
+															   this->t_suction->touch_began_func = [=]()
 															   {
-																   t_suction->is_on_touch_began_func = false;
-																   if(!is_menu_enable)
+																   this->t_suction->is_on_touch_began_func = false;
+																   if(!this->is_menu_enable)
 																	   return;
 																   
-																   is_menu_enable = false;
+																   this->is_menu_enable = false;
 																   
-																   tutorial_success_func = [=]()
+																   this->tutorial_success_func = [=]()
 																   {
 																	   t_arrow3->removeFromParent();
 																	   t_ment3->removeFromParent();
@@ -532,16 +538,16 @@ void EndlessModeOpening::setMain()
 																											  {
 																												  t_gray->setOpacity(255*t);
 																												  
-																												  t_suction->removeFromParent();
+																												  this->t_suction->removeFromParent();
 																												  
 																												  t_clipping->removeFromParent();
 																											  }));
 																   };
 																   
-																   tutorial_fail_func = [=]()
+																   this->tutorial_fail_func = [=]()
 																   {
-																	   t_suction->is_on_touch_began_func = true;
-																	   is_menu_enable = true;
+																	   this->t_suction->is_on_touch_began_func = true;
+																	   this->is_menu_enable = true;
 																   };
 																   
 																   ready_loading = LoadingLayer::create(-99999);
@@ -552,14 +558,8 @@ void EndlessModeOpening::setMain()
 																   //																	  param["no"] = 34;
 																   myHSP->command("startendlessplay", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 															   };
-															   is_menu_enable = true;
-															   t_suction->is_on_touch_began_func = true;
 														   };
-														   is_menu_enable = true;
-														   t_suction->is_on_touch_began_func = true;
 													   };
-													   t_suction->is_on_touch_began_func = true;
-													   
 												   }));
 		}
 		else

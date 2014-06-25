@@ -1590,6 +1590,8 @@ void Maingame::removeConditionLabel()
 											   {
 												   t_gray->setOpacity(255);
 												   
+												   
+												   t_suction->is_on_touch_began_func = true;
 												   t_suction->touch_began_func = [=]()
 												   {
 													   t_suction->is_on_touch_began_func = false;
@@ -1617,6 +1619,7 @@ void Maingame::removeConditionLabel()
 													   t_ment4->setPosition(t_arrow4->getPosition() + ccp(-t_arrow4->getContentSize().width/2.f - 3, 0));
 													   t_clipping->addChild(t_ment4);
 													   
+													   t_suction->is_on_touch_began_func = true;
 													   t_suction->touch_began_func = [=]()
 													   {
 														   t_suction->is_on_touch_began_func = false;
@@ -1649,6 +1652,7 @@ void Maingame::removeConditionLabel()
 														   t_ment5->setPosition(t_arrow5->getPosition() + ccp(t_arrow5->getContentSize().width/2.f + 3, 0));
 														   t_clipping->addChild(t_ment5);
 														   
+														   t_suction->is_on_touch_began_func = true;
 														   t_suction->touch_began_func = [=]()
 														   {
 															   t_suction->is_on_touch_began_func = false;
@@ -1667,6 +1671,7 @@ void Maingame::removeConditionLabel()
 															   t_final_label->setPosition(ccp(240, 50));
 															   t_clipping->addChild(t_final_label);
 															   
+															   t_suction->is_on_touch_began_func = true;
 															   t_suction->touch_began_func = [=]()
 															   {
 																   t_suction->is_on_touch_began_func = false;
@@ -1689,13 +1694,9 @@ void Maingame::removeConditionLabel()
 																															 tutorial_node->removeFromParent();
 																														 }));
 															   };
-															   t_suction->is_on_touch_began_func = true;
 														   };
-														   t_suction->is_on_touch_began_func = true;
 													   };
-													   t_suction->is_on_touch_began_func = true;
 												   };
-												   t_suction->is_on_touch_began_func = true;
 												   
 											   }));
 	}
@@ -3170,10 +3171,25 @@ void Maingame::takeExchangeCoin( CCPoint t_start_position, int t_coin_number )
 
 void Maingame::startExchange()
 {
+	AudioEngine::sharedInstance()->playSound("sound_back_maingame2.mp3", true);
 	AudioEngine::sharedInstance()->playEffect("ment_change_success.mp3", false, true);
+	
 	
 	mySD->exchangeSilhouette();
 	myMS->exchangeMS();
+	
+	
+	// ######################## hs code bbu woo~ ##############################
+	std::vector<KSCumberBase*> maincumbers = myCP->getMainCumbers();
+	for(int i=0;i<maincumbers.size();i++){
+		((KSCumberBase*)maincumbers[i])->applyAutoBalance(true);
+	}
+
+	std::vector<KSCumberBase*> subcumbers = myCP->getSubCumberArrayPointer();
+	for(int i=0;i<subcumbers.size();i++){
+		((KSCumberBase*)subcumbers[i])->applyAutoBalance(true);
+	}
+	// ######################## hs code bbu woo~ ##############################
 	
 	bool is_visible = sil_thumb->isVisible();
 	float t_scale = sil_thumb->getScale();
@@ -3187,7 +3203,12 @@ void Maingame::startExchange()
 	sil_thumb->setScale(t_scale);
 	sil_thumb->setPosition(t_position);
 	sil_thumb->setVisible(is_visible);
+	
+	
+	
 	addChild(sil_thumb, searchEyeZorder);
+	
+	
 	
 	if(mySGD->is_play_replay && mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() > 0)
 	{

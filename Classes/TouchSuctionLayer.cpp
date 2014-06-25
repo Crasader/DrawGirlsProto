@@ -39,6 +39,11 @@ TouchSuctionLayer::~TouchSuctionLayer()
 	TouchSwallowManagement::sharedInstance()->removeSwallowLayer(this);
 }
 
+void TouchSuctionLayer::touchFuncOn()
+{
+	is_on_touch_began_func = true;
+}
+
 void TouchSuctionLayer::myInit(int t_touch_priority)
 {
 	touch_priority = t_touch_priority;
@@ -93,7 +98,10 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 			CCLOG("%s : %d", swallow_ment.c_str(), touch_priority);
 		
 		if(is_on_touch_began_func)
+		{
+			CCLOG("setted touch_func");
 			touch_began_func();
+		}
 	}
 	return true;
 }
