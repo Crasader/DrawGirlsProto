@@ -702,7 +702,7 @@ void EndlessModeResult::setMain()
 																	  is_menu_enable = false;
 																	  
 																	  
-																	  if(mySGD->getScore() > mySGD->temp_endless_score.getV())
+																	  if(left_total_score.getV() > right_total_score.getV())
 																		{
 																			
 																			ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
