@@ -2496,7 +2496,9 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 	//그다음부턴 50%까지 까임
 	}else{
-		float per = 1.5f-playCount/(float)(4*autobalanceTry); //1-(float)(playCount-autobalanceTry*4)/(float)autobalanceTry;
+		
+		float per = 1.5f; //1-(float)(playCount-autobalanceTry*4)/(float)autobalanceTry;
+		if(autobalanceTry>0)per-=playCount/(float)(4*autobalanceTry);
 		if(per>1)per=1;
 		if(per<0.5)per=0.5;
 		
