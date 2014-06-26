@@ -196,6 +196,7 @@ var getFieldInfo = function(obj){
 		result["dbTable"] = result["table"].attr("dbTable");
 		result["dbSort"] = result["table"].attr("dbSort");
 		result["dbWhere"] = result["table"].attr("dbWhere");
+		if(!result["dbWhere"])result["dbWhere"]={};
 		result["dbLimit"] = result["table"].attr("dbLimit");
 		result["dbLoadParam"] =j2s({"where":s2j(result["dbWhere"]),"limit":s2j(result["dbLimit"]),"sort":s2j(result["dbSort"])});
 		dbFunc = s2j(result["table"].attr("dbFunc"));
@@ -653,7 +654,7 @@ var editorFunc_array_value = function(obj){
 	 var dataTable = obj;
 	 var eavresult=[];
 	
-	dataTable.find("tr[datarow]").each(function(index,item){
+	dataTable.children('tbody').children("tr[datarow]").each(function(index,item){
 		 dtfield = $(this).find('td[datafield]');
 		 editor = dtfield.find(".LQEditor:first");
 		 vvalue = getObjValue(editor);
@@ -2066,6 +2067,7 @@ var requestUpdate = function(obj,modal){
 	var tInfo = gf(obj);
 	var changeData={};
 	var oldData={};
+	if(!tInfo["rowData"])tInfo["rowData"]={};
 
 
 	//always 속성 가진놈들 처리하기.
@@ -2080,7 +2082,6 @@ var requestUpdate = function(obj,modal){
 			if(!$(this).hasClass("LQDataCell") && !$(this).attr("field"))return;
 			// ##################  셋벨류 하기~~~
 			var fInfo = gf($(this));
-
 			//값찾기
 			if(fInfo["editor"]!=undefined){
 				if(fInfo["editorObj"])fInfo["editorObj"].triggerHandler("saveCallBack");
@@ -2442,3 +2443,133 @@ var cuponCodeViewer = function(value,option){
 var textareaViewer = function(obj,value){
 	return "<textarea rows=3 cols=50>"+j2s(obj)+"</textarea>";
 }
+
+
+
+
+///////////////////////
+///////////////////////  file upload
+///////////////////////
+
+function FileUploader(value,option){
+	this.exchangeID = value;
+	this.list = s2j(value);
+	this.option = s2j(option);
+	this.editor = $("<div>").addClass("LQEditor");
+	this.editTable = $("<table>").addClass("table table-boarded");
+	this.callbackFunc = null;
+	this.createForm = function(){
+		var editor = this.editor;
+		var editTable = this.editTable;
+		editor.html("");
+		var obj=this;
+
+		var form = $("<form>").attr("action",this.option["uploadFile"]).attr("method","post").attr("enctype","multipart/form-data").attr("id","MyUploadForm").appendTo(editor);
+		
+		//form.on("submit",{"obj":obj},function(event){return event.data.obj.submitFunc();});
+		form.submit({"obj":obj},this.submit);
+		$("<input>").attr("name","FileInput").attr("id","FileInput").attr("type","file").addClass("form-control").appendTo(form);
+		$("<input>").attr("value","Upload").attr("id","submit-btn").attr("type","submit").addClass("btn btn-primary").appendTo(form);
+		$("<img>").attr("id","loading-img").css("display","none").appendTo(form);
+
+		$("<div>").attr("id","progressbox").append($("<div>").attr("id","progressbar")).append($("<div>").attr("id","statustxt")).appendTo(editor);
+		
+		return this.editor;
+	}
+
+	this.submit = function(event){
+			var obj = event.data.obj;
+		    var options = { 
+		    data : obj.option,
+		    dataType : "json",
+		    type:"POST",
+		    beforeSubmit:  function(){obj.beforeSubmit();},  // pre-submit callback 
+		    success:       function(responseText, statusText, xhr, $form){obj.afterSuccess(responseText, statusText, xhr, $form);},  // post-submit callback 
+		    uploadProgress: function(event, position, total, percentComplete){obj.OnProgress(event, position, total, percentComplete);}, //upload progress callback 
+		    resetForm: true        // reset the form after successful submit 
+		    }; 
+			
+			$(this).ajaxSubmit(options);        
+
+			return false;   
+	}
+
+	this.afterSuccess = function(responseText, statusText, xhr, $form)
+	{
+		this.editor.find('#submit-btn').show(); //hide submit button
+		this.editor.find('#loading-img').hide(); //hide submit button
+		this.editor.find('#progressbox').delay( 1000 ).fadeOut(); //hide progress bar
+		if(this.callbackFunc)this.callbackFunc(responseText);
+	}
+
+	this.beforeSubmit = function(){
+	    //check whether browser fully supports all File API
+	   // var obj = this;
+	   	if (window.File && window.FileReader && window.FileList && window.Blob)
+		{
+
+		    if( !this.editor.find('#FileInput').val()) //check empty input filed
+		    {
+		       	alert("Error","파일을 선택해주세요");
+		        return false
+		    }
+
+		    var fsize = this.editor.find('#FileInput')[0].files[0].size; //get file size
+		    var ftype = this.editor.find('#FileInput')[0].files[0].type; // get file type
+
+
+		    //allow file types 
+		    // switch(ftype)
+		    // {
+		    // 		case 'image/png':
+		    // 		case 'image/jpg':
+		    // 		case 'image/gif':
+		    //     case 'application/xls':
+		    //         break;
+		    //     default:
+		    //        	alert("error","<b>"+ftype+"</b> Unsupported file type!");
+		    //         return false
+		    // }
+
+		    //Allowed file size is less than 5 MB (1048576)
+		    if(fsize>52428800) 
+		    {
+		    	alert("error","<b>"+this.bytesToSize(fsize) +"</b> Too big file! <br />File is too big, it should be less than 50 MB.")
+		        return false
+		    }
+
+		    this.editor.find('#submit-btn').hide(); //hide submit button
+		    this.editor.find('#loading-img').show(); //hide submit button
+		}
+		else
+		{
+		    //Output error to older unsupported browsers that doesn't support HTML5 File API
+		   	alert("error","Please upgrade your browser, because your current browser lacks some new features we need!");
+		    return false;
+		}
+	}
+
+
+	this.OnProgress = function(event, position, total, percentComplete)
+	{
+	   //Progress bar
+		this.editor.find('#progressbox').show();
+		this.editor.find('#progressbar').width(percentComplete + '%') //update progressbar percent complete
+		this.editor.find('#statustxt').html(percentComplete + '%'); //update status text
+		if(percentComplete>50)
+	    {
+	        this.editor.find('#statustxt').css('color','#000'); //change status text to white after 50%
+	    }
+	}
+
+	//function to format bites bit.ly/19yoIPO
+	this.bytesToSize = function(bytes) {
+		var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+		if (bytes == 0) return '0 Bytes';
+		var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+		return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+	} 
+
+}
+
+

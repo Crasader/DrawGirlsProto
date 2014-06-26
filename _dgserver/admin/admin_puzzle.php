@@ -6,7 +6,7 @@ var showPuzzleImg = function(value,option){
 	data = s2j(value);
 	if(!data)return "";
 	if(!data["image"]) return "";
-	return '<img src=../images/'+data["image"]+' width=300>';
+	return '<img src='+data["image"]+' width=300>';
 }
 </script>
 <table align=center>

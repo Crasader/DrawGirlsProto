@@ -16,7 +16,7 @@ include "header.php";
 <script>
 var showCardImg = function(value,option){
 	data = s2j(value);
-	return '<img src=../images/'+data["img"]+' width=100>';
+	return '<img src='+data["img"]+' width=100>';
 }
 </script>
 <center>

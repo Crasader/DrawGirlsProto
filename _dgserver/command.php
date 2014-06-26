@@ -98,16 +98,16 @@ if(!$stopCommand){
                             $r["result"]=ResultState::toArray(4002);
                             $allResult[$cmd]= $r;
                             //continue;
-                    /*
-                    else if($userdata->lastCmdNo>=$param["cmdNo"]){
+                    
+                    }else if($userdata->lastCmdNo>=$param["cmdNo"]){
                                             $allResult["cmdNoError"]=true;
                                             $checkUserdata=true;
                                             $r["result"]=ResultState::toArray(4001);
                                             $allResult[$cmd]= $r;
                                             //continue;
 
-                                        }
-                    */
+                                       // }
+                    
 
 
                     }else if((TimeManager::get()->getTime()-$userdata->lastTime)>60*30){

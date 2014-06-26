@@ -21,7 +21,7 @@ include "header.php";
 	}
 	
 	var imageViewer = function(value,option){
-		return "<img src='../images/"+value+"' width=100>";
+		return "<img src='"+value+"' width=100>";
 	}
 
 </script>
