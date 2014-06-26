@@ -24,6 +24,7 @@
 #include "AudioEngine.h"
 #include "FormSetter.h"
 #include "AchieveData.h"
+#include "Terms.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -248,9 +249,13 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
+		is_menu_enable = false;
 		
-		
-		is_menu_enable = true;
+		Terms* t_terms = Terms::create(-999999, [=]()
+									   {
+										   this->is_menu_enable = true;
+									   });
+		addChild(t_terms, 10000);
 		
 		
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
