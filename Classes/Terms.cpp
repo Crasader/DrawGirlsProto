@@ -218,7 +218,11 @@ bool Terms::init(int touchP, std::function<void(void)> finalFunctor)
 			CommonAnimation::closePopup(this, container, t_popup->getDimmedSprite(), nullptr,
 																	[=](){
 																		removeFromParent();
-																	}); 
+																		if(finalFunctor)
+																		{
+																			finalFunctor();
+																		}
+																	});
 		}
 	});
 	return true;
