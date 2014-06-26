@@ -492,7 +492,7 @@ void TitleRenewalScene::successLogin()
 	
 	startCommand();
 	
-	is_loaded_cgp = false;
+	is_loaded_cgp = true;//false;
 	
 	std::function<void(Json::Value)> pf;
 	pf = [=](Json::Value v){
@@ -589,7 +589,7 @@ void TitleRenewalScene::successLogin()
 ////			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
 //		}
 	};
-	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), this, pf);
+//	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), this, pf);
 }
 
 void TitleRenewalScene::startCommand()
@@ -1997,6 +1997,8 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::endingAction()
 {
+	CCLOG("ttttt is_loaded_cgp : %d | is_loaded_server : %d | is_preloaded_effect : %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
+	
 	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
 	{
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
