@@ -614,6 +614,10 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
+	Json::Value dummy;
+	dummy["isSuccess"] = 1;
+	dummy["korean"] = 1;
+	func(dummy);
 #endif
 	
 }
