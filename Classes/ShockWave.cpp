@@ -57,15 +57,19 @@ void ShockWave::ingSW ()
 		t_sw->setScale(0);
 		addChild(t_sw);
 	}
+	float spread_speed_value = 0.03f;
+	
+	if(myGD->getCommunicationBool("UI_isExchanged"))
+		spread_speed_value = 0.06f;
 	
 	CCArray* my_child = getChildren();
 	
 	for(int i=0;i<getChildrenCount();i++)
 	{
 		CCSprite* t_child = (CCSprite*)my_child->objectAtIndex(i);
-		t_child->setScale(t_child->getScale()+0.06f);
+		t_child->setScale(t_child->getScale()+spread_speed_value);
 	}
-	radius += 80.f*0.06f;
+	radius += 80.f*spread_speed_value;
 	
 	IntPoint jackPoint = myGD->getJackPoint();
 	CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);

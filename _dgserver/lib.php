@@ -503,7 +503,7 @@ function reloadPuzzleInfo(){
 
 
 	mysql_query("update ".DBManager::get()->getMT("piece")." set cards='',puzzle=0,pieceNo=0",DBManager::get()->getMainConnection());
-	mysql_query("update ".DBManager::get()->getMT("card")." set piece=0",DBManager::get()->getMainConnection());
+	mysql_query("update ".DBManager::get()->getMT("card")." set piece=0,grade=0",DBManager::get()->getMainConnection());
 
 
 	//모두세팅!!!!! 일반
@@ -580,8 +580,9 @@ function reloadPuzzleInfo(){
 		$cardStat = getCardMissile($boss[0],$stageData[level]);
 		for($ci=0;$ci<count($cards);$ci++){
 			$reward = $stageReward[$ci];
+			$grade = $ci+1;
 			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs1 = "update ".DBManager::get()->getMT("card")." set missile='".$sString."',reward=$reward,piece=".$stageData[no]." where no=".$cards[$ci]; //
+			$qs1 = "update ".DBManager::get()->getMT("card")." set missile='".$sString."',reward=$reward,piece=".$stageData[no].",grade=$grade where no=".$cards[$ci]; //
 			mysql_query($qs1,DBManager::get()->getMainConnection());
 			LogManager::get()->addLog("Q--->".$qs1);
 			LogManager::get()->addLog("--->".mysql_error());

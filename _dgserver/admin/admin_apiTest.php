@@ -300,13 +300,11 @@ $apiListStr = json_encode($apiList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 </table>
 
 <script>
-	var textareaViewer = function(obj,value){
-		return "<textarea rows=3 cols=50>"+j2s(obj)+"</textarea>";
-	}
+
 </script> 
 <br><br>
 <h2 id="tables-contextual-classes">|최근 로그</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbWhere='' dbSort='{"no":"desc"}' autoSetting="true" dbLimit="10" name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbWhere='{}' dbSort='{"no":"desc"}' autoSetting="true" dbLimit="10" name="datatable" border=1>
 	<thead>
 	</thead>
 	<tbody datazone>
