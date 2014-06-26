@@ -19,21 +19,22 @@
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 #include "FormSetter.h"
-CouponPopup* CouponPopup::create(int t_touch_priority, function<void()> t_end_func)
+CouponPopup* CouponPopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_success_func)
 {
 	CouponPopup* t_mup = new CouponPopup();
-	t_mup->myInit(t_touch_priority, t_end_func);
+	t_mup->myInit(t_touch_priority, t_end_func, t_success_func);
 	t_mup->autorelease();
 	return t_mup;
 }
 
-void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func)
+void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_success_func)
 {
 	startFormSetter(this);
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
+	success_func = t_success_func;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -238,7 +239,7 @@ void CouponPopup::resultUseCoupon(Json::Value result_data)
 	loading_layer->removeFromParent();
 }
 
-void CouponPopup::createResultPopup(string title, string content)
+void CouponPopup::createResultPopup(string title, string content, bool is_success)
 {
 	input_text1->setVisible(false);
 	input_text1->setEnabled(false);
@@ -332,15 +333,38 @@ void CouponPopup::createResultPopup(string title, string content)
 		CommonAnimation::closePopup(this, t_container, gray, [=](){
 			
 		}, [=](){
-			is_menu_enable = true;
-			input_text1->setVisible(true);
-			input_text1->setEnabled(true);
+			if(is_success)
+			{
+				input_text1->setEnabled(false);
+				input_text1->removeFromParent();
+				
+				input_text2->setEnabled(false);
+				input_text2->removeFromParent();
+				
+				input_text3->setEnabled(false);
+				input_text3->removeFromParent();
+				AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+				
+				CommonAnimation::closePopup(this, m_container, gray, [=](){
+					
+				}, [=](){
+					end_func();
+					success_func();
+					removeFromParent();
+				});
+			}
+			else
+			{
+				input_text1->setVisible(true);
+				input_text1->setEnabled(true);
+				
+				input_text2->setVisible(true);
+				input_text2->setEnabled(true);
+				
+				input_text3->setVisible(true);
+				input_text3->setEnabled(true);
+			}
 			
-			input_text2->setVisible(true);
-			input_text2->setEnabled(true);
-			
-			input_text3->setVisible(true);
-			input_text3->setEnabled(true);
 			t_popup->removeFromParent();
 			
 		});

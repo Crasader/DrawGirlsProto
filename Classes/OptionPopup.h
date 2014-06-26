@@ -31,6 +31,8 @@ public:
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
+	function<void()> open_message_popup_func;
+	
 private:
 	
 	CCObject* target_final;

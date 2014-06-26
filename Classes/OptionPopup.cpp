@@ -1011,7 +1011,18 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_coupon)
 	{
-		CouponPopup* t_popup = CouponPopup::create(-300, [=](){is_menu_enable = true;});
+		CouponPopup* t_popup = CouponPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+		{
+			is_menu_enable = false;
+			CommonAnimation::closePopup(this, main_case, gray, [=](){
+				
+			}, [=]()
+										{
+											endHidePopup();
+											open_message_popup_func();
+										});
+			
+		});
 		addChild(t_popup, kOP_Z_popup);
 	}
 	else if(tag == kOP_MT_community)
