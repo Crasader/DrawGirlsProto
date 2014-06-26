@@ -38,6 +38,7 @@
 #include "OnePercentGame.h"
 #include "FiveRocksCpp.h"
 #include "CommonAnimation.h"
+#include "Terms.h"
 
 USING_NS_CC_EXT;
 
@@ -85,7 +86,18 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
-
+	
+//	Terms* terms = Terms::create(-999999, [=](){
+//		CCLog("END!!!!!");
+//	});
+//	addChild(terms, 10000);
+	
+	
+	
+//	KSLabelTTF* ttt= KSLabelTTF::create("대한민국 독립 만세 \n크크크크크 만세", mySGD->getFont().c_str(),
+//																			14.f, CCSizeMake(100, 300), CCTextAlignment::kCCTextAlignmentLeft);
+//	addChild(ttt, 10000);
+//	ttt->setPosition(ccp(240, 160));
 //	Json::Value value1, value2, value3, value4, value5, value6;
 //	value1["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 0);
 //	value1["font"] = mySGD->getFont().c_str();
