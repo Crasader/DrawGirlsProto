@@ -849,6 +849,7 @@ void JsGababo::showResult()
 //	gr1.spriteName = "shop_ruby2.png";
 //	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
 	auto tempEndFunction = m_endFunction;
+	auto winCount = m_winCount;
 	CurtainNodeForBonusGame* curtain = CurtainNodeForBonusGame::createForEnding((int)Curtain::kTouchPriority, gr1,
 																																							[=](){
 																																								removeFromParent();
@@ -856,7 +857,7 @@ void JsGababo::showResult()
 																																							[=](){
 																																								if(tempEndFunction)
 																																								{
-																																									tempEndFunction(m_winCount);
+																																									tempEndFunction(winCount);
 																																								}
 																																							});
 	getParent()->addChild(curtain, (int)Curtain::kCurtain);
