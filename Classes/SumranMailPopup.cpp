@@ -514,6 +514,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																	//						 int idx = (int)obj->getUserData();
 																	CCLog("%s",mail.toStyledString().c_str());
 																	
+																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																	
 																	CCNode* itemlist = CCNode::create();
 																	setFormSetter(itemlist);
 																	if(mail["reward"].isArray()){
@@ -556,6 +558,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 //																	itemlist->addChild(lbl);
 																	itemlist->setContentSize(CCSizeMake(mail["reward"].size()*80, 100));
 																	ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), itemlist,[=](){
+																		
+																		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																		
 																								Json::Value p;
 																								int mailNo = mail["no"].asInt();

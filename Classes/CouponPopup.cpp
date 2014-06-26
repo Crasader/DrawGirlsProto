@@ -198,6 +198,8 @@ void CouponPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+	
 	loading_layer = LoadingLayer::create(touch_priority-100);
 	addChild(loading_layer, 999);
 	
@@ -330,6 +332,8 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 		
 		t_popup->is_menu_enable = false;
 		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+		
 		CommonAnimation::closePopup(this, t_container, gray, [=](){
 			
 		}, [=](){
@@ -343,7 +347,6 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 				
 				input_text3->setEnabled(false);
 				input_text3->removeFromParent();
-				AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 				
 				CommonAnimation::closePopup(this, m_container, this->gray, [=](){
 					
@@ -363,6 +366,8 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 				
 				input_text3->setVisible(true);
 				input_text3->setEnabled(true);
+				
+				this->is_menu_enable = true;
 			}
 			
 			t_popup->removeFromParent();

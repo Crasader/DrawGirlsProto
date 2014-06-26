@@ -773,7 +773,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_onePercentGame7,
 	kMyLocalKey_onePercentGame8,
 	kMyLocalKey_onePercentGame9,
-	kMyLocalKey_onePercentGame10
+	kMyLocalKey_onePercentGame10,
+	
+	kMyLocalKey_endlessRewardInfo,
+	kMyLocalKey_endlessRewardInfoContent
 	
 }MyLocalKey;
 

@@ -259,6 +259,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
+		state_label->stopAllActions();
 		state_label->setVisible(false);
 		
 		
@@ -338,6 +339,9 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 void TitleRenewalScene::successLogin()
 {
 	state_label->setVisible(true);
+	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
+	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+	state_label->runAction(t_repeat);
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
 //		AudioEngine::sharedInstance()->preloadEffectScene("Title");
