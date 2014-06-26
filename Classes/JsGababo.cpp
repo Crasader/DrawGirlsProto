@@ -409,31 +409,31 @@ void JsGababo::showHandsMotion(std::function<void(void)> endLeft, std::function<
 	float timeMul = 2.f;
 	{
 		CCNode* handContainer = m_leftHandContainer;
-		addChild(KSGradualValue<float>::create(0, 120, 0.2 * timeMul,
+		addChild(KSGradualValue<float>::create(handContainer->getRotation(), handContainer->getRotation() + 120, 0.2 * timeMul,
 											   [=](float t){
 												   handContainer->setRotation(t);
 											   }, [=](float t){
 												   handContainer->setRotation(t);
-												   addChild(KSGradualValue<float>::create(120,
-																						  80, 0.23 * timeMul,
+												   addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																						  handContainer->getRotation() - 40, 0.23 * timeMul,
 																						  [=](float t){
 																							  handContainer->setRotation(t);
 																						  }, [=](float t){
 																							  handContainer->setRotation(t);
-																							  addChild(KSGradualValue<float>::create(80,
-																																	 120, 0.13 * timeMul,
+																							  addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																																	 handContainer->getRotation() + 40, 0.13 * timeMul,
 																																	 [=](float t){
 																																		 handContainer->setRotation(t);
 																																	 }, [=](float t){
 																																		 handContainer->setRotation(t);
-																																		 addChild(KSGradualValue<float>::create(120,
-																																												80, 0.23 * timeMul,
+																																		 addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																																												handContainer->getRotation() - 40, 0.23 * timeMul,
 																																												[=](float t){
 																																													handContainer->setRotation(t);
 																																												}, [=](float t){
 																																													handContainer->setRotation(t);
-																																													addChild(KSGradualValue<float>::create(80,
-																																																						   120, 0.2 * timeMul,
+																																													addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																																																						   handContainer->getRotation() + 40, 0.2 * timeMul,
 																																																						   [=](float t){
 																																																							   handContainer->setRotation(t);
 																																																						   }, [=](float t){
@@ -449,31 +449,31 @@ void JsGababo::showHandsMotion(std::function<void(void)> endLeft, std::function<
 	{
 		
 		CCNode* handContainer = m_rightHandContainer;
-		addChild(KSGradualValue<float>::create(0, -120, 0.2 * timeMul,
+		addChild(KSGradualValue<float>::create(handContainer->getRotation(), handContainer->getRotation() - 120, 0.2 * timeMul,
 											   [=](float t){
 												   handContainer->setRotation(t);
 											   }, [=](float t){
 												   handContainer->setRotation(t);
-												   addChild(KSGradualValue<float>::create(-120,
-																						  -80, 0.23 * timeMul,
+												   addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																						  handContainer->getRotation() + 40, 0.23 * timeMul,
 																						  [=](float t){
 																							  handContainer->setRotation(t);
 																						  }, [=](float t){
 																							  handContainer->setRotation(t);
-																							  addChild(KSGradualValue<float>::create(-80,
-																																	 -120, 0.13 * timeMul,
+																							  addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																																	 handContainer->getRotation() - 40, 0.13 * timeMul,
 																																	 [=](float t){
 																																		 handContainer->setRotation(t);
 																																	 }, [=](float t){
 																																		 handContainer->setRotation(t);
-																																		 addChild(KSGradualValue<float>::create(-120,
-																																												-80, 0.23 * timeMul,
+																																		 addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																																												handContainer->getRotation() + 40, 0.23 * timeMul,
 																																												[=](float t){
 																																													handContainer->setRotation(t);
 																																												}, [=](float t){
 																																													handContainer->setRotation(t);
-																																													addChild(KSGradualValue<float>::create(-80,
-																																																						   -120, 0.2 * timeMul,
+																																													addChild(KSGradualValue<float>::create(handContainer->getRotation(),
+																																																						   handContainer->getRotation() - 40, 0.2 * timeMul,
 																																																						   [=](float t){
 																																																							   handContainer->setRotation(t);
 																																																						   }, [=](float t){
