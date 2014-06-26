@@ -133,6 +133,17 @@ int DataStorageHub::getIntegerForKey (DSH_Key t_key)
 	dsh_cache_int[c_key] = return_value;
 	return return_value;
 }
+int DataStorageHub::getIntegerForKeyDefault (DSH_Key t_key, int def)
+{
+	string c_key = getKey(t_key);
+	iter_int = dsh_cache_int.find(c_key);
+	if(iter_int != dsh_cache_int.end())
+		return iter_int->second.getV();
+	
+	int return_value = myDefault->getValue(kSDF_myDSH, c_key, def);
+	dsh_cache_int[c_key] = return_value;
+	return return_value;
+}
 int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1)
 {
 	string c_key = CCString::createWithFormat(getKey(t_key).c_str(), key_val1)->getCString();
@@ -754,5 +765,7 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_isShowEndlessModeTutorial] = "isemt";
 	return_value[kSDH_Key_isShowOnePercentTutorial] = "issopt";
 	return_value[kDSH_Key_isShowGababoTutorial] = "issgt";
+	return_value[kDSH_Key_accountType] = "acct";
+	
 }
 #undef LZZ_INLINE
