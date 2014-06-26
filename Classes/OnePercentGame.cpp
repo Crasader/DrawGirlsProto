@@ -92,6 +92,8 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	inner_back->setPosition(ccp(0,10));
 	m_container->addChild(inner_back, kOnePercentGame_Z_back);
 	
+	setFormSetter(back_img);
+	setFormSetter(inner_back);
 	StyledLabelTTF* desc = StyledLabelTTF::create("<font color=999 size=11 newline=20>뽑기 기회는 단 3번!!!</font><font color=#FFAA14 size=11>부족한 영역을 채워 100% 에 도전하세요.</font>",
 																								mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
 	desc->setOldAnchorPoint();
@@ -167,6 +169,9 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	validArea->setColor(ccc3(232, 0, 192));
 	
 	
+	setFormSetter(desc3);
+	setFormSetter(currentGainArea);
+	setFormSetter(tutorialBox);
 	m_cursor = CCSprite::create("one_percent_gacha_02.png");
 	m_cursor->setPosition(ccp(0, -60));
 	m_container->addChild(m_cursor, kOnePercentGame_Z_content);
