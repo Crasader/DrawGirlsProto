@@ -213,7 +213,7 @@ void TitleRenewalScene::realInit()
 	
 	Json::Value param;
 	param["ManualLogin"] = true;
-	
+	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	
 	white_back->removeFromParent();
@@ -234,6 +234,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	{
 		Json::Value param;
 		param["ManualLogin"] = true;
+		param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 		
 		hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	}
