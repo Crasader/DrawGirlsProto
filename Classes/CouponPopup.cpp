@@ -345,7 +345,7 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 				input_text3->removeFromParent();
 				AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 				
-				CommonAnimation::closePopup(this, m_container, gray, [=](){
+				CommonAnimation::closePopup(this, m_container, this->gray, [=](){
 					
 				}, [=](){
 					end_func();
