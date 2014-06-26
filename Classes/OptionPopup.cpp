@@ -286,11 +286,14 @@ bool OptionPopup::init()
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
 													{
-														hspConnector::get()->mappingToAccount([](Json::Value v){
-														
-															CCLog("mapping test - %s",v.toStyledString().c_str());
-														
+														hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, [=](Json::Value t){
+															KS::KSLog("%", t);
 														});
+//														hspConnector::get()->mappingToAccount([](Json::Value v){
+//														
+//															CCLog("mapping test - %s",v.toStyledString().c_str());
+//														
+//														});
 														
 //														CCNode* t_node = CCNode::create();
 //														t_node->setTag(kOP_MT_tip);
