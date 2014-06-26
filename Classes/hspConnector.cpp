@@ -592,6 +592,35 @@ void hspConnector::mappingToAccount(enum HSPMapping mt, jsonSelType func)
 	// not implementation
 #endif
 }
+void hspConnector::getIsUsimKorean(jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	int dkey = jsonDelegator::get()->add(func, 0, 0);
+	jsonSelType nextFunc = [=](Json::Value obj){
+		int delekey = dkey;
+		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+		if(delsel.func){
+			delsel.func(obj);
+		}
+		jsonDelegator::get()->remove(delekey);
+	};
+	
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getIsUsimKorean", "(I)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	Json::Value dummy;
+	dummy["isSuccess"] = 1;
+	dummy["korean"] = 1;
+	func(dummy);
+#endif
+	
+}
 void hspConnector::openHSPNotice()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
