@@ -3470,8 +3470,6 @@ void PlayUI::myInit ()
 	myGD->V_I["UI_writeGameOver"] = std::bind(&PlayUI::writeGameOver, this, _1);
 	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
 	myGD->V_V["UI_takeSilenceItem"] = std::bind(&PlayUI::takeSilenceItem, this);
-	
-	
 }
 
 void PlayUI::hideThumb()

@@ -115,7 +115,12 @@ private:
 	void tracing()
 	{
 		bool is_end = false;
-		for(int i=0;!is_end && i<2;i++)//2배속
+		
+		int loop_value = 1;
+		if(myGD->getCommunicationBool("UI_isExchanged"))
+			loop_value++;
+		
+		for(int i=0;!is_end && i<loop_value;i++)//2배속
 		{
 			if(pre_img)
 			{
