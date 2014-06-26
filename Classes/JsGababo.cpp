@@ -23,7 +23,7 @@ static CCPoint _3winPosition = ccp(83.f - 5 + 74 * 3, 40.5);
 JsGababo::JsGababo()
 {
 	m_stepSprite = nullptr;
-//	m_gameStep = 1;
+	//	m_gameStep = 1;
 	m_winCount = 0;
 	m_resultStamp = nullptr;
 	m_tutorialStep = 1;
@@ -91,7 +91,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	back->addChild(front);
 	m_front1 = front;
 	auto tuto1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent1),
-																			mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+										mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	tuto1->setPosition(ccp(57.0, 54.5)); 			// dt (52.0, 25.5)
 	front->addChild(tuto1);
 	
@@ -162,11 +162,11 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	setFormSetter(bo);
 	
 	///////////////
-//	front->setVisible(false);
+	//	front->setVisible(false);
 	////////////////
 	
 	
-//	m_front1->setScaleY(0.f);
+	//	m_front1->setScaleY(0.f);
 	
 	m_front1->setScaleY(0.f);
 	
@@ -201,11 +201,11 @@ void JsGababo::setupReward()
 	
 	m_front2->addChild(rewardTitleBack);
 	auto rewardTitleLbl = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent2),
-																							 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	rewardTitleLbl->setAnchorPoint(ccp(0.5f, 0.5f));
 	rewardTitleLbl->setPosition(ccpFromSize(rewardTitleBack->getContentSize()) / 2.f + ccp(0, 0));
 	rewardTitleBack->addChild(rewardTitleLbl);
-
+	
 	
 	auto addReward = [=](const std::string& lbl, int rewardIndex)->pair<CCNode*, CCNode*>
 	{
@@ -276,7 +276,7 @@ void JsGababo::loadImage(int step)
 	if(m_stepSprite != nullptr)
 		m_stepSprite->removeFromParent();
 	m_stepSprite = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",
-																																NSDS_GI(1, kSDS_SI_level_int1_card_i, step))->getCString());
+																  NSDS_GI(1, kSDS_SI_level_int1_card_i, step))->getCString());
 	// CCSprite::create(boost::str(boost::format("ga%||.png") % step).c_str());
 	m_stepSprite->setScale(m_stepFrame->getContentSize().height / m_stepSprite->getContentSize().height);
 	m_stepSprite->setScale(m_stepSprite->getScale());
@@ -310,68 +310,68 @@ void JsGababo::contextSwitching(CCNode* from, CCNode* to, std::function<void(voi
 }
 void JsGababo::showReward()
 {
-//	addChild(KSGradualValue<float>::create(1.f, 0, 0.2f, [=](float t){
-//		m_front1->setScaleY(t);
-//	}, [=](float t){
-//		m_front1->setScaleY(t);
-//		showHandsMotion([=](){
-//			auto t1 = m_leftHand->getPosition();
-//			m_leftHand->removeFromParent();
-//			if(m_mySelection == kAttackBa)
-//			{
-//				m_leftHand = CCSprite::create("ba.png");
-//			}
-//			else if(m_mySelection == kAttackGa)
-//			{
-//				m_leftHand = CCSprite::create("ga.png");
-//			}
-//			else
-//			{
-//				m_leftHand = CCSprite::create("bo.png");
-//			}
-//			m_leftHandContainer->addChild(m_leftHand);
-//			m_leftHand->setPosition(t1);
-//		}, [=](){
-//			int computer = ks19937::getIntValue(1, 3);
-//			int D = m_mySelection - computer % 3;
-//			auto t1 = m_rightHand->getPosition();
-//			if(computer == kAttackBa)
-//			{
-//				m_rightHand = CCSprite::create("ba.png");
-//			}
-//			else if(computer == kAttackGa)
-//			{
-//				m_rightHand = CCSprite::create("ga.png");
-//			}
-//			else
-//			{
-//				m_rightHand = CCSprite::create("bo.png");
-//			}
-//			m_rightHandContainer->addChild(m_rightHand);
-//			m_rightHand->setPosition(t1);
-//			if(m_mySelection == computer) // Draw
-//			{
-//				CCLOG("draw");
-//				m_currentJudge = "draw";
-//			}
-//			else if(D == 1) // Win
-//			{
-//				CCLOG("win");
-//				m_currentJudge = "win";
-//				
-//			}
-//			else // Lose
-//			{
-//				CCLOG("lose~");
-//				m_currentJudge = "lose";
-//			}
-//		});
-//		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t){
-//			m_front2->setScaleY(t);
-//		}, [=](float t){
-//			m_front2->setScaleY(t);
-//		}));
-//	}));
+	//	addChild(KSGradualValue<float>::create(1.f, 0, 0.2f, [=](float t){
+	//		m_front1->setScaleY(t);
+	//	}, [=](float t){
+	//		m_front1->setScaleY(t);
+	//		showHandsMotion([=](){
+	//			auto t1 = m_leftHand->getPosition();
+	//			m_leftHand->removeFromParent();
+	//			if(m_mySelection == kAttackBa)
+	//			{
+	//				m_leftHand = CCSprite::create("ba.png");
+	//			}
+	//			else if(m_mySelection == kAttackGa)
+	//			{
+	//				m_leftHand = CCSprite::create("ga.png");
+	//			}
+	//			else
+	//			{
+	//				m_leftHand = CCSprite::create("bo.png");
+	//			}
+	//			m_leftHandContainer->addChild(m_leftHand);
+	//			m_leftHand->setPosition(t1);
+	//		}, [=](){
+	//			int computer = ks19937::getIntValue(1, 3);
+	//			int D = m_mySelection - computer % 3;
+	//			auto t1 = m_rightHand->getPosition();
+	//			if(computer == kAttackBa)
+	//			{
+	//				m_rightHand = CCSprite::create("ba.png");
+	//			}
+	//			else if(computer == kAttackGa)
+	//			{
+	//				m_rightHand = CCSprite::create("ga.png");
+	//			}
+	//			else
+	//			{
+	//				m_rightHand = CCSprite::create("bo.png");
+	//			}
+	//			m_rightHandContainer->addChild(m_rightHand);
+	//			m_rightHand->setPosition(t1);
+	//			if(m_mySelection == computer) // Draw
+	//			{
+	//				CCLOG("draw");
+	//				m_currentJudge = "draw";
+	//			}
+	//			else if(D == 1) // Win
+	//			{
+	//				CCLOG("win");
+	//				m_currentJudge = "win";
+	//
+	//			}
+	//			else // Lose
+	//			{
+	//				CCLOG("lose~");
+	//				m_currentJudge = "lose";
+	//			}
+	//		});
+	//		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t){
+	//			m_front2->setScaleY(t);
+	//		}, [=](float t){
+	//			m_front2->setScaleY(t);
+	//		}));
+	//	}));
 }
 
 void JsGababo::showHands()
@@ -409,82 +409,82 @@ void JsGababo::showHandsMotion(std::function<void(void)> endLeft, std::function<
 	float timeMul = 2.f;
 	{
 		CCNode* handContainer = m_leftHandContainer;
-		addChild(KSGradualValue<float>::create(handContainer->getRotation(), handContainer->getRotation() + 120, 0.2 * timeMul,
-																					 [=](float t){
-																						 handContainer->setRotation(t);
-																					 }, [=](float t){
-																						 handContainer->setRotation(t);
-																						 addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																										handContainer->getRotation() - 40, 0.23 * timeMul,
-																																										[=](float t){
-																																											handContainer->setRotation(t);
-																																										}, [=](float t){
-																																											handContainer->setRotation(t);
-																																											addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																																														 handContainer->getRotation() + 40, 0.13 * timeMul,
-																																																														 [=](float t){
-																																																															 handContainer->setRotation(t);
-																																																														 }, [=](float t){
-																																																															 handContainer->setRotation(t);
-																																																															 addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																																																																			handContainer->getRotation() - 40, 0.23 * timeMul,
-																																																																																			[=](float t){
-																																																																																				handContainer->setRotation(t);
-																																																																																			}, [=](float t){
-																																																																																				handContainer->setRotation(t);
-																																																																																				addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																																																																																							 handContainer->getRotation() + 40, 0.2 * timeMul,
-																																																																																																							 [=](float t){
-																																																																																																								 handContainer->setRotation(t);
-																																																																																																							 }, [=](float t){
-																																																																																																								 handContainer->setRotation(t);
-																																																																																																								 if(endLeft)
-																																																																																																									 endLeft();
-																																																																																																							 }));
-																																																																																			}));
-																																																														 }));
-																																										}));
-																					 }));
+		addChild(KSGradualValue<float>::create(0, 120, 0.2 * timeMul,
+											   [=](float t){
+												   handContainer->setRotation(t);
+											   }, [=](float t){
+												   handContainer->setRotation(t);
+												   addChild(KSGradualValue<float>::create(120,
+																						  80, 0.23 * timeMul,
+																						  [=](float t){
+																							  handContainer->setRotation(t);
+																						  }, [=](float t){
+																							  handContainer->setRotation(t);
+																							  addChild(KSGradualValue<float>::create(80,
+																																	 120, 0.13 * timeMul,
+																																	 [=](float t){
+																																		 handContainer->setRotation(t);
+																																	 }, [=](float t){
+																																		 handContainer->setRotation(t);
+																																		 addChild(KSGradualValue<float>::create(120,
+																																												80, 0.23 * timeMul,
+																																												[=](float t){
+																																													handContainer->setRotation(t);
+																																												}, [=](float t){
+																																													handContainer->setRotation(t);
+																																													addChild(KSGradualValue<float>::create(80,
+																																																						   120, 0.2 * timeMul,
+																																																						   [=](float t){
+																																																							   handContainer->setRotation(t);
+																																																						   }, [=](float t){
+																																																							   handContainer->setRotation(t);
+																																																							   if(endLeft)
+																																																								   endLeft();
+																																																						   }));
+																																												}));
+																																	 }));
+																						  }));
+											   }));
 	}
 	{
 		
 		CCNode* handContainer = m_rightHandContainer;
-		addChild(KSGradualValue<float>::create(handContainer->getRotation(), handContainer->getRotation() - 120, 0.2 * timeMul,
-																					 [=](float t){
-																						 handContainer->setRotation(t);
-																					 }, [=](float t){
-																						 handContainer->setRotation(t);
-																						 addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																										handContainer->getRotation() + 40, 0.23 * timeMul,
-																																										[=](float t){
-																																											handContainer->setRotation(t);
-																																										}, [=](float t){
-																																											handContainer->setRotation(t);
-																																											addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																																														 handContainer->getRotation() - 40, 0.13 * timeMul,
-																																																														 [=](float t){
-																																																															 handContainer->setRotation(t);
-																																																														 }, [=](float t){
-																																																															 handContainer->setRotation(t);
-																																																															 addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																																																																			handContainer->getRotation() + 40, 0.23 * timeMul,
-																																																																																			[=](float t){
-																																																																																				handContainer->setRotation(t);
-																																																																																			}, [=](float t){
-																																																																																				handContainer->setRotation(t);
-																																																																																				addChild(KSGradualValue<float>::create(handContainer->getRotation(),
-																																																																																																							 handContainer->getRotation() - 40, 0.2 * timeMul,
-																																																																																																							 [=](float t){
-																																																																																																								 handContainer->setRotation(t);
-																																																																																																							 }, [=](float t){
-																																																																																																								 handContainer->setRotation(t);
-																																																																																																								 if(endRight)
-																																																																																																									 endRight();
-																																																																																																							 }));
-																																																																																			}));
-																																																														 }));
-																																										}));
-																					 }));
+		addChild(KSGradualValue<float>::create(0, -120, 0.2 * timeMul,
+											   [=](float t){
+												   handContainer->setRotation(t);
+											   }, [=](float t){
+												   handContainer->setRotation(t);
+												   addChild(KSGradualValue<float>::create(-120,
+																						  -80, 0.23 * timeMul,
+																						  [=](float t){
+																							  handContainer->setRotation(t);
+																						  }, [=](float t){
+																							  handContainer->setRotation(t);
+																							  addChild(KSGradualValue<float>::create(-80,
+																																	 -120, 0.13 * timeMul,
+																																	 [=](float t){
+																																		 handContainer->setRotation(t);
+																																	 }, [=](float t){
+																																		 handContainer->setRotation(t);
+																																		 addChild(KSGradualValue<float>::create(-120,
+																																												-80, 0.23 * timeMul,
+																																												[=](float t){
+																																													handContainer->setRotation(t);
+																																												}, [=](float t){
+																																													handContainer->setRotation(t);
+																																													addChild(KSGradualValue<float>::create(-80,
+																																																						   -120, 0.2 * timeMul,
+																																																						   [=](float t){
+																																																							   handContainer->setRotation(t);
+																																																						   }, [=](float t){
+																																																							   handContainer->setRotation(t);
+																																																							   if(endRight)
+																																																								   endRight();
+																																																						   }));
+																																												}));
+																																	 }));
+																						  }));
+											   }));
 		handContainer->setScaleX(-1);
 	}
 	setFormSetter(m_leftHandContainer);
@@ -499,8 +499,8 @@ void JsGababo::setupCongMessage()
 	m_front3 = front;
 	
 	StyledLabelTTF* message = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent7),
-																									 mySGD->getFont().c_str(),
-																									 12.f, 999, StyledAlignment::kCenterAlignment);
+													 mySGD->getFont().c_str(),
+													 12.f, 999, StyledAlignment::kCenterAlignment);
 	m_message = message;
 	message->setAnchorPoint(ccp(0.5f, 0.5f));
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
@@ -599,12 +599,12 @@ void JsGababo::onPressConfirm(CCObject* t)
 	if(m_currentJudge == "draw")
 	{
 		contextSwitching(m_front3, m_front1, rollBack, nullptr);
-//		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
-//		auto onSelection = [=]() // 바위 가위 보 셋중 하나 눌렀을 때~
-//		{
-//			contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
-//		};
-
+		//		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
+		//		auto onSelection = [=]() // 바위 가위 보 셋중 하나 눌렀을 때~
+		//		{
+		//			contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
+		//		};
+		
 	}
 	
 	else if(m_currentJudge == "win")
@@ -618,7 +618,7 @@ void JsGababo::onPressConfirm(CCObject* t)
 				lightPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 					light->removeFromParent();
 				});
-//				light->setPosition(ccp(240, 195));
+				//				light->setPosition(ccp(240, 195));
 				light->setPosition(m_stepSprite->getPosition());
 				m_back->addChild(light, 100);
 				addChild(KSTimer::create(2.2f, [=](){
@@ -744,11 +744,11 @@ void JsGababo::showHandsMotionWrapper()
 			}
 			
 			addChild(KSGradualValue<CCPoint>::create(m_currentRewardCursor->getPosition(), targetPosition,
-																							 0.5f, [=](CCPoint t){
-																								 m_currentRewardCursor->setPosition(t);
-																							 }, [=](CCPoint t){
-																								 m_currentRewardCursor->setPosition(t);
-																							 }));
+													 0.5f, [=](CCPoint t){
+														 m_currentRewardCursor->setPosition(t);
+													 }, [=](CCPoint t){
+														 m_currentRewardCursor->setPosition(t);
+													 }));
 		}
 		else // Lose
 		{
@@ -778,7 +778,7 @@ void JsGababo::showHandsMotionWrapper()
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("gababo_draw.png");
 					m_resultStamp = result_stamp;
-//					result_stamp->setRotation(-15);
+					//					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
 					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 190));
 					showEffect(result_stamp);
@@ -798,7 +798,7 @@ void JsGababo::showHandsMotionWrapper()
 				else
 				{
 					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent12)
-																		);
+											  );
 					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
 					
 				}
@@ -846,20 +846,20 @@ void JsGababo::showHandsMotionWrapper()
 void JsGababo::showResult()
 {
 	BonusGameReward gr1 = m_rewards[m_winCount];
-//	gr1.spriteName = "shop_ruby2.png";
-//	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
+	//	gr1.spriteName = "shop_ruby2.png";
+	//	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
 	auto tempEndFunction = m_endFunction;
 	auto winCount = m_winCount;
 	CurtainNodeForBonusGame* curtain = CurtainNodeForBonusGame::createForEnding((int)Curtain::kTouchPriority, gr1,
-																																							[=](){
-																																								removeFromParent();
-																																							},
-																																							[=](){
-																																								if(tempEndFunction)
-																																								{
-																																									tempEndFunction(winCount);
-																																								}
-																																							});
+																				[=](){
+																					removeFromParent();
+																				},
+																				[=](){
+																					if(tempEndFunction)
+																					{
+																						tempEndFunction(winCount);
+																					}
+																				});
 	getParent()->addChild(curtain, (int)Curtain::kCurtain);
 	
 }
@@ -872,9 +872,9 @@ void JsGababo::setupTutorial()
 	m_front4 = front;
 	
 	StyledLabelTTF* message = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent15),
-																									 mySGD->getFont().c_str(),
-																									 12.f, 999, StyledAlignment::kCenterAlignment);
-//	m_message = message;
+													 mySGD->getFont().c_str(),
+													 12.f, 999, StyledAlignment::kCenterAlignment);
+	//	m_message = message;
 	message->setAnchorPoint(ccp(0.5f, 0.5f));
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
 	front->addChild(message);
@@ -888,7 +888,7 @@ void JsGababo::setupTutorial()
 		if(m_tutorialStep == 1)
 		{
 			message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent17)
-															);
+									);
 		}
 		else
 		{
