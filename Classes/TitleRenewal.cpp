@@ -24,6 +24,7 @@
 #include "AudioEngine.h"
 #include "FormSetter.h"
 #include "AchieveData.h"
+#include "Terms.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -248,9 +249,13 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
+		is_menu_enable = false;
 		
-		
-		is_menu_enable = true;
+		Terms* t_terms = Terms::create(-999999, [=]()
+									   {
+										   this->is_menu_enable = true;
+									   });
+		addChild(t_terms, 10000);
 		
 		
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
@@ -2065,7 +2070,10 @@ void TitleRenewalScene::successDownloadAction()
 		SDS_SS(kSDF_gameInfo, character_download_list[ing_download_cnt-1].key, character_download_list[ing_download_cnt-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+		if(download_percent > 100.f)
+			download_percent = 100.f;
+		download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size())
@@ -2076,7 +2084,10 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+		if(download_percent > 100.f)
+			download_percent = 100.f;
+		download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size())
@@ -2084,7 +2095,10 @@ void TitleRenewalScene::successDownloadAction()
 		SDS_SS(kSDF_gameInfo, monster_download_list[ing_download_cnt-character_download_list.size()-1].key, monster_download_list[ing_download_cnt-character_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+		if(download_percent > 100.f)
+			download_percent = 100.f;
+		download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size())
@@ -2095,7 +2109,10 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+		if(download_percent > 100.f)
+			download_percent = 100.f;
+		download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size())
@@ -2104,7 +2121,10 @@ void TitleRenewalScene::successDownloadAction()
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+		if(download_percent > 100.f)
+			download_percent = 100.f;
+		download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size())
@@ -2139,7 +2159,10 @@ void TitleRenewalScene::successDownloadAction()
 		
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+		if(download_percent > 100.f)
+			download_percent = 100.f;
+		download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt < character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
@@ -2148,7 +2171,10 @@ void TitleRenewalScene::successDownloadAction()
 			   puzzle_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-card_download_list.size()-1].img, false);
 		ing_download_cnt++;
 		ing_download_per = 0.f;
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+		if(download_percent > 100.f)
+			download_percent = 100.f;
+		download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 		startFileDownload();
 	}
 	else if(ing_download_cnt == character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
@@ -2159,7 +2185,12 @@ void TitleRenewalScene::successDownloadAction()
 		ing_download_per = 0.f;
 		
 		if(ing_download_cnt <= int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))
-		download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+		{
+			float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+			if(download_percent > 100.f)
+				download_percent = 100.f;
+			download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
+		}
 		
 		
 		for(int j=0;j<puzzle_download_list.size() && j < puzzle_download_list_puzzle_number.size();j++)
@@ -2360,7 +2391,10 @@ void TitleRenewalScene::downloadingFileAction()
 	
 	ing_download_per = t_per;
 	
-	download_state->setString(CCSTR_CWF("%.0f%%", 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size()))->getCString());
+	float download_percent = 100.f*ing_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
+	if(download_percent > 100.f)
+		download_percent = 100.f;
+	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 }
 
 void TitleRenewalScene::failDownloadAction()
@@ -2376,7 +2410,7 @@ void TitleRenewalScene::failDownloadAction()
 								 menuAction(t_node);
 							 });
 	
-	addChild(replay_menu, 0, kTitleRenewal_MT_redown);
+	addChild(replay_menu, 99, kTitleRenewal_MT_redown);
 	
 	is_menu_enable = true;
 }

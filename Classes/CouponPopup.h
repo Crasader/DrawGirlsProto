@@ -23,11 +23,12 @@ class KSLabelTTF;
 class CouponPopup : public CCLayer, public CCEditBoxDelegate
 {
 public:
-	static CouponPopup* create(int t_touch_priority, function<void()> t_end_func);
+	static CouponPopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_success_func);
 	
 private:
 	int touch_priority;
 	function<void()> end_func;
+	function<void()> success_func;
 	
 	bool is_menu_enable;
 	
@@ -44,7 +45,7 @@ private:
 	CCScale9Sprite* back_case;
 	LoadingLayer* loading_layer;
 	
-	void myInit(int t_touch_priority, function<void()> t_end_func);
+	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_success_func);
 	
 	void couponAction(CCObject* sender, CCControlEvent t_event);
 	void resultUseCoupon(Json::Value result_data);
@@ -55,7 +56,7 @@ private:
     virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);
     virtual void editBoxReturn(CCEditBox* editBox);
 	
-	void createResultPopup(string title, string content);
+	void createResultPopup(string title, string content, bool is_success = false);
 };
 
 #endif /* defined(__DGproto__CouponPopup__) */

@@ -936,7 +936,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	ko->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
 	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_stop);
-	ko->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	ko->setObject(CCString::create("100% 도전하기"), kMyLocalKey_go100percent);
 	ko->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ko->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ko->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
@@ -1280,6 +1280,31 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
 	
 	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
+	
+	ko->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
+								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
+								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
+								   "<font color=#FFAA14 size=14>한 단계 위 등급 카드를 획득</font>"
+								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
+	ko->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
+								   "<font color=#FFAA14 size=12 newline=16>0.3%를 추가로 획득할 수 있습니다.</font>"
+								   "<font color=#FFFFFF size=12 newline=30>기회는 총 3번 주어집니다.</font>"
+								   "<font color=#FFAA14 size=14 newline=15>자 그럼 100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
+	
+	ko->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=12>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
+	ko->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>100%에 성공시</font><font color=#FFAA14 size=12 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=12>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12>현재 획득 영역       </font><font color=#FFFF00 size=30 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
+	ko->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>분홍색 영역에 맞게</font>"
+								   "<font size=12 color=#FFAA14>멈춰 버튼 터치</font><font size=12 color=#FFFFFF>하세요!</font>"), kMyLocalKey_onePercentGame4);
+	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_onePercentGame5);
+	ko->setObject(CCString::create("100% 실패"), kMyLocalKey_onePercentGame6);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12>최종 획득 영역     </font>"
+								   "<font color=#FFAA14 size=30>%.1f%%</font>"), kMyLocalKey_onePercentGame7);
+	ko->setObject(CCString::create("닫기"), kMyLocalKey_onePercentGame8);
+	ko->setObject(CCString::create("100% 달성!!"), kMyLocalKey_onePercentGame9);
+	ko->setObject(CCString::create("카드 받기"), kMyLocalKey_onePercentGame10);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1730,7 +1755,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	en->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
 	en->setObject(CCString::create("STOP"), kMyLocalKey_stop);
-	en->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	en->setObject(CCString::create("100% 도전하기"), kMyLocalKey_go100percent);
 	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	en->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	en->setObject(CCString::create("COMPLETE"), kMyLocalKey_endUpgrade);
@@ -2531,7 +2556,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	ja->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
 	ja->setObject(CCString::create("STOP"), kMyLocalKey_stop);
-	ja->setObject(CCString::create("100%에 도전해보세요!"), kMyLocalKey_go100percent);
+	ja->setObject(CCString::create("100% 도전하기"), kMyLocalKey_go100percent);
 	ja->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ja->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ja->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);

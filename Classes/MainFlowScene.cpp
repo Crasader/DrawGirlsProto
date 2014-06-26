@@ -1778,6 +1778,15 @@ void MainFlowScene::menuAction(CCObject* sender)
 			OptionPopup* t_popup = OptionPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
+			
+			t_popup->open_message_popup_func = [=]()
+			{
+				is_menu_enable = false;
+				SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+				addChild(t_pp, kMainFlowZorder_popup);
+				
+				postbox_count_case->setVisible(false);
+			};
 		}
 		else if(tag == kMainFlowMenuTag_tip)
 		{
