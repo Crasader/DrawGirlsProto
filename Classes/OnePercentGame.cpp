@@ -177,7 +177,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
 	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_go100percent), mySGD->getFont().c_str(), 13);
-	gacha_label->setColor(ccBLACK);
+//	gacha_label->setColor(ccBLACK);
 	gacha_label->setPosition(ccp(0,0));
 	t_label->addChild(gacha_label);
 	

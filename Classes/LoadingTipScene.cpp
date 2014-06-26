@@ -916,7 +916,7 @@ void LoadingTipScene::readyLoading()
 	progress_label->setPosition(ccp(240,38));
 	addChild(progress_label, kLoadingTipZorder_content);
 	
-	if(next_scene_name == "maingame" || next_scene_name == "playtutorial")
+	if((next_scene_name == "maingame" || next_scene_name == "playtutorial") && !is_mission_tip)
 	{
 		loading_progress_img->setPosition(ccp(240,120));
 		progress_label->setPosition(ccp(240,120));

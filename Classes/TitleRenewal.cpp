@@ -250,23 +250,36 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
-		is_menu_enable = false;
+		myHSP->getIsUsimKorean([=](Json::Value result_data)
+							   {
+								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
+								   if(result_data["isSuccess"].asBool())
+									{
+										this->is_menu_enable = false;
+										
+										Terms* t_terms = Terms::create(-999999, [=]()
+																	   {
+																		   this->is_menu_enable = true;
+																	   });
+										addChild(t_terms, 10000);
+									}
+								   else
+									{
+										is_menu_enable = true;
+									}
+							   });
 		
-		Terms* t_terms = Terms::create(-999999, [=]()
-									   {
-										   this->is_menu_enable = true;
-									   });
-		addChild(t_terms, 10000);
+		
 		
 		
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
+		state_label->stopAllActions();
 		state_label->setVisible(false);
 		
 		
 		nick_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));// CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
 		nick_back->setContentSize(CCSizeMake(270,150));
 		nick_back->setPosition(ccp(240,220));
-//nick_back->setScale(0)
 		addChild(nick_back,100);
 
 		CCScale9Sprite* flag_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
@@ -339,6 +352,9 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 void TitleRenewalScene::successLogin()
 {
 	state_label->setVisible(true);
+	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
+	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+	state_label->runAction(t_repeat);
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
 //		AudioEngine::sharedInstance()->preloadEffectScene("Title");
@@ -792,6 +808,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setEventString(result_data["eventString"].asString());
 		mySGD->setIsAlwaysSavePlaydata(result_data["isAlwaysSavePlaydata"].asInt());
 		mySGD->setPlayContinueFeeEndless(result_data["playContinueFeeEndless"].asInt());
+		
+		mySGD->setAllClearReward(result_data["allClearReward"].asString());
 	}
 	else
 	{

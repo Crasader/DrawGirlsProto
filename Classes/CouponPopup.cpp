@@ -198,6 +198,8 @@ void CouponPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+	
 	loading_layer = LoadingLayer::create(touch_priority-100);
 	addChild(loading_layer, 999);
 	
@@ -214,7 +216,7 @@ void CouponPopup::resultUseCoupon(Json::Value result_data)
 	CCLOG("resultUseCoupon : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponSuccess), myLoc->getLocalForKey(kMyLocalKey_couponGiftbox));
+		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponSuccess), myLoc->getLocalForKey(kMyLocalKey_couponGiftbox), true);
 	}
 	else if(result_data["result"]["code"].asInt() == GDALREADY)
 	{
@@ -330,6 +332,8 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 		
 		t_popup->is_menu_enable = false;
 		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+		
 		CommonAnimation::closePopup(this, t_container, gray, [=](){
 			
 		}, [=](){
@@ -343,9 +347,8 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 				
 				input_text3->setEnabled(false);
 				input_text3->removeFromParent();
-				AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 				
-				CommonAnimation::closePopup(this, m_container, gray, [=](){
+				CommonAnimation::closePopup(this, m_container, this->gray, [=](){
 					
 				}, [=](){
 					end_func();
@@ -363,6 +366,8 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 				
 				input_text3->setVisible(true);
 				input_text3->setEnabled(true);
+				
+				this->is_menu_enable = true;
 			}
 			
 			t_popup->removeFromParent();

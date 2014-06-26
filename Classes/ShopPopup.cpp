@@ -672,7 +672,7 @@ bool ShopPopup::init()
 	
 	character_menu = CommonButton::create("무기상점", 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	character_menu->setTitleColor(ccWHITE);
-	character_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
+	character_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
 	character_menu->setTitleColorForDisable(ccBLACK);
 	character_menu->setPosition(getContentPosition(kSP_MT_character));
 	character_menu->setFunction([=](CCObject* sender)
@@ -686,7 +686,7 @@ bool ShopPopup::init()
 	
 	card_menu = CommonButton::create("뷰티스톤상점", 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	card_menu->setTitleColor(ccWHITE);
-	card_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
+	card_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
 	card_menu->setTitleColorForDisable(ccBLACK);
 	card_menu->setPosition(getContentPosition(kSP_MT_card));
 	card_menu->setFunction([=](CCObject* sender)
@@ -700,7 +700,7 @@ bool ShopPopup::init()
 	
 	ruby_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	ruby_menu->setTitleColor(ccWHITE);
-	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
+	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
 	ruby_menu->setTitleColorForDisable(ccBLACK);
 	ruby_menu->setPosition(getContentPosition(kSP_MT_ruby));
 	ruby_menu->setFunction([=](CCObject* sender)
@@ -713,7 +713,7 @@ bool ShopPopup::init()
 	
 	gold_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	gold_menu->setTitleColor(ccWHITE);
-	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
+	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
 	gold_menu->setTitleColorForDisable(ccBLACK);
 	gold_menu->setPosition(getContentPosition(kSP_MT_gold));
 	gold_menu->setFunction([=](CCObject* sender)
@@ -726,7 +726,7 @@ bool ShopPopup::init()
 	
 	heart_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
 	heart_menu->setTitleColor(ccWHITE);
-	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellowDown);
+	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
 	heart_menu->setTitleColorForDisable(ccBLACK);
 	heart_menu->setPosition(getContentPosition(kSP_MT_heart));
 	heart_menu->setFunction([=](CCObject* sender)
@@ -924,11 +924,11 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	else if(t_tag == kSP_MT_card)
 		return_value = ccp(141.5f,256);
 	else if(t_tag == kSP_MT_ruby)
-		return_value = ccp(225,256);//ccp(59,256);//ccp(224,256);
+		return_value = ccp(234,256);//ccp(59,256);//ccp(224,256);
 	else if(t_tag == kSP_MT_gold)
-		return_value = ccp(305,256);//ccp(141.5f,256);//ccp(306,256);
+		return_value = ccp(314,256);//ccp(141.5f,256);//ccp(306,256);
 	else if(t_tag == kSP_MT_heart)
-		return_value = ccp(385,256);//ccp(224,256);//ccp(388.5f,256);
+		return_value = ccp(394,256);//ccp(224,256);//ccp(388.5f,256);
 	else if(t_tag == kSP_MT_content1)
 		return_value = ccp(100,177);
 	else if(t_tag == kSP_MT_content2)

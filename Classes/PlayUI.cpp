@@ -3389,6 +3389,14 @@ void PlayUI::myInit ()
 	using_item_sprites.clear();
 	int using_item_cnt = 0;
 	
+	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
+	{
+		if(mySGD->isUsingItem((ITEM_CODE)i))
+		{
+			using_item_cnt++;
+		}
+	}
+	
 	vector<GraySprite*> using_item_vectors;
 	using_item_vectors.clear();
 	
@@ -3408,8 +3416,6 @@ void PlayUI::myInit ()
 	{
 		if(mySGD->isUsingItem((ITEM_CODE)i))
 		{
-			using_item_cnt++;
-			
 			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", i)->getCString());
 			item_img->setScale(item_scale);
 			item_img->setOpacity(150);

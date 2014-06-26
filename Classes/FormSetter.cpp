@@ -25,6 +25,8 @@ void FormSetter::start(string filename, string startName){
 	//		front->addChild(this,INT_MAX-10);
 	front2->addChild(this,INT_MAX-10);
 	this->setTouchEnabled(true);
+	
+	m_objList.clear();
 	//this->schedule(schedule_selector(FormSetter::sch));
 	
 	
@@ -49,7 +51,7 @@ bool FormSetter::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 			m_guideLine->setVisible(true);
 			if(m_guideImage)m_guideImage->setVisible(true);
 			
-			m_objList.clear();
+			//m_objList.clear();
 			findObject(front);
 			if(m_objList.size()>0){
 				for(int i=0;i<m_objList.size();i++){

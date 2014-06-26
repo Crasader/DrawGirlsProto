@@ -1191,13 +1191,14 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CommonButton* rewardInfo = CommonButton::create("보상내용", 12.f, CCSizeMake(60, 35),
+		CommonButton* rewardInfo = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessRewardInfo), 12.f, CCSizeMake(60, 35),
 																										CommonButtonYellow, touch_priority-1);
 		rewardInfo->getTitleLabel()->setColor(ccc3(37, 15, 0));
 		rewardInfo->setPosition(ccp(218.5, 211.5));
 		left_back->addChild(rewardInfo);
 		setFormSetter(rewardInfo);
 		rewardInfo->setFunction([=](CCObject*){
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			ASPopupView* rewardInfoPopup = ASPopupView::createDimmed(touch_priority - 2);
 			CCNode* container = CCNode::create();
 			
@@ -1225,10 +1226,10 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			
 			CommonButton* closeButton = CommonButton::createCloseButton(touch_priority - 2);
 			closeButton->setFunction([=](CCObject*){
+				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 				CommonAnimation::closePopup(this, container, rewardInfoPopup->getDimmedSprite(), [=](){
 					
 				}, [=](){
-					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 					rewardInfoPopup->removeFromParent();
 				});
 			});
@@ -1236,7 +1237,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			back->addChild(closeButton);
 			addChild(rewardInfoPopup);
 			
-			KSLabelTTF* rewardLbl = KSLabelTTF::create("보상내용", mySGD->getFont().c_str(), 15.f);
+			KSLabelTTF* rewardLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessRewardInfo), mySGD->getFont().c_str(), 15.f);
 			rewardLbl->setColor(ccc3(255, 170, 20));
 			rewardLbl->setPosition(ccp(46.5, 216.0)); 			// dt (46.5, 219.0)
 			back->addChild(rewardLbl);

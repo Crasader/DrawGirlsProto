@@ -162,6 +162,8 @@ private:
 	CCSprite* loading_progress_img;
 	void resultGetRank(Json::Value result_data);
 	
+	void tryGababoReward(CCNode* t_loading, function<void()> success_func);
+	
 	CCScale9Sprite* right_body;
 	
 	PuzzleRightMode right_mode;

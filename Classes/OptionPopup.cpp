@@ -940,7 +940,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 														 CCBReader* reader = new CCBReader(nodeLoader);
 														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-														 loading_progress_img->setPosition(ccp(0,-95));
+														 loading_progress_img->setPosition(ccp(0,-53));
 														 t_container->addChild(loading_progress_img);
 														 reader->release();
 														 

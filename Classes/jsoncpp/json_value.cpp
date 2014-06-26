@@ -1117,6 +1117,14 @@ Value::resize( ArrayIndex newSize )
 Value &
 Value::operator[]( ArrayIndex index )
 {
+	
+	if(type_ == stringValue){
+		Json::Reader r;
+		Json::Value other;
+		r.parse(value_.string_, other);
+		swap( other );
+	}
+	
    JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
    if ( type_ == nullValue )
       *this = Value( arrayValue );
@@ -1228,6 +1236,8 @@ Value::isValidIndex( ArrayIndex index ) const
 const Value &
 Value::operator[]( const char *key ) const
 {
+
+	
    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
    if ( type_ == nullValue )
       return null;

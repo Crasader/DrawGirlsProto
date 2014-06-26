@@ -473,6 +473,13 @@ public:
 	void start(string filename, string startName);
 	
 	void addObjectInObjList(CCNode* obj){
+		bool addnew=true;
+		for(int i=0;i<m_objList.size();i++){
+			if(obj->getStringData()==m_objList[i].obj->getStringData()){
+				addnew = false;
+			}
+		}
+		
 		FormSetterObj newobj;
 		newobj.obj = obj;
 		newobj.isEdited = false;
@@ -492,7 +499,7 @@ public:
 			newobj.originalData["fontsize"]=checkobj->getFontSize();
 		}
 		
-		m_objList.push_back(newobj);
+		if(addnew)m_objList.push_back(newobj);
 	}
 	void findObject(CCNode* obj){
 		if(!obj)return;
