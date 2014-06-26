@@ -845,9 +845,9 @@ void JsGababo::showHandsMotionWrapper()
 }
 void JsGababo::showResult()
 {
-	BonusGameReward gr1;
-	gr1.spriteName = "shop_ruby2.png";
-	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
+	BonusGameReward gr1 = m_rewards[m_winCount];
+//	gr1.spriteName = "shop_ruby2.png";
+//	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
 	auto tempEndFunction = m_endFunction;
 	CurtainNodeForBonusGame* curtain = CurtainNodeForBonusGame::createForEnding((int)Curtain::kTouchPriority, gr1,
 																																							[=](){

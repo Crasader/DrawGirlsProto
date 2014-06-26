@@ -807,6 +807,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setEventString(result_data["eventString"].asString());
 		mySGD->setIsAlwaysSavePlaydata(result_data["isAlwaysSavePlaydata"].asInt());
 		mySGD->setPlayContinueFeeEndless(result_data["playContinueFeeEndless"].asInt());
+		
+		mySGD->setAllClearReward(result_data["allClearReward"].asString());
 	}
 	else
 	{

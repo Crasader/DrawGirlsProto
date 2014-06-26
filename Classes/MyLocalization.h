@@ -794,7 +794,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_gababoContent14,
 	kMyLocalKey_gababoContent15,
 	kMyLocalKey_gababoContent16,
-	kMyLocalKey_gababoContent17
+	kMyLocalKey_gababoContent17,
+	kMyLocalKey_gababoReward
 	
 }MyLocalKey;
 

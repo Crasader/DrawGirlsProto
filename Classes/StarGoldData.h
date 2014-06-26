@@ -655,6 +655,9 @@ public:
 	void setFirstPurchaseReviewSecond(long long t_i);
 	long long getFirstPurchaseReviewSecond();
 	
+	string getAllClearReward();
+	void setAllClearReward(string t_str);
+	
 //	void setUserdataPGuide(string t_s);
 //	string getUserdataPGuide();
 	void setUserdataIsVIP(int t_i);
@@ -1072,6 +1075,8 @@ private:
 	KSProtectVar<int> stupid_npu_help_is_on;
 	KSProtectVar<int> play_count_high_is_on;
 	KSProtectVar<int> levelup_guide_is_on;
+	
+	KSProtectStr all_clear_reward;
 	
 	vector<ChangeUserdataValue> changed_userdata_list;
 	jsonSelType change_userdata_callback;

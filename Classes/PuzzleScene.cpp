@@ -774,19 +774,21 @@ void PuzzleScene::endGetStar()
 		CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
 			//		if(m_gameCode == kMiniGameCode_gababo)
 			{
+				Json::Value reward_info = mySGD->getAllClearReward();
+				
 				BonusGameReward gr1;
 				gr1.spriteName = "morphing_heart2.png";
-				gr1.desc = "1개";
+				gr1.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
 				
 				BonusGameReward gr2;
 				gr2.spriteName = "morphing_heart2.png";
-				gr2.desc = "2개";
+				gr2.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
 				BonusGameReward gr3;
 				gr3.spriteName = "morphing_heart2.png";
-				gr3.desc = "3개";
+				gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 				BonusGameReward gr4;
 				gr4.spriteName = "morphing_heart2.png";
-				gr4.desc = "4개";
+				gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[4]["reward"][0]["count"].asInt());
 //				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //											 {
 //												 if(clear_is_first_puzzle_success)
@@ -816,29 +818,37 @@ void PuzzleScene::endGetStar()
 //				addChild(gbb, (int)Curtain::kBonusGame);
 				JsGababo* gbb = JsGababo::create(-500, {gr1, gr2, gr3, gr4}, [=](int t_i)
 												 {
-													 if(clear_is_first_puzzle_success)
+													 mySGD->addChangeGoods(reward_info[t_i]["exchangeID"].asString());
+													 
+													 LoadingLayer* t_loading = LoadingLayer::create(-600);
+													 addChild(t_loading, 1000);
+													 
+													 tryGababoReward(t_loading, [=]()
 													 {
-														 showSuccessPuzzleEffect();
-													 }
-													 else
-													 {
-														 if(clear_is_first_perfect)
+														 if(clear_is_first_puzzle_success)
 														 {
-															 showPerfectPuzzleEffect();
+															 showSuccessPuzzleEffect();
 														 }
 														 else
 														 {
-															 if(clear_is_stage_unlock)
+															 if(clear_is_first_perfect)
 															 {
-																 showUnlockEffect();
+																 showPerfectPuzzleEffect();
 															 }
 															 else
 															 {
-																 addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
-																 is_menu_enable = true;
+																 if(clear_is_stage_unlock)
+																 {
+																	 showUnlockEffect();
+																 }
+																 else
+																 {
+																	 addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
+																	 is_menu_enable = true;
+																 }
 															 }
 														 }
-													 }
+													 });
 												 });
 				addChild(gbb, (int)Curtain::kBonusGame);
 			}
@@ -1586,19 +1596,21 @@ void PuzzleScene::menuAction(CCObject* sender)
 			CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
 				//		if(m_gameCode == kMiniGameCode_gababo)
 				{
+					Json::Value reward_info = mySGD->getAllClearReward();
+					
 					BonusGameReward gr1;
 					gr1.spriteName = "morphing_heart2.png";
-					gr1.desc = "1개";
+					gr1.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
 					
 					BonusGameReward gr2;
 					gr2.spriteName = "morphing_heart2.png";
-					gr2.desc = "2개";
+					gr2.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
 					BonusGameReward gr3;
 					gr3.spriteName = "morphing_heart2.png";
-					gr3.desc = "3개";
+					gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 					BonusGameReward gr4;
 					gr4.spriteName = "morphing_heart2.png";
-					gr4.desc = "4개";
+					gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[4]["reward"][0]["count"].asInt());
 //					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //																			 {
 //																				 is_menu_enable = true;
@@ -1606,7 +1618,12 @@ void PuzzleScene::menuAction(CCObject* sender)
 //					addChild(gbb, (int)Curtain::kBonusGame);
 					JsGababo* gbb = JsGababo::create(-500, {gr1, gr2, gr3, gr4}, [=](int t_i)
 																			 {
-																				 is_menu_enable = true;
+																				 mySGD->addChangeGoods(reward_info[t_i]["exchangeID"].asString());
+																				 
+																				 LoadingLayer* t_loading = LoadingLayer::create(-600);
+																				 addChild(t_loading, 1000);
+																				 
+																				 tryGababoReward(t_loading, [=](){is_menu_enable = true;});
 																			 });
 					addChild(gbb, (int)Curtain::kBonusGame);
 				}
@@ -1661,6 +1678,22 @@ void PuzzleScene::menuAction(CCObject* sender)
 			is_menu_enable = true;
 		}
 	}
+}
+
+void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_func)
+{
+	mySGD->changeGoods([=](Json::Value result_data)
+					   {
+						   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+							{
+								t_loading->removeFromParent();
+								success_func();
+							}
+						   else
+							{
+								addChild(KSTimer::create(0.1f, [=](){tryGababoReward(t_loading, success_func);}));
+							}
+					   });
 }
 
 void PuzzleScene::showShopPopup(ShopCode t_code)
