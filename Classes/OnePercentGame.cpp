@@ -76,7 +76,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	addChild(m_container, kOnePercentGame_Z_back);
 	
 	back_img = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_img->setContentSize(CCSizeMake(330, 270));
+	back_img->setContentSize(CCSizeMake(309.0, 270.0));
 	back_img->setPosition(ccp(0,0));
 	m_container->addChild(back_img, kOnePercentGame_Z_back);
 	
@@ -88,8 +88,8 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	setFormSetter(titleLbl);
 	
 	CCScale9Sprite* inner_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	inner_back->setContentSize(CCSizeMake(295, 180));
-	inner_back->setPosition(ccp(0,10));
+	inner_back->setContentSize(CCSizeMake(295.0, 192.0)); 			// dt (0.0, 12.0)
+	inner_back->setPosition(ccp(0.0, 6.0));
 	m_container->addChild(inner_back, kOnePercentGame_Z_back);
 	
 	setFormSetter(back_img);
@@ -160,7 +160,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	CCSprite* progress_back = CCSprite::create("one_percent_gacha_graph_back.png");
 	progress_back->setPosition(ccp(0,10));
 	m_container->addChild(progress_back, kOnePercentGame_Z_content);
-	progress_back->setPosition(ccp(0, -60));
+	progress_back->setPosition(ccp(0, -69));
 	CCSprite* validArea = CCSprite::create();
 	m_validArea = validArea;
 	validArea->setTextureRect(CCRectMake(0, 0, m_validSize, 15));
@@ -211,6 +211,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	
 	CCScale9Sprite* gacha_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	CCNode* gachaNode = CCNode::create();
+	
 	gacha_button = CCControlButton::create(t_label, gacha_back);
 	gachaNode->setScale(0.7f);
 	gachaNode->addChild(gacha_button); // 스케일을 위해 하나 더 만듬.

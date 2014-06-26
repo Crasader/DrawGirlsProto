@@ -66,13 +66,13 @@ bool OnePercentTutorial::init(float originalPercent,
 	addChild(m_container, kOnePercentTutorial_Z_back);
 	
 	back_img = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_img->setContentSize(CCSizeMake(330, 270));
+	back_img->setContentSize(CCSizeMake(309, 270));
 	back_img->setPosition(ccp(0,0));
 	m_container->addChild(back_img, kOnePercentTutorial_Z_back);
 	
 	CCScale9Sprite* inner_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	inner_back->setContentSize(CCSizeMake(295, 180));
-	inner_back->setPosition(ccp(0,10));
+	inner_back->setContentSize(CCSizeMake(295.0, 192.0)); 			// dt (0.0, 12.0)
+	inner_back->setPosition(ccp(0.0, 6.0));
 	m_container->addChild(inner_back, kOnePercentTutorial_Z_back);
 	
 	setFormSetter(back_img);
@@ -83,9 +83,10 @@ bool OnePercentTutorial::init(float originalPercent,
 	m_container->addChild(titleLbl, kOnePercentGame_Z_content);
 	setFormSetter(titleLbl);
 	CCScale9Sprite* puppleInner = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	
 	puppleInner->setContentSize(CCSizeMake(280.0, 114.0)); 			// dt (-1.0, -26.0)
+	puppleInner->setPosition(ccp(0.0, 31.0));
 
-	puppleInner->setPosition(ccp(0.0, 34.0)); 			// dt (0.0, 34.0)
 
 	m_container->addChild(puppleInner, kOnePercentTutorial_Z_back);
 	
@@ -95,18 +96,21 @@ bool OnePercentTutorial::init(float originalPercent,
 																			 "<font color=#FFAA14 size=14 newline=15>4등급 카드를 획득 할 수 있어요!</font>",
 																			 mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 	m_container->addChild(m_gachaDesc, kOnePercentTutorial_Z_content);
-	m_gachaDesc->setPosition(ccp(0.0, 71.5)); 			// dt (0.0, 71.5)
+	m_gachaDesc->setPosition(ccp(0.0, 67.5));
+
 	
 	StyledLabelTTF* desc2 = StyledLabelTTF::create(
 			CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
 			mySGD->getFont().c_str(), 12.f, 0, StyledAlignment::kCenterAlignment);
 	m_container->addChild(desc2, kOnePercentTutorial_Z_content);
-	desc2->setPosition(ccp(0.0,-36.5)); 			// dt (0.0,-36.5)
+	desc2->setPosition(ccp(0.0, -41.0));
+
 
 	CCSprite* progress_back = CCSprite::create("one_percent_gacha_graph_back.png");
-	progress_back->setPosition(ccp(0,10));
+//	progress_back->setPosition(ccp(0,10));
+
 	m_container->addChild(progress_back, kOnePercentTutorial_Z_content);
-	progress_back->setPosition(ccp(0, -60));
+	progress_back->setPosition(ccp(0, -69));
 	CCSprite* validArea = CCSprite::create();
 //	m_validArea = validArea;
 	validArea->setTextureRect(CCRectMake(0, 0, 50, 15));
@@ -133,7 +137,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	gacha_button = CCControlButton::create(t_label, gacha_back);
 //	gachaNode->setScale(0.7f);
 	gachaNode->addChild(gacha_button); // 스케일을 위해 하나 더 만듬.
-	gachaNode->setPosition(ccp(.0, 42.0)); 			// dt (1.0, 42.0)
+	gachaNode->setPosition(ccp(0.0, 38.0)); 			// dt (0.0, -4.0
 	gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::gachaAction), CCControlEventTouchUpInside);
 	gacha_button->setPreferredSize(CCSizeMake(118, 45));
 	gacha_button->setPosition(ccp(0, -145));
@@ -149,7 +153,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	
 	
 	cancel_menu = CommonButton::createCloseButton();
-	
+	setFormSetter(cancel_menu);
 	cancel_menu->setTouchPriority(-180);
 	cancel_menu->setFunction([=](CCObject* sender) {
 		if(m_cancelGacha) {
