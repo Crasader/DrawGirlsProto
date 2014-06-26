@@ -26,6 +26,8 @@ import com.hangame.hsp.HSPMappingType;
 import com.hangame.hsp.HSPMessage;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
+import com.hangame.hsp.HSPUtil;
+import com.hangame.hsp.HSPUtil.HSPAlertViewWithToastTermsCB;
 import com.hangame.hsp.cgp.HSPCGP;
 import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.payment.HSPPayment;
@@ -174,8 +176,8 @@ public class hspConnector{
 
 							
 							
-							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
-							//    Boolean isOverWriteMapping = false;     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
+//							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
+                            Boolean isOverWriteMapping = false;     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
 
 							HSPMappingType mt2 = HSPMappingType.values()[mt];
 							HSPCore.getInstance().requestMappingToAccount(mt2, isOverWriteMapping, new HSPCore.HSPRequestMappingToAccountCB() {
@@ -472,7 +474,30 @@ public class hspConnector{
 		String r = Locale.getDefault().getCountry();
 		return r;
 	}
-	
+	public static void getIsUsimKorean(final int _key){
+		HSPUtil.alertViewWithToastTerms((Activity)hspConnector.sContext, new HSPAlertViewWithToastTermsCB() {
+	           
+            @Override
+            public void onCheckResult(Boolean agreeTrueFalse) {
+                // TODO Auto-generated method stub
+//                Log.d("Result : " + agreeTrueFalse);
+                JSONObject r= new JSONObject();
+//                JSONObject error = new JSONObject();
+                try {
+                	r.put("korean", agreeTrueFalse);
+                	r.put("isSuccess", 1);
+//                	error.put("localizedDescription", result.getDetail());
+//                	r.put("error", error);
+                } catch (JSONException e) {
+                } 
+                mGLView.queueEvent(new KRunnable(_key,r.toString()) {
+                	public void run() {
+                		hspConnector.SendResult(this.delekey,this.totalSource);
+                	}
+                });
+            }
+        });
+	}
 	public static void logout(final int _key){
 		hspConnector.handler.post(
 				new Runnable(){
