@@ -75,6 +75,8 @@ bool OnePercentTutorial::init(float originalPercent,
 	inner_back->setPosition(ccp(0,10));
 	m_container->addChild(inner_back, kOnePercentTutorial_Z_back);
 	
+	setFormSetter(back_img);
+	setFormSetter(inner_back);
 	KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 영역 뽑기", mySGD->getFont().c_str(), 15.f);
 	titleLbl->setColor(ccc3(255, 170, 20));
 	titleLbl->setPosition(ccp(.0, 112.5)); 			// dt (6.0, 112.5)
@@ -114,6 +116,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	
 	
 	m_cursor = CCSprite::create("one_percent_gacha_02.png");
+	m_cursor->setVisible(false);
 	m_cursor->setPosition(ccp(0, -60));
 	m_container->addChild(m_cursor, kOnePercentTutorial_Z_content);
 	
@@ -137,6 +140,12 @@ bool OnePercentTutorial::init(float originalPercent,
 	m_container->addChild(gachaNode, kOnePercentTutorial_Z_content);
 	gacha_button->setTouchPriority(-180);
 	setFormSetter(gachaNode);
+	setFormSetter(puppleInner);
+	setFormSetter(m_container);
+	setFormSetter(m_gachaDesc);
+	setFormSetter(desc2);
+	setFormSetter(progress_back);
+	setFormSetter(gacha_label);
 	
 	
 	cancel_menu = CommonButton::createCloseButton();
