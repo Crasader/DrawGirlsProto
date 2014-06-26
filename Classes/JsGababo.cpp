@@ -62,10 +62,22 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	m_endFunction = endFunction;
 	m_rewards = rewards;
 	
-	CCSprite* bg = CCSprite::create("gababo_bg.png");
-	bg->setPosition(ccp(240, 160));
+	CCSpriteBatchNode* back_batch = CCSpriteBatchNode::create("ingame_side_pattern.png");
+	back_batch->setPosition(ccp(240,160));
+	addChild(back_batch);
 	
-	addChild(bg);
+	CCPoint base_position = ccp(-284,-180);
+	
+	for(int i=0;i*26 < 360;i++)
+	{
+		for(int j=0;j*48 < 568;j++)
+		{
+			CCSprite* t_back = CCSprite::createWithTexture(back_batch->getTexture());
+			t_back->setAnchorPoint(ccp(0,0));
+			t_back->setPosition(base_position + ccp(j*48, i*26));
+			back_batch->addChild(t_back);
+		}
+	}
 	
 	auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	back->setContentSize(CCSizeMake(357, 308));
@@ -78,8 +90,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	front->setContentSize(CCSizeMake(330 + 14, 100 - 19.5));
 	back->addChild(front);
 	m_front1 = front;
-	auto tuto1 = StyledLabelTTF::create("<font color=#FFFFFF size=12 newline=14>가위 바위 보 중</font>"
-																			"<font color=#FFAA14 size=12>하나를 선택 해 주세요.</font>",
+	auto tuto1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent1),
 																			mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	tuto1->setPosition(ccp(57.0, 54.5)); 			// dt (52.0, 25.5)
 	front->addChild(tuto1);
@@ -189,10 +200,7 @@ void JsGababo::setupReward()
 	rewardTitleBack->setPosition(ccp(28.0 - 3.5, 40.5)); 			// dt (4.0, -10.0)
 	
 	m_front2->addChild(rewardTitleBack);
-	auto rewardTitleLbl = StyledLabelTTF::create("<font size=12 newline=13>연</font>"
-																							 "<font size=12 newline=13>승</font>"
-																							 "<font size=12 newline=13>보</font>"
-																							 "<font size=12 newline=13>상</font>",
+	auto rewardTitleLbl = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent2),
 																							 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	rewardTitleLbl->setAnchorPoint(ccp(0.5f, 0.5f));
 	rewardTitleLbl->setPosition(ccpFromSize(rewardTitleBack->getContentSize()) / 2.f + ccp(0, 0));
@@ -221,17 +229,17 @@ void JsGababo::setupReward()
 		front2->addChild(_1winTagLbl, 1);
 		
 		auto _1winReward = CCSprite::create(m_rewards[rewardIndex].spriteName.c_str());
-		_1winReward->setPosition(ccpFromSize(_1winBox->getContentSize()) / 2.f + ccp(0, -13.0));
+		_1winReward->setPosition(ccpFromSize(_1winBox->getContentSize()) / 2.f + ccp(0, -4.0));
 		_1winBox->addChild(_1winReward);
 		auto _1winRewardLbl = KSLabelTTF::create(m_rewards[rewardIndex].desc.c_str(), mySGD->getFont().c_str(), 11.f);
 		_1winRewardLbl->setPosition(ccpFromSize(_1winReward->getContentSize()) / 2.f + ccp(0, -6.0));
 		_1winReward->addChild(_1winRewardLbl);
 		return make_pair(_1winBox, _1winTagLbl);
 	};
-	auto _0 = addReward("보상", 0);
-	auto _1 = addReward("1승", 1);
-	auto _2 = addReward("3승", 2);
-	auto _3 = addReward("4승", 3);
+	auto _0 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent3), 0);
+	auto _1 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent4), 1);
+	auto _2 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent5), 2);
+	auto _3 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent6), 3);
 	CCNode* _0winBox = _0.first;
 	CCNode* _1winBox = _1.first;
 	CCNode* _2winBox = _2.first;
@@ -490,8 +498,7 @@ void JsGababo::setupCongMessage()
 	m_back->addChild(front);
 	m_front3 = front;
 	
-	StyledLabelTTF* message = StyledLabelTTF::create("<font color=#FFFFFF size=14 newline=14>와우! 이겼어요!</font>"
-																									 "<font color=#FFAA14 size=14>더 좋은 보상을 향해 한번 더!</font>",
+	StyledLabelTTF* message = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent7),
 																									 mySGD->getFont().c_str(),
 																									 12.f, 999, StyledAlignment::kCenterAlignment);
 	m_message = message;
@@ -499,7 +506,7 @@ void JsGababo::setupCongMessage()
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
 	front->addChild(message);
 	
-	CommonButton* button = CommonButton::create("확 인", 12.f, CCSizeMake(60, 36), CommonButtonYellow, 0);
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent8), 12.f, CCSizeMake(69, 44), CommonButtonYellow, 0);
 	button->setTouchPriority(m_touchPriority - 1);
 	button->setFunction(bind(&JsGababo::onPressConfirm, this, std::placeholders::_1));
 	button->getTitleLabel()->setColor(ccc3(37, 15, 0));
@@ -516,10 +523,10 @@ void JsGababo::setupHands()
 	CCSprite* me = CCSprite::create("one_percent_gacha_me.png");
 	m_back->addChild(me);
 	me->setPosition(ccp(53, 250));
-	KSLabelTTF* meLbl = KSLabelTTF::create("나", mySGD->getFont().c_str(), 14.f);
+	KSLabelTTF* meLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent9), mySGD->getFont().c_str(), 14.f);
 	meLbl->setColor(ccc3(255, 170, 20));
 	me->addChild(meLbl);
-	meLbl->setPosition(ccpFromSize(me->getContentSize()) / 2.f + ccp(0, 10));
+	meLbl->setPosition(ccpFromSize(me->getContentSize()) / 2.f + ccp(0, 3));
 	
 	setFormSetter(me);
 	float timeMul = 2.f;
@@ -766,15 +773,14 @@ void JsGababo::showHandsMotionWrapper()
 			
 			if(m_mySelection == computer) // Draw
 			{
-				m_message->setStringByTag("<font color=#FFFFFF size=14 newline=14>이런, 무승부네요!</font>"
-																	"<font color=#FFAA14 size=14>한번 더!</font>");
-				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 0));
+				m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent10));
+				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 10));
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("gababo_draw.png");
 					m_resultStamp = result_stamp;
-					result_stamp->setRotation(-15);
+//					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
-					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 160));
+					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 190));
 					showEffect(result_stamp);
 				});
 				m_currentJudge = "draw";
@@ -786,18 +792,14 @@ void JsGababo::showHandsMotionWrapper()
 				
 				if(m_winCount != 3)
 				{
-					m_message->setStringByTag("<font color=#FFFFFF size=14 newline=14>와우! 이겼어요!</font>"
-																		"<font color=#FFAA14 size=14>더 좋은 보상을 향해 한번 더!</font>");
-					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 0));
+					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent11));
+					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
 				}
 				else
 				{
-					m_message->setStringByTag("<font color=#FFFFFF size=14 newline=14>세상에, 4판모두 이긴 사람은 당신이 처음이에요.</font>"
-																		"<font color=#FFAA14 size=14 newline=14>최고의 보상을 드릴게요!</font>"
-																		"<font color=#FFAA14 size=14 newline=14>보너스 게임은 퍼펙트 클리어시마다 할 수 있어요!</font>"
-																		"<font color=#FFAA14 size=14 newline=14>그럼 다음에 또 만나요!</font>"
+					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent12)
 																		);
-					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 0));
+					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
 					
 				}
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
@@ -814,7 +816,7 @@ void JsGababo::showHandsMotionWrapper()
 					
 					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
-					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 160));
+					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 190));
 					
 					showEffect(result_stamp);
 				});
@@ -824,15 +826,14 @@ void JsGababo::showHandsMotionWrapper()
 			else // Lose
 			{
 				CCLOG("lose~");
-				m_message->setStringByTag("<font color=#FFFFFF size=14 newline=14>이런이런... 지고 말았네요. 너무 상심마세요!</font>"
-																	"<font color=#FFAA14 size=14>보너스게임은 퍼펙트 클리어시마다 할 수 있어요!</font>");
-				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 0));
+				m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent13));
+				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("endless_loser.png");
 					m_resultStamp = result_stamp;
 					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
-					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 160));
+					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 190));
 					showEffect(result_stamp);
 				});
 				m_currentJudge = "lose";
@@ -846,7 +847,7 @@ void JsGababo::showResult()
 {
 	BonusGameReward gr1;
 	gr1.spriteName = "shop_ruby2.png";
-	gr1.desc = "루우비~!";
+	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
 	auto tempEndFunction = m_endFunction;
 	CurtainNodeForBonusGame* curtain = CurtainNodeForBonusGame::createForEnding((int)Curtain::kTouchPriority, gr1,
 																																							[=](){
@@ -869,9 +870,7 @@ void JsGababo::setupTutorial()
 	m_back->addChild(front);
 	m_front4 = front;
 	
-	StyledLabelTTF* message = StyledLabelTTF::create("<font color=#FFFFFF size=14 newline=14>보너스 게임에 오신 것을 환영합니다!</font>"
-																									 "<font color=#FFFFFF size=14 newline=14>벌써 퍼즐을 퍼펙트 클리어 하시다니 정말 대단해요!</font>"
-																									 "<font color=#FFAA14 size=14>게임 설명은 최초 1회만 해드리니 잘 봐주세요!</font>",
+	StyledLabelTTF* message = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent15),
 																									 mySGD->getFont().c_str(),
 																									 12.f, 999, StyledAlignment::kCenterAlignment);
 //	m_message = message;
@@ -879,7 +878,7 @@ void JsGababo::setupTutorial()
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
 	front->addChild(message);
 	
-	CommonButton* button = CommonButton::create("다 음", 12.f, CCSizeMake(60, 36), CommonButtonYellow, 0);
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 12.f, CCSizeMake(69, 44), CommonButtonYellow, 0);
 	button->setTouchPriority(m_touchPriority - 1);
 	button->setFunction([=](CCObject*){
 		
@@ -887,10 +886,7 @@ void JsGababo::setupTutorial()
 			return;
 		if(m_tutorialStep == 1)
 		{
-			message->setStringByTag("<font color=#FFFFFF size=14 newline=14>게임은 가위바위보 입니다!</font>"
-															"<font color=#FFAA14 size=14 newline=14>가위바위보 중 하나를 선택하여 저를 이기시면 됩니다.</font>"
-															"<font color=#FFAA14 size=14 newline=14>연승 횟수에 따라 더 큰 보상이 있어요!</font>"
-															"<font color=#FFFFFF size=14 newline=14>그럼 행운을 빌어요!</font>"
+			message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent17)
 															);
 		}
 		else

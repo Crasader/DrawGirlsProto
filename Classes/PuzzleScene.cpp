@@ -775,44 +775,71 @@ void PuzzleScene::endGetStar()
 			//		if(m_gameCode == kMiniGameCode_gababo)
 			{
 				BonusGameReward gr1;
-				gr1.spriteName = "shop_ruby2.png";
-				gr1.desc = "루우비~!";
+				gr1.spriteName = "morphing_heart2.png";
+				gr1.desc = "1개";
 				
 				BonusGameReward gr2;
-				gr2.spriteName = "shop_ruby2.png";
-				gr2.desc = "루우비~!";
+				gr2.spriteName = "morphing_heart2.png";
+				gr2.desc = "2개";
 				BonusGameReward gr3;
-				gr3.spriteName = "shop_ruby2.png";
-				gr3.desc = "루우비~!";
+				gr3.spriteName = "morphing_heart2.png";
+				gr3.desc = "3개";
 				BonusGameReward gr4;
-				gr4.spriteName = "shop_ruby2.png";
-				gr4.desc = "루우비~!";
-				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
-											 {
-												 if(clear_is_first_puzzle_success)
+				gr4.spriteName = "morphing_heart2.png";
+				gr4.desc = "4개";
+//				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+//											 {
+//												 if(clear_is_first_puzzle_success)
+//												 {
+//													 showSuccessPuzzleEffect();
+//												 }
+//												 else
+//												 {
+//													 if(clear_is_first_perfect)
+//													 {
+//														 showPerfectPuzzleEffect();
+//													 }
+//													 else
+//													 {
+//														 if(clear_is_stage_unlock)
+//														 {
+//															 showUnlockEffect();
+//														 }
+//														 else
+//														 {
+//															 addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
+//															 is_menu_enable = true;
+//														 }
+//													 }
+//												 }
+//											 });
+//				addChild(gbb, (int)Curtain::kBonusGame);
+				JsGababo* gbb = JsGababo::create(-500, {gr1, gr2, gr3, gr4}, [=](int t_i)
 												 {
-													 showSuccessPuzzleEffect();
-												 }
-												 else
-												 {
-													 if(clear_is_first_perfect)
+													 if(clear_is_first_puzzle_success)
 													 {
-														 showPerfectPuzzleEffect();
+														 showSuccessPuzzleEffect();
 													 }
 													 else
 													 {
-														 if(clear_is_stage_unlock)
+														 if(clear_is_first_perfect)
 														 {
-															 showUnlockEffect();
+															 showPerfectPuzzleEffect();
 														 }
 														 else
 														 {
-															 addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
-															 is_menu_enable = true;
+															 if(clear_is_stage_unlock)
+															 {
+																 showUnlockEffect();
+															 }
+															 else
+															 {
+																 addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
+																 is_menu_enable = true;
+															 }
 														 }
 													 }
-												 }
-											 });
+												 });
 				addChild(gbb, (int)Curtain::kBonusGame);
 			}
 		});
@@ -1560,18 +1587,18 @@ void PuzzleScene::menuAction(CCObject* sender)
 				//		if(m_gameCode == kMiniGameCode_gababo)
 				{
 					BonusGameReward gr1;
-					gr1.spriteName = "shop_ruby2.png";
-					gr1.desc = "루우비~!";
+					gr1.spriteName = "morphing_heart2.png";
+					gr1.desc = "1개";
 					
 					BonusGameReward gr2;
-					gr2.spriteName = "shop_ruby2.png";
-					gr2.desc = "루우비~!";
+					gr2.spriteName = "morphing_heart2.png";
+					gr2.desc = "2개";
 					BonusGameReward gr3;
-					gr3.spriteName = "shop_ruby2.png";
-					gr3.desc = "루우비~!";
+					gr3.spriteName = "morphing_heart2.png";
+					gr3.desc = "3개";
 					BonusGameReward gr4;
-					gr4.spriteName = "shop_ruby2.png";
-					gr4.desc = "루우비~!";
+					gr4.spriteName = "morphing_heart2.png";
+					gr4.desc = "4개";
 //					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //																			 {
 //																				 is_menu_enable = true;

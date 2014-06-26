@@ -776,7 +776,25 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_onePercentGame10,
 	
 	kMyLocalKey_endlessRewardInfo,
-	kMyLocalKey_endlessRewardInfoContent
+	kMyLocalKey_endlessRewardInfoContent,
+	
+	kMyLocalKey_gababoContent1,
+	kMyLocalKey_gababoContent2,
+	kMyLocalKey_gababoContent3,
+	kMyLocalKey_gababoContent4,
+	kMyLocalKey_gababoContent5,
+	kMyLocalKey_gababoContent6,
+	kMyLocalKey_gababoContent7,
+	kMyLocalKey_gababoContent8,
+	kMyLocalKey_gababoContent9,
+	kMyLocalKey_gababoContent10,
+	kMyLocalKey_gababoContent11,
+	kMyLocalKey_gababoContent12,
+	kMyLocalKey_gababoContent13,
+	kMyLocalKey_gababoContent14,
+	kMyLocalKey_gababoContent15,
+	kMyLocalKey_gababoContent16,
+	kMyLocalKey_gababoContent17
 	
 }MyLocalKey;
 
