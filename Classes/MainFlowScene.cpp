@@ -255,7 +255,7 @@ bool MainFlowScene::init()
 	bool is_openning = false;
 	if(mySGD->is_endless_mode)
 	{
-		
+		is_menu_enable = true;
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
@@ -289,11 +289,20 @@ bool MainFlowScene::init()
 		}
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
+		
+		is_menu_enable = true;
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
 	{
 		bottomOpenning();
 		topOnLight();
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_isShowMainflowDimmed) || mySGD->is_on_attendance || mySGD->is_on_rank_reward || mySGD->is_today_mission_first || mySGD->is_new_puzzle_card.getV() || (myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece()))
+		{
+			is_menu_enable = false;
+		}
+		else
+			is_menu_enable = true;
 		
 		CCSprite* title_name = CCSprite::create("temp_title_name.png");
 		title_name->setPosition(ccp(240,160));
@@ -305,8 +314,12 @@ bool MainFlowScene::init()
 		CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
 		title_name->runAction(t_seq);
 	}
+	else
+	{
+		is_menu_enable = true;
+	}
 	
-	is_menu_enable = true;
+	
 	
 	if(mySGD->is_endless_mode)
 	{
