@@ -758,7 +758,23 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessTutorialMent16,
 	kMyLocalKey_endlessTutorialMent17,
 	
-	kMyLocalKey_puzzleValue
+	kMyLocalKey_puzzleValue,
+	
+	kMyLocalKey_onePercentTutorial1,
+	kMyLocalKey_onePercentTutorial2,
+	kMyLocalKey_onePercentTutorial3,
+	kMyLocalKey_onePercentTutorial4,
+	kMyLocalKey_onePercentGame1,
+	kMyLocalKey_onePercentGame2,
+	kMyLocalKey_onePercentGame3,
+	kMyLocalKey_onePercentGame4,
+	kMyLocalKey_onePercentGame5,
+	kMyLocalKey_onePercentGame6,
+	kMyLocalKey_onePercentGame7,
+	kMyLocalKey_onePercentGame8,
+	kMyLocalKey_onePercentGame9,
+	kMyLocalKey_onePercentGame10
+	
 }MyLocalKey;
 
 
