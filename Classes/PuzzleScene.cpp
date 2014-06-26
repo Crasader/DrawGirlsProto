@@ -788,7 +788,7 @@ void PuzzleScene::endGetStar()
 				gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 				BonusGameReward gr4;
 				gr4.spriteName = "morphing_heart2.png";
-				gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[4]["reward"][0]["count"].asInt());
+				gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
 //				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //											 {
 //												 if(clear_is_first_puzzle_success)
@@ -1610,7 +1610,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 					gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 					BonusGameReward gr4;
 					gr4.spriteName = "morphing_heart2.png";
-					gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[4]["reward"][0]["count"].asInt());
+					gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
 //					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //																			 {
 //																				 is_menu_enable = true;
