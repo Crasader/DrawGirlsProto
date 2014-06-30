@@ -25,21 +25,6 @@ OnePercentTutorial::OnePercentTutorial()
 OnePercentTutorial::~OnePercentTutorial()
 {
 }
-//void OnePercentTutorial::registerWithTouchDispatcher()
-//{
-//CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
-//pDispatcher->addTargetedDelegate(this, INT_MIN, true);
-//}
-
-//bool OnePercentTutorial::ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent)
-//{
-//	CCTouch* touch = pTouch;
-//
-//	CCPoint location(ccp(0, 0));
-//	location = CCDirector::sharedDirector()->convertToGL(touch->locationInView());
-//
-//	return true;
-//}
 
 bool OnePercentTutorial::init(float originalPercent,
 															std::function<void(void)> cancelGacha,
@@ -107,12 +92,10 @@ bool OnePercentTutorial::init(float originalPercent,
 	setFormSetter(desc2);
 
 	CCSprite* progress_back = CCSprite::create("one_percent_gacha_graph_back.png");
-//	progress_back->setPosition(ccp(0,10));
 
 	m_container->addChild(progress_back, kOnePercentTutorial_Z_content);
 	progress_back->setPosition(ccp(0, -67));
 	CCSprite* validArea = CCSprite::create();
-//	m_validArea = validArea;
 	validArea->setTextureRect(CCRectMake(0, 0, 50, 15));
 	validArea->setPosition(ccp(0, -67));
 	m_container->addChild(validArea, kOnePercentTutorial_Z_content);
@@ -133,7 +116,6 @@ bool OnePercentTutorial::init(float originalPercent,
 	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial3), mySGD->getFont().c_str(), 15);
 	gacha_label->setColor(ccBLACK);
 	gacha_label->disableOuterStroke();
-//	gacha_label->setPosition(ccp(0,15));
 	t_label->addChild(gacha_label);
 
 	gacha_button = CCControlButton::create(t_label, gacha_back);
@@ -153,9 +135,6 @@ bool OnePercentTutorial::init(float originalPercent,
 			removeFromParent();
 			m_cancelGacha();
 		}
-		//CCNode* t_node = CCNode::create();
-		//t_node->setTag(kOnePercentGame_MT_cancel);
-		//menuAction(t_node);
 	});
 	cancel_menu->setPosition(ccpFromSize(back_img->getContentSize()) + ccp(-25, -25));
 	back_img->addChild(cancel_menu);
