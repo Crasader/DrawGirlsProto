@@ -894,7 +894,7 @@ class Puzzle extends DBTable{
 		$dictEditor = array("type"=>"dictionary");
 		$osEditor = json_decode('{"type":"select","element":["all","android","ios"]}',true);
 		$imgEditor = json_decode('{"type":"dictionary","element":[{"field":"image","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}',true);
-		$eventEditor = json_decode('{"type":"select","element":["일반","이벤트","미노출"],"value":[0,1,2]}',true);
+		$eventEditor = json_decode('{"type":"select","element":["일반","이벤트"],"value":[0,1]}',true);
 		$langEditor = json_decode('{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}',true);
 		$coordinateEditor = json_decode('{"type":"table","element":[
 			{"title":"x","field":"x","type":"text","datatype":"int"},
@@ -2196,8 +2196,7 @@ class LoginEvent extends DBTable{
 	public function loadWithDataTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
-		$data["head"][]=array("title"=>"쿠폰명","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("title"=>"쿠폰코드","field"=>"cuponCode","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"cuponCode"}',true));
+		$data["head"][]=array("title"=>"이벤트명","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
 		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
@@ -2428,6 +2427,28 @@ class CuponCode extends DBTable{
 			// return "`cuponCode`='".$param["data"]["cuponCode"]."'";
 		});
 
+		$this->setLQTableSelectCustomFunction(function($rData){
+			$cuponInfo = new CuponManager($rData["cuponNo"]);
+				
+			if($cuponInfo->isLoaded()){
+				if($cuponInfo->isCommon){
+					$rData["isUsed"]="중복가능";
+				}else{
+					$cuponUsedInfo = new CuponUsedInfo($rData["cuponCode"],$rData["serverNo"]);
+					
+
+					if($cuponUsedInfo->isLoaded()){
+						$rData["isUsed"]="사용";
+						$rData["usedDate"]=$cuponUsedInfo->useDate;
+						$rData["memberID"]=$cuponUsedInfo->memberID;
+					}else{
+						$rData["isUsed"]="미사용";
+					}
+				}
+			}
+			return $rData;
+		});
+
 		if($fNo){
 			parent::load("cuponCode='".$fNo."'");
 		}
@@ -2466,6 +2487,9 @@ class CuponCode extends DBTable{
 		$data["head"][]=array("title"=>"쿠폰번호","field"=>"cuponNo","viewer"=>$textViewer,"editor"=>$listViewer);
 		$data["head"][]=array("title"=>"쿠폰코드","field"=>"cuponCode","viewer"=>json_decode('{"type":"cuponCodeViewer"}',true),"editor"=>json_decode('{"type":"cuponMaker"}',true));
 		$data["head"][]=array("title"=>"관리서버","field"=>"serverNo","viewer"=>$textViewer);
+		$data["head"][]=array("title"=>"사용여부","field"=>"isUsed","viewer"=>$textViewer,"virtual");
+		$data["head"][]=array("title"=>"사용일시","field"=>"usedDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"virtual");
+		$data["head"][]=array("title"=>"사용유저","field"=>"memberID","viewer"=>$textViewer,"virtual");
 		$data["head"][]=array("manage"=>"delete insert");
 		
 		return $data;
@@ -2520,7 +2544,7 @@ class CuponCode extends DBTable{
 	}
 
 	static public function getRandomString($length = 10) {
-	    $validCharacters = "abcdefghijklmnopqrstuxyvwz0123456789";
+	    $validCharacters = "abcdefghijklmnopqrstuxyvwz";
 	    $validCharNumber = strlen($validCharacters);
 	 
 	    $result = "";
@@ -2605,8 +2629,7 @@ class CuponUsedInfo extends DBTable{
 		$this->setPrimarykey("no",true);
 
 		if($shardIndex){
-			$this->setDbInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
-			
+			$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
 		}
 		$this->cuponCode=$code;
 		if($code){

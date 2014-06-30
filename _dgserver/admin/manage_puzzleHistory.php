@@ -19,7 +19,7 @@ $(document).ready(function(){
 <input name="gid" value="<?=$gid?>" type="hidden">
 <br><br>
 <div class="table-responsive">
-	<table align=center><tr><td>
+<table align=center><tr><td>
 <div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">
 			  <button id="findType" type="button" value="nick" class="btn btn-default" data-toggle="button">닉네임</button>
 			  <button id="findType" type="button" value="fb" class="btn btn-default" data-toggle="button">페이스북</button>
