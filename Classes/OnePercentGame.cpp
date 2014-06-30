@@ -15,6 +15,8 @@
 #include "StageImgLoader.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "KsLocal.h"
+
 
 OnePercentGame::OnePercentGame()
 {
@@ -23,6 +25,7 @@ OnePercentGame::OnePercentGame()
 	
 	m_validSize = 50;
 	m_touchEnable = true;
+	m_failContent = m_failBox = nullptr;
 }
 OnePercentGame::~OnePercentGame()
 {
@@ -165,8 +168,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	validArea->setPosition(ccp(0, -67));
 	m_container->addChild(validArea, kOnePercentGame_Z_content);
 	validArea->setColor(ccc3(232, 0, 192));
-	
-	
+
 	setFormSetter(desc3);
 	setFormSetter(currentGainArea);
 	setFormSetter(tutorialBox);
@@ -233,7 +235,8 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 		//menuAction(t_node);
 	});
 	cancel_menu->setPosition(ccpFromSize(back_img->getContentSize()) + ccp(-25, -25));
-	m_container->addChild(cancel_menu, kOnePercentGame_Z_content);
+	setFormSetter(cancel_menu);
+	back_img->addChild(cancel_menu, kOnePercentGame_Z_content);
 	CCFadeTo* gray_fade = CCFadeTo::create(0.25f, 255);
 	m_grayBack->runAction(gray_fade);
 	
@@ -315,23 +318,28 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 //	setFormSetter(graphBack);
 //	setFormSetter(stencil);
 	
-	this->scheduleUpdate();
+//	this->scheduleUpdate();
 	return true;
 }
-void OnePercentGame::gameUISetting()
+void OnePercentGame::gameUISetting(bool hide)
 {
-	cancel_menu->removeFromParent();
+//	cancel_menu->setVisible(false);
 	// 현재 획득 영역, 설명글 지우고
-	addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t){
-		KS::setOpacity(m_currentGainArea, t);
-		KS::setOpacity(m_desc, t);
-		KS::setOpacity(m_tutorialBox, t);
-		KS::setOpacity(m_desc3, t);
-	},
-																				 [=](float t){
-																					 m_currentGainArea->removeFromParent();
-																					 m_desc->removeFromParent();
-																				 }));
+	if(hide)
+	{
+		addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t){
+			KS::setOpacity(m_currentGainArea, t);
+			KS::setOpacity(m_desc, t);
+			KS::setOpacity(m_tutorialBox, t);
+			KS::setOpacity(m_desc3, t);
+		},
+																					 [=](float t){
+//																						 m_currentGainArea->removeFromParent();
+//																						 m_currentGainArea = nullptr;
+//																						 m_desc->removeFromParent();
+//																						 m_desc = nullptr;
+																					 }));
+	}
 	
 	CCNode* tempNode = CCNode::create();
 	CCClippingNode* cNode = CCClippingNode::create();
@@ -393,8 +401,28 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 	else if(m_99State == 1)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-		
-		
+		scheduleUpdate();
+		m_totalPercent = recent_percent;
+		cancel_menu->setVisible(false);
+		m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
+		if(m_failBox)
+		{
+			m_failBox->removeFromParent();
+			m_failBox = nullptr;
+		}
+		if(m_failContent)
+		{
+			m_failContent->removeFromParent();
+			m_failContent = nullptr;
+		}
+		m_validSize = 50;
+		m_validArea->setTextureRect(CCRectMake(0, 0, m_validSize, 15));
+//		addChild(KSGradualValue<float>::create(m_validSize, m_validSize - 20, 1.f, [=](float t){
+//			m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+//		}, [=](float t){
+//			
+//			m_validArea->setTextureRect(CCRectMake(0, 0, t, 15));
+//		}));
 		if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
 		{
 			myLog->addLog(kLOG_gacha_onePercent, -1);
@@ -715,6 +743,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 void OnePercentGame::showFail()
 {
 	CCSprite* failBox = CCSprite::create("one_percent_gacha_failbox.png");
+	m_failBox = failBox;
 	m_container->addChild(failBox, kOnePercentGame_Z_content);
 	KSLabelTTF* failTitle = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame6), mySGD->getFont().c_str(), 20.f);
 	AudioEngine::sharedInstance()->playEffect("ment_gameover1.mp3", false);
@@ -730,6 +759,7 @@ void OnePercentGame::showFail()
 																					 999,
 																				 StyledAlignment::kCenterAlignment);
 	failContent->setPosition(ccp(0.0, -5.0)); 			// dt (0.0, -5.0)
+	m_failContent = failContent;
 	setFormSetter(failContent);
 	m_container->addChild(failContent, kOnePercentGame_Z_content);
 	
@@ -739,13 +769,121 @@ void OnePercentGame::showFail()
 //	}, [=](float t){
 //		label->setScale(t);
 //	}, elasticOut));
+
+//	m_99State = 1;
+//	
+//	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+//	
+//	
+//	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
+//	{
+//		myLog->addLog(kLOG_gacha_onePercent, -1);
+//		
+//		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
+//		addChild(t_loading, 9999);
+//		
+//		mySGD->addChangeGoods("g_99_p");
+//		
+//		mySGD->changeGoods([=](Json::Value result_data){
+//			t_loading->removeFromParent();
+//			if(result_data["result"]["code"] == GDSUCCESS)
+//			{
+//				// 무료 아템으로 구매.
+//				gameUISetting();
+//				m_99State = 2;
+//				m_graphNode->setVisible(true);
+//			}
+//			else
+//			{
+//				mySGD->clearChangeGoods();
+//				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//				//is_menu_enable = true;
+//			}
+//		});
+//	}
+//	else if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
+//	{
+//		myLog->addLog(kLOG_gacha_onePercent, -1);
+//		
+//		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
+//		addChild(t_loading, 9999);
+//		
+//		mySGD->addChangeGoods("g_99_r");
+//		
+//		mySGD->changeGoods([=](Json::Value result_data){
+//			t_loading->removeFromParent();
+//			if(result_data["result"]["code"] == GDSUCCESS)
+//			{
+//				// 잼로 구매.
+//				gameUISetting();
+//				m_99State = 2;
+//				m_graphNode->setVisible(true);
+//			}
+//			else
+//			{
+//				mySGD->clearChangeGoods();
+//				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//				//is_menu_enable = true;
+//			}
+//		});
+//	}
+//	m_99State = 999;
+
+	cancel_menu->setVisible(true);
+	cancel_menu->setFunction([=](CCObject*){
+		m_resultGacha(MIN(1.f, m_totalPercent));
+		removeFromParent();
+	});
+	gacha_button->removeFromParent();
+	m_99State = 1;
+	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	m_99State = 999;
-	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame8), mySGD->getFont().c_str(), 20.f);
-	stopFnt->setColor(ccc3(22, 11, 0));
-	gacha_button->getTitleLabel()->removeAllChildren();
+	KSLabelTTF* gacha_label = KSLabelTTF::create(getLocal(LK::kReGacha), mySGD->getFont().c_str(), 13);
+//	gacha_label->setColor(ccBLACK);
+	gacha_label->setPosition(ccp(0,0));
+	t_label->addChild(gacha_label);
 	
-	gacha_button->getTitleLabel()->addChild(stopFnt);
+	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
+	price_back->setContentSize(CCSizeMake(82, 26));
+	price_back->setPosition(ccp(gacha_label->getContentSize().width/2.f + 5, 0));
+	t_label->addChild(price_back);
+	
+	gacha_label->setPosition(ccp(-price_back->getContentSize().width/2.f,0));
+	
+	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
+	{
+		CCSprite* pass_ticket = CCSprite::create("pass_ticket5.png");
+		pass_ticket->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(pass_ticket);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
+		free_label->setColor(ccWHITE);
+		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(free_label);
+	}
+	else
+	{
+		CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_type);
+		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaOnePercentFee())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+		price_back->addChild(price_label);
+	}
+	
+	
+	CCScale9Sprite* gacha_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0,0,40,40), CCRectMake(19, 19, 2, 2));
+	
+	gacha_button = CCControlButton::create(t_label, gacha_back);
+	gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(OnePercentGame::gachaAction), CCControlEventTouchUpInside);
+	gacha_button->setPreferredSize(CCSizeMake(200,45));
+	gacha_button->setPosition(ccp(back_img->getContentSize().width/2.f, 30));
+	back_img->addChild(gacha_button);
+	gacha_button->setTouchPriority(-180);
+//	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame8), mySGD->getFont().c_str(), 20.f);
+//	stopFnt->setColor(ccc3(22, 11, 0));
+//	gacha_button->getTitleLabel()->removeAllChildren();
+//	
+//	gacha_button->getTitleLabel()->addChild(stopFnt);
 }
 void OnePercentGame::showSuccess()
 {
@@ -761,6 +899,7 @@ void OnePercentGame::showSuccess()
 	
 	label->enableOuterStroke(ccc3(19, 9, 0), 1.f);
 	label->setColor(ccc3(255, 155, 0));
+	label->setPosition(label->getPosition() + ccp(0, 28));
 	
 	m_99State = 999;
 	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame10), mySGD->getFont().c_str(), 20.f);
