@@ -258,7 +258,7 @@ public:
 			m_selectedObjNumber=-1;
 		});
 		
-		exit->setPosition(0,80);
+		exit->setPosition(-50,80);
 		
 		m_pauseBtn = CommonButton::create("||", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
 		m_pauseBtn->setFunction([this](CCObject *){
@@ -309,7 +309,7 @@ public:
 		
 		m_resetBtn->setBackgroundTypeForDisabled(CommonButtonGray);
 		
-		m_resetBtn->setPosition(50,40);
+		m_resetBtn->setPosition(100,40);
 		
 		m_objName = KSLabelTTF::create("title", 	mySGD->getFont().c_str(), 13, CCSizeMake(100, 20), kCCTextAlignmentLeft);
 		m_objName->setPosition(ccp(30,-30));
