@@ -392,9 +392,11 @@ void hspConnector::logout(jsonSelType func){
 }
 
 void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType func){
-	bool ManualLogin=true;
+	bool ManualLogin =true;
+	int LoginType = (int)HSPLogin::GUEST;
 	if(param!=0 && param!=NULL){
-		ManualLogin= param.get("ManualLogin",true).asBool();
+		ManualLogin = param.get("ManualLogin",true).asBool();
+		LoginType = param.get("LoginType", LoginType).asInt();
 	}
 
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
@@ -433,9 +435,9 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 ];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 JniMethodInfo t;
-if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZ)V")) {
+if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZI)V")) {
 	int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
-	t.env->CallStaticObjectMethod(t.classID, t.methodID,_key,ManualLogin);
+	t.env->CallStaticObjectMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
 	t.env->DeleteLocalRef(t.classID);
 }
 #endif
@@ -568,7 +570,7 @@ void hspConnector::openHSPUrl(const std::string& url)
 #endif
 }
 
-void hspConnector::mappingToAccount(enum HSPMapping mt, jsonSelType func)
+void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
@@ -582,14 +584,17 @@ void hspConnector::mappingToAccount(enum HSPMapping mt, jsonSelType func)
 	};
 	
 	JniMethodInfo t;
-	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "hspMappingToAccount", "(II)V")) {
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "hspMappingToAccount", "(IIZ)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, (int)mt);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, (int)mt, force);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
+	Json::Value test;
+	test["error"]["code"] = 0x0014006D;
+	func(test);
 #endif
 }
 void hspConnector::getIsUsimKorean(jsonSelType func)
@@ -618,6 +623,26 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 	dummy["isSuccess"] = 1;
 	dummy["korean"] = 1;
 	func(dummy);
+#endif
+	
+}
+int hspConnector::getLoginType()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	jint ret = -1;
+	JniMethodInfo t;
+	CCLog("getLoginType");
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getLoginType", "()I")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
+		CCLog("ret = %d ", ret);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	return (int)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return -1;
+	// not implementation
+//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 	
 }

@@ -39,6 +39,7 @@
 #include "FiveRocksCpp.h"
 #include "CommonAnimation.h"
 #include "Terms.h"
+#include "AccountManagerPopup.h"
 
 USING_NS_CC_EXT;
 
@@ -298,9 +299,11 @@ bool OptionPopup::init()
 	tip_button->setPosition(getContentPosition(kOP_MT_tip));
 	tip_button->setFunction([=](CCObject* sender)
 													{
-														hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, [=](Json::Value t){
-															KS::KSLog("%", t);
-														});
+														AccountManagerPopup* amp = AccountManagerPopup::create(-172);
+														addChild(amp, kOP_Z_popup);
+//														hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, [=](Json::Value t){
+//															KS::KSLog("%", t);
+//														});
 //														hspConnector::get()->mappingToAccount([](Json::Value v){
 //														
 //															CCLog("mapping test - %s",v.toStyledString().c_str());

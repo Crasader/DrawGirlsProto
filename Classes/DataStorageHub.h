@@ -149,7 +149,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_isShowMainflowDimmed,
 	kDSH_Key_isShowEndlessModeTutorial,
 	kSDH_Key_isShowOnePercentTutorial,
-	kDSH_Key_isShowGababoTutorial
+	kDSH_Key_isShowGababoTutorial,
+	kDSH_Key_accountType
 }DSH_Key;
 
 enum SpecialTutorialCode{
@@ -210,6 +211,7 @@ public:
 	string getUserStrForStr (string t_key, string t_default);
 	void setUserStrForStr (string t_key, string t_val1, bool diskWrite = true);
 	int getIntegerForKey (DSH_Key t_key);
+	int getIntegerForKeyDefault (DSH_Key t_key, int def);
 	int getIntegerForKey (DSH_Key t_key, int key_val1);
 	int getIntegerForKey (DSH_Key t_key, int key_val1, int key_val2);
 	void setIntegerForKey (DSH_Key t_key, int val1, bool diskWrite = true);

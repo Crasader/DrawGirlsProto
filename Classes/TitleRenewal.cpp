@@ -213,7 +213,7 @@ void TitleRenewalScene::realInit()
 	
 	Json::Value param;
 	param["ManualLogin"] = true;
-	
+	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	
 	white_back->removeFromParent();
@@ -234,6 +234,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	{
 		Json::Value param;
 		param["ManualLogin"] = true;
+		param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 		
 		hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 	}
@@ -491,7 +492,7 @@ void TitleRenewalScene::successLogin()
 	
 	startCommand();
 	
-	is_loaded_cgp = false;
+	is_loaded_cgp = true;//false;
 	
 	std::function<void(Json::Value)> pf;
 	pf = [=](Json::Value v){
@@ -588,7 +589,7 @@ void TitleRenewalScene::successLogin()
 ////			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
 //		}
 	};
-	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), this, pf);
+//	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), this, pf);
 }
 
 void TitleRenewalScene::startCommand()
@@ -807,6 +808,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setEventString(result_data["eventString"].asString());
 		mySGD->setIsAlwaysSavePlaydata(result_data["isAlwaysSavePlaydata"].asInt());
 		mySGD->setPlayContinueFeeEndless(result_data["playContinueFeeEndless"].asInt());
+		
+		mySGD->setAllClearReward(result_data["allClearReward"].asString());
 	}
 	else
 	{
@@ -1994,6 +1997,8 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::endingAction()
 {
+	CCLOG("ttttt is_loaded_cgp : %d | is_loaded_server : %d | is_preloaded_effect : %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
+	
 	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
 	{
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();

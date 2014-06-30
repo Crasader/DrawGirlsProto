@@ -363,10 +363,10 @@ public:
 	void logOnce(int i){
 		CCNode* obj = m_objList[i].obj;
 		if(!m_objList[i].isEdited)return;
-		printf("\n");
+		CCLog("");
 		
 		if(m_objList[i].originalData["x"].asFloat()!=obj->getPosition().x || m_objList[i].originalData["y"].asFloat()!=obj->getPosition().y)
-			printf("%s->setPosition(ccp(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)\n",
+			CCLog("%s->setPosition(ccp(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)",
 						obj->getStringData().c_str(),
 						obj->getPosition().x,
 						obj->getPosition().y,
@@ -375,7 +375,7 @@ public:
 						);
 		if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX() || m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY()){
 			if(obj->getScaleX()==obj->getScaleY())
-				printf("%s->setScale(%.1f); \t\t\t// dt (%.1f,%.1f)\n",
+				CCLog("%s->setScale(%.1f); \t\t\t// dt (%.1f,%.1f)",
 							obj->getStringData().c_str(),
 							(int)(obj->getScale()*100)/100.f,
 							(int)(obj->getScale()*100)/100.f-m_objList[i].originalData["sx"].asFloat(),
@@ -383,13 +383,13 @@ public:
 							);
 			else{
 				if(m_objList[i].originalData["sx"].asFloat()!=obj->getScaleX())
-					printf("%s->setScaleX(%.1f); \t\t\t// dt %.1f\n",
+					CCLog("%s->setScaleX(%.1f); \t\t\t// dt %.1f",
 								obj->getStringData().c_str(),
 								(int)(obj->getScaleX()*100)/100.f,
 								(int)(obj->getScaleX()*100)/100.f-m_objList[i].originalData["sx"].asFloat()
 								);
 				if(m_objList[i].originalData["sy"].asFloat()!=obj->getScaleY())
-					printf("%s->setScaleY(%.1f); \t\t\t// dt %.1f\n",
+					CCLog("%s->setScaleY(%.1f); \t\t\t// dt %.1f",
 								obj->getStringData().c_str(),
 								(int)(obj->getScaleY()*100)/100.f,
 								(int)(obj->getScaleY()*100)/100.f-m_objList[i].originalData["sy"].asFloat()
@@ -398,7 +398,7 @@ public:
 				
 		}
 		if(m_objList[i].originalData["w"].asFloat()!=obj->getContentSize().width || m_objList[i].originalData["h"].asFloat()!=obj->getContentSize().height)
-			printf("%s->setContentSize(CCSizeMake(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)\n",
+			CCLog("%s->setContentSize(CCSizeMake(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)",
 						obj->getStringData().c_str(),
 						obj->getContentSize().width,
 						obj->getContentSize().height,
@@ -408,7 +408,7 @@ public:
 		
 		if(CCLabelTTF* checkobj = dynamic_cast<CCLabelTTF*>(obj)){
 			if(m_objList[i].originalData["fontsize"].asFloat()!=checkobj->getFontSize())
-				printf("%s->setFontSize(%.1f); \t\t\t// dt %.1f\n",
+				CCLog("%s->setFontSize(%.1f); \t\t\t// dt %.1f",
 							obj->getStringData().c_str(),
 							(int)(checkobj->getFontSize()*10)/10.f,
 							(int)(checkobj->getFontSize()*10)/10.f-m_objList[i].originalData["fontsize"].asFloat()
@@ -417,14 +417,14 @@ public:
 		
 		if(CCNodeRGBA* checkobj = dynamic_cast<CCNodeRGBA*>(obj)){
 			if(m_objList[i].originalData["opacity"].asInt()!=checkobj->getOpacity())
-				printf("%s->setOpacity(%d); \t\t\t// dt %d\n",
+				CCLog("%s->setOpacity(%d); \t\t\t// dt %d",
 							obj->getStringData().c_str(),
 							checkobj->getOpacity(),
 							checkobj->getOpacity()-m_objList[i].originalData["opacity"].asInt()
 							);
 		}
 		if(m_objList[i].originalData["ax"].asFloat()!=obj->getAnchorPoint().x || m_objList[i].originalData["ay"].asFloat()!=obj->getAnchorPoint().y)
-			printf("%s->setAnchorPoint(ccp(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)\n",
+			CCLog("%s->setAnchorPoint(ccp(%.1f, %.1f)); \t\t\t// dt (%.1f, %.1f)",
 						 obj->getStringData().c_str(),
 						 obj->getAnchorPoint().x,
 						 obj->getAnchorPoint().y,

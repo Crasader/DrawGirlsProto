@@ -22,6 +22,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hangame.hsp.HSPCore;
+import com.hangame.hsp.HSPCore.HSPLoginType;
 import com.hangame.hsp.HSPMappingType;
 import com.hangame.hsp.HSPMessage;
 import com.hangame.hsp.HSPOAuthProvider;
@@ -165,19 +166,16 @@ public class hspConnector{
 				);
 		
 	}
-	public static void hspMappingToAccount(final int _key, final int mt)
+	public static void hspMappingToAccount(final int _key, final int mt, final boolean force)
 	{
 //		hspConnector.handler.post(
 //				new Runnable(){
 //					public void run() {
 					
 						HSPCore core = HSPCore.getInstance();
-						if (core != null) {
-
-							
-							
+						if (core != null) { 
 //							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
-                            Boolean isOverWriteMapping = false;     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
+                            Boolean isOverWriteMapping = Boolean.valueOf(force);     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
 
 							HSPMappingType mt2 = HSPMappingType.values()[mt];
 							HSPCore.getInstance().requestMappingToAccount(mt2, isOverWriteMapping, new HSPCore.HSPRequestMappingToAccountCB() {
@@ -361,7 +359,7 @@ public class hspConnector{
 	public static long getHSPMemberNo(){
 		return HSPCore.getInstance().getMemberNo();
 	}
-	public static void login(final int _key, final boolean manualLogin){
+	public static void login(final int _key, final boolean manualLogin, final int loginType){
 
 		hspConnector.handler.post(
 				new Runnable(){
@@ -374,8 +372,8 @@ public class hspConnector{
 							//Log.i("com.litqoo.dgproto", "hspcore create ok2");
 
 
-
-							core.login(activity,HSPOAuthProvider.GUEST,new HSPCore.HSPLoginCB() {
+							HSPOAuthProvider lType = HSPOAuthProvider.values()[loginType];
+							core.login(activity, lType,new HSPCore.HSPLoginCB() {
 
 								public void onLogin(final HSPResult result, boolean isPlayable) {
 									//Log.d("litqoo", "BEGIN - HSPLoginCB");
@@ -497,6 +495,20 @@ public class hspConnector{
                 });
             }
         });
+	}
+	public static int getLoginType()
+	{
+		for(HSPLoginType t: HSPLoginType.values())
+		{
+			Log.d("enum", t.name() + t.ordinal());
+		}
+		Log.d("enum", "AA");
+		for(HSPMappingType t: HSPMappingType.values())
+		{
+			Log.d("enum", t.name() + t.ordinal());
+		}
+		HSPLoginType t = HSPCore.getInstance().loginType();
+		return t.ordinal();
 	}
 	public static void logout(final int _key){
 		hspConnector.handler.post(

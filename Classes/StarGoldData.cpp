@@ -3604,6 +3604,9 @@ string StarGoldData::getEventString(){	return event_string;	}
 void StarGoldData::setIsAlwaysSavePlaydata(int t_i){	is_always_save_playdata = t_i;	}
 int StarGoldData::getIsAlwaysSavePlaydata(){	return is_always_save_playdata;	}
 
+string StarGoldData::getAllClearReward(){	return all_clear_reward.getV();	}
+void StarGoldData::setAllClearReward(string t_str){	all_clear_reward = t_str;	}
+
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}
 void StarGoldData::setUserdataIsVIP(int t_i)

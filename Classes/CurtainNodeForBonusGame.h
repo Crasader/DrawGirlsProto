@@ -33,6 +33,7 @@ struct BonusGameReward
 {
 	std::string spriteName;
 	std::string desc;
+	float scale;
 };
 
 
