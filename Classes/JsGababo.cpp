@@ -100,6 +100,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
 	};
 	auto baBox = CommonButton::create(CCSprite::create("gababo_box.png"), touchPriority);
+	m_ba = baBox;
 	baBox->setPosition(ccp(143.5, 41.0)); 			// dt (10.0, -3.0)
 	auto ba = CCSprite::create("ba.png");
 	ba->setRotation(-90);
@@ -114,6 +115,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	});
 	front->addChild(baBox);
 	auto gaBox = CommonButton::create(CCSprite::create("gababo_box.png"), touchPriority);
+	m_ga = gaBox;
 	gaBox->setPosition(ccp(220.0, 41.0)); 			// dt (2.0, -4.5)
 	auto ga = CCSprite::create("ga.png");
 	ga->setRotation(-90);
@@ -130,6 +132,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	auto boBox = CommonButton::create(CCSprite::create("gababo_box.png"), touchPriority);
 	boBox->setPosition(ccp(296.5, 41.0)); 			// dt (6.0, -3.0)
 	auto bo = CCSprite::create("bo.png");
+	m_bo = boBox;
 	bo->setRotation(-90);
 	bo->setPosition(ccpFromSize(boBox->getContentSize()) / 2.f + ccp(0, 10.5f - 6.5f));
 	bo->setScale(0.5f);
@@ -598,7 +601,14 @@ void JsGababo::onPressConfirm(CCObject* t)
 	};
 	if(m_currentJudge == "draw")
 	{
-		contextSwitching(m_front3, m_front1, rollBack, nullptr);
+		m_ba->setEnabled(false);
+		m_ga->setEnabled(false);
+		m_bo->setEnabled(false);
+		contextSwitching(m_front3, m_front1, rollBack, [=](){
+			m_ba->setEnabled(true);
+			m_ga->setEnabled(true);
+			m_bo->setEnabled(true);
+		});
 		//		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
 		//		auto onSelection = [=]() // 바위 가위 보 셋중 하나 눌렀을 때~
 		//		{
@@ -611,12 +621,18 @@ void JsGababo::onPressConfirm(CCObject* t)
 	{
 		if(m_winCount < 3)
 		{
+			m_ba->setEnabled(false);
+			m_ga->setEnabled(false);
+			m_bo->setEnabled(false);
 			contextSwitching(m_front3, m_front1, [=](){
 				rollBack();
 				auto lightPair = KS::loadCCBI<CCSprite*>(this, "gababo_change.ccbi");
 				CCSprite* light = lightPair.first;
 				lightPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 					light->removeFromParent();
+					m_ba->setEnabled(true);
+					m_ga->setEnabled(true);
+					m_bo->setEnabled(true);
 				});
 				//				light->setPosition(ccp(240, 195));
 				light->setPosition(m_stepSprite->getPosition());
