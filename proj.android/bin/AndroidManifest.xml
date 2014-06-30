@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nhnent.SKDRAWGIRLSA"
+    package="com.nhnent.SKDDMK"
     android:versionCode="1"
     android:versionName="1.0.0.KG" >
 
@@ -10,17 +10,29 @@
 
     <uses-feature android:glEsVersion="0x00020000" />
 
+    
+    
     <application
         android:hardwareAccelerated="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
+      
+
+
         <meta-data
             android:name="adbrix_app_key"
             android:value="58229468" />
         <meta-data
             android:name="adbrix_hash_key"
             android:value="03c0b0579dd4470b" />
-
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+		<meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/google_app_id" />
+		 <activity
+            android:name="com.toastgamenew.hsp.auth.login.GoogleLoginActivity"
+            android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection"
+android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
         <!-- facebook -->
         <activity
             android:name="com.facebook.LoginActivity"
@@ -36,8 +48,8 @@
         </activity>
         <!-- HSP Activity End -->
         <activity
-            android:name="com.nhnent.SKDRAWGIRLSA.DGproto"
-            android:configChanges="orientation"
+            android:name="com.nhnent.SKDDMK.DGproto"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
@@ -47,6 +59,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name="com.hangame.hsp.referrer.InstallReceiver">
+                <intent-filter>
+                    <action android:name="com.android.vending.INSTALL_REFERRER" />
+                </intent-filter>
+        </receiver>
+
         <receiver
             android:name="com.igaworks.adbrixtracersdk.cores.ADBrixReceiver"
             android:exported="true" >
@@ -66,7 +84,7 @@
                 <action android:name="com.nhn.nni.intent.EVENT" />
 
                 <!-- TODO: fill package name -->
-                <category android:name="com.nhnent.SKDRAWGIRLSA" />
+                <category android:name="com.nhnent.SKDDMK" />
 `
             </intent-filter>
             <intent-filter>
@@ -150,18 +168,25 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+  	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>   
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+                <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+                
+                   <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+                <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <!-- HSP permission end -->
 
 
     <!-- [HSP SDK] NPush Global permission begin -->
     <!-- TODO: fill package name -->
     <permission
-        android:name="com.nhnent.SKDRAWGIRLSA.permission.NNI_MESSAGE"
+        android:name="com.nhnent.SKDDMK.permission.NNI_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.nhnent.SKDRAWGIRLSA.permission.NNI_MESSAGE" />
+    <uses-permission android:name="com.nhnent.SKDDMK.permission.NNI_MESSAGE" />
     <!-- [HSP SDK] NPush Global permission end -->
 
 

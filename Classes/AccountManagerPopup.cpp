@@ -206,7 +206,46 @@ bool AccountManagerPopup::init(int touchP)
 			
 		});
 		previousLoad->setFunction([=](CCObject*){
+			hspConnector::get()->logout([=](Json::Value result_data){
+				CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+//				if(result_data["error"]["isSuccess"].asBool())
+				{
+					hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
+						
+						KS::KSLog("force %", t);
+						
+						if(t["error"]["isSuccess"].asInt())
+						{
+							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+							mySGD->resetLabels();
+							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+						}
+						else
+						{
+							
+						}
+					});
+//					myDSH->clear();
+//					myDSH->resetDSH();
+//					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				}
+//				else
+				{
+//					loading_progress_img->removeFromParent();
+//					cancel_button->setEnabled(true);
+//					ok_button->setEnabled(true);
+//					
+//					cancel_button->setVisible(true);
+//					ok_button->setVisible(true);
+					
+					CCLOG("fail logout");
+				}
+				
+			});
 			
+		});
+		
+		keepLoad->setFunction([=](CCObject*){
 			// 강제 매핑
 			hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
 				
@@ -224,10 +263,6 @@ bool AccountManagerPopup::init(int touchP)
 				}
 			});
 		});
-		
-		keepLoad->setFunction([=](CCObject*){
-			CCLog("no action!!");
-		});
 		setFormSetter(front);
 		setFormSetter(back);
 		setFormSetter(closeButton);
@@ -240,29 +275,24 @@ bool AccountManagerPopup::init(int touchP)
 	facebookLogin->setFunction([=](CCObject*){
 		hspConnector::get()->mappingToAccount(HSPMapping::kFACEBOOK, false, [=](Json::Value t){
 			KS::KSLog("hhh %", t);
-//			if(t["isSuccess"].asInt())
+			KS::KSLog("%", t);
+			if(t["error"]["isSuccess"].asBool())
 			{
-				int code = t["error"]["code"].asInt();
-				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-				CCLog("code %d", code);
-				if(code == 0x0014006D)
-				{
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-					CCLog("AAA");
-					anotherAccountFunctor(HSPMapping::kFACEBOOK, HSPLogin::FACEBOOK);
-				}
-				else if(code == 0x0014006F)
-				{
-					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-					CCLog("BBB");
-				}
-				else
-				{
-					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-					CCLog("CCC");
 					mySGD->resetLabels();
 					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 					myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::FACEBOOK);
+			}
+			else
+			{
+				if(t["error"]["code"].asInt() == 0x0014006D)
+				{
+					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::FACEBOOK);
+					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+				}
+				else
+				{
+					
 				}
 			}
 		});
@@ -271,11 +301,15 @@ bool AccountManagerPopup::init(int touchP)
 	googleLogin->setFunction([=](CCObject*){
 		hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, false, [=](Json::Value t){
 			KS::KSLog("%", t);
-			
-			CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+			if(t["error"]["isSuccess"].asBool())
 			{
-				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-				auto tempFront = front;
+					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+					mySGD->resetLabels();
+					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+					myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::GOOGLE);
+			}
+			else
+			{
 				if(t["error"]["code"].asInt() == 0x0014006D)
 				{
 					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::GOOGLE);
@@ -283,10 +317,7 @@ bool AccountManagerPopup::init(int touchP)
 				}
 				else
 				{
-					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-					mySGD->resetLabels();
-					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-					myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::GOOGLE);
+					
 				}
 			}
 		});

@@ -81,8 +81,9 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	end_selector = t_selector;
 	
 	for(int i=0;i<t_pattern_list.size();i++)
+	{
 		pattern_list.push_back(t_pattern_list[i]);
-	
+	}
 	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	case_back->setContentSize(CCSizeMake(275, 210));
 	case_back->setPosition(CCPointZero);
