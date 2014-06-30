@@ -418,9 +418,10 @@ public:
 			float waveValue = rgb.g + (rgb.b >= 10 ? 40 : 0);
 			if(waveValue <= 5)
 				continue;
-			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / -9.f;
+
+			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / -10.f;
 			//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
-			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.1f,
+			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.15f,
 																							 [=](CCPoint t){
 																								 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
 																								 //																								 i->y = backup.y + t;
@@ -428,7 +429,7 @@ public:
 																							 [=](CCPoint t){
 																								 //for(auto i : movingVertices){
 
-																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 0.3f,
+																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 0.5f,
 																																													[=](CCPoint t){
 																																														*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
 																																													},
