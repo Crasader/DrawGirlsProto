@@ -71,17 +71,20 @@ void KsLocal::ko()
 {
 	std::map<LK, std::string> obj;
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
+	obj[LK::kReGacha] = "다시 뽑기";
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::en()
 {
 	std::map<LK, std::string> obj;
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
+	obj[LK::kReGacha] = "다시 뽑기";
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::ja()
 {
 	std::map<LK, std::string> obj;
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
+	obj[LK::kReGacha] = "다시 뽑기";
 	m_mapper[__FUNCTION__] = obj;
 }

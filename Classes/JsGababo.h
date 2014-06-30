@@ -73,6 +73,7 @@ protected:
 	CCNode* m_resultStamp;
 	CCSprite* m_currentRewardCursor;
 	int m_tutorialStep;
+	CommonButton* m_ba, *m_ga, *m_bo;
 };
 
 #endif

@@ -45,7 +45,7 @@ public:
 	}
 	bool init(float originalPercent, std::function<void(void)> cancelGacha, std::function<void(float)> tryGacha,
 						bool openEffect);
-	void gameUISetting() ;
+	void gameUISetting(bool hide = true) ;
 	void gachaAction(CCObject* sender, CCControlEvent t_event) ;
 	void showFail() ;
 	void showSuccess() ;
@@ -85,6 +85,7 @@ protected:
 	CCSprite* m_gradient;
 	std::function<void(void)> m_toDown, m_toUp;
 	CCNode* m_tutorialBox, *m_desc3;
+	CCNode* m_failBox, *m_failContent;
 //	CCNode* m_command1;
 };
 #endif

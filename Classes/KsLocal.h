@@ -17,7 +17,8 @@ using namespace std;
 #define getLocal(X) (KsLocal::sharedInstance()->getLocalForKey(X))
 enum class LK
 {
-	kItem1
+	kItem1,
+	kReGacha
 };
 class KsLocal
 {

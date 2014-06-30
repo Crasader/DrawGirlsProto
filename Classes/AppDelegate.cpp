@@ -39,7 +39,6 @@ USING_NS_CC;
 #include "FormSetter.h"
 #include "MyLocalization.h"
 #include <chrono>
-
 //#include <boost/graph/graphviz.hpp>
 /*
  메테오 : AP_Missile16
@@ -54,6 +53,7 @@ USING_NS_CC;
 AppDelegate::AppDelegate()
 {
 	CCLOG("!!!");
+
 //	std::chrono::time_point<std::chrono::system_clock> recent;
 //    recent = std::chrono::system_clock::now();
 //	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);

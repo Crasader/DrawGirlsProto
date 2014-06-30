@@ -1339,7 +1339,7 @@ void AchievePopup::setAllMenu()
 	if(!all_menu)
 	{
 		all_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allView), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
-		all_menu->setPosition(ccp(150,256));
+		all_menu->setPosition(ccp(169,256));
 		main_case->addChild(all_menu, kAchievePopupZorder_menu);
 		all_menu->setFunction([=](CCObject* sender)
 							  {
@@ -1360,7 +1360,7 @@ void AchievePopup::setSuccessMenu()
 	{
 		success_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_achieveSuccess), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
 //		success_menu->setTitleColor(ccWHITE);
-		success_menu->setPosition(ccp(225,256));
+		success_menu->setPosition(ccp(244,256));
 		main_case->addChild(success_menu, kAchievePopupZorder_menu);
 		success_menu->setFunction([=](CCObject* sender)
 							  {
@@ -1381,7 +1381,7 @@ void AchievePopup::setIngMenu()
 	{
 		ing_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_achieveNotSuccess), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
 //		ing_menu->setTitleColor(ccWHITE);
-		ing_menu->setPosition(ccp(300,256));
+		ing_menu->setPosition(ccp(319,256));
 		main_case->addChild(ing_menu, kAchievePopupZorder_menu);
 		ing_menu->setFunction([=](CCObject* sender)
 								  {
@@ -1402,7 +1402,7 @@ void AchievePopup::setRewardMenu()
 	{
 		reward_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_achieveReward), 13, CCSizeMake(80,38), CommonButtonYellowDown, -190);
 //		reward_menu->setTitleColor(ccWHITE);
-		reward_menu->setPosition(ccp(375,256));
+		reward_menu->setPosition(ccp(394,256));
 		main_case->addChild(reward_menu, kAchievePopupZorder_menu);
 		reward_menu->setFunction([=](CCObject* sender)
 							  {
