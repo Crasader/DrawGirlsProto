@@ -912,8 +912,8 @@ void EndlessModeResult::setMain()
 	
 	
 	string next_button_str;
-	if(mySGD->endless_my_ing_win.getV() > 0)
-		next_button_str = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString();
+	if(mySGD->endless_my_victory.getV() > 0)
+		next_button_str = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_victory.getV()+1)->getCString();
 	else
 		next_button_str = myLoc->getLocalForKey(kMyLocalKey_nextStage);
 	
