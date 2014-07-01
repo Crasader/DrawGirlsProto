@@ -197,6 +197,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 	int power = mySGD->getSelectedCharacterHistory().power.getV();
 	AttackOption ao = getAttackOption(stoneType, grade);
 	int missileNumbersInt = floor(missileNumbers);
+	stoneType = StoneType::kStoneType_guided;
 	if(stoneType == StoneType::kStoneType_guided)
 	{
 		addChild(KSSchedule::create([=](float dt)
