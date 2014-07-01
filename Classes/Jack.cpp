@@ -387,23 +387,23 @@ void Jack::moveTest()
 				
 				if(t_direction == directionLeft)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveLeft"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveLeft");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_left");
 				}
 				else if(t_direction == directionRight)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveRight"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveRight");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_right");
 				}
 				else if(t_direction == directionUp)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveUp"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveUp");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_up");
 				}
 				else if(t_direction == directionDown)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveDown"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveDown");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_down");
 				}
 				
 				jack_img_direction = t_direction;
@@ -456,23 +456,23 @@ void Jack::moveTest()
 				
 				if(t_direction == directionLeft)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawLeft"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawLeft");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
 				}
 				else if(t_direction == directionRight)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawRight"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawRight");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
 				}
 				else if(t_direction == directionUp)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawUp"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawUp");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
 				}
 				else if(t_direction == directionDown)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawDown"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawDown");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
 				}
 				
 				jack_img_direction = t_direction;
@@ -517,23 +517,23 @@ void Jack::moveTest()
 				
 				if(t_direction == directionLeft)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveLeft"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveLeft");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_left");
 				}
 				else if(t_direction == directionRight)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveRight"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveRight");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_right");
 				}
 				else if(t_direction == directionUp)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveUp"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveUp");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_up");
 				}
 				else if(t_direction == directionDown)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("moveDown"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("moveDown");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_down");
 				}
 				
 				jack_img_direction = t_direction;
@@ -595,23 +595,23 @@ void Jack::moveTest()
 				
 				if(t_direction == directionLeft)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawLeft"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawLeft");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
 				}
 				else if(t_direction == directionRight)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawRight"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawRight");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
 				}
 				else if(t_direction == directionUp)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawUp"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawUp");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
 				}
 				else if(t_direction == directionDown)
 				{
-					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawDown"))
-						jack_ccb_manager->runAnimationsForSequenceNamed("drawDown");
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
 				}
 				
 				jack_img_direction = t_direction;
@@ -666,23 +666,23 @@ void Jack::moveTest()
 					
 					if(t_direction == directionLeft)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawLeft"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawLeft");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
 					}
 					else if(t_direction == directionRight)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawRight"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawRight");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
 					}
 					else if(t_direction == directionUp)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawUp"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawUp");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
 					}
 					else if(t_direction == directionDown)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawDown"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawDown");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
 					}
 					
 					jack_img_direction = t_direction;
@@ -740,23 +740,23 @@ void Jack::moveTest()
 					
 					if(t_direction == directionLeft)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawLeft"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawLeft");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
 					}
 					else if(t_direction == directionRight)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawRight"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawRight");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
 					}
 					else if(t_direction == directionUp)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawUp"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawUp");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
 					}
 					else if(t_direction == directionDown)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawDown"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawDown");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
 					}
 					
 					jack_img_direction = t_direction;
@@ -809,23 +809,23 @@ void Jack::moveTest()
 					
 					if(t_direction == directionLeft)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawLeft"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawLeft");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
 					}
 					else if(t_direction == directionRight)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawRight"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawRight");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
 					}
 					else if(t_direction == directionUp)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawUp"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawUp");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
 					}
 					else if(t_direction == directionDown)
 					{
-						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawDown"))
-							jack_ccb_manager->runAnimationsForSequenceNamed("drawDown");
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
 					}
 					
 					jack_img_direction = t_direction;
