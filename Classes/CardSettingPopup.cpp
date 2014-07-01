@@ -1324,12 +1324,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					
 					KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.puzzle_number), mySGD->getFont().c_str(), 13);
 					number_label->enableOuterStroke(ccBLACK, 1.f);
-					number_label->setColor(ccc3(255, 170, 20));
+					number_label->setColor(ccc3(100, 220, 255));
 					number_label->setPosition(base_position + ccp(0, 8));
 					cell->addChild(number_label);
 					
 					KSLabelTTF* unit_label = KSLabelTTF::create("PUZZLE", mySGD->getFont().c_str(), 12);
-					unit_label->enableOuterStroke(ccBLACK, 1.f);
+					unit_label->setColor(ccc3(100, 220, 255));
 					unit_label->setPosition(base_position + ccp(0,-7));
 					cell->addChild(unit_label);
 					
@@ -1342,12 +1342,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					
 					KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", t_cell_info.second_cell_in_cell_type), mySGD->getFont().c_str(), 13);
 					number_label->enableOuterStroke(ccBLACK, 1.f);
-					number_label->setColor(ccc3(255, 170, 20));
+					number_label->setColor(ccYELLOW);
 					number_label->setPosition(base_position + ccp(0, 8));
 					cell->addChild(number_label);
 					
 					KSLabelTTF* unit_label = KSLabelTTF::create("STAGE", mySGD->getFont().c_str(), 12);
 					unit_label->enableOuterStroke(ccBLACK, 1.f);
+					unit_label->setColor(ccYELLOW);
 					unit_label->setPosition(base_position + ccp(0,-7));
 					cell->addChild(unit_label);
 					
