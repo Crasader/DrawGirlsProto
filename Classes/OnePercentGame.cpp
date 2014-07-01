@@ -747,7 +747,7 @@ void OnePercentGame::showFail()
 	m_container->addChild(failBox, kOnePercentGame_Z_content);
 	KSLabelTTF* failTitle = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame6), mySGD->getFont().c_str(), 20.f);
 	AudioEngine::sharedInstance()->playEffect("ment_gameover1.mp3", false);
-	failTitle->setPosition(ccp(0.0, 14.5)); 			// dt (0.0, 14.5)
+	failTitle->setPosition(ccp(0.0, 14.5 + 28.f)); 			// dt (0.0, 14.5)
 	failTitle->setColor(ccc3(255, 0, 0));
 	setFormSetter(failTitle);
 	m_container->addChild(failTitle, kOnePercentGame_Z_content);
