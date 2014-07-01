@@ -239,6 +239,11 @@ public:
 																							 }));
 		}
 
+		setFormSetter(contentBack);
+		setFormSetter(obtainReward);
+		setFormSetter(inner_right);
+		setFormSetter(rName);
+		setFormSetter(rLabel);
 		contentBack->addChild(obtainReward, kBonusGameZorder_menu);
 		setFormSetter(contentBack);
 		showPopup(onCloseCompleted);
