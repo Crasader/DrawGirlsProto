@@ -8,6 +8,7 @@
 #include "StyledLabelTTF.h"
 #include "TitleRenewal.h"
 #include "HSPEnums.h"
+#include "LoadingLayer.h"
 
 AccountManagerPopup::AccountManagerPopup()
 {
@@ -151,69 +152,106 @@ bool AccountManagerPopup::init(int touchP)
 	front->addChild(facebookLogin);
 	
 	
-	auto anotherAccountFunctor = [=](enum HSPMapping mm, HSPLogin mm2){
+	auto anotherAccountFunctor = [=](enum HSPMapping mm, HSPLogin mm2, long long prevMemberNo){
 		CCLog("another!!!");
-		ASPopupView* toAnotherAccount = ASPopupView::createDimmed(touchP - 2);
-		//					toAnotherAccount->getDimmedSprite()->removeFromParent();
-		managerPopup->addChild(toAnotherAccount);
-		
-		
-		auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		auto front = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		
-		toAnotherAccount->setContainerNode(back);
-		back->setContentSize(CCSizeMake(550 / 2.f, 432 / 2.f));
-		front->setContentSize(CCSizeMake(528 / 2.f, 346 / 2.f));
-		
-		
-		back->addChild(front);
-		front->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -17));
-		//					toAnotherAccount->addChild(back);
-		//					CommonAnimation::openPopup(this, back, nullptr);
-		
-		KSLabelTTF* titleLbl = KSLabelTTF::create("유의사항", mySGD->getFont().c_str(), 15.f);
-		titleLbl->setColor(ccc3(255, 170, 20));
-		back->addChild(titleLbl);
-		titleLbl->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, 40 + 43.5));
-		
-		StyledLabelTTF* content = StyledLabelTTF::create(
-																										 "<font color=#FFFFFF newline=12>이 ID에 연결된</font>"
-																										 "<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
-																										 "<font color=#FFFFFF newline=24>(닉네임~, 레벨~~)</font>"
-																										 "<font color=#FFAA14 newline=24>이전 기록을 불러오시겠습니까?</font>"
-																										 "<font color=#FFFFFF newline=12>이전 게임 기록을 불러오면</font>"
-																										 "<font color=#FFFFFF newline=12>현재 게임 기록은 삭제됩니다.</font>" ,
-																										 mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);
-		front->addChild(content);
-		content->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f));
-		
-		CommonButton* previousLoad = CommonButton::create("이전 기록 불러오기", 13.f, CCSizeMake(110, 50),
+		Json::Value param;
+		param["memberID"] = myHSP->getMemberID();
+		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+		addChild(ll, INT_MAX);
+		myHSP->command("getUserData", param, [=](Json::Value t){
+			ll->removeFromParent();
+			KS::KSLog("%", t);
+			if(t["result"]["code"].asInt() == GDSUCCESS)
+			{
+				ASPopupView* toAnotherAccount = ASPopupView::createDimmed(touchP - 2);
+				//					toAnotherAccount->getDimmedSprite()->removeFromParent();
+				managerPopup->addChild(toAnotherAccount);
+				
+				
+				auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+				auto front = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+				
+				toAnotherAccount->setContainerNode(back);
+				back->setContentSize(CCSizeMake(550 / 2.f, 432 / 2.f));
+				front->setContentSize(CCSizeMake(528 / 2.f, 346 / 2.f));
+				
+				
+				back->addChild(front);
+				front->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -17));
+				//					toAnotherAccount->addChild(back);
+				//					CommonAnimation::openPopup(this, back, nullptr);
+				
+				KSLabelTTF* titleLbl = KSLabelTTF::create("유의사항", mySGD->getFont().c_str(), 15.f);
+				titleLbl->setColor(ccc3(255, 170, 20));
+				back->addChild(titleLbl);
+				titleLbl->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, 40 + 43.5));
+				std::string guidanceMsg = ccsf( "<font color=#FFFFFF newline=12>이 ID에 연결된</font>"
+																											 "<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
+																											 "<font color=#FFFFFF newline=24>(%s, %d)</font>"
+																											 "<font color=#FFAA14 newline=24>이전 기록을 불러오시겠습니까?</font>"
+																											 "<font color=#FFFFFF newline=12>이전 게임 기록을 불러오면</font>"
+																											 "<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>",
+																			 t["data"]["nick"].asString().c_str(), t["highPiece"].asInt(),
+																			 myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getUserdataHighPiece());
+				StyledLabelTTF* content = StyledLabelTTF::create(
+																												 guidanceMsg.c_str() ,
+																												 mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);
+				front->addChild(content);
+				content->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f));
+				
+				CommonButton* previousLoad = CommonButton::create("이전 기록 불러오기", 13.f, CCSizeMake(110, 50),
+																													CommonButtonLightPupple, touchP - 3);
+				previousLoad->setPosition(ccp(69.5, 37.0)); 			// dt (-1.0, 9.0)
+				front->addChild(previousLoad);
+				CommonButton* keepLoad = CommonButton::create("현재 기록을 저장", 13.f, CCSizeMake(110, 50),
 																											CommonButtonLightPupple, touchP - 3);
-		previousLoad->setPosition(ccp(69.5, 37.0)); 			// dt (-1.0, 9.0)
-		front->addChild(previousLoad);
-		CommonButton* keepLoad = CommonButton::create("현재 기록을 저장", 13.f, CCSizeMake(110, 50),
-																									CommonButtonLightPupple, touchP - 3);
-		keepLoad->setPosition(ccp(193.0, 37.0)); 			// dt (-57.0, 9.0)
-		front->addChild(keepLoad);
-		CommonButton* closeButton = CommonButton::createCloseButton(touchP - 3);
-		closeButton->setPosition(ccp(244.5, 187.0)); 			// dt (244.5, 187.0)
-		front->addChild(closeButton);
-		closeButton->setFunction([=](CCObject*){
-			CommonAnimation::closePopup(this, back, nullptr, nullptr,
-																	[=](){
-																		toAnotherAccount->removeFromParent();
-																	});
-			
-		});
-		previousLoad->setFunction([=](CCObject*){
-			hspConnector::get()->logout([=](Json::Value result_data){
-				CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-//				if(result_data["error"]["isSuccess"].asBool())
-				{
+				keepLoad->setPosition(ccp(193.0, 37.0)); 			// dt (-57.0, 9.0)
+				front->addChild(keepLoad);
+				CommonButton* closeButton = CommonButton::createCloseButton(touchP - 3);
+				closeButton->setPosition(ccp(244.5, 187.0)); 			// dt (244.5, 187.0)
+				front->addChild(closeButton);
+				closeButton->setFunction([=](CCObject*){
+					CommonAnimation::closePopup(this, back, nullptr, nullptr,
+																			[=](){
+																				toAnotherAccount->removeFromParent();
+																			});
+					
+				});
+				previousLoad->setFunction([=](CCObject*){
+					LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+					addChild(ll, INT_MAX);
+					hspConnector::get()->logout([=](Json::Value result_data){
+						ll->removeFromParent();
+						CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+						if(result_data["error"]["isSuccess"].asBool())
+						{
+							// 매핑 없이 로그인 시도. 이전기록 불러오기
+							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+							mySGD->resetLabels();
+							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+						}
+						else
+						{
+							//					loading_progress_img->removeFromParent();
+							//					cancel_button->setEnabled(true);
+							//					ok_button->setEnabled(true);
+							//
+							//					cancel_button->setVisible(true);
+							//					ok_button->setVisible(true);
+							
+							CCLOG("fail logout");
+						}
+					});
+					
+				});
+				
+				keepLoad->setFunction([=](CCObject*){
+					// 강제 매핑
+					LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+					addChild(ll, INT_MAX);
 					hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
-						
+						ll->removeFromParent();
 						KS::KSLog("force %", t);
-						
 						if(t["error"]["isSuccess"].asInt())
 						{
 							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
@@ -225,57 +263,33 @@ bool AccountManagerPopup::init(int touchP)
 							
 						}
 					});
-//					myDSH->clear();
-//					myDSH->resetDSH();
-//					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-				}
-//				else
-				{
-//					loading_progress_img->removeFromParent();
-//					cancel_button->setEnabled(true);
-//					ok_button->setEnabled(true);
-//					
-//					cancel_button->setVisible(true);
-//					ok_button->setVisible(true);
-					
-					CCLOG("fail logout");
-				}
-				
-			});
-			
+				});
+				setFormSetter(front);
+				setFormSetter(back);
+				setFormSetter(closeButton);
+				setFormSetter(content);
+				setFormSetter(titleLbl);
+				setFormSetter(previousLoad);
+				setFormSetter(keepLoad);
+			}
+			else
+			{
+				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "LQError",
+																												 StyledLabelTTF::create("<font color=#FFFFFF newline=12>통신 에러</font>"
+																																								"<font color=#FFAA14>다시 시도해 주세요.</font>",
+																																								mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
+				addChild(alert);
+			}
 		});
-		
-		keepLoad->setFunction([=](CCObject*){
-			// 강제 매핑
-			hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
-				
-				KS::KSLog("force %", t);
-				
-				if(t["error"]["isSuccess"].asInt())
-				{
-					myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
-					mySGD->resetLabels();
-					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-				}
-				else
-				{
-					
-				}
-			});
-		});
-		setFormSetter(front);
-		setFormSetter(back);
-		setFormSetter(closeButton);
-		setFormSetter(content);
-		setFormSetter(titleLbl);
-		setFormSetter(previousLoad);
-		setFormSetter(keepLoad);
 	};
 	
 	facebookLogin->setFunction([=](CCObject*){
+		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+		addChild(ll, INT_MAX);
 		hspConnector::get()->mappingToAccount(HSPMapping::kFACEBOOK, false, [=](Json::Value t){
 			KS::KSLog("hhh %", t);
 			KS::KSLog("%", t);
+			ll->removeFromParent();
 			if(t["error"]["isSuccess"].asBool())
 			{
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
@@ -287,19 +301,26 @@ bool AccountManagerPopup::init(int touchP)
 			{
 				if(t["error"]["code"].asInt() == 0x0014006D)
 				{
-					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::FACEBOOK);
+					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::FACEBOOK, t["prevMemberNo"].asUInt64());
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 				else
 				{
-					
+					ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "유의사항",
+													StyledLabelTTF::create("<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
+																								 "<font color=#FFAA14>다시 시도해 주세요.</font>",
+																								 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
+					addChild(alert);
 				}
 			}
 		});
 		
 	});
 	googleLogin->setFunction([=](CCObject*){
+		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+		addChild(ll, INT_MAX);
 		hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, false, [=](Json::Value t){
+			ll->removeFromParent();
 			KS::KSLog("%", t);
 			if(t["error"]["isSuccess"].asBool())
 			{
@@ -312,7 +333,7 @@ bool AccountManagerPopup::init(int touchP)
 			{
 				if(t["error"]["code"].asInt() == 0x0014006D)
 				{
-					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::GOOGLE);
+					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::GOOGLE, t["prevMemberNo"].asUInt64());
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 				else
