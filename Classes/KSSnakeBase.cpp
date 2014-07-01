@@ -86,7 +86,7 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 	{
 		schedule(schedule_selector(KSSnakeBase::scaleAdjustment), 1/60.f);
 		schedule(schedule_selector(KSCumberBase::movingAndCrash));
-		schedule(schedule_selector(KSCumberBase::followProcess));
+		schedule(schedule_selector(KSCumberBase::followProcess), 1/5.f);
 		
 	}
 	
@@ -763,7 +763,8 @@ COLLISION_CODE KSSnakeBase::getCrashCode( IntPoint point, IntPoint* checkPositio
 	{
 		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
 		{
-			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+			float calc_distance = sqrtf((afterPoint.x - i)*(afterPoint.x - i) +
+																	(afterPoint.y - j)*(afterPoint.y - j));
 			if(calc_distance < ip_half_distance)
 			{
 				ips.insert(IntPoint(i, j));
