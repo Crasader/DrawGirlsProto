@@ -52,7 +52,7 @@ bool KSCircleBase::init(const string& ccbiName)
 	
 	schedule(schedule_selector(KSCircleBase::scaleAdjustment), 1/60.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(KSCumberBase::followProcess));	
+	schedule(schedule_selector(KSCumberBase::followProcess), 1/5.f);	
 	schedule(schedule_selector(ThisClassType::update), 1/20.f);
 	//	m_headImg->m_7->setColor(ccc3(255, 0, 0));
 	return true;
@@ -643,9 +643,19 @@ COLLISION_CODE KSCircleBase::getCrashCode( IntPoint point, IntPoint* checkPositi
 	{
 		for(int j=afterPoint.y-ip_half_distance;j<=afterPoint.y+ip_half_distance;j++)
 		{
-			float calc_distance = sqrtf(powf((afterPoint.x - i)*1,2) + powf((afterPoint.y - j)*1, 2));
+			float calc_distance = sqrtf((afterPoint.x - i)*(afterPoint.x - i) +
+																	(afterPoint.y - j)*(afterPoint.y - j));
 			if(calc_distance < ip_half_distance)
 			{
+		
+//				auto result = crashWithX(i);
+//				if(result != kCOLLISION_NONE)
+//				{
+//					if(cp)
+//						*cp = i;
+//					return result;
+//				}
+
 				ips.insert(IntPoint(i, j));
 			}
 		}
