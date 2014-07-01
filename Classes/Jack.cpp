@@ -381,18 +381,48 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			setPosition(turnPosition);
 			
-			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
-				jack_ccb_manager->runAnimationsForSequenceNamed("move");
-			
-			if(c_dv.dx == -1 && jack_img_direction == directionRight)
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			{
-				jackImg->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
+				IntDirection t_direction = c_dv.getDirection();
+				
+				if(t_direction == directionLeft)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_left");
+				}
+				else if(t_direction == directionRight)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_right");
+				}
+				else if(t_direction == directionUp)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_up");
+				}
+				else if(t_direction == directionDown)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_down");
+				}
+				
+				jack_img_direction = t_direction;
 			}
-			else if(c_dv.dx == 1 && jack_img_direction == directionLeft)
+			else
 			{
-				jackImg->setScaleX(1.f);
-				jack_img_direction = directionRight;
+				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
+					jack_ccb_manager->runAnimationsForSequenceNamed("move");
+				
+				if(c_dv.dx == -1 && jack_img_direction == directionRight)
+				{
+					jackImg->setScaleX(-1.f);
+					jack_img_direction = directionLeft;
+				}
+				else if(c_dv.dx == 1 && jack_img_direction == directionLeft)
+				{
+					jackImg->setScaleX(1.f);
+					jack_img_direction = directionRight;
+				}
 			}
 		}
 		// main direction drawing
@@ -420,19 +450,48 @@ void Jack::moveTest()
 			CCPoint turnPosition = ccpAdd(getPosition(), ccp(t_speed*c_dv.dx,t_speed*c_dv.dy));
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			setPosition(turnPosition);
-			
-			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(c_dv.dx == -1 && jack_img_direction == directionRight)
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			{
-				jackImg->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
+				IntDirection t_direction = c_dv.getDirection();
+				
+				if(t_direction == directionLeft)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
+				}
+				else if(t_direction == directionRight)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
+				}
+				else if(t_direction == directionUp)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
+				}
+				else if(t_direction == directionDown)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
+				}
+				
+				jack_img_direction = t_direction;
 			}
-			else if(c_dv.dx == 1 && jack_img_direction == directionLeft)
+			else
 			{
-				jackImg->setScaleX(1.f);
-				jack_img_direction = directionRight;
+				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+				
+				if(c_dv.dx == -1 && jack_img_direction == directionRight)
+				{
+					jackImg->setScaleX(-1.f);
+					jack_img_direction = directionLeft;
+				}
+				else if(c_dv.dx == 1 && jack_img_direction == directionLeft)
+				{
+					jackImg->setScaleX(1.f);
+					jack_img_direction = directionRight;
+				}
 			}
 		}
 		else if(c_s_dv.dx == 0 && c_s_dv.dy == 0)
@@ -452,18 +511,48 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			setPosition(turnPosition);
 			
-			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
-				jack_ccb_manager->runAnimationsForSequenceNamed("move");
-			
-			if(c_s_dv.dx == -1 && jack_img_direction == directionRight)
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			{
-				jackImg->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
+				IntDirection t_direction = c_s_dv.getDirection();
+				
+				if(t_direction == directionLeft)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_left");
+				}
+				else if(t_direction == directionRight)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_right");
+				}
+				else if(t_direction == directionUp)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_up");
+				}
+				else if(t_direction == directionDown)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("move_down");
+				}
+				
+				jack_img_direction = t_direction;
 			}
-			else if(c_s_dv.dx == 1 && jack_img_direction == directionLeft)
+			else
 			{
-				jackImg->setScaleX(1.f);
-				jack_img_direction = directionRight;
+				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
+					jack_ccb_manager->runAnimationsForSequenceNamed("move");
+				
+				if(c_s_dv.dx == -1 && jack_img_direction == directionRight)
+				{
+					jackImg->setScaleX(-1.f);
+					jack_img_direction = directionLeft;
+				}
+				else if(c_s_dv.dx == 1 && jack_img_direction == directionLeft)
+				{
+					jackImg->setScaleX(1.f);
+					jack_img_direction = directionRight;
+				}
 			}
 		}
 		else // don't move
@@ -500,18 +589,48 @@ void Jack::moveTest()
 			turnPosition = checkOutlineTurnPosition(turnPosition);
 			setPosition(turnPosition);
 			
-			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(dv.dx == -1 && jack_img_direction == directionRight)
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			{
-				jackImg->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
+				IntDirection t_direction = dv.getDirection();
+				
+				if(t_direction == directionLeft)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
+				}
+				else if(t_direction == directionRight)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
+				}
+				else if(t_direction == directionUp)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
+				}
+				else if(t_direction == directionDown)
+				{
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
+				}
+				
+				jack_img_direction = t_direction;
 			}
-			else if(dv.dx == 1 && jack_img_direction == directionLeft)
+			else
 			{
-				jackImg->setScaleX(1.f);
-				jack_img_direction = directionRight;
+				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+				
+				if(dv.dx == -1 && jack_img_direction == directionRight)
+				{
+					jackImg->setScaleX(-1.f);
+					jack_img_direction = directionLeft;
+				}
+				else if(dv.dx == 1 && jack_img_direction == directionLeft)
+				{
+					jackImg->setScaleX(1.f);
+					jack_img_direction = directionRight;
+				}
 			}
 		}
 		else if(!myDSH->getBoolForKey(kDSH_Key_isDisableLineOver))
@@ -541,18 +660,48 @@ void Jack::moveTest()
 				turnPosition = checkOutlineTurnPosition(turnPosition);
 				setPosition(turnPosition);
 				
-				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-				
-				if(dv.dx == -1 && jack_img_direction == directionRight)
+				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 				{
-					jackImg->setScaleX(-1.f);
-					jack_img_direction = directionLeft;
+					IntDirection t_direction = dv.getDirection();
+					
+					if(t_direction == directionLeft)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
+					}
+					else if(t_direction == directionRight)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
+					}
+					else if(t_direction == directionUp)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
+					}
+					else if(t_direction == directionDown)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
+					}
+					
+					jack_img_direction = t_direction;
 				}
-				else if(dv.dx == 1 && jack_img_direction == directionLeft)
+				else
 				{
-					jackImg->setScaleX(1.f);
-					jack_img_direction = directionRight;
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+					
+					if(dv.dx == -1 && jack_img_direction == directionRight)
+					{
+						jackImg->setScaleX(-1.f);
+						jack_img_direction = directionLeft;
+					}
+					else if(dv.dx == 1 && jack_img_direction == directionLeft)
+					{
+						jackImg->setScaleX(1.f);
+						jack_img_direction = directionRight;
+					}
 				}
 			}
 			else
@@ -585,18 +734,48 @@ void Jack::moveTest()
 				turnPosition = checkOutlineTurnPosition(turnPosition);
 				setPosition(turnPosition);
 				
-				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-				
-				if(s_dv.dx == -1 && jack_img_direction == directionRight)
+				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 				{
-					jackImg->setScaleX(-1.f);
-					jack_img_direction = directionLeft;
+					IntDirection t_direction = s_dv.getDirection();
+					
+					if(t_direction == directionLeft)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
+					}
+					else if(t_direction == directionRight)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
+					}
+					else if(t_direction == directionUp)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
+					}
+					else if(t_direction == directionDown)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
+					}
+					
+					jack_img_direction = t_direction;
 				}
-				else if(s_dv.dx == 1 && jack_img_direction == directionLeft)
+				else
 				{
-					jackImg->setScaleX(1.f);
-					jack_img_direction = directionRight;
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+					
+					if(s_dv.dx == -1 && jack_img_direction == directionRight)
+					{
+						jackImg->setScaleX(-1.f);
+						jack_img_direction = directionLeft;
+					}
+					else if(s_dv.dx == 1 && jack_img_direction == directionLeft)
+					{
+						jackImg->setScaleX(1.f);
+						jack_img_direction = directionRight;
+					}
 				}
 			}
 			else if(s_dv_reverse.dx == 0 && s_dv_reverse.dy == 0)
@@ -624,18 +803,48 @@ void Jack::moveTest()
 				turnPosition = checkOutlineTurnPosition(turnPosition);
 				setPosition(turnPosition);
 				
-				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-					jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-				
-				if(s_dv_reverse.dx == -1 && jack_img_direction == directionRight)
+				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 				{
-					jackImg->setScaleX(-1.f);
-					jack_img_direction = directionLeft;
+					IntDirection t_direction = s_dv_reverse.getDirection();
+					
+					if(t_direction == directionLeft)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_left");
+					}
+					else if(t_direction == directionRight)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_right"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_right");
+					}
+					else if(t_direction == directionUp)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_up"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_up");
+					}
+					else if(t_direction == directionDown)
+					{
+						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+							jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
+					}
+					
+					jack_img_direction = t_direction;
 				}
-				else if(s_dv_reverse.dx == 1 && jack_img_direction == directionLeft)
+				else
 				{
-					jackImg->setScaleX(1.f);
-					jack_img_direction = directionRight;
+					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+						jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+					
+					if(s_dv_reverse.dx == -1 && jack_img_direction == directionRight)
+					{
+						jackImg->setScaleX(-1.f);
+						jack_img_direction = directionLeft;
+					}
+					else if(s_dv_reverse.dx == 1 && jack_img_direction == directionLeft)
+					{
+						jackImg->setScaleX(1.f);
+						jack_img_direction = directionRight;
+					}
 				}
 			}
 			else // don't move
@@ -1104,7 +1313,11 @@ void Jack::endBackTracking()
 {
 	setJackState(jackStateNormal);
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+	{
 		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
+		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+			jack_img_direction = directionStop;
+	}
 
 	afterDirection = directionStop;
 	secondDirection = directionStop;
@@ -1245,12 +1458,20 @@ void Jack::stopMove()
 	if(getJackState() == jackStateNormal)
 	{
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+		{
 			jack_ccb_manager->runAnimationsForSequenceNamed("stop");
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+				jack_img_direction = directionStop;
+		}
 	}
 	else if(getJackState() == jackStateDrawing)
 	{
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawStop"))
+		{
 			jack_ccb_manager->runAnimationsForSequenceNamed("drawStop");
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+				jack_img_direction = directionStop;
+		}
 	}
 	
 	direction = directionStop;
@@ -1589,7 +1810,11 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		dieEffectCnt = 0;
 		
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("die"))
+		{
 			jack_ccb_manager->runAnimationsForSequenceNamed("die");
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+				jack_img_direction = directionStop;
+		}
 		
 //		jackImg->removeFromParentAndCleanup(true);
 
@@ -1800,8 +2025,9 @@ void Jack::setJackState( jackState t_s )
 	myGD->setJackState(myState);
 	if(myState == jackStateNormal)
 	{
-		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
-			jack_ccb_manager->runAnimationsForSequenceNamed("move");
+		if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("move");
 //		jackImg->setColor(ccWHITE);
 //		jackImg->setVisible(true);
 //		line_edge->setVisible(false);
@@ -1816,8 +2042,9 @@ void Jack::setJackState( jackState t_s )
 	{
 //		line_edge->setVisible(true);
 		myGD->communication("Main_setLineParticle", true);
-		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
-			jack_ccb_manager->runAnimationsForSequenceNamed("draw");
+		if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
 //		jackImg->setVisible(false);
 //		if(!is_hard && jack_barrier->isVisible())
 //			jack_barrier->setVisible(false);
@@ -1830,7 +2057,11 @@ void Jack::setJackState( jackState t_s )
 //		line_edge->setVisible(false);
 		myGD->communication("Main_setLineParticle", false);
 		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("rewind"))
+		{
 			jack_ccb_manager->runAnimationsForSequenceNamed("rewind");
+			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+				jack_img_direction = directionStop;
+		}
 //		jackImg->setColor(ccGRAY);
 //		if(!is_hard && jack_barrier->isVisible())
 //			jack_barrier->setVisible(false);
@@ -1986,7 +2217,11 @@ void Jack::endReviveJack()
 	setTouchPointByJoystick(CCPointZero, directionStop, true);
 	setJackState(jackStateNormal);
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+	{
 		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
+		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+			jack_img_direction = directionStop;
+	}
 //	jack_barrier->setVisible(true);
 	
 	myGD->communication("UI_resumeCounting");
@@ -2195,8 +2430,13 @@ void Jack::myInit()
 	addChild(jackImg, kJackZ_main);
 	
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
+	{
 		jack_ccb_manager->runAnimationsForSequenceNamed("stop");
-	jack_img_direction = directionRight;
+		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+			jack_img_direction = directionStop;
+	}
+	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+		jack_img_direction = directionRight;
 
 	startShowJackAnimation(jackImg);
 
@@ -2369,7 +2609,11 @@ void Jack::startReviveAnimation( CCSprite* t_jack_img )
 	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_resurrection%d.mp3", rand()%2+1)->getCString(), false, true);
 	
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("born"))
+	{
 		jack_ccb_manager->runAnimationsForSequenceNamed("born");
+		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+			jack_img_direction = directionStop;
+	}
 //	t_jack_img->setOpacity(0);
 //	t_jack_img->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.8f), CCFadeTo::create(0.5f, 255)));
 
@@ -2393,7 +2637,11 @@ void Jack::startReviveAnimation( CCSprite* t_jack_img )
 void Jack::startShowJackAnimation( CCSprite* t_jack_img )
 {
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("born"))
+	{
 		jack_ccb_manager->runAnimationsForSequenceNamed("born");
+		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+			jack_img_direction = directionStop;
+	}
 //	t_jack_img->setOpacity(0);
 //	t_jack_img->runAction(CCFadeTo::create(1.3f, 255));
 

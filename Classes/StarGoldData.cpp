@@ -2980,7 +2980,7 @@ UserdataType StarGoldData::getUserdataKeyToType(string t_key)
 string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 {
 	string return_value = "";
-
+	
 	if(t_type == kUserdataType_isVIP)
 		return_value = "isVIP";
 	else if(t_type == kUserdataType_isFirstBuy)
@@ -2991,6 +2991,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "failCount";
 	else if(t_type == kUserdataType_autoLevel)
 		return_value = "autoLevel";
+	else if(t_type == kUserdataType_selectedCharNO)
+		return_value = "selectedCharNO";
 	else if(t_type == kUserdataType_highScore)
 		return_value = "highScore";
 	else if(t_type == kUserdataType_highPiece)

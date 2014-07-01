@@ -72,6 +72,8 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 	
 	is_menu_enable = false;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+	
 	unschedule(schedule_selector(ContinueContent::countingSchedule));
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
@@ -106,7 +108,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 							   }
 							   else
 							   {
-								   schedule(schedule_selector(ContinueContent::countingSchedule), 1.f);
+								   schedule(schedule_selector(ContinueContent::countingSchedule));
 								   
 								   mySGD->clearChangeGoods();
 								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
@@ -149,7 +151,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								   }
 								   else
 								   {
-									   schedule(schedule_selector(ContinueContent::countingSchedule), 1.f);
+									   schedule(schedule_selector(ContinueContent::countingSchedule));
 									   
 									   mySGD->clearChangeGoods();
 									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
@@ -166,7 +168,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 			t_popup->setCloseFunc([=]()
 								  {
 									  is_menu_enable = true;
-									  schedule(schedule_selector(ContinueContent::countingSchedule), 1.f);
+									  schedule(schedule_selector(ContinueContent::countingSchedule));
 								  });
 			getParent()->addChild(t_popup);
 		}
@@ -205,7 +207,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								   }
 								   else
 								   {
-									   schedule(schedule_selector(ContinueContent::countingSchedule), 1.f);
+									   schedule(schedule_selector(ContinueContent::countingSchedule));
 									   
 									   mySGD->clearChangeGoods();
 									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
@@ -222,7 +224,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 			t_popup->setCloseFunc([=]()
 								  {
 									  is_menu_enable = true;
-									  schedule(schedule_selector(ContinueContent::countingSchedule), 1.f);
+									  schedule(schedule_selector(ContinueContent::countingSchedule));
 								  });
 			getParent()->addChild(t_popup);
 		}
@@ -235,6 +237,8 @@ void ContinueContent::giveupAction(CCObject* sender, CCControlEvent t_event)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
 	giveup_button->setEnabled(false);
 	continue_button->setEnabled(false);

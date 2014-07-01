@@ -66,6 +66,22 @@ public:
 		return return_value;
 	}
 	
+	IntDirection getDirection()
+	{
+		// 대각선 불가
+		if(dx == 0)
+		{
+			if(dy == 1)
+				return directionUp;
+			else // dy == -1
+				return directionDown;
+		}
+		else if(dx == 1)
+			return directionRight;
+		else // dx == -1
+			return directionLeft;
+	}
+	
 	static IntVector reverseDirectionVector(IntDirection direction)
 	{
 		IntVector r_v;

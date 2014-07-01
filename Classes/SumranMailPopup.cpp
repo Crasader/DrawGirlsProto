@@ -139,6 +139,8 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setFunction([=](CCObject*){
 		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+		
 		t_suction->setTouchEnabled(true);
 		t_suction->setVisible(true);
 		Json::Value p;

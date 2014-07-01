@@ -134,7 +134,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		list_number_d->setColor(ccc3(255, 170, 20));
 		list_number_d->enableOuterStroke(ccBLACK, 1.f);
 		list_number_d->setAnchorPoint(ccp(0,0));
-		list_number_d->setPosition(ccp(list_number->getContentSize().width+2,0));
+		list_number_d->setPosition(ccp(list_number->getContentSize().width+2,2));
 		list_number->addChild(list_number_d);
 		
 		
@@ -549,25 +549,26 @@ CCNode* AttendancePopup::getGoodsSmallNodeAndCount(string t_type, int t_count)
 	GoodsType t_goods = mySGD->getGoodsKeyToType(t_type);
 	
 	CCNode* return_node = CCNode::create();
+	return_node->setPosition(ccp(0,0));
 	if(t_goods == kGoodsType_gold)
 	{
 		CCSprite* t_icon = CCSprite::create("price_gold_img.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
 		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
 	}
 	else if(t_goods == kGoodsType_ruby)
 	{
 		CCSprite* t_icon = CCSprite::create("price_ruby_img.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
 		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
 	}
 	else if(t_goods == kGoodsType_item9)
 	{
@@ -589,60 +590,61 @@ CCNode* AttendancePopup::getGoodsSmallNodeAndCount(string t_type, int t_count)
 		CCSprite* t_icon = CCSprite::create("pass_ticket1.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
 		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
 	}
 	else if(t_goods == kGoodsType_pass2)
 	{
 		CCSprite* t_icon = CCSprite::create("pass_ticket2.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
 		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
 	}
 	else if(t_goods == kGoodsType_pass3)
 	{
 		CCSprite* t_icon = CCSprite::create("pass_ticket3.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
 		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
 	}
 	else if(t_goods == kGoodsType_pass4)
 	{
 		CCSprite* t_icon = CCSprite::create("pass_ticket4.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
 		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
 	}
 	else if(t_goods == kGoodsType_pass5)
 	{
 		CCSprite* t_icon = CCSprite::create("pass_ticket5.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
 		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
 	}
 	else if(t_goods == kGoodsType_pass6)
 	{
 		CCSprite* t_icon = CCSprite::create("pass_ticket6.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
-		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f, 0));
-		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f, 0));
 		return_node->addChild(t_icon);
-		return_node->addChild(count_label);	}
+		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
+	}
 	else
 	{
 		KSLabelTTF* count_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeMany), mySGD->getFont().c_str(), 10);

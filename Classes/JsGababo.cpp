@@ -509,7 +509,7 @@ void JsGababo::setupCongMessage()
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
 	front->addChild(message);
 	
-	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent8), 12.f, CCSizeMake(69, 44), CommonButtonYellow, 0);
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent8), 12.f, CCSizeMake(69, 46), CommonButtonYellow, 0);
 	button->setTouchPriority(m_touchPriority - 1);
 	button->setFunction(bind(&JsGababo::onPressConfirm, this, std::placeholders::_1));
 	button->getTitleLabel()->setColor(ccc3(37, 15, 0));
@@ -847,7 +847,7 @@ void JsGababo::showHandsMotionWrapper()
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("endless_loser.png");
 					m_resultStamp = result_stamp;
-					result_stamp->setRotation(-15);
+//					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
 					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 190));
 					showEffect(result_stamp);
@@ -895,7 +895,7 @@ void JsGababo::setupTutorial()
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
 	front->addChild(message);
 	
-	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 12.f, CCSizeMake(69, 44), CommonButtonYellow, 0);
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 12.f, CCSizeMake(69, 46), CommonButtonYellow, 0);
 	button->setTouchPriority(m_touchPriority - 1);
 	button->setFunction([=](CCObject*){
 		

@@ -53,19 +53,19 @@ bool HeartTime::startGame ()
 }
 void HeartTime::backHeart ()
 {
-	myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
-	CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
-	t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
-	addChild(t_heart);
-	
-	if(is_on_light)
-	{
-		GoodsLight* heart_light = GoodsLight::create(CCSprite::create("mainflow_heart_mask.png"));
-		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
-		t_heart->addChild(heart_light);
-	}
-	
-	heart_list.push_back(t_heart);
+//	myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
+//	CCSprite* t_heart = CCSprite::create("mainflow_heart.png");
+//	t_heart->setPosition(ccp(heart_list.size()*HEART_DISTANCE,0));
+//	addChild(t_heart);
+//	
+//	if(is_on_light)
+//	{
+//		GoodsLight* heart_light = GoodsLight::create(CCSprite::create("mainflow_heart_mask.png"));
+//		heart_light->setPosition(ccp(t_heart->getContentSize().width/2.f, t_heart->getContentSize().height/2.f));
+//		t_heart->addChild(heart_light);
+//	}
+//	
+//	heart_list.push_back(t_heart);
 }
 
 void HeartTime::onLight()
