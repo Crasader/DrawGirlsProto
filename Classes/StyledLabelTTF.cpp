@@ -351,6 +351,8 @@ void StyledLabelTTF::setStringByTag(const char* text){
 	m_currentPosition = (0.f);
 	m_oneLineSize = (0.f);
 	m_currentLinePosition = (0.f);
+	m_fontSize = (12.f);
+	m_fontColor = (999);
 	
 	if(m_string==text)
 		return;
