@@ -1466,9 +1466,9 @@ void Jack::stopMove()
 	}
 	else if(getJackState() == jackStateDrawing)
 	{
-		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_stop"))
+		if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("drawStop"))
 		{
-			jack_ccb_manager->runAnimationsForSequenceNamed("draw_stop");
+			jack_ccb_manager->runAnimationsForSequenceNamed("drawStop");
 			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 				jack_img_direction = directionStop;
 		}
