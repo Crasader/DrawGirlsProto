@@ -1773,12 +1773,14 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 
 void StarGoldData::heartRefreshSuccess(Json::Value result_data)
 {
+	CCLOG("heart cnt : %d", result_data["heart"].asInt());
 	myDSH->setIntegerForKey(kDSH_Key_heartCnt, result_data["heart"].asInt());
 	
 	chrono::time_point<chrono::system_clock> recent_time = chrono::system_clock::now();
 	chrono::duration<double> recent_time_value = recent_time.time_since_epoch();
 	int recent_time_second = recent_time_value.count();
 	
+	CCLOG("left time : %d", result_data["leftTime"].asInt());
 	myDSH->setIntegerForKey(kDSH_Key_heartTime, recent_time_second-mySGD->getHeartCoolTime()+result_data["leftTime"].asInt());
 }
 

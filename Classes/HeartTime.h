@@ -18,6 +18,7 @@ public:
 	void backHeart ();
 	bool isStartable ();
 	void onLight();
+	void refreshHeartTime();
 private:
 	bool is_on_light;
 	vector <CCSprite*> heart_list;

@@ -552,6 +552,9 @@ void TutoControler::stopMySchedule()
 	unschedule(schedule_selector(TutoControler::directionKeeping));
 }
 
+#define TUTO_JOYSTICK_IN_DISTANCE	50
+#define TUTO_BUTTON_IN_DISTANCE		50
+
 void TutoControler::resetTouch()
 {
 	button_touch = NULL;
@@ -560,13 +563,13 @@ void TutoControler::resetTouch()
 	
 	if(controlJoystickDirection == kControlJoystickDirection_right)
 	{
-		control_circle->setPosition(ccp(480-40-7.f, 40));
-		control_ball->setPosition(ccp(480-40-7.f, 40));
+		control_circle->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
+		control_ball->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
 	}
 	else
 	{
-		control_circle->setPosition(ccp(40+7.f, 40));
-		control_ball->setPosition(ccp(40+7.f, 40));
+		control_circle->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
+		control_ball->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
 	}
 }
 
@@ -580,13 +583,13 @@ void TutoControler::invisibleControl()
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-40-7.f, 40));
-			control_ball->setPosition(ccp(480-40-7.f, 40));
+			control_circle->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
+			control_ball->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(40+7.f, 40));
-			control_ball->setPosition(ccp(40+7.f, 40));
+			control_circle->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
+			control_ball->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
 		}
 	}
 }
@@ -684,7 +687,7 @@ void TutoControler::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x < 480-40-120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x < 480-TUTO_JOYSTICK_IN_DISTANCE-120 || after_circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -705,7 +708,7 @@ void TutoControler::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x > 40+120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x > TUTO_JOYSTICK_IN_DISTANCE+120 || after_circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -752,7 +755,7 @@ void TutoControler::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x < 480-40-120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x < 480-TUTO_JOYSTICK_IN_DISTANCE-120 || after_circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -773,7 +776,7 @@ void TutoControler::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x > 40+120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x > TUTO_JOYSTICK_IN_DISTANCE+120 || after_circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -800,6 +803,8 @@ void TutoControler::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 	}
 }
 
+#define TUTO_JOYSTICK_FOLLOW_DISTANCE	60
+
 void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
 	CCSetIterator iter;
@@ -823,9 +828,9 @@ void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 				
 				CCPoint after_circle_position = CCPointZero;
-				if(distanceValue > 37)
+				if(distanceValue > TUTO_JOYSTICK_FOLLOW_DISTANCE)
 				{
-					float sub_value = distanceValue - 37;
+					float sub_value = distanceValue - TUTO_JOYSTICK_FOLLOW_DISTANCE;
 					after_circle_position.x = 1;
 					after_circle_position.y = tanf(angle/180.f*M_PI);
 					
@@ -854,10 +859,10 @@ void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
-							if(circle_position.x < 480-40-120)
-								circle_position.x = 480-40-120;
-							if(circle_position.y > 40+120)
-								circle_position.y = 40+120;
+							if(circle_position.x < 480-TUTO_JOYSTICK_IN_DISTANCE-120)
+								circle_position.x = 480-TUTO_JOYSTICK_IN_DISTANCE-120;
+							if(circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
+								circle_position.y = TUTO_JOYSTICK_IN_DISTANCE+120;
 							
 							control_circle->setPosition(circle_position);
 							
@@ -902,10 +907,10 @@ void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
-							if(circle_position.x > 40+120)
-								circle_position.x = 40+120;
-							if(circle_position.y > 40+120)
-								circle_position.y = 40+120;
+							if(circle_position.x > TUTO_JOYSTICK_IN_DISTANCE+120)
+								circle_position.x = TUTO_JOYSTICK_IN_DISTANCE+120;
+							if(circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
+								circle_position.y = TUTO_JOYSTICK_IN_DISTANCE+120;
 							
 							control_circle->setPosition(circle_position);
 							
@@ -998,10 +1003,10 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
-						if(circle_position.x < 480-40-120)
-							circle_position.x = 480-40-120;
-						if(circle_position.y > 40+120)
-							circle_position.y = 40+120;
+						if(circle_position.x < 480-TUTO_JOYSTICK_IN_DISTANCE-120)
+							circle_position.x = 480-TUTO_JOYSTICK_IN_DISTANCE-120;
+						if(circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
+							circle_position.y = TUTO_JOYSTICK_IN_DISTANCE+120;
 						
 						control_circle->setPosition(circle_position);
 						
@@ -1046,10 +1051,10 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
-						if(circle_position.x > 40+120)
-							circle_position.x = 40+120;
-						if(circle_position.y > 40+120)
-							circle_position.y = 40+120;
+						if(circle_position.x > TUTO_JOYSTICK_IN_DISTANCE+120)
+							circle_position.x = TUTO_JOYSTICK_IN_DISTANCE+120;
+						if(circle_position.y > TUTO_JOYSTICK_IN_DISTANCE+120)
+							circle_position.y = TUTO_JOYSTICK_IN_DISTANCE+120;
 						
 						control_circle->setPosition(circle_position);
 						
@@ -1089,13 +1094,13 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			{
 				if(controlJoystickDirection == kControlJoystickDirection_right)
 				{
-					control_circle->setPosition(ccp(480-40-7.f, 40));
-					control_ball->setPosition(ccp(480-40-7.f, 40));
+					control_circle->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
+					control_ball->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
 				}
 				else
 				{
-					control_circle->setPosition(ccp(40+7.f, 40));
-					control_ball->setPosition(ccp(40+7.f, 40));
+					control_circle->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
+					control_ball->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
 				}
 			}
 			
@@ -1181,13 +1186,13 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-40-7.f, 40));
-			control_ball->setPosition(ccp(480-40-7.f, 40));
+			control_circle->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
+			control_ball->setPosition(ccp(480-TUTO_JOYSTICK_IN_DISTANCE-7.f, TUTO_JOYSTICK_IN_DISTANCE));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(40+7.f, 40));
-			control_ball->setPosition(ccp(40+7.f, 40));
+			control_circle->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
+			control_ball->setPosition(ccp(TUTO_JOYSTICK_IN_DISTANCE+7.f, TUTO_JOYSTICK_IN_DISTANCE));
 		}
 	}
 	
@@ -1198,8 +1203,8 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString(),this));
 		button_ani = reader->getAnimationManager();
 		//		draw_button = CCSprite::create("ui_draw.png");
-		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-40,40));
-		else								draw_button->setPosition(ccp(40,40));
+		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-TUTO_BUTTON_IN_DISTANCE,TUTO_BUTTON_IN_DISTANCE));
+		else								draw_button->setPosition(ccp(TUTO_BUTTON_IN_DISTANCE,TUTO_BUTTON_IN_DISTANCE));
 		addChild(draw_button);
 		reader->release();
 		

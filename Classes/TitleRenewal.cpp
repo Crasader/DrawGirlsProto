@@ -162,12 +162,9 @@ void TitleRenewalScene::endSplash()
 //	
 //	addChild(KSTimer::create(1.5f, [=]()
 //	{
-		realInit();
+//		realInit();
 //	}));
-}
-
-void TitleRenewalScene::realInit()
-{
+	
 	title_img = CCSprite::create("temp_title_back.png");
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
@@ -210,14 +207,28 @@ void TitleRenewalScene::realInit()
 	black_img->setScaleX(screen_scale_x);
 	black_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(black_img, 3);
+	white_back->removeFromParent();
 	
+	myHSP->getIsUsimKorean([=](Json::Value result_data)
+						   {
+							   GraphDogLib::JsonToLog("isUsimKorean", result_data);
+							   if(result_data["korean"].asBool())
+							   {
+								   realInit();
+							   }
+							   else
+							   {
+								   realInit();
+							   }
+						   });
+}
+
+void TitleRenewalScene::realInit()
+{
 	Json::Value param;
 	param["ManualLogin"] = true;
 	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-	
-	white_back->removeFromParent();
-	
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -250,28 +261,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
-		myHSP->getIsUsimKorean([=](Json::Value result_data)
-							   {
-									 is_menu_enable = true;
-//								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
-//								   if(result_data["isSuccess"].asBool())
-//									{
-//										this->is_menu_enable = false;
-//										
-//										Terms* t_terms = Terms::create(-999999, [=]()
-//																	   {
-//																		   this->is_menu_enable = true;
-//																	   });
-//										addChild(t_terms, 10000);
-//									}
-//								   else
-//									{
-//										is_menu_enable = true;
-//									}
-							   });
-		
-		
-		
+		is_menu_enable = true;
 		
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
 		state_label->stopAllActions();
@@ -729,7 +719,6 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 			exit(1);
 			return;
 		}
-		
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
 		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());
