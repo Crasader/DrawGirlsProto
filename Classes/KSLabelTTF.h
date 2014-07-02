@@ -12,6 +12,7 @@ USING_NS_CC;
 #define SHADER_PROGRAM kCCShader_PositionTextureA8Color
 #endif
 
+
 class KSLabelTTF : public CCLabelTTF
 {
 public:
@@ -28,6 +29,7 @@ public:
 	virtual void setDisableItalic();
 	virtual void setOpacity(GLubyte opacity);
 	virtual void setColor(ccColor3B t_color);
+	virtual void setGradientColor(const ccColor4B& start, const ccColor4B& end, const CCPoint& v);
 	//	void draw();
 	//virtual void setString(const char *label);
 	static KSLabelTTF * create()
@@ -98,7 +100,7 @@ public:
 		return this->initWithString(label, fontName, fontSize,
 																CCSizeZero, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 	}
-
+	
 	virtual bool initWithString(const char *string, const char *fontName, float fontSize,
 															const cocos2d::CCSize &dimensions, CCTextAlignment hAlignment,
 															CCVerticalTextAlignment vAlignment)
@@ -147,6 +149,7 @@ public:
 	virtual void setString(const char *string);
 	void enableGradation(ccColor4B startColor, ccColor4B endColor, CCPoint alongVector);
 	void disableGradation();
+	void updateColor();
 protected:
 	float m_outerStrokeSize;
 	ccColor3B m_outerStrokeColor;
@@ -159,5 +162,10 @@ protected:
 	ccColor4B m_endColor;
 	CCPoint m_alongVector; // 그라데이션 방향.
 	CCClippingNode* m_clippingNodeForGra;
+	
+//	CC_PROPERTY_PASS_BY_REF(ccColor3B, m_startColor, StartColor)
+//	CC_PROPERTY_PASS_BY_REF(ccColor3B, m_endColor, EndColor)
+//	CC_PROPERTY(GLubyte, m_cStartOpacity, StartOpacity)
+//	CC_PROPERTY(GLubyte, m_cEndOpacity, EndOpacity)
+//	CC_PROPERTY_PASS_BY_REF(CCPoint, m_AlongVector, Vector)
 };
-

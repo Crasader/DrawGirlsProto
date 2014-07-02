@@ -21,6 +21,7 @@ void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSiz
 
 void KSLabelTTF::setColor(ccColor3B t_color)
 {
+	m_gradationMode = false;
 	if(t_color.r + t_color.g + t_color.b < 100)
 	{
 		//		enableOuterStroke(ccWHITE, m_outerStrokeSize, m_outerStrokeOpacity);
@@ -30,6 +31,101 @@ void KSLabelTTF::setColor(ccColor3B t_color)
 }
 
 
+void KSLabelTTF::setGradientColor(const ccColor4B& start, const ccColor4B& end, const CCPoint& v)
+{
+	m_gradationMode = true;
+	m_startColor = start;
+	m_endColor = end;
+	m_alongVector = v;
+	
+//	CCLabelTTF::setColor(ccc3(m_startColor.r, m_startColor.g, m_startColor.b));
+	updateColor();
+}
+
+void KSLabelTTF::updateColor()
+{
+	if(m_gradationMode == false)
+	{
+		CCLabelTTF::updateColor();
+		return;
+	}
+	else
+	{
+		float h = ccpLength(m_alongVector);
+		if (h == 0)
+			return;
+		
+		float c = sqrtf(2.0f);
+		CCPoint u = ccp(m_alongVector.x / h, m_alongVector.y / h);
+		
+		// Compressed Interpolation mode
+		//	if (m_bCompressedInterpolation)
+		{
+			float h2 = 1 / ( fabsf(u.x) + fabsf(u.y) );
+			u = ccpMult(u, h2 * (float)c);
+		}
+		
+		//	float opacityf = (float)_displayedOpacity / 255.0f;
+		
+		ccColor4F S = {
+			m_startColor.r / 255.0f,
+			m_startColor.g / 255.0f,
+			m_startColor.b / 255.0f,
+			m_startColor.a / 255.0f
+		};
+		
+		ccColor4F E = {
+			m_endColor.r / 255.0f,
+			m_endColor.g / 255.0f,
+			m_endColor.b / 255.0f,
+			m_endColor.a / 255.0f
+		};
+		
+		// (-1, -1)
+		ccColor4F m_pSquareColors[4];
+		m_pSquareColors[0].r = E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c));
+		m_pSquareColors[0].g = E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c));
+		m_pSquareColors[0].b = E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c));
+		m_pSquareColors[0].a = E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c));
+		// (1, -1)
+		m_pSquareColors[1].r = E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c));
+		m_pSquareColors[1].g = E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c));
+		m_pSquareColors[1].b = E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c));
+		m_pSquareColors[1].a = E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c));
+		// (-1, 1)
+		m_pSquareColors[2].r = E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c));
+		m_pSquareColors[2].g = E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c));
+		m_pSquareColors[2].b = E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c));
+		m_pSquareColors[2].a = E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c));
+		// (1, 1)
+		m_pSquareColors[3].r = E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c));
+		m_pSquareColors[3].g = E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c));
+		m_pSquareColors[3].b = E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c));
+		m_pSquareColors[3].a = E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c));
+		
+		
+		
+		m_sQuad.bl.colors = ccc4BFromccc4F(m_pSquareColors[0]);
+		m_sQuad.br.colors = ccc4BFromccc4F(m_pSquareColors[1]);
+		m_sQuad.tl.colors = ccc4BFromccc4F(m_pSquareColors[2]);
+		m_sQuad.tr.colors = ccc4BFromccc4F(m_pSquareColors[3]);
+		
+		// renders using batch node
+		if (m_pobBatchNode)
+		{
+			if (m_uAtlasIndex != CCSpriteIndexNotInitialized)
+			{
+				m_pobTextureAtlas->updateQuad(&m_sQuad, m_uAtlasIndex);
+			}
+			else
+			{
+				// no need to set it recursively
+				// update dirty_, don't update recursiveDirty_
+				setDirty(true);
+			}
+		}
+	}
+}
 void KSLabelTTF::disableOuterStroke(bool mustUpdateTexture)
 {
 	m_outerIsStroke = false;
@@ -84,7 +180,7 @@ bool KSLabelTTF::updateTexture()
 		m_outerSprite->removeFromParent();
 		m_outerSprite = nullptr;
 	}
-//	startFormSetter(this);
+	//	startFormSetter(this);
 	auto textureForGradient = CCSprite::createWithTexture(getTexture());
 	
 	CCRect rect =CCRectZero;
@@ -140,7 +236,7 @@ bool KSLabelTTF::updateTexture()
 			m_clippingNodeForGra->removeFromParent();
 		}
 		CCClippingNode* cNode = CCClippingNode::create();
-//		textureForGradient->getTexture()->setAliasTexParameters();
+		//		textureForGradient->getTexture()->setAliasTexParameters();
 		cNode->setStencil(textureForGradient);
 		cNode->setAlphaThreshold(0.1f);
 		CCLayerGradient* cclg = CCLayerGradient::create(m_startColor, m_endColor, m_alongVector);
