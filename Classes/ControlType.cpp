@@ -810,6 +810,9 @@ void ControlJoystickButton::resetTouch()
 	}
 }
 
+#define JOYSTICK_SCREEN_IN_DISTANCE	50
+#define BUTTON_SCREEN_IN_DISTANCE	50
+
 void ControlJoystickButton::invisibleControl()
 {
 	offButton();
@@ -820,13 +823,13 @@ void ControlJoystickButton::invisibleControl()
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
-			control_ball->setPosition(ccp(480-40-myGD->boarder_value, 40));
+			control_circle->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+			control_ball->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
-			control_ball->setPosition(ccp(40+myGD->boarder_value, 40));
+			control_circle->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+			control_ball->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
 		}
 	}
 }
@@ -949,7 +952,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x < 480-40-120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x < 480-JOYSTICK_SCREEN_IN_DISTANCE-120 || after_circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -970,7 +973,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x > 40+120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x > JOYSTICK_SCREEN_IN_DISTANCE+120 || after_circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -1019,7 +1022,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x < 480-40-120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x < 480-JOYSTICK_SCREEN_IN_DISTANCE-120 || after_circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -1040,7 +1043,7 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
-						if(after_circle_position.x > 40+120 || after_circle_position.y > 40+120)
+						if(after_circle_position.x > JOYSTICK_SCREEN_IN_DISTANCE+120 || after_circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
 							return;
 						else
 							control_circle->setPosition(after_circle_position);
@@ -1066,6 +1069,8 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		}
 	}
 }
+
+#define JOYSTICK_FOLLOW_DISTANCE 60
 
 void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
@@ -1093,9 +1098,9 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 				
 				CCPoint after_circle_position = CCPointZero;
-				if(distanceValue > 37)
+				if(distanceValue > JOYSTICK_FOLLOW_DISTANCE)
 				{
-					float sub_value = distanceValue - 37;
+					float sub_value = distanceValue - JOYSTICK_FOLLOW_DISTANCE;
 					after_circle_position.x = 1;
 					after_circle_position.y = tanf(angle/180.f*M_PI);
 					
@@ -1124,10 +1129,10 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
-							if(circle_position.x < 480-40-120)
-								circle_position.x = 480-40-120;
-							if(circle_position.y > 40+120)
-								circle_position.y = 40+120;
+							if(circle_position.x < 480-JOYSTICK_SCREEN_IN_DISTANCE-120)
+								circle_position.x = 480-JOYSTICK_SCREEN_IN_DISTANCE-120;
+							if(circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
+								circle_position.y = JOYSTICK_SCREEN_IN_DISTANCE+120;
 							
 							control_circle->setPosition(circle_position);
 							
@@ -1172,10 +1177,10 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						if(!isControlJoystickNotFixed)
 						{
 							CCPoint circle_position = after_circle_position;
-							if(circle_position.x > 40+120)
-								circle_position.x = 40+120;
-							if(circle_position.y > 40+120)
-								circle_position.y = 40+120;
+							if(circle_position.x > JOYSTICK_SCREEN_IN_DISTANCE+120)
+								circle_position.x = JOYSTICK_SCREEN_IN_DISTANCE+120;
+							if(circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
+								circle_position.y = JOYSTICK_SCREEN_IN_DISTANCE+120;
 							
 							control_circle->setPosition(circle_position);
 							
@@ -1275,10 +1280,10 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
-						if(circle_position.x < 480-40-120)
-							circle_position.x = 480-40-120;
-						if(circle_position.y > 40+120)
-							circle_position.y = 40+120;
+						if(circle_position.x < 480-JOYSTICK_SCREEN_IN_DISTANCE-120)
+							circle_position.x = 480-JOYSTICK_SCREEN_IN_DISTANCE-120;
+						if(circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
+							circle_position.y = JOYSTICK_SCREEN_IN_DISTANCE+120;
 						
 						control_circle->setPosition(circle_position);
 						
@@ -1323,10 +1328,10 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 					if(!isControlJoystickNotFixed)
 					{
 						CCPoint circle_position = after_circle_position;
-						if(circle_position.x > 40+120)
-							circle_position.x = 40+120;
-						if(circle_position.y > 40+120)
-							circle_position.y = 40+120;
+						if(circle_position.x > JOYSTICK_SCREEN_IN_DISTANCE+120)
+							circle_position.x = JOYSTICK_SCREEN_IN_DISTANCE+120;
+						if(circle_position.y > JOYSTICK_SCREEN_IN_DISTANCE+120)
+							circle_position.y = JOYSTICK_SCREEN_IN_DISTANCE+120;
 						
 						control_circle->setPosition(circle_position);
 						
@@ -1366,13 +1371,13 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			{
 				if(controlJoystickDirection == kControlJoystickDirection_right)
 				{
-					control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
-					control_ball->setPosition(ccp(480-40-myGD->boarder_value, 40));
+					control_circle->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+					control_ball->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
 				}
 				else
 				{
-					control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
-					control_ball->setPosition(ccp(40+myGD->boarder_value, 40));
+					control_circle->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+					control_ball->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
 				}
 			}
 			
@@ -1420,8 +1425,8 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 
 		if(joystick_touch)
 		{
-			if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(40+myGD->boarder_value, 40));
-			else																								control_circle->setPosition(ccp(480-40-myGD->boarder_value, 40));
+			if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+			else																								control_circle->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
 
 			control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
@@ -1468,21 +1473,21 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	{
 		if(controlJoystickDirection == kControlJoystickDirection_right)
 		{
-			control_circle->setPosition(ccp(480-40-myGD->boarder_value+CONTROL_OUT_DISTANCE, 40));
-			control_ball->setPosition(ccp(480-40-myGD->boarder_value+CONTROL_OUT_DISTANCE, 40));
+			control_circle->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value+CONTROL_OUT_DISTANCE, JOYSTICK_SCREEN_IN_DISTANCE));
+			control_ball->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value+CONTROL_OUT_DISTANCE, JOYSTICK_SCREEN_IN_DISTANCE));
 			
-			addChild(KSGradualValue<float>::create(480-40-myGD->boarder_value + CONTROL_OUT_DISTANCE, 480-40-myGD->boarder_value, CONTROL_IN_TIME,
+			addChild(KSGradualValue<float>::create(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value + CONTROL_OUT_DISTANCE, 480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, CONTROL_IN_TIME,
 												   [=](float t){control_circle->setPositionX(t);control_ball->setPositionX(t);},
-												   [=](float t){control_circle->setPositionX(480-40-myGD->boarder_value);control_ball->setPositionX(480-40-myGD->boarder_value);}));
+												   [=](float t){control_circle->setPositionX(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value);control_ball->setPositionX(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value);}));
 		}
 		else
 		{
-			control_circle->setPosition(ccp(40+myGD->boarder_value-CONTROL_OUT_DISTANCE, 40));
-			control_ball->setPosition(ccp(40+myGD->boarder_value-CONTROL_OUT_DISTANCE, 40));
+			control_circle->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value-CONTROL_OUT_DISTANCE, JOYSTICK_SCREEN_IN_DISTANCE));
+			control_ball->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value-CONTROL_OUT_DISTANCE, JOYSTICK_SCREEN_IN_DISTANCE));
 			
-			addChild(KSGradualValue<float>::create(40+myGD->boarder_value - CONTROL_OUT_DISTANCE, 40+myGD->boarder_value, CONTROL_IN_TIME,
+			addChild(KSGradualValue<float>::create(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value - CONTROL_OUT_DISTANCE, JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, CONTROL_IN_TIME,
 												   [=](float t){control_circle->setPositionX(t);control_ball->setPositionX(t);},
-												   [=](float t){control_circle->setPositionX(40+myGD->boarder_value);control_ball->setPositionX(40+myGD->boarder_value);}));
+												   [=](float t){control_circle->setPositionX(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value);control_ball->setPositionX(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value);}));
 		}
 	}
 
@@ -1495,19 +1500,19 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)
 		{
-			draw_button->setPosition(ccp(480-40+CONTROL_OUT_DISTANCE,40));
+			draw_button->setPosition(ccp(480-BUTTON_SCREEN_IN_DISTANCE+CONTROL_OUT_DISTANCE,BUTTON_SCREEN_IN_DISTANCE));
 			
-			addChild(KSGradualValue<float>::create(480-40 - CONTROL_OUT_DISTANCE, 480-40, CONTROL_IN_TIME,
+			addChild(KSGradualValue<float>::create(480-BUTTON_SCREEN_IN_DISTANCE - CONTROL_OUT_DISTANCE, 480-BUTTON_SCREEN_IN_DISTANCE, CONTROL_IN_TIME,
 												   [=](float t){draw_button->setPositionX(t);},
-												   [=](float t){draw_button->setPositionX(480-40);}));
+												   [=](float t){draw_button->setPositionX(480-BUTTON_SCREEN_IN_DISTANCE);}));
 		}
 		else
 		{
-			draw_button->setPosition(ccp(40-CONTROL_OUT_DISTANCE,40));
+			draw_button->setPosition(ccp(BUTTON_SCREEN_IN_DISTANCE-CONTROL_OUT_DISTANCE,BUTTON_SCREEN_IN_DISTANCE));
 			
-			addChild(KSGradualValue<float>::create(40 - CONTROL_OUT_DISTANCE, 40, CONTROL_IN_TIME,
+			addChild(KSGradualValue<float>::create(BUTTON_SCREEN_IN_DISTANCE - CONTROL_OUT_DISTANCE, BUTTON_SCREEN_IN_DISTANCE, CONTROL_IN_TIME,
 												   [=](float t){draw_button->setPositionX(t);},
-												   [=](float t){draw_button->setPositionX(40);}));
+												   [=](float t){draw_button->setPositionX(BUTTON_SCREEN_IN_DISTANCE);}));
 		}
 		addChild(draw_button);
 		
@@ -1556,9 +1561,9 @@ void ControlJoystickButton::offButton()
 		click_label->runAction(t_fade);
 		
 		if(controlJoystickDirection == kControlJoystickDirection_left)
-			draw_button->setPosition(ccp(480-40,40));
+			draw_button->setPosition(ccp(480-BUTTON_SCREEN_IN_DISTANCE,BUTTON_SCREEN_IN_DISTANCE));
 		else
-			draw_button->setPosition(ccp(40,40));
+			draw_button->setPosition(ccp(BUTTON_SCREEN_IN_DISTANCE,BUTTON_SCREEN_IN_DISTANCE));
 	}
 }
 
