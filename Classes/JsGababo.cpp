@@ -232,9 +232,11 @@ void JsGababo::setupReward()
 		front2->addChild(_1winTagLbl, 1);
 		
 		auto _1winReward = CCSprite::create(m_rewards[rewardIndex].spriteName.c_str());
+		_1winReward->setScale(0.7f);
 		_1winReward->setPosition(ccpFromSize(_1winBox->getContentSize()) / 2.f + ccp(0, -4.0));
 		_1winBox->addChild(_1winReward);
 		auto _1winRewardLbl = KSLabelTTF::create(m_rewards[rewardIndex].desc.c_str(), mySGD->getFont().c_str(), 11.f);
+		_1winRewardLbl->setScale(1.f/0.7f);
 		_1winRewardLbl->setPosition(ccpFromSize(_1winReward->getContentSize()) / 2.f + ccp(0, -6.0));
 		_1winReward->addChild(_1winRewardLbl);
 		return make_pair(_1winBox, _1winTagLbl);
@@ -505,6 +507,7 @@ void JsGababo::setupCongMessage()
 													 mySGD->getFont().c_str(),
 													 12.f, 999, StyledAlignment::kCenterAlignment);
 	m_message = message;
+	
 	message->setAnchorPoint(ccp(0.5f, 0.5f));
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
 	front->addChild(message);
@@ -583,6 +586,7 @@ void JsGababo::onPressConfirm(CCObject* t)
 		return;
 	
 	auto rollBack = [=](){
+		
 		auto r1 = m_leftHandContainer->getRotation();
 		auto r2 = m_rightHandContainer->getRotation();
 		addChild(KSGradualValue<float>::create(0, 1.f, 1.f, [=](float t){
@@ -596,6 +600,13 @@ void JsGababo::onPressConfirm(CCObject* t)
 			float y1 = (120) * t + r2;
 			m_leftHandContainer->setRotation(y0);
 			m_rightHandContainer->setRotation(y1);
+			if(m_currentJudge == "draw")
+			{
+				m_ba->setEnabled(true);
+				m_ga->setEnabled(true);
+				m_bo->setEnabled(true);
+				
+			}
 		}));
 		
 	};
@@ -604,11 +615,11 @@ void JsGababo::onPressConfirm(CCObject* t)
 		m_ba->setEnabled(false);
 		m_ga->setEnabled(false);
 		m_bo->setEnabled(false);
-		contextSwitching(m_front3, m_front1, rollBack, [=](){
-			m_ba->setEnabled(true);
-			m_ga->setEnabled(true);
-			m_bo->setEnabled(true);
-		});
+		addChild(KSTimer::create(2.0f, [=](){
+			contextSwitching(m_front3, m_front1, rollBack, [=](){
+				
+			});
+		}));
 		//		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
 		//		auto onSelection = [=]() // 바위 가위 보 셋중 하나 눌렀을 때~
 		//		{
@@ -790,7 +801,7 @@ void JsGababo::showHandsMotionWrapper()
 			if(m_mySelection == computer) // Draw
 			{
 				m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent10));
-				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 10));
+				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 6, 10 + 6.5 - 3));
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("gababo_draw.png");
 					m_resultStamp = result_stamp;
@@ -805,18 +816,16 @@ void JsGababo::showHandsMotionWrapper()
 			else if(D == 1) // Win
 			{
 				CCLOG("win");
-				
 				if(m_winCount != 3)
 				{
 					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent11));
-					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
+					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f - 6));
 				}
 				else
 				{
 					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent12)
 											  );
-					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
-					
+					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 4.5, 15.f + 21.f));
 				}
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("endless_winner.png");
