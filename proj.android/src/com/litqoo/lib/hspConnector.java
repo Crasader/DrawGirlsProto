@@ -27,6 +27,10 @@ import com.hangame.hsp.HSPMappingType;
 import com.hangame.hsp.HSPMessage;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
+import com.hangame.hsp.HSPResult.HSPResultCode;
+import com.hangame.hsp.HSPServiceProperties;
+import com.hangame.hsp.HSPServiceProperties.HSPServerName;
+import com.hangame.hsp.HSPState;
 import com.hangame.hsp.HSPUtil;
 import com.hangame.hsp.HSPUtil.HSPAlertViewWithToastTermsCB;
 import com.hangame.hsp.cgp.HSPCGP;
@@ -173,15 +177,19 @@ public class hspConnector{
 //					public void run() {
 					
 						HSPCore core = HSPCore.getInstance();
+						if(core.getState() == HSPState.HSP_STATE_ONLINE)
+						{
+							Log.d("hsp", "dfsgfsdg");
+						}
 						if (core != null) { 
 //							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
                             Boolean isOverWriteMapping = Boolean.valueOf(force);     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
 
 							HSPMappingType mt2 = HSPMappingType.values()[mt];
-							HSPCore.getInstance().requestMappingToAccount(mt2, isOverWriteMapping, new HSPCore.HSPRequestMappingToAccountCB() {
+							HSPCore.getInstance().requestMappingToAccount(mt2, isOverWriteMapping, new HSPCore.HSPReMappingAndMemberNoCB () {
 
 								@Override
-								public void onIdpIDMap(HSPResult result) {
+								public void onIdpIDMap(HSPResult result , long prevMemberNo) {
 									Log.d("mapping", "@@@@@@ HSPCore.login callback => " + result);
 									JSONObject r = new JSONObject();
 									JSONObject error = new JSONObject();
@@ -191,7 +199,13 @@ public class hspConnector{
 
 									} else { // 매핑을 실패한 케이스
 										Log.d("mapping", "HSP Remapping Failed - error = " + result);
+										if(result.getCode() == HSPResultCode.HSP_RESULT_CODE_ALREADY_MAPPED_ACCOUNT_TO_SNO){
 
+											// 만약 이미 매핑되어 있는 id라고 하면 매핑되어 있는 memberNo를 얻을 수 있다.
+
+											Log.d("TAG", "previous member number : " + prevMemberNo);
+
+										}
 										// 상세 에러코드 확인
 										Log.d("mapping", "Detail Error code = " + result.getCode() + ", domain = " + result.getDomain()
 												+ ", detail = " + result.getDetail());
@@ -214,6 +228,7 @@ public class hspConnector{
 
 									try {
 										r.put("account", mt);
+										r.put("prevMemberNo", prevMemberNo);
 										error.put("code", result.getCode());
 										error.put("isSuccess", result.isSuccess());
 										error.put("localizedDescription", result.getDetail());
@@ -264,6 +279,12 @@ public class hspConnector{
 		
 		
 	}	
+	public static String getServerAddress() 
+	{
+		HSPServiceProperties properties = HSPCore.getInstance().getServiceProperties();
+		String gameServerAddress = properties.getServerAddress(HSPServerName.HSP_SERVERNAME_GAMESVR);
+		return gameServerAddress;
+	}
 	public static void openKakaoMsg(){
 
 			/**
@@ -377,6 +398,12 @@ public class hspConnector{
 
 								public void onLogin(final HSPResult result, boolean isPlayable) {
 									//Log.d("litqoo", "BEGIN - HSPLoginCB");
+											
+                                    HSPCore core = HSPCore.getInstance();
+									if(core.getState() == HSPState.HSP_STATE_ONLINE)
+									{
+										Log.d("hsp", "dfsgfsdg");
+									}
 									JSONObject r= new JSONObject();
 									JSONObject error = new JSONObject();
 
@@ -482,7 +509,7 @@ public class hspConnector{
                 JSONObject r= new JSONObject();
 //                JSONObject error = new JSONObject();
                 try {
-                	r.put("korean", agreeTrueFalse);
+                	r.put("korean", !agreeTrueFalse);
                 	r.put("isSuccess", 1);
 //                	error.put("localizedDescription", result.getDetail());
 //                	r.put("error", error);
