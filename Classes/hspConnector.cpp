@@ -371,15 +371,15 @@ string hspConnector::getCountryCode(){
 
 
 string hspConnector::getServerAddress(){
+	string r;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return "182.162.196.182:10080";
+	r="182.162.196.182:10080";
 	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
 	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
-	string r;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getServerAddress", "()Ljava/lang/String;")) {
 		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
 		
