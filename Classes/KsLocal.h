@@ -18,7 +18,9 @@ using namespace std;
 enum class LK
 {
 	kItem1,
-	kReGacha
+	kReGacha,
+	kRewardConfirm,
+	kRewardTitle
 };
 class KsLocal
 {

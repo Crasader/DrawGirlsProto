@@ -72,6 +72,8 @@ void KsLocal::ko()
 	std::map<LK, std::string> obj;
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
 	obj[LK::kReGacha] = "다시 뽑기";
+	obj[LK::kRewardConfirm] = "확인";
+	obj[LK::kRewardTitle] = "게임 결과";
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::en()
@@ -79,6 +81,8 @@ void KsLocal::en()
 	std::map<LK, std::string> obj;
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
 	obj[LK::kReGacha] = "다시 뽑기";
+	obj[LK::kRewardConfirm] = "확인";
+	obj[LK::kRewardTitle] = "게임 결과";
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::ja()
@@ -86,5 +90,7 @@ void KsLocal::ja()
 	std::map<LK, std::string> obj;
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
 	obj[LK::kReGacha] = "다시 뽑기";
+	obj[LK::kRewardConfirm] = "확인";
+	obj[LK::kRewardTitle] = "게임 결과";
 	m_mapper[__FUNCTION__] = obj;
 }
