@@ -12,6 +12,7 @@ USING_NS_CC;
 #include "KSUtil.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "KsLocal.h"
 
 
 //#include "GaBaBo.h"
@@ -208,22 +209,29 @@ public:
 		inner_right->setContentSize(CCSizeMake(280.5,157.0)); 			// dt (30.5,-78.0)
 		contentBack->addChild(inner_right);
 		
-		rName->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f);
+		rName->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5));
 		contentBack->addChild(rName);
 		
 		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 16.f);
-		rLabel->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f);
-		rLabel->setColor(ccc3(254, 250, 50));
+		rLabel->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5));
+//		rLabel->setColor(ccc3(254, 250, 50));
+		rLabel->setColor(ccc3(255, 255, 255));
 		rLabel->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 		contentBack->addChild(rLabel);
-		
+	
+		StyledLabelTTF* comment = StyledLabelTTF::create("<font color=#FFFFFF newline=12>축하합니다.</font>"
+																										 "<font color=#FFFFFF>보상은 선물함에서 확인하세요.</font>", mySGD->getFont().c_str(),
+																										 12.f, 999, StyledAlignment::kCenterAlignment);
+		contentBack->addChild(comment);
+		comment->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -12.5));
+		setFormSetter(comment);
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
 //		auto m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
 //																			 buttonBack, m_touchPriority - 1);
 //		m_startMenu->setPosition( ccp(240, 65.f) );
-		auto obtainReward = CommonButton::create("확인", 23.f, CCSizeMake(160, 50),
+		auto obtainReward = CommonButton::create(getLocal(LK::kRewardConfirm), 23.f, CCSizeMake(160, 50),
 																			 CommonButtonLightPupple, m_touchPriority - 1);
-		obtainReward->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -50));
+		obtainReward->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -50 - 15.5));
 		if(obtainReward)
 		{
 			addChild(KSGradualValue<CCPoint>::create(obtainReward->getPosition(), ccp(240, 85.f), 0.3f,
@@ -255,10 +263,10 @@ public:
 			setFormSetter(obtainReward);
 		});
 	
-		KSLabelTTF* rewardConfirm = KSLabelTTF::create("보상 확인", mySGD->getFont().c_str(), 20.f);
+		KSLabelTTF* rewardConfirm = KSLabelTTF::create(getLocal(LK::kRewardTitle), mySGD->getFont().c_str(), 20.f);
 		rewardConfirm->setColor(ccc3(255, 155, 0));
 		contentBack->addChild(rewardConfirm);
-		rewardConfirm->setPosition(ccp(52.5,178.0)); 			// dt (52.5,178.0)
+		rewardConfirm->setPosition(ccp(contentBack->getContentSize().width / 2.f, 178.0)); 			// dt (52.5,178.0)
 	
 		CommonAnimation::openPopup(this, contentBack, nullptr, nullptr, nullptr);
 //		StyledLabelTTF* sltObtain = StyledLabelTTF::create("<font color=970 size=18>획득</font><font color=999 size=18> 하였습니다.</font>",

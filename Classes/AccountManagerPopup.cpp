@@ -61,11 +61,13 @@ bool AccountManagerPopup::init(int touchP)
 
 	
 	CommonButton* closeButton = CommonButton::createCloseButton(touchP - 1);
-	closeButton->setFunction([=](CCObject*){
-		CommonAnimation::closePopup(this, back, managerPopup->getDimmedSprite(), nullptr,
-																[=](){
-																	managerPopup->removeFromParent();
-																});
+	closeButton->setFunction([=](CCObject*)
+													 {
+														 CommonAnimation::closePopup(this, back, managerPopup->getDimmedSprite(), nullptr,
+																												 [=]()
+																												 {
+																													 managerPopup->removeFromParent();
+																												 });
 	});
 	back->addChild(closeButton);
 	closeButton->setPosition(ccp(251, 229.5f));

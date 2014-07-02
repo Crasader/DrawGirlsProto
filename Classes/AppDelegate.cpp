@@ -272,7 +272,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	pDirector->setContentScaleFactor(2.0);
 	
 	// turn on display FPS
-	pDirector->setDisplayStats(false);
+	pDirector->setDisplayStats(true);
 	
 	// set FPS. the default value is 1.0/60 if you don't call this
 	pDirector->setAnimationInterval(1.0 / 60);
@@ -322,7 +322,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	FormSetter::get()->setEnabledRemocon(true);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	FormSetter::get()->setEnabledRemocon(false);
+	FormSetter::get()->setEnabledRemocon(true);
 #endif
 	//	CCScene* pScene = TitleScene::scene();
 //	CCScene* pScene = GaBaBo::scene();
