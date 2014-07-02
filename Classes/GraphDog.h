@@ -260,6 +260,11 @@ public:
 	std::function<void(void)> cmdNoErrorFunc;
 	std::function<void(void)> longTimeErrorFunc;
 	std::function<void(void)> commandFinishedFunc;
+	std::function<void(std::vector<CommandParam>)> commandRetryFunc;
+	
+	void setCommandRetryFunc(std::function<void(std::vector<CommandParam>)> func){
+		commandRetryFunc = func;
+	}
 	
 	void setCommandFinishedFunc(std::function<void(void)> func){
 		commandFinishedFunc = func;
@@ -427,6 +432,7 @@ private:
 		this->cmdNoErrorFunc=nullptr;
 		this->longTimeErrorFunc=nullptr;
 		this->commandFinishedFunc=nullptr;
+		this->commandRetryFunc=nullptr;
 		this->deviceID=0;
 		
 		

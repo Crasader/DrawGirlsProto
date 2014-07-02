@@ -384,17 +384,32 @@ void* GraphDog::t_function(void *_insertIndex)
 		{
 			try
 			{
+				
+				
 				vector<char> encText = base64To(std::string(resultStr.begin(), resultStr.end() - 1) ); // unbase64
 				//resultStr = desDecryption(graphdog->sKey, std::string(encText.begin(), encText.end())); // des Decryption
 				
 				resultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
 				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
+				
+				Json::Value commandParam = command.commandStr;
+				if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
+					resultCode = CURLE_CHUNK_FAILED;
+					CCLOG("cmd check error %s",resultobj.asString().c_str());
+					//CCAssert(false, "정상적인 이용으로는 이곳에 들어오면 안된다.");
+				}
 				//CCLOG("t_function OK2 %s",resultStr.c_str());
 			}
 			catch(const std::string& msg)
 			{
-				
 				//CCLOG("t_function FAILED1");
+				resultCode = CURLE_CHUNK_FAILED;
+			}
+			catch(stlencoders::decode_error &error)
+			{
+				resultCode = CURLE_CHUNK_FAILED;
+			}
+			catch(...){
 				resultCode = CURLE_CHUNK_FAILED;
 			}
 		}
@@ -577,28 +592,49 @@ void GraphDog::receivedCommand(float dt)
 			}
 			else if(commands.chunk.resultCode != CURLE_OK)
 			{
-				for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
-				{
-					CCLOG("receivedCommand error");
-					//@ JsonBox::Object resultobj;
-					Json::Value resultobj;
-					CommandType command = commandTypeIter->second;
-					resultobj["state"] = "error";
-					resultobj["errorMsg"] = "check your network state";
-					resultobj["errorCode"] = 1002;
-					resultobj["result"]["code"]=GDCHECKNETWORK;
-					
-					//callbackparam
-					if(command.paramStr!=""){
-						//@ JsonBox::Object param =  GraphDogLib::StringToJsonObject(command.paramStr);
-						Json::Value param =  GraphDogLib::StringToJsonObject(command.paramStr);
-						//@ resultobj["param"]=JsonBox::Value(param);
-						resultobj["param"]=param;
+				
+				//다시시도하시겠습니까 팝업펑크가 있으면 띄운다.
+				if(commandRetryFunc!=nullptr){
+					std::vector<CommandParam> vcp;
+					for(std::map<string, CommandType>::const_iterator iter = commands.commands.begin(); iter != commands.commands.end(); ++iter)
+					{
+						Json::Value param;
+						param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
+						CommandParam cp;
+						cp.action = iter->second.action;
+						cp.param = param;
+						cp.func=iter->second.func;
+						vcp.push_back(cp);
 					}
-					//@@if(command.target!=0 && command.selector!=0)
-					//@@((command.target)->*(command.selector))(resultobj);
-					if(command.func!=NULL)command.func(resultobj);
-					if(commandFinishedFunc!=nullptr)commandFinishedFunc();
+					
+					commandRetryFunc(vcp);
+					
+				}else{
+				
+					for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
+					{
+						CCLOG("receivedCommand error");
+						//@ JsonBox::Object resultobj;
+						Json::Value resultobj;
+						CommandType command = commandTypeIter->second;
+						resultobj["state"] = "error";
+						resultobj["errorMsg"] = "check your network state";
+						resultobj["errorCode"] = 1002;
+						resultobj["result"]["code"]=GDCHECKNETWORK;
+						
+						//callbackparam
+						if(command.paramStr!=""){
+							//@ JsonBox::Object param =  GraphDogLib::StringToJsonObject(command.paramStr);
+							Json::Value param =  GraphDogLib::StringToJsonObject(command.paramStr);
+							//@ resultobj["param"]=JsonBox::Value(param);
+							resultobj["param"]=param;
+						}
+						//@@if(command.target!=0 && command.selector!=0)
+						//@@((command.target)->*(command.selector))(resultobj);
+						if(command.func!=NULL)command.func(resultobj);
+						if(commandFinishedFunc!=nullptr)commandFinishedFunc();
+					}
+				
 				}
 				throw commands.chunk.resultCode;
 			}
@@ -624,17 +660,13 @@ void GraphDog::receivedCommand(float dt)
 				if(this->longTimeErrorFunc!=nullptr)this->longTimeErrorFunc();
 			
 			}else{
+				bool retryCnt=false;
+				std::vector<CommandParam> vcp;
 				for(std::map<string, CommandType>::iterator iter2 = commands.commands.begin(); iter2 != commands.commands.end(); ++iter2)
 				{
-					//@ CommandType ct = commandQueueIter->second.commands[iter2->first];
 					CommandType ct = iter2->second;
-					//CommandType ct = commandQueueIter->second.commands[iter2.memberName()];
-					/* //@@ if(ct.target != 0 && ct.selector != 0)
-					 {
-					 //  CCLOG("%s,%s", iter2.memberName(),GraphDogLib::JsonObjectToString(commands.result));
-					 //((ct.target)->*(ct.selector))(iter2);
-					 ((ct.target)->*(ct.selector))(resultobj[iter2->first.c_str()]);
-					 }		*/
+					Json::Value oParam =  ct.paramStr;
+					
 					if(ct.action=="login"){
 						if(resultobj.get("deviceID", 0).asInt()!=0){
 							this->deviceID=resultobj.get("deviceID", 0).asInt();
@@ -671,10 +703,28 @@ void GraphDog::receivedCommand(float dt)
 						CCLOG("%s",wr.write(resultobj[iter2->first.c_str()]).c_str());
 						CCLOG("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[END for %s ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",ct.action.c_str());
 					}
-					if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
-					if(commandFinishedFunc!=nullptr)commandFinishedFunc();
+					
+					
+					if(!oParam.get("retry", false).asBool() || resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()==GDSUCCESS || oParam.get("passCode", -1).asInt()==resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()){
+						if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
+						if(commandFinishedFunc!=nullptr)commandFinishedFunc();
+					}else if(resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()!=GDSUCCESS){
+						retryCnt=true;
+						Json::Value param;
+						param = GraphDogLib::StringToJsonObject(iter2->second.paramStr);
+						CommandParam cp;
+						cp.action = iter2->second.action;
+						cp.param = param;
+						cp.func=iter2->second.func;
+						vcp.push_back(cp);
+					}
+				}
+				
+				if(retryCnt){
+						commandRetryFunc(vcp);
 				}
 			}
+			
 			//메모리도 해제
 			if(commands.chunk.memory)
 				free(commands.chunk.memory);

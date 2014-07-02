@@ -1371,6 +1371,8 @@ void StageListDown::startGetStageList()
 	Json::Value param;
 	param["version"] = NSDS_GI(puzzle_number, kSDS_PZ_version_i);
 	param["order"] = puzzle_number;
+	param["retry"]=true;
+	param["passCode"]=GDSAMEVERSION;
 	command_vector.push_back(CommandParam("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList)));
 //	hspConnector::get()->command("getpuzzleinfo", param, json_selector(this, StageListDown::resultGetStageList));
 	hspConnector::get()->command(command_vector);
