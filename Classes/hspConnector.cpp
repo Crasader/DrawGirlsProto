@@ -370,6 +370,33 @@ string hspConnector::getCountryCode(){
 }
 
 
+string hspConnector::getServerAddress(){
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return "182.162.196.182:10080";
+	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
+	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
+
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	string r;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getServerAddress", "()Ljava/lang/String;")) {
+		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
+		r = revStr;
+		
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
+	return r;
+	
+	
+	//std::transform(r.begin(), r.end(), r.begin(), towlower);
+	
+	//return r;
+}
 void hspConnector::logout(jsonSelType func){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] logoutWithCompletionHandler:

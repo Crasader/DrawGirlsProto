@@ -227,6 +227,7 @@ public:
 	void logout(jsonSelType func);
 	void mappingToAccount(jsonSelType func);
 	string getCountryCode();
+	string getServerAddress();
 	void sendPushMessage();
 	
 	void checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func);
