@@ -253,7 +253,13 @@ public:
 	string getAppVersionString();
 	string getGraphDogVersion();
 	
+	void setServerURL(string url){
+		serverURL=url;
+	}
 	
+	string getServerURL(){
+		return serverURL;
+	}
 	
 	
 	std::function<void(void)> duplicateLoginFunc;
@@ -374,7 +380,7 @@ private:
 	string packageName;
 	string appVersion;
 	string deviceInfo;
-	
+	string serverURL;
 	
 //	long long int hspMemberNo;
 //	string kakaoMemberID;

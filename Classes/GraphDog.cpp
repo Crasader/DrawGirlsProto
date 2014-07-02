@@ -355,11 +355,10 @@ void* GraphDog::t_function(void *_insertIndex)
 	string dataset = "&gid="+GraphDog::get()->aID+"&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
 	CCLOG("t_function3");
 	//string commandurl = "http://litqoo.com/dgserver/data.php";
-	string commandurl = "http://182.162.201.147:10010/command.php"; //"http://182.162.201.147:10010/data.php"; //
+	string commandurl = GraphDog::get()->getServerURL()+"/command.php"; //"http://182.162.201.147:10010/command.php"; //"http://182.162.201.147:10010/data.php"; //
 	//commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
 	//commandurl=commandurl.append("/");
 	//commandurl=commandurl.append(GraphDog::get()->aID);
-	
 	// << "&param=" << paramStr
 	//curl으로 명령을 날리고 겨로가를 얻는다.
 	CURL *handle = GraphDog::get()->getCURL();
@@ -527,7 +526,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	//CCLOG("t_function 14");
 	//@ if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
-	if(resultobj["timestamp"].asInt64()<GraphDog::get()->timestamp){
+	if(resultobj["timestamp"].asInt64()<GraphDog::get()->timestamp && resultCode != CURLE_CHUNK_FAILED){
 		
 		CCLOG("t_function error hack!!! %lld,%lld",resultobj["timestamp"].asInt64(),GraphDog::get()->timestamp);
 		resultCode=CURLE_CHUNK_FAILED;
