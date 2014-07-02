@@ -729,7 +729,6 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 			exit(1);
 			return;
 		}
-		
 		mySGD->setHeartMax(result_data["heartMax"].asInt());
 		mySGD->setHeartCoolTime(result_data["heartCoolTime"].asInt());
 		mySGD->setGameFriendMax(result_data["gameFriendMax"].asInt());

@@ -2010,9 +2010,27 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 											  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 											  {
 												  mySGD->heartRefreshSuccess(result_data);
+												  if(mySGD->is_endless_mode)
+												  {
+													  ((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
+												  }
+												  else
+												  {
+													  ((PuzzleScene*)getParent())->heart_time->refreshHeartTime();
+												  }
 											  }
 											  else if(result_data["result"]["code"].asInt() == GDEXPIRE)
 											  {
+												  mySGD->heartRefreshSuccess(result_data);
+												  if(mySGD->is_endless_mode)
+												  {
+													  ((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
+												  }
+												  else
+												  {
+													  ((PuzzleScene*)getParent())->heart_time->refreshHeartTime();
+												  }
+												  
 												  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_money, [=]()
 																									  {
 																										  ShopPopup* t_shop = ShopPopup::create();
