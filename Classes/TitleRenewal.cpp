@@ -483,7 +483,7 @@ void TitleRenewalScene::successLogin()
 	
 	startCommand();
 	
-	is_loaded_cgp = true;//false;
+	is_loaded_cgp = false;
 	
 	std::function<void(Json::Value)> pf;
 	pf = [=](Json::Value v){
@@ -580,7 +580,7 @@ void TitleRenewalScene::successLogin()
 ////			hspConnector::get()->checkCGP(param, Json::Value(), this, pf);
 //		}
 	};
-//	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), this, pf);
+	hspConnector::get()->checkCGP(Json::Value(), Json::Value(), this, pf);
 }
 
 void TitleRenewalScene::startCommand()
