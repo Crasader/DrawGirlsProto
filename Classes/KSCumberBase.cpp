@@ -2430,6 +2430,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		}
 		
 		//2번중 1번은 부수기공격나오도록
+		if(crashCnt>0){
 		sumpercent=sumpercent/crashCnt;
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
@@ -2439,6 +2440,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 				if((*iter)["percent"].asInt()<sumpercent)(*iter)["percent"]=sumpercent;
 				CCLOG("after %s type %d attack percent is %f",(*iter)["atype"].asString().c_str(),(*iter)["pattern"].asInt(),(*iter)["percent"].asFloat());
 			}
+		}
 		}
 		
 		

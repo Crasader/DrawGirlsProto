@@ -252,21 +252,22 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	{
 		myHSP->getIsUsimKorean([=](Json::Value result_data)
 							   {
-								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
-								   if(result_data["isSuccess"].asBool())
-									{
-										this->is_menu_enable = false;
-										
-										Terms* t_terms = Terms::create(-999999, [=]()
-																	   {
-																		   this->is_menu_enable = true;
-																	   });
-										addChild(t_terms, 10000);
-									}
-								   else
-									{
-										is_menu_enable = true;
-									}
+									 is_menu_enable = true;
+//								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
+//								   if(result_data["isSuccess"].asBool())
+//									{
+//										this->is_menu_enable = false;
+//										
+//										Terms* t_terms = Terms::create(-999999, [=]()
+//																	   {
+//																		   this->is_menu_enable = true;
+//																	   });
+//										addChild(t_terms, 10000);
+//									}
+//								   else
+//									{
+//										is_menu_enable = true;
+//									}
 							   });
 		
 		
