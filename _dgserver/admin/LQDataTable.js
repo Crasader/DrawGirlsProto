@@ -250,6 +250,14 @@ var getFieldInfo = function(obj){
 		}catch(e){
 			result["isVirtual"]=false;
 		}
+
+		if(result["isVirtual"]==false){
+			try{
+				result["isVirtual"]=(typeof(result["cell"].attr("virtual"))=="undefined")?false:true;
+			}catch(e){
+				result["isVirtual"]=false;
+			}
+		}
 		// if(result["fieldHeader"]==undefined || !result["fieldHeader"]){
 		// 	result["fieldHeader"]=result["cell"];
 		// }
@@ -1770,7 +1778,7 @@ var requestInsert = function(obj,modal){
 	//if(!confirm("really?"))return;
 	
 	var tInfo = gf(obj);
-	var rowData = {};
+	var rowDatas = {};
 	
 	//필드데이터모으기
 	tInfo["row"].find("td").each(function(index,item){
@@ -1781,15 +1789,13 @@ var requestInsert = function(obj,modal){
 
 			if(fInfo["editorObj"])fInfo["editorObj"].triggerHandler("saveCallBack");
 			var newValue=fInfo["editorValue"];
-			if(newValue != undefined && newValue !=rowData[fInfo["field"]] && fInfo["isVirtual"]==false){
-				rowData[fInfo["field"]]=newValue;
-			}else{
-				rowData[fInfo["field"]]="";
+			if(newValue != undefined && newValue !=rowDatas[fInfo["field"]] && fInfo["isVirtual"]==false){
+				rowDatas[fInfo["field"]]=newValue;
 			}
 		}
 	});
 	
-	var param={"gid":gid,"mode":"insert","table":tInfo["dbTable"],"data":j2s(rowData),"primaryKey":tInfo["primaryKey"],"primaryValue":tInfo["primaryValue"],"dbMode":"insert"};
+	var param={"gid":gid,"mode":"insert","table":tInfo["dbTable"],"data":j2s(rowDatas),"primaryKey":tInfo["primaryKey"],"primaryValue":tInfo["primaryValue"],"dbMode":"insert"};
 	//서버로보내기
 
 	if(typeof(tInfo["dbClass"]) != "undefined")
@@ -1800,7 +1806,8 @@ var requestInsert = function(obj,modal){
 			dbFunc=obj.attr("func");
 			dbMode = "custom";
 		}
-		param={"gid":gid,"dbClass":tInfo["dbClass"],"dbFunc":tInfo["writeFunc"],"param":j2s({"data":rowData}),"dbMode":"insert"};
+		param={"gid":gid,"dbClass":tInfo["dbClass"],"dbFunc":tInfo["writeFunc"],"param":j2s({"data":rowDatas}),"dbMode":"insert"};
+		param["shardIndex"]=tInfo["shardIndex"];
 	}
 
 	log(j2s(param));
@@ -1810,7 +1817,7 @@ var requestInsert = function(obj,modal){
 	    dataType : "json", 
 	    type : "post",
 	    success :function(resultData){ 
-	    
+	    	
 	    	if(tInfo["table"].hasClass("LQEditForm")){
 				tInfo = gf(contextSelectedCell);
 			}
@@ -1821,38 +1828,38 @@ var requestInsert = function(obj,modal){
 
 			if(resultData['result']['code']==1){
 
-			if(modal)modal.dialog( "close" );
-   			//값재설정
-			log("add success");
+				if(modal)modal.dialog( "close" );
+	   			//값재설정
+				log("add success");
 
-			//if(resultData["no"] && tInfo["primaryKey"])rowData[tInfo["primaryKey"]]=resultData["no"];
+				//if(resultData["no"] && tInfo["primaryKey"])rowData[tInfo["primaryKey"]]=resultData["no"];
 
-			var pushData="";
+				var pushData="";
 
-			if(typeof(data[0])=="undefined"){
-				tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(data,tInfo["table"],"yellow"));
-			}else{					
-				for(var i in data){
-					var rowData = data[i];
-					tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(rowData,tInfo["table"],"yellow"));
+				if(typeof(data[0])=="undefined"){
+					tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(data,tInfo["table"],"yellow"));
+				}else{					
+					for(var i in data){
+						var rowData = data[i];
+						tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(rowData,tInfo["table"],"yellow"));
+					}
 				}
-			}
 
-			
-			
-			//데이터 테이블에 집어넣기
-			//tInfo["table"].find('tbody[datazone]:last > tr:first').after(pushData);
-			
+				
+				
+				//데이터 테이블에 집어넣기
+				//tInfo["table"].find('tbody[datazone]:last > tr:first').after(pushData);
+				
 
-			if(tInfo["table"].attr("editType")!="form"){
-				tInfo["row"].remove();
-			}
-			// rowData[tInfo["primaryKey"]] = data["data"]
+				if(tInfo["table"].attr("editType")!="form"){
+					tInfo["row"].remove();
+				}
+				// rowData[tInfo["primaryKey"]] = data["data"]
 
 
-			// mydata = s2j(tInfo["table"].find('tbody[datazone]:last > tr:first').after().attr("data"));
-			// tInfo["rowData"] = data["data"];
-			// tInfo["row"].attr("data",j2s(tInfo["rowData"]));
+				// mydata = s2j(tInfo["table"].find('tbody[datazone]:last > tr:first').after().attr("data"));
+				// tInfo["rowData"] = data["data"];
+				// tInfo["row"].attr("data",j2s(tInfo["rowData"]));
 
 			}else{
    			alert("error",resultData['result']['message']);

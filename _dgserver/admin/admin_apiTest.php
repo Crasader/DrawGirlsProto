@@ -48,7 +48,7 @@ $(document).ready(function(){
 		var api = $(".custom-combobox-input").val();
 		var pdata = getLQEditorValue("p");
 		var param = {"mode":"nodes","version":"2"};
-		var apiurl = "http://182.162.201.147:10010/data.php";
+		var apiurl = "../data.php";
 
 		param["a"]=j2s(api);
 		param["p"]=j2s(pdata);

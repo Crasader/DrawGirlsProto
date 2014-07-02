@@ -9,7 +9,8 @@ $obj = new $_POST["dbClass"]();
 if($_POST["dbFunc"]){
 $result =  $obj->$_POST["dbFunc"](json_decode($_POST["param"],true));
 }else{
-	$param = json_decode($_POST["param"],true);
+	$param = json_decode(($_POST["param"]),true);
+	
 	if($_POST["type"]=="form"){
 		if($_POST["dbMode"]=="insert")$result = $obj->insertWithLQForm($param);
 		else if($_POST["dbMode"]=="update")$result = $obj->updateWithLQForm($param);

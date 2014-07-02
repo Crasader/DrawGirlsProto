@@ -37,7 +37,7 @@ $(document).ready(function(){
 </div>
 <br><br>
 <h2 id="tables-contextual-classes">|퍼즐내역조회</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PuzzleHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PuzzleHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1  commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 	</thead>
 	<tbody datazone>

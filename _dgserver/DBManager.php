@@ -471,6 +471,7 @@ class SendItem extends DBTable{
 				$mh->oldData="";
 				$mh->newData=$exchange->list;
 				$mh->comment=$param["comment"];
+				$mh->category=get_called_class();
 				CommitManager::get()->setSuccess($mID,$mh->save());
 			}
 
@@ -514,8 +515,9 @@ class UserData extends DBTable{
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
 			//LogManager::get()->addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
-			if($this->m__userIndex->isLoaded())$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			//if($this->m__userIndex->isLoaded())$this->setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
+				$this->setDBInfo($this->m__userIndex->getShardDBInfo());
 				if(parent::load("memberID='".$this->m__userIndex->memberID."'")){
 					//$this->autoMatching($this->m__result);
 					$this->archiveData = json_decode($this->archiveData,true);
@@ -1116,7 +1118,7 @@ class Piece extends DBTable{
 					]}',true));
 		$data["head"][]=array("field"=>"junior","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"table","element":[
 					
-					{"field":"type","title":"몬스터번호","type":"dataSelector","func":"selectedMonster","mode":"monster"},			
+					'.json_encode($listViewer).',			
 					{   
 					    "title":"속도",
 						"field":"speed","type":"dictionary",
@@ -1397,13 +1399,15 @@ class CardHistory extends DBTable{
 
 		$listViewer=array("type"=>"select");
 		while($pData = Card::getRowByQuery("",null,"name,no")){
-			$listViewer["element"][] = $pData["no"]."-".json_decode($pData["name"],true)["ko"];
+			$lang = json_decode($pData["name"],true);
+			$listViewer["element"][] = $pData["no"]."-".$lang["ko"];
 			$listViewer["value"][]=$pData["no"];
 		}
 
 		$listViewer2=array("type"=>"select");
 		while($pData = Puzzle::getRowByQuery("",null,"title,no")){
-			$listViewer2["element"][] = $pData["no"]."-".json_decode($pData["title"],true)["ko"];
+			$lang=json_decode($pData["title"],true);
+			$listViewer2["element"][] = $pData["no"]."-".$lang["ko"];
 			$listViewer2["value"][]=$pData["no"];
 		}
 
@@ -1435,6 +1439,7 @@ class CardHistory extends DBTable{
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -1448,6 +1453,7 @@ class CardHistory extends DBTable{
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -1501,7 +1507,8 @@ class PuzzleHistory extends DBTable{
 
 		$puzzleViewer=array("type"=>"select");
 		while($pData = Puzzle::getRowByQuery("",null,"title,no")){
-			$puzzleViewer["element"][] = $pData["no"]."-".json_decode($pData["title"],true)["ko"];
+			$lang = json_decode($pData["title"],true);
+			$puzzleViewer["element"][] = $pData["no"]."-".$lang["ko"];
 			$puzzleViewer["value"][]=$pData["no"];
 		}
 
@@ -1528,6 +1535,7 @@ class PuzzleHistory extends DBTable{
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -1541,6 +1549,7 @@ class PuzzleHistory extends DBTable{
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -1612,6 +1621,7 @@ class PieceHistory extends DBTable{
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -1625,6 +1635,7 @@ class PieceHistory extends DBTable{
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -1807,7 +1818,8 @@ class ArchivementHistory extends DBTable{
 
 		$listViewer=array("type"=>"select");
 		while($pData = Archivement::getRowByQuery("",null,"title,id")){
-			$listViewer["element"][] = $pData["id"]."-".json_decode($pData["title"],true)["ko"];
+			$lang = json_decode($pData["title"],true);
+			$listViewer["element"][] = $pData["id"]."-".$lang["ko"];
 			$listViewer["value"][]=$pData["id"];
 		}
 
@@ -2917,6 +2929,7 @@ class CharacterHistory extends DBTable{
 
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			LogManager::get()->addLog("--->".json_encode($param));
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
@@ -2944,16 +2957,17 @@ class CharacterHistory extends DBTable{
 	public function loadWithDataTable($p){
 		$listViewer=array("type"=>"select");
 		while($pData = Character::getRowByQuery("",null,"name,no")){
-			$listViewer["element"][] = $pData["no"]."-".json_decode($pData["name"],true)["ko"];
+			$lang = json_decode($pData["name"],true);
+			$listViewer["element"][] = $pData["no"]."-".$lang["ko"];
 			$listViewer["value"][]=$pData["no"];
 		}
 
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
-		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("title"=>"캐릭터","field"=>"characterNo","viewer"=>$listViewer);
-		$data["head"][]=array("title"=>"레벨","field"=>"level","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("title"=>"구입일시","field"=>"regDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true));
-		$data["head"][]=array("manage"=>"delete update");
+		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"캐릭터","field"=>"characterNo","viewer"=>$listViewer,"editor"=>$listViewer);
+		$data["head"][]=array("title"=>"레벨","field"=>"level","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"구입일시","field"=>"regDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
+		$data["head"][]=array("manage"=>"delete update insert");
 		return $data;
 	}
 
@@ -2968,6 +2982,7 @@ class CharacterHistory extends DBTable{
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -2981,6 +2996,7 @@ class CharacterHistory extends DBTable{
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
+			$mh->category=get_called_class();
 			$mh->save();
 		}
 		return $r;
@@ -3460,7 +3476,7 @@ public function __construct($id=null){
 		
 		$exchange = new Exchange($param["id"]);
 
-		if(!$exchange->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND,"보상아이디를 찾지 못했습니다.");
+		//if(!$exchange->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND,"보상아이디를 찾지 못했습니다.");
 
 		$exchange->list = $param["list"];
 
@@ -3844,6 +3860,7 @@ class ModifyHistory extends DBTable{
 		
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
 		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>$textViewer);
+		$data["head"][]=array("title"=>"카테고리","field"=>"category","viewer"=>$textViewer);
 		$data["head"][]=array("title"=>"수정전데이터","field"=>"oldData","viewer"=>$textViewer);
 		$data["head"][]=array("title"=>"수정후데이터","field"=>"newData","viewer"=>$textViewer);
 		$data["head"][]=array("title"=>"수정사유","field"=>"comment","viewer"=>$textViewer);
