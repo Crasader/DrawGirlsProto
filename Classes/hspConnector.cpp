@@ -389,8 +389,8 @@ string hspConnector::getServerAddress(){
 		
 		t.env->DeleteLocalRef(t.classID);
 	}
-#endif
 	return r;
+#endif
 	
 	
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
