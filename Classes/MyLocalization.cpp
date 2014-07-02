@@ -1342,7 +1342,7 @@ void MyLocal::ko()
 								   "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라 더 큰 보상이 있어요!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
-	ko->setObject(CCString::create("%d개"), kMyLocalKey_gababoReward);
+	ko->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -2194,7 +2194,7 @@ void MyLocal::en()
 								   "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라 더 큰 보상이 있어요!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
-	en->setObject(CCString::create("%d개"), kMyLocalKey_gababoReward);
+	en->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3068,7 +3068,7 @@ void MyLocal::ja()
 								   "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라 더 큰 보상이 있어요!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
-	ja->setObject(CCString::create("%d개"), kMyLocalKey_gababoReward);
+	ja->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
