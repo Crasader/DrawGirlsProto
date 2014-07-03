@@ -2421,7 +2421,7 @@ void PlayUI::counting ()
 				
 				
 				KSLabelTTF* time_over_label = KSLabelTTF::create("TIME OVER", mySGD->getFont().c_str(), 90);
-				time_over_label->setGradientColor(ccc4(1.f, 0.45f, 0.95f, 1.f), ccc4(0.84f, 0.235f, 0.51f, 1.f), ccp(0,-1));
+				time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 				time_over_label->enableOuterStroke(ccBLACK, 5.f, 190, true);
 				time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
 				time_over_label->setOpacity(0);

@@ -1691,7 +1691,10 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 							}
 						   else
 							{
-								addChild(KSTimer::create(0.1f, [=](){tryGababoReward(t_loading, success_func);}));
+								ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+									tryGababoReward(t_loading, success_func);
+								});
+								((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 							}
 					   });
 }

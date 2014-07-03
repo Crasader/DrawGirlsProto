@@ -301,7 +301,10 @@ void EndlessModeResult::tryTransaction()
 									  }
 									  else
 									  {
-										  addChild(KSTimer::create(0.1f, [=](){tryTransaction();}));
+										  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+											  tryTransaction();
+										  });
+										  ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 									  }
 								  });
 }
@@ -2240,7 +2243,10 @@ void EndlessModeResult::reSetEndlessRank()
 										{
 											if(result_data["result"]["code"].asInt() != GDSUCCESS)
 											{
-												addChild(KSTimer::create(0.1f, [=](){reSetEndlessRank();}));
+												ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+													reSetEndlessRank();
+												});
+												((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 											}
 											else
 											{
