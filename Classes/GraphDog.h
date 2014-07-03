@@ -224,6 +224,17 @@ public:
 	//kakaomemberno저장
 	void setSocialID(string _kakaomemberID);
 	
+	void callRetryPopup(Json::Value param,function<void(Json::Value)> func){
+		CommandParam cp;
+		cp.action = param["action"].asString();
+		if(param != 0){
+			cp.param = param;
+		}
+		cp.func=func;
+		std::vector<CommandParam> p;
+		p.push_back(cp);
+		commandRetryFunc(p);
+	}
 	
 	long long int getMemberID();
 	string getSocialID();

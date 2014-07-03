@@ -433,6 +433,7 @@ void* GraphDog::t_function(void *_insertIndex)
 			Json::Value param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
 			//@ resultobj[iter->first]["param"] = JsonBox::Value(param);
 			resultobj[iter->first]["param"] = param;
+			resultobj[iter->first]["param"]["action"]=iter->second.action;
 		}
 	}
 	
