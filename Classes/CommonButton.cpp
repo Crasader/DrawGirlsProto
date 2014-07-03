@@ -190,10 +190,10 @@ CCScale9Sprite* CommonButton::getBackgroundByType(CommonButtonType btnType){
 	}
 	else if(btnType >= CommonButtonDarkPupple && btnType <= CommonButtonYellowUp)
 	{
-		back->setInsetBottom(16);
-		back->setInsetTop(34-16*2);
-		back->setInsetLeft(13);
-		back->setInsetRight(34-13*2);
+		back->setInsetBottom(12);
+		back->setInsetTop(34-12*2);
+		back->setInsetLeft(12);
+		back->setInsetRight(34-12*2);
 	}
 	else if(btnType != CommonButtonClose){
 		back->setInsetBottom(12);
@@ -211,10 +211,10 @@ void CommonButton::setButtonInset(CommonButtonType type){
 	}
 	else if(type >= CommonButtonDarkPupple && type <= CommonButtonYellowUp)
 	{
-		m_btnBack->setInsetBottom(16);
-		m_btnBack->setInsetTop(34-16*2);
-		m_btnBack->setInsetLeft(13);
-		m_btnBack->setInsetRight(34-13*2);
+		m_btnBack->setInsetBottom(12);
+		m_btnBack->setInsetTop(34-12*2);
+		m_btnBack->setInsetLeft(12);
+		m_btnBack->setInsetRight(34-12*2);
 	}
 	else{
 		m_btnBack->setInsetBottom(12);

@@ -3258,7 +3258,32 @@ void Maingame::setUnlimitMap()
 {
 	myGD->game_step = kGS_changing;
 
-	showAreaScroll();
+	int total_cell = 0;
+	int take_cell = 0;
+	
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(mySD->silData[i][j])
+			{
+				total_cell++;
+				if(myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline)
+					take_cell++;
+			}
+		}
+	}
+	
+	float recent_percent = 1.f*take_cell/total_cell;
+	
+	if(recent_percent >= 0.85f || (mySGD->isTimeEvent(kTimeEventType_clear) && recent_percent >= mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f))
+	{
+		
+	}
+	else
+	{
+		showAreaScroll();
+	}
 
 	limitted_map_position = game_node->getPosition();
 	myGD->communication("VS_setLimittedMapPosition");

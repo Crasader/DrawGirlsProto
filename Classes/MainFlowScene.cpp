@@ -4126,7 +4126,7 @@ void MainFlowScene::setTop()
 //														return true;
 //													}));
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 8);
 	postbox_count_label->setColor(ccc3(255, 255, 255));
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
@@ -4140,7 +4140,7 @@ void MainFlowScene::setTop()
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12, 6));
 	achieve_node->addChild(achievement_count_case);
 	
-	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
+	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 8);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
 	achievement_count_case->addChild(achievement_count_label);
 	

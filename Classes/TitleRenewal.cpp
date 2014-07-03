@@ -406,77 +406,106 @@ void TitleRenewalScene::successLogin()
 	
 	receive_cnt = 0;
 	
-	command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	Json::Value commonsetting_param;
+	commonsetting_param["retry"] = true;
+	
+	command_list.push_back(CommandParam("getcommonsetting", commonsetting_param, json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	
 	Json::Value achievelist_param;
 	achievelist_param["version"] = NSDS_GI(kSDS_AI_version_i);
+	achievelist_param["retry"] = true;
+	achievelist_param["passCode"] = GDSAMEVERSION;
 	command_list.push_back(CommandParam("getarchivementlist", achievelist_param, json_selector(this, TitleRenewalScene::resultGetAchieveList)));
 	
 	Json::Value shopdata_param;
 	shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
+	shopdata_param["retry"] = true;
+	shopdata_param["passCode"] = GDSAMEVERSION;
 	command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
 	
 	Json::Value puzzlelist_param;
 	puzzlelist_param["version"] = NSDS_GI(kSDS_GI_puzzleListVersion_i);
+	puzzlelist_param["retry"] = true;
 	command_list.push_back(CommandParam("getpuzzlelist", puzzlelist_param, json_selector(this, TitleRenewalScene::resultGetPuzzleList)));
 	
 	Json::Value character_param;
 	character_param["version"] = NSDS_GI(kSDS_GI_characterVersion_i);
+	character_param["retry"] = true;
+	character_param["passCode"] = GDSAMEVERSION;
 	command_list.push_back(CommandParam("getcharacterlist", character_param, json_selector(this, TitleRenewalScene::resultGetCharacterInfo)));
 	
 	Json::Value monster_param;
 	monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
+	monster_param["retry"] = true;
+	monster_param["passCode"] = GDSAMEVERSION;
 	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
 	
-	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
+	Json::Value notice_param;
+	notice_param["retry"] = true;
+	command_list.push_back(CommandParam("getnoticelist", notice_param, json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
-	command_list.push_back(CommandParam("gettimeevent", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeEvent)));
+	Json::Value timeevent_param;
+	timeevent_param["retry"] = true;
+	command_list.push_back(CommandParam("gettimeevent", timeevent_param, json_selector(this, TitleRenewalScene::resultGetTimeEvent)));
 	
 	Json::Value attendance_param;
 	attendance_param["memberID"] = myHSP->getMemberID();
+	attendance_param["retry"] = true;
 	command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
 	
 	Json::Value rank_reward_param;
 	rank_reward_param["memberID"] = myHSP->getMemberID();
+	rank_reward_param["retry"] = true;
 	command_list.push_back(CommandParam("checkweeklyreward", rank_reward_param, json_selector(this, TitleRenewalScene::resultCheckWeeklyReward)));
 	
 	Json::Value achieve_param;
 	achieve_param["memberID"] = myHSP->getSocialID();
+	achieve_param["retry"] = true;
 	command_list.push_back(CommandParam("getarchivementhistory", achieve_param, json_selector(this, TitleRenewalScene::resultGetAchieveHistory)));
 	
 	Json::Value card_param;
 	card_param["memberID"] = hspConnector::get()->getSocialID();
+	card_param["retry"] = true;
 	command_list.push_back(CommandParam("getCardHistory", card_param, json_selector(this, TitleRenewalScene::resultGetCardHistory)));
 	
 	Json::Value puzzle_param;
 	puzzle_param["memberID"] = hspConnector::get()->getSocialID();
+	puzzle_param["retry"] = true;
 	command_list.push_back(CommandParam("getPuzzleHistory", puzzle_param, json_selector(this, TitleRenewalScene::resultGetPuzzleHistory)));
 	
 	Json::Value piece_param;
 	piece_param["memberID"] = hspConnector::get()->getSocialID();
+	piece_param["retry"] = true;
 	command_list.push_back(CommandParam("getPieceHistory", piece_param, json_selector(this, TitleRenewalScene::resultGetPieceHistory)));
 	
 	Json::Value character_history_param;
 	character_history_param["memberID"] = hspConnector::get()->getSocialID();
+	character_param["retry"] = true;
 	command_list.push_back(CommandParam("getcharacterhistory", character_history_param, json_selector(this, TitleRenewalScene::resultGetCharacterHistory)));
 	
 	Json::Value todaymission_param;
 	todaymission_param["memberID"] = hspConnector::get()->getSocialID();
+	todaymission_param["retry"] = true;
 	command_list.push_back(CommandParam("gettodaymission", todaymission_param, json_selector(this, TitleRenewalScene::resultGetTodayMission)));
 	
 	Json::Value properties_param;
 	properties_param["memberID"] = hspConnector::get()->getSocialID();
+	properties_param["retry"] = true;
 	command_list.push_back(CommandParam("getuserproperties", properties_param, json_selector(this, TitleRenewalScene::resultGetUserProperties)));
 	
 	Json::Value userdata_param;
 	userdata_param["memberID"] = hspConnector::get()->getSocialID();
+	userdata_param["retry"] = true;
 	command_list.push_back(CommandParam("getUserData", userdata_param, json_selector(this, TitleRenewalScene::resultGetUserData)));
 	
 	Json::Value heart_param;
 	heart_param["memberID"] = myHSP->getMemberID();
+	heart_param["retry"] = true;
 	command_list.push_back(CommandParam("getheart", heart_param, json_selector(this, TitleRenewalScene::resultGetHeart)));
 	
-	command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeInfo)));
+	Json::Value timeinfo_param;
+	timeinfo_param["retry"] = true;
+	command_list.push_back(CommandParam("gettimeinfo", timeinfo_param, json_selector(this, TitleRenewalScene::resultGetTimeInfo)));
 	
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
