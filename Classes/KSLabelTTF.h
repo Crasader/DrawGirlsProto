@@ -29,6 +29,7 @@ public:
 	virtual void setDisableItalic();
 	virtual void setOpacity(GLubyte opacity);
 	virtual void setColor(ccColor3B t_color);
+	virtual void draw(void);
 	virtual void setGradientColor(const ccColor4B& start, const ccColor4B& end, const CCPoint& v);
 	//	void draw();
 	//virtual void setString(const char *label);
@@ -162,7 +163,7 @@ protected:
 	ccColor4B m_endColor;
 	CCPoint m_alongVector; // 그라데이션 방향.
 	CCClippingNode* m_clippingNodeForGra;
-	
+	ccColor4F  m_pSquareColors[4];	
 //	CC_PROPERTY_PASS_BY_REF(ccColor3B, m_startColor, StartColor)
 //	CC_PROPERTY_PASS_BY_REF(ccColor3B, m_endColor, EndColor)
 //	CC_PROPERTY(GLubyte, m_cStartOpacity, StartOpacity)

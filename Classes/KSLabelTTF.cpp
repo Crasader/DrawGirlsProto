@@ -38,10 +38,91 @@ void KSLabelTTF::setGradientColor(const ccColor4B& start, const ccColor4B& end, 
 	m_endColor = end;
 	m_alongVector = v;
 	
-//	CCLabelTTF::setColor(ccc3(m_startColor.r, m_startColor.g, m_startColor.b));
+	//	CCLabelTTF::setColor(ccc3(m_startColor.r, m_startColor.g, m_startColor.b));
 	updateColor();
 }
 
+											
+void KSLabelTTF::draw(void)
+{
+	CC_PROFILER_START_CATEGORY(kCCProfilerCategorySprite, "CCSprite - draw");
+	
+	CCAssert(!m_pobBatchNode, "If CCSprite is being rendered by CCSpriteBatchNode, CCSprite#draw SHOULD NOT be called");
+	
+	CC_NODE_DRAW_SETUP();
+	
+	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
+	
+	ccGLBindTexture2D( m_pobTexture->getName() );
+	ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
+//	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_Color );
+
+#define kQuadSize sizeof(m_sQuad.bl)
+#ifdef EMSCRIPTEN
+	long offset = 0;
+	setGLBufferData(&m_sQuad, 4 * kQuadSize, 0);
+#else
+	long offset = (long)&m_sQuad;
+#endif // EMSCRIPTEN
+	
+	// vertex
+	int diff = offsetof( ccV3F_C4B_T2F, vertices);
+	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*) (offset + diff));
+	
+	/////////////////
+//	glVertexAttribPointer(kCCVertexAttrib_Position, 2, GL_FLOAT, GL_FALSE, 0, m_pSquareVertices);
+	//////////////////
+	// texCoods
+	diff = offsetof( ccV3F_C4B_T2F, texCoords);
+	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+	
+	// color
+	diff = offsetof( ccV3F_C4B_T2F, colors);
+	m_pSquareColors[0] = ccc4FFromccc4B(m_sQuad.tl.colors);
+	m_pSquareColors[1] = ccc4FFromccc4B(m_sQuad.bl.colors);
+	m_pSquareColors[2] = ccc4FFromccc4B(m_sQuad.br.colors);
+	m_pSquareColors[3] = ccc4FFromccc4B(m_sQuad.tr.colors);
+	if(m_pSquareColors[0].a != 1.f ||
+		 m_pSquareColors[1].a != 1.f ||
+		 m_pSquareColors[2].a != 1.f ||
+		 m_pSquareColors[3].a != 1.f)
+	{
+		CCLog("breakp");
+	}
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, 0, m_pSquareColors);
+//	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, kQuadSize, m_pSquareColors);
+	
+	
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	
+	CHECK_GL_ERROR_DEBUG();
+	
+	
+#if CC_SPRITE_DEBUG_DRAW == 1
+	// draw bounding box
+	CCPoint vertices[4]={
+		ccp(m_sQuad.tl.vertices.x,m_sQuad.tl.vertices.y),
+		ccp(m_sQuad.bl.vertices.x,m_sQuad.bl.vertices.y),
+		ccp(m_sQuad.br.vertices.x,m_sQuad.br.vertices.y),
+		ccp(m_sQuad.tr.vertices.x,m_sQuad.tr.vertices.y),
+	};
+	ccDrawPoly(vertices, 4, true);
+#elif CC_SPRITE_DEBUG_DRAW == 2
+	// draw texture box
+	CCSize s = this->getTextureRect().size;
+	CCPoint offsetPix = this->getOffsetPosition();
+	CCPoint vertices[4] = {
+		ccp(offsetPix.x,offsetPix.y), ccp(offsetPix.x+s.width,offsetPix.y),
+		ccp(offsetPix.x+s.width,offsetPix.y+s.height), ccp(offsetPix.x,offsetPix.y+s.height)
+	};
+	ccDrawPoly(vertices, 4, true);
+#endif // CC_SPRITE_DEBUG_DRAW
+	
+	CC_INCREMENT_GL_DRAWS(1);
+	
+	CC_PROFILER_STOP_CATEGORY(kCCProfilerCategorySprite, "CCSprite - draw");
+	
+}
 void KSLabelTTF::updateColor()
 {
 	if(m_gradationMode == false)
@@ -71,14 +152,16 @@ void KSLabelTTF::updateColor()
 			m_startColor.r / 255.0f,
 			m_startColor.g / 255.0f,
 			m_startColor.b / 255.0f,
-			m_startColor.a / 255.0f
+//			0.f
+			m_startColor.a / 255.0f * _displayedOpacity / 255.f
 		};
 		
 		ccColor4F E = {
 			m_endColor.r / 255.0f,
 			m_endColor.g / 255.0f,
 			m_endColor.b / 255.0f,
-			m_endColor.a / 255.0f
+//			0.f
+			m_endColor.a / 255.0f * _displayedOpacity / 255.f
 		};
 		
 		// (-1, -1)
@@ -206,7 +289,8 @@ bool KSLabelTTF::updateTexture()
 		
 		rt->begin();
 		
-		float devider = 8;
+		float devider = (m_fFontSize - 10)*9.f / 10.f + 8.f;
+		//float devider = 16;
 		for (int i=0; i<360; i+=360 / devider) // you should optimize that for your needs
 		{
 			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
@@ -228,26 +312,26 @@ bool KSLabelTTF::updateTexture()
 	}
 	//ok
 	
-	// 그라데이션 처리.
-	if(m_gradationMode)
-	{
-		if(m_clippingNodeForGra)
-		{
-			m_clippingNodeForGra->removeFromParent();
-		}
-		CCClippingNode* cNode = CCClippingNode::create();
-		//		textureForGradient->getTexture()->setAliasTexParameters();
-		cNode->setStencil(textureForGradient);
-		cNode->setAlphaThreshold(0.1f);
-		CCLayerGradient* cclg = CCLayerGradient::create(m_startColor, m_endColor, m_alongVector);
-		cclg->setAnchorPoint(ccp(0.5f, 0.5f));
-		cclg->ignoreAnchorPointForPosition(false);
-		cNode->addChild(cclg);
-		cclg->setContentSize(textureForGradient->getContentSize());
-		addChild(cNode);
-		cNode->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
-		m_clippingNodeForGra = cNode;
-	}
+//	// 그라데이션 처리.
+//	if(m_gradationMode)
+//	{
+//		if(m_clippingNodeForGra)
+//		{
+//			m_clippingNodeForGra->removeFromParent();
+//		}
+//		CCClippingNode* cNode = CCClippingNode::create();
+//		//		textureForGradient->getTexture()->setAliasTexParameters();
+//		cNode->setStencil(textureForGradient);
+//		cNode->setAlphaThreshold(0.1f);
+//		CCLayerGradient* cclg = CCLayerGradient::create(m_startColor, m_endColor, m_alongVector);
+//		cclg->setAnchorPoint(ccp(0.5f, 0.5f));
+//		cclg->ignoreAnchorPointForPosition(false);
+//		cNode->addChild(cclg);
+//		cclg->setContentSize(textureForGradient->getContentSize());
+//		addChild(cNode);
+//		cNode->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
+//		m_clippingNodeForGra = cNode;
+//	}
 	return true;
 }
 
@@ -262,11 +346,12 @@ void KSLabelTTF::setDisableItalic()
 }
 void KSLabelTTF::setOpacity(GLubyte opacity)
 {
-	CCLabelTTF::setOpacity(opacity);
+	CCNodeRGBA::setOpacity(opacity);
 	if(m_outerSprite)
 	{
 		m_outerSprite->setOpacity(opacity);
 	}
+	updateColor();
 	//	updateTexture();
 }
 void KSLabelTTF::setString(const char *string)
@@ -288,7 +373,7 @@ void KSLabelTTF::enableGradation(ccColor4B startColor, ccColor4B endColor, CCPoi
 	m_alongVector = alongVector;
 	m_gradationMode = true;
 	updateTexture();
-	
+	// test!!!!
 }
 void KSLabelTTF::disableGradation()
 {
@@ -300,3 +385,4 @@ void KSLabelTTF::disableGradation()
 	}
 	updateTexture();
 }
+
