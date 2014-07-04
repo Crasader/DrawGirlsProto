@@ -179,7 +179,7 @@ public class hspConnector{
 						HSPCore core = HSPCore.getInstance();
 						if(core.getState() == HSPState.HSP_STATE_ONLINE)
 						{
-							Log.d("hsp", "dfsgfsdg");
+							Log.d("hsp", "dfsgfsdg222");
 						}
 						if (core != null) { 
 //							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
