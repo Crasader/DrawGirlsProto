@@ -401,7 +401,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 	else if(m_99State == 1)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-		scheduleUpdate();
+		
 		m_totalPercent = recent_percent;
 		cancel_menu->setVisible(false);
 		m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
@@ -439,6 +439,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					// 무료 아템으로 구매.
 					gameUISetting();
 					m_99State = 2;
+					scheduleUpdate();
 					m_graphNode->setVisible(true);
 				}
 				else
@@ -465,6 +466,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					// 잼로 구매.
 					gameUISetting();
 					m_99State = 2;
+					scheduleUpdate();
 					m_graphNode->setVisible(true);
 				}
 				else
@@ -743,6 +745,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 void OnePercentGame::showFail()
 {
 	CCSprite* failBox = CCSprite::create("one_percent_gacha_failbox.png");
+	failBox->setPosition(ccp(0, 28));
 	m_failBox = failBox;
 	m_container->addChild(failBox, kOnePercentGame_Z_content);
 	KSLabelTTF* failTitle = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame6), mySGD->getFont().c_str(), 20.f);
@@ -758,76 +761,12 @@ void OnePercentGame::showFail()
 																					 12.f,
 																					 999,
 																				 StyledAlignment::kCenterAlignment);
-	failContent->setPosition(ccp(0.0, -5.0)); 			// dt (0.0, -5.0)
+	failContent->setPosition(ccp(0.0, -5.0 + 28.f)); 			// dt (0.0, -5.0)
+
 	m_failContent = failContent;
 	setFormSetter(failContent);
 	m_container->addChild(failContent, kOnePercentGame_Z_content);
 	
-//	label->setScale(0);
-//	addChild(KSGradualValue<float>::create(0, 1.f, 0.3f, [=](float t){
-//		label->setScale(t);
-//	}, [=](float t){
-//		label->setScale(t);
-//	}, elasticOut));
-
-//	m_99State = 1;
-//	
-//	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-//	
-//	
-//	if(mySGD->getGoodsValue(kGoodsType_pass5) > 0)
-//	{
-//		myLog->addLog(kLOG_gacha_onePercent, -1);
-//		
-//		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
-//		addChild(t_loading, 9999);
-//		
-//		mySGD->addChangeGoods("g_99_p");
-//		
-//		mySGD->changeGoods([=](Json::Value result_data){
-//			t_loading->removeFromParent();
-//			if(result_data["result"]["code"] == GDSUCCESS)
-//			{
-//				// 무료 아템으로 구매.
-//				gameUISetting();
-//				m_99State = 2;
-//				m_graphNode->setVisible(true);
-//			}
-//			else
-//			{
-//				mySGD->clearChangeGoods();
-//				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-//				//is_menu_enable = true;
-//			}
-//		});
-//	}
-//	else if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getGachaOnePercentFee())
-//	{
-//		myLog->addLog(kLOG_gacha_onePercent, -1);
-//		
-//		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
-//		addChild(t_loading, 9999);
-//		
-//		mySGD->addChangeGoods("g_99_r");
-//		
-//		mySGD->changeGoods([=](Json::Value result_data){
-//			t_loading->removeFromParent();
-//			if(result_data["result"]["code"] == GDSUCCESS)
-//			{
-//				// 잼로 구매.
-//				gameUISetting();
-//				m_99State = 2;
-//				m_graphNode->setVisible(true);
-//			}
-//			else
-//			{
-//				mySGD->clearChangeGoods();
-//				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-//				//is_menu_enable = true;
-//			}
-//		});
-//	}
-//	m_99State = 999;
 
 	cancel_menu->setVisible(true);
 	cancel_menu->setFunction([=](CCObject*){
