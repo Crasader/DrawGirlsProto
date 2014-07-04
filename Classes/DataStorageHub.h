@@ -150,7 +150,11 @@ typedef enum t_DSH_Key{
 	kDSH_Key_isShowEndlessModeTutorial,
 	kSDH_Key_isShowOnePercentTutorial,
 	kDSH_Key_isShowGababoTutorial,
-	kDSH_Key_accountType
+	kDSH_Key_accountType,
+	
+	kDSH_Key_clientVersion,
+	kDSH_Key_dataFileCnt,
+	kDSH_Key_dataFileName_int1
 }DSH_Key;
 
 enum SpecialTutorialCode{

@@ -10,6 +10,7 @@
 #include "jsoncpp/json.h"
 #include <sstream>
 #include "StringCodec.h"
+#include "DataStorageHub.h"
 
 //SaveData* saveData = SaveData::sharedObject();
 SaveData* SaveData::sharedObject()
@@ -60,10 +61,36 @@ void SaveData::createJSON(string filename)
 		Json::Reader reader;
 		reader.parse("{}", file_sync[key]);
 //		.loadFromString("{}");
+		
+		if(filename != getSyncKey(kSDF_myDSH))
+		{
+			int data_file_cnt = myDSH->getIntegerForKey(kDSH_Key_dataFileCnt) + 1;
+			myDSH->setIntegerForKey(kDSH_Key_dataFileCnt, data_file_cnt);
+			myDSH->setStringForKey(kDSH_Key_dataFileName_int1, data_file_cnt, filename);
+		}
+		
 		CCLOG("create json : %s", filename.c_str());
 	}
 	else
 	{
+		if(filename != getSyncKey(kSDF_myDSH))
+		{
+			bool is_pass = false;
+			int total_file = myDSH->getIntegerForKey(kDSH_Key_dataFileCnt);
+			for(int i=1;!is_pass && i<=total_file;i++)
+			{
+				if(myDSH->getStringForKey(kDSH_Key_dataFileName_int1, i) == filename)
+					is_pass = true;
+			}
+			
+			if(!is_pass)
+			{
+				int data_file_cnt = myDSH->getIntegerForKey(kDSH_Key_dataFileCnt) + 1;
+				myDSH->setIntegerForKey(kDSH_Key_dataFileCnt, data_file_cnt);
+				myDSH->setStringForKey(kDSH_Key_dataFileName_int1, data_file_cnt, filename);
+			}
+		}
+		
 		Json::Reader reader;
 		reader.parse(rawData, file_sync[key]);
 	}
@@ -133,6 +160,17 @@ void SaveData::resetData(string filename)
 	Json::Reader reader;
 	reader.parse("{}", file_sync[file_key]);
 	testF(filename, "");
+}
+
+void SaveData::resetAllData()
+{
+	int total_file = myDSH->getIntegerForKey(kDSH_Key_dataFileCnt);
+	for(int i=1;i<=total_file;i++)
+		resetData(myDSH->getStringForKey(kDSH_Key_dataFileName_int1, i));
+	resetData(getSyncKey(kSDF_myDSH));
+	file_sync.clear();
+	Json::Reader reader;
+	reader.parse("{}", file_sync);
 }
 
 void SaveData::setKeyValue(string filename, string _key, int _value, bool diskWrite /*= true*/)

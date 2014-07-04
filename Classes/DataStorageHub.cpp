@@ -767,5 +767,8 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_isShowGababoTutorial] = "issgt";
 	return_value[kDSH_Key_accountType] = "acct";
 	
+	return_value[kDSH_Key_clientVersion] = "cliv";
+	return_value[kDSH_Key_dataFileCnt] = "dtfc";
+	return_value[kDSH_Key_dataFileName_int1] = "dtfn%d";
 }
 #undef LZZ_INLINE
