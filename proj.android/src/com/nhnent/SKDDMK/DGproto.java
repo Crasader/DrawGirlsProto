@@ -34,6 +34,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -46,8 +47,15 @@ import com.litqoo.lib.KSActivityBase;
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final String FiveRocks_AppId = "538c30c400821dfba2000001";
 	public static final String FiveRocks_AppKey = "LxsEDRsKVnr8_Qd_Uffj";
+	public static final int ANDROID_BUILD_GINGERBREAD = 9;
+	public static final int SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
+	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+	    }
+		
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		

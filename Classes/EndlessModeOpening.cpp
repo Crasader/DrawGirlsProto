@@ -1606,7 +1606,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	setFormSetter(score_label);
 	
 	StyledLabelTTF* victory_label =
-	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), victory.getV()),
+	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), rank_list[idx].victory.getV()),
 												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 //	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	victory_label->setAnchorPoint(ccp(1,0.5f));

@@ -94,11 +94,11 @@ void GameItemBase::traceCharacter()
 	}
 	else
 	{
-		CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
+		CCPoint move_vector = ccpMult(direction_vector, 2.5f/direction_vector.getLength());
 		
 		item_img->setPosition(item_img->getPosition() + move_vector);
 		
-		if(item_img->getPosition().getDistanceSq(jack_position) < 2.f)
+		if(item_img->getPosition().getDistanceSq(jack_position) < 2.5f)
 		{
 			stopTraceCharacter();
 			
@@ -867,11 +867,11 @@ void ExchangeCoin::traceCharacter()
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
 	CCPoint direction_vector = jack_position - getPosition();
 	
-	CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
+	CCPoint move_vector = ccpMult(direction_vector, 2.5f/direction_vector.getLength());
 	
 	setPosition(getPosition() + move_vector);
 	
-	if(getPosition().getDistanceSq(jack_position) < 2.f)
+	if(getPosition().getDistanceSq(jack_position) < 2.5f)
 	{
 		stopTraceCharacter();
 		
@@ -1312,11 +1312,11 @@ void FloatingCoin::traceCharacter()
 	CCPoint jack_position = myGD->getJackPoint().convertToCCP();
 	CCPoint direction_vector = jack_position - getPosition();
 	
-	CCPoint move_vector = ccpMult(direction_vector, 2.f/direction_vector.getLength());
+	CCPoint move_vector = ccpMult(direction_vector, 2.5f/direction_vector.getLength());
 	
 	setPosition(getPosition() + move_vector);
 	
-	if(getPosition().getDistanceSq(jack_position) < 2.f)
+	if(getPosition().getDistanceSq(jack_position) < 2.5f)
 	{
 		stopTraceCharacter();
 		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
