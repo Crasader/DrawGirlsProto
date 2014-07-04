@@ -1,4 +1,5 @@
 #include "KSLabelTTF.h"
+
 #include "FormSetter.h"
 void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSize, bool mustUpdateTexture)
 {
@@ -34,6 +35,9 @@ void KSLabelTTF::setColor(ccColor3B t_color)
 void KSLabelTTF::setGradientColor(const ccColor4B& start, const ccColor4B& end, const CCPoint& v)
 {
 	m_gradationMode = true;
+	
+//	m_startColor = ccc4BFromccc4F( ccc4FFromccc3B(start) );
+//	m_endColor = ccc4BFromccc4F( ccc4FFromccc3B(end) );
 	m_startColor = start;
 	m_endColor = end;
 	m_alongVector = v;
@@ -50,8 +54,7 @@ void KSLabelTTF::draw(void)
 	CCAssert(!m_pobBatchNode, "If CCSprite is being rendered by CCSpriteBatchNode, CCSprite#draw SHOULD NOT be called");
 	
 	CC_NODE_DRAW_SETUP();
-	
-	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
+
 	
 	ccGLBindTexture2D( m_pobTexture->getName() );
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
@@ -89,10 +92,15 @@ void KSLabelTTF::draw(void)
 	{
 		CCLog("breakp");
 	}
-	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, 0, m_pSquareColors);
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_FALSE, 0, m_pSquareColors);
 //	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, kQuadSize, m_pSquareColors);
 	
 	
+//	m_sBlendFunc.src = CC_BLEND_SRC;
+//	m_sBlendFunc.dst = CC_BLEND_DST;
+	m_sBlendFunc.src = GL_SRC_ALPHA;
+	m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
+	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
 	CHECK_GL_ERROR_DEBUG();
@@ -147,21 +155,24 @@ void KSLabelTTF::updateColor()
 		}
 		
 		//	float opacityf = (float)_displayedOpacity / 255.0f;
-		
+
+		float _one = 1.f;
 		ccColor4F S = {
-			m_startColor.r / 255.0f,
-			m_startColor.g / 255.0f,
-			m_startColor.b / 255.0f,
+			m_startColor.r / 255.0f * _one,
+			m_startColor.g / 255.0f * _one,
+			m_startColor.b / 255.0f * _one,
 //			0.f
 			m_startColor.a / 255.0f * _displayedOpacity / 255.f
+//			1.f
 		};
 		
 		ccColor4F E = {
-			m_endColor.r / 255.0f,
-			m_endColor.g / 255.0f,
-			m_endColor.b / 255.0f,
+			m_endColor.r / 255.0f * _one,
+			m_endColor.g / 255.0f * _one,
+			m_endColor.b / 255.0f * _one,
 //			0.f
 			m_endColor.a / 255.0f * _displayedOpacity / 255.f
+//			0.f
 		};
 		
 		// (-1, -1)
@@ -185,9 +196,7 @@ void KSLabelTTF::updateColor()
 		m_pSquareColors[3].g = E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c));
 		m_pSquareColors[3].b = E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c));
 		m_pSquareColors[3].a = E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c));
-		
-		
-		
+	
 		m_sQuad.bl.colors = ccc4BFromccc4F(m_pSquareColors[0]);
 		m_sQuad.br.colors = ccc4BFromccc4F(m_pSquareColors[1]);
 		m_sQuad.tl.colors = ccc4BFromccc4F(m_pSquareColors[2]);
@@ -276,6 +285,7 @@ bool KSLabelTTF::updateTexture()
 		auto oFlip = label->isFlipY();
 		auto oColor = label->getColor();
 		auto oPosition = label->getPosition();
+		auto oOpacity = label->getOpacity();
 		CCRenderTexture* rt = CCRenderTexture::create(tex->getContentSize().width + m_outerStrokeSize*2 , tex->getContentSize().height+m_outerStrokeSize*2);
 		
 		label->setFlipY(!oFlip);
@@ -284,6 +294,7 @@ bool KSLabelTTF::updateTexture()
 		ccBlendFunc originalBlendFunc = label->getBlendFunc();
 		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
 		label->setBlendFunc(_t);
+		label->setOpacity(255);
 		CCPoint bottomLeft = ccp(label->getTexture()->getContentSize().width * label->getAnchorPoint().x + m_outerStrokeSize, label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize);
 		CCPoint position = ccpSub(label->getPosition(), ccp(-label->getContentSize().width / 2.0f,-label->getContentSize().height / 2.0f));
 		
@@ -296,11 +307,22 @@ bool KSLabelTTF::updateTexture()
 			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
 			label->visit();
 		}
+	
+		// 테두리 빼고 뚫기. 투명 그라데이션 일 때만
+		if(m_gradationMode && (m_startColor.a != 255 || m_endColor.a != 255) )
+		{
+			label->setBlendFunc({GL_ZERO, GL_ONE_MINUS_SRC_ALPHA});
+			label->setPosition(bottomLeft);
+			label->visit();
+			
+		}
 		
 		rt->end();
 		label->setFlipY(oFlip);
 		label->setColor(oColor);
 		label->setBlendFunc(originalBlendFunc);
+		label->setOpacity(oOpacity);
+		
 		m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
 		m_outerSprite->setOpacity(m_outerStrokeOpacity);
 		addChild(m_outerSprite, -1);
@@ -353,6 +375,36 @@ void KSLabelTTF::setOpacity(GLubyte opacity)
 	}
 	updateColor();
 	//	updateTexture();
+}
+bool KSLabelTTF::initWithString(const char *string, const char *fontName, float fontSize,
+														const cocos2d::CCSize &dimensions, CCTextAlignment hAlignment,
+														CCVerticalTextAlignment vAlignment)
+{
+	if (CCSprite::init())
+	{
+		// shader program
+		this->setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(SHADER_PROGRAM));
+		
+		m_tDimensions = CCSizeMake(dimensions.width, dimensions.height);
+		m_hAlignment  = hAlignment;
+		m_vAlignment  = vAlignment;
+		m_pFontName   = new std::string(fontName);
+		m_fFontSize   = fontSize;
+		
+		this->setString(string);
+		
+		this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)200);
+		m_sBlendFunc.src = GL_SRC_ALPHA;
+		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
+//		setOpacityModifyRGB(false);
+//		m_sBlendFunc.src = GL_SRC_ALPHA;
+//		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
+//		setOpacityModifyRGB(false);
+		
+		return true;
+	}
+	
+	return false;
 }
 void KSLabelTTF::setString(const char *string)
 {

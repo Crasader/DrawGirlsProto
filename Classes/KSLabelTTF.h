@@ -104,49 +104,9 @@ public:
 	
 	virtual bool initWithString(const char *string, const char *fontName, float fontSize,
 															const cocos2d::CCSize &dimensions, CCTextAlignment hAlignment,
-															CCVerticalTextAlignment vAlignment)
-	{
-		if (CCSprite::init())
-		{
-			// shader program
-			this->setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(SHADER_PROGRAM));
-			
-			m_tDimensions = CCSizeMake(dimensions.width, dimensions.height);
-			m_hAlignment  = hAlignment;
-			m_vAlignment  = vAlignment;
-			m_pFontName   = new std::string(fontName);
-			m_fFontSize   = fontSize;
-			
-			this->setString(string);
-			
-			this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)200);
-			return true;
-		}
-		
-		return false;
-	}
+															CCVerticalTextAlignment vAlignment);
 	
-	virtual bool initWithStringAndTextDefinition(const char *string, ccFontDefinition &textDefinition)
-	{
-		if (CCSprite::init())
-		{
-			// shader program
-			this->setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(SHADER_PROGRAM));
-			
-			// prepare everythin needed to render the label
-			_updateWithTextDefinition(textDefinition, false);
-			
-			// set the string
-			this->setString(string);
-			
-			//
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+	
 	virtual void setString(const char *string);
 	void enableGradation(ccColor4B startColor, ccColor4B endColor, CCPoint alongVector);
 	void disableGradation();
