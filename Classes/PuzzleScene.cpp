@@ -2710,7 +2710,25 @@ void PuzzleScene::countingMessage()
 void PuzzleScene::countingAchievement()
 {
 	achievement_count_case->setVisible(false);
-	int reward_count = myAchieve->isHaveRewardCount();
+	int reward_count = 0;
+	
+	for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
+	{
+		if(!myAchieve->isCompleted((AchievementCode)i) &&
+		   myAchieve->isAchieve((AchievementCode)i))
+		{
+			reward_count++;
+		}
+	}
+	
+	for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
+	{
+		if(!myAchieve->isCompleted((AchievementCode)i) &&
+		   myAchieve->isAchieve((AchievementCode)i))
+		{
+			reward_count++;
+		}
+	}
 	
 	if(reward_count > 0)
 	{

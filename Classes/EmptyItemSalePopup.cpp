@@ -136,9 +136,9 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	plus2->setPosition(ccp(35,50));
 	m_container->addChild(plus2);
 	
-	CCSprite* item8 = CCSprite::create("item8.png");
-	item8->setPosition(ccp(70,50));
-	m_container->addChild(item8);
+	CCSprite* item11 = CCSprite::create("item11.png");
+	item11->setPosition(ccp(70,50));
+	m_container->addChild(item11);
 	
 	
 	string before_value = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_data_s, m_type-1);
@@ -280,7 +280,11 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 		else
 		{
 			mySGD->clearChangeGoods();
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+			addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
+																{
+																	((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+																}), 9999);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 			is_menu_enable = true;
 		}
 	});

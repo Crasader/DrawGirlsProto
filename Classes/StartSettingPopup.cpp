@@ -2000,6 +2000,8 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 	
 	t_command_list.push_back(CommandParam("updatePieceHistory", mySGD->getSavePieceHistoryParam(t_history), nullptr));
 	
+	start_loading = LoadingLayer::create();
+	addChild(start_loading, kStartSettingPopupZorder_popup);
 	
 	Json::Value heart_param;
 	heart_param["memberID"] = myHSP->getMemberID();
@@ -2091,9 +2093,6 @@ void StartSettingPopup::acceptStartAction()
 }
 void StartSettingPopup::finalSetting()
 {
-	start_loading = LoadingLayer::create();
-	addChild(start_loading, kStartSettingPopupZorder_popup);
-	
 	is_have_item.clear();
 	is_have_item.push_back(false);
 	
@@ -2174,15 +2173,21 @@ void StartSettingPopup::goToGame()
 		
 		AudioEngine::sharedInstance()->preloadEffectScene("playtutorial");
 		
-		LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-		addChild(loading_tip, kStartSettingPopupZorder_popup);
+		addChild(KSTimer::create(0.3f, [=]()
+		{
+			LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+			addChild(loading_tip, kStartSettingPopupZorder_popup);
+		}));
 	}
 	else
 	{
 		mySGD->setNextSceneName("maingame");
 		
-		LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-		addChild(loading_tip, kStartSettingPopupZorder_popup);
+		addChild(KSTimer::create(0.3f, [=]()
+								 {
+									 LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+									 addChild(loading_tip, kStartSettingPopupZorder_popup);
+								 }));
 	}
 }
 
@@ -2235,6 +2240,8 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		start_loading->removeFromParent();
+		
 		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 			tutorial_success_func();
 		goToGame();

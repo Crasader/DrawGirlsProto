@@ -65,6 +65,18 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = convertToNodeSpace(touchLocation);
 		
+//		CCSprite* t_rect = CCSprite::create("whitePaper.png", CCRectMake(0,0,not_swallow_rect.size.width, not_swallow_rect.size.height));
+//		t_rect->setColor(ccBLUE);
+//		t_rect->setOpacity(100);
+//		t_rect->setAnchorPoint(ccp(0,0));
+//		t_rect->setPosition(not_swallow_rect.origin);
+//		addChild(t_rect);
+//		
+//		CCSprite* t_touched = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1, 1));
+//		t_touched->setColor(ccRED);
+//		t_touched->setPosition(local);
+//		addChild(t_touched);
+		
 		if(not_swallow_rect.containsPoint(local))
 			return false;
 		else

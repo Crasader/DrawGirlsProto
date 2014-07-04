@@ -1189,6 +1189,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 										  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 											 countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
 										  {
+											  myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 											  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 											  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 										  }
@@ -1313,6 +1314,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 				   countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
 				{
+					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 				}
@@ -2140,7 +2142,7 @@ void PlayUI::setComboCnt (int t_combo)
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 			   combo_cnt == myAchieve->getCondition((AchievementCode)i))
 			{
-				myAchieve->changeIngCount(AchievementCode(i), 1);
+				myAchieve->changeIngCount(AchievementCode(i), combo_cnt);
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -2618,7 +2620,6 @@ void PlayUI::createBonusScore ()
 void PlayUI::endGame (bool is_show_reason)
 {
 	myGD->communication("GIM_stopCounting");
-	//123123123 보스 움직임 완전 정지 시켜야 함, 패턴도
 	
 	AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");

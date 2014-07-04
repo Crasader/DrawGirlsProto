@@ -169,6 +169,7 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle, 
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 		   mySGD->stage_attack_count.getV() >= myAchieve->getCondition((AchievementCode)i))
 		{
+			myAchieve->changeIngCount((AchievementCode)i, mySGD->stage_attack_count.getV());
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}

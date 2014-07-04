@@ -17,7 +17,6 @@
 #include "CommonAnimation.h"
 #include "KsLocal.h"
 
-
 OnePercentGame::OnePercentGame()
 {
 	m_cursorDirection = 1;
@@ -445,7 +444,17 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				else
 				{
 					mySGD->clearChangeGoods();
-					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
+																		{
+																			ShopPopup* t_popup = ShopPopup::create();
+																			t_popup->setScale(myDSH->screen_convert_rate);
+																			t_popup->setShopCode(kSC_ruby);
+																			t_popup->setCloseFunc([=]()
+																								  {
+																									  //																is_menu_enable = true;
+																								  });
+																			addChild(t_popup, kOnePercentGame_Z_shop);
+																		}), 999);
 					//is_menu_enable = true;
 				}
 			});
@@ -472,7 +481,17 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				else
 				{
 					mySGD->clearChangeGoods();
-					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
+																		{
+																			ShopPopup* t_popup = ShopPopup::create();
+																			t_popup->setScale(myDSH->screen_convert_rate);
+																			t_popup->setShopCode(kSC_ruby);
+																			t_popup->setCloseFunc([=]()
+																								  {
+																									  //																is_menu_enable = true;
+																								  });
+																			addChild(t_popup, kOnePercentGame_Z_shop);
+																		}), 999);
 					//is_menu_enable = true;
 				}
 			});
