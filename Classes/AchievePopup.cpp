@@ -1428,17 +1428,33 @@ void AchievePopup::takeAllReward(CCObject* sender)
 	is_menu_enable = false;
 	
 	bool is_have = false;
-	for(int i=0;i<achieve_list.size();i++)
+	
+	vector<AchievementCode> one_list;
+	one_list.clear();
+	
+	for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 	{
-		for(int j=0;j<achieve_list[i].achieve_list.size();j++)
+		if(!myAchieve->isCompleted((AchievementCode)i) &&
+		   myAchieve->isAchieve((AchievementCode)i))
 		{
-			if(!myAchieve->isCompleted(achieve_list[i].achieve_list[j]) && myAchieve->isAchieve(achieve_list[i].achieve_list[j]))
-			{
-				mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", achieve_list[i].achieve_list[j])->getCString());
-				
-				myAchieve->changeComplete(achieve_list[i].achieve_list[j]);
-				is_have = true;
-			}
+			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", i)->getCString());
+			myAchieve->changeComplete((AchievementCode)i);
+			
+			one_list.push_back((AchievementCode)i);
+			is_have = true;
+		}
+	}
+	
+	for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
+	{
+		if(!myAchieve->isCompleted((AchievementCode)i) &&
+		   myAchieve->isAchieve((AchievementCode)i))
+		{
+			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", i)->getCString());
+			myAchieve->changeComplete((AchievementCode)i);
+			
+			one_list.push_back((AchievementCode)i);
+			is_have = true;
 		}
 	}
 	

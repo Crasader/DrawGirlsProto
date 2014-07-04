@@ -246,7 +246,7 @@ bool CardSettingPopup::init()
 	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-184);
 	t_suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
 	t_suction->setTouchEnabled(true);
-	addChild(t_suction);
+	main_inner->addChild(t_suction);
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-200);
@@ -353,8 +353,9 @@ bool CardSettingPopup::init()
 																			 }, [=](float t)
 																			 {
 																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																				 tt_suction->removeFromParent();
 																				 is_menu_enable = true;
+																				 tt_suction->removeFromParent();
+																				 t_clipping->removeFromParent();
 																			 }));
 									  t_menu->setTouchEnabled(false);
 									  t_menu->removeFromParent();
@@ -379,8 +380,9 @@ bool CardSettingPopup::init()
 																			 }, [=](float t)
 																			 {
 																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																				 tt_suction->removeFromParent();
 																				 is_menu_enable = true;
+																				 tt_suction->removeFromParent();
+																				 t_clipping->removeFromParent();
 																			 }));
 									  t_menu->setTouchEnabled(false);
 									  t_menu->removeFromParent();
@@ -405,8 +407,9 @@ bool CardSettingPopup::init()
 																			 }, [=](float t)
 																			 {
 																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																				 tt_suction->removeFromParent();
 																				 is_menu_enable = true;
+																				 tt_suction->removeFromParent();
+																				 t_clipping->removeFromParent();
 																			 }));
 									  t_menu->setTouchEnabled(false);
 									  t_menu->removeFromParent();
@@ -431,8 +434,9 @@ bool CardSettingPopup::init()
 																			 }, [=](float t)
 																			 {
 																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																				 tt_suction->removeFromParent();
 																				 is_menu_enable = true;
+																				 tt_suction->removeFromParent();
+																				 t_clipping->removeFromParent();
 																			 }));
 									  t_menu->setTouchEnabled(false);
 									  t_menu->removeFromParent();
@@ -457,8 +461,9 @@ bool CardSettingPopup::init()
 																			 }, [=](float t)
 																			 {
 																				 t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																				 tt_suction->removeFromParent();
 																				 is_menu_enable = true;
+																				 tt_suction->removeFromParent();
+																				 t_clipping->removeFromParent();
 																			 }));
 									  t_menu->setTouchEnabled(false);
 									  t_menu->removeFromParent();
@@ -493,16 +498,17 @@ bool CardSettingPopup::init()
 												   tt_suction->touch_began_func = [=]()
 												   {
 													   tt_suction->is_on_touch_began_func = false;
-													   tt_suction->touch_began_func = [](){};
 													   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.3f, [=](float t)
 																							  {
 																								  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
 																							  }, [=](float t)
 																							  {
 																								  t_case->setPosition(ccp(0,(-t_cell_height*4-6-7)*t));
-																								  tt_suction->removeFromParent();
 																								  is_menu_enable = true;
+																								  tt_suction->removeFromParent();
+																								  t_clipping->removeFromParent();
 																							  }));
+													   tt_suction->touch_began_func = [](){};
 												   };
 												   tt_suction->is_on_touch_began_func = true;
 												   t_menu->setEnabled(true);

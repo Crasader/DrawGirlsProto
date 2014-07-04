@@ -333,7 +333,7 @@ bool CollectionBookPopup::init()
 	
 	mySGD->initCollectionBook();
 	
-	mySGD->changeSortType(kCST_default);
+//	mySGD->changeSortType(kCST_default);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;

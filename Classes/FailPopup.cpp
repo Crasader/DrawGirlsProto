@@ -300,6 +300,7 @@ bool FailPopup::init()
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 		   left_total_score.getV() >= myAchieve->getCondition((AchievementCode)i))
 		{
+			myAchieve->changeIngCount(AchievementCode(i), left_total_score.getV());
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}
