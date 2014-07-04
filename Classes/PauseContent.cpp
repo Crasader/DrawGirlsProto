@@ -15,6 +15,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "CommonAnimation.h"
+#include "ASPopupView.h"
 
 PauseContent* PauseContent::create(int t_touch_priority, function<void(void)> t_resume, function<void(void)> t_gohome, function<void(void)> t_replay)
 {
@@ -74,23 +75,33 @@ void PauseContent::gohomeAction(CCObject* sender, CCControlEvent t_event)
 {
 	if(!is_menu_enable)
 		return;
-	
-	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 
 	is_menu_enable = false;
 	
-	gohome_selector();
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+	{
+		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_notGohomeEndlessTutorialMent), [=](){is_menu_enable = true;}), 9999);
+	}
+	else
+		gohome_selector();
 }
 void PauseContent::replayAction(CCObject* sender, CCControlEvent t_event)
 {
 	if(!is_menu_enable)
 		return;
-	
-	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 
 	is_menu_enable = false;
 	
-	replay_selector();
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	if(mySGD->is_endless_mode)
+	{
+		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_notReplayEndlessMent), [=](){is_menu_enable = true;}), 9999);
+	}
+	else
+		replay_selector();
 }
 
 void PauseContent::startHide()
@@ -194,8 +205,8 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	gohome_button->setTouchPriority(touch_priority-1);
 	
-	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
-		gohome_button->setEnabled(false);
+//	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+//		gohome_button->setEnabled(false);
 	
 //	CommonButton* gohome_menu = CommonButton::create("나가기", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);
 //	gohome_menu->setPosition(ccp(0, 11));
@@ -224,8 +235,8 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	replay_button->setTouchPriority(touch_priority-1);
 	
-	if(mySGD->is_endless_mode)
-		replay_button->setEnabled(false);
+//	if(mySGD->is_endless_mode)
+//		replay_button->setEnabled(false);
 	
 	
 //	CommonButton* replay_menu = CommonButton::create("재시작", 14, CCSizeMake(150,45), CommonButtonOrange, touch_priority-1);

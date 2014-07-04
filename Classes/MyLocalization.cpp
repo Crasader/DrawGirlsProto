@@ -1345,6 +1345,9 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
 	
+	ko->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
+	ko->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -2197,6 +2200,9 @@ void MyLocal::en()
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
 	en->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
+	
+	en->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
+	en->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3072,6 +3078,9 @@ void MyLocal::ja()
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
 	ja->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
+	
+	ja->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
+	ja->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
