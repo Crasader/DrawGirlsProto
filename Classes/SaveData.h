@@ -84,6 +84,7 @@ public:
 	
 	void resetData(SaveDataFile t_sdf);
 	void resetData(string filename);
+	void resetAllData();
 	
 	void fFlush(SaveDataFile t_sdf);
 	void fFlush(SaveDataFile t_sdf, int i1);
