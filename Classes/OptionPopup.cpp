@@ -87,7 +87,16 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
+//	CCLayerGradient* tLayer = CCLayerGradient::create(ccc4(255, 0, 0, 100), ccc4(0, 255, 0, 100));
+//	addChild(tLayer, 9999999);
 	
+	KSLabelTTF* time_over_label = KSLabelTTF::create("TIME OVER", mySGD->getFont().c_str(), 90);
+	time_over_label->setGradientColor(ccc4(255, 0, 0, 255), ccc4(0, 255, 0, 0.f), ccp(1,0));
+//	time_over_label->enableOuterStroke(ccBLACK, 5.f); // , 190, true);
+	time_over_label->setPosition(ccp(240,myDSH->ui_center_y));
+//	time_over_label->setOpacity(0);
+//	time_over_label->updateColor();
+	addChild(time_over_label, 99999999);
 //	Terms* terms = Terms::create(-999999, [=](){
 //		CCLog("END!!!!!");
 //	});
