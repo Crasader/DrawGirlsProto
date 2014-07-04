@@ -668,6 +668,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	ko->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
 	ko->setObject(CCString::create("세션이 종료되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert3);
+	ko->setObject(CCString::create("서버연결에 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_reConnectAlert4);
 	ko->setObject(CCString::create("BLOCKED"), kMyLocalKey_blocked);
 	ko->setObject(CCString::create("계정이 아래의 사유로 정지 되었습니다."), kMyLocalKey_blockedMsg);
 	ko->setObject(CCString::create("회원ID : "), kMyLocalKey_memberID);
@@ -1526,6 +1527,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	en->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
 	en->setObject(CCString::create("세션이 종료되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert3);
+	en->setObject(CCString::create("서버연결에 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_reConnectAlert4);
 	en->setObject(CCString::create("BLOCKED"), kMyLocalKey_blocked);
 	en->setObject(CCString::create("계정이 아래의 사유로 정지 되었습니다."), kMyLocalKey_blockedMsg);
 	en->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);
@@ -2387,6 +2389,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	ja->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
 	ja->setObject(CCString::create("세션이 종료되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert3);
+	ja->setObject(CCString::create("서버연결에 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_reConnectAlert4);
 	ja->setObject(CCString::create("BLOCKED"), kMyLocalKey_blocked);
 	ja->setObject(CCString::create("계정이 아래의 사유로 정지 되었습니다."), kMyLocalKey_blockedMsg);
 	ja->setObject(CCString::create("Member ID : "), kMyLocalKey_memberID);

@@ -102,7 +102,7 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	
 	
 	CCScale9Sprite* take_case = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	take_case->setContentSize(CCSizeMake(145, 36));
+	take_case->setContentSize(CCSizeMake(160, 36));
 	take_case->setPosition(ccp(back_in->getContentSize().width/2.f, 70));
 	back_in->addChild(take_case);
 	
@@ -110,13 +110,13 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	pass_img->setPosition(ccp(20,18));
 	take_case->addChild(pass_img);
 	
-	KSLabelTTF* take_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingTake), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* take_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingTake), mySGD->getFont().c_str(), 13);
 	take_ment->setColor(ccc3(255, 170, 20));
 	take_ment->setAnchorPoint(ccp(0,0.5f));
 	take_ment->setPosition(pass_img->getPosition() + ccp(pass_img->getContentSize().width/2.f+3, 0));
 	take_case->addChild(take_ment);
 	
-	KSLabelTTF* take_value_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass6))) + myLoc->getLocalForKey(kMyLocalKey_buyMorphingTakeValue)).c_str(), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* take_value_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass6))) + myLoc->getLocalForKey(kMyLocalKey_buyMorphingTakeValue)).c_str(), mySGD->getFont().c_str(), 13);
 	take_value_label->setColor(ccc3(255,170,20));
 	take_value_label->setAnchorPoint(ccp(1,0.5f));
 	take_value_label->setPosition(ccp(take_case->getContentSize().width-10, take_case->getContentSize().height/2.f));

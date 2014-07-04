@@ -39,7 +39,7 @@ $(document).ready(function(){
 <br><br>
 
 <h2 id="tables-contextual-classes">|업적정보</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ArchivementHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenterx='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ArchivementHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 	</thead>
 	<tbody datazone>

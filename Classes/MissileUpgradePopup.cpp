@@ -155,13 +155,13 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	upgrade_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 13);
+	upgrade_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
 	upgrade_label->enableOuterStroke(ccBLACK, 0.5f);
 	upgrade_label->setAnchorPoint(ccp(0.5f,0.5f));
 	upgrade_label->setPosition(ccp(0,0));
 	price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
-	price_back->setContentSize(CCSizeMake(82, 26));
-	price_back->setPosition(ccp(upgrade_label->getContentSize().width + price_back->getContentSize().width/2.f + 20, upgrade_label->getContentSize().height/2.f));
+	price_back->setContentSize(CCSizeMake(90, 26));
+	price_back->setPosition(ccp(upgrade_label->getContentSize().width + price_back->getContentSize().width/2.f + 10, upgrade_label->getContentSize().height/2.f));
 	upgrade_label->addChild(price_back);
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)

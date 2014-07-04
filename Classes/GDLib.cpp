@@ -99,11 +99,14 @@ void JsonToLog(string tag,Json::Value _obj){
 }
     
 Json::Value StringToJsonObject(string _str){
-    //명령문자열 json::value 로 변환
-    Json::Value root;
-    Json::Reader reader;
-    reader.parse(_str, root);
+	Json::Value root;
+	Json::Reader reader;
+	if(reader.parse(_str, root)){
     return root;
+	}else{
+		root = "";
+		return root;
+	}
 }
 
 	

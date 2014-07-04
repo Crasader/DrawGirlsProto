@@ -224,6 +224,17 @@ public:
 	//kakaomemberno저장
 	void setSocialID(string _kakaomemberID);
 	
+	void callRetryPopup(Json::Value param,function<void(Json::Value)> func){
+		CommandParam cp;
+		cp.action = param["action"].asString();
+		if(param != 0){
+			cp.param = param;
+		}
+		cp.func=func;
+		std::vector<CommandParam> p;
+		p.push_back(cp);
+		commandRetryFunc(p);
+	}
 	
 	long long int getMemberID();
 	string getSocialID();
@@ -253,13 +264,24 @@ public:
 	string getAppVersionString();
 	string getGraphDogVersion();
 	
+	void setServerURL(string url){
+		serverURL=url;
+	}
 	
+	string getServerURL(){
+		return serverURL;
+	}
 	
 	
 	std::function<void(void)> duplicateLoginFunc;
 	std::function<void(void)> cmdNoErrorFunc;
 	std::function<void(void)> longTimeErrorFunc;
 	std::function<void(void)> commandFinishedFunc;
+	std::function<void(std::vector<CommandParam>)> commandRetryFunc;
+	
+	void setCommandRetryFunc(std::function<void(std::vector<CommandParam>)> func){
+		commandRetryFunc = func;
+	}
 	
 	void setCommandFinishedFunc(std::function<void(void)> func){
 		commandFinishedFunc = func;
@@ -369,7 +391,7 @@ private:
 	string packageName;
 	string appVersion;
 	string deviceInfo;
-	
+	string serverURL;
 	
 //	long long int hspMemberNo;
 //	string kakaoMemberID;
@@ -427,6 +449,7 @@ private:
 		this->cmdNoErrorFunc=nullptr;
 		this->longTimeErrorFunc=nullptr;
 		this->commandFinishedFunc=nullptr;
+		this->commandRetryFunc=nullptr;
 		this->deviceID=0;
 		
 		

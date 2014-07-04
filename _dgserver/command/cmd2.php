@@ -5822,7 +5822,6 @@ function getheart($p){
 	$userInfo = new UserData($memberID);
 	$userStorage = new UserStorage($memberID);
 	if(!$userInfo->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);
-	$userInfo->lastHeartTime;
 	if($userStorage->h>$heartMax->value){
 		$userInfo->lastHeartTime=$now;
 		if($use){
@@ -5837,8 +5836,12 @@ function getheart($p){
 				$r = ResultState::makeReturn(ResultState::GDEXPIRE);
 				$r["leftTime"]=$cooltime->value-$m;
 				$r["max"]=$heartMax->value;
+				$r["heart"]=$userStorage->h;
+				$r["exchangeResult"]=$er;
 				return $r;
 			}
+			$r["exchangeResult"]=$er;
+			$r["heart"] = $er["list"][0]["count"];
 
 			// $userStorage->h-=1;
 			// if($userStorage->h<0){
@@ -5867,9 +5870,8 @@ function getheart($p){
 			$ep["list"][]=array("type"=>"h","count"=>$nHeart);
 			$er=$this->exchange($ep);
 			CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
-
+			$r["heart"] = $er["list"][0]["count"];
 			///////////////////////////////////////////////////////여기서 exchange getHeart
-
 			if($use){
 				$ep["memberID"]=$memberID;
 				$ep["exchangeID"]="useHeart";
@@ -5882,8 +5884,12 @@ function getheart($p){
 					$r = ResultState::makeReturn(ResultState::GDEXPIRE);
 					$r["leftTime"]=$cooltime->value-$m;
 					$r["max"]=$heartMax->value;
+					$r["heart"]=$userStorage->h;
+					$r["exchangeResult"]=$er;
 					return $r;
 				}
+				$r["exchangeResult"]=$er;
+				$r["heart"] = $er["list"][0]["count"];
 				// $userStorage->h-=1;
 				// if($userStorage->h<0){
 				// 	///////////////////////////////////////////////////////여기서 exchange useHeart
@@ -5899,7 +5905,7 @@ function getheart($p){
 		}
 	}
 	$r["max"]=$heartMax->value;
-	$r["heart"] = $userStorage->h;
+	if(!$r["heart"])$r["heart"] = $userStorage->h;
 
 	if(CommitManager::get()->commit($memberID)){
 		$r["result"]=ResultState::successToArray();

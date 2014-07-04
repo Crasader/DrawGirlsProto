@@ -190,6 +190,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_reConnectAlert1,
 	kMyLocalKey_reConnectAlert2,
 	kMyLocalKey_reConnectAlert3,
+	kMyLocalKey_reConnectAlert4,
 	kMyLocalKey_blocked,
 	kMyLocalKey_blockedMsg,
 	kMyLocalKey_noti,

@@ -406,7 +406,8 @@ void TitleRenewalScene::successLogin()
 	
 	receive_cnt = 0;
 	
-	command_list.push_back(CommandParam("getcommonsetting", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+	Json::Value commonsetting_param;
+	command_list.push_back(CommandParam("getcommonsetting", commonsetting_param, json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	
 	Json::Value achievelist_param;
 	achievelist_param["version"] = NSDS_GI(kSDS_AI_version_i);
@@ -428,9 +429,11 @@ void TitleRenewalScene::successLogin()
 	monster_param["version"] = NSDS_GI(kSDS_GI_monsterVersion_i);
 	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
 	
-	command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
+	Json::Value notice_param;
+	command_list.push_back(CommandParam("getnoticelist", notice_param, json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
-	command_list.push_back(CommandParam("gettimeevent", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeEvent)));
+	Json::Value timeevent_param;
+	command_list.push_back(CommandParam("gettimeevent", timeevent_param, json_selector(this, TitleRenewalScene::resultGetTimeEvent)));
 	
 	Json::Value attendance_param;
 	attendance_param["memberID"] = myHSP->getMemberID();
@@ -476,7 +479,8 @@ void TitleRenewalScene::successLogin()
 	heart_param["memberID"] = myHSP->getMemberID();
 	command_list.push_back(CommandParam("getheart", heart_param, json_selector(this, TitleRenewalScene::resultGetHeart)));
 	
-	command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetTimeInfo)));
+	Json::Value timeinfo_param;
+	command_list.push_back(CommandParam("gettimeinfo", timeinfo_param, json_selector(this, TitleRenewalScene::resultGetTimeInfo)));
 	
 	
 	//		command_list.push_back(CommandParam("getpathinfo", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPathInfo)));
@@ -678,20 +682,25 @@ void TitleRenewalScene::checkReceive()
 		}
 		else if(is_receive_fail)
 		{
-			state_label->setString(myLoc->getLocalForKey(kMyLocalKey_failLoadInfo));
+			ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+				startCommand();
+			});
+			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 			
-			CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
-			replay_menu->setPosition(ccp(240,160));
-			replay_menu->setFunction([=](CCObject* sender)
-									 {
-										 CCNode* t_node = CCNode::create();
-										 t_node->setTag(kTitleRenewal_MT_replay);
-										 menuAction(t_node);
-									 });
-			
-			addChild(replay_menu, 0, kTitleRenewal_MT_replay);
-			
-			is_menu_enable = true;
+//			state_label->setString(myLoc->getLocalForKey(kMyLocalKey_failLoadInfo));
+//			
+//			CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
+//			replay_menu->setPosition(ccp(240,160));
+//			replay_menu->setFunction([=](CCObject* sender)
+//									 {
+//										 CCNode* t_node = CCNode::create();
+//										 t_node->setTag(kTitleRenewal_MT_replay);
+//										 menuAction(t_node);
+//									 });
+//			
+//			addChild(replay_menu, 0, kTitleRenewal_MT_replay);
+//			
+//			is_menu_enable = true;
 		}
 		else
 		{

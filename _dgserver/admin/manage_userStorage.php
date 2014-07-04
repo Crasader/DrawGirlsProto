@@ -91,7 +91,7 @@ $(document).ready(function(){
 </h2>
 
 
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserPropertyHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="itemhistory" border=1 commenterx='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserPropertyHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="itemhistory" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 	</thead>
 	<tbody datazone>

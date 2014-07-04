@@ -216,7 +216,7 @@ if(!$stopCommand){
     $allResult["timestamp"]=TimeManager::get()->getTime();
     $allResult["date"]=TimeManager::get()->getCurrentDateTime();
     $allResult["weekNo"]=TimeManager::get()->getCurrentWeekNo();
-    
+    $allResult["cmdNo"]=$param["cmdNo"];
     $allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
     
     if($mode=="nodes"){

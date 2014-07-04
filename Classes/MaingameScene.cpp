@@ -1858,19 +1858,61 @@ void Maingame::gameover()
 
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		CCSprite* result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ui_gameover.ccbi",this));
-		result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
-		myUI->addChild(result_sprite);
-		reader->release();
+		KSLabelTTF* game_over_label = KSLabelTTF::create("GAME OVER", mySGD->getFont().c_str(), 90);
+		game_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
+		game_over_label->enableOuterStroke(ccBLACK, 5.f, 190, true);
+		game_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
+		game_over_label->setOpacity(0);
+		myUI->addChild(game_over_label);
 		
-		addChild(KSTimer::create(2.f, [=]()
-								 {
-									 myGD->hideBosses();
-									 hideThumb();
-									 failScenario();
-								 }));
+		game_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
+																{
+																	float convert_t;
+																	if (t < 1 / 2.75)
+																	{
+																		convert_t = 7.5625f * t * t;
+																	} else if (t < 2 / 2.75)
+																	{
+																		t -= 1.5f / 2.75f;
+																		convert_t = 7.5625f * t * t + 0.75f;
+																	} else if(t < 2.5 / 2.75)
+																	{
+																		t -= 2.25f / 2.75f;
+																		convert_t = 7.5625f * t * t + 0.9375f;
+																	}
+																	
+																	t -= 2.625f / 2.75f;
+																	convert_t = 7.5625f * t * t + 0.984375f;
+																	
+																	game_over_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
+																	game_over_label->setOpacity(t*255);
+																}, [=](float t)
+																{
+																	game_over_label->setPosition(ccp(240,myDSH->ui_center_y));
+																	game_over_label->setOpacity(255);
+																	
+																	game_over_label->addChild(KSTimer::create(32.f/30.f, [=]()
+																											  {
+																												  game_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+																																										  {
+																																											  game_over_label->setScale(1.f+t*0.6f);
+																																											  game_over_label->setOpacity(255-t*255);
+																																										  }, [=](float t)
+																																										  {
+																																											  game_over_label->setScale(1.6f);
+																																											  game_over_label->setOpacity(0);
+																																											  
+																																											  addChild(KSTimer::create(10.f/30.f, [=]()
+																																																	   {
+																																																		   myGD->hideBosses();
+																																																		   hideThumb();
+																																																		   failScenario();
+																																																	   }));
+																																											  
+																																											  game_over_label->removeFromParent();
+																																										  }));
+																											  }));
+																}));
 	}
 }
 
@@ -3258,7 +3300,32 @@ void Maingame::setUnlimitMap()
 {
 	myGD->game_step = kGS_changing;
 
-	showAreaScroll();
+	int total_cell = 0;
+	int take_cell = 0;
+	
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(mySD->silData[i][j])
+			{
+				total_cell++;
+				if(myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline)
+					take_cell++;
+			}
+		}
+	}
+	
+	float recent_percent = 1.f*take_cell/total_cell;
+	
+	if(recent_percent >= 0.85f || (mySGD->isTimeEvent(kTimeEventType_clear) && recent_percent >= mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f))
+	{
+		
+	}
+	else
+	{
+		showAreaScroll();
+	}
 
 	limitted_map_position = game_node->getPosition();
 	myGD->communication("VS_setLimittedMapPosition");

@@ -784,7 +784,10 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 									  {
 										  CCLOG("ClearPopup transaction fail");
 										  
-										  addChild(KSTimer::create(0.1f, [=](){tryTransaction(t_loading);}));
+										  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+											  tryTransaction(t_loading);
+										  });
+										  ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 									  }
 								  });
 }

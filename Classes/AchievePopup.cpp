@@ -16,6 +16,7 @@
 #include "MyLocalization.h"
 #include "ScrollBar.h"
 #include "CommonAnimation.h"
+#include "ASPopupView.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,
@@ -582,10 +583,11 @@ void AchievePopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLOG("reward get fail!!");
 		
-		addChild(KSTimer::create(0.1f, [=](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 			vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(json_selector(this, AchievePopup::resultSaveUserData));
 			mySGD->changeGoodsTransaction(t_command_achieve, nullptr);
-		}));
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		
 //		mySGD->clearChangeGoods();
 		
@@ -1481,10 +1483,11 @@ void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 	{
 		CCLOG("reward get fail!!");
 		
-		addChild(KSTimer::create(0.1f, [=](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 			vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
 			mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
-		}));
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		
 //		mySGD->clearChangeGoods();
 		

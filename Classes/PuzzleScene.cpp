@@ -1691,7 +1691,10 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 							}
 						   else
 							{
-								addChild(KSTimer::create(0.1f, [=](){tryGababoReward(t_loading, success_func);}));
+								ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+									tryGababoReward(t_loading, success_func);
+								});
+								((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 							}
 					   });
 }
@@ -2611,7 +2614,7 @@ void PuzzleScene::setTop()
 //														return true;
 //													}));
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 10);
+	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 8);
 	postbox_count_label->setColor(ccc3(255, 255, 255));
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
@@ -2625,7 +2628,7 @@ void PuzzleScene::setTop()
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
 	achieve_node->addChild(achievement_count_case);
 	
-	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
+	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 8);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
 	achievement_count_case->addChild(achievement_count_label);
 	

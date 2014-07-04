@@ -1154,9 +1154,19 @@ Value::operator[]( int index )
 const Value &
 Value::operator[]( ArrayIndex index ) const
 {
-   JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
-   if ( type_ == nullValue )
-      return null;
+	
+	if(type_ == stringValue){
+		Json::Reader r;
+		Json::Value other;
+		r.parse(value_.string_, other);
+		return other[index];
+	}
+	
+	JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
+	
+	if ( type_ == nullValue )
+		return null;
+	
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    CZString key( index );
    ObjectValues::const_iterator it = value_.map_->find( key );
@@ -1236,11 +1246,17 @@ Value::isValidIndex( ArrayIndex index ) const
 const Value &
 Value::operator[]( const char *key ) const
 {
-
+	if(type_ == stringValue){
+		Json::Reader r;
+		Json::Value other;
+		r.parse(value_.string_, other);
+		return other[key];
+	}
+	 JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
 	
-   JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
-   if ( type_ == nullValue )
-      return null;
+	if ( type_ == nullValue )
+		return null;
+  
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    CZString actualKey( key, CZString::noDuplication );
    ObjectValues::const_iterator it = value_.map_->find( actualKey );

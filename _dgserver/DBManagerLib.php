@@ -24,7 +24,8 @@ class DataTableUtil{
 	static function viewer_listViewer($obj,$keyField,$valueField){
 		$listViewer=array("type"=>"select");
 		while($pData = Monster::getRowByQuery("",null,$keyField.",".$valueField)){
-			$listViewer["element"][] = $pData[$keyField]."-".json_decode($pData["valueField "],true)["ko"];
+			$lang = json_decode($pData["valueField "],true);
+			$listViewer["element"][] = $pData[$keyField]."-".$lang["ko"];
 			$listViewer["value"][]=$pData["no"];
 		}
 
@@ -1354,10 +1355,13 @@ class DBTable{
 	public function insertWithLQTable($param){
 		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
-			if(!$this->isMainDBClass() && $shardIndex){
+			if($this->isMainDBClass()){
+				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+			}else if($shardIndex){
 				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
 			}else{
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+				$userIndex = UserIndex::create($param["data"]["memberID"]);
+				$this->setDBInfo($userIndex->getShardDBInfo());
 			}
 		}
 
@@ -1399,12 +1403,14 @@ class DBTable{
 
 
 	public function updateWithLQTable($param){
-		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
-			if(!$this->isMainDBClass() && $shardIndex){
+			if($this->isMainDBClass()){
+				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+			}else if($shardIndex){
 				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
 			}else{
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+				$userIndex = UserIndex::create($param["data"]["memberID"]);
+				$this->setDBInfo($userIndex->getShardDBInfo());
 			}
 		}
 

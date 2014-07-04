@@ -32,7 +32,7 @@ include "header.php";
 				imgurl = $(this).attr('imgname')
 				fsize = filesize(imgurl)/1024;
 				
-				imgurl = imgurl.replace("../resource/", "http://182.162.201.147:10010/resource/");
+				imgurl = imgurl.replace("../resource/", "http://<?php echo $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]; ?>/resource/");
 				
 				log("select"+imgurl+" size:"+fsize);
 				

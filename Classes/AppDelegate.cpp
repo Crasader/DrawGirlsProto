@@ -319,6 +319,15 @@ bool AppDelegate::applicationDidFinishLaunching()
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	});
 	
+	GraphDog::get()->setCommandRetryFunc([](std::vector<CommandParam> vcp){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			GraphDog::get()->command(vcp);
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+	});
+	
+	
+	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	FormSetter::get()->setEnabledRemocon(true);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID

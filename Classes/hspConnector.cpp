@@ -373,7 +373,7 @@ string hspConnector::getCountryCode(){
 string hspConnector::getServerAddress(){
 	string r;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	r="182.162.196.182:10080";
+	r = "http://182.162.201.147:10010";
 	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
 	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
@@ -389,10 +389,10 @@ string hspConnector::getServerAddress(){
 		
 		t.env->DeleteLocalRef(t.classID);
 	}
-	return r;
 #endif
 	
 	
+	return r.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
 	//return r;
@@ -419,6 +419,9 @@ void hspConnector::logout(jsonSelType func){
 }
 
 void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType func){
+	
+	GraphDog::get()->setServerURL(this->getServerAddress());
+	
 	bool ManualLogin =true;
 	int LoginType = (int)HSPLogin::GUEST;
 	if(param!=0 && param!=NULL){
