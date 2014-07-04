@@ -3165,3 +3165,14 @@ void MyLocal::ja()
 //	ja->setObject(CCString::create("ペットの種類に従って色んなblessingの効果を受けます。"), kMyLocalKey_loading25);
 	setObject(ja, "ja");
 }
+
+void MyLocal::printList(){
+	CCDictElement* element = NULL;
+	CCDictionary* loDic = (CCDictionary*)(myLoc->objectForKey("ko"));
+	printf("################## Localpack ####################\n");
+	CCDICT_FOREACH(loDic, element) {
+		CCString *objectString = (CCString *)element -> getObject();
+		printf("%d\t\"%s\"\n",element -> getIntKey(),objectString->getCString());
+	}
+	printf("################## Localpack ####################\n");
+}

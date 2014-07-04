@@ -822,6 +822,7 @@ public:
 	const char* getSupportLocalCode();
 	CCString* getLocalCode();
 	
+	void printList();
 private:
 	MyLocal() : CCDictionary()
 	{
