@@ -515,13 +515,14 @@ public:
 		
 		
 		if(selectedFlag==""){
-			string lang = KS::getLocalCode();
-			if(lang =="ko")selectedFlag="kr";
-			else if(lang=="ja")selectedFlag="jp";
-			else if(lang=="th")selectedFlag="th";
-			else selectedFlag="kr";
+			selectedFlag = hspConnector::get()->getCountryCode();
 		}
+		
 		selectedFlagSpr = CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",selectedFlag.c_str())->getCString());
+		
+		if(!selectedFlagSpr){
+			selectedFlagSpr = CCSprite::createWithSpriteFrameName("kr.png");
+		}
 		selectedFlagSpr->setPosition(ccp(100,56));
 		selectedFlagSpr->setScale(1.5);
 		addChild(selectedFlagSpr,2);
