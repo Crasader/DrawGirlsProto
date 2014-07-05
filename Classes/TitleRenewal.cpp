@@ -209,18 +209,25 @@ void TitleRenewalScene::endSplash()
 	addChild(black_img, 3);
 	white_back->removeFromParent();
 	
-	myHSP->getIsUsimKorean([=](Json::Value result_data)
-						   {
-							   GraphDogLib::JsonToLog("isUsimKorean", result_data);
-							   if(result_data["korean"].asBool())
+	if(myDSH->getBoolForKey(kDSH_Key_isCheckTerms))
+	{
+		realInit();
+	}
+	else
+	{
+		myHSP->getIsUsimKorean([=](Json::Value result_data)
 							   {
-								   realInit();
-							   }
-							   else
-							   {
-								   realInit();
-							   }
-						   });
+								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
+								   if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
+								   {
+									   realInit();
+								   }
+								   else // 내국인이면서 동의안함. 꺼버리기
+								   {
+									   exit(1);
+								   }
+							   });
+	}
 }
 
 void TitleRenewalScene::realInit()
