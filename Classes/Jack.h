@@ -279,6 +279,8 @@ private:
 	
 	Chaos* t_chaos;
 	
+//	CCSprite* line_edge;
+	
 	CCSprite* jackImg;
 	CCBAnimationManager* jack_ccb_manager;
 	CCSprite* die_particle;
