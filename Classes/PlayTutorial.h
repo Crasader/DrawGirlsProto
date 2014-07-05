@@ -69,14 +69,14 @@ private:
 		pathImg->setRotation(myPointVector.distance.getAngle());
 		pathScale = 1;
 		pathImg->setScaleX(pathScale);
-		pathImg->setScaleY(0.7f);
+		pathImg->setScaleY(1.f);
 		addChild(pathImg);
 		pathImg->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		
 		setPosition(ccp((myPointVector.origin.x)*pixelSize+1, (myPointVector.origin.y)*pixelSize+1));
 		
 		CCSprite* path_edge = CCSprite::create(("path_edge_" + line_color + ".png").c_str());
-		path_edge->setScale(0.8f);
+		path_edge->setScale(1.15f);
 		addChild(path_edge);
 		path_edge->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	}
@@ -301,11 +301,16 @@ public:
 	
 	void setCharacterPoint(IntPoint t_point);
 	
+	void rewindAnimation();
+	void drawAnimation();
+	
 	function<void(void)> controlerStop;
 	
 private:
 	
 	int height_value;
+	
+	IntDirection jack_img_direction;
 	
 	function<TutoMapType(IntPoint)> getMapData;
 	function<void(IntPoint, TutoMapType)> setMapData;
