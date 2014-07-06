@@ -615,11 +615,11 @@ void JsGababo::onPressConfirm(CCObject* t)
 		m_ba->setEnabled(false);
 		m_ga->setEnabled(false);
 		m_bo->setEnabled(false);
-		addChild(KSTimer::create(2.0f, [=](){
+		//addChild(KSTimer::create(2.0f, [=](){
 			contextSwitching(m_front3, m_front1, rollBack, [=](){
 				
 			});
-		}));
+		//}));
 		//		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
 		//		auto onSelection = [=]() // 바위 가위 보 셋중 하나 눌렀을 때~
 		//		{
@@ -801,7 +801,7 @@ void JsGababo::showHandsMotionWrapper()
 			if(m_mySelection == computer) // Draw
 			{
 				m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent10));
-				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 6, 10 + 6.5 - 3));
+//				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 6, 10 + 6.5 - 3));
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("gababo_draw.png");
 					m_resultStamp = result_stamp;
@@ -819,13 +819,13 @@ void JsGababo::showHandsMotionWrapper()
 				if(m_winCount != 3)
 				{
 					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent11));
-					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f - 6));
+//					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f - 6));
 				}
 				else
 				{
 					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent12)
 											  );
-					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 4.5, 15.f + 21.f));
+//					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 4.5, 15.f + 21.f));
 				}
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("endless_winner.png");
@@ -852,7 +852,7 @@ void JsGababo::showHandsMotionWrapper()
 			{
 				CCLOG("lose~");
 				m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent13));
-				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
+//				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					CCSprite* result_stamp = CCSprite::create("endless_loser.png");
 					m_resultStamp = result_stamp;
