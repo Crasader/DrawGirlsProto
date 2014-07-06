@@ -240,10 +240,11 @@ public:
 	void openHSPUrl(const std::string& url);
 	void mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func);
 	void getIsUsimKorean(jsonSelType func); // value["korean"] 이 1이면 약관 페이지 띄워야 함.
+	string getUniqId();
 	int getLoginType(); 
 	void openHSPNotice();
 	void launchPromotion();
-	void openKakaoMsg();
+	int openKakaoMsg();
 	//void loadMyInfo(Json::Value obj);
 	//void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	//void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
