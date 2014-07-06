@@ -392,6 +392,7 @@ string hspConnector::getServerAddress(){
 #endif
 	
 	
+	r = "http://182.162.201.147:10010";
 	return r.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
@@ -589,7 +590,7 @@ void hspConnector::openHSPUrl(const std::string& url)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
-	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPUrl", "()V")) {
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPUrl", "(Ljava/lang/String;)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
 		t.env->DeleteLocalRef(t.classID);
@@ -600,6 +601,21 @@ void hspConnector::openHSPUrl(const std::string& url)
 #endif
 }
 
+void hspConnector::openCSCenter(const std::string& url)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openCSCenter", "(Ljava/lang/String;)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+
+}
 void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -651,10 +667,34 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 	// not implementation
 	Json::Value dummy;
 	dummy["isSuccess"] = 1;
-	dummy["korean"] = 1;
+	dummy["korean"] = 0;
 	func(dummy);
 #endif
 	
+}
+string hspConnector::getUniqId()
+{
+	string r;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	r = "aes_key_";
+	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
+	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
+	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
+
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getUniqId", "()Ljava/lang/String;")) {
+		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
+		r = revStr;
+		
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
+	
+	return r;
 }
 int hspConnector::getLoginType()
 {
@@ -691,19 +731,24 @@ void hspConnector::openHSPNotice()
 #endif
 	
 }
-void hspConnector::openKakaoMsg()
+int hspConnector::openKakaoMsg()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
-	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openKakaoMsg", "()V")) {
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openKakaoMsg", "()I")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		r = t.env->CallStaticIntMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
+
+	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
 //	CCLog(url.c_str());
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+
+	return 0;
 #endif
 }
 

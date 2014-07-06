@@ -85,13 +85,6 @@ void KSLabelTTF::draw(void)
 	m_pSquareColors[1] = ccc4FFromccc4B(m_sQuad.bl.colors);
 	m_pSquareColors[2] = ccc4FFromccc4B(m_sQuad.br.colors);
 	m_pSquareColors[3] = ccc4FFromccc4B(m_sQuad.tr.colors);
-	if(m_pSquareColors[0].a != 1.f ||
-		 m_pSquareColors[1].a != 1.f ||
-		 m_pSquareColors[2].a != 1.f ||
-		 m_pSquareColors[3].a != 1.f)
-	{
-		CCLog("breakp");
-	}
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_FALSE, 0, m_pSquareColors);
 //	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_FLOAT, GL_TRUE, kQuadSize, m_pSquareColors);
 	
