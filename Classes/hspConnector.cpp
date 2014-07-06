@@ -601,6 +601,21 @@ void hspConnector::openHSPUrl(const std::string& url)
 #endif
 }
 
+void hspConnector::openCSCenter(const std::string& url)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openCSCenter", "(Ljava/lang/String;)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+
+}
 void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -652,7 +667,7 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 	// not implementation
 	Json::Value dummy;
 	dummy["isSuccess"] = 1;
-	dummy["korean"] = 1;
+	dummy["korean"] = 0;
 	func(dummy);
 #endif
 	
