@@ -25,6 +25,7 @@
 #include "CCGL.h"
 #include "CommonButton.h"
 #include "support/TransformUtils.h"
+#include "ks19937.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -380,6 +381,10 @@ public:
 		}
 		if(m_isLoadedRGB == false)
 			return;
+		vector<int> tt;
+			
+		AudioEngine::sharedInstance()->playEffect(ccsf("groan%d.wav", ks19937::getIntValue(1, 13)) ,false);
+		
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = convertToNodeSpace(touchLocation);
 		
