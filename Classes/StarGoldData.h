@@ -931,6 +931,9 @@ public:
 	void initCollectionBook();
 	void heartRefreshSuccess(Json::Value result_data);
 	
+	int network_check_cnt;
+	int max_network_check_cnt;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
