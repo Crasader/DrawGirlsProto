@@ -424,7 +424,7 @@ public:
 			if(waveValue <= 5)
 				continue;
 
-			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / -10.f;
+			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / -15.f;
 			//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
 			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.15f,
 																							 [=](CCPoint t){
@@ -448,37 +448,6 @@ public:
 //																							 expoIn));
 		}
 
-	/*	
-			else
-			{
-//				return;
-				// 여기서 부터는 출렁 해야됨.
-				auto backupPosition = m_backupVertices[&m_vertices[i]];
-				
-				auto startPosition = m_vertices[i];
-				CCPoint ccpStartPosition = ccp(startPosition.x, startPosition.y);
-				auto goalPosition = m_backupVertices[&m_vertices[i]];
-				CCPoint ccpGoalPosition = ccp(goalPosition.x, goalPosition.y);
-				ccpGoalPosition = ccpGoalPosition - ccpStartPosition;
-				if(ccpLength(ccpGoalPosition) > 0.5f)
-				{
-					addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), ccpGoalPosition, 0.5f,
-																									 [=](CCPoint t){
-																										 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
-																																									startPosition.y + t.y,
-																																									m_vertices[i].z);
-																										 //																								 i->y = backup.y + t;
-																									 },
-																									 [=](CCPoint t){
-																										 m_vertices[i] = Vertex3DMake(startPosition.x + t.x,
-																																									startPosition.y + t.y,
-																																									m_vertices[i].z);
-																									 },
-																									 elasticOut));
-				}
-			}
-			*/
-//		return true;
 	}
 	void triangulationWithPoints()
 	{

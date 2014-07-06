@@ -759,8 +759,11 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_help)
 	{
-		HelpPopup* t_hp = HelpPopup::create(this, callfunc_selector(OptionPopup::popupClose));
-		addChild(t_hp, kOP_Z_popup);
+		myHSP->openCSCenter("supports.cscenter");
+		is_menu_enable = true;
+		//HelpPopup* t_hp = HelpPopup::create(this, callfunc_selector(OptionPopup::popupClose));
+		//addChild(t_hp, kOP_Z_popup);
+
 	}
 	else if(tag == kOP_MT_logout)
 	{

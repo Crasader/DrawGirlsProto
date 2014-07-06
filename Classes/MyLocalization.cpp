@@ -2142,7 +2142,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
 								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
 								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>한 단계 위 등급 카드를 획득</font>"
+								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
 								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
 	en->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"

@@ -1876,7 +1876,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		else if(tag == kMainFlowMenuTag_event)
 		{
 			is_menu_enable = true;
-			
+			myHSP->openHSPUrl("http://cafe.naver.com/ddmkskdemo");
 //			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 			
 //			is_menu_enable = true; // 임시
