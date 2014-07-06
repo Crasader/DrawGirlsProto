@@ -40,6 +40,7 @@
 #include "CommonAnimation.h"
 #include "Terms.h"
 #include "AccountManagerPopup.h"
+#include "StyledLabelTTF.h"
 
 USING_NS_CC_EXT;
 
@@ -319,14 +320,17 @@ bool OptionPopup::init()
 	
 	CommonButton* kakao_button = CommonButton::create("", 12, CCSizeMake(85, 33), CCScale9Sprite::create("option_kakao.png"), -171);
 	kakao_button->setPosition(getContentPosition(kOP_MT_kakao));
-	kakao_button->setFunction([=](CCObject* sender)
-								{
-									
-									hspConnector::get()->openKakaoMsg();
-									//									CCNode* t_node = CCNode::create();
-//									t_node->setTag(kOP_MT_kakao);
-//									menuAction(t_node);
-								});
+	kakao_button->setFunction([=](CCObject* sender) { 
+															int ret = hspConnector::get()->openKakaoMsg();
+															if(ret == 0) {
+																ASPopupView* as = ASPopupView::getCommonNoti2(-172, "에러", 
+																																							StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>", 
+																																																		 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr, ccp(0, 0), true);
+																addChild(as, kOP_Z_content);
+
+															
+															} 
+														});
 	main_case->addChild(kakao_button, kOP_Z_content);
 	
 	
@@ -570,6 +574,11 @@ bool OptionPopup::init()
 	version_label->setPosition(ccp(30,27));
 	main_case->addChild(version_label, kOP_Z_back);
 	
+	KSLabelTTF* my_version_label = KSLabelTTF::create(GraphDog::get()->getAppVersionString().c_str(),
+																										mySGD->getFont().c_str(), 11);
+	my_version_label->setAnchorPoint(ccp(0,0.5));
+	my_version_label->setPosition(ccp(78, 27));
+	main_case->addChild(my_version_label, kOP_Z_content);
 	
 	CommonButton* withdraw_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), 12, CCSizeMake(90,40), CommonButtonDarkPupple, -171);
 	withdraw_button->setTitleColor(ccc3(172, 167, 175));
@@ -1030,7 +1039,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_community)
 	{
-		myHSP->openHSPUrl("http://naver.com");
+		myHSP->openHSPUrl("http://cafe.naver.com/ddmkskdemo");
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tip)
