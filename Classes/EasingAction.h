@@ -10,6 +10,7 @@
 #define DGproto_EasingAction_h
 float getTime(float t);
 float elasticOut(float time);
+float elasticOut2(float time);
 float bounceOut(float time);
 float easeOut(float time);
 float expoIn(float time);
