@@ -632,6 +632,7 @@ void StartSettingPopup::setMain()
 	
 	
 	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
+	missile_type_code = kStoneType_guided; // 임시
 	
 	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	

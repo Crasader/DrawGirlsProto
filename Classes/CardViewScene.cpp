@@ -160,7 +160,7 @@ bool CardViewScene::init()
 	};
 	if(!is_morphing)
 	{
-		buy_morphing = CommonButton::create("", 10, CCSizeMake(126, 126), CommonButtonLightPupple, -160);
+		buy_morphing = CommonButton::create("", 10, CCSizeMake(63, 63), CommonButtonLightPupple, -160);
 		buy_morphing->setPosition(morphing_position);
 		buy_morphing->setFunction([=](CCObject* sender)
 								  {

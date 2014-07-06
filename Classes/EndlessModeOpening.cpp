@@ -1587,7 +1587,13 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);
 	setFormSetter(selectedFlagSpr);
-	KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12);
+	
+//	CCSprite* nick_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 62, 15));
+//	nick_back->setAnchorPoint(ccp(0,0.5f));
+//	nick_back->setPosition(ccp(79 - 3.5,19));
+//	list_cell_case->addChild(nick_back);
+	
+	KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(62, 15), CCTextAlignment::kCCTextAlignmentLeft);
 	nick_label->setAnchorPoint(ccp(0,0.5f));
 	nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 	nick_label->setPosition(ccp(79 - 3.5,19));
