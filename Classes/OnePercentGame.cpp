@@ -402,7 +402,6 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
 		m_totalPercent = recent_percent;
-		cancel_menu->setVisible(false);
 		m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
 		if(m_failBox)
 		{
@@ -440,6 +439,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					m_99State = 2;
 					scheduleUpdate();
 					m_graphNode->setVisible(true);
+					cancel_menu->setVisible(false);
 				}
 				else
 				{
@@ -477,6 +477,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					m_99State = 2;
 					scheduleUpdate();
 					m_graphNode->setVisible(true);
+					cancel_menu->setVisible(false);
 				}
 				else
 				{
