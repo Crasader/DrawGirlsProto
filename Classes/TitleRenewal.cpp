@@ -209,18 +209,26 @@ void TitleRenewalScene::endSplash()
 	addChild(black_img, 3);
 	white_back->removeFromParent();
 	
-	myHSP->getIsUsimKorean([=](Json::Value result_data)
-						   {
-							   GraphDogLib::JsonToLog("isUsimKorean", result_data);
-							   if(result_data["korean"].asBool())
+	if(myDSH->getBoolForKey(kDSH_Key_isCheckTerms))
+	{
+		realInit();
+	}
+	else
+	{
+		myHSP->getIsUsimKorean([=](Json::Value result_data)
 							   {
-								   realInit();
-							   }
-							   else
-							   {
-								   realInit();
-							   }
-						   });
+								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
+								   if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
+								   {
+									   myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true);
+									   realInit();
+								   }
+								   else // 내국인이면서 동의안함. 꺼버리기
+								   {
+									   exit(1);
+								   }
+							   });
+	}
 }
 
 void TitleRenewalScene::realInit()
@@ -234,6 +242,20 @@ void TitleRenewalScene::realInit()
 void TitleRenewalScene::resultLogin( Json::Value result_data )
 {
 	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+	if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
+	{
+		myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
+	}
+	else
+	{
+		if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
+		{
+			SaveData::sharedObject()->resetAllData();
+			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+			return;
+		}
+	}
 	
 	if(result_data["error"]["isSuccess"].asBool())
 	{

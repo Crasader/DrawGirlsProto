@@ -531,16 +531,31 @@ public:
 		selectBox->setPosition(ccp(100.5f,56));
 		addChild(selectBox,1);
 		
-		CCSprite* leftArrow = CCSprite::create("nickname_arrow.png");
-		leftArrow->setPosition(ccp(210,15));
-		addChild(leftArrow,5);
-		
-		
-		
-		CCSprite* rightArrow = CCSprite::create("nickname_arrow.png");
-		rightArrow->setPosition(ccp(-10,15));
-		rightArrow->setFlipX(true);
-		addChild(rightArrow,5);
+	  CCMenu* t_arrow_menu = CCMenu::create();
+	  t_arrow_menu->setPosition(ccp(0,0));
+	  t_arrow_menu->setTouchPriority(INT_MAX*-1);
+	  addChild(t_arrow_menu, 5);
+	  
+	  CCSprite* n_left_arrow = CCSprite::create("nickname_arrow.png");
+	  CCSprite* s_left_arrow = CCSprite::create("nickname_arrow.png");
+	  s_left_arrow->setColor(ccGRAY);
+	  
+	  CCMenuItemSprite* left_arrow_item = CCMenuItemSprite::create(n_left_arrow, s_left_arrow, this, menu_selector(FlagSelector::menuAction));
+	  left_arrow_item->setTag(1);
+	  left_arrow_item->setPosition(ccp(210,15));
+	  t_arrow_menu->addChild(left_arrow_item);
+	  
+	  CCSprite* n_right_arrow = CCSprite::create("nickname_arrow.png");
+	  n_right_arrow->setFlipX(true);
+	  CCSprite* s_right_arrow = CCSprite::create("nickname_arrow.png");
+	  s_right_arrow->setFlipX(true);
+	  s_right_arrow->setColor(ccGRAY);
+	  
+	  CCMenuItemSprite* right_arrow_item = CCMenuItemSprite::create(n_right_arrow, s_right_arrow, this, menu_selector(FlagSelector::menuAction));
+	  right_arrow_item->setTag(2);
+	  right_arrow_item->setPosition(ccp(-10,15));
+	  t_arrow_menu->addChild(right_arrow_item);
+	  
 		
 //		CCScale9Sprite* back = CommonButton::getBackgroundByType(CommonButtonGray);
 //		back->setContentSize(CCSizeMake(200,100));
@@ -551,6 +566,29 @@ public:
 		return true;
 	}
 	
+	void menuAction(CCObject* sender)
+	{
+		int t_tag = ((CCNode*)sender)->getTag();
+		
+		CCPoint recent_offset = fTable->getContentOffset();
+		CCPoint after_offset;
+		if(t_tag == 1)
+		{
+			after_offset = recent_offset - ccp(32,0);
+			CCPoint min_offset = fTable->minContainerOffset();
+			if(after_offset.x < min_offset.x)
+				after_offset.x = min_offset.x;
+		}
+		else if(t_tag == 2)
+		{
+			after_offset = recent_offset + ccp(32,0);
+			CCPoint max_offset = fTable->maxContainerOffset();
+			if(after_offset.x > max_offset.x)
+				after_offset.x = max_offset.x;
+		}
+		
+		fTable->setContentOffset(after_offset);
+	}
 	
 	CREATE_FUNC(FlagSelector);
 	

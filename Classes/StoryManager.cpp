@@ -12,9 +12,11 @@
 #include "AudioEngine.h"
 
 void StoryManager::addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func,
-						   CCSize t_size/* = CCSizeMake(350,100)*/, CCPoint t_point/* = ccp(0,-110)*/, int t_font_size/* = 12*/)
+						   CCSize t_size/* = CCSizeMake(350,100)*/, CCPoint t_point/* = ccp(0,-110)*/, int t_font_size/* = 12*/, bool is_typing_sound/* = false*/)
 {
 	ment_node->removeAllChildren();
+	
+	is_on_typing_sound = is_typing_sound;
 	
 	CCScale9Sprite* ment_box = CCScale9Sprite::create("talk_mentbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(12, 12, 23-12, 23-12));
 	ment_box->setContentSize(t_size);
@@ -73,6 +75,9 @@ void StoryManager::mentAction()
 {
 	ing_ment_cnt++;
 	
+	if(is_on_typing_sound)
+		AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+	
 	int frame_value;
 	if(is_boosting)
 		frame_value = 1;
@@ -98,7 +103,6 @@ void StoryManager::mentAction()
 		}
 	}
 }
-
 
 bool StoryManager::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {

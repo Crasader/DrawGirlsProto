@@ -349,7 +349,7 @@ void Maingame::startStory()
 					  CCSequence* t_seq3 = CCSequence::create(t_delay3, t_call3, t_call4, NULL);
 					  
 					  t_sm->runAction(t_seq3);
-				  });
+				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
 }
 
 void Maingame::endIntro()
@@ -2583,7 +2583,7 @@ void Maingame::clearScenario2()
 //																																  }));
 //																		  }));
 					  t_sm->removeFromParent();
-				  });
+				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
 }
 
 void Maingame::clearScenario3()
@@ -2689,7 +2689,7 @@ void Maingame::failScenario2()
 					  curtain_node->runAction(t_seq);
 					  
 					  t_sm->removeFromParent();
-				  });
+				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
 	
 }
 

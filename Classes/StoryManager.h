@@ -33,11 +33,12 @@ public:
 	CCNode* front_node;
 	bool is_delaying;
 	
-	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func, CCSize t_size = CCSizeMake(350,100), CCPoint t_point = ccp(0,-110), int t_font_size = 12);
+	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func, CCSize t_size = CCSizeMake(350,100), CCPoint t_point = ccp(0,-110), int t_font_size = 12, bool is_typing_sound = false);
 	void cleanSM();
 	
 private:
 	
+	bool is_on_typing_sound;
 	bool is_menting;
 	int touch_count;
 	bool is_boosting;
@@ -66,6 +67,7 @@ private:
 	void myInit(int t_touch_priority)
 	{
 		touch_count = 0;
+		is_on_typing_sound = false;
 		is_boosting = false;
 		is_delaying = false;
 		is_menting = false;

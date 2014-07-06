@@ -770,5 +770,8 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_clientVersion] = "cliv";
 	return_value[kDSH_Key_dataFileCnt] = "dtfc";
 	return_value[kDSH_Key_dataFileName_int1] = "dtfn%d";
+	
+	return_value[kDSH_Key_isCheckTerms] = "ichkt";
+	return_value[kDSH_Key_savedMemberID] = "smid";
 }
 #undef LZZ_INLINE

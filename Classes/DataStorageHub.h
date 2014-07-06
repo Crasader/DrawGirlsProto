@@ -154,7 +154,10 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_clientVersion,
 	kDSH_Key_dataFileCnt,
-	kDSH_Key_dataFileName_int1
+	kDSH_Key_dataFileName_int1,
+	
+	kDSH_Key_isCheckTerms,
+	kDSH_Key_savedMemberID
 }DSH_Key;
 
 enum SpecialTutorialCode{
