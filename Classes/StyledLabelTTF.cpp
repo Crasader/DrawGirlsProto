@@ -169,20 +169,6 @@ void StyledLabelTTF::updateTexture()
 		i->setPositionY(i->getPositionY() - (firstLineMaxY - firstLineMinY) / 2.f + maxY - minY);
 	}
 	
-	// 기본 앵커 포인트 잡아주기.
-	if(m_currentAlignment == StyledAlignment::kLeftAlignment)
-	{
-		// default
-		setAnchorPoint(ccp(0.f, 1.f));
-	}
-	else if(m_currentAlignment == StyledAlignment::kCenterAlignment)
-	{
-		setAnchorPoint(ccp(0.5f, 1.f));
-	}
-	else if(m_currentAlignment == StyledAlignment::kRightAlignment)
-	{
-		setAnchorPoint(ccp(1.f, 1.f));
-	}
 
 	
 	//	m_oneLineContainer->setPosition(ccp(-m_oneLineSize / 2.f, 0));
@@ -233,6 +219,20 @@ StyledLabelTTF* StyledLabelTTF::create(const char* text,const char* defaultFont,
 	slttf->m_fontColor= defaultFontColor;
 	slttf->m_currentAlignment = sa;
 	slttf->setStringByTag(text);
+	// 기본 앵커 포인트 잡아주기.
+	if(sa == StyledAlignment::kLeftAlignment)
+	{
+		// default
+		slttf->setAnchorPoint(ccp(0.f, 1.f));
+	}
+	else if(sa == StyledAlignment::kCenterAlignment)
+	{
+		slttf->setAnchorPoint(ccp(0.5f, 1.f));
+	}
+	else if(sa == StyledAlignment::kRightAlignment)
+	{
+		slttf->setAnchorPoint(ccp(1.f, 1.f));
+	}
 	return slttf;
 	
 }
