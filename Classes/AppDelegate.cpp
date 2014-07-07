@@ -113,10 +113,10 @@ bool AppDelegate::applicationDidFinishLaunching()
 //	std::chrono::time_point<std::chrono::system_clock> start, end;
 //    start = std::chrono::system_clock::now();
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_clientVersion) < 0)
+	if(myDSH->getIntegerForKey(kDSH_Key_clientVersion) < 1)
 	{
 		SaveData::sharedObject()->resetAllData();
-		myDSH->setIntegerForKey(kDSH_Key_clientVersion, 0);
+		myDSH->setIntegerForKey(kDSH_Key_clientVersion, 1);
 	}
 	
 	

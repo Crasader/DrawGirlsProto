@@ -792,7 +792,12 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_name_s)			rv = "%d_name";
 	else if(t_key == kSDS_CI_int1_mPrice_ruby_i)				rv = "%d_mPrice_ruby";
 	else if(t_key == kSDS_CI_int1_mPrice_pass_i)				rv = "%d_mPrice_pass";
-	else if(t_key == kSDS_CI_int1_type_s)						rv = "%d_type";
+	else if(t_key == kSDS_CI_int1_type_i)						rv = "%d_type";
+	else if(t_key == kSDS_CI_int1_category_s)					rv = "%d_category";
+	else if(t_key == kSDS_CI_int1_level_i)						rv = "%d_level";
+	else if(t_key == kSDS_CI_int1_soundCnt_i)					rv = "%d_soundCnt";
+	else if(t_key == kSDS_CI_int1_soundNumber_int1_i)			rv = "%d_soundNumber_%d";
+	else if(t_key == kSDS_CI_int1_characterNo_i)				rv = "%d_characterNo";
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 	

@@ -808,7 +808,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardGiftMyID,
 	kMyLocalKey_cardGiftInputText,
 	kMyLocalKey_cardGiftSearch,
-	kMyLocalKey_cardGiftSend
+	kMyLocalKey_cardGiftSend,
+	kMyLocalKey_cardGiftNotFound
 }MyLocalKey;
 
 

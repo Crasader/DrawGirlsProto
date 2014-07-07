@@ -1357,6 +1357,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_cardGiftInputText);
 	ko->setObject(CCString::create("검색"), kMyLocalKey_cardGiftSearch);
 	ko->setObject(CCString::create("선물하기"), kMyLocalKey_cardGiftSend);
+	ko->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -2223,6 +2224,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_cardGiftInputText);
 	en->setObject(CCString::create("검색"), kMyLocalKey_cardGiftSearch);
 	en->setObject(CCString::create("선물하기"), kMyLocalKey_cardGiftSend);
+	en->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3111,6 +3113,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_cardGiftInputText);
 	ja->setObject(CCString::create("검색"), kMyLocalKey_cardGiftSearch);
 	ja->setObject(CCString::create("선물하기"), kMyLocalKey_cardGiftSend);
+	ja->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

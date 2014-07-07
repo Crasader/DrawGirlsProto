@@ -268,7 +268,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 		take_grade = 1;
 	
 	int t_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_grade);
-	string t_card_type = NSDS_GS(kSDS_CI_int1_type_s, t_card_number);
+	string t_card_type = NSDS_GS(kSDS_CI_int1_category_s, t_card_number);
 	if(t_card_type == "")
 		t_card_type = "normal";
 	

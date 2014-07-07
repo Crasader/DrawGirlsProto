@@ -682,7 +682,7 @@ int StarGoldData::getNextCardNumber( int recent_card_number )
 	bool is_event = false;
 	bool is_special = false;
 	
-	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	string card_type = NSDS_GS(kSDS_CI_int1_category_s, recent_card_number);
 	
 	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
 	{
@@ -802,7 +802,7 @@ int StarGoldData::getNextStageCardNumber( int recent_card_number )
 	bool is_event = false;
 	bool is_special = false;
 	
-	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	string card_type = NSDS_GS(kSDS_CI_int1_category_s, recent_card_number);
 	
 	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
 	{
@@ -928,7 +928,7 @@ int StarGoldData::getPreCardNumber( int recent_card_number )
 	bool is_event = false;
 	bool is_special = false;
 	
-	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	string card_type = NSDS_GS(kSDS_CI_int1_category_s, recent_card_number);
 	
 	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
 	{
@@ -1052,7 +1052,7 @@ vector<int> StarGoldData::getCollectionCardSet(int recent_card_number)
 	bool is_event = false;
 	bool is_special = false;
 	
-	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	string card_type = NSDS_GS(kSDS_CI_int1_category_s, recent_card_number);
 	
 	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
 	{
@@ -1111,7 +1111,7 @@ int StarGoldData::getPreStageCardNumber( int recent_card_number )
 	bool is_event = false;
 	bool is_special = false;
 	
-	string card_type = NSDS_GS(kSDS_CI_int1_type_s, recent_card_number);
+	string card_type = NSDS_GS(kSDS_CI_int1_category_s, recent_card_number);
 	
 	function<void(vector<CollectionCardInfo>&, function<void(int)>)> find_func = [&](vector<CollectionCardInfo>& target_vector, function<void(int)> found_func)
 	{
@@ -1301,6 +1301,9 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 	t_info.take_number = has_gotten_cards.size()+1;
 	t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number.getV());
 	t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number.getV());
+	t_info.count = 1;
+	t_info.level = 1;
+	
 	has_gotten_cards.push_back(t_info);
 
 	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
@@ -1682,7 +1685,7 @@ void StarGoldData::initCollectionBook()
 	{
 		int card_number = has_gotten_cards[i].card_number.getV();
 		
-		string card_type = NSDS_GS(kSDS_CI_int1_type_s, card_number);
+		string card_type = NSDS_GS(kSDS_CI_int1_category_s, card_number);
 		CCLOG("card_type : %s, card_number : %d", card_type.c_str(), card_number);
 		if(card_type == "gift")
 		{
@@ -1764,6 +1767,8 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		t_info.rank = 0;
 		t_info.user_ment = card_info["comment"].asString();
 		t_info.is_morphing = card_info["isMorphing"].asBool();
+		t_info.count = card_info["count"].asInt();
+		t_info.level = card_info["level"].asInt();
 		has_gotten_cards.push_back(t_info);
 		
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")

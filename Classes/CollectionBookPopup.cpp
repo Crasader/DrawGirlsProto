@@ -27,6 +27,7 @@
 #include "CommonAnimation.h"
 #include "FormSetter.h"
 #include "TouchSuctionLayer.h"
+#include "CardGiftPopup.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -40,6 +41,7 @@ enum CBP_MenuTag{
 	kCBP_MT_zoom,
 	kCBP_MT_pre,
 	kCBP_MT_next,
+	kCBP_MT_gift,
 //	kCBP_MT_inputText,
 	kCBP_MT_strength,
 	kCBP_MT_second,
@@ -106,6 +108,19 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	close->setPosition(getContentPosition(kCBP_MT_close));
 	target->addChild(close, 1, kCBP_MT_close);
 	
+	CommonButton* gift = CommonButton::create("선물하기", 12, CCSizeMake(70,33), CommonButtonType::CommonButtonDarkPupple, -191);
+	gift->setFunction([=](CCObject* sender)
+					  {
+						  if(!is_menu_enable)
+							  return;
+						  
+						  is_menu_enable = false;
+						  
+						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=](){is_menu_enable = true;});
+						  addChild(t_popup, 999);
+					  });
+	gift->setPosition(ccp(115,30));
+	target->addChild(gift, 1, kCBP_MT_gift);
 	
 //	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
 //	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
@@ -458,6 +473,7 @@ bool CollectionBookPopup::init()
 		setRightPage(after_right_img, next_number);
 		
 		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 		int sub_count = after_right_img->getTag();
 		for(int i=0;i<sub_count;i++)
@@ -729,6 +745,7 @@ void CollectionBookPopup::startNextPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
+	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -817,6 +834,7 @@ void CollectionBookPopup::startNextFullSelectedPage()
 	setRightPage(after_right_img, mySGD->selected_collectionbook);
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
@@ -943,6 +961,7 @@ void CollectionBookPopup::startPreSelectedPage()
 //        input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = covered_right_img->getTag();
@@ -1005,6 +1024,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
+	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -1137,6 +1157,7 @@ void CollectionBookPopup::endNextPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
@@ -1223,6 +1244,7 @@ void CollectionBookPopup::endNextSelectedPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = after_right_img->getTag();
@@ -1304,6 +1326,7 @@ void CollectionBookPopup::startPrePage()
 //        input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	int sub_count = covered_right_img->getTag();
@@ -1367,6 +1390,7 @@ void CollectionBookPopup::endPrePage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
+	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -1419,6 +1443,7 @@ void CollectionBookPopup::endPrePage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	sub_count = after_right_img->getTag();
@@ -1471,6 +1496,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
+	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -1523,6 +1549,7 @@ void CollectionBookPopup::endPreSelectedPage()
 	setRightPage(after_right_img, mySGD->getNextStageCardNumber(recent_card_number));
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
+	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 	sub_count = after_right_img->getTag();

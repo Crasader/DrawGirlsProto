@@ -79,6 +79,8 @@ public:
 	KSProtectVar<int> rank;
 	KSProtectStr user_ment;
 	KSProtectVar<bool> is_morphing;
+	KSProtectVar<int> count;
+	KSProtectVar<int> level;
 	
 	CardSortInfo() : card_number(0){}
 };

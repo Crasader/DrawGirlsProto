@@ -132,7 +132,7 @@ bool CardSettingPopup::init()
 	for(int i=0;i<mySGD->getHasGottenCardsSize();i++)
 	{
 		int t_card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-		string t_card_type = NSDS_GS(kSDS_CI_int1_type_s, t_card_number);
+		string t_card_type = NSDS_GS(kSDS_CI_int1_category_s, t_card_number);
 		if(t_card_type == "")
 			t_card_type = "normal";
 		
@@ -147,7 +147,7 @@ bool CardSettingPopup::init()
 	for(int i=0;i<mySGD->getHasGottenCardsSize();i++)
 	{
 		CardSortInfo t_info = mySGD->getHasGottenCardData(i);
-		string card_type = NSDS_GS(kSDS_CI_int1_type_s, t_info.card_number.getV());
+		string card_type = NSDS_GS(kSDS_CI_int1_category_s, t_info.card_number.getV());
 		if(card_type == "")
 			card_type = "normal";
 		
@@ -1137,7 +1137,7 @@ void CardSettingPopup::addDefaultAlignCard(int t_card_number, CCPoint t_position
 		}
 		n_card_img->setScale(0.6f);
 		
-		string card_type = NSDS_GS(kSDS_CI_int1_type_s, t_card_number);
+		string card_type = NSDS_GS(kSDS_CI_int1_category_s, t_card_number);
 		if(card_type == "")
 			card_type = "normal";
 		
@@ -1189,7 +1189,7 @@ void CardSettingPopup::addDefaultAlignCard(int t_card_number, CCPoint t_position
 		n_condition->setPosition(ccp(n_card_img->getContentSize().width/2.f, n_card_img->getContentSize().height/2.f));
 		n_card_img->addChild(n_condition);
 		
-		string card_type = NSDS_GS(kSDS_CI_int1_type_s, t_card_number);
+		string card_type = NSDS_GS(kSDS_CI_int1_category_s, t_card_number);
 		if(card_type == "")
 			card_type = "normal";
 		
@@ -1384,7 +1384,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				int card_number = not_default_card_list[i].card_number.getV();
 				CCPoint card_position = ccp(30.f + (i-idx*9)*(48.f), cellSizeForTable(table).height/2.f);
 				
-				string card_type = NSDS_GS(kSDS_CI_int1_type_s, card_number);
+				string card_type = NSDS_GS(kSDS_CI_int1_category_s, card_number);
 				if(card_type == "")
 					card_type = "normal";
 				
@@ -1444,7 +1444,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int card_number = special_card_list[i].card_number.getV();
 			CCPoint card_position = ccp(45.f + (i-idx*5)*(60.f), cellSizeForTable(table).height/2.f);
 			
-			string card_type = NSDS_GS(kSDS_CI_int1_type_s, card_number);
+			string card_type = NSDS_GS(kSDS_CI_int1_category_s, card_number);
 			if(card_type == "")
 				card_type = "normal";
 			

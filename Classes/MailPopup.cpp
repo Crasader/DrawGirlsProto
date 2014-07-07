@@ -1943,7 +1943,18 @@ void MailPopup::resultLoadedCardInfo (Json::Value result_data)
 			NSDS_SI(kSDS_CI_int1_mPrice_ruby_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_ruby)].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_mPrice_pass_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_pass6)].asInt(), false);
 			
-			NSDS_SS(kSDS_CI_int1_type_s, t_card["no"].asInt(), t_card["type"].asString(), false);
+			NSDS_SI(kSDS_CI_int1_type_i, t_card["no"].asInt(), t_card["type"].asInt(), false);
+			NSDS_SS(kSDS_CI_int1_category_s, t_card["no"].asInt(), t_card["category"].asString(), false);
+			NSDS_SI(kSDS_CI_int1_level_i, t_card["no"].asInt(), t_card["level"].asInt(), false);
+			
+			int sound_cnt = t_card["sound"].size();
+			NSDS_SI(kSDS_CI_int1_soundCnt_i, t_card["no"].asInt(), sound_cnt, false);
+			for(int j=1;j<=sound_cnt;j++)
+			{
+				NSDS_SI(kSDS_CI_int1_soundNumber_int1_i, t_card["no"].asInt(), j, t_card["sound"][j-1].asInt(), false);
+			}
+			
+			NSDS_SI(kSDS_CI_int1_characterNo_i, t_card["no"].asInt(), t_card["characterNo"].asInt(), false);
 			
 			Json::Value t_silImgInfo = t_card["silImgInfo"];
 			NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);

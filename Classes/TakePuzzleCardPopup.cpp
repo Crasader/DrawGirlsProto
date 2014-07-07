@@ -120,7 +120,7 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_thumbnail.png", new_card_number));
 	
-	string t_card_type = NSDS_GS(kSDS_CI_int1_type_s, new_card_number);
+	string t_card_type = NSDS_GS(kSDS_CI_int1_category_s, new_card_number);
 	if(t_card_type == "")
 		t_card_type = "normal";
 	
