@@ -86,6 +86,7 @@ private:
 //	void endUnlockAnimation();
 	
 	int keep_card_number;
+	int locked_puzzle_count;
 	
 	void updateCardHistory(CCNode* t_loading);
 	

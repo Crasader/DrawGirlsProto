@@ -601,6 +601,9 @@ public:
 	void setClearTakeCardCnt(int t_i);
 	int getClearTakeCardCnt();
 	
+	void setUnlockFrameCnt(int t_i);
+	int getUnlockFrameCnt();
+	
 	int getHeartMax();
 	int getHeartCoolTime();
 	int getGameFriendMax();
@@ -1087,6 +1090,7 @@ private:
 	KSProtectVar<int> levelup_guide_is_on;
 	
 	KSProtectVar<int> clear_take_card_cnt;
+	KSProtectVar<int> unlock_frame_cnt;
 	
 	KSProtectStr all_clear_reward;
 	

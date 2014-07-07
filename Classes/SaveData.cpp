@@ -166,7 +166,11 @@ void SaveData::resetAllData()
 {
 	int total_file = myDSH->getIntegerForKey(kDSH_Key_dataFileCnt);
 	for(int i=1;i<=total_file;i++)
-		resetData(myDSH->getStringForKey(kDSH_Key_dataFileName_int1, i));
+	{
+		string t_filename = myDSH->getStringForKey(kDSH_Key_dataFileName_int1, i);
+		if(t_filename != "")
+			resetData(t_filename);
+	}
 	resetData(getSyncKey(kSDF_myDSH));
 	file_sync.clear();
 	Json::Reader reader;

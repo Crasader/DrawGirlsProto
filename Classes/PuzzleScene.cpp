@@ -274,7 +274,149 @@ bool PuzzleScene::init()
 			}
 		}
 	}
-	else if(before_scene_name == "fail" || before_scene_name == "clear")
+	else if(before_scene_name == "fail")
+	{
+		int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+		if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
+		{
+			bool have_not_cleared_stage = false;
+			vector<int> not_cleared_stage_list;
+			vector<int> cleared_stage_list;
+			
+			for(int i=start_stage;i<start_stage+stage_count;i++)
+			{
+				int stage_card_count = 4;//NSDS_GI(i, kSDS_SI_cardCount_i);
+				have_not_cleared_stage = true;
+				for(int j=1;j<=stage_card_count && have_not_cleared_stage;j++)
+				{
+					if(mySGD->isHasGottenCards(i, j) > 0)
+						have_not_cleared_stage = false;
+				}
+				
+				if(have_not_cleared_stage)
+					not_cleared_stage_list.push_back(i);
+				else
+					cleared_stage_list.push_back(i);
+			}
+			
+			if(have_not_cleared_stage) // 아직 못 깬 스테이지가 있다
+			{
+				bool have_can_enter_stage = false;
+				
+				vector<int> can_enter_stage_list;
+				vector<int> can_enter_stage_level_list;
+				vector<int> can_enter_stage_pieceNumber_list;
+				
+				for(int i=0;i<not_cleared_stage_list.size();i++)
+				{
+					int stage_number = not_cleared_stage_list[i];
+					if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
+					   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
+						(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 ||
+						 mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
+					{
+						have_can_enter_stage = true;
+						can_enter_stage_list.push_back(stage_number);
+						can_enter_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
+						can_enter_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
+					}
+				}
+				
+				if(have_can_enter_stage) // 못 깬 스테이지 중에 입장가능한 스테이지가 있다
+				{
+					// 못 깬 스테이지 중 입장 가능한 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+					int minimum_index = 0;
+					int minimum_level = can_enter_stage_level_list[minimum_index];
+					int minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+					
+					for(int i=1;i<can_enter_stage_list.size();i++)
+					{
+						if(can_enter_stage_level_list[i] <= minimum_level && can_enter_stage_pieceNumber_list[i] < minimum_pieceNumber)
+						{
+							minimum_index = i;
+							minimum_level = can_enter_stage_level_list[minimum_index];
+							minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+						}
+					}
+					
+					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, can_enter_stage_list[minimum_index]);
+				}
+				else // 못 깬 스테이지 중에 입장가능한 스테이지가 없다
+				{
+					int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+					if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
+					{
+						// 깬 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+						
+						vector<int> cleared_stage_level_list;
+						vector<int> cleared_stage_pieceNumber_list;
+						
+						for(int i=0;i<cleared_stage_list.size();i++)
+						{
+							int stage_number = cleared_stage_list[i];
+							cleared_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
+							cleared_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
+						}
+						
+						int minimum_index = 0;
+						int minimum_level = cleared_stage_level_list[minimum_index];
+						int minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
+						
+						for(int i=1;i<cleared_stage_list.size();i++)
+						{
+							if(cleared_stage_level_list[i] <= minimum_level && cleared_stage_pieceNumber_list[i] < minimum_pieceNumber)
+							{
+								minimum_index = i;
+								minimum_level = cleared_stage_level_list[minimum_index];
+								minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
+							}
+						}
+						
+						myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, cleared_stage_list[minimum_index]);
+					}
+				}
+			}
+			else
+			{
+				// 입장 가능한 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+				
+				vector<int> can_enter_stage_list;
+				vector<int> can_enter_stage_level_list;
+				vector<int> can_enter_stage_pieceNumber_list;
+				
+				for(int i=start_stage;i<start_stage+stage_count;i++)
+				{
+					if(i == 1 || mySGD->isClearPiece(i) ||
+					   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, i) == 0 &&
+						(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i) == 0 ||
+						 mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, i)))))
+					{
+						can_enter_stage_list.push_back(i);
+						can_enter_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, i));
+						can_enter_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
+					}
+				}
+				
+				int minimum_index = 0;
+				int minimum_level = can_enter_stage_level_list[minimum_index];
+				int minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+				
+				for(int i=1;i<can_enter_stage_list.size();i++)
+				{
+					if(can_enter_stage_level_list[i] <= minimum_level && can_enter_stage_pieceNumber_list[i] < minimum_pieceNumber)
+					{
+						minimum_index = i;
+						minimum_level = can_enter_stage_level_list[minimum_index];
+						minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+					}
+				}
+				
+				selected_stage_number = can_enter_stage_list[minimum_index];
+				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
+			}
+		}
+	}
+	else if(before_scene_name == "clear")
 	{
 		int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
 		if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
@@ -316,11 +458,6 @@ bool PuzzleScene::init()
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, selected_stage_number);
 		}
 	}
-	
-	
-	
-	
-	
 	
 	
 	

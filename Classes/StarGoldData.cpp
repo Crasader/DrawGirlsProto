@@ -3638,6 +3638,9 @@ void StarGoldData::setAllClearReward(string t_str){	all_clear_reward = t_str;	}
 void StarGoldData::setClearTakeCardCnt(int t_i){	clear_take_card_cnt = t_i;	}
 int StarGoldData::getClearTakeCardCnt(){	return clear_take_card_cnt.getV();	}
 
+void StarGoldData::setUnlockFrameCnt(int t_i){	unlock_frame_cnt = t_i;	}
+int StarGoldData::getUnlockFrameCnt(){	return unlock_frame_cnt.getV();	}
+
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}
 void StarGoldData::setUserdataIsVIP(int t_i)
