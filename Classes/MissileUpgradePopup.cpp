@@ -114,6 +114,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	upgrade_action_node->addChild(level_case);
 	
 	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
+	missile_type_code = kStoneType_guided;
 	
 	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	
@@ -423,6 +424,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	}
 	
 	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
+	missile_type_code = kStoneType_guided;
 	
 	if(missile_type_code == kStoneType_guided)
 	{

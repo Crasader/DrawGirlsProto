@@ -20,6 +20,7 @@
 #include "PuzzleScene.h"
 #include "CommonButton.h"
 #include "CommonAnimation.h"
+#include "StyledLabelTTF.h"
 
 RankUpPopup* RankUpPopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func, bool t_is_time_event)
 {
@@ -411,6 +412,16 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	rankup_label->setPositionX(-rankup_button->getPreferredSize().width/2.f+15);
 	
 	rankup_button->setTouchPriority(touch_priority);
+	
+	if(!is_time_event)
+	{
+		rankup_button->setPosition(rankup_button->getPosition() + ccp(0,-5));
+		
+		StyledLabelTTF* fail_rate_up_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_rankUpFailRateUp), mySGD->getRankUpRateDistance()*100.f), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
+		fail_rate_up_label->setAnchorPoint(ccp(0.5f,0.5f));
+		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,30));
+		m_container->addChild(fail_rate_up_label);
+	}
 	
 	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){

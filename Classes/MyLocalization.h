@@ -810,7 +810,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardGiftInputText,
 	kMyLocalKey_cardGiftSearch,
 	kMyLocalKey_cardGiftSend,
-	kMyLocalKey_cardGiftNotFound
+	kMyLocalKey_cardGiftNotFound,
+	
+	kMyLocalKey_rankUpFailRateUp
 }MyLocalKey;
 
 
