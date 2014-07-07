@@ -297,15 +297,31 @@ void EndlessModeResult::tryTransaction()
 								  {
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
+										  mySGD->network_check_cnt = 0;
+										  
 										  ready_loading->removeFromParent();
 										  ready_loading = NULL;
 									  }
 									  else
 									  {
-										  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-											  tryTransaction();
-										  });
-										  ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+										  mySGD->network_check_cnt++;
+										  
+										  if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+										  {
+											  mySGD->network_check_cnt = 0;
+											  
+											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+												  tryTransaction();
+											  });
+											  ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+										  }
+										  else
+										  {
+											  addChild(KSTimer::create(0.5f, [=]()
+																	   {
+																		   tryTransaction();
+																	   }));
+										  }
 									  }
 								  });
 }
@@ -2244,13 +2260,29 @@ void EndlessModeResult::reSetEndlessRank()
 										{
 											if(result_data["result"]["code"].asInt() != GDSUCCESS)
 											{
-												ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-													reSetEndlessRank();
-												});
-												((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+												mySGD->network_check_cnt++;
+												
+												if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+												{
+													mySGD->network_check_cnt = 0;
+													
+													ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+														reSetEndlessRank();
+													});
+													((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+												}
+												else
+												{
+													addChild(KSTimer::create(0.5f, [=]()
+																			 {
+																				 reSetEndlessRank();
+																			 }));
+												}
 											}
 											else
 											{
+												mySGD->network_check_cnt = 0;
+												
 												ready_loading->removeFromParent();
 												ready_loading = NULL;
 												

@@ -624,6 +624,8 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
+			mySGD->network_check_cnt = 0;
+			
 			if(0 >= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
 			{
 				endingCheck();
@@ -704,10 +706,24 @@ void TitleRenewalScene::checkReceive()
 		}
 		else if(is_receive_fail)
 		{
-			ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-				startCommand();
-			});
-			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			mySGD->network_check_cnt++;
+			
+			if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+			{
+				mySGD->network_check_cnt = 0;
+				
+				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+					startCommand();
+				});
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}
+			else
+			{
+				addChild(KSTimer::create(0.5f, [=]()
+										 {
+											 startCommand();
+										 }));
+			}
 			
 //			state_label->setString(myLoc->getLocalForKey(kMyLocalKey_failLoadInfo));
 //			

@@ -3346,6 +3346,9 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 2;
 	
+	max_network_check_cnt = 6; // 0.5초 단위로
+	network_check_cnt = 0;
+	
 	time_event_list.clear();
 	
 	is_new_puzzle_card = false;

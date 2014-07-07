@@ -705,15 +705,33 @@ void FailPopup::tryTransaction(CCNode* t_loading)
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
 										  CCLOG("FailPopup transaction success");
+										  
+										  mySGD->network_check_cnt = 0;
+										  
 										  t_loading->removeFromParent();
 									  }
 									  else
 									  {
 										  CCLOG("FailPopup transaction fail");
-										  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-											  tryTransaction(t_loading);
-										  });
-										  ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+										  
+										  mySGD->network_check_cnt++;
+										  
+										  if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+										  {
+											  mySGD->network_check_cnt = 0;
+											  
+											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+												  tryTransaction(t_loading);
+											  });
+											  ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+										  }
+										  else
+										  {
+											  addChild(KSTimer::create(0.5f, [=]()
+																	   {
+																		   tryTransaction(t_loading);
+																	   }));
+										  }
 									  }
 								  });
 }
