@@ -799,8 +799,16 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_gababoReward,
 	
 	kMyLocalKey_notGohomeEndlessTutorialMent,
-	kMyLocalKey_notReplayEndlessMent
+	kMyLocalKey_notReplayEndlessMent,
+	kMyLocalKey_optionSecretTitle,
+	kMyLocalKey_optionSecretOn,
+	kMyLocalKey_optionSecretOff,
 	
+	kMyLocalKey_cardGiftTitle,
+	kMyLocalKey_cardGiftMyID,
+	kMyLocalKey_cardGiftInputText,
+	kMyLocalKey_cardGiftSearch,
+	kMyLocalKey_cardGiftSend
 }MyLocalKey;
 
 

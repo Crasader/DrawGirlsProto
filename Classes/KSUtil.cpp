@@ -271,6 +271,10 @@ namespace KS
 		}
 		return std::string(result.rbegin(), result.rend());
 	}
+	string longLongToStrForDG(long long t)
+	{
+		return longLongToStr(t+1000);
+	}
 	long long strToLongLong(const std::string& t)
 	{
 		int radix = 26;
@@ -306,6 +310,10 @@ namespace KS
 		return result;
 //		char* endP;
 //		return strtoll(t.c_str(), &endP, radix);
+	}
+	long long strToLongLongForDG(const std::string& t)
+	{
+		return strToLongLong(t)-1000;
 	}
 	//	CCSprite* spriteWithSpriteFrameName(const char *pszSpriteFrameName)
 	//	{

@@ -2091,6 +2091,10 @@ void StarGoldData::initSelectedCharacterNo(int t_i)
 			is_found = true;
 		}
 	}
+	if(!is_found)
+	{
+		selected_character_index = 0;
+	}
 }
 CharacterHistory StarGoldData::getSelectedCharacterHistory()
 {

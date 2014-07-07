@@ -76,6 +76,8 @@ namespace KS
 	string replaceAll(const string &str, const string &pattern, const string &replace);
 	string longLongToStr(long long t);
 	long long strToLongLong(const std::string& t);
+	string longLongToStrForDG(long long t);
+	long long strToLongLongForDG(const std::string& t);
 	
 	static void __KSLogCore(ostringstream& oss, const char* s) {
 		

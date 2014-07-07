@@ -97,6 +97,8 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	title_label1->addChild(content_label1);
 	setFormSetter(content_label1);
 	
+	animation_stemp_list.clear();
+	
 	dayCount = mySGD->attendance_data["dayCount"].asInt();
 	
 	int reward_list_size = mySGD->attendance_data["rewardList"].size();
@@ -160,6 +162,12 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			check_img->setScale(0.8f);
 			check_img->setPosition(ccpFromSize(cell_size/2.f));
 			t_back->addChild(check_img);
+			
+			if(i == dayCount-1)
+			{
+				check_img->setOpacity(0);
+				animation_stemp_list.push_back(check_img);
+			}
 		}
 	}
 	
@@ -242,6 +250,9 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			CCSprite* check_img = CCSprite::create("attendance_day_check.png");
 			check_img->setPosition(ccpFromSize(t_back->getContentSize()/2.f));
 			t_back->addChild(check_img);
+			
+			check_img->setOpacity(0);
+			animation_stemp_list.push_back(check_img);
 		}
 	}
 	
@@ -308,6 +319,44 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
 		
 	}, [=](){
+		is_menu_enable = true;
+		
+		for(int i=0;i<animation_stemp_list.size();i++)
+		{
+			CCSprite* t_stemp = animation_stemp_list[i];
+			
+			float original_scale = t_stemp->getScale();
+			t_stemp->setScale(original_scale+5.f);
+			
+			if(i==0)
+			{
+				addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+													   {
+														   t_stemp->setScale(original_scale+5.f - 5.f*t);
+														   t_stemp->setOpacity(255*t);
+													   }, [=](float t)
+													   {
+														   t_stemp->setScale(original_scale);
+														   t_stemp->setOpacity(255);
+													   }));
+			}
+			else
+			{
+				addChild(KSTimer::create(i*0.3f, [=]()
+				{
+					addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+														   {
+															   t_stemp->setScale(original_scale+5.f - 5.f*t);
+															   t_stemp->setOpacity(255*t);
+														   }, [=](float t)
+														   {
+															   t_stemp->setScale(original_scale);
+															   t_stemp->setOpacity(255);
+														   }));
+				}));
+			}
+		}
+		
 //		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 //																					 {
 //																						 if(!is_reloaded)
@@ -320,8 +369,6 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 //																					 {
 //																						 
 //																					 }));
-		
-		is_menu_enable = true;
 	});
 }
 
