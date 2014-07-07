@@ -236,6 +236,8 @@
 						<integer>0</integer>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -648,7 +650,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>emoticon_Scratch _01.png</string>
+							<string>emoticon_scratch_01.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -859,7 +861,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>emoticon_Scratch _02.png</string>
+							<string>emoticon_scratch_02.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -970,7 +972,7 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>1.2248737812042236</real>
+			<real>0.86799752712249756</real>
 			<key>position</key>
 			<real>2</real>
 			<key>resolution</key>
