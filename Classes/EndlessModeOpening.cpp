@@ -451,7 +451,7 @@ void EndlessModeOpening::setMain()
 			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
 			t_clipping->addChild(t_ment1);
 			
-			t_suction = TouchSuctionLayer::create(-10000);
+			t_suction = TouchSuctionLayer::create(touch_priority-99);
 			addChild(t_suction);
 			t_suction->setTouchEnabled(true);
 			
@@ -533,17 +533,28 @@ void EndlessModeOpening::setMain()
 																	   t_arrow3->removeFromParent();
 																	   t_ment3->removeFromParent();
 																	   
-																	   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
-																											  {
-																												  t_gray->setOpacity(255*t);
-																											  }, [=](float t)
-																											  {
-																												  t_gray->setOpacity(255*t);
-																												  
-																												  this->t_suction->removeFromParent();
-																												  
-																												  t_clipping->removeFromParent();
-																											  }));
+																	   t_stencil1->setContentSize(CCSizeMake(330, 130));
+																	   t_stencil1->setPosition(ccp(240,143));
+																	   
+																	   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent18), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																	   t_ment4->setAnchorPoint(ccp(0.5f,0.5f));
+																	   t_ment4->setPosition(ccp(240,143) + ccp(0, -80));
+																	   t_clipping->addChild(t_ment4);
+																	   
+																	   this->tutorial_success_func = [=]()
+																	   {
+																		   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																												  {
+																													  t_gray->setOpacity(255*t);
+																												  }, [=](float t)
+																												  {
+																													  t_gray->setOpacity(255*t);
+																													  
+																													  this->t_suction->removeFromParent();
+																													  
+																													  t_clipping->removeFromParent();
+																												  }));
+																	   };
 																   };
 																   
 																   this->tutorial_fail_func = [=]()
@@ -969,6 +980,12 @@ void EndlessModeOpening::successGetStageInfo()
 	
 	RivalSelectPopup* t_popup = RivalSelectPopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=]()
 														 {
+															 
+															 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+															 {
+																 tutorial_success_func();
+															 }
+															 
 															 addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
 																									{
 																										gray->setOpacity(255*t);

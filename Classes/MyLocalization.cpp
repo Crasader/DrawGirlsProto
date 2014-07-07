@@ -1279,6 +1279,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	ko->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
 	ko->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	ko->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
@@ -2146,6 +2147,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	en->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
 	en->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	en->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	en->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
@@ -3035,6 +3037,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	ja->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
 	ja->setObject(CCString::create("<font newline=16>연승에 도전하시면<font newline=20>생명의 돌을 받을 수 있어요.<font newline=16>튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	ja->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	ja->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
