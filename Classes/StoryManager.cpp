@@ -76,7 +76,7 @@ void StoryManager::mentAction()
 	ing_ment_cnt++;
 	
 	if(is_on_typing_sound)
-		AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+		AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", true);
 	
 	int frame_value;
 	if(is_boosting)
@@ -98,6 +98,8 @@ void StoryManager::mentAction()
 		if(ment_recent_length >= ment_length)
 		{
 			next_label->setVisible(true);
+			if(is_on_typing_sound)
+				AudioEngine::sharedInstance()->stopEffect("sound_crashed_map.mp3");
 			unschedule(schedule_selector(StoryManager::mentAction));
 			is_menting = false;
 		}

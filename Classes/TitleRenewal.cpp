@@ -53,8 +53,6 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
-	myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
-	
 	is_preloaded_effect = false;
 	
 //	std::chrono::time_point<std::chrono::system_clock> recent;
