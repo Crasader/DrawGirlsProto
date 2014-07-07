@@ -1296,22 +1296,35 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 {
 //	int take_number = myDSH->getIntegerForKey(kDSH_Key_hasGottenCard_int1, card_number);
 	
-	CardSortInfo t_info;
-	t_info.card_number = card_number;
-	t_info.take_number = has_gotten_cards.size()+1;
-	t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number.getV());
-	t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number.getV());
-	t_info.count = 1;
-	t_info.level = 1;
-	
-	has_gotten_cards.push_back(t_info);
-
-	changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
-
-	CCLOG("input %d, sort", card_number);
-	for(int i=0;i<has_gotten_cards.size();i++)
+	bool is_found = false;
+	for(int i=0;!is_found && i<has_gotten_cards.size();i++)
 	{
-		CCLOG("%d", has_gotten_cards[i].card_number.getV());
+		CardSortInfo t_info = has_gotten_cards[i];
+		if(t_info.card_number.getV() == card_number)
+		{
+			t_info.count = t_info.count.getV() + getClearTakeCardCnt();
+			is_found = true;
+		}
+	}
+	
+	if(!is_found)
+	{
+		CardSortInfo t_info;
+		t_info.card_number = card_number;
+		t_info.take_number = has_gotten_cards.size()+1;
+		t_info.grade = NSDS_GI(kSDS_CI_int1_grade_i, t_info.card_number.getV());
+		t_info.rank = NSDS_GI(kSDS_CI_int1_rank_i, t_info.card_number.getV());
+		t_info.count = getClearTakeCardCnt();
+		
+		has_gotten_cards.push_back(t_info);
+		
+		changeSortType(CardSortType(myDSH->getIntegerForKey(kDSH_Key_cardSortType)));
+		
+		CCLOG("input %d, sort", card_number);
+		for(int i=0;i<has_gotten_cards.size();i++)
+		{
+			CCLOG("%d", has_gotten_cards[i].card_number.getV());
+		}
 	}
 }
 
@@ -1768,7 +1781,6 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		t_info.user_ment = card_info["comment"].asString();
 		t_info.is_morphing = card_info["isMorphing"].asBool();
 		t_info.count = card_info["count"].asInt();
-		t_info.level = card_info["level"].asInt();
 		has_gotten_cards.push_back(t_info);
 		
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
@@ -3622,6 +3634,9 @@ int StarGoldData::getIsAlwaysSavePlaydata(){	return is_always_save_playdata;	}
 
 string StarGoldData::getAllClearReward(){	return all_clear_reward.getV();	}
 void StarGoldData::setAllClearReward(string t_str){	all_clear_reward = t_str;	}
+
+void StarGoldData::setClearTakeCardCnt(int t_i){	clear_take_card_cnt = t_i;	}
+int StarGoldData::getClearTakeCardCnt(){	return clear_take_card_cnt.getV();	}
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}

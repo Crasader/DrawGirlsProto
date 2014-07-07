@@ -342,20 +342,16 @@ bool MainFlowScene::init()
 		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
 		{
 			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-			
-			mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
-			
-			keep_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
-			
-			LoadingLayer* t_loading = LoadingLayer::create(-900);
-			addChild(t_loading, kMainFlowZorder_popup+1);
-			
-			updateCardHistory(t_loading);
 		}
-		else
-		{
-			
-		}
+		
+		mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+		keep_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
+		
+		LoadingLayer* t_loading = LoadingLayer::create(-900);
+		addChild(t_loading, kMainFlowZorder_popup+1);
+		
+		updateCardHistory(t_loading);
+		
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		showClearPopup();
@@ -425,16 +421,36 @@ void MainFlowScene::updateCardHistory(CCNode *t_loading)
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = keep_card_number;
+	param["addCount"] = mySGD->getClearTakeCardCnt();
 	
 	hspConnector::get()->command("updateCardHistory", param, [=](Json::Value result_data)
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
+										 mySGD->network_check_cnt = 0;
+										 
 										 t_loading->removeFromParent();
 									 }
 									 else
 									 {
-										 updateCardHistory(t_loading);
+										 mySGD->network_check_cnt++;
+										 
+										 if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+										 {
+											 mySGD->network_check_cnt = 0;
+											 
+											 ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+												 updateCardHistory(t_loading);
+											 });
+											 ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+										 }
+										 else
+										 {
+											 addChild(KSTimer::create(0.5f, [=]()
+																	  {
+																		  updateCardHistory(t_loading);
+																	  }));
+										 }
 									 }
 								 });
 }

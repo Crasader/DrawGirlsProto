@@ -847,6 +847,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setPlayContinueFeeEndless(result_data["playContinueFeeEndless"].asInt());
 		
 		mySGD->setAllClearReward(result_data["allClearReward"].asString());
+		mySGD->setClearTakeCardCnt(result_data["clearTakeCardCnt"].asInt());
 	}
 	else
 	{

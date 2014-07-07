@@ -80,7 +80,6 @@ public:
 	KSProtectStr user_ment;
 	KSProtectVar<bool> is_morphing;
 	KSProtectVar<int> count;
-	KSProtectVar<int> level;
 	
 	CardSortInfo() : card_number(0){}
 };
@@ -599,6 +598,9 @@ public:
 	void setSessionTime(int t_i);
 	int getSessionTime();
 	
+	void setClearTakeCardCnt(int t_i);
+	int getClearTakeCardCnt();
+	
 	int getHeartMax();
 	int getHeartCoolTime();
 	int getGameFriendMax();
@@ -1083,6 +1085,8 @@ private:
 	KSProtectVar<int> stupid_npu_help_is_on;
 	KSProtectVar<int> play_count_high_is_on;
 	KSProtectVar<int> levelup_guide_is_on;
+	
+	KSProtectVar<int> clear_take_card_cnt;
 	
 	KSProtectStr all_clear_reward;
 	
