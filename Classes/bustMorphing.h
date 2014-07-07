@@ -414,38 +414,71 @@ public:
 			}
 		}
 
+		float diffRad1 = atan2f(ks19937::getFloatValue(-1, 1), ks19937::getFloatValue(-1, 1)); // 위쪽으로.
+		float diffRad2 = atan2f(ks19937::getFloatValue(-1, 1), ks19937::getFloatValue(-1, 1)); // 위쪽으로.
 		for(auto i : movingVertices){ // 움직여야 되는 점의 집합에 대해
 			Vertex3D backup = m_backupVertices[i];
 			float r = distance[i];
 			ccColor4B rgb = movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g + (rgb.b >= 10 ? 40 : 0);
-			if(waveValue <= 5)
-				continue;
+			float waveValue = rgb.g? rgb.g + 40 : 0; // (rgb.b >= 10 ? 40 : 0);
+			float waveValue2 = rgb.r? rgb.r + 40 : 0; // (rgb.b >= 10 ? 40 : 0);
+			float devider = -15.f;
+			float time1 = 0.15f;
+			float time2 = 0.5f;
+			if(waveValue > 5)
+			{
+				float diffRad = diffRad1;
+				CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / devider;
+				//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, time1,
+																								 [=](CCPoint t){
+																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																									 //																								 i->y = backup.y + t;
+																								 },
+																								 [=](CCPoint t){
+																									 //for(auto i : movingVertices){
 
-			CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / -15.f;
-			//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
-			addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.15f,
-																							 [=](CCPoint t){
-																								 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
-																								 //																								 i->y = backup.y + t;
-																							 },
-																							 [=](CCPoint t){
-																								 //for(auto i : movingVertices){
+																									 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), time2,
+																																														[=](CCPoint t){
+																																															*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																																														},
+																																														[=](CCPoint t){
+																																															*i = backup;
+																																														},
+																																														elasticOut));
+																									 //}
+																								 },
+																								 nullptr));
+				//																							 expoIn));
+			}
+			if(waveValue2 > 5)
+			{
+				float diffRad = diffRad2;
+				CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue2  / devider;
+				//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, time1,
+																								 [=](CCPoint t){
+																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																									 //																								 i->y = backup.y + t;
+																								 },
+																								 [=](CCPoint t){
+																									 //for(auto i : movingVertices){
 
-																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 0.5f,
-																																													[=](CCPoint t){
-																																														*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
-																																													},
-																																													[=](CCPoint t){
-																																														*i = backup;
-																																													},
-																																													elasticOut));
-																								 //}
-																							 },
-																							 nullptr));
-//																							 expoIn));
+																									 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), time2,
+																																														[=](CCPoint t){
+																																															*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																																														},
+																																														[=](CCPoint t){
+																																															*i = backup;
+																																														},
+																																														elasticOut));
+																									 //}
+																								 },
+																								 nullptr));
+				//																							 expoIn));
+			}
 		}
 
 	}
