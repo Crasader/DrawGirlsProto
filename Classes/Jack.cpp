@@ -2026,11 +2026,15 @@ void Jack::setJackState( jackState t_s )
 	if(myState == jackStateNormal)
 	{
 		if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+		{
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move"))
 				jack_ccb_manager->runAnimationsForSequenceNamed("move");
+		}
 		else
+		{
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_down"))
 				jack_ccb_manager->runAnimationsForSequenceNamed("move_down");
+		}
 //		jackImg->setColor(ccWHITE);
 //		jackImg->setVisible(true);
 //		line_edge->setVisible(false);
@@ -2046,11 +2050,15 @@ void Jack::setJackState( jackState t_s )
 //		line_edge->setVisible(true);
 		myGD->communication("Main_setLineParticle", true);
 		if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+		{
 			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw"))
 				jack_ccb_manager->runAnimationsForSequenceNamed("draw");
-			else
-				if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
-					jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
+		}
+		else
+		{
+			if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_down"))
+				jack_ccb_manager->runAnimationsForSequenceNamed("draw_down");
+		}
 //		jackImg->setVisible(false);
 //		if(!is_hard && jack_barrier->isVisible())
 //			jack_barrier->setVisible(false);

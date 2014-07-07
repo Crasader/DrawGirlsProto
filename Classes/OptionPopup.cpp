@@ -562,7 +562,7 @@ bool OptionPopup::init()
 	main_case->addChild(id_label, kOP_Z_back);
 	
 	
-	KSLabelTTF* my_id_label = KSLabelTTF::create(CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString(), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* my_id_label = KSLabelTTF::create(KS::longLongToStrForDG(mySGD->user_index).c_str(), mySGD->getFont().c_str(), 11);
 	my_id_label->setAnchorPoint(ccp(0,0.5));
 	my_id_label->setPosition(ccp(78,45));
 	main_case->addChild(my_id_label, kOP_Z_content);
@@ -1013,8 +1013,19 @@ void OptionPopup::menuAction(CCObject* pSender)
 	{
 		myDSH->setBoolForKey(kDSH_Key_isSafetyMode, !myDSH->getBoolForKey(kDSH_Key_isSafetyMode));
 		mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
+		
+		string ment_str;
+		if(mySGD->is_safety_mode)
+			ment_str = myLoc->getLocalForKey(kMyLocalKey_optionSecretOn);
+		else
+			ment_str = myLoc->getLocalForKey(kMyLocalKey_optionSecretOff);
+		
+		StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_str.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		ment_label->setAnchorPoint(ccp(0.5f,0.5f));
+		addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(kMyLocalKey_optionSecretTitle), ment_label, [=](){is_menu_enable = true;}), kOP_Z_popup);
+		ment_label->setPosition(ccp(0,1));
+		
 		resetSafetyMenu();
-		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_push)
 	{

@@ -213,6 +213,7 @@ enum UserdataType
 	kUserdataType_selectedCharNO,
 	kUserdataType_highScore,
 	kUserdataType_highPiece,
+	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
 	
@@ -672,9 +673,9 @@ public:
 	int getUserdataAutoLevel();
 	void setUserdataHighScore(int t_i);
 	int getUserdataHighScore();
-	
 	void setUserdataHighPiece(int t_i);
 	int getUserdataHighPiece();
+	
 	void setUserdataEndlessIngWin(int t_i);
 	int getUserdataEndlessIngWin();
 	void setUserdataEndlessIngWeek(int t_i);
@@ -933,6 +934,8 @@ public:
 	
 	int network_check_cnt;
 	int max_network_check_cnt;
+	
+	long long user_index;
 	
 private:
 	

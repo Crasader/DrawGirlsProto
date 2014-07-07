@@ -41,6 +41,8 @@ private:
 //	CCTableView* day_table;
 //	CCTableView* reward_table;
 	
+	vector<CCSprite*> animation_stemp_list;
+	
 	void closeAction();
 	
 	string getGoodsTypeLocalData(string t_type);

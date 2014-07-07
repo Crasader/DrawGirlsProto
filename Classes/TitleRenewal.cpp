@@ -1478,6 +1478,8 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
 		
 		mySGD->initUserdata(result_data);
+		
+		mySGD->user_index = result_data["userIndex"].asInt64();
 	}
 	else
 	{

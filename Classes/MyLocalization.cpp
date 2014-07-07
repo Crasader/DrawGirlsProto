@@ -1348,6 +1348,16 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
 	ko->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
 	
+	ko->setObject(CCString::create("대중교통 모드"), kMyLocalKey_optionSecretTitle);
+	ko->setObject(CCString::create("<font newline=16>대중교통모드가 적용중입니다.<font newline=16>게임화면 내에 있는 설정창을 통해<font newline=16>대중교통모드를 해제하실 수 있습니다."), kMyLocalKey_optionSecretOn);
+	ko->setObject(CCString::create("<font newline=16>대중교통모드가 풀렸습니다.<font newline=16>게임화면 내에 있는 설정창을 통해<font newline=16>대중교통모드를 적용하실 수 있습니다."), kMyLocalKey_optionSecretOff);
+	
+	ko->setObject(CCString::create("카드 선물하기"), kMyLocalKey_cardGiftTitle);
+	ko->setObject(CCString::create("<font color=999>내 아이디는 <font color=961>%s<font color=999> 입니다."), kMyLocalKey_cardGiftMyID);
+	ko->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_cardGiftInputText);
+	ko->setObject(CCString::create("검색"), kMyLocalKey_cardGiftSearch);
+	ko->setObject(CCString::create("선물하기"), kMyLocalKey_cardGiftSend);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -2203,6 +2213,16 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
 	en->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
+	
+	en->setObject(CCString::create("대중교통 모드"), kMyLocalKey_optionSecretTitle);
+	en->setObject(CCString::create("<font newline=16>대중교통모드가 적용중입니다.<font newline=16>게임화면 내에 있는 설정창을 통해<font newline=16>대중교통모드를 해제하실 수 있습니다."), kMyLocalKey_optionSecretOn);
+	en->setObject(CCString::create("<font newline=16>대중교통모드가 풀렸습니다.<font newline=16>게임화면 내에 있는 설정창을 통해<font newline=16>대중교통모드를 적용하실 수 있습니다."), kMyLocalKey_optionSecretOff);
+	
+	en->setObject(CCString::create("카드 선물하기"), kMyLocalKey_cardGiftTitle);
+	en->setObject(CCString::create("<font color=999>내 아이디는 <font color=961>%s<font color=999> 입니다."), kMyLocalKey_cardGiftMyID);
+	en->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_cardGiftInputText);
+	en->setObject(CCString::create("검색"), kMyLocalKey_cardGiftSearch);
+	en->setObject(CCString::create("선물하기"), kMyLocalKey_cardGiftSend);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3081,6 +3101,16 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
 	ja->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
+	
+	ja->setObject(CCString::create("대중교통 모드"), kMyLocalKey_optionSecretTitle);
+	ja->setObject(CCString::create("<font newline=16>대중교통모드가 적용중입니다.<font newline=16>게임화면 내에 있는 설정창을 통해<font newline=16>대중교통모드를 해제하실 수 있습니다."), kMyLocalKey_optionSecretOn);
+	ja->setObject(CCString::create("<font newline=16>대중교통모드가 풀렸습니다.<font newline=16>게임화면 내에 있는 설정창을 통해<font newline=16>대중교통모드를 적용하실 수 있습니다."), kMyLocalKey_optionSecretOff);
+	
+	ja->setObject(CCString::create("카드 선물하기"), kMyLocalKey_cardGiftTitle);
+	ja->setObject(CCString::create("<font color=999>내 아이디는 <font color=961>%s<font color=999> 입니다."), kMyLocalKey_cardGiftMyID);
+	ja->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_cardGiftInputText);
+	ja->setObject(CCString::create("검색"), kMyLocalKey_cardGiftSearch);
+	ja->setObject(CCString::create("선물하기"), kMyLocalKey_cardGiftSend);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
