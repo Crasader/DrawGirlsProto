@@ -636,9 +636,9 @@ void MainFlowScene::tableDownloading(function<void()> end_func)
 		{
 			if(index_puzzle_number == puzzle_number)
 			{
-				is_found = true;
 				if(t_cell)
 				{
+					is_found = true;
 					CCNode* t_node = t_cell->getChildByTag(1);
 					
 					CCNode* t_rate = t_node->getChildByTag(999);
@@ -742,9 +742,10 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 		{
 			if(index_puzzle_number == puzzle_number)
 			{
-				is_found = true;
 				if(t_cell)
 				{
+					is_found = true;
+					
 					CCNode* t_node = t_cell->getChildByTag(1);
 					
 					CCNode* t_rate = t_node->getChildByTag(999);
