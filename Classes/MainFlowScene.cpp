@@ -2601,7 +2601,7 @@ void MainFlowScene::setBottom()
 			
 			is_menu_enable = false;
 			
-			int puzzle_number = 6;
+			int puzzle_number = mySGD->getSpecialEventPuzzleNumber();
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
 			
 			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
