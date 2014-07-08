@@ -2544,6 +2544,10 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		}
 		else
 		{
+			
+			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
+																					myLoc->getLocalForKey(kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
+			
 			is_menu_enable = true;
 		}
 	}
