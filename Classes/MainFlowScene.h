@@ -40,6 +40,7 @@ public:
 	int need_ruby_value;
 	int need_star_count;
 	int before_locked_puzzle_count;
+	int puzzle_number;
 	
 	PuzzleOpenInfo()
 	{
@@ -91,6 +92,8 @@ private:
 	void updateCardHistory(CCNode* t_loading);
 	
 	void heartRefresh();
+	
+	vector<int> not_event_puzzle_list;
 	
 	CCNode* tutorial_node;
 	
