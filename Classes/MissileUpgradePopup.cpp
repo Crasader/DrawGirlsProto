@@ -453,6 +453,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	{
 		upgrade_button->setEnabled(false);
 		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString());
+		upgrade_label->setPosition(upgrade_label->getPosition() + ccp(-18, 0));
 		price_type->removeFromParent();
 		price_back->setContentSize(CCSizeMake(120, 30));
 		price_back->setPosition(ccp(upgrade_label->getContentSize().width/2.f + price_back->getContentSize().width/2.f + 10 + 30.f, upgrade_label->getContentSize().height/2.f));

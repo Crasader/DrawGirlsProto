@@ -279,21 +279,21 @@ void StartSettingPopup::setMain()
 	for(int i=0;i<item_list.size();i++)
 	{
 		ITEM_CODE t_code = item_list[i];
-		if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getUserdataHighPiece()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getUserdataHighPiece()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getUserdataHighPiece()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
@@ -985,9 +985,11 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		{
 			missile_position = missile_img->getPosition();
 			missile_img->removeFromParent();
+			missile_img = NULL;
 		}
 		
 		StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
+		missile_type_code = kStoneType_guided;
 		
 		if(missile_type_code == kStoneType_guided)
 		{
@@ -2006,6 +2008,14 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 
 											  }
 										  }));
+	
+	if(mySGD->is_endless_mode)
+	{
+		Json::Value endless_param;
+		endless_param["memberID"] = myHSP->getMemberID();
+		endless_param["autoLevel"] = mySGD->getUserdataAutoLevel();
+		t_command_list.push_back(CommandParam("startendlessplay", endless_param, nullptr));
+	}
 	
 	mySGD->changeGoodsTransaction(t_command_list, json_selector(this, StartSettingPopup::finalStartAction));
 }

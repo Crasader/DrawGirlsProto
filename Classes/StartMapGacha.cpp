@@ -151,6 +151,8 @@ void StartMapGacha::outAction()
 	
 	is_menu_enable = false;
 	
+	remove_func();
+	
 	gacha_button->setEnabled(false);
 	cancel_menu->setEnabled(false);
 	
@@ -164,7 +166,6 @@ void StartMapGacha::outAction()
 void StartMapGacha::removeFromParent()
 {
 	remove_func();
-	
 	CCLayer::removeFromParent();
 }
 
