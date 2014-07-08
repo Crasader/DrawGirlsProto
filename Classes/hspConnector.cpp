@@ -421,7 +421,7 @@ void hspConnector::logout(jsonSelType func){
 
 void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType func){
 	
-	GraphDog::get()->setServerURL(this->getServerAddress());
+	
 	
 	bool ManualLogin =true;
 	int LoginType = (int)HSPLogin::GUEST;
@@ -436,7 +436,7 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 
 		int delekey = dkey;
 		graphdog->setMemberID(hspConnector::get()->getMemberID());
-
+		GraphDog::get()->setServerURL(this->getServerAddress());
 		string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString();
 		CCLOG("member id is %s",hspids.c_str());
 		graphdog->setSocialID(hspids);
