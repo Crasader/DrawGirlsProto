@@ -459,7 +459,7 @@ bool PuzzleScene::init()
 		}
 	}
 	
-	
+	is_success_command = true;
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
@@ -529,7 +529,92 @@ bool PuzzleScene::init()
 		LoadingLayer* t_loading = LoadingLayer::create(-900);
 		addChild(t_loading, kPuzzleZorder_popup+1);
 		
-		updateCardHistory(t_loading);
+		is_success_command = false;
+		clear_command_list.clear();
+		
+		
+		Json::Value transaction_param;
+		transaction_param["memberID"] = hspConnector::get()->getMemberID();
+		clear_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
+												  {
+													  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+													  {
+														  mySGD->network_check_cnt = 0;
+														  
+														  t_loading->removeFromParent();
+														  is_success_command = true;
+														  endReady();
+													  }
+													  else
+													  {
+														  mySGD->network_check_cnt++;
+														  
+														  if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+														  {
+															  mySGD->network_check_cnt = 0;
+															  
+															  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+																  myHSP->command(this->clear_command_list);
+															  });
+															  ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+														  }
+														  else
+														  {
+															  addChild(KSTimer::create(0.5f, [=]()
+																					   {
+																						   myHSP->command(this->clear_command_list);
+																					   }));
+														  }
+													  }
+												  }));
+		
+		
+		Json::Value card_param;
+		card_param["memberID"] = hspConnector::get()->getSocialID();
+		card_param["cardNo"] = keep_card_number;
+		card_param["addCount"] = mySGD->getClearTakeCardCnt();
+		
+		clear_command_list.push_back(CommandParam("updateCardHistory", card_param, [=](Json::Value result_data)
+												  {
+													  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+														{
+															for(int i=kAchievementCode_cardCollection1;i<=kAchievementCode_cardCollection3;i++)
+															{
+																if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+																   mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
+																{
+																	AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+																	CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+																}
+															}
+															
+															AchievementCode i = kAchievementCode_cardSet;
+															if(!myAchieve->isCompleted(i) && !myAchieve->isAchieve(i))
+															{
+																int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, keep_card_number);
+																bool is_success = true;
+																for(int i=1;i<=4 && is_success;i++)
+																{
+																	int t_card_number = NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, i);
+																	if(!mySGD->isHasGottenCards(t_card_number))
+																		is_success = false;
+																}
+																
+																if(is_success)
+																{
+																	myAchieve->changeIngCount(i, 1);
+																	if(!myAchieve->isNoti(AchievementCode(i)))
+																	{
+																		AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+																		CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+																	}
+																	myAchieve->updateAchieve(nullptr);
+																}
+															}
+														}
+												  }));
+		
+		
 		
 		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
 		bool is_change_history = false;
@@ -549,7 +634,84 @@ bool PuzzleScene::init()
 		}
 		
 		if(is_change_history)
-			mySGD->setPieceHistory(t_history, nullptr);
+		{
+			clear_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, [=](Json::Value result_data)
+											  {
+												  if(result_data["result"]["code"] == GDSUCCESS)
+													{
+														
+													}
+											  }));
+		}
+
+		
+		int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+		
+		PuzzleHistory pz_history = mySGD->getPuzzleHistory(t_puzzle_number);
+		
+		clear_is_first_perfect = !pz_history.is_perfect;
+		clear_is_first_puzzle_success = !pz_history.is_clear;
+		
+		int t_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+		int t_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+		
+		for(int i=t_start_stage;i<t_start_stage+t_stage_count;i++)
+		{
+			int t_stage_number = i;
+			
+			if(t_stage_number == 1 || mySGD->getPieceHistory(t_stage_number).is_open.getV() ||
+			   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number) == 0 &&
+				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, t_stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, t_stage_number))))) // 입장 가능인가
+			{
+				PieceHistory t_history = mySGD->getPieceHistory(t_stage_number);
+				
+				if(mySGD->isClearPiece(t_stage_number))
+				{
+					if(!t_history.is_clear[0] || !t_history.is_clear[1] || !t_history.is_clear[2] || !t_history.is_clear[3])
+					{
+						clear_is_first_perfect = false;
+					}
+				}
+				else // empty
+				{
+					clear_is_first_puzzle_success = false;
+				}
+			}
+			else
+			{
+				if(NSDS_GS(t_stage_number, kSDS_SI_type_s) == "normal")
+				{
+					clear_is_first_puzzle_success = false;
+					clear_is_first_perfect = false;
+				}
+			}
+		}
+		
+		if(clear_is_first_puzzle_success || clear_is_first_perfect)
+		{
+			PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+			
+			if(clear_is_first_perfect)
+				t_history.is_perfect = true;
+			if(clear_is_first_puzzle_success)
+				t_history.is_clear = true;
+			
+			clear_command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, [=](Json::Value result_data)
+																			{
+																				GraphDogLib::JsonToLog("clear or perfect puzzle", result_data);
+																				
+																				if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																				{
+																					if(result_data["sendGift"].asBool())
+																					{
+																						mySGD->new_puzzle_card_info = result_data["giftData"];
+																						mySGD->is_new_puzzle_card = true;
+																					}
+																				}
+																			}));
+		}
+		
+		myHSP->command(clear_command_list);
 	}
 	
 	
@@ -683,6 +845,53 @@ bool PuzzleScene::init()
 	return true;
 }
 
+void PuzzleScene::endReady()
+{
+	if(is_clear_close && is_success_command)
+	{
+		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
+		if(recent_step == kTutorialFlowStep_pieceType)
+		{
+			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+			t_tutorial->initStep(kTutorialFlowStep_pieceType);
+			addChild(t_tutorial, kPuzzleZorder_popup);
+			
+			tutorial_node = t_tutorial;
+		}
+		else if(recent_step == kTutorialFlowStep_backClick)
+		{
+			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+			int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
+			if(selected_card_number > 0 && recent_get_card_cnt >= 2)
+			{
+				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
+				t_tutorial->initStep(kTutorialFlowStep_backClick);
+				addChild(t_tutorial, kPuzzleZorder_popup);
+				
+				tutorial_node = t_tutorial;
+			}
+		}
+		
+		if(clear_is_empty_piece)
+			showGetPuzzle();
+		else
+		{
+			if(clear_is_empty_star)
+				showGetStar();
+			else
+			{
+				if(clear_is_stage_unlock)
+					showUnlockEffect();
+				else
+				{
+					addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
+					is_menu_enable = true;
+				}
+			}
+		}
+	}
+}
+
 void PuzzleScene::updateCardHistory(CCNode *t_loading)
 {
 	Json::Value param;
@@ -767,6 +976,8 @@ void PuzzleScene::showClearPopup()
 {
 	is_menu_enable = false;
 	
+	is_clear_close = false;
+	
 	ClearPopup* t_popup = ClearPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideClearPopup));
 	t_popup->replay_func = [=](){openSettingPopup();};
@@ -784,46 +995,8 @@ void PuzzleScene::hideClearPopup()
 //	}
 //	else
 //	{
-		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
-		if(recent_step == kTutorialFlowStep_pieceType)
-		{
-			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
-			t_tutorial->initStep(kTutorialFlowStep_pieceType);
-			addChild(t_tutorial, kPuzzleZorder_popup);
-			
-			tutorial_node = t_tutorial;
-		}
-		else if(recent_step == kTutorialFlowStep_backClick)
-		{
-			int selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-			int recent_get_card_cnt = mySGD->getHasGottenCardsSize();
-			if(selected_card_number > 0 && recent_get_card_cnt >= 2)
-			{
-				TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
-				t_tutorial->initStep(kTutorialFlowStep_backClick);
-				addChild(t_tutorial, kPuzzleZorder_popup);
-				
-				tutorial_node = t_tutorial;
-			}
-		}
-		
-		if(clear_is_empty_piece)
-			showGetPuzzle();
-		else
-		{
-			if(clear_is_empty_star)
-				showGetStar();
-			else
-			{
-				if(clear_is_stage_unlock)
-					showUnlockEffect();
-				else
-				{
-					addChild(KSTimer::create(3.f, [=](){startAutoTurnPiece();}));
-					is_menu_enable = true;
-				}
-			}
-		}
+	is_clear_close = true;
+	endReady();
 //	}
 }
 
@@ -1309,8 +1482,6 @@ void PuzzleScene::setPuzzle()
 	
 	unlock_cover = NULL;
 	
-	clear_is_first_perfect = !mySGD->getPuzzleHistory(puzzle_number).is_perfect;
-	
 	int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
 	
 	for(int i=0;i<20;i++)
@@ -1345,9 +1516,6 @@ void PuzzleScene::setPuzzle()
 			{
 				PieceHistory t_history = mySGD->getPieceHistory(stage_number);
 				
-				if(NSDS_GS(stage_number, kSDS_SI_type_s) == "normal" && (!t_history.is_clear[0] || !t_history.is_clear[1] || !t_history.is_clear[2] || !t_history.is_clear[3]))
-					clear_is_first_perfect = false;
-				
 				if(mySGD->isClearPiece(stage_number))
 				{
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
@@ -1358,9 +1526,6 @@ void PuzzleScene::setPuzzle()
 				}
 				else // empty
 				{
-					if(NSDS_GS(stage_number, kSDS_SI_type_s) == "normal")
-						is_puzzle_clear = false;
-					
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::pieceAction));
 					t_piece->setPosition(piece_position);
 					puzzle_node->addChild(t_piece, kPuzzleNodeZorder_piece, stage_number);
@@ -1371,9 +1536,6 @@ void PuzzleScene::setPuzzle()
 			}
 			else
 			{
-				if(NSDS_GS(stage_number, kSDS_SI_type_s) == "normal")
-					is_puzzle_clear = false;
-				
 				if(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) <= 0 || mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number))) // buy
 				{
 					PuzzlePiece* t_piece = PuzzlePiece::create(stage_number, stage_level, this, callfuncI_selector(PuzzleScene::buyPieceAction));
@@ -1409,47 +1571,6 @@ void PuzzleScene::setPuzzle()
 			piece->setPosition(piece_position);
 			puzzle_node->addChild(piece, kPuzzleNodeZorder_puzzle);
 		}
-	}
-	
-	clear_is_first_puzzle_success = false;
-	
-	if(is_puzzle_clear && !mySGD->getPuzzleHistory(puzzle_number).is_clear)
-	{
-		clear_is_first_puzzle_success = true;
-		
-		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-		
-		if(clear_is_first_perfect)
-			t_history.is_perfect = true;
-		
-		t_history.is_clear = true;
-		
-		LoadingLayer* t_loading = LoadingLayer::create(-9999);
-		addChild(t_loading, kPuzzleZorder_popup+1);
-		
-		keep_func = [=]()
-		{
-			mySGD->setPuzzleHistory(t_history, [=](Json::Value result_data)
-									{
-										GraphDogLib::JsonToLog("clear or perfect puzzle", result_data);
-										
-										if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										{
-											t_loading->removeFromParent();
-											if(result_data["sendGift"].asBool())
-											{
-												mySGD->new_puzzle_card_info = result_data["giftData"];
-												mySGD->is_new_puzzle_card = true;
-											}
-										}
-										else
-										{
-											this->keep_func();
-										}
-									});
-		};
-		
-		keep_func();
 	}
 	
 	if(must_be_change_selected_stage_number && enable_stage_number != -1) // 현재 선택된 스테이지가 선택 불가 스테이지라면

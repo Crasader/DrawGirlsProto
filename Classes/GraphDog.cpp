@@ -527,16 +527,16 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	//CCLOG("t_function 14");
 	//@ if(resultobj["timestamp"].getInt()<GraphDog::get()->timestamp){
-	if(resultobj["timestamp"].asInt64()<GraphDog::get()->timestamp && resultCode != CURLE_CHUNK_FAILED){
-		
-		CCLOG("t_function error hack!!! %lld,%lld",resultobj["timestamp"].asInt64(),GraphDog::get()->timestamp);
-		resultCode=CURLE_CHUNK_FAILED;
-		resultobj["state"]="error";
-		resultobj["errorMsg"]="hack!!";
-		resultobj["result"]["code"]=GDSECURITY;
-		//@ GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
-		
-	}
+//	if(resultobj["timestamp"].asInt64()<GraphDog::get()->timestamp && resultCode != CURLE_CHUNK_FAILED){
+//		
+//		CCLOG("t_function error hack!!! %lld,%lld",resultobj["timestamp"].asInt64(),GraphDog::get()->timestamp);
+//		resultCode=CURLE_CHUNK_FAILED;
+//		resultobj["state"]="error";
+//		resultobj["errorMsg"]="hack!!";
+//		resultobj["result"]["code"]=GDSECURITY;
+//		//@ GraphDog::get()->timestamp=resultobj["timestamp"].getInt();
+//		
+//	}
 	
 	GraphDog::get()->timestamp=resultobj.get("timestamp", 0).asInt64();
 	GraphDog::get()->date=resultobj.get("date", 0).asInt64();

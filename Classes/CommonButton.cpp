@@ -89,7 +89,7 @@ bool CommonButton::init(string title, int fontSize, CCSize size,CommonButtonType
 	m_btn = CCControlButton::create(titleNode, m_btnBack);
 	
 	if(btnType == CommonButtonClose){
-		this->setSize(CCSizeMake(45,45));
+		this->setSize(CCSizeMake(55,55));
 	}
 	
 	
@@ -207,7 +207,7 @@ CCScale9Sprite* CommonButton::getBackgroundByType(CommonButtonType btnType){
 
 void CommonButton::setButtonInset(CommonButtonType type){
 	if(type == CommonButtonClose){
-		this->setSize(CCSizeMake(45,45));
+		this->setSize(CCSizeMake(55,55));
 	}
 	else if(type >= CommonButtonDarkPupple && type <= CommonButtonYellowUp)
 	{

@@ -849,6 +849,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setAllClearReward(result_data["allClearReward"].asString());
 		mySGD->setClearTakeCardCnt(result_data["clearTakeCardCnt"].asInt());
 		mySGD->setUnlockFrameCnt(result_data["unlockFrameCnt"].asInt());
+		mySGD->setSpecialEventPuzzleNumber(result_data["specialEventPuzzleNumber"].asInt());
 	}
 	else
 	{
@@ -2543,6 +2544,10 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		}
 		else
 		{
+			
+			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
+																					myLoc->getLocalForKey(kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
+			
 			is_menu_enable = true;
 		}
 	}

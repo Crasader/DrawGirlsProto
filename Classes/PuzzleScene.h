@@ -64,7 +64,13 @@ private:
 	int keep_card_number;
 	void updateCardHistory(CCNode* t_loading);
 	
+	void endReady();
+	bool is_clear_close;
+	
 	int call_rank_stage_number;
+	
+	bool is_success_command;
+	vector<CommandParam> clear_command_list;
 	
 	void heartRefresh();
 	

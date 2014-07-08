@@ -62,10 +62,8 @@ private:
 	
 	CCNode* missile_img;
 	
-	KSLabelTTF* n_start_label2;
-	
 	void setMain();
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	
 	bool is_before_selected_event_stage;
 	
@@ -95,6 +93,8 @@ private:
 	void stopItemGacha();
 	void endItemGacha();
 	void menuAction(CCObject* sender);
+	
+	void startButtonAction(CCObject* sender, CCControlEvent t_event);
 	
 	void closeAction();
 	

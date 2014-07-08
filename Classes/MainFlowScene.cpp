@@ -78,34 +78,42 @@ bool MainFlowScene::init()
 	
 	have_card_count_for_puzzle_index.clear();
 	
+	not_event_puzzle_list.clear();
+	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_count;i++)
 	{
 		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
-		int have_card_cnt = 0;
-		int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
-		int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
 		
-		int card_take_cnt = mySGD->getHasGottenCardsSize();
-		for(int i=0;i<card_take_cnt;i++)
+		if(!NSDS_GB(t_puzzle_number, kSDS_PZ_isEvent_b))
 		{
-			int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-			int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
-				have_card_cnt += NSDS_GI(kSDS_CI_int1_grade_i, card_number);
-		}
+			int have_card_cnt = 0;
+			int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+			int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+			
+			int card_take_cnt = mySGD->getHasGottenCardsSize();
+			for(int i=0;i<card_take_cnt;i++)
+			{
+				int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
+				int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+				if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
+					have_card_cnt += NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+			}
+			
+			have_card_count_for_puzzle_index.push_back(have_card_cnt);
 		
-		have_card_count_for_puzzle_index.push_back(have_card_cnt);
+		
+			not_event_puzzle_list.push_back(t_puzzle_number);
+		}
 	}
 	
 	is_puzzle_enter_list.clear();
-	int total_puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	
 	locked_puzzle_count = 0;
 	
-	for(int i=1;i<=total_puzzle_count;i++)
+	for(int i=0;i<not_event_puzzle_list.size();i++)
 	{
-		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i);
+		int t_puzzle_number = not_event_puzzle_list[i];
 		
 		PuzzleOpenInfo t_info;
 		t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV();
@@ -201,6 +209,7 @@ bool MainFlowScene::init()
 		}
 		
 		t_info.before_locked_puzzle_count = locked_puzzle_count;
+		t_info.puzzle_number = t_puzzle_number;
 		is_puzzle_enter_list.push_back(t_info);
 		
 		if(!t_info.is_open)
@@ -575,7 +584,7 @@ void MainFlowScene::setTable()
 	int myPosition = puzzle_table->minContainerOffset().x;
 	for(int i=0; i<numberOfCellsInTableView(puzzle_table); i++)
 	{
-		if(puzzle_number == NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
+		if(puzzle_number == not_event_puzzle_list[i])//NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1))
 		{
 			myPosition = i+1;
 			break;
@@ -636,9 +645,9 @@ void MainFlowScene::tableDownloading(function<void()> end_func)
 		{
 			if(index_puzzle_number == puzzle_number)
 			{
-				is_found = true;
 				if(t_cell)
 				{
+					is_found = true;
 					CCNode* t_node = t_cell->getChildByTag(1);
 					
 					CCNode* t_rate = t_node->getChildByTag(999);
@@ -682,6 +691,11 @@ void MainFlowScene::tableDownloading(function<void()> end_func)
 				}
 			}
 		}
+	}
+	
+	if(!is_found)
+	{
+		addChild(KSTimer::create(0.6f, [=](){end_func();}));
 	}
 }
 
@@ -737,9 +751,10 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 		{
 			if(index_puzzle_number == puzzle_number)
 			{
-				is_found = true;
 				if(t_cell)
 				{
+					is_found = true;
+					
 					CCNode* t_node = t_cell->getChildByTag(1);
 					
 					CCNode* t_rate = t_node->getChildByTag(999);
@@ -1014,7 +1029,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell->addChild(cell_node, 1, 1);
 	
 	
-	if(idx==NSDS_GI(kSDS_GI_puzzleListCount_i)){
+	if(idx==not_event_puzzle_list.size()){
 		CCSprite* n_locked_back = CCSprite::create("mainflow_puzzle_lock.png"); //mySIL->getLoadedImg("mainflow_puzzle_lock.png");
 		cell_node->addChild(n_locked_back);
 		
@@ -1038,7 +1053,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 //	CCSize table_size = CCSizeMake(480*screen_scale_x, 245);
 	
-	int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
+	int puzzle_number = not_event_puzzle_list[idx];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, idx+1);
 	cell->setTag(puzzle_number);
 	
 //	if(puzzle_number == is_unlock_puzzle)
@@ -1055,7 +1070,24 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //		}
 //	}
 	
-	if(is_puzzle_enter_list[idx].is_open)
+	PuzzleOpenInfo t_info;
+	bool t_is_found = false;
+	for(int i=0;!t_is_found && i<is_puzzle_enter_list.size();i++)
+	{
+		if(is_puzzle_enter_list[i].puzzle_number == not_event_puzzle_list[idx])
+		{
+			t_info = is_puzzle_enter_list[i];
+			t_is_found = true;
+		}
+	}
+	
+	if(!t_is_found)
+	{
+		CCLOG("not found puzzle open info!!!");
+		return cell;
+	}
+	
+	if(t_info.is_open)
 //	if(puzzle_number == 1 || mySGD->getPuzzleHistory(puzzle_number).is_open || (mySGD->getPuzzleHistory(puzzle_number-1).is_clear && NSDS_GI(puzzle_number, kSDS_PZ_point_i) == 0))
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
@@ -1118,7 +1150,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		rate_label->setPosition(ccp(-25, -81));
 		cell_node->addChild(rate_label);
 		
-		if(is_puzzle_enter_list[idx].is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
+		if(t_info.is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
 		{
 			// 잼 구매 혹은 시간이 되야 열림
 			
@@ -1133,7 +1165,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //			buy_menu->setPosition(ccp(-24, -16));
 //			cell_node->addChild(buy_menu);
 			
-			int lock_img_number = is_puzzle_enter_list[idx].before_locked_puzzle_count;
+			int lock_img_number = t_info.before_locked_puzzle_count;
 			if(lock_img_number > 1)
 				lock_img_number = 1;
 			lock_img_number++;
@@ -1142,40 +1174,40 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 			
-			if(is_puzzle_enter_list[idx].before_locked_puzzle_count == 0)
+			if(t_info.before_locked_puzzle_count == 0)
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->setPosition(ccp(67.5f, 137));
 				not_clear_img->addChild(condition_title);
 				
-				if(is_puzzle_enter_list[idx].is_have_week_condition)
+				if(t_info.is_have_week_condition)
 				{
 					string weekday_string;
-					if(is_puzzle_enter_list[idx].keep_weekday == -1)
+					if(t_info.keep_weekday == -1)
 						weekday_string = "매일";
-					else if(is_puzzle_enter_list[idx].keep_weekday == 0)
+					else if(t_info.keep_weekday == 0)
 						weekday_string = "일요일";
-					else if(is_puzzle_enter_list[idx].keep_weekday == 1)
+					else if(t_info.keep_weekday == 1)
 						weekday_string = "월요일";
-					else if(is_puzzle_enter_list[idx].keep_weekday == 2)
+					else if(t_info.keep_weekday == 2)
 						weekday_string = "화요일";
-					else if(is_puzzle_enter_list[idx].keep_weekday == 3)
+					else if(t_info.keep_weekday == 3)
 						weekday_string = "수요일";
-					else if(is_puzzle_enter_list[idx].keep_weekday == 4)
+					else if(t_info.keep_weekday == 4)
 						weekday_string = "목요일";
-					else if(is_puzzle_enter_list[idx].keep_weekday == 5)
+					else if(t_info.keep_weekday == 5)
 						weekday_string = "금요일";
-					else if(is_puzzle_enter_list[idx].keep_weekday == 6)
+					else if(t_info.keep_weekday == 6)
 						weekday_string = "토요일";
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), is_puzzle_enter_list[idx].keep_week_start, is_puzzle_enter_list[idx].keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), t_info.keep_week_start, t_info.keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
 					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
-				else if(is_puzzle_enter_list[idx].is_have_date_condition)
+				else if(t_info.is_have_date_condition)
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), is_puzzle_enter_list[idx].keep_date_start.substr(4,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(6,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(8,2).c_str(), is_puzzle_enter_list[idx].keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), t_info.keep_date_start.substr(4,2).c_str(), t_info.keep_date_start.substr(6,2).c_str(), t_info.keep_date_start.substr(8,2).c_str(), t_info.keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
 					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
@@ -1186,7 +1218,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					not_clear_img->addChild(condition_content);
 				}
 				
-				if(is_puzzle_enter_list[idx].is_have_ruby_condition)
+				if(t_info.is_have_ruby_condition)
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					
@@ -1194,7 +1226,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					price_type->setScale(0.7f);
 					c_label->addChild(price_type);
 					
-					KSLabelTTF* price_value_label = KSLabelTTF::create(CCString::createWithFormat("%d  ", is_puzzle_enter_list[idx].need_ruby_value)->getCString(), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* price_value_label = KSLabelTTF::create(CCString::createWithFormat("%d  ", t_info.need_ruby_value)->getCString(), mySGD->getFont().c_str(), 10);
 					c_label->addChild(price_value_label);
 					
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
@@ -1213,7 +1245,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
-					detail_button->setTag(10000000 + idx*10000 + is_puzzle_enter_list[idx].need_ruby_value);
+					detail_button->setTag(10000000 + idx*10000 + t_info.need_ruby_value);
 					detail_button->setPreferredSize(CCSizeMake(80, 30));
 					detail_button->setPosition(ccp(67.5f,93.5f));
 					not_clear_img->addChild(detail_button);
@@ -1247,7 +1279,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		}
 		else
 		{
-			int lock_img_number = is_puzzle_enter_list[idx].before_locked_puzzle_count;
+			int lock_img_number = t_info.before_locked_puzzle_count;
 			if(lock_img_number > 1)
 				lock_img_number = 1;
 			lock_img_number++;
@@ -1256,14 +1288,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			not_clear_img->setPosition(close_back->getPosition());
 			cell_node->addChild(not_clear_img);
 			
-			if(is_puzzle_enter_list[idx].before_locked_puzzle_count == 0)
+			if(t_info.before_locked_puzzle_count == 0)
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->setPosition(ccp(67.5f, 137));
 				not_clear_img->addChild(condition_title);
 				
-				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
+				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
 				condition_content->setPosition(ccp(67.5f, 118.5f));
 				not_clear_img->addChild(condition_content);
 				
@@ -1307,7 +1339,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	
 	if(puzzle_number == is_unlock_puzzle)
 	{
-		if(is_puzzle_enter_list[idx].is_open)
+		if(t_info.is_open)
 		{
 			CCSprite* puzzle_unlock_beam = CCSprite::create("puzzle_unlock_beam.png");
 			puzzle_unlock_beam->setPosition(CCPointZero);
@@ -1431,7 +1463,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																										  
 //																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=]()
 //																										  {
-																											  if(!is_puzzle_enter_list[idx].is_base_condition_success)
+																											  if(!t_info.is_base_condition_success)
 																												{
 																													ASPopupView* t_popup = ASPopupView::create(-999);
 																													
@@ -1473,7 +1505,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 																													t_container->addChild(title_label);
 																													
-																													StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), is_puzzle_enter_list[idx].need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																													StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 																													sub_label->setPosition(ccp(0.0,-0.5)); 			// dt (0.0,-13.5)
 																													t_container->addChild(sub_label);
 																													sub_label->setOldAnchorPoint();
@@ -1595,7 +1627,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		LoadingLayer* t_loading = LoadingLayer::create(-9999);
 		addChild(t_loading, 9999);
 		
-		int puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
+		int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
 		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
 		t_history.is_open = true;
 		t_history.open_type = "잼결제";
@@ -1656,7 +1688,7 @@ CCSize MainFlowScene::cellSizeForTable(CCTableView *table)
 }
 unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
-	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int puzzle_count = not_event_puzzle_list.size();//NSDS_GI(kSDS_GI_puzzleListCount_i);
 	
 	int view_count = puzzle_count - locked_puzzle_count;
 	view_count += mySGD->getUnlockFrameCnt();
@@ -2601,7 +2633,7 @@ void MainFlowScene::setBottom()
 			
 			is_menu_enable = false;
 			
-			int puzzle_number = 1;
+			int puzzle_number = mySGD->getSpecialEventPuzzleNumber();
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
 			
 			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
