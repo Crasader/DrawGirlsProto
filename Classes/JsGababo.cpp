@@ -582,6 +582,10 @@ void JsGababo::setupHands()
 void JsGababo::onPressConfirm(CCObject* t)
 {
 	CCLOG("%s", m_currentJudge.c_str());
+	((CommonButton*)t)->setEnabled(false);
+	addChild(KSTimer::create(1.f, [=](){
+		((CommonButton*)t)->setEnabled(true);
+	}));
 	if(m_front3->getScaleY() <= 0.5f)
 		return;
 	
