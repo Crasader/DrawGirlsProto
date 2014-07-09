@@ -401,8 +401,10 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
-		
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-200, kGoodsType_gold, [=]()
+															{
+																((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+															}), 9999);
 	}
 	loading_layer->removeFromParent();
 }
