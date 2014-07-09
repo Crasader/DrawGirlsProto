@@ -1494,6 +1494,8 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	//		return;
 	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
+		myGD->communication("Main_checkHideStartMapGacha");
+		
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString(), false, true);
 		myGD->toFun();
 		myGD->communication("UI_writeDie");

@@ -1363,6 +1363,11 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
 	
+	ko->setObject(CCString::create("타임 오버"), kMyLocalKey_failTitleTimeover);
+	ko->setObject(CCString::create("미션 실패"), kMyLocalKey_failTitleMissionfail);
+	ko->setObject(CCString::create("게임 오버"), kMyLocalKey_failTitleGameover);
+	ko->setObject(CCString::create("스테이지 클리어"), kMyLocalKey_clearTitle);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -2233,6 +2238,12 @@ void MyLocal::en()
 	en->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	en->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
+	
+	en->setObject(CCString::create("TIME OVER"), kMyLocalKey_failTitleTimeover);
+	en->setObject(CCString::create("MISSION FAIL"), kMyLocalKey_failTitleMissionfail);
+	en->setObject(CCString::create("GAME OVER"), kMyLocalKey_failTitleGameover);
+	
+	en->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3126,6 +3137,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	ja->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
+	
+	ja->setObject(CCString::create("TIME OVER"), kMyLocalKey_failTitleTimeover);
+	ja->setObject(CCString::create("MISSION FAIL"), kMyLocalKey_failTitleMissionfail);
+	ja->setObject(CCString::create("GAME OVER"), kMyLocalKey_failTitleGameover);
+	
+	ja->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
