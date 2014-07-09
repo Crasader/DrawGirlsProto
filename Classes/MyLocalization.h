@@ -118,6 +118,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_invalidNick,
 	kMyLocalKey_longNick,
 	kMyLocalKey_shortNick,
+	kMyLocalKey_specialCharacterError,
 	kMyLocalKey_openRightNow,
 	kMyLocalKey_openRubyValue,
 	kMyLocalKey_openGoldValue,

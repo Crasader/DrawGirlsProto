@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <net/if_dl.h>
 #include <ifaddrs.h>
+#include <regex.h>
 #endif
 
 
@@ -39,6 +40,12 @@ namespace GraphDogLib {
     void openAppStore(string appid);
 	void openReview(string);
 	void openUpdate(string);
+	
+	
+	int match(const char *string, const char *pattern);
+
+	
+	
 }
 
 using namespace cocos2d;
