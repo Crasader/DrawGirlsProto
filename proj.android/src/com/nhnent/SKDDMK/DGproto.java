@@ -28,7 +28,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -41,14 +44,21 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 
+import com.hangame.hsp.HSPCore;
+import com.hangame.hsp.HSPOAuthProvider;
+import com.hangame.hsp.HSPResult;
+import com.hangame.hsp.HSPState;
 import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
+//import com.litqoo.lib.KRunnable;
 import com.litqoo.lib.KSActivityBase;
+import com.litqoo.lib.hspConnector;
 
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final String FiveRocks_AppId = "538c30c400821dfba2000001";
 	public static final String FiveRocks_AppKey = "LxsEDRsKVnr8_Qd_Uffj";
 	public static final int ANDROID_BUILD_GINGERBREAD = 9;
 	public static final int SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
+	private static native int getUserState();
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -115,6 +125,51 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     {
          super.onResume();     
          ADBrixManager.startSession(this);
+         HSPCore core = HSPCore.getInstance();
+//         if(core.getState() == HSPState.HSP_STATE_OFFLINE)
+//         { 
+//        	 hspConnector.handler.post(
+//        			 new Runnable(){
+//        				 public void run() {
+//        					 Activity activity=(Activity)DGproto.this;
+//        					 HSPCore core = HSPCore.getInstance();
+//        					 if(core!=null){
+//        						 HSPOAuthProvider lType = HSPOAuthProvider.values()[getUserState()];
+//        						 core.login(activity, lType,new HSPCore.HSPLoginCB() {
+//
+//        							 public void onLogin(final HSPResult result, boolean isPlayable) {
+//        								 //Log.d("litqoo", "BEGIN - HSPLoginCB");
+//
+//        								 HSPCore core = HSPCore.getInstance();
+//        								 if(core.getState() == HSPState.HSP_STATE_ONLINE)
+//        								 {
+//        									 Log.d("hsp", "dfsgfsdg");
+//        								 }
+//        								 JSONObject r= new JSONObject();
+//        								 JSONObject error = new JSONObject();
+//
+//        								 if (result.isSuccess() == false) {
+//        									 //Log.i("litqoo", "HSP Login Error = " + result);
+//
+//        									 // 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
+//        									 int errorCode = result.getCode();
+//        									 String errorDescription = result.getDetail();
+//
+//        									 //Log.i("litqoo", "code = " + errorCode + ", message = " + errorDescription);
+//        								 }else{
+//        									 //Log.i("litqoo", "success");
+//        								 } 
+//        							 }
+//        						 });
+//        					 }else{
+//        						 //Log.d("litqoo","!!!!!!!! need setup !!!!!!");
+//        					 }
+//
+//
+//        				 }
+//        			 }
+//        			 );
+//         }
     }
     @Override
     protected void onPause()
