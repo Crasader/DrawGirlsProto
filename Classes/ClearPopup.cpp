@@ -100,11 +100,6 @@ bool ClearPopup::init()
 	
 	send_command_list.clear();
 	
-//	Json::Value param;
-//	param["key"] = CCSTR_CWF("stage_clear_%d", mySD->getSilType())->getCString();
-//	
-//	send_command_list.push_back(CommandParam("increaseStats", param, nullptr));
-	
 	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
 	{
 		myDSH->setIntegerForKey(kDSH_Key_allHighScore, int(mySGD->getScore()));
@@ -125,126 +120,26 @@ bool ClearPopup::init()
 	send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
 	
 	is_rank_changed = false;
-//	if(mySGD->save_stage_rank_stageNumber == mySD->getSilType())
-//	{
-//		// 받아왔던 rank list 사용
-//		string my_id = hspConnector::get()->getSocialID();
-//		
-//		vector<RankFriendInfo>::iterator iter = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
-//		if(iter != mySGD->save_stage_rank_list.end())
-//		{
-//			// found
-//			if((*iter).score < mySGD->getScore())
-//			{
-//				Json::Value p;
-//				p["memberID"]=hspConnector::get()->getSocialID();
-//				p["score"]=int(mySGD->getScore());
-//				p["stageNo"]=mySD->getSilType();
-//				hspConnector::get()->command("setStageScore",p,NULL);
-//				
-//				
-//				before_my_rank = (*iter).rank;
-//				(*iter).score = mySGD->getScore();
-//				struct t_FriendSort{
-//					bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
-//					{
-//						return a.score > b.score;
-//					}
-//				} pred;
-//				
-//				sort(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), pred);
-//				
-//				for(int i=0;i<mySGD->save_stage_rank_list.size();i++)
-//					mySGD->save_stage_rank_list[i].rank = i+1;
-//				
-//				vector<RankFriendInfo>::iterator iter2 = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
-//				if((*iter2).rank < before_my_rank)
-//				{
-//					is_rank_changed = true;
-//					recent_my_rank = (*iter2).rank;
-//					next_rank_info = (*(iter2+1));
-//				}
-//			}
-//		}
-//		else
-//		{
-//			CCLOG("not found myKakaoID");
-//			
-//			Json::Value p;
-//			p["memberID"]=hspConnector::get()->getSocialID();
-//			p["score"]=int(mySGD->getScore());
-//			p["stageNo"]=mySD->getSilType();
-//			hspConnector::get()->command("setStageScore",p,NULL);
-//			
-//			Json::Value my_kakao = hspConnector::get()->myKakaoInfo;
-//			
-//			RankFriendInfo fInfo;
-//			fInfo.nickname = my_kakao["nickname"].asString();
-//			fInfo.img_url = my_kakao["profile_image_url"].asString();
-//			fInfo.user_id = my_kakao["user_id"].asString();
-//			fInfo.score = mySGD->getScore();
-//			fInfo.is_play = true;
-//			mySGD->save_stage_rank_list.push_back(fInfo);
-//			
-//			struct t_FriendSort{
-//				bool operator() (const RankFriendInfo& a, const RankFriendInfo& b)
-//				{
-//					return a.score > b.score;
-//				}
-//			} pred;
-//			
-//			sort(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), pred);
-//			
-//			for(int i=0;i<mySGD->save_stage_rank_list.size();i++)
-//				mySGD->save_stage_rank_list[i].rank = i+1;
-//			
-//			vector<RankFriendInfo>::iterator iter2 = find(mySGD->save_stage_rank_list.begin(), mySGD->save_stage_rank_list.end(), my_id);
-//			if((*iter2).rank < mySGD->save_stage_rank_list.size())
-//			{
-//				is_rank_changed = true;
-//				recent_my_rank = (*iter2).rank;
-//				next_rank_info = (*(iter2+1));
-//			}
-//		}
-//		
-//		friend_list = mySGD->save_stage_rank_list;
-//		is_loaded_list = true;
-//	}
-//	else
-//	{
-//		Json::Value p;
-//		p["memberID"]=hspConnector::get()->getSocialID();
-//		p["score"]=int(mySGD->getScore());
-//		p["stageNo"]=mySD->getSilType();
-//	Json::Value p_data;
-//	p_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-//	Json::FastWriter p_data_writer;
-//	p["data"] = p_data_writer.write(p_data);
-//	
-//	send_command_list.push_back(CommandParam("setStageScore",p,nullptr));
-//	
-//	}
     
-	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_case->setContentSize(CCSizeMake(480, 280));
+	main_case = CCSprite::create("mainpopup2_back.png");
 	main_case->setPosition(ccp(240,160-14.f-450));
 	addChild(main_case, kZ_CP_back);
 	
-	inner_left = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-	inner_left->setContentSize(CCSizeMake(230, 209));
-	inner_left->setPosition(main_case->getContentSize().width*0.26f, main_case->getContentSize().height*0.58f+3);
+	inner_left = CCScale9Sprite::create("common_doubleblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	inner_left->setContentSize(CCSizeMake(209, 177));
+	inner_left->setPosition(132, main_case->getContentSize().height*0.58f+3);
 	main_case->addChild(inner_left);
 	
 	
-	CCScale9Sprite* inner_right = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	inner_right->setContentSize(CCSizeMake(230, 209));
-	inner_right->setPosition(main_case->getContentSize().width*0.74f, main_case->getContentSize().height*0.58f+3);
+	CCScale9Sprite* inner_right = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	inner_right->setContentSize(CCSizeMake(209, 177));
+	inner_right->setPosition(347, main_case->getContentSize().height*0.58f+3);
 	main_case->addChild(inner_right);
 	
 	
-	CCScale9Sprite* star_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	star_back->setContentSize(CCSizeMake(215, 60));
-	star_back->setPosition(ccp(115,140));
+	CCScale9Sprite* star_back = CCScale9Sprite::create("common_deepgray.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+	star_back->setContentSize(CCSizeMake(193, 50));
+	star_back->setPosition(ccp(inner_left->getContentSize().width/2.f,119));
 	inner_left->addChild(star_back);
 	
 	play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
@@ -297,42 +192,23 @@ bool ClearPopup::init()
 	left_content_list.push_back(KS::insert_separator(int(mySGD->getPercentage()*100.f)) + "%");
 	
 	
-//	CCScale9Sprite* time_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-//	time_back->setContentSize(CCSizeMake(215, 35));
-//	time_back->setPosition(ccp(115,93));
-//	inner_left->addChild(time_back);
-//	
-//	
-//	CCScale9Sprite* gold_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-//	gold_back->setContentSize(CCSizeMake(215, 35));
-//	gold_back->setPosition(ccp(115,60));
-//	inner_left->addChild(gold_back);
-//	
-//	
-//	CCScale9Sprite* score_back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-//	score_back->setContentSize(CCSizeMake(215, 35));
-//	score_back->setPosition(ccp(115,27));
-//	inner_left->addChild(score_back);
-	
-	
-	title = CCSprite::create(CCString::createWithFormat("ending_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
+	title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 21.5f);
 	title->setScale(0);
-	title->setPosition(ccp(inner_left->getContentSize().width/2.f,186));
+	title->setColor(ccc3(255, 170, 20));
+	title->setPosition(ccp(inner_left->getContentSize().width/2.f,154));
 	inner_left->addChild(title, kZ_CP_menu);
 	
 	
-	CCSprite* stage_tab = CCSprite::create("ending_tab.png");
-	stage_tab->setPosition(ccp(40,253));
+	CCSprite* stage_tab = CCSprite::create("title_tab.png");
+	stage_tab->setPosition(ccp(76,253));
 	main_case->addChild(stage_tab);
 	
 	int stage_number = mySD->getSilType();
 	
 	if(mySGD->is_before_selected_event_stage)
 	{
-		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 14);
-		stage_number_label->setColor(ccc3(255, 170, 20));
-		stage_number_label->enableOuterStroke(ccc3(95, 65, 130), 1.f);
-		stage_number_label->setPosition(ccp(24, 16));
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		stage_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(stage_number_label);
 		
 		mySGD->is_before_selected_event_stage = false;
@@ -342,10 +218,8 @@ bool ClearPopup::init()
 //		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
-		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(),	mySGD->getFont().c_str(), 14);
-		piece_number_label->setColor(ccc3(255, 170, 20));
-		piece_number_label->enableOuterStroke(ccc3(95, 65, 130), 1.f);
-		piece_number_label->setPosition(ccp(24, 16));
+		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		piece_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(piece_number_label);
 	}
 	
@@ -391,14 +265,14 @@ bool ClearPopup::init()
 	for(int i=0;i<4;i++)
 	{
 		CCSprite* t_star = CCSprite::create("ending_star_empty.png");
-		t_star->setPosition(ccp(53+i*48,201));
+		t_star->setPosition(ccp(inner_left->getPositionX() - 1.5f*48 + i*48,196));
 		main_case->addChild(t_star, kZ_CP_img);
 	}
 	
 	for(int i=0;i<take_level;i++)
 	{
 		CCSprite* t_star = CCSprite::create("ending_star_gold.png");
-		t_star->setPosition(ccp(53+i*48,201));
+		t_star->setPosition(ccp(inner_left->getPositionX() - 1.5f*48 + i*48,196));
 		main_case->addChild(t_star, kZ_CP_table);
 		t_star->setScale(2.f);
 		t_star->setOpacity(0);
@@ -421,15 +295,15 @@ bool ClearPopup::init()
 	else
 		endTakeCard();
 	
-	CCScale9Sprite* left_total_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	left_total_back->setContentSize(CCSizeMake(inner_left->getContentSize().width-20, 35));
-	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 24));
+	CCScale9Sprite* left_total_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
+	left_total_back->setContentSize(CCSizeMake(193, 20));
+	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 15));
 	inner_left->addChild(left_total_back);
 	
-	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
 	left_total_title->setColor(ccc3(255, 170, 20));
 	left_total_title->setAnchorPoint(ccp(0,0.5f));
-	left_total_title->setPosition(ccp(10, left_total_back->getContentSize().height/2.f));
+	left_total_title->setPosition(ccp(8, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_title);
 	
 	string start_total_left_content;
@@ -438,10 +312,10 @@ bool ClearPopup::init()
 	left_total_content = KSLabelTTF::create(start_total_left_content.c_str(), mySGD->getFont().c_str(), 15);
 	left_total_content->setColor(ccc3(255, 170, 20));
 	left_total_content->setAnchorPoint(ccp(1,0.5f));
-	left_total_content->setPosition(ccp(left_total_back->getContentSize().width-10, left_total_back->getContentSize().height/2.f));
+	left_total_content->setPosition(ccp(left_total_back->getContentSize().width-8, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_content);
 	
-	CCRect left_rect = CCRectMake(inner_left->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f+4, (480-30)/2.f-20, 72);
+	CCRect left_rect = CCRectMake(inner_left->getContentSize().width/2.f-((480-30)/2.f-20)/2.f, 51.f-30.f/2.f-9, (480-30)/2.f-20, 65);
 	
 	//	CCSprite* left_size = CCSprite::create("whitePaper.png", CCRectMake(0, 0, left_rect.size.width, left_rect.size.height));
 //	left_size->setAnchorPoint(CCPointZero);
@@ -455,177 +329,36 @@ bool ClearPopup::init()
 	left_table->setTouchPriority(-200);
 	left_table->setTouchEnabled(false);
 	
-	left_table->setContentOffset(ccp(0,-9*28));
+	left_table->setContentOffset(ccp(0,-9*21));
+		
 	
+	CCLabelTTF* t_ok_node = CCLabelTTF::create();
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 27.5f);
+	t_ok_node->addChild(ok_label);
 	
-//	KSLabelTTF* time_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_time), mySGD->getFont().c_str(), 15);
-//	time_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-//	time_ment->setPosition(ccp(48,153));
-//	main_case->addChild(time_ment, kZ_CP_img);
-//	
-//	CCSprite* time_img = CCSprite::create("ending_mark_time.png");
-//	time_img->setPosition(ccp(80,153));
-//	main_case->addChild(time_img, kZ_CP_img);
-//	
-//	time_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGameTime())->getCString(), mySGD->getFont().c_str(), 15);
-//	time_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-//	time_label->setAnchorPoint(ccp(1,0.5));
-//	time_label->setPosition(ccp(220,153));
-//	main_case->addChild(time_label, kZ_CP_img);
-//	
-//	KSLabelTTF* gold_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gold), mySGD->getFont().c_str(), 15);
-//	gold_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-//	gold_ment->setPosition(ccp(48,120));
-//	main_case->addChild(gold_ment, kZ_CP_img);
-//	
-//	CCSprite* gold_img = CCSprite::create("ending_mark_gold.png");
-//	gold_img->setPosition(ccp(80,120));
-//	main_case->addChild(gold_img, kZ_CP_img);
-//	
-//	gold_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), mySGD->getFont().c_str(), 15);
-//	gold_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-//	gold_label->setAnchorPoint(ccp(1,0.5));
-//	gold_label->setPosition(ccp(220,120));
-//	main_case->addChild(gold_label, kZ_CP_img);
-//	
-//	if(mySGD->isTimeEvent(kTimeEventType_gold))
-//	{
-//		KSLabelTTF* gold_event = KSLabelTTF::create(CCString::createWithFormat("X%.1f", mySGD->getTimeEventFloatValue(kTimeEventType_gold))->getCString(), mySGD->getFont().c_str(), 14);
-//		gold_event->setColor(ccc3(255, 190, 50));
-//		gold_event->enableOuterStroke(ccBLACK, 1.f);
-//		gold_event->setAnchorPoint(ccp(0,0.5));
-//		gold_event->setPosition(ccp(gold_ment->getContentSize().width+3,gold_ment->getContentSize().height/2.f));
-//		gold_ment->addChild(gold_event);
-//		
-//		KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
-//		
-//		CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-//		event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
-//		event_back->setPosition(ccp(gold_event->getContentSize().width+4+event_back->getContentSize().width/2.f, gold_event->getContentSize().height/2.f));
-//		gold_event->addChild(event_back);
-//		
-//		event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
-//		event_back->addChild(event_label);
-//	}
-//	
-//	KSLabelTTF* score_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_score), mySGD->getFont().c_str(), 15);
-//	score_ment->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-//	score_ment->setPosition(ccp(48,87));
-//	main_case->addChild(score_ment, kZ_CP_img);
-//	
-//	CCSprite* score_img = CCSprite::create("ending_mark_score.png");
-//	score_img->setPosition(ccp(80,87));
-//	main_case->addChild(score_img, kZ_CP_img);
-//	
-//	score_label = KSLabelTTF::create(CCString::createWithFormat("%.0f", mySGD->getBaseScore())->getCString(), mySGD->getFont().c_str(), 15);
-//	score_label->enableOuterStroke(ccc3(40, 15, 55), 1.f);
-//	score_label->setAnchorPoint(ccp(1,0.5));
-//	score_label->setPosition(ccp(220,87));
-//	main_case->addChild(score_label, kZ_CP_img);
-	
-	
-	
-	CCSprite* n_ok = CCSprite::create("ending_button.png");
-	
-	n_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
-	n_ok_label2->setColor(ccWHITE);
-	n_ok_label2->disableOuterStroke();
-	n_ok_label2->setOpacity(100);
-	n_ok_label2->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f-1));
-	n_ok->addChild(n_ok_label2);
-	
-	KSLabelTTF* n_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
-	n_ok_label->setColor(ccc3(50, 30, 5));
-//	n_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
-	n_ok_label->setPosition(ccp(n_ok->getContentSize().width/2.f, n_ok->getContentSize().height/2.f));
-	n_ok->addChild(n_ok_label);
-	
-	CCSprite* s_ok = CCSprite::create("ending_button.png");
-	s_ok->setColor(ccGRAY);
-	
-	s_ok_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
-	s_ok_label2->setColor(ccWHITE);
-	s_ok_label2->disableOuterStroke();
-	s_ok_label2->setOpacity(100);
-	s_ok_label2->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f-1));
-	s_ok->addChild(s_ok_label2);
-	
-	KSLabelTTF* s_ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 22);
-	s_ok_label->setColor(ccc3(50, 30, 5));
-//	s_ok_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
-	s_ok_label->setPosition(ccp(s_ok->getContentSize().width/2.f, s_ok->getContentSize().height/2.f));
-	s_ok->addChild(s_ok_label);
-	
-	CCMenuItem* ok_item = CCMenuItemSprite::create(n_ok, s_ok, this, menu_selector(ClearPopup::menuAction));
-	ok_item->setTag(kMT_CP_ok);
-	
-	ok_menu = CCMenu::createWithItem(ok_item);
+	ok_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
+	ok_menu->setPreferredSize(CCSizeMake(215, 65));
+	ok_menu->setTag(kMT_CP_ok);
+	ok_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearPopup::controlButtonAction), CCControlEventTouchUpInside);
+	ok_menu->setPosition(ccp(347,45));
 	ok_menu->setVisible(false);
-	ok_menu->setPosition(ccp(354,36));
 	main_case->addChild(ok_menu, kZ_CP_menu);
 	ok_menu->setTouchPriority(-200);
 	
-//	if(!mySGD->getIsMeChallenge() && !mySGD->getIsAcceptChallenge() && !mySGD->getIsAcceptHelp())
-//	{
-		CCSprite* n_replay = CCSprite::create("ending_button.png");
 	
-	n_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
-	n_replay_label2->setColor(ccWHITE);
-	n_replay_label2->disableOuterStroke();
-	n_replay_label2->setOpacity(100);
-	n_replay_label2->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f-1));
-	n_replay->addChild(n_replay_label2);
+	CCLabelTTF* t_replay_node = CCLabelTTF::create();
+	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
+	t_replay_node->addChild(replay_label);
 	
-	KSLabelTTF* n_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
-	n_replay_label->setColor(ccc3(50, 30, 5));
-//	n_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
-	n_replay_label->setPosition(ccp(n_replay->getContentSize().width/2.f, n_replay->getContentSize().height/2.f));
-	n_replay->addChild(n_replay_label);
-		CCSprite* s_replay = CCSprite::create("ending_button.png");
-		s_replay->setColor(ccGRAY);
+	replay_menu = CCControlButton::create(t_replay_node, CCScale9Sprite::create("mainbutton_green.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
+	replay_menu->setPreferredSize(CCSizeMake(215, 65));
+	replay_menu->setTag(kMT_CP_replay);
+	replay_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearPopup::controlButtonAction), CCControlEventTouchUpInside);
+	replay_menu->setPosition(ccp(132,45));
+	replay_menu->setVisible(false);
+	main_case->addChild(replay_menu, kZ_CP_menu);
+	replay_menu->setTouchPriority(-200);
 	
-	s_replay_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
-	s_replay_label2->setColor(ccWHITE);
-	s_replay_label2->setOpacity(100);
-	s_replay_label2->disableOuterStroke();
-	s_replay_label2->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f-1));
-	s_replay->addChild(s_replay_label2);
-	
-	KSLabelTTF* s_replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 22);
-	s_replay_label->setColor(ccc3(50, 30, 5));
-//	s_replay_label->enableOuterStroke(ccc3(50, 30, 5), 0.25f);
-	s_replay_label->setPosition(ccp(s_replay->getContentSize().width/2.f, s_replay->getContentSize().height/2.f));
-	s_replay->addChild(s_replay_label);
-		
-		CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ClearPopup::menuAction));
-		replay_item->setTag(kMT_CP_replay);
-		
-		replay_menu = CCMenu::createWithItem(replay_item);
-		replay_menu->setVisible(false);
-		replay_menu->setPosition(ccp(125,36));
-		main_case->addChild(replay_menu, kZ_CP_menu);
-		replay_menu->setTouchPriority(-200);
-//	}
-//	else
-//	{
-//		if((mySGD->getIsMeChallenge() && mySGD->getScore() < mySGD->getMeChallengeTargetScore()) || (mySGD->getIsAcceptChallenge() && mySGD->getScore() < mySGD->getAcceptChallengeScore()))
-//		{
-//			CCSprite* n_replay = CCSprite::create("ending_replay2.png");
-//			CCSprite* s_replay = CCSprite::create("ending_replay2.png");
-//			s_replay->setColor(ccGRAY);
-//			
-//			CCMenuItem* replay_item = CCMenuItemSprite::create(n_replay, s_replay, this, menu_selector(ClearPopup::menuAction));
-//			replay_item->setTag(kMT_CP_replay);
-//			
-//			replay_menu = CCMenu::createWithItem(replay_item);
-//			replay_menu->setVisible(false);
-//			replay_menu->setPosition(ccp(130,38));
-//			main_case->addChild(replay_menu, kZ_CP_menu);
-//			replay_menu->setTouchPriority(-200);
-//		}
-//		else
-//			replay_menu = NULL;
-//	}
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
@@ -769,6 +502,11 @@ bool ClearPopup::init()
 	tryTransaction(t_loading);
 	
     return true;
+}
+
+void ClearPopup::controlButtonAction(CCObject* sender, CCControlEvent t_event)
+{
+	menuAction(sender);
 }
 
 void ClearPopup::tryTransaction(CCNode* t_loading)
@@ -936,7 +674,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
-		graph_back->setPosition(ccp(355,228));
+		graph_back->setPosition(ccp(347,220));
 		main_case->addChild(graph_back, kZ_CP_img);
 		
 //		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -981,13 +719,13 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(257+195,231));
+		rank_percent_case->setPosition(ccp(249+195,221));
 		main_case->addChild(rank_percent_case, kZ_CP_img);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 13);
-		percent_label->setColor(ccc3(255, 170, 20));
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 12);
+//		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
+		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+3));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
 //		percent_label->setOpacity(0);
 		
@@ -995,7 +733,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		
 		cell_action_list.push_back([=](){
-			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,231));
+			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(249 + 195.f*rank_percent,221));
 			rank_percent_case->runAction(t_move);
 			
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
@@ -1014,7 +752,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		delay_index = 0;
 		int limit_count = 3;
-		auto cellSize = CCSizeMake(217, 40);
+		auto cellSize = CCSizeMake(204, 31);
 	
 		float spinDuration = 0.3f;
 		CCScale9Sprite* t_list_cell_case_back = nullptr;
@@ -1025,25 +763,25 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			bool isMe = false;
 			if(myrank == i+1)
 			{
-				case_name = "mainpopup_pupple1.png";
+				case_name = "mainpopup_purple.png";
 				limit_count++;
 				isMe = true;
 			}
 			else
 			{
-				case_name = "rank_normal.png";
+				case_name = "rank_normal2.png";
 			}
 		
 			
-			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			auto cellPosition = ccp(355, 197 - i*36);
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			auto cellPosition = ccp(347, 191 - i*32);
 			list_cell_case->setContentSize(cellSize);
 			list_cell_case->setPosition(cellPosition);
 			main_case->addChild(list_cell_case, kZ_CP_img);
 			
 			if(isMe)
 			{
-				CCScale9Sprite* list_cell_case_back = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+				CCScale9Sprite* list_cell_case_back = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 				list_cell_case_back->setContentSize(cellSize);
 				list_cell_case_back->setPosition(cellPosition);
 				t_list_cell_case_back = list_cell_case_back;
@@ -1051,7 +789,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 				main_case->addChild(list_cell_case_back, kZ_CP_img);
 
 			}
-			CCPoint rank_position = ccp(20,20);
+			CCPoint rank_position = ccp(17,15.5f);
 			if(i == 0)
 			{
 				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
@@ -1072,8 +810,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
-				rank_label->enableOuterStroke(ccBLACK, 1);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 15);
 				rank_label->setPosition(rank_position);
 				list_cell_case->addChild(rank_label);
 			}
@@ -1084,21 +821,20 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			
 			string flag = read_data.get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(52,20));
+			selectedFlagSpr->setPosition(ccp(49,15.5f));
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
 			nick_label->setAnchorPoint(ccp(0,0.5));
-			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(67,20));
+			nick_label->setPosition(ccp(64,15.5f));
 			list_cell_case->addChild(nick_label);
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5));
-			score_label->setColor(ccc3(255, 170, 20));
-			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(200,20));
+			score_label->setColor(ccc3(55, 35, 150));
+			score_label->setPosition(ccp(198,15.5f));
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();
@@ -1115,34 +851,32 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		if(myrank > 3)
 		{
-			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(217, 40));
-			list_cell_case->setPosition(ccp(355,197-3*36));
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_purple.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			list_cell_case->setContentSize(CCSizeMake(204, 31));
+			list_cell_case->setPosition(ccp(347,191-3*32));
 			t_list_cell_case = list_cell_case;
 			main_case->addChild(list_cell_case, kZ_CP_img);
 			
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 12);
-			rank_label->enableOuterStroke(ccBLACK, 1);
-			rank_label->setPosition(ccp(20,20));
+			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 15);
+			rank_label->setPosition(ccp(17,15.5f));
 			list_cell_case->addChild(rank_label);
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(52,20));
+			selectedFlagSpr->setPosition(ccp(49,15.5f));
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
 			nick_label->setAnchorPoint(ccp(0,0.5));
-			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(67,20));
+			nick_label->setPosition(ccp(64,15.5f));
 			list_cell_case->addChild(nick_label);
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5));
-			score_label->setColor(ccc3(255, 170, 20));
-			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(200,20));
+			score_label->setColor(ccc3(55, 35, 150));
+			score_label->setPosition(ccp(198,15.5f));
 			list_cell_case->addChild(score_label);
 			
 			CCPoint original_position = list_cell_case->getPosition();
@@ -1157,7 +891,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			
 			if(!(before_stage_high_rank == 0 || before_stage_high_rank == myrank))
 			{
-				CCScale9Sprite* list_cell_case_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+				CCScale9Sprite* list_cell_case_back = CCScale9Sprite::create("mainpopup_purple.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 
 				list_cell_case_back->setContentSize(cellSize);
 				list_cell_case_back->setPosition(original_position);
@@ -2124,10 +1858,10 @@ void ClearPopup::startCalcAnimation()
 		
 		addChild(KSGradualValue<float>::create(0.f, 1.f, 0.15f, [=](float t)
 	   {
-		   left_table->setContentOffset(ccp(0, before_y+28*t));
+		   left_table->setContentOffset(ccp(0, before_y+21*t));
 	   }, [=](float t)
 	   {
-		   left_table->setContentOffset(ccp(0, before_y+28));
+		   left_table->setContentOffset(ccp(0, before_y+21));
 		   
 		   AudioEngine::sharedInstance()->playEffect("sound_calc.mp3", true);
 		   startLeftCalcAnimation(left_decrease_value, left_base_value, 0.3f, NULL, [=]()
@@ -2137,28 +1871,28 @@ void ClearPopup::startCalcAnimation()
 	   }));
 	};
 	
-	t_func1(-9*28, mySGD->area_score.getV(), 0, [=]()
+	t_func1(-9*21, mySGD->area_score.getV(), 0, [=]()
 	{
-		t_func1(-8*28, mySGD->damage_score.getV(), mySGD->area_score.getV(), [=]()
+		t_func1(-8*21, mySGD->damage_score.getV(), mySGD->area_score.getV(), [=]()
 		{
-			t_func1(-7*28, mySGD->combo_score.getV(), mySGD->area_score.getV()+mySGD->damage_score.getV(), [=]()
+			t_func1(-7*21, mySGD->combo_score.getV(), mySGD->area_score.getV()+mySGD->damage_score.getV(), [=]()
 			{
-				t_func1(-6*28, left_life_decrease_score.getV(), left_life_base_score.getV(), [=]()
+				t_func1(-6*21, left_life_decrease_score.getV(), left_life_base_score.getV(), [=]()
 				{
-					t_func1(-5*28, left_time_decrease_score.getV(), left_time_base_score.getV(), [=]()
+					t_func1(-5*21, left_time_decrease_score.getV(), left_time_base_score.getV(), [=]()
 					{
-						t_func1(-4*28, left_grade_decrease_score.getV(), left_grade_base_score.getV(), [=]()
+						t_func1(-4*21, left_grade_decrease_score.getV(), left_grade_base_score.getV(), [=]()
 						{
-							t_func1(-3*28, left_damaged_score.getV(), left_grade_base_score.getV()+left_grade_decrease_score.getV(), [=]()
+							t_func1(-3*21, left_damaged_score.getV(), left_grade_base_score.getV()+left_grade_decrease_score.getV(), [=]()
 							{
 								AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 								
 								addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
 								{
-									left_table->setContentOffset(ccp(0, -2*28+56*t));
+									left_table->setContentOffset(ccp(0, -2*21+42*t));
 								}, [=](float t)
 								{
-									left_table->setContentOffset(ccp(0, -2*28+56));
+									left_table->setContentOffset(ccp(0, -2*21+42));
 									
 									left_table->setTouchEnabled(true);
 									
@@ -2191,16 +1925,9 @@ void ClearPopup::startCalcAnimation()
 									main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 7.f/30.f, [=](float t){
 										replay_menu->setPosition(replay_origin_position + ccpMult(ccp(0,-12), 1.f-t));
 										KS::setOpacity(replay_menu, t*255);
-										if(t*255 > 100)
-										{
-											n_replay_label2->setOpacity(100);
-											s_replay_label2->setOpacity(100);
-										}
 									}, [=](float t){
 										replay_menu->setPosition(replay_origin_position);
 										KS::setOpacity(replay_menu, 255);
-										n_replay_label2->setOpacity(100);
-										s_replay_label2->setOpacity(100);
 									}));
 									
 									CCPoint ok_origin_position = ok_menu->getPosition();
@@ -2209,16 +1936,9 @@ void ClearPopup::startCalcAnimation()
 										main_case->addChild(KSGradualValue<float>::create(0.f, 1.f, 7.f/30.f, [=](float t){
 											ok_menu->setPosition(ok_origin_position + ccpMult(ccp(0,-12), 1.f-t));
 											KS::setOpacity(ok_menu, t*255);
-											if(t*255 > 100)
-											{
-												n_ok_label2->setOpacity(100);
-												s_ok_label2->setOpacity(100);
-											}
 										}, [=](float t){
 											ok_menu->setPosition(ok_origin_position);
 											KS::setOpacity(ok_menu, 255);
-											n_ok_label2->setOpacity(100);
-											s_ok_label2->setOpacity(100);
 											closePopup();
 										}));
 									}));
@@ -2703,25 +2423,30 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 		string title = title_list[idx];
 		string content;
 		
+		CCRect back_rect1, back_rect2;
 		if(idx < 9)
 		{
-			back_filename = "mainpopup_pupple3.png";
+			back_filename = "common_lightgray.png";
+			back_rect1 = CCRectMake(0, 0, 18, 18);
+			back_rect2 = CCRectMake(8, 8, 2, 2);
 		}
 		else
 		{
-			back_filename = "mainpopup_pupple2.png";
+			back_filename = "common_deepgray.png";
+			back_rect1 = CCRectMake(0, 0, 20, 20);
+			back_rect2 = CCRectMake(9, 9, 2, 2);
 		}
 		
 		content = left_content_list[idx];
 		
-		CCScale9Sprite* t_back = CCScale9Sprite::create(back_filename.c_str(), CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-		t_back->setContentSize(CCSizeMake(inner_left->getContentSize().width-20, 35));
+		CCScale9Sprite* t_back = CCScale9Sprite::create(back_filename.c_str(), back_rect1, back_rect2);
+		t_back->setContentSize(CCSizeMake(193, 19));
 		t_back->setPosition(ccp(cell_size.width/2.f, cell_size.height/2.f));
 		cell->addChild(t_back);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* title_label = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 12);
 		title_label->setAnchorPoint(ccp(0,0.5f));
-		title_label->setPosition(ccp(10, t_back->getContentSize().height/2.f));
+		title_label->setPosition(ccp(8, t_back->getContentSize().height/2.f));
 		t_back->addChild(title_label);
 		
 		if(idx == 7)
@@ -2749,7 +2474,7 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 		
 		KSLabelTTF* content_label = KSLabelTTF::create(content.c_str(), mySGD->getFont().c_str(), 13);
 		content_label->setAnchorPoint(ccp(1,0.5f));
-		content_label->setPosition(ccp(t_back->getContentSize().width-10, t_back->getContentSize().height/2.f));
+		content_label->setPosition(ccp(t_back->getContentSize().width-8, t_back->getContentSize().height/2.f));
 		t_back->addChild(content_label);
 	}
 	
@@ -2887,7 +2612,7 @@ void ClearPopup::tableCellTouched( CCTableView* table, CCTableViewCell* cell )
 
 CCSize ClearPopup::cellSizeForTable( CCTableView *table )
 {
-	return CCSizeMake((480-30)/2.f-20, 28);//CCSizeMake(210, 45);
+	return CCSizeMake((480-30)/2.f-20, 21);//CCSizeMake(210, 45);
 }
 
 unsigned int ClearPopup::numberOfCellsInTableView( CCTableView *table )

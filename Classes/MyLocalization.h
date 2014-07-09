@@ -118,6 +118,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_invalidNick,
 	kMyLocalKey_longNick,
 	kMyLocalKey_shortNick,
+	kMyLocalKey_specialCharacterError,
 	kMyLocalKey_openRightNow,
 	kMyLocalKey_openRubyValue,
 	kMyLocalKey_openGoldValue,
@@ -812,7 +813,12 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardGiftSend,
 	kMyLocalKey_cardGiftNotFound,
 	
-	kMyLocalKey_rankUpFailRateUp
+	kMyLocalKey_rankUpFailRateUp,
+	
+	kMyLocalKey_failTitleTimeover,
+	kMyLocalKey_failTitleMissionfail,
+	kMyLocalKey_failTitleGameover,
+	kMyLocalKey_clearTitle
 }MyLocalKey;
 
 

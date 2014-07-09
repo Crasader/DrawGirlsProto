@@ -19,6 +19,7 @@
 #include "CumberShowWindow.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "ASPopupView.h"
 
 void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 {
@@ -734,16 +735,23 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 	}
 	else
 	{
-		CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
-		replay_menu->setPosition(ccp(300,100));
-		replay_menu->setFunction([=](CCObject* sender)
-								 {
-									 CCNode* t_node = CCNode::create();
-									 t_node->setTag(kSLD_MT_receive);
-									 menuAction(t_node);
-								 });
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			CCNode* t_node = CCNode::create();
+			t_node->setTag(kSLD_MT_receive);
+			menuAction(t_node);
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		
-		addChild(replay_menu, kSLD_Z_content, kSLD_MT_receive);
+//		CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
+//		replay_menu->setPosition(ccp(300,100));
+//		replay_menu->setFunction([=](CCObject* sender)
+//								 {
+//									 CCNode* t_node = CCNode::create();
+//									 t_node->setTag(kSLD_MT_receive);
+//									 menuAction(t_node);
+//								 });
+//		
+//		addChild(replay_menu, kSLD_Z_content, kSLD_MT_receive);
 	}
 }
 

@@ -588,6 +588,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("사용할 수 없는 닉네임 입니다."), kMyLocalKey_invalidNick);
 	ko->setObject(CCString::create("닉네임이 너무 깁니다."), kMyLocalKey_longNick);
 	ko->setObject(CCString::create("닉네임이 너무 짧습니다."), kMyLocalKey_shortNick);
+	ko->setObject(CCString::create("특수문자는 사용 할 수 없습니다."), kMyLocalKey_specialCharacterError);
 	ko->setObject(CCString::create("지금 열기"), kMyLocalKey_openRightNow);
 	ko->setObject(CCString::create("RUBY %d 로 오픈"), kMyLocalKey_openRubyValue);
 	ko->setObject(CCString::create("GOLD %d 로 오픈"), kMyLocalKey_openGoldValue);
@@ -1287,7 +1288,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
 								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
 								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>한 단계 위 등급 카드를 획득</font>"
+								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
 								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
 	ko->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
@@ -1361,6 +1362,11 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	ko->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
+	
+	ko->setObject(CCString::create("타임 오버"), kMyLocalKey_failTitleTimeover);
+	ko->setObject(CCString::create("미션 실패"), kMyLocalKey_failTitleMissionfail);
+	ko->setObject(CCString::create("게임 오버"), kMyLocalKey_failTitleGameover);
+	ko->setObject(CCString::create("스테이지 클리어"), kMyLocalKey_clearTitle);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1464,6 +1470,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Nickname error"), kMyLocalKey_invalidNick);
 	en->setObject(CCString::create("Nickname is too long."), kMyLocalKey_longNick);
 	en->setObject(CCString::create("Nickname is too short."), kMyLocalKey_shortNick);
+	en->setObject(CCString::create("특수문자는 사용 할 수 없습니다."), kMyLocalKey_specialCharacterError);
 	en->setObject(CCString::create("Now Open"), kMyLocalKey_openRightNow);
 	en->setObject(CCString::create("RUBY %d open"), kMyLocalKey_openRubyValue);
 	en->setObject(CCString::create("GOLD %d open"), kMyLocalKey_openGoldValue);
@@ -2232,6 +2239,12 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
 	
+	en->setObject(CCString::create("TIME OVER"), kMyLocalKey_failTitleTimeover);
+	en->setObject(CCString::create("MISSION FAIL"), kMyLocalKey_failTitleMissionfail);
+	en->setObject(CCString::create("GAME OVER"), kMyLocalKey_failTitleGameover);
+	
+	en->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
+	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
 //	en->setObject(CCString::create("This is a game in which you\nhave to gain as much area as\npossible using up, down, left,\nand right gestures."), kMyLocalKey_tutorial1);
@@ -2343,6 +2356,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Nickname error"), kMyLocalKey_invalidNick);
 	ja->setObject(CCString::create("Nickname is too long."), kMyLocalKey_longNick);
 	ja->setObject(CCString::create("Nickname is too short."), kMyLocalKey_shortNick);
+	ja->setObject(CCString::create("특수문자는 사용 할 수 없습니다."), kMyLocalKey_specialCharacterError);
 	ja->setObject(CCString::create("Now Open"), kMyLocalKey_openRightNow);
 	ja->setObject(CCString::create("RUBY %d open"), kMyLocalKey_openRubyValue);
 	ja->setObject(CCString::create("GOLD %d open"), kMyLocalKey_openGoldValue);
@@ -3049,7 +3063,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
 								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
 								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>한 단계 위 등급 카드를 획득</font>"
+								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
 								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
 	ja->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
@@ -3123,6 +3137,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	ja->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
+	
+	ja->setObject(CCString::create("TIME OVER"), kMyLocalKey_failTitleTimeover);
+	ja->setObject(CCString::create("MISSION FAIL"), kMyLocalKey_failTitleMissionfail);
+	ja->setObject(CCString::create("GAME OVER"), kMyLocalKey_failTitleGameover);
+	
+	ja->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

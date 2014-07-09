@@ -383,7 +383,9 @@ void EndlessModeOpening::setMain()
 																	  Json::Value param;
 																	  param["memberID"] = myHSP->getMemberID();
 //																	  param["no"] = 34;
-																	  myHSP->command("startendlessplay", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
+																	  param["autoLevel"] = mySGD->getUserdataAutoLevel();
+																	  param["highPiece"] = mySGD->getUserdataHighPiece();
+																	  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 																  });
 	
 	CCMenuLambda* ready_menu = CCMenuLambda::createWithItem(ready_item);
@@ -569,7 +571,9 @@ void EndlessModeOpening::setMain()
 																   Json::Value param;
 																   param["memberID"] = myHSP->getMemberID();
 																   //																	  param["no"] = 34;
-																   myHSP->command("startendlessplay", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
+																   param["autoLevel"] = mySGD->getUserdataAutoLevel();
+																   param["highPiece"] = mySGD->getUserdataHighPiece();
+																   myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 															   };
 														   };
 													   };
