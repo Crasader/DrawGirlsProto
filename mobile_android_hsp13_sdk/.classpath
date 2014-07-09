@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="lib" path="libs/FacebookSDK-2.26.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/HSPCore-2.28.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/HSPCore_Onebuildgame-2.28.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/HSPItemDelivery-2.24.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/HSPPromotion-2.27.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/HSPSns-2.28.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/httpmime-4.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/json_simple-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Litmus_v21.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/MRSConnector4Android-1.2.0.492.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/MRSConnector4Android-apache.commons-1.2.0.492.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/nelo2-android-v0.7.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ToastCore-2.28.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/HSPNPush_Global-2.28.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/npushclient_v1.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/HSPPayment-3.15.8.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
