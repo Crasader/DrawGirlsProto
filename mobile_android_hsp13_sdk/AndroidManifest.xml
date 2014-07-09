@@ -71,18 +71,6 @@
         <service android:name="com.hangame.hsp.push.NPushIntentService"/>
         <!-- [HSP SDK] NPush Global end -->
 
-
-        <!-- [HSP SDK] NPush begin -->
-        <activity android:label="HSP Push" android:name="com.hangame.hsp.push.HSPPushActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-            <intent-filter>
-                <action android:name="com.hangame.hsp.action.PUSH"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <!-- [HSP SDK] NPush end -->
-
     </application>
 
 

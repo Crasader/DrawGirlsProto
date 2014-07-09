@@ -588,6 +588,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("사용할 수 없는 닉네임 입니다."), kMyLocalKey_invalidNick);
 	ko->setObject(CCString::create("닉네임이 너무 깁니다."), kMyLocalKey_longNick);
 	ko->setObject(CCString::create("닉네임이 너무 짧습니다."), kMyLocalKey_shortNick);
+	ko->setObject(CCString::create("특수문자는 사용 할 수 없습니다."), kMyLocalKey_specialCharacterError);
 	ko->setObject(CCString::create("지금 열기"), kMyLocalKey_openRightNow);
 	ko->setObject(CCString::create("RUBY %d 로 오픈"), kMyLocalKey_openRubyValue);
 	ko->setObject(CCString::create("GOLD %d 로 오픈"), kMyLocalKey_openGoldValue);
@@ -1287,7 +1288,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
 								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
 								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>한 단계 위 등급 카드를 획득</font>"
+								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
 								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
 	ko->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
@@ -1469,6 +1470,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Nickname error"), kMyLocalKey_invalidNick);
 	en->setObject(CCString::create("Nickname is too long."), kMyLocalKey_longNick);
 	en->setObject(CCString::create("Nickname is too short."), kMyLocalKey_shortNick);
+	en->setObject(CCString::create("특수문자는 사용 할 수 없습니다."), kMyLocalKey_specialCharacterError);
 	en->setObject(CCString::create("Now Open"), kMyLocalKey_openRightNow);
 	en->setObject(CCString::create("RUBY %d open"), kMyLocalKey_openRubyValue);
 	en->setObject(CCString::create("GOLD %d open"), kMyLocalKey_openGoldValue);
@@ -2354,6 +2356,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Nickname error"), kMyLocalKey_invalidNick);
 	ja->setObject(CCString::create("Nickname is too long."), kMyLocalKey_longNick);
 	ja->setObject(CCString::create("Nickname is too short."), kMyLocalKey_shortNick);
+	ja->setObject(CCString::create("특수문자는 사용 할 수 없습니다."), kMyLocalKey_specialCharacterError);
 	ja->setObject(CCString::create("Now Open"), kMyLocalKey_openRightNow);
 	ja->setObject(CCString::create("RUBY %d open"), kMyLocalKey_openRubyValue);
 	ja->setObject(CCString::create("GOLD %d open"), kMyLocalKey_openGoldValue);
@@ -3060,7 +3063,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
 								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
 								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>한 단계 위 등급 카드를 획득</font>"
+								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
 								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
 	ja->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
