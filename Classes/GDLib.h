@@ -14,8 +14,8 @@
 #include <sys/socket.h>
 #include <net/if_dl.h>
 #include <ifaddrs.h>
-#include <regex.h>
 #endif
+#include <regex.h>
 
 
 
