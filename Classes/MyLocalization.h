@@ -818,7 +818,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_failTitleTimeover,
 	kMyLocalKey_failTitleMissionfail,
 	kMyLocalKey_failTitleGameover,
-	kMyLocalKey_clearTitle
+	kMyLocalKey_clearTitle,
+	
+	kMyLocalKey_allPuzzleClearTitle,
+	kMyLocalKey_allPuzzleClearMent
 }MyLocalKey;
 
 

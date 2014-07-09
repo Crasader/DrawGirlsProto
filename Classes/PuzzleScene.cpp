@@ -1290,7 +1290,42 @@ void PuzzleScene::endSuccessPuzzleEffect()
 //			gr4.desc = "루우비~!";
 //			GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //										 {
-											 mySGD->setIsUnlockPuzzle(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)+1);
+	
+	int loop_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int found_unlock_puzzle_number = -1;
+	for(int i=0;found_unlock_puzzle_number == -1 && i<loop_cnt;i++)
+	{
+		int t_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, i+1);
+		
+		if(NSDS_GB(t_puzzle_number, kSDS_PZ_isEvent_b))
+			continue;
+		
+		PuzzleOpenInfo t_info;
+		t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV();
+		
+		string puzzle_condition = NSDS_GS(t_puzzle_number, kSDS_PZ_condition_s);
+		
+		Json::Value condition_list;
+		Json::Reader reader;
+		reader.parse(puzzle_condition, condition_list);
+		
+		for(int i=0;found_unlock_puzzle_number == -1 && i<condition_list.size();i++)
+		{
+			Json::Value t_condition_and = condition_list[i];
+			
+			for(int j=0;found_unlock_puzzle_number == -1 && j<t_condition_and.size();j++)
+			{
+				Json::Value t_condition = t_condition_and[j];
+				string t_type = t_condition["type"].asString();
+				if(t_type == "p")
+				{
+					if(t_condition["value"].asInt() == myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber))
+						found_unlock_puzzle_number = t_puzzle_number;
+				}
+			}
+		}
+	}
+											 mySGD->setIsUnlockPuzzle(found_unlock_puzzle_number);
 											 startBacking();
 //										 });
 //			addChild(gbb, (int)Curtain::kBonusGame);
@@ -1635,7 +1670,13 @@ void PuzzleScene::setPuzzle()
 void PuzzleScene::setPieceClick(int t_stage_number)
 {
 	if(selected_piece_img)
+	{
+		int before_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber));
+		PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(before_stage_number);
+		target_piece->unRegSelectImg();
 		selected_piece_img->removeFromParent();
+		selected_piece_img = NULL;
+	}
 	
 	myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), t_stage_number);
 	
@@ -1644,6 +1685,8 @@ void PuzzleScene::setPieceClick(int t_stage_number)
 	selected_piece_img = KS::loadCCBI<CCSprite*>(this, ("piece_selected_" + WorH + ".ccbi").c_str()).first;
 	selected_piece_img->setPosition(target_piece->getPosition());
 	puzzle_node->addChild(selected_piece_img, kPuzzleNodeZorder_selected);
+	
+	target_piece->regSelectImg(selected_piece_img);
 }
 
 void PuzzleScene::pieceAction(int t_stage_number)
@@ -1709,7 +1752,6 @@ void PuzzleScene::pieceAction(int t_stage_number)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_piece.mp3", false);
 		
-		myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), t_stage_number);
 		setPieceClick(t_stage_number);
 		
 		setRight();
