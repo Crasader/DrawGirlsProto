@@ -219,20 +219,25 @@ void StartSettingPopup::setMain()
 	
 	if(!mySGD->is_endless_mode)
 	{
-		CCRect mission_size = CCRectMake(0, 0, 210, 22);
-		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+92, main_case->getContentSize().height+2-26);
+		CCScale9Sprite* mission_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		mission_back->setContentSize(CCSizeMake(278, 26));
+		mission_back->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-34));
+		main_case->addChild(mission_back);
 		
-		//	CCSprite* temp_mission = CCSprite::create("whitePaper.png", mission_size);
-		//	temp_mission->setOpacity(100);
-		//	temp_mission->setPosition(mission_position);
-		//	main_case->addChild(temp_mission);
+		CCRect mission_size = CCRectMake(0, 0, 225, 22);
+		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+97, main_case->getContentSize().height+2-34);
+		
+//		CCSprite* temp_mission = CCSprite::create("whitePaper.png", mission_size);
+//		temp_mission->setOpacity(100);
+//		temp_mission->setPosition(mission_position);
+//		main_case->addChild(temp_mission);
 	
 		LabelTTFMarquee* mission_label = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, mySD->getConditionContent(stage_number).c_str());
 		setFormSetter(mission_label);
 		mission_label->setAnchorPoint(ccp(0.5,0.5));
 		mission_label->setPosition(mission_position);
 		main_case->addChild(mission_label);
-		mission_label->setFontSize(13);
+		mission_label->setFontSize(12);
 		mission_label->startMarquee();
 		
 		if(mySD->getClearCondition(stage_number) != kCLEAR_default)
@@ -246,19 +251,26 @@ void StartSettingPopup::setMain()
 			mission_label->runAction(t_repeat);
 		}
 		
-		CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
-		setFormSetter(mission_img);
-		mission_img->setContentSize(CCSizeMake(65, 22));
-		mission_img->setPosition(ccp(198,255));
-		main_case->addChild(mission_img);
+		CCScale9Sprite* mission_title_back = CCScale9Sprite::create("tip.png", CCRectMake(0, 0, 55, 32), CCRectMake(27, 15, 1, 2));
+		mission_title_back->setContentSize(CCSizeMake(55, 32));
+		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-34));
+		main_case->addChild(mission_title_back);
 		
-		KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
-		mission_img_label->setColor(ccc3(255, 170, 20));
-		mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
-		mission_img->addChild(mission_img_label);
-		//	CCSprite* mission_img = CCSprite::create("startsetting_mission.png");
-		//	mission_img->setPosition(ccp(198,255));
-		//	main_case->addChild(mission_img);
+		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 12);
+		mission_title_label->disableOuterStroke();
+		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f));
+		mission_title_back->addChild(mission_title_label);
+		
+//		CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
+//		setFormSetter(mission_img);
+//		mission_img->setContentSize(CCSizeMake(65, 22));
+//		mission_img->setPosition(ccp(198,255));
+//		main_case->addChild(mission_img);
+//		
+//		KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
+//		mission_img_label->setColor(ccc3(255, 170, 20));
+//		mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
+//		mission_img->addChild(mission_img_label);
 	}
 	
 	
