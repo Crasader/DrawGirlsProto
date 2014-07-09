@@ -33,74 +33,86 @@
 using namespace std;
 USING_NS_CC;
 
+#include "DataStorageHub.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 extern "C"{
-void Java_com_litqoo_lib_hspConnector_SetupOnAndroid(JNIEnv *env, jobject thiz,int hspGameNo, jstring hspGameID, jstring hspGameVersion)
-{
-	jboolean isCopy = JNI_FALSE;
-	const char* revStr = env->GetStringUTFChars(hspGameID, &isCopy);
-	string _gameID = revStr;
-
-	jboolean isCopy2 = JNI_FALSE;
-	const char* revStr2 = env->GetStringUTFChars(hspGameVersion, &isCopy2);
-	string _gameVersion = revStr2;
-
-	hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
-	
-	
-	//env->ReleaseStringUTFChars(revStr2, revStr);
-
-}
-
-void Java_com_litqoo_lib_hspConnector_SendResultNative(JNIEnv *env, jobject thiz,int _key, jstring datas, bool isFinish)
-{
-	CCLOG("sendresultnative1 %d", _key);
-	jsonDelegator::DeleSel delesel = jsonDelegator::get()->load(_key);
-	jboolean isCopy = JNI_FALSE;
-	const char* revStr = env->GetStringUTFChars(datas, &isCopy);
-	string throwData = revStr;
-
-	CCLOG("sendresultnative1");
-	jsonDelegator::get()->buff.append(throwData);
-
-
-	CCLOG("sendresultnative3");
-	if(delesel.func!=NULL)
+	void Java_com_litqoo_lib_hspConnector_SetupOnAndroid(JNIEnv *env, jobject thiz,int hspGameNo, jstring hspGameID, jstring hspGameVersion)
 	{
-
-		CCLOG("sendresultnative4");
-		if(isFinish){
-
-			CCLOG("sendresultnative5");
-			Json::Value resultData;
-
-			Json::Value resultObj;
-			Json::Reader rd;
-			rd.parse(jsonDelegator::get()->buff.c_str(),resultObj);
-
-			//
-			CCLOG("sendresultnative6");
-			resultObj["param"] = delesel.param;
-			resultObj["callback"] = delesel.callbackParam;
-			//((delesel.target)->*(delesel.selector))(resultObj);
-			delesel.func(resultObj);
-
-
-			jsonDelegator::get()->buff="";
-
-			CCLOG("sendresultnative7");
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = env->GetStringUTFChars(hspGameID, &isCopy);
+		string _gameID = revStr;
+		
+		jboolean isCopy2 = JNI_FALSE;
+		const char* revStr2 = env->GetStringUTFChars(hspGameVersion, &isCopy2);
+		string _gameVersion = revStr2;
+		
+		hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
+		
+		
+		//env->ReleaseStringUTFChars(revStr2, revStr);
+		
+	}
+	
+	void Java_com_litqoo_lib_hspConnector_SendResultNative(JNIEnv *env, jobject thiz,int _key, jstring datas, bool isFinish)
+	{
+		CCLOG("sendresultnative1 %d", _key);
+		jsonDelegator::DeleSel delesel = jsonDelegator::get()->load(_key);
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = env->GetStringUTFChars(datas, &isCopy);
+		string throwData = revStr;
+		
+		CCLOG("sendresultnative1");
+		jsonDelegator::get()->buff.append(throwData);
+		
+		
+		CCLOG("sendresultnative3");
+		if(delesel.func!=NULL)
+		{
+			
+			CCLOG("sendresultnative4");
+			if(isFinish){
+				
+				CCLOG("sendresultnative5");
+				Json::Value resultData;
+				
+				Json::Value resultObj;
+				Json::Reader rd;
+				rd.parse(jsonDelegator::get()->buff.c_str(),resultObj);
+				
+				//
+				CCLOG("sendresultnative6");
+				resultObj["param"] = delesel.param;
+				resultObj["callback"] = delesel.callbackParam;
+				//((delesel.target)->*(delesel.selector))(resultObj);
+				delesel.func(resultObj);
+				
+				
+				jsonDelegator::get()->buff="";
+				
+				CCLOG("sendresultnative7");
+			}
 		}
+		
+		if(isFinish) jsonDelegator::get()->remove(_key);
+		
+		CCLOG("sendresultnative8");
+		env->ReleaseStringUTFChars(datas, revStr);
+		
+		CCLOG("sendresultnative9");
+		return;
+	}
+	int Java_com_nhnent_SKDDMK_DGproto_getUserState(JNIEnv *env, jobject thiz)
+	{
+		jboolean isCopy = JNI_FALSE;
+//		hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
+		return myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+		
+		//env->ReleaseStringUTFChars(revStr2, revStr);
+		
 	}
 
-	if(isFinish) jsonDelegator::get()->remove(_key);
-
-	CCLOG("sendresultnative8");
-	env->ReleaseStringUTFChars(datas, revStr);
-
-	CCLOG("sendresultnative9");
-	return;
-}
+	
 }
 #endif
 
@@ -357,8 +369,10 @@ string hspConnector::getCountryCode(){
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
 		r = revStr;
-		
+	
+		t.env->ReleaseStringUTFChars(result, revStr);
 		t.env->DeleteLocalRef(t.classID);
+		
 	}
 #endif
 
@@ -387,6 +401,7 @@ string hspConnector::getServerAddress(){
 		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
 		r = revStr;
 		
+		t.env->ReleaseStringUTFChars(result, revStr);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -551,7 +566,10 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,j
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "purchaseProduct", "(ILjava/lang/String;)Z")) {
 		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, t.env->NewStringUTF(param.get("productid", "").asString().c_str()));
+		jstring param1 = t.env->NewStringUTF(param.get("productid", "").asString().c_str());
+		
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, param1);
+		t.env->DeleteLocalRef(param1);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -577,8 +595,10 @@ void hspConnector::openUrl(const std::string& url)
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openUrl", "(Ljava/lang/String;)V")) {
 //		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		jstring param1 = t.env->NewStringUTF(url.c_str());
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, param1);
 		t.env->DeleteLocalRef(t.classID);
+		t.env->DeleteLocalRef(param1);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
@@ -592,7 +612,9 @@ void hspConnector::openHSPUrl(const std::string& url)
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPUrl", "(Ljava/lang/String;)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		jstring param1 = t.env->NewStringUTF(url.c_str());
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, param1);
+		t.env->DeleteLocalRef(param1);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -606,9 +628,11 @@ void hspConnector::openCSCenter(const std::string& url)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openCSCenter", "(Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(url.c_str());
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, t.env->NewStringUTF(url.c_str()));
+		t.env->CallStaticObjectMethod(t.classID, t.methodID, param1);
 		t.env->DeleteLocalRef(t.classID);
+		t.env->DeleteLocalRef(param1);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
@@ -690,6 +714,7 @@ string hspConnector::getUniqId()
 		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
 		r = revStr;
 		
+		t.env->ReleaseStringUTFChars(result, revStr);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -719,12 +744,6 @@ int hspConnector::getLoginType()
 void hspConnector::openHSPNotice()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	JniMethodInfo t;
-	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPNotice", "(Ljava/lang/String;)V")) {
-		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID);
-		t.env->DeleteLocalRef(t.classID);
-	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
