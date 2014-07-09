@@ -34,8 +34,16 @@ void AlertEngine::addDoubleAlert(const char *t_title, const char *t_message, con
 		JniMethodInfo __minfo;
 		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "addDoubleDialog", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V"))
 		{
-			__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, __minfo.env->NewStringUTF(t_title), __minfo.env->NewStringUTF(t_message), __minfo.env->NewStringUTF(t_leftButtonText), __minfo.env->NewStringUTF(t_rightButtonText), t_tag);
+			jstring param1 = __minfo.env->NewStringUTF(t_title);
+			jstring param2 = __minfo.env->NewStringUTF(t_message);
+			jstring param3 = __minfo.env->NewStringUTF(t_leftButtonText);
+			jstring param4 = __minfo.env->NewStringUTF(t_rightButtonText);
+			__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1, param2, param3, param4, t_tag);
 			__minfo.env->DeleteLocalRef(__minfo.classID);
+			__minfo.env->DeleteLocalRef(param1);
+			__minfo.env->DeleteLocalRef(param2);
+			__minfo.env->DeleteLocalRef(param3);
+			__minfo.env->DeleteLocalRef(param4);
 		}
 #endif
 //	}
@@ -63,8 +71,14 @@ void AlertEngine::addSingleAlert(const char* t_title, const char* t_message, con
 		JniMethodInfo __minfo;
 		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "addSingleDialog", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V"))
 		{
-			__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, __minfo.env->NewStringUTF(t_title), __minfo.env->NewStringUTF(t_message), __minfo.env->NewStringUTF(t_checkButtonText), t_tag);
+			jstring param1 = __minfo.env->NewStringUTF(t_title);
+			jstring param2 = __minfo.env->NewStringUTF(t_message);
+			jstring param3 = __minfo.env->NewStringUTF(t_checkButtonText);
+			__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1, param2, param3, t_tag);
 			__minfo.env->DeleteLocalRef(__minfo.classID);
+			__minfo.env->DeleteLocalRef(param1);
+			__minfo.env->DeleteLocalRef(param2);
+			__minfo.env->DeleteLocalRef(param3);
 		}
 #endif
 //	}

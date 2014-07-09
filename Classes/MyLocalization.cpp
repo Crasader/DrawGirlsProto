@@ -1368,6 +1368,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("게임 오버"), kMyLocalKey_failTitleGameover);
 	ko->setObject(CCString::create("스테이지 클리어"), kMyLocalKey_clearTitle);
 	
+	ko->setObject(CCString::create("모든 퍼즐 클리어"), kMyLocalKey_allPuzzleClearTitle);
+	ko->setObject(CCString::create("<font newline=15>마지막 퍼즐을 클리어하셨습니다.<font newline=15>다음 퍼즐은 곧 업데이트 됩니다.<font newline=15>아직 획득하지 못한 카드들을<font>모두 모아보세요."), kMyLocalKey_allPuzzleClearMent);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);

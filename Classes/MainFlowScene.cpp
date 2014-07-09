@@ -238,6 +238,8 @@ bool MainFlowScene::init()
 //	back_img->setPosition(ccp(240,160));
 //	addChild(back_img, kMainFlowZorder_back);
 	
+	start_unlock_animation = nullptr;
+	
 	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
 	is_perfect_puzzle = mySGD->getIsPerfectPuzzle();
 	
@@ -330,6 +332,8 @@ bool MainFlowScene::init()
 	
 	
 	
+	
+	
 	if(mySGD->is_endless_mode)
 	{
 		mySGD->endless_my_victory_on = true;
@@ -395,11 +399,93 @@ bool MainFlowScene::init()
 			puzzle_table->setTouchEnabled(false);
 		}
 		
-		
 		if(is_unlock_puzzle > 0)
 		{
 			is_menu_enable = false;
 			puzzle_table->setTouchEnabled(false);
+		}
+		else if(is_unlock_puzzle == -1)
+		{
+			is_menu_enable = false;
+			puzzle_table->setTouchEnabled(false);
+			
+			start_unlock_animation = [=](function<void()> t_end_func)
+			{
+				ASPopupView* t_popup = ASPopupView::create(-999);
+				
+				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+				if(screen_scale_x < 1.f)
+					screen_scale_x = 1.f;
+				
+				float height_value = 320.f;
+				if(myDSH->screen_convert_rate < 1.f)
+					height_value = 320.f/myDSH->screen_convert_rate;
+				
+				if(height_value < myDSH->ui_top)
+					height_value = myDSH->ui_top;
+				
+				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+				t_popup->setDimmedPosition(ccp(240, 160));
+				t_popup->setBasePosition(ccp(240, 160));
+				
+				CCNode* t_container = CCNode::create();
+				t_popup->setContainerNode(t_container);
+				addChild(t_popup, kMainFlowZorder_popup);
+				
+				CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+				back_case->setContentSize(CCSizeMake(240, 139));
+				back_case->setPosition(ccp(0,0));
+				t_container->addChild(back_case);
+				
+				CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+				back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+				back_case->addChild(back_in);
+				
+				
+				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allPuzzleClearTitle), mySGD->getFont().c_str(), 15);
+				title_label->setColor(ccc3(255, 170, 20));
+				title_label->setAnchorPoint(ccp(0.5f,0.5f));
+				title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+				t_container->addChild(title_label);
+				
+				StyledLabelTTF* sub_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allPuzzleClearMent), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				sub_label->setAnchorPoint(ccp(0.5,0.5));
+				sub_label->setPosition(ccp(0.0,-18)); 			// dt (0.0,-13.5)
+				t_container->addChild(sub_label);
+				
+				CCSprite* gray = t_popup->getDimmedSprite();
+				
+				CommonButton* ok_button = CommonButton::createCloseButton(t_popup->getTouchPriority() - 5);
+				ok_button->setFunction([=](CCObject*){
+					if(!t_popup->is_menu_enable)
+						return;
+					
+					t_popup->is_menu_enable = false;
+					
+					CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
+						
+					}, [=](){
+						endUnlockAnimation();
+						t_end_func();
+						t_popup->removeFromParent();
+					});
+				});
+				t_container->addChild(ok_button);
+				ok_button->setPosition(ccp(97.0,47.0)); 			// dt (1.5,-18.5)
+				ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+				setFormSetter(ok_button);
+				
+				
+				CommonAnimation::openPopup(this, t_container, gray, [=](){
+					
+				}, [=](){
+					t_popup->is_menu_enable = true;
+				});
+			};
+			is_unlock_puzzle = 0;
+			mySGD->setIsUnlockPuzzle(is_unlock_puzzle);
 		}
 		
 		tableOpenning();
@@ -414,11 +500,11 @@ bool MainFlowScene::init()
 //		t_suction->target_touch_began = t_suction;
 //		t_suction->delegate_touch_began = callfunc_selector(TouchSuctionLayer::removeFromParent);
 //		t_suction->setTouchEnabled(true);
-//		
+//
 //		CCSprite* dimed_tip = CCSprite::create("tutorial_dimed_main.png");
 //		dimed_tip->setPosition(ccp(240,160));
 //		t_suction->addChild(dimed_tip);
-//		
+//
 //		addChild(t_suction, kMainFlowZorder_popup);
 //	}
 	
@@ -1341,237 +1427,223 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	{
 		if(t_info.is_open)
 		{
-			CCSprite* puzzle_unlock_beam = CCSprite::create("puzzle_unlock_beam.png");
-			puzzle_unlock_beam->setPosition(CCPointZero);
-			cell_node->addChild(puzzle_unlock_beam, -1);
-			puzzle_unlock_beam->setOpacity(0);
-			
-			CCScaleTo* beam_scale1 = CCScaleTo::create(0.2f, 1.4f);
-			CCDelayTime* beam_scale_delay = CCDelayTime::create(0.5f);
-			CCScaleTo* beam_scale2 = CCScaleTo::create(0.2f, 1.f);
-			CCSequence* beam_scale_seq = CCSequence::create(beam_scale1, beam_scale_delay, beam_scale2, NULL);
-			
-			CCRotateBy* beam_rotate = CCRotateBy::create(0.9f, 80);
-			
-			CCFadeTo* beam_fade1 = CCFadeTo::create(0.2f, 200);
-			CCDelayTime* beam_fade_delay = CCDelayTime::create(0.5f);
-			CCFadeTo* beam_fade2 = CCFadeTo::create(0.2f, 0);
-			CCSequence* beam_fade_seq = CCSequence::create(beam_fade1, beam_fade_delay, beam_fade2, NULL);
-			
-			CCDelayTime* beam_delay = CCDelayTime::create(0.5f);
-			CCSpawn* beam_spawn = CCSpawn::create(beam_scale_seq, beam_rotate, beam_fade_seq, NULL);
-			CCCallFunc* beam_remove = CCCallFunc::create(puzzle_unlock_beam, callfunc_selector(CCSprite::removeFromParent));
-			CCSequence* beam_seq = CCSequence::create(beam_delay, beam_spawn, beam_remove, NULL);
-			
-			puzzle_unlock_beam->runAction(beam_seq);
-			
-			CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base1.png");
-			not_clear_img->setPosition(CCPointZero);
-			cell_node->addChild(not_clear_img);
-			
-			KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
-			not_clear_label->enableOuterStroke(ccBLACK, 1.f);
-			not_clear_label->setPosition(ccp(67.5f,138.5f));
-			not_clear_img->addChild(not_clear_label);
-			
-			CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
-			CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 0);
-			CCCallFunc* t_remove_self1 = CCCallFunc::create(not_clear_img, callfunc_selector(CCNode::removeFromParent));
-			CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, t_remove_self1, NULL);
-			not_clear_img->runAction(t_seq1);
-			
-			cell_node->addChild(KSTimer::create(0.7f, [=]()
-												{
-													AudioEngine::sharedInstance()->playEffect("se_puzzleopen_2.mp3", false);
-													cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
-																									  {
-																										  if(t < 1.f)
+			start_unlock_animation = [=](function<void()> t_end_func)
+			{
+				CCSprite* puzzle_unlock_beam = CCSprite::create("puzzle_unlock_beam.png");
+				puzzle_unlock_beam->setPosition(CCPointZero);
+				cell_node->addChild(puzzle_unlock_beam, -1);
+				puzzle_unlock_beam->setOpacity(0);
+				
+				CCScaleTo* beam_scale1 = CCScaleTo::create(0.2f, 1.4f);
+				CCDelayTime* beam_scale_delay = CCDelayTime::create(0.5f);
+				CCScaleTo* beam_scale2 = CCScaleTo::create(0.2f, 1.f);
+				CCSequence* beam_scale_seq = CCSequence::create(beam_scale1, beam_scale_delay, beam_scale2, NULL);
+				
+				CCRotateBy* beam_rotate = CCRotateBy::create(0.9f, 80);
+				
+				CCFadeTo* beam_fade1 = CCFadeTo::create(0.2f, 200);
+				CCDelayTime* beam_fade_delay = CCDelayTime::create(0.5f);
+				CCFadeTo* beam_fade2 = CCFadeTo::create(0.2f, 0);
+				CCSequence* beam_fade_seq = CCSequence::create(beam_fade1, beam_fade_delay, beam_fade2, NULL);
+				
+				CCDelayTime* beam_delay = CCDelayTime::create(0.5f);
+				CCSpawn* beam_spawn = CCSpawn::create(beam_scale_seq, beam_rotate, beam_fade_seq, NULL);
+				CCCallFunc* beam_remove = CCCallFunc::create(puzzle_unlock_beam, callfunc_selector(CCSprite::removeFromParent));
+				CCSequence* beam_seq = CCSequence::create(beam_delay, beam_spawn, beam_remove, NULL);
+				
+				puzzle_unlock_beam->runAction(beam_seq);
+				
+				CCSprite* not_clear_img = CCSprite::create("mainflow_puzzle_lock_base1.png");
+				not_clear_img->setPosition(CCPointZero);
+				cell_node->addChild(not_clear_img);
+				
+				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
+				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
+				not_clear_label->setPosition(ccp(67.5f,138.5f));
+				not_clear_img->addChild(not_clear_label);
+				
+				CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+				CCFadeTo* t_fade1 = CCFadeTo::create(0.2f, 0);
+				CCCallFunc* t_remove_self1 = CCCallFunc::create(not_clear_img, callfunc_selector(CCNode::removeFromParent));
+				CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, t_remove_self1, NULL);
+				not_clear_img->runAction(t_seq1);
+				
+				cell_node->addChild(KSTimer::create(0.7f, [=]()
+													{
+														AudioEngine::sharedInstance()->playEffect("se_puzzleopen_2.mp3", false);
+														cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
 																										  {
-																											  cell_node->setScale(1.f+0.1f*t);
-																										  }
-																										  else if(t < 2.f)
+																											  if(t < 1.f)
+																											  {
+																												  cell_node->setScale(1.f+0.1f*t);
+																											  }
+																											  else if(t < 2.f)
+																											  {
+																												  cell_node->setScale(1.1f);
+																											  }
+																											  else
+																											  {
+																												  cell_node->setScale(1.1f-0.1f*(t-2.f));
+																											  }
+																										  }, [=](float t)
 																										  {
-																											  cell_node->setScale(1.1f);
-																										  }
-																										  else
-																										  {
-																											  cell_node->setScale(1.1f-0.1f*(t-2.f));
-																										  }
-																									  }, [=](float t)
-																									  {
-																										  cell_node->setScale(1.f);
-																										  
-																										  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
-																										  {
-																											  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
+																											  cell_node->setScale(1.f);
 																											  
-																											  CCNode* target_parent = heart_time->getParent();
-																											  CCPoint heart_time_position = heart_time->getPosition();
-																											  int heart_time_tag = heart_time->getTag();
+																											  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
+																											  {
+																												  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
+																												  
+																												  CCNode* target_parent = heart_time->getParent();
+																												  CCPoint heart_time_position = heart_time->getPosition();
+																												  int heart_time_tag = heart_time->getTag();
+																												  
+																												  heart_time->removeFromParent();
+																												  heart_time = HeartTime::create();
+																												  heart_time->setPosition(heart_time_position);
+																												  target_parent->addChild(heart_time, 0, heart_time_tag);
+																											  }
 																											  
-																											  heart_time->removeFromParent();
-																											  heart_time = HeartTime::create();
-																											  heart_time->setPosition(heart_time_position);
-																											  target_parent->addChild(heart_time, 0, heart_time_tag);
-																										  }
-																										  
-//																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=](){
 																											  endUnlockAnimation();
-//																										  }, true);
-//																										  addChild(t_popup, kMainFlowZorder_popup);
-																										  
-																										  mySGD->setIsUnlockPuzzle(0);
-																										  is_unlock_puzzle = 0;
-																									  }));
-												}));
+																											  
+																											  mySGD->setIsUnlockPuzzle(0);
+																											  is_unlock_puzzle = 0;
+																											  
+																											  t_end_func();
+																										  }));
+													}));
+			};
 		}
 		else
 		{
-			cell_node->addChild(KSTimer::create(0.7f, [=]()
-												{
-													cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
-																									  {
-																										  if(t < 1.f)
+			start_unlock_animation = [=](function<void()> t_end_func)
+			{
+				cell_node->addChild(KSTimer::create(0.7f, [=]()
+													{
+														cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
 																										  {
-																											  cell_node->setScale(1.f+0.1f*t);
-																										  }
-																										  else if(t < 2.f)
-																										  {
-																											  cell_node->setScale(1.1f);
-																										  }
-																										  else
-																										  {
-																											  cell_node->setScale(1.1f-0.1f*(t-2.f));
-																										  }
-																									  }, [=](float t)
-																									  {
-																										  cell_node->setScale(1.f);
-																										  
-																										  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
-																										  {
-																											  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
-																											  
-																											  CCNode* target_parent = heart_time->getParent();
-																											  CCPoint heart_time_position = heart_time->getPosition();
-																											  int heart_time_tag = heart_time->getTag();
-																											  
-																											  heart_time->removeFromParent();
-																											  heart_time = HeartTime::create();
-																											  heart_time->setPosition(heart_time_position);
-																											  target_parent->addChild(heart_time, 0, heart_time_tag);
-																										  }
-																										  
-//																										  PuzzleSuccessAndPerfect* t_popup = PuzzleSuccessAndPerfect::create(-999, [=]()
-//																										  {
-																											  if(!t_info.is_base_condition_success)
-																												{
-																													ASPopupView* t_popup = ASPopupView::create(-999);
-																													
-																													CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-																													float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-																													if(screen_scale_x < 1.f)
-																														screen_scale_x = 1.f;
-																													
-																													float height_value = 320.f;
-																													if(myDSH->screen_convert_rate < 1.f)
-																														height_value = 320.f/myDSH->screen_convert_rate;
-																													
-																													if(height_value < myDSH->ui_top)
-																														height_value = myDSH->ui_top;
-																													
-																													t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-																													t_popup->setDimmedPosition(ccp(240, 160));
-																													t_popup->setBasePosition(ccp(240, 160));
-																													
-																													CCNode* t_container = CCNode::create();
-																													t_popup->setContainerNode(t_container);
-																													addChild(t_popup, kMainFlowZorder_popup);
-																													
-																													CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-																													back_case->setContentSize(CCSizeMake(240, 139));
-																													back_case->setPosition(ccp(0,0));
-																													t_container->addChild(back_case);
-																													
-																													startFormSetter(this);
-																													CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-																													back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-																													back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
-																													back_case->addChild(back_in);
-																													
-																													
-																													KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle), mySGD->getFont().c_str(), 15);
-																													title_label->setColor(ccc3(255, 170, 20));
-																													title_label->setAnchorPoint(ccp(0.5f,0.5f));
-																													title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
-																													t_container->addChild(title_label);
-																													
-																													StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-																													sub_label->setPosition(ccp(0.0,-0.5)); 			// dt (0.0,-13.5)
-																													t_container->addChild(sub_label);
-																													sub_label->setOldAnchorPoint();
-
-
-																													
-																													setFormSetter(back_case);
-																													setFormSetter(back_in);
-																													setFormSetter(title_label);
-																													setFormSetter(sub_label);
-																													CCSprite* gray = t_popup->getDimmedSprite();
-																													
-																													CommonButton* ok_button = CommonButton::createCloseButton(t_popup->getTouchPriority() - 5);
-																													ok_button->setFunction([=](CCObject*){
-																														if(!t_popup->is_menu_enable)
-																															return;
-																														
-																														t_popup->is_menu_enable = false;
-																														
-																														CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
-																															
-																														}, [=](){
-																															endUnlockAnimation();
-																															t_popup->removeFromParent();
-//																															end_func(); removeFromParent();
-																														});
-																													});
-																													t_container->addChild(ok_button);
-																													ok_button->setPosition(ccp(97.0,47.0)); 			// dt (1.5,-18.5)
-																													ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
-																													setFormSetter(ok_button);
-																													
-																													
-																													CommonAnimation::openPopup(this, t_container, gray, [=](){
-																														
-																													}, [=](){
-																														t_popup->is_menu_enable = true;
-																													});
-//																													t_container->setScaleY(0.f);
-//																													
-//																													t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-//																														t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-//																															t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
-//																													
-//																													t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-//																																								  {
-//																																									  gray->setOpacity(t);
-//																																									  KS::setOpacity(t_container, t);
-//																																								  }, [=](int t)
-//																																								  {
-//																																									  gray->setOpacity(255);
-//																																									  KS::setOpacity(t_container, 255);
-//																																									  t_popup->is_menu_enable = true;
-//																																								  }));
-																												}
+																											  if(t < 1.f)
+																											  {
+																												  cell_node->setScale(1.f+0.1f*t);
+																											  }
+																											  else if(t < 2.f)
+																											  {
+																												  cell_node->setScale(1.1f);
+																											  }
 																											  else
-																												{
-																													endUnlockAnimation();
-																												}
-//																										  }, true);
-//																										  addChild(t_popup, kMainFlowZorder_popup);
-																										  
-																										  mySGD->setIsUnlockPuzzle(0);
-																										  is_unlock_puzzle = 0;
-																									  }));
-												}));
+																											  {
+																												  cell_node->setScale(1.1f-0.1f*(t-2.f));
+																											  }
+																										  }, [=](float t)
+																										  {
+																											  cell_node->setScale(1.f);
+																											  
+																											  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
+																											  {
+																												  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
+																												  
+																												  CCNode* target_parent = heart_time->getParent();
+																												  CCPoint heart_time_position = heart_time->getPosition();
+																												  int heart_time_tag = heart_time->getTag();
+																												  
+																												  heart_time->removeFromParent();
+																												  heart_time = HeartTime::create();
+																												  heart_time->setPosition(heart_time_position);
+																												  target_parent->addChild(heart_time, 0, heart_time_tag);
+																											  }
+																											  
+																											  if(!t_info.is_base_condition_success)
+																											  {
+																												  ASPopupView* t_popup = ASPopupView::create(-999);
+																												  
+																												  CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																												  float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																												  if(screen_scale_x < 1.f)
+																													  screen_scale_x = 1.f;
+																												  
+																												  float height_value = 320.f;
+																												  if(myDSH->screen_convert_rate < 1.f)
+																													  height_value = 320.f/myDSH->screen_convert_rate;
+																												  
+																												  if(height_value < myDSH->ui_top)
+																													  height_value = myDSH->ui_top;
+																												  
+																												  t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+																												  t_popup->setDimmedPosition(ccp(240, 160));
+																												  t_popup->setBasePosition(ccp(240, 160));
+																												  
+																												  CCNode* t_container = CCNode::create();
+																												  t_popup->setContainerNode(t_container);
+																												  addChild(t_popup, kMainFlowZorder_popup);
+																												  
+																												  CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+																												  back_case->setContentSize(CCSizeMake(240, 139));
+																												  back_case->setPosition(ccp(0,0));
+																												  t_container->addChild(back_case);
+																												  
+																												  startFormSetter(this);
+																												  CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+																												  back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+																												  back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+																												  back_case->addChild(back_in);
+																												  
+																												  
+																												  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle), mySGD->getFont().c_str(), 15);
+																												  title_label->setColor(ccc3(255, 170, 20));
+																												  title_label->setAnchorPoint(ccp(0.5f,0.5f));
+																												  title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+																												  t_container->addChild(title_label);
+																												  
+																												  StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																												  sub_label->setPosition(ccp(0.0,-0.5)); 			// dt (0.0,-13.5)
+																												  t_container->addChild(sub_label);
+																												  sub_label->setOldAnchorPoint();
+																												  
+																												  
+																												  
+																												  setFormSetter(back_case);
+																												  setFormSetter(back_in);
+																												  setFormSetter(title_label);
+																												  setFormSetter(sub_label);
+																												  CCSprite* gray = t_popup->getDimmedSprite();
+																												  
+																												  CommonButton* ok_button = CommonButton::createCloseButton(t_popup->getTouchPriority() - 5);
+																												  ok_button->setFunction([=](CCObject*){
+																													  if(!t_popup->is_menu_enable)
+																														  return;
+																													  
+																													  t_popup->is_menu_enable = false;
+																													  
+																													  CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
+																														  
+																													  }, [=](){
+																														  endUnlockAnimation();
+																														  t_end_func();
+																														  t_popup->removeFromParent();
+																													  });
+																												  });
+																												  t_container->addChild(ok_button);
+																												  ok_button->setPosition(ccp(97.0,47.0)); 			// dt (1.5,-18.5)
+																												  ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+																												  setFormSetter(ok_button);
+																												  
+																												  
+																												  CommonAnimation::openPopup(this, t_container, gray, [=](){
+																													  
+																												  }, [=](){
+																													  t_popup->is_menu_enable = true;
+																												  });
+																											  }
+																											  else
+																											  {
+																												  endUnlockAnimation();
+																												  t_end_func();
+																											  }
+																											  
+																											  mySGD->setIsUnlockPuzzle(0);
+																											  is_unlock_puzzle = 0;
+																										  }));
+													}));
+			};
 		}
 	}
 	else if(puzzle_number == is_perfect_puzzle)
@@ -3094,15 +3166,152 @@ void MainFlowScene::topOnLight()
 	{
 		TakePuzzleCardPopup* t_popup = TakePuzzleCardPopup::create(-300, [=]()
 																   {
-																	   if(mySGD->is_on_rank_reward)
+																	   function<void()> t_after_func = [=]()
 																	   {
-																		   RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
-																															  {
-																																  if(mySGD->is_today_mission_first)
+																		   if(mySGD->is_on_rank_reward)
+																		   {
+																			   RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
 																																  {
-																																	  mySGD->is_today_mission_first = false;
-																																	  
-																																	  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+																																	  if(mySGD->is_today_mission_first)
+																																	  {
+																																		  mySGD->is_today_mission_first = false;
+																																		  
+																																		  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+																																																 {
+																																																	 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+																																																	 {
+																																																		 myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+																																																		 
+																																																		 CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																																																		 float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																																																		 if(screen_scale_x < 1.f)
+																																																			 screen_scale_x = 1.f;
+																																																		 
+																																																		 CCNode* t_stencil_node = CCNode::create();
+																																																		 CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+																																																		 t_stencil1->setContentSize(CCSizeMake(50, 50));
+																																																		 t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																																																		 t_stencil_node->addChild(t_stencil1);
+																																																		 
+																																																		 CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+																																																		 t_clipping->setAlphaThreshold(0.1f);
+																																																		 
+																																																		 float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																																																		 
+																																																		 float change_scale = 1.f;
+																																																		 CCPoint change_origin = ccp(0,0);
+																																																		 if(screen_scale_x > 1.f)
+																																																		 {
+																																																			 change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+																																																			 change_scale = screen_scale_x;
+																																																		 }
+																																																		 if(screen_scale_y > 1.f)
+																																																			 change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+																																																		 CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+																																																		 t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+																																																		 
+																																																		 
+																																																		 CCSprite* t_gray = CCSprite::create("back_gray.png");
+																																																		 t_gray->setScaleX(screen_scale_x);
+																																																		 t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+																																																		 t_gray->setOpacity(0);
+																																																		 t_gray->setPosition(ccp(240,160));
+																																																		 t_clipping->addChild(t_gray);
+																																																		 
+																																																		 CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+																																																		 t_arrow1->setRotation(180);
+																																																		 t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
+																																																		 t_clipping->addChild(t_arrow1);
+																																																		 
+																																																		 StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+																																																		 t_ment1->setAnchorPoint(ccp(0.5f,0.f));
+																																																		 t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
+																																																		 t_clipping->addChild(t_ment1);
+																																																		 
+																																																		 TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																																																		 addChild(t_suction);
+																																																		 t_suction->setTouchEnabled(true);
+																																																		 //
+																																																		 //		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																																																		 //		n_button->setOpacity(0);
+																																																		 //		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
+																																																		 //		s_button->setOpacity(0);
+																																																		 //		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
+																																																		 //																			   {
+																																																		 //																				   if(!is_menu_enable)
+																																																		 //																					   return;
+																																																		 //
+																																																		 //																				   is_menu_enable = false;
+																																																		 //
+																																																		 //																				   t_arrow1->removeFromParent();
+																																																		 //																				   t_ment1->removeFromParent();
+																																																		 //
+																																																		 //																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																																		 //																														  {
+																																																		 //																															  t_gray->setOpacity(t*255);
+																																																		 //																														  }, [=](float t)
+																																																		 //																														  {
+																																																		 //																															  t_gray->setOpacity(t*255);
+																																																		 //
+																																																		 //																															  t_suction->removeFromParent();
+																																																		 //
+																																																		 //																															  showEndlessOpening();
+																																																		 //																															  t_clipping->removeFromParent();
+																																																		 //																														  }));
+																																																		 //																			   });
+																																																		 //		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
+																																																		 //		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
+																																																		 //		t_clipping->addChild(t_lambda_menu);
+																																																		 //		t_lambda_menu->setTouchPriority(-10000);
+																																																		 //
+																																																		 //		t_lambda_menu->addChild(t_lambda_item);
+																																																		 
+																																																		 t_clipping->setInverted(true);
+																																																		 addChild(t_clipping, 9999);
+																																																		 
+																																																		 addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+																																																												{
+																																																													t_gray->setOpacity(t*255);
+																																																												}, [=](float t)
+																																																												{
+																																																													t_gray->setOpacity(255);
+																																																													is_menu_enable = true;
+																																																													
+																																																													t_suction->touch_began_func = [=]()
+																																																													{
+																																																														t_suction->is_on_touch_began_func = false;
+																																																														if(!is_menu_enable)
+																																																															return;
+																																																														
+																																																														is_menu_enable = false;
+																																																														
+																																																														t_arrow1->removeFromParent();
+																																																														t_ment1->removeFromParent();
+																																																														
+																																																														addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																																																																							   {
+																																																																								   t_gray->setOpacity(t*255);
+																																																																							   }, [=](float t)
+																																																																							   {
+																																																																								   t_gray->setOpacity(t*255);
+																																																																								   
+																																																																								   t_suction->removeFromParent();
+																																																																								   
+																																																																								   showEndlessOpening();
+																																																																								   t_clipping->removeFromParent();
+																																																																							   }));
+																																																														
+																																																													};
+																																																													t_suction->is_on_touch_began_func = true;
+																																																													
+																																																												}));
+																																																	 }
+																																																	 else
+																																																		 is_menu_enable = true;
+																																																 });
+																																		  addChild(t_popup, kMainFlowZorder_popup);
+																																	  }
+																																	  else
 																																	  {
 																																		  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
 																																		  {
@@ -3157,40 +3366,6 @@ void MainFlowScene::topOnLight()
 																																			  TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
 																																			  addChild(t_suction);
 																																			  t_suction->setTouchEnabled(true);
-																																			  //
-																																			  //		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-																																			  //		n_button->setOpacity(0);
-																																			  //		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-																																			  //		s_button->setOpacity(0);
-																																			  //		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
-																																			  //																			   {
-																																			  //																				   if(!is_menu_enable)
-																																			  //																					   return;
-																																			  //
-																																			  //																				   is_menu_enable = false;
-																																			  //
-																																			  //																				   t_arrow1->removeFromParent();
-																																			  //																				   t_ment1->removeFromParent();
-																																			  //																				   
-																																			  //																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
-																																			  //																														  {
-																																			  //																															  t_gray->setOpacity(t*255);
-																																			  //																														  }, [=](float t)
-																																			  //																														  {
-																																			  //																															  t_gray->setOpacity(t*255);
-																																			  //																															  
-																																			  //																															  t_suction->removeFromParent();
-																																			  //																															  
-																																			  //																															  showEndlessOpening();
-																																			  //																															  t_clipping->removeFromParent();
-																																			  //																														  }));
-																																			  //																			   });
-																																			  //		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
-																																			  //		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
-																																			  //		t_clipping->addChild(t_lambda_menu);
-																																			  //		t_lambda_menu->setTouchPriority(-10000);
-																																			  //		
-																																			  //		t_lambda_menu->addChild(t_lambda_item);
 																																			  
 																																			  t_clipping->setInverted(true);
 																																			  addChild(t_clipping, 9999);
@@ -3234,144 +3409,19 @@ void MainFlowScene::topOnLight()
 																																		  }
 																																		  else
 																																			  is_menu_enable = true;
-																																	  });
-																																	  addChild(t_popup, kMainFlowZorder_popup);
-																																  }
-																																  else
-																																  {
-																																	  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
-																																	  {
-																																		  myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
-																																		  
-																																		  CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-																																		  float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-																																		  if(screen_scale_x < 1.f)
-																																			  screen_scale_x = 1.f;
-																																		  
-																																		  CCNode* t_stencil_node = CCNode::create();
-																																		  CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-																																		  t_stencil1->setContentSize(CCSizeMake(50, 50));
-																																		  t_stencil1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
-																																		  t_stencil_node->addChild(t_stencil1);
-																																		  
-																																		  CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
-																																		  t_clipping->setAlphaThreshold(0.1f);
-																																		  
-																																		  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-																																		  
-																																		  float change_scale = 1.f;
-																																		  CCPoint change_origin = ccp(0,0);
-																																		  if(screen_scale_x > 1.f)
-																																		  {
-																																			  change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
-																																			  change_scale = screen_scale_x;
-																																		  }
-																																		  if(screen_scale_y > 1.f)
-																																			  change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
-																																		  CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-																																		  t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
-																																		  
-																																		  
-																																		  CCSprite* t_gray = CCSprite::create("back_gray.png");
-																																		  t_gray->setScaleX(screen_scale_x);
-																																		  t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
-																																		  t_gray->setOpacity(0);
-																																		  t_gray->setPosition(ccp(240,160));
-																																		  t_clipping->addChild(t_gray);
-																																		  
-																																		  CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
-																																		  t_arrow1->setRotation(180);
-																																		  t_arrow1->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 40));
-																																		  t_clipping->addChild(t_arrow1);
-																																		  
-																																		  StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-																																		  t_ment1->setAnchorPoint(ccp(0.5f,0.f));
-																																		  t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
-																																		  t_clipping->addChild(t_ment1);
-																																		  
-																																		  TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
-																																		  addChild(t_suction);
-																																		  t_suction->setTouchEnabled(true);
-																																		  //
-																																		  //		CCSprite* n_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-																																		  //		n_button->setOpacity(0);
-																																		  //		CCSprite* s_button = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 50, 50));
-																																		  //		s_button->setOpacity(0);
-																																		  //		CCMenuItemSpriteLambda* t_lambda_item = CCMenuItemSpriteLambda::create(n_button, s_button, [=](CCObject* sender)
-																																		  //																			   {
-																																		  //																				   if(!is_menu_enable)
-																																		  //																					   return;
-																																		  //
-																																		  //																				   is_menu_enable = false;
-																																		  //
-																																		  //																				   t_arrow1->removeFromParent();
-																																		  //																				   t_ment1->removeFromParent();
-																																		  //
-																																		  //																				   addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
-																																		  //																														  {
-																																		  //																															  t_gray->setOpacity(t*255);
-																																		  //																														  }, [=](float t)
-																																		  //																														  {
-																																		  //																															  t_gray->setOpacity(t*255);
-																																		  //																															  
-																																		  //																															  t_suction->removeFromParent();
-																																		  //																															  
-																																		  //																															  showEndlessOpening();
-																																		  //																															  t_clipping->removeFromParent();
-																																		  //																														  }));
-																																		  //																			   });
-																																		  //		CCMenuLambda* t_lambda_menu = CCMenuLambda::create();
-																																		  //		t_lambda_menu->setPosition(ccp(43+214.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38));
-																																		  //		t_clipping->addChild(t_lambda_menu);
-																																		  //		t_lambda_menu->setTouchPriority(-10000);
-																																		  //		
-																																		  //		t_lambda_menu->addChild(t_lambda_item);
-																																		  
-																																		  t_clipping->setInverted(true);
-																																		  addChild(t_clipping, 9999);
-																																		  
-																																		  addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
-																																												 {
-																																													 t_gray->setOpacity(t*255);
-																																												 }, [=](float t)
-																																												 {
-																																													 t_gray->setOpacity(255);
-																																													 is_menu_enable = true;
-																																													 
-																																													 t_suction->touch_began_func = [=]()
-																																													 {
-																																														 t_suction->is_on_touch_began_func = false;
-																																														 if(!is_menu_enable)
-																																															 return;
-																																														 
-																																														 is_menu_enable = false;
-																																														 
-																																														 t_arrow1->removeFromParent();
-																																														 t_ment1->removeFromParent();
-																																														 
-																																														 addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
-																																																								{
-																																																									t_gray->setOpacity(t*255);
-																																																								}, [=](float t)
-																																																								{
-																																																									t_gray->setOpacity(t*255);
-																																																									
-																																																									t_suction->removeFromParent();
-																																																									
-																																																									showEndlessOpening();
-																																																									t_clipping->removeFromParent();
-																																																								}));
-																																														 
-																																													 };
-																																													 t_suction->is_on_touch_began_func = true;
-																																													 
-																																												 }));
 																																	  }
-																																	  else
-																																		  is_menu_enable = true;
-																																  }
-																															  });
-																		   addChild(t_popup, kMainFlowZorder_popup);
+																																  });
+																			   addChild(t_popup, kMainFlowZorder_popup);
+																		   }
+																	   };
+																	   
+																	   if(start_unlock_animation != nullptr)
+																		{
+																			start_unlock_animation(t_after_func);
+																		}
+																	   else
+																		{
+																			t_after_func();
 																		}
 																   });
 		addChild(t_popup, kMainFlowZorder_popup);

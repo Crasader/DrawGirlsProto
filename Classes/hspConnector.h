@@ -241,6 +241,7 @@ public:
 	void openCSCenter(const std::string& url);
 	void mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func);
 	void getIsUsimKorean(jsonSelType func); // value["korean"] 이 1이면 약관 페이지 띄워야 함.
+	
 	string getUniqId();
 	int getLoginType(); 
 	void openHSPNotice();

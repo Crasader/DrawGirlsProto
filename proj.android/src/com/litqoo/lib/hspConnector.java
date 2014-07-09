@@ -116,6 +116,7 @@ public class hspConnector{
 	// ===========================================================
 	private static native void ResultLogin(int _key,String datas,boolean isFinish);
 	private static native void SendResultNative(int _key,String datas,boolean isFinish);
+//	private static native int getUserState();
 	public static native void SetupOnAndroid(int gameno,String gameid,String gameVersion);
 	public static boolean checkCGP(final int _key)
 	{
@@ -184,10 +185,7 @@ public class hspConnector{
 //					public void run() {
 					
 						HSPCore core = HSPCore.getInstance();
-						if(core.getState() == HSPState.HSP_STATE_ONLINE)
-						{
-							Log.d("hsp", "dfsgfsdg222");
-						}
+						Log.d("before cur State",core.getState().toString());
 						if (core != null) { 
 //							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
                             Boolean isOverWriteMapping = Boolean.valueOf(force);     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
@@ -198,7 +196,7 @@ public class hspConnector{
 								@Override
 								public void onIdpIDMap(HSPResult result , long prevMemberNo) {
 									HSPCore core = HSPCore.getInstance();
-									Log.d("cur State",core.getState().toString());
+									Log.d("after cur State",core.getState().toString());
 									Log.d("mapping", "@@@@@@ HSPCore.login callback => " + result);
 									JSONObject r = new JSONObject();
 									JSONObject error = new JSONObject();
@@ -250,7 +248,6 @@ public class hspConnector{
 											hspConnector.SendResult(this.delekey,this.totalSource);
 										}
 									});
-																HSPResultUtil.showErrorAlertDialog(result);
 								}
 							});
 
