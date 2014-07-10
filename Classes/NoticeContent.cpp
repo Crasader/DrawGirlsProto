@@ -10,7 +10,6 @@
 #include "GDWebSprite.h"
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
-#include "CommonButton.h"
 
 void NoticeContent::menuAction(CCObject* sender)
 {
@@ -51,7 +50,8 @@ void NoticeContent::menuAction(CCObject* sender)
 
 void NoticeContent::loadNotice(){
 	
-
+	day3Btn->setVisible(false);
+	closeBtn->setVisible(false);
 	loading_circle->setVisible(true);
 	
 	is_not_show_three_day = false;
@@ -127,6 +127,23 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	
 	//	case_back->setContentSize(CCSizeMake(notice_list[ing_close_cnt]["imgInfo"]["w"].asInt() + 17, notice_list[ing_close_cnt]["imgInfo"]["h"].asInt() + 66)); // 333 + 17 , 199 + 66
 	
+	
+	closeBtn = CommonButton::create("닫기", 12, CCSizeMake(80, 40), CommonButtonLightPupple, touch_priority-2);
+	addChild(closeBtn,100);
+	closeBtn->setFunction(json_selector(this, NoticeContent::menuAction));
+	closeBtn->setAnchorPoint(ccp(1,0.5));
+	closeBtn->setPosition(ccp(230,-140));
+	closeBtn->setTag(kNoticeContentMenuTag_ok);
+	
+	
+	
+	day3Btn = CommonButton::create("3일동안 열지 않음", 12, CCSizeMake(120,40), CommonButtonGray, touch_priority-2);
+	addChild(day3Btn,100);
+	day3Btn->setTag(kNoticeContentMenuTag_check);
+	day3Btn->setAnchorPoint(ccp(0,0.5));
+	day3Btn->setPosition(ccp(-230,-140));
+	day3Btn->setFunction(json_selector(this, NoticeContent::menuAction));
+	
 	title_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 15);
 	title_label->setPosition(ccp(0,150));
 	title_label->setColor(ccc3(255, 255, 0));
@@ -147,23 +164,6 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	
 	loadNotice();
 	
-	
-	
-	CommonButton* btn = CommonButton::create("닫기", 12, CCSizeMake(80, 40), CommonButtonLightPupple, touch_priority-2);
-	addChild(btn,100);
-	btn->setFunction(json_selector(this, NoticeContent::menuAction));
-	btn->setAnchorPoint(ccp(1,0.5));
-	btn->setPosition(ccp(230,-140));
-	btn->setTag(kNoticeContentMenuTag_ok);
-	
-	
-	
-	CommonButton* tbtn = CommonButton::create("3일동안 열지 않음", 12, CCSizeMake(120,40), CommonButtonGray, touch_priority-2);
-	addChild(tbtn,100);
-	tbtn->setTag(kNoticeContentMenuTag_check);
-	tbtn->setAnchorPoint(ccp(0,0.5));
-	tbtn->setPosition(ccp(-230,-140));
-	tbtn->setFunction(json_selector(this, NoticeContent::menuAction));
 	
 	
 	CommonButton* back = CommonButton::create("", 10, CCSizeMake(480, 320), CommonButtonGray, touch_priority-1);
