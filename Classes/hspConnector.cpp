@@ -355,14 +355,14 @@ void hspConnector::mappingToAccount(jsonSelType func){
 
 
 string hspConnector::getCountryCode(){
+	string r;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-	string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
+	r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
-	string r;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getCountryCode", "()Ljava/lang/String;")) {
 		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
 		
@@ -380,6 +380,38 @@ string hspConnector::getCountryCode(){
 	
 	std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
+	return r;
+}
+
+
+
+string hspConnector::getTimeZone(){
+	
+	string r;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	NSTimeZone *timeZone = [NSTimeZone localTimeZone];
+	NSString *tzName = [timeZone name];
+	r = [tzName cStringUsingEncoding:NSUTF8StringEncoding];
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getTimeZone", "()Ljava/lang/String;")) {
+		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
+		r = revStr;
+		
+		t.env->ReleaseStringUTFChars(result, revStr);
+		t.env->DeleteLocalRef(t.classID);
+		
+	}
+#endif
+	
+	
+	
+	//std::transform(r.begin(), r.end(), r.begin(), towlower);
+	CCLOG("mytime zone is : %s",r.c_str());
 	return r;
 }
 
