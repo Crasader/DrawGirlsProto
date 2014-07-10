@@ -51,6 +51,9 @@ void NoticeContent::menuAction(CCObject* sender)
 
 void NoticeContent::loadNotice(){
 	
+
+	loading_circle->setVisible(true);
+	
 	is_not_show_three_day = false;
 	if(notice_list[ing_close_cnt].get("content", "").asString()!=""){
 		//텍스트모드
@@ -136,6 +139,12 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	
 	show_content = NULL;
 	
+	
+	loading_circle = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+	loading_circle->setPosition(ccp(this->getContentSize().width/2.f, this->getContentSize().height/2.f));
+	this->addChild(loading_circle,9999999);
+	
+	
 	loadNotice();
 	
 	
@@ -146,8 +155,6 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	btn->setAnchorPoint(ccp(1,0.5));
 	btn->setPosition(ccp(230,-140));
 	btn->setTag(kNoticeContentMenuTag_ok);
-	
-	
 	
 	
 	

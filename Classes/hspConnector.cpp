@@ -484,12 +484,15 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
 
 		int delekey = dkey;
-		graphdog->setMemberID(hspConnector::get()->getMemberID());
-		GraphDog::get()->setServerURL(this->getServerAddress());
-		string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString();
-		CCLOG("member id is %s",hspids.c_str());
-		graphdog->setSocialID(hspids);
-
+		
+		if(obj["error"]["isSuccess"].asBool()){
+			graphdog->setMemberID(hspConnector::get()->getMemberID());
+			GraphDog::get()->setServerURL(this->getServerAddress());
+			string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString();
+			CCLOG("member id is %s",hspids.c_str());
+			graphdog->setSocialID(hspids);
+		}
+		
 		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
 		if(delsel.func)delsel.func(obj);
 		jsonDelegator::get()->remove(delekey);
