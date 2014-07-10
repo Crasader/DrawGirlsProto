@@ -1752,9 +1752,18 @@ void PuzzleScene::pieceAction(int t_stage_number)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_piece.mp3", false);
 		
-		setPieceClick(t_stage_number);
-		
-		setRight();
+		if(selected_piece_img && myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)) == t_stage_number)
+		{
+			CCNode* t_node = CCNode::create();
+			t_node->setTag(kPuzzleMenuTag_start);
+			menuAction(t_node);
+		}
+		else
+		{
+			setPieceClick(t_stage_number);
+			
+			setRight();
+		}
 	}
 }
 
