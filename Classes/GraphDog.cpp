@@ -208,7 +208,7 @@ CURL* GraphDog::getCURL(){
 	return curl_handle;
 }
 
-bool GraphDog::command(const std::vector<CommandParam>& params)
+bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 {
 	string udid=getUdid();
 	string email=getEmail();
@@ -224,6 +224,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	//@ JsonBox::Object jsonTotalCmd;
 	Json::Value jsonTotalCmd;
 	cmdQueue.chunk = GDStruct((char*)malloc(1), 0, CURLE_AGAIN);
+	cmdQueue.errorCnt=errorCnt;
 	int i=0;
 	for(std::vector<CommandParam>::const_iterator iter = params.begin(); iter != params.end(); ++iter, i++)
 	{
@@ -607,8 +608,11 @@ void GraphDog::receivedCommand(float dt)
 						vcp.push_back(cp);
 					}
 					
-					commandRetryFunc(vcp);
-					
+					if(commands.errorCnt<=1){
+						this->command(vcp,commands.errorCnt+1);
+					}else{
+						commandRetryFunc(vcp);
+					}
 				}else{
 				
 					for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
@@ -721,7 +725,11 @@ void GraphDog::receivedCommand(float dt)
 				}
 				
 				if(retryCnt){
+					if(commands.errorCnt<=1){
+						this->command(vcp,commands.errorCnt+1);
+					}else{
 						commandRetryFunc(vcp);
+					}
 				}
 			}
 			
