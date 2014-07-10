@@ -307,10 +307,9 @@ public class hspConnector{
 	
 	public static String getServerAddress() 
 	{
-		return "tttt";
-//		HSPServiceProperties properties = HSPCore.getInstance().getServiceProperties();
-//		String gameServerAddress = properties.getServerAddress(HSPServerName.HSP_SERVERNAME_GAMESVR);
-//		return gameServerAddress;
+		HSPServiceProperties properties = HSPCore.getInstance().getServiceProperties();
+		String gameServerAddress = properties.getServerAddress(HSPServerName.HSP_SERVERNAME_GAMESVR);
+		return gameServerAddress;
 	}
 	public static int openKakaoMsg(){
 
