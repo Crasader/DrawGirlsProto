@@ -323,11 +323,11 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			if(!sale_str.empty())
 			{
 				CCSprite* tab = CCSprite::create("shop_tab.png");
-				tab->setPosition(ccp(32,33));
+				tab->setPosition(ccp(-42,35.5f));
 				content_node->addChild(tab, 4);
 				
 				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 14);
-				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+3));
+				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+1));
 				tab->addChild(sale_label);
 			}
 			
@@ -709,19 +709,19 @@ bool ShopPopup::init()
 	
 	tab_menu->setTouchPriority(touch_priority-4);
 	
-	CCSprite* n_ruby_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* n_ruby_img = CCSprite::create("tabbutton_down.png");
 	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	n_ruby_label->setPosition(ccpFromSize(n_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	n_ruby_img->addChild(n_ruby_label);
 	
-	CCSprite* s_ruby_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* s_ruby_img = CCSprite::create("tabbutton_down.png");
 	s_ruby_img->setColor(ccGRAY);
 	KSLabelTTF* s_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	s_ruby_label->setColor(ccGRAY);
 	s_ruby_label->setPosition(ccpFromSize(s_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	s_ruby_img->addChild(s_ruby_label);
 	
-	CCSprite* d_ruby_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* d_ruby_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* d_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	d_ruby_label->setPosition(ccpFromSize(d_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	d_ruby_img->addChild(d_ruby_label);
@@ -733,19 +733,19 @@ bool ShopPopup::init()
 	tab_menu->addChild(ruby_menu, kSP_Z_content);
 	
 	
-	CCSprite* n_gold_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* n_gold_img = CCSprite::create("tabbutton_down.png");
 	KSLabelTTF* n_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	n_gold_label->setPosition(ccpFromSize(n_gold_img->getContentSize()/2.f) + ccp(0,2));
 	n_gold_img->addChild(n_gold_label);
 	
-	CCSprite* s_gold_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* s_gold_img = CCSprite::create("tabbutton_down.png");
 	s_gold_img->setColor(ccGRAY);
 	KSLabelTTF* s_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	s_gold_label->setColor(ccGRAY);
 	s_gold_label->setPosition(ccpFromSize(s_gold_img->getContentSize()/2.f) + ccp(0,2));
 	s_gold_img->addChild(s_gold_label);
 	
-	CCSprite* d_gold_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* d_gold_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* d_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	d_gold_label->setPosition(ccpFromSize(d_gold_img->getContentSize()/2.f) + ccp(0,2));
 	d_gold_img->addChild(d_gold_label);
@@ -757,19 +757,19 @@ bool ShopPopup::init()
 	tab_menu->addChild(gold_menu, kSP_Z_content);
 	
 	
-	CCSprite* n_heart_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* n_heart_img = CCSprite::create("tabbutton_down.png");
 	KSLabelTTF* n_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	n_heart_label->setPosition(ccpFromSize(n_heart_img->getContentSize()/2.f) + ccp(0,2));
 	n_heart_img->addChild(n_heart_label);
 	
-	CCSprite* s_heart_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* s_heart_img = CCSprite::create("tabbutton_down.png");
 	s_heart_img->setColor(ccGRAY);
 	KSLabelTTF* s_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	s_heart_label->setColor(ccGRAY);
 	s_heart_label->setPosition(ccpFromSize(s_heart_img->getContentSize()/2.f) + ccp(0,2));
 	s_heart_img->addChild(s_heart_label);
 	
-	CCSprite* d_heart_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* d_heart_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* d_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	d_heart_label->setPosition(ccpFromSize(d_heart_img->getContentSize()/2.f) + ccp(0,2));
 	d_heart_img->addChild(d_heart_label);
