@@ -2579,6 +2579,8 @@ void TitleRenewalScene::joinAction()
 										 //flag->removeFromParent();
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
+										 myDSH->setStringForKey(kDSH_Key_timeZone, myHSP->getTimeZone());
+										 
 										 successLogin();
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)

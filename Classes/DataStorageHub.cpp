@@ -773,5 +773,6 @@ void DataStorageHub::initReturnPair()
 	
 	return_value[kDSH_Key_isCheckTerms] = "ichkt";
 	return_value[kDSH_Key_savedMemberID] = "smid";
+	return_value[kDSH_Key_timeZone] = "tmzn";
 }
 #undef LZZ_INLINE
