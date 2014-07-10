@@ -419,9 +419,9 @@ string hspConnector::getTimeZone(){
 string hspConnector::getServerAddress(){
 	string r;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	//r = "http://182.162.201.147:10010";
+	r = "http://182.162.201.147:10010";
 	
-	r = "http://182.162.196.182:10080";
+	//r = "http://182.162.196.182:10080";
 	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
 	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
