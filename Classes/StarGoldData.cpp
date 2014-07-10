@@ -1710,10 +1710,20 @@ void StarGoldData::initCollectionBook()
 		}
 		else
 		{
-			int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-			
 			int puzzle_number = -1;
 			
+			if(card_type == "nPuzzle" || card_type == "ePuzzle")
+			{
+				for(auto iter = puzzle_stage_info.begin();puzzle_number == -1 && iter!=puzzle_stage_info.end();iter++)
+				{
+					if(NSDS_GI(iter->first, kSDS_PZ_clearCard_i) == card_number || NSDS_GI(iter->first, kSDS_PZ_perfectCard_i) == card_number)
+					{
+						puzzle_number = iter->first;
+					}
+				}
+			}
+			
+			int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 			for(auto iter = puzzle_stage_info.begin();puzzle_number == -1 && iter!=puzzle_stage_info.end();iter++)
 			{
 				if(iter->second.x <= stage_number && iter->second.x + iter->second.y > stage_number)
