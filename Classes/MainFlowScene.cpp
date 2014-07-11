@@ -278,7 +278,7 @@ bool MainFlowScene::init()
 																   t_popup->removeFromParent();
 															   }, mySGD->getNoticeList());
 			t_popup->setContainerNode(t_container);
-			addChild(t_popup, kMainFlowZorder_popup+1000);
+			addChild(t_popup, kMainFlowZorder_popup+9999999);
 		}
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
@@ -2012,7 +2012,15 @@ void MainFlowScene::menuAction(CCObject* sender)
 		else if(tag == kMainFlowMenuTag_event)
 		{
 			is_menu_enable = true;
-			myHSP->openHSPUrl("http://cafe.naver.com/ddmkskdemo");
+			string serverUrl = myHSP->getServerAddress();
+			string os="ios";
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+			os="android";
+#endif
+			string lang = KS::getLocalCode();
+			string cc = myHSP->getCountryCode();
+			string tz = myHSP->getTimeZone();
+			myHSP->openHSPUrl(serverUrl+"/event.php?lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
 //			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 			
 //			is_menu_enable = true; // 임시
