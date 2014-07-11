@@ -2165,8 +2165,8 @@ void MainFlowScene::bottomPuzzleMode()
 {
 	for(int i=0;i<bottom_list.size();i++)
 	{
-		CCDelayTime* t_delay = CCDelayTime::create(i*0.1f);
-		CCMoveTo* t_move = CCMoveTo::create(0.2f, ccp(bottom_list[i]->getPositionX(), bottom_list[i]->getPositionY()-100));
+		CCDelayTime* t_delay = CCDelayTime::create(i*0.05f);
+		CCMoveTo* t_move = CCMoveTo::create(0.1f, ccp(bottom_list[i]->getPositionX(), bottom_list[i]->getPositionY()-100));
 		CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
 		
 		bottom_list[i]->runAction(t_seq);

@@ -75,7 +75,7 @@ void AreaGage::onChange()
 	CCPoint d_position = ccp(9,0);
 	for(int i=0;i<2;i++)
 	{
-		CCSprite* star_img = CCSprite::create("star_one.png");
+		CCSprite* star_img = CCSprite::create("star_on.png");
 		star_img->setPosition(base_position + d_position*i);
 		star1->addChild(star_img);
 	}
@@ -84,7 +84,7 @@ void AreaGage::onChange()
 	d_position = ccp(9,0);
 	for(int i=0;i<4;i++)
 	{
-		CCSprite* star_img = CCSprite::create("star_one.png");
+		CCSprite* star_img = CCSprite::create("star_on.png");
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}
@@ -211,24 +211,24 @@ void AreaGage::myInit(float t_clear_percent)
 //	addChild(gage_case);
 	
 	star1 = CCNode::create();
-	star1->setPosition(ccp(gage_bar2->getPositionX(), 17));
+	star1->setPosition(ccp(gage_bar2->getPositionX(), 11));
 	addChild(star1, 3);
 	
 	{
-		CCSprite* star_img = CCSprite::create("star_one.png");
+		CCSprite* star_img = CCSprite::create("star_on.png");
 		star_img->setPosition(ccp(0,0));
 		star1->addChild(star_img);
 	}
 	
 	star2 = CCNode::create();// CCSprite::create("gage_star_gold.png");
-	star2->setPosition(ccp(gage_bar3->getPositionX(), 17));
+	star2->setPosition(ccp(gage_bar3->getPositionX(), 11));
 	addChild(star2, 3);
 	
 	CCPoint base_position = ccp(-9,0);
 	CCPoint d_position = ccp(9,0);
 	for(int i=0;i<3;i++)
 	{
-		CCSprite* star_img = CCSprite::create("star_one.png");
+		CCSprite* star_img = CCSprite::create("star_on.png");
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}
