@@ -62,7 +62,7 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	CCSprite* gray;
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 //	CCSprite* top_case;
 	
 	bool is_menu_enable;
@@ -70,8 +70,11 @@ private:
 //	bool is_loaded_list;
 	bool is_end_popup_animation;
 	
-	CCMenu* main_menu;
-	CCMenu* replay_menu;
+	CCControlButton* main_menu;
+	CCControlButton* replay_menu;
+	
+	void controlButtonAction(CCObject* sender, CCControlEvent t_event);
+	
 	//	CCMenu* help_menu;
 	
 //	KSLabelTTF* score_label;

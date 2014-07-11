@@ -66,13 +66,15 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	CCSprite* gray;
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	
-	CCSprite* title;
-	KSLabelTTF* n_ok_label2;
-	KSLabelTTF* s_ok_label2;
-	KSLabelTTF* n_replay_label2;
-	KSLabelTTF* s_replay_label2;
+	KSLabelTTF* title;
+//	KSLabelTTF* n_ok_label2;
+//	KSLabelTTF* s_ok_label2;
+//	KSLabelTTF* n_replay_label2;
+//	KSLabelTTF* s_replay_label2;
+	
+	void controlButtonAction(CCObject* sender, CCControlEvent t_event);
 	
 	CCScale9Sprite* inner_left;
 	
@@ -118,8 +120,8 @@ private:
 	
 	vector<CCSprite*> ani_stars;
 	
-	CCMenu* ok_menu;
-	CCMenu* replay_menu;
+	CCControlButton* ok_menu;
+	CCControlButton* replay_menu;
 	
 //	KSLabelTTF* score_label;
 //	KSLabelTTF* gold_label;

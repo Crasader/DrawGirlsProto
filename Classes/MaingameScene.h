@@ -267,6 +267,7 @@ private:
 //	SearchEye* search_eye;
 	
 	StartMapGacha* t_smg;
+	void checkHideStartMapGacha();
 	
 	CCNode* screen_node;
 	

@@ -72,7 +72,39 @@ public:
 		CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, t_call2, NULL);
 		runAction(t_seq);
 		
+		if(selected_img)
+		{
+			if(piece_mode == kPieceMode_default)
+			{
+				CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.2f, 1.f, 0, 0, 90, 0, 0);
+				CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::selectedImgInvisible));
+				CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, NULL);
+				selected_img->runAction(t_seq);
+			}
+			else // kPieceMode_thumb
+			{
+				CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.2f, 1.f, 0, 0, 90, 0, 0);
+				CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::selectedImgVisible));
+				CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.2f, 1.f, 0, -90, 90, 0, 0);
+				CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, NULL);
+				selected_img->runAction(t_seq);
+			}
+		}
+		
 		return true;
+	}
+	
+	void regSelectImg(CCSprite* t_img)
+	{
+		selected_img = t_img;
+		
+		if(piece_mode == kPieceMode_default)
+			selectedImgInvisible();
+	}
+	
+	void unRegSelectImg()
+	{
+		selected_img = NULL;
 	}
 	
 	void simpleView()
@@ -203,10 +235,24 @@ private:
 	SEL_CallFuncCCp delegate_create_particle;
 	PieceMode get_animation_mode;
 	
+	CCSprite* selected_img;
+	
 	CCSprite* star1;
 	CCSprite* star2;
 	CCSprite* star3;
 	CCSprite* star4;
+	
+	void selectedImgVisible()
+	{
+		if(selected_img)
+			selected_img->setVisible(true);
+	}
+	
+	void selectedImgInvisible()
+	{
+		if(selected_img)
+			selected_img->setVisible(false);
+	}
 	
 	void originalMode ()
 	{
@@ -490,6 +536,8 @@ private:
 		star2 = NULL;
 		star3 = NULL;
 		star4 = NULL;
+		
+		selected_img = NULL;
 		
 		stage_number = t_stage_number;
 		stage_level = t_stage_level;

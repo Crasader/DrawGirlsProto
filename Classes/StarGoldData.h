@@ -751,6 +751,9 @@ public:
 	void setEndlessMinPiece(int t_i);
 	int getEndlessMinPiece();
 	
+	void setSpecialEventPuzzleNumber(int t_i);
+	int getSpecialEventPuzzleNumber();
+	
 	bool is_before_selected_event_stage;
 	
 	StarGoldData() : heart_max(0), heart_cool_time(0), game_friend_max(0), help_cool_time(0), challenge_cool_time(0), msg_remove_day(0),
@@ -1091,6 +1094,8 @@ private:
 	
 	KSProtectVar<int> clear_take_card_cnt;
 	KSProtectVar<int> unlock_frame_cnt;
+	
+	KSProtectVar<int> special_event_puzzle_number;
 	
 	KSProtectStr all_clear_reward;
 	

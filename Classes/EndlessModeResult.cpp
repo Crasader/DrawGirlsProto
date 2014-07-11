@@ -988,8 +988,9 @@ void EndlessModeResult::setMain()
 																	 
 																	 Json::Value param;
 																	 param["memberID"] = myHSP->getMemberID();
-																	 
-																	 command_list.push_back(CommandParam("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
+																	 param["autoLevel"] = mySGD->getUserdataAutoLevel();
+																	 param["highPiece"] = mySGD->getUserdataHighPiece();
+																	 command_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
 																	 
 																	 myHSP->command(command_list);
 																 });
@@ -1601,8 +1602,9 @@ void EndlessModeResult::startCalcAnimation()
 																																																					  
 																																																					  Json::Value param;
 																																																					  param["memberID"] = myHSP->getMemberID();
-																																																					  
-																																																					  command_list.push_back(CommandParam("startendlessplay", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
+																																																					  param["autoLevel"] = mySGD->getUserdataAutoLevel();
+																																																					  param["highPiece"] = mySGD->getUserdataHighPiece();
+																																																					  command_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
 																																																					  
 																																																					  myHSP->command(command_list);
 																																																					  

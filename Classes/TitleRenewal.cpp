@@ -243,6 +243,12 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 {
 	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	
+	if(myDSH->getStringForKey(kDSH_Key_timeZone)==""){
+		string tz = myHSP->getTimeZone();
+		myDSH->setStringForKey(kDSH_Key_timeZone, tz);
+		CCLOG("saved time zone : ",tz.c_str());
+	}
+		
 	if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
 	{
 		myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
@@ -849,6 +855,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setAllClearReward(result_data["allClearReward"].asString());
 		mySGD->setClearTakeCardCnt(result_data["clearTakeCardCnt"].asInt());
 		mySGD->setUnlockFrameCnt(result_data["unlockFrameCnt"].asInt());
+		mySGD->setSpecialEventPuzzleNumber(result_data["specialEventPuzzleNumber"].asInt());
 	}
 	else
 	{
@@ -2543,6 +2550,10 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		}
 		else
 		{
+			
+			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
+																					myLoc->getLocalForKey(kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
+			
 			is_menu_enable = true;
 		}
 	}
@@ -2573,6 +2584,8 @@ void TitleRenewalScene::joinAction()
 										 //input_text->removeFromParent();
 										 //flag->removeFromParent();
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+										 
+										
 										 
 										 successLogin();
 									 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -41,6 +43,7 @@ import com.hangame.hsp.ui.HSPUiLauncher;
 import com.hangame.hsp.ui.HSPUiUri;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
+import com.hangame.hsp.util.HSPResultUtil;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -65,6 +68,7 @@ abstract class KRunnable implements Runnable
 public class hspConnector{
 	//public static KakaoLeaderboard kakaoLeaderboard;
 	//public static Kakao kakao;
+	public static String uniqId;
 	public static Cocos2dxGLSurfaceView mGLView;
 	public static Context AppContext;
 	public static Handler handler = new Handler();
@@ -102,6 +106,9 @@ public class hspConnector{
 		hspConnector.sPackageName = applicationInfo.packageName;
 		hspConnector.sFileDirectory = pContext.getFilesDir().getAbsolutePath();
 		hspConnector.sAssetManager = pContext.getAssets();
+		
+		
+		initUniqId();
 	}
 
 	// ===========================================================
@@ -109,6 +116,7 @@ public class hspConnector{
 	// ===========================================================
 	private static native void ResultLogin(int _key,String datas,boolean isFinish);
 	private static native void SendResultNative(int _key,String datas,boolean isFinish);
+//	private static native int getUserState();
 	public static native void SetupOnAndroid(int gameno,String gameid,String gameVersion);
 	public static boolean checkCGP(final int _key)
 	{
@@ -177,10 +185,7 @@ public class hspConnector{
 //					public void run() {
 					
 						HSPCore core = HSPCore.getInstance();
-						if(core.getState() == HSPState.HSP_STATE_ONLINE)
-						{
-							Log.d("hsp", "dfsgfsdg222");
-						}
+						Log.d("before cur State",core.getState().toString());
 						if (core != null) { 
 //							Boolean isOverWriteMapping = true;          // true 이면 이미 매핑한 sno를 강제로 매핑시킨다는 의미이다.
                             Boolean isOverWriteMapping = Boolean.valueOf(force);     // false 이면 이미 매핑한 sno는 건들지 않고 얼럿으로 알려주기만 한다.
@@ -190,6 +195,8 @@ public class hspConnector{
 
 								@Override
 								public void onIdpIDMap(HSPResult result , long prevMemberNo) {
+									HSPCore core = HSPCore.getInstance();
+									Log.d("after cur State",core.getState().toString());
 									Log.d("mapping", "@@@@@@ HSPCore.login callback => " + result);
 									JSONObject r = new JSONObject();
 									JSONObject error = new JSONObject();
@@ -241,7 +248,6 @@ public class hspConnector{
 											hspConnector.SendResult(this.delekey,this.totalSource);
 										}
 									});
-
 								}
 							});
 
@@ -269,6 +275,7 @@ public class hspConnector{
 		 
 //		3.     접속하고자 하는 Web Page Url을 파라미터로 설정한다.
 		 
+		
 		uriWebview.setParameter(HSPUiUri.HSPUiUriParameterKey.WEB_URL, url);
 		 
 //		4.     생성된 HSPUiUri 인스턴스를 이용하여 HSPUiLauncher에 launch 요청을 한다.
@@ -278,14 +285,33 @@ public class hspConnector{
 
 		
 		
+	}
+	public static void openCSCenter(final String url)
+	{
+		// 내 정보 URI Action(WEBVIEW)으로 HSPUiUri 인스턴스를 생성한다 HSPUri*
+		HSPUiUri uriWebview =  HSPUiFactory.getUiUri(HSPUiUri.HSPUiUriAction.SUPPORTS_CSCENTER);
+		 
+//		3.     접속하고자 하는 Web Page Url을 파라미터로 설정한다.
+		 
+		
+//		uriWebview.setParameter(HSPUiUri.HSPUiUriParameterKey.WEB_URL, url);
+		
+//		4.     생성된 HSPUiUri 인스턴스를 이용하여 HSPUiLauncher에 launch 요청을 한다.
+
+		// 게임 위에 해당 HSPUiUri 인스턴스에 해당하는 HSP화면을 출력한다.
+		HSPUiLauncher.getInstance().launch(uriWebview);
+
+		
+		
 	}	
+	
 	public static String getServerAddress() 
 	{
 		HSPServiceProperties properties = HSPCore.getInstance().getServiceProperties();
 		String gameServerAddress = properties.getServerAddress(HSPServerName.HSP_SERVERNAME_GAMESVR);
 		return gameServerAddress;
 	}
-	public static void openKakaoMsg(){
+	public static int openKakaoMsg(){
 
 			/**
 			 * @param activity
@@ -298,26 +324,37 @@ public class hspConnector{
 			 */
 
 			
+		KakaoLink kakaoLink = KakaoLink.getLink((Activity)hspConnector.sContext);
+
+		// check, intent is available.
+		if (!kakaoLink.isAvailableIntent())
+		{
+			return 0;
+		}
+		else
+		{
 			hspConnector.handler.post(
 					new Runnable(){
 						public void run() {
 							KakaoLink kakaoLink = KakaoLink.getLink((Activity)hspConnector.sContext);
-
-							// check, intent is available.
-							if (!kakaoLink.isAvailableIntent())
-							  return;
+//
+//							// check, intent is available.
+//							if (!kakaoLink.isAvailableIntent())
+//								return;
 							kakaoLink.openKakaoLink((Activity)hspConnector.sContext, 
-							        "http://naver.com", 
-							        "남자들을 흥분의 도가니로 몰아 넣은 그게임!!\n땅따먹기 섬란카구라 뉴웨이브", 
-							        "com.nhnent.SKDRAWGIRLSA", 
-							        "1.0",
-							        "땅따먹기 섬란카구라", 
-							        "UTF-8");
-						
-							
+									"http://naver.com", 
+									"남자들을 흥분의 도가니로 몰아 넣은 그게임!!\n땅따먹기 섬란카구라 뉴웨이브", 
+									"com.nhnent.SKDRAWGIRLSA", 
+									"1.0",
+									"땅따먹기 섬란카구라", 
+									"UTF-8");
+
+
 						}
 					}
 					);
+			return 1;
+		}
 	}
 	public static void finishItemDelivery(final int _key, final String datas)
 	{
@@ -770,7 +807,18 @@ public class hspConnector{
 	public static String getDeviceModel(){
 		return Build.MODEL;
 	}
-
+	public static String getUniqId(){
+		return uniqId;
+	}
+	public static void initUniqId(){
+		final TelephonyManager tm = (TelephonyManager) ((Activity)sContext).getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+        final String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(sContext.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        uniqId = deviceUuid.toString();
+	}
 	public static AssetManager getAssetManager() {
 		return hspConnector.sAssetManager;
 	}

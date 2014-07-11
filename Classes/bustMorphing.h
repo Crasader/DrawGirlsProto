@@ -260,7 +260,8 @@ public:
 	int colorRampUniformLocation;   // 1
 	CCTexture2D* colorRampTexture;  // 2
 	vector<vector<ccColor4B>> m_silColors; // y, x 의 컬러값. loadRGB 할 때 로드 함.
-	
+	CCPoint m_greenCenter;
+	CCPoint m_redCenter;
 //	FromToWithDuration2
 	MyNode()
 	{
@@ -386,7 +387,7 @@ public:
 		AudioEngine::sharedInstance()->playEffect(ccsf("groan%d.wav", ks19937::getIntValue(1, 13)) ,false);
 		
 		CCPoint touchLocation = pTouch->getLocation();
-		CCPoint local = convertToNodeSpace(touchLocation);
+		CCPoint local = getParent()->convertToNodeSpace(touchLocation);
 		
 		m_validTouch = false;
 
@@ -414,8 +415,8 @@ public:
 			}
 		}
 
-		float diffRad1 = atan2f(ks19937::getFloatValue(-1, 1), ks19937::getFloatValue(-1, 1)); // 위쪽으로.
-		float diffRad2 = atan2f(ks19937::getFloatValue(-1, 1), ks19937::getFloatValue(-1, 1)); // 위쪽으로.
+		float diffRad1 = atan2f(local.y - m_greenCenter.y, local.x - m_greenCenter.x );
+		float diffRad2 = atan2f(local.y - m_redCenter.y, local.x - m_redCenter.x);
 		for(auto i : movingVertices){ // 움직여야 되는 점의 집합에 대해
 			Vertex3D backup = m_backupVertices[i];
 			float r = distance[i];
@@ -430,7 +431,7 @@ public:
 			if(waveValue > 5)
 			{
 				float diffRad = diffRad1;
-				CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue  / devider;
+				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
 				//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
 				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, time1,
 																								 [=](CCPoint t){
@@ -456,7 +457,7 @@ public:
 			if(waveValue2 > 5)
 			{
 				float diffRad = diffRad2;
-				CCPoint goalPosition = ccp(cosf(diffRad), sinf(diffRad)) * waveValue2  / devider;
+				CCPoint goalPosition = ccp(cosf(diffRad2), sinf(diffRad2)) * waveValue2  / devider;
 				//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
 				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, time1,
 																								 [=](CCPoint t){
@@ -647,13 +648,25 @@ public:
 		int height = img->getHeight();
 		int width = img->getWidth();
 		m_silColors = vector<vector<ccColor4B> >(height, vector<ccColor4B>(width));	
+		CCPoint redWeightCenter = ccp(0, 0);
+		CCPoint greenWeightCenter = ccp(0, 0);
+		float greenWeightSum = 0.f;
+		float redWeightSum = 0.f;
 		for(int y=0;y<height;y++){
 			for(int x=0;x<width;x++){
 				int i = ((height - 1 - y)*width+x)*4;
 //				CCLOG("i = %d", i);
 				m_silColors[y][x] = ccc4(oData[i], oData[i + 1], oData[i + 2], oData[i + 3]);
+				greenWeightCenter = greenWeightCenter + ccp(x, y) * oData[i + 1] / 255.f;
+				greenWeightSum += oData[i + 1] / 255.f;
+				redWeightCenter = redWeightCenter + ccp(x, y) * oData[i + 0] / 255.f;
+				redWeightSum += oData[i + 0] / 255.f;
 			}
 		}
+		if(greenWeightSum != 0.f)
+			m_greenCenter = greenWeightCenter / greenWeightSum / 2.f;
+		if(redWeightSum != 0.f)
+			m_redCenter = redWeightCenter / redWeightSum / 2.f;
 		int j = 0;
 		// z 값을 주석처리 해놈.
 //		for(auto& point : m_points)

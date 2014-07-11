@@ -52,18 +52,20 @@ private:
 	SEL_CallFunc delegate_final;
 	
 	CCSprite* gray;
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	
-	ScrollBar* m_scrollBar;
+//	ScrollBar* m_scrollBar;
 	
 	bool is_menu_enable;
 	
-	CommonButton* all_menu;
-	CommonButton* success_menu;
-	CommonButton* ing_menu;
-	CommonButton* reward_menu;
+	CCMenu* tab_menu;
 	
-	CommonButton* all_reward_menu;
+	CCMenuItem* all_menu;
+	CCMenuItem* success_menu;
+	CCMenuItem* ing_menu;
+	CCMenuItem* reward_menu;
+	
+	CCMenuItem* all_reward_menu;
 	
 	CCTableView* achieve_table;
 	CCLabelTTF* empty_ment;

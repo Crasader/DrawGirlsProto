@@ -35,7 +35,24 @@
 
 
 namespace GraphDogLib {
-    
+
+	int match(const char *string, const char *pattern)
+	{
+		int    status;
+		regex_t    re;
+		
+		
+		if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) {
+			return(0);      /* Report error. */
+		}
+		status = regexec(&re, string, (size_t) 0, NULL, 0);
+		regfree(&re);
+		if (status != 0) {
+			return(0);      /* Report error. */
+		}
+		return(1);
+	}
+
 
 std::string GDCreateToken(string auID,string udid,string flag,string lang,string nick,string email,string platform,string cTime,string secretKey,string dInfo){
     string msg = auID;

@@ -142,6 +142,7 @@ bool Maingame::init()
 	myGD->V_CCP["Main_initJackPosition"] = std::bind(&Maingame::initJackPosition, this, _1);
 	myGD->V_I["Main_scoreAttackMissile"] = std::bind(&Maingame::scoreAttackMissile, this, _1);
 	myGD->V_CCP["Main_showScoreMissileEffect"] = std::bind(&Maingame::showScoreMissileEffect, this, _1);
+	myGD->V_V["Main_checkHideStartMapGacha"] = std::bind(&Maingame::checkHideStartMapGacha, this);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -160,6 +161,14 @@ bool Maingame::init()
 	game_node->addChild(myMS, myMSZorder);
 	
 	return true;
+}
+
+void Maingame::checkHideStartMapGacha()
+{
+	if(t_smg)
+	{
+		t_smg->outAction();
+	}
 }
 
 void Maingame::setLineParticle(bool t_b)
