@@ -242,21 +242,9 @@ void Maingame::onEnterTransitionDidFinish()
 	top_bottom_layer->setPosition(ccp(0, 0));
 	getParent()->addChild(top_bottom_layer, -1);
 	
-	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern2.png");
+	CCSprite* side_back = CCSprite::create("ingame_outback.png");
+	side_back->setPosition(ccp(240,myDSH->ui_center_y));
 	top_bottom_layer->addChild(side_back, topBottomZorder);
-	
-	CCSize pattern_size = side_back->getTexture()->getContentSize();
-	
-	for(int i=0;i*pattern_size.width < 480;i++)
-	{
-		for(int j=0;j*pattern_size.height < myDSH->ui_top;j++)
-		{
-			CCSprite* t_pattern = CCSprite::createWithTexture(side_back->getTexture());
-			t_pattern->setAnchorPoint(ccp(0,0));
-			t_pattern->setPosition(ccp(i*pattern_size.width,j*pattern_size.height));
-			side_back->addChild(t_pattern);
-		}
-	}
 	
 	if(mySGD->getStartMapGachaCnt() == 0)
 	{

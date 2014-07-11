@@ -21,84 +21,62 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	target_gacha = t_gacha;
 	delegate_gacha = d_gacha;
 	
-	back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));// CCSprite::create("start_map_gacha_back.png");
-	back->setContentSize(CCSizeMake(200, 50));
+	back = CCSprite::create("start_map_gacha_back.png");// CCSprite::create("start_map_gacha_back.png");
 	back->setAnchorPoint(ccp(0.5f,1.f));
 	back->setPosition(ccp(240,0));
 	addChild(back, kSMG_Z_back);
 	
 	
-	CCLabelTTF* g_label = CCLabelTTF::create();
+	CCSprite* n_gacha = CCSprite::create("start_map_gacha_button.png");
+	CCSprite* s_gacha = CCSprite::create("start_map_gacha_button.png");
+	s_gacha->setColor(ccGRAY);
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_areaReGacha), mySGD->getFont().c_str(), 11);
-	gacha_label->enableOuterStroke(ccBLACK, 1.f);
-	gacha_label->setPosition(ccp(-35,0));
-	g_label->addChild(gacha_label);
+	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StartMapGacha::menuAction));
+	gacha_item->setTag(kSMG_MT_gacha);
 	
-	CCScale9Sprite* price_back = CCScale9Sprite::create("common_button_yellowdown.png", CCRectMake(0,0,34,34), CCRectMake(16,16,2,2));
-	price_back->setContentSize(CCSizeMake(75, 33));
-	price_back->setPosition(ccp(38, 0));
-	g_label->addChild(price_back);
-	
-	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
-	{
-		CCSprite* pass_ticket = CCSprite::create("pass_ticket2.png");
-		pass_ticket->setPosition(ccp(20,16.f));
-		price_back->addChild(pass_ticket);
-		
-		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 11);
-		free_label->enableOuterStroke(ccBLACK, 1.f);
-		free_label->setPosition(ccp(49,16));
-		price_back->addChild(free_label);
-	}
-	else
-	{
-		CCSprite* price_type = CCSprite::create("ui_gold_img.png");
-		price_type->setPosition(ccp(15,15));
-		price_back->addChild(price_type);
-		
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString()).c_str(), mySGD->getFont().c_str(), 15);
-		price_label->enableOuterStroke(ccBLACK, 1.f);
-		price_label->setPosition(ccp(47,15));
-		price_back->addChild(price_label);
-	}
-	
-	CCScale9Sprite* gacha_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-	
-	gacha_button = CCControlButton::create(g_label, gacha_back);
-	gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(StartMapGacha::gachaAction), CCControlEventTouchUpInside);
-	gacha_button->setPreferredSize(CCSizeMake(160,40));
-	gacha_button->setPosition(ccp(85,25));
+	gacha_button = CCMenu::createWithItem(gacha_item);
+	gacha_button->setPosition(ccp(87,back->getContentSize().height/2.f));
 	back->addChild(gacha_button);
 	
 	gacha_button->setTouchPriority(-170);
 	
+	CCNode* gacha_node = CCNode::create();
+	gacha_node->setPosition(ccpFromSize(back->getContentSize()/2.f));
+	back->addChild(gacha_node, 1);
 	
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_areaReGacha), mySGD->getFont().c_str(), 11);
+	gacha_label->disableOuterStroke();
+	gacha_label->setPosition(ccp(-56,0));
+	gacha_node->addChild(gacha_label);
 	
-//	CCSprite* n_gacha = CCSprite::create("start_map_gacha_button.png");
-//	CCSprite* n_gacha_price_type = CCSprite::create("price_gold_img.png");
-//	n_gacha_price_type->setPosition(ccp(n_gacha->getContentSize().width/2.f+10, n_gacha->getContentSize().height/2.f));
-//	n_gacha->addChild(n_gacha_price_type);
-//	CCLabelTTF* n_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
-//	n_gacha_price_label->setPosition(ccp(n_gacha->getContentSize().width/2.f+35, n_gacha->getContentSize().height/2.f));
-//	n_gacha->addChild(n_gacha_price_label);
-//	
-//	CCSprite* s_gacha = CCSprite::create("start_map_gacha_button.png");
-//	s_gacha->setColor(ccGRAY);
-//	CCSprite* s_gacha_price_type = CCSprite::create("price_gold_img.png");
-//	s_gacha_price_type->setPosition(ccp(s_gacha->getContentSize().width/2.f+10, s_gacha->getContentSize().height/2.f));
-//	s_gacha->addChild(s_gacha_price_type);
-//	CCLabelTTF* s_gacha_price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString(), mySGD->getFont().c_str(), 15);
-//	s_gacha_price_label->setPosition(ccp(s_gacha->getContentSize().width/2.f+35, s_gacha->getContentSize().height/2.f));
-//	s_gacha->addChild(s_gacha_price_label);
-//	
-//	CCMenuItem* gacha_item = CCMenuItemSprite::create(n_gacha, s_gacha, this, menu_selector(StartMapGacha::menuAction));
-//	gacha_item->setTag(kSMG_MT_gacha);
-//	
-//	gacha_menu = CCMenu::createWithItem(gacha_item);
-//	gacha_menu->setPosition(getContentPosition(kSMG_MT_gacha));
-//	back->addChild(gacha_menu, kSMG_Z_content);
-//	gacha_menu->setTouchPriority(-170);
+	CCNode* price_node = CCNode::create();
+	price_node->setPosition(ccp(38, 0));
+	gacha_node->addChild(price_node);
+	
+	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
+	{
+		CCSprite* pass_ticket = CCSprite::create("pass_ticket2.png");
+		pass_ticket->setPosition(ccp(-40.f,0));
+		pass_ticket->setScale(0.7);
+		price_node->addChild(pass_ticket);
+		
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 11);
+		free_label->disableOuterStroke();
+		free_label->setPosition(ccp(-13.f,0));
+		price_node->addChild(free_label);
+	}
+	else
+	{
+		CCSprite* price_type = CCSprite::create("ui_gold_img.png");
+		price_type->setPosition(ccp(-40.f,0));
+		price_type->setScale(0.8);
+		price_node->addChild(price_type);
+		
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->getGachaMapFee())->getCString()).c_str(), mySGD->getFont().c_str(), 11);
+		price_label->disableOuterStroke();
+		price_label->setPosition(ccp(-13.f,0));
+		price_node->addChild(price_label);
+	}
 	
 	
 	cancel_menu = CommonButton::createCloseButton();
@@ -127,7 +105,7 @@ CCPoint StartMapGacha::getContentPosition (int t_tag)
 	CCPoint return_value;
 	
 	if(t_tag == kSMG_MT_gacha)			return_value = ccp(78,29);
-	else if(t_tag == kSMG_MT_cancel)	return_value = ccp(177,25);
+	else if(t_tag == kSMG_MT_cancel)	return_value = ccp(187,back->getContentSize().height/2.f);
 	
 	return return_value;
 }
