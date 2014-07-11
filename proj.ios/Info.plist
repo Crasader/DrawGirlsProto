@@ -47,7 +47,7 @@
 		<string>fonts/RixGoEB.ttf</string>
 		<string>fonts/RixJGoB.ttf</string>
 		<string>fonts/meiryo.ttc</string>
-		<string>fonts/jrNaver.otf</string>
+		<string>fonts/jrNaver.ttf</string>
 	</array>
 	<key>UIPrerenderedIcon</key>
 	<true/>

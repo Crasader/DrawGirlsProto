@@ -188,11 +188,19 @@ string StarGoldData::getFont()
 	
 	
 	string font_name;
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//	font_name = "RixGoEB";
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	font_name = "fonts/RixGoEB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+//#endif
+//	
+
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	font_name = "RixGoEB";
+	font_name = "jrNaver";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	font_name = "fonts/RixGoEB.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
+	font_name = "fonts/jrNaver.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
+	
 	
 	return font_name;
 }
