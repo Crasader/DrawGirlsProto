@@ -38,6 +38,8 @@ enum PuzzleRightMode{
 
 class RankFriendInfo;
 class CommonButton;
+class CCMenuItemLambda;
+class CCMenuLambda;
 class PuzzleScene : public CCLayer
 {
 public:
@@ -154,8 +156,9 @@ private:
 	void topBacking();
 	void setTop();
 	
-	CommonButton* stage_button;
-	CommonButton* ranking_button;
+	CCMenuLambda* right_top_menu;
+	CCMenuItemLambda* stage_button;
+	CCMenuItemLambda* ranking_button;
 	void setRightTopButton();
 	
 	CCMenu* ready_menu;
@@ -170,7 +173,7 @@ private:
 	
 	void tryGababoReward(CCNode* t_loading, function<void()> success_func);
 	
-	CCScale9Sprite* right_body;
+	CCSprite* right_body;
 	
 	PuzzleRightMode right_mode;
 	int saved_ranking_stage_number;

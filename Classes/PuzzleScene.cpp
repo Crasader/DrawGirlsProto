@@ -715,26 +715,9 @@ bool PuzzleScene::init()
 	}
 	
 	
-//	CCSprite* back_img = CCSprite::create("mainflow_back_wall.png");
-//	back_img->setPosition(ccp(240,160));
-//	addChild(back_img, kPuzzleZorder_back);
-	
-	CCSpriteBatchNode* back_batch = CCSpriteBatchNode::create("ingame_side_pattern.png");
-	back_batch->setPosition(ccp(240,160));
-	addChild(back_batch, kPuzzleZorder_back);
-	
-	CCPoint base_position = ccp(-284,-180);
-	
-	for(int i=0;i*26 < 360;i++)
-	{
-		for(int j=0;j*48 < 568;j++)
-		{
-			CCSprite* t_back = CCSprite::createWithTexture(back_batch->getTexture());
-			t_back->setAnchorPoint(ccp(0,0));
-			t_back->setPosition(base_position + ccp(j*48, i*26));
-			back_batch->addChild(t_back);
-		}
-	}
+	CCSprite* back_img = CCSprite::create("main_back.png");
+	back_img->setPosition(ccp(240,160));
+	addChild(back_img, kPuzzleZorder_back);
 	
 	piece_mode = kPieceMode_thumb;//(PieceMode)myDSH->getIntegerForKey(kDSH_Key_puzzleMode);
 	setPuzzle();
@@ -2238,10 +2221,8 @@ void PuzzleScene::setRight()
 		myHSP->removeTarget(this);
 	}
 	
-	right_body = CCScale9Sprite::create("puzzle_right_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	right_body->setContentSize(CCSizeMake(130, 280));
-//	CCSprite* right_body = CCSprite::create("puzzle_right_body.png");
-	right_body->setPosition(ccp(-right_body->getContentSize().width/2.f-6, -1));
+	right_body = CCSprite::create("puzzle_right_body.png");
+	right_body->setPosition(ccp(-right_body->getContentSize().width/2.f-6, 23));
 	right_case->addChild(right_body);
 	
 	int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber));
@@ -2258,7 +2239,7 @@ void PuzzleScene::setRight()
 			int step_card_number = NSDS_GI(selected_stage_number, kSDS_SI_level_int1_card_i, i);
 			is_have_card_list[i-1] = mySGD->isHasGottenCards(step_card_number);
 			
-			CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-(i-1)*46.5f);
+			CCPoint step_position = ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-53-(i-1)*46.5f);
 			
 			if(is_have_card_list[i-1])
 			{
@@ -2299,32 +2280,39 @@ void PuzzleScene::setRight()
 				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
 				for(int j=0;j<card_rank;j++)
 				{
-					CCSprite* t_star = CCSprite::create("puzzle_right_staron.png");
-					t_star->setPosition(ccpAdd(step_position, ccp(-43.5f+j*13.5f,10)));
+					CCSprite* t_star = CCSprite::create("star_on.png");
+					t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
 					right_body->addChild(t_star);
 				}
 				
-				CommonButton* show_img = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_view), 12, CCSizeMake(40, 40), CommonButtonYellow, kCCMenuHandlerPriority);
-				show_img->setTitleColor(ccc3(50, 20, 0));
-				show_img->setPosition(ccpAdd(step_position, ccp(33,0)));
-				show_img->setFunction([=](CCObject* sender)
-									  {
-										  if(!is_menu_enable)
-											  return;
-										  
-										  is_menu_enable = false;
-										  
-										  mySGD->selected_collectionbook = step_card_number;
-										  
-//										  CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, CardViewScene::scene());
-										  CCDirector::sharedDirector()->pushScene(CardViewScene::scene([=](){is_menu_enable = true;}));
-										  
-//										  DiaryZoomPopup* t_popup = DiaryZoomPopup::create();
-//										  t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
-//										  t_popup->is_before_no_diary = true;
-//										  addChild(t_popup, kPuzzleZorder_popup);
-									  });
-				right_body->addChild(show_img);
+				CCSprite* n_show = CCSprite::create("puzzle_right_view.png");
+				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_view), mySGD->getFont().c_str(), 12);
+				n_label->disableOuterStroke();
+				n_label->setPosition(ccpFromSize(n_show->getContentSize()/2.f) + ccp(2,0));
+				n_show->addChild(n_label);
+				
+				CCSprite* s_show = CCSprite::create("puzzle_right_view.png");
+				s_show->setColor(ccGRAY);
+				KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_view), mySGD->getFont().c_str(), 12);
+				s_label->disableOuterStroke();
+				s_label->setPosition(ccpFromSize(s_show->getContentSize()/2.f) + ccp(2,0));
+				s_show->addChild(s_label);
+				
+				CCMenuItemLambda* show_item = CCMenuItemSpriteLambda::create(n_show, s_show, [=](CCObject* sender)
+																			 {
+																				 if(!is_menu_enable)
+																					 return;
+																				 
+																				 is_menu_enable = false;
+																				 
+																				 mySGD->selected_collectionbook = step_card_number;
+																				 
+																				 CCDirector::sharedDirector()->pushScene(CardViewScene::scene([=](){is_menu_enable = true;}));
+																			 });
+				
+				CCMenuLambda* show_menu = CCMenuLambda::createWithItem(show_item);
+				show_menu->setPosition(ccpAdd(step_position, ccp(44,0)));
+				right_body->addChild(show_menu);
 			}
 			else
 			{
@@ -2358,15 +2346,16 @@ void PuzzleScene::setRight()
 					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition4);
 				
 				KSLabelTTF* condition_label = KSLabelTTF::create(condition_string.c_str(), mySGD->getFont().c_str(), 10);
+				condition_label->disableOuterStroke();
 				condition_label->setAnchorPoint(ccp(0.f,0.5f));
-				condition_label->setPosition(step_position + ccp(8-60,15-23.5f));
+				condition_label->setPosition(step_position + ccp(8-64,15-23.5f));
 				right_body->addChild(condition_label);
 				
 				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
 				for(int j=0;j<card_rank;j++)
 				{
-					CCSprite* t_star = CCSprite::create("puzzle_right_staroff.png");
-					t_star->setPosition(ccpAdd(step_position, ccp(-43.5f+j*13.5f,10)));
+					CCSprite* t_star = CCSprite::create("star_off.png");
+					t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
 					right_body->addChild(t_star);
 				}
 				
@@ -2414,65 +2403,34 @@ void PuzzleScene::setRight()
 	
 	CCSprite* n_ready = CCSprite::create("puzzle_right_ready.png");
 	
-	CCLabelTTF* n_stage2 = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
-											 mySGD->getFont().c_str(), 12);
-	n_stage2->setColor(ccWHITE);
-	n_stage2->setOpacity(100);
-	n_stage2->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+12));
-	n_ready->addChild(n_stage2);
-	
-	KSLabelTTF* n_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
-	n_ready_label2->setColor(ccWHITE);
-	n_ready_label2->setOpacity(100);
-	n_ready_label2->disableOuterStroke();
-	n_ready_label2->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f-1));
-	n_ready->addChild(n_ready_label2);
-	
 	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
-												 mySGD->getFont().c_str(), 12);
-	n_stage->setColor(ccBLACK);
-	n_stage->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+13));
+												 mySGD->getFont().c_str(), 11);
+	n_stage->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+9));
 	n_ready->addChild(n_stage);
 	
-	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
-	n_ready_label->setColor(ccc3(47, 30, 6));
-	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f));
+	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 18.5f);
+	n_ready_label->disableOuterStroke();
+	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f-1));
 	n_ready->addChild(n_ready_label);
 	
 	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
 	s_ready->setColor(ccGRAY);
 	
-	CCLabelTTF* s_stage2 = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
-											  mySGD->getFont().c_str(), 12);
-	s_stage2->setColor(ccWHITE);
-	s_stage2->setOpacity(100);
-	s_stage2->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+12));
-	s_ready->addChild(s_stage2);
-	
-	KSLabelTTF* s_ready_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
-	s_ready_label2->setColor(ccWHITE);
-	s_ready_label2->setOpacity(100);
-	s_ready_label2->disableOuterStroke();
-	s_ready_label2->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f-1));
-	s_ready->addChild(s_ready_label2);
-	
 	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
-												 mySGD->getFont().c_str(), 12);
-	s_stage->setColor(ccBLACK);
-	s_stage->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+13));
+												 mySGD->getFont().c_str(), 11);
+	s_stage->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+9));
 	s_ready->addChild(s_stage);
 	
-	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 20);
-	s_ready_label->setColor(ccc3(47, 30, 6));
+	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 18.5f);
 	s_ready_label->disableOuterStroke();
-	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f));
+	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f-1));
 	s_ready->addChild(s_ready_label);
 	
 	CCMenuItem* ready_item = CCMenuItemSprite::create(n_ready, s_ready, this, menu_selector(PuzzleScene::menuAction));
 	ready_item->setTag(kPuzzleMenuTag_start);
 	
 	ready_menu = CCMenu::createWithItem(ready_item);
-	ready_menu->setPosition(ccp(-65-6,-puzzle_node->getPositionY()+28+8));
+	ready_menu->setPosition(ccp(-65-6,-puzzle_node->getPositionY()+28+4));
 	right_case->addChild(ready_menu);
 	
 	setRightTopButton();
@@ -2499,7 +2457,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		Json::Value user_list = result_data["list"];
 		
 		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
-		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,213));
+		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,158));
 		right_body->addChild(graph_back);
 		
 //		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -2538,24 +2496,23 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		
 		float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
 		
-		CCSprite* rank_percent_case = CCSprite::create("puzzle_rank_percent.png");
+		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");//"puzzle_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(10+115,213));
+		rank_percent_case->setPosition(ccp(10+115,158));
 		right_body->addChild(rank_percent_case);
 		
-		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 11);
+		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 12);
 		percent_label->addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
 																					 2.f * (1.f - rank_percent), [=](float t){
 																					 percent_label->setString(ccsf("%.0f%%", t));
 		}, [=](float t){
 			percent_label->setString(ccsf("%.0f%%", t));
 		}));
-		percent_label->setColor(ccc3(255, 170, 20));
-		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
+		percent_label->enableOuterStroke(ccc3(50, 25, 0), 0.5f);
+		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+3));
 		rank_percent_case->addChild(percent_label);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,213));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,158));
 		rank_percent_case->runAction(t_move);
 		
 //		delay_index = 0;
@@ -2565,20 +2522,20 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			string case_name;
 			if(myrank == i+1)
 			{
-				case_name = "mainpopup_pupple1.png";
+				case_name = "mainpopup_purple.png";
 				limit_count++;
 			}
 			else
 			{
-				case_name = "rank_normal.png";
+				case_name = "rank_normal2.png";
 			}
 			
-			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(125, 40));
-			list_cell_case->setPosition(ccp(right_body->getContentSize().width/2.f,180-i*34.5f));
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			list_cell_case->setContentSize(CCSizeMake(124, 36));
+			list_cell_case->setPosition(ccp(right_body->getContentSize().width/2.f,130-i*36.f));
 			right_body->addChild(list_cell_case);
 			
-			CCPoint rank_position = ccp(18,20);
+			CCPoint rank_position = ccp(14,list_cell_case->getContentSize().height/2.f);
 			if(i == 0)
 			{
 				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
@@ -2599,8 +2556,8 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
-				rank_label->enableOuterStroke(ccBLACK, 1);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 15);
+				rank_label->disableOuterStroke();
 				rank_label->setPosition(rank_position);
 				list_cell_case->addChild(rank_label);
 			}
@@ -2611,19 +2568,19 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			
 			string flag = read_data.get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(39,20));
-			selectedFlagSpr->setScale(0.5);
+			selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
+			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
-			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(78,28));
+			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+			nick_label->disableOuterStroke();
+			nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-			score_label->setColor(ccc3(255, 170, 20));
-			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(78,12));
+			score_label->setColor(ccc3(54, 36, 148));
+			score_label->disableOuterStroke();
+			score_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f - 7));
 			list_cell_case->addChild(score_label);
 			
 //			CCPoint original_position = list_cell_case->getPosition();
@@ -2640,32 +2597,32 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		
 		if(myrank > 3)
 		{
-			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			list_cell_case->setContentSize(CCSizeMake(125, 40));
-			list_cell_case->setPosition(ccp(right_body->getContentSize().width/2.f,180-3*34.5f));
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_purple.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			list_cell_case->setContentSize(CCSizeMake(124, 36));
+			list_cell_case->setPosition(ccp(right_body->getContentSize().width/2.f,130-3*36.f));
 			right_body->addChild(list_cell_case);
 			
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 12);
-			rank_label->enableOuterStroke(ccBLACK, 1);
-			rank_label->setPosition(ccp(18,20));
+			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 15);
+			rank_label->disableOuterStroke();
+			rank_label->setPosition(ccp(14,list_cell_case->getContentSize().height/2.f));
 			list_cell_case->addChild(rank_label);
 			
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(39,20));
-			selectedFlagSpr->setScale(0.5);
+			selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
+			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
-			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(78,28));
+			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
+			nick_label->disableOuterStroke();
+			nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",result_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-			score_label->setColor(ccc3(255, 170, 20));
-			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-			score_label->setPosition(ccp(78,12));
+			score_label->setColor(ccc3(54, 36, 148));
+			score_label->disableOuterStroke();
+			score_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f - 7));
 			list_cell_case->addChild(score_label);
 			
 //			CCPoint original_position = list_cell_case->getPosition();
@@ -2689,35 +2646,74 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 
 void PuzzleScene::setRightTopButton()
 {
+	if(!right_top_menu)
+	{
+		right_top_menu = CCMenuLambda::create();
+		right_top_menu->setPosition(CCPointZero);
+		right_case->addChild(right_top_menu, 5);
+	}
+	
 	if(!stage_button)
 	{
-		stage_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_stage), 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
-		stage_button->setPosition(ccp(-65-6-29, 118.5f));
-		right_case->addChild(stage_button, 5);
-		stage_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
-		stage_button->setTitleColorForDisable(ccc3(50, 20, 0));
-		stage_button->setFunction([=](CCObject* sender)
-								  {
-									  if(!is_menu_enable)
-										  return;
-									  right_mode = kPuzzleRightMode_stage;
-									  setRight();
-								  });
+		CCSprite* n_stage = CCSprite::create("puzzle_right_top_off.png");
+		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		n_label->disableOuterStroke();
+		n_label->setPosition(ccpFromSize(n_stage->getContentSize()/2.f));
+		n_stage->addChild(n_label);
+		CCSprite* s_stage = CCSprite::create("puzzle_right_top_off.png");
+		s_stage->setColor(ccGRAY);
+		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		s_label->disableOuterStroke();
+		s_label->setColor(ccGRAY);
+		s_label->setPosition(ccpFromSize(s_stage->getContentSize()/2.f));
+		s_stage->addChild(s_label);
+		CCSprite* d_stage = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_stage->getContentSize().width, n_stage->getContentSize().height));
+		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		d_label->disableOuterStroke();
+		d_label->setPosition(ccpFromSize(d_stage->getContentSize()/2.f));
+		d_stage->addChild(d_label);
+		
+		stage_button = CCMenuItemSpriteLambda::create(n_stage, s_stage, d_stage, [=](CCObject* sender)
+													  {
+														  if(!this->is_menu_enable)
+															  return;
+														  this->right_mode = kPuzzleRightMode_stage;
+														  setRight();
+													  });
+		
+		stage_button->setPosition(ccp(-65-5.5f-31.f, 115.5f));
+		right_top_menu->addChild(stage_button);
 	}
 	if(!ranking_button)
 	{
-		ranking_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ranking), 12, CCSizeMake(66,35), CommonButtonYellowDown, kCCMenuHandlerPriority);
-		ranking_button->setPosition(ccp(-65-6+29, 118.5f));
-		right_case->addChild(ranking_button, 5);
-		ranking_button->setBackgroundTypeForDisabled(CommonButtonYellowUp);
-		ranking_button->setTitleColorForDisable(ccc3(50, 20, 0));
-		ranking_button->setFunction([=](CCObject* sender)
-								  {
-									  if(!is_menu_enable)
-										  return;
-									  right_mode = kPuzzleRightMode_ranking;
-									  setRight();
-								  });
+		CCSprite* n_ranking = CCSprite::create("puzzle_right_top_off.png");
+		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		n_label->disableOuterStroke();
+		n_label->setPosition(ccpFromSize(n_ranking->getContentSize()/2.f));
+		n_ranking->addChild(n_label);
+		CCSprite* s_ranking = CCSprite::create("puzzle_right_top_off.png");
+		s_ranking->setColor(ccGRAY);
+		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		s_label->disableOuterStroke();
+		s_label->setColor(ccGRAY);
+		s_label->setPosition(ccpFromSize(s_ranking->getContentSize()/2.f));
+		s_ranking->addChild(s_label);
+		CCSprite* d_ranking = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_ranking->getContentSize().width, n_ranking->getContentSize().height));
+		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		d_label->disableOuterStroke();
+		d_label->setPosition(ccpFromSize(d_ranking->getContentSize()/2.f));
+		d_ranking->addChild(d_label);
+		
+		ranking_button = CCMenuItemSpriteLambda::create(n_ranking, s_ranking, d_ranking, [=](CCObject* sender)
+													  {
+														  if(!this->is_menu_enable)
+															  return;
+														  this->right_mode = kPuzzleRightMode_ranking;
+														  setRight();
+													  });
+		
+		ranking_button->setPosition(ccp(-65-5.5f+31.f, 115.5f));
+		right_top_menu->addChild(ranking_button);
 	}
 	
 	if(right_mode == kPuzzleRightMode_stage)
