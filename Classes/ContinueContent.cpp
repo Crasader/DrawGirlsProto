@@ -313,19 +313,17 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	end_selector = t_end;
 	continue_selector = t_continue;
 	
-	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_case->setContentSize(CCSizeMake(290, 230));
+	CCSprite* back_case = CCSprite::create("ingame_back.png");
 	back_case->setPosition(ccp(0,0));
 	addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_pupple5.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	back_in->setContentSize(CCSizeMake(260,130));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+5.f));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(225,90));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+11.f));
 	back_case->addChild(back_in,2);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-25));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 16);
+	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-30));
 	back_case->addChild(title_label);
 	
 	counting_value = 10*60;
@@ -334,18 +332,18 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	counting_label->setScale(5.f);
 	counting_label->setOpacity(0);
 	counting_label->setAnchorPoint(ccp(0.5f,0.5f));
-	counting_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height/2.f));
+	counting_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height/2.f-4));
 	back_in->addChild(counting_label);
 	counting_label->setVisible(false);
 	
 	
 	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_offContinue), mySGD->getFont().c_str(), 15);
-	giveup_label->setColor(ccBLACK);
-	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
+	giveup_label->disableOuterStroke();
+	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_button_ing.png");
 	giveup_button = CCControlButton::create(giveup_label, giveup_back);
 	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::giveupAction), CCControlEventTouchUpInside);
-	giveup_button->setPreferredSize(CCSizeMake(80,40));
-	giveup_button->setPosition(ccp(back_case->getContentSize().width/2.f-87,back_case->getContentSize().height/2.f-85));
+	giveup_button->setPreferredSize(CCSizeMake(101,44));
+	giveup_button->setPosition(ccp(back_case->getContentSize().width/2.f-77,back_case->getContentSize().height/2.f-65));
 	back_case->addChild(giveup_button);
 	
 	giveup_button->setTouchPriority(touch_priority-1);
@@ -355,53 +353,62 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
 	KSLabelTTF* c_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinue), mySGD->getFont().c_str(), 15);
+	c_label->disableOuterStroke();
 	c_label->setAnchorPoint(ccp(0,0.5f));
 	c_label->setPosition(ccp(0,0));
-	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
-	price_back->setContentSize(CCSizeMake(82, 26));
-	price_back->setPosition(ccp(c_label->getContentSize().width + price_back->getContentSize().width/2.f + 5, c_label->getContentSize().height/2.f));
-	c_label->addChild(price_back);
+	
+	CCNode* price_node = CCNode::create();
+	price_node->setPosition(ccp(c_label->getContentSize().width + 1, c_label->getContentSize().height/2.f));
+	c_label->addChild(price_node);
+	
+//	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
+//	price_back->setContentSize(CCSizeMake(82, 26));
+//	price_back->setPosition(ccp(c_label->getContentSize().width + price_back->getContentSize().width/2.f + 5, c_label->getContentSize().height/2.f));
+//	c_label->addChild(price_back);
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
 	{
 		price_type = CCSprite::create("pass_ticket1.png");
-		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_type);
+		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
+		price_node->addChild(price_type);
 		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
-		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+15,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_label);
+		price_label->setAnchorPoint(ccp(0,0.5f));
+		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
+		price_node->addChild(price_label);
 	}
 	else if(mySGD->is_endless_mode)
 	{
 		price_type = CCSprite::create("price_gold_img.png");
-		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_type);
-		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless())->getCString(), mySGD->getFont().c_str(), 17);
-		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+15,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_label);
+		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
+		price_node->addChild(price_type);
+		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label->setAnchorPoint(ccp(0,0.5f));
+		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
+		price_node->addChild(price_label);
 	}
 	else
 	{
 		price_type = CCSprite::create("price_ruby_img.png");
-		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-20,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_type);
-		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 17);
-		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+15,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_label);
+		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
+		price_node->addChild(price_type);
+		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label->setAnchorPoint(ccp(0,0.5f));
+		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
+		price_node->addChild(price_label);
 	}
 	
 	r_label->addChild(c_label);
 	
 	
-	CCScale9Sprite* c_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* c_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	continue_button = CCControlButton::create(r_label, c_back);
 	continue_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction), CCControlEventTouchUpInside);
-	continue_button->setPreferredSize(CCSizeMake(170,44));
-	continue_button->setPosition(ccp(back_case->getContentSize().width/2.f+43,back_case->getContentSize().height/2.f-85));
+	continue_button->setPreferredSize(CCSizeMake(150,44));
+	continue_button->setPosition(ccp(back_case->getContentSize().width/2.f+53,back_case->getContentSize().height/2.f-65));
 	back_case->addChild(continue_button);
 	
 	continue_button->setTouchPriority(touch_priority-1);
 	
-	c_label->setPositionX(-continue_button->getPreferredSize().width/2.f+15);
+	c_label->setPositionX(-(c_label->getContentSize().width + 1 + price_type->getContentSize().width + 2 + price_label->getContentSize().width)/2.f);
 }
