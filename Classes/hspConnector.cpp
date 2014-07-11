@@ -355,14 +355,14 @@ void hspConnector::mappingToAccount(jsonSelType func){
 
 
 string hspConnector::getCountryCode(){
+	string r;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-	string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
+	r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
-	string r;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getCountryCode", "()Ljava/lang/String;")) {
 		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
 		
@@ -384,12 +384,44 @@ string hspConnector::getCountryCode(){
 }
 
 
+
+string hspConnector::getTimeZone(){
+	
+	string r;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	NSTimeZone *timeZone = [NSTimeZone localTimeZone];
+	NSString *tzName = [timeZone name];
+	r = [tzName cStringUsingEncoding:NSUTF8StringEncoding];
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getTimeZone", "()Ljava/lang/String;")) {
+		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
+		r = revStr;
+		
+		t.env->ReleaseStringUTFChars(result, revStr);
+		t.env->DeleteLocalRef(t.classID);
+		
+	}
+#endif
+	
+	
+	
+	//std::transform(r.begin(), r.end(), r.begin(), towlower);
+	CCLOG("mytime zone is : %s",r.c_str());
+	return r;
+}
+
+
 string hspConnector::getServerAddress(){
 	string r;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	//r = "http://182.162.201.147:10010";
+	r = "http://182.162.201.147:10010";
 	
-	r = "http://182.162.196.182:10080";
+	//r = "http://182.162.196.182:10080";
 	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
 	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
@@ -452,12 +484,15 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
 
 		int delekey = dkey;
-		graphdog->setMemberID(hspConnector::get()->getMemberID());
-		GraphDog::get()->setServerURL(this->getServerAddress());
-		string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString();
-		CCLOG("member id is %s",hspids.c_str());
-		graphdog->setSocialID(hspids);
-
+		
+		if(obj["error"]["isSuccess"].asBool()){
+			graphdog->setMemberID(hspConnector::get()->getMemberID());
+			GraphDog::get()->setServerURL(this->getServerAddress());
+			string hspids = CCString::createWithFormat("%lld",hspConnector::get()->getMemberID())->getCString();
+			CCLOG("member id is %s",hspids.c_str());
+			graphdog->setSocialID(hspids);
+		}
+		
 		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
 		if(delsel.func)delsel.func(obj);
 		jsonDelegator::get()->remove(delekey);

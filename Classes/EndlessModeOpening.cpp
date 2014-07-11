@@ -1475,7 +1475,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		selectedFlagSpr->setScale(0.8f);
 		list_cell_case->addChild(selectedFlagSpr);
 		
-		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(62, 15), CCTextAlignment::kCCTextAlignmentLeft);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		nick_label->setPosition(ccp(79 - 3.5,19));

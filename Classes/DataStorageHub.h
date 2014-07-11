@@ -157,7 +157,8 @@ typedef enum t_DSH_Key{
 	kDSH_Key_dataFileName_int1,
 	
 	kDSH_Key_isCheckTerms,
-	kDSH_Key_savedMemberID
+	kDSH_Key_savedMemberID,
+	kDSH_Key_timeZone
 }DSH_Key;
 
 enum SpecialTutorialCode{

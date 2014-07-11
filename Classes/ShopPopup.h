@@ -94,7 +94,7 @@ private:
 	
 	function<void()> fail_func;
 	
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	int server_character_count;
 	CCTableView* character_table;
 	
@@ -102,9 +102,10 @@ private:
 	
 	CommonButton* character_menu;
 	CommonButton* card_menu;
-	CommonButton* ruby_menu;
-	CommonButton* gold_menu;
-	CommonButton* heart_menu;
+	
+	CCMenuItem* ruby_menu;
+	CCMenuItem* gold_menu;
+	CCMenuItem* heart_menu;
 	
 //	CCMenu* tab_menu;
 	

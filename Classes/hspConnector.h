@@ -227,6 +227,7 @@ public:
 	void logout(jsonSelType func);
 	void mappingToAccount(jsonSelType func);
 	string getCountryCode();
+	string getTimeZone();
 	string getServerAddress();
 	void sendPushMessage();
 	

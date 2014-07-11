@@ -291,21 +291,21 @@ void StartSettingPopup::setMain()
 	for(int i=0;i<item_list.size();i++)
 	{
 		ITEM_CODE t_code = item_list[i];
-		if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getUserdataHighPiece()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem9OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getUserdataHighPiece()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem6OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 			
 			mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 		}
-		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getUserdataHighPiece()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+		else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem11OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 		{
 			show_item_popup.push_back(t_code);
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);

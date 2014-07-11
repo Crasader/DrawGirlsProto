@@ -140,26 +140,29 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 {
 	if(recent_shop_code == kSC_ruby)
 	{
-		KSLabelTTF* ruby_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		ruby_label->setColor(ccc3(255, 230, 0));
-		ruby_label->enableOuterStroke(ccc3(0, 0, 0), 1);
-		ruby_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f-5));
+		KSLabelTTF* ruby_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+		ruby_label->setColor(ccc3(55, 35, 150));
+		ruby_label->disableOuterStroke();
+		ruby_label->setAnchorPoint(ccp(1.f,0.5f));
+		ruby_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
 		t_target->addChild(ruby_label);
 	}
 	else if(recent_shop_code == kSC_gold)
 	{
-		KSLabelTTF* gold_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		gold_label->setColor(ccc3(255, 230, 0));
-		gold_label->enableOuterStroke(ccc3(0, 0, 0), 1);
-		gold_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f-5));
+		KSLabelTTF* gold_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+		gold_label->setColor(ccc3(55, 35, 150));
+		gold_label->disableOuterStroke();
+		gold_label->setAnchorPoint(ccp(1.f,0.5f));
+		gold_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
 		t_target->addChild(gold_label);
 	}
 	else if(recent_shop_code == kSC_heart)
 	{
-		KSLabelTTF* heart_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		heart_label->setColor(ccc3(255, 230, 0));
-		heart_label->enableOuterStroke(ccc3(0, 0, 0), 1);
-		heart_label->setPosition(ccp(t_target->getContentSize().width/2.f, t_target->getContentSize().height/2.f-5));
+		KSLabelTTF* heart_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+		heart_label->setColor(ccc3(55, 35, 150));
+		heart_label->disableOuterStroke();
+		heart_label->setAnchorPoint(ccp(1.f,0.5f));
+		heart_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
 		t_target->addChild(heart_label);
 	}
 }
@@ -320,38 +323,38 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			if(!sale_str.empty())
 			{
 				CCSprite* tab = CCSprite::create("shop_tab.png");
-				tab->setPosition(ccp(32,33));
+				tab->setPosition(ccp(-42,35.5f));
 				content_node->addChild(tab, 4);
 				
-				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 10);
-				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+3));
+				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 14);
+				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+1));
 				tab->addChild(sale_label);
 			}
 			
 			if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
 			{
-				CCLabelTTF* won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				won_label->setPosition(ccp(0, -33));
+				CCLabelTTF* won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+				won_label->setPosition(ccp(0, -27));
 				content_node->addChild(won_label, 3);
 			}
 			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 			{
 				CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
-				ruby_img->setPosition(ccp(-30, -33));
+				ruby_img->setPosition(ccp(-30, -27));
 				content_node->addChild(ruby_img, 3);
 				
-				CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				ruby_label->setPosition(ccp(10, -33));
+				CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+				ruby_label->setPosition(ccp(10, -27));
 				content_node->addChild(ruby_label, 3);
 			}
 			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
 			{
 				CCSprite* gold_img = CCSprite::create("price_gold_img.png");
-				gold_img->setPosition(ccp(-30, -33));
+				gold_img->setPosition(ccp(-30, -27));
 				content_node->addChild(gold_img, 3);
 				
-				CCLabelTTF* gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-				gold_label->setPosition(ccp(10, -33));
+				CCLabelTTF* gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+				gold_label->setPosition(ccp(10, -27));
 				content_node->addChild(gold_label, 3);
 			}
 			
@@ -644,23 +647,25 @@ bool ShopPopup::init()
 	is_menu_enable = false;
 	
 	
-	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_case->setContentSize(CCSizeMake(480, 280));
+	main_case = CCSprite::create("mainpopup2_back.png");
 	main_case->setPosition(ccp(240, 160 - 14));
 	addChild(main_case, kSP_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(40,256));
-	main_case->addChild(title_label);
+	CCSprite* title_back = CCSprite::create("title_tab.png");
+	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
+	main_case->addChild(title_back);
 	
-	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_inner->setContentSize(CCSizeMake(445, 228));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 15);
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	title_back->addChild(title_label);
+	
+	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	main_inner->setContentSize(CCSizeMake(424, 204));
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f);
 	main_case->addChild(main_inner);
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(touch_priority-4);
-	close_menu->setPosition(getContentPosition(kSP_MT_close));
+	close_menu->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_menu->setFunction([=](CCObject* sender)
 							{
 								CCNode* t_node = CCNode::create();
@@ -698,44 +703,82 @@ bool ShopPopup::init()
 	main_case->addChild(card_menu, kSP_Z_content);
 	card_menu->setVisible(false);
 	
-	ruby_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
-	ruby_menu->setTitleColor(ccWHITE);
-	ruby_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
-	ruby_menu->setTitleColorForDisable(ccBLACK);
+	CCMenu* tab_menu = CCMenu::create();
+	tab_menu->setPosition(CCPointZero);
+	main_case->addChild(tab_menu, kSP_Z_content);
+	
+	tab_menu->setTouchPriority(touch_priority-4);
+	
+	CCSprite* n_ruby_img = CCSprite::create("tabbutton_down.png");
+	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	n_ruby_label->setPosition(ccpFromSize(n_ruby_img->getContentSize()/2.f) + ccp(0,2));
+	n_ruby_img->addChild(n_ruby_label);
+	
+	CCSprite* s_ruby_img = CCSprite::create("tabbutton_down.png");
+	s_ruby_img->setColor(ccGRAY);
+	KSLabelTTF* s_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	s_ruby_label->setColor(ccGRAY);
+	s_ruby_label->setPosition(ccpFromSize(s_ruby_img->getContentSize()/2.f) + ccp(0,2));
+	s_ruby_img->addChild(s_ruby_label);
+	
+	CCSprite* d_ruby_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* d_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	d_ruby_label->setPosition(ccpFromSize(d_ruby_img->getContentSize()/2.f) + ccp(0,2));
+	d_ruby_img->addChild(d_ruby_label);
+	
+	
+	ruby_menu = CCMenuItemSprite::create(n_ruby_img, s_ruby_img, d_ruby_img, this, menu_selector(ShopPopup::menuAction));
+	ruby_menu->setTag(kSP_MT_ruby);
 	ruby_menu->setPosition(getContentPosition(kSP_MT_ruby));
-	ruby_menu->setFunction([=](CCObject* sender)
-								{
-									CCNode* t_node = CCNode::create();
-									t_node->setTag(kSP_MT_ruby);
-									menuAction(t_node);
-								});
-	main_case->addChild(ruby_menu, kSP_Z_content);
+	tab_menu->addChild(ruby_menu, kSP_Z_content);
 	
-	gold_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
-	gold_menu->setTitleColor(ccWHITE);
-	gold_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
-	gold_menu->setTitleColorForDisable(ccBLACK);
+	
+	CCSprite* n_gold_img = CCSprite::create("tabbutton_down.png");
+	KSLabelTTF* n_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	n_gold_label->setPosition(ccpFromSize(n_gold_img->getContentSize()/2.f) + ccp(0,2));
+	n_gold_img->addChild(n_gold_label);
+	
+	CCSprite* s_gold_img = CCSprite::create("tabbutton_down.png");
+	s_gold_img->setColor(ccGRAY);
+	KSLabelTTF* s_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	s_gold_label->setColor(ccGRAY);
+	s_gold_label->setPosition(ccpFromSize(s_gold_img->getContentSize()/2.f) + ccp(0,2));
+	s_gold_img->addChild(s_gold_label);
+	
+	CCSprite* d_gold_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* d_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	d_gold_label->setPosition(ccpFromSize(d_gold_img->getContentSize()/2.f) + ccp(0,2));
+	d_gold_img->addChild(d_gold_label);
+	
+	
+	gold_menu = CCMenuItemSprite::create(n_gold_img, s_gold_img, d_gold_img, this, menu_selector(ShopPopup::menuAction));
+	gold_menu->setTag(kSP_MT_gold);
 	gold_menu->setPosition(getContentPosition(kSP_MT_gold));
-	gold_menu->setFunction([=](CCObject* sender)
-						   {
-							   CCNode* t_node = CCNode::create();
-							   t_node->setTag(kSP_MT_gold);
-							   menuAction(t_node);
-						   });
-	main_case->addChild(gold_menu, kSP_Z_content);
+	tab_menu->addChild(gold_menu, kSP_Z_content);
 	
-	heart_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), 12, CCSizeMake(83,38), CommonButtonPupple, touch_priority-4);
-	heart_menu->setTitleColor(ccWHITE);
-	heart_menu->setBackgroundTypeForDisabled(CommonButtonYellowUp);
-	heart_menu->setTitleColorForDisable(ccBLACK);
+	
+	CCSprite* n_heart_img = CCSprite::create("tabbutton_down.png");
+	KSLabelTTF* n_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	n_heart_label->setPosition(ccpFromSize(n_heart_img->getContentSize()/2.f) + ccp(0,2));
+	n_heart_img->addChild(n_heart_label);
+	
+	CCSprite* s_heart_img = CCSprite::create("tabbutton_down.png");
+	s_heart_img->setColor(ccGRAY);
+	KSLabelTTF* s_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	s_heart_label->setColor(ccGRAY);
+	s_heart_label->setPosition(ccpFromSize(s_heart_img->getContentSize()/2.f) + ccp(0,2));
+	s_heart_img->addChild(s_heart_label);
+	
+	CCSprite* d_heart_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* d_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	d_heart_label->setPosition(ccpFromSize(d_heart_img->getContentSize()/2.f) + ccp(0,2));
+	d_heart_img->addChild(d_heart_label);
+	
+	
+	heart_menu = CCMenuItemSprite::create(n_heart_img, s_heart_img, d_heart_img, this, menu_selector(ShopPopup::menuAction));
+	heart_menu->setTag(kSP_MT_heart);
 	heart_menu->setPosition(getContentPosition(kSP_MT_heart));
-	heart_menu->setFunction([=](CCObject* sender)
-						   {
-							   CCNode* t_node = CCNode::create();
-							   t_node->setTag(kSP_MT_heart);
-							   menuAction(t_node);
-						   });
-	main_case->addChild(heart_menu, kSP_Z_content);
+	tab_menu->addChild(heart_menu, kSP_Z_content);
 	
 	
 	
@@ -920,15 +963,15 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	if(t_tag == kSP_MT_close)
 		return_value = ccp(453,257);
 	else if(t_tag == kSP_MT_character)
-		return_value = ccp(59,256);
+		return_value = ccp(59,256.5f);
 	else if(t_tag == kSP_MT_card)
-		return_value = ccp(141.5f,256);
+		return_value = ccp(141.5f,256.5f);
 	else if(t_tag == kSP_MT_ruby)
-		return_value = ccp(234,256);//ccp(59,256);//ccp(224,256);
+		return_value = ccp(244,256.5f);//ccp(59,256);//ccp(224,256);
 	else if(t_tag == kSP_MT_gold)
-		return_value = ccp(314,256);//ccp(141.5f,256);//ccp(306,256);
+		return_value = ccp(319,256.5f);//ccp(141.5f,256);//ccp(306,256);
 	else if(t_tag == kSP_MT_heart)
-		return_value = ccp(394,256);//ccp(224,256);//ccp(388.5f,256);
+		return_value = ccp(394,256.5f);//ccp(224,256);//ccp(388.5f,256);
 	else if(t_tag == kSP_MT_content1)
 		return_value = ccp(100,177);
 	else if(t_tag == kSP_MT_content2)
@@ -936,11 +979,11 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	else if(t_tag == kSP_MT_content3)
 		return_value = ccp(380,177);
 	else if(t_tag == kSP_MT_content4)
-		return_value = ccp(100,72);
+		return_value = ccp(100,74);
 	else if(t_tag == kSP_MT_content5)
-		return_value = ccp(240,72);
+		return_value = ccp(240,74);
 	else if(t_tag == kSP_MT_content6)
-		return_value = ccp(380,72);
+		return_value = ccp(380,74);
 	
 	return return_value;
 }

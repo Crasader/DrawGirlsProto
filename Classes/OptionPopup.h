@@ -38,7 +38,7 @@ private:
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	CCSprite* gray;
 	
 	bool is_menu_enable;

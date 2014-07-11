@@ -32,6 +32,7 @@
 #include "EncryptCharsA.h"
 #include "KSUtil.h"
 #include "hspConnector.h"
+#include "DataStorageHub.h"
 
 int AutoIncrease::cnt = 0;
 size_t GraphDog::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp){
@@ -208,14 +209,14 @@ CURL* GraphDog::getCURL(){
 	return curl_handle;
 }
 
-bool GraphDog::command(const std::vector<CommandParam>& params)
+bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 {
 	string udid=getUdid();
 	string email=getEmail();
 	string auid=getAuID();
-	string token;
+	//string token;
 	//저장되어있는 토큰불러오기. 없으면 생성
-	token=getToken();
+	//token=getToken();
 	
 	int insertIndex = AutoIncrease::get();
 	std::vector<CommandType> cmdCollect;
@@ -224,6 +225,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	//@ JsonBox::Object jsonTotalCmd;
 	Json::Value jsonTotalCmd;
 	cmdQueue.chunk = GDStruct((char*)malloc(1), 0, CURLE_AGAIN);
+	cmdQueue.errorCnt=errorCnt;
 	int i=0;
 	for(std::vector<CommandParam>::const_iterator iter = params.begin(); iter != params.end(); ++iter, i++)
 	{
@@ -245,6 +247,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params)
 	
 	
 	jsonTotalCmd["country"]=hspConnector::get()->getCountryCode();
+	jsonTotalCmd["timezone"]=myDSH->getStringForKey(kDSH_Key_timeZone);
 	jsonTotalCmd["memberID"]=getMemberID();
 	jsonTotalCmd["socialID"]=getSocialID();
 	jsonTotalCmd["deviceID"]=this->deviceID;
@@ -347,12 +350,12 @@ void* GraphDog::t_function(void *_insertIndex)
 	CommandsType& command = graphdog->commandQueue[insertIndex];
 	pthread_mutex_lock(&command.caller->t_functionMutex);
 	//CCLOG("t_function2");
-	string token="";
+	//string token="";
 	//CCLOG("t_function2");
 	string paramStr =  CipherUtils::encryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), command.commandStr.c_str()); //toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	
 	CCLOG("request %s",command.commandStr.c_str());
-	string dataset = "&gid="+GraphDog::get()->aID+"&token=" + token + "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
+	string dataset = "&gid="+GraphDog::get()->aID+ "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
 	CCLOG("t_function3");
 	//string commandurl = "http://litqoo.com/dgserver/data.php";
 	string commandurl = GraphDog::get()->getServerURL()+"/command.php"; //"http://182.162.201.147:10010/command.php"; //"http://182.162.201.147:10010/data.php"; //
@@ -607,8 +610,11 @@ void GraphDog::receivedCommand(float dt)
 						vcp.push_back(cp);
 					}
 					
-					commandRetryFunc(vcp);
-					
+					if(commands.errorCnt<=1){
+						this->command(vcp,commands.errorCnt+1);
+					}else{
+						commandRetryFunc(vcp);
+					}
 				}else{
 				
 					for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
@@ -721,7 +727,11 @@ void GraphDog::receivedCommand(float dt)
 				}
 				
 				if(retryCnt){
+					if(commands.errorCnt<=1){
+						this->command(vcp,commands.errorCnt+1);
+					}else{
 						commandRetryFunc(vcp);
+					}
 				}
 			}
 			

@@ -14,6 +14,7 @@
 #include "CCMenuLambda.h"
 #include "jsoncpp/json.h"
 #include "StyledLabelTTF.h"
+#include "CommonButton.h"
 #include <chrono>
 
 USING_NS_CC;
@@ -36,6 +37,9 @@ public:
 		return t_ctc;
 	}
 	
+	CommonButton* closeBtn;
+	CommonButton* day3Btn;
+	
 private:
 	int touch_priority;
 	//CCMenu* close_menu;
@@ -46,6 +50,9 @@ private:
 	CCLabelTTF* title_label;
 	CCLabelTTF* content_label;
 	StyledLabelTTF* stTxt;
+	CCSprite* loading_circle;
+	
+	
 	//CCMenu* check_menu;
 	//CCSprite* check_img;
 	
@@ -60,6 +67,10 @@ private:
 	
 	void loadedAction()
 	{
+		
+		day3Btn->setVisible(true);
+		closeBtn->setVisible(true);
+		loading_circle->setVisible(false);
 		is_menu_enable=true;
 		//show_content->setPosition(ccp(-show_content->getContentSize().width/2.f, -show_content->getContentSize().height/2.f-16));
 	}

@@ -243,6 +243,12 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 {
 	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	
+	if(myDSH->getStringForKey(kDSH_Key_timeZone)==""){
+		string tz = myHSP->getTimeZone();
+		myDSH->setStringForKey(kDSH_Key_timeZone, tz);
+		CCLOG("saved time zone : ",tz.c_str());
+	}
+		
 	if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
 	{
 		myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
@@ -2578,6 +2584,8 @@ void TitleRenewalScene::joinAction()
 										 //input_text->removeFromParent();
 										 //flag->removeFromParent();
 										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+										 
+										
 										 
 										 successLogin();
 									 }

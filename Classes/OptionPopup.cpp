@@ -225,19 +225,23 @@ bool OptionPopup::init()
 	addChild(gray, kOP_Z_gray);
 	
 	
-	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_case->setContentSize(CCSizeMake(480, 280));
+	main_case = CCSprite::create("mainpopup2_back.png");
 	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kOP_Z_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_option), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(40,256));
-	main_case->addChild(title_label);
+	CCSprite* title_back = CCSprite::create("title_tab.png");
+	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
+	main_case->addChild(title_back);
 	
-	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_inner->setContentSize(CCSizeMake(460, 232));
-	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_option), mySGD->getFont().c_str(), 15);
+	title_label->disableOuterStroke();
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	title_back->addChild(title_label);
+	
+	
+	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	main_inner->setContentSize(CCSizeMake(424, 194));
+	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f + 5);
 	main_case->addChild(main_inner);
 	
 	if(myDSH->isCheatKeyEnable())
@@ -255,87 +259,124 @@ bool OptionPopup::init()
 		temp_menu->setTouchPriority(-171);
 	}
 	
-	//	CCSprite* n_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
-	//	n_popcake->setOpacity(100);
-	//	CCSprite* s_popcake = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 30, 30));
-	//	s_popcake->setOpacity(100);
-	//
-	//	CCMenuItemLambda* popcake_item = CCMenuItemSpriteLambda::create(n_popcake, s_popcake, [=](CCObject* sender)
-	//																	{
-	//																		CCDirector::sharedDirector()->replaceScene(PopCake::scene());
-	//																	});
-	//
-	//	CCMenuLambda* popcake_menu = CCMenuLambda::createWithItem(popcake_item);
-	//	popcake_menu->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height+15));
-	//	main_case->addChild(popcake_menu, kOP_Z_content);
-	//	popcake_menu->setTouchPriority(-171);
+	CCMenu* tab_menu = CCMenu::create();
+	tab_menu->setPosition(CCPointZero);
+	main_case->addChild(tab_menu, kOP_Z_content);
+	tab_menu->setTouchPriority(-171);
+	
+	CCSprite* n_coupon_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* n_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
+	n_coupon_label->disableOuterStroke();
+	n_coupon_label->setPosition(ccpFromSize(n_coupon_img->getContentSize()/2.f) + ccp(0,2));
+	n_coupon_img->addChild(n_coupon_label);
+	
+	CCSprite* s_coupon_img = CCSprite::create("tabbutton_up.png");
+	s_coupon_img->setColor(ccGRAY);
+	KSLabelTTF* s_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
+	s_coupon_label->disableOuterStroke();
+	s_coupon_label->setColor(ccGRAY);
+	s_coupon_label->setPosition(ccpFromSize(s_coupon_img->getContentSize()/2.f) + ccp(0,2));
+	s_coupon_img->addChild(s_coupon_label);
+	
+	CCSprite* d_coupon_img = CCSprite::create("tabbutton_down.png");
+	d_coupon_img->setColor(ccGRAY);
+	KSLabelTTF* d_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
+	d_coupon_label->disableOuterStroke();
+	d_coupon_label->setPosition(ccpFromSize(d_coupon_img->getContentSize()/2.f) + ccp(0,2));
+	d_coupon_img->addChild(d_coupon_label);
 	
 	
-	CommonButton* coupon_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
-	coupon_button->setTitleColor(ccc3(50, 20, 0));
-	coupon_button->setPosition(getContentPosition(kOP_MT_coupon));
-	coupon_button->setFunction([=](CCObject* sender)
-														 {
-															 CCNode* t_node = CCNode::create();
-															 t_node->setTag(kOP_MT_coupon);
-															 menuAction(t_node);
-														 });
-	main_case->addChild(coupon_button, kOP_Z_content);
+	CCMenuItem* coupon_item = CCMenuItemSprite::create(n_coupon_img, s_coupon_img, d_coupon_img, this, menu_selector(OptionPopup::menuAction));
+	coupon_item->setTag(kOP_MT_coupon);
+	coupon_item->setPosition(ccp(394,256.5f));
+	tab_menu->addChild(coupon_item);
 	
 	
-	CommonButton* community_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_community), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
-	community_button->setTitleColor(ccc3(50, 20, 0));
-	community_button->setPosition(getContentPosition(kOP_MT_community));
-	community_button->setFunction([=](CCObject* sender)
-																{
-																	CCNode* t_node = CCNode::create();
-																	t_node->setTag(kOP_MT_community);
-																	menuAction(t_node);
-																});
-	main_case->addChild(community_button, kOP_Z_content);
+	CCSprite* n_community_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* n_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
+	n_community_label->disableOuterStroke();
+	n_community_label->setPosition(ccpFromSize(n_community_img->getContentSize()/2.f) + ccp(0,2));
+	n_community_img->addChild(n_community_label);
+	
+	CCSprite* s_community_img = CCSprite::create("tabbutton_up.png");
+	s_community_img->setColor(ccGRAY);
+	KSLabelTTF* s_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
+	s_community_label->disableOuterStroke();
+	s_community_label->setColor(ccGRAY);
+	s_community_label->setPosition(ccpFromSize(s_community_img->getContentSize()/2.f) + ccp(0,2));
+	s_community_img->addChild(s_community_label);
+	
+	CCSprite* d_community_img = CCSprite::create("tabbutton_down.png");
+	d_community_img->setColor(ccGRAY);
+	KSLabelTTF* d_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
+	d_community_label->disableOuterStroke();
+	d_community_label->setPosition(ccpFromSize(d_community_img->getContentSize()/2.f) + ccp(0,2));
+	d_community_img->addChild(d_community_label);
 	
 	
-	CommonButton* tip_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), 12, CCSizeMake(80,40), CommonButtonYellow, -171);
-	tip_button->setTitleColor(ccc3(50, 20, 0));
-	tip_button->setPosition(getContentPosition(kOP_MT_tip));
-	tip_button->setFunction([=](CCObject* sender)
-													{
-														AccountManagerPopup* amp = AccountManagerPopup::create(-172);
-														addChild(amp, kOP_Z_popup);
-//														hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, [=](Json::Value t){
-//															KS::KSLog("%", t);
-//														});
-//														hspConnector::get()->mappingToAccount([](Json::Value v){
-//														
-//															CCLog("mapping test - %s",v.toStyledString().c_str());
-//														
-//														});
-														
-//														CCNode* t_node = CCNode::create();
-//														t_node->setTag(kOP_MT_tip);
-//														menuAction(t_node);
-													});
-	main_case->addChild(tip_button, kOP_Z_content);
+	CCMenuItem* community_item = CCMenuItemSprite::create(n_community_img, s_community_img, d_community_img, this, menu_selector(OptionPopup::menuAction));
+	community_item->setTag(kOP_MT_community);
+	community_item->setPosition(ccp(319,256.5f));
+	tab_menu->addChild(community_item);
 	
 	
-	CommonButton* kakao_button = CommonButton::create("", 12, CCSizeMake(85, 33), CCScale9Sprite::create("option_kakao.png"), -171);
-	kakao_button->setPosition(getContentPosition(kOP_MT_kakao));
-	kakao_button->setFunction([=](CCObject* sender) { 
-															int ret = hspConnector::get()->openKakaoMsg();
-															if(ret == 0) {
-																ASPopupView* as = ASPopupView::getCommonNoti2(-172, "에러", 
-																																							StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>", 
-																																																		 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr, ccp(0, 0), true);
-																addChild(as, kOP_Z_content);
-
-															
-															} 
-														});
-	main_case->addChild(kakao_button, kOP_Z_content);
+	CCSprite* n_tip_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* n_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	n_tip_label->disableOuterStroke();
+	n_tip_label->setPosition(ccpFromSize(n_tip_img->getContentSize()/2.f) + ccp(0,2));
+	n_tip_img->addChild(n_tip_label);
+	
+	CCSprite* s_tip_img = CCSprite::create("tabbutton_up.png");
+	s_tip_img->setColor(ccGRAY);
+	KSLabelTTF* s_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	s_tip_label->disableOuterStroke();
+	s_tip_label->setColor(ccGRAY);
+	s_tip_label->setPosition(ccpFromSize(s_tip_img->getContentSize()/2.f) + ccp(0,2));
+	s_tip_img->addChild(s_tip_label);
+	
+	CCSprite* d_tip_img = CCSprite::create("tabbutton_down.png");
+	d_tip_img->setColor(ccGRAY);
+	KSLabelTTF* d_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	d_tip_label->disableOuterStroke();
+	d_tip_label->setPosition(ccpFromSize(d_tip_img->getContentSize()/2.f) + ccp(0,2));
+	d_tip_img->addChild(d_tip_label);
+	
+	
+	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip_img, s_tip_img, d_tip_img, this, menu_selector(OptionPopup::menuAction));
+	tip_item->setTag(kOP_MT_tip);
+	tip_item->setPosition(ccp(244,256.5f));
+	tab_menu->addChild(tip_item);
+	
+	
+	
+	CCSprite* n_kakao_img = CCSprite::create("option_kakao.png");
+//	KSLabelTTF* n_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+//	n_kakao_label->setPosition(ccpFromSize(n_kakao_img->getContentSize()/2.f) + ccp(0,-1));
+//	n_kakao_img->addChild(n_kakao_label);
+	
+	CCSprite* s_kakao_img = CCSprite::create("option_kakao.png");
+	s_kakao_img->setColor(ccGRAY);
+//	KSLabelTTF* s_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+//	s_kakao_label->setColor(ccGRAY);
+//	s_kakao_label->setPosition(ccpFromSize(s_kakao_img->getContentSize()/2.f) + ccp(0,-1));
+//	s_kakao_img->addChild(s_kakao_label);
+	
+	CCSprite* d_kakao_img = CCSprite::create("option_kakao.png");
+	d_kakao_img->setColor(ccGRAY);
+//	KSLabelTTF* d_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+//	d_kakao_label->setPosition(ccpFromSize(d_kakao_img->getContentSize()/2.f) + ccp(0,-1));
+//	d_kakao_img->addChild(d_kakao_label);
+	
+	
+	CCMenuItem* kakao_item = CCMenuItemSprite::create(n_kakao_img, s_kakao_img, d_kakao_img, this, menu_selector(OptionPopup::menuAction));
+	kakao_item->setTag(kOP_MT_kakao);
+	kakao_item->setPosition(ccp(169,256.5f));
+	tab_menu->addChild(kakao_item);
+	
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-171);
-	close_menu->setPosition(getContentPosition(kOP_MT_close));
+	close_menu->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_menu->setFunction([=](CCObject* sender)
 													{
 														CCNode* t_node = CCNode::create();
@@ -346,28 +387,28 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* system_tab = CCSprite::create("option_tab.png");
-	system_tab->setPosition(ccp(41, 215));
+	system_tab->setPosition(ccp(50, 210));
 	main_case->addChild(system_tab, kOP_Z_back);
 	
-	KSLabelTTF* system_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_system), mySGD->getFont().c_str(), 10);
-	system_label->enableOuterStroke(ccc3(92, 4, 0), 0.5f);
-	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.55f));
+	KSLabelTTF* system_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_system), mySGD->getFont().c_str(), 12);
+	system_label->disableOuterStroke();
+	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.5f));
 	system_tab->addChild(system_label);
 	
 	
-	KSLabelTTF* bgm_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* bgm_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 11.5f);
 	bgm_label->setAnchorPoint(ccp(0,0.5f));
-	bgm_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
-	bgm_label->setPosition(ccpAdd(getContentPosition(kOP_MT_bgm), ccp(-135,0)));
+	bgm_label->disableOuterStroke();
+	bgm_label->setPosition(ccpAdd(getContentPosition(kOP_MT_bgm), ccp(-100,0)));
 	main_case->addChild(bgm_label, kOP_Z_back);
 	
 	CCSprite* bgm_scroll = CCSprite::create("option_scroll.png");
 	bgm_scroll->setPosition(getContentPosition(kOP_MT_bgm));
 	main_case->addChild(bgm_scroll, kOP_Z_back);
 	
-	CCSprite* n_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* n_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	n_bgm->setOpacity(0);
-	CCSprite* s_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* s_bgm = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	s_bgm->setOpacity(0);
 	
 	CCMenuItem* bgm_item = CCMenuItemSprite::create(n_bgm, s_bgm, this, menu_selector(OptionPopup::menuAction));
@@ -383,19 +424,19 @@ bool OptionPopup::init()
 	
 	
 	
-	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 11.5f);
 	effect_label->setAnchorPoint(ccp(0,0.5f));
-	effect_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
-	effect_label->setPosition(ccpAdd(getContentPosition(kOP_MT_effect), ccp(-135,0)));
+	effect_label->disableOuterStroke();
+	effect_label->setPosition(ccpAdd(getContentPosition(kOP_MT_effect), ccp(-100,0)));
 	main_case->addChild(effect_label, kOP_Z_back);
 	
 	CCSprite* effect_scroll = CCSprite::create("option_scroll.png");
 	effect_scroll->setPosition(getContentPosition(kOP_MT_effect));
 	main_case->addChild(effect_scroll, kOP_Z_back);
 	
-	CCSprite* n_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* n_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	n_effect->setOpacity(0);
-	CCSprite* s_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* s_effect = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	s_effect->setOpacity(0);
 	
 	CCMenuItem* effect_item = CCMenuItemSprite::create(n_effect, s_effect, this, menu_selector(OptionPopup::menuAction));
@@ -410,19 +451,20 @@ bool OptionPopup::init()
 	resetEffectMenu();
 	
 	
-	KSLabelTTF* joystick_position_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickPosition), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* joystick_position_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickPosition), mySGD->getFont().c_str(), 11.5f);
+	joystick_position_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	joystick_position_label->setAnchorPoint(ccp(0,0.5f));
-	joystick_position_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
-	joystick_position_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickPositioning), ccp(-135,0)));
+	joystick_position_label->disableOuterStroke();
+	joystick_position_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickPositioning), ccp(-100,0)));
 	main_case->addChild(joystick_position_label, kOP_Z_back);
 	
 	CCSprite* joystick_position_scroll = CCSprite::create("option_scroll.png");
 	joystick_position_scroll->setPosition(getContentPosition(kOP_MT_joystickPositioning));
 	main_case->addChild(joystick_position_scroll, kOP_Z_back);
 	
-	CCSprite* n_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* n_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	n_joystick_positioning->setOpacity(0);
-	CCSprite* s_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* s_joystick_positioning = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	s_joystick_positioning->setOpacity(0);
 	
 	CCMenuItem* joystick_positioning_item = CCMenuItemSprite::create(n_joystick_positioning, s_joystick_positioning, this, menu_selector(OptionPopup::menuAction));
@@ -437,19 +479,20 @@ bool OptionPopup::init()
 	resetJoystickPositioningMenu();
 	
 	
-	KSLabelTTF* joystick_moving_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickControl), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* joystick_moving_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickControl), mySGD->getFont().c_str(), 11.5f);
+	joystick_moving_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	joystick_moving_label->setAnchorPoint(ccp(0,0.5f));
-	joystick_moving_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
-	joystick_moving_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickMoving), ccp(-135,0)));
+	joystick_moving_label->disableOuterStroke();
+	joystick_moving_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickMoving), ccp(-100,0)));
 	main_case->addChild(joystick_moving_label, kOP_Z_back);
 	
 	CCSprite* joystick_moving_scroll = CCSprite::create("option_scroll.png");
 	joystick_moving_scroll->setPosition(getContentPosition(kOP_MT_joystickMoving));
 	main_case->addChild(joystick_moving_scroll, kOP_Z_back);
 	
-	CCSprite* n_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* n_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	n_joystick_moving->setOpacity(0);
-	CCSprite* s_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* s_joystick_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	s_joystick_moving->setOpacity(0);
 	
 	CCMenuItem* joystick_moving_item = CCMenuItemSprite::create(n_joystick_moving, s_joystick_moving, this, menu_selector(OptionPopup::menuAction));
@@ -464,19 +507,19 @@ bool OptionPopup::init()
 	resetJoystickMovingMenu();
 	
 	
-	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 11.5f);
 	safety_label->setAnchorPoint(ccp(0,0.5f));
-	safety_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
-	safety_label->setPosition(ccpAdd(getContentPosition(kOP_MT_safety), ccp(-135,0)));
+	safety_label->disableOuterStroke();
+	safety_label->setPosition(ccpAdd(getContentPosition(kOP_MT_safety), ccp(-100,0)));
 	main_case->addChild(safety_label, kOP_Z_back);
 	
 	CCSprite* safety_scroll = CCSprite::create("option_scroll.png");
 	safety_scroll->setPosition(getContentPosition(kOP_MT_safety));
 	main_case->addChild(safety_scroll, kOP_Z_back);
 	
-	CCSprite* n_safety = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* n_safety = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	n_safety->setOpacity(0);
-	CCSprite* s_safety = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* s_safety = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	s_safety->setOpacity(0);
 	
 	CCMenuItem* safety_item = CCMenuItemSprite::create(n_safety, s_safety, this, menu_selector(OptionPopup::menuAction));
@@ -492,28 +535,28 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* alert_tab = CCSprite::create("option_tab.png");
-	alert_tab->setPosition(ccp(41, 95));
+	alert_tab->setPosition(ccp(50, 100));
 	main_case->addChild(alert_tab, kOP_Z_back);
 	
-	KSLabelTTF* alert_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noti), mySGD->getFont().c_str(), 10);
-	alert_label->enableOuterStroke(ccc3(92, 4, 0), 0.5f);
-	alert_label->setPosition(ccp(alert_tab->getContentSize().width*0.45f, alert_tab->getContentSize().height*0.55f));
+	KSLabelTTF* alert_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noti), mySGD->getFont().c_str(), 12);
+	alert_label->disableOuterStroke();
+	alert_label->setPosition(ccp(alert_tab->getContentSize().width*0.45f, alert_tab->getContentSize().height*0.5f));
 	alert_tab->addChild(alert_label);
 	
 	
-	KSLabelTTF* push_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pushNoti), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* push_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pushNoti), mySGD->getFont().c_str(), 11.5f);
 	push_label->setAnchorPoint(ccp(0,0.5f));
-	push_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
-	push_label->setPosition(ccpAdd(getContentPosition(kOP_MT_push), ccp(-135,0)));
+	push_label->disableOuterStroke();
+	push_label->setPosition(ccpAdd(getContentPosition(kOP_MT_push), ccp(-100,0)));
 	main_case->addChild(push_label, kOP_Z_back);
 	
 	CCSprite* push_scroll = CCSprite::create("option_scroll.png");
 	push_scroll->setPosition(getContentPosition(kOP_MT_push));
 	main_case->addChild(push_scroll, kOP_Z_back);
 	
-	CCSprite* n_push = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* n_push = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	n_push->setOpacity(0);
-	CCSprite* s_push = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* s_push = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	s_push->setOpacity(0);
 	
 	CCMenuItem* push_item = CCMenuItemSprite::create(n_push, s_push, this, menu_selector(OptionPopup::menuAction));
@@ -528,19 +571,20 @@ bool OptionPopup::init()
 	resetPushMenu();
 	
 	
-	KSLabelTTF* message_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_messageNoti), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* message_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_messageNoti), mySGD->getFont().c_str(), 11.5f);
+	message_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	message_label->setAnchorPoint(ccp(0,0.5f));
-	message_label->enableOuterStroke(ccc3(64, 45, 24), 1.f);
-	message_label->setPosition(ccpAdd(getContentPosition(kOP_MT_message), ccp(-135,0)));
+	message_label->disableOuterStroke();
+	message_label->setPosition(ccpAdd(getContentPosition(kOP_MT_message), ccp(-100,0)));
 	main_case->addChild(message_label, kOP_Z_back);
 	
 	CCSprite* message_scroll = CCSprite::create("option_scroll.png");
 	message_scroll->setPosition(getContentPosition(kOP_MT_message));
 	main_case->addChild(message_scroll, kOP_Z_back);
 	
-	CCSprite* n_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* n_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	n_message->setOpacity(0);
-	CCSprite* s_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 110, 30));
+	CCSprite* s_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
 	s_message->setOpacity(0);
 	
 	CCMenuItem* message_item = CCMenuItemSprite::create(n_message, s_message, this, menu_selector(OptionPopup::menuAction));
@@ -555,53 +599,70 @@ bool OptionPopup::init()
 	resetMessageMenu();
 	
 	
-	KSLabelTTF* id_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_memberID), mySGD->getFont().c_str(), 11);
+	CCSprite* info_back = CCSprite::create("option_info_back.png");
+	info_back->setPosition(ccp(230, 60));
+	main_case->addChild(info_back, kOP_Z_content);
+	
+	KSLabelTTF* id_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_memberID), mySGD->getFont().c_str(), 11.5f);
+	id_label->setColor(ccc3(54, 36, 148));
+	id_label->disableOuterStroke();
 	id_label->setAnchorPoint(ccp(0,0.5f));
-	id_label->enableOuterStroke(ccBLACK, 0.5f);
-	id_label->setPosition(ccp(30,45));
-	main_case->addChild(id_label, kOP_Z_back);
+	id_label->setPosition(ccp(10,info_back->getContentSize().height/2.f));
+	info_back->addChild(id_label);
 	
 	
-	KSLabelTTF* my_id_label = KSLabelTTF::create(KS::longLongToStrForDG(mySGD->user_index).c_str(), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* my_id_label = KSLabelTTF::create(KS::longLongToStrForDG(mySGD->user_index).c_str(), mySGD->getFont().c_str(), 11.5f);
+	my_id_label->setColor(ccc3(54, 36, 148));
+	my_id_label->disableOuterStroke();
 	my_id_label->setAnchorPoint(ccp(0,0.5));
-	my_id_label->setPosition(ccp(78,45));
-	main_case->addChild(my_id_label, kOP_Z_content);
+	my_id_label->setPosition(ccp(id_label->getPositionX() + id_label->getContentSize().width + 3,info_back->getContentSize().height/2.f));
+	info_back->addChild(my_id_label, kOP_Z_content);
 	
 	
-	KSLabelTTF* version_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gameversion), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* version_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gameversion), mySGD->getFont().c_str(), 11.5f);
+	version_label->setColor(ccc3(54, 36, 148));
+	version_label->disableOuterStroke();
 	version_label->setAnchorPoint(ccp(0,0.5f));
-	version_label->enableOuterStroke(ccBLACK, 0.5f);
-	version_label->setPosition(ccp(30,27));
-	main_case->addChild(version_label, kOP_Z_back);
+	version_label->setPosition(ccp(150,info_back->getContentSize().height/2.f));
+	info_back->addChild(version_label, kOP_Z_back);
 	
 	KSLabelTTF* my_version_label = KSLabelTTF::create(GraphDog::get()->getAppVersionString().c_str(),
-																										mySGD->getFont().c_str(), 11);
+																										mySGD->getFont().c_str(), 11.5f);
+	my_version_label->setColor(ccc3(54, 36, 148));
+	my_version_label->disableOuterStroke();
 	my_version_label->setAnchorPoint(ccp(0,0.5));
-	my_version_label->setPosition(ccp(78, 27));
-	main_case->addChild(my_version_label, kOP_Z_content);
+	my_version_label->setPosition(ccp(200, info_back->getContentSize().height/2.f));
+	info_back->addChild(my_version_label, kOP_Z_content);
 	
-	CommonButton* withdraw_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), 12, CCSizeMake(90,40), CommonButtonDarkPupple, -171);
-	withdraw_button->setTitleColor(ccc3(172, 167, 175));
-	withdraw_button->setPosition(getContentPosition(kOP_MT_withdraw));
-	withdraw_button->setFunction([=](CCObject* sender)
-															 {
-																 CCNode* t_node = CCNode::create();
-																 t_node->setTag(kOP_MT_withdraw);
-																 menuAction(t_node);
-															 });
-	main_case->addChild(withdraw_button, kOP_Z_content);
 	
-	//	CCSprite* n_withdraw = CCSprite::create("option_withdraw.png");
-	//	CCSprite* s_withdraw = CCSprite::create("option_withdraw.png");
-	//	s_withdraw->setColor(ccGRAY);
-	//
-	//	CCMenuItem* withdraw_item = CCMenuItemSprite::create(n_withdraw, s_withdraw, this, menu_selector(OptionPopup::menuAction));
-	//	withdraw_item->setTag(kOP_MT_withdraw);
-	//
-	//	CCMenu* withdraw_menu = CCMenu::createWithItem(withdraw_item);
-	//	withdraw_menu->setPosition(getContentPosition(kOP_MT_withdraw));
-	//	main_case->addChild(withdraw_menu, kOP_Z_content);
-	//	withdraw_menu->setTouchPriority(-171);
+	CCSprite* n_withdraw_img = CCSprite::create("option_withdraw.png");
+	KSLabelTTF* n_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
+	n_withdraw_label->setColor(ccc3(54, 36, 148));
+	n_withdraw_label->disableOuterStroke();
+	n_withdraw_label->setPosition(ccpFromSize(n_withdraw_img->getContentSize()/2.f) + ccp(0,0));
+	n_withdraw_img->addChild(n_withdraw_label);
+	
+	CCSprite* s_withdraw_img = CCSprite::create("option_withdraw.png");
+	s_withdraw_img->setColor(ccGRAY);
+	KSLabelTTF* s_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
+	s_withdraw_label->setColor(ccc3(54, 36, 148));
+	s_withdraw_label->disableOuterStroke();
+	s_withdraw_label->setPosition(ccpFromSize(s_withdraw_img->getContentSize()/2.f) + ccp(0,0));
+	s_withdraw_img->addChild(s_withdraw_label);
+	
+	CCSprite* d_withdraw_img = CCSprite::create("option_withdraw.png");
+	d_withdraw_img->setColor(ccGRAY);
+	KSLabelTTF* d_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
+	d_withdraw_label->setColor(ccc3(54, 36, 148));
+	d_withdraw_label->disableOuterStroke();
+	d_withdraw_label->setPosition(ccpFromSize(d_withdraw_img->getContentSize()/2.f) + ccp(0,0));
+	d_withdraw_img->addChild(d_withdraw_label);
+	
+	
+	CCMenuItem* withdraw_item = CCMenuItemSprite::create(n_withdraw_img, s_withdraw_img, d_withdraw_img, this, menu_selector(OptionPopup::menuAction));
+	withdraw_item->setTag(kOP_MT_withdraw);
+	withdraw_item->setPosition(getContentPosition(kOP_MT_withdraw));
+	tab_menu->addChild(withdraw_item);
 	
 	
 	//	CCSprite* n_logout = CCSprite::create("option_logout.png");
@@ -617,27 +678,30 @@ bool OptionPopup::init()
 	//	logout_menu->setTouchPriority(-171);
 	
 	
-	CommonButton* help_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), 12, CCSizeMake(90,40), CommonButtonLightPupple, -171);
-	help_button->setPosition(getContentPosition(kOP_MT_help));
-	help_button->setFunction([=](CCObject* sender)
-													 {
-														 CCNode* t_node = CCNode::create();
-														 t_node->setTag(kOP_MT_help);
-														 menuAction(t_node);
-													 });
-	main_case->addChild(help_button, kOP_Z_content);
+	CCSprite* n_help_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	n_help_label->setPosition(ccpFromSize(n_help_img->getContentSize()/2.f) + ccp(0,-1));
+	n_help_img->addChild(n_help_label);
 	
-	//	CCSprite* n_help = CCSprite::create("option_help.png");
-	//	CCSprite* s_help = CCSprite::create("option_help.png");
-	//	s_help->setColor(ccGRAY);
-	//
-	//	CCMenuItem* help_item = CCMenuItemSprite::create(n_help, s_help, this, menu_selector(OptionPopup::menuAction));
-	//	help_item->setTag(kOP_MT_help);
-	//
-	//	CCMenu* help_menu = CCMenu::createWithItem(help_item);
-	//	help_menu->setPosition(getContentPosition(kOP_MT_help));
-	//	main_case->addChild(help_menu, kOP_Z_content);
-	//	help_menu->setTouchPriority(-171);
+	CCSprite* s_help_img = CCSprite::create("subbutton_pink.png");
+	s_help_img->setColor(ccGRAY);
+	KSLabelTTF* s_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	s_help_label->setColor(ccGRAY);
+	s_help_label->setPosition(ccpFromSize(s_help_img->getContentSize()/2.f) + ccp(0,-1));
+	s_help_img->addChild(s_help_label);
+	
+	CCSprite* d_help_img = CCSprite::create("subbutton_pink.png");
+	d_help_img->setColor(ccGRAY);
+	KSLabelTTF* d_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	d_help_label->setPosition(ccpFromSize(d_help_img->getContentSize()/2.f) + ccp(0,-1));
+	d_help_img->addChild(d_help_label);
+	
+	
+	CCMenuItem* help_item = CCMenuItemSprite::create(n_help_img, s_help_img, d_help_img, this, menu_selector(OptionPopup::menuAction));
+	help_item->setTag(kOP_MT_help);
+	help_item->setPosition(ccp(395,16));
+	tab_menu->addChild(help_item);
+	
 	
 	
 	
@@ -1058,6 +1122,21 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_tip)
 	{
+		AccountManagerPopup* amp = AccountManagerPopup::create(-172);
+		addChild(amp, kOP_Z_popup);
+		
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_kakao)
+	{
+		int ret = hspConnector::get()->openKakaoMsg();
+		if(ret == 0) {
+			ASPopupView* as = ASPopupView::getCommonNoti2(-172, "에러",
+														  StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
+																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr, ccp(0, 0), true);
+			addChild(as, kOP_Z_content);
+		}
+		
 		is_menu_enable = true;
 	}
 }
@@ -1075,7 +1154,7 @@ void OptionPopup::resetBgmMenu()
 		bgm_img = NULL;
 	}
 	
-	bgm_img = CCSprite::create("option_button.png");
+	bgm_img = CCSprite::create("subbutton_purple2.png");
 	main_case->addChild(bgm_img, kOP_Z_content);
 	
 	string inner_text;
@@ -1092,7 +1171,7 @@ void OptionPopup::resetBgmMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
+	inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(bgm_img->getContentSize().width/2.f, bgm_img->getContentSize().height/2.f));
 	bgm_img->addChild(inner_label);
 	
@@ -1107,7 +1186,7 @@ void OptionPopup::resetEffectMenu()
 		effect_img = NULL;
 	}
 	
-	effect_img = CCSprite::create("option_button.png");
+	effect_img = CCSprite::create("subbutton_purple2.png");
 	main_case->addChild(effect_img, kOP_Z_content);
 	
 	string inner_text;
@@ -1124,7 +1203,7 @@ void OptionPopup::resetEffectMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
+	inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(effect_img->getContentSize().width/2.f, effect_img->getContentSize().height/2.f));
 	effect_img->addChild(inner_label);
 	
@@ -1140,7 +1219,7 @@ void OptionPopup::resetJoystickPositioningMenu()
 		joystick_positioning_img = NULL;
 	}
 	
-	joystick_positioning_img = CCSprite::create("option_button.png");
+	joystick_positioning_img = CCSprite::create("subbutton_purple2.png");
 	main_case->addChild(joystick_positioning_img, kOP_Z_content);
 	
 	string inner_text;
@@ -1157,7 +1236,7 @@ void OptionPopup::resetJoystickPositioningMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
+	inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(joystick_positioning_img->getContentSize().width/2.f, joystick_positioning_img->getContentSize().height/2.f));
 	joystick_positioning_img->addChild(inner_label);
 	
@@ -1172,7 +1251,7 @@ void OptionPopup::resetJoystickMovingMenu()
 		joystick_moving_img = NULL;
 	}
 	
-	joystick_moving_img = CCSprite::create("option_button.png");
+	joystick_moving_img = CCSprite::create("subbutton_purple2.png");
 	main_case->addChild(joystick_moving_img, kOP_Z_content);
 	
 	string inner_text;
@@ -1189,7 +1268,7 @@ void OptionPopup::resetJoystickMovingMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
+	inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(joystick_moving_img->getContentSize().width/2.f, joystick_moving_img->getContentSize().height/2.f));
 	joystick_moving_img->addChild(inner_label);
 	
@@ -1204,7 +1283,7 @@ void OptionPopup::resetSafetyMenu()
 		safety_img = NULL;
 	}
 	
-	safety_img = CCSprite::create("option_button.png");
+	safety_img = CCSprite::create("subbutton_purple2.png");
 	main_case->addChild(safety_img, kOP_Z_content);
 	
 	string inner_text;
@@ -1221,7 +1300,7 @@ void OptionPopup::resetSafetyMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
+	inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(safety_img->getContentSize().width/2.f, safety_img->getContentSize().height/2.f));
 	safety_img->addChild(inner_label);
 	
@@ -1236,7 +1315,7 @@ void OptionPopup::resetPushMenu()
 		push_img = NULL;
 	}
 	
-	push_img = CCSprite::create("option_button.png");
+	push_img = CCSprite::create("subbutton_purple2.png");
 	main_case->addChild(push_img, kOP_Z_content);
 	
 	string inner_text;
@@ -1253,7 +1332,7 @@ void OptionPopup::resetPushMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
+	inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(push_img->getContentSize().width/2.f, push_img->getContentSize().height/2.f));
 	push_img->addChild(inner_label);
 	
@@ -1268,7 +1347,7 @@ void OptionPopup::resetMessageMenu()
 		message_img = NULL;
 	}
 	
-	message_img = CCSprite::create("option_button.png");
+	message_img = CCSprite::create("subbutton_purple2.png");
 	main_case->addChild(message_img, kOP_Z_content);
 	
 	string inner_text;
@@ -1285,7 +1364,7 @@ void OptionPopup::resetMessageMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccc3(90, 72, 34), 1);
+	inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(message_img->getContentSize().width/2.f, message_img->getContentSize().height/2.f));
 	message_img->addChild(inner_label);
 	
@@ -1302,15 +1381,15 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_gameui_full)	return_value = ccp(204, 113);
 	else if(t_tag == kOP_MT_gameui_right)	return_value = ccp(265, 113);
 	
-	else if(t_tag == kOP_MT_bgm)					return_value = ccp(165, 195);
-	else if(t_tag == kOP_MT_effect)					return_value = ccp(390, 195);
-	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(165, 160);
-	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(390, 160);
-	else if(t_tag == kOP_MT_safety)					return_value = ccp(165, 125);
-	else if(t_tag == kOP_MT_push)					return_value = ccp(165, 75);
-	else if(t_tag == kOP_MT_message)				return_value = ccp(390, 75);
+	else if(t_tag == kOP_MT_bgm)					return_value = ccp(200, 210);
+	else if(t_tag == kOP_MT_effect)					return_value = ccp(380, 210);
+	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(200, 175);
+	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(380, 175);
+	else if(t_tag == kOP_MT_safety)					return_value = ccp(200, 140);
+	else if(t_tag == kOP_MT_push)					return_value = ccp(200, 100);
+	else if(t_tag == kOP_MT_message)				return_value = ccp(380, 100);
 	
-	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(320, 36);
+	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(405, 60);
 	else if(t_tag == kOP_MT_logout)			return_value = ccp(273, 43);
 	
 	else if(t_tag == kOP_MT_coupon)			return_value = ccp(390, 256);
