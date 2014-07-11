@@ -1440,9 +1440,8 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 		addChild(draw_button);
 		reader->release();
 		
-		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 15);
-		click_label->setColor(ccc3(120, 60, 0));
-		click_label->enableOuterStroke(ccc3(255, 231, 133), 1.f);
+		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 18);
+		click_label->enableOuterStroke(ccBLACK, 0.5f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
 		click_label->setVisible(false);
 		draw_button->addChild(click_label);

@@ -30,13 +30,12 @@ public:
 	function<void()> remove_func;
 private:
   bool is_menu_enable;
-	CCControlButton* gacha_button;
+	CCMenu* gacha_button;
 //  CCMenu * gacha_menu;
   CommonButton * cancel_menu;
   CCObject * target_gacha;
   SEL_CallFunc delegate_gacha;
-	CCScale9Sprite* back;
-//  CCSprite * back;
+	CCSprite* back;
   void myInit (CCObject * t_gacha, SEL_CallFunc d_gacha);
   CCPoint getContentPosition (int t_tag);
   void menuAction (CCObject * sender);
