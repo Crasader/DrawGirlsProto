@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
@@ -536,6 +537,12 @@ public class hspConnector{
 		String r = Locale.getDefault().getCountry();
 		return r;
 	}
+
+	public static String getTimeZone(){
+		TimeZone tz = TimeZone.getDefault();
+		return tz.getID();
+	}
+	
 	public static void getIsUsimKorean(final int _key){
 		HSPUtil.alertViewWithToastTerms((Activity)hspConnector.sContext, new HSPAlertViewWithToastTermsCB() {
 	           
