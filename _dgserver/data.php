@@ -117,7 +117,7 @@ if(!$stopCommand){
 	}
 	
 	
-	DBManager::get()->closeDB();
+	DBManager::closeDB();
 	@mysql_close();
 
 }

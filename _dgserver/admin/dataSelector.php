@@ -28,7 +28,7 @@ include "header.php";
 <?php
 if($_GET[mode]=="pattern"){
 ?>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("pattern")?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("pattern")?>" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="type" viewer='{"type":"text"}' primary>no</th>
@@ -44,7 +44,7 @@ if($_GET[mode]=="pattern"){
 
 <?php }else if($_GET[mode]=="monster"){?>
 
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("monster")?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("monster")?>" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}'>no</th>

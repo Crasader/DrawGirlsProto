@@ -66,7 +66,7 @@ var pathSelector = function(value,option){
 </form>
 
 </center>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("stage")?>" dbWhere="<?=$_GET['where']?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("stage")?>" dbWhere="<?=$_GET['where']?>" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary editor='{"type":"text"}'>no</th>

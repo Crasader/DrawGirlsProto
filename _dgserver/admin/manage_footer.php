@@ -15,7 +15,7 @@
 
 <?php 
 
-DBManager::get()->closeDB();
+DBManager::closeDB();
 
 if($connect){
 	@mysql_close();

@@ -215,11 +215,11 @@ function help_getcommonsetting(){
 }
 
 function getcommonsetting($p){
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
-	$result = mysql_query("select * from ".DBManager::get()->getMT("commonsetting"),$mainConn);  
+	$result = mysql_query("select * from ".DBManager::getMT("commonsetting"),$mainConn);  
 	$r = array();
 	
 	if(!$result)return ResultState::makeReturn(1001,"commonsetting error");
@@ -256,11 +256,11 @@ function help_getformsetter(){
 }
 
 function getformsetter($p){
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
-	$result = mysql_query("select * from ".DBManager::get()->getMT("formsetter"),$mainConn);  
+	$result = mysql_query("select * from ".DBManager::getMT("formsetter"),$mainConn);  
 	$r = array();
 	
 	if(!$result)return ResultState::makeReturn(1001,mysql_error());
@@ -298,7 +298,7 @@ function help_getnoticelist(){
 function getnoticelist($p){
 
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
@@ -340,7 +340,7 @@ function help_getcharacterlist(){
 
 function getcharacterlist($p){
 
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
@@ -355,7 +355,7 @@ function getcharacterlist($p){
 		return $r;
 	}
 	
-	$result =  mysql_query("select * from ".DBManager::get()->getMT("character"),$mainConn);
+	$result =  mysql_query("select * from ".DBManager::getMT("character"),$mainConn);
 	
 	if(!$result)return ResultState::makeReturn(1001,"getcharacterlist error");
 	
@@ -402,7 +402,7 @@ function help_getshoplist(){
 
 function getshoplist($p){
 
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
@@ -477,7 +477,7 @@ function help_getmonsterlist(){
 
 function getmonsterlist($p){
 
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
@@ -492,7 +492,7 @@ function getmonsterlist($p){
 		return $r;
 	}
 	
-	$result =  mysql_query("select * from ".DBManager::get()->getMT("monster"),$mainConn);
+	$result =  mysql_query("select * from ".DBManager::getMT("monster"),$mainConn);
 	
 	if(!$result)return ResultState::makeReturn(1001,"getmonsterlist error");
 	
@@ -535,11 +535,11 @@ function help_getstageinfo(){
 }
 
 function getstageinfo($p,$pTable=""){
-	if(!$pTable)$pTable=DBManager::get()->getMT("stage");
+	if(!$pTable)$pTable=DBManager::getMT("stage");
 	
 	$stageVer=0;
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 
 	$siresult = mysql_query("select * from $pTable where no=$p[no]",$mainConn);
@@ -557,7 +557,7 @@ function getstageinfo($p,$pTable=""){
 		$r["result"]=ResultState::toArray(2001);
 		return $r;
 	}
-	//$puzzleInfo = mysql_fetch_assoc(mysql_query("select * from ".DBManager::get()->getMT("puzzle")." where no = ".$stageInfo[puzzle],$mainConn));
+	//$puzzleInfo = mysql_fetch_assoc(mysql_query("select * from ".DBManager::getMT("puzzle")." where no = ".$stageInfo[puzzle],$mainConn));
 
 	$stageInfo[shopItems]=json_decode($stageInfo[shopItems],true);
 	$stageInfo[defItems]=json_decode($stageInfo[defItems],true);
@@ -582,7 +582,7 @@ function getstageinfo($p,$pTable=""){
 
 function geteventstageinfo($p)
 {
-	return $this->getstageinfo($p,DBManager::get()->getMT("eventstage"));
+	return $this->getstageinfo($p,DBManager::getMT("eventstage"));
 }
 
 ///////////////////////////////////////////
@@ -654,10 +654,10 @@ function getcardlist($p){
 		$cardlist = $p["noList"];
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
-	$result = mysql_query("select * from ".DBManager::get()->getMT("card")." where no IN ($cardlist)",$mainConn);  
+	$result = mysql_query("select * from ".DBManager::getMT("card")." where no IN ($cardlist)",$mainConn);  
 	if(!$result)return ResultState::makeReturn(1001);
 	
 	$list = array();
@@ -721,10 +721,10 @@ function getcardinfobyrand($p){
 
 
 
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
-	$result = mysql_query("select * from ".DBManager::get()->getMT("card")." where stage<>0 order by rand() limit 1",$mainConn);  
+	$result = mysql_query("select * from ".DBManager::getMT("card")." where stage<>0 order by rand() limit 1",$mainConn);  
 	if(!$result)return ResultState::makeReturn(1001);
 	
 	$cardInfo = mysql_fetch_array($result,MYSQL_ASSOC);
@@ -776,7 +776,7 @@ function getpuzzleinfo($p){
 	global $ERRORCODE;
 	
 	
-	// $mainConn = DBManager::get()->getMainConnection();
+	// $mainConn = DBManager::getMainConnection();
 	// if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	
@@ -785,8 +785,8 @@ function getpuzzleinfo($p){
 
 
 	// $piresult = null;
-	// if($p[no])$piresult = mysql_query("select * from ".DBManager::get()->getMT("puzzle")." where no=$p[no]",$mainConn);
-	// else if($p[order])$piresult = mysql_query("select * from ".DBManager::get()->getMT("puzzle")." where `order`=$p[order]",$mainConn);
+	// if($p[no])$piresult = mysql_query("select * from ".DBManager::getMT("puzzle")." where no=$p[no]",$mainConn);
+	// else if($p[order])$piresult = mysql_query("select * from ".DBManager::getMT("puzzle")." where `order`=$p[order]",$mainConn);
 
 	// if(!$piresult)return ResultState::makeReturn(1001,"puzzle info");
 	
@@ -811,7 +811,7 @@ function getpuzzleinfo($p){
 	
 			
 	
-	// $query = mysql_query("select * from ".DBManager::get()->getMT("piece")." where puzzle=".$puzzleInfo[no]." order by no asc",$mainConn);
+	// $query = mysql_query("select * from ".DBManager::getMT("piece")." where puzzle=".$puzzleInfo[no]." order by no asc",$mainConn);
 	// if(!$query)return ResultState::makeReturn(1001,"piece list");
 		
 	// $stagelist=array();
@@ -862,7 +862,7 @@ function geteventpuzzlelist($p){
 	global $ERRORCODE;
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	$puzzleListVer = kvManager::get("epuzzleListVer",1);
@@ -874,20 +874,20 @@ function geteventpuzzlelist($p){
 		if(!$p[start])$p[start]=0;
 		if(!$p[limit])$p[limit]=100;
 		
-		$query = mysql_query("select no,`order`,thumbnail,title,point,ticket from ".DBManager::get()->getMT("puzzle")." where isEvent=1 order by `order` asc limit $p[start],$p[limit]",$mainConn);
+		$query = mysql_query("select no,`order`,thumbnail,title,point,ticket from ".DBManager::getMT("puzzle")." where isEvent=1 order by `order` asc limit $p[start],$p[limit]",$mainConn);
 		
 		$list=array();
 		$cnt=0;
 		while($pData = mysql_fetch_array($query,MYSQL_ASSOC)){
 			//퍼즐 시작stage 알아오기
-			$r1 = mysql_query("select no from ".DBManager::get()->getMT("piece")." where puzzle=".$pData[no]." order by no asc limit 1",$mainConn);
+			$r1 = mysql_query("select no from ".DBManager::getMT("piece")." where puzzle=".$pData[no]." order by no asc limit 1",$mainConn);
 			if($r1){
 				$r1d = mysql_fetch_array($r1,MYSQL_ASSOC);
 				$pData["startStage"]=$r1d[no];
 			}
 			
 			//퍼즐 안에 스테이지 갯수 알아오기
-			$r2 = mysql_query("select count(no) from ".DBManager::get()->getMT("piece")." where puzzle=".$pData[no],$mainConn);
+			$r2 = mysql_query("select count(no) from ".DBManager::getMT("piece")." where puzzle=".$pData[no],$mainConn);
 			if($r2){
 				$r2d = mysql_fetch_array($r2);
 				$pData["stageCount"]=$r2d[0];
@@ -930,7 +930,7 @@ function getpuzzlelist($p){
 	global $ERRORCODE;
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	$puzzleListVer = kvManager::get("puzzleListVer",1);
@@ -942,20 +942,20 @@ function getpuzzlelist($p){
 		if(!$p[start])$p[start]=0;
 		if(!$p[limit])$p[limit]=100;
 		
-		$query = mysql_query("select no,`order`,`color`,title,point,ticket,thumbnail,pathInfo,cardInfo,rewardInfo,levelInfo,conditionInfo,coordinateInfo,startPosition,endPosition,map,center,original,face,`condition`,isEvent from ".DBManager::get()->getMT("puzzle")." order by `order` asc limit $p[start],$p[limit]",$mainConn);
+		$query = mysql_query("select no,`order`,`color`,title,point,ticket,thumbnail,pathInfo,cardInfo,rewardInfo,levelInfo,conditionInfo,coordinateInfo,startPosition,endPosition,map,center,original,face,`condition`,isEvent from ".DBManager::getMT("puzzle")." order by `order` asc limit $p[start],$p[limit]",$mainConn);
 		
 		$list=array();
 		$cnt=0;
 		while($pData = mysql_fetch_array($query,MYSQL_ASSOC)){
 			//퍼즐 시작stage 알아오기
-			$r1 = mysql_query("select no from ".DBManager::get()->getMT("piece")." where puzzle=".$pData[no]." order by no asc limit 1",$mainConn);
+			$r1 = mysql_query("select no from ".DBManager::getMT("piece")." where puzzle=".$pData[no]." order by no asc limit 1",$mainConn);
 			if($r1){
 				$r1d = mysql_fetch_array($r1,MYSQL_ASSOC);
 				$pData["startStage"]=$r1d[no];
 			}
 			
 			//퍼즐 안에 스테이지 갯수 알아오기
-			$r2 = mysql_query("select count(no) from ".DBManager::get()->getMT("piece")." where puzzle=".$pData[no],$mainConn);
+			$r2 = mysql_query("select count(no) from ".DBManager::getMT("piece")." where puzzle=".$pData[no],$mainConn);
 			if($r2){
 				$r2d = mysql_fetch_array($r2);
 				$pData["stageCount"]=$r2d[0];
@@ -1029,7 +1029,7 @@ function getbookinfo($p){
 	global $ERRORCODE;
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	
@@ -1038,8 +1038,8 @@ function getbookinfo($p){
 
 
 	$piresult = null;
-	if($p[no])$piresult = mysql_query("select * from ".DBManager::get()->getMT("book")." where no=$p[no]",$mainConn);
-	else if($p[order])$piresult = mysql_query("select * from ".DBManager::get()->getMT("book")." where `order`=$p[order]",$mainConn);
+	if($p[no])$piresult = mysql_query("select * from ".DBManager::getMT("book")." where no=$p[no]",$mainConn);
+	else if($p[order])$piresult = mysql_query("select * from ".DBManager::getMT("book")." where `order`=$p[order]",$mainConn);
 
 	if(!$piresult)return ResultState::makeReturn(1001,"book info");
 	
@@ -1068,7 +1068,7 @@ function getbookinfo($p){
 	$puzzleInfo[endPosition]=json_decode($puzzleInfo[endPosition],true);
 	$puzzleInfo[clearReward]=json_decode($puzzleInfo[clearReward],true);
 	
-	$query = mysql_query("select * from ".DBManager::get()->getMT("stage")." where book=".$puzzleInfo[no]." order by no asc",$mainConn);
+	$query = mysql_query("select * from ".DBManager::getMT("stage")." where book=".$puzzleInfo[no]." order by no asc",$mainConn);
 	if(!$query)return ResultState::makeReturn(1001,"stage list");
 		
 	$stagelist=array();
@@ -1126,7 +1126,7 @@ function geteventbooklist($p){
 	global $ERRORCODE;
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	$puzzleListVer = kvManager::get("ebookListVer",1);
@@ -1138,20 +1138,20 @@ function geteventbooklist($p){
 		if(!$p[start])$p[start]=0;
 		if(!$p[limit])$p[limit]=100;
 		
-		$query = mysql_query("select no,`order`,thumbnail,title,point,ticket from ".DBManager::get()->getMT("book")." where isEvent=1 order by `order` asc limit $p[start],$p[limit]",$mainConn);
+		$query = mysql_query("select no,`order`,thumbnail,title,point,ticket from ".DBManager::getMT("book")." where isEvent=1 order by `order` asc limit $p[start],$p[limit]",$mainConn);
 		
 		$list=array();
 		$cnt=0;
 		while($pData = mysql_fetch_array($query,MYSQL_ASSOC)){
 			//퍼즐 시작stage 알아오기
-			$r1 = mysql_query("select no from ".DBManager::get()->getMT("stage")." where book=".$pData[no]." order by no asc limit 1",$mainConn);
+			$r1 = mysql_query("select no from ".DBManager::getMT("stage")." where book=".$pData[no]." order by no asc limit 1",$mainConn);
 			if($r1){
 				$r1d = mysql_fetch_array($r1,MYSQL_ASSOC);
 				$pData["startStage"]=$r1d[no];
 			}
 			
 			//퍼즐 안에 스테이지 갯수 알아오기
-			$r2 = mysql_query("select count(no) from ".DBManager::get()->getMT("stage")." where book=".$pData[no],$mainConn);
+			$r2 = mysql_query("select count(no) from ".DBManager::getMT("stage")." where book=".$pData[no],$mainConn);
 			if($r2){
 				$r2d = mysql_fetch_array($r2);
 				$pData["stageCount"]=$r2d[0];
@@ -1195,7 +1195,7 @@ function getbooklist($p){
 	global $ERRORCODE;
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	$puzzleListVer = kvManager::get("bookListVer",1);
@@ -1207,20 +1207,20 @@ function getbooklist($p){
 		if(!$p[start])$p[start]=0;
 		if(!$p[limit])$p[limit]=100;
 		
-		$query = mysql_query("select no,`order`,title,point,ticket,thumbnail,pathInfo,cardInfo,rewardInfo,levelInfo,conditionInfo,coordinateInfo,startPosition,endPosition,map,center,original,face from ".DBManager::get()->getMT("book")." where isEvent=0 order by `order` asc limit $p[start],$p[limit]",$mainConn);
+		$query = mysql_query("select no,`order`,title,point,ticket,thumbnail,pathInfo,cardInfo,rewardInfo,levelInfo,conditionInfo,coordinateInfo,startPosition,endPosition,map,center,original,face from ".DBManager::getMT("book")." where isEvent=0 order by `order` asc limit $p[start],$p[limit]",$mainConn);
 		
 		$list=array();
 		$cnt=0;
 		while($pData = mysql_fetch_array($query,MYSQL_ASSOC)){
 			//퍼즐 시작stage 알아오기
-			$r1 = mysql_query("select no from ".DBManager::get()->getMT("stage")." where book=".$pData[no]." order by no asc limit 1",$mainConn);
+			$r1 = mysql_query("select no from ".DBManager::getMT("stage")." where book=".$pData[no]." order by no asc limit 1",$mainConn);
 			if($r1){
 				$r1d = mysql_fetch_array($r1,MYSQL_ASSOC);
 				$pData["startStage"]=$r1d[no];
 			}
 			
 			//퍼즐 안에 스테이지 갯수 알아오기
-			$r2 = mysql_query("select count(no) from ".DBManager::get()->getMT("stage")." where book=".$pData[no],$mainConn);
+			$r2 = mysql_query("select count(no) from ".DBManager::getMT("stage")." where book=".$pData[no],$mainConn);
 			if($r2){
 				$r2d = mysql_fetch_array($r2);
 				$pData["stageCount"]=$r2d[0];
@@ -1285,7 +1285,7 @@ function getpathinfo($p){
 	global $ERRORCODE;
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	$puzzleVer = kvManager::get("puzzleListVer",1);
@@ -1297,7 +1297,7 @@ function getpathinfo($p){
 		if(!$p[start])$p[start]=0;
 		if(!$p[limit])$p[limit]=100;
 		
-		$query = mysql_query("select no,`order` from ".DBManager::get()->getMT("puzzle")." where isEvent=0 order by `order` asc limit $p[start],$p[limit]",$mainConn);
+		$query = mysql_query("select no,`order` from ".DBManager::getMT("puzzle")." where isEvent=0 order by `order` asc limit $p[start],$p[limit]",$mainConn);
 		
 		$list=array();
 		$nData=array();
@@ -1306,7 +1306,7 @@ function getpathinfo($p){
 			//퍼즐 시작stage 알아오기
 			$pathList = array();
 			$startStage = 0;
-			$r1 = mysql_query("select no,pieceNo from ".DBManager::get()->getMT("stage")." where puzzle=".$pData[no]." order by no asc",$mainConn);
+			$r1 = mysql_query("select no,pieceNo from ".DBManager::getMT("stage")." where puzzle=".$pData[no]." order by no asc",$mainConn);
 			while($sData=mysql_fetch_array($r1)){
 				if($startStage==0)$startStage=$sData["no"];
 				$pathList[] = $sData["pieceNo"];
@@ -1354,7 +1354,7 @@ function help_geteventstagelist(){
 function geteventstagelist($p){
 	
 	
-	$mainConn = DBManager::get()->getMainConnection();
+	$mainConn = DBManager::getMainConnection();
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	$eventVer = kvManager::get("eStageListVer",1);
@@ -1366,7 +1366,7 @@ function geteventstagelist($p){
 		return $r;
 	}
 	
-	$query = mysql_query("select no,thumbnail from ".DBManager::get()->getMT("eventstage"),$mainConn);
+	$query = mysql_query("select no,thumbnail from ".DBManager::getMT("eventstage"),$mainConn);
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
 	$list=array();
@@ -1477,31 +1477,31 @@ function dropoutuser($p){
 	$memberID = $p["memberID"];
 	$keylist = $p["keyList"];
 	if($memberID){
-		CommitManager::get()->begin($memberID);
+		CommitManager::begin($memberID);
 		$user = UserData::create($memberID);
 
 		
 		if($user->isLoaded()){
-			CommitManager::get()->setSuccess($memberID,StageScore::removeRowByQuery("where memberID=".$user->memberID));
-			CommitManager::get()->setSuccess($memberID,WeeklyScore::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,PieceHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,CardHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,PuzzleHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,ArchivementHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,CharacterHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,UserProperty::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,UserStorage::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,GiftBoxHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::get()->setSuccess($memberID,$user->remove());
+			CommitManager::setSuccess($memberID,StageScore::removeRowByQuery("where memberID=".$user->memberID));
+			CommitManager::setSuccess($memberID,WeeklyScore::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,PieceHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,CardHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,PuzzleHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,ArchivementHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,CharacterHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,UserProperty::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,UserStorage::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,GiftBoxHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,$user->remove());
 
-			if(CommitManager::get()->commit($memberID)){
+			if(CommitManager::commit($memberID)){
 				$user->getUserIndex()->remove();
 				$r["result"]=ResultState::successToArray();
 			}else{
 				$r["result"]=ResultState::toArray(1001,"query fail");
 			}
 		}else{
-			CommitManager::get()->rollback($memberID);
+			CommitManager::rollback($memberID);
 			$r["state"]="error";
 			$r["result"]=ResultState::toArray(2003,"fail to load userdata");
 		}
@@ -1620,7 +1620,7 @@ function join($p){
 	}
 
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	$user = UserData::create($memberID);
 	$user->memberID = $memberID;
 	$user->flag = $p["flag"];
@@ -1679,7 +1679,7 @@ function join($p){
             LogManager::addLog("join user DeviceID s2 ".$user->deviceID);
 			
 			$userStorage = new UserStorage($memberID);
-			CommitManager::get()->setSuccess($memberID,$userStorage->save());
+			CommitManager::setSuccess($memberID,$userStorage->save());
 			// $itemType = array("fr","g","m","pr","h","i9","i6","i8","p1","p2","p3","p4","p5");
 			// $itemValue = array(100,5000,0,0,5,1,1,1,1,1,1,1,1);
 
@@ -1688,7 +1688,7 @@ function join($p){
 			// 	$userProp->memberID = $memberID;
 			// 	$userProp->type = $itemType[$i];
 			// 	$userProp->count = $itemValue[$i];
-			// 	CommitManager::get()->setSuccess($memberID,$userProp->save());
+			// 	CommitManager::setSuccess($memberID,$userProp->save());
 			// }
 
 			$character = new CharacterHistory($memberID,1);
@@ -1696,16 +1696,16 @@ function join($p){
 			$character->characterNo = 1;
 			$character->level=1;
 			$character->regDate = TimeManager::getCurrentDateTime();
-			CommitManager::get()->setSuccess($memberID,$character->save());
+			CommitManager::setSuccess($memberID,$character->save());
 
-			if(CommitManager::get()->commit($memberID)){
+			if(CommitManager::commit($memberID)){
 				return $r;
 			}else{
 				return ResultState::makeReturn(2014);
 			}
 		}
 	}else{
-		CommitManager::get()->commit($memberID);
+		CommitManager::commit($memberID);
 	}
 
 
@@ -2733,7 +2733,7 @@ function checkweeklyreward($p){
 	}
 	$r["rewardInfo"]=$nrinfo;
 	$rewards=$rewardInfo->value;
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	$userInfo = UserData::create($memberID);
 	if(!$userInfo->eventCheckWeek){
 	
@@ -2790,7 +2790,7 @@ function checkweeklyreward($p){
 			$sR = $this->sendgiftboxhistory($param);
 			
 			if(!ResultState::successCheck($sR["result"])){
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 			}
 			
 			$r["sendGift"]=true;
@@ -2841,7 +2841,7 @@ function checkweeklyreward($p){
 			$sR = $this->sendgiftboxhistory($param);
 			
 			if(!ResultState::successCheck($sR["result"])){
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 			}
 			
 			$r["sendGift"]=true;
@@ -2854,11 +2854,11 @@ function checkweeklyreward($p){
 
 	if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNo()){
 		$userInfo->eventCheckWeek = TimeManager::getCurrentWeekNo();
-		CommitManager::get()->setSuccess($memberID,$userInfo->save());
+		CommitManager::setSuccess($memberID,$userInfo->save());
 	}
 
 
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(2014,"dont save");
@@ -2956,7 +2956,7 @@ function getstagescorelist($p){
 	$memberIDListString = "(".implode(",",$memberlist).")";
 	$list=array();
 
-	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString",DBManager::get()->getConnectionByShardKey($stageNo));
+	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString",DBManager::getConnectionByShardKey($stageNo));
 	while($rankInfo = mysql_fetch_array($qresult,MYSQL_ASSOC)){
 		$list[]=$rankInfo;
 	}	
@@ -3005,7 +3005,7 @@ function getstageranklist($p){
 	$memberIDListString = "(".implode(",",$memberIDList).")";
 	$list = array();
 	foreach($stageNoList as $key=>$stageNo){
-		$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString order by score desc limit $limit",DBManager::get()->getConnectionByShardKey($stageNo));
+		$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString order by score desc limit $limit",DBManager::getConnectionByShardKey($stageNo));
 		
 		$rlist = array();
 		LogManager::addLog("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString order by score desc limit $limit");
@@ -3084,7 +3084,7 @@ function getstagerankbyalluser($p){
 
 	// StageScore::q
 
-	// $mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo",DBManager::get()->getConnectionByShardKey($stageNo)));
+	// $mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo",DBManager::getConnectionByShardKey($stageNo)));
 	// $alluser=$mresult[0]+1;
 	// $r["alluser"]=$alluser+1;
 
@@ -3100,7 +3100,7 @@ function getstagerankbyalluser($p){
 
 
 	// if($myscore){
-	// 	$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score>$myscore order by score desc",DBManager::get()->getConnectionByShardKey($stageNo)));
+	// 	$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score>$myscore order by score desc",DBManager::getConnectionByShardKey($stageNo)));
 	// 	$myrank=$mresult[0]+1;
 	// 	$r["myrank"]=$myrank;
 	// }else{
@@ -3112,7 +3112,7 @@ function getstagerankbyalluser($p){
 // 	$list=array();
 // 	$bronzeScore=0;
 // 	$_r=1;
-// 	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo order by score desc limit 4",DBManager::get()->getConnectionByShardKey($stageNo));
+// 	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo order by score desc limit 4",DBManager::getConnectionByShardKey($stageNo));
 // 	while($rankInfo = mysql_fetch_array($qresult,MYSQL_ASSOC)){
 // 		$rankInfo["nick"]=$rankInfo["memberID"];
 // 		$rankInfo["rank"]=$_r++;
@@ -3138,12 +3138,12 @@ function getstagerankbyalluser($p){
 	
 // 	if(!$stageNo)return ResultState::makeReturn(2002,"stageNo");
 
-// 	$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo",DBManager::get()->getConnectionByShardKey($stageNo)));
+// 	$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo",DBManager::getConnectionByShardKey($stageNo)));
 // 	$alluser=$mresult[0]+1;
 // 	$r["alluser"]=$alluser+1;
 
 // 	if($myscore){
-// 		$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score>$myscore order by score desc",DBManager::get()->getConnectionByShardKey($stageNo)));
+// 		$mresult = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score>$myscore order by score desc",DBManager::getConnectionByShardKey($stageNo)));
 // 		$myrank=$mresult[0]+1;
 // 		$r["myrank"]=$myrank;
 // 	}else{
@@ -3153,7 +3153,7 @@ function getstagerankbyalluser($p){
 // 	$list=array();
 // 	$bronzeScore=0;
 // 	$_r=1;
-// 	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score>$myscore order by score desc limit 3",DBManager::get()->getConnectionByShardKey($stageNo));
+// 	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score>$myscore order by score desc limit 3",DBManager::getConnectionByShardKey($stageNo));
 // 	while($rankInfo = mysql_fetch_array($qresult,MYSQL_ASSOC)){
 // 		$rankInfo["nick"]=$rankInfo["memberID"];
 // 		$rankInfo["rank"]=$_r++;
@@ -3169,7 +3169,7 @@ function getstagerankbyalluser($p){
 // 		$list_front=array();
 // 		$limit = 3;
 // 		if($myrank<6)$limit = $myrank-3;
-// 		$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score<$bronzeScore and score>$myscore order by score asc limit $limit",DBManager::get()->getConnectionByShardKey($stageNo));
+// 		$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score<$bronzeScore and score>$myscore order by score asc limit $limit",DBManager::getConnectionByShardKey($stageNo));
 // 		while($rankInfo = mysql_fetch_array($qresult,MYSQL_ASSOC)){
 // 			$rankInfo["nick"]=$rankInfo["memberID"];
 // 			$rankInfo["rank"]=$myrank-$_r++;
@@ -3187,7 +3187,7 @@ function getstagerankbyalluser($p){
 // 	$limit = 3;
 // 	if($myrank<10)$limit = 10 - $myrank;
 // 	$list_back=array();
-// 	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score<$myscore order by score desc limit $limit",DBManager::get()->getConnectionByShardKey($stageNo));
+// 	$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and score<$myscore order by score desc limit $limit",DBManager::getConnectionByShardKey($stageNo));
 // 	while($rankInfo = mysql_fetch_array($qresult,MYSQL_ASSOC)){
 // 		$rankInfo["nick"]=$rankInfo["memberID"];
 // 		$rankInfo["rank"]=$myrank+$_r++;
@@ -3232,7 +3232,7 @@ function updatepuzzlehistory($p){
 	//보내기
 
 	$r["sendGift"]=false;
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	$obj = new PuzzleHistory($memberID,$puzzleNo);
 	$obj->memberID=$memberID;
 	$obj->puzzleNo = $puzzleNo;
@@ -3252,7 +3252,7 @@ function updatepuzzlehistory($p){
 			$r["sendGift"]=true;
 			$r["giftCardNo"]=$clearReward["normal"];
 			if(!ResultState::successCheck($cr["result"])){
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 			}
 			$r["giftData"]=$cr["data"];
 		}
@@ -3274,7 +3274,7 @@ function updatepuzzlehistory($p){
 			$r["sendGift"]=true;
 			$r["giftCardNo"]=$clearReward["perfect"];
 			if(!ResultState::successCheck($cr["result"])){
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 			}
 		}
 	}
@@ -3282,10 +3282,10 @@ function updatepuzzlehistory($p){
 	if($p["openType"])$obj->openType=$p["openType"];
 
 	if(!$obj->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["data"]=$obj->getArrayData(true);
 		$r["result"]=ResultState::successToArray();
 	}else{
@@ -3592,7 +3592,7 @@ function addproperty($p){
 	if(!$count)return ResultState::makeReturn(2002,"count");
 	if(!$p["type"])return ResultState::makeReturn(2002,"type");
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	$userProp = new UserStorage($memberID);
 	
@@ -3622,12 +3622,12 @@ function addproperty($p){
 	}
 
 	if(!$userProp->save() or !$userHistory->save()){
-		CommitManager::get()->rollback($memberID);
+		CommitManager::rollback($memberID);
 		$r["result"] = ResultState::toArray(2014,"Dont Save gold");
 		return $r;
 	}
 
-	CommitManager::get()->commit($memberID);
+	CommitManager::commit($memberID);
 	
 	$r["result"]=ResultState::successToArray();
 	return $r;
@@ -3749,7 +3749,7 @@ function changeuserproperties($p){
 
 	LogManager::addLog("changeuserproperties ".json_encode($list));
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	$userStorage = new UserStorage($memberID);
 
@@ -3785,7 +3785,7 @@ function changeuserproperties($p){
 				$result = $this->updateuserpropertyhistory($param);	
 				
 				if(!ResultState::successCheck($result["result"])){
-					CommitManager::get()->setSuccess($memberID,false);
+					CommitManager::setSuccess($memberID,false);
 				}
 
 				$rs[]=array("type"=>"r","count"=>($userStorage->fr+$userStorage->pr));
@@ -3799,7 +3799,7 @@ function changeuserproperties($p){
 					$rs[]=array("type"=>"r","count"=>($userStorage->fr+$userStorage->pr));
 					$minusProperty="r";
 					$minusPropertyValue = $userStorage->fr+$userStorage->pr;
-					CommitManager::get()->setSuccess($memberID,false);
+					CommitManager::setSuccess($memberID,false);
 				}else{
 					//무료젬가 충분하다면 무료젬만 사용
 					if($value["count"]+$userStorage->fr>=0){
@@ -3816,7 +3816,7 @@ function changeuserproperties($p){
 						$userHistory->sender = "user";
 						$userHistory->exchangeID=$p["exchangeID"];
 						$userHistory->regDate = TimeManager::getCurrentDateTime();
-						CommitManager::get()->setSuccess($memberID,$userHistory->save());
+						CommitManager::setSuccess($memberID,$userHistory->save());
 
 					//무료젬가 부족하면 뮤료젬=0, 남은건 유료젬에서 차감
 					}else{
@@ -3832,7 +3832,7 @@ function changeuserproperties($p){
 							$userHistory1->sender = "user";
 							$userHistory->exchangeID=$p["exchangeID"];
 							$userHistory1->regDate = TimeManager::getCurrentDateTime();
-							CommitManager::get()->setSuccess($memberID,$userHistory1->save());
+							CommitManager::setSuccess($memberID,$userHistory1->save());
 						}
 
 						$userStorage->pr=$userStorage->pr+$userStorage->fr+$value["count"];
@@ -3850,10 +3850,10 @@ function changeuserproperties($p){
 							$userHistory2->sender = "user";
 							$userHistory->exchangeID=$p["exchangeID"];
 							$userHistory2->regDate = TimeManager::getCurrentDateTime();
-							CommitManager::get()->setSuccess($memberID,$userHistory2->save());
+							CommitManager::setSuccess($memberID,$userHistory2->save());
 						}
 
-						//CommitManager::get()->setSuccess($memberID,$fRuby->save() && $pRuby->save());
+						//CommitManager::setSuccess($memberID,$fRuby->save() && $pRuby->save());
 					}
 
 					$rs[]=array("type"=>"r","count"=>($userStorage->fr+$userStorage->pr));
@@ -3921,7 +3921,7 @@ function changeuserproperties($p){
 				$r["result"]=ResultState::toArray(2015);
 				$minusProperty=$pType;
 				$minusPropertyValue = $userStorage->{$pType}-$value["count"]; ;
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 			}else{
 				$param["memberID"]=$memberID;
 				$param["type"]=$value["type"];
@@ -3935,7 +3935,7 @@ function changeuserproperties($p){
 
 				$result = $this->updateuserpropertyhistory($param);	
 				if(!ResultState::successCheck($result["result"])){
-					CommitManager::get()->setSuccess($memberID,false);
+					CommitManager::setSuccess($memberID,false);
 				}
 
 				$rs[]=array("type"=>$pType,"count"=>$userStorage->{$pType});
@@ -3947,12 +3947,12 @@ function changeuserproperties($p){
 
 	if(!$userStorage->save()){
 		LogManager::addLog("faild save userStorage ".mysql_error());
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 
 
 
-	if(CommitManager::get()->commit($memberID))$r["result"]=ResultState::successToArray();
+	if(CommitManager::commit($memberID))$r["result"]=ResultState::successToArray();
 	else{	
 		if(!$r["result"])$r["result"]=ResultState::toArray(2013,"dont success");
 	}
@@ -3980,7 +3980,7 @@ function changeuserproperties($p){
 
 	//if(count($list)==1 && !$list[0]["valu"])return ResultState::makeReturn(1);
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	foreach ($list as $key => $value) {
 		$param=array();
@@ -4009,7 +4009,7 @@ function changeuserproperties($p){
 					if($result["result"]["code"]==2015){
 						$r["result"]=ResultState::toArray(2015);
 					}
-					CommitManager::get()->setSuccess($memberID,false);
+					CommitManager::setSuccess($memberID,false);
 				}
 
 				$fRuby = new UserProperty($memberID,"fr");
@@ -4027,7 +4027,7 @@ function changeuserproperties($p){
 					$rs[]=array("type"=>"r","count"=>($fRuby->count+$pRuby->count));
 					$minusProperty="r";
 					$minusPropertyValue = $fRuby->count+$pRuby->count;
-					CommitManager::get()->setSuccess($memberID,false);
+					CommitManager::setSuccess($memberID,false);
 				}else{
 					//무료젬가 충분하다면 무료젬만 사용
 					if($value["count"]+$fRuby->count>=0){
@@ -4043,7 +4043,7 @@ function changeuserproperties($p){
 						$userHistory->content = $value["content"];
 						$userHistory->sender = "user";
 						$userHistory->regDate = TimeManager::getCurrentDateTime();
-						CommitManager::get()->setSuccess($memberID,($userHistory->save() && $fRuby->save()));
+						CommitManager::setSuccess($memberID,($userHistory->save() && $fRuby->save()));
 
 					//무료젬가 부족하면 뮤료젬=0, 남은건 유료젬에서 차감
 					}else{
@@ -4058,7 +4058,7 @@ function changeuserproperties($p){
 							$userHistory1->content = $value["content"];
 							$userHistory1->sender = "user";
 							$userHistory1->regDate = TimeManager::getCurrentDateTime();
-							CommitManager::get()->setSuccess($memberID,$userHistory1->save());
+							CommitManager::setSuccess($memberID,$userHistory1->save());
 						}
 
 						$pRuby->count=$pRuby->count+$fRuby->count+$value["count"];
@@ -4075,10 +4075,10 @@ function changeuserproperties($p){
 							$userHistory2->content = $value["content"];
 							$userHistory2->sender = "user";
 							$userHistory2->regDate = TimeManager::getCurrentDateTime();
-							CommitManager::get()->setSuccess($memberID,$userHistory2->save());
+							CommitManager::setSuccess($memberID,$userHistory2->save());
 						}
 
-						CommitManager::get()->setSuccess($memberID,$fRuby->save() && $pRuby->save());
+						CommitManager::setSuccess($memberID,$fRuby->save() && $pRuby->save());
 					}
 
 					$rs[]=array("type"=>"r","count"=>($fRuby->count+$pRuby->count));
@@ -4106,7 +4106,7 @@ function changeuserproperties($p){
 					$minusPropertyValue = $result["minusCount"];
 
 				}
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 				$rs[]=array("type"=>$result["data"]["type"],"count"=>$result["data"]["count"]);
 			}else{
 				$rs[]=array("type"=>$result["data"]["type"],"count"=>$result["data"]["count"]);
@@ -4117,12 +4117,12 @@ function changeuserproperties($p){
 	$r["list"]=$rs;
 
 	if($minusProperty){$r["minusType"]=$minusProperty; $r["minusCount"]=$minusPropertyValue;}
-	if(!CommitManager::get()->isSuccess($memberID)){
-		CommitManager::get()->rollback($memberID);
+	if(!CommitManager::isSuccess($memberID)){
+		CommitManager::rollback($memberID);
 		$r["result"]=ResultState::toArray(2013,"dont success");
 		
 	}else{
-		if(CommitManager::get()->commit($memberID))$r["result"]=ResultState::successToArray();
+		if(CommitManager::commit($memberID))$r["result"]=ResultState::successToArray();
 		else ResultState::toArray(2013,"dont success");
 	}
 
@@ -4252,7 +4252,7 @@ function transaction($p){
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	if(!$p["actions"])return ResultState::makeReturn(2002,"actions");
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	
 	foreach ($p["actions"] as $key => $value) {
 		$a = $value["action"];
@@ -4262,19 +4262,19 @@ function transaction($p){
 			$r = $this->$a($p);
 			$results[]=$r;
 			if(!ResultState::successCheck($r["result"])){
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 				break;
 			}
 		}
 	}
 
 
-	if(CommitManager::get()->isSuccess($memberID)){
-		CommitManager::get()->commit($memberID);
+	if(CommitManager::isSuccess($memberID)){
+		CommitManager::commit($memberID);
 		$cResult["list"]=$results;
 		$cResult["result"]=ResultState::successToArray();
 	}else{
-		CommitManager::get()->rollback($memberID);
+		CommitManager::rollback($memberID);
 		return ResultState::makeReturn(2013,"Fail Tranjection");
 	}
 
@@ -4555,7 +4555,7 @@ function confirmgiftboxhistory($p){
 
 	if($obj->confirmDate>0)return ResultState::makeReturn(2003,"dont find message");
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	$cResult = array();
 	// if(!$obj->exchangeID){
@@ -4578,23 +4578,23 @@ function confirmgiftboxhistory($p){
 
 
 	if(ResultState::successCheck($cResult["result"])){
-		CommitManager::get()->setSuccess($memberID,true);
+		CommitManager::setSuccess($memberID,true);
 	}else{
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 
 	$obj->confirmDate=TimeManager::getCurrentDateTime();
 
 	if($obj->save()){
-		CommitManager::get()->setSuccess($memberID,true);
+		CommitManager::setSuccess($memberID,true);
 		$r["result"]=ResultState::successToArray();
 		$r["list"]=$cResult["list"];
 	}else{
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 		$r["result"]=ResultState::toArray(2014,"dont save");
 	}
 
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 		$r["list"]=$cResult["list"];
 	}else{
@@ -4626,7 +4626,7 @@ function confirmallgiftboxhistory($p){
 	
 	$obj = new GiftBoxHistory($memberID);
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	$cResult = array();
 
@@ -4641,15 +4641,15 @@ function confirmallgiftboxhistory($p){
 
 	if(ResultState::successCheck($cResult["result"])){
 		LogManager::addLog("cresult is true");
-		CommitManager::get()->setSuccess($memberID,true);
+		CommitManager::setSuccess($memberID,true);
 	}else{
 		LogManager::addLog("cresult is false ".json_encode($cResult));
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 
 	$obj->confirmDate=TimeManager::getCurrentDateTime();
 
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 		$r["list"]=$cResult["list"];
 	}else{
@@ -4924,7 +4924,7 @@ function updatetodaymission($p){
 	if($todayDate != $p["date"]){
 		return ResultState::makeReturn(ResultState::GDSUCCESS,"date not same");
 	}
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	$user = UserData::create($memberID);
 	$tMission = $user->TMInfo;
 	$tLevel = $user->TMLevel;
@@ -4946,7 +4946,7 @@ function updatetodaymission($p){
 		$checkFirst=true;
 		$checkCount=$result["data"]["count"];
 		// if(!ResultState::successCheck($result["result"])){
-		// 	CommitManager::get()->setSuccess($memberID,false);
+		// 	CommitManager::setSuccess($memberID,false);
 		// }
 
 
@@ -4957,15 +4957,15 @@ function updatetodaymission($p){
 		$param["reward"]=$tMission["rewardInfo"]["reward"];
 		$sR = $this->sendgiftboxhistory($param);
 		if(!ResultState::successCheck($sR["result"])){
-			CommitManager::get()->setSuccess($memberID,false);
+			CommitManager::setSuccess($memberID,false);
 		}
 	}
 
 	$user->TMInfo = $tMission;
 
-	if(!$user->save())CommitManager::get()->setSuccess($memberID,false);
+	if(!$user->save())CommitManager::setSuccess($memberID,false);
 
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r = $tMission;
 		$r["resetTimestamp"]=strtotime("24:00", TimeManager::getTime()+60*60*5);
 		$r["remainTime"]= $r["resetTimestamp"] - TimeManager::getTime();
@@ -5104,7 +5104,7 @@ function checkloginevent($p){
 	$memberID  = $p["memberID"];
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	
 	$userData = UserData::create($memberID);
 	$todayDateTime = TimeManager::getCurrentDateTime();
@@ -5137,15 +5137,15 @@ function checkloginevent($p){
 				$param["reward"]=$rData["reward"];
 				$sR = $this->sendgiftboxhistory($param);
 				if(!ResultState::successCheck($sR["result"])){
-					CommitManager::get()->setSuccess($memberID,false);
+					CommitManager::setSuccess($memberID,false);
 				}
 			}
 		}
 	}
 
-	CommitManager::get()->setSuccess($memberID,$userData->save());
+	CommitManager::setSuccess($memberID,$userData->save());
 
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		return ResultState::makeReturn(1);
 	}
 
@@ -5319,15 +5319,15 @@ function setendlessrank($p){
 	if($p["score"]>$endlessData["score"])$endlessData["score"]=$p["score"];
 	if($p["victory"]>$endlessData["victory"])$endlessData["victory"]=$p["victory"];
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	if(!$userData->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 	if(!$endlessRank->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
@@ -5422,22 +5422,22 @@ function finishendlessplay($p){
 			$param["reward"]=$ew["reward"];
 			$sR = $this->sendgiftboxhistory($param);
 			if(!ResultState::successCheck($sR["result"])){
-				CommitManager::get()->setSuccess($memberID,false);
+				CommitManager::setSuccess($memberID,false);
 			}
 		}
 	}
 	
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	$r["endlessData"]=$endlessData;
 
 	if(!$userData->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 	if(!$endlessRank->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
@@ -5687,7 +5687,7 @@ function checkattendenceevent($p){
 		return $r;
 	}
 	
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	//4. 출석정보업데이트하고, 하루더 카운팅, 보상지급
 	$userData->eventAtdNo=$adtInfo->no;
 
@@ -5700,7 +5700,7 @@ function checkattendenceevent($p){
 		$param["reward"]=array($adtInfo->rewardList[$userData->eventAtdCount]);
 		$sR = $this->sendgiftboxhistory($param);
 		if(!ResultState::successCheck($sR["result"])){
-			CommitManager::get()->setSuccess($memberID,false);
+			CommitManager::setSuccess($memberID,false);
 		}
 		$r["sendGift"]=true;
 
@@ -5711,10 +5711,10 @@ function checkattendenceevent($p){
 	$userData->eventAtdCount++;
 	$userData->eventCheckDate=TimeManager::getCurrentDate();
 	if(!$userData->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
@@ -5767,7 +5767,7 @@ function usecupon($p){
 	}
 
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 
 	// 3. 사용내역로드. 사용했으면 튕구기
 	$cuponHistory = new CuponHistory($cuponCode->cuponCode,$memberID);
@@ -5788,7 +5788,7 @@ function usecupon($p){
 		$cuponUsedInfo->useDate = $today;
 		$cuponUsedInfo->memberID = $memberID;
 		if(!$cuponUsedInfo->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 		}
 	}
 
@@ -5801,7 +5801,7 @@ function usecupon($p){
 	$sR = $this->sendgiftboxhistory($param);
 	
 	if(!ResultState::successCheck($sR["result"])){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 
 	//히스토리등록
@@ -5810,11 +5810,11 @@ function usecupon($p){
 	$cuponHistory->cuponCode = $cuponCode->cuponCode;
 	
 	if(!$cuponHistory->save()){
-		CommitManager::get()->setSuccess($memberID,false);
+		CommitManager::setSuccess($memberID,false);
 	}
 
 	//끗
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
@@ -5885,7 +5885,7 @@ function getheart($p){
 	$heartMax = new CommonSetting("heartMax");
 	if(!$cooltime->isLoaded() || !$heartMax->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);
 
-	CommitManager::get()->begin($memberID);
+	CommitManager::begin($memberID);
 	$userInfo = UserData::create($memberID);
 	$userStorage = new UserStorage($memberID);
 	$r["heart"] = $userStorage->h; 
@@ -5898,10 +5898,10 @@ function getheart($p){
 			$ep["memberID"]=$memberID;
 			$ep["exchangeID"]="useHeart";
 			$er=$this->exchange($ep);
-			CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
+			CommitManager::setSuccess($memberID,ResultState::successCheck($er["result"]));
 			
 			if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
-				CommitManager::get()->rollback($memberID);
+				CommitManager::rollback($memberID);
 				$r = ResultState::makeReturn(ResultState::GDEXPIRE);
 				$r["leftTime"]=$cooltime->value-$m;
 				$r["max"]=$heartMax->value;
@@ -5914,12 +5914,12 @@ function getheart($p){
 
 			// $userStorage->h-=1;
 			// if($userStorage->h<0){
-			// 	CommitManager::get()->commit($memberID);
+			// 	CommitManager::commit($memberID);
 			// 	return ResultState::makeReturn(ResultState::GDEXPIRE);
 			// }
 		}
-		CommitManager::get()->setSuccess($memberID,$userInfo->save());
-		//CommitManager::get()->setSuccess($memberID,$userStorage->save());	
+		CommitManager::setSuccess($memberID,$userInfo->save());
+		//CommitManager::setSuccess($memberID,$userStorage->save());	
 		$r["leftTime"]=$cooltime->value;	
 	}else{
 		$m = $now-$userInfo->lastHeartTime;
@@ -5938,11 +5938,11 @@ function getheart($p){
 			$ep["exchangeID"]="getHeart";
 			$ep["list"][]=array("type"=>"h","count"=>$nHeart);
 			$er=$this->exchange($ep);
-			CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
+			CommitManager::setSuccess($memberID,ResultState::successCheck($er["result"]));
 			$r["heart"] = $er["list"][0]["count"];
 			
 			if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
-				CommitManager::get()->rollback($memberID);
+				CommitManager::rollback($memberID);
 				$r = ResultState::makeReturn(ResultState::GDEXPIRE);
 				$r["leftTime"]=$cooltime->value-$m;
 				$r["max"]=$heartMax->value;
@@ -5957,10 +5957,10 @@ function getheart($p){
 			// 	$ep["exchangeID"]="useHeart";
 			// 	unset($ep["list"]);
 			// 	$er=$this->exchange($ep);
-			// 	CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
+			// 	CommitManager::setSuccess($memberID,ResultState::successCheck($er["result"]));
 
 			// 	if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
-			// 		CommitManager::get()->rollback($memberID);
+			// 		CommitManager::rollback($memberID);
 			// 		$r = ResultState::makeReturn(ResultState::GDEXPIRE);
 			// 		$r["leftTime"]=$cooltime->value-$m;
 			// 		$r["max"]=$heartMax->value;
@@ -5973,12 +5973,12 @@ function getheart($p){
 			// 	// $userStorage->h-=1;
 			// 	// if($userStorage->h<0){
 			// 	// 	///////////////////////////////////////////////////////여기서 exchange useHeart
-			// 	// 	CommitManager::get()->commit($memberID);
+			// 	// 	CommitManager::commit($memberID);
 			// 	// 	return ResultState::makeReturn(ResultState::GDEXPIRE);
 			// 	// }
 			// }
-			CommitManager::get()->setSuccess($memberID,$userInfo->save());
-			//CommitManager::get()->setSuccess($memberID,$userStorage->save());
+			CommitManager::setSuccess($memberID,$userInfo->save());
+			//CommitManager::setSuccess($memberID,$userStorage->save());
 			$r["leftTime"]=$cooltime->value-$m;
 		}else{
 			$r["leftTime"]=$cooltime->value-$m;			
@@ -5986,7 +5986,7 @@ function getheart($p){
 	}
 	$r["max"]=$heartMax->value;
 	
-	if(CommitManager::get()->commit($memberID)){
+	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);

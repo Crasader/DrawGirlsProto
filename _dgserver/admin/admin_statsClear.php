@@ -6,7 +6,7 @@ include "header.php";
 if(!$_GET[where])$where = "puzzle=1 order by no asc";
 else $where = $_GET[where];
 
-$result = mysql_query("select * from ".DBManager::get()->getMT("stage")." where $where",DBManager::get()->getMainConnection());
+$result = mysql_query("select * from ".DBManager::getMT("stage")." where $where",DBManager::getMainConnection());
 
 ?>
 <center>

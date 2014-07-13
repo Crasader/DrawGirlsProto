@@ -442,9 +442,9 @@ class DBInfo{
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DBManager{
-	public  $m_serverInfo=array();
-	public  $m_shardDBInfoList=array();
-	public  $m_mainDBInfo=array();
+	public static $m_serverInfo=array();
+	public static $m_shardDBInfoList=array();
+	public static $m_mainDBInfo=array();
 	public static $m_gameNo=null;
 	public static $m_httpgateway=null;
 	public static $m_gameID=null;
@@ -454,8 +454,8 @@ class DBManager{
 	private static $m_instance;
 	
 	//초기화 
-	public function __construct(){
-		$this->m_shardDBInfoList[]=null;
+	public static function construct(){
+		self::$m_shardDBInfoList[]=null;
 
 
 		//테이블 설정		
@@ -534,76 +534,21 @@ class DBManager{
 		self::$m_httpgateway["port"]=$p["HTTPGATEWAY_PORT"];//"18080";
 		self::$m_secretKey = $p["secretKey"];//"12345678";
 	}
-	// public function setDataBase($gameid=null){
-	// 	self::$m_gameID = $gameid;
-	// 	self::$m_gameNo = 10289;
-	// 	self::$m_httpgateway["URL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/nomad.json";
-	// 	self::$m_httpgateway["helpURL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/help.json";
-	// 	self::$m_httpgateway["version"]="1.3";
-	// 	self::$m_httpgateway["port"]="18080";
-	// 	self::$m_secretKey = "12345678";
-
-	// 	if(!$gameid and $gameid=="drawgirls"){
-
-
-	// 		//서버설정
-	// 		$serverInfo = new ServerInfo("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
-	// 		$server0Index = $this->addServerInfo($serverInfo);
-			
-	// 		//메인db설정
-	// 		$this->m_mainDBInfo = new DBInfo("drawgirls",$this->getServerInfo($server0Index));
-			
-	// 		//샤드db설정
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
-			
-
-	// 		LogManager::addLog("dbmanager use drawgirls db");
-	// 	}else if($gameid == "drawgirls_tstore"){
-	// 		//서버설정
-	// 		$serverInfo = new ServerInfo("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
-	// 		$server0Index = $this->addServerInfo($serverInfo);
-			
-	// 		//메인db설정
-	// 		$this->m_mainDBInfo = new DBInfo("drawgirls",$this->getServerInfo($server0Index));
-			
-	// 		//샤드db설정
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
-			
-
-	// 		LogManager::addLog("dbmanager use drawgirls_tstore db");
-	// 	}else{
-			
-	// 		$serverInfo = new ServerInfo("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
-	// 		$server0Index = $this->addServerInfo($serverInfo);
-			
-	// 		//메인db설정
-	// 		$this->m_mainDBInfo = new DBInfo("drawgirls",$this->getServerInfo($server0Index));
-			
-	// 		//샤드db설정
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
-			
-
-	// 		LogManager::addLog("dbmanager use nothing or $gameID db");
-	// 	}
-	// }
-
+	
 	static public function getSecretKey(){
 		return self::$m_secretKey;
 	}
-	public function setMainDB($dbname,$serverIndex){
-		$this->m_mainDBInfo = new DBInfo($dbname,$this->getServerInfo($serverIndex));
+	static public function setMainDB($dbname,$serverIndex){
+		self::$m_mainDBInfo = new DBInfo($dbname,self::getServerInfo($serverIndex));
 	}
 
-	public function addShardDB($dbname,$serverIndex){
-		$this->m_shardDBInfoList[]=new DBInfo($dbname,$this->getServerInfo($serverIndex));
+	static public function addShardDB($dbname,$serverIndex){
+		self::$m_shardDBInfoList[]=new DBInfo($dbname,self::getServerInfo($serverIndex));
 	}
 
-	public function addDBServer($ip,$id,$pass){
+	static public function addDBServer($ip,$id,$pass){
 		$serverInfo = new ServerInfo($ip,$id,$pass);
-		return $this->addServerInfo($serverInfo);
+		return self::addServerInfo($serverInfo);
 	}
 	//싱글턴 얻어오기
 	public static function get()
@@ -616,74 +561,74 @@ class DBManager{
 	}
   
 	//샤드서버추가
-	public function addServerInfo($server){
-		$this->m_serverInfo[]=$server;
-		return count($this->m_serverInfo)-1;
+	static public function addServerInfo($server){
+		self::$m_serverInfo[]=$server;
+		return count(self::$m_serverInfo)-1;
 	}
 	
-	public function getServerInfo($index){
-		return $this->m_serverInfo[$index];
+	static public function getServerInfo($index){
+		return self::$m_serverInfo[$index];
 	}
 
-	public function getMainDBInfo(){
-		return $this->m_mainDBInfo;
+	static public function getMainDBInfo(){
+		return self::$m_mainDBInfo;
 	}
-	public function getDBInfoByShardKey($shardKey){
+	static public function getDBInfoByShardKey($shardKey){
 	
-		return $this->getDBInfoByShardIndex($this->getDBIndexByShardKey($shardKey));
+		return self::getDBInfoByShardIndex(self::getDBIndexByShardKey($shardKey));
 	}
 	
-	public function getDBInfoByShardIndex($index){
-		return $this->m_shardDBInfoList[$index];
+	static public function getDBInfoByShardIndex($index){
+		return self::$m_shardDBInfoList[$index];
 	}
 
 
-	public function getConnectionByShardKey($shardKey){
+	static public function getConnectionByShardKey($shardKey){
 		
 		
-		$conn = $this->getConnectionByShardIndex($this->getDBIndexByShardKey($shardKey));
+		$conn = self::getConnectionByShardIndex(self::getDBIndexByShardKey($shardKey));
 
 		return $conn;
 	}
 
-	public function getConnectionByShardIndex($index){
-		$conn = $this->m_shardDBInfoList[$index]->getConnection();
+	static public function getConnectionByShardIndex($index){
+		$conn = self::$m_shardDBInfoList[$index]->getConnection();
 		return $conn;
 	}
 		
-	public function getMainConnection(){ 
-		return $this->m_mainDBInfo->getConnection();
+	static public function getMainConnection(){ 
+		return self::$m_mainDBInfo->getConnection();
 	}
 
-	public function getShardDBCount(){
-		return count($this->m_shardDBInfoList);
+	static public function getShardDBCount(){
+		return count(self::$m_shardDBInfoList);
 	}
-	public function getDBIndexByShardKey($shardKey){
-		return abs(($shardKey%($this->getShardDBCount()-1))+1);
+	static public function getDBIndexByShardKey($shardKey){
+		return abs(($shardKey%(self::getShardDBCount()-1))+1);
 	}
-	public function getDBIndexByShardString($shardString){
-		return $this->getDBIndexByShardKey(crc32($shardString));
+	static public function getDBIndexByShardString($shardString){
+		return self::getDBIndexByShardKey(crc32($shardString));
 	}
 	
-	public function closeShardDB(){
+	static public function closeShardDB(){
 		//for문 돌면서 close
-		foreach($this->m_shardDBInfoList as &$dbInfo){
+		foreach(self::$m_shardDBInfoList as &$dbInfo){
 			if($dbInfo)$dbInfo->closeConnection();
 		}
 	}
 	
-	public function closeMainDB(){
+	static public function closeMainDB(){
 		//close
-		$this->m_mainDBInfo->closeConnection();
+		self::$m_mainDBInfo->closeConnection();
 	}
 	
-	public function closeDB(){
-		$this->closeMainDB();
-		$this->closeShardDB();
+	static public function closeDB(){
+		self::closeMainDB();
+		self::closeShardDB();
 	}
 
-	public function getShardDBInfoList(){
-		return $this->m_shardDBInfoList;
+	static public function getShardDBInfoList(){
+		return self::$m_shardDBInfoList;
 	}
 	//static
 	
@@ -741,6 +686,8 @@ class DBManager{
 		return $query;
 	}
 }
+
+DBManager::construct();
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -974,7 +921,7 @@ class DBManager{
 
 // 	static public function getRowByQuery($where="",$dbcon=NULL){
 // 		if(self::isMainDBClass()){
-// 			if(!self::$m__qResult)self::$m__qResult = mysql_query("select * from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+// 			if(!self::$m__qResult)self::$m__qResult = mysql_query("select * from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 // 			$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
 // 			if(!$result)self::$m__qResult=null;
 // 			return $result;
@@ -1007,7 +954,7 @@ class DBManager{
 // 		if(!$where)return;
 
 // 		if(self::isMainDBClass()){
-// 			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+// 			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 // 			return;
 // 		}
 
@@ -1307,11 +1254,11 @@ class DBTable{
 		$this->m__LQTableDeleteCustomFunction = $func;
 	}
 
-	public function loadWithDataTable($p){
-		if($this->isMainDBClass()){
-			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::get()->getMainConnection());
+	static public function loadWithDataTable($p){
+		if(self::isMainDBClass()){
+			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::getMainConnection());
 		}else{
-			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::get()->getConnectionByShardIndex(1));
+			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::getConnectionByShardIndex(1));
 		}
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
@@ -1395,9 +1342,9 @@ class DBTable{
 		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
 			if($this->isMainDBClass()){
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+				$this->setDBInfo(DBManager::getMainDBInfo());
 			}else if($shardIndex){
-				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+				$this->setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
 			}else{
 				$userIndex = UserIndex::create($param["data"]["memberID"]);
 				$this->setDBInfo($userIndex->getShardDBInfo());
@@ -1444,9 +1391,9 @@ class DBTable{
 	public function updateWithLQTable($param){
 		if(!$this->getDBInfo()){
 			if($this->isMainDBClass()){
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+				$this->setDBInfo(DBManager::getMainDBInfo());
 			}else if($param["shardIndex"]){
-				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($param["shardIndex"]));
+				$this->setDBInfo(DBManager::getDBInfoByShardIndex($param["shardIndex"]));
 			}else{
 				$userIndex = UserIndex::create($param["data"]["memberID"]);
 				$this->setDBInfo($userIndex->getShardDBInfo());
@@ -1493,9 +1440,9 @@ class DBTable{
 		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
 			if(!$this->isMainDBClass() && $shardIndex){
-				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+				$this->setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
 			}else{
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+				$this->setDBInfo(DBManager::getMainDBInfo());
 			}
 		}
 
@@ -1537,7 +1484,7 @@ class DBTable{
 	static public function getQueryResult($query,$dbcon=NULL){
 		if(self::isMainDBClass()){
 		LogManager::addLog("getqueryresult2->".$query);
-			$result = mysql_query($query,DBManager::get()->getMainConnection());
+			$result = mysql_query($query,DBManager::getMainConnection());
 			return $result;
 		}
 
@@ -1567,7 +1514,7 @@ class DBTable{
 	}
 	static public function getRowByQuery($where="",$dbcon=NULL,$fields="*"){
 		if(self::isMainDBClass()){
-			if(!self::$m__qResult)self::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+			if(!self::$m__qResult)self::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 			LogManager::addLog("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where);
 			if(self::$m__qResult)$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
 			if(!$result)self::$m__qResult=null;
@@ -1614,7 +1561,7 @@ class DBTable{
 		if(!$where)return false;
 
 		if(self::isMainDBClass()){
-			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 			return $result;
  		}
 

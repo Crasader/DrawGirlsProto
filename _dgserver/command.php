@@ -79,7 +79,7 @@ if(!$stopCommand){
         
         if($a=="starttransaction"){
             $commitMemberID=$p["memberID"];
-            CommitManager::get()->begin($commitMemberID);
+            CommitManager::begin($commitMemberID);
             $commitCmdName = $cmd;
         }else if(method_exists($command,$a)){
             if(!CurrentUserInfo::$memberID && $p["memberID"]){
@@ -148,7 +148,7 @@ if(!$stopCommand){
             }
 
             if($commitMemberID && !ResultState::successCheck($r["result"])){
-                CommitManager::get()->setSuccess($commitMemberID,false);
+                CommitManager::setSuccess($commitMemberID,false);
             }
 
             
@@ -191,7 +191,7 @@ if(!$stopCommand){
     }
 
     if($commitMemberID>0){
-        $commitsuccess=CommitManager::get()->commit($commitMemberID);
+        $commitsuccess=CommitManager::commit($commitMemberID);
         if($commitsuccess){
             $cr["result"] = ResultState::successToArray();
             $cr["list"] = $allResult;
@@ -228,7 +228,7 @@ if(!$stopCommand){
     }
     
     
-    DBManager::get()->closeDB();
+    DBManager::closeDB();
     @mysql_close();
 
 }

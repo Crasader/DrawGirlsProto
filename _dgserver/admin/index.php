@@ -248,14 +248,14 @@ if($_GET["pass"]=="1234"){
 // 레벨설정하기
 // $levels = array(0,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8);
 
-// $result = mysql_query("select * from aStageTable where no<1000 order by no asc",DBManager::get()->getMainConnection());
+// $result = mysql_query("select * from aStageTable where no<1000 order by no asc",DBManager::getMainConnection());
 
 // $level=1;
 // while($data = mysql_fetch_array($result)){
 
 
 // //	echo "update aStageTable set level=$level where no=".$data[no]."<br>";
-// 	mysql_query("update aStageTable set level=$level where no=".$data[no],DBManager::get()->getMainConnection());
+// 	mysql_query("update aStageTable set level=$level where no=".$data[no],DBManager::getMainConnection());
 // 	$levels[$level]-=1;
 // 	if($levels[$level]<=0){
 // 		$level++;
@@ -384,7 +384,7 @@ var_dump($gitemList);
 $sitem = json_decode('{"type":16,"currency":"social","price":10,"option":{}}',true);
 
 
-$result = mysql_query("select * from ".DBManager::get()->getMT("stage")." where puzzle>=2 and no < 10000 order by no asc",DBManager::get()->getMainConnection());
+$result = mysql_query("select * from ".DBManager::getMT("stage")." where puzzle>=2 and no < 10000 order by no asc",DBManager::getMainConnection());
 srand(1);
 $missionCntCheck = array(0,0,4,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
 $missionCnt=0;
@@ -431,8 +431,8 @@ while($sData = mysql_fetch_assoc($result)){
 
 	$missionStr = json_encode($missionList[$mission],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	if($mission==0)$missionStr = '{"type":0}';
-	echo ("update ".DBManager::get()->getMT("stage")." set shopItems='".$shopItemStr."',defItems='".$defaultItemStr."',mission='".$missionStr."',playtime=100 where no = ".$sData[no]); //,DBManager::get()->getMainConnection()
-	mysql_query("update ".DBManager::get()->getMT("stage")." set shopItems='".$shopItemStr."',defItems='".$defaultItemStr."',mission='".$missionStr."',playtime=100 where no = ".$sData[no],DBManager::get()->getMainConnection()); 
+	echo ("update ".DBManager::getMT("stage")." set shopItems='".$shopItemStr."',defItems='".$defaultItemStr."',mission='".$missionStr."',playtime=100 where no = ".$sData[no]); //,DBManager::getMainConnection()
+	mysql_query("update ".DBManager::getMT("stage")." set shopItems='".$shopItemStr."',defItems='".$defaultItemStr."',mission='".$missionStr."',playtime=100 where no = ".$sData[no],DBManager::getMainConnection()); 
 	echo mysql_error();
 	echo "<br><br>";
 
@@ -1012,7 +1012,7 @@ function getJuniors($stageNo,$stageLevel,$boss){
 $bossData = array();
 
 
-$result = mysql_query("select * from aPieceTable where level>=1 and no<1000 order by no asc",DBManager::get()->getMainConnection());
+$result = mysql_query("select * from aPieceTable where level>=1 and no<1000 order by no asc",DBManager::getMainConnection());
 while($data = mysql_fetch_array($result)){
 	$data[level] = ceil($data[no]/5);
 	if($data[level]<1)$data[level]=1;
@@ -1035,7 +1035,7 @@ while($data = mysql_fetch_array($result)){
 			$reward = $stageReward[$ci];
 			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			$qs1 = "update aCardTable set missile='".$sString."',piece=".$data[no]." where no=".$cards[$ci];
-			mysql_query($qs1,DBManager::get()->getMainConnection());
+			mysql_query($qs1,DBManager::getMainConnection());
 			echo "<br><font color=blue>$qs1</font>";
 			echo json_encode($cardStat,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			echo "<br><br>";
@@ -1088,7 +1088,7 @@ if(!$_GET[mode])exit;
 // $i=1;
 // $levels = array(0,5,6,7,8,9,10,10,10,10,10,10,10,10,10,10,10); 
 // $c=1;
-// $query = mysql_query("select * from aStageTable order by no asc",DBManager::get()->getMainConnection());
+// $query = mysql_query("select * from aStageTable order by no asc",DBManager::getMainConnection());
 // while($data = mysql_fetch_array($query)){
 // 	$n = $data[no];
 
@@ -1097,7 +1097,7 @@ if(!$_GET[mode])exit;
 	
 // 	$l = $c;
 // 	echo $i."<br>";
-// 	mysql_query("update aStageTable set no=".$data[num]." where num=".$data[num],DBManager::get()->getMainConnection());
+// 	mysql_query("update aStageTable set no=".$data[num]." where num=".$data[num],DBManager::getMainConnection());
 // 	$i++;
 // }
 
@@ -1122,7 +1122,7 @@ return;
 $puzzleNo = 6;
 $cardHeader = 11;
 
-$result = mysql_query("select * from ".DBManager::get()->getMT("stage")." where puzzle=$puzzleNo",DBManager::get()->getMainConnection());
+$result = mysql_query("select * from ".DBManager::getMT("stage")." where puzzle=$puzzleNo",DBManager::getMainConnection());
 echo mysql_error();
 $i=0;
 while($stageInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
@@ -1132,8 +1132,8 @@ while($stageInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
 	if($i>10)$zero="";
 	$mycard = $cardHeader*1000+$i*10;
 	$cardtext = "[".($mycard+1).",".($mycard+2).",".($mycard+3)."]";
-	//echo("update ".DBManager::get()->getMT("stage")." set cards = '".$cardtext."' where no=".$stageInfo[no]);
-	mysql_query("update ".DBManager::get()->getMT("stage")." set cards = '".$cardtext."' where no=".$stageInfo[no],DBManager::get()->getMainConnection());
+	//echo("update ".DBManager::getMT("stage")." set cards = '".$cardtext."' where no=".$stageInfo[no]);
+	mysql_query("update ".DBManager::getMT("stage")." set cards = '".$cardtext."' where no=".$stageInfo[no],DBManager::getMainConnection());
 
 	echo "<br>";
 	$i++;
@@ -1282,13 +1282,13 @@ while($stageInfo = mysql_fetch_array($result,MYSQL_ASSOC)){
 // 	$data3[imgInfo]='{"img":"'.$card3.'","size":'.(int)(filesize($filepath_head.$card3)/1000).'}';
 // 	$data3[silImgInfo]='{"isSil":"0"}';
 	
-// 	$query1 = lq_query_insert($data1,DBManager::get()->getMT("card"));
-// 	$query2 = lq_query_insert($data2,DBManager::get()->getMT("card"));
-// 	$query3 = lq_query_insert($data3,DBManager::get()->getMT("card"));
+// 	$query1 = lq_query_insert($data1,DBManager::getMT("card"));
+// 	$query2 = lq_query_insert($data2,DBManager::getMT("card"));
+// 	$query3 = lq_query_insert($data3,DBManager::getMT("card"));
 
-// 	mysql_query($query1,DBManager::get()->getMainConnection());
-// 	mysql_query($query2,DBManager::get()->getMainConnection());
-// 	mysql_query($query3,DBManager::get()->getMainConnection());
+// 	mysql_query($query1,DBManager::getMainConnection());
+// 	mysql_query($query2,DBManager::getMainConnection());
+// 	mysql_query($query3,DBManager::getMainConnection());
 
 // 	echo $query1;
 // 	echo $query2;
@@ -1376,15 +1376,15 @@ foreach ($res as $plistName => $value){
 			$mobinfo["size"]=(int)(filesize("../".$mobinfo["pvrccz"])/1000);
 			$mobinfo["type"]=$mobType;
 			$rInfo =  json_encode($mobinfo,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK); 
-			echo("insert into ".DBManager::get()->getMT("monster")." ('name','resourceInfo','type') values ('".$filename."','".$rInfo."','".$mobType."') <br>");
-			mysql_query("insert into ".DBManager::get()->getMT("monster")." (`name`,`resourceInfo`,`type`) values ('".$filename."','".$rInfo."','".$mobType."')",DBManager::get()->getMainConnection());
+			echo("insert into ".DBManager::getMT("monster")." ('name','resourceInfo','type') values ('".$filename."','".$rInfo."','".$mobType."') <br>");
+			mysql_query("insert into ".DBManager::getMT("monster")." (`name`,`resourceInfo`,`type`) values ('".$filename."','".$rInfo."','".$mobType."')",DBManager::getMainConnection());
 			echo mysql_error();
 			echo "ok<br><br>";
 		}
 	}
 }
 */
-DBManager::get()->closeDB();
+DBManager::closeDB();
 
 ?>
 

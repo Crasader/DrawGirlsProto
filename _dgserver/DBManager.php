@@ -5,74 +5,74 @@
 class CommitManager{
 	
 
-	public $m_dbInfo=null;
-	public $m_userIndex=null;
-	public $m_isSuccess=null;
-	public $m_releaseCount=null;
-	private static $m_instance=NULL;
+	static public $m_dbInfo=null;
+	static public $m_userIndex=null;
+	static public $m_isSuccess=null;
+	static public $m_releaseCount=null;
+	//private static $m_instance=NULL;
 
-	public function __construct($memberID=null){
-		$this->m_userIndex=array();
-		$this->m_dbInfo=array();
-		$this->m_isSuccess=array();
-		$this->m_releaseCount=array();
+	static public function construct($memberID=null){
+		self::$m_userIndex=array();
+		self::$m_dbInfo=array();
+		self::$m_isSuccess=array();
+		self::$m_releaseCount=array();
 	}
 
-	//싱글턴 얻어오기
-	public static function get()
-	{
-	    if ( is_null( self::$m_instance ) )
-	    {
-	      self::$m_instance = new self();
-	    }
-	    return self::$m_instance;
-	}
+	// //싱글턴 얻어오기
+	// public static function get()
+	// {
+	//     if ( is_null( self::$m_instance ) )
+	//     {
+	//       self::$m_instance = new self();
+	//     }
+	//     return self::$m_instance;
+	// }
 
-	public function begin($memberID){
-		if(!$this->m_releaseCount[$memberID]){
-			$this->m_releaseCount[$memberID]=1;
+	static public function begin($memberID){
+		if(!self::$m_releaseCount[$memberID]){
+			self::$m_releaseCount[$memberID]=1;
 			
 			//user db
 			if($memberID!="main"){
-				$this->m_userIndex[$memberID] = UserIndex::create($memberID);
-				$this->m_dbInfo[$memberID] = $this->m_userIndex[$memberID]->getShardDBInfo();
+				self::$m_userIndex[$memberID] = UserIndex::create($memberID);
+				self::$m_dbInfo[$memberID] = self::$m_userIndex[$memberID]->getShardDBInfo();
 			//main db
 			}else{
-				$this->m_dbInfo[$memberID] = DBManager::get()->getMainDBInfo();
+				self::$m_dbInfo[$memberID] = DBManager::getMainDBInfo();
 			}
 
-			$this->m_isSuccess[$memberID]=true;
-			mysql_query("SET AUTOCOMMIT=0",$this->m_dbInfo[$memberID]->getConnection());
-			mysql_query("BEGIN",$this->m_dbInfo[$memberID]->getConnection());
+			self::$m_isSuccess[$memberID]=true;
+			mysql_query("SET AUTOCOMMIT=0",self::$m_dbInfo[$memberID]->getConnection());
+			mysql_query("BEGIN",self::$m_dbInfo[$memberID]->getConnection());
 
 			LogManager::addLog("start transaction".mysql_error());
 		}else{
 			LogManager::addLog("start transaction but ++");
-			$this->m_releaseCount[$memberID]++;
+			self::$m_releaseCount[$memberID]++;
 		}
 	}
 
-	public function commit($memberID){
-		if(!$this->m_releaseCount[$memberID]) return false;
+	static public function commit($memberID){
+		if(!self::$m_releaseCount[$memberID]) return false;
 
 
-		LogManager::addLog("commit transaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::addLog("commit transaction count=".self::$m_releaseCount[$memberID]."-1");
 
-		$this->m_releaseCount[$memberID]--;
+		self::$m_releaseCount[$memberID]--;
 
-		if(!$this->isSuccess($memberID)){
-			if($this->m_releaseCount[$memberID]==0){
-				$result = mysql_query("ROLLBACK", $this->m_dbInfo[$memberID]->getConnection());
+		if(!self::isSuccess($memberID)){
+			if(self::$m_releaseCount[$memberID]==0){
+				$result = mysql_query("ROLLBACK", self::$m_dbInfo[$memberID]->getConnection());
 				LogManager::addLog("commit query but rollback : ".mysql_error());
-				mysql_query("SET AUTOCOMMIT=1",$this->m_dbInfo[$memberID]->getConnection());
+				mysql_query("SET AUTOCOMMIT=1",self::$m_dbInfo[$memberID]->getConnection());
 			}
 			return false;
 		}
 
-		if($this->m_releaseCount[$memberID]==0){
-			$result = mysql_query("COMMIT", $this->m_dbInfo[$memberID]->getConnection());
+		if(self::$m_releaseCount[$memberID]==0){
+			$result = mysql_query("COMMIT", self::$m_dbInfo[$memberID]->getConnection());
 			LogManager::addLog("commit query ok? : ".mysql_error());
-			mysql_query("SET AUTOCOMMIT=1",$this->m_dbInfo[$memberID]->getConnection());
+			mysql_query("SET AUTOCOMMIT=1",self::$m_dbInfo[$memberID]->getConnection());
 		}else{
 			$result = true;
 		}
@@ -81,34 +81,36 @@ class CommitManager{
 		return $result;
 	}
 
-	public function rollback($memberID){
-		if(!$this->m_releaseCount[$memberID]) return false;
+	static public function rollback($memberID){
+		if(!self::$m_releaseCount[$memberID]) return false;
 
 
-		LogManager::addLog("rollback transaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::addLog("rollback transaction count=".self::$m_releaseCount[$memberID]."-1");
 
-		$this->m_releaseCount[$memberID]--;
+		self::$m_releaseCount[$memberID]--;
 
-		if($this->m_releaseCount[$memberID]==0){
-			$result = mysql_query("ROLLBACK", $this->m_dbInfo[$memberID]->getConnection());
+		if(self::$m_releaseCount[$memberID]==0){
+			$result = mysql_query("ROLLBACK", self::$m_dbInfo[$memberID]->getConnection());
 		}else{
-			$this->setSuccess($memberID,false);
+			self::setSuccess($memberID,false);
 			$result=true;
 		}
 		LogManager::addLog("rollback transaction");
 		return $result;
 	}
 
-	public function setSuccess($memberID,$success){
-		if($this->m_isSuccess[$memberID]==false)return;
+	static public function setSuccess($memberID,$success){
+		if(self::$m_isSuccess[$memberID]==false)return;
 
-		$this->m_isSuccess[$memberID]=$success;
+		self::$m_isSuccess[$memberID]=$success;
 	}
 
-	public function isSuccess($memberID){
-		return $this->m_isSuccess[$memberID];
+	static public function isSuccess($memberID){
+		return self::$m_isSuccess[$memberID];
 	}
 }
+
+CommitManager::construct();
 
 class UserIndex extends DBTable{
 	// public $m_memberID = null;
@@ -153,7 +155,7 @@ class UserIndex extends DBTable{
 		LogManager::addLog("construct userIndex for ".$memberID);
 
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		if($userindex){
 			parent::load("no=".$userindex);
@@ -171,7 +173,7 @@ class UserIndex extends DBTable{
 		 	}else{
 				$this->memberID = $memberID;
 		 		$this->shardIndex = $this->getShardIndexByNumberKey($memberID);
-		 		LogManager::addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::get()->getShardDBCount());
+		 		LogManager::addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::getShardDBCount());
 		 		//$this->save(true);
 		 	}
 	 	}else if($socialID){
@@ -186,23 +188,23 @@ class UserIndex extends DBTable{
 		return $this->no;
 	}
 	public function getShardIndexByNumberKey($numberKey){
-		return DBManager::get()->getDBIndexByShardKey($numberKey);
+		return DBManager::getDBIndexByShardKey($numberKey);
 	}
 
 	public function getShardConnection(){
-		return DBManager::get()->getConnectionByShardIndex($this->shardIndex);
+		return DBManager::getConnectionByShardIndex($this->shardIndex);
 	}
 
 	public function getShardDBInfo(){
-		return DBManager::get()->getDBInfoByShardIndex($this->shardIndex);
+		return DBManager::getDBInfoByShardIndex($this->shardIndex);
 	}
 
 	static public function getShardConnectionByRandom(){
-		return DBManager::get()->getConnectionByShardKey(rand(0,10));
+		return DBManager::getConnectionByShardKey(rand(0,10));
 	}
 
 	static public function getShardDBInfoList(){
-		return DBManager::get()->getShardDBInfoList();
+		return DBManager::getShardDBInfoList();
 	}
 
 	public function remove(){
@@ -438,7 +440,7 @@ class SendItem extends DBTable{
 		$result["reward"]=$exchange->list;
 		$rList = array();
 		foreach ($data["memberList"] as $mID => $nick) {
-			CommitManager::get()->begin($mID);
+			CommitManager::begin($mID);
 			
 			$userInfo = UserData::create($mID);
 
@@ -456,7 +458,7 @@ class SendItem extends DBTable{
 				$param["reward"]=$exchange->list;
 				$cmd = new commandClass();
 				$sR = $cmd->sendgiftboxhistory($param);
-				CommitManager::get()->setSuccess($mID,ResultState::successCheck($sR["result"]));
+				CommitManager::setSuccess($mID,ResultState::successCheck($sR["result"]));
 			
 			//바로지급
 			}else{
@@ -465,7 +467,7 @@ class SendItem extends DBTable{
 				$param["exchangeID"]=$exchange->id;
 				$cmd = new commandClass();
 				$sR = $cmd->exchange($param);
-				CommitManager::get()->setSuccess($mID,ResultState::successCheck($sR["result"]));
+				CommitManager::setSuccess($mID,ResultState::successCheck($sR["result"]));
 			}
 
 			if($param["comment"]){
@@ -475,10 +477,10 @@ class SendItem extends DBTable{
 				$mh->newData=$exchange->list;
 				$mh->comment=$param["comment"];
 				$mh->category=get_called_class();
-				CommitManager::get()->setSuccess($mID,$mh->save());
+				CommitManager::setSuccess($mID,$mh->save());
 			}
 
-			if(CommitManager::get()->commit($mID)){
+			if(CommitManager::commit($mID)){
 				$rList[$mID]=array("result"=>"success","nick"=>$nick);
 			}else{
 				$rList[$mID]=array("result"=>"fail","nick"=>$nick);
@@ -835,7 +837,7 @@ class Message extends DBTable{
 		
 // 		$this->setPrimarykey("no");
 // 		//$this->setDBTable(DBManager::getST("stageScore"));
-// 		$this->setDBInfo(DBManager::get()->getDBInfoByShardKey($stageNo));
+// 		$this->setDBInfo(DBManager::getDBInfoByShardKey($stageNo));
 		
 // 		if($memberID || $where){
 // 			if($where)$q_where = $where;
@@ -867,7 +869,7 @@ class Puzzle extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($puzzleNo)$this->no=$puzzleNo;
@@ -1008,7 +1010,7 @@ class Piece extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		if($no)$this->no=$no;
 
@@ -1039,19 +1041,19 @@ class Piece extends DBTable{
 	}
 
 	public function updateWithLQTable($p){
-		CommitManager::get()->begin("main");
+		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
 			$puzzle->version+=1;
 			kvManager::increase("puzzleListVer");
-			CommitManager::get()->setSuccess("main",$puzzle->save());
+			CommitManager::setSuccess("main",$puzzle->save());
 		}
 
 		$p["data"]["version"]+=1;
 		$r = parent::updateWithLQTable($p);
-		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			return $r;
 		}else{
 			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
@@ -1059,19 +1061,19 @@ class Piece extends DBTable{
 	}
 
 	public function insertWithLQTable($p){
-		CommitManager::get()->begin("main");
+		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
 			$puzzle->version+=1;
 			kvManager::increase("puzzleListVer");
-			CommitManager::get()->setSuccess("main",$puzzle->save());
+			CommitManager::setSuccess("main",$puzzle->save());
 		}
 
 		//$p["data"]["version"]+=1;
 		$r = parent::updateWithLQTable($p);
-		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			return $r;
 		}else{
 			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
@@ -1269,7 +1271,7 @@ class Card extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -1302,25 +1304,25 @@ class Card extends DBTable{
 	}
 
 	public function updateWithLQTable($p){
-		CommitManager::get()->begin("main");
+		CommitManager::begin("main");
 		
 		if($p["data"]["piece"]){
 			$piece = new Piece($p["data"]["piece"]);
 			$piece->version+=1;
-			CommitManager::get()->setSuccess("main",$piece->save());
+			CommitManager::setSuccess("main",$piece->save());
 
 			if($piece->puzzle){
 				$puzzle = new Puzzle($piece->puzzle);
 				$puzzle->version+=1;
 				kvManager::increase("puzzleListVer");
-				CommitManager::get()->setSuccess("main",$puzzle->save());
+				CommitManager::setSuccess("main",$puzzle->save());
 			}
 		}
 
 		$r = parent::updateWithLQTable($p);
-		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			return $r;
 		}else{
 			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
@@ -1329,25 +1331,25 @@ class Card extends DBTable{
 	}
 
 	public function insertWithLQTable($p){
-		CommitManager::get()->begin("main");
+		CommitManager::begin("main");
 		
 		if($p["data"]["piece"]){
 			$piece = new Piece($p["data"]["piece"]);
 			$piece->version+=1;
-			CommitManager::get()->setSuccess("main",$piece->save());
+			CommitManager::setSuccess("main",$piece->save());
 
 			if($piece->puzzle){
 				$puzzle = new Puzzle($piece->puzzle);
 				$puzzle->version+=1;
 				kvManager::increase("puzzleListVer");
-				CommitManager::get()->setSuccess("main",$puzzle->save());
+				CommitManager::setSuccess("main",$puzzle->save());
 			}
 		}
 
 		$r = parent::insertWithLQTable($p);
-		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			return $r;
 		}else{
 			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
@@ -1733,7 +1735,7 @@ class FaultyNick extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($no)$this->m_no=$no;
@@ -1759,7 +1761,7 @@ class Archivement extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectCustomFunction(function ($data){
 			if($data["exchangeID"]){
@@ -2238,7 +2240,7 @@ class LoginEvent extends DBTable{
 			return $rData;
 		});
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		if($fNo){
 			parent::load("no=".$fNo);
@@ -2315,7 +2317,7 @@ class AttendenceEvent extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
@@ -2369,7 +2371,7 @@ class MissionEvent extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		if($memberID && $fNo){
 			parent::load("memberID=".$memberID." and no=".$fNo);
@@ -2389,7 +2391,7 @@ class CuponManager extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		$this->setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
@@ -2506,7 +2508,7 @@ class CuponCode extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"] && $param["where"]["type"]=="cuponNo"){
@@ -2606,7 +2608,7 @@ class CuponCode extends DBTable{
 		}
 		//unset($p["data"]["code"]);
 		LogManager::addLog("test count is ".count($codeList));
-		CommitManager::get()->begin("main");
+		CommitManager::begin("main");
 		for($i=0;$i<$cnt;$i++){
 
 			LogManager::addLog("test1 ".$i);
@@ -2615,20 +2617,20 @@ class CuponCode extends DBTable{
 			if($mode=="manual")	$p2["data"]["cuponCode"]=$codeList[$i];
 			else $p2["data"]["cuponCode"] = CuponCode::getRandomString(12);
 
-			$p2["data"]["serverNo"]=DBManager::get()->getDBIndexByShardString($p2["data"]["cuponCode"]);
+			$p2["data"]["serverNo"]=DBManager::getDBIndexByShardString($p2["data"]["cuponCode"]);
 			
 			$this->setLoaded(false);
 			$ri = parent::insertWithLQTable($p2);
 			if(ResultState::successCheck($ri["result"])){
 				$r["data"][]=$ri["data"];	
 			}else{
-				CommitManager::get()->rollback("main");
+				CommitManager::rollback("main");
 				return ResultState::makeReturn(ResultState::GDDONTSAVE,"코드가중복되었습니다.(".$p2["data"]["cuponCode"].")");	
 			}
 					
 		}
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			$r["result"]=ResultState::successToArray();
 		}else{
 			$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE,"저장하지 못했습니다");
@@ -2722,7 +2724,7 @@ class CuponUsedInfo extends DBTable{
 		$this->setPrimarykey("no",true);
 
 		if($shardIndex){
-			$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+			$this->setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
 		}
 		$this->cuponCode=$code;
 		if($code){
@@ -2938,7 +2940,7 @@ class Character extends DBTable{
 		$this->setPrimarykey("no",true);
 
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		if($characterNo){
 			$q_where = "no=".$characterNo;
@@ -3107,7 +3109,7 @@ class Notice extends DBTable{
 		$this->setPrimarykey("no",true);
 
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
@@ -3175,7 +3177,7 @@ class Shop extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectCustomFunction(function ($data){
 			if($data["exchangeID"]){
@@ -3280,7 +3282,7 @@ class ShopEvent extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectCustomFunction(function ($data){
 			// if($data["exchangeID"]){
@@ -3419,7 +3421,7 @@ class Monster extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -3493,7 +3495,7 @@ class Pattern extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -3532,7 +3534,7 @@ public function __construct($id=null){
 		});
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->id=$id;
 		if($id){
 			$q_where = "`id`='".$id."'";
@@ -3605,7 +3607,7 @@ public function __construct($no=null){
 		parent::__construct();
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3791,7 +3793,7 @@ class CommonSetting extends DBTable{
 		parent::__construct();
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		if($key){
 			$this->key = $key;
 			$q_where = "`key`='".$key."'";
@@ -3832,7 +3834,7 @@ class KeyIntValue extends DBTable{
 		parent::__construct();
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3883,7 +3885,7 @@ public function __construct($no=null){
 		});
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -4032,7 +4034,7 @@ class AdminUser extends DBTable{
 		// }
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->m__isLogin = false;
 		$q_where="";
 		if($id){
@@ -4090,7 +4092,7 @@ class AdminUser extends DBTable{
 
 	public function insertWithLQTable($p){
 		if($p["data"]["passwd"]){
-			$q = mysql_query("select password('".$p["data"]["passwd"]."')",DBManager::get()->getMainConnection());
+			$q = mysql_query("select password('".$p["data"]["passwd"]."')",DBManager::getMainConnection());
 			$pass = mysql_fetch_array($q);
 			$p["data"]["passwd"]=$pass[0];
 		}
