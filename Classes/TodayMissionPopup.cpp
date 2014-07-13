@@ -57,30 +57,31 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(280,200));
+	back_case = CCSprite::create("popup_small_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	CCScale9Sprite* back_top = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	back_top->setContentSize(CCSizeMake(back_case->getContentSize().width-15, 50));
-	back_top->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height - back_top->getContentSize().height/2.f-38));
-	back_case->addChild(back_top);
-	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-90));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_in->getContentSize().height/2.f+5));
-	back_case->addChild(back_in);
-	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 15);
-	setFormSetter(title_label);
-	title_label->setColor(ccc3(255,170,20));//50, 250, 255));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
+	
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-50, back_case->getContentSize().height-80));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-14));
+	back_case->addChild(back_in);
+	
+	
+	CCScale9Sprite* in_in = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+	in_in->setContentSize(CCSizeMake(236, 46));
+	in_in->setPosition(ccp(back_in->getContentSize().width/2.f, 32));
+	back_in->addChild(in_in);
+	
+	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
-	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-22));
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-25));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  closeAction(sender, CCControlEventTouchUpInside);
@@ -112,7 +113,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	
 	value4["fillcolor"] = StyledLabelTTF::makeRGB(255, 170, 20);
 	value4["font"] = mySGD->getFont();
-	value4["size"] = 15.f;
+	value4["size"] = 13.f;
 	value4["strokecolor"]=StyledLabelTTF::makeRGB(0, 0, 0);
 	value4["strokesize"]=0.5f;
 	
@@ -131,7 +132,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 
 		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent1),mySGD->today_mission_info.goal_count.getV())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		slttf->setOldAnchorPoint();
-		slttf->setPosition(ccp(0, 35));
+		slttf->setPosition(ccp(0, 25));
 		m_container->addChild(slttf);
 		
 		
@@ -142,7 +143,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kLeftAlignment);
 			under_label->setOldAnchorPoint();
-			under_label->setPosition(ccp(-100, -40));
+			under_label->setPosition(ccp(-100, -27));
 			m_container->addChild(under_label);
 			
 			StyledLabelTTF* under_label2 = StyledLabelTTF::create({
@@ -150,7 +151,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kRightAlignment);
 			under_label2->setOldAnchorPoint();
-			under_label2->setPosition(ccp(100, -40));
+			under_label2->setPosition(ccp(100, -27));
 			m_container->addChild(under_label2);
 		}
 	}
@@ -166,7 +167,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		std::string score = KS::insert_separator(ccsf("%d", mySGD->today_mission_info.goal_count.getV()));
 		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore1), score.c_str())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		slttf->setOldAnchorPoint();
-		slttf->setPosition(ccp(0, 35));
+		slttf->setPosition(ccp(0, 25));
 		m_container->addChild(slttf);
 		
 		
@@ -177,14 +178,14 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kLeftAlignment);
 			under_label->setOldAnchorPoint();
-			under_label->setPosition(ccp(-100, -40));
+			under_label->setPosition(ccp(-100, -27));
 			m_container->addChild(under_label);
 			
 			StyledLabelTTF* under_label2 = StyledLabelTTF::create({
 				{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalScore2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str())->getCString(), value4.toStyledString()},
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kRightAlignment);
-			under_label2->setPosition(ccp(100, -40));
+			under_label2->setPosition(ccp(100, -27));
 			under_label2->setOldAnchorPoint();
 			m_container->addChild(under_label2);
 		}
@@ -200,7 +201,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		std::string number = KS::insert_separator(mySGD->today_mission_info.goal_count.getV());
 		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalTakeGold1), number.c_str())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		slttf->setOldAnchorPoint();
-		slttf->setPosition(ccp(0, 35));
+		slttf->setPosition(ccp(0, 25));
 		m_container->addChild(slttf);
 		
 		
@@ -211,7 +212,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kLeftAlignment);
 			under_label->setOldAnchorPoint();
-			under_label->setPosition(ccp(-100, -40));
+			under_label->setPosition(ccp(-100, -27));
 			m_container->addChild(under_label);
 			
 			StyledLabelTTF* under_label2 = StyledLabelTTF::create({
@@ -219,7 +220,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kRightAlignment);
 			under_label2->setOldAnchorPoint();
-			under_label2->setPosition(ccp(100, -40));
+			under_label2->setPosition(ccp(100, -27));
 			m_container->addChild(under_label2);
 		}
 	}
@@ -234,7 +235,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		
 		StyledLabelTTF* slttf = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch1),mySGD->today_mission_info.goal_count.getV())->getCString(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		slttf->setOldAnchorPoint();
-		slttf->setPosition(ccp(0, 35));
+		slttf->setPosition(ccp(0, 25));
 		m_container->addChild(slttf);
 		
 		
@@ -245,21 +246,21 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kLeftAlignment);
 			under_label->setOldAnchorPoint();
-			under_label->setPosition(ccp(-100, -40));
+			under_label->setPosition(ccp(-100, -27));
 			m_container->addChild(under_label);
 			
 			StyledLabelTTF* under_label2 = StyledLabelTTF::create({
 				{CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalCatch2), KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str())->getCString(), value4.toStyledString()},
 				{"", value5.toStyledString()}
 			}, StyledAlignment::kRightAlignment);
-			under_label2->setPosition(ccp(100, -40));
+			under_label2->setPosition(ccp(100, -27));
 			under_label2->setOldAnchorPoint();
 			m_container->addChild(under_label2);
 		}
 	}
 	
 	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
-	progress_back->setPosition(ccp(0,-10));
+	progress_back->setPosition(ccp(0,3));
 	m_container->addChild(progress_back);
 	
 	progress_bar = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
@@ -267,7 +268,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	progress_bar->setMidpoint(ccp(0,0));
 	progress_bar->setBarChangeRate(ccp(1,0));
 	progress_bar->setPercentage(100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV());
-	progress_bar->setPosition(ccp(0, -10));
+	progress_bar->setPosition(ccp(0,3));
 	progress_bar->setVisible(false);
 	m_container->addChild(progress_bar);
 	
@@ -277,7 +278,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 //	m_container->addChild(progress_label);
 	
 	CCSprite* present_img = CCSprite::create("mission_present.png");
-	present_img->setPosition(ccp(progress_bar->getSprite()->getContentSize().width/2.f, -8));
+	present_img->setPosition(ccp(progress_bar->getSprite()->getContentSize().width/2.f, 5));
 	m_container->addChild(present_img);
 	
 	
@@ -298,21 +299,21 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		//		else if(reward_type == kGoodsType_pass5)
 		//			reward_ment = myLoc->getLocalForKey(kMyLocalKey_todaymissionSuccessPass5);
 		
-		StyledLabelTTF* under_label = StyledLabelTTF::create(reward_ment.c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* under_label = StyledLabelTTF::create(reward_ment.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		setFormSetter(under_label);
-		under_label->setPosition(ccp(0, -45));
+		under_label->setPosition(ccp(0, -29.f));
 		under_label->setOldAnchorPoint();
 		m_container->addChild(under_label);
 		
 		
 		CCScale9Sprite* stamp_case = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 		stamp_case->setContentSize(CCSizeMake(75, 45));
-		stamp_case->setPosition(ccp(0,-10));
+		stamp_case->setPosition(ccp(0,7));
 		stamp_case->setRotation(-15);
 		m_container->addChild(stamp_case);
 		
 		
-		KSLabelTTF* complete_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_complete), mySGD->getFont().c_str(), 20);
+		KSLabelTTF* complete_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_complete), mySGD->getFont().c_str(), 18);
 		complete_label->setColor(ccYELLOW);
 		complete_label->setPosition(ccp(37.5f,22.5f));
 		stamp_case->addChild(complete_label);
@@ -320,7 +321,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	else
 	{
 		CCSprite* line_img = CCSprite::create("cardsetting_line.png");
-		line_img->setPosition(ccp(0,-52.5f));
+		line_img->setPosition(ccp(0,-36.5f));
 		m_container->addChild(line_img);
 		line_img->setScaleX(210/line_img->getContentSize().width);
 		
@@ -333,7 +334,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		
 		StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 		remain_label->setOldAnchorPoint();
-		remain_label->setPosition(ccp(-99, -65));
+		remain_label->setPosition(ccp(-99, -47));
 		m_container->addChild(remain_label);
 		
 		string ment_string2;
@@ -344,7 +345,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		
 		StyledLabelTTF* remain_label2 = StyledLabelTTF::create(ment_string2.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		remain_label2->setOldAnchorPoint();
-		remain_label2->setPosition(ccp(100, -65));
+		remain_label2->setPosition(ccp(100, -47));
 		m_container->addChild(remain_label2);
 	}
 	

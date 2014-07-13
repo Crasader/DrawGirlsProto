@@ -42,7 +42,7 @@ private:
 	CCEditBox* input_text2;
 	CCEditBox* input_text3;
 	
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	LoadingLayer* loading_layer;
 	
 	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_success_func);

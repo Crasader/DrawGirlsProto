@@ -390,14 +390,13 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	
 	t_popup->setBasePosition(ccp(240, 160));
 	
-	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(240,140));
+	CCSprite* back_case = CCSprite::create("popup_small_back.png");
 	back_case->setPosition(ccp(0,0));
 	t_container->addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-140));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f+16.5f));
 	back_case->addChild(back_in);
 	
 	string title_string;
@@ -409,20 +408,21 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 		title_string = myLoc->getLocalForKey(kMyLocalKey_heartNotEnought);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	t_container->addChild(title_label);
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_enoughtGoodsContent), mySGD->getFont().c_str(), 12);
+	sub_label->disableOuterStroke();
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-	sub_label->setPosition(ccp(0,10));
+	sub_label->setPosition(ccp(0,16));
 	t_container->addChild(sub_label);
 	
 	CCSprite* gray = t_popup->getDimmedSprite();
 	
 	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-25));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!t_popup->is_menu_enable)
@@ -458,16 +458,17 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
 	KSLabelTTF* goshop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goShopButton), mySGD->getFont().c_str(), 13);
+	goshop_label->disableOuterStroke();
 	goshop_label->setPosition(ccp(0,0));
 	t2_label->addChild(goshop_label);
 	
-	CCScale9Sprite* goshop_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* goshop_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	CCControlButton* goshop_button = CCControlButton::create(t2_label, goshop_back);
 	goshop_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
 	goshop_button->setTag(0);
-	goshop_button->setPreferredSize(CCSizeMake(110,45));
-	goshop_button->setPosition(ccp(0,-30));
+	goshop_button->setPreferredSize(CCSizeMake(150,50));
+	goshop_button->setPosition(ccp(0,-42));
 	t_container->addChild(goshop_button);
 	
 	goshop_button->setTouchPriority(t_popup->getTouchPriority()-5);

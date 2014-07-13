@@ -59,8 +59,7 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(270,150));
+	back_case = CCSprite::create("popup_small_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
@@ -95,56 +94,63 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_couponTitle), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_couponTitle), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
-	CCScale9Sprite* nick_case1 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	
+	KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_couponMent), mySGD->getFont().c_str(), 13);
+//	ment_label->disableOuterStroke();
+	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
+	ment_label->setPosition(ccp(0,35));
+	m_container->addChild(ment_label);
+	
+	
+	CCScale9Sprite* nick_case1 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	nick_case1->setAnchorPoint(ccp(0.5f, 0.5f));
 	nick_case1->setContentSize(CCSizeMake(70,35));
-	nick_case1->setPosition(ccp(-80.f, 9.5)); 			// dt (-128.0,2.5)
+	nick_case1->setPosition(ccp(-87.f, 0)); 			// dt (-128.0,2.5)
 	m_container->addChild(nick_case1);
 	
-	CCScale9Sprite* nick_case2 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	CCScale9Sprite* nick_case2 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	nick_case2->setAnchorPoint(ccp(0.5f, 0.5f));
 	nick_case2->setContentSize(CCSizeMake(70,35));
-	nick_case2->setPosition(ccp(0.f, 10.0)); 			// dt (-60.5,3.0)
+	nick_case2->setPosition(ccp(0.f, 0)); 			// dt (-60.5,3.0)
 	m_container->addChild(nick_case2);
 	
-	CCScale9Sprite* nick_case3 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	CCScale9Sprite* nick_case3 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	nick_case3->setAnchorPoint(ccp(0.5f, 0.5f));
 	nick_case3->setContentSize(CCSizeMake(70,35));
-	nick_case3->setPosition(ccp(80.5f,10.5)); 			// dt (7.5,3.5)
+	nick_case3->setPosition(ccp(87.f,0)); 			// dt (7.5,3.5)
 	m_container->addChild(nick_case3);
 
 	CCSprite* seperateBar1 = CCSprite::create("coupon_bar.png");
-	seperateBar1->setPosition(ccp(-40, 10.5f));
+	seperateBar1->setPosition(ccp(-43, 0.f));
 	m_container->addChild(seperateBar1);
 	
 	
 	CCSprite* seperateBar2 = CCSprite::create("coupon_bar.png");
-	seperateBar2->setPosition(ccp(40, 10.5f));
+	seperateBar2->setPosition(ccp(43, 0.f));
 	m_container->addChild(seperateBar2);
 	
-	CCScale9Sprite* t_back1 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	CCScale9Sprite* t_back1 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	t_back1->setOpacity(0);
 	input_text1 = CCEditBox::create(CCSizeMake(55, 35), t_back1);
-	input_text1->setPosition(ccp(130.0 + 30.f,229.5f)); 			// dt (10.0,-1.0)
-//	input_text1->setPosition(ccp(117.0,231.0)); 			// dt (117.0,4.0)
+	input_text1->setPosition(ccp(130.0 + 23.f,219.f));
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 	
-	CCScale9Sprite* t_back2 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	CCScale9Sprite* t_back2 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	t_back2->setOpacity(0);
 	input_text2 = CCEditBox::create(CCSizeMake(55, 35), t_back2);
-	input_text2->setPosition(ccp(209.5 + 30.f,229.5f)); 			// dt (22.5,0.0)
+	input_text2->setPosition(ccp(209.5 + 30.f,219.f)); 			// dt (22.5,0.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text2, 99999);
 	
-	CCScale9Sprite* t_back3 = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	CCScale9Sprite* t_back3 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	t_back3->setOpacity(0);
 	input_text3 = CCEditBox::create(CCSizeMake(55, 35), t_back3);
-	input_text3->setPosition(ccp(289.5 + 30.f,229.5f)); 			// dt (34.5,-3.0)
+	input_text3->setPosition(ccp(289.5 + 37.f,219.f)); 			// dt (34.5,-3.0)
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text3, 99999);
 	
 	
@@ -162,14 +168,15 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 		
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	ok_label->disableOuterStroke();
 	t_label->addChild(ok_label);
 	
-	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* ok_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	CCControlButton* ok_button = CCControlButton::create(t_label, ok_back);
 	ok_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CouponPopup::couponAction), CCControlEventTouchUpInside);
-	ok_button->setPreferredSize(CCSizeMake(160,45));
-	ok_button->setPosition(ccp(0,-40));
+	ok_button->setPreferredSize(CCSizeMake(101,44));
+	ok_button->setPosition(ccp(0,-47));
 	m_container->addChild(ok_button);
 	
 	ok_button->setTouchPriority(touch_priority);
@@ -273,26 +280,26 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 	t_popup->setContainerNode(t_container);
 	addChild(t_popup, 999);
 	
-	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(240,140));
-//	back_case->setPosition(ccp(0,0));
+	CCSprite* back_case = CCSprite::create("popup_small_back.png");
 	t_container->addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-80));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-14));
 	back_case->addChild(back_in);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	t_container->addChild(title_label);
 	
-	KSLabelTTF* sub_label = KSLabelTTF::create(content.c_str(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_label = KSLabelTTF::create(content.c_str(), mySGD->getFont().c_str(), 13);
+	sub_label->setColor(ccc3(255, 170, 20));
+	sub_label->disableOuterStroke();
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-	sub_label->setPosition(ccp(0,10));
-	t_container->addChild(sub_label);
+	sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
+	back_in->addChild(sub_label);
 	
 	CCSprite* gray = t_popup->getDimmedSprite();
 	
@@ -324,74 +331,127 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 //							  });
 //	t_container->addChild(close_button);
 	
-	t_popup->button_func_list.clear();
+	CommonButton* t_close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+	t_close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-25));
+	t_close_button->setFunction([=](CCObject* sender)
+								{
+									if(!t_popup->is_menu_enable)
+										return;
+									
+									t_popup->is_menu_enable = false;
+									
+									AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+									
+									CommonAnimation::closePopup(this, t_container, gray, [=](){
+										
+									}, [=](){
+										if(is_success)
+										{
+											input_text1->setEnabled(false);
+											input_text1->removeFromParent();
+											
+											input_text2->setEnabled(false);
+											input_text2->removeFromParent();
+											
+											input_text3->setEnabled(false);
+											input_text3->removeFromParent();
+											
+											CommonAnimation::closePopup(this, m_container, this->gray, [=](){
+												
+											}, [=](){
+												end_func();
+												success_func();
+												removeFromParent();
+											});
+										}
+										else
+										{
+											input_text1->setVisible(true);
+											input_text1->setEnabled(true);
+											
+											input_text2->setVisible(true);
+											input_text2->setEnabled(true);
+											
+											input_text3->setVisible(true);
+											input_text3->setEnabled(true);
+											
+											this->is_menu_enable = true;
+										}
+										
+										t_popup->removeFromParent();
+										
+									});
+								});
+	t_container->addChild(t_close_button);
 	
-	t_popup->button_func_list.push_back([=](){
-		if(!t_popup->is_menu_enable)
-			return;
-		
-		t_popup->is_menu_enable = false;
-		
-		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
-		
-		CommonAnimation::closePopup(this, t_container, gray, [=](){
-			
-		}, [=](){
-			if(is_success)
-			{
-				input_text1->setEnabled(false);
-				input_text1->removeFromParent();
-				
-				input_text2->setEnabled(false);
-				input_text2->removeFromParent();
-				
-				input_text3->setEnabled(false);
-				input_text3->removeFromParent();
-				
-				CommonAnimation::closePopup(this, m_container, this->gray, [=](){
-					
-				}, [=](){
-					end_func();
-					success_func();
-					removeFromParent();
-				});
-			}
-			else
-			{
-				input_text1->setVisible(true);
-				input_text1->setEnabled(true);
-				
-				input_text2->setVisible(true);
-				input_text2->setEnabled(true);
-				
-				input_text3->setVisible(true);
-				input_text3->setEnabled(true);
-				
-				this->is_menu_enable = true;
-			}
-			
-			t_popup->removeFromParent();
-			
-		});
-		
-	});
-	
-	CCLabelTTF* t2_label = CCLabelTTF::create();
-	
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
-	ok_label->setPosition(ccp(0,0));
-	t2_label->addChild(ok_label);
-	
-	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-	
-	CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
-	ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
-	ok_button->setTag(0);
-	ok_button->setPreferredSize(CCSizeMake(110,45));
-	ok_button->setPosition(ccp(0,-30));
-	t_container->addChild(ok_button);
-	
-	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+//	t_popup->button_func_list.clear();
+//	
+//	t_popup->button_func_list.push_back([=](){
+//		if(!t_popup->is_menu_enable)
+//			return;
+//		
+//		t_popup->is_menu_enable = false;
+//		
+//		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+//		
+//		CommonAnimation::closePopup(this, t_container, gray, [=](){
+//			
+//		}, [=](){
+//			if(is_success)
+//			{
+//				input_text1->setEnabled(false);
+//				input_text1->removeFromParent();
+//				
+//				input_text2->setEnabled(false);
+//				input_text2->removeFromParent();
+//				
+//				input_text3->setEnabled(false);
+//				input_text3->removeFromParent();
+//				
+//				CommonAnimation::closePopup(this, m_container, this->gray, [=](){
+//					
+//				}, [=](){
+//					end_func();
+//					success_func();
+//					removeFromParent();
+//				});
+//			}
+//			else
+//			{
+//				input_text1->setVisible(true);
+//				input_text1->setEnabled(true);
+//				
+//				input_text2->setVisible(true);
+//				input_text2->setEnabled(true);
+//				
+//				input_text3->setVisible(true);
+//				input_text3->setEnabled(true);
+//				
+//				this->is_menu_enable = true;
+//			}
+//			
+//			t_popup->removeFromParent();
+//			
+//		});
+//		
+//	});
+//	
+//	CCLabelTTF* t2_label = CCLabelTTF::create();
+//	
+//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+//	ok_label->setPosition(ccp(0,0));
+//	t2_label->addChild(ok_label);
+//	
+//	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+//	
+//	CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
+//	ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
+//	ok_button->setTag(0);
+//	ok_button->setPreferredSize(CCSizeMake(110,45));
+//	ok_button->setPosition(ccp(0,-30));
+//	t_container->addChild(ok_button);
+//	
+//	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 	
 	
 	CommonAnimation::openPopup(this, t_container, gray, [=](){

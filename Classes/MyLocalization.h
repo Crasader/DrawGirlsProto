@@ -823,7 +823,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_allPuzzleClearTitle,
 	kMyLocalKey_allPuzzleClearMent,
 	
-	kMyLocalKey_warningDie
+	kMyLocalKey_warningDie,
+	kMyLocalKey_couponMent
 }MyLocalKey;
 
 

@@ -1953,31 +1953,31 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 	t_popup->setContainerNode(t_container);
 	addChild(t_popup, kSP_Z_popup);
 	
-	CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(240,140));
+	CCSprite* back_case = CCSprite::create("popup_small_back.png");
 	back_case->setPosition(ccp(0,0));
 	t_container->addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-140));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f+16.5f));
 	back_case->addChild(back_in);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	t_container->addChild(title_label);
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
+	sub_label->disableOuterStroke();
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-	sub_label->setPosition(ccp(0,10));
+	sub_label->setPosition(ccp(0,16));
 	t_container->addChild(sub_label);
 	
 	CCSprite* gray = t_popup->getDimmedSprite();
 	
 	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-25));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!t_popup->is_menu_enable)
@@ -2014,16 +2014,17 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	ok_label->disableOuterStroke();
 	ok_label->setPosition(ccp(0,0));
 	t2_label->addChild(ok_label);
 	
-	CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* ok_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
 	ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
 	ok_button->setTag(0);
-	ok_button->setPreferredSize(CCSizeMake(110,45));
-	ok_button->setPosition(ccp(0,-30));
+	ok_button->setPreferredSize(CCSizeMake(150,50));
+	ok_button->setPosition(ccp(0,-42));
 	t_container->addChild(ok_button);
 	
 	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
