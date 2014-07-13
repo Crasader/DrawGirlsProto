@@ -133,14 +133,14 @@ if($mode=="update"){
 		$dataObj->regDate=$data["regDate"];
 		$dataObj->data=$data["data"];
 		$result=$dataObj->save();
-		$data[log] = LogManager::get()->getLogAndClear();
+		$data[log] = LogManager::getLogAndClear();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
 		else echo'{"result":"fail","msg":"세이브쿼리실패"}';
 
 	}else if($table==DBManager::getST("stagescore")){
 		$dataObj = new StageScore($data["stageNo"],$data["memberID"]);
-		LogManager::get()->addLog("modify stagescore");
-		LogManager::get()->addLog("modify stagescore is load? ".$dataObj->isLoaded());
+		LogManager::addLog("modify stagescore");
+		LogManager::addLog("modify stagescore is load? ".$dataObj->isLoaded());
 
 
 		$dataObj->memberID=$data["memberID"];
@@ -149,7 +149,7 @@ if($mode=="update"){
 		$dataObj->regDate=$data["regDate"];
 		$dataObj->data=$data["data"];
 		$result=$dataObj->save();
-		$data[log] = LogManager::get()->getLogAndClear();
+		$data[log] = LogManager::getLogAndClear();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
 		else echo'{"result":"fail","msg":"세이브쿼리실패"}';
 
@@ -168,7 +168,7 @@ if($mode=="update"){
 
 	}else if($table==DBManager::getST("userdata")){
 		//보내기
-		$userdata = new UserData($data["memberID"]);
+		$userdata = UserData::create($data["memberID"]);
 		$userdata->data = $data["data"];
 		$userdata->friendList = $data["friendList"];
 
@@ -258,7 +258,7 @@ if($mode=="update"){
 	    while($userdata = StageScore::getRowByQuery($qstr)){
 			$memberID = $userdata["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userdata["memberID"]);
+				$userList[$memberID] = UserData::create($userdata["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -298,7 +298,7 @@ if($mode=="update"){
 	    while($userdata = WeeklyScore::getRowByQuery($qstr)){
 			$memberID = $userdata["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userdata["memberID"]);
+				$userList[$memberID] = UserData::create($userdata["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -338,10 +338,10 @@ if($mode=="update"){
 			$memberID = $data["memberID"];
 			$friendID = $data["friendID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($data["memberID"]);
+				$userList[$memberID] = UserData::create($data["memberID"]);
 			}
 			if(!$userList[$friendID]){
-				$userList[$friendID] = new UserData($data["friendID"]);
+				$userList[$friendID] = UserData::create($data["friendID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -377,7 +377,7 @@ if($mode=="update"){
 	    while($userlog = UserLog::getRowByQuery($qstr)){
 			$memberID = $userlog["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userlog["memberID"]);
+				$userList[$memberID] = UserData::create($userlog["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -414,7 +414,7 @@ if($mode=="update"){
 	    while($userdata = UserData::getRowByQuery($qstr)){
 			$memberID = $userdata["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userdata["memberID"]);
+				$userList[$memberID] = UserData::create($userdata["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];

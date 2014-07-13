@@ -144,7 +144,7 @@ function requestitemdelivery($p){
 	$pp["deliveryMaxCount"]=10;
 	$pp["deliveryHeader"]="memberNo-".$p["memberID"].",gameNo-".DBManager::$m_gameNo;
 	$result = $this->httpgateway($pp);
-	LogManager::get()->addLog("RequestItemDelivery2-->".json_encode($result));
+	LogManager::addLog("RequestItemDelivery2-->".json_encode($result));
 	if(!ResultState::successCheck($result["result"]))return $result;
 	
 	$r = array();
@@ -154,7 +154,7 @@ function requestitemdelivery($p){
 	$ppp["exchangeIDList"]=array();
 	$itemSeq=array();
 	for($i=0;$i<count($result["data"]["deliveryResponse"]["itemIds"]);$i++){
-		LogManager::get()->addLog("item id is ".$result["data"]["deliveryResponse"]["itemIds"][$i]);
+		LogManager::addLog("item id is ".$result["data"]["deliveryResponse"]["itemIds"][$i]);
 		$item = new Shop($result["data"]["deliveryResponse"]["itemIds"][$i]);
 	
 		if(!$item->isLoaded()){
@@ -177,9 +177,9 @@ function requestitemdelivery($p){
 			$pppp["itemDeliverySequences"]=implode(",",$itemSeq);
 			$pppp["deliveryHeader"]="memberNo-".$p["memberID"].",gameNo-".DBManager::$m_gameNo;
 			$result3 = $this->httpgateway($pppp);
-			LogManager::get()->addLog("-->".json_encode($result3));
+			LogManager::addLog("-->".json_encode($result3));
 			if(ResultState::successCheck($result3["result"])){
-				$user = new UserData($memberID);
+				$user = UserData::create($memberID);
 				if($user->isLoaded()){
 					$user->isVIP = 1;
 					$user->save();
@@ -307,7 +307,7 @@ function getnoticelist($p){
 
 	$r = array();
 
-	LogManager::get()->addLog("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') order by `order` asc");
+	LogManager::addLog("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') order by `order` asc");
 	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') and isPopup=1 order by `order` asc")){
 		$rData[imgInfo]=json_decode($rData[imgInfo],true);	
 		$r["list"][]=$rData;
@@ -1478,7 +1478,7 @@ function dropoutuser($p){
 	$keylist = $p["keyList"];
 	if($memberID){
 		CommitManager::get()->begin($memberID);
-		$user = new UserData($memberID);
+		$user = UserData::create($memberID);
 
 		
 		if($user->isLoaded()){
@@ -1534,7 +1534,7 @@ function help_login(){
 function login($p){
 	$memberID = $p["memberID"];
 	if($memberID){
-		$user = new UserData($memberID);
+		$user = UserData::create($memberID);
 		
 		if(!$user->isLoaded())return ResultState::makeReturn(2007);
 
@@ -1614,19 +1614,19 @@ function join($p){
 	//닉네임중복검사
 	while($rData = UserIndex::getRowByQuery("where nick='".$nick."'")){
 		if($rData){
-			LogManager::get()->addLog("dupl data is".json_encode($rData));
+			LogManager::addLog("dupl data is".json_encode($rData));
 			return ResultState::makeReturn(2008);
 		}
 	}
 
 
 	CommitManager::get()->begin($memberID);
-	$user = new UserData($memberID);
+	$user = UserData::create($memberID);
 	$user->memberID = $memberID;
 	$user->flag = $p["flag"];
 	$user->country = CurrentUserInfo::$country;
 
-    LogManager::get()->addLog("join1 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
+    LogManager::addLog("join1 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
 
 	
 	//이미 가입한유저
@@ -1634,7 +1634,7 @@ function join($p){
 
 
 
-	LogManager::get()->addLog("where (nick like '%".$nick."%' and isInclusionRule=1) or (nick = '".$nick."' and isInclusionRule=0)");
+	LogManager::addLog("where (nick like '%".$nick."%' and isInclusionRule=1) or (nick = '".$nick."' and isInclusionRule=0)");
 	//불량닉네임검사
 	// while($rData = FaultyNick::getRowByQuery("where (nick like '%".addslashes($nick)."%' and isInclusionRule=1) or (nick = '".addslashes($nick)."' and isInclusionRule=0) limit 1")){
 	// 	if($rData){
@@ -1659,13 +1659,13 @@ function join($p){
 	$user->lastCmdNo=0;
 	$user->selectedCharNo=1;
 
-    LogManager::get()->addLog("join user DeviceID s1 ".$user->deviceID);
+    LogManager::addLog("join user DeviceID s1 ".$user->deviceID);
 
 	$user->m__userIndex->nick = $nick;
 	$user->nick = $nick;
 	$user->joinDate=TimeManager::get()->getCurrentDateTime();
 	
-    LogManager::get()->addLog("join2 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
+    LogManager::addLog("join2 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
 
 	if($user->m__userIndex->save()){
 		$user->setDBInfo($user->m__userIndex->getShardDBInfo());
@@ -1676,7 +1676,7 @@ function join($p){
 			
 			
 
-            LogManager::get()->addLog("join user DeviceID s2 ".$user->deviceID);
+            LogManager::addLog("join user DeviceID s2 ".$user->deviceID);
 			
 			$userStorage = new UserStorage($memberID);
 			CommitManager::get()->setSuccess($memberID,$userStorage->save());
@@ -1731,7 +1731,7 @@ function help_setuserdata(){
 function setuserdata($p){
 	$memberid = $p["memberID"];
 	if($memberid){
-		$user = new UserData($memberid);
+		$user = UserData::create($memberid);
 		
 		if($p["nick"]){
 			$user->nick = $p["nick"];
@@ -1771,7 +1771,7 @@ function getuserdata($p){
 	$userindex = $p["userIndex"];
 	$keylist = $p["keyList"];
 	if($memberid){
-		$user = UserData::create($memberid); //new UserData($memberid);
+		$user = UserData::create($memberid); //UserData::create($memberid);
 		if($user->isLoaded()){
 			$r = $user->getArrayData(true,$keylist);
 			$r["state"]="ok";
@@ -1784,7 +1784,7 @@ function getuserdata($p){
 	}else if($userindex){
 		$uIndex = UserIndex::create(0,$userindex);
 		if($uIndex->isLoaded()){
-			$user = new UserData($uIndex->m_memberID);
+			$user = UserData::create($uIndex->m_memberID);
 			if($user->isLoaded()){
 				$r = $user->getArrayData(true,$keylist);
 				$r["state"]="ok";
@@ -1834,7 +1834,7 @@ function getuserdatalist($p){
 	for($i=0;$i<count($memberlist);$i++){
 		$memberid = $memberlist[$i];
 		if($memberid){
-			$user = new UserData($memberid);
+			$user = UserData::create($memberid);
 			if($user->isLoaded()){
 				$_r = $user->getArrayData(true,$keylist);
 				$list[]=$_r;	
@@ -1884,10 +1884,10 @@ function updateuserdata($p){
 	$memberid = $p["memberID"];
 	$r=array();
 	if($memberid){
-		$user = new UserData($memberid);
-		LogManager::get()->addLog("updateuserdata for ".$memberid);
+		$user = UserData::create($memberid);
+		LogManager::addLog("updateuserdata for ".$memberid);
 		if($user->isLoaded()){
-			LogManager::get()->addLog("updateuserdata load ok ".json_encode($user->getArrayData()));
+			LogManager::addLog("updateuserdata load ok ".json_encode($user->getArrayData()));
 		}
 		//if($p["nick"])$user->nick = $p["nick"];
 		if($p["isVIP"])$user->isVIP = $p["isVIP"];
@@ -1912,10 +1912,10 @@ function updateuserdata($p){
 		if($p["highPiece"])$user->highPiece = $p["highPiece"];
 
 		if($p["data"]){
-			LogManager::get()->addLog("updateuserdata updateData");
+			LogManager::addLog("updateuserdata updateData");
 			if(!$user->updateData($p["data"]))return ResultState::makeReturn(2006);
 		}else{
-			LogManager::get()->addLog("updateuserdata save");
+			LogManager::addLog("updateuserdata save");
 			if(!$user->save())return ResultState::makeReturn(2006);
 		} 
 
@@ -1955,7 +1955,7 @@ function adduserdata($p){
 	$value = $p["value"];
 	$safekey = $p["safekey"];
 	if($memberid){
-		$user = new UserData($memberid);
+		$user = UserData::create($memberid);
 		
 		$udata = json_decode($user->data,true);
 		if(is_numeric($udata[$key]))$udata[$key]+=$value;
@@ -1998,7 +1998,7 @@ function updatenick($p){
 	$memberid = $p["memberID"];
 	$nick = $p["nick"];
 
-	$user = new UserData($memberid);
+	$user = UserData::create($memberid);
 
 	if(!$memberid){
 		$r["state"]="error";
@@ -2046,7 +2046,7 @@ function addfriend($p){
 	if($friendMax>500)$friendMax=500;
 	
 	if($memberid){
-		$user = new UserData($memberid);
+		$user = UserData::create($memberid);
 		
 		if(!$user->isLoaded())return ResultState::makeReturn(2005);
 		
@@ -2091,7 +2091,7 @@ function help_addfriendeach(){
 }
 
 function addfriendeach($p){
-	LogManager::get()->addLog("addfriendeach");
+	LogManager::addLog("addfriendeach");
 	$memberid = $p["memberID"];
 	$friendid = $p["friendID"];
 	$friendMax = $p["friendMax"];
@@ -2102,10 +2102,10 @@ function addfriendeach($p){
 		return $r;
 	}
 	
-	$user = new UserData($memberid);
+	$user = UserData::create($memberid);
 	$userfriendList = json_decode($user->friendList,true);
 	
-	$friend = new UserData($friendid);
+	$friend = UserData::create($friendid);
 	$friendfriendList = json_decode($friend->friendList,true);
 	
 	if(!$user->isLoaded() || !$friend->isLoaded()){
@@ -2197,7 +2197,7 @@ function removefriend($p){
 	$memberid = $p["memberID"];
 	$friendid = $p["friendID"];
 	if($memberid){
-		$user = new UserData($memberid);
+		$user = UserData::create($memberid);
 		$friendList = json_decode($user->friendList,true);
 		
 		$index = array_search($friendid, $friendList);
@@ -2234,11 +2234,11 @@ function help_getfriendlist(){
 function getfriendlist($p){
 	$memberid = $p["memberID"];
 	if($memberid){
-		$user = new UserData($memberid);	
+		$user = UserData::create($memberid);	
 		$list=json_decode($user->friendList,true); //json_encode($user->m_friendList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		
 		for($i=0;$i<count($list);$i++){
-			$friend = new UserData($list[$i]);
+			$friend = UserData::create($list[$i]);
 			if($friend->isLoaded())$fList[]=$friend->getArrayData(true);	
 		}
 		
@@ -2734,7 +2734,7 @@ function checkweeklyreward($p){
 	$r["rewardInfo"]=$nrinfo;
 	$rewards=$rewardInfo->value;
 	CommitManager::get()->begin($memberID);
-	$userInfo = new UserData($memberID);
+	$userInfo = UserData::create($memberID);
 	if(!$userInfo->eventCheckWeek){
 	
 	
@@ -2760,8 +2760,8 @@ function checkweeklyreward($p){
 
 		$pc = $sResult["myrank"]/$sResult["alluser"]*100;
 
-		LogManager::get()->addLog("weeklyscore rank is".$sResult["myrank"]);
-		LogManager::get()->addLog("weeklyscore pc is".$pc);
+		LogManager::addLog("weeklyscore rank is".$sResult["myrank"]);
+		LogManager::addLog("weeklyscore pc is".$pc);
 		if($sResult["myrank"]==1)$rewardType="t1";
 		else if($sResult["myrank"]==2)$rewardType="t2";
 		else if($sResult["myrank"]==3)$rewardType="t3";
@@ -2812,8 +2812,8 @@ function checkweeklyreward($p){
 		
 		$rewardType = "";
 		$pc = $eResult["myrank"]/$eResult["alluser"]*100;
-		LogManager::get()->addLog("EndlessRank rank is".$eResult["myrank"]);
-		LogManager::get()->addLog("EndlessRank pc is".$pc);
+		LogManager::addLog("EndlessRank rank is".$eResult["myrank"]);
+		LogManager::addLog("EndlessRank pc is".$pc);
 		if($eResult["myrank"]==1)$rewardType="t1";
 		else if($eResult["myrank"]==2)$rewardType="t2";
 		else if($eResult["myrank"]==3)$rewardType="t3";
@@ -3008,7 +3008,7 @@ function getstageranklist($p){
 		$qresult = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString order by score desc limit $limit",DBManager::get()->getConnectionByShardKey($stageNo));
 		
 		$rlist = array();
-		LogManager::get()->addLog("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString order by score desc limit $limit");
+		LogManager::addLog("select * from ".DBManager::getST("stagescore")." where stageNo=$stageNo and memberID IN $memberIDListString order by score desc limit $limit");
 		
 		if($qresult){
 			while($user = mysql_fetch_array($qresult,MYSQL_ASSOC)){
@@ -3404,7 +3404,7 @@ function updatepiecehistory($p){
 	// if($p["openType"])$obj->openType=$p["openType"];
 
 
-	LogManager::get()->addLog("lastCheck".json_encode($obj->clearDateList));
+	LogManager::addLog("lastCheck".json_encode($obj->clearDateList));
 	if($obj->save()){
 		$r["data"]=$obj->getArrayData(true);
 		$r["result"]=ResultState::successToArray();
@@ -3514,8 +3514,8 @@ function updatecardhistory($p){
 	
 	if($p["level"] && $cardInfo->category!='leader')$obj->level = $p["level"];
 
-	LogManager::get()->addLog($obj->comment);
-	LogManager::get()->addLog($obj->getArrayData(true));
+	LogManager::addLog($obj->comment);
+	LogManager::addLog($obj->getArrayData(true));
 
 	if(!$obj->save())return ResultState::makeReturn(2014,"dont save");
 
@@ -3747,7 +3747,7 @@ function changeuserproperties($p){
 	if(!$list)return ResultState::makeReturn(2002,"list");
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	LogManager::get()->addLog("changeuserproperties ".json_encode($list));
+	LogManager::addLog("changeuserproperties ".json_encode($list));
 
 	CommitManager::get()->begin($memberID);
 
@@ -3946,7 +3946,7 @@ function changeuserproperties($p){
 	}
 
 	if(!$userStorage->save()){
-		LogManager::get()->addLog("faild save userStorage ".mysql_error());
+		LogManager::addLog("faild save userStorage ".mysql_error());
 		CommitManager::get()->setSuccess($memberID,false);
 	}
 
@@ -4563,9 +4563,9 @@ function confirmgiftboxhistory($p){
 	// 	for($i=0;$i<count($_reward);$i++){
 	// 		$_reward[$i]["content"]="giftbox";
 	// 		$_reward[$i]["statsID"]="giftbox";
-	// 	LogManager::get()->addLog("reward is 1 ".json_encode($_reward[$i]));
+	// 	LogManager::addLog("reward is 1 ".json_encode($_reward[$i]));
 	// 	}
-	// 	LogManager::get()->addLog("reward is ".json_encode($obj->reward));
+	// 	LogManager::addLog("reward is ".json_encode($obj->reward));
 
 	// 	$param["list"]=$obj->reward;
 	// 	$param["memberID"]=$memberID;
@@ -4632,18 +4632,18 @@ function confirmallgiftboxhistory($p){
 
 	$param["memberID"]=$memberID;
 	$param["exchangeIDList"]=$obj->getAllExchangeID();
-	LogManager::get()->addLog("exchangeIDlist is ".json_encode($param["exchangeIDList"]));
+	LogManager::addLog("exchangeIDlist is ".json_encode($param["exchangeIDList"]));
 	$cResult = $this->exchangeByList($param);
 
 	$rrrr = $obj->confirmAll();
 
-	LogManager::get()->addLog("confirm result is ".$rrrr);
+	LogManager::addLog("confirm result is ".$rrrr);
 
 	if(ResultState::successCheck($cResult["result"])){
-		LogManager::get()->addLog("cresult is true");
+		LogManager::addLog("cresult is true");
 		CommitManager::get()->setSuccess($memberID,true);
 	}else{
-		LogManager::get()->addLog("cresult is false ".json_encode($cResult));
+		LogManager::addLog("cresult is false ".json_encode($cResult));
 		CommitManager::get()->setSuccess($memberID,false);
 	}
 
@@ -4679,8 +4679,8 @@ function checkgiftboxhistory($p){
 	$where = "where memberID=".$memberID;
 	$where = $where." and confirmDate='' limit 1";
 
-	$userInfo = new UserData($memberID);
-	LogManager::get()->addLog("select count(*) from ".DBManager::getST("giftboxhistory")." ".$where);
+	$userInfo = UserData::create($memberID);
+	LogManager::addLog("select count(*) from ".DBManager::getST("giftboxhistory")." ".$where);
 	$cnt = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("giftboxhistory")." ".$where,$userInfo->getUserIndex()->getShardConnection()));
     if($cnt[0]>0){
     	$r["haveNewGift"] = true;
@@ -4827,7 +4827,7 @@ function gettodaymission($p){
 	$memberID  = $p["memberID"];
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$user = new UserData($p["memberID"]);
+	$user = UserData::create($p["memberID"]);
 
 	$tMission = $user->TMInfo;
 	$tLevel = $user->TMLevel;
@@ -4885,7 +4885,7 @@ function gettodaymission($p){
 		$user->TMInfo = $tMission;
 		$user->TMLevel = $tLevel;
 		if(!$user->save()){
-			LogManager::get()->addLog("todaymission error ".mysql_error());
+			LogManager::addLog("todaymission error ".mysql_error());
 			return ResultState::makeReturn(1001);
 		}
 	}
@@ -4925,7 +4925,7 @@ function updatetodaymission($p){
 		return ResultState::makeReturn(ResultState::GDSUCCESS,"date not same");
 	}
 	CommitManager::get()->begin($memberID);
-	$user = new UserData($memberID);
+	$user = UserData::create($memberID);
 	$tMission = $user->TMInfo;
 	$tLevel = $user->TMLevel;
 	$r = array();
@@ -5106,7 +5106,7 @@ function checkloginevent($p){
 	
 	CommitManager::get()->begin($memberID);
 	
-	$userData = new UserData($memberID);
+	$userData = UserData::create($memberID);
 	$todayDateTime = TimeManager::get()->getCurrentDateTime();
 	$todayDate = TimeManager::get()->getCurrentDate();
 	$nowTime = TimeManager::get()->getCurrentTime();
@@ -5184,7 +5184,7 @@ function getendlessrank($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$userData = new UserData($memberID);
+	$userData = UserData::create($memberID);
 
 	$myRank = new EndlessRank($memberID,$weekNo);
 	$myRank->memberID=$memberID;
@@ -5243,7 +5243,7 @@ function getendlessrankinfo($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$userData = new UserData($memberID);
+	$userData = UserData::create($memberID);
 
 	$myRank = new EndlessRank($memberID,$weekNo);
 	$myRank->memberID=$memberID;
@@ -5311,7 +5311,7 @@ function setendlessrank($p){
 	
 	$endlessRank->regWeek = TimeManager::get()->getCurrentWeekNo();
 	
-	$userData = new UserData($memberID);
+	$userData = UserData::create($memberID);
 	
 	$endlessData =& $userData->getRef("endlessData");
 	$endlessData["win"]+=$p["victory"];
@@ -5360,7 +5360,7 @@ function finishendlessplay($p){
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
 	$endlessRank = new EndlessRank($memberID,TimeManager::get()->getCurrentWeekNo());
-	$userData = new UserData($memberID);
+	$userData = UserData::create($memberID);
 	$endlessData =& $userData->getRef("endlessData");
 
 	//위크번호다르면 초기화~
@@ -5511,7 +5511,7 @@ function startendlessplay($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	
-	$userInfo = new UserData($memberID);
+	$userInfo = UserData::create($memberID);
 	$endlessData =& $userInfo->getRef("endlessData");
 	
 	if($endlessData["ing_win"]<=0){
@@ -5630,7 +5630,7 @@ function saveendlessplaydata($p){
 	$endlessPlayList->regDate = TimeManager::get()->getCurrentDateTime();
 
 	if($endlessPlayList->save()){
-		LogManager::get()->addLog("saveendlessplaydata ok");
+		LogManager::addLog("saveendlessplaydata ok");
 		$r["no"]=$endlessPlayList->no;
 		$r["result"]=ResultState::successToArray();
 	}else{
@@ -5660,7 +5660,7 @@ function checkattendenceevent($p){
 	$memberID=$p["memberID"];
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
-	$userData = new Userdata($memberID);
+	$userData = UserData::create($memberID);
 	
 	$r["sendGift"]=false;
 
@@ -5886,7 +5886,7 @@ function getheart($p){
 	if(!$cooltime->isLoaded() || !$heartMax->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);
 
 	CommitManager::get()->begin($memberID);
-	$userInfo = new UserData($memberID);
+	$userInfo = UserData::create($memberID);
 	$userStorage = new UserStorage($memberID);
 	$r["heart"] = $userStorage->h; 
 	if(!$userInfo->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);

@@ -1,7 +1,7 @@
 				<br><br><br><br>
 				<textarea rows=10 class="form-control">
 					
-					<?=json_encode(LogManager::get()->getLogAndClear(),JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK)?>
+					<?=json_encode(LogManager::getLogAndClear(),JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK)?>
 
 				</textarea>
 

@@ -45,9 +45,9 @@ class CommitManager{
 			mysql_query("SET AUTOCOMMIT=0",$this->m_dbInfo[$memberID]->getConnection());
 			mysql_query("BEGIN",$this->m_dbInfo[$memberID]->getConnection());
 
-			LogManager::get()->addLog("start transaction".mysql_error());
+			LogManager::addLog("start transaction".mysql_error());
 		}else{
-			LogManager::get()->addLog("start transaction but ++");
+			LogManager::addLog("start transaction but ++");
 			$this->m_releaseCount[$memberID]++;
 		}
 	}
@@ -56,14 +56,14 @@ class CommitManager{
 		if(!$this->m_releaseCount[$memberID]) return false;
 
 
-		LogManager::get()->addLog("commit transaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::addLog("commit transaction count=".$this->m_releaseCount[$memberID]."-1");
 
 		$this->m_releaseCount[$memberID]--;
 
 		if(!$this->isSuccess($memberID)){
 			if($this->m_releaseCount[$memberID]==0){
 				$result = mysql_query("ROLLBACK", $this->m_dbInfo[$memberID]->getConnection());
-				LogManager::get()->addLog("commit query but rollback : ".mysql_error());
+				LogManager::addLog("commit query but rollback : ".mysql_error());
 				mysql_query("SET AUTOCOMMIT=1",$this->m_dbInfo[$memberID]->getConnection());
 			}
 			return false;
@@ -71,7 +71,7 @@ class CommitManager{
 
 		if($this->m_releaseCount[$memberID]==0){
 			$result = mysql_query("COMMIT", $this->m_dbInfo[$memberID]->getConnection());
-			LogManager::get()->addLog("commit query ok? : ".mysql_error());
+			LogManager::addLog("commit query ok? : ".mysql_error());
 			mysql_query("SET AUTOCOMMIT=1",$this->m_dbInfo[$memberID]->getConnection());
 		}else{
 			$result = true;
@@ -85,7 +85,7 @@ class CommitManager{
 		if(!$this->m_releaseCount[$memberID]) return false;
 
 
-		LogManager::get()->addLog("rollback transaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::addLog("rollback transaction count=".$this->m_releaseCount[$memberID]."-1");
 
 		$this->m_releaseCount[$memberID]--;
 
@@ -95,7 +95,7 @@ class CommitManager{
 			$this->setSuccess($memberID,false);
 			$result=true;
 		}
-		LogManager::get()->addLog("rollback transaction");
+		LogManager::addLog("rollback transaction");
 		return $result;
 	}
 
@@ -121,27 +121,27 @@ class UserIndex extends DBTable{
 
 	public static function create($memberID=null,$userindex=null,$socialID=null,$nick=null){
 		
-		LogManager::get()->addLog("create userIndex");
+		LogManager::addLog("create userIndex");
 		if($memberID && self::$sharedIndexes[$memberID]){
-			LogManager::get()->addLog("finded userIndex in sharedIndexes ".$memberID);
+			LogManager::addLog("finded userIndex in sharedIndexes ".$memberID);
 			return self::$sharedIndexes[$memberID];
 		}
 
 
-		LogManager::get()->addLog("new userIndex, memberID is ".$memberID." and userIndex is ".$userindex);
+		LogManager::addLog("new userIndex, memberID is ".$memberID." and userIndex is ".$userindex);
 		$newIndex =new UserIndex($memberID,$userindex,$socialID,$nick);
 
 		if($newIndex->isLoaded()){
-			LogManager::get()->addLog("useindex load success no is".$newIndex->no);
+			LogManager::addLog("useindex load success no is".$newIndex->no);
 			self::$sharedIndexes[$newIndex->memberID]=$newIndex;
 		}else{
-			LogManager::get()->addLog("userindex load fail it's new obj is ".json_encode($newIndex->getArrayData(true))." and shardIndex is ".$newIndex->shardIndex);
+			LogManager::addLog("userindex load fail it's new obj is ".json_encode($newIndex->getArrayData(true))." and shardIndex is ".$newIndex->shardIndex);
 			
 			if(!$memberID){
 				return null;
 			}
 			//$test = get_class_vars(get_class($newIndex));
-			//LogManager::get()->addLog("userindex load fuck!!".json_encode($test));
+			//LogManager::addLog("userindex load fuck!!".json_encode($test));
 		}	
 		return $newIndex;
 	}
@@ -150,7 +150,7 @@ class UserIndex extends DBTable{
 
 		parent::__construct();
 		
-		LogManager::get()->addLog("construct userIndex for ".$memberID);
+		LogManager::addLog("construct userIndex for ".$memberID);
 
 		$this->setPrimarykey("no");
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
@@ -167,11 +167,11 @@ class UserIndex extends DBTable{
 
 		 	if(parent::load("memberID='".$memberID."'")){
 		 		//$this->autoMatching($this->m__result);
-		 		LogManager::get()->addLog("load success userindex shardIndex is".$this->shardIndex);
+		 		LogManager::addLog("load success userindex shardIndex is".$this->shardIndex);
 		 	}else{
 				$this->memberID = $memberID;
 		 		$this->shardIndex = $this->getShardIndexByNumberKey($memberID);
-		 		LogManager::get()->addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::get()->getShardDBCount());
+		 		LogManager::addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::get()->getShardDBCount());
 		 		//$this->save(true);
 		 	}
 	 	}else if($socialID){
@@ -206,13 +206,13 @@ class UserIndex extends DBTable{
 	}
 
 	public function remove(){
-		LogManager::get()->addLog("remove userindex!!");
+		LogManager::addLog("remove userindex!!");
 		return parent::remove();
 	}
 
 
 	public function save($isIncludePrimaryKey = false){
-		LogManager::get()->addLog("save userindex!!");
+		LogManager::addLog("save userindex!!");
 		return parent::save($isIncludePrimaryKey);
 	}
 
@@ -252,9 +252,9 @@ class UserLog extends DBTable{
 				return "where category = '".$param["where"]["category"]."'";
 			}
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -351,7 +351,7 @@ class SendItem extends DBTable{
 
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
-			//LogManager::get()->addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
+			//LogManager::addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
 			if($this->m__userIndex)$this->setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
 				if(parent::load("memberID=".$this->m__userIndex->memberID)){
@@ -376,11 +376,11 @@ class SendItem extends DBTable{
 		$user=null;
 
 		if($param["where"]["type"]=="sno"){
-			$user = new UserData($param["where"]["id"]);
+			$user = UserData::create($param["where"]["id"]);
 		}else if($param["where"]["type"]=="nick"){
-			$user = new UserData(null,null,$param["where"]["id"]);
+			$user = UserData::create(null,null,$param["where"]["id"]);
 		}else{
-			$user = new UserData(null,$param["where"]["id"]);
+			$user = UserData::create(null,$param["where"]["id"]);
 		}
 
 		if(!$user->isLoaded()){
@@ -406,7 +406,7 @@ class SendItem extends DBTable{
 
 		$data = $param["data"];
 
-		LogManager::get()->addLog(json_encode($data));
+		LogManager::addLog(json_encode($data));
 
 		// $propCount = $data["propData"]["count"];
 		// if($data["propData"]["count"]=="m"){
@@ -440,7 +440,7 @@ class SendItem extends DBTable{
 		foreach ($data["memberList"] as $mID => $nick) {
 			CommitManager::get()->begin($mID);
 			
-			$userInfo = new UserData($mID);
+			$userInfo = UserData::create($mID);
 
 			if(!$userInfo->isLoaded()){
 				$rList[$mID]=array("result"=>"fail","nick"=>$nick);
@@ -507,27 +507,27 @@ class UserData extends DBTable{
 
 	public static function create($memberID=null,$socialID=null,$nick=null){
 		
-		LogManager::get()->addLog("create userData");
+		LogManager::addLog("create userData");
 		if($memberID && self::$sharedUserDatas[$memberID]){
-			LogManager::get()->addLog("finded userData in sharedUserDatas ".$memberID);
+			LogManager::addLog("finded userData in sharedUserDatas ".$memberID);
 			return self::$sharedUserDatas[$memberID];
 		}
 
 
-		LogManager::get()->addLog("new userData, memberID is ".$memberID." and userIndex is ");
+		LogManager::addLog("UserData::create, memberID is ".$memberID." and userIndex is ");
 		$newUserData =new UserData($memberID,$socialID,$nick);
 
 		if($newUserData->isLoaded()){
-			LogManager::get()->addLog("useindex load success no is".$newUserData->no);
+			LogManager::addLog("useindex load success no is".$newUserData->no);
 			self::$sharedUserDatas[$newUserData->memberID]=$newUserData;
 		}else{
-			LogManager::get()->addLog("userindex load fail it's new obj is ".json_encode($newUserData->getArrayData(true)));
+			LogManager::addLog("userindex load fail it's new obj is ".json_encode($newUserData->getArrayData(true)));
 			
 			// if(!$memberID){
 			// 	return null;
 			// }
 			//$test = get_class_vars(get_class($newIndex));
-			//LogManager::get()->addLog("userindex load fuck!!".json_encode($test));
+			//LogManager::addLog("userindex load fuck!!".json_encode($test));
 		}	
 		return $newUserData;
 	}
@@ -548,7 +548,7 @@ class UserData extends DBTable{
 
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
-			//LogManager::get()->addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
+			//LogManager::addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
 			//if($this->m__userIndex->isLoaded())$this->setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
 				$this->setDBInfo($this->m__userIndex->getShardDBInfo());
@@ -577,7 +577,7 @@ class UserData extends DBTable{
 
 	public function save($isIncludePrimaryKey=false){
 		//마지막접속시간
-		LogManager::get()->addLog("userdata save!!!!!!");
+		LogManager::addLog("userdata save!!!!!!");
 		$this->lastDate = TimeManager::get()->getCurrentDateTime();
 		$this->lastTime = TimeManager::get()->getTime();
 		return parent::save($isIncludePrimaryKey);
@@ -587,7 +587,7 @@ class UserData extends DBTable{
 		$r = $this->m__userIndex->remove();
 		if($r)parent::remove();
 		
-		LogManager::get()->addLog("dropout User query error is".mysql_error()." and ".json_encode($r));
+		LogManager::addLog("dropout User query error is".mysql_error()." and ".json_encode($r));
 
 		return $r;
 	}
@@ -673,7 +673,7 @@ class UserData extends DBTable{
 	}
 	
 	public function addFriend($friendID){
-		LogManager::get()->addLog("addfriend ".$friendID);
+		LogManager::addLog("addfriend ".$friendID);
 
 		$friendList=array();
 		if($this->friendList)$friendList = json_decode($this->friendList,true);
@@ -683,7 +683,7 @@ class UserData extends DBTable{
 		$friendList = array_unique($friendList);		
 		$this->friendList = json_encode($friendList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		
-		LogManager::get()->addLog("addfriendResult is ".$this->friendList);
+		LogManager::addLog("addfriendResult is ".$this->friendList);
 	}
 
 	public function setArchiveData($key,$value){
@@ -699,11 +699,11 @@ class UserData extends DBTable{
 		$user=null;
 
 		if($param["where"]["type"]=="sno"){
-			$user = new UserData($param["where"]["id"]);
+			$user = UserData::create($param["where"]["id"]);
 		}else if($param["where"]["type"]=="nick"){
-			$user = new UserData(null,null,$param["where"]["id"]);
+			$user = UserData::create(null,null,$param["where"]["id"]);
 		}else{
-			$user = new UserData(null,$param["where"]["id"]);
+			$user = UserData::create(null,$param["where"]["id"]);
 		}
 
 		if(!$user->isLoaded()){
@@ -720,7 +720,7 @@ class UserData extends DBTable{
 		$r = array_merge($hgr,$r);
 
 		$character = new CharacterHistory($user->memberID,$user->selectedCharNO);
-		LogManager::get()->addLog("character".$user->memberID."-".$user->selectedCharNO);
+		LogManager::addLog("character".$user->memberID."-".$user->selectedCharNO);
 		$r["characterLevel"]=$character->level;
 
 		$storage = new UserStorage($user->memberID);
@@ -842,7 +842,7 @@ class Message extends DBTable{
 // 			else $q_where = "memberID=".$memberID." and stageNo=".$stageNo;
 			
 
-// 			LogManager::get()->addLog("stage score construct ".$q_where);
+// 			LogManager::addLog("stage score construct ".$q_where);
 // 			if(parent::load($q_where)){
 // 				$this->autoMatching($this->m__result);
 // 				// $this->m_no = $this->m__result["no"];
@@ -1445,9 +1445,9 @@ class CardHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1557,9 +1557,9 @@ class PuzzleHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1654,9 +1654,9 @@ class PieceHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1865,9 +1865,9 @@ class ArchivementHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1934,9 +1934,9 @@ class GiftBoxHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -2081,9 +2081,9 @@ class UserStorage extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -2167,9 +2167,9 @@ class UserPropertyHistory extends DBTable{
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -2605,11 +2605,11 @@ class CuponCode extends DBTable{
 			$mode="auto";
 		}
 		//unset($p["data"]["code"]);
-		LogManager::get()->addLog("test count is ".count($codeList));
+		LogManager::addLog("test count is ".count($codeList));
 		CommitManager::get()->begin("main");
 		for($i=0;$i<$cnt;$i++){
 
-			LogManager::get()->addLog("test1 ".$i);
+			LogManager::addLog("test1 ".$i);
 			
 			$p2=unserialize(serialize($p));
 			if($mode=="manual")	$p2["data"]["cuponCode"]=$codeList[$i];
@@ -2666,9 +2666,9 @@ class CuponHistory extends DBTable{
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -2744,7 +2744,7 @@ class WeeklyScore extends DBTable{
 		
 		$this->setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("weeklyScore"));
-		LogManager::get()->addLog("weeklyScore is ".DBManager::getST("weeklyScore"));
+		LogManager::addLog("weeklyScore is ".DBManager::getST("weeklyScore"));
 
 
 		if($memberID){
@@ -2839,7 +2839,7 @@ class StageScore extends DBTable{
 			else $q_where = "memberID=".$memberID." and stageNo=".$stageNo;
 			
 
-			LogManager::get()->addLog("stage score construct ".$q_where);
+			LogManager::addLog("stage score construct ".$q_where);
 			parent::load($q_where);
 		}
 	}
@@ -2854,7 +2854,7 @@ class StageScore extends DBTable{
 	public function getTop4(){
 		// $topquery = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4",$this->getDBConnection());
 		
-		// LogManager::get()->addLog("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4");
+		// LogManager::addLog("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4");
 		// $rank=1;
 		// $rdata = array(); 
 		// while($data = mysql_fetch_assoc($topquery)){
@@ -3019,11 +3019,11 @@ class CharacterHistory extends DBTable{
 
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
-			LogManager::get()->addLog("--->".json_encode($param));
+			LogManager::addLog("--->".json_encode($param));
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -3545,9 +3545,9 @@ public function __construct($id=null){
 	public function makeExchangeIDByRandom($param){
 		$r["param"]=$param;
 		if($param["id"]){
-			LogManager::get()->addLog("exchangeID is ".$param["id"]);
+			LogManager::addLog("exchangeID is ".$param["id"]);
 			$exchange = new Exchange($param["id"]);
-			LogManager::get()->addLog("exchangelist is ".json_encode($exchange->list));
+			LogManager::addLog("exchangelist is ".json_encode($exchange->list));
 			$r["exchangeID"]=$exchange->id;
 			$r["list"]=$exchange->list;
 			$r["result"]=ResultState::successToArray();
@@ -3724,7 +3724,7 @@ class EndlessPlayList extends DBTable{
 	public function getPlayDataByRandom($memberID,$lvl,$limit=1,$fieldlist="*"){
 		$result = array();
 		$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
-		LogManager::get()->addLog("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
+		LogManager::addLog("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
 		
 		$check=false;
 		while($rData = mysql_fetch_assoc($query)){
@@ -3732,7 +3732,7 @@ class EndlessPlayList extends DBTable{
 			$result[]=$rData;
 			$check=true;
 		}
-		LogManager::get()->addLog("test size is".count($result));
+		LogManager::addLog("test size is".count($result));
 		$i=0;
 		while(count($result)<$limit){
 			$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and memberID<>'".$memberID."' ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
@@ -3744,7 +3744,7 @@ class EndlessPlayList extends DBTable{
 			if($i>50)break;
 		}
 
-		LogManager::get()->addLog(mysql_error());
+		LogManager::addLog(mysql_error());
 		
 		return $result;
 	}
@@ -3758,7 +3758,7 @@ class EndlessPlayList extends DBTable{
 			if($query)$result = mysql_fetch_assoc($query);
 		}
 
-		LogManager::get()->addLog(mysql_error());
+		LogManager::addLog(mysql_error());
 		
 		return $result;
 	}
@@ -3935,9 +3935,9 @@ class ModifyHistory extends DBTable{
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -3982,11 +3982,11 @@ class ModifyHistory extends DBTable{
 
 	// public function selectWithLQTable($param){
 	// 	if($param["where"]["type"]=="sno"){
-	// 		$user = new UserData($param["where"]["id"]);
+	// 		$user = UserData::create($param["where"]["id"]);
 	// 	}else if($param["where"]["type"]=="nick"){
-	// 		$user = new UserData(null,null,$param["where"]["id"]);
+	// 		$user = UserData::create(null,null,$param["where"]["id"]);
 	// 	}else{
-	// 		$user = new UserData(null,$param["where"]["id"]);
+	// 		$user = UserData::create(null,$param["where"]["id"]);
 	// 	}
 
 	// 	if(!$user->isLoaded()){
@@ -4016,9 +4016,9 @@ class AdminUser extends DBTable{
 		// $this->setLQTableSelectQueryCustomFunction(function ($param){
 		// 	if($param["where"]["id"]=="*")return "";
 
-		// 	if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-		// 	else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-		// 	else $user = new UserData(null,$param["where"]["id"]);
+		// 	if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+		// 	else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+		// 	else $user = UserData::create(null,$param["where"]["id"]);
 
 		// 	if(!$user->isLoaded())return "where memberID='-1'";
 

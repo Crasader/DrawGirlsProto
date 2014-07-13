@@ -53,8 +53,8 @@ if($mode){
     if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["memberNo"];
     // if(!is_array($param)){
     //     $param = json_decode(trim(preg_replace("/'/","\"", $paramoriginal)),true);
-    //     LogManager::get()->addLog("ok --> ".$paramoriginal);
-    //     LogManager::get()->addLog("ok --> ".preg_replace("/'/","\"", $paramoriginal));
+    //     LogManager::addLog("ok --> ".$paramoriginal);
+    //     LogManager::addLog("ok --> ".preg_replace("/'/","\"", $paramoriginal));
     // }
     $version = $_POST["version"];
     
@@ -88,8 +88,8 @@ if(!$stopCommand){
 
             if(!($a=="login" || $a=="join") && CurrentUserInfo::$memberID && $checkUserdata==false){
                 $userdata = UserData::create($memberID);
-                LogManager::get()->addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
-                LogManager::get()->addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
+                LogManager::addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
+                LogManager::addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
 
                 if($userdata->isLoaded()){
                     if($userdata->deviceID!=$param["deviceID"]){
@@ -136,12 +136,12 @@ if(!$stopCommand){
             $endTime = TimeManager::get()->getMicroTime();
             
             if($a=="login" || $a=="join"){
-                LogManager::get()->addLog("ok out deviceID ".$r["result"]["code"]);
+                LogManager::addLog("ok out deviceID ".$r["result"]["code"]);
                 if(ResultState::successCheck($r["result"])){
                     $checkUserdata=true;
                     $allResult["lastCmdNo"]=0;
                     $allResult["deviceID"]=$r["data"]["deviceID"];
-                    LogManager::get()->addLog("out deviceID".$r["data"]["deviceID"]);
+                    LogManager::addLog("out deviceID".$r["data"]["deviceID"]);
                 }else{
                     $allResult["deviceID"]=0;
                 }
@@ -156,14 +156,14 @@ if(!$stopCommand){
             $p2["memberID"]= CurrentUserInfo::$memberID;
         
 
-            $r["log"] = LogManager::get()->getLog();
+            $r["log"] = LogManager::getLog();
 
             $p2["category"]=$a;
             $p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
             $p2["output"]=$r;
             $p2["execTime"]=$endTime-$startTime;
             if($a!="writelog")$command->writelog($p2);
-            LogManager::get()->getLogAndClear();
+            LogManager::getLogAndClear();
             $allResult[$cmd]= $r;
         }else if($a=="help"){
             $class_methods = get_class_methods('commandClass');

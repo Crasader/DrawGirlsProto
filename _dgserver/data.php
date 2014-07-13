@@ -65,7 +65,7 @@ if(!$stopCommand){
 			$r = $command->$a($p);
 			$endTime = TimeManager::get()->getMicroTime();
 
-			$r[log] = LogManager::get()->getLogAndClear();
+			$r[log] = LogManager::getLogAndClear();
 		 	$allResult[$cmd]= $r;
 		 	
 		 	$p2 = array();
