@@ -110,7 +110,7 @@ if(!$stopCommand){
                     
 
 
-                    }else if((TimeManager::get()->getTime()-$userdata->lastTime)>60*30){
+                    }else if((TimeManager::getTime()-$userdata->lastTime)>60*30){
                         $checkUserdata=true;
                         $allResult["longTimeError"]=true;
                         $r["result"]=ResultState::toArray(4003);
@@ -131,9 +131,9 @@ if(!$stopCommand){
 
             }
 
-            $startTime = TimeManager::get()->getMicroTime();
+            $startTime = TimeManager::getMicroTime();
             $r = $command->$a($p);
-            $endTime = TimeManager::get()->getMicroTime();
+            $endTime = TimeManager::getMicroTime();
             
             if($a=="login" || $a=="join"){
                 LogManager::addLog("ok out deviceID ".$r["result"]["code"]);
@@ -213,9 +213,9 @@ if(!$stopCommand){
     }
 
     $allResult["state"]="ok";
-    $allResult["timestamp"]=TimeManager::get()->getTime();
-    $allResult["date"]=TimeManager::get()->getCurrentDateTime();
-    $allResult["weekNo"]=TimeManager::get()->getCurrentWeekNo();
+    $allResult["timestamp"]=TimeManager::getTime();
+    $allResult["date"]=TimeManager::getCurrentDateTime();
+    $allResult["weekNo"]=TimeManager::getCurrentWeekNo();
     $allResult["cmdNo"]=$param["cmdNo"];
     $allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
     

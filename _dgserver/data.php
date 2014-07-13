@@ -61,9 +61,9 @@ if(!$stopCommand){
 		
 		
 		if(method_exists($command,$a)){
-			$startTime = TimeManager::get()->getMicroTime();
+			$startTime = TimeManager::getMicroTime();
 			$r = $command->$a($p);
-			$endTime = TimeManager::get()->getMicroTime();
+			$endTime = TimeManager::getMicroTime();
 
 			$r[log] = LogManager::getLogAndClear();
 		 	$allResult[$cmd]= $r;
@@ -106,7 +106,7 @@ if(!$stopCommand){
 		
 	}
 	$allResult[state]="ok";
-	$allResult[timestamp]=TimeManager::get()->getTime();
+	$allResult[timestamp]=TimeManager::getTime();
 	
 	$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	

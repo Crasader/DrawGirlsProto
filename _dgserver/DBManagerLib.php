@@ -32,24 +32,25 @@ class DataTableUtil{
 
 	}
 }
-class TimeManager{
-	public $m_timeOffset=32400;
-	private static $m_instance=NULL;
-	public $m_nowDate = NULL;
-	//싱글턴 얻어오기
-	public static function get()
-	{
-	    if ( is_null( self::$m_instance ) )
-	    {
-	      self::$m_instance = new self();
 
-	    }
-	    return self::$m_instance;
-	}
+class TimeManager{
+	static public $m_timeOffset=32400;
+	// private static $m_instance=NULL;
+	static public $m_nowDate = NULL;
+	//싱글턴 얻어오기
+	// public static function get()
+	// {
+	//     if ( is_null( self::$m_instance ) )
+	//     {
+	//       self::$m_instance = new self();
+
+	//     }
+	//     return self::$m_instance;
+	// }
 	
-	public function __construct(){
+	static public function construct(){
 		if(!CurrentUserInfo::$timezone)CurrentUserInfo::$timezone="Asia/Seoul";
-		$this->m_nowDate = new DateTime("now",new DateTimeZone(CurrentUserInfo::$timezone));
+		TimeManager::$m_nowDate = new DateTime("now",new DateTimeZone(CurrentUserInfo::$timezone));
 	}
 
 	// public function setTimeOffsetByLanguage($lang){
@@ -64,12 +65,12 @@ class TimeManager{
 	// public function getTimeOffset(){
 	// 	return $this->m_timeOffset;
 	// }
-	public function getTime(){
-		return $this->m_nowDate->getTimestamp();
+	static public function getTime(){
+		return TimeManager::$m_nowDate->getTimestamp();
 		//return time()+$this->m_timeOffset;
 	}
 
-	public function getTimestampByUTC(){
+	static public function getTimestampByUTC(){
 		return time();
 	}
 	static public function getMicroTime() 
@@ -78,9 +79,9 @@ class TimeManager{
 	  return ((float)$usec + (float)$sec + $m_timeOffset); 
 	} 
 	
-	public function getCurrentWeekNo(){
-		$y  = $this->m_nowDate->format("Y");
-		$w  = $this->m_nowDate->format("W");
+	static public function getCurrentWeekNo(){
+		$y  =TimeManager::$m_nowDate->format("Y");
+		$w  = TimeManager::$m_nowDate->format("W");
 		if($w<10)$w="0".$w;
 
 		return $y.$w;
@@ -96,22 +97,22 @@ class TimeManager{
 	// 	return $y.$w;
 	// }
 
-	public function getRemainTimeForWeeklyRank(){
+	static public function getRemainTimeForWeeklyRank(){
 		//return strtotime("next Sunday")-time();
-		$sunDay = strtotime("next Sunday",$this->m_nowDate->getTimestamp());
-		$nextday = new DateTime(date("Y-m-d h:i:s",$sunDay),$this->m_nowDate->getTimezone());
+		$sunDay = strtotime("next Sunday",TimeManager::$m_nowDate->getTimestamp());
+		$nextday = new DateTime(date("Y-m-d h:i:s",$sunDay),TimeManager::$m_nowDate->getTimezone());
 		$nextday->setTime(5,0,0);
 		
-		$subDay = $nextday->diff($this->m_nowDate);
+		$subDay = $nextday->diff(TimeManager::$m_nowDate);
 
 		return ($subDay->d*24*60*60+$subDay->h*60*60+$subDay->i*60+$subDay->s);
 	}
 
-	public function getRemainTimeForTodayMission(){
+	static public function getRemainTimeForTodayMission(){
 
-		$nextday = new DateTime("tomorrow",$this->m_nowDate->getTimezone());
+		$nextday = new DateTime("tomorrow",TimeManager::$m_nowDate->getTimezone());
 		$nextday->setTime(5,0,0);
-		$subDay = $nextday->diff($this->m_nowDate);
+		$subDay = $nextday->diff(TimeManager::$m_nowDate);
 
 		
 		return ($subDay->h*60*60+$subDay->i*60+$subDay->s);
@@ -121,38 +122,39 @@ class TimeManager{
 	// 	return date("W",$timestamp);
 	// }
 	
-	public function getDateTime($timestamp){
+	static public function getDateTime($timestamp){
 		return date("YmdHis",$timestamp);
 	}
 	
-	public function getCurrentDateTime(){
-		return $this->getDateTime($this->getTime());
+	static public function getCurrentDateTime(){
+		return TimeManager::getDateTime(TimeManager::getTime());
 	}
 
-	public function getCurrentTime(){
-  		return date("His",$this->getTime());
+	static public function getCurrentTime(){
+  		return date("His",TimeManager::getTime());
 	}
-	public function getWeekDayNo($timestamp){
+	static public function getWeekDayNo($timestamp){
 		return date("w",$timestamp);
 	}
 
-	public function getCurrentWeekDayNo(){
-		return $this->getWeekDayNo($this->getTime());
+	static public function getCurrentWeekDayNo(){
+		return TimeManager::getWeekDayNo(TimeManager::getTime());
 	}
   	
-  	public function getCurrentHour(){
-  		return date("H",$this->getTime());
+  	static public function getCurrentHour(){
+  		return date("H",TimeManager::getTime());
   	}
 
-  	public function getCurrentDate(){
-  		return date("Ymd",$this->getTime());
+  	static public function getCurrentDate(){
+  		return date("Ymd",TimeManager::getTime());
   	}
 
-  	public function getYesterDayDate(){
-  		return date("Ymd",strtotime(TimeManager::get()->getCurrentDate())-24*60*60);
+  	static public function getYesterDayDate(){
+  		return date("Ymd",strtotime(TimeManager::getCurrentDate())-24*60*60);
   	}
 }
 
+TimeManager::construct();
 
 class LogManager{
 	public static $m_logList=array();

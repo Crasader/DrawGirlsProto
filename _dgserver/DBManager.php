@@ -367,7 +367,7 @@ class SendItem extends DBTable{
 		
 
 		//가입시간
-		//if(!$this->joinDate)$this->joinDate=TimeManager::get()->getCurrentDateTime();
+		//if(!$this->joinDate)$this->joinDate=TimeManager::getCurrentDateTime();
 	}
 
 
@@ -565,7 +565,7 @@ class UserData extends DBTable{
 		
 
 		//가입시간
-		//if(!$this->joinDate)$this->joinDate=TimeManager::get()->getCurrentDateTime();
+		//if(!$this->joinDate)$this->joinDate=TimeManager::getCurrentDateTime();
 	}
 
 
@@ -578,8 +578,8 @@ class UserData extends DBTable{
 	public function save($isIncludePrimaryKey=false){
 		//마지막접속시간
 		LogManager::addLog("userdata save!!!!!!");
-		$this->lastDate = TimeManager::get()->getCurrentDateTime();
-		$this->lastTime = TimeManager::get()->getTime();
+		$this->lastDate = TimeManager::getCurrentDateTime();
+		$this->lastTime = TimeManager::getTime();
 		return parent::save($isIncludePrimaryKey);
 	}
 
@@ -725,7 +725,7 @@ class UserData extends DBTable{
 
 		$storage = new UserStorage($user->memberID);
 		$r["r"]='{"fr":'.$storage->fr.',"pr":'.$storage->pr.'}';
-		$r["isConnecting"]=((TimeManager::get()->getTime()-$user->lastTime)<300)?"Y":"N";
+		$r["isConnecting"]=((TimeManager::getTime()-$user->lastTime)<300)?"Y":"N";
 		$r = array_merge($r,$storage->getArrayData());
 
 		$result["data"]=$r;
@@ -1975,8 +1975,8 @@ class GiftBoxHistory extends DBTable{
 	}
 
 	public function confirmAll(){
-		$lastDay = TimeManager::get()->getDateTime(TimeManager::get()->getTime()-60*60*24*30);
-		$result = mysql_query("update ".$this->getDBTable()." set confirmDate='".TimeManager::get()->getCurrentDateTime()."' where memberID='".$this->memberID."' and confirmDate=0 and regDate>$lastDay",$this->getDBConnection());
+		$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
+		$result = mysql_query("update ".$this->getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$this->memberID."' and confirmDate=0 and regDate>$lastDay",$this->getDBConnection());
 		return $result;
 	}
 
@@ -2224,7 +2224,7 @@ class LoginEvent extends DBTable{
 		$this->setPrimarykey("no",true);
 
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -2246,7 +2246,7 @@ class LoginEvent extends DBTable{
 	}
 	static public function getRewardDays(){
 		$data=array();
-		while($rData = LoginEvent::getRowByQuery("where endDate>".TimeManager::get()->getCurrentDateTime()." and startTime=0 and endTime=235959 limit 4")){
+		while($rData = LoginEvent::getRowByQuery("where endDate>".TimeManager::getCurrentDateTime()." and startTime=0 and endTime=235959 limit 4")){
 			$rData["reward"]=json_decode($rData["reward"],true);
 			$data[]=$rData;
 		}
@@ -2317,7 +2317,7 @@ class AttendenceEvent extends DBTable{
 
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -2332,7 +2332,7 @@ class AttendenceEvent extends DBTable{
 		if($fNo){
 			$query = "no=".$fNo;
 		}else{
-			$today = TimeManager::get()->getCurrentDateTime();
+			$today = TimeManager::getCurrentDateTime();
 			$query = "startDate<=".$today." and endDate>=".$today;
 		}
 		if(parent::load($query)){
@@ -2392,7 +2392,7 @@ class CuponManager extends DBTable{
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -2477,7 +2477,7 @@ class CuponManager extends DBTable{
 		// 		$exchange->save();		
 		// }
 		// unset($p["data"]["exchangeList"]);
-		// $p["data"]["regDate"]=TimeManager::get()->getCurrentDateTime();
+		// $p["data"]["regDate"]=TimeManager::getCurrentDateTime();
 
 		if($p["data"]["exchangeID"]){
 			$exchange = new Exchange($p["data"]["exchangeID"]);
@@ -2845,8 +2845,8 @@ class StageScore extends DBTable{
 	}
 	public function save($p=null){
 		if(!$this->regDate){
-			$this->regDate=TimeManager::get()->getCurrentDateTime();
-			$this->regDate=TimeManager::get()->getTime();
+			$this->regDate=TimeManager::getCurrentDateTime();
+			$this->regDate=TimeManager::getTime();
 		}
 		return parent::save($p);
 	}
@@ -3109,7 +3109,7 @@ class Notice extends DBTable{
 
 		$this->setDBInfo(DBManager::get()->getMainDBInfo());
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -3291,7 +3291,7 @@ class ShopEvent extends DBTable{
 		});
 
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -3868,7 +3868,7 @@ public function __construct($no=null){
 		parent::__construct();
 		
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -3958,7 +3958,7 @@ class ModifyHistory extends DBTable{
 	}
 
 	public function save($isIncludePrimaryKey = false){
-		if(!$this->regDate)$this->regDate=TimeManager::get()->getCurrentDateTime();
+		if(!$this->regDate)$this->regDate=TimeManager::getCurrentDateTime();
 		return parent::save($isIncludePrimaryKey);
 	}
 

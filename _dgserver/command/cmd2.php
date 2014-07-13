@@ -302,7 +302,7 @@ function getnoticelist($p){
 	
 	if(!$mainConn) return ResultState::makeReturn(1002,"fail to get mainConnection");
 	
-	$nowDate = TimeManager::get()->getCurrentDateTime();
+	$nowDate = TimeManager::getCurrentDateTime();
 	
 
 	$r = array();
@@ -313,7 +313,7 @@ function getnoticelist($p){
 		$r["list"][]=$rData;
 	}
 
-	$r["date"]=(string)TimeManager::get()->getCurrentDateTime();
+	$r["date"]=(string)TimeManager::getCurrentDateTime();
 	$r["result"]=ResultState::successToArray();
 	$r["state"]="ok";
 	
@@ -432,8 +432,8 @@ function getshoplist($p){
 			$id = $shopInfo["id"];
 			$r[$id]=$shopInfo;
 	}
-	$today = TimeManager::get()->getCurrentDateTime();
-	$nowtime = TimeManager::get()->getCurrentTime();
+	$today = TimeManager::getCurrentDateTime();
+	$nowtime = TimeManager::getCurrentTime();
 	$ingEvent = false;
 	while($shopInfo = ShopEvent::getRowByQuery("where startDate<=".$today." and endDate>=".$today." and startTime<=".$nowtime." and endTime>=".$nowtime." order by type asc, count asc")){
 			$script=json_decode($shopInfo["priceName"],true);
@@ -1413,8 +1413,8 @@ function writelog($p){
 	$userlog->memberID = $p["memberID"];
 	$userlog->output = $p["output"];
 	$userlog->input = $p["input"];
-	$userlog->regDate = TimeManager::get()->getCurrentDateTime();
-	$userlog->regTime = TimeManager::get()->getTime();
+	$userlog->regDate = TimeManager::getCurrentDateTime();
+	$userlog->regTime = TimeManager::getTime();
 	$userlog->category = $p["category"];
 	$userlog->ip = get_client_ip();
 	$userlog->header = json_encode(getallheaders());
@@ -1538,15 +1538,15 @@ function login($p){
 		
 		if(!$user->isLoaded())return ResultState::makeReturn(2007);
 
-		if($user->blockDate>TimeManager::get()->getCurrentDateTime()){
+		if($user->blockDate>TimeManager::getCurrentDateTime()){
 			$r["result"] = ResultState::toArray(ResultState::GDBLOCKEDUSER,$user->blockReason);
 			$r["blockDate"]=$user->blockDate;
 			$r["blockReason"]=$user->blockReason;
 			return $r;
 		}
 
-		$user->lastDate = TimeManager::get()->getCurrentDateTime();
-		$user->lastTime = TimeManager::get()->getTime();
+		$user->lastDate = TimeManager::getCurrentDateTime();
+		$user->lastTime = TimeManager::getTime();
 		
 		$newID=rand(1,100000);
 		while($user->deviceID==$newID){
@@ -1663,7 +1663,7 @@ function join($p){
 
 	$user->m__userIndex->nick = $nick;
 	$user->nick = $nick;
-	$user->joinDate=TimeManager::get()->getCurrentDateTime();
+	$user->joinDate=TimeManager::getCurrentDateTime();
 	
     LogManager::addLog("join2 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
 
@@ -1695,7 +1695,7 @@ function join($p){
 			$character->memberID=$memberID;
 			$character->characterNo = 1;
 			$character->level=1;
-			$character->regDate = TimeManager::get()->getCurrentDateTime();
+			$character->regDate = TimeManager::getCurrentDateTime();
 			CommitManager::get()->setSuccess($memberID,$character->save());
 
 			if(CommitManager::get()->commit($memberID)){
@@ -2317,8 +2317,8 @@ function sendmessage($p){
 	$message = new Message();
 	$message->m_memberID=$p["receiverMemberID"];
 	$message->m_content=$p["content"];
-	$message->m_regDate=TimeManager::get()->getCurrentDateTime();
-	$message->m_regTime=TimeManager::get()->getTime();
+	$message->m_regDate=TimeManager::getCurrentDateTime();
+	$message->m_regTime=TimeManager::getTime();
 	$message->m_friendID=$p["senderMemberID"];
 	$message->m_type=$p["type"];
 	$message->m_isSendMsg=0;
@@ -2329,7 +2329,7 @@ function sendmessage($p){
 	// $message2 = new Message();
 	// $message2->m_memberID=$p["senderMemberID"];
 	// $message2->m_content=$p["content"];
-	// $message2->m_regDate=TimeManager::get()->getCurrentDateTime();
+	// $message2->m_regDate=TimeManager::getCurrentDateTime();
 	// $message2->m_friendID=$p["receiverMemberID"];
 	// $message2->m_type=$p["type"];
 	// $message2->m_isSendMsg=1;
@@ -2368,8 +2368,8 @@ function sendmessagebylist($p){
 		$message = new Message();
 		$message->m_memberID=$rmemberid;
 		$message->m_content=$p["content"];
-		$message->m_regDate=TimeManager::get()->getCurrentDateTime();
-		$message->m_regTime=TimeManager::get()->getTime();
+		$message->m_regDate=TimeManager::getCurrentDateTime();
+		$message->m_regTime=TimeManager::getTime();
 		$message->m_friendID=$p["senderMemberID"];
 		$message->m_type=$p["type"];
 		$message->m_isSendMsg=0;
@@ -2379,7 +2379,7 @@ function sendmessagebylist($p){
 		// $message2 = new Message();
 		// $message2->m_memberID=$p["senderMemberID"];
 		// $message2->m_content=$p["content"];
-		// $message2->m_regDate=TimeManager::get()->getCurrentDateTime();
+		// $message2->m_regDate=TimeManager::getCurrentDateTime();
 		// $message2->m_friendID=$rmemberid;
 		// $message2->m_type=$p["type"];
 		// $message2->m_isSendMsg=1;
@@ -2562,12 +2562,12 @@ function help_setweeklyscore(){
 
 function setweeklyscore($p){
 
-	$ws =new WeeklyScore($p["memberID"],TimeManager::get()->getCurrentWeekNo());
+	$ws =new WeeklyScore($p["memberID"],TimeManager::getCurrentWeekNo());
 	$ws->memberID = $p["memberID"];
 	$ws->data = $p["data"];
-	$ws->regDate = TimeManager::get()->getCurrentDateTime();
-	$ws->regTime = TimeManager::get()->getTime();
-	$ws->regWeek = TimeManager::get()->getCurrentWeekNo();
+	$ws->regDate = TimeManager::getCurrentDateTime();
+	$ws->regTime = TimeManager::getTime();
+	$ws->regWeek = TimeManager::getCurrentWeekNo();
 	
 	$r["update"]=false;
 	if($ws->score<$p["score"]){
@@ -2598,12 +2598,12 @@ function help_addweeklyscore(){
 
 function addweeklyscore($p){
 
-	$ws =new WeeklyScore($p["memberID"],TimeManager::get()->getCurrentWeekNo());
+	$ws =new WeeklyScore($p["memberID"],TimeManager::getCurrentWeekNo());
 	$ws->memberID = $p["memberID"];
 	$ws->data = $p["data"];
-	$ws->regDate = TimeManager::get()->getCurrentDateTime();
-	$ws->regTime = TimeManager::get()->getTime();
-	$ws->regWeek = TimeManager::get()->getCurrentWeekNo();
+	$ws->regDate = TimeManager::getCurrentDateTime();
+	$ws->regTime = TimeManager::getTime();
+	$ws->regWeek = TimeManager::getCurrentWeekNo();
 	$ws->score = $ws->score + $p["score"];
 	$ws->count = $ws->count+1;
 	$r["update"]=false;
@@ -2627,7 +2627,7 @@ function help_getweeklyscorelist(){
 
 function getweeklyscorelist($p){
 	$memberlist = $p["memberIDList"];
-	$weekNo = TimeManager::get()->getCurrentWeekNo();
+	$weekNo = TimeManager::getCurrentWeekNo();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
 	
 	$list=array();
@@ -2665,7 +2665,7 @@ function getweeklyrankbyalluser($p){
 	$memberID = $p["memberID"];
 	$start = $p["start"];
 	$limit = $p["limit"];
-	$weekNo = TimeManager::get()->getCurrentWeekNo();
+	$weekNo = TimeManager::getCurrentWeekNo();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
 	if(!$start)$start=1;
 	if(!$limit)$limit=10;
@@ -2691,7 +2691,7 @@ function getweeklyrankbyalluser($p){
 	$r["myscore"]=$myRank->score;
 	$r["alluser"]=$myRank->getAllUser();
 	$r["myrank"]=$myRank->getMyRank();
-	$r["remainTime"]=TimeManager::get()->getRemainTimeForWeeklyRank();
+	$r["remainTime"]=TimeManager::getRemainTimeForWeeklyRank();
 	if($r["myrank"]<=0){
 		$r["alluser"]+=1;
 		$r["myrank"]=$r["alluser"];
@@ -2738,7 +2738,7 @@ function checkweeklyreward($p){
 	if(!$userInfo->eventCheckWeek){
 	
 	
-	}else if($userInfo->eventCheckWeek!=TimeManager::get()->getCurrentWeekNo()){
+	}else if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNo()){
 	//if(1){
 		$r["sendGift"]=false;
 		$r["lastWeek"]=$userInfo->eventCheckWeek;
@@ -2852,8 +2852,8 @@ function checkweeklyreward($p){
 
 	}
 
-	if($userInfo->eventCheckWeek!=TimeManager::get()->getCurrentWeekNo()){
-		$userInfo->eventCheckWeek = TimeManager::get()->getCurrentWeekNo();
+	if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNo()){
+		$userInfo->eventCheckWeek = TimeManager::getCurrentWeekNo();
 		CommitManager::get()->setSuccess($memberID,$userInfo->save());
 	}
 
@@ -2889,8 +2889,8 @@ function setstagescore($p){
 	$ss->memberID = $p["memberID"];
 	$ss->stageNo = $stageNo;
 	$ss->data = $p["data"];
-	$ss->regDate = TimeManager::get()->getCurrentDateTime();
-	$ss->regTime = TimeManager::get()->getTime();
+	$ss->regDate = TimeManager::getCurrentDateTime();
+	$ss->regTime = TimeManager::getTime();
 
 	$r["update"]=false;
 	if($ss->score<=$score){
@@ -2923,8 +2923,8 @@ function addstagescore($p){
 	$ss->memberID = $p["memberID"];
 	$ss->stageNo = $stageNo;
 	$ss->data = $p["data"];
-	$ss->regDate = TimeManager::get()->getCurrentDateTime();
-	$ss->regTime = TimeManager::get()->getTime();
+	$ss->regDate = TimeManager::getCurrentDateTime();
+	$ss->regTime = TimeManager::getTime();
 	$ss->score+=$p["score"];	
 	$ss->save();
 	$r["state"]="ok";
@@ -3236,9 +3236,9 @@ function updatepuzzlehistory($p){
 	$obj = new PuzzleHistory($memberID,$puzzleNo);
 	$obj->memberID=$memberID;
 	$obj->puzzleNo = $puzzleNo;
-	if($p["updateOpenDate"] && !$obj->openDate)$obj->openDate=TimeManager::get()->getCurrentDateTime();
+	if($p["updateOpenDate"] && !$obj->openDate)$obj->openDate=TimeManager::getCurrentDateTime();
 	if($p["updateClearDate"] && !$obj->clearDate){
-		$obj->clearDate=TimeManager::get()->getCurrentDateTime();
+		$obj->clearDate=TimeManager::getCurrentDateTime();
 		//카드선물하기
 		$puzzle = new Puzzle(null,$p["puzzleNo"]);
 		$clearReward =& $puzzle->getRef("clearReward");
@@ -3260,7 +3260,7 @@ function updatepuzzlehistory($p){
 	}
 
 	if($p["updatePerfectDate"] && !$obj->perfectDate){
-		$obj->perfectDate=TimeManager::get()->getCurrentDateTime();
+		$obj->perfectDate=TimeManager::getCurrentDateTime();
 		//카드선물하기
 		$puzzle = new Puzzle($p["puzzleNo"]);
 		$clearReward =& $puzzle->getRef("clearReward");
@@ -3366,8 +3366,8 @@ function updatepiecehistory($p){
 
 	$obj->memberID = $memberID;
 	$obj->pieceNo = $pieceNo;
-	if($p["openDate"] && !$obj->openDate)$obj->openDate = TimeManager::get()->getCurrentDateTime();
-	if(($p["firstClearDate"] && !$obj->firstClearDate) || ($p["clearCount"]>0 && !$obj->firstClearDate))$obj->firstClearDate = TimeManager::get()->getCurrentDateTime();
+	if($p["openDate"] && !$obj->openDate)$obj->openDate = TimeManager::getCurrentDateTime();
+	if(($p["firstClearDate"] && !$obj->firstClearDate) || ($p["clearCount"]>0 && !$obj->firstClearDate))$obj->firstClearDate = TimeManager::getCurrentDateTime();
 	if($p["tryCount"])$obj->tryCount= $p["tryCount"];
 	if($p["clearCount"] && !$obj->clearCount)$obj->clearCount = $p["clearCount"];
 	if(is_array($p["clearDateList"])){
@@ -3377,7 +3377,7 @@ function updatepiecehistory($p){
 		else if(!is_array($obj->clearDateList))$obj->clearDateList = json_decode($obj->clearDateList,true);
 		foreach ($obj->clearDateList as $key => $value) {
 			if($value<=0 && ($p["clearDateList"][$key]>0)){
-				$newlistdata[$key]=TimeManager::get()->getCurrentDateTime();
+				$newlistdata[$key]=TimeManager::getCurrentDateTime();
 			}else if($value){
 				$newlistdata[$key]=$value;
 			}
@@ -3389,16 +3389,16 @@ function updatepiecehistory($p){
 
 
 	// if(!$p["updateOpenDate"])$obj->tryCount=$obj->m_tryCount+1;
-	// else $obj->openDate=TimeManager::get()->getCurrentDateTime();
+	// else $obj->openDate=TimeManager::getCurrentDateTime();
 	// if($clearRank>0){
 	// 	$clearDateList = json_decode($obj->clearDateList,true);
 	// 	if(!$clearDateList)$clearDateList=array(0,0,0,0);
-	// 	$clearDateList[$clearRank-1] = TimeManager::get()->getCurrentDateTime();
+	// 	$clearDateList[$clearRank-1] = TimeManager::getCurrentDateTime();
 	// 	$obj->clearDateList=json_encode($clearDateList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	// }
 	// if(!$obj->clearDateList)$obj->clearDateList=array(0,0,0,0);
 	// if($p["updateFirstClearDate"] || ($clearRank>0 && !$obj->firstClearDate)){
-	// 	$obj->firstClearDate=TimeManager::get()->getCurrentDateTime();
+	// 	$obj->firstClearDate=TimeManager::getCurrentDateTime();
 	// 	$obj->clearCount=$obj->tryCount;
 	// }
 	// if($p["openType"])$obj->openType=$p["openType"];
@@ -3508,7 +3508,7 @@ function updatecardhistory($p){
 		}
 	}
 
-	if($p["updateTakeDate"] || !$obj->isLoaded())$obj->takeDate=TimeManager::get()->getCurrentDateTime();
+	if($p["updateTakeDate"] || !$obj->isLoaded())$obj->takeDate=TimeManager::getCurrentDateTime();
 	if($p["comment"])$obj->comment=addslashes($p["comment"]);
 	if($p["isMorphing"])$obj->isMorphing=$p["isMorphing"];
 	
@@ -3608,7 +3608,7 @@ function addproperty($p){
 	$userHistory->total = $userProp->{$p["type"]}+$p["count"];
 	$userHistory->content = $p["content"];
 	$userHistory->sender = $p["sender"];
-	$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
+	$userHistory->regDate = TimeManager::getCurrentDateTime();
 
 	$userProp->{$p["type"]} += $count;
 
@@ -3677,7 +3677,7 @@ function updateuserpropertyhistory($p){
 	$userHistory->content = $p["content"];
 	$userHistory->sender = $p["sender"];
 	$userHistory->exchangeID = $p["exchangeID"];
-	$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
+	$userHistory->regDate = TimeManager::getCurrentDateTime();
 
 
 	if(!$userHistory->save()){
@@ -3815,7 +3815,7 @@ function changeuserproperties($p){
 						$userHistory->content = $value["content"];
 						$userHistory->sender = "user";
 						$userHistory->exchangeID=$p["exchangeID"];
-						$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
+						$userHistory->regDate = TimeManager::getCurrentDateTime();
 						CommitManager::get()->setSuccess($memberID,$userHistory->save());
 
 					//무료젬가 부족하면 뮤료젬=0, 남은건 유료젬에서 차감
@@ -3831,7 +3831,7 @@ function changeuserproperties($p){
 							$userHistory1->content = $value["content"];
 							$userHistory1->sender = "user";
 							$userHistory->exchangeID=$p["exchangeID"];
-							$userHistory1->regDate = TimeManager::get()->getCurrentDateTime();
+							$userHistory1->regDate = TimeManager::getCurrentDateTime();
 							CommitManager::get()->setSuccess($memberID,$userHistory1->save());
 						}
 
@@ -3849,7 +3849,7 @@ function changeuserproperties($p){
 							$userHistory2->content = $value["content"];
 							$userHistory2->sender = "user";
 							$userHistory->exchangeID=$p["exchangeID"];
-							$userHistory2->regDate = TimeManager::get()->getCurrentDateTime();
+							$userHistory2->regDate = TimeManager::getCurrentDateTime();
 							CommitManager::get()->setSuccess($memberID,$userHistory2->save());
 						}
 
@@ -4042,7 +4042,7 @@ function changeuserproperties($p){
 						$userHistory->total = $fRuby->count;
 						$userHistory->content = $value["content"];
 						$userHistory->sender = "user";
-						$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
+						$userHistory->regDate = TimeManager::getCurrentDateTime();
 						CommitManager::get()->setSuccess($memberID,($userHistory->save() && $fRuby->save()));
 
 					//무료젬가 부족하면 뮤료젬=0, 남은건 유료젬에서 차감
@@ -4057,7 +4057,7 @@ function changeuserproperties($p){
 							$userHistory1->total = 0;
 							$userHistory1->content = $value["content"];
 							$userHistory1->sender = "user";
-							$userHistory1->regDate = TimeManager::get()->getCurrentDateTime();
+							$userHistory1->regDate = TimeManager::getCurrentDateTime();
 							CommitManager::get()->setSuccess($memberID,$userHistory1->save());
 						}
 
@@ -4074,7 +4074,7 @@ function changeuserproperties($p){
 							$userHistory2->total = $pRuby->count;
 							$userHistory2->content = $value["content"];
 							$userHistory2->sender = "user";
-							$userHistory2->regDate = TimeManager::get()->getCurrentDateTime();
+							$userHistory2->regDate = TimeManager::getCurrentDateTime();
 							CommitManager::get()->setSuccess($memberID,$userHistory2->save());
 						}
 
@@ -4388,8 +4388,8 @@ function updatearchivementhistory($p){
 	$obj = new ArchivementHistory($memberID,$archiveID);
 	$obj->memberID=$memberID;
 	$obj->archiveID=$archiveID;
-	if($p["updateClearDate"] && !$obj->clearDate)$obj->clearDate=TimeManager::get()->getCurrentDateTime();
-	if($p["updateRewardDate"] && !$obj->rewardDate)$obj->rewardDate=TimeManager::get()->getCurrentDateTime();
+	if($p["updateClearDate"] && !$obj->clearDate)$obj->clearDate=TimeManager::getCurrentDateTime();
+	if($p["updateRewardDate"] && !$obj->rewardDate)$obj->rewardDate=TimeManager::getCurrentDateTime();
 	if($p["count"])$obj->count=$p["count"];
 
 	if($obj->save()){
@@ -4425,7 +4425,7 @@ function getgiftboxhistory($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$lastDay = TimeManager::get()->getDateTime(TimeManager::get()->getTime()-60*60*24*30);
+	$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
 	$where = "where memberID=".$memberID;
 	if($includeConfirm)$where = $where." and regDate>$lastDay order by regDate desc";
 	else $where = $where." and confirmDate='' and regDate>$lastDay order by regDate desc";
@@ -4473,7 +4473,7 @@ function updategiftboxhistory($p){
 
 	if(!$obj->isLoaded())return ResultState::makeReturn(2002,"dont find message");
 
-	if($p["updateConfirmDate"])$obj->confirmDate=TimeManager::get()->getCurrentDateTime();
+	if($p["updateConfirmDate"])$obj->confirmDate=TimeManager::getCurrentDateTime();
 
 	if($obj->save()){
 		$r["result"]=ResultState::successToArray();
@@ -4516,7 +4516,7 @@ function sendgiftboxhistory($p){
 	$gb->reward = $p["reward"];
 	$gb->data = $p["data"];
 	$gb->exchangeID = $p["exchangeID"];
-	$gb->regDate = TimeManager::get()->getCurrentDateTime();
+	$gb->regDate = TimeManager::getCurrentDateTime();
 
 	if($gb->save()){
 		$r["result"]=ResultState::successToArray();
@@ -4583,7 +4583,7 @@ function confirmgiftboxhistory($p){
 		CommitManager::get()->setSuccess($memberID,false);
 	}
 
-	$obj->confirmDate=TimeManager::get()->getCurrentDateTime();
+	$obj->confirmDate=TimeManager::getCurrentDateTime();
 
 	if($obj->save()){
 		CommitManager::get()->setSuccess($memberID,true);
@@ -4647,7 +4647,7 @@ function confirmallgiftboxhistory($p){
 		CommitManager::get()->setSuccess($memberID,false);
 	}
 
-	$obj->confirmDate=TimeManager::get()->getCurrentDateTime();
+	$obj->confirmDate=TimeManager::getCurrentDateTime();
 
 	if(CommitManager::get()->commit($memberID)){
 		$r["result"]=ResultState::successToArray();
@@ -4762,7 +4762,7 @@ function updatecharacterhistory($p){
 	$obj->memberID = $memberID;
 	$obj->characterNo = $characterNo;
 	if(!$obj->isLoaded()){
-		$obj->regDate = TimeManager::get()->getCurrentDateTime();
+		$obj->regDate = TimeManager::getCurrentDateTime();
 	}
 
 	if($p["level"])$obj->level = $p["level"];
@@ -4795,12 +4795,12 @@ function help_gettimeinfo(){
 
 function gettimeinfo($p){
 	//$r["test"]=$p["test"];
-	if($p["offset"])TimeManager::get()->setTimeOffset($p["offset"]);
-	$r["timestamp"]=TimeManager::get()->getTime();
-	$r["weekNo"]=TimeManager::get()->getCurrentWeekNo();
-	$r["weekday"]=TimeManager::get()->getCurrentWeekDayNo();
-	$r["date"]=TimeManager::get()->getCurrentDateTime();
-	$r["hour"]=TimeManager::get()->getCurrentHour();
+	if($p["offset"])TimeManager::setTimeOffset($p["offset"]);
+	$r["timestamp"]=TimeManager::getTime();
+	$r["weekNo"]=TimeManager::getCurrentWeekNo();
+	$r["weekday"]=TimeManager::getCurrentWeekDayNo();
+	$r["date"]=TimeManager::getCurrentDateTime();
+	$r["hour"]=TimeManager::getCurrentHour();
 	$r["result"]=ResultState::successToArray();
 	return $r;
 }
@@ -4831,7 +4831,7 @@ function gettodaymission($p){
 
 	$tMission = $user->TMInfo;
 	$tLevel = $user->TMLevel;
-	$todayDate = TimeManager::get()->getCurrentDate();
+	$todayDate = TimeManager::getCurrentDate();
 
 	if(!$tLevel)$tLevel=array(0,0,0,0,0,0,0,0,0,0);
 	if(!$tMission)$tMission=array();
@@ -4891,8 +4891,8 @@ function gettodaymission($p){
 	}
 
 	$r = $tMission;
-	$r["remainTime"]= TimeManager::get()->getRemainTimeForTodayMission(); //$r["resetTimestamp"] - TimeManager::get()->getTime();
-	$r["resetTimestamp"]=TimeManager::get()->getTime()+$r["remainTime"];
+	$r["remainTime"]= TimeManager::getRemainTimeForTodayMission(); //$r["resetTimestamp"] - TimeManager::getTime();
+	$r["resetTimestamp"]=TimeManager::getTime()+$r["remainTime"];
 	$r["isFirstCheck"]=$isFirstCheck;
 	$r["result"] = ResultState::successToArray();
 	return $r;
@@ -4920,7 +4920,7 @@ function updatetodaymission($p){
 	$memberID  = $p["memberID"];
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$todayDate = TimeManager::get()->getCurrentDate();
+	$todayDate = TimeManager::getCurrentDate();
 	if($todayDate != $p["date"]){
 		return ResultState::makeReturn(ResultState::GDSUCCESS,"date not same");
 	}
@@ -4967,8 +4967,8 @@ function updatetodaymission($p){
 
 	if(CommitManager::get()->commit($memberID)){
 		$r = $tMission;
-		$r["resetTimestamp"]=strtotime("24:00", TimeManager::get()->getTime()+60*60*5);
-		$r["remainTime"]= $r["resetTimestamp"] - TimeManager::get()->getTime();
+		$r["resetTimestamp"]=strtotime("24:00", TimeManager::getTime()+60*60*5);
+		$r["remainTime"]= $r["resetTimestamp"] - TimeManager::getTime();
 		if($checkFirst){
 			$r["isFirstCheck"]=true;
 			$r["rewardCount"]=$checkCount;
@@ -5107,9 +5107,9 @@ function checkloginevent($p){
 	CommitManager::get()->begin($memberID);
 	
 	$userData = UserData::create($memberID);
-	$todayDateTime = TimeManager::get()->getCurrentDateTime();
-	$todayDate = TimeManager::get()->getCurrentDate();
-	$nowTime = TimeManager::get()->getCurrentTime();
+	$todayDateTime = TimeManager::getCurrentDateTime();
+	$todayDate = TimeManager::getCurrentDate();
+	$nowTime = TimeManager::getCurrentTime();
 	$eventCheckData =& $userData->getRef("eventCheckData");
 	while($rData = LoginEvent::getRowByQuery("where startDate<$todayDateTime and endDate>$todayDateTime and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."')")){
 		$idx=-1;
@@ -5177,7 +5177,7 @@ function getendlessrank($p){
 	$memberID = $p["memberID"];
 	$start = $p["start"];
 	$limit = $p["limit"];
-	$weekNo = TimeManager::get()->getCurrentWeekNo();
+	$weekNo = TimeManager::getCurrentWeekNo();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
 	if(!$start)$start=1;
 	if(!$limit)$limit=50;
@@ -5196,7 +5196,7 @@ function getendlessrank($p){
 	$r["level"]=$myRank->level<=0?0:$myRank->level;
 	$r["alluser"]=$myRank->getAllUser();
 	$r["myrank"]=$myRank->getMyRank();
-	$r["remainTime"]=TimeManager::get()->getRemainTimeForWeeklyRank();
+	$r["remainTime"]=TimeManager::getRemainTimeForWeeklyRank();
 	$r["myInfo"]=$userData->endlessData;
 	if($r["myrank"]<=0){
 		$r["alluser"]+=1;
@@ -5238,7 +5238,7 @@ function help_getendlessrankinfo(){
 function getendlessrankinfo($p){
 
 	$memberID = $p["memberID"];
-	$weekNo = TimeManager::get()->getCurrentWeekNo();
+	$weekNo = TimeManager::getCurrentWeekNo();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
@@ -5291,7 +5291,7 @@ function setendlessrank($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$endlessRank = new EndlessRank($memberID,TimeManager::get()->getCurrentWeekNo());
+	$endlessRank = new EndlessRank($memberID,TimeManager::getCurrentWeekNo());
 
 	$endlessRank->memberID=$memberID;
 	$endlessRank->nick = $p["nick"];
@@ -5301,15 +5301,15 @@ function setendlessrank($p){
 	
 	if($endlessRank->score<$p["score"]){
 		$endlessRank->score = $p["score"];
-		$endlessRank->regDate = TimeManager::get()->getCurrentDateTime();
+		$endlessRank->regDate = TimeManager::getCurrentDateTime();
 	}
 
 	if($endlessRank->victory<$p["victory"]){
 		$endlessRank->victory = $p["victory"];
-		$endlessRank->regDate = TimeManager::get()->getCurrentDateTime();
+		$endlessRank->regDate = TimeManager::getCurrentDateTime();
 	}
 	
-	$endlessRank->regWeek = TimeManager::get()->getCurrentWeekNo();
+	$endlessRank->regWeek = TimeManager::getCurrentWeekNo();
 	
 	$userData = UserData::create($memberID);
 	
@@ -5359,15 +5359,15 @@ function finishendlessplay($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$endlessRank = new EndlessRank($memberID,TimeManager::get()->getCurrentWeekNo());
+	$endlessRank = new EndlessRank($memberID,TimeManager::getCurrentWeekNo());
 	$userData = UserData::create($memberID);
 	$endlessData =& $userData->getRef("endlessData");
 
 	//위크번호다르면 초기화~
-	if($endlessData["ing_week"]!=TimeManager::get()->getCurrentWeekNo()){
+	if($endlessData["ing_week"]!=TimeManager::getCurrentWeekNo()){
 		$endlessData["ing_score"]=0;
 		$endlessData["ing_win"]=0;
-		$endlessData["ing_week"]=TimeManager::get()->getCurrentWeekNo();
+		$endlessData["ing_week"]=TimeManager::getCurrentWeekNo();
 		$endlessData["ing_level"]=0;
 	}
 
@@ -5398,15 +5398,15 @@ function finishendlessplay($p){
 	if($endlessData["ing_score"]>$endlessRank->score)$endlessRank->score=$endlessData["ing_score"];
 	if($endlessData["ing_win"]>$endlessRank->victory)$endlessRank->victory=$endlessData["ing_win"];
 
-	$endlessRank->regDate = TimeManager::get()->getCurrentDateTime();
-	$endlessRank->regWeek = TimeManager::get()->getCurrentWeekNo();
+	$endlessRank->regDate = TimeManager::getCurrentDateTime();
+	$endlessRank->regWeek = TimeManager::getCurrentWeekNo();
 	
 	$r["sendGift"]=false;
 	//졌으면 끄읏
 	if(!$p["victory"]){
 		$endlessData["ing_win"]=0;
 		$endlessData["ing_score"]=0;
-		$endlessData["ing_week"]=TimeManager::get()->getCurrentWeekNo();
+		$endlessData["ing_week"]=TimeManager::getCurrentWeekNo();
 		$endlessData["lose"]+=1;
 		$endlessData["ing_level"]=0;
 	}else{
@@ -5518,11 +5518,11 @@ function startendlessplay($p){
 		$endlessData["ing_level"]=$p["autoLevel"];		
 	}
 
-	if($endlessData["ing_state"]==1 || $endlessData["ing_week"]!=TimeManager::get()->getCurrentWeekNo()){
+	if($endlessData["ing_state"]==1 || $endlessData["ing_week"]!=TimeManager::getCurrentWeekNo()){
 		$endlessData["ing_win"]=0;
 		$endlessData["lose"]+=1;
 		$endlessData["ing_score"]=0;
-		$endlessData["ing_week"]=TimeManager::get()->getCurrentWeekNo();
+		$endlessData["ing_week"]=TimeManager::getCurrentWeekNo();
 	}
 	
 	$endlessData["ing_state"]=1;
@@ -5627,7 +5627,7 @@ function saveendlessplaydata($p){
 	$endlessPlayList->victory = $p["victory"];
 	$endlessPlayList->playData = $p["playData"];
 	$endlessPlayList->pieceNo = $p["pieceNo"];
-	$endlessPlayList->regDate = TimeManager::get()->getCurrentDateTime();
+	$endlessPlayList->regDate = TimeManager::getCurrentDateTime();
 
 	if($endlessPlayList->save()){
 		LogManager::addLog("saveendlessplaydata ok");
@@ -5665,14 +5665,14 @@ function checkattendenceevent($p){
 	$r["sendGift"]=false;
 
 	//아래코드를 초기화하면 출첵이 계속 뜬다
-	if($userData->eventCheckDate==TimeManager::get()->getCurrentDate()){
+	if($userData->eventCheckDate==TimeManager::getCurrentDate()){
 		$r["result"]=ResultState::successToArray();
 		//$r["dayList"]=LoginEvent::getRewardDays();
 		return $r;
 	}
 
 	//1. 어제출석정보가 있는지. 없으면 출첵정보초기화
-	if($userData->eventCheckDate!=TimeManager::get()->getYesterDayDate()){
+	if($userData->eventCheckDate!=TimeManager::getYesterDayDate()){
 		$userData->eventCheckDate=0;
 		$userData->eventAtdNo=0;
 		$userData->eventAtdCount=0;
@@ -5709,7 +5709,7 @@ function checkattendenceevent($p){
 	$r["rewardList"]=$adtInfo->rewardList;
 	$r["dayList"]=LoginEvent::getRewardDays();
 	$userData->eventAtdCount++;
-	$userData->eventCheckDate=TimeManager::get()->getCurrentDate();
+	$userData->eventCheckDate=TimeManager::getCurrentDate();
 	if(!$userData->save()){
 		CommitManager::get()->setSuccess($memberID,false);
 	}
@@ -5761,7 +5761,7 @@ function usecupon($p){
 	$cuponInfo = new CuponManager($cuponCode->cuponNo);
 	
 	//유효기간검사
-	$today = TimeManager::get()->getCurrentDateTime();
+	$today = TimeManager::getCurrentDateTime();
 	if($cuponInfo->startDate>$today || $cuponInfo->endDate<$today){
 		return ResultState::makeReturn(ResultState::GDEXPIRE);	
 	}
@@ -5841,8 +5841,8 @@ function help_gettimeevent(){
 }
 
 function gettimeevent($p){
-	$nowDate = TimeManager::get()->getCurrentDateTime();
-	$nowtime = TimeManager::get()->getCurrentTime();
+	$nowDate = TimeManager::getCurrentDateTime();
+	$nowtime = TimeManager::getCurrentTime();
 	$eList = array();
 	while($rData = TimeEvent::getRowByQuery("where startDate<".$nowDate." and endDate>".$nowDate." and startTime<=".$nowtime." and endTime>=".$nowtime." and os IN ('all','".CurrentUserInfo::$os."') and cc IN ('all','".CurrentUserInfo::$country."')")){
 		$eList[]=$rData;
@@ -5878,7 +5878,7 @@ function getheart($p){
 	$use = $p["use"];
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$now = TimeManager::get()->getTimestampByUTC();
+	$now = TimeManager::getTimestampByUTC();
 	
 
 	$cooltime = new CommonSetting("heartCoolTime");

@@ -221,7 +221,7 @@ if($mode=="update"){
 		$message = new Message();
 		$message->memberID=$data["memberID"];
 		$message->content=$data["content"];
-		$message->regDate=TimeManager::get()->getCurrentDateTime();
+		$message->regDate=TimeManager::getCurrentDateTime();
 		$message->friendID=$data["friendID"];
 		$message->type=$data["type"];
 		$message->isSendMsg=$data["isSendMsg"];
