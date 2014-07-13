@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 
 error_reporting( E_ALL ^ E_NOTICE );
 ini_set( 'display_errors',  E_ALL ^ E_NOTICE );
@@ -502,6 +502,7 @@ function getCardMissile($boss,$stageLevel){
 function reloadPuzzleInfo(){
 
 
+	//CommitManager::get()->begin("main");
 	mysql_query("update ".DBManager::get()->getMT("piece")." set cards='',puzzle=0,pieceNo=0",DBManager::get()->getMainConnection());
 	mysql_query("update ".DBManager::get()->getMT("card")." set piece=0,grade=0",DBManager::get()->getMainConnection());
 
@@ -510,6 +511,20 @@ function reloadPuzzleInfo(){
 
 	//mysql_query("update aCardTable set ability='[]'",DBManager::get()->getMainConnection());
 
+	//퍼즐보상카드
+	$query = mysql_query("select * from ".DBManager::get()->getMT('puzzle'),DBManager::get()->getMainConnection());
+	while($pData = mysql_fetch_assoc($query)){
+		$clearReward = json_decode($pData["clearReward"],true);
+		if($clearReward["normal"]){
+			mysql_query("update ".DBManager::get()->getMT("card")." set category='nPuzzle' where no=".$clearReward["normal"],DBManager::get()->getMainConnection());
+		}
+
+		if($clearReward["perfect"]){
+			mysql_query("update ".DBManager::get()->getMT("card")." set category='nPuzzle' where no=".$clearReward["perfect"],DBManager::get()->getMainConnection());
+		}
+
+
+	}
 
 	$query = mysql_query("select * from ".DBManager::get()->getMT("piece")." where no<10000 order by no asc",DBManager::get()->getMainConnection());
 	LogManager::get()->addLog(mysql_error());
@@ -582,7 +597,7 @@ function reloadPuzzleInfo(){
 			$reward = $stageReward[$ci];
 			$grade = $ci+1;
 			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs1 = "update ".DBManager::get()->getMT("card")." set missile='".$sString."',reward=$reward,piece=".$stageData[no].",grade=$grade where no=".$cards[$ci]; //
+			$qs1 = "update ".DBManager::get()->getMT("card")." set missile='".$sString."',reward=$reward,piece=".$stageData[no].",grade=$grade,category='normal' where no=".$cards[$ci]; //
 			mysql_query($qs1,DBManager::get()->getMainConnection());
 			LogManager::get()->addLog("Q--->".$qs1);
 			LogManager::get()->addLog("--->".mysql_error());
@@ -611,6 +626,12 @@ function reloadPuzzleInfo(){
 			$puzzleCount=0;
 			$puzzleOrder++;
 		}
+
+		// if(CommitManager::get()->commit("main")){
+		// 	return true;
+		// }else{
+		// 	return false;
+		// }
 
 		//스테이지 쭉~~ 불러와서 카드정보, 퍼즐번호 업뎃.
 		//퍼즐의 스타트스테이지업뎃

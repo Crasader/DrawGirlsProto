@@ -1,10 +1,10 @@
 <?php
 
+include "lib.php";
 iconv_set_encoding("internal_encoding", "UTF-8");
 iconv_set_encoding("output_encoding", "UTF-8");
 
 
-include "lib.php";
 
 
 $nowurl = $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
@@ -45,8 +45,8 @@ if($mode){
     CurrentUserInfo::$language = $param["lang"];
     CurrentUserInfo::$memberID = $param["memberID"];
     CurrentUserInfo::$socialID = $param["socialID"];
-    CurrentUserInfo::$os = $param["os"];
     CurrentUserInfo::$country = $param["country"];
+    if($param["timezone"])CurrentUserInfo::$timezone = $param["timezone"];
 
 
     if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["hspMemberNo"];
@@ -87,7 +87,7 @@ if(!$stopCommand){
             }
 
             if(!($a=="login" || $a=="join") && CurrentUserInfo::$memberID && $checkUserdata==false){
-                $userdata = new UserData(CurrentUserInfo::$memberID);
+                $userdata = UserData::create($memberID);
                 LogManager::get()->addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
                 LogManager::get()->addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
 

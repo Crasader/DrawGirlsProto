@@ -1,6 +1,12 @@
 <?php
 include_once("../lib.php");
 
+$admin = new AdminUser($_SESSION["admin_no"]);
+if(!$admin->isLogined()){
+	echo "fail";
+	exit;
+}
+
 $left_menu = array();
 $left_menu[]=array("title"=>"","url"=>"");
 
@@ -74,7 +80,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 			<div class="col-lg-2"> <!--navbar-fixed-left-->
 				<div class="bs-sidebar hidden-print" role="complementary">
 					<center>
-		            	[<a href=manage_userInfo.php?gid=<?=$gid?>>운영툴</a>] [<a href=admin_help.php?gid=<?=$gid?>>관리툴</a>]
+		            	<!--[<a href=manage_userInfo.php?gid=<?=$gid?>>운영툴</a>] [<a href=admin_help.php?gid=<?=$gid?>>관리툴</a>]-->
 		        	</center>
 		        	<br>
 		            <ul class="nav bs-sidenav">
@@ -85,7 +91,9 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href="#glyphicons-examples">예제</a></li>
 							</ul>
 		            	</li -->
-
+						<?php
+							if($admin->checkPermission("readUser")){
+						?>
 		            	<li>유저관리
 							<ul class="nav">
 								<li><a href=manage_userInfo.php?gid=<?=$gid?>>userInfo<br>기본정보조회</a></li>
@@ -102,7 +110,11 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_userData.php?gid=<?=$gid?>>userdata<br>유저목록</a></li>
 							</ul>
 		            	</li>
+						<?php
+							}
 
+							if($admin->checkPermission("readEvent")){
+						?>
 		            	<li>이벤트
 							<ul class="nav">
 								<li><a href=manage_sendItem.php?gid=<?=$gid?>>sendItem<br>재화/아이템 정보변경</a></li>
@@ -114,15 +126,24 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_cuponCode.php?gid=<?=$gid?>>cuponCode<br>쿠폰코드</a></li>
 							</ul>
 						</li>
+						<?php
+							}
 
+							if($admin->checkPermission("readAdmin")){
+						?>
 		            	<li>미완성
 							<ul class="nav">
 								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>attendenceEvent<br>출석이벤트</a></li>
 								<li><a href=manage_balance.php?gid=<?=$gid?>>balance<br>벨런스</a></li>
 								<li><a href=manage_userPropertyHistory.php?gid=<?=$gid?>>userPropertyHistory<br>보관함히스토리</a></li>
 								<li><a href=manage_endlessPlayList.php?gid=<?=$gid?>>PVPPlayData<br>PVP플레이데이터</a></li>
+								<li><a href=admin_help.php?gid=<?=$gid?>>EditGame<br>관리툴</a></li>
+								<li><a href=manage_adminUser.php?gid=<?=$gid?>>adminUser<br>관리자목록</a></li>
 							</ul>
 						</li>
+						<?php
+							}
+						?>
 				  	</ul>
 				</div>
 			</div>

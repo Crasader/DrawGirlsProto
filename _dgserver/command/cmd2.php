@@ -162,7 +162,7 @@ function requestitemdelivery($p){
 			if(!$item->isLoaded())continue;
 		}
 		
-		$ppp["exchangeIDList"][] = $item->exchangeID; //array("type"=>$item->type,"count"=>$item->count,"statsID"=>"purchase","statsValue"=>"","content"=>"루비구매","isPurchase"=>true);
+		$ppp["exchangeIDList"][] = $item->exchangeID; //array("type"=>$item->type,"count"=>$item->count,"statsID"=>"purchase","statsValue"=>"","content"=>"젬구매","isPurchase"=>true);
 		$r["list"][]=$item->getArrayData();
 		$itemSeq[]=$result["data"]["deliveryResponse"]["itemDeliverySequences"][$i];
 	}
@@ -307,8 +307,8 @@ function getnoticelist($p){
 
 	$r = array();
 
-	LogManager::get()->addLog("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."') order by `order` asc");
-	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."') order by `order` asc")){
+	LogManager::get()->addLog("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') order by `order` asc");
+	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') and isPopup=1 order by `order` asc")){
 		$rData[imgInfo]=json_decode($rData[imgInfo],true);	
 		$r["list"][]=$rData;
 	}
@@ -1594,7 +1594,14 @@ function help_join(){
 function join($p){
 	$memberID = $p["memberID"];
 	$nick = $p["nick"];
+	$nick = iconv("EUC-KR", "UTF-8", iconv("UTF-8", "EUC-KR//TRANSLIT", $nick));
 	$nick = preg_replace("/\s+/", "", $nick);
+
+
+	if(preg_match("/[^a-z0-9A-Z一-龥ぁ-んァ-ヶ가-힣]+/iu",$nick)){
+		return ResultState::makeReturn(2009);
+	}
+
 	if(!$memberID)return ResultState::makeReturn(2002);
 	if(!$nick)return ResultState::makeReturn(2002);
 	if(!$p["flag"])$p["flag"]="kr";
@@ -1635,12 +1642,12 @@ function join($p){
 	// 	}
 	// }
 
-	//SELECT * FROM drawgirls.aFaultyNickTable where 'ㄱ' regexp `pattern`;
-	// while($rData = FaultyNick::getRowByQuery("where '".addslashes($nick)."' regexp `pattern` and isInclusionRule=1 limit 1")){
-	// 	if($rData){
-	// 		return ResultState::makeReturn(2009);
-	// 	}
-	// }
+	//SELECT * FROM drawgirls.aFaultyNickTable where 'ㄱ' regexp `pattern`; 
+	while($rData = FaultyNick::getRowByQuery("where '".addslashes($nick)."' regexp `nick` and isInclusionRule=1 limit 1")){
+		if($rData){
+			return ResultState::makeReturn(2009);
+		}
+	}
 
 	
 	//deviceID발급
@@ -1764,7 +1771,7 @@ function getuserdata($p){
 	$userindex = $p["userIndex"];
 	$keylist = $p["keyList"];
 	if($memberid){
-		$user = new UserData($memberid);
+		$user = UserData::create($memberid); //new UserData($memberid);
 		if($user->isLoaded()){
 			$r = $user->getArrayData(true,$keylist);
 			$r["state"]="ok";
@@ -2670,10 +2677,10 @@ function getweeklyrankbyalluser($p){
 	$myRank->memberID=$memberID;
 	$myRank->regWeek=$weekNo;
 
-	$lang=CurrentUserInfo::$language;
-	$rewardInfo = new CommonSetting("weeklyReward_$lang");
+	$cc=CurrentUserInfo::$country;
+	$rewardInfo = new CommonSetting("weeklyReward_$cc");
 	if(!$rewardInfo->isLoaded){
-		$rewardInfo = new CommonSetting("weeklyReward_en");
+		$rewardInfo = new CommonSetting("weeklyReward_kr");
 	}
 	$nrinfo=array();
 	foreach ($rewardInfo->value as $key => $value) {
@@ -2715,10 +2722,10 @@ function checkweeklyreward($p){
 	
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	
-	$lang=CurrentUserInfo::$language;
-	$rewardInfo = new CommonSetting("weeklyReward_$lang");
+	$cc=CurrentUserInfo::$country;
+	$rewardInfo = new CommonSetting("weeklyReward_$cc");
 	if(!$rewardInfo->isLoaded){
-		$rewardInfo = new CommonSetting("weeklyReward_en");
+		$rewardInfo = new CommonSetting("weeklyReward_kr");
 	}
 	$nrinfo=array();
 	foreach ($rewardInfo->value as $key => $value) {
@@ -3205,7 +3212,7 @@ function help_updatepuzzlehistory(){
 	$r["param"][] = array("name"=>"updateOpenDate","type"=>"bool","description"=>"true 일 경우 오픈시간을 현재시각으로 설정합니다.");
 	$r["param"][] = array("name"=>"updateClearDate","type"=>"bool","description"=>"true 일 경우 클리어시각을 현재시각으로 설정합니다.");
 	$r["param"][] = array("name"=>"updatePerfectDate","type"=>"bool","description"=>"true 일 경우 퍼펙트클리어시각을 현재시각으로 설정합니다.");
-	$r["param"][] = array("name"=>"openType","type"=>"string","description"=>"어떻게 오픈했는가(ex 무료, 이벤트, 구입-100루비)");
+	$r["param"][] = array("name"=>"openType","type"=>"string","description"=>"어떻게 오픈했는가(ex 무료, 이벤트, 구입-100젬)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID or puzzleNo");
@@ -3331,7 +3338,7 @@ function help_updatepiecehistory(){
 	$r["param"][] = array("name"=>"tryCount","type"=>"int","description"=>"총 시도횟수변경");
 	$r["param"][] = array("name"=>"clearCount","type"=>"int","description"=>"성공했을때까지의 시도횟수변경");
 	$r["param"][] = array("name"=>"clearDateList","type"=>"array(1등급bool,2등급bool,3등급bool,4등급bool)","description"=>"등급클리어정보업데이트");
-	$r["param"][] = array("name"=>"openType","type"=>"string","description"=>"어떻게 오픈했는가(ex 이전피스클리어 or 5루비구입");
+	$r["param"][] = array("name"=>"openType","type"=>"string","description"=>"어떻게 오픈했는가(ex 이전피스클리어 or 5젬구입");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID or pieceNo");
@@ -3456,11 +3463,14 @@ function help_updatecardhistory(){
 	$r["param"][] = array("name"=>"comment","type"=>"string","description"=>"코멘트");
 	$r["param"][] = array("name"=>"updateTakeDate","type"=>"bool","description"=>"true 일 경우 획득시각을 현재시각으로 설정합니다.");
 	$r["param"][] = array("name"=>"isMorphing","type"=>"bool","description"=>"모핑가능함?");
+	$r["param"][] = array("name"=>"addCount","type"=>"bool","description"=>"더할갯수");
+	$r["param"][] = array("name"=>"level","type"=>"bool","description"=>"레벨");
 	
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID or cardNo");
 	$r["result"][]=ResultState::toArray(2014,"Dont save");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"Dont find");
 	
 	return $r;
 }
@@ -3470,17 +3480,39 @@ function updatecardhistory($p){
 	
 	$memberID=$p["memberID"];
 	$cardNo=$p["cardNo"];
+	$addCount = $p["addCount"];
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	if(!$cardNo)return ResultState::makeReturn(2002,"cardNo");
 	
+	$cardInfo = new Card($cardNo);
+	if(!$cardInfo->isLoaded()){
+		return ResultState::makeReturn(ResultState::GDDONTFIND);
+	}
+
 	//보내기
 	$obj = new CardHistory($memberID,$cardNo);
 	$obj->memberID = $memberID;
 	$obj->cardNo = $cardNo;
+	
+	if(!$obj->isLoaded()){
+		$obj->level = $cardInfo->level;
+	}
+
+	if($addCount){
+		if(!$obj->isLoaded())$obj->count=$addCount;
+		else $obj->count+=$addCount;
+
+		if($obj->count<=0){
+			return ResultState::makeReturn(ResultState::GDPROPERTYISMINUS);
+		}
+	}
+
 	if($p["updateTakeDate"] || !$obj->isLoaded())$obj->takeDate=TimeManager::get()->getCurrentDateTime();
 	if($p["comment"])$obj->comment=addslashes($p["comment"]);
 	if($p["isMorphing"])$obj->isMorphing=$p["isMorphing"];
+	
+	if($p["level"] && $cardInfo->category!='leader')$obj->level = $p["level"];
 
 	LogManager::get()->addLog($obj->comment);
 	LogManager::get()->addLog($obj->getArrayData(true));
@@ -3679,7 +3711,7 @@ function help_changeuserproperties(){
 *type
 m(실제돈)
 g (골드)
-r (루비)
+r (젬)
 h (하트)
 i6 (스피드업)
 i8 (아이템두배)
@@ -3689,6 +3721,13 @@ p2 (맵가챠 이용권)
 p3 (업그레이드 이용권)
 p4 (아이템뽑기 이용권)
 p5 (99프로 이용권)
+p6 생명의돌
+cd 카드획득
+cdm 카드소멸
+pc 피스획득
+pz 퍼즐획득
+cu 캐릭업글
+cp 캐릭터획득
 
 *statsID / statsValue
 stage / 스테이지번호
@@ -3717,7 +3756,7 @@ function changeuserproperties($p){
 	foreach ($list as $key => $value) {
 		$param=array();
 
-		//루비인경우 특수처리
+		//젬인경우 특수처리
 		if(!$value["type"] || $value["count"]==0){
 			continue;
 		}else if($value["type"]=="r"){
@@ -3762,7 +3801,7 @@ function changeuserproperties($p){
 					$minusPropertyValue = $userStorage->fr+$userStorage->pr;
 					CommitManager::get()->setSuccess($memberID,false);
 				}else{
-					//무료루비가 충분하다면 무료루비만 사용
+					//무료젬가 충분하다면 무료젬만 사용
 					if($value["count"]+$userStorage->fr>=0){
 						$userStorage->fr = $userStorage->fr+$value["count"]; 
 
@@ -3779,7 +3818,7 @@ function changeuserproperties($p){
 						$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
 						CommitManager::get()->setSuccess($memberID,$userHistory->save());
 
-					//무료루비가 부족하면 뮤료루비=0, 남은건 유료루비에서 차감
+					//무료젬가 부족하면 뮤료젬=0, 남은건 유료젬에서 차감
 					}else{
 						if($userStorage->fr>0){
 							$userHistory1 = new UserPropertyHistory($memberID);
@@ -3829,6 +3868,15 @@ function changeuserproperties($p){
 			$ucp["memberID"]=$memberID;
 			$ucp["cardNo"]=$value["count"];
 			$ucp["updateTakeDate"]=true;
+			$ucp["addCount"]=1;
+			$result = $this->updatecardhistory($ucp);
+			$rs[]=array("type"=>$value["type"],"result"=>$result);
+		//피스획득
+		}else if($value["type"]=="cdm"){
+			$ucp["memberID"]=$memberID;
+			$ucp["cardNo"]=$value["count"];
+			$ucp["updateTakeDate"]=true;
+			$ucp["addCount"]=-1;
 			$result = $this->updatecardhistory($ucp);
 			$rs[]=array("type"=>$value["type"],"result"=>$result);
 		//피스획득
@@ -3872,7 +3920,7 @@ function changeuserproperties($p){
 			if($userStorage->{$pType}<0){
 				$r["result"]=ResultState::toArray(2015);
 				$minusProperty=$pType;
-				$minusPropertyValue = $userStorage->{$pType};
+				$minusPropertyValue = $userStorage->{$pType}-$value["count"]; ;
 				CommitManager::get()->setSuccess($memberID,false);
 			}else{
 				$param["memberID"]=$memberID;
@@ -3937,7 +3985,7 @@ function changeuserproperties($p){
 	foreach ($list as $key => $value) {
 		$param=array();
 
-		//루비인경우 특수처리
+		//젬인경우 특수처리
 		if(!$value["type"] || $value["count"]==0){
 			continue;
 		}else if($value["type"]=="r"){
@@ -3981,7 +4029,7 @@ function changeuserproperties($p){
 					$minusPropertyValue = $fRuby->count+$pRuby->count;
 					CommitManager::get()->setSuccess($memberID,false);
 				}else{
-					//무료루비가 충분하다면 무료루비만 사용
+					//무료젬가 충분하다면 무료젬만 사용
 					if($value["count"]+$fRuby->count>=0){
 						$fRuby->count = $fRuby->count+$value["count"]; 
 
@@ -3997,7 +4045,7 @@ function changeuserproperties($p){
 						$userHistory->regDate = TimeManager::get()->getCurrentDateTime();
 						CommitManager::get()->setSuccess($memberID,($userHistory->save() && $fRuby->save()));
 
-					//무료루비가 부족하면 뮤료루비=0, 남은건 유료루비에서 차감
+					//무료젬가 부족하면 뮤료젬=0, 남은건 유료젬에서 차감
 					}else{
 						{
 							$userHistory1 = new UserPropertyHistory($memberID);
@@ -4668,12 +4716,9 @@ function getcharacterhistory($p){
 	$where = "where memberID=".$memberID;
 	$dataList = array();
     while($rData = CharacterHistory::getRowByQuery($where)){
-    	$rData["nextPrice"]=$rData["level"]*1000;
-    	$rData["power"]=$rData["level"]*10;
-    	$rData["nextPower"]=($rData["level"]+1)*10;
-    	$rData["prevPower"]=($rData["level"]-1)*10;
-    	$rData["isMaxLevel"]=false;
-    	if($rData["level"]>=30)$rData["isMaxLevel"]=true;
+
+		$powerInfo = Character::getPowerInfo($rData["level"]);
+		$rData=array_merge($rData,$powerInfo);
 
     	$dataList[]=$rData;
     }
@@ -4727,13 +4772,8 @@ function updatecharacterhistory($p){
 	$r=array();
 	if($obj->save()){
 		$r = $obj->getArrayData(true);
-		$r["nextPrice"]=$obj->level*1000;
-    	$r["power"]=$obj->level*15;
-    	$r["nextPower"]=($obj->level+1)*15;
-    	$r["prevPower"]=($obj->level-1)*15;
-    	$r["isMaxLevel"]=false;
-    	if($r["level"]>=30)$r["isMaxLevel"]=true;
-
+		$powerInfo = Character::getPowerInfo($obj->level);
+		$r=array_merge($r,$powerInfo);
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(2014,"dont save");
@@ -4741,7 +4781,6 @@ function updatecharacterhistory($p){
 	
 	return $r;
 }
-
 
 function help_gettimeinfo(){
 
@@ -4797,7 +4836,8 @@ function gettodaymission($p){
 	if(!$tLevel)$tLevel=array(0,0,0,0,0,0,0,0,0,0);
 	if(!$tMission)$tMission=array();
 	
-
+	$myComon = new CommonSetting("todayMissionReward");
+	$tmReward =& $myComon->getRef("value");
 	$isFirstCheck = false;
 	//데이트비교해서 이전 미션이 남아있으면 1.완료하지 못한미션일경우 해당 타입 오토벨런싱 -1 시킴. 그리고 데이터 리셋, 투데이미션 재발급
 	if($tMission["date"]!=$todayDate){
@@ -4815,11 +4855,11 @@ function gettodaymission($p){
 
 		$rewardRnd = rand(1,100);
 
-		if($rewardRnd>95)$tMission["reward"]=array(array("type"=>"p1","count"=>1,"exchangeID"=>"tm_1"));		//이어하기권
-		else if($rewardRnd>85)$tMission["reward"]=array(array("type"=>"p3","count"=>1,"exchangeID"=>"tm_3")); //업그레이드
-		else if($rewardRnd>70)$tMission["reward"]=array(array("type"=>"p5","count"=>1,"exchangeID"=>"tm_5")); //99가챠
-		else if($rewardRnd>40)$tMission["reward"]=array(array("type"=>"p4","count"=>1,"exchangeID"=>"tm_4")); //뽑기
-		else $tMission["reward"]=array(array("type"=>"p2","count"=>1,"exchangeID"=>"tm_2"));					//맵가챠
+		if($rewardRnd>95)$tMission["rewardInfo"]=$tmReward[0];		//이어하기권
+		else if($rewardRnd>85)$tMission["rewardInfo"]=$tmReward[1]; //업그레이드
+		else if($rewardRnd>70)$tMission["rewardInfo"]=$tmReward[2]; //99가챠
+		else if($rewardRnd>40)$tMission["rewardInfo"]=$tmReward[3]; //뽑기
+		else $tMission["rewardInfo"]=$tmReward[4];					//맵가챠
 		
 
 		if($tMission["type"]==1){
@@ -4851,8 +4891,8 @@ function gettodaymission($p){
 	}
 
 	$r = $tMission;
-	$r["resetTimestamp"]=strtotime("24:00", TimeManager::get()->getTime()+60*60*5);
-	$r["remainTime"]= $r["resetTimestamp"] - TimeManager::get()->getTime();
+	$r["remainTime"]= TimeManager::get()->getRemainTimeForTodayMission(); //$r["resetTimestamp"] - TimeManager::get()->getTime();
+	$r["resetTimestamp"]=TimeManager::get()->getTime()+$r["remainTime"];
 	$r["isFirstCheck"]=$isFirstCheck;
 	$r["result"] = ResultState::successToArray();
 	return $r;
@@ -4913,8 +4953,8 @@ function updatetodaymission($p){
 		$param["memberID"]=$memberID;
 		$param["sender"]="TodayMission";
 		$param["content"]="오늘의미션보상";
-		$param["exchangeID"]=$tMission["reward"][0]["exchangeID"];
-		$param["reward"]=$tMission["reward"];
+		$param["exchangeID"]=$tMission["rewardInfo"]["exchangeID"];
+		$param["reward"]=$tMission["rewardInfo"]["reward"];
 		$sR = $this->sendgiftboxhistory($param);
 		if(!ResultState::successCheck($sR["result"])){
 			CommitManager::get()->setSuccess($memberID,false);
@@ -5071,7 +5111,7 @@ function checkloginevent($p){
 	$todayDate = TimeManager::get()->getCurrentDate();
 	$nowTime = TimeManager::get()->getCurrentTime();
 	$eventCheckData =& $userData->getRef("eventCheckData");
-	while($rData = LoginEvent::getRowByQuery("where startDate<$todayDateTime and endDate>$todayDateTime and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."')")){
+	while($rData = LoginEvent::getRowByQuery("where startDate<$todayDateTime and endDate>$todayDateTime and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."')")){
 		$idx=-1;
 		for($i=0;$i<count($eventCheckData);$i++){
 			if($eventCheckData[$i]["no"]==$rData["no"]){
@@ -5165,10 +5205,10 @@ function getendlessrank($p){
 	$r["state"]="ok";
 	$r["result"]=ResultState::successToArray();
 
-	$lang=CurrentUserInfo::$language;
-	$rewardInfo = new CommonSetting("weeklyReward_$lang");
+	$cc=CurrentUserInfo::$country;
+	$rewardInfo = new CommonSetting("weeklyReward_$cc");
 	if(!$rewardInfo->isLoaded){
-		$rewardInfo = new CommonSetting("weeklyReward_en");
+		$rewardInfo = new CommonSetting("weeklyReward_kr");
 	}
 	$nrinfo=array();
 	foreach ($rewardInfo->value as $key => $value) {
@@ -5454,10 +5494,10 @@ function getendlessplaydata($p){
 
 function help_startendlessplay(){
 
-	$r["description"] = "무한모드상대와 스테이지정보를 불러오고 내상태를 플레이상태로 변경합니다.";
+	$r["description"] = "무한모드 시작상태로 내상태를 변경합니다.";
 
 	$r["param"][] = array("name"=>"memberID","type"=>"int or string","description"=>"memberID");
-	$r["param"][] = array("name"=>"autoLevel","type"=>"int","description"=>"autoLevel");
+	$r["param"][] = array("name"=>"autoLevel","type"=>"int","description"=>"autoLevel(userdata의 autoLevel)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(ResultState::GDDONTSAVE,"저장오류");
@@ -5487,17 +5527,51 @@ function startendlessplay($p){
 	
 	$endlessData["ing_state"]=1;
 
+
+	$r["endlessData"]=$endlessData;
+	if($userInfo->save()){
+		$r["result"]=ResultState::successToArray();		
+	}else{
+		return ResultState::makeReturn(ResultState::GDDONTSAVE);
+	}
+
+	return $r;
+
+}
+
+function help_getendlessplayriver(){
+
+	$r["description"] = "무한모드상대와 스테이지정보를 불러옵니다.";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"int or string","description"=>"memberID");
+	$r["param"][] = array("name"=>"autoLevel","type"=>"int","description"=>"autoLevel(userdata의 autoLevel)");
+	$r["param"][] = array("name"=>"highPiece","type"=>"int","description"=>"최고진입스테이지(userdata의 highPiece)");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTSAVE,"저장오류");
+	$r["result"][]=ResultState::toArray(2002,"memberID");
+
+	return $r;
+}
+
+function getendlessplayriver($p){
+	$memberID=$p["memberID"];
+	$ingLevel = $p["autoLevel"];
+	$maxStage = $p["highPiece"];
+
 	$endlessPlayList = new EndlessPlayList();
 
-	$rival = $endlessPlayList->getPlayDataByRandom($endlessData["ing_level"]);
-	$rival2 = $endlessPlayList->getPlayDataByRandom($endlessData["ing_level"],3,"nick,flag,victory,autoLevel,level,score");
+	if(!$ingLevel)$ingLevel=1;
+
+	$rival2 = $endlessPlayList->getPlayDataByRandom($memberID,$ingLevel,3);
 	
+	$r["rival"] = $rival2[0];
+	unset($rival2[0]["playData"]);
 	$r["dummy"] = $rival2;
-	$r["rival"] = $rival[0];
 	
 	$sp["no"]=$rival["pieceNo"];
 
-	if(!$sp["no"])$sp["no"]=rand(1,25);
+	if(!$sp["no"])$sp["no"]=rand(1,$maxStage);
 
 	$r["stageInfo"]=$this->getpieceinfo($sp);
 	$r["stageInfo"]["realNo"]=$r["stageInfo"]["no"];
@@ -5512,16 +5586,8 @@ function startendlessplay($p){
 		$r["stageInfo"]["cards"][$i]["grade"]=$i+1;
 	}
 		
-
-	$r["endlessData"]=$endlessData;
-	if($userInfo->save()){
-		$r["result"]=ResultState::successToArray();		
-	}else{
-		return ResultState::makeReturn(ResultState::GDDONTSAVE);
-	}
-
+	$r["result"]=ResultState::successToArray();		
 	return $r;
-
 }
 
 
@@ -5598,6 +5664,7 @@ function checkattendenceevent($p){
 	
 	$r["sendGift"]=false;
 
+	//아래코드를 초기화하면 출첵이 계속 뜬다
 	if($userData->eventCheckDate==TimeManager::get()->getCurrentDate()){
 		$r["result"]=ResultState::successToArray();
 		//$r["dayList"]=LoginEvent::getRewardDays();
@@ -5777,7 +5844,7 @@ function gettimeevent($p){
 	$nowDate = TimeManager::get()->getCurrentDateTime();
 	$nowtime = TimeManager::get()->getCurrentTime();
 	$eList = array();
-	while($rData = TimeEvent::getRowByQuery("where startDate<".$nowDate." and endDate>".$nowDate." and startTime<=".$nowtime." and endTime>=".$nowtime." and os IN ('all','".CurrentUserInfo::$os."') and language IN ('all','".CurrentUserInfo::$language."')")){
+	while($rData = TimeEvent::getRowByQuery("where startDate<".$nowDate." and endDate>".$nowDate." and startTime<=".$nowtime." and endTime>=".$nowtime." and os IN ('all','".CurrentUserInfo::$os."') and cc IN ('all','".CurrentUserInfo::$country."')")){
 		$eList[]=$rData;
 	}
 
@@ -5811,7 +5878,7 @@ function getheart($p){
 	$use = $p["use"];
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$now = TimeManager::get()->getTime();
+	$now = TimeManager::get()->getTimestampByUTC();
 	
 
 	$cooltime = new CommonSetting("heartCoolTime");
@@ -5821,9 +5888,11 @@ function getheart($p){
 	CommitManager::get()->begin($memberID);
 	$userInfo = new UserData($memberID);
 	$userStorage = new UserStorage($memberID);
+	$r["heart"] = $userStorage->h; 
 	if(!$userInfo->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);
-	if($userStorage->h>$heartMax->value){
+	if($userStorage->h>=$heartMax->value){
 		$userInfo->lastHeartTime=$now;
+
 		if($use){
 			///////////////////////////////////////////////////////여기서 exchange useHeart
 			$ep["memberID"]=$memberID;
@@ -5836,7 +5905,7 @@ function getheart($p){
 				$r = ResultState::makeReturn(ResultState::GDEXPIRE);
 				$r["leftTime"]=$cooltime->value-$m;
 				$r["max"]=$heartMax->value;
-				$r["heart"]=$userStorage->h;
+				$r["heart"]=0;
 				$r["exchangeResult"]=$er;
 				return $r;
 			}
@@ -5864,39 +5933,50 @@ function getheart($p){
 
 			// $userStorage->h += $nHeart;
 			if($userStorage->h+$nHeart>$heartMax->value)$nHeart=$heartMax->value-$userStorage->h;
-
+			if($use)$nHeart-=1;
 			$ep["memberID"]=$memberID;
 			$ep["exchangeID"]="getHeart";
 			$ep["list"][]=array("type"=>"h","count"=>$nHeart);
 			$er=$this->exchange($ep);
 			CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
 			$r["heart"] = $er["list"][0]["count"];
-			///////////////////////////////////////////////////////여기서 exchange getHeart
-			if($use){
-				$ep["memberID"]=$memberID;
-				$ep["exchangeID"]="useHeart";
-				unset($ep["list"]);
-				$er=$this->exchange($ep);
-				CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
-
-				if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
-					CommitManager::get()->rollback($memberID);
-					$r = ResultState::makeReturn(ResultState::GDEXPIRE);
-					$r["leftTime"]=$cooltime->value-$m;
-					$r["max"]=$heartMax->value;
-					$r["heart"]=$userStorage->h;
-					$r["exchangeResult"]=$er;
-					return $r;
-				}
+			
+			if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
+				CommitManager::get()->rollback($memberID);
+				$r = ResultState::makeReturn(ResultState::GDEXPIRE);
+				$r["leftTime"]=$cooltime->value-$m;
+				$r["max"]=$heartMax->value;
+				$r["heart"]=0;
 				$r["exchangeResult"]=$er;
-				$r["heart"] = $er["list"][0]["count"];
-				// $userStorage->h-=1;
-				// if($userStorage->h<0){
-				// 	///////////////////////////////////////////////////////여기서 exchange useHeart
-				// 	CommitManager::get()->commit($memberID);
-				// 	return ResultState::makeReturn(ResultState::GDEXPIRE);
-				// }
+				return $r;
 			}
+
+			///////////////////////////////////////////////////////여기서 exchange getHeart
+			// if($use){
+			// 	$ep["memberID"]=$memberID;
+			// 	$ep["exchangeID"]="useHeart";
+			// 	unset($ep["list"]);
+			// 	$er=$this->exchange($ep);
+			// 	CommitManager::get()->setSuccess($memberID,ResultState::successCheck($er["result"]));
+
+			// 	if($er["result"]["code"]==ResultState::GDPROPERTYISMINUS){
+			// 		CommitManager::get()->rollback($memberID);
+			// 		$r = ResultState::makeReturn(ResultState::GDEXPIRE);
+			// 		$r["leftTime"]=$cooltime->value-$m;
+			// 		$r["max"]=$heartMax->value;
+			// 		$r["heart"]=0;
+			// 		$r["exchangeResult"]=$er;
+			// 		return $r;
+			// 	}
+			// 	$r["exchangeResult"]=$er;
+			// 	$r["heart"] = $er["list"][0]["count"];
+			// 	// $userStorage->h-=1;
+			// 	// if($userStorage->h<0){
+			// 	// 	///////////////////////////////////////////////////////여기서 exchange useHeart
+			// 	// 	CommitManager::get()->commit($memberID);
+			// 	// 	return ResultState::makeReturn(ResultState::GDEXPIRE);
+			// 	// }
+			// }
 			CommitManager::get()->setSuccess($memberID,$userInfo->save());
 			//CommitManager::get()->setSuccess($memberID,$userStorage->save());
 			$r["leftTime"]=$cooltime->value-$m;
@@ -5905,8 +5985,7 @@ function getheart($p){
 		}
 	}
 	$r["max"]=$heartMax->value;
-	if(!$r["heart"])$r["heart"] = $userStorage->h;
-
+	
 	if(CommitManager::get()->commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 	}else{

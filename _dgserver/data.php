@@ -1,10 +1,10 @@
 <?php
 
+include "lib.php";
 iconv_set_encoding("internal_encoding", "UTF-8");
 iconv_set_encoding("output_encoding", "UTF-8");
 
 
-include "lib.php";
 
 
 $nowurl = $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
@@ -44,9 +44,10 @@ if($mode){
 	
 }
 
+include "command/cmd2.php";
 
-if($version)include "command/cmd".$version.".php";
-else include "command/cmd1.php";
+// if($version)include "command/cmd".$version.".php";
+// else include "command/cmd1.php";
 
 
 if(!$stopCommand){

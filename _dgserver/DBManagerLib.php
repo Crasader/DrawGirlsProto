@@ -6,6 +6,7 @@ class CurrentUserInfo{
 	static public $memberID;
 	static public $socialID;
 	static public $country="kr";
+	static public $timezone="Asia/Seoul";
 
 	static public function getLocalizedValueInData($data){
 		return $data[CurrentUserInfo::$language]?$data[CurrentUserInfo::$language]:$data["en"];	
@@ -34,31 +35,43 @@ class DataTableUtil{
 class TimeManager{
 	public $m_timeOffset=32400;
 	private static $m_instance=NULL;
+	public $m_nowDate = NULL;
 	//싱글턴 얻어오기
 	public static function get()
 	{
 	    if ( is_null( self::$m_instance ) )
 	    {
 	      self::$m_instance = new self();
+
 	    }
 	    return self::$m_instance;
 	}
 	
-	public function setTimeOffsetByLanguage($lang){
-		if($lnag=="kr")$this->m_timeOffset = 32400;
-		else $this->m_timeOffset = 0;
-	}
-	public function setTimeOffset($offset){
-		$this->m_timeOffset = $offset;
-	}
-	
-	public function getTimeOffset(){
-		return $this->m_timeOffset;
-	}
-	public function getTime(){
-		return time()+$this->m_timeOffset;
+	public function __construct(){
+		if(!CurrentUserInfo::$timezone)CurrentUserInfo::$timezone="Asia/Seoul";
+		$this->m_nowDate = new DateTime("now",new DateTimeZone(CurrentUserInfo::$timezone));
 	}
 
+	// public function setTimeOffsetByLanguage($lang){
+	// 	if($lnag=="kr")$this->m_timeOffset = 32400;
+	// 	else $this->m_timeOffset = 0;
+	// }
+
+	// public function setTimeOffset($offset){
+	// 	$this->m_timeOffset = $offset;
+	// }
+	
+	// public function getTimeOffset(){
+	// 	return $this->m_timeOffset;
+	// }
+	public function getTime(){
+		return $this->m_nowDate->getTimestamp();
+		//return time()+$this->m_timeOffset;
+	}
+
+	public function getTimestampByUTC(){
+		return time();
+	}
 	static public function getMicroTime() 
 	{ 
 	  list($usec, $sec) = explode(" ", microtime()); 
@@ -66,19 +79,42 @@ class TimeManager{
 	} 
 	
 	public function getCurrentWeekNo(){
-		return $this->getWeekNo($this->getTime());
+		$y  = $this->m_nowDate->format("Y");
+		$w  = $this->m_nowDate->format("W");
+		if($w<10)$w="0".$w;
+
+		return $y.$w;
+
+		//return $this->getWeekNo($this->getTime());
 	}
 	
-	public function getWeekNo($time){
-		$y = date("Y",$time);
-		$w = date("W",$time);
-		if($w<10)$w="0".$w;
+	// public function getWeekNo($time){
+	// 	$y = date("Y",$time);
+	// 	$w = date("W",$time);
+	// 	if($w<10)$w="0".$w;
 		
-		return $y.$w;
-	}
+	// 	return $y.$w;
+	// }
 
 	public function getRemainTimeForWeeklyRank(){
-		return strtotime("next Sunday")-time();
+		//return strtotime("next Sunday")-time();
+		$sunDay = strtotime("next Sunday",$this->m_nowDate->getTimestamp());
+		$nextday = new DateTime(date("Y-m-d h:i:s",$sunDay),$this->m_nowDate->getTimezone());
+		$nextday->setTime(5,0,0);
+		
+		$subDay = $nextday->diff($this->m_nowDate);
+
+		return ($subDay->d*24*60*60+$subDay->h*60*60+$subDay->i*60+$subDay->s);
+	}
+
+	public function getRemainTimeForTodayMission(){
+
+		$nextday = new DateTime("tomorrow",$this->m_nowDate->getTimezone());
+		$nextday->setTime(5,0,0);
+		$subDay = $nextday->diff($this->m_nowDate);
+
+		
+		return ($subDay->h*60*60+$subDay->i*60+$subDay->s);
 	}
 
 	// public function getWeekNo($timestamp){
@@ -485,6 +521,7 @@ class DBManager{
 		self::$m_mainTables["attendenceevent"]="aAttendenceEventTable";
 		self::$m_mainTables["loginevent"]="aLoginEventTable";
 		self::$m_mainTables["exchange"]="aExchangeManager";
+		self::$m_mainTables["adminuser"]="aAdminUser";
 	}
 	static public function setStaticInfo($p){
 		self::$m_gameID = $p["gameID"];
@@ -1315,7 +1352,7 @@ class DBTable{
 					foreach ($orderInfo as $key => $value) {
 						if($value=="desc")$orderType="desc";
 						else $orderType="asc";
-						$orderStr.=" ".$key." ".$orderType;
+						$orderStr.=" `".$key."` ".$orderType;
 
 						if($orderCnt!=$cc)$orderStr.=",";
 						$cc++;
@@ -1406,8 +1443,8 @@ class DBTable{
 		if(!$this->getDBInfo()){
 			if($this->isMainDBClass()){
 				$this->setDBInfo(DBManager::get()->getMainDBInfo());
-			}else if($shardIndex){
-				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+			}else if($param["shardIndex"]){
+				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($param["shardIndex"]));
 			}else{
 				$userIndex = UserIndex::create($param["data"]["memberID"]);
 				$this->setDBInfo($userIndex->getShardDBInfo());
@@ -1441,7 +1478,7 @@ class DBTable{
 			$r["data"] = $this->getArrayData(true);
 			$func = $this->m__LQTableSelectCustomFunction;
 			if($func)$r["data"]=$func($r["data"]);
-			$r["shardIndex"]=$shardIndex;
+			$r["shardIndex"]=$param["shardIndex"];
 			$r["result"]=ResultState::successToArray();
 			return $r;
 		}

@@ -248,6 +248,9 @@ class UserLog extends DBTable{
 		// });
 		
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			if($param["where"]["category"]){
+				return "where category = '".$param["where"]["category"]."'";
+			}
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
@@ -498,8 +501,39 @@ class UserData extends DBTable{
 	// public $m_deviceID=null;
 	// public $m_friendList=null;
 	public $m__userIndex=null;
+	public static $sharedUserDatas=array();
 	// static public $m__queryResult = null;
 	// static public $m__queryCnt = 0;
+
+	public static function create($memberID=null,$socialID=null,$nick=null){
+		
+		LogManager::get()->addLog("create userData");
+		if($memberID && self::$sharedUserDatas[$memberID]){
+			LogManager::get()->addLog("finded userData in sharedUserDatas ".$memberID);
+			return self::$sharedUserDatas[$memberID];
+		}
+
+
+		LogManager::get()->addLog("new userData, memberID is ".$memberID." and userIndex is ");
+		$newUserData =new UserData($memberID,$socialID,$nick);
+
+		if($newUserData->isLoaded()){
+			LogManager::get()->addLog("useindex load success no is".$newUserData->no);
+			self::$sharedUserDatas[$newUserData->memberID]=$newUserData;
+		}else{
+			LogManager::get()->addLog("userindex load fail it's new obj is ".json_encode($newUserData->getArrayData(true)));
+			
+			// if(!$memberID){
+			// 	return null;
+			// }
+			//$test = get_class_vars(get_class($newIndex));
+			//LogManager::get()->addLog("userindex load fuck!!".json_encode($test));
+		}	
+		return $newUserData;
+	}
+
+
+
 	public function __construct($memberID=null,$socialID=null,$nick=null){
 		parent::__construct();
 		
@@ -540,6 +574,7 @@ class UserData extends DBTable{
 		$r["head"][]=array("manage"=>"update delete insert");
 		return $r;
 	}
+
 	public function save($isIncludePrimaryKey=false){
 		//마지막접속시간
 		LogManager::get()->addLog("userdata save!!!!!!");
@@ -1267,14 +1302,56 @@ class Card extends DBTable{
 	}
 
 	public function updateWithLQTable($p){
-		$r = parent::updateWithLQTable($p);
+		CommitManager::get()->begin("main");
+		
+		if($p["data"]["piece"]){
+			$piece = new Piece($p["data"]["piece"]);
+			$piece->version+=1;
+			CommitManager::get()->setSuccess("main",$piece->save());
 
-		return $r;
+			if($piece->puzzle){
+				$puzzle = new Puzzle($piece->puzzle);
+				$puzzle->version+=1;
+				kvManager::increase("puzzleListVer");
+				CommitManager::get()->setSuccess("main",$puzzle->save());
+			}
+		}
+
+		$r = parent::updateWithLQTable($p);
+		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+
+		if(CommitManager::get()->commit("main")){
+			return $r;
+		}else{
+			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
+		}
+
 	}
 
 	public function insertWithLQTable($p){
+		CommitManager::get()->begin("main");
+		
+		if($p["data"]["piece"]){
+			$piece = new Piece($p["data"]["piece"]);
+			$piece->version+=1;
+			CommitManager::get()->setSuccess("main",$piece->save());
+
+			if($piece->puzzle){
+				$puzzle = new Puzzle($piece->puzzle);
+				$puzzle->version+=1;
+				kvManager::increase("puzzleListVer");
+				CommitManager::get()->setSuccess("main",$puzzle->save());
+			}
+		}
+
 		$r = parent::insertWithLQTable($p);
-		return $r;
+		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+
+		if(CommitManager::get()->commit("main")){
+			return $r;
+		}else{
+			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
+		}
 	}
 
 	public function loadWithDataTable($p){
@@ -1316,9 +1393,9 @@ class Card extends DBTable{
 					{"title":"AI","field":"ai","type":"text","datatype":"int"}				
 					]}',true));
 		$data["head"][]=array("field"=>"missile","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"type","type":"text"},{"field":"speed","type":"text","datatype":"int"},{"field":"power","type":"text","datatype":"int"},{"field":"dex","type":"text","datatype":"int"}]}',true));
-		$data["head"][]=array("field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["kr","jp","en","cn"]}',true));
+		$data["head"][]=array("field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["kr","jp","en","cn"]}',true));
 		$data["head"][]=array("field"=>"stage","viewer"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("field"=>"piece","viewer"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("field"=>"piece","viewer"=>json_decode('{"type":"text"}',true),'always');
 		$data["head"][]=array("field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("field"=>"imgInfo","viewer"=>json_decode('{"type":"custom","func":"showCardImg"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}',true));
 		$data["head"][]=array("field"=>"aniInfo","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"dictionary","element":
@@ -1343,7 +1420,11 @@ class Card extends DBTable{
 		$data["head"][]=array("field"=>"profile","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"textarea"}',true));
 		$data["head"][]=array("field"=>"silImgInfo","viewer"=>json_decode('{"type":"text","cut":50}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"isSil","type":"bool"},{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}',true));
 		$data["head"][]=array("field"=>"mPrice","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"r","type":"text","datatype":"int"},{"field":"p6","type":"text","datatype":"int"}]}',true));
-		$data["head"][]=array("field"=>"type","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["normal","nPuzzle","special","event","ePuzzle","gift"]}',true));
+		$data["head"][]=array("field"=>"category","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["normal","nPuzzle","special","event","ePuzzle","gift","leader"]}',true));
+		$data["head"][]=array("field"=>"type","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["음","양","섬"],"value":[1,2,3]}',true));
+		$data["head"][]=array("field"=>"level","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
+		$data["head"][]=array("field"=>"characterNo","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
+		$data["head"][]=array("field"=>"sound","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"array","element":{"type":"text"}}',true));
 		$data["head"][]=array("manage"=>"[delete,update,insert]");
 
 		return $data;
@@ -1757,7 +1838,7 @@ class Archivement extends DBTable{
 		$data["head"][]=array("field"=>"content","viewer"=>$textViewer,"editor"=>$dictEditor);
 		$data["head"][]=array("field"=>"reward","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("field"=>"goal","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor,"always");
 		$data["head"][]=array("field"=>"exchangeListEditor","viewer"=>$textViewer,"editor"=>$textEditor);
 		
 
@@ -1864,10 +1945,10 @@ class GiftBoxHistory extends DBTable{
 
 		$this->setLQTableSelectCustomFunction(function ($rData){
 			if($rData["reward"])$rData["reward"] = json_decode($rData["reward"],true);
-			if($rData["exchangeID"]){
-				$exchange = new Exchange($rData["exchangeID"]);
-				$rData["exchangeList"]=$exchange->list;				
-			}
+			// if($rData["exchangeID"]){
+			// 	$exchange = new Exchange($rData["exchangeID"]);
+			// 	$rData["exchangeList"]=$exchange->list;				
+			// }
 			return $rData;
 		});
 
@@ -1899,35 +1980,35 @@ class GiftBoxHistory extends DBTable{
 		return $result;
 	}
 
-	public function updateWithLQTable($p){
-		$exchange=null;
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-		}
+	// public function updateWithLQTable($p){
+	// 	$exchange=null;
+	// 	// if($p["data"]["exchangeID"]){
+	// 	// 	$exchange = new Exchange($p["data"]["exchangeID"]);
+	// 	// }
 		
-		unset($p["data"]["exchangeList"]);
+	// 	//unset($p["data"]["exchangeList"]);
 		
-		$r = parent::updateWithLQTable($p);
+	// 	$r = parent::updateWithLQTable($p);
 		
-		if($exchange)$r["data"]["exchangeList"]=$exchange->list;
+	// 	//if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
-		return $r;
-	}
+	// 	return $r;
+	// }
 
-	public function insertWithLQTable($p){
-		$exchange=null;
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-		}
+	// public function insertWithLQTable($p){
+	// 	$exchange=null;
+	// 	// if($p["data"]["exchangeID"]){
+	// 	// 	$exchange = new Exchange($p["data"]["exchangeID"]);
+	// 	// }
 		
-		unset($p["data"]["exchangeList"]);
+	// 	//unset($p["data"]["exchangeList"]);
 
-		$r = parent::insertWithLQTable($p);
+	// 	$r = parent::insertWithLQTable($p);
 
-		if($exchange)$r["data"]["exchangeList"]=$exchange->list;
+	// 	//if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
-		return $r;
-	}
+	// 	return $r;
+	// }
 
 	public function loadWithDataTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
@@ -1938,7 +2019,7 @@ class GiftBoxHistory extends DBTable{
 		$data["head"][]=array("title"=>"내용","field"=>"content","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"보상","field"=>"reward","viewer"=>json_decode('{"type":"custom","func":"rewardViewer"}',true),"virtual");
 		// $data["head"][]=array("field"=>"data","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"textarea"}',true));
-		// $data["head"][]=array("field"=>"exchangeID","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"textarea"}',true));
+		$data["head"][]=array("title"=>"교환ID","field"=>"exchangeID","viewer"=>json_decode('{"type":"text"}',true));
 		// $data["head"][]=array("field"=>"exchangeList","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("manage"=>"delete update");
 		return $data;
@@ -2025,8 +2106,8 @@ class UserStorage extends DBTable{
 		$textViewer = array("type"=>"text");
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"editor"=>$textEditor,"primary");
 		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("title"=>"유료루비","field"=>"pr","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("title"=>"무료루비","field"=>"fr","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"유료젬","field"=>"pr","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"무료젬","field"=>"fr","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"하트","field"=>"h","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"현금","field"=>"m","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"골드","field"=>"g","viewer"=>$textViewer,"editor"=>$textEditor);
@@ -2210,7 +2291,7 @@ class LoginEvent extends DBTable{
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"이벤트명","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"시작시간","field"=>"startTime","viewer"=>json_decode('{"type":"time","format":"h:i:s"}',true),"editor"=>json_decode('{"type":"time"}',true));
@@ -2266,7 +2347,7 @@ class AttendenceEvent extends DBTable{
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"제목","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"보상목록","field"=>"rewardList","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"array","element":{"type":"dictionary","element":[{"type":"type","field":"type"}]}}',true));
@@ -2867,7 +2948,16 @@ class Character extends DBTable{
 		}
 	}
 
+	static public function getPowerInfo($level){
+		$r["nextPrice"]=$level*1000;
+    	$r["power"]=$level*10;
+    	$r["nextPower"]=($level+1)*10;
+    	$r["prevPower"]=($level-1)*10;
+    	$r["isMaxLevel"]=false;
+    	if($level>=30)$r["isMaxLevel"]=true;
 
+    	return $r;
+	}
 	public function updateWithLQTable($p){
 		$r = parent::updateWithLQTable($p);
 		kvManager::increase("charListVer");
@@ -3032,7 +3122,10 @@ class Notice extends DBTable{
 		});
 		if($no){
 			$q_where = "no=".$no;
-			parent::load($q_where);
+			if(parent::load($q_where)){
+				$this->banner = json_decode($this->banner,true);
+				$this->imgInfo = json_decode($this->imgInfo,true);
+			}
 		}
 	}
 
@@ -3053,10 +3146,14 @@ class Notice extends DBTable{
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>$textViewer,"editor"=>$osEditor);
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"팝업표시여부","field"=>"isPopup","viewer"=>$textViewer,"editor"=>json_decode('{"type":"bool"}'));
 		$data["head"][]=array("title"=>"이미지","field"=>"imgInfo","viewer"=>json_decode('{"type":"viewer_image"}'),"editor"=>$imgEditor);
 		$data["head"][]=array("title"=>"연결URL","field"=>"linkURL","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("title"=>"내용","field"=>"content","viewer"=>$textViewer,"editor"=>$textareaEditor);
+		$data["head"][]=array("title"=>"클라이언트내용","field"=>"content","viewer"=>$textViewer,"editor"=>$textareaEditor);
+		$data["head"][]=array("title"=>"목록표시여부","field"=>"isList","viewer"=>$textViewer,"editor"=>json_decode('{"type":"bool"}'));
+		$data["head"][]=array("title"=>"목록표시내용","field"=>"webContent","viewer"=>$textViewer,"editor"=>$textareaEditor);
+		$data["head"][]=array("title"=>"목록배너","field"=>"banner","viewer"=>json_decode('{"type":"viewer_image"}'),"editor"=>$imgEditor);
 		
 		$data["head"][]=array("manage"=>"update delete insert");
 		
@@ -3168,7 +3265,7 @@ class Shop extends DBTable{
 		$data["head"][]=array("field"=>"image","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("field"=>"data","viewer"=>$textViewer,"editor"=>$dictEditor);
 		$data["head"][]=array("field"=>"pID","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor,"always");
 		$data["head"][]=array("field"=>"exchangeList","viewer"=>$textViewer,"editor"=>$exchangeListEditor);
 		$data["head"][]=array("manage"=>"update delete insert");
 		
@@ -3273,6 +3370,13 @@ class ShopEvent extends DBTable{
 	}
 
 	public function loadWithDataTable($p){
+
+		$listViewer=array("type"=>"select","field"=>"type");
+		while($pData = Shop::getRowByQuery("",null,"id,type,count")){
+			$listViewer["element"][] = $pData["id"]." : ".$pData["type"]." ".$pData["count"]."개";
+			$listViewer["value"][]=$pData["id"];
+		}
+
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$dictEditor = array("type"=>"dictionary");
@@ -3283,7 +3387,7 @@ class ShopEvent extends DBTable{
 		
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
-		$data["head"][]=array("title"=>"상점ID","field"=>"id","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"대상상점ID","field"=>"id","viewer"=>$listViewer,"editor"=>$listViewer);
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"시작시간","field"=>"startTime","viewer"=>json_decode('{"type":"time","format":"h:i:s"}',true),"editor"=>json_decode('{"type":"time"}',true));
@@ -3617,19 +3721,23 @@ class EndlessPlayList extends DBTable{
 		}
 	}
 
-	public function getPlayDataByRandom($lvl,$limit=1,$fieldlist="*"){
+	public function getPlayDataByRandom($memberID,$lvl,$limit=1,$fieldlist="*"){
 		$result = array();
-		$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where autoLevel<=".($lvl+5)." and autoLevel>=".($lvl-5)." ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
-		LogManager::get()->addLog("select ".$fieldlist." from `".$this->getDBTable()."` where autoLevel<=".($lvl+5)." and autoLevel>=".($lvl-5)." ORDER BY RAND() limit ".$limit);
+		$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
+		LogManager::get()->addLog("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
 		
+		$check=false;
 		while($rData = mysql_fetch_assoc($query)){
+			if($check)unset($rData["playData"]);
 			$result[]=$rData;
+			$check=true;
 		}
-
+		LogManager::get()->addLog("test size is".count($result));
 		$i=0;
 		while(count($result)<$limit){
-			$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
+			$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and memberID<>'".$memberID."' ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
 			while($rData = mysql_fetch_assoc($query)){
+				if($check)unset($rData["playData"]);
 				$result[]=$rData;
 			}
 			$i++;
@@ -3798,7 +3906,7 @@ public function __construct($no=null){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"시작시간","field"=>"startTime","viewer"=>json_decode('{"type":"time","format":"h:i:s"}',true),"editor"=>json_decode('{"type":"time"}',true));
@@ -3889,6 +3997,126 @@ class ModifyHistory extends DBTable{
 
 	// }
 
+}
+
+
+
+/////////////////////////////////////
+/////////////////////////////////////
+
+
+class AdminUser extends DBTable{
+	public $m__isLogin = false;
+	public function __construct($no=null,$id=null,$pw=null){
+
+		parent::__construct();
+		
+
+
+		// $this->setLQTableSelectQueryCustomFunction(function ($param){
+		// 	if($param["where"]["id"]=="*")return "";
+
+		// 	if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
+		// 	else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
+		// 	else $user = new UserData(null,$param["where"]["id"]);
+
+		// 	if(!$user->isLoaded())return "where memberID='-1'";
+
+		// 	return "where memberID='".$user->memberID."'";
+		// });
+
+		// if($memberID){
+		// 	$this->m__userIndex = UserIndex::create($memberID);
+		// 	$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+		// 	$this->memberID=$memberID;
+		// }
+
+		$this->setPrimarykey("no",true);
+		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->m__isLogin = false;
+		$q_where="";
+		if($id){
+			$q_where = "`id`='".$id."'";
+			if($pw){
+				$q_where .= " and `passwd`=password('".$pw."')";
+				$this->m__isLogin = true;
+			}
+		}else if($no){
+			$q_where = "`no`='".$no."'";
+			$this->m__isLogin = true;
+		}
+
+		if($q_where){
+			if(parent::load($q_where)){
+				$this->permission = json_decode($this->permission,true);
+			}else{
+				$this->m__isLogin = false;
+			}
+		}
+	}
+
+
+	public function isLogined(){
+		return $this->m__isLogin;
+	}
+
+	public function logout(){
+		unset($_SESSION['admin_id']);
+		unset($_SESSION['admin_no']);
+	}
+	
+	public function checkPermission($where){
+		$p =& $this->getRef("permission");
+		return $p[$where];
+	}
+
+	public function login($p){
+		$r["param"]=$p;
+		$admin = new AdminUser(null,$p["data"]["id"],$p["data"]["passwd"]);
+		$r["isLogined"]=false;
+		if($admin->isLogined()){
+			$_SESSION['admin_id']=$admin->id;
+			$_SESSION['admin_no']= $admin->no;
+			$r["isLogined"]=true;
+			$r["result"]=ResultState::successToArray();
+		}else{
+			$r["isLogined"]=false;
+			$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"로그인실패");
+		}
+
+		
+		return $r;
+	}
+
+	public function insertWithLQTable($p){
+		if($p["data"]["passwd"]){
+			$q = mysql_query("select password('".$p["data"]["passwd"]."')",DBManager::get()->getMainConnection());
+			$pass = mysql_fetch_array($q);
+			$p["data"]["passwd"]=$pass[0];
+		}
+		$r = parent::insertWithLQTable($p);
+		return $r;
+	}
+
+	public function updateWithLQTable($p){
+		if($p["data"]["passwd"])unset($p["data"]["passwd"]);
+		$r = parent::updateWithLQTable($p);
+		return $r;
+	}
+
+	public function loadWithDataTable($p){
+		$textEditor = array("type"=>"text");
+		$textViewer = array("type"=>"text");
+		
+		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
+		$data["head"][]=array("title"=>"ID","field"=>"id","viewer"=>$textViewer,"editor"=>$textViewer);
+		$data["head"][]=array("title"=>"PW","field"=>"passwd","viewer"=>$textViewer,"editor"=>json_decode('{"type":"password"}',true));
+		$data["head"][]=array("title"=>"권한","field"=>"permission","viewer"=>$textViewer,"editor"=>json_decode('{"type":"dictionary"}',true));
+
+		$data["head"][]=array("manage"=>"delete update insert");
+		
+		return $data;
+	}
 }
 
 ?>

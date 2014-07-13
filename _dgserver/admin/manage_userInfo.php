@@ -87,7 +87,7 @@ $(document).ready(function(){
 		</tr>
 		<tr>
 			<td>보유골드</td><td field="g" viewer='{"type":"text"}'></td>
-			<td>보유루비<br>(무료/유료)</td><td field="r" viewer='{"type":"format","format":"[fr] / [pr]"}'></td>
+			<td>보유젬<br>(무료/유료)</td><td field="r" viewer='{"type":"format","format":"[fr] / [pr]"}'></td>
 			<td>보유하트</td><td field="h" viewer='{"type":"text"}'></td>
 		</tr>
 		<tr>
@@ -101,17 +101,17 @@ $(document).ready(function(){
 	<h2 id="tables-contextual-classes">|보유 아이템</h2>
 	<table class="table table-bordered">
 		<tr>
-			<td>i1</td>
-			<td>i2</td>
-			<td>i3</td>
-			<td>i4</td>
-			<td>i5</td>
-			<td>i6</td>
-			<td>i7</td>
-			<td>i8</td>
-			<td>i9</td>
-			<td>i10</td>
-			<td>i11</td>
+			<td>i1(미사용)</td>
+			<td>i2(미사용)</td>
+			<td>i3(미사용)</td>
+			<td>i4(미사용)</td>
+			<td>i5(미사용)</td>
+			<td>아이템두배</td>
+			<td>i7(미사용)</td>
+			<td>i8(미사용)</td>
+			<td>신발</td>
+			<td>i10(미사용)</td>
+			<td>자석</td>
 		</tr>
 		<tr>
 			<td field="i1" viewer='{"type":"text"}'></td>
@@ -127,17 +127,17 @@ $(document).ready(function(){
 			<td field="i11" viewer='{"type":"text"}'></td>
 		</tr>
 		<tr>
-			<td>p1</td>
-			<td>p2</td>
-			<td>p3</td>
-			<td>p4</td>
-			<td>p5</td>
-			<td>p6</td>
-			<td>p7</td>
-			<td>p8</td>
-			<td>p9</td>
-			<td>p10</td>
-			<td>p11</td>
+			<td>이어하기</td>
+			<td>맵가챠</td>
+			<td>캐릭업글</td>
+			<td>아이템뽑기</td>
+			<td>99프로뽑기</td>
+			<td>생명의돌</td>
+			<td>p7(미사용)</td>
+			<td>p8(미사용)</td>
+			<td>p9(미사용)</td>
+			<td>p10(미사용)</td>
+			<td>p11(미사용)</td>
 		</tr>
 		<tr>
 			<td field="p1" viewer='{"type":"text"}'></td>
