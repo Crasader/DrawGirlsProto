@@ -38,7 +38,7 @@ private:
 	
 	CCSprite* gray;
 	CCNode* m_container;
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	LoadingLayer* loading_layer;
 	
 	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_buy_func, int t_stage_number);

@@ -208,6 +208,7 @@ bool ClearPopup::init()
 	if(mySGD->is_before_selected_event_stage)
 	{
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		stage_number_label->disableOuterStroke();
 		stage_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(stage_number_label);
 		
@@ -219,6 +220,7 @@ bool ClearPopup::init()
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		piece_number_label->disableOuterStroke();
 		piece_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(piece_number_label);
 	}
@@ -334,6 +336,7 @@ bool ClearPopup::init()
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 27.5f);
+	ok_label->disableOuterStroke();
 	t_ok_node->addChild(ok_label);
 	
 	ok_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
@@ -348,6 +351,7 @@ bool ClearPopup::init()
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
 	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
+	replay_label->disableOuterStroke();
 	t_replay_node->addChild(replay_label);
 	
 	replay_menu = CCControlButton::create(t_replay_node, CCScale9Sprite::create("mainbutton_green.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));

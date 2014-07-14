@@ -170,6 +170,7 @@ void StartSettingPopup::setMain()
 	left_back->addChild(left_tab);
 	
 	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 12.5f);
+	tab_label->disableOuterStroke();
 	tab_label->setPosition(ccp(left_tab->getContentSize().width/2.f,left_tab->getContentSize().height/2.f+1.5f));
 	left_tab->addChild(tab_label);
 	
@@ -185,6 +186,7 @@ void StartSettingPopup::setMain()
 	{
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 17.5f);
 		stage_number_label->setColor(ccc3(255, 255, 255));
+		stage_number_label->disableOuterStroke();
 		stage_number_label->setPosition(ccp(65, 250));
 		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
@@ -198,6 +200,7 @@ void StartSettingPopup::setMain()
 		{
 			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			stage_number_label->setColor(ccc3(255, 255, 255));
+			stage_number_label->disableOuterStroke();
 			stage_number_label->setPosition(ccp(65, 250));
 			setFormSetter(stage_number_label);
 			main_case->addChild(stage_number_label);
@@ -210,6 +213,7 @@ void StartSettingPopup::setMain()
 			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			setFormSetter(piece_number_label);
 			piece_number_label->setColor(ccc3(255, 255, 255));
+			piece_number_label->disableOuterStroke();
 			piece_number_label->setPosition(ccp(65, 250));
 			main_case->addChild(piece_number_label);
 			
@@ -561,6 +565,7 @@ void StartSettingPopup::setMain()
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	KSLabelTTF* start_label = KSLabelTTF::create(readyLbl, mySGD->getFont().c_str(), 30.f);
+	start_label->disableOuterStroke();
 	t_label->addChild(start_label);
 	
 	if(mySGD->isTimeEvent(kTimeEventType_heart))
@@ -644,6 +649,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(n_upgrade);
 		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(n_level);
+		n_level->disableOuterStroke();
 		n_level->setPosition(ccp(70,46));
 		n_upgrade->addChild(n_level);
 		
@@ -652,17 +658,20 @@ void StartSettingPopup::setMain()
 		setFormSetter(s_upgrade);
 		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(s_level);
+		s_level->disableOuterStroke();
 		s_level->setPosition(ccp(70,46));
 		s_upgrade->addChild(s_level);
 		
 		
 		KSLabelTTF* n_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 		setFormSetter(n_price_label);
+		n_price_label->disableOuterStroke();
 		n_price_label->setPosition(ccp(70,20));
 		n_upgrade->addChild(n_price_label);
 		
 		KSLabelTTF* s_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 		setFormSetter(s_price_label);
+		s_price_label->disableOuterStroke();
 		s_price_label->setPosition(ccp(70,20));
 		s_upgrade->addChild(s_price_label);
 		
@@ -682,6 +691,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(n_upgrade);
 		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(n_level);
+		n_level->disableOuterStroke();
 		n_level->setPosition(ccp(70,46));
 		n_upgrade->addChild(n_level);
 		
@@ -690,6 +700,7 @@ void StartSettingPopup::setMain()
 		s_upgrade->setColor(ccGRAY);
 		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(s_level);
+		s_level->disableOuterStroke();
 		s_level->setPosition(ccp(70,46));
 		s_upgrade->addChild(s_level);
 		
@@ -701,6 +712,7 @@ void StartSettingPopup::setMain()
 			n_pass_ticket->setPosition(ccp(28,21.f));
 			n_upgrade->addChild(n_pass_ticket);
 			KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+			n_free_label->disableOuterStroke();
 			n_free_label->setPosition(ccp(78,20));
 			n_upgrade->addChild(n_free_label);
 			
@@ -708,6 +720,7 @@ void StartSettingPopup::setMain()
 			s_pass_ticket->setPosition(ccp(28,21.f));
 			s_upgrade->addChild(s_pass_ticket);
 			KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+			s_free_label->disableOuterStroke();
 			s_free_label->setPosition(ccp(78,20));
 			s_upgrade->addChild(s_free_label);
 		}
@@ -718,6 +731,7 @@ void StartSettingPopup::setMain()
 			n_upgrade->addChild(n_price_type);
 			KSLabelTTF* n_price_label = KSLabelTTF::create(KS::insert_separator(
 												ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+			n_price_label->disableOuterStroke();
 			n_price_label->setPosition(ccp(78,20));
 			n_upgrade->addChild(n_price_label);
 			
@@ -726,6 +740,7 @@ void StartSettingPopup::setMain()
 			s_upgrade->addChild(s_price_type);
 			KSLabelTTF* s_price_label = KSLabelTTF::create(KS::insert_separator(
 												ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+			s_price_label->disableOuterStroke();
 			s_price_label->setPosition(ccp(78,20));
 			s_upgrade->addChild(s_price_label);
 		}

@@ -58,15 +58,14 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(260,230));
+	back_case = CCSprite::create("popup_large_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	setFormSetter(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(251,185));
+	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,-15));
 	back_case->addChild(back_in);
 	setFormSetter(back_in);
 	
@@ -90,14 +89,14 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		content_str = myLoc->getLocalForKey(kMyLocalKey_puzzleClearCardContent);
 	}
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(back_case->getContentSize().width / 2.f, back_case->getContentSize().height-25));
+	title_label->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(-85, back_case->getContentSize().height/2.f-35));
 	back_case->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
-	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-25));
+	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-22));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!is_menu_enable)
@@ -134,7 +133,7 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	light_img->runAction(CCRepeatForever::create(CCRotateBy::create(1.f, 90)));
 	
-	card_img->setPosition(ccp(back_in->getContentSize().width/2.f, 117));
+	card_img->setPosition(ccpFromSize(back_in->getContentSize()/2.f) + ccp(0, 25));
 	back_in->addChild(card_img);
 	setFormSetter(card_img);
 	

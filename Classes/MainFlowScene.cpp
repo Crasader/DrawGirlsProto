@@ -1700,7 +1700,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 	if(tag == 0)
 	{
 		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
-		content_label->setOldAnchorPoint();
+		content_label->setAnchorPoint(ccp(0.5f,0.5f));
 		
 		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800, myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), (CCNode*)content_label, [=](){is_menu_enable = true;},CCPointZero,true);
 		
@@ -2039,91 +2039,80 @@ void MainFlowScene::menuAction(CCObject* sender)
 		{
 			if(mySGD->getUserdataHighPiece() < mySGD->getEndlessMinPiece())
 			{
-				ASPopupView* t_popup = ASPopupView::create(-999);
-				
-				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-				if(screen_scale_x < 1.f)
-					screen_scale_x = 1.f;
-				
-				float height_value = 320.f;
-				if(myDSH->screen_convert_rate < 1.f)
-					height_value = 320.f/myDSH->screen_convert_rate;
-				
-				if(height_value < myDSH->ui_top)
-					height_value = myDSH->ui_top;
-				
-				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-				t_popup->setDimmedPosition(ccp(240, 160));
-				t_popup->setBasePosition(ccp(240, 160));
-				
-				CCNode* t_container = CCNode::create();
-				t_popup->setContainerNode(t_container);
-				addChild(t_popup, 999);
-				
-				CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-				back_case->setContentSize(CCSizeMake(240,120));
-				back_case->setPosition(ccp(0,0));
-				t_container->addChild(back_case);
-				
-				CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-				back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
-				back_case->addChild(back_in);
-				
-				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), mySGD->getFont().c_str(), 15);
-				title_label->setColor(ccc3(255, 170, 20));
-				title_label->setAnchorPoint(ccp(0.5,0.5f));
-				title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
-				t_container->addChild(title_label);
-				
 				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-				sub_label->setPosition(ccp(0,-10));
-				sub_label->setOldAnchorPoint();
-				t_container->addChild(sub_label);
+				sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 				
-				CCSprite* gray = t_popup->getDimmedSprite();
+				addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), sub_label, [=](){is_menu_enable = true;}, ccp(0,0), true), 999);
 				
-				CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-				close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
-				close_button->setFunction([=](CCObject* sender)
-										  {
-											  if(!t_popup->is_menu_enable)
-												  return;
-											  
-											  t_popup->is_menu_enable = false;
-											  
-												CommonAnimation::closePopup(this, t_container, gray, [=](){
-													
-												}, [=](){
-													is_menu_enable = true;
-													t_popup->removeFromParent();
-//													end_func(); removeFromParent();
-												});
-										  });
-				t_container->addChild(close_button);
-				
-				CommonAnimation::openPopup(this, t_container, gray, [=](){
-					
-				}, [=](){
-					t_popup->is_menu_enable = true;
-				});
-//				t_container->setScaleY(0.f);
+//				ASPopupView* t_popup = ASPopupView::create(-999);
 //				
-//				t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-//					t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-//						t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+//				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//				if(screen_scale_x < 1.f)
+//					screen_scale_x = 1.f;
 //				
-//				t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-//																											{
-//																												gray->setOpacity(t);
-//																												KS::setOpacity(t_container, t);
-//																											}, [=](int t)
-//																											{
-//																												gray->setOpacity(255);
-//																												KS::setOpacity(t_container, 255);
-//																												t_popup->is_menu_enable = true;
-//																											}));
+//				float height_value = 320.f;
+//				if(myDSH->screen_convert_rate < 1.f)
+//					height_value = 320.f/myDSH->screen_convert_rate;
+//				
+//				if(height_value < myDSH->ui_top)
+//					height_value = myDSH->ui_top;
+//				
+//				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//				t_popup->setDimmedPosition(ccp(240, 160));
+//				t_popup->setBasePosition(ccp(240, 160));
+//				
+//				CCNode* t_container = CCNode::create();
+//				t_popup->setContainerNode(t_container);
+//				addChild(t_popup, 999);
+//				
+//				CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+//				back_case->setContentSize(CCSizeMake(240,120));
+//				back_case->setPosition(ccp(0,0));
+//				t_container->addChild(back_case);
+//				
+//				CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+//				back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+//				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+//				back_case->addChild(back_in);
+//				
+//				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), mySGD->getFont().c_str(), 15);
+//				title_label->setColor(ccc3(255, 170, 20));
+//				title_label->setAnchorPoint(ccp(0.5,0.5f));
+//				title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+//				t_container->addChild(title_label);
+//				
+//				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+//				sub_label->setPosition(ccp(0,-10));
+//				sub_label->setOldAnchorPoint();
+//				t_container->addChild(sub_label);
+//				
+//				CCSprite* gray = t_popup->getDimmedSprite();
+//				
+//				CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//				close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+//				close_button->setFunction([=](CCObject* sender)
+//										  {
+//											  if(!t_popup->is_menu_enable)
+//												  return;
+//											  
+//											  t_popup->is_menu_enable = false;
+//											  
+//												CommonAnimation::closePopup(this, t_container, gray, [=](){
+//													
+//												}, [=](){
+//													is_menu_enable = true;
+//													t_popup->removeFromParent();
+////													end_func(); removeFromParent();
+//												});
+//										  });
+//				t_container->addChild(close_button);
+//				
+//				CommonAnimation::openPopup(this, t_container, gray, [=](){
+//					
+//				}, [=](){
+//					t_popup->is_menu_enable = true;
+//				});
 			}
 			else
 				showEndlessOpening();

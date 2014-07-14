@@ -196,6 +196,7 @@ void ZoomScript::onEnterTransitionDidFinish()
 
 void ZoomScript::startScript()
 {
+	script_label->setString("");
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	basic_string<wchar_t> result;

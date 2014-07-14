@@ -84,17 +84,14 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	no_selector = t_no;
 	yes_selector = t_yes;
 	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	CCSprite* case_back = CCSprite::create("popup_small_back.png");
 	case_back->setPosition(CCPointZero);
 	addChild(case_back);
 	
-	case_back->setContentSize(CCSizeMake(220, 186));
-	setFormSetter(case_back);
 	
-	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTimeEventTitle), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(0, 70));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTimeEventTitle), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
+	title_label->setPosition(ccp(-85, case_back->getContentSize().height/2.f-35));
 	addChild(title_label);
 	setFormSetter(title_label);
 	
@@ -112,31 +109,31 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 //	addChild(close_button);
 	
 	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24,24,2,2));
-	content_back->setPosition(ccp(0,-13));
+	CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12,12,2,2));
+	content_back->setContentSize(CCSizeMake(251,70));
+	content_back->setPosition(ccp(0,10));
 	addChild(content_back);
 	
-	content_back->setContentSize(CCSizeMake(206,140));
-	setFormSetter(content_back);
+	
 	
 	StyledLabelTTF* ment_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_clearTimeEventMent), 85.f, mySGD->getTimeEventFloatValue(kTimeEventType_clear))->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-	ment_label->setPosition(ccp(0,35));
-	addChild(ment_label);
-	setFormSetter(ment_label);
+	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
+	ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
+	content_back->addChild(ment_label);
 	
 	CCLabelTTF* t1_label = CCLabelTTF::create();
 	
-	KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_no), mySGD->getFont().c_str(), 13);
-	no_label->enableOuterStroke(ccBLACK, 1.f);
+	KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_no), mySGD->getFont().c_str(), 12);
+	no_label->disableOuterStroke();
 	no_label->setPosition(ccp(0,0));
 	t1_label->addChild(no_label);
 	
-	CCScale9Sprite* no_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0,0,40,40), CCRectMake(19, 19, 2, 2));
+	CCScale9Sprite* no_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	CCControlButton* no_button = CCControlButton::create(t1_label, no_back);
 	no_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearTimeEventContent::noAction), CCControlEventTouchUpInside);
-	no_button->setPreferredSize(CCSizeMake(90,40));
-	no_button->setPosition(ccp(-45,-50));
+	no_button->setPreferredSize(CCSizeMake(101,44));
+	no_button->setPosition(ccp(-55,-50));
 	addChild(no_button);
 	setFormSetter(no_button);
 	
@@ -145,9 +142,8 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	
 	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
-	KSLabelTTF* yes_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_yes), mySGD->getFont().c_str(), 13);
-	yes_label->setColor(ccc3(255, 170, 20));
-	yes_label->enableOuterStroke(ccBLACK, 1.f);
+	KSLabelTTF* yes_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_yes), mySGD->getFont().c_str(), 12);
+	yes_label->disableOuterStroke();
 	yes_label->setPosition(ccp(0,0));
 	t2_label->addChild(yes_label);
 	
@@ -156,12 +152,12 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	t2_label->addChild(event_img);
 	setFormSetter(event_img);
 	
-	CCScale9Sprite* yes_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0,0,40,40), CCRectMake(19, 19, 2, 2));
+	CCScale9Sprite* yes_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	CCControlButton* yes_button = CCControlButton::create(t2_label, yes_back);
 	yes_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearTimeEventContent::yesAction), CCControlEventTouchUpInside);
-	yes_button->setPreferredSize(CCSizeMake(90,40));
-	yes_button->setPosition(ccp(45,-50));
+	yes_button->setPreferredSize(CCSizeMake(101,44));
+	yes_button->setPosition(ccp(55,-50));
 	addChild(yes_button);
 	setFormSetter(yes_button);
 	

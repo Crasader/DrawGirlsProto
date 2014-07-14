@@ -206,6 +206,7 @@ bool OptionPopup::init()
 	
 	setTouchEnabled(true);
 	
+	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
 	//addChild(t_popup, 4);
 	
