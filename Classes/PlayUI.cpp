@@ -1529,7 +1529,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 	
 	exchange_dic->setObject(new_coin_spr, t_coin_number);
 	
-	if(taked_coin_cnt >= 6 && !isGameover && getPercentage() < clearPercentage.getV())
+	if(taked_coin_cnt >= 6 && !isGameover && getPercentage() < clearPercentage.getV() && !is_exchanged)
 	{
 		if(clr_cdt_type == kCLEAR_sequenceChange)
 		{

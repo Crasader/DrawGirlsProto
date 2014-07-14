@@ -1374,6 +1374,7 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("주의!"), kMyLocalKey_warningDie);
 	ko->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
+	ko->setObject(CCString::create("내 정보"), kMyLocalKey_nickTitle);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1940,7 +1941,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("미션"), kMyLocalKey_mission);
 	en->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
 	en->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
-	en->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
+	en->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	en->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
 	en->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1>(승률%d%%)</font>"), kMyLocalKey_endlessInfoScoreValue2);
 	en->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
@@ -2254,6 +2255,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
 	en->setObject(CCString::create("Warning!"), kMyLocalKey_warningDie);
 	en->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
+	
+	en->setObject(CCString::create("내 정보"), kMyLocalKey_nickTitle);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2843,7 +2846,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("미션"), kMyLocalKey_mission);
 	ja->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
 	ja->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
-	ja->setObject(CCString::create("내 정보"), kMyLocalKey_endlessMyInfo);
+	ja->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ja->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
 	ja->setObject(CCString::create("<font color=999 strokecolor=000 strokesize=1>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=1>(승률%d%%)</font>"), kMyLocalKey_endlessInfoScoreValue2);
 	ja->setObject(CCString::create("%d승 %d패 승률%d%%"), kMyLocalKey_endlessInfoScoreValue);
@@ -3156,6 +3159,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
 	ja->setObject(CCString::create("Warning!"), kMyLocalKey_warningDie);
 	ja->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
+	
+	ja->setObject(CCString::create("내 정보"), kMyLocalKey_nickTitle);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

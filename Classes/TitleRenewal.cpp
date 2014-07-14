@@ -296,45 +296,49 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		state_label->setVisible(false);
 		
 		
-		nick_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));// CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-		nick_back->setContentSize(CCSizeMake(270,150));
+		nick_back = CCSprite::create("popup_small_back.png");
 		nick_back->setPosition(ccp(240,220));
 		addChild(nick_back,100);
 
-		CCScale9Sprite* flag_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		flag_back->setContentSize(CCSizeMake(240, 40));
-		flag_back->setPosition(ccp(nick_back->getContentSize().width/2.f,76));
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nickTitle), mySGD->getFont().c_str(), 12);
+		title_label->disableOuterStroke();
+		title_label->setPosition(ccpFromSize(nick_back->getContentSize()/2.f) + ccp(-85, nick_back->getContentSize().height/2.f-35));
+		nick_back->addChild(title_label);
+		
+		CCScale9Sprite* flag_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		flag_back->setContentSize(CCSizeMake(251, 68));
+		flag_back->setPosition(ccpFromSize(nick_back->getContentSize()/2.f) + ccp(0,10));
 		nick_back->addChild(flag_back);
+		
+		CCScale9Sprite* selector_back = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+		selector_back->setContentSize(CCSizeMake(184, 46));
+		selector_back->setPosition(ccpFromSize(flag_back->getContentSize()/2.f) + ccp(25,0));
+		flag_back->addChild(selector_back);
 
-		CCScale9Sprite* nick_case = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-		nick_case->setContentSize(CCSizeMake(236,35));
-		nick_case->setPosition(ccp(nick_back->getContentSize().width/2.f,35));
+		CCScale9Sprite* nick_case = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		nick_case->setContentSize(CCSizeMake(251,35));
+		nick_case->setPosition(ccp(nick_back->getContentSize().width/2.f,42));
 		nick_back->addChild(nick_case);
+		
 		
 		CCScale9Sprite* t_back = CCScale9Sprite::create("nickname_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 		t_back->setOpacity(0);
-//		t_back->setInsetBottom(16);
-//		t_back->setInsetTop(34-16*2);
-//		t_back->setInsetLeft(13);
-//		t_back->setInsetRight(34-13*2);
 		
 		input_text = CCEditBox::create(CCSizeMake(160, 35), t_back);
-		input_text->setPosition(ccp(110,35));
+		input_text->setPosition(ccp(110,42));
 		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
-		input_text->setFont(mySGD->getFont().c_str(), 15);
+		input_text->setFont(mySGD->getFont().c_str(), 13);
 		input_text->setInputMode(kEditBoxInputModeSingleLine);
 		input_text->setDelegate(this);
 		nick_back->addChild(input_text,3);
-		//FormSetter::get()->addObject("t1", input_text);
 		
 		flag = FlagSelector::create();
-		flag->setPosition(35,60);
+		flag->setPosition(35,90);
 		nick_back->addChild(flag,100000);
-		//FormSetter::get()->addObject("t2", flag);
 		
-		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 14, CCSizeMake(60, 35), CCScale9Sprite::create("nickname_ok.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)), kCCMenuHandlerPriority);
-		ok_menu->setPosition(ccp(221,35));
+		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 13, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), kCCMenuHandlerPriority);
+		ok_menu->setPosition(ccp(237,42));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
 								 CCNode* t_node = CCNode::create();
@@ -344,9 +348,6 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		nick_back->addChild(ok_menu, 10, kTitleRenewal_MT_nick);
 		
 		
-//		nick_back->setPosition(ccp(240,-500));
-	//	nick_back->runAction(CCEaseBounceOut::create(CCMoveTo::create(0.3, ccp(240,220))));
-		//FormSetter::get()->addObject("t3", ok_menu);
 	}
 	else if(result_data["result"]["code"].asInt() == GDBLOCKEDUSER)
 	{

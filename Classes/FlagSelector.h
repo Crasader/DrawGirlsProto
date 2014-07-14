@@ -502,12 +502,12 @@ public:
 			
 			countryList.push_back(countries[i]);
 		}
-		
-		fTable = CCTableView::create(this,CCSizeMake(200,40));
+	  
+		fTable = CCTableView::create(this,CCSizeMake(150,40));
 		fTable->setDirection(kCCScrollViewDirectionHorizontal);
 		fTable->setVerticalFillOrder(kCCTableViewFillTopDown);
 		fTable->setAnchorPoint(ccp(0,0));
-		fTable->setPosition(0,0);
+		fTable->setPosition(67,0);
 		fTable->setTouchPriority(INT_MAX*-1);
 		fTable->setTouchEnabled(true);
 		fTable->setDelegate(this);
@@ -523,12 +523,13 @@ public:
 		if(!selectedFlagSpr){
 			selectedFlagSpr = CCSprite::createWithSpriteFrameName("kr.png");
 		}
-		selectedFlagSpr->setPosition(ccp(100,56));
-		selectedFlagSpr->setScale(1.5);
+		selectedFlagSpr->setPosition(ccp(25,16));
+		selectedFlagSpr->setScale(1.f);
 		addChild(selectedFlagSpr,2);
 		
 		CCSprite* selectBox = CCSprite::create("nickname_flagbox.png");
-		selectBox->setPosition(ccp(100.5f,56));
+	  selectBox->setScale(1.f/1.5f);
+		selectBox->setPosition(ccp(25.f,16));
 		addChild(selectBox,1);
 		
 	  CCMenu* t_arrow_menu = CCMenu::create();
@@ -542,7 +543,7 @@ public:
 	  
 	  CCMenuItemSprite* left_arrow_item = CCMenuItemSprite::create(n_left_arrow, s_left_arrow, this, menu_selector(FlagSelector::menuAction));
 	  left_arrow_item->setTag(1);
-	  left_arrow_item->setPosition(ccp(210,15));
+	  left_arrow_item->setPosition(ccp(226,15));
 	  t_arrow_menu->addChild(left_arrow_item);
 	  
 	  CCSprite* n_right_arrow = CCSprite::create("nickname_arrow.png");
@@ -553,7 +554,7 @@ public:
 	  
 	  CCMenuItemSprite* right_arrow_item = CCMenuItemSprite::create(n_right_arrow, s_right_arrow, this, menu_selector(FlagSelector::menuAction));
 	  right_arrow_item->setTag(2);
-	  right_arrow_item->setPosition(ccp(-10,15));
+	  right_arrow_item->setPosition(ccp(58,15));
 	  t_arrow_menu->addChild(right_arrow_item);
 	  
 		
@@ -614,8 +615,8 @@ public:
 		if(selectedFlagSpr!=NULL)selectedFlagSpr->removeFromParent();
 		
 		selectedFlagSpr = CCSprite::createWithSpriteFrameName(CCString::createWithFormat("%s.png",selectedFlag.c_str())->getCString());
-		selectedFlagSpr->setPosition(ccp(100,56));
-		selectedFlagSpr->setScale(1.5);
+		selectedFlagSpr->setPosition(ccp(25,16));
+		selectedFlagSpr->setScale(1.f);
 		addChild(selectedFlagSpr,2);
 	}
 	virtual CCSize cellSizeForTable(CCTableView *table){

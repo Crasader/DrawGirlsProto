@@ -825,7 +825,8 @@ typedef enum MyLocalKey_ {
 	
 	kMyLocalKey_warningDie,
 	kMyLocalKey_couponMent,
-	kMyLocalKey_upgradeLevelValue2
+	kMyLocalKey_upgradeLevelValue2,
+	kMyLocalKey_nickTitle
 }MyLocalKey;
 
 

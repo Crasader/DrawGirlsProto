@@ -76,7 +76,7 @@ private:
 	
 	CCEditBox* input_text;
 	FlagSelector* flag;
-	CCScale9Sprite* nick_back;
+	CCSprite* nick_back;
 	
 	virtual void editBoxEditingDidBegin(CCEditBox* editBox);
     virtual void editBoxEditingDidEnd(CCEditBox* editBox);
