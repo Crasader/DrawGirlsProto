@@ -1,6 +1,58 @@
 <?php
 
 include "../lib.php";
+
+
+
+Class DBTableTest{
+	static public $m__dbTable=NULL;
+
+	static public function setA($_a){
+		$klass = get_called_class();
+		//$newvalue = "";
+		static::$m__dbTable=&$newValue;
+		static::$m__dbTable=$_a;
+	}
+
+	static public function getA(){
+		$klass = get_called_class();
+		echo "<br>".$klass."<br>";
+		return static::$m__dbTable;
+	}
+
+	public function setDBTable($_table){
+		self::$m__dbTable=$_table;
+	}
+
+
+	public function getDBTable($_table){
+		return self::$m__dbTable=$_table;
+	}
+}
+
+class NoticeTable extends DBTableTest{
+	public function __construct($_a){
+		self::setA($_a);
+	}
+}
+
+
+class EventTable extends DBTableTest{
+	public function __construct($_a){
+		self::setA($_a);
+	}
+
+
+}
+
+$notice = new NoticeTable("notice");
+$event = new EventTable("event");
+
+echo "notice:".$notice->getA()."<br>";
+echo "event:".$event->getA()."<br>";
+echo "notice:".$notice::getA()."<br>";
+echo "event:".$event::getA()."<br>";
+
 ?>
 <html>
 <head>

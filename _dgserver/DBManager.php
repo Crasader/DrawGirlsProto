@@ -154,8 +154,10 @@ class UserIndex extends DBTable{
 		
 		LogManager::addLog("construct userIndex for ".$memberID);
 
-		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no");
+
+		LogManager::addLog("set db info");
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
 		if($userindex){
 			parent::load("no=".$userindex);
@@ -239,17 +241,17 @@ class UserLog extends DBTable{
 	public function __construct($memberID=null,$no=null){
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		self::setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("userlog"));
 		$this->memberID = $memberID;
 		
-		// $this->setLQTableSelectQueryCustomFunction(function ($param){
+		// self::setLQTableSelectQueryCustomFunction(function ($param){
 		
 		// 	if(!$param["where"] || !$param["where"]["category"] || $param["where"]["category"]=="")return "";
 		// 	return "where category='".$param["where"]["category"]."'";
 		// });
 		
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["category"]){
 				return "where category = '".$param["where"]["category"]."'";
 			}
@@ -265,7 +267,7 @@ class UserLog extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 		}
 
 		if($memberID && $no){
@@ -302,8 +304,8 @@ class UserLog extends DBTable{
 	// 		$l=0;
 
 	// 		if($dataList[$limit-1]["regTime"]>$data["regTime"]){
-	// 			self::$m__qResult=null;
-	// 			self::$m__qCnt++;
+	// 			static::$m__qResult=null;
+	// 			static::$m__qCnt++;
 	// 		}
 	// 		for($i=0;$i<count($dataList);$i++){
 	// 			if($dataList[$i]["regTime"]<$data["regTime"])break;
@@ -319,7 +321,7 @@ class UserLog extends DBTable{
 	//     $result["result"]=ResultState::successToArray();
 	//     return $result;
 	// }
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"카테고리","field"=>"category","viewer"=>json_decode('{"type":"text"}',true));
@@ -342,11 +344,11 @@ class SendItem extends DBTable{
 	public function __construct($memberID=null,$socialID=null,$nick=null){
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		self::setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("userdata"));
 		$this->memberID = $memberID;
 		
-		$this->setLQTableSelectCustomFunction(function ($data){
+		self::setLQTableSelectCustomFunction(function ($data){
 			$data["memberID"] = strval($data["memberID"]);
 			return $data;
 		});
@@ -354,7 +356,7 @@ class SendItem extends DBTable{
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
 			//LogManager::addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
-			if($this->m__userIndex)$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			if($this->m__userIndex)self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
 				if(parent::load("memberID=".$this->m__userIndex->memberID)){
 					//$this->autoMatching($this->m__result);
@@ -373,7 +375,7 @@ class SendItem extends DBTable{
 	}
 
 
-	public function selectWithLQForm($param){
+	public static function selectWithLQForm($param){
 		$command = new commandClass();
 		$user=null;
 
@@ -399,7 +401,7 @@ class SendItem extends DBTable{
 		return $result;
 	}
 
-	public function updateWithLQForm($param){
+	public static function updateWithLQForm($param){
 		//여러멤버아이디
 		//멤버국가표시
 		//변경내용 바로 지급
@@ -472,7 +474,7 @@ class SendItem extends DBTable{
 
 			if($param["comment"]){
 				$mh = new ModifyHistory($mID);
-				unset($p["data"][$this->getPrimaryKey()]);
+				unset($p["data"][self::getPrimarykey()]);
 				$mh->oldData="";
 				$mh->newData=$exchange->list;
 				$mh->comment=$param["comment"];
@@ -539,11 +541,11 @@ class UserData extends DBTable{
 	public function __construct($memberID=null,$socialID=null,$nick=null){
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		self::setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("userdata"));
 		$this->memberID = $memberID;
 		
-		$this->setLQTableSelectCustomFunction(function ($data){
+		self::setLQTableSelectCustomFunction(function ($data){
 			$data["memberID"] = strval($data["memberID"]);
 			return $data;
 		});
@@ -551,9 +553,9 @@ class UserData extends DBTable{
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
 			//LogManager::addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
-			//if($this->m__userIndex->isLoaded())$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			//if($this->m__userIndex->isLoaded())self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
-				$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+				self::setDBInfo($this->m__userIndex->getShardDBInfo());
 				if(parent::load("memberID='".$this->m__userIndex->memberID."'")){
 					//$this->autoMatching($this->m__result);
 					$this->archiveData = json_decode($this->archiveData,true);
@@ -571,8 +573,8 @@ class UserData extends DBTable{
 	}
 
 
-	public function loadWithDataTable($p){
-		$r=parent::loadWithDataTable($p);
+	public static function loadWithLQTable($p){
+		$r=parent::loadWithLQTable($p);
 		$r["head"][]=array("manage"=>"update delete insert");
 		return $r;
 	}
@@ -635,8 +637,8 @@ class UserData extends DBTable{
 		// 	}
 		// }
 		
-		// if($this->m__primarykey && !$isIncludePrimaryKey){
-		// 	unset($arraydata[$this->m__primarykey]);
+		// if(static::$m__primarykey && !$isIncludePrimaryKey){
+		// 	unset($arraydata[static::$m__primarykey]);
 		// }
 		
 		// return $arraydata;
@@ -696,7 +698,7 @@ class UserData extends DBTable{
 	}
 
 
-	public function selectWithLQForm($param){
+	public static function selectWithLQForm($param){
 		$command = new commandClass();
 		$user=null;
 
@@ -735,7 +737,7 @@ class UserData extends DBTable{
 		return $result;
 	}
 
-	public function updateWithLQForm($param){
+	public static function updateWithLQForm($param){
 		//값저장.
 		//멤버아이디 안넘어왔음 넘겨달라 에러 띄울것
 		//변경내역저장
@@ -759,15 +761,15 @@ class Message extends DBTable{
 	public $m__userIndex=null;
 	public function __construct($memberID=null,$messageNo=null){
 		parent::__construct();
-		$this->setPrimarykey("no");
+		self::setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("message"));
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			return "where memberID='".$param["id"]."' and isSendMsg=0";
 		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 		}
 		
 		if($memberID && $messageNo){
@@ -780,12 +782,12 @@ class Message extends DBTable{
 
 	public function send(){
 		if(!$this->memberID)return "error";
-		if(!$this->m__DBInfo){
+		if(!static::$m__DBInfo){
 			$userIndex = UserIndex::create($this->m_memberID);
-			$this->setDBInfo($userIndex->getShardDBInfo());
+			self::setDBInfo($userIndex->getShardDBInfo());
 		}
 		
-		$result=mysql_query("insert into ".DBManager::getST("message")." (memberID,content,regDate,regTime,friendID,type,isSendMsg) values ('".$this->m_memberID."','".$this->m_content."','".$this->m_regDate."','".$this->m_regTime."','".$this->m_friendID."','".$this->m_type."','".$this->m_isSendMsg."')",$this->m__DBInfo->getConnection());
+		$result=mysql_query("insert into ".DBManager::getST("message")." (memberID,content,regDate,regTime,friendID,type,isSendMsg) values ('".$this->m_memberID."','".$this->m_content."','".$this->m_regDate."','".$this->m_regTime."','".$this->m_friendID."','".$this->m_type."','".$this->m_isSendMsg."')",static::$m__DBInfo->getConnection());
 		
 		if(!$result)return "error";
 		
@@ -835,9 +837,9 @@ class Message extends DBTable{
 // 		parent::__construct();
 		
 		
-// 		$this->setPrimarykey("no");
+// 		self::setPrimarykey("no");
 // 		//$this->setDBTable(DBManager::getST("stageScore"));
-// 		$this->setDBInfo(DBManager::getDBInfoByShardKey($stageNo));
+// 		self::setDBInfo(DBManager::getDBInfoByShardKey($stageNo));
 		
 // 		if($memberID || $where){
 // 			if($where)$q_where = $where;
@@ -868,8 +870,8 @@ class Puzzle extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no");
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($puzzleNo)$this->no=$puzzleNo;
@@ -926,7 +928,7 @@ class Puzzle extends DBTable{
 		return $objInfo;
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$intEditor = array("type"=>"text","datatype"=>"int");
 		$textViewer = array("type"=>"text");
 		$textareaEditor = array("type"=>"textarea");
@@ -980,7 +982,7 @@ class Puzzle extends DBTable{
 	}
 
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		reloadPuzzleInfo();
 		$p["data"]["version"]+=1;
 		$r = parent::updateWithLQTable($p);
@@ -989,7 +991,7 @@ class Puzzle extends DBTable{
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		reloadPuzzleInfo();
 		$r = parent::insertWithLQTable($p);
 		kvManager::increase("puzzleListVer");
@@ -1009,8 +1011,8 @@ class Piece extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no");
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
 		if($no)$this->no=$no;
 
@@ -1040,7 +1042,7 @@ class Piece extends DBTable{
 		return $stageInfo;
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
@@ -1060,7 +1062,7 @@ class Piece extends DBTable{
 		}
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
@@ -1080,7 +1082,7 @@ class Piece extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 
 		$listViewer=array("type"=>"select","field"=>"type","title"=>"몬스터명");
 		while($pData = Monster::getRowByQuery("",null,"name,no")){
@@ -1270,8 +1272,8 @@ class Card extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no");
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -1303,7 +1305,7 @@ class Card extends DBTable{
 		return $cardInfo;
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		CommitManager::begin("main");
 		
 		if($p["data"]["piece"]){
@@ -1330,7 +1332,7 @@ class Card extends DBTable{
 
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		CommitManager::begin("main");
 		
 		if($p["data"]["piece"]){
@@ -1356,7 +1358,7 @@ class Card extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 
 
 
@@ -1443,9 +1445,9 @@ class CardHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		self::setPrimarykey("no");
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
@@ -1456,7 +1458,7 @@ class CardHistory extends DBTable{
 			return "where memberID='".$user->memberID."'";
 		});
 
-		$this->setLQTableSelectCustomFunction(function ($rData){
+		self::setLQTableSelectCustomFunction(function ($rData){
 	    	$cardInfo = new Card($rData["cardNo"]);
 	    	$pieceInfo = new Piece($cardInfo->piece);
 	    	$puzzleInfo = new Puzzle($pieceInfo->puzzle);
@@ -1467,7 +1469,7 @@ class CardHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID = $memberID;
 		}
 
@@ -1478,7 +1480,7 @@ class CardHistory extends DBTable{
 			parent::load("memberID=".$memberID." and cardNo=".$cardNo);
 		}
 	}
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 
 		$listViewer=array("type"=>"select");
 		while($pData = Card::getRowByQuery("",null,"name,no")){
@@ -1512,13 +1514,13 @@ class CardHistory extends DBTable{
 		
 		return $data;
 	}
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		unset($p["data"]["puzzleNo"]);
 		$r = parent::updateWithLQTable($p);
 
 		if($p["comment"]){
 			$mh = new ModifyHistory($r["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
@@ -1528,11 +1530,11 @@ class CardHistory extends DBTable{
 		return $r;
 	}
 
-	public function deleteWithLQTable($p){
+	public static function deleteWithLQTable($p){
 		$r = parent::deleteWithLQTable($p);
 		if($p["comment"]){
 			$mh = new ModifyHistory($p["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
@@ -1555,9 +1557,9 @@ class PuzzleHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
@@ -1568,14 +1570,14 @@ class PuzzleHistory extends DBTable{
 			return "where memberID='".$user->memberID."'";
 		});
 
-		// $this->setLQTableSelectCustomFunction(function ($data){
+		// self::setLQTableSelectCustomFunction(function ($data){
 		// 	return $data;
 		// });
 
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID = $memberID;
 		}
 
@@ -1586,7 +1588,7 @@ class PuzzleHistory extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 
 		$puzzleViewer=array("type"=>"select");
 		while($pData = Puzzle::getRowByQuery("",null,"title,no")){
@@ -1607,14 +1609,14 @@ class PuzzleHistory extends DBTable{
 		return $data;
 	}
 
-	public function updateWithLQTable($p){
-		
+	public static function updateWithLQTable($p){
+
 		unset($p["data"]["reward"]);
 		$r = parent::updateWithLQTable($p);
 
 		if($p["comment"]){
 			$mh = new ModifyHistory($r["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
@@ -1624,11 +1626,11 @@ class PuzzleHistory extends DBTable{
 		return $r;
 	}
 
-	public function deleteWithLQTable($p){
+	public static function deleteWithLQTable($p){
 		$r = parent::deleteWithLQTable($p);
 		if($p["comment"]){
 			$mh = new ModifyHistory($p["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
@@ -1652,9 +1654,9 @@ class PieceHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
@@ -1667,7 +1669,7 @@ class PieceHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID = $memberID;
 		}
 
@@ -1680,7 +1682,7 @@ class PieceHistory extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"스테이지번호","field"=>"pieceNo","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
@@ -1693,14 +1695,14 @@ class PieceHistory extends DBTable{
 		return $data;
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		
 		unset($p["data"]["reward"]);
 		$r = parent::updateWithLQTable($p);
 
 		if($p["comment"]){
 			$mh = new ModifyHistory($r["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
@@ -1710,11 +1712,11 @@ class PieceHistory extends DBTable{
 		return $r;
 	}
 
-	public function deleteWithLQTable($p){
+	public static function deleteWithLQTable($p){
 		$r = parent::deleteWithLQTable($p);
 		if($p["comment"]){
 			$mh = new ModifyHistory($p["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
@@ -1734,8 +1736,8 @@ class FaultyNick extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no");
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($no)$this->m_no=$no;
@@ -1760,10 +1762,10 @@ class Archivement extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
-		$this->setLQTableSelectCustomFunction(function ($data){
+		self::setLQTableSelectCustomFunction(function ($data){
 			if($data["exchangeID"]){
 				$exchange = new Exchange($data["exchangeID"]);
 				$data["exchangeList"]=$exchange->list;				
@@ -1781,7 +1783,7 @@ class Archivement extends DBTable{
 		}
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		
 
 		$exchange=null;
@@ -1803,7 +1805,7 @@ class Archivement extends DBTable{
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		$exchange=null;
 		if($p["data"]["exchangeID"]){
 				$exchange = new Exchange($p["data"]["exchangeID"]);
@@ -1823,7 +1825,7 @@ class Archivement extends DBTable{
 	}
 
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$dictEditor = array("type"=>"dictionary");
@@ -1863,9 +1865,9 @@ class ArchivementHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
@@ -1876,7 +1878,7 @@ class ArchivementHistory extends DBTable{
 			return "where memberID='".$user->memberID."'";
 		});
 
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setLQTableSelectCustomFunction(function($rData){
 			if($rData["rewardDate"]>0){
 				$archive = new Archivement($rData["archiveID"]);
 				$rData["reward"]=$archive->reward;
@@ -1886,7 +1888,7 @@ class ArchivementHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID = $memberID;
 		}
 
@@ -1897,7 +1899,7 @@ class ArchivementHistory extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 
 		$listViewer=array("type"=>"select");
 		while($pData = Archivement::getRowByQuery("",null,"title,id")){
@@ -1932,9 +1934,9 @@ class GiftBoxHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
@@ -1945,7 +1947,7 @@ class GiftBoxHistory extends DBTable{
 			return "where memberID='".$user->memberID."'";
 		});
 
-		$this->setLQTableSelectCustomFunction(function ($rData){
+		self::setLQTableSelectCustomFunction(function ($rData){
 			if($rData["reward"])$rData["reward"] = json_decode($rData["reward"],true);
 			// if($rData["exchangeID"]){
 			// 	$exchange = new Exchange($rData["exchangeID"]);
@@ -1956,7 +1958,7 @@ class GiftBoxHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->setField("memberID",$memberID);
 		}
 
@@ -1969,7 +1971,7 @@ class GiftBoxHistory extends DBTable{
 
 	public function getAllExchangeID(){
 		$elist=array();
-		while($rData = $this->getRowByQuery("where memberID='".$this->memberID."' and confirmDate=0",$this->getDBConnection())){
+		while($rData = $this->getRowByQuery("where memberID='".$this->memberID."' and confirmDate=0",self::getDBConnection())){
 			if($rData["exchangeID"])$elist[]=$rData["exchangeID"];
 		}
 
@@ -1978,11 +1980,11 @@ class GiftBoxHistory extends DBTable{
 
 	public function confirmAll(){
 		$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
-		$result = mysql_query("update ".$this->getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$this->memberID."' and confirmDate=0 and regDate>$lastDay",$this->getDBConnection());
+		$result = mysql_query("update ".$this->getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$this->memberID."' and confirmDate=0 and regDate>$lastDay",self::getDBConnection());
 		return $result;
 	}
 
-	// public function updateWithLQTable($p){
+	// public static function updateWithLQTable($p){
 	// 	$exchange=null;
 	// 	// if($p["data"]["exchangeID"]){
 	// 	// 	$exchange = new Exchange($p["data"]["exchangeID"]);
@@ -1990,14 +1992,14 @@ class GiftBoxHistory extends DBTable{
 		
 	// 	//unset($p["data"]["exchangeList"]);
 		
-	// 	$r = parent::updateWithLQTable($p);
+	// 	$r = self::updateWithLQTable($p);
 		
 	// 	//if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
 	// 	return $r;
 	// }
 
-	// public function insertWithLQTable($p){
+	// public static function insertWithLQTable($p){
 	// 	$exchange=null;
 	// 	// if($p["data"]["exchangeID"]){
 	// 	// 	$exchange = new Exchange($p["data"]["exchangeID"]);
@@ -2005,14 +2007,14 @@ class GiftBoxHistory extends DBTable{
 		
 	// 	//unset($p["data"]["exchangeList"]);
 
-	// 	$r = parent::insertWithLQTable($p);
+	// 	$r = self::insertWithLQTable($p);
 
 	// 	//if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
 	// 	return $r;
 	// }
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"받은일시","field"=>"regDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true));
@@ -2048,15 +2050,15 @@ class UserProperty extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			return "where memberID='".$param["id"]."'";
 		});
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 
@@ -2079,9 +2081,9 @@ class UserStorage extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
 			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
@@ -2094,7 +2096,7 @@ class UserStorage extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 
@@ -2103,7 +2105,7 @@ class UserStorage extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"editor"=>$textEditor,"primary");
@@ -2164,9 +2166,9 @@ class UserPropertyHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
@@ -2189,7 +2191,7 @@ class UserPropertyHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 
@@ -2198,7 +2200,7 @@ class UserPropertyHistory extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"종류","field"=>"type","viewer"=>json_decode('{"type":"custom","func":"propChange"}',true));
 		$data["head"][]=array("title"=>"교환ID","field"=>"exchangeID","viewer"=>json_decode('{"type":"text"}',true));
@@ -2223,9 +2225,9 @@ class LoginEvent extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
@@ -2240,7 +2242,7 @@ class LoginEvent extends DBTable{
 			return $rData;
 		});
 
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setDBInfo(DBManager::getMainDBInfo());
 
 		if($fNo){
 			parent::load("no=".$fNo);
@@ -2254,7 +2256,7 @@ class LoginEvent extends DBTable{
 		}
 		return $data;
 	}
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		
 		// $exchange=null;
 		// if($p["data"]["exchangeID"]){
@@ -2279,7 +2281,7 @@ class LoginEvent extends DBTable{
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		if($p["data"]["exchangeID"]){
 			$exchange = new Exchange($p["data"]["exchangeID"]);
 			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
@@ -2288,7 +2290,7 @@ class LoginEvent extends DBTable{
 		return $r;
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"이벤트명","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
@@ -2315,10 +2317,10 @@ class AttendenceEvent extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::getMainDBInfo());
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setDBInfo(DBManager::getMainDBInfo());
+		self::setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
@@ -2344,7 +2346,7 @@ class AttendenceEvent extends DBTable{
 		
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"제목","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
@@ -2369,9 +2371,9 @@ class MissionEvent extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setDBInfo(DBManager::getMainDBInfo());
 
 		if($memberID && $fNo){
 			parent::load("memberID=".$memberID." and no=".$fNo);
@@ -2389,11 +2391,11 @@ class CuponManager extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setDBInfo(DBManager::getMainDBInfo());
 
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
@@ -2405,7 +2407,7 @@ class CuponManager extends DBTable{
 			$rData["cuponCount"] = CuponCode::getCuponCount($rData[no]);
 			return $rData;
 		});
-		// $this->setLQTableSelectCustomFunction(function ($data){
+		// self::setLQTableSelectCustomFunction(function ($data){
 		// 	if($data["exchangeID"]){
 		// 		$exchange = new Exchange($data["exchangeID"]);
 		// 		$data["exchangeList"]=$exchange->list;				
@@ -2421,7 +2423,7 @@ class CuponManager extends DBTable{
 	}
 
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$osEditor = json_decode('{"type":"select","element":["all","android","ios"]}',true);
@@ -2446,7 +2448,7 @@ class CuponManager extends DBTable{
 		return $data;
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		
 		// $exchange=null;
 		// if($p["data"]["exchangeID"]){
@@ -2470,7 +2472,7 @@ class CuponManager extends DBTable{
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		// $exchange=null;
 		// if($p["data"]["exchangeID"]){
 		// 		$exchange = new Exchange($p["data"]["exchangeID"]);
@@ -2506,11 +2508,11 @@ class CuponCode extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"] && $param["where"]["type"]=="cuponNo"){
 				return "where cuponNo=".$param["where"]["id"];
 			}else if ($param["where"]["id"] && $param["where"]["type"]=="cuponCode"){
@@ -2522,7 +2524,7 @@ class CuponCode extends DBTable{
 			// return "`cuponCode`='".$param["data"]["cuponCode"]."'";
 		});
 
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setLQTableSelectCustomFunction(function($rData){
 			$cuponInfo = new CuponManager($rData["cuponNo"]);
 				
 			if($cuponInfo->isLoaded()){
@@ -2568,7 +2570,7 @@ class CuponCode extends DBTable{
 	}
 
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$listViewer=array("type"=>"select");
 		while($pData = CuponManager::getRowByQuery("",null,"title,no")){
 			$listViewer["element"][] = $pData["no"]."-".$pData["title"];
@@ -2590,13 +2592,13 @@ class CuponCode extends DBTable{
 		return $data;
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		//$r = parent::updateWithLQTable($p);
 		$r["result"]=ResultState::toArray(ResultState::GDUNKNOWNRESULT,"업데이트할수없습니다.");
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		//$codeList = json_decode($p["data"]["cuponCode"],true);
 		if(is_array($p["data"]["cuponCode"])){
 			$codeList=$p["data"]["cuponCode"];
@@ -2663,9 +2665,9 @@ class CuponHistory extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
@@ -2677,7 +2679,7 @@ class CuponHistory extends DBTable{
 			return "where memberID='".$user->memberID."'";
 		});
 
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setLQTableSelectCustomFunction(function($rData){
 			$cuponInfo = new CuponManager($rData["cuponNo"]);
 			$rData["cuponTitle"]=$cuponInfo->title;
 			return $rData;
@@ -2685,7 +2687,7 @@ class CuponHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 		if($code && $memberID){
@@ -2695,7 +2697,7 @@ class CuponHistory extends DBTable{
 
 
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		
@@ -2721,10 +2723,10 @@ class CuponUsedInfo extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
 		if($shardIndex){
-			$this->setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
+			self::setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
 		}
 		$this->cuponCode=$code;
 		if($code){
@@ -2744,14 +2746,14 @@ class WeeklyScore extends DBTable{
 	public function __construct($memberID=null,$weekNo=null){
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
+		self::setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("weeklyScore"));
 		LogManager::addLog("weeklyScore is ".DBManager::getST("weeklyScore"));
 
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 		}
 		
 		if($memberID && $weekNo){
@@ -2827,12 +2829,12 @@ class StageScore extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 		$this->stageNo=$stageNo;
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 		
@@ -2937,10 +2939,10 @@ class Character extends DBTable{
 
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
 
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setDBInfo(DBManager::getMainDBInfo());
 
 		if($characterNo){
 			$q_where = "no=".$characterNo;
@@ -2960,19 +2962,19 @@ class Character extends DBTable{
 
     	return $r;
 	}
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		$r = parent::updateWithLQTable($p);
 		kvManager::increase("charListVer");
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		$r = parent::insertWithLQTable($p);
 		kvManager::increase("charListVer");
 		return $r;
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("field"=>"name","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}',true));
 		$data["head"][]=array("field"=>"sale","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
@@ -3017,10 +3019,10 @@ class CharacterHistory extends DBTable{
 
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
 
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			LogManager::addLog("--->".json_encode($param));
 			if($param["where"]["id"]=="*")return "";
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
@@ -3034,7 +3036,7 @@ class CharacterHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 		
@@ -3046,7 +3048,7 @@ class CharacterHistory extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$listViewer=array("type"=>"select");
 		while($pData = Character::getRowByQuery("",null,"name,no")){
 			$lang = json_decode($pData["name"],true);
@@ -3063,14 +3065,14 @@ class CharacterHistory extends DBTable{
 		return $data;
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		
 		unset($p["data"]["name"]);
 		$r = parent::updateWithLQTable($p);
 
 		if($p["comment"]){
 			$mh = new ModifyHistory($r["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["oldData"];
 			$mh->newData=$p["data"];
 			$mh->comment=$p["comment"];
@@ -3080,11 +3082,11 @@ class CharacterHistory extends DBTable{
 		return $r;
 	}
 
-	public function deleteWithLQTable($p){
+	public static function deleteWithLQTable($p){
 		$r = parent::deleteWithLQTable($p);
 		if($p["comment"]){
 			$mh = new ModifyHistory($p["data"]["memberID"]);
-			unset($p["data"][$this->getPrimaryKey()]);
+			unset($p["data"][self::getPrimarykey()]);
 			$mh->oldData=$p["data"];
 			$mh->newData="삭제";
 			$mh->comment=$p["comment"];
@@ -3106,11 +3108,11 @@ class Notice extends DBTable{
 
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
 
-		$this->setDBInfo(DBManager::getMainDBInfo());
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setDBInfo(DBManager::getMainDBInfo());
+		self::setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
@@ -3132,7 +3134,7 @@ class Notice extends DBTable{
 	}
 
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$intEditor = array("type"=>"text","datatype"=>"int");
 		$textViewer = array("type"=>"text");
 		$textareaEditor = array("type"=>"textarea");
@@ -3176,10 +3178,10 @@ class Shop extends DBTable{
 
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
-		$this->setLQTableSelectCustomFunction(function ($data){
+		self::setLQTableSelectCustomFunction(function ($data){
 			if($data["exchangeID"]){
 				$exchange = new Exchange($data["exchangeID"]);
 				$data["exchangeList"]=$exchange->list;				
@@ -3203,7 +3205,7 @@ class Shop extends DBTable{
 		}
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		
 		$exchange=null;
 		if($p["data"]["exchangeID"]){
@@ -3224,7 +3226,7 @@ class Shop extends DBTable{
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		$exchange=null;
 		if($p["data"]["exchangeID"]){
 				$exchange = new Exchange($p["data"]["exchangeID"]);
@@ -3246,7 +3248,7 @@ class Shop extends DBTable{
 	}
 
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$dictEditor = array("type"=>"dictionary");
@@ -3281,10 +3283,10 @@ class ShopEvent extends DBTable{
 
 		parent::__construct();
 		
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
-		$this->setLQTableSelectCustomFunction(function ($data){
+		self::setLQTableSelectCustomFunction(function ($data){
 			// if($data["exchangeID"]){
 			// 	$exchange = new Exchange($data["exchangeID"]);
 			// 	$data["exchangeList"]=$exchange->list;				
@@ -3292,7 +3294,7 @@ class ShopEvent extends DBTable{
 			return $data;
 		});
 
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setLQTableSelectCustomFunction(function($rData){
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
@@ -3320,7 +3322,7 @@ class ShopEvent extends DBTable{
 		}
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		
 		// $exchange=null;
 		// if($p["data"]["exchangeID"]){
@@ -3330,7 +3332,7 @@ class ShopEvent extends DBTable{
 		// 		$exchange->save();		
 		// }
 		// unset($p["data"]["exchangeList"]);
-		// $r = parent::updateWithLQTable($p);
+		// $r = self::updateWithLQTable($p);
 
 		// if($exchange){
 		// 	$r["data"]["exchangeList"]=$exchange->list;
@@ -3346,7 +3348,7 @@ class ShopEvent extends DBTable{
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		// if($p["data"]["exchangeID"]){
 		// 	$exchange = new Exchange($p["data"]["exchangeID"]);
 		// 	if($exchange->isLoaded())$p["data"]["exchangeList"]=$exchange->list;
@@ -3361,7 +3363,7 @@ class ShopEvent extends DBTable{
 		// 		$exchange->save();		
 		// }
 		// unset($p["data"]["exchangeList"]);
-		// $r = parent::insertWithLQTable($p);
+		// $r = self::insertWithLQTable($p);
 
 		// if($exchange){
 		// 	$r["data"]["exchangeList"]=$exchange->list;
@@ -3371,7 +3373,7 @@ class ShopEvent extends DBTable{
 		// return $r;
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 
 		$listViewer=array("type"=>"select","field"=>"type");
 		while($pData = Shop::getRowByQuery("",null,"id,type,count")){
@@ -3420,8 +3422,8 @@ class Monster extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no");
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -3432,19 +3434,19 @@ class Monster extends DBTable{
 		}
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		$r = parent::updateWithLQTable($p);
 		kvManager::increase("monsterListVer");
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		$r = parent::insertWithLQTable($p);
 		kvManager::increase("monsterListVer");
 		return $r;
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("field"=>"type","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["circle","snake","jr"]}',true));
 		$data["head"][]=array("field"=>"name","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
@@ -3494,8 +3496,8 @@ class Pattern extends DBTable{
 		
 		parent::__construct();
 		
-		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no");
+		self::setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -3506,7 +3508,7 @@ class Pattern extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$data["head"][]=array("field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("field"=>"category","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("field"=>"type","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
@@ -3529,12 +3531,12 @@ public function __construct($id=null){
 
 		parent::__construct();
 		
-		$this->setLQTableInsertCustomFunction(function ($param){
+		self::setLQTableInsertCustomFunction(function ($param){
 			return "`id`=".$param["data"]["id"];
 		});
 
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		$this->id=$id;
 		if($id){
 			$q_where = "`id`='".$id."'";
@@ -3606,8 +3608,8 @@ public function __construct($no=null){
 
 		parent::__construct();
 
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3626,12 +3628,12 @@ class EndlessRank extends DBTable{
 
 		parent::__construct();
 
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 
@@ -3709,11 +3711,11 @@ class EndlessPlayList extends DBTable{
 	public function __construct($memberID=null,$pNo=null){
 
 		parent::__construct();
-		$this->setPrimarykey("no",true);
+		self::setPrimarykey("no",true);
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 
@@ -3753,10 +3755,10 @@ class EndlessPlayList extends DBTable{
 
 	public function getPlayDataByNo($no){
 
-		$query = mysql_query("select * from `".$this->getDBTable()."` where no=".$no,$this->getDBConnection());
+		$query = mysql_query("select * from `".$this->getDBTable()."` where no=".$no,self::getDBConnection());
 		if($query)$result = mysql_fetch_assoc($query);
 		if(!$result){
-			$query = mysql_query("select * from `".$this->getDBTable()."` ORDER BY RAND() limit 1",$this->getDBConnection());
+			$query = mysql_query("select * from `".$this->getDBTable()."` ORDER BY RAND() limit 1",self::getDBConnection());
 			if($query)$result = mysql_fetch_assoc($query);
 		}
 
@@ -3765,7 +3767,7 @@ class EndlessPlayList extends DBTable{
 		return $result;
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("title"=>"닉네임","field"=>"nick","viewer"=>json_decode('{"type":"text"}',true));
@@ -3792,8 +3794,8 @@ class CommonSetting extends DBTable{
 
 		parent::__construct();
 
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		if($key){
 			$this->key = $key;
 			$q_where = "`key`='".$key."'";
@@ -3806,7 +3808,7 @@ class CommonSetting extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$textareaEditor = array("type"=>"textarea");
@@ -3833,8 +3835,8 @@ class KeyIntValue extends DBTable{
 
 		parent::__construct();
 
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3843,7 +3845,7 @@ class KeyIntValue extends DBTable{
 		}
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$intEditor = array("type"=>"text","datatype"=>"int");
 		$textViewer = array("type"=>"text");
 		$textareaEditor = array("type"=>"textarea");
@@ -3865,11 +3867,16 @@ class KeyIntValue extends DBTable{
 
 
 class TimeEvent extends DBTable{
+
+
 public function __construct($no=null){
 
 		parent::__construct();
 		
-		$this->setLQTableSelectCustomFunction(function($rData){
+		self::setLQTableSelectCustomFunction(function($rData){
+
+			LogManager::addLog("in custom function");
+
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
@@ -3884,8 +3891,8 @@ public function __construct($no=null){
 			return $rData;
 		});
 
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3895,7 +3902,7 @@ public function __construct($no=null){
 	}
 
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$dictEditor = array("type"=>"dictionary");
@@ -3934,7 +3941,7 @@ class ModifyHistory extends DBTable{
 
 		parent::__construct();
 		
-		$this->setLQTableSelectQueryCustomFunction(function ($param){
+		self::setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
 			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
@@ -3948,7 +3955,7 @@ class ModifyHistory extends DBTable{
 
 		if($memberID){
 			$this->m__userIndex = UserIndex::create($memberID);
-			$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+			self::setDBInfo($this->m__userIndex->getShardDBInfo());
 			$this->memberID=$memberID;
 		}
 
@@ -3960,11 +3967,18 @@ class ModifyHistory extends DBTable{
 	}
 
 	public function save($isIncludePrimaryKey = false){
+		$admin = new AdminUser($_SESSION["admin_no"]);
+		if(!$admin->isLogined()){
+			return ResultState::makeReturn(ResultState::GDSECURITY);
+		}
+
+		$this->writer = $admin->id;
+
 		if(!$this->regDate)$this->regDate=TimeManager::getCurrentDateTime();
 		return parent::save($isIncludePrimaryKey);
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		
@@ -4015,7 +4029,7 @@ class AdminUser extends DBTable{
 		
 
 
-		// $this->setLQTableSelectQueryCustomFunction(function ($param){
+		// self::setLQTableSelectQueryCustomFunction(function ($param){
 		// 	if($param["where"]["id"]=="*")return "";
 
 		// 	if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
@@ -4029,12 +4043,12 @@ class AdminUser extends DBTable{
 
 		// if($memberID){
 		// 	$this->m__userIndex = UserIndex::create($memberID);
-		// 	$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+		// 	self::setDBInfo($this->m__userIndex->getShardDBInfo());
 		// 	$this->memberID=$memberID;
 		// }
 
-		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::getMainDBInfo());
+		self::setPrimarykey("no",true);
+		self::setDBInfo(DBManager::getMainDBInfo());
 		$this->m__isLogin = false;
 		$q_where="";
 		if($id){
@@ -4072,7 +4086,7 @@ class AdminUser extends DBTable{
 		return $p[$where];
 	}
 
-	public function login($p){
+	public static function login($p){
 		$r["param"]=$p;
 		$admin = new AdminUser(null,$p["data"]["id"],$p["data"]["passwd"]);
 		$r["isLogined"]=false;
@@ -4090,7 +4104,7 @@ class AdminUser extends DBTable{
 		return $r;
 	}
 
-	public function insertWithLQTable($p){
+	public static function insertWithLQTable($p){
 		if($p["data"]["passwd"]){
 			$q = mysql_query("select password('".$p["data"]["passwd"]."')",DBManager::getMainConnection());
 			$pass = mysql_fetch_array($q);
@@ -4100,13 +4114,13 @@ class AdminUser extends DBTable{
 		return $r;
 	}
 
-	public function updateWithLQTable($p){
+	public static function updateWithLQTable($p){
 		if($p["data"]["passwd"])unset($p["data"]["passwd"]);
 		$r = parent::updateWithLQTable($p);
 		return $r;
 	}
 
-	public function loadWithDataTable($p){
+	public static function loadWithLQTable($p){
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		

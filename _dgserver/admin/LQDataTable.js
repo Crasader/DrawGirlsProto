@@ -2003,7 +2003,7 @@ $(".LQAdd .LQDelete .LQModify .LQModifyApply .LQModifyCancel").blur();
 	var makeHeadInfo = function(){
 	log("make head info");
 	var a = "";
-	a+='public function loadWithDataTable($p){\n';
+	a+='public static function loadWithLQTable($p){\n';
 	$(".LQDataTable").find("th").each(function(index,item){
 		//log("test");
 		item = $(this);
