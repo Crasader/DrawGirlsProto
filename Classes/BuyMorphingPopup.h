@@ -38,7 +38,7 @@ private:
 	
 	CCSprite* gray;
 	CCNode* m_container;
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	CCControlButton* cancel_button;
 	CCControlButton* buy_button;
 	

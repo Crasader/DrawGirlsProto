@@ -37,7 +37,7 @@ private:
 	CCSprite* gray;
 	
 	CCNode* m_container;
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	KSLabelTTF* missile_data_level;
 	KSLabelTTF* missile_data_power;
 	CCNode* missile_img;

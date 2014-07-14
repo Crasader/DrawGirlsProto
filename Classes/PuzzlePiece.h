@@ -86,6 +86,7 @@ public:
 				CCOrbitCamera* t_orbit1 = CCOrbitCamera::create(0.2f, 1.f, 0, 0, 90, 0, 0);
 				CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::selectedImgVisible));
 				CCOrbitCamera* t_orbit2 = CCOrbitCamera::create(0.2f, 1.f, 0, -90, 90, 0, 0);
+				CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(PuzzlePiece::resetCamera));
 				CCSequence* t_seq = CCSequence::create(t_orbit1, t_call1, t_orbit2, NULL);
 				selected_img->runAction(t_seq);
 			}
@@ -241,6 +242,14 @@ private:
 	CCSprite* star2;
 	CCSprite* star3;
 	CCSprite* star4;
+	
+	void resetCamera()
+	{
+		if(selected_img)
+		{
+			selected_img->getCamera()->restore();
+		}
+	}
 	
 	void selectedImgVisible()
 	{

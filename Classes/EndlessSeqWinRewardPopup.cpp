@@ -57,29 +57,28 @@ void EndlessSeqWinRewardPopup::myInit(int t_touch_priority, function<void()> t_e
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(260,230));
+	back_case = CCSprite::create("popup_small_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	setFormSetter(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(251, 113));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-15.f));
 	back_case->addChild(back_in);
 	setFormSetter(back_in);
 	
 	
 	int victory_value = t_reward["endlessData"]["ing_win"].asInt();
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardTitle), victory_value), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardTitle), victory_value), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(back_case->getContentSize().width / 2.f, back_case->getContentSize().height-25));
+	title_label->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(-85, back_case->getContentSize().height/2.f-35));
 	back_case->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
-	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-25));
+	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-22));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!is_menu_enable)
@@ -111,29 +110,14 @@ void EndlessSeqWinRewardPopup::myInit(int t_touch_priority, function<void()> t_e
 	{
 		reward_type = t_reward_list[0]["type"].asString();
 	}
-	
+
 	CCNode* reward_node = getRewardNode(reward_type);
-	reward_node->setPosition(ccp(back_in->getContentSize().width/2.f, 117));
+	reward_node->setPosition(ccp(back_in->getContentSize().width/2.f, 75));
 	back_in->addChild(reward_node);
 	
-//	CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_thumbnail.png", new_card_number));
-//	CCSprite* card_case = CCSprite::create("cardsetting_minicase2.png");
-//	card_case->setPosition(ccpFromSize(card_img->getContentSize()/2.f));
-//	card_img->addChild(card_case);
-//	
-//	CCSprite* light_img = CCSprite::create("newitem_back.png");
-//	light_img->setPosition(card_case->getPosition());
-//	card_img->addChild(light_img, -1);
-//	
-//	light_img->runAction(CCRepeatForever::create(CCRotateBy::create(1.f, 90)));
-//
-//	card_img->setPosition(ccp(back_in->getContentSize().width/2.f, 117));
-//	back_in->addChild(card_img);
-//	setFormSetter(card_img);
-	
-	KSLabelTTF* content_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardContent), victory_value), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* content_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardContent), victory_value), mySGD->getFont().c_str(), 12);
 	content_label->setColor(ccc3(255, 170, 20));
-	content_label->setPosition(ccp(back_in->getContentSize().width/2.f, 70));
+	content_label->setPosition(ccp(back_in->getContentSize().width/2.f, 42));
 	back_in->addChild(content_label);
 	
 	int reward_count_value = t_reward_list[0]["count"].asInt();
@@ -141,12 +125,9 @@ void EndlessSeqWinRewardPopup::myInit(int t_touch_priority, function<void()> t_e
 	string goods_string = getRewardString(reward_type, reward_count_value);
 	
 	StyledLabelTTF* goods_label = StyledLabelTTF::create(goods_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-	goods_label->setPosition(ccp(back_in->getContentSize().width/2.f, 45));
+	goods_label->setAnchorPoint(ccp(0.5f,0.5f));
+	goods_label->setPosition(ccp(back_in->getContentSize().width/2.f, 20));
 	back_in->addChild(goods_label);
-	
-//	StyledLabelTTF* content_label = StyledLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-//	content_label->setPosition(ccp(back_in->getContentSize().width / 2.f, 50));
-//	back_in->addChild(content_label);
 	
 	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
@@ -295,6 +276,7 @@ CCNode* EndlessSeqWinRewardPopup::getRewardNode(string t_type)
 	}
 	
 	CCSprite* light_img = CCSprite::create("newitem_back.png");
+	light_img->setScale(0.6f);
 	return_node->addChild(light_img, -1);
 	
 	light_img->runAction(CCRepeatForever::create(CCRotateBy::create(1.f, 90)));

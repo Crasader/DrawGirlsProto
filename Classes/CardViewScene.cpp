@@ -213,8 +213,6 @@ bool CardViewScene::init()
 	{
 		mySGD->is_morphing_noti = false;
 		
-        CCLOG("222222222");
-        
 		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, liveGirl);
 		addChild(t_popup, 999);
 	}
