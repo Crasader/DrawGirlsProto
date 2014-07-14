@@ -516,7 +516,8 @@ void JsGababo::setupCongMessage()
 	m_confirmButton = button;
 	button->setTouchPriority(m_touchPriority - 1);
 	button->setFunction(bind(&JsGababo::onPressConfirm, this, std::placeholders::_1));
-	button->getTitleLabel()->setColor(ccc3(37, 15, 0));
+	button->setTitleColor(ccc3(37, 15, 0));
+	button->setTitleColorForDisable(ccc3(37, 15, 0));
 	button->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(128, 0));
 	front->addChild(button);
 	
