@@ -9,7 +9,7 @@ var showPuzzleImg = function(value,option){
 	return '<img src='+data["image"]+' width=300>';
 }
 </script>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("book")?>" dbSort="`order` asc" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("book")?>" dbSort="`order` asc" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>

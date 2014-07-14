@@ -1,10 +1,10 @@
 <?php
 
+include "lib.php";
 iconv_set_encoding("internal_encoding", "UTF-8");
 iconv_set_encoding("output_encoding", "UTF-8");
 
 
-include "lib.php";
 
 
 $nowurl = $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
@@ -45,16 +45,16 @@ if($mode){
     CurrentUserInfo::$language = $param["lang"];
     CurrentUserInfo::$memberID = $param["memberID"];
     CurrentUserInfo::$socialID = $param["socialID"];
-    CurrentUserInfo::$os = $param["os"];
     CurrentUserInfo::$country = $param["country"];
+    if($param["timezone"])CurrentUserInfo::$timezone = $param["timezone"];
 
 
     if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["hspMemberNo"];
     if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["memberNo"];
     // if(!is_array($param)){
     //     $param = json_decode(trim(preg_replace("/'/","\"", $paramoriginal)),true);
-    //     LogManager::get()->addLog("ok --> ".$paramoriginal);
-    //     LogManager::get()->addLog("ok --> ".preg_replace("/'/","\"", $paramoriginal));
+    //     LogManager::addLog("ok --> ".$paramoriginal);
+    //     LogManager::addLog("ok --> ".preg_replace("/'/","\"", $paramoriginal));
     // }
     $version = $_POST["version"];
     
@@ -79,7 +79,7 @@ if(!$stopCommand){
         
         if($a=="starttransaction"){
             $commitMemberID=$p["memberID"];
-            CommitManager::get()->begin($commitMemberID);
+            CommitManager::begin($commitMemberID);
             $commitCmdName = $cmd;
         }else if(method_exists($command,$a)){
             if(!CurrentUserInfo::$memberID && $p["memberID"]){
@@ -87,9 +87,9 @@ if(!$stopCommand){
             }
 
             if(!($a=="login" || $a=="join") && CurrentUserInfo::$memberID && $checkUserdata==false){
-                $userdata = new UserData(CurrentUserInfo::$memberID);
-                LogManager::get()->addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
-                LogManager::get()->addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
+                $userdata = UserData::create($memberID);
+                LogManager::addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
+                LogManager::addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
 
                 if($userdata->isLoaded()){
                     if($userdata->deviceID!=$param["deviceID"]){
@@ -110,7 +110,7 @@ if(!$stopCommand){
                     
 
 
-                    }else if((TimeManager::get()->getTime()-$userdata->lastTime)>60*30){
+                    }else if((TimeManager::getTime()-$userdata->lastTime)>60*30){
                         $checkUserdata=true;
                         $allResult["longTimeError"]=true;
                         $r["result"]=ResultState::toArray(4003);
@@ -131,24 +131,24 @@ if(!$stopCommand){
 
             }
 
-            $startTime = TimeManager::get()->getMicroTime();
+            $startTime = TimeManager::getMicroTime();
             $r = $command->$a($p);
-            $endTime = TimeManager::get()->getMicroTime();
+            $endTime = TimeManager::getMicroTime();
             
             if($a=="login" || $a=="join"){
-                LogManager::get()->addLog("ok out deviceID ".$r["result"]["code"]);
+                LogManager::addLog("ok out deviceID ".$r["result"]["code"]);
                 if(ResultState::successCheck($r["result"])){
                     $checkUserdata=true;
                     $allResult["lastCmdNo"]=0;
                     $allResult["deviceID"]=$r["data"]["deviceID"];
-                    LogManager::get()->addLog("out deviceID".$r["data"]["deviceID"]);
+                    LogManager::addLog("out deviceID".$r["data"]["deviceID"]);
                 }else{
                     $allResult["deviceID"]=0;
                 }
             }
 
             if($commitMemberID && !ResultState::successCheck($r["result"])){
-                CommitManager::get()->setSuccess($commitMemberID,false);
+                CommitManager::setSuccess($commitMemberID,false);
             }
 
             
@@ -156,14 +156,14 @@ if(!$stopCommand){
             $p2["memberID"]= CurrentUserInfo::$memberID;
         
 
-            $r["log"] = LogManager::get()->getLog();
+            $r["log"] = LogManager::getLog();
 
             $p2["category"]=$a;
             $p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
             $p2["output"]=$r;
             $p2["execTime"]=$endTime-$startTime;
             if($a!="writelog")$command->writelog($p2);
-            LogManager::get()->getLogAndClear();
+            LogManager::getLogAndClear();
             $allResult[$cmd]= $r;
         }else if($a=="help"){
             $class_methods = get_class_methods('commandClass');
@@ -191,7 +191,7 @@ if(!$stopCommand){
     }
 
     if($commitMemberID>0){
-        $commitsuccess=CommitManager::get()->commit($commitMemberID);
+        $commitsuccess=CommitManager::commit($commitMemberID);
         if($commitsuccess){
             $cr["result"] = ResultState::successToArray();
             $cr["list"] = $allResult;
@@ -213,9 +213,9 @@ if(!$stopCommand){
     }
 
     $allResult["state"]="ok";
-    $allResult["timestamp"]=TimeManager::get()->getTime();
-    $allResult["date"]=TimeManager::get()->getCurrentDateTime();
-    $allResult["weekNo"]=TimeManager::get()->getCurrentWeekNo();
+    $allResult["timestamp"]=TimeManager::getTime();
+    $allResult["date"]=TimeManager::getCurrentDateTime();
+    $allResult["weekNo"]=TimeManager::getCurrentWeekNo();
     $allResult["cmdNo"]=$param["cmdNo"];
     $allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
     
@@ -228,7 +228,7 @@ if(!$stopCommand){
     }
     
     
-    DBManager::get()->closeDB();
+    DBManager::closeDB();
     @mysql_close();
 
 }

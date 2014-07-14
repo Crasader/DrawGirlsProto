@@ -2,7 +2,7 @@
 include "manage_header.php";
 
 
-$result = mysql_query("select * from ".DBManager::getMT("piece")." where no<=100 order by no asc",DBManager::get()->getMainConnection());
+$result = mysql_query("select * from ".DBManager::getMT("piece")." where no<=100 order by no asc",DBManager::getMainConnection());
 ?>
 <center>
 <table border=1>

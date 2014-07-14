@@ -3,7 +3,7 @@ include "header.php";
 ?>
 
 
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("language")?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("language")?>" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary editor='{"type":"text"}'>no</th>

@@ -38,7 +38,7 @@ var selectedMonster = function(obj,value){
 }
 </script>
 
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("eventstage")?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("eventstage")?>" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary editor='{"type":"text"}'>no</th>

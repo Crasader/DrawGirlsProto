@@ -6,6 +6,7 @@ class CurrentUserInfo{
 	static public $memberID;
 	static public $socialID;
 	static public $country="kr";
+	static public $timezone="Asia/Seoul";
 
 	static public function getLocalizedValueInData($data){
 		return $data[CurrentUserInfo::$language]?$data[CurrentUserInfo::$language]:$data["en"];	
@@ -31,109 +32,146 @@ class DataTableUtil{
 
 	}
 }
+
 class TimeManager{
-	public $m_timeOffset=32400;
-	private static $m_instance=NULL;
+	static public $m_timeOffset=32400;
+	// private static $m_instance=NULL;
+	static public $m_nowDate = NULL;
 	//싱글턴 얻어오기
-	public static function get()
-	{
-	    if ( is_null( self::$m_instance ) )
-	    {
-	      self::$m_instance = new self();
-	    }
-	    return self::$m_instance;
-	}
+	// public static function get()
+	// {
+	//     if ( is_null( self::$m_instance ) )
+	//     {
+	//       self::$m_instance = new self();
+
+	//     }
+	//     return self::$m_instance;
+	// }
 	
-	public function setTimeOffsetByLanguage($lang){
-		if($lnag=="kr")$this->m_timeOffset = 32400;
-		else $this->m_timeOffset = 0;
-	}
-	public function setTimeOffset($offset){
-		$this->m_timeOffset = $offset;
-	}
-	
-	public function getTimeOffset(){
-		return $this->m_timeOffset;
-	}
-	public function getTime(){
-		return time()+$this->m_timeOffset;
+	static public function construct(){
+		if(!CurrentUserInfo::$timezone)CurrentUserInfo::$timezone="Asia/Seoul";
+		TimeManager::$m_nowDate = new DateTime("now",new DateTimeZone(CurrentUserInfo::$timezone));
 	}
 
+	// public function setTimeOffsetByLanguage($lang){
+	// 	if($lnag=="kr")$this->m_timeOffset = 32400;
+	// 	else $this->m_timeOffset = 0;
+	// }
+
+	// public function setTimeOffset($offset){
+	// 	$this->m_timeOffset = $offset;
+	// }
+	
+	// public function getTimeOffset(){
+	// 	return $this->m_timeOffset;
+	// }
+	static public function getTime(){
+		return TimeManager::$m_nowDate->getTimestamp();
+		//return time()+$this->m_timeOffset;
+	}
+
+	static public function getTimestampByUTC(){
+		return time();
+	}
 	static public function getMicroTime() 
 	{ 
 	  list($usec, $sec) = explode(" ", microtime()); 
 	  return ((float)$usec + (float)$sec + $m_timeOffset); 
 	} 
 	
-	public function getCurrentWeekNo(){
-		return $this->getWeekNo($this->getTime());
+	static public function getCurrentWeekNo(){
+		$y  =TimeManager::$m_nowDate->format("Y");
+		$w  = TimeManager::$m_nowDate->format("W");
+		if($w<10)$w="0".$w;
+
+		return $y.$w;
+
+		//return $this->getWeekNo($this->getTime());
 	}
 	
-	public function getWeekNo($time){
-		$y = date("Y",$time);
-		$w = date("W",$time);
-		if($w<10)$w="0".$w;
+	// public function getWeekNo($time){
+	// 	$y = date("Y",$time);
+	// 	$w = date("W",$time);
+	// 	if($w<10)$w="0".$w;
 		
-		return $y.$w;
+	// 	return $y.$w;
+	// }
+
+	static public function getRemainTimeForWeeklyRank(){
+		//return strtotime("next Sunday")-time();
+		$sunDay = strtotime("next Sunday",TimeManager::$m_nowDate->getTimestamp());
+		$nextday = new DateTime(date("Y-m-d h:i:s",$sunDay),TimeManager::$m_nowDate->getTimezone());
+		$nextday->setTime(5,0,0);
+		
+		$subDay = $nextday->diff(TimeManager::$m_nowDate);
+
+		return ($subDay->d*24*60*60+$subDay->h*60*60+$subDay->i*60+$subDay->s);
 	}
 
-	public function getRemainTimeForWeeklyRank(){
-		return strtotime("next Sunday")-time();
+	static public function getRemainTimeForTodayMission(){
+
+		$nextday = new DateTime("tomorrow",TimeManager::$m_nowDate->getTimezone());
+		$nextday->setTime(5,0,0);
+		$subDay = $nextday->diff(TimeManager::$m_nowDate);
+
+		
+		return ($subDay->h*60*60+$subDay->i*60+$subDay->s);
 	}
 
 	// public function getWeekNo($timestamp){
 	// 	return date("W",$timestamp);
 	// }
 	
-	public function getDateTime($timestamp){
+	static public function getDateTime($timestamp){
 		return date("YmdHis",$timestamp);
 	}
 	
-	public function getCurrentDateTime(){
-		return $this->getDateTime($this->getTime());
+	static public function getCurrentDateTime(){
+		return TimeManager::getDateTime(TimeManager::getTime());
 	}
 
-	public function getCurrentTime(){
-  		return date("His",$this->getTime());
+	static public function getCurrentTime(){
+  		return date("His",TimeManager::getTime());
 	}
-	public function getWeekDayNo($timestamp){
+	static public function getWeekDayNo($timestamp){
 		return date("w",$timestamp);
 	}
 
-	public function getCurrentWeekDayNo(){
-		return $this->getWeekDayNo($this->getTime());
+	static public function getCurrentWeekDayNo(){
+		return TimeManager::getWeekDayNo(TimeManager::getTime());
 	}
   	
-  	public function getCurrentHour(){
-  		return date("H",$this->getTime());
+  	static public function getCurrentHour(){
+  		return date("H",TimeManager::getTime());
   	}
 
-  	public function getCurrentDate(){
-  		return date("Ymd",$this->getTime());
+  	static public function getCurrentDate(){
+  		return date("Ymd",TimeManager::getTime());
   	}
 
-  	public function getYesterDayDate(){
-  		return date("Ymd",strtotime(TimeManager::get()->getCurrentDate())-24*60*60);
+  	static public function getYesterDayDate(){
+  		return date("Ymd",strtotime(TimeManager::getCurrentDate())-24*60*60);
   	}
 }
 
+TimeManager::construct();
 
 class LogManager{
-	public $m_logList=array();
-	private static $m_instance=NULL;
-	public $m_isLocked=false;
+	public static $m_logList=array();
+	//private static $m_instance=NULL;
+	public static $m_isLocked=false;
 	//싱글턴 얻어오기
-	public static function get()
-	{
-	    if ( is_null( self::$m_instance ) )
-	    {
-	      self::$m_instance = new self();
-	    }
-	    return self::$m_instance;
-	}
+	// public static function get()
+	// {
+	//     if ( is_null( self::$m_instance ) )
+	//     {
+	//       self::$m_instance = new self();
+	//     }
+	//     return self::$m_instance;
+	// }
 	
-	public function addLog($log){
-		if(!$this->isLocked()){
+	static public function addLog($log){
+		if(!self::isLocked()){
 			$dInfo = debug_backtrace();
 			$dInfoSize = count($dInfo);
 		
@@ -143,27 +181,27 @@ class LogManager{
 			$url_cnt = count($php_self) - 1;
 			$this_page = $php_self[$url_cnt];
 			
-			$this->m_logList[]=$this_page."(".$dInfo[$dInfoSize]["line"].")@".$dInfo[$dInfoSize]["class"]."::".$dInfo[$dInfoSize]["function"]." : ".$log;
+			self::$m_logList[]=$this_page."(".$dInfo[$dInfoSize]["line"].")@".$dInfo[$dInfoSize]["class"]."::".$dInfo[$dInfoSize]["function"]." : ".$log;
 
 		}
 	}
 	
-	public function getLog(){
-		return unserialize(serialize($this->m_logList));
+	static public function getLog(){
+		return unserialize(serialize(self::$m_logList));
 	}
 	
-	public function getLogAndClear(){
-		$loglist = unserialize(serialize($this->m_logList));
-		$this->m_logList=array();
+	static public function getLogAndClear(){
+		$loglist = unserialize(serialize(self::$m_logList));
+		self::$m_logList=array();
 		return $loglist;
 	}
 	
-	public function setLock($locked){
-		$this->m_isLocked=$locked;
+	static public function setLock($locked){
+		self::$m_isLocked=$locked;
 	}
 	
-	public function isLocked(){
-		return $m_isLocked;
+	static public function isLocked(){
+		return self::$m_isLocked;
 	}
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -404,9 +442,9 @@ class DBInfo{
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DBManager{
-	public  $m_serverInfo=array();
-	public  $m_shardDBInfoList=array();
-	public  $m_mainDBInfo=array();
+	public static $m_serverInfo=array();
+	public static $m_shardDBInfoList=array();
+	public static $m_mainDBInfo=array();
 	public static $m_gameNo=null;
 	public static $m_httpgateway=null;
 	public static $m_gameID=null;
@@ -416,8 +454,8 @@ class DBManager{
 	private static $m_instance;
 	
 	//초기화 
-	public function __construct(){
-		$this->m_shardDBInfoList[]=null;
+	public static function construct(){
+		self::$m_shardDBInfoList[]=null;
 
 
 		//테이블 설정		
@@ -485,6 +523,7 @@ class DBManager{
 		self::$m_mainTables["attendenceevent"]="aAttendenceEventTable";
 		self::$m_mainTables["loginevent"]="aLoginEventTable";
 		self::$m_mainTables["exchange"]="aExchangeManager";
+		self::$m_mainTables["adminuser"]="aAdminUser";
 	}
 	static public function setStaticInfo($p){
 		self::$m_gameID = $p["gameID"];
@@ -495,76 +534,21 @@ class DBManager{
 		self::$m_httpgateway["port"]=$p["HTTPGATEWAY_PORT"];//"18080";
 		self::$m_secretKey = $p["secretKey"];//"12345678";
 	}
-	// public function setDataBase($gameid=null){
-	// 	self::$m_gameID = $gameid;
-	// 	self::$m_gameNo = 10289;
-	// 	self::$m_httpgateway["URL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/nomad.json";
-	// 	self::$m_httpgateway["helpURL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/help.json";
-	// 	self::$m_httpgateway["version"]="1.3";
-	// 	self::$m_httpgateway["port"]="18080";
-	// 	self::$m_secretKey = "12345678";
-
-	// 	if(!$gameid and $gameid=="drawgirls"){
-
-
-	// 		//서버설정
-	// 		$serverInfo = new ServerInfo("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
-	// 		$server0Index = $this->addServerInfo($serverInfo);
-			
-	// 		//메인db설정
-	// 		$this->m_mainDBInfo = new DBInfo("drawgirls",$this->getServerInfo($server0Index));
-			
-	// 		//샤드db설정
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
-			
-
-	// 		LogManager::get()->addLog("dbmanager use drawgirls db");
-	// 	}else if($gameid == "drawgirls_tstore"){
-	// 		//서버설정
-	// 		$serverInfo = new ServerInfo("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
-	// 		$server0Index = $this->addServerInfo($serverInfo);
-			
-	// 		//메인db설정
-	// 		$this->m_mainDBInfo = new DBInfo("drawgirls",$this->getServerInfo($server0Index));
-			
-	// 		//샤드db설정
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
-			
-
-	// 		LogManager::get()->addLog("dbmanager use drawgirls_tstore db");
-	// 	}else{
-			
-	// 		$serverInfo = new ServerInfo("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
-	// 		$server0Index = $this->addServerInfo($serverInfo);
-			
-	// 		//메인db설정
-	// 		$this->m_mainDBInfo = new DBInfo("drawgirls",$this->getServerInfo($server0Index));
-			
-	// 		//샤드db설정
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg001",$this->getServerInfo($server0Index));
-	// 		$this->m_shardDBInfoList[]=new DBInfo("dg002",$this->getServerInfo($server0Index));
-			
-
-	// 		LogManager::get()->addLog("dbmanager use nothing or $gameID db");
-	// 	}
-	// }
-
+	
 	static public function getSecretKey(){
 		return self::$m_secretKey;
 	}
-	public function setMainDB($dbname,$serverIndex){
-		$this->m_mainDBInfo = new DBInfo($dbname,$this->getServerInfo($serverIndex));
+	static public function setMainDB($dbname,$serverIndex){
+		self::$m_mainDBInfo = new DBInfo($dbname,self::getServerInfo($serverIndex));
 	}
 
-	public function addShardDB($dbname,$serverIndex){
-		$this->m_shardDBInfoList[]=new DBInfo($dbname,$this->getServerInfo($serverIndex));
+	static public function addShardDB($dbname,$serverIndex){
+		self::$m_shardDBInfoList[]=new DBInfo($dbname,self::getServerInfo($serverIndex));
 	}
 
-	public function addDBServer($ip,$id,$pass){
+	static public function addDBServer($ip,$id,$pass){
 		$serverInfo = new ServerInfo($ip,$id,$pass);
-		return $this->addServerInfo($serverInfo);
+		return self::addServerInfo($serverInfo);
 	}
 	//싱글턴 얻어오기
 	public static function get()
@@ -577,74 +561,74 @@ class DBManager{
 	}
   
 	//샤드서버추가
-	public function addServerInfo($server){
-		$this->m_serverInfo[]=$server;
-		return count($this->m_serverInfo)-1;
+	static public function addServerInfo($server){
+		self::$m_serverInfo[]=$server;
+		return count(self::$m_serverInfo)-1;
 	}
 	
-	public function getServerInfo($index){
-		return $this->m_serverInfo[$index];
+	static public function getServerInfo($index){
+		return self::$m_serverInfo[$index];
 	}
 
-	public function getMainDBInfo(){
-		return $this->m_mainDBInfo;
+	static public function getMainDBInfo(){
+		return self::$m_mainDBInfo;
 	}
-	public function getDBInfoByShardKey($shardKey){
+	static public function getDBInfoByShardKey($shardKey){
 	
-		return $this->getDBInfoByShardIndex($this->getDBIndexByShardKey($shardKey));
+		return self::getDBInfoByShardIndex(self::getDBIndexByShardKey($shardKey));
 	}
 	
-	public function getDBInfoByShardIndex($index){
-		return $this->m_shardDBInfoList[$index];
+	static public function getDBInfoByShardIndex($index){
+		return self::$m_shardDBInfoList[$index];
 	}
 
 
-	public function getConnectionByShardKey($shardKey){
+	static public function getConnectionByShardKey($shardKey){
 		
 		
-		$conn = $this->getConnectionByShardIndex($this->getDBIndexByShardKey($shardKey));
+		$conn = self::getConnectionByShardIndex(self::getDBIndexByShardKey($shardKey));
 
 		return $conn;
 	}
 
-	public function getConnectionByShardIndex($index){
-		$conn = $this->m_shardDBInfoList[$index]->getConnection();
+	static public function getConnectionByShardIndex($index){
+		$conn = self::$m_shardDBInfoList[$index]->getConnection();
 		return $conn;
 	}
 		
-	public function getMainConnection(){ 
-		return $this->m_mainDBInfo->getConnection();
+	static public function getMainConnection(){ 
+		return self::$m_mainDBInfo->getConnection();
 	}
 
-	public function getShardDBCount(){
-		return count($this->m_shardDBInfoList);
+	static public function getShardDBCount(){
+		return count(self::$m_shardDBInfoList);
 	}
-	public function getDBIndexByShardKey($shardKey){
-		return abs(($shardKey%($this->getShardDBCount()-1))+1);
+	static public function getDBIndexByShardKey($shardKey){
+		return abs(($shardKey%(self::getShardDBCount()-1))+1);
 	}
-	public function getDBIndexByShardString($shardString){
-		return $this->getDBIndexByShardKey(crc32($shardString));
+	static public function getDBIndexByShardString($shardString){
+		return self::getDBIndexByShardKey(crc32($shardString));
 	}
 	
-	public function closeShardDB(){
+	static public function closeShardDB(){
 		//for문 돌면서 close
-		foreach($this->m_shardDBInfoList as &$dbInfo){
+		foreach(self::$m_shardDBInfoList as &$dbInfo){
 			if($dbInfo)$dbInfo->closeConnection();
 		}
 	}
 	
-	public function closeMainDB(){
+	static public function closeMainDB(){
 		//close
-		$this->m_mainDBInfo->closeConnection();
+		self::$m_mainDBInfo->closeConnection();
 	}
 	
-	public function closeDB(){
-		$this->closeMainDB();
-		$this->closeShardDB();
+	static public function closeDB(){
+		self::closeMainDB();
+		self::closeShardDB();
 	}
 
-	public function getShardDBInfoList(){
-		return $this->m_shardDBInfoList;
+	static public function getShardDBInfoList(){
+		return self::$m_shardDBInfoList;
 	}
 	//static
 	
@@ -702,6 +686,8 @@ class DBManager{
 		return $query;
 	}
 }
+
+DBManager::construct();
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -730,7 +716,7 @@ class DBManager{
 // 			$this->m__DBTable = DBManager::getMT(get_called_class());
 // 			$this->m__isMainClass=true;
 // 		}
-// 		LogManager::get()->addLog("db table auto select by ".get_called_class()." ==>".$this->m__DBTable);
+// 		LogManager::addLog("db table auto select by ".get_called_class()." ==>".$this->m__DBTable);
 // 	}
 	
 // 	public function getPrimaryKey(){
@@ -821,10 +807,10 @@ class DBManager{
 // 	}
 	
 // 	public function save($isIncludePrimaryKey=false){
-// 		LogManager::get()->addLog("save function start");
+// 		LogManager::addLog("save function start");
 // 		if(!$this->m__DBInfo){
 
-// 			LogManager::get()->addLog("save function fail, undefined m__DBInfo");
+// 			LogManager::addLog("save function fail, undefined m__DBInfo");
 // 			return false;
 // 		}
 
@@ -833,27 +819,27 @@ class DBManager{
 // 			if($this->isLoaded()){
 // 				//update
 // 				$query = $this->updateQuery();
-// 				LogManager::get()->addLog("save make update query ".$query);
+// 				LogManager::addLog("save make update query ".$query);
 // 			}else{
 // 				//insert
 // 				$query = $this->insertQuery($isIncludePrimaryKey);
-// 				LogManager::get()->addLog("save make insert query ".$query);
+// 				LogManager::addLog("save make insert query ".$query);
 // 			}
 			
 // 			if(mysql_query($query,$this->m__DBInfo->getConnection())){
-// 				LogManager::get()->addLog("save query ok".mysql_error());
+// 				LogManager::addLog("save query ok".mysql_error());
 // 				return true;
 // 			}else{
-// 				LogManager::get()->addLog("save query fail".mysql_error());
+// 				LogManager::addLog("save query fail".mysql_error());
 // 				return false;
 // 			}
 // 		}
-// 		LogManager::get()->addLog("save fail, m__DBInfo->getConnection() is false");
+// 		LogManager::addLog("save fail, m__DBInfo->getConnection() is false");
 // 		return false;
 // 	}
 	
 // 	public function load($where){
-// 		LogManager::get()->addLog("load start");
+// 		LogManager::addLog("load start");
 // 		if(!$this->m__DBTable)return false;
 // 		if(!$this->m__DBInfo)return false;
 // 		if(!$this->m__DBInfo->getConnection())return false;
@@ -867,40 +853,40 @@ class DBManager{
 // 			$query = "select * from ".$this->m__DBTable." where ".$where;
 // 		}
 		
-// 		LogManager::get()->addLog("load query ->".$query);
+// 		LogManager::addLog("load query ->".$query);
 
 // 		$result=mysql_query($query,$this->m__DBInfo->getConnection());
 
 // 		if(mysql_error() || mysql_affected_rows()<1){
 			
-// 			LogManager::get()->addLog("load fail ->".mysql_error()." affected_rows is ".mysql_affected_rows());
+// 			LogManager::addLog("load fail ->".mysql_error()." affected_rows is ".mysql_affected_rows());
 // 			return false;
 // 		}
 
 // 		if($result)$this->m__result = mysql_fetch_array($result,MYSQL_ASSOC);
 		
 // 		if($this->m__result && $this->m__result[$this->m__primarykey]){
-// 			LogManager::get()->addLog("load ok, primarykey is ".$this->m__primarykey." and value is ".$this->m__result[$this->m__primarykey]);
+// 			LogManager::addLog("load ok, primarykey is ".$this->m__primarykey." and value is ".$this->m__result[$this->m__primarykey]);
 // 			$this->m__isLoaded=true;
 // 			return true;
 // 		}
 		
-// 		LogManager::get()->addLog("load fail");
+// 		LogManager::addLog("load fail");
 // 		return false;
 // 	}
 	
 // 	public function remove(){
-// 		LogManager::get()->addLog("remove function start");
+// 		LogManager::addLog("remove function start");
 // 		if($this->isLoaded()){
 // 			$query = "DELETE FROM ".$this->m__DBTable." WHERE `".$this->m__primarykey."`='".$this->getPrimaryValue()."'";
 // 			$result = mysql_query($query,$this->m__DBInfo->getConnection());
 // 			if(!mysql_error()){
-// 				LogManager::get()->addLog("remove success with query -> ".$query);
+// 				LogManager::addLog("remove success with query -> ".$query);
 // 				return true;
 // 			}
 // 		}
 
-// 		LogManager::get()->addLog("remove fail");
+// 		LogManager::addLog("remove fail");
 // 		return false;
 // 	}
 // 	public function setDBInfo($dbInfo){
@@ -935,7 +921,7 @@ class DBManager{
 
 // 	static public function getRowByQuery($where="",$dbcon=NULL){
 // 		if(self::isMainDBClass()){
-// 			if(!self::$m__qResult)self::$m__qResult = mysql_query("select * from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+// 			if(!self::$m__qResult)self::$m__qResult = mysql_query("select * from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 // 			$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
 // 			if(!$result)self::$m__qResult=null;
 // 			return $result;
@@ -968,7 +954,7 @@ class DBManager{
 // 		if(!$where)return;
 
 // 		if(self::isMainDBClass()){
-// 			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+// 			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 // 			return;
 // 		}
 
@@ -991,7 +977,7 @@ class DBManager{
 // 		// 	else $dbconn = $dbcon;
 
 // 		// 	self::$m__qResult = mysql_query("delete from ".DBManager::getST(get_called_class())." ".$where,$dbconn);
-// 		// 	LogManager::get()->addLog("removeRowByQuery : ".self::$m__qResult);
+// 		// 	LogManager::addLog("removeRowByQuery : ".self::$m__qResult);
 // 		// }
 
 // 		// if($dbcon!=NULL)return $result;
@@ -1029,7 +1015,7 @@ class DBTable{
 			$this->m__DBTable = DBManager::getMT(get_called_class());
 			$this->m__isMainClass=true;
 		}
-		LogManager::get()->addLog("db table auto select by ".get_called_class()." ==>".$this->m__DBTable);
+		LogManager::addLog("db table auto select by ".get_called_class()." ==>".$this->m__DBTable);
 	}
 	
 	static public function isMainDBClass(){
@@ -1087,7 +1073,7 @@ class DBTable{
 	}
 	
 	public function save($isIncludePrimaryKey=false){
-		LogManager::get()->addLog("DBRow save function");
+		LogManager::addLog("DBRow save function");
 		if(!$this->m__DBInfo)return false;
 
 		if($this->m__DBInfo->getConnection()){
@@ -1096,28 +1082,28 @@ class DBTable{
 			if($this->isLoaded()){
 				//update
 				$query = $this->updateQuery();
-				LogManager::get()->addLog("make update query ".$query);
+				LogManager::addLog("make update query ".$query);
 			}else{
 				//insert
 				$query = $this->insertQuery($isIncludePrimaryKey);
-				LogManager::get()->addLog("make insert query ".$query);
+				LogManager::addLog("make insert query ".$query);
 				$isInsert=true;
 			}
 			
 			if(mysql_query($query,$this->getDBConnection())){
-				LogManager::get()->addLog("what?->".mysql_error());
-				LogManager::get()->addLog("query ok ");
+				LogManager::addLog("what?->".mysql_error());
+				LogManager::addLog("query ok ");
 				if($isInsert && $this->m__autoIncreaseKey){
 					$this->{$this->m__autoIncreaseKey}=mysql_insert_id($this->getDBConnection());
-					LogManager::get()->addLog("find autoIncreaseKey ".$this->m__autoIncreaseKey." value is ".$this->m__data[$this->m__autoIncreaseKey]);
+					LogManager::addLog("find autoIncreaseKey ".$this->m__autoIncreaseKey." value is ".$this->m__data[$this->m__autoIncreaseKey]);
 				}
 				return true;
 			}else{
-				LogManager::get()->addLog("query fail ".mysql_error());
+				LogManager::addLog("query fail ".mysql_error());
 				return false;
 			}
 		}
-		LogManager::get()->addLog("dginfo fail");
+		LogManager::addLog("dginfo fail");
 		return false;
 	}
 	
@@ -1133,7 +1119,7 @@ class DBTable{
 			$query = "select * from ".$this->m__DBTable." where ".$where;
 		}
 		
-		LogManager::get()->addLog("load query ".$query);
+		LogManager::addLog("load query ".$query);
 
 		$this->m__isLoaded=false;
 
@@ -1143,12 +1129,12 @@ class DBTable{
 		
 		if($tempdata && $tempdata[$this->m__primarykey]){
 			$this->m__data = $tempdata;
-			LogManager::get()->addLog("load ok, primarykey is".$tempdata[$this->m__primarykey]);
+			LogManager::addLog("load ok, primarykey is".$tempdata[$this->m__primarykey]);
 			$this->m__isLoaded=true;
 			return true;
 		}
 		
-		LogManager::get()->addLog("load fail".mysql_error());
+		LogManager::addLog("load fail".mysql_error());
 		return false;
 	}
 	
@@ -1268,11 +1254,11 @@ class DBTable{
 		$this->m__LQTableDeleteCustomFunction = $func;
 	}
 
-	public function loadWithDataTable($p){
-		if($this->isMainDBClass()){
-			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::get()->getMainConnection());
+	static public function loadWithDataTable($p){
+		if(self::isMainDBClass()){
+			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::getMainConnection());
 		}else{
-			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::get()->getConnectionByShardIndex(1));
+			$q = mysql_query('DESCRIBE '.$this->m__DBTable,DBManager::getConnectionByShardIndex(1));
 		}
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
@@ -1306,7 +1292,7 @@ class DBTable{
 		$orderStr="";
 		if($param["sort"]){
 			$orderInfo = $param["sort"];
-			LogManager::get()->addLog("sort info".$param["sort"]);
+			LogManager::addLog("sort info".$param["sort"]);
 			if($orderInfo){
 				$orderStr=" order by";
 				$cc=1;
@@ -1315,7 +1301,7 @@ class DBTable{
 					foreach ($orderInfo as $key => $value) {
 						if($value=="desc")$orderType="desc";
 						else $orderType="asc";
-						$orderStr.=" ".$key." ".$orderType;
+						$orderStr.=" `".$key."` ".$orderType;
 
 						if($orderCnt!=$cc)$orderStr.=",";
 						$cc++;
@@ -1356,9 +1342,9 @@ class DBTable{
 		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
 			if($this->isMainDBClass()){
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+				$this->setDBInfo(DBManager::getMainDBInfo());
 			}else if($shardIndex){
-				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+				$this->setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
 			}else{
 				$userIndex = UserIndex::create($param["data"]["memberID"]);
 				$this->setDBInfo($userIndex->getShardDBInfo());
@@ -1376,8 +1362,8 @@ class DBTable{
 			}
 		}
 
-		LogManager::get()->addLog("loadQuery:".$loadQuery);
-		LogManager::get()->addLog("param check ".json_encode($param["data"],true));
+		LogManager::addLog("loadQuery:".$loadQuery);
+		LogManager::addLog("param check ".json_encode($param["data"],true));
 		if($loadQuery!=-1)$this->load($loadQuery);
 
 		if($this->isLoaded()){
@@ -1387,7 +1373,7 @@ class DBTable{
 
 		foreach ($param["data"] as $key => $value) {
 			$this->$key = $value;
-			LogManager::get()->addLog("foreach $key -".json_encode($value,true));
+			LogManager::addLog("foreach $key -".json_encode($value,true));
 		}
 
 		if($this->save()){
@@ -1405,9 +1391,9 @@ class DBTable{
 	public function updateWithLQTable($param){
 		if(!$this->getDBInfo()){
 			if($this->isMainDBClass()){
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
-			}else if($shardIndex){
-				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+				$this->setDBInfo(DBManager::getMainDBInfo());
+			}else if($param["shardIndex"]){
+				$this->setDBInfo(DBManager::getDBInfoByShardIndex($param["shardIndex"]));
 			}else{
 				$userIndex = UserIndex::create($param["data"]["memberID"]);
 				$this->setDBInfo($userIndex->getShardDBInfo());
@@ -1441,7 +1427,7 @@ class DBTable{
 			$r["data"] = $this->getArrayData(true);
 			$func = $this->m__LQTableSelectCustomFunction;
 			if($func)$r["data"]=$func($r["data"]);
-			$r["shardIndex"]=$shardIndex;
+			$r["shardIndex"]=$param["shardIndex"];
 			$r["result"]=ResultState::successToArray();
 			return $r;
 		}
@@ -1454,9 +1440,9 @@ class DBTable{
 		$shardIndex=$param["shardIndex"];
 		if(!$this->getDBInfo()){
 			if(!$this->isMainDBClass() && $shardIndex){
-				$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+				$this->setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
 			}else{
-				$this->setDBInfo(DBManager::get()->getMainDBInfo());
+				$this->setDBInfo(DBManager::getMainDBInfo());
 			}
 		}
 
@@ -1497,8 +1483,8 @@ class DBTable{
 
 	static public function getQueryResult($query,$dbcon=NULL){
 		if(self::isMainDBClass()){
-		LogManager::get()->addLog("getqueryresult2->".$query);
-			$result = mysql_query($query,DBManager::get()->getMainConnection());
+		LogManager::addLog("getqueryresult2->".$query);
+			$result = mysql_query($query,DBManager::getMainConnection());
 			return $result;
 		}
 
@@ -1514,7 +1500,7 @@ class DBTable{
 		else $dbconn = $dbcon;
 
 
-		LogManager::get()->addLog("getqueryresult2->".$query);
+		LogManager::addLog("getqueryresult2->".$query);
 		$result = mysql_query($query,$dbconn);
 
 
@@ -1528,8 +1514,8 @@ class DBTable{
 	}
 	static public function getRowByQuery($where="",$dbcon=NULL,$fields="*"){
 		if(self::isMainDBClass()){
-			if(!self::$m__qResult)self::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
-			LogManager::get()->addLog("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where);
+			if(!self::$m__qResult)self::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
+			LogManager::addLog("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where);
 			if(self::$m__qResult)$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
 			if(!$result)self::$m__qResult=null;
 			return $result;
@@ -1546,7 +1532,7 @@ class DBTable{
 			else $dbconn = $dbcon;
 
 			self::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getST(get_called_class())." ".$where,$dbconn);
-			LogManager::get()->addLog("ok go select ".$fields." from ".DBManager::getST(get_called_class())." ".$where);
+			LogManager::addLog("ok go select ".$fields." from ".DBManager::getST(get_called_class())." ".$where);
 		}
 
 		$result = mysql_fetch_array(self::$m__qResult,MYSQL_ASSOC);
@@ -1575,7 +1561,7 @@ class DBTable{
 		if(!$where)return false;
 
 		if(self::isMainDBClass()){
-			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::get()->getMainConnection());
+			$result=mysql_query("delete from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 			return $result;
  		}
 
@@ -1583,7 +1569,7 @@ class DBTable{
 			$table = DBManager::getMT(get_called_class());
 			if(!$table)$table=DBManager::getST(get_called_class());
 			$result=mysql_query("delete from ".$table." ".$where,$dbcon);
-			LogManager::get()->addLog("delete gogo is ".$result);
+			LogManager::addLog("delete gogo is ".$result);
 			return $result;
 		}
 

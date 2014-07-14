@@ -7,7 +7,7 @@ include "header.php";
 <table border=1>
 	<tr><td>
 		<b>* type</b> <br>
-		r 루비 , g 골드 , h 하트 , m 실제돈 , cd 카드 , pc 피스 , pz 퍼즐 , cu 캐릭업그레이드 , cp 캐릭터 <br>
+		r 젬 , g 골드 , h 하트 , m 실제돈 , cd 카드 , pc 피스 , pz 퍼즐 , cu 캐릭업그레이드 , cp 캐릭터 <br>
 		패스권 p1,p2,p3,p4,p5 ...<br>
 		아이템 i1,i2,i3,i4,i5 ...<br>
 	</td></tr>

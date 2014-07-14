@@ -20,6 +20,6 @@ include "command/cmd2.php";
 	// $r=$command->tranjaction($ps);
 	// echo json_encode($r,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	// echo "<br><br>";
-	// echo json_encode(LogManager::get()->getLogAndClear(),JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+	// echo json_encode(LogManager::getLogAndClear(),JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	// echo "<br><br>";
 ?>

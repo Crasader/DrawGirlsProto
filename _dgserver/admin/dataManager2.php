@@ -28,6 +28,6 @@ $result =  $obj->$_POST["dbFunc"](json_decode($_POST["param"],true));
 	}
 }
 
-$result["log"]=LogManager::get()->getLogAndClear();
+$result["log"]=LogManager::getLogAndClear();
 echo json_encode($result,JSON_UNESCAPED_UNICODE);
 ?>

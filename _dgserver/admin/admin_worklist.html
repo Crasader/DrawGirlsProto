@@ -2,7 +2,7 @@
 include "header.php";
 ?>
 
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("worklist")?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("worklist")?>" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="no" viewer='{"type":"text"}' primary>no</th>

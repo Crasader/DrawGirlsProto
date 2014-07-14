@@ -140,11 +140,9 @@ var getFieldInfo = function(obj){
 	selectedObj = obj;
 	depth=0;
 	while(1){
-		log("find tables");
 		if(selectedObj.hasClass("LQDataTable") || selectedObj.hasClass("LQDataForm")){
 			result["table"]=selectedObj;
 			result["row"]=selectedObj;
-			log("find table");
 			break;
 		}else{
 			selectedObj = selectedObj.parent();
@@ -163,7 +161,6 @@ var getFieldInfo = function(obj){
 		log("find row");
 		if(selectedObj.hasClass("LQDataRow") || selectedObj.hasClass("LQDataAddRow")){
 			result["row"]=selectedObj;
-			log("find row");
 			break;
 		}else{
 			selectedObj = selectedObj.parent();
@@ -266,10 +263,10 @@ var getFieldInfo = function(obj){
 		if(typeof(result["editor"])=="undefined")result["editor"]=result["cell"].attr("editor");
 		result["viewer"]=result["fieldHeader"].attr("viewer");
 		
-		log("getFieldInfo, editorValue "+result["editorObj"].attr("editor"));
-		log("getFieldInfo, viewer "+result["viewer"]);
-		log("getFieldInfo, editor "+result["editor"]);
-		log("getFieldInfo, fieldheader "+result["fieldHeader"].attr("class"));
+		// log("getFieldInfo, editorValue "+result["editorObj"].attr("editor"));
+		// log("getFieldInfo, viewer "+result["viewer"]);
+		// log("getFieldInfo, editor "+result["editor"]);
+		// log("getFieldInfo, fieldheader "+result["fieldHeader"].attr("class"));
 
 		result["editorValue"]=getObjValue(result["editorObj"]);
 
@@ -323,14 +320,14 @@ if(typeof(obj)=="undefined")return undefined;
 var getObjValue = function(obj){
 	//obj = s2j(obj);
 
-	log("getObjValue --------------------------------------- start ---------------");
-	log("getObjValue, obj is "+j2s(obj));
+	// log("getObjValue --------------------------------------- start ---------------");
+	// log("getObjValue, obj is "+j2s(obj));
 	var editor = s2j(obj.attr("editor"));
-	log("getObjValue, obj.attr(editor) is "+j2s(editor));
+	// log("getObjValue, obj.attr(editor) is "+j2s(editor));
 	var editorName = undefined;
 	if(editor){
 		editorName = editor["type"];
-		log("getObjValue, ok set editorName "+editorName);
+		// log("getObjValue, ok set editorName "+editorName);
 	}
 
 	var vFunc = undefined;
@@ -343,7 +340,7 @@ var getObjValue = function(obj){
 		}
 	}
 	
-	log("getObjValue, editorName is "+editorName);
+	// log("getObjValue, editorName is "+editorName);
 	if(typeof(vFunc)=="function"){
 		r=vFunc(obj);
 	}
@@ -358,9 +355,9 @@ var getObjValue = function(obj){
 		//log("s to number!!");
 		r=Number(r);
 	}
-	log("getObjValue return is "+j2s(r)+" and datatype is"+datatype);
+	// log("getObjValue return is "+j2s(r)+" and datatype is"+datatype);
 
-	log("getObjValue --------------------------------------- end ---------------");
+	// log("getObjValue --------------------------------------- end ---------------");
 	return r;
 	
 	
@@ -399,8 +396,8 @@ var viewerFunc_format = function(value,option){
 	for(var key in value){
 		result=result.replace("["+key+"]",value[key]);
 	}
-	log("format option "+j2s(option));
-	log("format reuslt "+result);
+	// log("format option "+j2s(option));
+	// log("format reuslt "+result);
 	return result;
 }
 
@@ -518,6 +515,16 @@ var editorFunc_text = function(value,option){
 	return neditor;
 	//return "<input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
 }
+
+
+
+var editorFunc_password = function(value,option){
+
+	var neditor = $("<input>").attr("type","password").attr("value",value).addClass("LQEditor form-control form-control-inline").attr("editor",j2s(option));
+	return neditor;
+	//return "<input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
+}
+
 var editorFunc_date = function(value,option){
 	var neditor = $("<input>").attr("type","text").attr("value",value).addClass("LQEditor form-control form-control-inline LQDateEditor").attr("editor",j2s(option));
 	neditor.datepicker({ dateFormat: "yymmdd",changeMonth: true, changeYear: true });
@@ -615,8 +622,8 @@ var editorFunc_array = function(value,option){
 	
 	if(typeof(_value)!="object")_value=[_value];
 	
-	log("editorFunc_array value is "+ j2s(_value));
-	log("editorFunc_array option is "+j2s(_option));
+	// log("editorFunc_array value is "+ j2s(_value));
+	// log("editorFunc_array option is "+j2s(_option));
 	
 	var eTable = $("<table>").attr("value",j2s(_value)).attr("editor",j2s(_option)).addClass("LQEditor table table-bordered");
 	var eTbody = $("<tbody>").appendTo(eTable);
@@ -632,7 +639,7 @@ var editorFunc_array = function(value,option){
 	// _result+="<input type='button' value='add' class='LQJSONArrayEditorAdd btn btn-primary'></td>";
 	// _result+="</tr>";
 	
-	log("-----------start-------------");
+	//log("-----------start-------------");
 	for(var j in _value){
 		var nTR = $("<tr>").attr("datarow","").appendTo(eTbody);
 		var nTD = $("<td>").attr("datafield","").appendTo(nTR);
@@ -647,7 +654,7 @@ var editorFunc_array = function(value,option){
 		// _result+="<td><input type='button' value='delete' class='LQJSONArrayEditorDelete  btn btn-danger'></td>";
 		// _result+="</tr>";
 	}
-	log("-----------end-------------");
+	//log("-----------end-------------");
 	//_result+="</tbody></table>";
 	
 	return eTable;
@@ -663,14 +670,14 @@ var editorFunc_array_value = function(obj){
 	 var eavresult=[];
 	
 	dataTable.children('tbody').children("tr[datarow]").each(function(index,item){
-		 dtfield = $(this).find('td[datafield]');
-		 editor = dtfield.find(".LQEditor:first");
-		 vvalue = getObjValue(editor);
+		 var dtfield = $(this).find('td[datafield]:first');
+		 var editor = dtfield.find(".LQEditor:first");
+		 var vvalue = getObjValue(editor);
 		
 		eavresult.push(vvalue);
 	});
 
-	log("result is."+j2s(eavresult));
+	//log("result is."+j2s(eavresult));
 	return eavresult;
 
 }
@@ -754,7 +761,7 @@ var editorFunc_table_value = function(obj){
 
 
 var editorFunc_dictionary = function(value,option){
-	log("dict option is"+j2s(option));
+	//log("dict option is"+j2s(option));
 	var _option = s2j(option["element"]);
 	var _value = s2j(value);
 	if(!_value)_value={};
@@ -779,7 +786,7 @@ var editorFunc_dictionary = function(value,option){
 		if(_option[key]["field"]=="VARIABLEKEY")isInVKey=true;
 		
 		for(key2 in _value){
-			log("check"+key2+"==="+_option[key]["field"]);
+			//log("check"+key2+"==="+_option[key]["field"]);
 			if(_option[key]["field"] == key2){
 				check=false;
 				break;
@@ -798,8 +805,8 @@ var editorFunc_dictionary = function(value,option){
 		}
 		
 	}
-	log(_value);
-	log("value is"+j2s(_value));
+	// log(_value);
+	// log("value is"+j2s(_value));
 	
 
 
@@ -840,7 +847,7 @@ var editorFunc_dictionary = function(value,option){
 		// _result+="<input type='text' value='"+j+"' class='LQDictFieldName form-control form-control-inline'>";
 		
 		if(keyEditor){
-			log("keyEditor"+keyEditor);
+			//log("keyEditor"+keyEditor);
 			$("<input>").attr("type","button").attr("value","select").attr("func",keyEditorOption["func"]).attr("mode",keyEditorOption["mode"]).addClass("LQDataSelectorButton btn btn-info").appendTo(nTD);
 
 			//_result+="<input type=button value='select' func='"+keyEditorOption["func"]+"' mode='"+keyEditorOption["mode"]+"' class='LQDataSelectorButton btn btn-info'>";
@@ -870,7 +877,7 @@ var editorFunc_dictionary = function(value,option){
 		//if(_op1=="")_op1="text";
 
 		
-		log("editorFunc_dictionary _op1 is " + j2s(_op1));
+		//log("editorFunc_dictionary _op1 is " + j2s(_op1));
 		
 		nTD2.append(editorSelector(_op1,_value[j]));
 //		_result+= editorSelector(_op1,_value[j]);
@@ -902,7 +909,7 @@ var editorFunc_dictionary_value = function(obj){
 		vdictresult[fieldname] = vvalue;
 
 	});
-	log("editorFunc_dictionary_value value is "+j2s(vdictresult));
+	//log("editorFunc_dictionary_value value is "+j2s(vdictresult));
 	return vdictresult;
 
 }			
@@ -944,7 +951,7 @@ var editorSelector = function(editor,value){
 		value = s2j(value);
 	}
 	editor = s2j(editor);
-	log("editor is "+j2s(editor));
+	//log("editor is "+j2s(editor));
 	if(!editor || typeof(editor)=="undefined"){
 		editor = {};
 
@@ -955,13 +962,13 @@ var editorSelector = function(editor,value){
 		else if(typeof(value)=="object") editor["type"]="dictionary";
 		
 		
-		log("editorSelector, valuse is "+typeof(value)+" editor is "+editor);
+		//log("editorSelector, valuse is "+typeof(value)+" editor is "+editor);
 	}
 
 
 	var pushEditor="";
 	var editortype = editor["type"];
-	log("editortype is " + editortype);
+	//log("editortype is " + editortype);
 	switch(editortype){
 		case "custom": pushEditor = eval(editor["func"]+"(value,editor);");break;
 		case "textarea": pushEditor = editorFunc_textarea(value,editor);break;
@@ -975,12 +982,13 @@ var editorSelector = function(editor,value){
 		case "date":pushEditor=editorFunc_date(value,editor);break;
 		case "datetime":pushEditor=editorFunc_datetime(value,editor);break;
 		case "time":pushEditor=editorFunc_time(value,editor);break;
+		case "password":pushEditor=editorFunc_password(value,editor);break;
 		case "NONE":pushEditor=j2s(value);break;
 		default:
 		var vFunc = editorFunc_text;
 		eval("if(typeof "+editortype+" != 'undefined') vFunc="+editortype+";");
 		pushEditor=vFunc(value,editor);
-		log("selected default editor");
+		//log("selected default editor");
 		break;
 
 	}
@@ -1015,7 +1023,7 @@ var startUpdateMode = function(obj){
 		for(var i=0;i<attrs.length;i++) {
 			if(attrs[i].nodeName!="class"){
 				newTable.attr(attrs[i].nodeName,attrs[i].nodeValue);
-				log(attrs[i].nodeName + " => " + attrs[i].nodeValue);
+				//log(attrs[i].nodeName + " => " + attrs[i].nodeValue);
 			}
 		}
 
@@ -2028,9 +2036,9 @@ var commenter_value = function(obj){
 
 var propChange = function(value){
 	switch(value){
-		case "r":return "루비";
-		case "pr":return "유료루비";
-		case "fr":return "무료루비";
+		case "r":return "젬";
+		case "pr":return "유료젬";
+		case "fr":return "무료젬";
 		case "g":return "골드";
 		case "h":return "하트";
 		case "i6":return "아이템두배아이템";
@@ -2047,7 +2055,7 @@ var propChange = function(value){
 }
 
 var propSelect = function(value,option){
- return editorFunc_select(value,{"type":"select","element":["골드","루비","유료루비","무료루비","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지"],"value":["g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg"]});
+ return editorFunc_select(value,{"type":"select","element":["골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지"],"value":["g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg"]});
 }
 
 var rewardViewer = function(value,option){
@@ -2074,6 +2082,7 @@ var requestUpdate = function(obj,modal){
 	var tInfo = gf(obj);
 	var changeData={};
 	var oldData={};
+	var callbackFunc = obj.attr("callbackFunc");
 	if(!tInfo["rowData"])tInfo["rowData"]={};
 
 
@@ -2083,14 +2092,16 @@ var requestUpdate = function(obj,modal){
 	});
 
 	//전체수정
-	if($(this).parent().hasClass("LQManageCell") || tInfo["table"].attr("startMode")=="update" || tInfo["table"].attr("editRowOnly")=="true"){
+	if(obj.parent().hasClass("LQManageCell") || tInfo["table"].attr("startMode")=="update" || tInfo["table"].attr("editRowOnly")=="true"){
 		//셀들찾기
 		tInfo["row"].find("td").each(function(index,item){
 			if(!$(this).hasClass("LQDataCell") && !$(this).attr("field"))return;
 			// ##################  셋벨류 하기~~~
 			var fInfo = gf($(this));
 			//값찾기
-			if(fInfo["editor"]!=undefined){
+			log("what da fuck cell is "+$(this).attr("field"));
+			
+			if(fInfo && typeof(fInfo["editor"])!="undefined"){
 				if(fInfo["editorObj"])fInfo["editorObj"].triggerHandler("saveCallBack");
 				var newValue=fInfo["editorValue"];
 				//getObjValue($(this).find(".LQEditor:first"),0);
@@ -2130,7 +2141,7 @@ var requestUpdate = function(obj,modal){
 		}
 		param={"dbClass":tInfo["dbClass"],"dbFunc":dbFunc,"param":j2s(lastData),"dbMode":dbMode};
 	}
-
+	param["callbackFunc"]=callbackFunc;
 	param["primaryKey"]=tInfo["primaryKey"];
 
 	log("shardIndex is "+tInfo["shardIndex"]);
@@ -2170,6 +2181,13 @@ var modfiyApplyAjax = function(param,tInfo,modal){
 	    dataType : "json", 
 	    type : "post",
 	    success : function(data){ 
+	    	var openSuccessAlert=true;
+	    	if(param['callbackFunc'] != undefined){
+	    		
+	    		eval("if(typeof "+param['callbackFunc']+" != 'undefined') vFunc="+param['callbackFunc']+";");
+	    		openSuccessAlert=vFunc(data);
+	    	}
+
 			if(data['result']['code']==1){
 				if(modal)modal.dialog( "close" );
 				log("result"+j2s(data));
@@ -2185,7 +2203,7 @@ var modfiyApplyAjax = function(param,tInfo,modal){
 						var fInfo=gf($(this));
 						// ##################  셋벨류 하기~~~						
 						//view모드로 복구					
-						if($(this).hasClass("LQDataCell") && fInfo["isPrimary"]==false){
+						if($(this).hasClass("LQDataCell") && $(this).find(".LQEditor")){
 							//viewer 적용
 							
 							var viewer = fInfo["viewer"];
@@ -2205,7 +2223,7 @@ var modfiyApplyAjax = function(param,tInfo,modal){
 						}
 					});
 				}else{
-					alert("ok","success"); // ############## 모두 초기화해야하나?
+					if(openSuccessAlert)alert("ok","success"); // ############## 모두 초기화해야하나?
 				}	
 		
 
