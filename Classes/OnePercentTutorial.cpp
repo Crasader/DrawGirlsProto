@@ -132,8 +132,8 @@ bool OnePercentTutorial::init(float originalPercent,
 	cancel_menu->setTouchPriority(-180);
 	cancel_menu->setFunction([=](CCObject* sender) {
 		if(m_cancelGacha) {
-			removeFromParent();
 			m_cancelGacha();
+			removeFromParent();
 		}
 	});
 	cancel_menu->setPosition(ccpFromSize(back_img->getContentSize()) + ccp(-25, -25));

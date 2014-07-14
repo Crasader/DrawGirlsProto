@@ -441,7 +441,7 @@ string hspConnector::getServerAddress(){
 #endif
 	
 	
-	//r = "http://182.162.201.147:10010";
+	r = "http://182.162.201.147:10010";
 	return r.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
