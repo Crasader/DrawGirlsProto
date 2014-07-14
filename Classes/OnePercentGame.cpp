@@ -401,7 +401,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
-		m_totalPercent = recent_percent;
+//		m_totalPercent = recent_percent; // 재 시도하면 퍼센트 깎는 코드
 		m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
 		if(m_failBox)
 		{
@@ -591,7 +591,6 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 		}
 		else if(m_99State == 3) // 2nd try
 		{
-			
 			unscheduleUpdate();
 			int pos = m_cursor->getPositionX();
 			m_99State = 4; // 세번 째 시도로 세팅.
