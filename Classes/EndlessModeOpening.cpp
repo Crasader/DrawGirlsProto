@@ -1225,7 +1225,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 	{
 		CommonButton* rewardInfo = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessRewardInfo), 12.f, CCSizeMake(60, 35),
 																										CommonButtonYellow, touch_priority-1);
-		rewardInfo->getTitleLabel()->setColor(ccc3(37, 15, 0));
+		rewardInfo->setTitleColor(ccc3(37, 15, 0));
 		rewardInfo->setPosition(ccp(218.5, 211.5));
 		left_back->addChild(rewardInfo);
 		setFormSetter(rewardInfo);
