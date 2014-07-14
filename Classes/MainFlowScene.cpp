@@ -1102,7 +1102,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		cell_node->addChild(n_locked_back);
 		
 		CCLabelTTF* rate_label = CCLabelTTF::create("??/??", mySGD->getFont().c_str(), 10);
-		rate_label->setPosition(ccp(-25, -81));
+		rate_label->setPosition(ccp(-15, -71.5f));
 		cell_node->addChild(rate_label);
 		
 		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
@@ -1183,14 +1183,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		int total_card_cnt = stage_count*10;
 		
 		CCLabelTTF* rate_label = CCLabelTTF::create(CCString::createWithFormat("%d/%d", have_card_count_for_puzzle_index[idx], total_card_cnt)->getCString(), mySGD->getFont().c_str(), 10);
-		rate_label->setPosition(ccp(-25, -81));
+		rate_label->setPosition(ccp(-15, -71.5f));
 		cell_node->addChild(rate_label);
 		
 		int t_start_stage = NSDS_GI(not_event_puzzle_list[idx], kSDS_PZ_startStage_i);
 		int t_stage_count = NSDS_GI(not_event_puzzle_list[idx], kSDS_PZ_stageCount_i);
 		
-		CCPoint t_distance_position = ccp(10, 0);
-		CCPoint t_base_position = ccp(22, -80) - t_distance_position*2;
+		CCPoint t_distance_position = ccp(8.25f, 0);
+		CCPoint t_base_position = ccp(21, -72.f) - t_distance_position*2;
 		
 		for(int i=t_start_stage;i<t_start_stage+t_stage_count;i++)
 		{
@@ -1222,9 +1222,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //		cell_node->addChild(rate_timer, 0, 999);
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
-		title_label->setColor(ccBLACK);
 		//title_label->enableOuterStroke(ccWHITE, 1.f);
-		title_label->setPosition(ccp(0,-57.5f));
+		title_label->setPosition(ccp(0,-56.f));
 		cell_node->addChild(title_label, 1);
 
 		
@@ -1242,7 +1241,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		cell_node->addChild(close_back);
 		
 		CCLabelTTF* rate_label = CCLabelTTF::create("0/50", mySGD->getFont().c_str(), 10);
-		rate_label->setPosition(ccp(-25, -81));
+		rate_label->setPosition(ccp(-15, -71.5f));
 		cell_node->addChild(rate_label);
 		
 		if(t_info.is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
@@ -1273,6 +1272,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
+				condition_title->disableOuterStroke();
 				condition_title->setPosition(ccp(67.5f, 137));
 				not_clear_img->addChild(condition_title);
 				
@@ -1297,18 +1297,21 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 						weekday_string = "토요일";
 					
 					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), t_info.keep_week_start, t_info.keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
+					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else if(t_info.is_have_date_condition)
 				{
 					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), t_info.keep_date_start.substr(4,2).c_str(), t_info.keep_date_start.substr(6,2).c_str(), t_info.keep_date_start.substr(8,2).c_str(), t_info.keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
+					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else
 				{
 					KSLabelTTF* condition_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), mySGD->getFont().c_str(), 9);
+					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 118.5f));
 					not_clear_img->addChild(condition_content);
 				}
@@ -1322,9 +1325,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					c_label->addChild(price_type);
 					
 					KSLabelTTF* price_value_label = KSLabelTTF::create(CCString::createWithFormat("%d  ", t_info.need_ruby_value)->getCString(), mySGD->getFont().c_str(), 10);
+					price_value_label->disableOuterStroke();
 					c_label->addChild(price_value_label);
 					
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
+					detail_label->disableOuterStroke();
 					c_label->addChild(detail_label);
 					
 					float t_width = price_type->getContentSize().width*price_type->getScale();
@@ -1349,6 +1354,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 10);
+					detail_label->disableOuterStroke();
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
 				
@@ -1387,15 +1393,18 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			{
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
+				condition_title->disableOuterStroke();
 				condition_title->setPosition(ccp(67.5f, 137));
 				not_clear_img->addChild(condition_title);
 				
 				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
+				condition_content->disableOuterStroke();
 				condition_content->setPosition(ccp(67.5f, 118.5f));
 				not_clear_img->addChild(condition_content);
 				
 				CCLabelTTF* c_label = CCLabelTTF::create();
 				KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 10);
+				detail_label->disableOuterStroke();
 				detail_label->setPosition(ccp(0,0));
 				c_label->addChild(detail_label);
 				
@@ -1419,9 +1428,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		}
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
-		title_label->setColor(ccBLACK);
-		//title_label->enableOuterStroke(ccWHITE, 1.f);
-		title_label->setPosition(ccp(0,-57.5f));
+		title_label->setPosition(ccp(0,-56.f));
 		cell_node->addChild(title_label, 1);
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
@@ -1693,7 +1700,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 	if(tag == 0)
 	{
 		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
-		content_label->setOldAnchorPoint();
+		content_label->setAnchorPoint(ccp(0.5f,0.5f));
 		
 		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800, myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), (CCNode*)content_label, [=](){is_menu_enable = true;},CCPointZero,true);
 		
@@ -2032,91 +2039,80 @@ void MainFlowScene::menuAction(CCObject* sender)
 		{
 			if(mySGD->getUserdataHighPiece() < mySGD->getEndlessMinPiece())
 			{
-				ASPopupView* t_popup = ASPopupView::create(-999);
-				
-				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-				if(screen_scale_x < 1.f)
-					screen_scale_x = 1.f;
-				
-				float height_value = 320.f;
-				if(myDSH->screen_convert_rate < 1.f)
-					height_value = 320.f/myDSH->screen_convert_rate;
-				
-				if(height_value < myDSH->ui_top)
-					height_value = myDSH->ui_top;
-				
-				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-				t_popup->setDimmedPosition(ccp(240, 160));
-				t_popup->setBasePosition(ccp(240, 160));
-				
-				CCNode* t_container = CCNode::create();
-				t_popup->setContainerNode(t_container);
-				addChild(t_popup, 999);
-				
-				CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-				back_case->setContentSize(CCSizeMake(240,120));
-				back_case->setPosition(ccp(0,0));
-				t_container->addChild(back_case);
-				
-				CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-				back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
-				back_case->addChild(back_in);
-				
-				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), mySGD->getFont().c_str(), 15);
-				title_label->setColor(ccc3(255, 170, 20));
-				title_label->setAnchorPoint(ccp(0.5,0.5f));
-				title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
-				t_container->addChild(title_label);
-				
 				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-				sub_label->setPosition(ccp(0,-10));
-				sub_label->setOldAnchorPoint();
-				t_container->addChild(sub_label);
+				sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 				
-				CCSprite* gray = t_popup->getDimmedSprite();
+				addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), sub_label, [=](){is_menu_enable = true;}, ccp(0,0), true), 999);
 				
-				CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-				close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
-				close_button->setFunction([=](CCObject* sender)
-										  {
-											  if(!t_popup->is_menu_enable)
-												  return;
-											  
-											  t_popup->is_menu_enable = false;
-											  
-												CommonAnimation::closePopup(this, t_container, gray, [=](){
-													
-												}, [=](){
-													is_menu_enable = true;
-													t_popup->removeFromParent();
-//													end_func(); removeFromParent();
-												});
-										  });
-				t_container->addChild(close_button);
-				
-				CommonAnimation::openPopup(this, t_container, gray, [=](){
-					
-				}, [=](){
-					t_popup->is_menu_enable = true;
-				});
-//				t_container->setScaleY(0.f);
+//				ASPopupView* t_popup = ASPopupView::create(-999);
 //				
-//				t_popup->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-//					t_popup->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-//						t_popup->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);}));}));}));
+//				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//				if(screen_scale_x < 1.f)
+//					screen_scale_x = 1.f;
 //				
-//				t_popup->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-//																											{
-//																												gray->setOpacity(t);
-//																												KS::setOpacity(t_container, t);
-//																											}, [=](int t)
-//																											{
-//																												gray->setOpacity(255);
-//																												KS::setOpacity(t_container, 255);
-//																												t_popup->is_menu_enable = true;
-//																											}));
+//				float height_value = 320.f;
+//				if(myDSH->screen_convert_rate < 1.f)
+//					height_value = 320.f/myDSH->screen_convert_rate;
+//				
+//				if(height_value < myDSH->ui_top)
+//					height_value = myDSH->ui_top;
+//				
+//				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//				t_popup->setDimmedPosition(ccp(240, 160));
+//				t_popup->setBasePosition(ccp(240, 160));
+//				
+//				CCNode* t_container = CCNode::create();
+//				t_popup->setContainerNode(t_container);
+//				addChild(t_popup, 999);
+//				
+//				CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
+//				back_case->setContentSize(CCSizeMake(240,120));
+//				back_case->setPosition(ccp(0,0));
+//				t_container->addChild(back_case);
+//				
+//				CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+//				back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
+//				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+//				back_case->addChild(back_in);
+//				
+//				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), mySGD->getFont().c_str(), 15);
+//				title_label->setColor(ccc3(255, 170, 20));
+//				title_label->setAnchorPoint(ccp(0.5,0.5f));
+//				title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+//				t_container->addChild(title_label);
+//				
+//				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+//				sub_label->setPosition(ccp(0,-10));
+//				sub_label->setOldAnchorPoint();
+//				t_container->addChild(sub_label);
+//				
+//				CCSprite* gray = t_popup->getDimmedSprite();
+//				
+//				CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//				close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+//				close_button->setFunction([=](CCObject* sender)
+//										  {
+//											  if(!t_popup->is_menu_enable)
+//												  return;
+//											  
+//											  t_popup->is_menu_enable = false;
+//											  
+//												CommonAnimation::closePopup(this, t_container, gray, [=](){
+//													
+//												}, [=](){
+//													is_menu_enable = true;
+//													t_popup->removeFromParent();
+////													end_func(); removeFromParent();
+//												});
+//										  });
+//				t_container->addChild(close_button);
+//				
+//				CommonAnimation::openPopup(this, t_container, gray, [=](){
+//					
+//				}, [=](){
+//					t_popup->is_menu_enable = true;
+//				});
 			}
 			else
 				showEndlessOpening();

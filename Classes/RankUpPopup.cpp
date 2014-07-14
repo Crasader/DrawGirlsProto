@@ -217,14 +217,13 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	m_container->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_case->setContentSize(CCSizeMake(280,240));
+	back_case = CCSprite::create("popup_large_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-20, back_case->getContentSize().height-20-30));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-15));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(251, 118));
+	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,0));
 	back_case->addChild(back_in);
 	
 	string title_str;
@@ -233,14 +232,14 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	else
 		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpTitle);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-25));
+	title_label->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(-85,back_case->getContentSize().height/2.f-35));
 	back_case->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
-	close_button->setPosition(ccp(back_case->getContentSize().width-22,back_case->getContentSize().height-22));
+	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-22));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  giveupAction(sender, CCControlEventTouchUpInside);
@@ -346,6 +345,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	KSLabelTTF* rate_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpRate), mySGD->getFont().c_str(), 8);
 	rate_ment->setColor(ccBLACK);
+	rate_ment->disableOuterStroke();
 	rate_ment->setPosition(ccp(rankup_rate_back->getContentSize().width/2.f-5, rankup_rate_back->getContentSize().height/2.f+12));
 	rankup_rate_back->addChild(rate_ment);
 	
@@ -356,6 +356,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	KSLabelTTF* rate_value_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rate_value)->getCString(), mySGD->getFont().c_str(), 18);
 	rate_value_label->setColor(ccBLACK);
+	rate_value_label->disableOuterStroke();
 	rate_value_label->setPosition(ccp(rankup_rate_back->getContentSize().width/2.f-2, rankup_rate_back->getContentSize().height/2.f-5));
 	rankup_rate_back->addChild(rate_value_label);
 	
@@ -376,6 +377,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
 	KSLabelTTF* rankup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankup), mySGD->getFont().c_str(), 15);
+	rankup_label->disableOuterStroke();
 	rankup_label->setAnchorPoint(ccp(0,0.5));
 	rankup_label->setPosition(ccp(0,0));
 	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
@@ -387,6 +389,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-15,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_type);
 	KSLabelTTF* price_label = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getRankUpRubyFee())->getCString(), mySGD->getFont().c_str(), 15);
+	price_label->disableOuterStroke();
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+10,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
@@ -401,15 +404,15 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	r_label->addChild(rankup_label);
 	
 	
-	CCScale9Sprite* rankup_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* rankup_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	rankup_button = CCControlButton::create(r_label, rankup_back);
 	rankup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(RankUpPopup::rankupAction), CCControlEventTouchUpInside);
 	rankup_button->setPreferredSize(CCSizeMake(170,44));
-	rankup_button->setPosition(ccp(0,-80));
+	rankup_button->setPosition(ccp(0,-86));
 	m_container->addChild(rankup_button);
 	
-	rankup_label->setPositionX(-rankup_button->getPreferredSize().width/2.f+15);
+	rankup_label->setPositionX(-(rankup_label->getContentSize().width + 5 + price_back->getContentSize().width)/2.f);
 	
 	rankup_button->setTouchPriority(touch_priority);
 	

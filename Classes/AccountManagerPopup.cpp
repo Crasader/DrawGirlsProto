@@ -9,7 +9,7 @@
 #include "TitleRenewal.h"
 #include "HSPEnums.h"
 #include "LoadingLayer.h"
-
+#include <boost/lexical_cast.hpp>
 AccountManagerPopup::AccountManagerPopup()
 {
 	
@@ -228,6 +228,7 @@ bool AccountManagerPopup::init(int touchP)
 						if(result_data["error"]["isSuccess"].asBool())
 						{
 							// 매핑 없이 로그인 시도. 이전기록 불러오기
+							myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 							mySGD->resetLabels();
 							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
@@ -303,7 +304,7 @@ bool AccountManagerPopup::init(int touchP)
 			{
 				if(t["error"]["code"].asInt() == 0x0014006D)
 				{
-					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::FACEBOOK, t["prevMemberNo"].asUInt64());
+					anotherAccountFunctor(HSPMapping::kFACEBOOK, HSPLogin::FACEBOOK, t["prevMemberNo"].asUInt64());
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 				else

@@ -100,10 +100,14 @@ public:
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("startsetting_item_buy.png");
 		m_startMenu = CommonButton::create("게임시작", 23.f, CCSizeMake(175.f, 55.f),
 																			buttonBack, m_touchPriority - 1);
+		m_startMenu->setTitleColorForDisable(ccc3(37, 18, 0));
 		m_startMenu->setTitleColor(ccc3(37, 18, 0));
 		m_startMenu->setPosition(ccp(240, -200));
 		addChild(m_startMenu, kBonusGameZorder_menu);
 		m_startMenu->setFunction([=](CCObject* t){
+			if(m_startMenu->isEnabled() == false)
+				return;
+			m_startMenu->setEnabled(false);
 			menuAction(nullptr);
 
 		});

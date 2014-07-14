@@ -60,20 +60,19 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(250,250));
+	back_case = CCSprite::create("popup_large_back.png");
 	back_case->setPosition(ccp(0,10));
 	m_container->addChild(back_case);
 	
 	
-	CCScale9Sprite* back_center = CCScale9Sprite::create("missile_upgrade_back.png", CCRectMake(0, 0, 47, 47), CCRectMake(23, 23, 1, 1));
-	back_center->setContentSize(CCSizeMake(back_case->getContentSize().width-30, 110));
-	back_center->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-10));
+	CCScale9Sprite* back_center = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_center->setContentSize(CCSizeMake(251, 108));
+	back_center->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,5));
 	back_case->addChild(back_center);
 	
 	
 	CommonButton* cancel_button = CommonButton::createCloseButton(touch_priority);
-	cancel_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-12));
+	cancel_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-15));
 	cancel_button->setFunction([=](CCObject* sender)
 							   {
 								   if(!is_menu_enable)
@@ -92,17 +91,16 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	m_container->addChild(cancel_button);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->enableOuterStroke(ccBLACK, 0.5f);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-15));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
-	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_upgradeSubMent), mySGD->getFont().c_str(), 10);
-	sub_label->enableOuterStroke(ccBLACK, 1.f);
+	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_upgradeSubMent), mySGD->getFont().c_str(), 11);
+	sub_label->enableOuterStroke(ccBLACK, 0.5f);
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-	sub_label->setPosition(ccp(0,90));
+	sub_label->setPosition(ccp(0,83));
 	m_container->addChild(sub_label);
 	
 	upgrade_action_node = CCNode::create();
@@ -110,7 +108,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	CCSprite* level_case = CCSprite::create("startsetting_levelbox.png");
 	level_case->setAnchorPoint(ccp(0,0.5f));
-	level_case->setPosition(ccp(-back_case->getContentSize().width/2.f+17,70));
+	level_case->setPosition(ccp(-back_case->getContentSize().width/2.f+30,55));
 	upgrade_action_node->addChild(level_case);
 	
 	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
@@ -129,7 +127,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
 																														 rotation);
 		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5);
-		t_gm->setPosition(ccp(0,0));
+		t_gm->setPosition(ccp(0,5));
 
 		upgrade_action_node->addChild(t_gm);
 		
@@ -141,14 +139,14 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 //	missile_data_level->setColor(ccc3(255, 222, 0));
-	missile_data_level->enableOuterStroke(ccBLACK, 0.5f);
+	missile_data_level->disableOuterStroke();
 	missile_data_level->setAnchorPoint(ccp(0.5f,0.5f));
 	missile_data_level->setPosition(ccp(level_case->getContentSize().width/2.f-30.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_level);
 	
-	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 11);
 //	missile_data_power->setColor(ccc3(255, 222, 0));
-	missile_data_power->enableOuterStroke(ccBLACK, 0.5f);
+	missile_data_power->disableOuterStroke();
 	missile_data_power->setAnchorPoint(ccp(0.5f,0.5f));
 	missile_data_power->setPosition(ccp(level_case->getContentSize().width/2.f+28.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_power);
@@ -156,8 +154,8 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	upgrade_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 12);
-	upgrade_label->enableOuterStroke(ccBLACK, 0.5f);
+	upgrade_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue2), missile_level+1)->getCString(), mySGD->getFont().c_str(), 13);
+	upgrade_label->disableOuterStroke();
 	upgrade_label->setAnchorPoint(ccp(0.5f,0.5f));
 	upgrade_label->setPosition(ccp(0,0));
 	price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
@@ -171,7 +169,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-27,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
 		price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
-		price_label->enableOuterStroke(ccBLACK, 0.5f);
+		price_label->disableOuterStroke();
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
 	}
@@ -184,7 +182,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 					 KS::insert_separator( CCString::createWithFormat("%d",
 												mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString()).c_str(),
 																mySGD->getFont().c_str(), 15);
-		price_label->enableOuterStroke(ccBLACK, 0.5f);
+		price_label->disableOuterStroke();
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
 	}
@@ -193,12 +191,12 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	
 	
-	CCScale9Sprite* upgrade_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* upgrade_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	upgrade_button = CCControlButton::create(t_label, upgrade_back);
 	upgrade_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MissileUpgradePopup::upgradeAction), CCControlEventTouchUpInside);
-	upgrade_button->setPreferredSize(CCSizeMake(220,45));
-	upgrade_button->setPosition(ccp(0,-80));
+	upgrade_button->setPreferredSize(CCSizeMake(200,50));
+	upgrade_button->setPosition(ccp(0,-72));
 	upgrade_action_node->addChild(upgrade_button);
 	
 	upgrade_button->setTouchPriority(touch_priority);

@@ -32,7 +32,7 @@ private:
 	
 	CCSprite* gray;
 	CCNode* m_container;
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	CCControlButton* close_button;
 	
 	void myInit(int t_touch_priority, function<void()> t_end_func);

@@ -868,14 +868,14 @@ void MapScanner::setTopBottomBlock()
 		line_cnt++;
 		CCSprite* t_line = CCSprite::createWithTexture(top_block_line_manager->getTexture());
 		t_line->setAnchorPoint(ccp(0,0));
-		t_line->setPosition(ccp(i*line_size.width,top_y-2));
+		t_line->setPosition(ccp(i*line_size.width,top_y-1));
 		//	t_line->setTag(top_cnt*8);
 		top_block_line_manager->addChild(t_line);
 	}
 	{
 		CCSprite* t_line = CCSprite::createWithTexture(top_block_line_manager->getTexture(), CCRectMake(0, 0, 320-line_cnt*line_size.width, line_size.height));
 		t_line->setAnchorPoint(ccp(0,0));
-		t_line->setPosition(ccp(line_cnt*line_size.width, top_y-2));
+		t_line->setPosition(ccp(line_cnt*line_size.width, top_y-1));
 		top_block_line_manager->addChild(t_line);
 	}
 	
@@ -985,14 +985,14 @@ void MapScanner::setTopBottomBlock()
 			line_cnt++;
 			CCSprite* t_line = CCSprite::createWithTexture(bottom_block_line_manager->getTexture());
 			t_line->setAnchorPoint(ccp(0,1.f));
-			t_line->setPosition(ccp(i*line_size.width,bottom_y+1));
+			t_line->setPosition(ccp(i*line_size.width,bottom_y-1));
 			//	t_line->setTag(bottom_cnt*8);
 			bottom_block_line_manager->addChild(t_line);
 		}
 		{
 			CCSprite* t_line = CCSprite::createWithTexture(bottom_block_line_manager->getTexture(), CCRectMake(0, 0, 320-line_cnt*line_size.width, line_size.height));
 			t_line->setAnchorPoint(ccp(0,1.f));
-			t_line->setPosition(ccp(line_cnt*line_size.width, bottom_y+1));
+			t_line->setPosition(ccp(line_cnt*line_size.width, bottom_y-1));
 			bottom_block_line_manager->addChild(t_line);
 		}
 	}

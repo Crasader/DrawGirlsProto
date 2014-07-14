@@ -236,17 +236,23 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_case->setContentSize(CCSizeMake(300,260));
+	back_case = CCSprite::create("popup_large_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
+	
+	
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(251, 128));
+	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,15));
+	back_case->addChild(back_in);
+	
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");
 	
@@ -263,10 +269,12 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	
 	item_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent1), mySGD->getFont().c_str(), 15);
+	item_title->disableOuterStroke();
 	item_title->setPosition(ccp(0,-20));
 	m_container->addChild(item_title);
 	
 	item_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent2), mySGD->getFont().c_str(), 12);
+	item_ment->disableOuterStroke();
 	item_ment->setColor(ccc3(255, 170, 20));
 	item_ment->setPosition(ccp(0,-35));
 	m_container->addChild(item_ment);
@@ -275,6 +283,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
 	regacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemRegacha), mySGD->getFont().c_str(), 13);
+	regacha_label->disableOuterStroke();
 	regacha_label->setPosition(ccp(0,10));
 	r_label->addChild(regacha_label);
 	
@@ -298,6 +307,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 		float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
 		
 		KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
+		stamp_label->disableOuterStroke();
 		stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
 		stamp_label->setColor(ccc3(255,222,0));
 		stamp_back->addChild(stamp_label);
@@ -322,12 +332,12 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	}
 	
 	
-	CCScale9Sprite* regacha_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	CCScale9Sprite* regacha_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	regacha_button = CCControlButton::create(r_label, regacha_back);
 	regacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::regachaAction), CCControlEventTouchUpInside);
-	regacha_button->setPreferredSize(CCSizeMake(120,65));
-	regacha_button->setPosition(ccp(-65,-85-100));
+	regacha_button->setPreferredSize(CCSizeMake(117,60));
+	regacha_button->setPosition(ccp(-65,-85-98));
 	m_container->addChild(regacha_button);
 	
 	regacha_button->setVisible(false);
@@ -336,11 +346,12 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	
 	KSLabelTTF* use_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_thisItemUse), mySGD->getFont().c_str(), 13);
-	CCScale9Sprite* use_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+	use_label->disableOuterStroke();
+	CCScale9Sprite* use_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	use_button = CCControlButton::create(use_label, use_back);
 	use_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::useAction), CCControlEventTouchUpInside);
-	use_button->setPreferredSize(CCSizeMake(120,65));
-	use_button->setPosition(ccp(65,-85-100));
+	use_button->setPreferredSize(CCSizeMake(117,60));//120,65
+	use_button->setPosition(ccp(65,-85-98));
 	m_container->addChild(use_button);
 	
 	use_button->setVisible(false);

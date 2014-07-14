@@ -74,6 +74,7 @@ protected:
 	CCSprite* m_currentRewardCursor;
 	int m_tutorialStep;
 	CommonButton* m_ba, *m_ga, *m_bo;
+	CommonButton* m_confirmButton;
 };
 
 #endif
