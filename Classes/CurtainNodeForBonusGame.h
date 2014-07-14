@@ -104,6 +104,9 @@ public:
 		m_startMenu->setPosition(ccp(240, -200));
 		addChild(m_startMenu, kBonusGameZorder_menu);
 		m_startMenu->setFunction([=](CCObject* t){
+			if(m_startMenu->isEnabled() == false)
+				return;
+			m_startMenu->setEnabled(false);
 			menuAction(nullptr);
 
 		});
