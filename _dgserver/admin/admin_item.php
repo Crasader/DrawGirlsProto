@@ -1,7 +1,7 @@
 <?php
 include "header.php";
 ?>
-<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::get()->getMT("item")?>" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager.php" dbTable="<?=DBManager::getMT("item")?>" border=1 align=center>
 	<thead>
 		<tr>
 			<th field="type" viewer='{"type":"text"}' primary editor='{"type":"text"}'>type</th>

@@ -1599,8 +1599,8 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		{
 			myLog->addLog(kLOG_die_missileToLine, myGD->getCommunication("UI_getUseTime"));
 			
-			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace))
-			{
+//			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace))
+//			{
 				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace, true);
 				CCNode* exit_target = getParent()->getParent();
 				exit_target->onExit();
@@ -1620,29 +1620,21 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				t_popup->setContainerNode(t_container);
 				exit_target->getParent()->addChild(t_popup);
 
-//				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-//				case_back->setPosition(CCPointZero);
-//				t_container->addChild(case_back);
-//				
-//				case_back->setContentSize(CCSizeMake(348, 245));
 				
-				CCSprite* content_back = CCSprite::create("tutorial_popup2.png");
+				CCSprite* content_back = CCSprite::create("tutorial_popup1.png");
 				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
-				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial2), mySGD->getFont().c_str(), 12.5f);
-				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
-				content_label->setAnchorPoint(ccp(0,0.5));
-				content_label->setPosition(ccp(60,35));
+				KSLabelTTF* warning_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_warningDie), mySGD->getFont().c_str(), 15.f);
+				warning_label->disableOuterStroke();
+				warning_label->setPosition(ccp(52,66));
+				content_back->addChild(warning_label);
+			
+				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial1), mySGD->getFont().c_str(), 12.5f);
+				content_label->setAnchorPoint(ccp(0.5f,0.5f));
+				content_label->setPosition(ccp(content_back->getContentSize().width/2.f,50));
 				content_back->addChild(content_label);
 				
-//				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
-//				title_img->setPosition(ccp(0, 102));
-//				t_container->addChild(title_img);
-//				
-//				CCLabelTTF* content_label = CCLabelTTF::create("몬스터가 쏜 미사일이\n선에 닿으면 불이 붙어요.", mySGD->getFont().c_str(), 13);
-//				content_label->setPosition(ccp(38,-61));
-//				t_container->addChild(content_label);
 				
 				CCSprite* n_close = CCSprite::create("whitePaper.png");
 				n_close->setOpacity(0);
@@ -1682,22 +1674,14 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				}, [=](){
 					close_menu->setVisible(true);
 				});
-//				t_container->setScaleY(0.f);
-//				
-//				t_container->addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.2f);
-//					t_container->addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(0.8f);
-//						t_container->addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){t_container->setScaleY(t);}, [=](float t){t_container->setScaleY(1.f);
-//							close_menu->setVisible(true);}));}));}));
-//				
-//				t_container->addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t){KS::setOpacity(t_container, t);}, [=](int t){KS::setOpacity(t_container, 255);}));
-			}
+//			}
 		}
 		else if(die_type == DieType::kDieType_shockwave)
 		{
 			myLog->addLog(kLOG_die_shockwave, myGD->getCommunication("UI_getUseTime"));
 			
-			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupShockWave))
-			{
+//			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupShockWave))
+//			{
 				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupShockWave, true);
 				CCNode* exit_target = getParent()->getParent();
 				exit_target->onExit();
@@ -1716,30 +1700,22 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				CCNode* t_container = CCNode::create();
 				t_popup->setContainerNode(t_container);
 				exit_target->getParent()->addChild(t_popup);
+			
 				
-//				CCScale9Sprite* case_back = CCScale9Sprite::create("popup3_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(13, 45, 135-13, 105-13));
-//				case_back->setPosition(CCPointZero);
-//				t_container->addChild(case_back);
-//				
-//				case_back->setContentSize(CCSizeMake(348, 245));
-				
-				CCSprite* content_back = CCSprite::create("tutorial_popup1.png");
+				CCSprite* content_back = CCSprite::create("tutorial_popup2.png");
 				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
-				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial1), mySGD->getFont().c_str(), 12.5f);
-				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
-				content_label->setAnchorPoint(ccp(0,0.5));
-				content_label->setPosition(ccp(60,35));
+				KSLabelTTF* warning_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_warningDie), mySGD->getFont().c_str(), 15.f);
+				warning_label->disableOuterStroke();
+				warning_label->setPosition(ccp(52,66));
+				content_back->addChild(warning_label);
+			
+				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial2), mySGD->getFont().c_str(), 12.5f);
+				content_label->setAnchorPoint(ccp(0.5f,0.5f));
+				content_label->setPosition(ccp(content_back->getContentSize().width/2.f,50));
 				content_back->addChild(content_label);
 				
-//				CCSprite* title_img = CCSprite::create("tutorial_popup_title.png");
-//				title_img->setPosition(ccp(0, 102));
-//				t_container->addChild(title_img);
-//				
-//				CCLabelTTF* content_label = CCLabelTTF::create("선과 몬스터가 부딪히면\n충격파가 생겨요.", mySGD->getFont().c_str(), 13);
-//				content_label->setPosition(ccp(55,-60));
-//				t_container->addChild(content_label);
 				
 				CCSprite* n_close = CCSprite::create("whitePaper.png");
 				n_close->setOpacity(0);
@@ -1780,7 +1756,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 					close_menu->setVisible(true);
 				});
 				
-			}
+//			}
 		}
 		else if(die_type == DieType::kDieType_timeover)
 		{

@@ -12,13 +12,13 @@ DBManager::setStaticInfo($sInfo);
 if($_SERVER["SERVER_NAME"]=="hsdooki.cafe24.com"){
 	// 테스트용 서버
 	//서버설정											ip                    id            pw
-	$server0Index = DBManager::get()->addDBServer("localhost","hsdooki","q1w2e3!@");
+	$server0Index = DBManager::addDBServer("localhost","hsdooki","q1w2e3!@");
 
 	//메인db설정					dbname       server index
-	DBManager::get()->setMainDB("hsdooki",$server0Index);
+	DBManager::setMainDB("hsdooki",$server0Index);
 
 	//유저db설정                   dbname      server index
-	DBManager::get()->addShardDB("hsdooki",$server0Index);
+	DBManager::addShardDB("hsdooki",$server0Index);
 }else{
 
 
@@ -33,14 +33,14 @@ if($_SERVER["SERVER_NAME"]=="hsdooki.cafe24.com"){
 ****************************************************************************************/
 
 	//서버추가											ip                    id            pw
-	$server0Index = DBManager::get()->addDBServer("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
+	$server0Index = DBManager::addDBServer("10.99.197.209:13306","drawgirlsdb","litqoo!@#234");
 
 	//메인db설정, 위 에서 추가한 서버의 drawgirls라는 dbname을 사용하겠다.
-	DBManager::get()->setMainDB("drawgirls",$server0Index);
+	DBManager::setMainDB("drawgirls",$server0Index);
 
 	//유저db설정, 위 에서 추가한 서버의 dg001, dg002 라는 dbname을 사용하겠다.
-	DBManager::get()->addShardDB("dg001",$server0Index);
-	DBManager::get()->addShardDB("dg002",$server0Index);
+	DBManager::addShardDB("dg001",$server0Index);
+	DBManager::addShardDB("dg002",$server0Index);
 }
 
 ?>

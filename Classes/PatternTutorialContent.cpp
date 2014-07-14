@@ -84,42 +84,41 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	{
 		pattern_list.push_back(t_pattern_list[i]);
 	}
-	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	case_back->setContentSize(CCSizeMake(275, 210));
+	CCSprite* case_back = CCSprite::create("ingame_back.png");
 	case_back->setPosition(CCPointZero);
 	show_node->addChild(case_back);
 	
-	CCSprite* warning_img = CCSprite::create("ui_warning.png");
-	warning_img->setPosition(ccp(15+warning_img->getContentSize().width/2.f, case_back->getContentSize().height-25));
-	case_back->addChild(warning_img);
+	CCSprite* title_back = CCSprite::create("title_tag.png");
+	title_back->setPosition(ccp(65,case_back->getContentSize().height-30));
+	case_back->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newBossPattern), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5f));
-	title_label->setPosition(ccp(warning_img->getContentSize().width+10, warning_img->getContentSize().height/2.f));
-	warning_img->addChild(title_label);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newBossPattern), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
+	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(-3,0));
+	title_back->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(0);
 	close_button->setPosition(ccp(case_back->getContentSize().width/2.f-22, case_back->getContentSize().height/2.f-22));
 	close_button->setEnabled(false);
 	show_node->addChild(close_button);
 	
-	CCScale9Sprite* case_in = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	case_in->setContentSize(CCSizeMake(260, 100));
+	CCScale9Sprite* case_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	case_in->setContentSize(CCSizeMake(251, 97));
 	case_in->setPosition(ccp(case_back->getContentSize().width/2.f,case_back->getContentSize().height/2.f+10));
 	case_back->addChild(case_in);
 	
 	ing_close_cnt = 0;
 	
-	pattern_title = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))), mySGD->getFont().c_str(), 17.5f);
+	pattern_title = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))), mySGD->getFont().c_str(), 14.f);
 	pattern_title->setColor(ccc3(255, 170, 20));
-	pattern_title->setAnchorPoint(ccp(0,0.5f));
-	pattern_title->setPosition(ccp(15, 50));
+	pattern_title->setAnchorPoint(ccp(0.5f,0.5f));
+	pattern_title->setPosition(ccp(case_back->getContentSize().width/2.f, 50));
 	case_back->addChild(pattern_title);
 	
 	pattern_content = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))), mySGD->getFont().c_str(), 12);
-	pattern_content->setAnchorPoint(ccp(0,0.5f));
-	pattern_content->setPosition(ccp(15, 25));
+	pattern_content->setAnchorPoint(ccp(0.5f,0.5f));
+	pattern_content->setPosition(ccp(case_back->getContentSize().width/2.f, 28));
 	case_back->addChild(pattern_content);
 	
 	

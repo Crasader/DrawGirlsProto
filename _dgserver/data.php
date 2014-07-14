@@ -1,10 +1,10 @@
 <?php
 
+include "lib.php";
 iconv_set_encoding("internal_encoding", "UTF-8");
 iconv_set_encoding("output_encoding", "UTF-8");
 
 
-include "lib.php";
 
 
 $nowurl = $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
@@ -44,9 +44,10 @@ if($mode){
 	
 }
 
+include "command/cmd2.php";
 
-if($version)include "command/cmd".$version.".php";
-else include "command/cmd1.php";
+// if($version)include "command/cmd".$version.".php";
+// else include "command/cmd1.php";
 
 
 if(!$stopCommand){
@@ -60,11 +61,11 @@ if(!$stopCommand){
 		
 		
 		if(method_exists($command,$a)){
-			$startTime = TimeManager::get()->getMicroTime();
+			$startTime = TimeManager::getMicroTime();
 			$r = $command->$a($p);
-			$endTime = TimeManager::get()->getMicroTime();
+			$endTime = TimeManager::getMicroTime();
 
-			$r[log] = LogManager::get()->getLogAndClear();
+			$r[log] = LogManager::getLogAndClear();
 		 	$allResult[$cmd]= $r;
 		 	
 		 	$p2 = array();
@@ -105,7 +106,7 @@ if(!$stopCommand){
 		
 	}
 	$allResult[state]="ok";
-	$allResult[timestamp]=TimeManager::get()->getTime();
+	$allResult[timestamp]=TimeManager::getTime();
 	
 	$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	
@@ -116,7 +117,7 @@ if(!$stopCommand){
 	}
 	
 	
-	DBManager::get()->closeDB();
+	DBManager::closeDB();
 	@mysql_close();
 
 }

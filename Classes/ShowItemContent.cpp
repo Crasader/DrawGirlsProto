@@ -86,60 +86,50 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 		item_list.push_back(t_item_list[i]);
 	
 	
-//	CCSprite* back_light = CCSprite::create("newitem_back.png");
-//	back_light->setScale(2.f);
-//	back_light->setPosition(CCPointZero);
-//	addChild(back_light);
-//	
-//	CCRotateBy* t_rotate = CCRotateBy::create(1.f, 100);
-//	CCRepeatForever* t_repeat = CCRepeatForever::create(t_rotate);
-//	back_light->runAction(t_repeat);
-	
-	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	case_back->setContentSize(CCSizeMake(240, 250 - 40));
+	CCSprite* case_back = CCSprite::create("popup_small_back.png");
 	case_back->setPosition(ccp(0,0));
 	addChild(case_back);
 	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	content_back->setContentSize(CCSizeMake(case_back->getContentSize().width-20, case_back->getContentSize().height-50));
-	content_back->setPosition(ccp(case_back->getContentSize().width/2.f,case_back->getContentSize().height/2.f-15));
+	CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	content_back->setContentSize(CCSizeMake(case_back->getContentSize().width-45, case_back->getContentSize().height-80));
+	content_back->setPosition(ccp(case_back->getContentSize().width/2.f,case_back->getContentSize().height/2.f-14));
 	case_back->addChild(content_back);
 	
 	
 	ing_close_cnt = 0;
 	
 	show_content = CCSprite::create(CCString::createWithFormat("item%d.png", item_list[ing_close_cnt])->getCString());
-	show_content->setPosition(ccp(0, 40 - 5 - 10));
+	show_content->setPosition(ccp(0, 40 - 28));
 	addChild(show_content);
 	
 	item_title = KSLabelTTF::create(convertToItemCodeToItemName((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 12);
-	item_title->setColor(ccc3(255,170,20));
-	item_title->enableOuterStroke(ccBLACK, 1);
-	item_title->setPosition(ccp(0,-10));
+	item_title->disableOuterStroke();
+	item_title->setColor(ccc3(255, 170, 20));
+	item_title->setPosition(ccp(0,-24));
 	addChild(item_title);
 	
 	item_ment = KSLabelTTF::create(mySD->getItemScript((ITEM_CODE)item_list[ing_close_cnt]).c_str(), mySGD->getFont().c_str(), 12);
-	item_ment->setColor(ccWHITE);
-	item_ment->setPosition(ccp(0,-32 - 10));
+	item_ment->disableOuterStroke();
+	item_ment->setPosition(ccp(0,-32 - 9));
 	addChild(item_ment);
 	
-	if(item_ment->getContentSize().width > 200)
-	{
-		case_back->setContentSize(CCSizeMake(item_ment->getContentSize().width+40,case_back->getContentSize().height));
-		content_back->setContentSize(CCSizeMake(item_ment->getContentSize().width+20,content_back->getContentSize().height));
-	}
+//	if(item_ment->getContentSize().width > 200)
+//	{
+//		case_back->setContentSize(CCSizeMake(item_ment->getContentSize().width+40,case_back->getContentSize().height));
+//		content_back->setContentSize(CCSizeMake(item_ment->getContentSize().width+20,content_back->getContentSize().height));
+//	}
 	
 	
-	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemTitle), mySGD->getFont().c_str(), 15);
-	title_img->setColor(ccc3(255,170,20));
+	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemTitle), mySGD->getFont().c_str(), 12);
+	title_img->disableOuterStroke();
 	title_img->setAnchorPoint(ccp(0.5f, 0.5f));
-	title_img->setPosition(ccp(0, 3+case_back->getContentSize().height/2.f-30));
+	title_img->setPosition(ccp(-85,case_back->getContentSize().height/2.f-35));
 	addChild(title_img);
 	
 	KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 12);
+	bonus_ment_img->disableOuterStroke();
 	bonus_ment_img->setColor(ccc3(255,170,20));
-	bonus_ment_img->setPosition(ccp(0,-60 - 10));
+	bonus_ment_img->setPosition(ccp(0,-57));
 	addChild(bonus_ment_img);
 	
 	//		CCSprite* t_tab = CCSprite::create("shop_tab.png");

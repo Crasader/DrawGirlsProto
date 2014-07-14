@@ -206,9 +206,6 @@ bool OptionPopup::init()
 	
 	setTouchEnabled(true);
 	
-	
-
-	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
 	//addChild(t_popup, 4);
 	
@@ -680,6 +677,7 @@ bool OptionPopup::init()
 	
 	CCSprite* n_help_img = CCSprite::create("subbutton_pink.png");
 	KSLabelTTF* n_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	n_help_label->disableOuterStroke();
 	n_help_label->setPosition(ccpFromSize(n_help_img->getContentSize()/2.f) + ccp(0,-1));
 	n_help_img->addChild(n_help_label);
 	
@@ -687,12 +685,14 @@ bool OptionPopup::init()
 	s_help_img->setColor(ccGRAY);
 	KSLabelTTF* s_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
 	s_help_label->setColor(ccGRAY);
+	s_help_label->disableOuterStroke();
 	s_help_label->setPosition(ccpFromSize(s_help_img->getContentSize()/2.f) + ccp(0,-1));
 	s_help_img->addChild(s_help_label);
 	
 	CCSprite* d_help_img = CCSprite::create("subbutton_pink.png");
 	d_help_img->setColor(ccGRAY);
 	KSLabelTTF* d_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	d_help_label->disableOuterStroke();
 	d_help_label->setPosition(ccpFromSize(d_help_img->getContentSize()/2.f) + ccp(0,-1));
 	d_help_img->addChild(d_help_label);
 	
@@ -958,42 +958,44 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_popup->setContainerNode(t_container);
 		addChild(t_popup, kOP_Z_popup);
 		
-		CCScale9Sprite* case_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		case_back->setContentSize(CCSizeMake(250, 180));
+		CCSprite* case_back = CCSprite::create("popup_small_back.png");
 		case_back->setPosition(ccp(0,0));
 		t_container->addChild(case_back);
 		
-		CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		back_in->setContentSize(CCSizeMake(case_back->getContentSize().width-10, case_back->getContentSize().height-46));
-		back_in->setPosition(ccp(case_back->getContentSize().width/2.f, case_back->getContentSize().height/2.f-17));
+		CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		back_in->setContentSize(CCSizeMake(case_back->getContentSize().width-45, case_back->getContentSize().height-123));
+		back_in->setPosition(ccp(case_back->getContentSize().width/2.f, case_back->getContentSize().height/2.f+8));
 		case_back->addChild(back_in);
 		
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawTitle), mySGD->getFont().c_str(), 15);
-		title_label->setColor(ccc3(255, 170, 20));
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawTitle), mySGD->getFont().c_str(), 12);
+		title_label->disableOuterStroke();
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
-		title_label->setPosition(ccp(0, case_back->getContentSize().height/2.f-25));
+		title_label->setPosition(ccp(-85, case_back->getContentSize().height/2.f-35));
 		t_container->addChild(title_label);
 		
 		KSLabelTTF* ment1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent1), mySGD->getFont().c_str(), 12);
+		ment1_label->disableOuterStroke();
 		ment1_label->setAnchorPoint(ccp(0.5f,0.5f));
-		ment1_label->setPosition(ccp(0,30));
+		ment1_label->setPosition(ccp(0,28));
 		t_container->addChild(ment1_label);
 		
 		KSLabelTTF* ment2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent2), mySGD->getFont().c_str(), 12);
+		ment2_label->disableOuterStroke();
 		ment2_label->setAnchorPoint(ccp(0.5f,0.5f));
 		ment2_label->setPosition(ccp(0,8));
 		t_container->addChild(ment2_label);
 		
 		KSLabelTTF* ment3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent3), mySGD->getFont().c_str(), 12);
 		ment3_label->setColor(ccc3(255, 170, 20));
+		ment3_label->disableOuterStroke();
 		ment3_label->setAnchorPoint(ccp(0.5f,0.5f));
-		ment3_label->setPosition(ccp(0,-14));
+		ment3_label->setPosition(ccp(0,-12));
 		t_container->addChild(ment3_label);
 		
 		
 		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-		close_button->setPosition(ccp(case_back->getContentSize().width/2.f-25, case_back->getContentSize().height/2.f-25));
+		close_button->setPosition(ccp(case_back->getContentSize().width/2.f-22, case_back->getContentSize().height/2.f-25));
 		close_button->setFunction([=](CCObject* sender)
 								  {
 									  is_menu_enable = true;
@@ -1002,8 +1004,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(close_button);
 		
 		
-		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_doWithdraw), 15, CCSizeMake(100, 45), CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2)), t_popup->getTouchPriority()-5);
-		ok_button->setTitleColor(ccBLACK);
+		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_doWithdraw), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(0,-53));
 		ok_button->setFunction([=](CCObject* sender)
 													 {

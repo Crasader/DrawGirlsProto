@@ -81,8 +81,8 @@ $(document).ready(function(){
 <h2 id="tables-contextual-classes">|아이템 히스토리
 	<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">	
 		<button id="propType" type="button" value="*" class="btn btn-default active" data-toggle="button">모두보기</button>
-		<button id="propType" type="button" value="pr" class="btn btn-default" data-toggle="button">유료루비</button>
-		<button id="propType" type="button" value="fr" class="btn btn-default" data-toggle="button">무료루비</button>
+		<button id="propType" type="button" value="pr" class="btn btn-default" data-toggle="button">유료젬</button>
+		<button id="propType" type="button" value="fr" class="btn btn-default" data-toggle="button">무료젬</button>
 		<button id="propType" type="button" value="h" class="btn btn-default" data-toggle="button">하트</button>
 		<button id="propType" type="button" value="g" class="btn btn-default" data-toggle="button">골드</button>
 		<button id="propType" type="button" value="i" class="btn btn-default" data-toggle="button">아이템</button>

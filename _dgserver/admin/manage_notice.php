@@ -4,7 +4,7 @@ include "manage_header.php";
 <script>
 var viewer_image = function(value,option){
 	value = s2j(value);
-	var neditor = $("<img>").attr("src","../images/"+value["img"]).attr("width",100);
+	var neditor = $("<img>").attr("src",value["img"]).attr("width",100);
 	return neditor;
 }
 </script>

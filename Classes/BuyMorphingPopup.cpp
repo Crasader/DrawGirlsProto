@@ -59,24 +59,23 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	m_container->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(260,210));
+	back_case = CCSprite::create("popup_large_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(251,128));
+	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,15));
 	back_case->addChild(back_in);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingTitle), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingTitle), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(back_case->getContentSize().width / 2.f, back_case->getContentSize().height-25));
+	title_label->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(-85, back_case->getContentSize().height/2.f-35));
 	back_case->addChild(title_label);
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
-	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-25));
+	close_button->setPosition(ccp(back_case->getContentSize().width-25,back_case->getContentSize().height-22));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!is_menu_enable)
@@ -101,9 +100,9 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	back_in->addChild(content_label);
 	
 	
-	CCScale9Sprite* take_case = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	take_case->setContentSize(CCSizeMake(160, 36));
-	take_case->setPosition(ccp(back_in->getContentSize().width/2.f, 70));
+	CCScale9Sprite* take_case = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+	take_case->setContentSize(CCSizeMake(160, 34));
+	take_case->setPosition(ccp(back_in->getContentSize().width/2.f, 25));
 	back_in->addChild(take_case);
 	
 	CCSprite* pass_img = CCSprite::create("pass_ticket6.png");
@@ -112,12 +111,14 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	
 	KSLabelTTF* take_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingTake), mySGD->getFont().c_str(), 13);
 	take_ment->setColor(ccc3(255, 170, 20));
+	take_ment->disableOuterStroke();
 	take_ment->setAnchorPoint(ccp(0,0.5f));
 	take_ment->setPosition(pass_img->getPosition() + ccp(pass_img->getContentSize().width/2.f+3, 0));
 	take_case->addChild(take_ment);
 	
 	KSLabelTTF* take_value_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass6))) + myLoc->getLocalForKey(kMyLocalKey_buyMorphingTakeValue)).c_str(), mySGD->getFont().c_str(), 13);
 	take_value_label->setColor(ccc3(255,170,20));
+	take_value_label->disableOuterStroke();
 	take_value_label->setAnchorPoint(ccp(1,0.5f));
 	take_value_label->setPosition(ccp(take_case->getContentSize().width-10, take_case->getContentSize().height/2.f));
 	take_case->addChild(take_value_label);
@@ -126,6 +127,7 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	KSLabelTTF* buy_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buyMorphingBuy), mySGD->getFont().c_str(), 13);
+	buy_label->disableOuterStroke();
 	buy_label->setAnchorPoint(ccp(0.0f, 0.5f));
 	r_label->addChild(buy_label);
 	
@@ -158,12 +160,12 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 //	}
 	
 	
-	CCScale9Sprite* buy_back = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0,0,40,40), CCRectMake(19, 19, 2, 2));
+	CCScale9Sprite* buy_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	buy_button = CCControlButton::create(r_label, buy_back);
 	buy_button->addTargetWithActionForControlEvents(this, cccontrol_selector(BuyMorphingPopup::buyAction), CCControlEventTouchUpInside);
-	buy_button->setPreferredSize(CCSizeMake(160,42));
-	buy_button->setPosition(ccp(0,-69));
+	buy_button->setPreferredSize(CCSizeMake(160,50));
+	buy_button->setPosition(ccp(0,-80));
 	m_container->addChild(buy_button);
 	
 	buy_label->setPositionX(-buy_button->getPreferredSize().width/2.f+15);

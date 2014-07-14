@@ -12,11 +12,11 @@ var showPuzzleImg = function(value,option){
 <table align=center>
 	<tr><td>
 		-condition type<br>
-		퍼즐 p(value),별 s(value),루비 r(value,exchangeID),요일 w(weekday,s,e),일 d(s,e)
+		퍼즐 p(value),별 s(value),젬 r(value,exchangeID),요일 w(weekday,s,e),일 d(s,e)
 
 	</td></tr></table><br><br>
 	
-<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Puzzle" autoSetting="true" dbWhere='' name="datatable" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Puzzle" autoSetting="true" dbWhere='' name="datatable" dbSort='{"order":"asc"}' border=1 align=center>
 	<thead>
 	</thead>
 	<tbody datazone>

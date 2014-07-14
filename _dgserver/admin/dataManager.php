@@ -14,12 +14,12 @@ $limit = $_POST['limit'];
 if(!$table)$table=$_GET['table'];
 /*
 		$data = json_decode(stripslashes($data));	
-	if($table==DBManager::get()->getMT("stage")){
+	if($table==DBManager::getMT("stage")){
 		$data["version"]=$data["version"]+1;
 		kvManager::increase("stageVersion_".$data[no]);
 		kvManager::increase("puzzleVersion_".$data[puzzle]);
 	}
-	if($table==DBManager::get()->getMT("puzzle")){
+	if($table==DBManager::getMT("puzzle")){
 		$data["version"]=$data["version"]+1;
 		kvManager::increase("puzzleVersion_".$data[no]);
 	}
@@ -28,41 +28,41 @@ if(!$table)$table=$_GET['table'];
 
 	if($data)$data = json_decode($data,true);	
 	
-	if($table==DBManager::get()->getMT("stage") && $data){
+	if($table==DBManager::getMT("stage") && $data){
 		$data["version"]=$data["version"]+1;
 
-		$pResult = mysql_query("select * from ".DBManager::get()->getMT("book")." where no=$data[book]",DBManager::get()->getMainConnection());
+		$pResult = mysql_query("select * from ".DBManager::getMT("book")." where no=$data[book]",DBManager::getMainConnection());
 		if($pResult){
 			$pData = mysql_fetch_assoc($pResult);
 			kvManager::increase("bookVer_".$pData[no]);
 			kvManager::increase("bookListVer");
-			mysql_query("update ".DBManager::get()->getMT("book")." set version=version+1 where no=".$data[book],DBManager::get()->getMainConnection());
+			mysql_query("update ".DBManager::getMT("book")." set version=version+1 where no=".$data[book],DBManager::getMainConnection());
 		}
 		
 
 		$cardlist = json_decode($data["cards"],true);
 
 		for($i=0;$i<count($cardlist);$i++){
-			mysql_query("update ".DBManager::get()->getMT("card")." set `stage`=".$data[no].", `grade`=".($i+1)." where no=".$cardlist[$i],DBManager::get()->getMainConnection());
+			mysql_query("update ".DBManager::getMT("card")." set `stage`=".$data[no].", `grade`=".($i+1)." where no=".$cardlist[$i],DBManager::getMainConnection());
 		}
 	}
 
-	if($table==DBManager::get()->getMT("piece") && $data){
+	if($table==DBManager::getMT("piece") && $data){
 		$data["version"]=$data["version"]+1;
-		$pResult = mysql_query("select * from ".DBManager::get()->getMT("puzzle")." where no=$data[puzzle]",DBManager::get()->getMainConnection());
+		$pResult = mysql_query("select * from ".DBManager::getMT("puzzle")." where no=$data[puzzle]",DBManager::getMainConnection());
 		
 		if($pResult){
 			$pData = mysql_fetch_assoc($pResult);
 			kvManager::increase("puzzleVer_".$pData[no]);
 			kvManager::increase("puzzleListVer");
-			mysql_query("update ".DBManager::get()->getMT("puzzle")." set version=version+1 where no=".$data[puzzle],DBManager::get()->getMainConnection());
+			mysql_query("update ".DBManager::getMT("puzzle")." set version=version+1 where no=".$data[puzzle],DBManager::getMainConnection());
 		}
 		
 
 		$cardlist = json_decode($data["cards"],true);
 
 		for($i=0;$i<count($cardlist);$i++){
-			mysql_query("update ".DBManager::get()->getMT("card")." set `stage`=".$data[no].", `grade`=".($i+1)." where no=".$cardlist[$i],DBManager::get()->getMainConnection());
+			mysql_query("update ".DBManager::getMT("card")." set `stage`=".$data[no].", `grade`=".($i+1)." where no=".$cardlist[$i],DBManager::getMainConnection());
 		}
 	}
 
@@ -70,56 +70,56 @@ if(!$table)$table=$_GET['table'];
 
 
 
-	if($table==DBManager::get()->getMT("eventstage") && $data){
+	if($table==DBManager::getMT("eventstage") && $data){
 		$data["version"]=$data["version"]+1;
 		kvManager::increase("eStageVer_".$data[no]);
 		kvManager::increase("eStageListVer");
 	}
 	
 	//puzzle
-	if($table==DBManager::get()->getMT("puzzle") && $data["isEvent"]==1){
+	if($table==DBManager::getMT("puzzle") && $data["isEvent"]==1){
 		$data["version"]=$data["version"]+1;
 		kvManager::increase("puzzleVer_".$data[no]);
 		kvManager::increase("ePuzzleListVer");
-		mysql_query("update ".DBManager::get()->getMT("puzzle")." set version=version+1 where no=".$data[no],DBManager::get()->getMainConnection());
+		mysql_query("update ".DBManager::getMT("puzzle")." set version=version+1 where no=".$data[no],DBManager::getMainConnection());
 
 		reloadPuzzleInfo();
-	}else if($table==DBManager::get()->getMT("puzzle") && $data){
+	}else if($table==DBManager::getMT("puzzle") && $data){
 		$data["version"]=$data["version"]+1;
 		kvManager::increase("puzzleVer_".$data[no]);
 		kvManager::increase("puzzleListVer");
 
 		reloadPuzzleInfo();
-	}else if($table==DBManager::get()->getMT("puzzle")){
+	}else if($table==DBManager::getMT("puzzle")){
 		
 		reloadPuzzleInfo();
 	}
 
 	//book
-	if($table==DBManager::get()->getMT("book") && $data["isEvent"]==1){
+	if($table==DBManager::getMT("book") && $data["isEvent"]==1){
 		$data["version"]=$data["version"]+1;
 		kvManager::increase("bookVer_".$data[no]);
 		kvManager::increase("eBookListVer");
-		mysql_query("update ".DBManager::get()->getMT("book")." set version=version+1 where no=".$data[no],DBManager::get()->getMainConnection());
+		mysql_query("update ".DBManager::getMT("book")." set version=version+1 where no=".$data[no],DBManager::getMainConnection());
 
-	}else if($table==DBManager::get()->getMT("book") && $data){
+	}else if($table==DBManager::getMT("book") && $data){
 		$data["version"]=$data["version"]+1;
 		kvManager::increase("bookVer_".$data[no]);
 		kvManager::increase("bookListVer");
 	}
 
-	if($table==DBManager::get()->getMT("card") && $data){
+	if($table==DBManager::getMT("card") && $data){
 		kvManager::increase("cardVer_".$data[no]);
 		kvManager::increase("stageVer_".$data[stage]);
 	}
-	if($table==DBManager::get()->getMT("character") && $data){
+	if($table==DBManager::getMT("character") && $data){
 		kvManager::increase("charListVer");
 	}
-	if($table==DBManager::get()->getMT("monster") && $data){
+	if($table==DBManager::getMT("monster") && $data){
 		kvManager::increase("monsterListVer");
 	}
 
-	if($table==DBManager::get()->getMT("shop") && $data){
+	if($table==DBManager::getMT("shop") && $data){
 		kvManager::increase("shopListVer");
 	}
 	
@@ -133,14 +133,14 @@ if($mode=="update"){
 		$dataObj->regDate=$data["regDate"];
 		$dataObj->data=$data["data"];
 		$result=$dataObj->save();
-		$data[log] = LogManager::get()->getLogAndClear();
+		$data[log] = LogManager::getLogAndClear();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
 		else echo'{"result":"fail","msg":"세이브쿼리실패"}';
 
 	}else if($table==DBManager::getST("stagescore")){
 		$dataObj = new StageScore($data["stageNo"],$data["memberID"]);
-		LogManager::get()->addLog("modify stagescore");
-		LogManager::get()->addLog("modify stagescore is load? ".$dataObj->isLoaded());
+		LogManager::addLog("modify stagescore");
+		LogManager::addLog("modify stagescore is load? ".$dataObj->isLoaded());
 
 
 		$dataObj->memberID=$data["memberID"];
@@ -149,7 +149,7 @@ if($mode=="update"){
 		$dataObj->regDate=$data["regDate"];
 		$dataObj->data=$data["data"];
 		$result=$dataObj->save();
-		$data[log] = LogManager::get()->getLogAndClear();
+		$data[log] = LogManager::getLogAndClear();
 		if($result)echo'{"result":"ok","data":'.json_encode($data).'}';
 		else echo'{"result":"fail","msg":"세이브쿼리실패"}';
 
@@ -168,7 +168,7 @@ if($mode=="update"){
 
 	}else if($table==DBManager::getST("userdata")){
 		//보내기
-		$userdata = new UserData($data["memberID"]);
+		$userdata = UserData::create($data["memberID"]);
 		$userdata->data = $data["data"];
 		$userdata->friendList = $data["friendList"];
 
@@ -181,7 +181,7 @@ if($mode=="update"){
 		$query = lq_query_update($data,$table,"where $primaryKey = $primaryValue");
 		
 
-		if(mysql_query($query,DBManager::get()->getMainConnection())){
+		if(mysql_query($query,DBManager::getMainConnection())){
 			//"query":"'.addslashes($query).'"
 			echo'{"result":"ok","data":'.json_encode($data).'}'; mysql_close(); exit; 
 		}
@@ -202,7 +202,7 @@ if($mode=="update"){
 		echo'{"result":"fail","msg":"메세지와 유저데이터는 수정불가"}';
 	}else{
 		$query = "delete from $table where $primaryKey = $primaryValue";
-		if(mysql_query($query,DBManager::get()->getMainConnection())){
+		if(mysql_query($query,DBManager::getMainConnection())){
 			//,"query":"'.addslashes($query).'"
 			echo'{"result":"ok"}'; mysql_close(); exit; 
 		}
@@ -221,7 +221,7 @@ if($mode=="update"){
 		$message = new Message();
 		$message->memberID=$data["memberID"];
 		$message->content=$data["content"];
-		$message->regDate=TimeManager::get()->getCurrentDateTime();
+		$message->regDate=TimeManager::getCurrentDateTime();
 		$message->friendID=$data["friendID"];
 		$message->type=$data["type"];
 		$message->isSendMsg=$data["isSendMsg"];
@@ -231,8 +231,8 @@ if($mode=="update"){
 
 		$query = lq_query_insert($data,$table);
 
-		if(mysql_query($query,DBManager::get()->getMainConnection())){
-			$no = mysql_insert_id(DBManager::get()->getMainConnection());
+		if(mysql_query($query,DBManager::getMainConnection())){
+			$no = mysql_insert_id(DBManager::getMainConnection());
 			$primaryString="";
 			if($no)$primaryString=',"'.$primaryKey.'":'.$no;
 			echo'{"result":"ok" '.$primaryString.'}'; mysql_close();exit; 
@@ -258,7 +258,7 @@ if($mode=="update"){
 	    while($userdata = StageScore::getRowByQuery($qstr)){
 			$memberID = $userdata["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userdata["memberID"]);
+				$userList[$memberID] = UserData::create($userdata["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -298,7 +298,7 @@ if($mode=="update"){
 	    while($userdata = WeeklyScore::getRowByQuery($qstr)){
 			$memberID = $userdata["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userdata["memberID"]);
+				$userList[$memberID] = UserData::create($userdata["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -338,10 +338,10 @@ if($mode=="update"){
 			$memberID = $data["memberID"];
 			$friendID = $data["friendID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($data["memberID"]);
+				$userList[$memberID] = UserData::create($data["memberID"]);
 			}
 			if(!$userList[$friendID]){
-				$userList[$friendID] = new UserData($data["friendID"]);
+				$userList[$friendID] = UserData::create($data["friendID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -377,7 +377,7 @@ if($mode=="update"){
 	    while($userlog = UserLog::getRowByQuery($qstr)){
 			$memberID = $userlog["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userlog["memberID"]);
+				$userList[$memberID] = UserData::create($userlog["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -414,7 +414,7 @@ if($mode=="update"){
 	    while($userdata = UserData::getRowByQuery($qstr)){
 			$memberID = $userdata["memberID"];
 			if(!$userList[$memberID]){
-				$userList[$memberID] = new UserData($userdata["memberID"]);
+				$userList[$memberID] = UserData::create($userdata["memberID"]);
 			}
 
 			$userInfo = $userList[$memberID];
@@ -443,7 +443,7 @@ if($mode=="update"){
 		if($where)$qstr .= "where ".$where." ";
 		if($sort)$qstr .= "order by ".$sort." ";
 		if($limit)$qstr .= "limit ".$limit;
-		$query = @mysql_query("select * from `$table` ".$qstr,DBManager::get()->getMainConnection());
+		$query = @mysql_query("select * from `$table` ".$qstr,DBManager::getMainConnection());
 		echo'{"result":"ok","data":[';
 		$isFirst = true;
 		while($data = @mysql_fetch_array($query,MYSQL_ASSOC)){
@@ -459,7 +459,7 @@ if($mode=="update"){
 }
 
 
-DBManager::get()->closeDB();
+DBManager::closeDB();
 
 ?>
 

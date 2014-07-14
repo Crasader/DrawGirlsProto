@@ -5,74 +5,74 @@
 class CommitManager{
 	
 
-	public $m_dbInfo=null;
-	public $m_userIndex=null;
-	public $m_isSuccess=null;
-	public $m_releaseCount=null;
-	private static $m_instance=NULL;
+	static public $m_dbInfo=null;
+	static public $m_userIndex=null;
+	static public $m_isSuccess=null;
+	static public $m_releaseCount=null;
+	//private static $m_instance=NULL;
 
-	public function __construct($memberID=null){
-		$this->m_userIndex=array();
-		$this->m_dbInfo=array();
-		$this->m_isSuccess=array();
-		$this->m_releaseCount=array();
+	static public function construct($memberID=null){
+		self::$m_userIndex=array();
+		self::$m_dbInfo=array();
+		self::$m_isSuccess=array();
+		self::$m_releaseCount=array();
 	}
 
-	//싱글턴 얻어오기
-	public static function get()
-	{
-	    if ( is_null( self::$m_instance ) )
-	    {
-	      self::$m_instance = new self();
-	    }
-	    return self::$m_instance;
-	}
+	// //싱글턴 얻어오기
+	// public static function get()
+	// {
+	//     if ( is_null( self::$m_instance ) )
+	//     {
+	//       self::$m_instance = new self();
+	//     }
+	//     return self::$m_instance;
+	// }
 
-	public function begin($memberID){
-		if(!$this->m_releaseCount[$memberID]){
-			$this->m_releaseCount[$memberID]=1;
+	static public function begin($memberID){
+		if(!self::$m_releaseCount[$memberID]){
+			self::$m_releaseCount[$memberID]=1;
 			
 			//user db
 			if($memberID!="main"){
-				$this->m_userIndex[$memberID] = UserIndex::create($memberID);
-				$this->m_dbInfo[$memberID] = $this->m_userIndex[$memberID]->getShardDBInfo();
+				self::$m_userIndex[$memberID] = UserIndex::create($memberID);
+				self::$m_dbInfo[$memberID] = self::$m_userIndex[$memberID]->getShardDBInfo();
 			//main db
 			}else{
-				$this->m_dbInfo[$memberID] = DBManager::get()->getMainDBInfo();
+				self::$m_dbInfo[$memberID] = DBManager::getMainDBInfo();
 			}
 
-			$this->m_isSuccess[$memberID]=true;
-			mysql_query("SET AUTOCOMMIT=0",$this->m_dbInfo[$memberID]->getConnection());
-			mysql_query("BEGIN",$this->m_dbInfo[$memberID]->getConnection());
+			self::$m_isSuccess[$memberID]=true;
+			mysql_query("SET AUTOCOMMIT=0",self::$m_dbInfo[$memberID]->getConnection());
+			mysql_query("BEGIN",self::$m_dbInfo[$memberID]->getConnection());
 
-			LogManager::get()->addLog("start transaction".mysql_error());
+			LogManager::addLog("start transaction".mysql_error());
 		}else{
-			LogManager::get()->addLog("start transaction but ++");
-			$this->m_releaseCount[$memberID]++;
+			LogManager::addLog("start transaction but ++");
+			self::$m_releaseCount[$memberID]++;
 		}
 	}
 
-	public function commit($memberID){
-		if(!$this->m_releaseCount[$memberID]) return false;
+	static public function commit($memberID){
+		if(!self::$m_releaseCount[$memberID]) return false;
 
 
-		LogManager::get()->addLog("commit transaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::addLog("commit transaction count=".self::$m_releaseCount[$memberID]."-1");
 
-		$this->m_releaseCount[$memberID]--;
+		self::$m_releaseCount[$memberID]--;
 
-		if(!$this->isSuccess($memberID)){
-			if($this->m_releaseCount[$memberID]==0){
-				$result = mysql_query("ROLLBACK", $this->m_dbInfo[$memberID]->getConnection());
-				LogManager::get()->addLog("commit query but rollback : ".mysql_error());
-				mysql_query("SET AUTOCOMMIT=1",$this->m_dbInfo[$memberID]->getConnection());
+		if(!self::isSuccess($memberID)){
+			if(self::$m_releaseCount[$memberID]==0){
+				$result = mysql_query("ROLLBACK", self::$m_dbInfo[$memberID]->getConnection());
+				LogManager::addLog("commit query but rollback : ".mysql_error());
+				mysql_query("SET AUTOCOMMIT=1",self::$m_dbInfo[$memberID]->getConnection());
 			}
 			return false;
 		}
 
-		if($this->m_releaseCount[$memberID]==0){
-			$result = mysql_query("COMMIT", $this->m_dbInfo[$memberID]->getConnection());
-			LogManager::get()->addLog("commit query ok? : ".mysql_error());
-			mysql_query("SET AUTOCOMMIT=1",$this->m_dbInfo[$memberID]->getConnection());
+		if(self::$m_releaseCount[$memberID]==0){
+			$result = mysql_query("COMMIT", self::$m_dbInfo[$memberID]->getConnection());
+			LogManager::addLog("commit query ok? : ".mysql_error());
+			mysql_query("SET AUTOCOMMIT=1",self::$m_dbInfo[$memberID]->getConnection());
 		}else{
 			$result = true;
 		}
@@ -81,34 +81,36 @@ class CommitManager{
 		return $result;
 	}
 
-	public function rollback($memberID){
-		if(!$this->m_releaseCount[$memberID]) return false;
+	static public function rollback($memberID){
+		if(!self::$m_releaseCount[$memberID]) return false;
 
 
-		LogManager::get()->addLog("rollback transaction count=".$this->m_releaseCount[$memberID]."-1");
+		LogManager::addLog("rollback transaction count=".self::$m_releaseCount[$memberID]."-1");
 
-		$this->m_releaseCount[$memberID]--;
+		self::$m_releaseCount[$memberID]--;
 
-		if($this->m_releaseCount[$memberID]==0){
-			$result = mysql_query("ROLLBACK", $this->m_dbInfo[$memberID]->getConnection());
+		if(self::$m_releaseCount[$memberID]==0){
+			$result = mysql_query("ROLLBACK", self::$m_dbInfo[$memberID]->getConnection());
 		}else{
-			$this->setSuccess($memberID,false);
+			self::setSuccess($memberID,false);
 			$result=true;
 		}
-		LogManager::get()->addLog("rollback transaction");
+		LogManager::addLog("rollback transaction");
 		return $result;
 	}
 
-	public function setSuccess($memberID,$success){
-		if($this->m_isSuccess[$memberID]==false)return;
+	static public function setSuccess($memberID,$success){
+		if(self::$m_isSuccess[$memberID]==false)return;
 
-		$this->m_isSuccess[$memberID]=$success;
+		self::$m_isSuccess[$memberID]=$success;
 	}
 
-	public function isSuccess($memberID){
-		return $this->m_isSuccess[$memberID];
+	static public function isSuccess($memberID){
+		return self::$m_isSuccess[$memberID];
 	}
 }
+
+CommitManager::construct();
 
 class UserIndex extends DBTable{
 	// public $m_memberID = null;
@@ -121,27 +123,27 @@ class UserIndex extends DBTable{
 
 	public static function create($memberID=null,$userindex=null,$socialID=null,$nick=null){
 		
-		LogManager::get()->addLog("create userIndex");
+		LogManager::addLog("create userIndex");
 		if($memberID && self::$sharedIndexes[$memberID]){
-			LogManager::get()->addLog("finded userIndex in sharedIndexes ".$memberID);
+			LogManager::addLog("finded userIndex in sharedIndexes ".$memberID);
 			return self::$sharedIndexes[$memberID];
 		}
 
 
-		LogManager::get()->addLog("new userIndex, memberID is ".$memberID." and userIndex is ".$userindex);
+		LogManager::addLog("new userIndex, memberID is ".$memberID." and userIndex is ".$userindex);
 		$newIndex =new UserIndex($memberID,$userindex,$socialID,$nick);
 
 		if($newIndex->isLoaded()){
-			LogManager::get()->addLog("useindex load success no is".$newIndex->no);
+			LogManager::addLog("useindex load success no is".$newIndex->no);
 			self::$sharedIndexes[$newIndex->memberID]=$newIndex;
 		}else{
-			LogManager::get()->addLog("userindex load fail it's new obj is ".json_encode($newIndex->getArrayData(true))." and shardIndex is ".$newIndex->shardIndex);
+			LogManager::addLog("userindex load fail it's new obj is ".json_encode($newIndex->getArrayData(true))." and shardIndex is ".$newIndex->shardIndex);
 			
 			if(!$memberID){
 				return null;
 			}
 			//$test = get_class_vars(get_class($newIndex));
-			//LogManager::get()->addLog("userindex load fuck!!".json_encode($test));
+			//LogManager::addLog("userindex load fuck!!".json_encode($test));
 		}	
 		return $newIndex;
 	}
@@ -150,10 +152,10 @@ class UserIndex extends DBTable{
 
 		parent::__construct();
 		
-		LogManager::get()->addLog("construct userIndex for ".$memberID);
+		LogManager::addLog("construct userIndex for ".$memberID);
 
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		if($userindex){
 			parent::load("no=".$userindex);
@@ -167,11 +169,11 @@ class UserIndex extends DBTable{
 
 		 	if(parent::load("memberID='".$memberID."'")){
 		 		//$this->autoMatching($this->m__result);
-		 		LogManager::get()->addLog("load success userindex shardIndex is".$this->shardIndex);
+		 		LogManager::addLog("load success userindex shardIndex is".$this->shardIndex);
 		 	}else{
 				$this->memberID = $memberID;
 		 		$this->shardIndex = $this->getShardIndexByNumberKey($memberID);
-		 		LogManager::get()->addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::get()->getShardDBCount());
+		 		LogManager::addLog("load fail userindex shardIndex is ".$this->shardIndex." m_shardDBCount is ".DBManager::getShardDBCount());
 		 		//$this->save(true);
 		 	}
 	 	}else if($socialID){
@@ -186,33 +188,33 @@ class UserIndex extends DBTable{
 		return $this->no;
 	}
 	public function getShardIndexByNumberKey($numberKey){
-		return DBManager::get()->getDBIndexByShardKey($numberKey);
+		return DBManager::getDBIndexByShardKey($numberKey);
 	}
 
 	public function getShardConnection(){
-		return DBManager::get()->getConnectionByShardIndex($this->shardIndex);
+		return DBManager::getConnectionByShardIndex($this->shardIndex);
 	}
 
 	public function getShardDBInfo(){
-		return DBManager::get()->getDBInfoByShardIndex($this->shardIndex);
+		return DBManager::getDBInfoByShardIndex($this->shardIndex);
 	}
 
 	static public function getShardConnectionByRandom(){
-		return DBManager::get()->getConnectionByShardKey(rand(0,10));
+		return DBManager::getConnectionByShardKey(rand(0,10));
 	}
 
 	static public function getShardDBInfoList(){
-		return DBManager::get()->getShardDBInfoList();
+		return DBManager::getShardDBInfoList();
 	}
 
 	public function remove(){
-		LogManager::get()->addLog("remove userindex!!");
+		LogManager::addLog("remove userindex!!");
 		return parent::remove();
 	}
 
 
 	public function save($isIncludePrimaryKey = false){
-		LogManager::get()->addLog("save userindex!!");
+		LogManager::addLog("save userindex!!");
 		return parent::save($isIncludePrimaryKey);
 	}
 
@@ -248,10 +250,13 @@ class UserLog extends DBTable{
 		// });
 		
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
+			if($param["where"]["category"]){
+				return "where category = '".$param["where"]["category"]."'";
+			}
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -348,7 +353,7 @@ class SendItem extends DBTable{
 
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
-			//LogManager::get()->addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
+			//LogManager::addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
 			if($this->m__userIndex)$this->setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
 				if(parent::load("memberID=".$this->m__userIndex->memberID)){
@@ -364,7 +369,7 @@ class SendItem extends DBTable{
 		
 
 		//가입시간
-		//if(!$this->joinDate)$this->joinDate=TimeManager::get()->getCurrentDateTime();
+		//if(!$this->joinDate)$this->joinDate=TimeManager::getCurrentDateTime();
 	}
 
 
@@ -373,11 +378,11 @@ class SendItem extends DBTable{
 		$user=null;
 
 		if($param["where"]["type"]=="sno"){
-			$user = new UserData($param["where"]["id"]);
+			$user = UserData::create($param["where"]["id"]);
 		}else if($param["where"]["type"]=="nick"){
-			$user = new UserData(null,null,$param["where"]["id"]);
+			$user = UserData::create(null,null,$param["where"]["id"]);
 		}else{
-			$user = new UserData(null,$param["where"]["id"]);
+			$user = UserData::create(null,$param["where"]["id"]);
 		}
 
 		if(!$user->isLoaded()){
@@ -403,7 +408,7 @@ class SendItem extends DBTable{
 
 		$data = $param["data"];
 
-		LogManager::get()->addLog(json_encode($data));
+		LogManager::addLog(json_encode($data));
 
 		// $propCount = $data["propData"]["count"];
 		// if($data["propData"]["count"]=="m"){
@@ -435,9 +440,9 @@ class SendItem extends DBTable{
 		$result["reward"]=$exchange->list;
 		$rList = array();
 		foreach ($data["memberList"] as $mID => $nick) {
-			CommitManager::get()->begin($mID);
+			CommitManager::begin($mID);
 			
-			$userInfo = new UserData($mID);
+			$userInfo = UserData::create($mID);
 
 			if(!$userInfo->isLoaded()){
 				$rList[$mID]=array("result"=>"fail","nick"=>$nick);
@@ -453,7 +458,7 @@ class SendItem extends DBTable{
 				$param["reward"]=$exchange->list;
 				$cmd = new commandClass();
 				$sR = $cmd->sendgiftboxhistory($param);
-				CommitManager::get()->setSuccess($mID,ResultState::successCheck($sR["result"]));
+				CommitManager::setSuccess($mID,ResultState::successCheck($sR["result"]));
 			
 			//바로지급
 			}else{
@@ -462,7 +467,7 @@ class SendItem extends DBTable{
 				$param["exchangeID"]=$exchange->id;
 				$cmd = new commandClass();
 				$sR = $cmd->exchange($param);
-				CommitManager::get()->setSuccess($mID,ResultState::successCheck($sR["result"]));
+				CommitManager::setSuccess($mID,ResultState::successCheck($sR["result"]));
 			}
 
 			if($param["comment"]){
@@ -472,10 +477,10 @@ class SendItem extends DBTable{
 				$mh->newData=$exchange->list;
 				$mh->comment=$param["comment"];
 				$mh->category=get_called_class();
-				CommitManager::get()->setSuccess($mID,$mh->save());
+				CommitManager::setSuccess($mID,$mh->save());
 			}
 
-			if(CommitManager::get()->commit($mID)){
+			if(CommitManager::commit($mID)){
 				$rList[$mID]=array("result"=>"success","nick"=>$nick);
 			}else{
 				$rList[$mID]=array("result"=>"fail","nick"=>$nick);
@@ -498,8 +503,39 @@ class UserData extends DBTable{
 	// public $m_deviceID=null;
 	// public $m_friendList=null;
 	public $m__userIndex=null;
+	public static $sharedUserDatas=array();
 	// static public $m__queryResult = null;
 	// static public $m__queryCnt = 0;
+
+	public static function create($memberID=null,$socialID=null,$nick=null){
+		
+		LogManager::addLog("create userData");
+		if($memberID && self::$sharedUserDatas[$memberID]){
+			LogManager::addLog("finded userData in sharedUserDatas ".$memberID);
+			return self::$sharedUserDatas[$memberID];
+		}
+
+
+		LogManager::addLog("UserData::create, memberID is ".$memberID." and userIndex is ");
+		$newUserData =new UserData($memberID,$socialID,$nick);
+
+		if($newUserData->isLoaded()){
+			LogManager::addLog("useindex load success no is".$newUserData->no);
+			self::$sharedUserDatas[$newUserData->memberID]=$newUserData;
+		}else{
+			LogManager::addLog("userindex load fail it's new obj is ".json_encode($newUserData->getArrayData(true)));
+			
+			// if(!$memberID){
+			// 	return null;
+			// }
+			//$test = get_class_vars(get_class($newIndex));
+			//LogManager::addLog("userindex load fuck!!".json_encode($test));
+		}	
+		return $newUserData;
+	}
+
+
+
 	public function __construct($memberID=null,$socialID=null,$nick=null){
 		parent::__construct();
 		
@@ -514,7 +550,7 @@ class UserData extends DBTable{
 
 		if($memberID || $socialID || $nick){
 			$this->m__userIndex = UserIndex::create($memberID,null,$socialID,$nick);
-			//LogManager::get()->addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
+			//LogManager::addLog("create userindex for ".$this->m__userIndex->memberID." result is ".json_encode($this->m__userIndex->getArrayData(true)));
 			//if($this->m__userIndex->isLoaded())$this->setDBInfo($this->m__userIndex->getShardDBInfo());
 			if($this->m__userIndex && $this->m__userIndex->isLoaded()){
 				$this->setDBInfo($this->m__userIndex->getShardDBInfo());
@@ -531,7 +567,7 @@ class UserData extends DBTable{
 		
 
 		//가입시간
-		//if(!$this->joinDate)$this->joinDate=TimeManager::get()->getCurrentDateTime();
+		//if(!$this->joinDate)$this->joinDate=TimeManager::getCurrentDateTime();
 	}
 
 
@@ -540,11 +576,12 @@ class UserData extends DBTable{
 		$r["head"][]=array("manage"=>"update delete insert");
 		return $r;
 	}
+
 	public function save($isIncludePrimaryKey=false){
 		//마지막접속시간
-		LogManager::get()->addLog("userdata save!!!!!!");
-		$this->lastDate = TimeManager::get()->getCurrentDateTime();
-		$this->lastTime = TimeManager::get()->getTime();
+		LogManager::addLog("userdata save!!!!!!");
+		$this->lastDate = TimeManager::getCurrentDateTime();
+		$this->lastTime = TimeManager::getTime();
 		return parent::save($isIncludePrimaryKey);
 	}
 
@@ -552,7 +589,7 @@ class UserData extends DBTable{
 		$r = $this->m__userIndex->remove();
 		if($r)parent::remove();
 		
-		LogManager::get()->addLog("dropout User query error is".mysql_error()." and ".json_encode($r));
+		LogManager::addLog("dropout User query error is".mysql_error()." and ".json_encode($r));
 
 		return $r;
 	}
@@ -638,7 +675,7 @@ class UserData extends DBTable{
 	}
 	
 	public function addFriend($friendID){
-		LogManager::get()->addLog("addfriend ".$friendID);
+		LogManager::addLog("addfriend ".$friendID);
 
 		$friendList=array();
 		if($this->friendList)$friendList = json_decode($this->friendList,true);
@@ -648,7 +685,7 @@ class UserData extends DBTable{
 		$friendList = array_unique($friendList);		
 		$this->friendList = json_encode($friendList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 		
-		LogManager::get()->addLog("addfriendResult is ".$this->friendList);
+		LogManager::addLog("addfriendResult is ".$this->friendList);
 	}
 
 	public function setArchiveData($key,$value){
@@ -664,11 +701,11 @@ class UserData extends DBTable{
 		$user=null;
 
 		if($param["where"]["type"]=="sno"){
-			$user = new UserData($param["where"]["id"]);
+			$user = UserData::create($param["where"]["id"]);
 		}else if($param["where"]["type"]=="nick"){
-			$user = new UserData(null,null,$param["where"]["id"]);
+			$user = UserData::create(null,null,$param["where"]["id"]);
 		}else{
-			$user = new UserData(null,$param["where"]["id"]);
+			$user = UserData::create(null,$param["where"]["id"]);
 		}
 
 		if(!$user->isLoaded()){
@@ -685,12 +722,12 @@ class UserData extends DBTable{
 		$r = array_merge($hgr,$r);
 
 		$character = new CharacterHistory($user->memberID,$user->selectedCharNO);
-		LogManager::get()->addLog("character".$user->memberID."-".$user->selectedCharNO);
+		LogManager::addLog("character".$user->memberID."-".$user->selectedCharNO);
 		$r["characterLevel"]=$character->level;
 
 		$storage = new UserStorage($user->memberID);
 		$r["r"]='{"fr":'.$storage->fr.',"pr":'.$storage->pr.'}';
-		$r["isConnecting"]=((TimeManager::get()->getTime()-$user->lastTime)<300)?"Y":"N";
+		$r["isConnecting"]=((TimeManager::getTime()-$user->lastTime)<300)?"Y":"N";
 		$r = array_merge($r,$storage->getArrayData());
 
 		$result["data"]=$r;
@@ -800,14 +837,14 @@ class Message extends DBTable{
 		
 // 		$this->setPrimarykey("no");
 // 		//$this->setDBTable(DBManager::getST("stageScore"));
-// 		$this->setDBInfo(DBManager::get()->getDBInfoByShardKey($stageNo));
+// 		$this->setDBInfo(DBManager::getDBInfoByShardKey($stageNo));
 		
 // 		if($memberID || $where){
 // 			if($where)$q_where = $where;
 // 			else $q_where = "memberID=".$memberID." and stageNo=".$stageNo;
 			
 
-// 			LogManager::get()->addLog("stage score construct ".$q_where);
+// 			LogManager::addLog("stage score construct ".$q_where);
 // 			if(parent::load($q_where)){
 // 				$this->autoMatching($this->m__result);
 // 				// $this->m_no = $this->m__result["no"];
@@ -832,7 +869,7 @@ class Puzzle extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($puzzleNo)$this->no=$puzzleNo;
@@ -973,7 +1010,7 @@ class Piece extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		if($no)$this->no=$no;
 
@@ -1004,19 +1041,19 @@ class Piece extends DBTable{
 	}
 
 	public function updateWithLQTable($p){
-		CommitManager::get()->begin("main");
+		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
 			$puzzle->version+=1;
 			kvManager::increase("puzzleListVer");
-			CommitManager::get()->setSuccess("main",$puzzle->save());
+			CommitManager::setSuccess("main",$puzzle->save());
 		}
 
 		$p["data"]["version"]+=1;
 		$r = parent::updateWithLQTable($p);
-		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			return $r;
 		}else{
 			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
@@ -1024,19 +1061,19 @@ class Piece extends DBTable{
 	}
 
 	public function insertWithLQTable($p){
-		CommitManager::get()->begin("main");
+		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
 			$puzzle->version+=1;
 			kvManager::increase("puzzleListVer");
-			CommitManager::get()->setSuccess("main",$puzzle->save());
+			CommitManager::setSuccess("main",$puzzle->save());
 		}
 
 		//$p["data"]["version"]+=1;
 		$r = parent::updateWithLQTable($p);
-		CommitManager::get()->setSuccess("main",ResultState::successCheck($r["result"]));
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			return $r;
 		}else{
 			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
@@ -1234,7 +1271,7 @@ class Card extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -1267,14 +1304,56 @@ class Card extends DBTable{
 	}
 
 	public function updateWithLQTable($p){
-		$r = parent::updateWithLQTable($p);
+		CommitManager::begin("main");
+		
+		if($p["data"]["piece"]){
+			$piece = new Piece($p["data"]["piece"]);
+			$piece->version+=1;
+			CommitManager::setSuccess("main",$piece->save());
 
-		return $r;
+			if($piece->puzzle){
+				$puzzle = new Puzzle($piece->puzzle);
+				$puzzle->version+=1;
+				kvManager::increase("puzzleListVer");
+				CommitManager::setSuccess("main",$puzzle->save());
+			}
+		}
+
+		$r = parent::updateWithLQTable($p);
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
+
+		if(CommitManager::commit("main")){
+			return $r;
+		}else{
+			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
+		}
+
 	}
 
 	public function insertWithLQTable($p){
+		CommitManager::begin("main");
+		
+		if($p["data"]["piece"]){
+			$piece = new Piece($p["data"]["piece"]);
+			$piece->version+=1;
+			CommitManager::setSuccess("main",$piece->save());
+
+			if($piece->puzzle){
+				$puzzle = new Puzzle($piece->puzzle);
+				$puzzle->version+=1;
+				kvManager::increase("puzzleListVer");
+				CommitManager::setSuccess("main",$puzzle->save());
+			}
+		}
+
 		$r = parent::insertWithLQTable($p);
-		return $r;
+		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
+
+		if(CommitManager::commit("main")){
+			return $r;
+		}else{
+			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
+		}
 	}
 
 	public function loadWithDataTable($p){
@@ -1316,9 +1395,9 @@ class Card extends DBTable{
 					{"title":"AI","field":"ai","type":"text","datatype":"int"}				
 					]}',true));
 		$data["head"][]=array("field"=>"missile","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"type","type":"text"},{"field":"speed","type":"text","datatype":"int"},{"field":"power","type":"text","datatype":"int"},{"field":"dex","type":"text","datatype":"int"}]}',true));
-		$data["head"][]=array("field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["kr","jp","en","cn"]}',true));
+		$data["head"][]=array("field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["kr","jp","en","cn"]}',true));
 		$data["head"][]=array("field"=>"stage","viewer"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("field"=>"piece","viewer"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("field"=>"piece","viewer"=>json_decode('{"type":"text"}',true),'always');
 		$data["head"][]=array("field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
 		$data["head"][]=array("field"=>"imgInfo","viewer"=>json_decode('{"type":"custom","func":"showCardImg"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}',true));
 		$data["head"][]=array("field"=>"aniInfo","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"dictionary","element":
@@ -1343,7 +1422,11 @@ class Card extends DBTable{
 		$data["head"][]=array("field"=>"profile","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"textarea"}',true));
 		$data["head"][]=array("field"=>"silImgInfo","viewer"=>json_decode('{"type":"text","cut":50}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"isSil","type":"bool"},{"field":"img","type":"custom","func":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}',true));
 		$data["head"][]=array("field"=>"mPrice","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"r","type":"text","datatype":"int"},{"field":"p6","type":"text","datatype":"int"}]}',true));
-		$data["head"][]=array("field"=>"type","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["normal","nPuzzle","special","event","ePuzzle","gift"]}',true));
+		$data["head"][]=array("field"=>"category","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["normal","nPuzzle","special","event","ePuzzle","gift","leader"]}',true));
+		$data["head"][]=array("field"=>"type","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["음","양","섬"],"value":[1,2,3]}',true));
+		$data["head"][]=array("field"=>"level","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
+		$data["head"][]=array("field"=>"characterNo","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
+		$data["head"][]=array("field"=>"sound","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"array","element":{"type":"text"}}',true));
 		$data["head"][]=array("manage"=>"[delete,update,insert]");
 
 		return $data;
@@ -1364,9 +1447,9 @@ class CardHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1476,9 +1559,9 @@ class PuzzleHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1573,9 +1656,9 @@ class PieceHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1652,7 +1735,7 @@ class FaultyNick extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($no)$this->m_no=$no;
@@ -1678,7 +1761,7 @@ class Archivement extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectCustomFunction(function ($data){
 			if($data["exchangeID"]){
@@ -1757,7 +1840,7 @@ class Archivement extends DBTable{
 		$data["head"][]=array("field"=>"content","viewer"=>$textViewer,"editor"=>$dictEditor);
 		$data["head"][]=array("field"=>"reward","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("field"=>"goal","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor,"always");
 		$data["head"][]=array("field"=>"exchangeListEditor","viewer"=>$textViewer,"editor"=>$textEditor);
 		
 
@@ -1784,9 +1867,9 @@ class ArchivementHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1853,9 +1936,9 @@ class GiftBoxHistory extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -1864,10 +1947,10 @@ class GiftBoxHistory extends DBTable{
 
 		$this->setLQTableSelectCustomFunction(function ($rData){
 			if($rData["reward"])$rData["reward"] = json_decode($rData["reward"],true);
-			if($rData["exchangeID"]){
-				$exchange = new Exchange($rData["exchangeID"]);
-				$rData["exchangeList"]=$exchange->list;				
-			}
+			// if($rData["exchangeID"]){
+			// 	$exchange = new Exchange($rData["exchangeID"]);
+			// 	$rData["exchangeList"]=$exchange->list;				
+			// }
 			return $rData;
 		});
 
@@ -1894,40 +1977,40 @@ class GiftBoxHistory extends DBTable{
 	}
 
 	public function confirmAll(){
-		$lastDay = TimeManager::get()->getDateTime(TimeManager::get()->getTime()-60*60*24*30);
-		$result = mysql_query("update ".$this->getDBTable()." set confirmDate='".TimeManager::get()->getCurrentDateTime()."' where memberID='".$this->memberID."' and confirmDate=0 and regDate>$lastDay",$this->getDBConnection());
+		$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
+		$result = mysql_query("update ".$this->getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$this->memberID."' and confirmDate=0 and regDate>$lastDay",$this->getDBConnection());
 		return $result;
 	}
 
-	public function updateWithLQTable($p){
-		$exchange=null;
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-		}
+	// public function updateWithLQTable($p){
+	// 	$exchange=null;
+	// 	// if($p["data"]["exchangeID"]){
+	// 	// 	$exchange = new Exchange($p["data"]["exchangeID"]);
+	// 	// }
 		
-		unset($p["data"]["exchangeList"]);
+	// 	//unset($p["data"]["exchangeList"]);
 		
-		$r = parent::updateWithLQTable($p);
+	// 	$r = parent::updateWithLQTable($p);
 		
-		if($exchange)$r["data"]["exchangeList"]=$exchange->list;
+	// 	//if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
-		return $r;
-	}
+	// 	return $r;
+	// }
 
-	public function insertWithLQTable($p){
-		$exchange=null;
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-		}
+	// public function insertWithLQTable($p){
+	// 	$exchange=null;
+	// 	// if($p["data"]["exchangeID"]){
+	// 	// 	$exchange = new Exchange($p["data"]["exchangeID"]);
+	// 	// }
 		
-		unset($p["data"]["exchangeList"]);
+	// 	//unset($p["data"]["exchangeList"]);
 
-		$r = parent::insertWithLQTable($p);
+	// 	$r = parent::insertWithLQTable($p);
 
-		if($exchange)$r["data"]["exchangeList"]=$exchange->list;
+	// 	//if($exchange)$r["data"]["exchangeList"]=$exchange->list;
 
-		return $r;
-	}
+	// 	return $r;
+	// }
 
 	public function loadWithDataTable($p){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>json_decode('{"type":"text"}',true),"primary");
@@ -1938,7 +2021,7 @@ class GiftBoxHistory extends DBTable{
 		$data["head"][]=array("title"=>"내용","field"=>"content","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"보상","field"=>"reward","viewer"=>json_decode('{"type":"custom","func":"rewardViewer"}',true),"virtual");
 		// $data["head"][]=array("field"=>"data","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"textarea"}',true));
-		// $data["head"][]=array("field"=>"exchangeID","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"textarea"}',true));
+		$data["head"][]=array("title"=>"교환ID","field"=>"exchangeID","viewer"=>json_decode('{"type":"text"}',true));
 		// $data["head"][]=array("field"=>"exchangeList","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("manage"=>"delete update");
 		return $data;
@@ -2000,9 +2083,9 @@ class UserStorage extends DBTable{
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -2025,8 +2108,8 @@ class UserStorage extends DBTable{
 		$textViewer = array("type"=>"text");
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"editor"=>$textEditor,"primary");
 		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("title"=>"유료루비","field"=>"pr","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("title"=>"무료루비","field"=>"fr","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"유료젬","field"=>"pr","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"무료젬","field"=>"fr","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"하트","field"=>"h","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"현금","field"=>"m","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"골드","field"=>"g","viewer"=>$textViewer,"editor"=>$textEditor);
@@ -2086,9 +2169,9 @@ class UserPropertyHistory extends DBTable{
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -2143,7 +2226,7 @@ class LoginEvent extends DBTable{
 		$this->setPrimarykey("no",true);
 
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -2157,7 +2240,7 @@ class LoginEvent extends DBTable{
 			return $rData;
 		});
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		if($fNo){
 			parent::load("no=".$fNo);
@@ -2165,7 +2248,7 @@ class LoginEvent extends DBTable{
 	}
 	static public function getRewardDays(){
 		$data=array();
-		while($rData = LoginEvent::getRowByQuery("where endDate>".TimeManager::get()->getCurrentDateTime()." and startTime=0 and endTime=235959 limit 4")){
+		while($rData = LoginEvent::getRowByQuery("where endDate>".TimeManager::getCurrentDateTime()." and startTime=0 and endTime=235959 limit 4")){
 			$rData["reward"]=json_decode($rData["reward"],true);
 			$data[]=$rData;
 		}
@@ -2210,7 +2293,7 @@ class LoginEvent extends DBTable{
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"이벤트명","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"시작시간","field"=>"startTime","viewer"=>json_decode('{"type":"time","format":"h:i:s"}',true),"editor"=>json_decode('{"type":"time"}',true));
@@ -2234,9 +2317,9 @@ class AttendenceEvent extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -2251,7 +2334,7 @@ class AttendenceEvent extends DBTable{
 		if($fNo){
 			$query = "no=".$fNo;
 		}else{
-			$today = TimeManager::get()->getCurrentDateTime();
+			$today = TimeManager::getCurrentDateTime();
 			$query = "startDate<=".$today." and endDate>=".$today;
 		}
 		if(parent::load($query)){
@@ -2266,7 +2349,7 @@ class AttendenceEvent extends DBTable{
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"제목","field"=>"title","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"보상목록","field"=>"rewardList","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"array","element":{"type":"dictionary","element":[{"type":"type","field":"type"}]}}',true));
@@ -2288,7 +2371,7 @@ class MissionEvent extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		if($memberID && $fNo){
 			parent::load("memberID=".$memberID." and no=".$fNo);
@@ -2308,10 +2391,10 @@ class CuponManager extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -2396,7 +2479,7 @@ class CuponManager extends DBTable{
 		// 		$exchange->save();		
 		// }
 		// unset($p["data"]["exchangeList"]);
-		// $p["data"]["regDate"]=TimeManager::get()->getCurrentDateTime();
+		// $p["data"]["regDate"]=TimeManager::getCurrentDateTime();
 
 		if($p["data"]["exchangeID"]){
 			$exchange = new Exchange($p["data"]["exchangeID"]);
@@ -2425,7 +2508,7 @@ class CuponCode extends DBTable{
 		
 		$this->setPrimarykey("no",true);
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"] && $param["where"]["type"]=="cuponNo"){
@@ -2524,30 +2607,30 @@ class CuponCode extends DBTable{
 			$mode="auto";
 		}
 		//unset($p["data"]["code"]);
-		LogManager::get()->addLog("test count is ".count($codeList));
-		CommitManager::get()->begin("main");
+		LogManager::addLog("test count is ".count($codeList));
+		CommitManager::begin("main");
 		for($i=0;$i<$cnt;$i++){
 
-			LogManager::get()->addLog("test1 ".$i);
+			LogManager::addLog("test1 ".$i);
 			
 			$p2=unserialize(serialize($p));
 			if($mode=="manual")	$p2["data"]["cuponCode"]=$codeList[$i];
 			else $p2["data"]["cuponCode"] = CuponCode::getRandomString(12);
 
-			$p2["data"]["serverNo"]=DBManager::get()->getDBIndexByShardString($p2["data"]["cuponCode"]);
+			$p2["data"]["serverNo"]=DBManager::getDBIndexByShardString($p2["data"]["cuponCode"]);
 			
 			$this->setLoaded(false);
 			$ri = parent::insertWithLQTable($p2);
 			if(ResultState::successCheck($ri["result"])){
 				$r["data"][]=$ri["data"];	
 			}else{
-				CommitManager::get()->rollback("main");
+				CommitManager::rollback("main");
 				return ResultState::makeReturn(ResultState::GDDONTSAVE,"코드가중복되었습니다.(".$p2["data"]["cuponCode"].")");	
 			}
 					
 		}
 
-		if(CommitManager::get()->commit("main")){
+		if(CommitManager::commit("main")){
 			$r["result"]=ResultState::successToArray();
 		}else{
 			$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE,"저장하지 못했습니다");
@@ -2585,9 +2668,9 @@ class CuponHistory extends DBTable{
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -2641,7 +2724,7 @@ class CuponUsedInfo extends DBTable{
 		$this->setPrimarykey("no",true);
 
 		if($shardIndex){
-			$this->setDBInfo(DBManager::get()->getDBInfoByShardIndex($shardIndex));
+			$this->setDBInfo(DBManager::getDBInfoByShardIndex($shardIndex));
 		}
 		$this->cuponCode=$code;
 		if($code){
@@ -2663,7 +2746,7 @@ class WeeklyScore extends DBTable{
 		
 		$this->setPrimarykey("no");
 		//$this->setDBTable(DBManager::getST("weeklyScore"));
-		LogManager::get()->addLog("weeklyScore is ".DBManager::getST("weeklyScore"));
+		LogManager::addLog("weeklyScore is ".DBManager::getST("weeklyScore"));
 
 
 		if($memberID){
@@ -2758,14 +2841,14 @@ class StageScore extends DBTable{
 			else $q_where = "memberID=".$memberID." and stageNo=".$stageNo;
 			
 
-			LogManager::get()->addLog("stage score construct ".$q_where);
+			LogManager::addLog("stage score construct ".$q_where);
 			parent::load($q_where);
 		}
 	}
 	public function save($p=null){
 		if(!$this->regDate){
-			$this->regDate=TimeManager::get()->getCurrentDateTime();
-			$this->regDate=TimeManager::get()->getTime();
+			$this->regDate=TimeManager::getCurrentDateTime();
+			$this->regDate=TimeManager::getTime();
 		}
 		return parent::save($p);
 	}
@@ -2773,7 +2856,7 @@ class StageScore extends DBTable{
 	public function getTop4(){
 		// $topquery = mysql_query("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4",$this->getDBConnection());
 		
-		// LogManager::get()->addLog("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4");
+		// LogManager::addLog("select * from ".DBManager::getST("stagescore")." where stageNo=".$this->stageNo." order by score desc limit 4");
 		// $rank=1;
 		// $rdata = array(); 
 		// while($data = mysql_fetch_assoc($topquery)){
@@ -2857,7 +2940,7 @@ class Character extends DBTable{
 		$this->setPrimarykey("no",true);
 
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 
 		if($characterNo){
 			$q_where = "no=".$characterNo;
@@ -2867,7 +2950,16 @@ class Character extends DBTable{
 		}
 	}
 
+	static public function getPowerInfo($level){
+		$r["nextPrice"]=$level*1000;
+    	$r["power"]=$level*10;
+    	$r["nextPower"]=($level+1)*10;
+    	$r["prevPower"]=($level-1)*10;
+    	$r["isMaxLevel"]=false;
+    	if($level>=30)$r["isMaxLevel"]=true;
 
+    	return $r;
+	}
 	public function updateWithLQTable($p){
 		$r = parent::updateWithLQTable($p);
 		kvManager::increase("charListVer");
@@ -2929,11 +3021,11 @@ class CharacterHistory extends DBTable{
 
 
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
-			LogManager::get()->addLog("--->".json_encode($param));
+			LogManager::addLog("--->".json_encode($param));
 			if($param["where"]["id"]=="*")return "";
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -3017,9 +3109,9 @@ class Notice extends DBTable{
 		$this->setPrimarykey("no",true);
 
 
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -3032,7 +3124,10 @@ class Notice extends DBTable{
 		});
 		if($no){
 			$q_where = "no=".$no;
-			parent::load($q_where);
+			if(parent::load($q_where)){
+				$this->banner = json_decode($this->banner,true);
+				$this->imgInfo = json_decode($this->imgInfo,true);
+			}
 		}
 	}
 
@@ -3053,10 +3148,14 @@ class Notice extends DBTable{
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>$textViewer,"editor"=>$osEditor);
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"팝업표시여부","field"=>"isPopup","viewer"=>$textViewer,"editor"=>json_decode('{"type":"bool"}'));
 		$data["head"][]=array("title"=>"이미지","field"=>"imgInfo","viewer"=>json_decode('{"type":"viewer_image"}'),"editor"=>$imgEditor);
 		$data["head"][]=array("title"=>"연결URL","field"=>"linkURL","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("title"=>"내용","field"=>"content","viewer"=>$textViewer,"editor"=>$textareaEditor);
+		$data["head"][]=array("title"=>"클라이언트내용","field"=>"content","viewer"=>$textViewer,"editor"=>$textareaEditor);
+		$data["head"][]=array("title"=>"목록표시여부","field"=>"isList","viewer"=>$textViewer,"editor"=>json_decode('{"type":"bool"}'));
+		$data["head"][]=array("title"=>"목록표시내용","field"=>"webContent","viewer"=>$textViewer,"editor"=>$textareaEditor);
+		$data["head"][]=array("title"=>"목록배너","field"=>"banner","viewer"=>json_decode('{"type":"viewer_image"}'),"editor"=>$imgEditor);
 		
 		$data["head"][]=array("manage"=>"update delete insert");
 		
@@ -3078,7 +3177,7 @@ class Shop extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectCustomFunction(function ($data){
 			if($data["exchangeID"]){
@@ -3168,7 +3267,7 @@ class Shop extends DBTable{
 		$data["head"][]=array("field"=>"image","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("field"=>"data","viewer"=>$textViewer,"editor"=>$dictEditor);
 		$data["head"][]=array("field"=>"pID","viewer"=>$textViewer,"editor"=>$textEditor);
-		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("field"=>"exchangeID","viewer"=>$textViewer,"editor"=>$textEditor,"always");
 		$data["head"][]=array("field"=>"exchangeList","viewer"=>$textViewer,"editor"=>$exchangeListEditor);
 		$data["head"][]=array("manage"=>"update delete insert");
 		
@@ -3183,7 +3282,7 @@ class ShopEvent extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 		$this->setLQTableSelectCustomFunction(function ($data){
 			// if($data["exchangeID"]){
@@ -3194,7 +3293,7 @@ class ShopEvent extends DBTable{
 		});
 
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -3273,6 +3372,13 @@ class ShopEvent extends DBTable{
 	}
 
 	public function loadWithDataTable($p){
+
+		$listViewer=array("type"=>"select","field"=>"type");
+		while($pData = Shop::getRowByQuery("",null,"id,type,count")){
+			$listViewer["element"][] = $pData["id"]." : ".$pData["type"]." ".$pData["count"]."개";
+			$listViewer["value"][]=$pData["id"];
+		}
+
 		$textEditor = array("type"=>"text");
 		$textViewer = array("type"=>"text");
 		$dictEditor = array("type"=>"dictionary");
@@ -3283,7 +3389,7 @@ class ShopEvent extends DBTable{
 		
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
-		$data["head"][]=array("title"=>"상점ID","field"=>"id","viewer"=>$textViewer,"editor"=>$textEditor);
+		$data["head"][]=array("title"=>"대상상점ID","field"=>"id","viewer"=>$listViewer,"editor"=>$listViewer);
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"시작시간","field"=>"startTime","viewer"=>json_decode('{"type":"time","format":"h:i:s"}',true),"editor"=>json_decode('{"type":"time"}',true));
@@ -3315,7 +3421,7 @@ class Monster extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -3389,7 +3495,7 @@ class Pattern extends DBTable{
 		parent::__construct();
 		
 		$this->setPrimarykey("no");
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		
 
 		if($cardNo)$this->no=$cardNo;
@@ -3428,7 +3534,7 @@ public function __construct($id=null){
 		});
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->id=$id;
 		if($id){
 			$q_where = "`id`='".$id."'";
@@ -3441,9 +3547,9 @@ public function __construct($id=null){
 	public function makeExchangeIDByRandom($param){
 		$r["param"]=$param;
 		if($param["id"]){
-			LogManager::get()->addLog("exchangeID is ".$param["id"]);
+			LogManager::addLog("exchangeID is ".$param["id"]);
 			$exchange = new Exchange($param["id"]);
-			LogManager::get()->addLog("exchangelist is ".json_encode($exchange->list));
+			LogManager::addLog("exchangelist is ".json_encode($exchange->list));
 			$r["exchangeID"]=$exchange->id;
 			$r["list"]=$exchange->list;
 			$r["result"]=ResultState::successToArray();
@@ -3501,7 +3607,7 @@ public function __construct($no=null){
 		parent::__construct();
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3617,26 +3723,30 @@ class EndlessPlayList extends DBTable{
 		}
 	}
 
-	public function getPlayDataByRandom($lvl,$limit=1,$fieldlist="*"){
+	public function getPlayDataByRandom($memberID,$lvl,$limit=1,$fieldlist="*"){
 		$result = array();
-		$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where autoLevel<=".($lvl+5)." and autoLevel>=".($lvl-5)." ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
-		LogManager::get()->addLog("select ".$fieldlist." from `".$this->getDBTable()."` where autoLevel<=".($lvl+5)." and autoLevel>=".($lvl-5)." ORDER BY RAND() limit ".$limit);
+		$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
+		LogManager::addLog("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
 		
+		$check=false;
 		while($rData = mysql_fetch_assoc($query)){
+			if($check)unset($rData["playData"]);
 			$result[]=$rData;
+			$check=true;
 		}
-
+		LogManager::addLog("test size is".count($result));
 		$i=0;
 		while(count($result)<$limit){
-			$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
+			$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and memberID<>'".$memberID."' ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
 			while($rData = mysql_fetch_assoc($query)){
+				if($check)unset($rData["playData"]);
 				$result[]=$rData;
 			}
 			$i++;
 			if($i>50)break;
 		}
 
-		LogManager::get()->addLog(mysql_error());
+		LogManager::addLog(mysql_error());
 		
 		return $result;
 	}
@@ -3650,7 +3760,7 @@ class EndlessPlayList extends DBTable{
 			if($query)$result = mysql_fetch_assoc($query);
 		}
 
-		LogManager::get()->addLog(mysql_error());
+		LogManager::addLog(mysql_error());
 		
 		return $result;
 	}
@@ -3683,7 +3793,7 @@ class CommonSetting extends DBTable{
 		parent::__construct();
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		if($key){
 			$this->key = $key;
 			$q_where = "`key`='".$key."'";
@@ -3724,7 +3834,7 @@ class KeyIntValue extends DBTable{
 		parent::__construct();
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3760,7 +3870,7 @@ public function __construct($no=null){
 		parent::__construct();
 		
 		$this->setLQTableSelectCustomFunction(function($rData){
-			$now = TimeManager::get()->getCurrentDateTime();
+			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
 			}else if($r["startDate"]>=$now){
@@ -3775,7 +3885,7 @@ public function __construct($no=null){
 		});
 
 		$this->setPrimarykey("no",true);
-		$this->setDBInfo(DBManager::get()->getMainDBInfo());
+		$this->setDBInfo(DBManager::getMainDBInfo());
 		$this->no = $no;
 		if($no){
 			$q_where = "`no`='".$no."'";
@@ -3798,7 +3908,7 @@ public function __construct($no=null){
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
 		$data["head"][]=array("title"=>"진행상태","field"=>"state","viewer"=>json_decode('{"type":"text"}',true),"virtual");
 		$data["head"][]=array("title"=>"운영체제","field"=>"os","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["all","android","ios"]}',true));
-		$data["head"][]=array("title"=>"언어","field"=>"language","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		$data["head"][]=array("title"=>"국가","field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"시작일시","field"=>"startDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"종료일시","field"=>"endDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true),"editor"=>json_decode('{"type":"datetime"}',true));
 		$data["head"][]=array("title"=>"시작시간","field"=>"startTime","viewer"=>json_decode('{"type":"time","format":"h:i:s"}',true),"editor"=>json_decode('{"type":"time"}',true));
@@ -3827,9 +3937,9 @@ class ModifyHistory extends DBTable{
 		$this->setLQTableSelectQueryCustomFunction(function ($param){
 			if($param["where"]["id"]=="*")return "";
 
-			if($param["where"]["type"]=="sno")$user = new UserData($param["where"]["id"]);
-			else if($param["where"]["type"]=="nick")$user = new UserData(null,null,$param["where"]["id"]);
-			else $user = new UserData(null,$param["where"]["id"]);
+			if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+			else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+			else $user = UserData::create(null,$param["where"]["id"]);
 
 			if(!$user->isLoaded())return "where memberID='-1'";
 
@@ -3850,7 +3960,7 @@ class ModifyHistory extends DBTable{
 	}
 
 	public function save($isIncludePrimaryKey = false){
-		if(!$this->regDate)$this->regDate=TimeManager::get()->getCurrentDateTime();
+		if(!$this->regDate)$this->regDate=TimeManager::getCurrentDateTime();
 		return parent::save($isIncludePrimaryKey);
 	}
 
@@ -3874,11 +3984,11 @@ class ModifyHistory extends DBTable{
 
 	// public function selectWithLQTable($param){
 	// 	if($param["where"]["type"]=="sno"){
-	// 		$user = new UserData($param["where"]["id"]);
+	// 		$user = UserData::create($param["where"]["id"]);
 	// 	}else if($param["where"]["type"]=="nick"){
-	// 		$user = new UserData(null,null,$param["where"]["id"]);
+	// 		$user = UserData::create(null,null,$param["where"]["id"]);
 	// 	}else{
-	// 		$user = new UserData(null,$param["where"]["id"]);
+	// 		$user = UserData::create(null,$param["where"]["id"]);
 	// 	}
 
 	// 	if(!$user->isLoaded()){
@@ -3889,6 +3999,126 @@ class ModifyHistory extends DBTable{
 
 	// }
 
+}
+
+
+
+/////////////////////////////////////
+/////////////////////////////////////
+
+
+class AdminUser extends DBTable{
+	public $m__isLogin = false;
+	public function __construct($no=null,$id=null,$pw=null){
+
+		parent::__construct();
+		
+
+
+		// $this->setLQTableSelectQueryCustomFunction(function ($param){
+		// 	if($param["where"]["id"]=="*")return "";
+
+		// 	if($param["where"]["type"]=="sno")$user = UserData::create($param["where"]["id"]);
+		// 	else if($param["where"]["type"]=="nick")$user = UserData::create(null,null,$param["where"]["id"]);
+		// 	else $user = UserData::create(null,$param["where"]["id"]);
+
+		// 	if(!$user->isLoaded())return "where memberID='-1'";
+
+		// 	return "where memberID='".$user->memberID."'";
+		// });
+
+		// if($memberID){
+		// 	$this->m__userIndex = UserIndex::create($memberID);
+		// 	$this->setDBInfo($this->m__userIndex->getShardDBInfo());
+		// 	$this->memberID=$memberID;
+		// }
+
+		$this->setPrimarykey("no",true);
+		$this->setDBInfo(DBManager::getMainDBInfo());
+		$this->m__isLogin = false;
+		$q_where="";
+		if($id){
+			$q_where = "`id`='".$id."'";
+			if($pw){
+				$q_where .= " and `passwd`=password('".$pw."')";
+				$this->m__isLogin = true;
+			}
+		}else if($no){
+			$q_where = "`no`='".$no."'";
+			$this->m__isLogin = true;
+		}
+
+		if($q_where){
+			if(parent::load($q_where)){
+				$this->permission = json_decode($this->permission,true);
+			}else{
+				$this->m__isLogin = false;
+			}
+		}
+	}
+
+
+	public function isLogined(){
+		return $this->m__isLogin;
+	}
+
+	public function logout(){
+		unset($_SESSION['admin_id']);
+		unset($_SESSION['admin_no']);
+	}
+	
+	public function checkPermission($where){
+		$p =& $this->getRef("permission");
+		return $p[$where];
+	}
+
+	public function login($p){
+		$r["param"]=$p;
+		$admin = new AdminUser(null,$p["data"]["id"],$p["data"]["passwd"]);
+		$r["isLogined"]=false;
+		if($admin->isLogined()){
+			$_SESSION['admin_id']=$admin->id;
+			$_SESSION['admin_no']= $admin->no;
+			$r["isLogined"]=true;
+			$r["result"]=ResultState::successToArray();
+		}else{
+			$r["isLogined"]=false;
+			$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"로그인실패");
+		}
+
+		
+		return $r;
+	}
+
+	public function insertWithLQTable($p){
+		if($p["data"]["passwd"]){
+			$q = mysql_query("select password('".$p["data"]["passwd"]."')",DBManager::getMainConnection());
+			$pass = mysql_fetch_array($q);
+			$p["data"]["passwd"]=$pass[0];
+		}
+		$r = parent::insertWithLQTable($p);
+		return $r;
+	}
+
+	public function updateWithLQTable($p){
+		if($p["data"]["passwd"])unset($p["data"]["passwd"]);
+		$r = parent::updateWithLQTable($p);
+		return $r;
+	}
+
+	public function loadWithDataTable($p){
+		$textEditor = array("type"=>"text");
+		$textViewer = array("type"=>"text");
+		
+		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
+		$data["head"][]=array("title"=>"ID","field"=>"id","viewer"=>$textViewer,"editor"=>$textViewer);
+		$data["head"][]=array("title"=>"PW","field"=>"passwd","viewer"=>$textViewer,"editor"=>json_decode('{"type":"password"}',true));
+		$data["head"][]=array("title"=>"권한","field"=>"permission","viewer"=>$textViewer,"editor"=>json_decode('{"type":"dictionary"}',true));
+
+		$data["head"][]=array("manage"=>"delete update insert");
+		
+		return $data;
+	}
 }
 
 ?>

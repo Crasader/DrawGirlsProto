@@ -646,7 +646,7 @@ void GraphDog::receivedCommand(float dt)
 			}
 			
 			//@ JsonBox::Object resultobj = commands.result; //GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
-			
+			CCLOG("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ command start, sendSize:%d, getSize:%d $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",commands.commandStr.length()*2,commands.chunk.size);
 			Json::Value resultobj = commands.result;
 			
 			if(resultobj.get("checkDeviceError", false).asBool()){

@@ -626,6 +626,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("레벨 %d"), kMyLocalKey_levelValue);
 	ko->setObject(CCString::create("파워 %s"), kMyLocalKey_powerValue);
 	ko->setObject(CCString::create("레벨 %d 업그레이드"), kMyLocalKey_upgradeLevelValue);
+	ko->setObject(CCString::create("레벨 %d\n업그레이드"), kMyLocalKey_upgradeLevelValue2);
 	ko->setObject(CCString::create("아이템은 최대 3개까지\n선택이 가능합니다."), kMyLocalKey_totalItemSelectCount3);
 	ko->setObject(CCString::create("골드가 부족합니다."), kMyLocalKey_goldNotEnought);
 	ko->setObject(CCString::create("잼이 부족합니다."), kMyLocalKey_rubyNotEnought);
@@ -961,7 +962,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
 	ko->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
 	ko->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
-	ko->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
+	ko->setObject(CCString::create("보스가 쏜 미사일이\n선에 닿으면 불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	ko->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ko->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ko->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
@@ -1240,18 +1241,18 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("%d연승 돌파!"), kMyLocalKey_endlessSeqWinRewardTitle);
 	ko->setObject(CCString::create("%d연승을 축하드립니다!"), kMyLocalKey_endlessSeqWinRewardContent);
-	ko->setObject(CCString::create("<font newline=18>%d골드를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeGold);
-	ko->setObject(CCString::create("<font newline=18>%d잼을 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby);
-	ko->setObject(CCString::create("<font newline=18>기본속도업아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9);
-	ko->setObject(CCString::create("<font newline=18>더블아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6);
-	ko->setObject(CCString::create("<font newline=18>자석아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11);
-	ko->setObject(CCString::create("<font newline=18>이어하기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass1);
-	ko->setObject(CCString::create("<font newline=18>맵가챠 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass2);
-	ko->setObject(CCString::create("<font newline=18>업그레이드 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass3);
-	ko->setObject(CCString::create("<font newline=18>아이템뽑기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass4);
-	ko->setObject(CCString::create("<font newline=18>1프로찬스 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass5);
-	ko->setObject(CCString::create("<font newline=18>생명의 돌을 %d개를 드립니다.<font newline=18>생명의 돌은 내카드 다이어리에서 사용하세요."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass6);
-	ko->setObject(CCString::create("<font newline=18>선물상자를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeMany);
+	ko->setObject(CCString::create("<font newline=15>%d골드를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeGold);
+	ko->setObject(CCString::create("<font newline=15>%d잼을 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby);
+	ko->setObject(CCString::create("<font newline=15>기본속도업아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9);
+	ko->setObject(CCString::create("<font newline=15>더블아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6);
+	ko->setObject(CCString::create("<font newline=15>자석아이템 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11);
+	ko->setObject(CCString::create("<font newline=15>이어하기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass1);
+	ko->setObject(CCString::create("<font newline=15>맵가챠 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass2);
+	ko->setObject(CCString::create("<font newline=15>업그레이드 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass3);
+	ko->setObject(CCString::create("<font newline=15>아이템뽑기 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass4);
+	ko->setObject(CCString::create("<font newline=15>1프로찬스 이용권 %d개를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass5);
+	ko->setObject(CCString::create("<font newline=15>생명의 돌을 %d개를 드립니다.<font newline=15>생명의 돌은 내카드 다이어리에서 사용하세요."), kMyLocalKey_endlessSeqWinRewardGoodsTypePass6);
+	ko->setObject(CCString::create("<font newline=15>선물상자를 드립니다."), kMyLocalKey_endlessSeqWinRewardGoodsTypeMany);
 	
 	ko->setObject(CCString::create("퍼즐에서 획득한 카드입니다."), kMyLocalKey_cardSettingMyCardContent);
 	ko->setObject(CCString::create("스페셜 카드 보기"), kMyLocalKey_cardSettingMyCardToSpecial);
@@ -1370,6 +1371,9 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("모든 퍼즐 클리어"), kMyLocalKey_allPuzzleClearTitle);
 	ko->setObject(CCString::create("<font newline=15>마지막 퍼즐을 클리어하셨습니다.<font newline=15>다음 퍼즐은 곧 업데이트 됩니다.<font newline=15>아직 획득하지 못한 카드들을<font>모두 모아보세요."), kMyLocalKey_allPuzzleClearMent);
+	
+	ko->setObject(CCString::create("주의!"), kMyLocalKey_warningDie);
+	ko->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1511,6 +1515,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Level %d"), kMyLocalKey_levelValue);
 	en->setObject(CCString::create("Power %s"), kMyLocalKey_powerValue);
 	en->setObject(CCString::create("Level %d Upgrade"), kMyLocalKey_upgradeLevelValue);
+	en->setObject(CCString::create("Level %d\nUpgrade"), kMyLocalKey_upgradeLevelValue2);
 	en->setObject(CCString::create("Up to three items\ncan be selected."), kMyLocalKey_totalItemSelectCount3);
 	en->setObject(CCString::create("You don’t have enough gold"), kMyLocalKey_goldNotEnought);
 	en->setObject(CCString::create("You don’t have enough ruby."), kMyLocalKey_rubyNotEnought);
@@ -1845,7 +1850,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
 	en->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
 	en->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
-	en->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
+	en->setObject(CCString::create("보스가 쏜 미사일이\n선에 닿으면 불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	en->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	en->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	en->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
@@ -2247,6 +2252,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("GAME OVER"), kMyLocalKey_failTitleGameover);
 	
 	en->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
+	en->setObject(CCString::create("Warning!"), kMyLocalKey_warningDie);
+	en->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2397,6 +2404,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Level %d"), kMyLocalKey_levelValue);
 	ja->setObject(CCString::create("Power %s"), kMyLocalKey_powerValue);
 	ja->setObject(CCString::create("Level %d Upgrade"), kMyLocalKey_upgradeLevelValue);
+	ja->setObject(CCString::create("Level %d\nUpgrade"), kMyLocalKey_upgradeLevelValue2);
 	ja->setObject(CCString::create("Up to three items\ncan be selected."), kMyLocalKey_totalItemSelectCount3);
 	ja->setObject(CCString::create("You don’t have enough gold"), kMyLocalKey_goldNotEnought);
 	ja->setObject(CCString::create("You don’t have enough ruby."), kMyLocalKey_rubyNotEnought);
@@ -2734,7 +2742,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("이번 스테이지는 아이템을 사용할 수 없습니다."), kMyLocalKey_notUseItem);
 	ja->setObject(CCString::create("새로운 아이템 등장!"), kMyLocalKey_newItemTitle);
 	ja->setObject(CCString::create("새로운 아이템을 선물로 드릴께요!"), kMyLocalKey_newItemMent);
-	ja->setObject(CCString::create("보스가 쏜 미사일이 선에 닿으면\n불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
+	ja->setObject(CCString::create("보스가 쏜 미사일이\n선에 닿으면 불씨가 생겨 닿으면 죽어요."), kMyLocalKey_dieTutorial1);
 	ja->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ja->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ja->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
@@ -3146,6 +3154,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("GAME OVER"), kMyLocalKey_failTitleGameover);
 	
 	ja->setObject(CCString::create("STAGE CLEAR"), kMyLocalKey_clearTitle);
+	ja->setObject(CCString::create("Warning!"), kMyLocalKey_warningDie);
+	ja->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

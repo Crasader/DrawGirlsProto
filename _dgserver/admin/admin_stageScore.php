@@ -17,11 +17,11 @@ limit : <input name='limit' size="50" value='<?=$_GET['limit']?>'><br>
  <input type=submit value="확인"><br>
  
  현재시각 : <?php 
-echo TimeManager::get()->getCurrentDateTime();
+echo TimeManager::getCurrentDateTime();
  ?>
 <br>
  이번주번호 :<?php 
-echo TimeManager::get()->getCurrentWeekNo();
+echo TimeManager::getCurrentWeekNo();
  ?>
 </form>
 </center>

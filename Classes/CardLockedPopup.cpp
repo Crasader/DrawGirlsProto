@@ -46,22 +46,20 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(230,120));
+	back_case = CCSprite::create("popup_small_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(220, 80));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-15));
+	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-80));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-14));
 	back_case->addChild(back_in);
 	
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_cardLockedTitle), t_step)->getCString(), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255,170,20));
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f, 0.5f));
-	title_label->setPosition(ccp(0,37));
-	setFormSetter(title_label);
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	
@@ -89,7 +87,7 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority);
-	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-22));
+	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-22));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  closeAction(sender, CCControlEventTouchUpInside);
