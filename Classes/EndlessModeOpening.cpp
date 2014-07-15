@@ -384,7 +384,7 @@ void EndlessModeOpening::setMain()
 																	  param["memberID"] = myHSP->getMemberID();
 //																	  param["no"] = 34;
 																	  param["autoLevel"] = mySGD->getUserdataAutoLevel();
-																	  param["highPiece"] = mySGD->getUserdataHighPiece();
+																	  param["win"] = mySGD->getUserdataEndlessIngWin();
 																	  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 																  });
 	
@@ -571,8 +571,9 @@ void EndlessModeOpening::setMain()
 																   Json::Value param;
 																   param["memberID"] = myHSP->getMemberID();
 																   //																	  param["no"] = 34;
-																   param["autoLevel"] = mySGD->getUserdataAutoLevel();
+																   param["win"] = mySGD->getUserdataEndlessIngWin(); //mySGD->getUserdataAutoLevel();
 																   param["highPiece"] = mySGD->getUserdataHighPiece();
+																	 
 																   myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 															   };
 														   };
