@@ -405,6 +405,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 		m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
 		if(m_failBox)
 		{
+			
 			m_failBox->removeFromParent();
 			m_failBox = nullptr;
 		}
@@ -515,6 +516,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 		/*
 		 멈춰! 버튼 클릭! 승리시 셔터가 올라감 2~3초 그리고 그사이에 하트가생성! 그후 1~2초 멈춘다음 다시 게임 플레이~ 플레이 동시에 2.3번째 게임시 포인트 영역이 작아져있음 (속도는 동일)
 		 */
+		auto devider = ceilf((1.f - m_totalPercent) / 0.003f);
 		if(m_99State == 2) // 첫번 째 시도.
 		{
 			int pos = m_cursor->getPositionX();
@@ -563,6 +565,19 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				}
 				else
 				{
+					addChild(KSTimer::create(0.f, [=](){
+						//m_touchEnable = true;
+						float upLimit = 175;
+						
+						//upLimit / floorf((1.f - m_totalPercent) / 0.3f)
+						addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), 
+																									 m_shutter->getPositionY() + upLimit / devider, 1.f, [=](float t){
+							m_shutter->setPositionY(t);
+						}, [=](float t){
+							m_shutter->setPositionY(t);
+						}));
+					}));
+
 					addChild(KSTimer::create(0.f, [=](){
 						m_desc2->removeFromParent();
 						StyledLabelTTF* desc2 = StyledLabelTTF::create(
@@ -640,6 +655,17 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				else
 				{
 					addChild(KSTimer::create(0.f, [=](){
+						//m_touchEnable = true;
+						float upLimit = 175;
+						//upLimit / floorf((1.f - m_totalPercent) / 0.3f)
+						addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), 
+																									 m_shutter->getPositionY() + upLimit / devider, 1.f, [=](float t){
+							m_shutter->setPositionY(t);
+						}, [=](float t){
+							m_shutter->setPositionY(t);
+						}));
+					}));
+					addChild(KSTimer::create(0.f, [=](){
 						m_desc2->removeFromParent();
 						StyledLabelTTF* desc2 = StyledLabelTTF::create(
 																													 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 1, 0.4f)->getCString(),
@@ -692,18 +718,27 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 //				m_closer->setStencil(stencil);
 				m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));
 				//					m_99State = 777; // 성공
-				float upLimit;
-				if(m_totalPercent >= 1.f)
-					upLimit = 175;
-				else
-					upLimit = m_shutter->getPositionY();
 				
-				addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
-					m_shutter->setPositionY(t);
-				}, [=](float t){
-					m_shutter->setPositionY(t);
+				if(m_totalPercent >= 1.f)
+				{
+					float upLimit = 175;
+					addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
+						m_shutter->setPositionY(t);
+					}, [=](float t){
+						m_shutter->setPositionY(t);
+					}));
 				}
-																							 ));
+				else
+				{
+					float upLimit = 175;
+					//upLimit / floorf((1.f - m_totalPercent) / 0.3f)
+					addChild(KSGradualValue<float>::create(m_shutter->getPositionY(),
+																								 m_shutter->getPositionY() + upLimit / devider, 1.f, [=](float t){
+																									 m_shutter->setPositionY(t);
+																								 }, [=](float t){
+																									 m_shutter->setPositionY(t);
+																								 }));
+				}
 				addChild(KSTimer::create(0.f, [=](){
 				}));
 			}
@@ -713,21 +748,33 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				AudioEngine::sharedInstance()->playEffect("se_fail.mp3", false);
 			}
 			
+			// 여기 코드가 뭔가 이상함. 위에서 셔터를 올렸는데 또 올림.......??
 			addChild(KSTimer::create(1.5f, [=](){
 				m_touchEnable = true;
 				if(m_totalPercent >= 1.f)
 				{
-					float upLimit = 175;
-					addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
-						m_shutter->setPositionY(t);
-					}, [=](float t){
-						m_shutter->setPositionY(t);
-					}));
+//					float upLimit = 175;
+//					addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), upLimit, 1.f, [=](float t){
+//						m_shutter->setPositionY(t);
+//					}, [=](float t){
+//						m_shutter->setPositionY(t);
+//					}));
 					
 					showSuccess();
 				}
 				else
 				{
+//					addChild(KSTimer::create(0.f, [=](){
+//						//m_touchEnable = true;
+//						float upLimit = 175;
+//						//upLimit / floorf((1.f - m_totalPercent) / 0.3f)
+//						addChild(KSGradualValue<float>::create(m_shutter->getPositionY(), 
+//																									 m_shutter->getPositionY() + upLimit / devider, 1.f, [=](float t){
+//							m_shutter->setPositionY(t);
+//						}, [=](float t){
+//							m_shutter->setPositionY(t);
+//						}));
+//					}));
 					showFail();
 				}
 			}));
