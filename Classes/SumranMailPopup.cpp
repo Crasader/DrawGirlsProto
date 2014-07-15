@@ -575,7 +575,6 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																								this->removeMessage (mailNo, mail["memberID"].asInt64(),
 																																		 [=](Json::Value r)
 																																		 {
-																																			 
 																																			 t_suction->setTouchEnabled(false);
 																																			 t_suction->setVisible(false);
 																																			 //여기서 r["list"] 참고하여 재화 정보 업데이트하기

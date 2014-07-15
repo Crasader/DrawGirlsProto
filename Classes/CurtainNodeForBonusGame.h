@@ -224,7 +224,7 @@ public:
 		contentBack->addChild(rLabel);
 	
 		StyledLabelTTF* comment = StyledLabelTTF::create("<font color=#FFFFFF newline=12>축하합니다.</font>"
-																										 "<font color=#FFFFFF>보상은 선물함에서 확인하세요.</font>", mySGD->getFont().c_str(),
+																										 "<font color=#FFFFFF>보상이 지급되었습니다.</font>", mySGD->getFont().c_str(),
 																										 12.f, 999, StyledAlignment::kCenterAlignment);
 		contentBack->addChild(comment);
 		comment->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -12.5));

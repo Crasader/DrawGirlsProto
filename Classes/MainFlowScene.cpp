@@ -1085,6 +1085,19 @@ void MainFlowScene::cellAction(CCObject* sender)
 		}
 //	}
 }
+
+void MainFlowScene::puzzleHeartRefresh(Json::Value result_data)
+{
+	if(result_data["result"]["code"] == GDSUCCESS)
+	{
+		heart_refresh_loading->removeFromParent();
+	}
+	else
+	{
+		addChild(KSTimer::create(0.5f, [=](){mySGD->changeGoods(json_selector(this, MainFlowScene::puzzleHeartRefresh));}));
+	}
+}
+
 CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
 	CCTableViewCell* cell = new CCTableViewCell();
@@ -1483,6 +1496,18 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, t_remove_self1, NULL);
 				not_clear_img->runAction(t_seq1);
 				
+				int refresh_cnt = 5 - myDSH->getIntegerForKey(kDSH_Key_heartCnt);
+				if(refresh_cnt > 0)
+				{
+					LoadingLayer* t_loading = LoadingLayer::create(999);
+					addChild(t_loading, 999);
+					
+					heart_refresh_loading = t_loading;
+					
+					mySGD->addChangeGoods("getHeart", kGoodsType_heart, refresh_cnt, "puzzleHeart", ccsf("%d", puzzle_number), "퍼즐클리어하트");
+					mySGD->changeGoods(json_selector(this, MainFlowScene::puzzleHeartRefresh));
+				}
+				
 				cell_node->addChild(KSTimer::create(0.7f, [=]()
 													{
 														AudioEngine::sharedInstance()->playEffect("se_puzzleopen_2.mp3", false);
@@ -1504,19 +1529,19 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																										  {
 																											  cell_node->setScale(1.f);
 																											  
-																											  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
-																											  {
-																												  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
-																												  
-																												  CCNode* target_parent = heart_time->getParent();
-																												  CCPoint heart_time_position = heart_time->getPosition();
-																												  int heart_time_tag = heart_time->getTag();
-																												  
-																												  heart_time->removeFromParent();
-																												  heart_time = HeartTime::create();
-																												  heart_time->setPosition(heart_time_position);
-																												  target_parent->addChild(heart_time, 0, heart_time_tag);
-																											  }
+//																											  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
+//																											  {
+//																												  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
+//																												  
+//																												  CCNode* target_parent = heart_time->getParent();
+//																												  CCPoint heart_time_position = heart_time->getPosition();
+//																												  int heart_time_tag = heart_time->getTag();
+//																												  
+//																												  heart_time->removeFromParent();
+//																												  heart_time = HeartTime::create();
+//																												  heart_time->setPosition(heart_time_position);
+//																												  target_parent->addChild(heart_time, 0, heart_time_tag);
+//																											  }
 																											  
 																											  endUnlockAnimation();
 																											  
@@ -1532,6 +1557,18 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		{
 			start_unlock_animation = [=](function<void()> t_end_func)
 			{
+				int refresh_cnt = 5 - myDSH->getIntegerForKey(kDSH_Key_heartCnt);
+				if(refresh_cnt > 0)
+				{
+					LoadingLayer* t_loading = LoadingLayer::create(999);
+					addChild(t_loading, 999);
+					
+					heart_refresh_loading = t_loading;
+					
+					mySGD->addChangeGoods("getHeart", kGoodsType_heart, refresh_cnt, "puzzleHeart", ccsf("%d", puzzle_number), "퍼즐클리어하트");
+					mySGD->changeGoods(json_selector(this, MainFlowScene::puzzleHeartRefresh));
+				}
+				
 				cell_node->addChild(KSTimer::create(0.7f, [=]()
 													{
 														cell_node->addChild(KSGradualValue<float>::create(0.f, 3.f, 0.5f, [=](float t)
@@ -1552,19 +1589,19 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																										  {
 																											  cell_node->setScale(1.f);
 																											  
-																											  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
-																											  {
-																												  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
-																												  
-																												  CCNode* target_parent = heart_time->getParent();
-																												  CCPoint heart_time_position = heart_time->getPosition();
-																												  int heart_time_tag = heart_time->getTag();
-																												  
-																												  heart_time->removeFromParent();
-																												  heart_time = HeartTime::create();
-																												  heart_time->setPosition(heart_time_position);
-																												  target_parent->addChild(heart_time, 0, heart_time_tag);
-																											  }
+//																											  if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) < mySGD->getHeartMax())
+//																											  {
+//																												  myDSH->setIntegerForKey(kDSH_Key_heartCnt, mySGD->getHeartMax());
+//																												  
+//																												  CCNode* target_parent = heart_time->getParent();
+//																												  CCPoint heart_time_position = heart_time->getPosition();
+//																												  int heart_time_tag = heart_time->getTag();
+//																												  
+//																												  heart_time->removeFromParent();
+//																												  heart_time = HeartTime::create();
+//																												  heart_time->setPosition(heart_time_position);
+//																												  target_parent->addChild(heart_time, 0, heart_time_tag);
+//																											  }
 																											  
 																											  if(!t_info.is_base_condition_success)
 																											  {

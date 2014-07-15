@@ -519,6 +519,7 @@ private:
 	
 	void endTurnPiece()
 	{
+		getCamera()->restore();
 		is_menu_enable = true;
 	}
 	

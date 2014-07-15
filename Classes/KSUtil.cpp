@@ -303,7 +303,7 @@ namespace KS
 		int idx = 0;
 		for(auto iter = t.rbegin(); iter != t.rend(); ++iter)
 		{
-			int n = converter(*iter);
+			int n = converter(tolower(*iter));
 			result += n * longLongPow(radix, idx);
 			idx++;
 		}

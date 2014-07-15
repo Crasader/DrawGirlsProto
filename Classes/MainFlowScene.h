@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include <deque>
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -176,6 +177,9 @@ private:
 	void endUnlockAnimation();
 	
 	void puzzleLoadSuccess();
+	
+	CCNode* heart_refresh_loading;
+	void puzzleHeartRefresh(Json::Value result_data);
 	
 	void cgpReward(CCObject* sender, CCControlEvent t_event);
 	void cgpAllReward(CCObject* sender, CCControlEvent t_event);

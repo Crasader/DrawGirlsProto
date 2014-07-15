@@ -171,6 +171,7 @@ enum GoodsType
 	kGoodsType_pass4,
 	kGoodsType_pass5,
 	kGoodsType_pass6,
+	kGoodsType_heart,
 	kGoodsType_end,
 	kGoodsType_pz,
 	kGoodsType_pc,
@@ -355,6 +356,8 @@ public:
 	}
 };
 
+class HeartTime;
+
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 
@@ -374,6 +377,8 @@ public:
 	void setGoldLabel(CCLabelBMFont* t_label);
 //	int getGold();
 //	void setGold(int t_gold, bool is_write = true);
+	
+	void setHeartTime(HeartTime* t_heart);
 	
 	int getKeepGold();
 	
@@ -967,6 +972,7 @@ private:
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* friend_point_label;
 	CCLabelBMFont* ingame_gold_label;
+	HeartTime* heart_time;
 	
 	vector<KSProtectVar<int>> bonus_item_cnt;
 

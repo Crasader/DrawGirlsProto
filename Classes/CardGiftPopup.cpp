@@ -89,6 +89,10 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 							});
 	main_case->addChild(close_menu);
 	
+	CCLOG("my index : %lld", mySGD->user_index);
+	CCLOG("to string : %s", KS::longLongToStrForDG(mySGD->user_index).c_str());
+	CCLOG("decode : %lld", KS::strToLongLongForDG(KS::longLongToStrForDG(mySGD->user_index).c_str()));
+	
 	StyledLabelTTF* my_id_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardGiftMyID), KS::longLongToStrForDG(mySGD->user_index).c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	my_id_label->setAnchorPoint(ccp(0.5f,0.5f));
 	my_id_label->setPosition(ccp(main_inner->getContentSize().width/2.f, 100));
@@ -111,7 +115,7 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	input_text->setReturnType(kKeyboardReturnTypeDone);
 	input_text->setFont(mySGD->getFont().c_str(), 13);
 	input_text->setInputMode(kEditBoxInputModeSingleLine);
-	input_text->setInputFlag(cocos2d::extension::EditBoxInputFlag::kEditBoxInputFlagInitialCapsAllCharacters);
+//	input_text->setInputFlag(cocos2d::extension::EditBoxInputFlag::kEditBoxInputFlagInitialCapsAllCharacters);
 	input_text->setDelegate(this);
 	input_text->setTouchPriority(touch_priority);
 	input_text->setEnabled(false);
@@ -175,7 +179,7 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 		found_back->setPosition(ccp(240,110) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
 		main_inner->addChild(found_back, 1001);
 		
-		KSLabelTTF* nick_label = KSLabelTTF::create("ABC123abc가나다", mySGD->getFont().c_str(), 12);
+		KSLabelTTF* nick_label = KSLabelTTF::create(result_data["nick"].asString().c_str(), mySGD->getFont().c_str(), 12);
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->setPosition(ccp(10, found_back->getContentSize().height/2.f));
 		found_back->addChild(nick_label);
@@ -195,6 +199,7 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 		found_back->addChild(send_button);
 		
 		t_loading->removeFromParent();
+		is_menu_enable = true;
 	}
 	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
@@ -203,6 +208,7 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 		this->result_label->setVisible(true);
 		
 		t_loading->removeFromParent();
+		is_menu_enable = true;
 	}
 	else
 	{

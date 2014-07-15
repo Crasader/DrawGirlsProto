@@ -10,6 +10,7 @@
 #include "MyLocalization.h"
 #include "DataStorageHub.h"
 #include "AchieveNoti.h"
+#include "HeartTime.h"
 
 void StarGoldData::withdraw()
 {
@@ -242,6 +243,7 @@ void StarGoldData::resetLabels()
 	gold_label = NULL;
 	friend_point_label = NULL;
 	ingame_gold_label = NULL;
+	heart_time = NULL;
 }
 
 void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
@@ -287,6 +289,12 @@ void StarGoldData::setGoldLabel( CCLabelBMFont* t_label )
 {
 	gold_label = t_label;
 }
+
+void StarGoldData::setHeartTime(HeartTime *t_heart)
+{
+	heart_time = t_heart;
+}
+
 //int StarGoldData::getGold()
 //{
 //	return myDSH->getIntegerForKey(kDSH_Key_savedGold);
@@ -2287,6 +2295,11 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 					myAchieve->updateAchieve(nullptr);
 				}
 			}
+			else if(t_type == kGoodsType_heart && heart_time)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, t_count);
+				heart_time->refreshHeartTime();
+			}
 		}
 	}
 	
@@ -2400,6 +2413,8 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "p5";
 	else if(t_type == kGoodsType_pass6)
 		return_value = "p6";
+	else if(t_type == kGoodsType_heart)
+		return_value = "h";
 	else if(t_type == kGoodsType_pz)
 		return_value = "pz";
 	else if(t_type == kGoodsType_pc)
@@ -2449,6 +2464,11 @@ void StarGoldData::initProperties(Json::Value t_list)
 			star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
 		else if(t_type == kGoodsType_gold && gold_label)
 			gold_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
+		else if(t_type == kGoodsType_heart && heart_time)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_heartCnt, t_count);
+			heart_time->refreshHeartTime();
+		}
 	}
 }
 
@@ -2677,6 +2697,11 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 						myAchieve->updateAchieve(nullptr);
 					}
 				}
+				else if(t_type == kGoodsType_heart && heart_time)
+				{
+					myDSH->setIntegerForKey(kDSH_Key_heartCnt, t_count);
+					heart_time->refreshHeartTime();
+				}
 			}
 			else
 			{
@@ -2732,6 +2757,11 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 					}
 					myAchieve->updateAchieve(nullptr);
 				}
+			}
+			else if(t_type == kGoodsType_heart && heart_time)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, t_count);
+				heart_time->refreshHeartTime();
 			}
 		}
 		else
@@ -2790,6 +2820,11 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 				}
 				myAchieve->updateAchieve(nullptr);
 			}
+		}
+		else if(t_type == kGoodsType_heart && heart_time)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_heartCnt, t_count);
+			heart_time->refreshHeartTime();
 		}
 	}
 	else
@@ -2937,6 +2972,11 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 						myAchieve->updateAchieve(nullptr);
 					}
 				}
+				else if(t_type == kGoodsType_heart && heart_time)
+				{
+					myDSH->setIntegerForKey(kDSH_Key_heartCnt, t_count);
+					heart_time->refreshHeartTime();
+				}
 			}
 			else
 			{
@@ -2993,6 +3033,11 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 					}
 					myAchieve->updateAchieve(nullptr);
 				}
+			}
+			else if(t_type == kGoodsType_heart && heart_time)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_heartCnt, t_count);
+				heart_time->refreshHeartTime();
 			}
 		}
 		else
