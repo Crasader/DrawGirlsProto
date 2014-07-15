@@ -42,21 +42,27 @@ bool AccountManagerPopup::init(int touchP)
 	addChild(managerPopup);
 	
 	
-	auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	auto front = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	
+//	auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	auto back = CCSprite::create("popup_large_back.png");
+
+	auto front = CCScale9Sprite::create("common_grayblue.png",
+																			CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+
+//	front->setVisible(false);
 	managerPopup->setContainerNode(back);
-	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
-	front->setContentSize(CCSizeMake(528 / 2.f, 418 / 2.f));
+//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
+//	back->setContentSize(CCSizeMake(200, 200));
+	front->setContentSize(CCSizeMake(251, 370 / 2.f));
 	
 
 	back->addChild(front);
 	
-	front->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -16.5));
+	front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,15 - 26));
 
-	KSLabelTTF* titleLbl = KSLabelTTF::create("계정 설정", mySGD->getFont().c_str(), 15.f);
-	titleLbl->setColor(ccc3(255, 170, 20));
-	titleLbl->setPosition(ccpFromSize(back->getContentSize() / 2.f) + ccp(0, 99.5f + 2.5f));
+	KSLabelTTF* titleLbl = KSLabelTTF::create("계정 설정", mySGD->getFont().c_str(), 12.f);
+//	titleLbl->setColor(ccc3(255, 170, 20));
+	titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
+	titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
 	back->addChild(titleLbl);
 
 	
@@ -70,12 +76,16 @@ bool AccountManagerPopup::init(int touchP)
 																												 });
 	});
 	back->addChild(closeButton);
-	closeButton->setPosition(ccp(251, 229.5f));
+	closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
+
+
 	
-	auto connectionBox = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	connectionBox->setContentSize(CCSizeMake(240, 60));
-	front->addChild(connectionBox);
-	connectionBox->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 62.5));
+	auto connectionBox = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+	connectionBox->setContentSize(CCSizeMake(474 / 2.f, 92 / 2.f));
+	connectionBox->setPosition(ccp(back->getContentSize().width/2.f, 182.f));
+
+	back->addChild(connectionBox);
+//	connectionBox->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 62.5));
 
 	HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
 	std::string mappedAccountMsg = "";
@@ -100,56 +110,60 @@ bool AccountManagerPopup::init(int touchP)
 	}
 	
 	KSLabelTTF* mappedMsgTitle = KSLabelTTF::create("연결계정", mySGD->getFont().c_str(), 12.f);
-	front->addChild(mappedMsgTitle);
-	mappedMsgTitle->setPosition(ccp(47.0, 180.0)); 			// dt (47.0, 180.0)
+	connectionBox->addChild(mappedMsgTitle);
+	mappedMsgTitle->setPosition(ccp(32.0, 35.0)); 		// dt (47.0, 180.0)
 	
 	KSLabelTTF* memberID = KSLabelTTF::create("회원번호", mySGD->getFont().c_str(), 12.f);
-	front->addChild(memberID);
-	memberID->setPosition(ccp(47.0, 155.0)); 			// dt (47.0, 155.0)
+	connectionBox->addChild(memberID);
+	memberID->setPosition(ccp(32.0, 13.0)); 	// dt (47.0, 155.0)
 	setFormSetter(mappedMsgTitle);
 	setFormSetter(memberID);
 	KSLabelTTF* mappedMsgLbl = KSLabelTTF::create(mappedAccountMsg.c_str(), mySGD->getFont().c_str(), 12.f);
-	mappedMsgLbl->setPosition(ccp(159.0, 180.0)); 			// dt (27.0, -53.5)
+	mappedMsgLbl->setAnchorPoint(ccp(0.f, 0.5f));
+	mappedMsgLbl->setPosition(ccp(69.5, 35.0)); 				// dt (27.0, -53.5)
+	mappedMsgLbl->setColor(ccc3(255, 170, 20));
 //	mappedMsgLbl->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 129));
-	front->addChild(mappedMsgLbl);
+	connectionBox->addChild(mappedMsgLbl);
 	
 	KSLabelTTF* hspIDLbl = KSLabelTTF::create(ccsf("%llu", myHSP->getMemberID()), mySGD->getFont().c_str(), 12.f);
 //	hspIDLbl->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 100));
-	front->addChild(hspIDLbl);
-	hspIDLbl->setPosition(ccp(156.5, 155.0)); 			// dt (24.5, -49.5)
+	hspIDLbl->setAnchorPoint(ccp(0.f, 0.5f));
+	connectionBox->addChild(hspIDLbl);
+	hspIDLbl->setPosition(ccp(69.5f, 13.0)); 				// dt (24.5, -49.5)
+	hspIDLbl->setColor(ccc3(255, 170, 20));
 	setFormSetter(mappedMsgLbl);
 	setFormSetter(hspIDLbl);
 	
 	CCSprite* seper0 = CCSprite::create("cardsetting_line.png");
 	seper0->setScaleX(235.f/seper0->getContentSize().width);
 	front->addChild(seper0);
-	seper0->setPosition(ccpFromSize(front->getContentSize() / 2.f) + ccp(0, 63));
+	seper0->setPosition(ccp(125.5, 153.5));
 	
-	KSLabelTTF* googleGuide = KSLabelTTF::create("게임을 저장하시려면 Google+ ID를 연결해 주세요.",
+	KSLabelTTF* googleGuide = KSLabelTTF::create("게임을 저장하시려면\n Google+ ID를\n 연결해 주세요.",
 																							 mySGD->getFont().c_str(), 10.f);
-	googleGuide->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 16 + 6));
+	googleGuide->setPosition(ccp(67, 98.f));
 	front->addChild(googleGuide);
-	CommonButton* googleLogin = CommonButton::create("GOOGLE+ ID 연결", 14.f, CCSizeMake(160, 50),
-																										 CommonButtonLightPupple, touchP - 1);
+	CommonButton* googleLogin = CommonButton::create("GOOGLE+\nID 연결", 14.f, CCSizeMake(101, 60),
+																										 CommonButtonAchievement, touchP - 1);
 	
-	googleLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -7.5f + 6 - 4.5f));
+	googleLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(69, -7.5f + 6 - 4.5f + 10.5f));
 	
 	CCSprite* seper = CCSprite::create("cardsetting_line.png");
 	seper->setScaleX(235.f/seper->getContentSize().width);
 	front->addChild(seper);
-	seper->setPosition(ccpFromSize(front->getContentSize() / 2.f) + ccp(0, -32));
+	seper->setPosition(ccpFromSize(front->getContentSize() / 2.f) + ccp(0, -32 + 4.5));
 	
 	front->addChild(googleLogin);
 	
-	KSLabelTTF* facebookGuide = KSLabelTTF::create("여러 기기에서 게임을 즐기시려면 facebook ID를 연결해 주세요.",
+	KSLabelTTF* facebookGuide = KSLabelTTF::create("여러 기기에서 게임을\n 즐기시려면 facebook ID를\n 연결해 주세요.",
 																							 mySGD->getFont().c_str(), 10.f);
-	facebookGuide->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -54 + 8));
+	facebookGuide->setPosition(ccp(67, 33));
 	front->addChild(facebookGuide);
 	
-	CommonButton* facebookLogin = CommonButton::create("FACEBOOK ID 연결", 14.f, CCSizeMake(160, 50),
-																										 CommonButtonLightPupple, touchP - 1);
+	CommonButton* facebookLogin = CommonButton::create("FACEBOOK\n ID 연결", 14.f, CCSizeMake(101, 60),
+																										 CommonButtonAchievement, touchP - 1);
 	
-	facebookLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -79 + 4.5f));
+	facebookLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(69, -79 + 4.5f + 14.5f));
 
 	front->addChild(facebookLogin);
 	
@@ -170,23 +184,26 @@ bool AccountManagerPopup::init(int touchP)
 				managerPopup->addChild(toAnotherAccount);
 				
 				
-				auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-				auto front = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+				auto back = CCSprite::create("popup_large_back.png");
+				auto front = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+
 				
 				toAnotherAccount->setContainerNode(back);
-				back->setContentSize(CCSizeMake(550 / 2.f, 432 / 2.f));
-				front->setContentSize(CCSizeMake(528 / 2.f, 346 / 2.f));
+//				back->setContentSize(CCSizeMake(550 / 2.f, 432 / 2.f));
+				front->setContentSize(CCSizeMake(251,128));
 				
 				
 				back->addChild(front);
-				front->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -17));
+				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,15));
+
 				//					toAnotherAccount->addChild(back);
 				//					CommonAnimation::openPopup(this, back, nullptr);
 				
-				KSLabelTTF* titleLbl = KSLabelTTF::create("유의사항", mySGD->getFont().c_str(), 15.f);
-				titleLbl->setColor(ccc3(255, 170, 20));
+				KSLabelTTF* titleLbl = KSLabelTTF::create("유의사항", mySGD->getFont().c_str(), 12.f);
+//				titleLbl->setColor(ccc3(255, 170, 20));
 				back->addChild(titleLbl);
-				titleLbl->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, 40 + 43.5));
+				titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
+
 				std::string guidanceMsg = ccsf( "<font color=#FFFFFF newline=12>이 ID에 연결된</font>"
 																											 "<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
 																											 "<font color=#FFFFFF newline=24>(%s, %d)</font>"
@@ -199,19 +216,19 @@ bool AccountManagerPopup::init(int touchP)
 																												 guidanceMsg.c_str() ,
 																												 mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);
 				front->addChild(content);
-				content->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f));
+				content->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f - 20.f));
 				
 				CommonButton* previousLoad = CommonButton::create("이전 기록 불러오기", 13.f, CCSizeMake(110, 50),
-																													CommonButtonLightPupple, touchP - 3);
-				previousLoad->setPosition(ccp(69.5, 37.0)); 			// dt (-1.0, 9.0)
+																													CommonButtonAchievement, touchP - 3);
+				previousLoad->setPosition(ccp(69.5, -32.f)); 			// dt (-1.0, 9.0)
 				front->addChild(previousLoad);
 				CommonButton* keepLoad = CommonButton::create("현재 기록을 저장", 13.f, CCSizeMake(110, 50),
-																											CommonButtonLightPupple, touchP - 3);
-				keepLoad->setPosition(ccp(193.0, 37.0)); 			// dt (-57.0, 9.0)
+																											CommonButtonAchievement, touchP - 3);
+				keepLoad->setPosition(ccp(193.0, -32.f)); 			// dt (-57.0, 9.0)
 				front->addChild(keepLoad);
 				CommonButton* closeButton = CommonButton::createCloseButton(touchP - 3);
-				closeButton->setPosition(ccp(244.5, 187.0)); 			// dt (244.5, 187.0)
-				front->addChild(closeButton);
+				closeButton->setPosition(ccp(back->getContentSize().width-25,back->getContentSize().height-22));
+				back->addChild(closeButton);
 				closeButton->setFunction([=](CCObject*){
 					CommonAnimation::closePopup(this, back, nullptr, nullptr,
 																			[=](){

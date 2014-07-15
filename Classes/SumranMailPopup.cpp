@@ -77,16 +77,21 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 
 	target_final = t_close;
 	delegate_final = d_close;
-	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_case->setContentSize(CCSizeMake(480, 280));
+	main_case = CCSprite::create("mainpopup2_back.png");
+	//main_case->setContentSize(CCSizeMake(480, 280));
 	main_case->setPosition(ccp(240,160-14));
 //	addChild(main_case, 0);
 	
+	CCSprite* title_back = CCSprite::create("title_tab.png");
+	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
+	main_case->addChild(title_back);
+
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setPosition(ccp(38.0,253.0));
+	//title_label->setColor(ccc3(255, 170, 20));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	//title_label->setPosition(ccp(38.0,253.0));
 	setFormSetter(title_label);
-	main_case->addChild(title_label);
+	title_back->addChild(title_label);
 	
 	m_nothingMessage = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nogift), mySGD->getFont().c_str(), 14);
 	m_nothingMessage->setPosition(ccpMult(main_case->getContentSize(),0.5));
@@ -94,9 +99,9 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	setFormSetter(m_nothingMessage);
 	m_nothingMessage->setVisible(false);	
 	
-	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_inner->setContentSize(CCSizeMake(460, 232));
-	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.44f);
+	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	main_inner->setContentSize(CCSizeMake(424, 204));
+	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f + 5);
 	setFormSetter(main_inner);
 	main_case->addChild(main_inner);
 
@@ -132,8 +137,10 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	_menu->setTouchPriority(-200);
 
 	
-	allReceive = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), 12, CCSizeMake(100,40), CommonButtonLightPupple, -200);
-	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
+	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), -200);
+	allReceive->setTitleSize(12.f);
+	allReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_allAccept));
+//	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setTitleColor(ccc3(255, 255, 255));
 	allReceive->setTitleColorForDisable(ccc3(90, 60, 30));
 	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
@@ -164,17 +171,24 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 		});
 	});
 	//FormSetter::get()->addObject("testksoo2", allReceive);
-	allReceive->setPosition(ccp(410.0,33.0));
+	allReceive->setPosition(ccp(395.0, 13.5));
 	allReceive->setEnabled(false);
 	setFormSetter(allReceive);
 	main_case->addChild(allReceive, 1);
+
+	auto giftBoxAlertBox = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
+	giftBoxAlertBox->setPosition(ccp(370.0, 246.5));
+	giftBoxAlertBox->setContentSize(CCSizeMake(148.0, 19.5)); 			// dt (-50.0, 1.5)
+	main_case->addChild(giftBoxAlertBox);
+
 	
 	CCLabelTTF* giftboxAlert = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftboxAlert), mySGD->getFont().c_str(), 12);
 	setFormSetter(giftboxAlert);
+	setFormSetter(giftBoxAlertBox);
 	giftboxAlert->setAnchorPoint(ccp(0,0.5));
-	giftboxAlert->setPosition(ccp(25,33));
-	main_case->addChild(giftboxAlert, 1);
-
+	giftboxAlert->setPosition(ccpFromSize(giftBoxAlertBox->getContentSize()) / 2.f + ccp(-91.5 + 22.5, 1));
+	giftBoxAlertBox->addChild(giftboxAlert, 1);
+	
 	
 	CommonButton* giftFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, -200); // ? 티켓함?이 맞음? From YH To KS
 	CommonButton* helpFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_helpBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
@@ -321,7 +335,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 		});
 //		this->hidePopup();
 	});
-	closeBtn->setPosition(ccp(450, 255));
+	closeBtn->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	setFormSetter(closeBtn);
 	main_case->addChild(closeBtn);
 	
@@ -385,19 +399,20 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	CCScale9Sprite* barBack = CCScale9Sprite::create("cardsetting_scroll.png", CCRectMake(0, 0, 7, 13), CCRectMake(3, 6, 1, 1));
 	barBack->setContentSize(CCSizeMake(7, 160.f));
 	barBack->setPosition(ccp(451, 140));
+	barBack->setVisible(false);
 	setFormSetter(barBack);
 //	FormSetter::get()->addObject("testksoo", barBack);
 	main_case->addChild(barBack, kMP_Z_mailTable - 1);
 	//320x320 테이블 뷰 생성
 
 	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
-		
+	setFormSetter(mailTableView);	
 //	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
 																										 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
 	m_scrollBar = ScrollBar::createScrollbar(mailTableView, -18, NULL, scrollBar, -191);
 	m_scrollBar->setDynamicScrollSize(true);
-	m_scrollBar->setVisible(true);	
+	m_scrollBar->setVisible(false);
 	mailTableView->setAnchorPoint(CCPointZero);
 	setFormSetter(m_scrollBar);
 	//kCCScrollViewDirectionVertical : 세로 스크롤, kCCScrollViewDirectionHorizontal : 가로 스크롤
@@ -409,7 +424,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	//기준점 0,0
 	// 좌표 수동으로 잡느라 이리 됨
 	//FormSetter::get()->addObject("testksoo", mailTableView);
-	mailTableView->setPosition(ccp(20, 56));
+	mailTableView->setPosition(ccp(33.0, 56.0));
 	
 	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 	mailTableView->setDelegate(this);
@@ -465,20 +480,24 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 		CCNode* cell = CCNode::create();
 		setFormSetter(cell);
-		std::string cellBackFile = "achievement_cellback_normal.png";
+		std::string cellBackFile = "rank_normal2.png";
 
-		CCScale9Sprite* listCellCase = CCScale9Sprite::create(cellBackFile.c_str(), CCRectMake(0, 0, 47, 47), CCRectMake(5, 5, 34, 34));
-		listCellCase->setContentSize(CCSizeMake(212.0,46.0));
+		CCScale9Sprite* listCellCase = CCScale9Sprite::create(cellBackFile.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+		listCellCase->setContentSize(CCSizeMake(201, 41));
 		setFormSetter(listCellCase);
 		CCScale9Sprite* bg = listCellCase;
 		bg->setPosition(CCPointZero);
 		bg->setAnchorPoint(CCPointZero);
 		cell->addChild(bg,0);
 
-		CCSprite* profileImg = CCSprite::create("postbox_present.png"); // GDWebSprite::create((mail)["profile_image_url"].asString(), "ending_noimg.png");
+		auto profileImg = CCScale9Sprite::create("common_purple.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		profileImg->setContentSize(CCSizeMake(57, 32));
 		profileImg->setAnchorPoint(ccp(0.5, 0.5));
 		profileImg->setTag(kMP_MT_profileImg);
-		profileImg->setPosition(ccp(23.5,24.0));
+		profileImg->setPosition(ccp(33.0, 20.5));
+		auto presentIcon = CCSprite::create("postbox_present.png");
+		profileImg->addChild(presentIcon);
+		presentIcon->setPosition(ccpFromSize(profileImg->getContentSize()) / 2.f);
 		//profileImg->setScale(30.f / profileImg->getContentSize().width);
 		cell->addChild(profileImg, kMP_Z_profileImg);
 		setFormSetter(profileImg);
@@ -491,8 +510,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 
-		title = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(),12); // "님의"
-		title->setPosition(ccp(48.0,22.5));
+		title = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(), 13); // "님의"
+		title->setPosition(ccp(68.5, 20.5));
 		title->setColor(ccc3(255, 255, 255));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);
@@ -508,7 +527,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				comment = GraphDog::get()->dateFormat("m/d h:i",mail.get("regDate","Event").asString().c_str());
 				
 				
-				btnReceive = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_take), 12.f, CCSizeMake(60, 40), CommonButtonYellow, -200);
+				btnReceive = CommonButton::create(CCSprite::create("subbutton_purple.png"), -200);
+				setFormSetter(btnReceive);
+				btnReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_take));
+				btnReceive->setTitleSize(12.f);
+				btnReceive->setTouchPriority(-200);
 				btnReceive->setTitleColor(ccc3(255, 255, 255));
 				btnReceive->setFunction([=](CCObject*)
 																{
@@ -1370,15 +1393,15 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				///
 		}
 
-		score = KSLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 10);
-		score->setColor(ccc3(255, 255, 255));
-		score->setPosition(ccp(47.5,7.5));
+		score = KSLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 9);
+		score->setColor(ccc3(54, 36, 148));
+		score->setPosition(ccp(69.0, 7.5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);
 		setFormSetter(score);
 		cell->addChild(score,2);
 		btnReceive->setUserData((void*)idx);
-		btnReceive->setPosition(ccp(174.5,23.5));
+		btnReceive->setPosition(ccp(178.5, 21.0));
 //		sendBtn->setUserData((void *)idx);
 //		sendBtn->setPosition(ccp(174.5,23.5));
 //		setFormSetter(sendBtn);
