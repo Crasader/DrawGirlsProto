@@ -1375,6 +1375,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("주의!"), kMyLocalKey_warningDie);
 	ko->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
 	ko->setObject(CCString::create("내 정보"), kMyLocalKey_nickTitle);
+	ko->setObject(CCString::create("추가지급"), kMyLocalKey_plusGive);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -2257,6 +2258,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
 	
 	en->setObject(CCString::create("내 정보"), kMyLocalKey_nickTitle);
+	en->setObject(CCString::create("추가지급"), kMyLocalKey_plusGive);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3161,6 +3163,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("쿠폰 번호를 입력해주세요."), kMyLocalKey_couponMent);
 	
 	ja->setObject(CCString::create("내 정보"), kMyLocalKey_nickTitle);
+	ja->setObject(CCString::create("추가지급"), kMyLocalKey_plusGive);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
