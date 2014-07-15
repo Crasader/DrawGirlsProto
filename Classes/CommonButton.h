@@ -33,7 +33,10 @@ enum CommonButtonType {
 	CommonButtonYellowDown,
 	CommonButtonYellowUp,
 		CommonButtonClose,
-	CommonButtonFree
+	CommonButtonFree,
+	CommonButtonAchievement,
+	CommonButtonReward,
+	CommonButtonIng,
 	};
 
 enum PriceType{

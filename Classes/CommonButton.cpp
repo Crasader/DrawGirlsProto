@@ -178,29 +178,38 @@ CCScale9Sprite* CommonButton::getBackgroundByType(CommonButtonType btnType){
 	else if(btnType==CommonButtonYellowDown)	btnBackImg = "common_button_yellowdown.png";
 	else if(btnType==CommonButtonYellowUp)		btnBackImg = "common_button_yellowup.png";
 	else if(btnType==CommonButtonClose) btnBackImg = "common_button_close.png";
-	
-	CCScale9Sprite* back = CCScale9Sprite::create(btnBackImg.c_str());
-	
-	if(btnType == CommonButtonGray2){
-		back->setInsetBottom(9);
-		back->setInsetTop(9);
-		back->setInsetLeft(9);
-		back->setInsetRight(9);
-		
-	}
-	else if(btnType >= CommonButtonDarkPupple && btnType <= CommonButtonYellowUp)
+	else if(btnType==CommonButtonAchievement) btnBackImg = "achievement_button_success.png";
+	else if(btnType==CommonButtonReward) btnBackImg = "achievement_button_reward.png";
+	else if(btnType==CommonButtonIng) btnBackImg = "achievement_button_ing.png";
+
+	struct btlr
 	{
-		back->setInsetBottom(12);
-		back->setInsetTop(34-12*2);
-		back->setInsetLeft(12);
-		back->setInsetRight(34-12*2);
+		float b, t, l, r;
+	};
+	std::map<int, btlr> inset;
+
+	
+	inset[CommonButtonGray2] = {9, 9, 9, 9};
+	inset[CommonButtonAchievement] = {21, 21, 50, 50};
+	inset[CommonButtonReward] ={21, 21, 50, 50};
+	inset[CommonButtonIng] ={21, 21, 50, 50};
+	inset[CommonButtonYellow] ={12, 38 - 12*2, 9, 38 - 9*2};
+	inset[CommonButtonGray] ={12, 38 - 12*2, 9, 38 - 9*2};
+	inset[CommonButtonGray2] ={12, 38 - 12*2, 9, 38 - 9*2};
+	inset[CommonButtonBlue] ={12, 38 - 12*2, 9, 38 - 9*2};
+	inset[CommonButtonGreen] ={12, 38 - 12*2, 9, 38 - 9*2};
+	inset[CommonButtonOrange] ={12, 38 - 12*2, 9, 38 - 9*2};
+	inset[CommonButtonPupple] ={12, 38 - 12*2, 9, 38 - 9*2};
+	inset[CommonButtonFree] ={12, 38 - 12*2, 9, 38 - 9*2};
+	for(int i=CommonButtonDarkPupple; i<=CommonButtonYellowUp; i++ )
+	{
+		inset[i] = {12, 34 - 12*2, 12, 34 - 12*2};
 	}
-	else if(btnType != CommonButtonClose){
-		back->setInsetBottom(12);
-		back->setInsetTop(38-12*2);
-		back->setInsetLeft(9);
-		back->setInsetRight(38-9*2);
-	}
+	CCScale9Sprite* back = CCScale9Sprite::create(btnBackImg.c_str());
+	back->setInsetBottom(inset[btnType].b);
+	back->setInsetTop(inset[btnType].t);
+	back->setInsetLeft(inset[btnType].l);
+	back->setInsetRight(inset[btnType].r);
 	
 	return back;
 }
