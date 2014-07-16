@@ -126,56 +126,74 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
          super.onResume();     
          ADBrixManager.startSession(this);
          HSPCore core = HSPCore.getInstance();
-//         if(core.getState() == HSPState.HSP_STATE_OFFLINE)
-//         { 
-//        	 hspConnector.handler.post(
-//        			 new Runnable(){
-//        				 public void run() {
-//        					 Activity activity=(Activity)DGproto.this;
-//        					 HSPCore core = HSPCore.getInstance();
-//        					 if(core!=null){
-//        						 HSPOAuthProvider lType = HSPOAuthProvider.values()[getUserState()];
-//        						 core.login(activity, lType,new HSPCore.HSPLoginCB() {
-//
-//        							 public void onLogin(final HSPResult result, boolean isPlayable) {
-//        								 //Log.d("litqoo", "BEGIN - HSPLoginCB");
-//
-//        								 HSPCore core = HSPCore.getInstance();
-//        								 if(core.getState() == HSPState.HSP_STATE_ONLINE)
-//        								 {
-//        									 Log.d("hsp", "dfsgfsdg");
-//        								 }
-//        								 JSONObject r= new JSONObject();
-//        								 JSONObject error = new JSONObject();
-//
-//        								 if (result.isSuccess() == false) {
-//        									 //Log.i("litqoo", "HSP Login Error = " + result);
-//
-//        									 // 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
-//        									 int errorCode = result.getCode();
-//        									 String errorDescription = result.getDetail();
-//
-//        									 //Log.i("litqoo", "code = " + errorCode + ", message = " + errorDescription);
-//        								 }else{
-//        									 //Log.i("litqoo", "success");
-//        								 } 
-//        							 }
-//        						 });
-//        					 }else{
-//        						 //Log.d("litqoo","!!!!!!!! need setup !!!!!!");
-//        					 }
-//
-//
-//        				 }
-//        			 }
-//        			 );
-//         }
+         if (HSPCore.getInstance().getState() != HSPState.HSP_STATE_INIT
+         		&& HSPCore.getInstance().getState() != HSPState.HSP_STATE_ONLINE) 
+         { 
+        	 hspConnector.handler.post(
+        			 new Runnable(){
+        				 public void run() {
+        					 Activity activity=(Activity)DGproto.this;
+        					 HSPCore core = HSPCore.getInstance();
+        					 if(core!=null){
+        						 HSPOAuthProvider lType = HSPOAuthProvider.values()[getUserState()];
+        						 core.login(activity, lType,new HSPCore.HSPLoginCB() {
+
+        							 public void onLogin(final HSPResult result, boolean isPlayable) {
+        								 //Log.d("litqoo", "BEGIN - HSPLoginCB");
+
+        								 HSPCore core = HSPCore.getInstance();
+        								 if(core.getState() == HSPState.HSP_STATE_ONLINE)
+        								 {
+        									 Log.d("hsp", "dfsgfsdg");
+        								 }
+        								 JSONObject r= new JSONObject();
+        								 JSONObject error = new JSONObject();
+
+        								 if (result.isSuccess() == false) {
+        									 //Log.i("litqoo", "HSP Login Error = " + result);
+
+        									 // 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
+        									 int errorCode = result.getCode();
+        									 String errorDescription = result.getDetail();
+
+        									 //Log.i("litqoo", "code = " + errorCode + ", message = " + errorDescription);
+        								 }else{
+        									 //Log.i("litqoo", "success");
+        								 } 
+        							 }
+        						 });
+        					 }else{
+        						 //Log.d("litqoo","!!!!!!!! need setup !!!!!!");
+        					 }
+
+
+        				 }
+        			 }
+        			 );
+         }
+    }
+    private void suspend() {
+        // Call suspend() when onPause() is called
+        if (HSPCore.getInstance().getState() == HSPState.HSP_STATE_ONLINE) {
+            HSPCore.getInstance().suspend(new HSPCore.HSPSuspendCB() {
+
+                @Override
+                public void onSuspend(HSPResult result) {
+                    if (result.isSuccess()) {
+                        Log.d("hsp", "onSuspend success");
+                    } else {
+                        Log.d("hsp", "onSuspend fail: " + result);
+                    }
+                }
+            });
+        }
     }
     @Override
     protected void onPause()
     {
          super.onPause();
          ADBrixManager.endSession();
+         suspend();
     }
     //    protected void onActivityResult(int requestCode, int resultCode, Intent data){
 //    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);

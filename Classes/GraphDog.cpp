@@ -368,6 +368,9 @@ void* GraphDog::t_function(void *_insertIndex)
 	curl_easy_setopt(handle, CURLOPT_URL, commandurl.c_str());
 	curl_easy_setopt(handle, CURLOPT_POSTFIELDS,dataset.c_str());
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&command.chunk);
+	curl_easy_setopt(handle, CURLOPT_TIMEOUT, 20);
+	curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, 20);
+
 	//CCLOG("t_function4");
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 	//	pthread_mutex_unlock(&graphdog->cmdsMutex);
@@ -637,8 +640,14 @@ void GraphDog::receivedCommand(float dt)
 						}
 						//@@if(command.target!=0 && command.selector!=0)
 						//@@((command.target)->*(command.selector))(resultobj);
-						if(command.func!=NULL)command.func(resultobj);
+						CCLOG("graphdog:: error call func for %s",command.action.c_str());
+						if(command.func!=NULL){
+							command.func(resultobj);
+						}else{
+							CCLOG("graphdog:: error call func back is null for %s",command.action.c_str());
+						}
 						if(commandFinishedFunc!=nullptr)commandFinishedFunc();
+						CCLOG("graphdog:: error call func finished for %s",command.action.c_str());
 					}
 				
 				}
@@ -712,8 +721,18 @@ void GraphDog::receivedCommand(float dt)
 					
 					
 					if(!oParam.get("retry", false).asBool() || resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()==GDSUCCESS || oParam.get("passCode", -1).asInt()==resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()){
-						if(ct.func!=NULL)ct.func(resultobj[iter2->first.c_str()]);
+						
+						
+						CCLOG("graphdog:: call func for %s",ct.action.c_str());
+						if(ct.func!=NULL){
+							ct.func(resultobj[iter2->first.c_str()]);
+						}else{
+							CCLOG("graphdog:: call func is null for %s",ct.action.c_str());
+						}
+						CCLOG("graphdog:: call func finished for %s",ct.action.c_str());
 						if(commandFinishedFunc!=nullptr)commandFinishedFunc();
+						CCLOG("graphdog:: call commandFinishedFunc finished for %s",ct.action.c_str());
+					
 					}else if(resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()!=GDSUCCESS){
 						retryCnt=true;
 						Json::Value param;

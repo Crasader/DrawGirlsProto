@@ -282,7 +282,6 @@ void EndlessModeOpening::setMain()
 																		straight_back->getContentSize().height/2.f + 2.f - 1.0f));
 	straight_back->addChild(straight_content);
 	
-	
 	ready_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), 18.5f, CCSizeMake(160, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
 	ready_button->setPosition(ccp(right_back->getContentSize().width/2.f,-28));
 	right_back->addChild(ready_button);
@@ -477,9 +476,9 @@ void EndlessModeOpening::setMain()
 																   Json::Value param;
 																   param["memberID"] = myHSP->getMemberID();
 																   //																	  param["no"] = 34;
-//																   param["autoLevel"] = mySGD->getUserdataAutoLevel();
-																   param["win"] = mySGD->getUserdataEndlessIngWin();
+																   param["win"] = mySGD->getUserdataEndlessIngWin(); //mySGD->getUserdataAutoLevel();
 																   param["highPiece"] = mySGD->getUserdataHighPiece();
+																	 
 																   myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 															   };
 														   };

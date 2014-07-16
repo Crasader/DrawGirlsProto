@@ -458,8 +458,10 @@ void KSCumberBase::followMoving(float dt)
 			float goalDegree = rad2Deg(atan2(t.y, t.x));
 			float deltaDegree = (goalDegree - m_follow.followDegree)/1.f;
 			m_follow.followDegree += clampf(deltaDegree, -5, 5);
-			dx = getSpeed() * cos(deg2Rad(m_follow.followDegree)) * 2.f;
-			dy = getSpeed() * sin(deg2Rad(m_follow.followDegree)) * 2.f;
+			float speed = getSpeed()*2;
+			if(speed>1.5)speed=1.5;
+			dx = speed * cos(deg2Rad(m_follow.followDegree));
+			dy = speed * sin(deg2Rad(m_follow.followDegree));
 		}
 		else
 		{
@@ -2395,24 +2397,27 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	std::string playcountKey = std::string("playcount_") + oss.str();
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
+	
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
 
 	CCLOG("#################### autobalance ############################");
 	CCLOG("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
 	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-
 	if(autobalanceTry==0 && !isExchange){
 		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
         settingFuryRule();
 		return;
 	}
 	
+	
+	if(m_attackPercent<=0)vCount*=0.5f;
+	
 	if(vCount>0){
-		if(m_attackPercent>0)m_aiValue = m_aiValue+2.5f*vCount;
-		else m_aiValue = m_aiValue+1.25f*vCount;
-		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.01;
+		m_aiValue = m_aiValue+5.f*vCount;
+		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.02;
 		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.025;
 	}
+	
 	
 	if(isExchange){
 		m_aiValue *=2;
@@ -2445,7 +2450,9 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 		
 	}
-
+	
+	if(m_attackPercent<=0 && m_maxSpeed>1.0)m_maxSpeed=1.f;
+	if(m_maxSpeed>1.5)m_maxSpeed=1.5;
 	settingFuryRule();
 	
 	CCLOG("#################### Change Balnace1 ############################");
@@ -2705,8 +2712,8 @@ void KSCumberBase::setSlience( bool s )
 
 void KSCumberBase::caughtAnimation()
 {
+	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(myGD->getCommunicationNode("CP_getMainCumberPointer")));
 	myGD->communication("UI_catchSubCumber");
-	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(this));
 }
 
 bool KSCumberBase::bossIsClosed()

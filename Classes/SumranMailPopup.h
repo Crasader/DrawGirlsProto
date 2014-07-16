@@ -106,7 +106,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		ScrollBar * m_scrollBar;
 		SumranMailFilter m_mailFilter;
 		SumranPostBoxState m_popupState;
-		CCScale9Sprite* main_case;
+		CCSprite* main_case;
 		TouchSuctionLayer* t_suction;
 		CommonButton* allReceive;
 	CCSprite* gray;
