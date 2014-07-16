@@ -43,7 +43,7 @@ private:
 	
 	//ScrollBar* m_scrollBar;
 	CCTableView* rank_table;
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	CCSprite* gray;
 	CCNode* rankBack;
 	int delay_index;
