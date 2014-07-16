@@ -73,7 +73,7 @@ public:
 		m_func=func;
 	}
 	
-	static CommonButton* create(string title, int fontSize, CCSize size,CommonButtonType btnType, int touchPriority){
+	static CommonButton* create(string title, float fontSize, CCSize size,CommonButtonType btnType, int touchPriority){
 		CommonButton* btn = new CommonButton();
 		if(btn->init(title,fontSize,size,btnType,touchPriority)==false){
 			return NULL;
@@ -110,7 +110,7 @@ public:
 		return btn;
 	}
 	
-	static CommonButton* create(string title, int fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority){
+	static CommonButton* create(string title, float fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority){
 		CommonButton* btn = new CommonButton();
 		if(btn->init(title, fontSize, size, button_back, touchPriority) == false){
 			return NULL;
@@ -140,9 +140,9 @@ public:
 	
 	bool init(CCSprite* backSprite, int touchPriority);
 
-	bool init(string title, int fontSize, CCSize size,CommonButtonType btnType, int touchPriority);
+	bool init(string title, float fontSize, CCSize size,CommonButtonType btnType, int touchPriority);
 	
-	bool init(string title, int fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority);
+	bool init(string title, float fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority);
 	static CCScale9Sprite* getBackgroundByType(CommonButtonType btnType);
 	
 	void setButtonInset(CommonButtonType type);
@@ -150,7 +150,7 @@ public:
 	
 	void setTouchPriority(int touchPriority);
 	void setTitle(string title);
-	void setTitleSize(int size);
+	void setTitleSize(float size);
 	void setSize(CCSize size);
 	void setEnabled(bool isEnabled);
 	bool isEnabled();
