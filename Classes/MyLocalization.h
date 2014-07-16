@@ -827,7 +827,15 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_couponMent,
 	kMyLocalKey_upgradeLevelValue2,
 	kMyLocalKey_nickTitle,
-	kMyLocalKey_plusGive
+	kMyLocalKey_plusGive,
+	
+	
+	
+	
+	
+	
+	
+	kMyLocalKey_lastkey
 }MyLocalKey;
 
 
@@ -852,7 +860,7 @@ public:
 	const char* getSupportLocalCode();
 	CCString* getLocalCode();
 	
-	void printList();
+	string printList();
 private:
 	MyLocal() : CCDictionary()
 	{
