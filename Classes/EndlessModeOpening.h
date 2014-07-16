@@ -13,7 +13,6 @@
 #include "cocos-ext.h"
 #include "hspConnector.h"
 #include "KSProtect.h"
-#include "ScrollBar.h"
 
 //#include "CommonButton.h"
 USING_NS_CC;
@@ -41,13 +40,14 @@ class DownloadFile;
 class CopyFile;
 class CommonButton;
 class StyledLabelTTF;
+class CCMenuLambda;
+class CCMenuItemLambda;
 class EndlessModeOpening : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
 	EndlessModeOpening()
 	{
 		currentSelectedCell = nullptr;
-		m_scrollBar = nullptr;
 		currentSelectedIdx = -1;
 		right_flag = nullptr;
 		right_nick = nullptr;
@@ -94,6 +94,13 @@ private:
 	KSLabelTTF* straight_content;
 	StyledLabelTTF* record_content;
 	
+	CCNode* right_info_node;
+	CCNode* right_reward_node;
+	
+	CCMenuLambda* right_top_menu;
+	CCMenuItemLambda* info_item;
+	CCMenuItemLambda* reward_item;
+	
 	CommonButton* ready_button;
 	
 	CCSprite* rank_percent_case;
@@ -113,7 +120,6 @@ private:
 	vector<CopyFile> cf_list;
 	CCScale9Sprite* currentSelectedCell;
 	int currentSelectedIdx;
-	ScrollBar* m_scrollBar;
 	CommonButton* mySelection;
 	CCSprite* right_flag;
 	KSLabelTTF* right_nick;
@@ -154,10 +160,6 @@ private:
 	virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
 	virtual void scrollViewDidScroll(CCScrollView* view){
-		if(m_scrollBar)
-		{
-			m_scrollBar->setBarRefresh();
-		}
 	}
 	virtual void scrollViewDidZoom(CCScrollView* view){}
 	void putInformation(Json::Value info);

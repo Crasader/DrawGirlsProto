@@ -116,7 +116,7 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 	KSLabelTTF* ment4_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent4), mySGD->getFont().c_str(), 12.f);
 	ment4_label->disableOuterStroke();
 	ment4_label->setAnchorPoint(ccp(0.5f,0.5f));
-	ment4_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-55));
+	ment4_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-53));
 	back_in->addChild(ment4_label);
 	
 	ment3_label->setPositionX(back_in->getContentSize().width/2.f-ment4_label->getContentSize().width/2.f);

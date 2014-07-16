@@ -45,21 +45,14 @@ private:
 	bool is_menu_enable;
 	
 	CCSprite* gray;
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	
 	CCSprite* result_stamp;
 	
 	LoadingLayer* ready_loading;
 	
-	KSLabelTTF* n_stop_label2;
-	KSLabelTTF* s_stop_label2;
-	KSLabelTTF* n_next_label2;
-	KSLabelTTF* s_next_label2;
-	
-	CCMenuLambda* bottom_menu;
-	
 	virtual CCSize cellSizeForTable(CCTableView *table) {
-        return CCSizeMake((480-30)/2.f-20, 27);
+        return CCSizeMake((480-30)/2.f-20, 21);
     };
     virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
     virtual unsigned int numberOfCellsInTableView(CCTableView *table);
@@ -78,6 +71,9 @@ private:
 	CCScale9Sprite* left_back;
 	CCScale9Sprite* right_back;
 	
+	CCControlButton* next_button;
+	CCControlButton* stop_button;
+	
 	CCTableView* left_table;
 	CCTableView* right_table;
 	
@@ -85,31 +81,7 @@ private:
 	vector<string> left_content_list;
 	vector<string> right_content_list;
 	
-//	CCScale9Sprite* left_top_back;
-//	KSLabelTTF* left_top_title;
-//	KSLabelTTF* left_top_content;
-//	
-//	CCScale9Sprite* left_center_back;
-//	KSLabelTTF* left_center_title;
-//	KSLabelTTF* left_center_content;
-//	
-//	CCScale9Sprite* left_bottom_back;
-//	KSLabelTTF* left_bottom_title;
-//	KSLabelTTF* left_bottom_content;
-	
 	KSLabelTTF* left_total_content;
-	
-//	CCScale9Sprite* right_top_back;
-//	KSLabelTTF* right_top_title;
-//	KSLabelTTF* right_top_content;
-//	
-//	CCScale9Sprite* right_center_back;
-//	KSLabelTTF* right_center_title;
-//	KSLabelTTF* right_center_content;
-//	
-//	CCScale9Sprite* right_bottom_back;
-//	KSLabelTTF* right_bottom_title;
-//	KSLabelTTF* right_bottom_content;
 	
 	KSLabelTTF* right_total_content;
 	
@@ -178,6 +150,7 @@ private:
 	void successGetStageInfo();
 	
 	void menuAction(CCObject* sender);
+	void controlButtonAction(CCObject* sender, CCControlEvent t_event);
 	
 	virtual void scrollViewDidScroll(CCScrollView* view);
 	virtual void scrollViewDidZoom(CCScrollView* view);

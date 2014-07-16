@@ -661,12 +661,28 @@ void Maingame::finalSetting()
 		
 		myGD->V_V["Main_readyBomb"] = [=]()
 		{
-			replay_bomb->runAction(CCMoveTo::create(0.5f, ccp(0, 0)));
+			replay_bomb->removeChildByTag(9999);
+			float t_y = replay_bomb->getPositionY();
+			replay_bomb->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																{
+																	replay_bomb->setPositionY(t_y - t_y*t);
+																}, [=](float t)
+																{
+																	replay_bomb->setPositionY(t_y - t_y*t);
+																}), 0, 9999);
 			//replay_manager->runAnimationsForSequenceNamed("bombcast1");
 		};
 		myGD->V_V["Main_stopBomb"] = [=]()
 		{
-			replay_bomb->runAction(CCMoveTo::create(0.3f, ccp(0, -54)));
+			replay_bomb->removeChildByTag(9999);
+			float t_y = replay_bomb->getPositionY();
+			replay_bomb->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																{
+																	replay_bomb->setPositionY(t_y + (-54-t_y)*t);
+																}, [=](float t)
+																{
+																	replay_bomb->setPositionY(t_y + (-54-t_y)*t);
+																}), 0, 9999);
 //			replay_manager->runAnimationsForSequenceNamed("Default Timeline");
 		};
 		

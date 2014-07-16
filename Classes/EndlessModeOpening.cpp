@@ -12,7 +12,6 @@
 #include "StarGoldData.h"
 #include "CommonButton.h"
 #include "TouchSuctionLayer.h"
-#include "CCMenuLambda.h"
 #include "FlagSelector.h"
 #include "FormSetter.h"
 #include "LoadingLayer.h"
@@ -25,9 +24,9 @@
 #include "MyLocalization.h"
 #include "RivalSelectPopup.h"
 #include "CommonAnimation.h"
-#include "FormSetter.h"
 #include "LabelTTFMarquee.h"
-#include "StyledLabelTTF.h"
+#include "CCMenuLambda.h"
+
 enum EndlessModeOpeningZorder
 {
 	kEndlessModeOpeningZorder_gray = 0,
@@ -159,7 +158,7 @@ void EndlessModeOpening::setMain()
 	tip_marquee_back->setPosition(ccp(165+150, 250.f));
 	main_case->addChild(tip_marquee_back);
 	
-	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 245, 25, "");
+	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 240, 25, "");
 	tipMaquee->addText("<font size=13>PVP랭킹은 연승이 중요해요.</font>");
 	tipMaquee->addText("<font size=13>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>");
 	tipMaquee->addText("<font size=13>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>");
@@ -177,7 +176,7 @@ void EndlessModeOpening::setMain()
 	tipBack->addChild(tipLbl);
 	
 	left_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	left_back->setContentSize(CCSizeMake(235, 212));
+	left_back->setContentSize(CCSizeMake(255, 212));
 	left_back->setPosition(ccp(25+left_back->getContentSize().width/2.f, main_case->getContentSize().height*0.44f));
 	main_case->addChild(left_back);
 	
@@ -185,14 +184,14 @@ void EndlessModeOpening::setMain()
 	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessWeeklyranking), mySGD->getFont().c_str(), 12);
 	left_title->disableOuterStroke();
 	left_title->setAnchorPoint(ccp(0.5f,0.5f));
-	left_title->setPosition(ccp(35,left_back->getContentSize().height-20));
+	left_title->setPosition(ccp(40,left_back->getContentSize().height-15));
 	left_back->addChild(left_title);
 	
 	loading_circle = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_circle->setPosition(ccp(left_back->getContentSize().width/2.f, left_back->getContentSize().height/2.f));
 	left_back->addChild(loading_circle);
 	
-	rest_back = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+	rest_back = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(8, 8, 18, 18));
 	left_back->addChild(rest_back);
 	
 	rest_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_restTime), mySGD->getFont().c_str(), 11);
@@ -200,89 +199,167 @@ void EndlessModeOpening::setMain()
 	rest_time_title->setAnchorPoint(ccp(0.5f,0.5f));
 	rest_back->addChild(rest_time_title);
 	
-	rest_time_value = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), mySGD->getFont().c_str(), 11);
+	rest_time_value = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), 0), mySGD->getFont().c_str(), 11);
 	rest_time_value->setVisible(false);
 	rest_time_value->disableOuterStroke();
 	rest_time_value->setAnchorPoint(ccp(0.5f,0.5f));
 	rest_back->addChild(rest_time_value);
 	
-	rest_back->setContentSize(CCSizeMake(rest_time_title->getContentSize().width + rest_time_value->getContentSize().width + 20, 34));
-	rest_back->setPosition(ccp(left_back->getContentSize().width-10-rest_back->getContentSize().width/2.f,left_back->getContentSize().height-20));
+	rest_back->setContentSize(CCSizeMake(rest_time_title->getContentSize().width + rest_time_value->getContentSize().width + 20, 20));
+	rest_back->setPosition(ccp(left_back->getContentSize().width-10-rest_back->getContentSize().width/2.f,left_back->getContentSize().height-15));
 	
-	rest_time_title->setPosition(ccp(10 + 4.5 + rest_time_title->getContentSize().width/2.f, rest_back->getContentSize().height/2.f));
+	rest_time_title->setPosition(ccp(10 + rest_time_title->getContentSize().width/2.f, rest_back->getContentSize().height/2.f));
 	rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10 - rest_time_value->getContentSize().width/2.f, rest_back->getContentSize().height/2.f));
 	
 	right_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	right_back->setContentSize(CCSizeMake(185, 160));
+	right_back->setContentSize(CCSizeMake(165, 160));
 	right_back->setPosition(ccp(main_case->getContentSize().width-25-right_back->getContentSize().width/2.f, 149));
 	main_case->addChild(right_back);
 	
-		
+	right_info_node = CCNode::create();
+	right_back->addChild(right_info_node);
+	
+	right_reward_node = CCNode::create();
+	right_back->addChild(right_reward_node);
+	right_reward_node->setVisible(false);
+	
+	right_top_menu = CCMenuLambda::create();
+	right_top_menu->setPosition(ccp(0,0));
+	right_back->addChild(right_top_menu);
+	right_top_menu->setTouchPriority(touch_priority);
+	
+	CCSprite* n_info = CCSprite::create("endless_bt_down.png");
+	KSLabelTTF* n_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
+	n_info_label->disableOuterStroke();
+	n_info_label->setPosition(ccpFromSize(n_info->getContentSize()/2.f));
+	n_info->addChild(n_info_label);
+	CCSprite* s_info = CCSprite::create("endless_bt_down.png");
+	s_info->setColor(ccGRAY);
+	KSLabelTTF* s_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
+	s_info_label->disableOuterStroke();
+	s_info_label->setPosition(ccpFromSize(s_info->getContentSize()/2.f));
+	s_info->addChild(s_info_label);
+	CCSprite* d_info = CCSprite::create("endless_bt_up.png");
+	KSLabelTTF* d_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
+	d_info_label->disableOuterStroke();
+	d_info_label->setPosition(ccpFromSize(d_info->getContentSize()/2.f));
+	d_info->addChild(d_info_label);
+	
+	info_item = CCMenuItemSpriteLambda::create(n_info, s_info, d_info, [=](CCObject* sender)
+											   {
+												   if(!is_menu_enable)
+													   return;
+												   
+												   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+												   
+												   right_info_node->setVisible(true);
+												   right_reward_node->setVisible(false);
+												   this->info_item->setEnabled(false);
+												   this->reward_item->setEnabled(true);
+											   });
+	info_item->setPosition(ccp(right_back->getContentSize().width/2.f - 39, 145));
+	right_top_menu->addChild(info_item);
+	
+	CCSprite* n_reward = CCSprite::create("endless_bt_down.png");
+	KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
+	n_reward_label->disableOuterStroke();
+	n_reward_label->setPosition(ccpFromSize(n_reward->getContentSize()/2.f));
+	n_reward->addChild(n_reward_label);
+	CCSprite* s_reward = CCSprite::create("endless_bt_down.png");
+	s_reward->setColor(ccGRAY);
+	KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
+	s_reward_label->disableOuterStroke();
+	s_reward_label->setPosition(ccpFromSize(s_reward->getContentSize()/2.f));
+	s_reward->addChild(s_reward_label);
+	CCSprite* d_reward = CCSprite::create("endless_bt_up.png");
+	KSLabelTTF* d_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
+	d_reward_label->disableOuterStroke();
+	d_reward_label->setPosition(ccpFromSize(d_reward->getContentSize()/2.f));
+	d_reward->addChild(d_reward_label);
+	
+	reward_item = CCMenuItemSpriteLambda::create(n_reward, s_reward, d_reward, [=](CCObject* sender)
+											   {
+												   if(!is_menu_enable)
+													   return;
+												   
+												   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+												   
+												   right_reward_node->setVisible(true);
+												   right_info_node->setVisible(false);
+												   this->reward_item->setEnabled(false);
+												   this->info_item->setEnabled(true);
+											   });
+	reward_item->setPosition(ccp(right_back->getContentSize().width/2.f + 39, 145));
+	right_top_menu->addChild(reward_item);
+	
+	info_item->setEnabled(false);
+	
 	CCSprite* graph_img = CCSprite::create("endless_graph.png");
-	graph_img->setPosition(ccp(right_back->getContentSize().width/2.f, 126));
-	right_back->addChild(graph_img);
+	graph_img->setPosition(ccp(right_back->getContentSize().width/2.f, 83));
+	right_info_node->addChild(graph_img);
 	
 	rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 	rank_percent_case->setAnchorPoint(ccp(0.5f,0.5f));
-	rank_percent_case->setPosition(ccp(177,15.5f)); // 177
-	right_back->addChild(rank_percent_case);
+	rank_percent_case->setPosition(ccp(graph_img->getContentSize().width,23));
+	graph_img->addChild(rank_percent_case);
 	
-	percent_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 13);
+	percent_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 12);
 	percent_label->disableOuterStroke();
 	percent_label->setOpacity(0);
 	percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1,
-																 rank_percent_case->getContentSize().height/2.f+2));
+																 rank_percent_case->getContentSize().height/2.f+3));
 	rank_percent_case->addChild(percent_label);
 	
 	
 	record_back = CCScale9Sprite::create("common_deepgray.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-	record_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 20));
-	record_back->setPosition(ccp(right_back->getContentSize().width/2.f, 85.5f - 7.5f));
-	right_back->addChild(record_back);
+	record_back->setContentSize(CCSizeMake(right_back->getContentSize().width-5, 20));
+	record_back->setPosition(ccp(right_back->getContentSize().width/2.f, 60.f));
+	right_info_node->addChild(record_back);
 	
 	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 11);
 	record_title->disableOuterStroke();
 	record_title->setAnchorPoint(ccp(0,0.5f));
-	record_title->setPosition(ccp(10, record_back->getContentSize().height/2.f));
+	record_title->setPosition(ccp(5, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_title);
 	
 	
 	CCScale9Sprite* highscore_back = CCScale9Sprite::create("common_deepgray.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-	highscore_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 20));
-	highscore_back->setPosition(ccp(right_back->getContentSize().width/2.f + 1.f - 1.f, 55 - 4.5f));
-	right_back->addChild(highscore_back);
+	highscore_back->setContentSize(CCSizeMake(right_back->getContentSize().width-5, 20));
+	highscore_back->setPosition(ccp(right_back->getContentSize().width/2.f, 37.f));
+	right_info_node->addChild(highscore_back);
+	
 	KSLabelTTF* highscore_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighScore), mySGD->getFont().c_str(), 11);
 	highscore_title->disableOuterStroke();
 	highscore_title->setAnchorPoint(ccp(0,0.5f));
-	highscore_title->setPosition(ccp(8, highscore_back->getContentSize().height/2.f + 2.f - 1.f));
+	highscore_title->setPosition(ccp(5, highscore_back->getContentSize().height/2.f));
 	highscore_back->addChild(highscore_title);
 	
 	highscore_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 11);
 	highscore_content->disableOuterStroke();
 	highscore_content->setAnchorPoint(ccp(1,0.5f));
-	highscore_content->setPosition(ccp(highscore_back->getContentSize().width-10 + 0.5f,
-																		 highscore_back->getContentSize().height/2.f + 1.5f - 0.5f));
+	highscore_content->setPosition(ccp(highscore_back->getContentSize().width-5,
+																		 highscore_back->getContentSize().height/2.f));
 	highscore_back->addChild(highscore_content);
 	
 	CCScale9Sprite* straight_back = CCScale9Sprite::create("common_deepgray.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-	straight_back->setContentSize(CCSizeMake(right_back->getContentSize().width-20 + 1.f, 20));
-	straight_back->setPosition(ccp(right_back->getContentSize().width/2.f, 24.5f - 1.f));
-	right_back->addChild(straight_back);
+	straight_back->setContentSize(CCSizeMake(right_back->getContentSize().width-5, 20));
+	straight_back->setPosition(ccp(right_back->getContentSize().width/2.f, 14.f));
+	right_info_node->addChild(straight_back);
 	
 	KSLabelTTF* straight_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraight), mySGD->getFont().c_str(), 11);
 	straight_title->disableOuterStroke();
 	straight_title->setAnchorPoint(ccp(0,0.5f));
-	straight_title->setPosition(ccp(10, straight_back->getContentSize().height/2.f + 1.5f - 0.5f));
+	straight_title->setPosition(ccp(5, straight_back->getContentSize().height/2.f));
 	straight_back->addChild(straight_title);
 	
 	straight_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 11);
 	straight_content->disableOuterStroke();
 	straight_content->setAnchorPoint(ccp(1,0.5f));
-	straight_content->setPosition(ccp(straight_back->getContentSize().width-10,
-																		straight_back->getContentSize().height/2.f + 2.f - 1.0f));
+	straight_content->setPosition(ccp(straight_back->getContentSize().width-5,
+																		straight_back->getContentSize().height/2.f));
 	straight_back->addChild(straight_content);
 	
-	ready_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), 18.5f, CCSizeMake(160, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
+	ready_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), 18.5f, CCSizeMake(170, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
 	ready_button->setPosition(ccp(right_back->getContentSize().width/2.f,-28));
 	right_back->addChild(ready_button);
 	ready_button->setFunction([=](CCObject* sender)
@@ -968,7 +1045,7 @@ public:
 //	}
 	virtual CCSize cellSizeForTable(CCTableView *table)
 	{
-		return CCSizeMake(171, 42);
+		return CCSizeMake(160, 42);
 	}
 	virtual unsigned int numberOfCellsInTableView(CCTableView *table)
 	{
@@ -999,7 +1076,7 @@ public:
 		CCScale9Sprite* rewardBack2 = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 		rewardBack2->setPosition(ccp(0.f, 0.f));
 		rewardBack2->setAnchorPoint(ccp(0.f, 0.0f));
-		rewardBack2->setContentSize(CCSizeMake(171, 42));
+		rewardBack2->setContentSize(CCSizeMake(163, 42));
 		//			rewardBack2->setPosition(105,175);
 		setFormSetter(rewardBack2);
 		cell->addChild(rewardBack2);
@@ -1105,21 +1182,23 @@ public:
 		
 		if(A)
 		{
-			A->setPosition(ccp(26.0,19.0 + 2)); 			// dt (26.0,19.0)
+			A->setPosition(ccp(20.f,19.0 + 2)); 			// dt (26.0,19.0)
 		}
 		if(B)
 		{
 			
-			B->setPosition(ccp(51.5,32.5)); 			// dt (9.5,-6.0)
+			B->setPosition(ccp(41.5,32.5)); 			// dt (9.5,-6.0)
 		}
 		if(C)
 		{
-			C->setPosition(ccp(148.0,27.5 - 10.5)); 			// dt (-0.5,0.5)
+			C->setPosition(ccp(131.0,27.5 - 10.5)); 			// dt (-0.5,0.5)
 		}
 		return cell;
 	}
 	
 };
+
+
 void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 {
 	loading_circle->removeFromParent();
@@ -1129,76 +1208,32 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CommonButton* rewardInfo = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessRewardInfo), 12.f, CCSizeMake(60, 35),
-																										CommonButtonYellow, touch_priority-1);
-		rewardInfo->setTitleColor(ccc3(37, 15, 0));
-		rewardInfo->setPosition(ccp(218.5, 211.5));
-		left_back->addChild(rewardInfo);
-		setFormSetter(rewardInfo);
-		rewardInfo->setFunction([=](CCObject*){
-			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-			ASPopupView* rewardInfoPopup = ASPopupView::createDimmed(touch_priority - 2);
-			CCNode* container = CCNode::create();
 			
-			rewardInfoPopup->setContainerNode(container);
-			
-			RewardTableDelegator* rtd = new RewardTableDelegator();
-			rtd->init();
-			rtd->autorelease();
-			container->addChild(rtd);
-			rtd->m_rewardData = result_data["rewardInfo"];
-			auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-			auto front = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-			
-			back->setContentSize(CCSizeMake(203, 242));
-			back->setPosition(ccp(0, 0));
-			
-			//		front->setContentSize(back->getContentSize() - CCSizeMake(20, 50));
-			front->setContentSize(CCSizeMake(187, 197));
-//			front->setPosition(ccpFromSize(back->getContentSize()) / 2.f - ccp(0, -15 - 29.5 - 59.0));
-			front->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -18.5));
-			//		front->setPosition(ccpFromSize(back->getContentSize()) / 2.f);
-			
-			rtd->addChild(back);
-			back->addChild(front);
-			
-			CommonButton* closeButton = CommonButton::createCloseButton(touch_priority - 2);
-			closeButton->setFunction([=](CCObject*){
-				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-				CommonAnimation::closePopup(this, container, rewardInfoPopup->getDimmedSprite(), [=](){
-					
-				}, [=](){
-					rewardInfoPopup->removeFromParent();
-				});
-			});
-			closeButton->setPosition(ccp(179.0, 218.0)); 			// dt (179.0, 218.0)
-			back->addChild(closeButton);
-			addChild(rewardInfoPopup);
-			
-			KSLabelTTF* rewardLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessRewardInfo), mySGD->getFont().c_str(), 15.f);
-			rewardLbl->setColor(ccc3(255, 170, 20));
-			rewardLbl->setPosition(ccp(46.5, 216.0)); 			// dt (46.5, 219.0)
-			back->addChild(rewardLbl);
-			setFormSetter(closeButton);
-			setFormSetter(rewardLbl);
-			setFormSetter(front);
-			setFormSetter(back);
-			
-			reward_table = CCTableView::create(rtd, CCSizeMake(187, 180));
-			reward_table->setPosition(ccp(7.5, 9.0)); 			// dt (7.5, 9.0)
-			
-			reward_table->setTouchPriority(touch_priority - 2);
-			front->addChild(reward_table);
-			reward_table->setDirection(kCCScrollViewDirectionVertical);
-			
-			//추가시 정렬 기준 설정 kCCTableViewFillTopDown : 아래부분으로 추가됨, kCCTableViewFillBottomUp : 위에서 부터 추가됨.
-			reward_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-			reward_table->setDelegate(rtd);
-			setFormSetter(reward_table);
+		RewardTableDelegator* rtd = new RewardTableDelegator();
+		rtd->init();
+		rtd->autorelease();
+		right_reward_node->addChild(rtd);
+		rtd->m_rewardData = result_data["rewardInfo"];
+		
+		CCRect t_table_rect = CCRectMake(1.f, 1.f, 165, 127);
+		
+//		CCSprite* t_table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_table_rect.size.width, t_table_rect.size.height));
+//		t_table_back->setOpacity(100);
+//		t_table_back->setAnchorPoint(ccp(0,0));
+//		t_table_back->setPosition(t_table_rect.origin);
+//		right_reward_node->addChild(t_table_back);
+		
+		reward_table = CCTableView::create(rtd, t_table_rect.size);
+		reward_table->setPosition(t_table_rect.origin); 			// dt (7.5, 9.0)
+		
+		reward_table->setTouchPriority(touch_priority - 2);
+		right_reward_node->addChild(reward_table);
+		reward_table->setDirection(kCCScrollViewDirectionVertical);
+		
+		reward_table->setVerticalFillOrder(kCCTableViewFillTopDown);
+		reward_table->setDelegate(rtd);
 
-			CommonAnimation::openPopup(this, container, rewardInfoPopup->getDimmedSprite());
-			//		setFormSetter(closeButton);
-		});
+
 		rank_list.clear();
 		
 		Json::Value t_list = result_data["list"];
@@ -1260,7 +1295,6 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		int remain_time = remainTime.getV();
 		if(remain_time < 60)
-//			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeSecond), remain_time)->getCString());
 			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), 0)->getCString());
 		else if(remain_time < 60*60)
 			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), remain_time/60)->getCString());
@@ -1271,12 +1305,15 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		rest_time_value->setVisible(true);
 		
-		rest_back->setContentSize(CCSizeMake(rest_time_title->getContentSize().width + rest_time_value->getContentSize().width + 20 + 5, 22));
-		rest_back->setPosition(ccp(left_back->getContentSize().width-60-rest_back->getContentSize().width/2.f - 17.5 + 13.5f,left_back->getContentSize().height-20));
+		rest_back->setContentSize(CCSizeMake(rest_time_title->getContentSize().width + rest_time_value->getContentSize().width + 20, 20));
+		rest_back->setPosition(ccp(left_back->getContentSize().width-10-rest_back->getContentSize().width/2.f,left_back->getContentSize().height-15));
 		
-		rest_time_title->setPosition(ccp(10, rest_back->getContentSize().height/2.f));
-		rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10, rest_back->getContentSize().height/2.f));
-		CCRect table_rect = CCRectMake(10, left_back->getContentSize().height/2.f - 150/2.f - 30, 255, 150);
+		rest_time_title->setPosition(ccp(10 + rest_time_title->getContentSize().width/2.f, rest_back->getContentSize().height/2.f));
+		rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10 - rest_time_value->getContentSize().width/2.f, rest_back->getContentSize().height/2.f));
+		
+		
+		
+		CCRect table_rect = CCRectMake(6, left_back->getContentSize().height/2.f - 150/2.f - 30, 255, 150);
 		
 //		CCSprite* table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_rect.size.width, table_rect.size.height));
 //		table_back->setOpacity(100);
@@ -1292,16 +1329,14 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		rank_table->setDelegate(this);
 		
 		
-		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_pupple1.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		list_cell_case->setContentSize(CCSizeMake(235, 37));
-		list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("rank_normal2.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+		list_cell_case->setContentSize(CCSizeMake(244, 31));
+		list_cell_case->setPosition(ccp(5+list_cell_case->getContentSize().width/2.f,167));//list_cell_case->getContentSize().height/2.f+5));
 		list_cell_case->setTag(kCellCase);
 		left_back->addChild(list_cell_case);
 		
-		mySelection = CommonButton::create(CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 225, 37)), touch_priority);
-//		mySelection->setOpacity(0);
-		mySelection->setPosition(ccp(15.5+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
-		setFormSetter(mySelection);
+		mySelection = CommonButton::create(CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 234, 31)), touch_priority);
+		mySelection->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,160));//list_cell_case->getContentSize().height/2.f+5));
 		mySelection->setFunction([=](CCObject* obj){
 			Json::Value param;
 			param["endlessData"] = Json::Value();
@@ -1321,16 +1356,18 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 				currentSelectedCell = nullptr;
 				currentSelectedIdx = -1;
 			}
-			currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			currentSelectedCell->setPosition(ccp(119.5,16.0));
-			//				currentSelectedCell->setPosition(ccp(114.0,15.5)); 			// dt (114.0,15.5)
-			currentSelectedCell->setContentSize(CCSizeMake(241.0,46.5)); 			// dt (6.0,9.5)
-			//	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+			currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+			currentSelectedCell->setPosition(ccpFromSize(list_cell_case->getContentSize()/2.f));
+			currentSelectedCell->setContentSize(list_cell_case->getContentSize() + CCSizeMake(7, 7));
 			list_cell_case->addChild(currentSelectedCell);
-			setFormSetter(currentSelectedCell);
+			
+			right_info_node->setVisible(true);
+			right_reward_node->setVisible(false);
+			this->info_item->setEnabled(false);
+			this->reward_item->setEnabled(true);
 		});
 		left_back->addChild(mySelection);
-		CCPoint rank_position = ccp(28 - 2.5,18);
+		CCPoint rank_position = ccp(20,list_cell_case->getContentSize().height/2.f);
 		int my_rank = myrank.getV();
 		if(my_rank == 1)
 		{
@@ -1357,7 +1394,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		else
 		{
 			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", my_rank)->getCString(), mySGD->getFont().c_str(), 12);
-			rank_label->enableOuterStroke(ccBLACK, 1);
+			rank_label->disableOuterStroke();
 			rank_label->setPosition(rank_position);
 			list_cell_case->addChild(rank_label);
 		}
@@ -1365,33 +1402,30 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		string flag = myDSH->getStringForKey(kDSH_Key_flag);
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(50 + 13.5 - 4.5, 18));
+		selectedFlagSpr->setPosition(ccp(50, list_cell_case->getContentSize().height/2.f));
 		selectedFlagSpr->setScale(0.8f);
 		list_cell_case->addChild(selectedFlagSpr);
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(62, 15), CCTextAlignment::kCCTextAlignmentLeft);
+		nick_label->setColor(ccc3(53, 41, 144));
 		nick_label->setAnchorPoint(ccp(0,0.5f));
-		nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		nick_label->setPosition(ccp(79 - 3.5,19));
+		nick_label->disableOuterStroke();
+		nick_label->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
 		list_cell_case->addChild(nick_label);
 		
 		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-		score_label->setColor(ccc3(255, 255, 255));
+		score_label->setColor(ccc3(53, 41, 144));
 		score_label->setAnchorPoint(ccp(1,0.5f));
-		score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		score_label->setPosition(ccp(215 + 9.5,18));
-		setFormSetter(score_label);
+		score_label->disableOuterStroke();
+		score_label->setPosition(ccp(list_cell_case->getContentSize().width-10,list_cell_case->getContentSize().height/2.f));
 		list_cell_case->addChild(score_label);
 		
-//		KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 		StyledLabelTTF* victory_label =
 				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), mySGD->endless_my_high_victory.getV()),
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
-//		victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-		victory_label->setPosition(ccp(152 + 12 + 3.0, 18));
+		victory_label->setPosition(ccp(175, list_cell_case->getContentSize().height/2.f));
 		list_cell_case->addChild(victory_label);
-		setFormSetter(victory_label);
 		///////////////////////////////////
 		
 		Json::Value param;
@@ -1406,45 +1440,18 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		param["level"] = result_data["level"].asInt();
 		param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-//		param["score"] = result_data["myInfo"]["score"].asInt();
-//		param["victory"] = result_data["myInfo"]["score"].asInt();
-//		param["level"] = result_data["level"].asInt();
-//		param["alluser"] = result_data["alluser"].asInt();
-//		param["rank"] = result_data["rank"].asInt();
+
 		putInformation(param);
-		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		currentSelectedCell->setPosition(ccp(119.5,16.0));
-		//				currentSelectedCell->setPosition(ccp(114.0,15.5)); 			// dt (114.0,15.5)
-		currentSelectedCell->setContentSize(CCSizeMake(241.0,46.5)); 			// dt (6.0,9.5)
-		//	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+		currentSelectedCell->setPosition(ccpFromSize(list_cell_case->getContentSize()/2.f));
+		currentSelectedCell->setContentSize(list_cell_case->getContentSize() + CCSizeMake(7, 7));
 		list_cell_case->addChild(currentSelectedCell);
-//		int win_count = mySGD->endless_my_win.getV();
-//		int lose_count = mySGD->endless_my_lose.getV();
-//		int win_rate = 100.f*win_count/(win_count + lose_count);
-//		
-//		record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());
-//		highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str());
-//		straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), mySGD->endless_my_high_victory.getV())->getCString());
-//		
-//		float rank_percent = 1.f*myrank.getV()/alluser.getV();
-//		
-//		percent_label->setString(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString());
-//		
-//		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(17 + 160.f*rank_percent,15.5f));
-//		rank_percent_case->runAction(t_move);
-//		
-//		CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
-//		CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
-//		CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, NULL);
-//		percent_label->runAction(t_seq2);
 	}
 	else
 	{
 		
 	}
 	
-	
-
 	
 }
 
@@ -1471,11 +1478,11 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 //	}
 	
 	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-	list_cell_case->setContentSize(CCSizeMake(220, 34));
-	list_cell_case->setPosition(ccp(list_cell_case->getContentSize().width/2.f,list_cell_case->getContentSize().height/2.f-5));
+	list_cell_case->setContentSize(CCSizeMake(244, 31));
+	list_cell_case->setPosition(ccp(list_cell_case->getContentSize().width/2.f,list_cell_case->getContentSize().height/2.f));
 	cell->addChild(list_cell_case);
 	
-	CCPoint rank_position = ccp(28 - 2.5,18);
+	CCPoint rank_position = ccp(20,list_cell_case->getContentSize().height/2.f);
 	if(idx == 0)
 	{
 		CCSprite* gold_medal = CCSprite::create("rank_gold.png");
@@ -1501,7 +1508,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	else
 	{
 		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 12);
-		rank_label->enableOuterStroke(ccBLACK, 1);
+		rank_label->disableOuterStroke();
 		rank_label->setPosition(rank_position);
 		list_cell_case->addChild(rank_label);
 	}
@@ -1509,56 +1516,40 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-	selectedFlagSpr->setPosition(ccp(50 + 13.5 - 4.5,18));
+	selectedFlagSpr->setPosition(ccp(50,list_cell_case->getContentSize().height/2.f));
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);
-	setFormSetter(selectedFlagSpr);
-	
-//	CCSprite* nick_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 62, 15));
-//	nick_back->setAnchorPoint(ccp(0,0.5f));
-//	nick_back->setPosition(ccp(79 - 3.5,19));
-//	list_cell_case->addChild(nick_back);
 	
 	KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(62, 15), CCTextAlignment::kCCTextAlignmentLeft);
+	nick_label->setColor(ccc3(53, 41, 144));
 	nick_label->setAnchorPoint(ccp(0,0.5f));
-	nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-	nick_label->setPosition(ccp(79 - 3.5,19));
+	nick_label->disableOuterStroke();
+	nick_label->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
 	list_cell_case->addChild(nick_label);
 	
-	setFormSetter(nick_label);
 	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_list[idx].score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
-	score_label->setColor(ccc3(255, 255, 255));
+	score_label->setColor(ccc3(53, 41, 144));
+	score_label->disableOuterStroke();
 	score_label->setAnchorPoint(ccp(1,0.5f));
-	score_label->setPosition(ccp(215 + 9.5,18));
-	//score_label->setHorizontalAlignment(kCCTextAlignmentRight);
-	//score_label->setPosition(ccp(160,18));
-	//score_label->setPosition(ccp(223.5, 18.0));
+	score_label->setPosition(ccp(list_cell_case->getContentSize().width-10,list_cell_case->getContentSize().height/2.f));
 	list_cell_case->addChild(score_label);
-	
-	setFormSetter(score_label);
 	
 	StyledLabelTTF* victory_label =
 	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), rank_list[idx].victory.getV()),
 												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
-//	KSLabelTTF* victory_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue),rank_list[idx].victory.getV())->getCString(), mySGD->getFont().c_str(), 12);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
-//	victory_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
-//	victory_label->setPosition(ccp(190,18));
-	victory_label->setPosition(ccp(152 + 12 + 3.0,18));
-
+	victory_label->setPosition(ccp(175,list_cell_case->getContentSize().height/2.f));
 	list_cell_case->addChild(victory_label);
 	
-	setFormSetter(victory_label);
 	if(idx == currentSelectedIdx)
 	{
 		if(currentSelectedCell)
 		{
 			currentSelectedCell->removeFromParent();
 		}
-		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		currentSelectedCell->setPosition(ccp(114.0,11.5)); 			// dt (114.0,15.5)
-		currentSelectedCell->setContentSize(CCSizeMake(241.0,46.5)); 			// dt (6.0,9.5)
-		//	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
+		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+		currentSelectedCell->setPosition(ccpFromSize(list_cell_case->getContentSize()/2.f));
+		currentSelectedCell->setContentSize(list_cell_case->getContentSize() + CCSizeMake(7,7));
 		cell->addChild(currentSelectedCell);
 	}
 	return cell;
@@ -1571,7 +1562,7 @@ void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* c
 	param["memberID"] = rank_list[tempIndex].memberID.getV();
 	loading_right_circle = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_right_circle->setPosition(ccp(right_back->getContentSize().width/2.f, right_back->getContentSize().height/2.f));
-	right_back->addChild(loading_right_circle);
+	right_info_node->addChild(loading_right_circle);
 	myHSP->command("getendlessrankinfo", param, this, [=](Json::Value obj){
 		if(obj["result"]["code"].asInt() == GDSUCCESS)
 		{
@@ -1591,12 +1582,16 @@ void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* c
 	{
 		currentSelectedCell->removeFromParent();
 	}
-	currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-	currentSelectedCell->setPosition(ccp(114.0 + 5.5,10.5)); 			// dt (114.0,15.5)
-	currentSelectedCell->setContentSize(CCSizeMake(241.0,46.5)); 			// dt (6.0,9.5)
+	currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+	currentSelectedCell->setPosition(ccpFromSize(CCSizeMake(244, 31)/2.f));
+	currentSelectedCell->setContentSize(CCSizeMake(244, 31) + CCSizeMake(7,7)); 			// dt (6.0,9.5)
 //	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
 	cell->addChild(currentSelectedCell);
-	setFormSetter(currentSelectedCell);
+	
+	right_info_node->setVisible(true);
+	right_reward_node->setVisible(false);
+	this->info_item->setEnabled(false);
+	this->reward_item->setEnabled(true);
 }
 void EndlessModeOpening::putInformation(Json::Value info)
 {
@@ -1610,37 +1605,24 @@ void EndlessModeOpening::putInformation(Json::Value info)
 		win_rate = 100.f*win_count/(win_count + lose_count);
 	}
 	
-//	record_content->setAnchorPoint(ccp(1,0.5f));
-	
-	//////////////////////////////////////////
 	if(record_content)
 	{
 		record_content->removeFromParent();
+		record_content = NULL;
 	}
 	record_content = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue2), win_count, lose_count, win_rate)->getCString(),
 																					mySGD->getFont().c_str(),
-																					13.f, 0, StyledAlignment::kRightAlignment);
-	
-	
-	setFormSetter(record_content);
-	record_content->setOldAnchorPoint();
+																					11.f, 0, StyledAlignment::kRightAlignment);
+	record_content->setAnchorPoint(ccp(1,0.5f));
 	record_content->setPosition(ccp(record_back->getContentSize().width-10, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_content);
-	setFormSetter(record_back);
-//	record_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue), win_count, lose_count, win_rate)->getCString());
-//	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str());
-	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", info["endlessData"]["score"].asInt())->getCString()).c_str());
-//	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue), mySGD->endless_my_high_victory.getV())->getCString());
-	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue2),
-																												 info["endlessData"]["victory"].asInt())->getCString());
 	
-	setFormSetter(highscore_content);
-	setFormSetter(straight_content);
+	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", info["endlessData"]["score"].asInt())->getCString()).c_str());
+	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue2), info["endlessData"]["victory"].asInt())->getCString());
+	
 	int	alluser = info["alluser"].asInt();
 	int	myrank = info["rank"].asInt();
 	float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
-	
-//	percent_label->setString(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString());
 	
 	if(animation_node1)
 	{
@@ -1657,19 +1639,16 @@ void EndlessModeOpening::putInformation(Json::Value info)
 																					 percent_label->setString(ccsf("%.0f%%", t));
 																					 animation_node1 = nullptr;
 																				 }));
-	setFormSetter(percent_label);
 	
-	addChild(animation_node2 = KSGradualValue<CCPoint>::create(rank_percent_case->getPosition(),
-																														 ccp(17 + 160.f*rank_percent, 15.5f),
+	addChild(animation_node2 = KSGradualValue<float>::create(rank_percent_case->getPositionX(),
+																														 rank_percent_case->getParent()->getContentSize().width*rank_percent,
 																														 1.f,
-																														 [=](CCPoint t){
-																															 rank_percent_case->setPosition(t);
-																														 }, [=](CCPoint t){
-																															 rank_percent_case->setPosition(t);
+																														 [=](float t){
+																															 rank_percent_case->setPositionX(t);
+																														 }, [=](float t){
+																															 rank_percent_case->setPositionX(t);
 																															 animation_node2 = nullptr;
 																														 }));
-//	CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(17 + 160.f*rank_percent,15.5f));
-//	rank_percent_case->runAction(t_move);
 	
 	CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
 	CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 255);
@@ -1680,32 +1659,32 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	if(right_flag)
 	{
 		right_flag->removeFromParent();
+		right_flag = NULL;
 	}
 	
 	right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(info.get("flag", "kr").asString()).c_str());
-	right_flag->setScaleX(0.9); 			// dt -0.1
-	right_flag->setScaleY(0.9); 			// dt -0.1
-	right_flag->setAnchorPoint(ccp(0, 0.5f));
+	right_flag->setScale(0.75f);
+	right_flag->setAnchorPoint(ccp(0.5f, 0.5f));
 	flagnick->addChild(right_flag);
-	
-	setFormSetter(right_flag);
 	
 	if(right_nick)
 	{
 		right_nick->removeFromParent();
+		right_nick = NULL;
 	}
 	right_nick = KSLabelTTF::create(info.get("nick", "").asString().c_str(),
-																	mySGD->getFont().c_str(), 15.f);
-	right_nick->setAnchorPoint(ccp(0.f, 0.5f));
-	
-	right_nick->setPosition(ccp(right_flag->getContentSize().width + 10.f, 0 - 1.f));
-	float flagNickWidth = right_flag->getContentSize().width + 15.f + right_nick->getContentSize().width;
-	
+																	mySGD->getFont().c_str(), 12.f);
+	right_nick->disableOuterStroke();
+	right_nick->setAnchorPoint(ccp(0.5f, 0.5f));
+	right_nick->setPosition(ccp(right_flag->getContentSize().width/2.f+2, 0));
 	flagnick->addChild(right_nick);
-	flagnick->setPosition(ccpFromSize(right_back->getContentSize()) / 2.f - ccp(flagNickWidth, 0) / 2.f);
-	flagnick->setPositionY(73 - 45 + 134);
-	right_back->addChild(flagnick);
-	setFormSetter(right_nick);
-	right_nick->setColor(ccc3(255, 155, 0));
-	right_nick->enableOuterStroke(ccc3(0, 0, 0), 1);
+	
+	right_flag->setPosition(ccp(-right_nick->getContentSize().width/2.f-2, 0));
+	
+	float flagNickWidth = right_flag->getContentSize().width + 4.f + right_nick->getContentSize().width;
+	
+	
+	flagnick->setPosition(ccpFromSize(right_back->getContentSize() / 2.f) + ccp(0,40));
+	right_info_node->addChild(flagnick);
 }
+

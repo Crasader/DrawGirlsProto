@@ -58,30 +58,19 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 	m_container->setPosition(ccp(240,160));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_case->setContentSize(CCSizeMake(350,180));
+	back_case = CCSprite::create("popup_small_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	setFormSetter(back_case);
-	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
-	back_case->addChild(back_in);
-	
-	setFormSetter(back_in);
-	
-	
-	title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rivalSearch), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rivalSearch), mySGD->getFont().c_str(), 11);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	select_menu = CCMenuLambda::create();
-	select_menu->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height/2.f));
-	back_in->addChild(select_menu);
+	select_menu->setPosition(ccpFromSize(back_case->getContentSize()/2.f));
+	back_case->addChild(select_menu);
 	select_menu->setTouchPriority(touch_priority);
 	select_menu->setEnabled(false);
 	
@@ -109,12 +98,10 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 							  });
 	back_case->addChild(close_button);
 	
-	left_case = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	left_case->setContentSize(CCSizeMake(100, back_in->getContentSize().height-20));
-	left_case->setPosition(ccp(back_in->getContentSize().width/2.f-110, back_in->getContentSize().height/2.f));
-	back_in->addChild(left_case);
-	
-	setFormSetter(left_case);
+	left_case = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	left_case->setContentSize(CCSizeMake(80, 70));
+	left_case->setPosition(ccp(back_case->getContentSize().width/2.f-90, back_case->getContentSize().height/2.f+5));
+	back_case->addChild(left_case);
 	
 	left_node = CCNode::create();
 	left_node->setPosition(ccp(left_case->getContentSize().width/2.f, left_case->getContentSize().height/2.f));
@@ -127,12 +114,10 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 	}
 	
 	
-	center_case = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	center_case->setContentSize(CCSizeMake(100, back_in->getContentSize().height-20));
-	center_case->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height/2.f));
-	back_in->addChild(center_case);
-	
-	setFormSetter(center_case);
+	center_case = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	center_case->setContentSize(CCSizeMake(80, 70));
+	center_case->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f+5));
+	back_case->addChild(center_case);
 	
 	center_node = CCNode::create();
 	center_node->setPosition(ccp(center_case->getContentSize().width/2.f, center_case->getContentSize().height/2.f));
@@ -144,12 +129,10 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 		center_node->addChild(t_question);
 	}
 	
-	right_case = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	right_case->setContentSize(CCSizeMake(100, back_in->getContentSize().height-20));
-	right_case->setPosition(ccp(back_in->getContentSize().width/2.f+110, back_in->getContentSize().height/2.f));
-	back_in->addChild(right_case);
-	
-	setFormSetter(right_case);
+	right_case = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	right_case->setContentSize(CCSizeMake(80, 70));
+	right_case->setPosition(ccp(back_case->getContentSize().width/2.f+90, back_case->getContentSize().height/2.f+5));
+	back_case->addChild(right_case);
 	
 	right_node = CCNode::create();
 	right_node->setPosition(ccp(right_case->getContentSize().width/2.f, right_case->getContentSize().height/2.f));
@@ -212,11 +195,11 @@ void RivalSelectPopup::startRivalAnimation()
 								left_node->removeAllChildren();
 								
 								CCSprite* left_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->dummy_list[0]["flag"].asString()).c_str());
-								left_flag->setScale(1.2f);
-								left_flag->setPosition(ccp(0, 22));
+								left_flag->setScale(1.f);
+								left_flag->setPosition(ccp(0, 18));
 								left_node->addChild(left_flag);
 								
-								KSLabelTTF* left_nick = KSLabelTTF::create(mySGD->dummy_list[0]["nick"].asString().c_str(), mySGD->getFont().c_str(), 14);
+								KSLabelTTF* left_nick = KSLabelTTF::create(mySGD->dummy_list[0]["nick"].asString().c_str(), mySGD->getFont().c_str(), 10);
 								left_nick->setPosition(ccp(0, -3));
 								left_node->addChild(left_nick);
 								
@@ -226,7 +209,7 @@ void RivalSelectPopup::startRivalAnimation()
 								
 								KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[0]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 								left_ing_win->setColor(ccc3(255,170,20));
-								left_ing_win->setPosition(ccp(0, -30));
+								left_ing_win->setPosition(ccp(0, -19));
 								left_node->addChild(left_ing_win);
 								
 								wide_animation(left_case, [=]()
@@ -261,11 +244,11 @@ void RivalSelectPopup::startRivalAnimation()
 													center_node->removeAllChildren();
 													
 													CCSprite* center_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->dummy_list[1]["flag"].asString()).c_str());
-													center_flag->setScale(1.2f);
-													center_flag->setPosition(ccp(0, 22));
+													center_flag->setScale(1.f);
+													center_flag->setPosition(ccp(0, 18));
 													center_node->addChild(center_flag);
 													
-													KSLabelTTF* center_nick = KSLabelTTF::create(mySGD->dummy_list[1]["nick"].asString().c_str(), mySGD->getFont().c_str(), 14);
+													KSLabelTTF* center_nick = KSLabelTTF::create(mySGD->dummy_list[1]["nick"].asString().c_str(), mySGD->getFont().c_str(), 10);
 													center_nick->setPosition(ccp(0, -3));
 													center_node->addChild(center_nick);
 													
@@ -275,7 +258,7 @@ void RivalSelectPopup::startRivalAnimation()
 													
 													KSLabelTTF* center_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[1]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 													center_ing_win->setColor(ccc3(255,170,20));
-													center_ing_win->setPosition(ccp(0, -30));
+													center_ing_win->setPosition(ccp(0, -19));
 													center_node->addChild(center_ing_win);
 													
 													wide_animation(center_case, [=]()
@@ -309,11 +292,11 @@ void RivalSelectPopup::startRivalAnimation()
 																		right_node->removeAllChildren();
 																		
 																		CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->dummy_list[2]["flag"].asString()).c_str());
-																		right_flag->setScale(1.2f);
-																		right_flag->setPosition(ccp(0, 22));
+																		right_flag->setScale(1.f);
+																		right_flag->setPosition(ccp(0, 18));
 																		right_node->addChild(right_flag);
 																		
-																		KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->dummy_list[2]["nick"].asString().c_str(), mySGD->getFont().c_str(), 14);
+																		KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->dummy_list[2]["nick"].asString().c_str(), mySGD->getFont().c_str(), 10);
 																		right_nick->setPosition(ccp(0, -3));
 																		right_node->addChild(right_nick);
 																		
@@ -323,7 +306,7 @@ void RivalSelectPopup::startRivalAnimation()
 																		
 																		KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[2]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 																		right_ing_win->setColor(ccc3(255,170,20));
-																		right_ing_win->setPosition(ccp(0, -30));
+																		right_ing_win->setPosition(ccp(0, -19));
 																		right_node->addChild(right_ing_win);
 																		
 																		wide_animation(right_case, [=]()
@@ -345,33 +328,50 @@ void RivalSelectPopup::startRivalAnimation()
 																																									  }, [=](float t)
 																																									  {
 																																										  title_label->setOpacity(255);
-																																										  CCSprite* n_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, left_case->getContentSize().width-10, left_case->getContentSize().height-10));
-																																										  n_left->setOpacity(0);
-																																										  CCSprite* s_left = CCSprite::create("whitePaper.png", CCRectMake(0, 0, left_case->getContentSize().width-10, left_case->getContentSize().height-10));
-																																										  s_left->setOpacity(0);
+																																										  
+																																										  CCSprite* n_left = CCSprite::create("subbutton_purple2.png");
+																																										  KSLabelTTF* n_left_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  n_left_label->setPosition(ccpFromSize(n_left->getContentSize()/2.f));
+																																										  n_left->addChild(n_left_label);
+																																										  CCSprite* s_left = CCSprite::create("subbutton_purple2.png");
+																																										  s_left->setColor(ccGRAY);
+																																										  KSLabelTTF* s_left_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  s_left_label->setPosition(ccpFromSize(s_left->getContentSize()/2.f));
+																																										  s_left->addChild(s_left_label);
+																																										  
 																																										  
 																																										  CCMenuItemLambda* left_item = CCMenuItemSpriteLambda::create(n_left, s_left, [=](CCObject* sender){selectRival(0);});
-																																										  left_item->setPosition(ccp(-110,0));
+																																										  left_item->setPosition(ccp(-90,-52));
 																																										  select_menu->addChild(left_item);
 																																										  
 																																										  
-																																										  CCSprite* n_center = CCSprite::create("whitePaper.png", CCRectMake(0, 0, center_case->getContentSize().width-10, center_case->getContentSize().height-10));
-																																										  n_center->setOpacity(0);
-																																										  CCSprite* s_center = CCSprite::create("whitePaper.png", CCRectMake(0, 0, center_case->getContentSize().width-10, center_case->getContentSize().height-10));
-																																										  s_center->setOpacity(0);
+																																										  CCSprite* n_center = CCSprite::create("subbutton_purple2.png");
+																																										  KSLabelTTF* n_center_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  n_center_label->setPosition(ccpFromSize(n_center->getContentSize()/2.f));
+																																										  n_center->addChild(n_center_label);
+																																										  CCSprite* s_center = CCSprite::create("subbutton_purple2.png");
+																																										  s_center->setColor(ccGRAY);
+																																										  KSLabelTTF* s_center_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  s_center_label->setPosition(ccpFromSize(s_center->getContentSize()/2.f));
+																																										  s_center->addChild(s_center_label);
 																																										  
 																																										  CCMenuItemLambda* center_item = CCMenuItemSpriteLambda::create(n_center, s_center, [=](CCObject* sender){selectRival(1);});
-																																										  center_item->setPosition(ccp(0,0));
+																																										  center_item->setPosition(ccp(0,-52));
 																																										  select_menu->addChild(center_item);
 																																										  
 																																										  
-																																										  CCSprite* n_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, right_case->getContentSize().width-10, right_case->getContentSize().height-10));
-																																										  n_right->setOpacity(0);
-																																										  CCSprite* s_right = CCSprite::create("whitePaper.png", CCRectMake(0, 0, right_case->getContentSize().width-10, right_case->getContentSize().height-10));
-																																										  s_right->setOpacity(0);
+																																										  CCSprite* n_right = CCSprite::create("subbutton_purple2.png");
+																																										  KSLabelTTF* n_right_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  n_right_label->setPosition(ccpFromSize(n_right->getContentSize()/2.f));
+																																										  n_right->addChild(n_right_label);
+																																										  CCSprite* s_right = CCSprite::create("subbutton_purple2.png");
+																																										  s_right->setColor(ccGRAY);
+																																										  KSLabelTTF* s_right_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  s_right_label->setPosition(ccpFromSize(s_right->getContentSize()/2.f));
+																																										  s_right->addChild(s_right_label);
 																																										  
 																																										  CCMenuItemLambda* right_item = CCMenuItemSpriteLambda::create(n_right, s_right, [=](CCObject* sender){selectRival(2);});
-																																										  right_item->setPosition(ccp(110,0));
+																																										  right_item->setPosition(ccp(90,-52));
 																																										  select_menu->addChild(right_item);
 																																										  
 																																										  select_menu->setEnabled(true);
