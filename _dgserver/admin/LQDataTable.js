@@ -2051,11 +2051,14 @@ var propChange = function(value){
 		case "p4":return "아이템뽑기권";
 		case "p5":return "99프로뽑기권";
 		case "p6":return "생명의 돌";
+		case "cd":return "카드";
+		case "pc":return "피스";
+		case "pz":return "퍼즐";
 	}
 }
 
 var propSelect = function(value,option){
- return editorFunc_select(value,{"type":"select","element":["골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지"],"value":["g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg"]});
+ return editorFunc_select(value,{"type":"select","element":["골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐"],"value":["g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz"]});
 }
 
 var rewardViewer = function(value,option){
