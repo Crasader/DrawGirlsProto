@@ -83,7 +83,7 @@ private:
 	CCSprite* gray;
 	CCSprite* loading_circle;
 	CCSprite* loading_right_circle;
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	
 	KSProtectVar<int> myscore;
 	KSProtectVar<int> victory;
@@ -94,10 +94,7 @@ private:
 	KSLabelTTF* straight_content;
 	StyledLabelTTF* record_content;
 	
-	KSLabelTTF* n_ready_label;
-	KSLabelTTF* n_ready_label2;
-	KSLabelTTF* s_ready_label;
-	KSLabelTTF* s_ready_label2;
+	CommonButton* ready_button;
 	
 	CCSprite* rank_percent_case;
 	KSLabelTTF* percent_label;
