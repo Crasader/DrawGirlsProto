@@ -690,7 +690,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("왼쪽"), kMyLocalKey_left);
 	ko->setObject(CCString::create("고정"), kMyLocalKey_fix);
 	ko->setObject(CCString::create("이동"), kMyLocalKey_move);
-	ko->setObject(CCString::create("주간누적랭킹"), kMyLocalKey_weeklyranking);
+	ko->setObject(CCString::create("주간랭킹"), kMyLocalKey_weeklyranking);
 	ko->setObject(CCString::create("%d일후 리셋"), kMyLocalKey_dayAfterReset);
 	ko->setObject(CCString::create("%d시간후 리셋"), kMyLocalKey_hourAfterReset);
 	ko->setObject(CCString::create("%d분후 리셋"), kMyLocalKey_secondAfterReset);

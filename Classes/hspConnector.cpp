@@ -772,7 +772,7 @@ int hspConnector::getLoginType()
 	}
 	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return -1;
+	return 1;
 	// not implementation
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
