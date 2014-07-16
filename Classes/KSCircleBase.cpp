@@ -50,9 +50,9 @@ bool KSCircleBase::init(const string& ccbiName)
 	mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstart", lastCastNum)->getCString());
 	
 	
-	schedule(schedule_selector(KSCircleBase::scaleAdjustment), 1/60.f);
+	schedule(schedule_selector(KSCircleBase::scaleAdjustment), 1/10.f);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
-	schedule(schedule_selector(KSCumberBase::followProcess), 1/5.f);	
+	schedule(schedule_selector(KSCumberBase::followProcess), 1/3.f);
 	schedule(schedule_selector(ThisClassType::update), 1/20.f);
 	//	m_headImg->m_7->setColor(ccc3(255, 0, 0));
 	return true;
