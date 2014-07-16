@@ -47,7 +47,7 @@ bool AccountManagerPopup::init(int touchP)
 
 	auto front = CCScale9Sprite::create("common_grayblue.png",
 																			CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-
+	CommonAnimation::openPopup(managerPopup, back, managerPopup->getDimmedSprite(), nullptr, nullptr);
 //	front->setVisible(false);
 	managerPopup->setContainerNode(back);
 //	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
@@ -187,6 +187,7 @@ bool AccountManagerPopup::init(int touchP)
 				auto back = CCSprite::create("popup_large_back.png");
 				auto front = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 
+				CommonAnimation::openPopup(toAnotherAccount, back, toAnotherAccount->getDimmedSprite(), nullptr, nullptr);
 				
 				toAnotherAccount->setContainerNode(back);
 //				back->setContentSize(CCSizeMake(550 / 2.f, 432 / 2.f));
@@ -284,13 +285,6 @@ bool AccountManagerPopup::init(int touchP)
 						}
 					});
 				});
-				setFormSetter(front);
-				setFormSetter(back);
-				setFormSetter(closeButton);
-				setFormSetter(content);
-				setFormSetter(titleLbl);
-				setFormSetter(previousLoad);
-				setFormSetter(keepLoad);
 			}
 			else
 			{
@@ -302,66 +296,148 @@ bool AccountManagerPopup::init(int touchP)
 			}
 		});
 	};
-	
+	auto showWarning = [=](HSPLoginTypeX lt, const std::string& desc){
+		ASPopupView* warningPopup = ASPopupView::createDimmed(touchP - 2);
+		addChild(warningPopup);
+
+		auto back = CCSprite::create("popup_large_back.png");
+
+		CommonAnimation::openPopup(warningPopup, back, warningPopup->getDimmedSprite(), nullptr, nullptr);
+		auto front = CCScale9Sprite::create("common_grayblue.png",
+																				CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+
+		//	front->setVisible(false);
+		warningPopup->setContainerNode(back);
+		//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
+		//	back->setContentSize(CCSizeMake(200, 200));
+		front->setContentSize(CCSizeMake(251, 282 / 2.f));
+
+
+		back->addChild(front);
+
+		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,15));
+
+		KSLabelTTF* titleLbl = KSLabelTTF::create("유의 사항", mySGD->getFont().c_str(), 12.f);
+		//	titleLbl->setColor(ccc3(255, 170, 20));
+		titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
+		titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
+		back->addChild(titleLbl);
+
+
+		CommonButton* closeButton = CommonButton::createCloseButton(touchP - 2);
+		closeButton->setFunction([=](CCObject*)
+														 {
+															 CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
+																													 [=]()
+																													 {
+																														 warningPopup->removeFromParent();
+																													 });
+														 });
+		back->addChild(closeButton);
+		closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
+		
+		std::map<HSPLoginTypeX, std::string> descMapper = {
+			{HSPLoginTypeGOOGLE, "Google ID"},
+			{HSPLoginTypeGUEST, "Guest ID"},
+			{HSPLoginTypeFACEBOOK, "Facebook ID"},
+		};
+		std::string guidanceMsg = ccsf( "<font color=#FFAA14 newline=12>%s 와 연결되어 있습니다.</font>"
+																		"<font color=#FFFFFF newline=12>%s 로 연결하시면</font>"
+																		"<font color=#FFAA14 newline=24>이어서 게임을 하실 수 있으나</font>"
+																		"<font color=#FFFFFF newline=12>%s 로는 이어서 게임을</font>"
+																		"<font color=#FFFFFF newline=24>하실 수 없습니다.</font>"
+																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>",
+																		descMapper[lt].c_str(), desc.c_str(),descMapper[lt].c_str() 
+																	);
+		StyledLabelTTF* content = StyledLabelTTF::create(
+				guidanceMsg.c_str() ,
+				mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);
+		front->addChild(content);
+		content->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f - 20.f));
+
+
+		CommonButton* connect = CommonButton::create("연결하기", 13.f, CCSizeMake(110, 50),
+																								 CommonButtonAchievement, touchP - 2);
+		connect->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -99.5f));
+		front->addChild(connect);
+
+		startFormSetter(this);
+		auto front2 = front;
+		auto content2 = content;
+		setFormSetter(front2);
+		setFormSetter(back);
+		setFormSetter(closeButton);
+		setFormSetter(content2);
+		setFormSetter(titleLbl);
+		setFormSetter(connect);
+
+	};
 	facebookLogin->setFunction([=](CCObject*){
-		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
-		addChild(ll, INT_MAX);
-		hspConnector::get()->mappingToAccount(HSPMapping::kFACEBOOK, false, [=](Json::Value t){
-			KS::KSLog("hhh %", t);
-			KS::KSLog("%", t);
-			ll->removeFromParent();
-			if(t["error"]["isSuccess"].asBool())
+		HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
+		if(loginType != HSPLoginTypeGUEST || false) { // 뭔가에 연결 되어 있다면...
+			showWarning(loginType, "Facebook ID");
+		}
+		else {
+
+			LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+			addChild(ll, INT_MAX);
+			hspConnector::get()->mappingToAccount(HSPMapping::kFACEBOOK, false, [=](Json::Value t){
+				KS::KSLog("hhh %", t);
+				KS::KSLog("%", t);
+				ll->removeFromParent();
+				if(t["error"]["isSuccess"].asBool())
 			{
-					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-					mySGD->resetLabels();
-					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-					myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::FACEBOOK);
+				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+				mySGD->resetLabels();
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::FACEBOOK);
 			}
-			else
+				else
 			{
 				if(t["error"]["code"].asInt() == 0x0014006D)
-				{
-					anotherAccountFunctor(HSPMapping::kFACEBOOK, HSPLogin::FACEBOOK, t["prevMemberNo"].asUInt64());
-					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-				}
-				else
-				{
-					ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "유의사항",
-													StyledLabelTTF::create("<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
-																								 "<font color=#FFAA14>다시 시도해 주세요.</font>",
-																								 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
-					addChild(alert);
-				}
+			{
+				anotherAccountFunctor(HSPMapping::kFACEBOOK, HSPLogin::FACEBOOK, t["prevMemberNo"].asUInt64());
+				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 			}
-		});
-		
+				else
+			{
+				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "유의사항",
+																												 StyledLabelTTF::create("<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
+																																								"<font color=#FFAA14>다시 시도해 주세요.</font>",
+																																								mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
+				addChild(alert);
+			}
+			}
+			});
+		}	
 	});
 	googleLogin->setFunction([=](CCObject*){
-		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
-		addChild(ll, INT_MAX);
-		hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, false, [=](Json::Value t){
-			ll->removeFromParent();
-			KS::KSLog("%", t);
-			if(t["error"]["isSuccess"].asBool())
-			{
+		if(loginType != HSPLoginTypeGUEST || false) { // 뭔가에 연결 되어 있다면...
+			showWarning(loginType, "Google ID");
+		}
+		else {
+			LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+			addChild(ll, INT_MAX);
+			hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, false, [=](Json::Value t){
+				ll->removeFromParent();
+				KS::KSLog("%", t);
+				if(t["error"]["isSuccess"].asBool()) {
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 					mySGD->resetLabels();
 					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 					myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::GOOGLE);
-			}
-			else
-			{
-				if(t["error"]["code"].asInt() == 0x0014006D)
-				{
-					anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::GOOGLE, t["prevMemberNo"].asUInt64());
-					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				}
-				else
-				{
-					
+				else {
+					if(t["error"]["code"].asInt() == 0x0014006D) {
+						anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::GOOGLE, t["prevMemberNo"].asUInt64());
+						CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+					}
+					else {
+
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 	
 	

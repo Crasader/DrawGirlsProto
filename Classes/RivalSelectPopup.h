@@ -37,7 +37,7 @@ private:
 	
 	CCSprite* gray;
 	CCNode* m_container;
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	KSLabelTTF* title_label;
 	CCNode* left_node;
 	CCNode* center_node;

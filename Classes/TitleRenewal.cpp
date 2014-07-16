@@ -165,14 +165,18 @@ void TitleRenewalScene::endSplash()
 //		realInit();
 //	}));
 	
-	title_img = CCSprite::create("temp_title_back.png");
+	title_img = KS::loadCCBI<CCSprite*>(this, "title_01.ccbi").first;
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
 	
-	title_name = CCSprite::create("temp_title_name.png");
-	title_name->setAnchorPoint(ccp(0.5,0));
-	title_name->setPosition(ccp(240,50));//10));
-	addChild(title_name, 1);
+//	title_img = CCSprite::create("temp_title_back.png");
+//	title_img->setPosition(ccp(240,160));
+//	addChild(title_img);
+//	
+//	title_name = CCSprite::create("temp_title_name.png");
+//	title_name->setAnchorPoint(ccp(0.5,0));
+//	title_name->setPosition(ccp(240,50));//10));
+//	addChild(title_name, 1);
 	
 	CCPoint convert_position = CCPointZero;
 	
@@ -651,7 +655,10 @@ void TitleRenewalScene::checkReceive()
 					title_img->setPosition(ccp(240,160));
 					addChild(title_img);
 					
-					title_name->setPosition(ccp(240,160));
+					CCSprite* title_name = CCSprite::create("temp_title_name.png");
+					title_name->setAnchorPoint(ccp(0.5,0));
+					title_name->setPosition(ccp(240,160));//10));
+					addChild(title_name, 1);
 					
 //					CCSprite* logo_img = CCSprite::create("temp_title_sumlanlogo.png");
 //					logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));

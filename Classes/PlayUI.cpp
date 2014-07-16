@@ -1928,11 +1928,11 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																			
 																			t_missile->removeFromParent();
 																			
-																			CCSprite* bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
-																			bomb_img->setPosition(ccp(40, myDSH->ui_center_y-10));
-																			addChild(bomb_img);
+																			CCSprite* t_bomb_img = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi").first;
+																			t_bomb_img->setPosition(ccp(40, myDSH->ui_center_y-10));
+																			addChild(t_bomb_img);
 																			
-																			bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){bomb_img->removeFromParent();}));
+																			t_bomb_img->addChild(KSTimer::create(24.f/30.f, [=](){t_bomb_img->removeFromParent();}));
 																			
 																			KSLabelTTF* t_label = KSLabelTTF::create(CCString::createWithFormat("%d", -t_damage)->getCString(), mySGD->getFont().c_str(), 12);
 																			t_label->setColor(ccRED);
