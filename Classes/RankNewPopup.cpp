@@ -470,7 +470,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			list_cell_case->addChild(nick_label);
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 14);
-			score_label->setColor(ccc3(255, 170, 20));
+			score_label->setColor(ccc3(39, 6, 132));
 			score_label->setAnchorPoint(ccp(1,0.5f));
 			score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 			score_label->setPosition(ccp(215 + 20.f + 15, 18));
@@ -647,7 +647,7 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	list_cell_case->addChild(nick_label);
 	setFormSetter(nick_label);	
 	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 15);
-	score_label->setColor(ccc3(255, 170, 20));
+	score_label->setColor(ccc3(39, 6, 132));
 	score_label->setAnchorPoint(ccp(1,0.5f));
 	score_label->enableOuterStroke(ccc3(50, 25, 0), 1.f);
 	score_label->setPosition(ccp(215 + 35,18));
