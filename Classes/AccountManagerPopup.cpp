@@ -39,6 +39,7 @@ bool AccountManagerPopup::init(int touchP)
 
 	startFormSetter(this);
 	ASPopupView* managerPopup = ASPopupView::createDimmed(touchP);
+	managerPopup->getDimmedSprite()->setVisible(false);
 	addChild(managerPopup);
 	
 	
@@ -171,7 +172,7 @@ bool AccountManagerPopup::init(int touchP)
 	auto anotherAccountFunctor = [=](enum HSPMapping mm, HSPLogin mm2, long long prevMemberNo){
 		CCLog("another!!!");
 		Json::Value param;
-		param["memberID"] = myHSP->getMemberID();
+		param["memberID"] = prevMemberNo;
 		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 		addChild(ll, INT_MAX);
 		myHSP->command("getUserData", param, [=](Json::Value t){
@@ -180,6 +181,8 @@ bool AccountManagerPopup::init(int touchP)
 			if(t["result"]["code"].asInt() == GDSUCCESS)
 			{
 				ASPopupView* toAnotherAccount = ASPopupView::createDimmed(touchP - 2);
+				
+				toAnotherAccount->getDimmedSprite()->setVisible(false);
 				//					toAnotherAccount->getDimmedSprite()->removeFromParent();
 				managerPopup->addChild(toAnotherAccount);
 				
@@ -296,8 +299,40 @@ bool AccountManagerPopup::init(int touchP)
 			}
 		});
 	};
-	auto showWarning = [=](HSPLoginTypeX lt, const std::string& desc){
+	auto doLogin = [=](HSPMapping hspmap, HSPLogin willSaveLogin){
+		
+		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+		addChild(ll, INT_MAX);
+		hspConnector::get()->mappingToAccount(hspmap, false, [=](Json::Value t){
+			KS::KSLog("hhh %", t);
+			KS::KSLog("%", t);
+			ll->removeFromParent();
+			if(t["error"]["isSuccess"].asBool()) {
+				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+				mySGD->resetLabels();
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)willSaveLogin);
+			}
+			else {
+				if(t["error"]["code"].asInt() == 0x0014006D) {
+					anotherAccountFunctor(hspmap, willSaveLogin, t["prevMemberNo"].asUInt64());
+					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+				}
+				else {
+					ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "유의사항",
+																													 StyledLabelTTF::create("<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
+																																									"<font color=#FFAA14>다시 시도해 주세요.</font>",
+																																									mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
+					addChild(alert);
+				}
+			}
+		});
+	};
+	auto showWarning = [=](const std::string& desc, HSPMapping hspmap, HSPLogin willSaveLogin){
+		HSPLoginTypeX lt = (HSPLoginTypeX)myHSP->getLoginType();
 		ASPopupView* warningPopup = ASPopupView::createDimmed(touchP - 2);
+		
+		warningPopup->getDimmedSprite()->setVisible(false);
 		addChild(warningPopup);
 
 		auto back = CCSprite::create("popup_large_back.png");
@@ -360,7 +395,9 @@ bool AccountManagerPopup::init(int touchP)
 																								 CommonButtonAchievement, touchP - 2);
 		connect->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -99.5f));
 		front->addChild(connect);
-
+		connect->setFunction([=](CCObject*){
+			doLogin(hspmap, willSaveLogin);
+		});
 		startFormSetter(this);
 		auto front2 = front;
 		auto content2 = content;
@@ -372,72 +409,20 @@ bool AccountManagerPopup::init(int touchP)
 		setFormSetter(connect);
 
 	};
-	facebookLogin->setFunction([=](CCObject*){
+	auto tryLogin = [=](HSPMapping hspmap, const std::string& tryName, HSPLogin willSaveLogin){
 		HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
-		if(loginType != HSPLoginTypeGUEST || false) { // 뭔가에 연결 되어 있다면...
-			showWarning(loginType, "Facebook ID");
+		if(loginType != HSPLoginTypeGUEST) { // 뭔가에 연결 되어 있다면...
+			showWarning(tryName, hspmap, willSaveLogin);
 		}
 		else {
-
-			LoadingLayer* ll = LoadingLayer::create(touchP - 100);
-			addChild(ll, INT_MAX);
-			hspConnector::get()->mappingToAccount(HSPMapping::kFACEBOOK, false, [=](Json::Value t){
-				KS::KSLog("hhh %", t);
-				KS::KSLog("%", t);
-				ll->removeFromParent();
-				if(t["error"]["isSuccess"].asBool())
-			{
-				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-				mySGD->resetLabels();
-				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::FACEBOOK);
-			}
-				else
-			{
-				if(t["error"]["code"].asInt() == 0x0014006D)
-			{
-				anotherAccountFunctor(HSPMapping::kFACEBOOK, HSPLogin::FACEBOOK, t["prevMemberNo"].asUInt64());
-				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-			}
-				else
-			{
-				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "유의사항",
-																												 StyledLabelTTF::create("<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
-																																								"<font color=#FFAA14>다시 시도해 주세요.</font>",
-																																								mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
-				addChild(alert);
-			}
-			}
-			});
-		}	
+			doLogin(hspmap, willSaveLogin);
+		}
+	};
+	facebookLogin->setFunction([=](CCObject*){
+		tryLogin(HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
 	});
 	googleLogin->setFunction([=](CCObject*){
-		if(loginType != HSPLoginTypeGUEST || false) { // 뭔가에 연결 되어 있다면...
-			showWarning(loginType, "Google ID");
-		}
-		else {
-			LoadingLayer* ll = LoadingLayer::create(touchP - 100);
-			addChild(ll, INT_MAX);
-			hspConnector::get()->mappingToAccount(HSPMapping::kGOOGLE, false, [=](Json::Value t){
-				ll->removeFromParent();
-				KS::KSLog("%", t);
-				if(t["error"]["isSuccess"].asBool()) {
-					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-					mySGD->resetLabels();
-					CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-					myDSH->setIntegerForKey(kDSH_Key_accountType, (int)HSPLogin::GOOGLE);
-				}
-				else {
-					if(t["error"]["code"].asInt() == 0x0014006D) {
-						anotherAccountFunctor(HSPMapping::kGOOGLE, HSPLogin::GOOGLE, t["prevMemberNo"].asUInt64());
-						CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-					}
-					else {
-
-					}
-				}
-			});
-		}
+		tryLogin(HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
 	});
 	
 	
