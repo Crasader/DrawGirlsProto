@@ -347,7 +347,7 @@ void hspConnector::mappingToAccount(jsonSelType func){
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "mappingToAccount", "(I)V")) {
 		int _key =  jsonDelegator::get()->add(func,0,0);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID,_key);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -461,7 +461,7 @@ void hspConnector::logout(jsonSelType func){
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "logout", "(I)V")) {
 		int _key =  jsonDelegator::get()->add(func,0,0);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID,_key);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -520,7 +520,7 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 JniMethodInfo t;
 if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZI)V")) {
 	int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
-	t.env->CallStaticObjectMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
+	t.env->CallStaticVoidMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
 	t.env->DeleteLocalRef(t.classID);
 }
 #endif
@@ -572,7 +572,7 @@ void hspConnector::completePromotion()
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "completePromotion", "()V")) {
-		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -582,7 +582,7 @@ void hspConnector::completeInstallPromotion()
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "completeInstallPromotion", "()V")) {
-		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -633,7 +633,7 @@ void hspConnector::openUrl(const std::string& url)
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openUrl", "(Ljava/lang/String;)V")) {
 //		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		jstring param1 = t.env->NewStringUTF(url.c_str());
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, param1);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
 		t.env->DeleteLocalRef(t.classID);
 		t.env->DeleteLocalRef(param1);
 	}
@@ -650,7 +650,7 @@ void hspConnector::openHSPUrl(const std::string& url)
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openHSPUrl", "(Ljava/lang/String;)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		jstring param1 = t.env->NewStringUTF(url.c_str());
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, param1);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
 		t.env->DeleteLocalRef(param1);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -667,7 +667,7 @@ void hspConnector::openCSCenter(const std::string& url)
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "openCSCenter", "(Ljava/lang/String;)V")) {
 		jstring param1 = t.env->NewStringUTF(url.c_str());
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, param1);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
 		t.env->DeleteLocalRef(t.classID);
 		t.env->DeleteLocalRef(param1);
 	}
@@ -694,7 +694,7 @@ void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType 
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "hspMappingToAccount", "(IIZ)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, (int)mt, force);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key, (int)mt, force);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -721,7 +721,7 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getIsUsimKorean", "(I)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -814,7 +814,7 @@ void hspConnector::launchPromotion()
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "launchPromotion", "()V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
