@@ -167,6 +167,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 						this->filterWithMailFilter();
 						this->mailTableView->reloadData();
 						mySGD->saveChangeGoodsTransaction(r);
+						takedCheck(r["list"]);
 					});
 				}
 			}
@@ -635,7 +636,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																														 
 																														 
 																														 mySGD->saveChangeGoodsTransaction(r);
-																														 
+																														 takedCheck(r["list"]);
 																													 });
 																			
 																		});
@@ -1543,10 +1544,6 @@ void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> f
 	if(reward.isArray()){
 		for(int i=0;i<reward.size();i++){
 			if(reward[i].get("type","box").asString()=="cd"){
-				//카드다운로드 시작~
-				//다운완료하고 func(); 호출할것
-				//카드번호는 reward[i]["count"].asInt();
-				
 				cardDown(reward[i]["count"].asInt(),func);
 				return;
 			}
@@ -1554,6 +1551,17 @@ void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> f
 	}
 	
 	func(true);
+}
+
+void SumranMailPopup::takedCheck(Json::Value reward){
+	if(reward.isArray()){
+		for(int i=0;i<reward.size();i++){
+			if(reward[i].get("type","box").asString()=="cd"){
+				takedCard(reward[i]["count"].asInt());
+				return;
+			}
+		}
+	}
 }
 
 void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
@@ -1564,8 +1572,17 @@ void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
 	{
 		//123123123
 	}
+	//카드정보 다운로드하기, 다운성공시 func(true); , 실패시 func(false) 호출
+	
 	
 }
+
+void SumranMailPopup::takedCard(int cardNo){
+	// 클라이언트의 카드정보업데이트 using getcardhistory?
+	
+	
+}
+
 void SumranMailPopup::onReceiveStageSuccess()
 {
 	// 성공시 게임창...
