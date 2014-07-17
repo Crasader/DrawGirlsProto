@@ -2617,28 +2617,22 @@ void MainFlowScene::setBottom()
 			});
 			
 			cgp_menu->addChild(etc_item);
-			bool other_removed = false;
-			while(!other_removed)
-			{
-				CCArray* t_menu_array = cgp_menu->getChildren();
-				int array_cnt = cgp_menu->getChildrenCount();
-				bool is_removed = false;
-				for(int i=0;!is_removed && i<array_cnt;i++)
-				{
-					CCMenuItemLambda* t_lambda_item = ((CCMenuItemLambda*)t_menu_array->objectAtIndex(i));
-					if(t_lambda_item == etc_item)
-						continue;
-					else
-					{
-						t_lambda_item->removeFromParent();
-						is_removed = true;
-					}
-				}
-				
-				if(!is_removed)
-					other_removed = true;
-			}
 			
+			CCArray* t_menu_array = cgp_menu->getChildren();
+			int array_cnt = cgp_menu->getChildrenCount();
+			bool is_removed = false;
+			for(int i=0;!is_removed && i<array_cnt;i++)
+			{
+				CCMenuItemLambda* t_lambda_item = ((CCMenuItemLambda*)t_menu_array->objectAtIndex(i));
+				if(t_lambda_item == etc_item)
+					continue;
+				else
+				{
+					is_removed = true;
+					t_lambda_item->removeFromParent();
+					break;
+				}
+			}
 		});
 		
 		cgp_menu->addChild(cgp_item);
