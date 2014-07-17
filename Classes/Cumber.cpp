@@ -110,12 +110,12 @@ void CumberParent::stopMovingMainCumber()
 		mainCumber->stopMoving();
 }
 
-//CCNode* CumberParent::getMainCumberPointer()
-//{
+CCNode* CumberParent::getMainCumberPointer()
+{
 	////### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	//return *mainCumbers.begin();
+return *mainCumbers.begin();
 ////	return mainCumber;
-//}
+}
 
 std::vector<KSCumberBase*>& CumberParent::getSubCumberArrayPointer()
 {
@@ -612,7 +612,7 @@ void CumberParent::mappingFunctor()
 	myGD->I_V["CP_getSubCumberCount"] = std::bind(&CumberParent::getSubCumberCount, this);
 	myGD->V_Ip["CP_createSubCumber"] = std::bind(&CumberParent::createSubCumber, this, _1);
 	myGD->V_I["CP_setMainCumberState"] = std::bind(&CumberParent::setMainCumberState, this, _1);
-	//myGD->CCN_V["CP_getMainCumberPointer"] = std::bind(&CumberParent::getMainCumberPointer, this);
+	myGD->CCN_V["CP_getMainCumberPointer"] = std::bind(&CumberParent::getMainCumberPointer, this);
 	//myGD->CCA_V["CP_getSubCumberArrayPointer"] = std::bind(&CumberParent::getSubCumberArrayPointer, this);
 	myGD->getMainCumberVector = std::bind(&CumberParent::getMainCumbers, this);
 	myGD->getSubCumberVector = std::bind(&CumberParent::getSubCumberArrayPointer, this);

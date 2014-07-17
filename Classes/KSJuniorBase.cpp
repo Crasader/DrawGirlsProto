@@ -112,6 +112,14 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		
 		scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 1.f);
 		//		removeFromParentAndCleanup(true);
+
+		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
+		{
+			//removeFromParentAndCleanup(true);
+			myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(myGD->getCommunicationNode("CP_getMainCumberPointer")));
+			//caughtAnimation();
+		}
+		
 		return true;
 	}
 	else
