@@ -156,9 +156,6 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 		
 		
 		myHSP->command("confirmallgiftboxhistory",p,[=](Json::Value r){
-			
-			t_suction->setTouchEnabled(false);
-			t_suction->setVisible(false);
 			if(r["result"]["code"].asInt()==GDSUCCESS){
 				
 				{
@@ -168,7 +165,11 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 						this->filterWithMailFilter();
 						this->mailTableView->reloadData();
 						mySGD->saveChangeGoodsTransaction(r);
-						takedCheck(r["list"]);
+						takedCheck(r["list"],[=](){
+							t_suction->setTouchEnabled(false);
+							t_suction->setVisible(false);
+							
+						});
 					});
 				}
 			}
@@ -632,12 +633,14 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																			this->removeMessage (mailNo, mail["memberID"].asInt64(),
 																													 [=](Json::Value r)
 																													 {
-																														 t_suction->setTouchEnabled(false);
-																														 t_suction->setVisible(false);
-																														 
-																														 
 																														 mySGD->saveChangeGoodsTransaction(r);
-																														 takedCheck(r["list"]);
+																														 takedCheck(r["list"],[=](){
+																															 
+																															 t_suction->setTouchEnabled(false);
+																															 t_suction->setVisible(false);
+																															 
+																															 
+																														 });
 																													 });
 																			
 																		});
@@ -1554,15 +1557,17 @@ void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> f
 	func(true);
 }
 
-void SumranMailPopup::takedCheck(Json::Value reward){
+void SumranMailPopup::takedCheck(Json::Value reward, std::function<void(void)> func){
 	if(reward.isArray()){
 		for(int i=0;i<reward.size();i++){
 			if(reward[i].get("type","box").asString()=="cd"){
-				takedCard(reward[i]["count"].asInt());
+				takedCard(reward[i]["count"].asInt(),func);
 				return;
 			}
 		}
 	}
+	
+	func();
 }
 
 void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
@@ -1861,7 +1866,7 @@ void SumranMailPopup::failCardDownload()
 	}
 }
 
-void SumranMailPopup::takedCard(int cardNo/*, function<void()> t_end_func*/){
+void SumranMailPopup::takedCard(int cardNo, function<void()> t_end_func){
 	// 클라이언트의 카드정보업데이트 using getcardhistory?
 	Json::Value card_param;
 	card_param["memberID"] = hspConnector::get()->getSocialID();
@@ -1888,7 +1893,7 @@ void SumranMailPopup::takedCard(int cardNo/*, function<void()> t_end_func*/){
 				mySGD->resetHasGottenCards();
 //			}
 			
-//			t_end_func();
+			t_end_func();
 		}
 		else
 		{
@@ -1899,7 +1904,7 @@ void SumranMailPopup::takedCard(int cardNo/*, function<void()> t_end_func*/){
 				mySGD->network_check_cnt = 0;
 				
 				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-					takedCard(cardNo/*, t_end_func*/);
+					takedCard(cardNo, t_end_func);
 				});
 				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 			}
@@ -1907,7 +1912,7 @@ void SumranMailPopup::takedCard(int cardNo/*, function<void()> t_end_func*/){
 			{
 				addChild(KSTimer::create(0.5f, [=]()
 										 {
-											 takedCard(cardNo/*, t_end_func*/);
+											 takedCard(cardNo, t_end_func);
 										 }));
 			}
 		}

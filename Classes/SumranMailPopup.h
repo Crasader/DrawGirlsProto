@@ -109,9 +109,9 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		void removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> f);
 		void filterWithMailFilter();
 		void rewardDown(Json::Value reward, std::function<void(bool)> func);
-		void takedCheck(Json::Value reward);
+		void takedCheck(Json::Value reward, std::function<void(void)> func);
 		void cardDown(int cardNo,std::function<void(bool)>finishFunc);
-		void takedCard(int cardNo);
+		void takedCard(int cardNo,std::function<void(void)>finishFunc);
 	protected:
 		std::function<void(void)> m_heartRefresh;
 		Json::Value m_mailList; // 이 정보를 기반으로 뿌려줌. 
