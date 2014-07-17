@@ -392,14 +392,15 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 	if(m_touchEnable == false)
 		return;
 	
-	if(m_tutorialBox)
-	{
-		m_tutorialBox->removeFromParent();
-		m_tutorialBox = NULL;
-	}
-	else if(m_99State == 1)
+	if(m_99State == 1)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+		
+		if(m_tutorialBox)
+		{
+			m_tutorialBox->removeFromParent();
+			m_tutorialBox = NULL;
+		}
 		
 //		m_totalPercent = recent_percent; // 재 시도하면 퍼센트 깎는 코드
 		m_stencil->setContentSize(CCSizeMake(13, graphHeight * (m_totalPercent - 0.99f) * 100.f));

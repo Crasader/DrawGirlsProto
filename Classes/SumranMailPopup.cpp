@@ -1558,7 +1558,12 @@ void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> f
 
 void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
 	// 다운로드하기, 다운성공시 func(true); , 실패시 func(false) 호출
-	
+	if(NSDS_GS(kSDS_CI_int1_imgInfo_s, cardNo) == "")
+		func(true);
+	else
+	{
+		//123123123
+	}
 	
 }
 void SumranMailPopup::onReceiveStageSuccess()
