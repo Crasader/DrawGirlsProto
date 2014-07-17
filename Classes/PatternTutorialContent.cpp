@@ -209,6 +209,8 @@ int PatternTutorialContent::getTitleLocalKeyForPatternNumber(int t_pattern)
 		return_value = kMyLocalKey_warning1017;
 	else if(t_pattern == 1018)
 		return_value = kMyLocalKey_warning1018;
+	else if(t_pattern == 1020)
+		return_value = kMyLocalKey_warning1020;
 	
 	return return_value;
 }
@@ -272,6 +274,8 @@ int PatternTutorialContent::getContentLocalKeyForPatternNumber(int t_pattern)
 		return_value = kMyLocalKey_patternContent1017;
 	else if(t_pattern == 1018)
 		return_value = kMyLocalKey_patternContent1018;
+	else if(t_pattern == 1020)
+		return_value = kMyLocalKey_patternContent1020;
 	
 	return return_value;
 }
