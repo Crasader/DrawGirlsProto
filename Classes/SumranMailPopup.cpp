@@ -116,7 +116,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 	t_suction = TouchSuctionLayer::create(-999999);
 	t_suction->setTouchEnabled(false);
-	main_case->addChild(t_suction);
+	main_case->addChild(t_suction,1000);
 	CommonAnimation::openPopup(this, main_case, gray, [=](){
 		
 	}, [=](){
@@ -161,11 +161,13 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 			if(r["result"]["code"].asInt()==GDSUCCESS){
 				
 				{
-					//테이블 리로드
-					m_mailList.clear();
-					this->filterWithMailFilter();
-					this->mailTableView->reloadData();
-					mySGD->saveChangeGoodsTransaction(r);
+					rewardDown(r["list"],[=](bool isSuccess){
+						//테이블 리로드
+						m_mailList.clear();
+						this->filterWithMailFilter();
+						this->mailTableView->reloadData();
+						mySGD->saveChangeGoodsTransaction(r);
+					});
 				}
 			}
 		});
@@ -537,78 +539,116 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																{
 																	//						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
 																	//						 int idx = (int)obj->getUserData();
-																	CCLog("%s",mail.toStyledString().c_str());
 																	
-																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																	
-																	CCNode* itemlist = CCNode::create();
-																	setFormSetter(itemlist);
-																	if(mail["reward"].isArray()){
-																		for(int i=0;i<mail["reward"].size();i++){
-																			string rewardType = mail["reward"][i].get("type","box").asString();
-																			if(rewardType=="fr" || rewardType=="pr")rewardType="r";
-																			int rewardCount = mail["reward"][i].get("count",1).asInt();
-																			CCScale9Sprite* back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-																			back->setContentSize(CCSizeMake(70, 70));
-																			back->setPosition(ccp(i*75-(mail["reward"].size()-1)/2.f*75,-30));
-																			CCSprite* spr = CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
-																			KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
-																			
-																			count->setPosition(ccp(back->getContentSize().width/2.f,16));
-																			spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
-																			
-																			setFormSetter(back);
-																			setFormSetter(spr);
-																			setFormSetter(count);
-																			back->addChild(count);
-																			back->addChild(spr);
-																			itemlist->addChild(back);
-
+																	
+																	/*
+																	 mail["list"][N]["type"]==cd 인게 있으면 이미지 다운로드후 표시할것.
+																	*/
+																	
+																	t_suction->setTouchEnabled(true);
+																	t_suction->setVisible(true);
+																	
+																	rewardDown(mail["reward"],[=](bool isSuccess){
+																	////////////////////////////////////////////////////////////////////
+																		
+																		
+																		t_suction->setTouchEnabled(false);
+																		t_suction->setVisible(false);
+																		
+																		
+																		if(isSuccess==false){
+																			ASPopupView *alert = ASPopupView::getCommonNoti(-9999,"실패", "카드정보 로드를 실패했습니다.",[=](){
+																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																			});
+																			this->addChild(alert, 2000);
+																			return;
 																		}
-																	}else if(mail["reward"].isObject()){
-																	
-																	}
-																	
-															
-																	KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getgift), mySGD->getFont().c_str(), 13);
-																	ment->setPosition(ccp(itemlist->getContentSize().width/2.f,-83));
-																	itemlist->addChild(ment);
-																	setFormSetter(ment);
-																	
-																	
-//																	StyledLabelTTF* lbl = StyledLabelTTF::create(rewardList.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-//																	setFormSetter(lbl);
-//																	lbl->setOldAnchorPoint();
-//																	lbl->setPosition(ccp(0,-55));
-//																	itemlist->addChild(lbl);
-																	itemlist->setContentSize(CCSizeMake(mail["reward"].size()*80, 100));
-																	ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), itemlist,[=](){
 																		
 																		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																		
-																								Json::Value p;
-																								int mailNo = mail["no"].asInt();
-																								
-																								p["giftBoxNo"] = mailNo;
-																								p["memberID"] = mail["memberID"].asInt64();
-																								
-																								t_suction->setTouchEnabled(true);
-																								t_suction->setVisible(true);
-																								//삭제요청
-																								this->removeMessage (mailNo, mail["memberID"].asInt64(),
-																																		 [=](Json::Value r)
-																																		 {
-																																			 t_suction->setTouchEnabled(false);
-																																			 t_suction->setVisible(false);
-																																			 //여기서 r["list"] 참고하여 재화 정보 업데이트하기
-																																			 
-																																			 mySGD->saveChangeGoodsTransaction(r);
-																																			 
-																																		 });
-
+																		CCNode* itemlist = CCNode::create();
+																		setFormSetter(itemlist);
+																		if(mail["reward"].isArray()){
+																			for(int i=0;i<mail["reward"].size();i++){
+																				string rewardType = mail["reward"][i].get("type","box").asString();
+																				if(rewardType=="fr" || rewardType=="pr")rewardType="r";
+																				int rewardCount = mail["reward"][i].get("count",1).asInt();
+																				CCScale9Sprite* back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+																				back->setContentSize(CCSizeMake(70, 70));
+																				back->setPosition(ccp(i*75-(mail["reward"].size()-1)/2.f*75,0));
+																				CCSprite* spr = CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
+																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
+																				
+																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
+																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
+																				
+																				setFormSetter(back);
+																				setFormSetter(spr);
+																				setFormSetter(count);
+																				back->addChild(count);
+																				back->addChild(spr);
+																				itemlist->addChild(back);
+																				
+																			}
+																		}else if(mail["reward"].isObject()){
+																			
+																		}
+																		
+																		
+																		//KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getgift), mySGD->getFont().c_str(), 13);
+																		//	ment->setPosition(ccp(itemlist->getContentSize().width/2.f,-83));
+																		//itemlist->addChild(ment);
+																		//setFormSetter(ment);
+																		
+																		
+																		//																	StyledLabelTTF* lbl = StyledLabelTTF::create(rewardList.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+																		//																	setFormSetter(lbl);
+																		//																	lbl->setOldAnchorPoint();
+																		//																	lbl->setPosition(ccp(0,-55));
+																		//																	itemlist->addChild(lbl);
+																		itemlist->setContentSize(CCSizeMake(mail["reward"].size()*80, 100));
+																		
+																		
+																		
+																		
+																		
+																		
+																		ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), itemlist,[=](){
+																			
+																			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																			
+																			Json::Value p;
+																			int mailNo = mail["no"].asInt();
+																			
+																			p["giftBoxNo"] = mailNo;
+																			p["memberID"] = mail["memberID"].asInt64();
+																			
+																			t_suction->setTouchEnabled(true);
+																			t_suction->setVisible(true);
+																			//삭제요청
+																			this->removeMessage (mailNo, mail["memberID"].asInt64(),
+																													 [=](Json::Value r)
+																													 {
+																														 t_suction->setTouchEnabled(false);
+																														 t_suction->setVisible(false);
+																														 
+																														 
+																														 mySGD->saveChangeGoodsTransaction(r);
+																														 
+																													 });
+																			
+																		});
+																		
+																		this->addChild(alert, 2000);
+																		
+																		
+																	///////////////////////////////////////////////////////////////////
 																	});
 																	
-																	this->addChild(alert, 1000);
+																	
+																	
+																	
 																	
 																});
 				cell->addChild(btnReceive, kMP_MT_getheart);
@@ -1496,7 +1536,31 @@ void SumranMailPopup::registerWithTouchDispatcher ()
 	pDispatcher->addTargetedDelegate(this, -170, true);
 }
 
+void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> func){
+	
+	//여기서 reward체크하고 다운받기~
+	
+	if(reward.isArray()){
+		for(int i=0;i<reward.size();i++){
+			if(reward[i].get("type","box").asString()=="cd"){
+				//카드다운로드 시작~
+				//다운완료하고 func(); 호출할것
+				//카드번호는 reward[i]["count"].asInt();
+				
+				cardDown(reward[i]["count"].asInt(),func);
+				return;
+			}
+		}
+	}
+	
+	func(true);
+}
 
+void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
+	// 다운로드하기, 다운성공시 func(true); , 실패시 func(false) 호출
+	
+	
+}
 void SumranMailPopup::onReceiveStageSuccess()
 {
 	// 성공시 게임창...
