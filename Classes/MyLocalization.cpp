@@ -1006,6 +1006,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다이너마이트 지뢰"), kMyLocalKey_warning1016);
 	ko->setObject(CCString::create("불꽃스토커"), kMyLocalKey_warning1017);
 	ko->setObject(CCString::create("문득구름"), kMyLocalKey_warning1018);
+	ko->setObject(CCString::create("부하몬스터 소환"), kMyLocalKey_warning1020);
 	ko->setObject(CCString::create("보스공격저지"), kMyLocalKey_warningBossSuccess);
 	ko->setObject(CCString::create("마지막 목숨"), kMyLocalKey_warningLastLife);
 	
@@ -1039,6 +1040,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("카운트가 끝나면 폭발해요."), kMyLocalKey_patternContent1016);
 	ko->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
 	ko->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
+	ko->setObject(CCString::create("부하몬스터를 새로 소환합니다."), kMyLocalKey_patternContent1020);
 	
 //	ko->setObject(CCString::create("서버에 연결할 수 없습니다."), kMyLocalKey_canNotConnectedServer);
 //	ko->setObject(CCString::create("화면을 터치 해주세요."), kMyLocalKey_touchPlease);
