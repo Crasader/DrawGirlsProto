@@ -1367,35 +1367,35 @@ class Card extends DBTable{
 		$data["head"][]=array("field"=>"rank","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
 		$data["head"][]=array("field"=>"grade","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
 		$data["head"][]=array("field"=>"name","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}',true));
-		$data["head"][]=array("field"=>"reward","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
-		$data["head"][]=array("field"=>"durability","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
-		$data["head"][]=array("field"=>"ability","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"table","element":[{"title":"아이템번호","field":"type","type":"text","datatype":"int"},{"title":"옵션","field":"option","type":"dictionary"}]}',true));
-		$data["head"][]=array("field"=>"passive","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"dictionary","element":[
-					{"title":"operator","field":"operator","type":"select","element":["-","*(1-x)"]},	
-					{
-						"title":"패턴",
-						"field":"pattern",
-						"type":"dictionary",
-						"element":[
-							{"field":"castframe","type":"text","datatype":"int"},
-							{"field":"totalframe","type":"text","datatype":"int"},
-							{"field":"speed","type":"text","datatype":"int"}
-						]			
-					},			
+		// $data["head"][]=array("field"=>"reward","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text","datatype":"int"}',true));
+		// $data["head"][]=array("field"=>"durability","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"text"}',true));
+		// $data["head"][]=array("field"=>"ability","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"table","element":[{"title":"아이템번호","field":"type","type":"text","datatype":"int"},{"title":"옵션","field":"option","type":"dictionary"}]}',true));
+		// $data["head"][]=array("field"=>"passive","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"dictionary","element":[
+		// 			{"title":"operator","field":"operator","type":"select","element":["-","*(1-x)"]},	
+		// 			{
+		// 				"title":"패턴",
+		// 				"field":"pattern",
+		// 				"type":"dictionary",
+		// 				"element":[
+		// 					{"field":"castframe","type":"text","datatype":"int"},
+		// 					{"field":"totalframe","type":"text","datatype":"int"},
+		// 					{"field":"speed","type":"text","datatype":"int"}
+		// 				]			
+		// 			},			
 							
-					{   
-					    "title":"속도",
-						"field":"speed","type":"text","datatype":"int"
-					},
-					{   
-					    "title":"스케일",
-						"field":"scale","type":"text","datatype":"int"
-					},
-					{"title":"공격주기","field":"attackpercent","type":"text","datatype":"int"},
-					{"title":"에너지","field":"hp","type":"text","datatype":"int"},
-					{"title":"민첩","field":"agi","type":"text","datatype":"int"}	,
-					{"title":"AI","field":"ai","type":"text","datatype":"int"}				
-					]}',true));
+		// 			{   
+		// 			    "title":"속도",
+		// 				"field":"speed","type":"text","datatype":"int"
+		// 			},
+		// 			{   
+		// 			    "title":"스케일",
+		// 				"field":"scale","type":"text","datatype":"int"
+		// 			},
+		// 			{"title":"공격주기","field":"attackpercent","type":"text","datatype":"int"},
+		// 			{"title":"에너지","field":"hp","type":"text","datatype":"int"},
+		// 			{"title":"민첩","field":"agi","type":"text","datatype":"int"}	,
+		// 			{"title":"AI","field":"ai","type":"text","datatype":"int"}				
+		// 			]}',true));
 		$data["head"][]=array("field"=>"missile","viewer"=>json_decode('{"type":"json"}',true),"editor"=>json_decode('{"type":"dictionary","element":[{"field":"type","type":"text"},{"field":"speed","type":"text","datatype":"int"},{"field":"power","type":"text","datatype":"int"},{"field":"dex","type":"text","datatype":"int"}]}',true));
 		$data["head"][]=array("field"=>"cc","viewer"=>json_decode('{"type":"text"}',true),"editor"=>json_decode('{"type":"select","element":["kr","jp","en","cn"]}',true));
 		$data["head"][]=array("field"=>"stage","viewer"=>json_decode('{"type":"text"}',true));
@@ -1506,6 +1506,7 @@ class CardHistory extends DBTable{
 		$data["head"][]=array("title"=>"고유번호","field"=>"no","viewer"=>$textViewer,"primary");
 		$data["head"][]=array("title"=>"회원번호","field"=>"memberID","viewer"=>json_decode('{"type":"text"}',true));
 		$data["head"][]=array("title"=>"카드","field"=>"cardNo","viewer"=>$listViewer);
+		$data["head"][]=array("title"=>"갯수","field"=>"count","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"퍼즐","field"=>"puzzleNo","viewer"=>$listViewer2);
 		$data["head"][]=array("title"=>"코멘트","field"=>"comment","viewer"=>$textViewer,"editor"=>$textEditor);
 		$data["head"][]=array("title"=>"획득일시","field"=>"takeDate","viewer"=>json_decode('{"type":"datetime","format":"Y/m/d h:i:s"}',true));
@@ -1965,6 +1966,7 @@ class GiftBoxHistory extends DBTable{
 		if($memberID && $fNo){
 			if(parent::load("memberID=".$memberID." and no=".$fNo)){
 				$this->reward = json_decode($this->reward,true);
+				$this->exchangeList = json_decode($this->exchangeList,true);
 			}
 		}
 	}
@@ -2250,7 +2252,7 @@ class LoginEvent extends DBTable{
 	}
 	static public function getRewardDays(){
 		$data=array();
-		while($rData = LoginEvent::getRowByQuery("where endDate>".TimeManager::getCurrentDateTime()." and startTime=0 and endTime=235959 limit 4")){
+		while($rData = LoginEvent::getRowByQuery("where endDate>".TimeManager::getCurrentDateTime()." and endTime=235959 and endDate-startDate=235959 limit 3")){
 			$rData["reward"]=json_decode($rData["reward"],true);
 			$data[]=$rData;
 		}
@@ -2557,7 +2559,7 @@ class CuponCode extends DBTable{
 		return $row[0];
 	}
 
-	public function getCuponList($param){
+	public static function getCuponList($param){
 		$data = array();
 
 		while($rData = CuponCode::getRowByQuery("where cuponNo=".$param["cuponNo"])){
@@ -3546,7 +3548,7 @@ public function __construct($id=null){
 		}
 	}
 
-	public function makeExchangeIDByRandom($param){
+	public static function makeExchangeIDByRandom($param){
 		$r["param"]=$param;
 		if($param["id"]){
 			LogManager::addLog("exchangeID is ".$param["id"]);
@@ -3580,7 +3582,7 @@ public function __construct($id=null){
 		return $r;
 	}
 
-	public function saveExchangeID($param){
+	public static function saveExchangeID($param){
 		
 		$exchange = new Exchange($param["id"]);
 
@@ -3725,7 +3727,7 @@ class EndlessPlayList extends DBTable{
 		}
 	}
 
-	public function getPlayDataByRandom($memberID,$lvl,$limit=1,$fieldlist="*"){
+	public function getPlayDataByRandom($memberID,$lvl=1,$limit=1,$fieldlist="*"){
 		$result = array();
 		$query = mysql_query("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit,UserIndex::getShardConnectionByRandom());
 		LogManager::addLog("select ".$fieldlist." from `".$this->getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".$this->getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
@@ -4135,4 +4137,123 @@ class AdminUser extends DBTable{
 	}
 }
 
+/*
+
+class DBGroup{
+	public $m_groupList;
+	public $m_masterList;
+	public $m_newShardKeyFunc;
+	public $m_getShardKeyFunc;
+
+	public static function create($name){
+		self::$m_groupList[$name] = new DBGroup();
+		return self::$m_groupList[$name];
+	}
+
+	public function addMaster($db){
+		$this->m_masterList[]=$db;
+	}
+
+	public function getMaster($order){
+		return $this->m_masterList[$order-1];
+	}
+
+	public function getMasterList(){
+		return $this->m_masterList;
+	}
+
+	public function setNewShardKeyFunc($func){
+		$this->m_newShardKeyFunc = $func;
+	}
+
+	public function setGetShardKeyFunc($func){
+		$this->m_getShardKeyFunc = $func;
+	}
+
+	public function getMasterConnection($key){
+		$func = $this->m_getShardKeyFunc;
+		$serverOrder = $func($key);
+		$server = $this->getMaster($serverOrder);
+		return $server->getConnection();
+	}
+}
+
+class DBMaster{
+	public $m_name = null;
+	public $m_server = null;
+	public $m_slaveList = null;
+
+	public function __construct($name,$server){
+		$this->m_name=$name;
+		$this->m_server=$server;
+		$this->m_slaveList=array();
+	}
+	
+
+	public function getConnection(){
+		if(!$this->m_server)return null;
+	
+		$conn=$this->m_server->getConnection();
+		
+		mysql_select_db($this->m_name, $conn);
+		
+		return $conn;
+	}
+	
+	public function closeConnection(){
+		if($this->m_server)
+			$this->m_server->closeConnection();
+	}
+
+	public function addSlave($db){
+		$this->m_slaveList[]=$db;
+	}
+
+	public function getSlave($order){
+		return $this->m_slaveList[$order-1];
+	}
+
+	public function getSlaveList(){
+		return $this->m_slaveList;
+	}
+
+	public function getSlaveByRand(){
+		srand((double)microtime()*1000000);
+		$r  =rand(1,1000)%count($this->slaveList);
+		return $htis->m_slaveList[$r];
+	}
+
+}
+
+
+	$userGroup = new DBGroup("user");
+	
+	$userGroup->setNewShardKeyFunc(function($key){
+		$userIndex = UserIndex::create($key);
+		return $userIndex->shardIndex;
+	}); // 샤드키발급
+	
+	$userGroup->setGetShardKeyFunc(function($key){return 1;}); // 샤드키찾기
+
+	$masterDB1 = new DBMaster("dg001",$server0Index);
+	$salveDB1 = new DBSlave("dg001",$server0Index);
+	$masterDB1->addSlave($salveDB1);
+	$userGroup->addMaster($masterDB1);
+
+
+	$masterDB2 = new DBMaster("dg002",$server0Index);
+	$salveDB2 = new DBSlave("dg002",$server0Index);
+	$masterDB2->addSlave($salveDB2);
+	$userGroup->addMaster($masterDB2);
+
+	class noticestable extends DBTable{
+		public function __construct($memberID=null){
+			parent::__construct();
+			
+			self::setDBGroup("user");
+
+			
+		}
+	}
+*/
 ?>

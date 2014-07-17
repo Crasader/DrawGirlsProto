@@ -87,7 +87,7 @@ if(!$stopCommand){
             }
 
             if(!($a=="login" || $a=="join") && CurrentUserInfo::$memberID && $checkUserdata==false){
-                $userdata = UserData::create($memberID);
+                $userdata = UserData::create(CurrentUserInfo::$memberID);
                 LogManager::addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
                 LogManager::addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
 

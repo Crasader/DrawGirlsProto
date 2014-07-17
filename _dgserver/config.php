@@ -41,6 +41,10 @@ if($_SERVER["SERVER_NAME"]=="hsdooki.cafe24.com"){
 	//유저db설정, 위 에서 추가한 서버의 dg001, dg002 라는 dbname을 사용하겠다.
 	DBManager::addShardDB("dg001",$server0Index);
 	DBManager::addShardDB("dg002",$server0Index);
+
+
+
+
 }
 
 ?>

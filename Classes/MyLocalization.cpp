@@ -1932,7 +1932,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
 	en->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
 	
-	en->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
+	en->setObject(CCString::create("조작방법에 대한 튜토리얼을 시작하겠습니다.\nㄹ가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
 	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
 	en->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
 	en->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
@@ -3279,13 +3279,60 @@ void MyLocal::ja()
 	setObject(ja, "ja");
 }
 
-void MyLocal::printList(){
-	CCDictElement* element = NULL;
-	CCDictionary* loDic = (CCDictionary*)(myLoc->objectForKey("ko"));
-	printf("################## Localpack ####################\n");
-	CCDICT_FOREACH(loDic, element) {
-		CCString *objectString = (CCString *)element -> getObject();
-		printf("%d\t\"%s\"\n",element -> getIntKey(),objectString->getCString());
+void ReplaceString(std::string & strCallId, const char * pszBefore, const char * pszAfter )
+{
+	size_t iPos = strCallId.find( pszBefore );
+	size_t iBeforeLen = strlen( pszBefore );
+	while( iPos < std::string::npos )
+	{
+		strCallId.replace( iPos, iBeforeLen, pszAfter );
+		iPos = strCallId.find( pszBefore, iPos );
 	}
+}
+
+string MyLocal::printList(){
+	CCDictionary* loDic = (CCDictionary*)(myLoc->objectForKey("ko"));
+	CCArray *keys = loDic->allKeys();
+	
 	printf("################## Localpack ####################\n");
+	int i=0;
+	string r = "";
+	while(1){
+		int nextCnt = i;
+		CCString* ob = (CCString *)(loDic->objectForKey(nextCnt));
+		
+		string a ="";
+		
+		if(ob)a=ob->getCString();
+		
+		ReplaceString(a,"\n","");
+		//CCLOG("%d",i);
+		
+		std::ostringstream ostr;
+		ostr << i;
+		
+		r += ostr.str();
+		r += "\t"+a+"\n";
+		
+		
+		i++;
+		if(i>MyLocalKey::kMyLocalKey_lastkey)break;
+	}
+	
+	CCLOG("\n %s",r.c_str());
+
+	printf("################## Localpack ####################\n");
+
+	//	string a = myLoc->printList();
+	//	Json::Value param;
+	//
+	//	param["memberID"] = hspConnector::get()->getSocialID();
+	//	param["content"] = a;
+	//	param["category"] = "localPack";
+	//
+	//	hspConnector::get()->command("writelog", param, nullptr);
+	//	
+
+	
+	return r;
 }

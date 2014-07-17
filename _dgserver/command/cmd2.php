@@ -1779,12 +1779,12 @@ function getuserdata($p){
 			$r["result"]=ResultState::successToArray();
 		}else{
 			$r["state"]="error";
-			$r["result"]=ResultState::toArray(2003,"fail to load userdata");
+			$r["result"]=ResultState::toArray(2003,"fail to load userdata1");
 		}
-	}else if($userindex){
+	}else if($userindex && $userindex>0){
 		$uIndex = UserIndex::create(0,$userindex);
 		if($uIndex->isLoaded()){
-			$user = UserData::create($uIndex->m_memberID);
+			$user = UserData::create($uIndex->memberID);
 			if($user->isLoaded()){
 				$r = $user->getArrayData(true,$keylist);
 				$r["state"]="ok";
@@ -1792,11 +1792,11 @@ function getuserdata($p){
 				$r["result"]=ResultState::successToArray();
 			}else{
 				$r["state"]="error";
-				$r["result"]=ResultState::toArray(2003,"fail to load userdata");
+				$r["result"]=ResultState::toArray(2003,"fail to load userdata2");
 			}
 		}else{
 			$r["state"]="error";
-			$r["result"]=ResultState::toArray(2003,"fail to load userdata");
+			$r["result"]=ResultState::toArray(2003,"fail to load userdata3");
 		}
 	}else{
 		$r["state"]="error";
@@ -2679,7 +2679,7 @@ function getweeklyrankbyalluser($p){
 
 	$cc=CurrentUserInfo::$country;
 	$rewardInfo = new CommonSetting("weeklyReward_$cc");
-	if(!$rewardInfo->isLoaded){
+	if(!$rewardInfo->isLoaded()){
 		$rewardInfo = new CommonSetting("weeklyReward_kr");
 	}
 	$nrinfo=array();
@@ -2724,7 +2724,7 @@ function checkweeklyreward($p){
 	
 	$cc=CurrentUserInfo::$country;
 	$rewardInfo = new CommonSetting("weeklyReward_$cc");
-	if(!$rewardInfo->isLoaded){
+	if(!$rewardInfo->isLoaded()){
 		$rewardInfo = new CommonSetting("weeklyReward_kr");
 	}
 	$nrinfo=array();
@@ -3920,7 +3920,7 @@ function changeuserproperties($p){
 			if($userStorage->{$pType}<0){
 				$r["result"]=ResultState::toArray(2015);
 				$minusProperty=$pType;
-				$minusPropertyValue = $userStorage->{$pType}-$value["count"]; ;
+				$minusPropertyValue = $userStorage->{$pType}-$value["count"];
 				CommitManager::setSuccess($memberID,false);
 			}else{
 				$param["memberID"]=$memberID;
@@ -3943,8 +3943,12 @@ function changeuserproperties($p){
 			
 		}
 
-	}
 
+
+	}
+	
+	$rs[]=array("type"=>"r","count"=>($userStorage->fr+$userStorage->pr));
+	
 	if(!$userStorage->save()){
 		LogManager::addLog("faild save userStorage ".mysql_error());
 		CommitManager::setSuccess($memberID,false);
@@ -4496,6 +4500,7 @@ function help_sendgiftboxhistory(){
 	$r["param"][] = array("name"=>"reward","type"=>"array(dict(key,value))","description"=>"보상");
 	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
 	$r["param"][] = array("name"=>"exchangeID","type"=>"string","description"=>"exchangeID");
+	$r["param"][] = array("name"=>"exchangeList","type"=>"string","description"=>"exchangeList (exchnage custom)");
 
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -4516,6 +4521,7 @@ function sendgiftboxhistory($p){
 	$gb->reward = $p["reward"];
 	$gb->data = $p["data"];
 	$gb->exchangeID = $p["exchangeID"];
+	$gb->exchangeList = $p["exchangeList"];
 	$gb->regDate = TimeManager::getCurrentDateTime();
 
 	if($gb->save()){
@@ -4573,6 +4579,7 @@ function confirmgiftboxhistory($p){
 	// }else{
 	$param["memberID"]=$memberID;
 	$param["exchangeID"]=$obj->exchangeID;
+	$param["list"]=$obj->exchangeList;
 	$cResult = $this->exchange($param);
 	//}
 
@@ -5207,7 +5214,7 @@ function getendlessrank($p){
 
 	$cc=CurrentUserInfo::$country;
 	$rewardInfo = new CommonSetting("weeklyReward_$cc");
-	if(!$rewardInfo->isLoaded){
+	if(!$rewardInfo->isLoaded()){
 		$rewardInfo = new CommonSetting("weeklyReward_kr");
 	}
 	$nrinfo=array();
@@ -5451,7 +5458,7 @@ function help_getendlessplaydata(){
 	$r["description"] = "무한모드상대와 스테이지정보를 불러옵니다.";
 
 	$r["param"][] = array("name"=>"memberID","type"=>"int or string","description"=>"memberID");
-	$r["param"][] = array("name"=>"autoLevel","type"=>"int","description"=>"autoLevel");
+	$r["param"][] = array("name"=>"win","type"=>"int","description"=>"현재연승수");
 	$r["param"][] = array("name"=>"no","type"=>"int","description"=>"지정번호(필수아님)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
@@ -5472,7 +5479,7 @@ function getendlessplaydata($p){
 	if($p["no"]){
 		$r["rival"] = $endlessPlayList->getPlayDataByNo($p["no"]);
 	}else{
-		$r["rival"] = $endlessPlayList->getPlayDataByRandom($p["autoLevel"]);
+		$r["rival"] = $endlessPlayList->getPlayDataByRandom($memberID,$p["win"]);
 	}
 	$sp["no"]=rand(1,25);
 	$r["stageInfo"]=$this->getpieceinfo($sp);
@@ -5544,7 +5551,7 @@ function help_getendlessplayriver(){
 	$r["description"] = "무한모드상대와 스테이지정보를 불러옵니다.";
 
 	$r["param"][] = array("name"=>"memberID","type"=>"int or string","description"=>"memberID");
-	$r["param"][] = array("name"=>"autoLevel","type"=>"int","description"=>"autoLevel(userdata의 autoLevel)");
+	$r["param"][] = array("name"=>"win","type"=>"int","description"=>"win(userdata의 ing_win)");
 	$r["param"][] = array("name"=>"highPiece","type"=>"int","description"=>"최고진입스테이지(userdata의 highPiece)");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
@@ -5556,7 +5563,7 @@ function help_getendlessplayriver(){
 
 function getendlessplayriver($p){
 	$memberID=$p["memberID"];
-	$ingLevel = $p["autoLevel"];
+	$ingLevel = $p["win"];
 	$maxStage = $p["highPiece"];
 
 	$endlessPlayList = new EndlessPlayList();
@@ -5998,7 +6005,75 @@ function getheart($p){
 
 }
 
+///////// 카드 선물하기
 
+
+function help_sendcard(){
+
+	$r["description"] = "카드를 선물합니다.";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"int or string","description"=>"my memberID");
+	$r["param"][] = array("name"=>"toMemberID","type"=>"int or string","description"=>"상대방 memberID");
+	$r["param"][] = array("name"=>"cardNo","type"=>"int or string","description"=>"선물할 카드번호");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(1001,"저장오류");
+	$r["result"][]=ResultState::toArray(2002,"memberID");
+	$r["result"][]=ResultState::toArray(ResultState::GDALREADY,"이미사용함");
+	$r["result"][]=ResultState::toArray(ResultState::GDEXPIRE,"기간지남");
+	$r["result"][]=ResultState::toArray(ResultState::GDOSERROR,"os안맞음");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"찾을수없음");
+
+	return $r;
+}
+
+function sendcard($p){
+	$memberID=$p["memberID"];
+	$toMemberID=$p["toMemberID"];
+	$cardNo=$p["cardNo"];
+
+	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
+	if(!$toMemberID)return ResultState::makeReturn(2002,"toMemberID");
+	if(!$cardNo)return ResultState::makeReturn(2002,"cardNo");
+
+	$cardInfo = new CardHistory($memberID,$cardNo);
+	if(!$cardInfo->isLoaded() || $cardInfo->count<=0)return ResultState::makeReturn(ResultState::GDEXPIRE);
+	
+	$toUserData = new UserData($toMemberID);
+	if(!$toUserData->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFINDUSER);
+
+	$cardInfo->count-=1;
+
+	if(!$cardInfo->save()){
+		return ResultState::makeReturn(ResultState::GDDONTSAVE);
+	};
+	
+
+	$cc=CurrentUserInfo::$country;
+	$sendcardinfo = new CommonSetting("sendcardbyuser_$cc");
+	if(!$sendcardinfo->isLoaded()){
+		$sendcardinfo = new CommonSetting("sendcardbyuser_kr");
+	}
+
+	$csInfo =& $sendcardinfo->getRef("value");
+
+	$exchangeInfo = new Exchange($csInfo["exchangeID"]);
+	if(!$exchangeInfo->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFIND);
+
+	$param["memberID"]=$toMemberID;
+	$param["sender"]=$userData->nick;
+	$param["content"]=$csInfo["content"];
+	$param["exchangeID"]=$exchangeInfo->id;
+	$param["reward"]=$exchangeInfo->list;
+	$param["exchangeList"]=array(array("type"=>"cd","count"=>$cardNo,"level"=>$cardInfo->level));
+
+	$cmd = new commandClass();
+	$sR = $cmd->sendgiftboxhistory($param);
+	//CommitManager::setSuccess($mID,ResultState::successCheck($sR["result"]));
+	$r["result"]=ResultState::toArray(ResultState::GDSUCCESS);
+	return $r;
+
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

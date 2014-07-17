@@ -59,7 +59,7 @@ bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 
 
 
-bool CommonButton::init(string title, int fontSize, CCSize size,CommonButtonType btnType, int touchPriority){
+bool CommonButton::init(string title, float fontSize, CCSize size,CommonButtonType btnType, int touchPriority){
 	
 	if(CCNode::init()==false){
 		return false;
@@ -113,7 +113,7 @@ bool CommonButton::init(string title, int fontSize, CCSize size,CommonButtonType
 	return true;
 }
 
-bool CommonButton::init(string title, int fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority){
+bool CommonButton::init(string title, float fontSize, CCSize size, CCScale9Sprite* button_back, int touchPriority){
 	if(CCNode::init()==false){
 		return false;
 	}
@@ -246,7 +246,7 @@ void CommonButton::setTitle(string title){
 	m_btnTitle->setString(title.c_str());
 }
 
-void CommonButton::setTitleSize(int size){
+void CommonButton::setTitleSize(float size){
 	m_btnTitle->setFontSize(size);
 }
 

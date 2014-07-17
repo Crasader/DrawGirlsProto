@@ -2,57 +2,6 @@
 
 include "../lib.php";
 
-
-
-Class DBTableTest{
-	static public $m__dbTable=NULL;
-
-	static public function setA($_a){
-		$klass = get_called_class();
-		//$newvalue = "";
-		static::$m__dbTable=&$newValue;
-		static::$m__dbTable=$_a;
-	}
-
-	static public function getA(){
-		$klass = get_called_class();
-		echo "<br>".$klass."<br>";
-		return static::$m__dbTable;
-	}
-
-	public function setDBTable($_table){
-		self::$m__dbTable=$_table;
-	}
-
-
-	public function getDBTable($_table){
-		return self::$m__dbTable=$_table;
-	}
-}
-
-class NoticeTable extends DBTableTest{
-	public function __construct($_a){
-		self::setA($_a);
-	}
-}
-
-
-class EventTable extends DBTableTest{
-	public function __construct($_a){
-		self::setA($_a);
-	}
-
-
-}
-
-$notice = new NoticeTable("notice");
-$event = new EventTable("event");
-
-echo "notice:".$notice->getA()."<br>";
-echo "event:".$event->getA()."<br>";
-echo "notice:".$notice::getA()."<br>";
-echo "event:".$event::getA()."<br>";
-
 ?>
 <html>
 <head>
@@ -659,6 +608,15 @@ $sPattern=array();
 	//$sPattern[]=$pattern;
 }
 
+{
+	$patternRegen=array();
+	$patternRegen["data"] = json_decode('{"atype":"special","childs":2,"maxchilds":6,"pattern":"1020"}',true);
+	$patternRegen["option"] = "maxchilds";
+	$patternRegen["option_max"] = 10;
+	$patternRegen["option_min"] = 1;
+	$patternRegen["option_type"] = "int";
+	//$sPattern[]=$pattern;
+}
 
 
 
@@ -822,6 +780,41 @@ $jrList[]="boss_succubus_jr";
 $jrList[]="boss_snake_jr";
 $jrList[]="boss_monk_jr";
 
+
+$missionList[0]=json_decode('{"type":0}',true); // 없음
+$missionList[1]=json_decode('{"type":1,"option":{}}',true); // 용감한기사
+$missionList[2]=json_decode('{"type":2,"option":{"count":3}}',true); // 사냥꾼
+$missionList[3]=json_decode('{"type":3,"option":{"percent":20,"count":2}}',true); // 욕심쟁이
+$missionList[4]=json_decode('{"type":4,"option":{"count":10}}',true); // 수집가
+$missionList[5]=json_decode('{"type":5,"option":{"percent":90}}',true); // 완벽주의자
+$missionList[6]=json_decode('{"type":6,"option":{}}',true); // 결벽주의자
+$missionList[7]=json_decode('{"type":7,"option":{"sec":70}}',true); // 비지니스맨
+
+
+$usingMission=array(2,4,7);
+
+function getMission($stageNo,$stageLevel){
+	global $usingMission,$missionList;
+	
+	if($stageLevel<=5)return $missionList[0];
+
+	$mNo = $stageLevel%count($usingMission);
+	$mNo = $usingMission[$mNo];
+	$data = $missionList[$mNo];
+	if($mNo==2){
+		$data["option"]["count"]=3+floor(($stageLevel-5)/5);
+	}
+	if($mNo==4){
+		$data["option"]["count"]=10+floor(($stageLevel-5)/2);
+	}
+	if($mNo==7){
+		$data["option"]["sec"]=70+floor(($stageLevel-5)/5)*5;
+		if($data["option"]["sec"]<50)$data["option"]["sec"]=50;
+	}
+
+	return $data;
+}
+
 function getCrashPattern($number,$level,$stageLevel){
 	global $cPattern;
 	if($level>10)$level=10;
@@ -855,11 +848,16 @@ function getCrashPatternByNo($no){
 	return getCrashPattern($no,$level,$stageNo*2/3.0);
 }
 
-function getSpecialPattern($number,$level,$stageLevel){
+function getSpecialPattern($number,$level,$stageLevel,$targetPattern=null){
 	global $sPattern;
 	if($level>10)$level=10;
 	$pNo = $number%count($sPattern);
 	$pattern = $sPattern[$pNo];
+	
+	if($targetPattern){
+		$pattern = $targetPattern;
+	}
+
 	$data = $pattern["data"];
 	$frame = 100-(100-60)/10*$level;
 
@@ -875,6 +873,7 @@ function getSpecialPattern($number,$level,$stageLevel){
 	$data[$frameName] = $frame;
 
 	$data["percent"]=1;
+
 	return $data;
 
 }
@@ -908,6 +907,7 @@ function getMissilePattern($number,$level){
 
 
 function getPattern($stageNo,$stageLevel){
+	global $patternRegen;
 	//스테이지 레벨을 잘 쪼개서 값을 분배하자.
 	$sType = rand(0,2);
 	$high = (int)(0.5*$stageLevel);
@@ -942,6 +942,11 @@ function getPattern($stageNo,$stageLevel){
 		$p[]=$mp2;
 	}
 	
+	if(($stageLevel>4)){
+		$sp3 = getSpecialPattern($stageNo+rand(1,100),$high,$stageLevel,$patternRegen);
+		$p[]=$sp3;
+	}
+
 	if(($sType==1 && $stageLevel>4) || $stageLevel>15){
 		$sp2 = getSpecialPattern($stageNo+rand(1,100),$high,$stageLevel);
 		$p[]=$sp2;
@@ -972,7 +977,7 @@ function getCircleBoss($stageNo,$stageLevel){
 
 	// $boss["type"]="circle_".$BossNo;
 	// if($BossNo<10)$boss["type"]="circle_0".$BossNo;
-	$boss["ai"]=5*$level*0.7;
+	$boss["ai"]=5*$level;
 
 	$boss["shape"]="circle";
 	
@@ -1028,7 +1033,7 @@ function getJuniors($stageNo,$stageLevel,$boss){
 	global $jrList;
 
 	$juniors=array();
-	$jCnt = ceil(($stageLevel)/2);
+	$jCnt = ceil(($stageLevel)/5);
 	if($jCnt>10)$jCnt=10;
 	if($stageLevel==1)$jCnt=0;
 	$movement = rand(1,3);
@@ -1066,17 +1071,19 @@ $bossData = array();
 
 $result = mysql_query("select * from aPieceTable where level>=1 and no<1000 order by no asc",DBManager::getMainConnection());
 while($data = mysql_fetch_array($result)){
-	$data[level] = ceil($data[no]/5);
+	//$data[level] = ceil($data[no]/5);
+	$data[level] = $data[no];
+
 	if($data[level]<1)$data[level]=1;
 
 	$bossData = array();
 	$bossData[0] = getCircleBoss($data[no],$data[level]);
 	$juniors = getJuniors($data[no],$data[level],$bossData[0]);
-
+	$mission=getMission($data[no],$data[level]);
 	$bString = json_encode($bossData,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	$jString = json_encode($juniors,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
-	$query = "update aPieceTable set level=".$data[level].",junior='".$jString."', boss='".$bString."', version=version+1 where no =".$data[no];
+	$mString = json_encode($mission,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+	$query = "update aPieceTable set level=".$data[level].",junior='".$jString."', boss='".$bString."',mission='".$mString."',version=version+1 where no =".$data[no];
 	mysql_query($query);
 	echo mysql_error();
 	echo $query."<br><br>";

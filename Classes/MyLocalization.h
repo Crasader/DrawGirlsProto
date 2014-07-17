@@ -828,10 +828,20 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_upgradeLevelValue2,
 	kMyLocalKey_nickTitle,
 	kMyLocalKey_plusGive,
+
 	kMyLocalKey_pvpInfo,
 	kMyLocalKey_pvpReward,
 	kMyLocalKey_choice,
-	kMyLocalKey_stageImgLoadFail
+	kMyLocalKey_stageImgLoadFail,
+	
+	
+	
+	
+	
+	
+	
+	
+	kMyLocalKey_lastkey
 }MyLocalKey;
 
 
@@ -856,7 +866,7 @@ public:
 	const char* getSupportLocalCode();
 	CCString* getLocalCode();
 	
-	void printList();
+	string printList();
 private:
 	MyLocal() : CCDictionary()
 	{

@@ -127,14 +127,16 @@ class TimeManager{
 	}
 	
 	static public function getCurrentDateTime(){
-		return TimeManager::getDateTime(TimeManager::getTime());
+		return self::$m_nowDate->format("YmdHis");
 	}
 
 	static public function getCurrentTime(){
-  		return date("His",TimeManager::getTime());
+		return self::$m_nowDate->format("His");
+  		//return date("His",TimeManager::getTime());
 	}
 	static public function getWeekDayNo($timestamp){
-		return date("w",$timestamp);
+		return self::$m_nowDate->format("w");
+		//return date("w",$timestamp);
 	}
 
 	static public function getCurrentWeekDayNo(){
@@ -142,11 +144,14 @@ class TimeManager{
 	}
   	
   	static public function getCurrentHour(){
-  		return date("H",TimeManager::getTime());
+
+		return self::$m_nowDate->format("H");
+  		//return date("H",TimeManager::getTime());
   	}
 
   	static public function getCurrentDate(){
-  		return date("Ymd",TimeManager::getTime());
+		return self::$m_nowDate->format("Ymd");
+  		//return date("Ymd",TimeManager::getTime());
   	}
 
   	static public function getYesterDayDate(){
@@ -451,7 +456,6 @@ class DBManager{
 	public static $m_mainTables=array();
 	public static $m_shardTables=array();
 	public static $m_secretKey;
-	private static $m_instance;
 	
 	//초기화 
 	public static function construct(){
@@ -550,15 +554,7 @@ class DBManager{
 		$serverInfo = new ServerInfo($ip,$id,$pass);
 		return self::addServerInfo($serverInfo);
 	}
-	//싱글턴 얻어오기
-	public static function get()
-	{
-	    if ( is_null( self::$m_instance ) )
-	    {
-	      self::$m_instance = new self();
-	    }
-	    return self::$m_instance;
-	}
+
   
 	//샤드서버추가
 	static public function addServerInfo($server){
@@ -700,8 +696,8 @@ class DBTable{
 	static public $m__primarykey=NULL;
 	static public $m__autoIncreaseKey=NULL;
 	static public $m__DBInfo;
-	static public $m__qResult = null;
-	static public $m__qCnt = null;
+	static public $m__qResult = -1;
+	static public $m__qCnt = -1;
 	static public $m__LQTableSelectCustomFunction=null;
 	static public $m__LQTableInsertCustomFunction=null;
 	static public $m__LQTableUpdateCustomFunction=null;
@@ -1209,7 +1205,7 @@ class DBTable{
 		if(!$admin->isLogined()){
 			return ResultState::makeReturn(ResultState::GDSECURITY);
 		}
-		
+
 		$klass = get_called_class();
 		$obj = new $klass();
 
@@ -1260,17 +1256,19 @@ class DBTable{
 	}
 
 	static public function getQueryResult($query,$dbcon=NULL){
-		if(!static::$m__qCnt){
-			$newvalue=1;
-			static::$m__qCnt =& $newvalue;
+		if(static::$m__qCnt==-1){
+			$newvalue1=1;
+			static::$m__qCnt =& $newvalue1;
+			static::$m__qCnt=1;
 		}
-		if(static::$m__qResult==null){
-			$newvalue="";
-			static::$m__qResult =& $newvalue;
+		if(static::$m__qResult==-1){
+			$newvalue2="";
+			static::$m__qResult =& $newvalue2;
+			static::$m__qResult="";
 		}
 
 		if(self::isMainDBClass()){
-		LogManager::addLog("getqueryresult2->".$query);
+			LogManager::addLog("getqueryresult2->".$query);
 			$result = mysql_query($query,DBManager::getMainConnection());
 			return $result;
 		}
@@ -1283,8 +1281,11 @@ class DBTable{
 			return false;
 		}
 		
-		if($dbcon==NULL)$dbconn = $dbInfoList[static::$m__qCnt]->getConnection();
-		else $dbconn = $dbcon;
+		if($dbcon==NULL){
+
+			$dbconn = $dbInfoList[static::$m__qCnt]->getConnection();
+			
+		}else $dbconn = $dbcon;
 
 
 		LogManager::addLog("getqueryresult2->".$query);
@@ -1300,19 +1301,18 @@ class DBTable{
 		return static::$m__qCnt;
 	}
 	static public function getRowByQuery($where="",$dbcon=NULL,$fields="*"){
-		if(!static::$m__qCnt){
+		if(static::$m__qCnt==-1){
 			$newvalue1=1;
 			static::$m__qCnt =& $newvalue1;
 		}
 
-		if(static::$m__qResult==null){
+		if(static::$m__qResult==-1){
 			$newvalue2="";
 			static::$m__qResult =& $newvalue2;
 		}
 
 		if(self::isMainDBClass()){
 			if(!static::$m__qResult){
-				static::$m__qResult =& $newvalue3;
 				static::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 			}
 			LogManager::addLog("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where);
