@@ -1381,8 +1381,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("보상내용"), kMyLocalKey_pvpReward);
 	
 	ko->setObject(CCString::create("선택"), kMyLocalKey_choice);
-	
 	ko->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_stageImgLoadFail);
+	
+	ko->setObject(CCString::create("카드선물"), kMyLocalKey_cardGiftSuccessTitle);
+	ko->setObject(CCString::create("카드를 선물하였습니다."), kMyLocalKey_cardGiftSuccessContent);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -2271,8 +2273,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("보상내용"), kMyLocalKey_pvpReward);
 	
 	en->setObject(CCString::create("선택"), kMyLocalKey_choice);
-	
 	en->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_stageImgLoadFail);
+	
+	en->setObject(CCString::create("카드선물"), kMyLocalKey_cardGiftSuccessTitle);
+	en->setObject(CCString::create("카드를 선물하였습니다."), kMyLocalKey_cardGiftSuccessContent);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3183,8 +3187,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("보상내용"), kMyLocalKey_pvpReward);
 	
 	ja->setObject(CCString::create("선택"), kMyLocalKey_choice);
-	
 	ja->setObject(CCString::create("스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다."), kMyLocalKey_stageImgLoadFail);
+	
+	ja->setObject(CCString::create("카드선물"), kMyLocalKey_cardGiftSuccessTitle);
+	ja->setObject(CCString::create("카드를 선물하였습니다."), kMyLocalKey_cardGiftSuccessContent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

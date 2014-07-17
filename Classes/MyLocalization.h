@@ -834,7 +834,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_choice,
 	kMyLocalKey_stageImgLoadFail,
 	
-	
+	kMyLocalKey_cardGiftSuccessTitle,
+	kMyLocalKey_cardGiftSuccessContent,
 	
 	
 	

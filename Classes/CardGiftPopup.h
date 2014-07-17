@@ -23,16 +23,19 @@ class LoadingLayer;
 class CardGiftPopup : public CCNode, public CCEditBoxDelegate
 {
 public:
-	static CardGiftPopup* create(int t_touch_priority, int t_gift_card, function<void()> t_end_func);
+	static CardGiftPopup* create(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func);
 	
 private:
 	int touch_priority;
 	function<void()> end_func;
+	function<void()> close_func;
 	CCSprite* gray;
 	CCScale9Sprite* main_case;
 	CCScale9Sprite* main_inner;
 	KSProtectVar<int> gift_card_number;
 	bool is_menu_enable;
+	
+	vector<CommandParam> command_list;
 	
 	LoadingLayer* t_loading;
 	
@@ -40,7 +43,9 @@ private:
 	KSLabelTTF* result_label;
 	CCScale9Sprite* found_back;
 	
-	void myInit(int t_touch_priority, int t_gift_card, function<void()> t_end_func);
+	void resultSendAction(Json::Value result_data);
+	
+	void myInit(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func);
 	
 	void resultGetUserData(Json::Value result_data);
 	

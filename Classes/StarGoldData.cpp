@@ -1455,7 +1455,7 @@ int StarGoldData::isHasGottenCards(int t_card_number)
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(i->card_number.getV() == t_card_number)
+		if(i->card_number.getV() == t_card_number && i->count.getV() > 0)
 			return i->card_number.getV();
 	}
 	
@@ -1466,7 +1466,7 @@ int StarGoldData::isHasGottenCardsToIndex(int t_card_number)
 {
 	for(int i = 0;i<has_gotten_cards.size();i++)
 	{
-		if(has_gotten_cards[i].card_number.getV() == t_card_number)
+		if(has_gotten_cards[i].card_number.getV() == t_card_number && has_gotten_cards[i].count.getV() > 0)
 			return i;
 	}
 	
@@ -1477,7 +1477,7 @@ int StarGoldData::isHasGottenCards( int t_stage, int t_grade )
 {
 	for(auto i = has_gotten_cards.begin();i!=has_gotten_cards.end();i++)
 	{
-		if(NSDS_GI(kSDS_CI_int1_stage_i, i->card_number.getV()) == t_stage && i->grade.getV() == t_grade)
+		if(NSDS_GI(kSDS_CI_int1_stage_i, i->card_number.getV()) == t_stage && i->grade.getV() == t_grade && i->count.getV() > 0)
 			return i->card_number.getV();
 	}
 
@@ -1807,7 +1807,9 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		t_info.user_ment = card_info["comment"].asString();
 		t_info.is_morphing = card_info["isMorphing"].asBool();
 		t_info.count = card_info["count"].asInt();
-		has_gotten_cards.push_back(t_info);
+		
+		if(t_info.count.getV() > 0)
+			has_gotten_cards.push_back(t_info);
 		
 		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
 			card_data_load_list.push_back(card_number);

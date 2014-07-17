@@ -19,18 +19,19 @@
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
 
-CardGiftPopup* CardGiftPopup::create(int t_touch_priority, int t_gift_card, function<void()> t_end_func)
+CardGiftPopup* CardGiftPopup::create(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func)
 {
 	CardGiftPopup* t_cgp = new CardGiftPopup();
-	t_cgp->myInit(t_touch_priority, t_gift_card, t_end_func);
+	t_cgp->myInit(t_touch_priority, t_gift_card, t_end_func, t_close_func);
 	t_cgp->autorelease();
 	return t_cgp;
 }
 
-void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void()> t_end_func)
+void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func)
 {
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
+	close_func = t_close_func;
 	gift_card_number = t_gift_card;
 	
 	is_menu_enable = false;
@@ -166,6 +167,81 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	});
 }
 
+void CardGiftPopup::resultSendAction(Json::Value result_data)
+{
+	KS::KSLog("%", result_data);
+	
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->network_check_cnt = 0;
+		
+		vector<int> card_data_load_list;
+		card_data_load_list.clear();
+		
+		mySGD->initTakeCardInfo(result_data["list"], card_data_load_list);
+		
+//		if(card_data_load_list.size() > 0)
+//		{
+//			Json::Value card_param;
+//			for(int i=0;i<card_data_load_list.size();i++)
+//				card_param["noList"][i] = card_data_load_list[i];
+//			command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
+//		}
+//		else
+//		{
+			mySGD->resetHasGottenCards();
+//		}
+		
+		t_loading->removeFromParent();
+		
+		if(mySGD->isHasGottenCards(gift_card_number.getV()) > 0)
+		{
+			addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
+			{
+				input_text->setVisible(true);
+				is_menu_enable = true;
+			}), 9999);
+		}
+		else
+		{
+			addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
+												{
+													input_text->setEnabled(false);
+													input_text->setVisible(false);
+													
+													input_text->removeFromParent();
+													
+													CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
+																				{
+																					close_func();
+																					removeFromParent();
+																				});
+												}), 9999);
+		}
+	}
+	else
+	{
+		mySGD->network_check_cnt++;
+		
+		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+		{
+			mySGD->network_check_cnt = 0;
+			
+			ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+				myHSP->command(command_list);
+			});
+			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}
+		else
+		{
+			addChild(KSTimer::create(0.5f, [=]()
+									 {
+										 myHSP->command(command_list);
+									 }));
+		}
+	}
+}
+
 void CardGiftPopup::resultGetUserData(Json::Value result_data)
 {
 	GraphDogLib::JsonToLog("result getuserdata", result_data);
@@ -192,9 +268,27 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 										 return;
 									 
 									 is_menu_enable = false;
+									 input_text->setVisible(false);
+									 t_loading = LoadingLayer::create(touch_priority-100);
+									 addChild(t_loading, 9999);
 									 
-									 //123123123
-									 result_data["userIndex"].asInt64();
+									 command_list.clear();
+									 
+									 Json::Value transaction_param;
+									 transaction_param["memberID"] = hspConnector::get()->getMemberID();
+									 command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+									 
+									 Json::Value send_card_param;
+									 send_card_param["memberID"] = myHSP->getMemberID();
+									 send_card_param["toMemberID"] = result_data["memberID"].asInt64();
+									 send_card_param["cardNo"] = gift_card_number.getV();
+									 command_list.push_back(CommandParam("sendcard", send_card_param, nullptr));
+									 
+									 Json::Value card_history_param;
+									 card_history_param["memberID"] = myHSP->getMemberID();
+									 command_list.push_back(CommandParam("getCardHistory", card_history_param, json_selector(this, CardGiftPopup::resultSendAction)));
+									 
+									 myHSP->command(command_list);
 								 });
 		found_back->addChild(send_button);
 		

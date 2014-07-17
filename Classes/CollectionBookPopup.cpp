@@ -116,7 +116,13 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 						  
 						  is_menu_enable = false;
 						  
-						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=](){is_menu_enable = true;});
+						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=](){is_menu_enable = true;}, [=]()
+						  {
+							  is_menu_enable = true;
+							  CCNode* t_node = CCNode::create();
+							  t_node->setTag(kCBP_MT_close);
+							  menuAction(t_node);
+						  });
 						  addChild(t_popup, 999);
 					  });
 	gift->setPosition(ccp(115,30));
