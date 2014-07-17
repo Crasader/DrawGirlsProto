@@ -458,7 +458,9 @@ void GameItemAttack::acting()
 	int weapon_rank = (weapon_level-1)/5 + 1;
 	weapon_level = (weapon_level-1)%5 + 1;
 	
-	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, myPoint.convertToCCP());
+	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f;
+	
+	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
 	
 //	string missile_code;
 //	missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));

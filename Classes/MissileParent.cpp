@@ -192,9 +192,9 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	}
 }
 
-void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition)
+void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition, int missile_damage)
 {
-	int power = mySGD->getSelectedCharacterHistory().power.getV();
+	int power = missile_damage;
 	AttackOption ao = getAttackOption(stoneType, grade);
 	int missileNumbersInt = floor(missileNumbers);
 	stoneType = StoneType::kStoneType_guided;
@@ -1634,7 +1634,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
 	myGD->createJackMissileWithStoneFunctor = std::bind(&MissileParent::createJackMissileWithStone, this,
-																											_1, _2, _3, _4, _5);
+																											_1, _2, _3, _4, _5, _6);
 	myGD->V_CCPCOLORF["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2, _3);
 	myGD->V_V["MP_endIngActionAP"] = std::bind(&MissileParent::endIngActionAP, this);
 	myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);

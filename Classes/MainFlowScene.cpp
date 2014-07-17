@@ -2505,6 +2505,9 @@ void MainFlowScene::setBottom()
 	bool is_add_etc = false;
 	
 	Json::Value v = mySGD->cgp_data;
+//	Json::Reader r;
+//	r.parse(R"( {"buttonurl":"http://images.hangame.co.kr/mobile/cgp/2012.10/cgp_icon_wooproo.png","eventurl":"","typecode":1,"promotionstate":"CGP_PROMOTION_EXISTS","bubbletext":""} )",
+//			v);
 	std::string pState = v["promotionstate"].asString();
 	
 	// 아무것도 하지마!!
@@ -2566,8 +2569,6 @@ void MainFlowScene::setBottom()
 			
 			hspConnector::get()->launchPromotion();
 			
-			cgp_menu->removeAllChildren();// removeFromParent();
-			
 //			CCSprite* etc_img = CCSprite::create("mainflow_etc_event.png");
 //			etc_img->setPosition(ccp(43-240+220.f, etc_img->getContentSize().height/2.f+8));
 //			etc_frame->addChild(etc_img);
@@ -2616,6 +2617,27 @@ void MainFlowScene::setBottom()
 			});
 			
 			cgp_menu->addChild(etc_item);
+			bool other_removed = false;
+			while(!other_removed)
+			{
+				CCArray* t_menu_array = cgp_menu->getChildren();
+				int array_cnt = cgp_menu->getChildrenCount();
+				bool is_removed = false;
+				for(int i=0;!is_removed && i<array_cnt;i++)
+				{
+					CCMenuItemLambda* t_lambda_item = ((CCMenuItemLambda*)t_menu_array->objectAtIndex(i));
+					if(t_lambda_item == etc_item)
+						continue;
+					else
+					{
+						t_lambda_item->removeFromParent();
+						is_removed = true;
+					}
+				}
+				
+				if(!is_removed)
+					other_removed = true;
+			}
 			
 		});
 		
