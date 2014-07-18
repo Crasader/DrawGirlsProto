@@ -574,7 +574,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 									 "pattern" : 1020,
 									 "percent" : 1,
 									 "target" : "no"
-									 } )", patternData); 
+									 } )", patternData);
 		}
 		else
 		{
