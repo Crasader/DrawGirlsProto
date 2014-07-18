@@ -64,30 +64,37 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 
-	white_back = CCSprite::create("whitePaper.png");
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
-	
-	white_back->setScaleX(screen_scale_x);
-	white_back->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
-	white_back->setPosition(ccp(240,160));
-	addChild(white_back);
-	
-	auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
-	splash.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-		splash.first->removeFromParent();
+	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
+	{
+		white_back = CCSprite::create("whitePaper.png");
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		white_back->setScaleX(screen_scale_x);
+		white_back->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+		white_back->setPosition(ccp(240,160));
+		addChild(white_back);
+		
+		auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
+		splash.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
+			splash.first->removeFromParent();
+			endSplash();
+		});
+		splash.first->setPosition(ccp(240,160));
+		
+		addChild(splash.first);
+		
+		//	addChild(KSTimer::create(3.f, [=]()
+		//	{
+		splash.second->runAnimationsForSequenceNamed("Default Timeline");
+		//	}));
+	}
+	else
+	{
 		endSplash();
-	});
-	splash.first->setPosition(ccp(240,160));
-	
-	addChild(splash.first);
-	
-	//	addChild(KSTimer::create(3.f, [=]()
-	//	{
-	splash.second->runAnimationsForSequenceNamed("Default Timeline");
-	//	}));
+	}
 	
 //	vector<string> preload_list;
 //	preload_list.clear();
