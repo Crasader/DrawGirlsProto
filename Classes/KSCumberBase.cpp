@@ -1383,7 +1383,7 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 	}
 	
-	std::vector<Json::Value> selectedAttacks;
+	std::vector<Json::Value> selectedAttacks; // 나갈 공격패턴들이 들어감, 아래쪽에서 이 중 하나 택.
 	float exeProb;
 	if(crashAttack)
 	{
@@ -2712,7 +2712,62 @@ void KSCumberBase::setSlience( bool s )
 
 void KSCumberBase::caughtAnimation()
 {
-	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(myGD->getCommunicationNode("CP_getMainCumberPointer")));
+//	myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(myGD->getCommunicationNode("CP_getMainCumberPointer")));
+	
+	
+	// 다음 패턴 부하 생성 코드
+	if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
+	{
+		// 보스에서 부하 생성패턴이 있는지 살펴보고 없으면 강제로 넣어줌.
+		bool found2 = false;
+		for(auto iter = myGD->getMainCumberVector().begin();
+				iter != myGD->getMainCumberVector().end();
+				++iter)
+		{
+			KSCumberBase* cumber = *iter;
+			bool found = false;
+			for(auto attackIter = cumber->getAttacks().begin();
+					attackIter != cumber->getAttacks().end();
+					++attackIter)
+			{
+				KS::KSLog("%", *attackIter);
+				if( (*attackIter).get("pattern", "").asString() == "1020" )
+				{
+					cumber->getAttackQueue().push_back(*iter);
+					found = true;
+					break;
+				}
+			}
+			if(found)
+			{
+				found2 = true;
+				break;
+			}
+			//						attackIter = cumber->getAttackPattern().en
+		}
+		if(found2 == false)
+		{
+			if(myGD->getMainCumberVector().empty() == false)
+			{
+				Json::Reader reader;
+				Json::Value createCumberPattern;
+				reader.parse(R"({
+										 "atype" : "special",
+										 "childs" : 1,
+										 "name" : "부하몹리젠",
+										 "pattern" : 1020,
+										 "percent" : 1,
+										 "target" : "no"
+										 } )", createCumberPattern);
+				
+				auto cumber = myGD->getMainCumberVector()[0];
+				cumber->getAttackQueue().push_back(createCumberPattern);
+			}
+		}
+	}
+
+
+
 	myGD->communication("UI_catchSubCumber");
 }
 

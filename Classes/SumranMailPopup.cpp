@@ -577,11 +577,23 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				string rewardType = mail["reward"][i].get("type","box").asString();
 																				if(rewardType=="fr" || rewardType=="pr")rewardType="r";
 																				int rewardCount = mail["reward"][i].get("count",1).asInt();
+																				
 																				CCScale9Sprite* back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 																				back->setContentSize(CCSizeMake(70, 70));
 																				back->setPosition(ccp(i*75-(mail["reward"].size()-1)/2.f*75,0));
-																				CCSprite* spr = CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
+																				
+																				
+																				CCSprite* spr;
 																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
+																				if(rewardType=="cd"){
+																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",rewardCount)->getCString());
+																					spr->setScale(0.12);
+																					count->setString("");
+																				}else{
+																					spr= CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
+																				}
+																				
+																				
 																				
 																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
 																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));

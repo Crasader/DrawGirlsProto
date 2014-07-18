@@ -15,6 +15,7 @@
 #include "StarGoldData.h"
 #include "AchieveNoti.h"
 
+
 bool KSJuniorBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
@@ -113,13 +114,57 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 1.f);
 		//		removeFromParentAndCleanup(true);
 
+		/////////////////////////////// 다음 패턴 부하생성.
 		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
 		{
-			//removeFromParentAndCleanup(true);
-			myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(myGD->getCommunicationNode("CP_getMainCumberPointer")));
-			//caughtAnimation();
+			// 보스에서 부하 생성패턴이 있는지 살펴보고 없으면 강제로 넣어줌.
+			bool found2 = false;
+			for(auto iter = myGD->getMainCumberVector().begin();
+					iter != myGD->getMainCumberVector().end();
+					++iter)
+			{
+				KSCumberBase* cumber = *iter;
+				bool found = false;
+				for(auto attackIter = cumber->getAttacks().begin();
+						attackIter != cumber->getAttacks().end();
+						++attackIter)
+				{
+					KS::KSLog("%", *attackIter);
+					if( (*attackIter).get("pattern", "").asString() == "1020" )
+					{
+						cumber->getAttackQueue().push_back(*iter);
+						found = true;
+						break;
+					}
+				}
+				if(found)
+				{
+					found2 = true;
+					break;
+				}
+//						attackIter = cumber->getAttackPattern().en
+			}
+			if(found2 == false)
+			{
+				if(myGD->getMainCumberVector().empty() == false)
+				{
+					Json::Reader reader;
+					Json::Value createCumberPattern;
+					reader.parse(R"({
+											 "atype" : "special",
+											 "childs" : 1,
+											 "name" : "부하몹리젠",
+											 "pattern" : 1020,
+											 "percent" : 1,
+											 "target" : "no"
+											 } )", createCumberPattern);
+					
+					auto cumber = myGD->getMainCumberVector()[0];
+					cumber->getAttackQueue().push_back(createCumberPattern);
+				}
+			}
 		}
-		
+
 		return true;
 	}
 	else

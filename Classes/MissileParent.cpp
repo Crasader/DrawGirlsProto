@@ -554,9 +554,35 @@ void MissileParent::endIngActionAP()
 int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD, KSCumberBase* cb, bool exe)
 {
 	Json::Value patternData;
-	Json::Reader reader;
-	reader.parse(patternD, patternData);
 	
+	// Attack Queue 가 있으면 patternD 무시하고 Attack Queue 에서 하나하나 빼서 씀.
+	if(cb->getAttackQueue().empty() == false)
+	{
+		patternData = cb->getAttackQueue().front();
+		cb->getAttackQueue().pop_front();
+	}
+	else
+	{
+		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
+		{
+			Json::Reader reader;
+			Json::Value createCumberPattern;
+			reader.parse(R"({
+									 "atype" : "special",
+									 "childs" : 1,
+									 "name" : "부하몹리젠",
+									 "pattern" : 1020,
+									 "percent" : 1,
+									 "target" : "no"
+									 } )", patternData);
+		}
+		else
+		{
+			Json::Reader reader;
+			reader.parse(patternD, patternData);
+		}
+	}
+	CCLOG("%s", boost::str(boost::format("%||") % patternData).c_str());
 	int castFrame = patternData.get("castframe", 120).asInt();
 	// 캐스팅 실패하면 캐스팅 시간 점점 줄음.
 	castFrame = MAX(30, castFrame - (castFrame * 0.1f)* cb->getCastingCancelCount());

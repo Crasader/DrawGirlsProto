@@ -9,14 +9,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.cgp.HSPCGP;
 import com.hangame.hsp.cgp.HSPCGP.CheckPromotionMapCB;
-import com.hangame.hsp.cgp.constant.CGPType.PromotionType;
 import com.hangame.hsp.cgp.constant.CGPType.ShapeType;
 import com.hangame.hsp.cgp.model.PromotionItem;
 import com.hangame.hsp.cgp.model.PromotionState;
@@ -75,7 +73,7 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 			if(promoList != null && promoList.size() !=0 ){
 				PromotionItem promoItem = promoList.get(0);
 				// 프로모션정보는 하나이기 때문에 첫번째의 것을 얻는다.
-				
+				hspConnector.setmPromoItem(promoItem);
 				try {
 					r.put("typecode", promoItem.getTypeCode());
 					switch(promoItem.getTypeCode())

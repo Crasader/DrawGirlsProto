@@ -51,7 +51,7 @@ public:
 	void tickingOn();
 	void movingMainCumber();
 	void stopMovingMainCumber();
-	CCNode* getMainCumberPointer();
+//	CCNode* getMainCumberPointer();
 	std::vector<KSCumberBase*>& getSubCumberArrayPointer();
 	std::vector<KSCumberBase*>& getMainCumbers();
 

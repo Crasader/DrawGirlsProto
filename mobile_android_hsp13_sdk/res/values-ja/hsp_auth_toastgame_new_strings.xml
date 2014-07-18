@@ -8,6 +8,7 @@
     <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">Attention</string>
     <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">利用規約に同意</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.terms">TOAST利用規約はこちら</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">もっと見る</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">個人情報収集および利用方針はこちら</string>
     <string name="hsp.toastnew.auth.welcome.agreement.alert">使用中のIDがある場合は、[IDでログイン]してください。\n [ゲストとしてログイン]した場合、アプリを削除するとゲームの情報も削除されますのでご注意ください。</string>
     <string name="hsp.toastnew.auth.welcome.idp.login">IDログイン</string>
