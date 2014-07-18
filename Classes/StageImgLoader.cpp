@@ -49,6 +49,9 @@ void StageImgLoader::addImageAsync(const char *path, cocos2d::CCObject *target, 
 	CCTextureCache::sharedTextureCache()->addImageAsync(path, target, selector, true, getDocumentPath());
 }
 
+vector<LMemoryStruct> lchunk_list;
+vector<DownloadImgInfo> downloading_list;
+
 size_t StageImgLoader::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
 	size_t realsize = size*nmemb;
 	LMemoryStruct *out=(LMemoryStruct *)userp;
@@ -126,6 +129,69 @@ void* StageImgLoader::t_function(void *data)
 	return NULL;
 }
 
+void* StageImgLoader::t_function2(void *data)
+{
+	do{
+		CURL *curl_handle;
+		CURLcode retCode = curl_global_init(CURL_GLOBAL_ALL); // _ALL -> _DEFAULT
+		if(retCode != CURLE_OK)
+		{
+			downloading_list[(int)data].is_fail = true;
+			break;
+		}
+		curl_handle = curl_easy_init();
+		curl_easy_setopt(curl_handle, CURLOPT_URL, downloading_list[(int)data].download_url.c_str());
+		curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, true);
+		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&lchunk_list[(int)data]);
+		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+		//		curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+		
+		if(curl_easy_perform(curl_handle) != CURLE_OK)
+		{
+			downloading_list[(int)data].is_fail = true;
+			break;
+		}
+		curl_easy_cleanup(curl_handle);
+		
+		if(lchunk_list[(int)data].stream)
+			fclose(lchunk_list[(int)data].stream);
+		
+		curl_global_cleanup();
+		
+		if((int)data == 0)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet1), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 1)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet2), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 2)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet3), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 3)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet4), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 4)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet5), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		
+		//		while (lchunk.size!=0) {
+		//			usleep(10000);
+		//		}
+	}while (0);
+	
+	if(downloading_list[(int)data].is_fail)
+	{
+		if((int)data == 0)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet1), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 1)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet2), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 2)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet3), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 3)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet4), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+		else if((int)data == 4)
+			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet5), StageImgLoader::sharedInstance(), 0, 0, 0, false);
+	}
+	
+	return NULL;
+}
+
 float StageImgLoader::getDownloadPercentage()
 {
 	if(lchunk.size != 0)
@@ -155,6 +221,47 @@ void StageImgLoader::successAction()
 	}
 }
 
+void StageImgLoader::successActionSet1()
+{
+	unschedule(schedule_selector(StageImgLoader::successActionSet1));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::successActionSet2()
+{
+	unschedule(schedule_selector(StageImgLoader::successActionSet2));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::successActionSet3()
+{
+	unschedule(schedule_selector(StageImgLoader::successActionSet3));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::successActionSet4()
+{
+	unschedule(schedule_selector(StageImgLoader::successActionSet4));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::successActionSet5()
+{
+	unschedule(schedule_selector(StageImgLoader::successActionSet5));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+
 void StageImgLoader::failAction()
 {
 	unschedule(schedule_selector(StageImgLoader::failAction));
@@ -162,6 +269,58 @@ void StageImgLoader::failAction()
 	
 	if(target_fail)
 		(target_fail->*delegate_fail)();
+}
+
+void StageImgLoader::failActionSet1()
+{
+	unschedule(schedule_selector(StageImgLoader::failActionSet1));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::failActionSet2()
+{
+	unschedule(schedule_selector(StageImgLoader::failActionSet2));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::failActionSet3()
+{
+	unschedule(schedule_selector(StageImgLoader::failActionSet3));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::failActionSet4()
+{
+	unschedule(schedule_selector(StageImgLoader::failActionSet4));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+void StageImgLoader::failActionSet5()
+{
+	unschedule(schedule_selector(StageImgLoader::failActionSet5));
+	
+	end_cnt++;
+	if(downloading_list.size() == end_cnt)
+		endDownloadSet();
+}
+
+void StageImgLoader::endDownloadSet()
+{
+	for(int i=0;i<downloading_list.size();i++)
+	{
+		if(downloading_list[i].is_fail)
+			downloading_list[i].fail_func(downloading_list[i].download_filename);
+		else
+			downloading_list[i].success_func(downloading_list[i].download_filename);
+	}
 }
 
 StageImgLoader* StageImgLoader::sharedInstance()
@@ -184,6 +343,14 @@ void StageImgLoader::downloadImg( string t_url, int t_size, string t_down_filena
 	down_filename = t_down_filename;
 
 	startDownload(t_url, t_size);
+}
+
+void StageImgLoader::downloadImgSet(vector<DownloadImgInfo> t_list)
+{
+	downloading_list.clear();
+	downloading_list = t_list;
+	
+	startDownloadSet();
 }
 
 void StageImgLoader::removeTD()
@@ -216,9 +383,37 @@ void StageImgLoader::startDownload( string t_url, int t_size )
 	}
 }
 
+void StageImgLoader::startDownloadSet()
+{
+	end_cnt = 0;
+	lchunk_list.clear();
+	for(int i=0;i<downloading_list.size();i++)
+	{
+		LMemoryStruct t_chunk;
+		t_chunk.size = 0;
+		t_chunk.filename = (writeable_path+downloading_list[i].download_filename).c_str();
+		t_chunk.stream = NULL;
+		
+		lchunk_list.push_back(t_chunk);
+		
+		pthread_t p_thread;
+		int thr_id;
+		// 쓰레드 생성 아규먼트로 1 을 넘긴다.
+		thr_id = pthread_create(&p_thread, NULL, t_function2, (void *)i);
+		if (thr_id < 0)
+		{
+			perror("thread create error : ");
+			exit(0);
+		}
+	}
+}
+
 void StageImgLoader::myInit()
 {
 	my_savedata = SaveData::sharedObject();
 	my_savedata->createJSON(kSDF_downloadedInfo);
 	writeable_path = getDocumentPath();
+	
+	lchunk_list.clear();
+	downloading_list.clear();
 }

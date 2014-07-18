@@ -626,14 +626,14 @@ void MainFlowScene::setTable()
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_back->setOpacity(100);
 //	temp_back->setAnchorPoint(CCPointZero);
-//	temp_back->setPosition(ccp(myDSH->ui_zero_point.x, 160-table_size.height/2.f));
+//	temp_back->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f+5.f));
 //	addChild(temp_back, kMainFlowZorder_table);
 	
 	puzzle_table = CCTableView::create(this, table_size);
 	puzzle_table->setAnchorPoint(CCPointZero);
 	puzzle_table->setDirection(kCCScrollViewDirectionHorizontal);
 	puzzle_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f-5.f));
+	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f+5.f));
 	puzzle_table->setDelegate(this);
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
