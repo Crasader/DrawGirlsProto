@@ -28,7 +28,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -49,9 +48,9 @@ import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
 import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
-//import com.litqoo.lib.KRunnable;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
+//import com.litqoo.lib.KRunnable;
 
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final String FiveRocks_AppId = "538c30c400821dfba2000001";
@@ -115,7 +114,21 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
     	// hspConnector should create stencil buffer
     	mGLView = glSurfaceView;
-    	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
+//    	setEGLConfigChooser
+    	String product = Build.PRODUCT;
+        boolean isEmulator = false;
+        if (product != null) {
+           isEmulator = product.equals("sdk") || product.contains("_sdk") || product.contains("sdk_") || 
+          		 product.contains ("vbox");
+        }
+        if(isEmulator)
+        {
+        	glSurfaceView.setEGLConfigChooser(8 , 8, 8, 8, 16, 0);
+        }
+        else
+        {
+        	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8); 
+        }
     	com.litqoo.lib.hspConnector.kInit(this,glSurfaceView,getApplicationContext());
     	
     	return glSurfaceView;
@@ -194,6 +207,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
          super.onPause();
          ADBrixManager.endSession();
          suspend();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
     //    protected void onActivityResult(int requestCode, int resultCode, Intent data){
 //    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);

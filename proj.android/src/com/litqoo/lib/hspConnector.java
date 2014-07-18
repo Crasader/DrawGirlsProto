@@ -37,6 +37,7 @@ import com.hangame.hsp.HSPState;
 import com.hangame.hsp.HSPUtil;
 import com.hangame.hsp.HSPUtil.HSPAlertViewWithToastTermsCB;
 import com.hangame.hsp.cgp.HSPCGP;
+import com.hangame.hsp.cgp.model.PromotionItem;
 import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.payment.HSPPayment;
 import com.hangame.hsp.ui.HSPUiFactory;
@@ -44,7 +45,6 @@ import com.hangame.hsp.ui.HSPUiLauncher;
 import com.hangame.hsp.ui.HSPUiUri;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
-import com.hangame.hsp.util.HSPResultUtil;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -154,14 +154,30 @@ public class hspConnector {
 	public static void completeInstallPromotion() {
 		HSPCGP.completeInstallPromotion(sContext);
 	}
+	public static PromotionItem mPromoItem;
+	public static PromotionItem getmPromoItem() {
+		return mPromoItem;
+	}
 
-	public static void launchPromotion() {
+	public static void setmPromoItem(PromotionItem mPromoItem) {
+		hspConnector.mPromoItem = mPromoItem;
+	}
 
-		hspConnector.handler.post(new Runnable() {
-			public void run() {
-				HSPCGP.launchPromotion((Activity) sContext);
-			}
-		});
+	public static void launchPromotion() 
+	{
+		PromotionItem pi = hspConnector.mPromoItem;
+		Log.d("", "dsf");
+		HSPCGP.launchPromotion((Activity) sContext, hspConnector.mPromoItem);
+//		HSPCGP.launchPromotion((Activity) sContext);
+//		hspConnector.handler.post(new Runnable() {
+//			public void run() {
+//				HSPCGP.launchPromotion((Activity) sContext, hspConnector.mPromoItem);
+//				mGLView.queueEvent(new Runnable() {
+//					public void run() {
+//					}
+//				});
+//			}
+//		});
 	}
 
 	public static void openUrl(final String url) {
@@ -453,6 +469,7 @@ public class hspConnector {
 				if (core != null) {
 					// Log.i("com.litqoo.dgproto", "hspcore create ok2");
 
+					
 					HSPOAuthProvider lType = HSPOAuthProvider.values()[loginType];
 					core.login(activity, lType, new HSPCore.HSPLoginCB() {
 
