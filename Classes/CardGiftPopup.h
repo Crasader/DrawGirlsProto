@@ -30,7 +30,7 @@ private:
 	function<void()> end_func;
 	function<void()> close_func;
 	CCSprite* gray;
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	CCScale9Sprite* main_inner;
 	KSProtectVar<int> gift_card_number;
 	bool is_menu_enable;

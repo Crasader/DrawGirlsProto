@@ -3623,16 +3623,26 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 	reader.parse(patternData, pattern);
 	m_pattern = pattern;
 	m_cumber = cb;
+
+	IntPoint mapPoint;
+	bool finded;
+	cb->getRandomPositionToJack(&mapPoint, &finded);
+	
 	auto grang = KS::loadCCBI<CCSprite*>(this, "summons_01.ccbi").first;
 	addChild(grang);
-	grang->setPosition(cb->getPosition());
-
+	grang->setPosition(ip2ccp(mapPoint));
+	
 	addChild(KSTimer::create(2.3f, [=](){
 		addChild(KSSchedule::create([=](float dt){
-			int n = MIN(m_pattern.get("maxchilds", 99999).asInt() - myGD->getSubCumberCount(), m_pattern.get("childs", 1).asInt());
+			Json::Reader reader;
+			Json::Value root;
+			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"), root);
+			
+			// 기본값으로 서버에서 설정된 부하몹 개수로 함.
+			int n = MIN(m_pattern.get("maxchilds", root.size()).asInt() - myGD->getSubCumberCount(), m_pattern.get("childs", 1).asInt());
 			for(int i=0; i<n; ++i)
 		{
-			myGD->communication("CP_createSubCumber", myGD->getMainCumberPoint(cb));
+			myGD->communication("CP_createSubCumber", mapPoint);
 		}
 		m_cumber->setAttackPattern(nullptr);
 		myGD->communication("CP_onPatternEndOf", m_cumber);

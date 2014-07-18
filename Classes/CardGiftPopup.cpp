@@ -52,24 +52,23 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray);
 	
-	main_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_case->setContentSize(CCSizeMake(230, 170));
+	main_case = CCSprite::create("popup_small_back.png");
 	main_case->setPosition(ccp(240,160));
 	addChild(main_case);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftTitle), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftTitle), mySGD->getFont().c_str(), 12);
+	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height-25));
+	title_label->setPosition(ccp(main_case->getContentSize().width/2.f-85,main_case->getContentSize().height-35));
 	main_case->addChild(title_label);
 	
-	main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_inner->setContentSize(CCSizeMake(215, 122.5f));
-	main_inner->setPosition(main_case->getContentSize().width/2.f, 68.75f);
+	main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	main_inner->setContentSize(CCSizeMake(250, 110.f));
+	main_inner->setPosition(main_case->getContentSize().width/2.f, 82.f);
 	main_case->addChild(main_inner);
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(touch_priority);
-	close_menu->setPosition(ccp(main_case->getContentSize().width-25,main_case->getContentSize().height-25));
+	close_menu->setPosition(ccp(main_case->getContentSize().width-25,main_case->getContentSize().height-22));
 	close_menu->setFunction([=](CCObject* sender)
 							{
 								if(!is_menu_enable)
@@ -90,25 +89,21 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 							});
 	main_case->addChild(close_menu);
 	
-	CCLOG("my index : %lld", mySGD->user_index);
-	CCLOG("to string : %s", KS::longLongToStrForDG(mySGD->user_index).c_str());
-	CCLOG("decode : %lld", KS::strToLongLongForDG(KS::longLongToStrForDG(mySGD->user_index).c_str()));
-	
 	StyledLabelTTF* my_id_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardGiftMyID), KS::longLongToStrForDG(mySGD->user_index).c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	my_id_label->setAnchorPoint(ccp(0.5f,0.5f));
-	my_id_label->setPosition(ccp(main_inner->getContentSize().width/2.f, 100));
+	my_id_label->setPosition(ccp(main_inner->getContentSize().width/2.f, 95));
 	main_inner->addChild(my_id_label);
 	
-	CCPoint text_position = ccp(220,150);
+	CCPoint text_position = ccp(207,157);
 	
-	CCScale9Sprite* text_back = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	text_back->setContentSize(CCSizeMake(160, 35));
+	CCScale9Sprite* text_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(5, 5, 8, 8));
+	text_back->setContentSize(CCSizeMake(160, 30));
 	text_back->setPosition(text_position - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
 	main_inner->addChild(text_back, 999);
 	
-	CCScale9Sprite* t_back1 = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	CCScale9Sprite* t_back1 = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(5, 5, 8, 8));
 	t_back1->setOpacity(0);
-	input_text = CCEditBox::create(CCSizeMake(160, 35), t_back1);
+	input_text = CCEditBox::create(CCSizeMake(160, 30), t_back1);
 	input_text->setAnchorPoint(ccp(0.5f, 0.5f));
 	input_text->setPosition(text_position); 			// dt (10.0,-1.0)
 	
@@ -126,8 +121,8 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	
 	found_back = NULL;
 	
-	CommonButton* search_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftSearch), 12, CCSizeMake(60, 35), CommonButtonType::CommonButtonYellowUp, touch_priority-1);
-	search_button->setPosition(text_position + ccp(90,0) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
+	CommonButton* search_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftSearch), 12, CCSizeMake(60, 35), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0, 0, 62, 32), CCRectMake(30, 15, 2, 2)), touch_priority-1);
+	search_button->setPosition(text_position + ccp(118,0) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
 	search_button->setFunction([=](CCObject* sender)
 							   {
 								   if(!is_menu_enable)
@@ -155,7 +150,7 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	main_inner->addChild(search_button, 1000);
 	
 	result_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftNotFound), mySGD->getFont().c_str(), 12);
-	result_label->setPosition(ccp(240,110) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
+	result_label->setPosition(ccp(240,117) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
 	main_inner->addChild(result_label, 1001);
 		
 	CommonAnimation::openPopup(this, main_case, gray,
@@ -250,9 +245,9 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 	{
 		mySGD->network_check_cnt = 0;
 		
-		found_back = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		found_back->setContentSize(CCSizeMake(200, 40));
-		found_back->setPosition(ccp(240,110) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
+		found_back = CCScale9Sprite::create("rank_normal2.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+		found_back->setContentSize(CCSizeMake(224, 35));
+		found_back->setPosition(ccp(240,117) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
 		main_inner->addChild(found_back, 1001);
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(result_data["nick"].asString().c_str(), mySGD->getFont().c_str(), 12);
@@ -260,8 +255,8 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 		nick_label->setPosition(ccp(10, found_back->getContentSize().height/2.f));
 		found_back->addChild(nick_label);
 		
-		CommonButton* send_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftSend), 12, CCSizeMake(60, 35), CommonButtonType::CommonButtonLightPupple, touch_priority-2);
-		send_button->setPosition(ccp(found_back->getContentSize().width-35, found_back->getContentSize().height/2.f));
+		CommonButton* send_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftSend), 12, CCSizeMake(60, 35), CCScale9Sprite::create("tip.png", CCRectMake(0, 0, 55, 32), CCRectMake(27, 15, 1, 2)), touch_priority-2);
+		send_button->setPosition(ccp(found_back->getContentSize().width-31, found_back->getContentSize().height/2.f));
 		send_button->setFunction([=](CCObject* sender)
 								 {
 									 if(!is_menu_enable)

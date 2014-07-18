@@ -626,14 +626,14 @@ void MainFlowScene::setTable()
 //	CCSprite* temp_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_size.width, table_size.height));
 //	temp_back->setOpacity(100);
 //	temp_back->setAnchorPoint(CCPointZero);
-//	temp_back->setPosition(ccp(myDSH->ui_zero_point.x, 160-table_size.height/2.f));
+//	temp_back->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f+5.f));
 //	addChild(temp_back, kMainFlowZorder_table);
 	
 	puzzle_table = CCTableView::create(this, table_size);
 	puzzle_table->setAnchorPoint(CCPointZero);
 	puzzle_table->setDirection(kCCScrollViewDirectionHorizontal);
 	puzzle_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f-5.f));
+	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f+5.f));
 	puzzle_table->setDelegate(this);
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
@@ -2505,9 +2505,6 @@ void MainFlowScene::setBottom()
 	bool is_add_etc = false;
 	
 	Json::Value v = mySGD->cgp_data;
-//	Json::Reader r;
-//	r.parse(R"( {"buttonurl":"http://images.hangame.co.kr/mobile/cgp/2012.10/cgp_icon_wooproo.png","eventurl":"","typecode":1,"promotionstate":"CGP_PROMOTION_EXISTS","bubbletext":""} )",
-//			v);
 	std::string pState = v["promotionstate"].asString();
 	
 	// 아무것도 하지마!!
@@ -2567,7 +2564,9 @@ void MainFlowScene::setBottom()
 			
 			is_menu_enable = false;
 			
+			CCLog("%s %d", __FILE__, __LINE__);
 			hspConnector::get()->launchPromotion();
+			CCLog("%s %d", __FILE__, __LINE__);
 			
 //			CCSprite* etc_img = CCSprite::create("mainflow_etc_event.png");
 //			etc_img->setPosition(ccp(43-240+220.f, etc_img->getContentSize().height/2.f+8));
@@ -2578,25 +2577,42 @@ void MainFlowScene::setBottom()
 //			etc_frame->addChild(etc_label);
 			
 			
+			CCLog("%s %d", __FILE__, __LINE__);
 			CCSprite* n_etc_img = CCSprite::create("mainflow_etc_event.png");
 			KSLabelTTF* n_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 			n_etc_label->enableOuterStroke(ccBLACK, 1.f);
 			n_etc_label->setPosition(ccp(n_etc_img->getContentSize().width/2.f, 7));
 			n_etc_img->addChild(n_etc_label);
-			KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 12);
+			CCLog("%s %d", __FILE__, __LINE__);
+//			KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 12);
+			auto tt = mySGD->getEventString().c_str();
+			CCLog("%s %d %s", __FILE__, __LINE__, tt);
+			KSLabelTTF* n_event_ment = KSLabelTTF::create(tt, mySGD->getFont().c_str(), 12);
+			CCLog("%s %d", __FILE__, __LINE__);
 			n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(0,15));
+			CCLog("%s %d", __FILE__, __LINE__);
 			n_etc_img->addChild(n_event_ment);
 			
 			CCSprite* s_etc_img = CCSprite::create("mainflow_etc_event.png");
+			CCLog("%s %d", __FILE__, __LINE__);
 			s_etc_img->setColor(ccGRAY);
+			CCLog("%s %d", __FILE__, __LINE__);
 			KSLabelTTF* s_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+			CCLog("%s %d", __FILE__, __LINE__);
 			s_etc_label->enableOuterStroke(ccBLACK, 1.f);
+			CCLog("%s %d", __FILE__, __LINE__);
 			s_etc_label->setPosition(ccp(s_etc_img->getContentSize().width/2.f, 7));
+			CCLog("%s %d", __FILE__, __LINE__);
 			s_etc_img->addChild(s_etc_label);
+			CCLog("%s %d", __FILE__, __LINE__);
 			KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 12);
+			CCLog("%s %d", __FILE__, __LINE__);
 			s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(0,15));
+			CCLog("%s %d", __FILE__, __LINE__);
 			s_etc_img->addChild(s_event_ment);
+			CCLog("%s %d", __FILE__, __LINE__);
 			
+			CCLog("%s %d", __FILE__, __LINE__);
 			CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
 				if(!is_menu_enable)
 					return;
@@ -2616,26 +2632,35 @@ void MainFlowScene::setBottom()
 				addChild(t_sld, kMainFlowZorder_popup);
 			});
 			
+			CCLog("%s %d", __FILE__, __LINE__);
 			cgp_menu->addChild(etc_item);
-			
+			CCLog("%s %d", __FILE__, __LINE__);
 			CCArray* t_menu_array = cgp_menu->getChildren();
+			CCLog("%s %d", __FILE__, __LINE__);
 			int array_cnt = cgp_menu->getChildrenCount();
+			CCLog("%s %d", __FILE__, __LINE__);
 			bool is_removed = false;
+			CCLog("%s %d", __FILE__, __LINE__);
 			for(int i=0;!is_removed && i<array_cnt;i++)
 			{
 				CCMenuItemLambda* t_lambda_item = ((CCMenuItemLambda*)t_menu_array->objectAtIndex(i));
+			CCLog("%s %d", __FILE__, __LINE__);
 				if(t_lambda_item == etc_item)
 					continue;
 				else
 				{
 					is_removed = true;
+			CCLog("%s %d", __FILE__, __LINE__);
 					t_lambda_item->removeFromParent();
+			CCLog("%s %d", __FILE__, __LINE__);
 					break;
 				}
 			}
 		});
 		
+			CCLog("%s %d", __FILE__, __LINE__);
 		cgp_menu->addChild(cgp_item);
+			CCLog("%s %d", __FILE__, __LINE__);
 	}
 	// 일반 보상
 	else if(pState == "CGP_REWARD_REQUIRED")
