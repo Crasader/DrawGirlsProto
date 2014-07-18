@@ -64,7 +64,7 @@ public:
 	CCSprite* getLoadedImg(string filename, CCRect t_rect);
 	
 	void downloadImg(string t_url, int t_size, string t_down_filename, CCObject* t_success, SEL_CallFunc d_success, CCObject* t_fail, SEL_CallFunc d_fail);
-	void downloadImgSet(vector<DownloadImgInfo> t_list);
+	void downloadImgSet(vector<DownloadImgInfo>& t_list);
 	
 	void removeTD();
 	
@@ -79,6 +79,9 @@ public:
 	void addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector);
 	
 	string getDocumentPath();
+	
+	vector<LMemoryStruct> lchunk_list;
+	vector<DownloadImgInfo> downloading_list;
 	
 private:
 	SaveData* my_savedata;
@@ -108,8 +111,8 @@ private:
 	
 	void startDownload(string t_url, int t_size);
 	int end_cnt;
+	int total_download_cnt;
 	void startDownloadSet();
-	
 	void endDownloadSet();
 	
 	static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp);
