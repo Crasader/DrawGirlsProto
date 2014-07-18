@@ -8,6 +8,7 @@
     <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">Attention</string>
     <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">Agree to Terms</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.terms">TOAST Terms</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">view more</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">Privacy Policy</string>
     <string name="hsp.toastnew.auth.welcome.agreement.alert">If there is an ID in use, please [Login with ID]. If you [Guest login], please keep in mind that game information will also be deleted should you delete the app. </string>
     <string name="hsp.toastnew.auth.welcome.idp.login">Login with ID</string>

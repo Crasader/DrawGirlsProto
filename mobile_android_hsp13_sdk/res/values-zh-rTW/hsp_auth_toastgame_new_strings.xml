@@ -8,6 +8,7 @@
     <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">Attention</string>
     <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">同意條款</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.terms">閱讀TOAST的用戶同意書</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">查看更多</string>
     <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">閱讀個人資訊使用同意書</string>
     <string name="hsp.toastnew.auth.welcome.agreement.alert">如果在使用一個ID，請[ID為登錄]\n 如果您[登錄為客人]，請記住，遊戲信息也將被刪除，你應該刪除的應用程序。</string>
     <string name="hsp.toastnew.auth.welcome.idp.login">用ID登錄</string>
