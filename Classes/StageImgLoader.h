@@ -28,6 +28,31 @@ struct LMemoryStruct {
 	string writeable_path;
 };
 
+class DownloadImgInfo
+{
+public:
+	string download_url;
+	int download_size;
+	string download_filename;
+	function<void(string)> success_func;
+	function<void(string)> fail_func;
+	bool is_fail;
+	
+	bool operator== (const DownloadImgInfo a)
+	{
+		return download_filename == a.download_filename;
+	}
+	
+	DownloadImgInfo(string t_filename) : download_filename(t_filename)
+	{
+		DownloadImgInfo();
+	}
+	
+	DownloadImgInfo() :
+	is_fail(false)
+	{}
+};
+
 #define mySIL StageImgLoader::sharedInstance()
 
 class StageImgLoader : public CCNode
@@ -39,6 +64,7 @@ public:
 	CCSprite* getLoadedImg(string filename, CCRect t_rect);
 	
 	void downloadImg(string t_url, int t_size, string t_down_filename, CCObject* t_success, SEL_CallFunc d_success, CCObject* t_fail, SEL_CallFunc d_fail);
+	void downloadImgSet(vector<DownloadImgInfo> t_list);
 	
 	void removeTD();
 	
@@ -69,10 +95,26 @@ private:
 	void successAction();
 	void failAction();
 	
+	void successActionSet1();
+	void successActionSet2();
+	void successActionSet3();
+	void successActionSet4();
+	void successActionSet5();
+	void failActionSet1();
+	void failActionSet2();
+	void failActionSet3();
+	void failActionSet4();
+	void failActionSet5();
+	
 	void startDownload(string t_url, int t_size);
+	int end_cnt;
+	void startDownloadSet();
+	
+	void endDownloadSet();
 	
 	static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp);
 	static void* t_function(void *data);
+	static void* t_function2(void *data);
 	
 	void myInit();
 };

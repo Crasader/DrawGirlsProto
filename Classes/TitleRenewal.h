@@ -57,6 +57,7 @@ private:
 	KSLabelTTF* state_label;
 	CCSprite* white_back;
 	CCSprite* title_img;
+	CCBAnimationManager* title_manager;
 //	CCSprite* title_name;
 	CCLabelBMFont* download_state;
 	CCSprite* black_img;
@@ -68,6 +69,7 @@ private:
 	
 	int ing_download_cnt;
 	float ing_download_per;
+	int success_download_cnt;
 	
 	bool is_downloading;
 	int puzzlelist_download_version;
@@ -108,6 +110,12 @@ private:
 	void downloadingFileAction();
 	void successDownloadAction();
 	void failDownloadAction();
+	
+	int rest_download_cnt;
+	vector<DownloadImgInfo> download_set;
+	void startFileDownloadSet();
+	void successDownloadActionSet(string t_filename);
+	void failDownloadActionSet(string t_filename);
 	
 	void resultGetCommonSetting(Json::Value result_data);
 	void resultGetAchieveList(Json::Value result_data);

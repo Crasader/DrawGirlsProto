@@ -33,6 +33,7 @@ enum SLD_MenuTag{
 class IntPoint;
 class CumberShowWindow;
 class KSLabelTTF;
+class DownloadImgInfo;
 class StageListDown : public CCLayer
 {
 public:
@@ -81,6 +82,8 @@ private:
 	vector<DownloadFile> sf_list;
 	vector<CopyFile> cf_list;
 	
+	vector<DownloadImgInfo> download_set;
+	
 	vector<IntPoint> save_version_list;
 	
 	void myInit(CCObject* t_success, SEL_CallFunc d_success, int t_puzzle, function<void(function<void()>)> t_download_start, function<void()> t_success_func);
@@ -88,6 +91,11 @@ private:
 	void successAction();
 	void failAction();
 	void downloadingAction();
+	
+	int rest_download_cnt;
+	int success_download_cnt;
+	void successActionSet(string t_filename);
+	void failActionSet(string t_filename);
 	
 	void startGetStageList();
 	
@@ -99,6 +107,7 @@ private:
 	void menuAction(CCObject* sender);
 	
 	void startDownload();
+	void startDownloadSet();
 	
 	virtual void registerWithTouchDispatcher ()
 	{
