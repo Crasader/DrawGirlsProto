@@ -349,7 +349,7 @@ protected:
 		int m_bossDieFrameCount;
 	}m_bossDie;
 
-	std::vector<Json::Value> m_attacks; // 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
+	
 	const int LIMIT_COLLISION_PER_SEC; /// 초당 변수만큼 충돌시 스케일 줄임.
 	
 //	Emotion* mEmotion;
@@ -518,7 +518,14 @@ protected:
 	CC_SYNTHESIZE(float, m_remainHp, RemainHp);
 	CC_SYNTHESIZE(float, m_totalHp, TotalHp);
 	CC_SYNTHESIZE(CumberEmotion*, m_emotion, Emotion);
+	// 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
+	CC_SYNTHESIZE_PASS_BY_REF(vector<Json::Value>, m_attacks, Attacks);
 
+protected:	deque<Json::Value> m_attackQueue;
+public:	deque<Json::Value>& getAttackQueue()
+	{
+		return m_attackQueue;
+	}
 //	CC_SYNTHESIZE(vector<ChargeParent*>, m_charges, Charges);
 //	vector<ChargeParent*> m_charges;
 //	CC_SYNTHESIZE(ChargeParent*, m_chargeParent, ChargeParent);
