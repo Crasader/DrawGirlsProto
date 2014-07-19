@@ -63,7 +63,8 @@ bool TitleRenewalScene::init()
 	AudioEngine::sharedInstance()->stopSound();
 	
 	is_menu_enable = false;
-
+	white_back = NULL;
+	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
 	{
 		white_back = CCSprite::create("whitePaper.png");
@@ -221,7 +222,9 @@ void TitleRenewalScene::endSplash()
 	black_img->setScaleX(screen_scale_x);
 	black_img->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(black_img, 3);
-	white_back->removeFromParent();
+	
+	if(white_back)
+		white_back->removeFromParent();
 	
 	if(myDSH->getBoolForKey(kDSH_Key_isCheckTerms))
 	{
