@@ -260,7 +260,7 @@ void StartSettingPopup::setMain()
 		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-34));
 		main_case->addChild(mission_title_back);
 		
-		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 12);
+		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 10.5f);
 		mission_title_label->disableOuterStroke();
 		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f));
 		mission_title_back->addChild(mission_title_label);
@@ -480,6 +480,9 @@ void StartSettingPopup::setMain()
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 11);
 			cnt_label->setPosition(ccp(16.5f, -18));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
+			
+			if(is_unlocked)
+				cnt_label->setVisible(false);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");
 			clicked_img->setVisible(false);
@@ -755,7 +758,7 @@ void StartSettingPopup::setMain()
 		upgrade_menu->setTouchPriority(touch_priority);
 	}
 	
-	CCRect option_size = CCRectMake(0, 0, 200, 25);
+	CCRect option_size = CCRectMake(0, 0, 240, 25);
 	CCPoint option_position = ccp(314,114);
 	
 //	CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
@@ -932,7 +935,7 @@ void StartSettingPopup::gachaMenuCreate()
 //																			   buy_button->removeFromParent();
 																		   
 																		   CCRect title_size = CCRectMake(0, 0, 200, 20);
-																		   CCPoint title_position = ccp(188, 135);
+																		   CCPoint title_position = ccp(188, 130);
 																		   
 																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 15, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 																			 setFormSetter(item_title_label);
@@ -941,7 +944,7 @@ void StartSettingPopup::gachaMenuCreate()
 																		   main_case->addChild(item_title_label);
 																		   
 																		   CCRect option_size = CCRectMake(0, 0, 200, 25);
-																		   CCPoint option_position = ccp(188, 115);
+																		   CCPoint option_position = ccp(188, 117);
 																		   
 																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 11.5f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
 																			 setFormSetter(option_label);
@@ -1543,7 +1546,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 //			buy_button->removeFromParent();
 		
 		CCRect title_size = CCRectMake(0, 0, 200, 20);
-		CCPoint title_position = ccp(188, 135);
+		CCPoint title_position = ccp(188, 130);
 		
 		//		CCSprite* title_rect = CCSprite::create("whitePaper.png", title_size);
 		//		title_rect->setOpacity(100);
@@ -1558,7 +1561,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		main_case->addChild(item_title_label);
 		
 		CCRect option_size = CCRectMake(0, 0, 200, 25);
-		CCPoint option_position = ccp(188, 115);
+		CCPoint option_position = ccp(188, 117);
 		
 		//		CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
 		//		option_rect->setOpacity(100);

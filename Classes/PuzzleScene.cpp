@@ -2461,7 +2461,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		Json::Value user_list = result_data["list"];
 		
 		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
-		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,158));
+		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,177));
 		right_body->addChild(graph_back);
 		
 //		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -2501,8 +2501,8 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");//"puzzle_rank_percent.png");
-		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(10+115,158));
+		rank_percent_case->setAnchorPoint(ccp(0.5,1));
+		rank_percent_case->setPosition(ccp(10+115,177));
 		right_body->addChild(rank_percent_case);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 12);
@@ -2513,10 +2513,10 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			percent_label->setString(ccsf("%.0f%%", t));
 		}));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 0.5f);
-		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+3));
+		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f-3));
 		rank_percent_case->addChild(percent_label);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,158));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(10 + 115.f*rank_percent,177));
 		rank_percent_case->runAction(t_move);
 		
 //		delay_index = 0;
@@ -2785,7 +2785,7 @@ void PuzzleScene::setTop()
 	cancel_item->setTag(kPuzzleMenuTag_cancel);
 	
 	CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
-	cancel_menu->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	cancel_menu->setPosition(ccp(23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(cancel_menu, kPuzzleZorder_top);
 	
 	top_list.push_back(cancel_menu);
@@ -2793,7 +2793,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(109,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
+	top_heart->setPosition(ccp(107,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
 	addChild(top_heart, kPuzzleZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -2816,7 +2816,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_gold = CCSprite::create("mainflow_top_gold.png");
 	top_gold->setAnchorPoint(ccp(0.5f,1.f));
-	top_gold->setPosition(ccp(221.5f,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
+	top_gold->setPosition(ccp(221.5f,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
 	addChild(top_gold, kPuzzleZorder_top);
 	
 	top_list.push_back(top_gold);
@@ -2849,7 +2849,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
-	top_ruby->setPosition(ccp(311,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-10));
+	top_ruby->setPosition(ccp(310,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
 	addChild(top_ruby, kPuzzleZorder_top);
 	
 	top_list.push_back(top_ruby);
@@ -2888,7 +2888,7 @@ void PuzzleScene::setTop()
 	option_item->setTag(kPuzzleMenuTag_option);
 	
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
-	option_menu->setPosition(ccp(428,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	option_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
 	addChild(option_menu, kPuzzleZorder_top);
 	
 	
@@ -2904,7 +2904,7 @@ void PuzzleScene::setTop()
 	achieve_item->setTag(kPuzzleMenuTag_achieve);
 	
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
-	achieve_menu->setPosition(ccp(398,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	achieve_menu->setPosition(ccp(395,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
 	achieve_node->addChild(achieve_menu);
 	
 	CCNode* postbox_node = CCNode::create();
@@ -2918,7 +2918,7 @@ void PuzzleScene::setTop()
 	postbox_item->setTag(kPuzzleMenuTag_postbox);
 	
 	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
-	postbox_menu->setPosition(ccp(368,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	postbox_menu->setPosition(ccp(363,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
 	postbox_node->addChild(postbox_menu);
 	
 	top_list.push_back(postbox_node);
@@ -3006,7 +3006,7 @@ void PuzzleScene::setTop()
 	event_item->setTag(kPuzzleMenuTag_event);
 	
 	CCMenu* event_menu = CCMenu::createWithItem(event_item);
-	event_menu->setPosition(ccp(458,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	event_menu->setPosition(ccp(458,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
 	addChild(event_menu, kPuzzleZorder_top);
 	
 	top_list.push_back(event_menu);
