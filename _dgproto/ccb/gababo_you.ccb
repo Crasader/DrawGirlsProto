@@ -36,6 +36,78 @@
 		<key>children</key>
 		<array>
 			<dict>
+				<key>baseClass</key>
+				<string>CCSprite</string>
+				<key>children</key>
+				<array/>
+				<key>customClass</key>
+				<string></string>
+				<key>displayName</key>
+				<string>gababo_shadow</string>
+				<key>memberVarAssignmentName</key>
+				<string></string>
+				<key>memberVarAssignmentType</key>
+				<integer>0</integer>
+				<key>properties</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>position</string>
+						<key>type</key>
+						<string>Position</string>
+						<key>value</key>
+						<array>
+							<real>4</real>
+							<real>-32</real>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>anchorPoint</string>
+						<key>type</key>
+						<string>Point</string>
+						<key>value</key>
+						<array>
+							<real>0.5</real>
+							<real>0.5</real>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>scale</string>
+						<key>type</key>
+						<string>ScaleLock</string>
+						<key>value</key>
+						<array>
+							<real>1</real>
+							<real>1</real>
+							<false/>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>ignoreAnchorPointForPosition</string>
+						<key>type</key>
+						<string>Check</string>
+						<key>value</key>
+						<false/>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>displayFrame</string>
+						<key>type</key>
+						<string>SpriteFrame</string>
+						<key>value</key>
+						<array>
+							<string></string>
+							<string>gababo_shadow.png</string>
+						</array>
+					</dict>
+				</array>
+			</dict>
+			<dict>
 				<key>animatedProperties</key>
 				<dict>
 					<key>0</key>
@@ -487,8 +559,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1586,8 +1656,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -2543,7 +2611,7 @@
 			<key>name</key>
 			<string>gababo_start</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>0.011678934097290039</real>
 			<key>position</key>
 			<real>1.3333333730697632</real>
 			<key>resolution</key>
