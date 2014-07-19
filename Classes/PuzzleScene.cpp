@@ -1196,9 +1196,9 @@ void PuzzleScene::showSuccessPuzzleEffect()
 {
 	CCLOG("success puzzle animation");
 	addChild(KSGradualValue<float>::create(255, 0, 0.5f, [=](float t){
-		selected_piece_img->setOpacity(t);
+//		selected_piece_img->setOpacity(t);
 	}, [=](float t){
-		selected_piece_img->setOpacity(t);
+//		selected_piece_img->setOpacity(t);
 		selected_piece_img->setVisible(false);
 	}));
 //	if(selected_piece_img)
@@ -1665,9 +1665,13 @@ void PuzzleScene::setPieceClick(int t_stage_number)
 	
 	PuzzlePiece* target_piece = (PuzzlePiece*)puzzle_node->getChildByTag(t_stage_number);
 	string WorH = target_piece->getWorH();
-	selected_piece_img = KS::loadCCBI<CCSprite*>(this, ("piece_selected_" + WorH + ".ccbi").c_str()).first;
+	
+	selected_piece_img = CCNode::create();
 	selected_piece_img->setPosition(target_piece->getPosition());
 	puzzle_node->addChild(selected_piece_img, kPuzzleNodeZorder_selected);
+	
+	CCSprite* light_img = KS::loadCCBI<CCSprite*>(this, ("piece_selected_" + WorH + ".ccbi").c_str()).first;
+	selected_piece_img->addChild(light_img);
 	
 	target_piece->regSelectImg(selected_piece_img);
 }

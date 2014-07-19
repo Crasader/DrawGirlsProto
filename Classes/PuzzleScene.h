@@ -139,7 +139,7 @@ private:
 	CCNode* puzzle_node;
 //	CCSpriteBatchNode* shadow_batchnode;
 //	void addShadow(string piece_type, CCPoint piece_position, int t_stage_number);
-	CCSprite* selected_piece_img;
+	CCNode* selected_piece_img;
 	void setPieceClick(int t_stage_number);
 	void pieceAction(int t_stage_number);
 	void buyPieceAction(int t_stage_number);

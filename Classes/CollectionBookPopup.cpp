@@ -44,9 +44,9 @@ enum CBP_MenuTag{
 	kCBP_MT_gift,
 //	kCBP_MT_inputText,
 	kCBP_MT_strength,
-	kCBP_MT_second,
-	kCBP_MT_third,
-	kCBP_MT_forth,
+//	kCBP_MT_second,
+//	kCBP_MT_third,
+//	kCBP_MT_forth,
 	kCBP_MT_cardBase = 10000
 };
 
@@ -63,10 +63,10 @@ CCPoint CollectionBookPopup::getContentPosition(int t_tag)
 	if(t_tag == kCBP_MT_zoom)		return_value = ccp(57, 57);
 	else if(t_tag == kCBP_MT_pre)	return_value = ccp(30, 160);
 	else if(t_tag == kCBP_MT_next)	return_value = ccp(210, 160);
-	else if(t_tag == kCBP_MT_second)	return_value = ccp(50,225);
-	else if(t_tag == kCBP_MT_third)	return_value = ccp(110,225);
-	else if(t_tag == kCBP_MT_forth)	return_value = ccp(170,225);
-	else if(t_tag == kCBP_MT_close)	return_value = ccp(200, 287);
+//	else if(t_tag == kCBP_MT_second)	return_value = ccp(50,225);
+//	else if(t_tag == kCBP_MT_third)	return_value = ccp(110,225);
+//	else if(t_tag == kCBP_MT_forth)	return_value = ccp(170,225);
+	else if(t_tag == kCBP_MT_close)	return_value = ccp(195, 282);
 //	else if(t_tag == kCBP_MT_inputText)	return_value = ccp(112,95);
 	else if(t_tag == kCBP_MT_strength)	return_value = ccp(55,40);
 	
@@ -75,28 +75,99 @@ CCPoint CollectionBookPopup::getContentPosition(int t_tag)
 
 void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 {
-	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft);
-	r_stage_script->setPosition(ccp(25,152));
+	KSLabelTTF* r_stage_name = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 10);
+	r_stage_name->setPosition(ccp(32,273));
+	r_stage_name->setAnchorPoint(ccp(0,0.5f));
+	target->addChild(r_stage_name);
+	
+//	CCSprite* script_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 175, 35));
+//	script_back->setColor(ccGRAY);
+//	script_back->setOpacity(100);
+//	script_back->setAnchorPoint(ccp(0,1));
+//	script_back->setPosition(ccp(25,261));
+//	target->addChild(script_back);
+	
+	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 35), kCCTextAlignmentLeft);
+	r_stage_script->setPosition(ccp(25,261));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_script->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_script);
 	
 	
-	KSLabelTTF* r_stage_name = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft); //create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft);
-	r_stage_name->setColor(ccWHITE);
-	r_stage_name->enableOuterStroke(ccBLACK, 1);
-	r_stage_name->setPosition(ccp(32,109));
-	r_stage_name->setVerticalAlignment(kCCVerticalTextAlignmentTop);
-	r_stage_name->setAnchorPoint(ccp(0,1));
-	target->addChild(r_stage_name);
+	KSLabelTTF* r_touch = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_touch), mySGD->getFont().c_str(), 9);
+	r_touch->setColor(ccBLACK);
+	r_touch->setPosition(ccp(45,218));
+	target->addChild(r_touch);
 	
-	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(180, 100), kCCTextAlignmentLeft);
-	r_stage_profile->setPosition(ccp(32,95));
+	if(mySGD->isCardMorphing(card_number))
+	{
+		CCSprite* touch_img = CCSprite::create("diary_icon_touch.png");
+		touch_img->setPosition(ccp(45,197));
+		target->addChild(touch_img);
+	}
+	else
+	{
+		CCSprite* not_touch_img = CCSprite::create("diary_icon_lock.png");
+		not_touch_img->setPosition(ccp(45,197));
+		target->addChild(not_touch_img);
+	}
+	
+	KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
+	r_sound->setColor(ccBLACK);
+	r_sound->setPosition(ccp(95,218));
+	target->addChild(r_sound);
+	
+	if(1)
+	{
+		CCSprite* sound_img = CCSprite::create("diary_icon_sound.png");
+		sound_img->setPosition(ccp(95,197));
+		target->addChild(sound_img);
+	}
+	else
+	{
+		CCSprite* not_sound_img = CCSprite::create("diary_icon_lock.png");
+		not_sound_img->setPosition(ccp(95,197));
+		target->addChild(not_sound_img);
+	}
+	
+	
+	KSLabelTTF* r_profile_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_profile), mySGD->getFont().c_str(), 10);
+	r_profile_label->setPosition(ccp(32,170));
+	r_profile_label->setAnchorPoint(ccp(0,0.5f));
+	target->addChild(r_profile_label);
+	
+//	CCSprite* profile_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 175, 50));
+//	profile_back->setColor(ccGRAY);
+//	profile_back->setOpacity(100);
+//	profile_back->setAnchorPoint(ccp(0,1));
+//	profile_back->setPosition(ccp(25,157));
+//	target->addChild(profile_back);
+	
+	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 50), kCCTextAlignmentLeft);
+	r_stage_profile->setPosition(ccp(25,157));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_profile->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_profile);
+	
+	
+	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
+	r_card_elemental_label->setPosition(ccp(32,96));
+	r_card_elemental_label->setAnchorPoint(ccp(0,0.5f));
+	target->addChild(r_card_elemental_label);
+	
+	string elemental_str = "성";
+	
+	KSLabelTTF* r_elemental = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_elementalValue), elemental_str.c_str()), mySGD->getFont().c_str(), 9);
+	r_elemental->setColor(ccBLACK);
+	r_elemental->setPosition(ccp(45,80));
+	target->addChild(r_elemental);
+	
+	CCSprite* elemental_img = CCSprite::create("diary_icon_light.png");
+	elemental_img->setPosition(ccp(45,59));
+	target->addChild(elemental_img);
+	
 	
 	CommonButton* close = CommonButton::createCloseButton(-191);
 	close->setFunction([=](CCObject* sender)
@@ -108,7 +179,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	close->setPosition(getContentPosition(kCBP_MT_close));
 	target->addChild(close, 1, kCBP_MT_close);
 	
-	CommonButton* gift = CommonButton::create("선물하기", 12, CCSizeMake(70,33), CommonButtonType::CommonButtonDarkPupple, -191);
+	CommonButton* gift = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftTitle), 9, CCSizeMake(80,32), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), -191);
 	gift->setFunction([=](CCObject* sender)
 					  {
 						  if(!is_menu_enable)
@@ -125,7 +196,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 						  });
 						  addChild(t_popup, 999);
 					  });
-	gift->setPosition(ccp(115,30));
+	gift->setPosition(ccp(115,32));
 	target->addChild(gift, 1, kCBP_MT_gift);
 	
 //	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
@@ -141,168 +212,161 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //	zoom_menu->setTouchPriority(-191);
 	
 	
-	float mul_value = 0.88f;
-//    int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-//    int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+//	float mul_value = 0.88f;
+//	
+//	int position_index = 1;
+//	
+//	random_device rd;
+//	default_random_engine e1(rd());
+//	uniform_int_distribution<int> uniform_dist(-10, 10);
+//	uniform_int_distribution<int> uniform_dist_x(8, 82);
+//	uniform_int_distribution<int> uniform_dist_y(8, 112);
+//	uniform_int_distribution<int> uniform_dist_cnt(1, 2);
+//	uniform_int_distribution<int> uniform_dist_type(1, 3);
+//	uniform_int_distribution<int> uniform_dist_rotate(-90,90);
+//	
+//	vector<int> card_set = mySGD->getCollectionCardSet(card_number);
+//	
+//	for(int j=0;j<card_set.size();j++)
+//	{
+//		if(card_set[j] == card_number)
+//			continue;
+//		
+//		int rotation_value;
+//		CCPoint position_value;
+//		
+//		if(position_index == 1)
+//		{
+//			rotation_value = uniform_dist(e1);
+//			position_value = ccpAdd(getContentPosition(kCBP_MT_second), ccp(0,uniform_dist(e1)));
+//		}
+//		else if(position_index == 2)
+//		{
+//			rotation_value = uniform_dist(e1);
+//			position_value = ccpAdd(getContentPosition(kCBP_MT_third), ccp(0,uniform_dist(e1)));
+//		}
+//		else
+//		{
+//			rotation_value = uniform_dist(e1);
+//			position_value = ccpAdd(getContentPosition(kCBP_MT_forth), ccp(0,uniform_dist(e1)));
+//		}
+//		
+//		if(card_set[j] > 0)
+//		{
+//			CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", card_set[j])->getCString());
+//            second_img->setScale(mul_value);
+//			second_img->setRotation(rotation_value);
+//            second_img->setPosition(position_value);
+//            target->addChild(second_img);
+//			
+//			CCSprite* img_case = CCSprite::create("diary_frame.png");
+//			img_case->setPosition(ccp(second_img->getContentSize().width/2.f, second_img->getContentSize().height/2.f-4.f));
+//			second_img->addChild(img_case);
+//			
+//			int tape_cnt = uniform_dist_cnt(e1);
+//			for(int j=0;j<tape_cnt;j++)
+//			{
+//				int tape_type = uniform_dist_type(e1);
+//				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
+//				bool is_x = uniform_dist_cnt(e1) == 1;
+//				bool is_first = uniform_dist_cnt(e1) == 1;
+//				if(is_x)
+//				{
+//					if(is_first)
+//						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
+//					else
+//						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
+//				}
+//				else
+//				{
+//					if(is_first)
+//						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
+//					else
+//						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
+//				}
+//				img_case->addChild(tape_img);
+//				tape_img->setRotation(uniform_dist_rotate(e1));
+//			}
+//			
+//			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
+//			second_item->setTag(kCBP_MT_cardBase + card_set[j]);
+//			second_item->setRotation(rotation_value);
+//			
+//			CCMenu* second_menu = CCMenu::createWithItem(second_item);
+//			second_menu->setPosition(second_img->getPosition());
+//			target->addChild(second_menu, 1, kCBP_MT_second+position_index-1);
+//			second_menu->setTouchPriority(-191);
+//		}
+//		else if(card_set[j] == -1)
+//		{
+//			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
+//			
+//			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
+//			no_label->disableOuterStroke();
+//			no_label->setColor(ccc3(60, 60, 60));
+//			no_label->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f));
+//			no_img->addChild(no_label);
+//			
+//			no_img->setScale(mul_value);
+//			no_img->setRotation(rotation_value);
+//            no_img->setPosition(position_value);
+//            target->addChild(no_img);
+//			
+//			CCSprite* img_case = CCSprite::create("diary_frame.png");
+//			img_case->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f-4.f));
+//			no_img->addChild(img_case);
+//			
+//			int tape_cnt = uniform_dist_cnt(e1);
+//			for(int j=0;j<tape_cnt;j++)
+//			{
+//				int tape_type = uniform_dist_type(e1);
+//				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
+//				bool is_x = uniform_dist_cnt(e1) == 1;
+//				bool is_first = uniform_dist_cnt(e1) == 1;
+//				if(is_x)
+//				{
+//					if(is_first)
+//						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
+//					else
+//						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
+//				}
+//				else
+//				{
+//					if(is_first)
+//						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
+//					else
+//						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
+//				}
+//				img_case->addChild(tape_img);
+//				tape_img->setRotation(uniform_dist_rotate(e1));
+//			}
+//		}
+//		position_index++;
+//	}
 	
-	int position_index = 1;
-	
-//	int stage_card_count = NSDS_GI(stage_number, kSDS_SI_cardCount_i);
-//	target->setTag(stage_card_count);
-	
-	random_device rd;
-	default_random_engine e1(rd());
-	uniform_int_distribution<int> uniform_dist(-10, 10);
-	uniform_int_distribution<int> uniform_dist_x(8, 82);
-	uniform_int_distribution<int> uniform_dist_y(8, 112);
-	uniform_int_distribution<int> uniform_dist_cnt(1, 2);
-	uniform_int_distribution<int> uniform_dist_type(1, 3);
-	uniform_int_distribution<int> uniform_dist_rotate(-90,90);
-	
-	vector<int> card_set = mySGD->getCollectionCardSet(card_number);
-	
-	for(int j=0;j<card_set.size();j++)
-	{
-		if(card_set[j] == card_number)
-			continue;
-		
-		int rotation_value;
-		CCPoint position_value;
-		
-		if(position_index == 1)
-		{
-			rotation_value = uniform_dist(e1);
-			position_value = ccpAdd(getContentPosition(kCBP_MT_second), ccp(0,uniform_dist(e1)));
-		}
-		else if(position_index == 2)
-		{
-			rotation_value = uniform_dist(e1);
-			position_value = ccpAdd(getContentPosition(kCBP_MT_third), ccp(0,uniform_dist(e1)));
-		}
-		else
-		{
-			rotation_value = uniform_dist(e1);
-			position_value = ccpAdd(getContentPosition(kCBP_MT_forth), ccp(0,uniform_dist(e1)));
-		}
-		
-		if(card_set[j] > 0)
-		{
-			CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", card_set[j])->getCString());
-            second_img->setScale(mul_value);
-			second_img->setRotation(rotation_value);
-            second_img->setPosition(position_value);
-            target->addChild(second_img);
-			
-			CCSprite* img_case = CCSprite::create("diary_frame.png");
-			img_case->setPosition(ccp(second_img->getContentSize().width/2.f, second_img->getContentSize().height/2.f-4.f));
-			second_img->addChild(img_case);
-			
-			int tape_cnt = uniform_dist_cnt(e1);
-			for(int j=0;j<tape_cnt;j++)
-			{
-				int tape_type = uniform_dist_type(e1);
-				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
-				bool is_x = uniform_dist_cnt(e1) == 1;
-				bool is_first = uniform_dist_cnt(e1) == 1;
-				if(is_x)
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
-					else
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
-				}
-				else
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
-					else
-						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
-				}
-				img_case->addChild(tape_img);
-				tape_img->setRotation(uniform_dist_rotate(e1));
-			}
-			
-			CCMenuItem* second_item = CCMenuItemImage::create("cardsetting_cardmenu.png", "cardsetting_cardmenu.png", this, menu_selector(CollectionBookPopup::menuAction));
-			second_item->setTag(kCBP_MT_cardBase + card_set[j]);
-			second_item->setRotation(rotation_value);
-			
-			CCMenu* second_menu = CCMenu::createWithItem(second_item);
-			second_menu->setPosition(second_img->getPosition());
-			target->addChild(second_menu, 1, kCBP_MT_second+position_index-1);
-			second_menu->setTouchPriority(-191);
-		}
-		else if(card_set[j] == -1)
-		{
-			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
-			
-			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
-			no_label->disableOuterStroke();
-			no_label->setColor(ccc3(60, 60, 60));
-			no_label->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f));
-			no_img->addChild(no_label);
-			
-			no_img->setScale(mul_value);
-			no_img->setRotation(rotation_value);
-            no_img->setPosition(position_value);
-            target->addChild(no_img);
-			
-			CCSprite* img_case = CCSprite::create("diary_frame.png");
-			img_case->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f-4.f));
-			no_img->addChild(img_case);
-			
-			int tape_cnt = uniform_dist_cnt(e1);
-			for(int j=0;j<tape_cnt;j++)
-			{
-				int tape_type = uniform_dist_type(e1);
-				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
-				bool is_x = uniform_dist_cnt(e1) == 1;
-				bool is_first = uniform_dist_cnt(e1) == 1;
-				if(is_x)
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
-					else
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
-				}
-				else
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
-					else
-						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
-				}
-				img_case->addChild(tape_img);
-				tape_img->setRotation(uniform_dist_rotate(e1));
-			}
-		}
-		position_index++;
-	}
-	
-	if(card_set[0] == -2)
-	{
-		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
-		
-		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
-		r_stage_label->setAnchorPoint(ccp(0,0.5f));
-		r_stage_label->setPosition(ccp(138, 287));
-		r_stage_label->setColor(ccBLACK);
-		r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-		r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-		target->addChild(r_stage_label);
-	}
-	else
-	{
+//	if(card_set[0] == -2)
+//	{
+//		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+//		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
+//		
+//		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
+//		r_stage_label->setAnchorPoint(ccp(0,0.5f));
+//		r_stage_label->setPosition(ccp(138, 287));
+//		r_stage_label->setColor(ccBLACK);
+//		r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
+//		r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+//		target->addChild(r_stage_label);
+//	}
+//	else
+//	{
 		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 		
 		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
 		r_stage_label->setAnchorPoint(ccp(0,0.5f));
-		r_stage_label->setPosition(ccp(138, 287));
+		r_stage_label->setPosition(ccp(136, 288));
 		r_stage_label->setColor(ccBLACK);
-		r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-		r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
 		target->addChild(r_stage_label);
-	}
+//	}
 }
 
 void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
@@ -481,16 +545,13 @@ bool CollectionBookPopup::init()
 		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
-		int sub_count = after_right_img->getTag();
-		for(int i=0;i<sub_count;i++)
-		{
-			if(after_right_img->getChildByTag(kCBP_MT_second+i))
-				((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-		}
-//		if(after_right_img->getChildByTag(kCBP_MT_second))
-//			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//		if(after_right_img->getChildByTag(kCBP_MT_third))
-//			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+		
+//		int sub_count = after_right_img->getTag();
+//		for(int i=0;i<sub_count;i++)
+//		{
+//			if(after_right_img->getChildByTag(kCBP_MT_second+i))
+//				((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//		}
 		
 //		CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 //		CCSprite* a_s_pre = CCSprite::create("diary_left.png");
@@ -756,17 +817,12 @@ void CollectionBookPopup::startNextPage()
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
-	int sub_count = recent_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
-	}
-//	if(recent_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second))->setEnabled(true);
-//	if(recent_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
-	
+//	int sub_count = recent_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
+//	}
 	
 	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
@@ -843,17 +899,12 @@ void CollectionBookPopup::startNextFullSelectedPage()
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
-	int sub_count = after_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(after_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-	}
-	
-//	if(after_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//	if(after_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+//	int sub_count = after_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(after_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//	}
 	
 //	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 //	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
@@ -970,17 +1021,12 @@ void CollectionBookPopup::startPreSelectedPage()
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
-	int sub_count = covered_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(covered_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-	}
-	
-//	if(covered_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//	if(covered_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+//	int sub_count = covered_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(covered_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//	}
 	
 //	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 //	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
@@ -1035,17 +1081,12 @@ void CollectionBookPopup::startNextSelectedPage()
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
-	int sub_count = recent_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
-	}
-	
-//	if(recent_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second))->setEnabled(true);
-//	if(recent_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
+//	int sub_count = recent_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
+//	}
 	
 	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	((CCMenu*)recent_left_img->getChildByTag(kCBP_MT_pre))->setEnabled(false);
@@ -1166,17 +1207,12 @@ void CollectionBookPopup::endNextPage()
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
-	int sub_count = after_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(after_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-	}
-	
-//	if(after_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//	if(after_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+//	int sub_count = after_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(after_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//	}
 	
 	
 //	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
@@ -1253,18 +1289,12 @@ void CollectionBookPopup::endNextSelectedPage()
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
-	int sub_count = after_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(after_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-	}
-	
-//	if(after_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//	if(after_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
-	
+//	int sub_count = after_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(after_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//	}
 	
 //	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 //	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
@@ -1335,17 +1365,12 @@ void CollectionBookPopup::startPrePage()
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
-	int sub_count = covered_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(covered_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-	}
-	
-//	if(covered_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//	if(covered_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+//	int sub_count = covered_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(covered_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//	}
 	
 //	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 //	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
@@ -1401,17 +1426,12 @@ void CollectionBookPopup::endPrePage()
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 
-	int sub_count = recent_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
-	}
-	
-//	if(recent_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second))->setEnabled(true);
-//	if(recent_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
+//	int sub_count = recent_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
+//	}
 	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f, 0.5f));
@@ -1452,17 +1472,12 @@ void CollectionBookPopup::endPrePage()
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
-	sub_count = after_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(after_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-	}
-	
-//	if(after_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//	if(after_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+//	sub_count = after_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(after_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//	}
 	
 //	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 //	CCSprite* a_s_pre = CCSprite::create("diary_left.png");
@@ -1507,17 +1522,12 @@ void CollectionBookPopup::endPreSelectedPage()
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
 	
-	int sub_count = recent_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
-	}
-	
-//	if(recent_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second))->setEnabled(true);
-//	if(recent_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_third))->setEnabled(true);
+//	int sub_count = recent_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(recent_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(true);
+//	}
 	
 	after_left_img = CCSprite::create("diary_back.png", CCRectMake(0, 0, 240, 320));
 	after_left_img->setAnchorPoint(ccp(1.f, 0.5f));
@@ -1558,17 +1568,12 @@ void CollectionBookPopup::endPreSelectedPage()
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
-	sub_count = after_right_img->getTag();
-	for(int i=0;i<sub_count;i++)
-	{
-		if(after_right_img->getChildByTag(kCBP_MT_second+i))
-			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
-	}
-	
-//	if(after_right_img->getChildByTag(kCBP_MT_second))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second))->setEnabled(false);
-//	if(after_right_img->getChildByTag(kCBP_MT_third))
-//		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_third))->setEnabled(false);
+//	sub_count = after_right_img->getTag();
+//	for(int i=0;i<sub_count;i++)
+//	{
+//		if(after_right_img->getChildByTag(kCBP_MT_second+i))
+//			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_second+i))->setEnabled(false);
+//	}
 	
 //	CCSprite* a_n_pre = CCSprite::create("diary_left.png");
 //	CCSprite* a_s_pre = CCSprite::create("diary_left.png");

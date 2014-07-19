@@ -838,10 +838,12 @@ typedef enum MyLocalKey_ {
 	
 	kMyLocalKey_cardGiftSuccessTitle,
 	kMyLocalKey_cardGiftSuccessContent,
+	kMyLocalKey_profile,
+	kMyLocalKey_cardElemental,
 	
-	
-	
-	
+	kMyLocalKey_touch,
+	kMyLocalKey_sound,
+	kMyLocalKey_elementalValue,
 	
 	
 	kMyLocalKey_lastkey

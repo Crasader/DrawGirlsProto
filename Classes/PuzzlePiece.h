@@ -95,7 +95,7 @@ public:
 		return true;
 	}
 	
-	void regSelectImg(CCSprite* t_img)
+	void regSelectImg(CCNode* t_img)
 	{
 		selected_img = t_img;
 		
@@ -236,7 +236,7 @@ private:
 	SEL_CallFuncCCp delegate_create_particle;
 	PieceMode get_animation_mode;
 	
-	CCSprite* selected_img;
+	CCNode* selected_img;
 	
 	CCSprite* star1;
 	CCSprite* star2;
