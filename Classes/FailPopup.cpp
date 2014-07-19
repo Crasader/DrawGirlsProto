@@ -582,7 +582,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
-		graph_back->setPosition(ccp(347,220));
+		graph_back->setPosition(ccp(347,240));
 		main_case->addChild(graph_back, kZ_FP_img);
 		setFormSetter(graph_back);
 		
@@ -623,8 +623,8 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
-		rank_percent_case->setAnchorPoint(ccp(0.5,0));
-		rank_percent_case->setPosition(ccp(249+195,221));
+		rank_percent_case->setAnchorPoint(ccp(0.5,1));
+		rank_percent_case->setPosition(ccp(249+195,240));
 		main_case->addChild(rank_percent_case, kZ_FP_img);
 		setFormSetter(rank_percent_case);
 		
@@ -637,10 +637,10 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		}));
 //		percent_label->setColor(ccc3(255, 170, 20));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+3));
+		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f-3));
 		rank_percent_case->addChild(percent_label, kZ_FP_img);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(249 + 195.f*rank_percent,221));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(249 + 195.f*rank_percent,240));
 		rank_percent_case->runAction(t_move);
 		
 		Json::Value user_list = result_data["list"];

@@ -123,7 +123,7 @@ bool EndlessSettingPopup::init()
 void EndlessSettingPopup::addMyPosition(CCNode* main_case)
 {
 	CCSprite* graph_back = CCSprite::create("ending_graph.png");
-	graph_back->setPosition(ccp(110, 155));
+	graph_back->setPosition(ccp(110, 170));
 	main_case->addChild(graph_back);
 
 
@@ -178,17 +178,17 @@ void EndlessSettingPopup::addMyPosition(CCNode* main_case)
 	float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
 	
 	CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
-	rank_percent_case->setAnchorPoint(ccp(0.5,0));
-	rank_percent_case->setPosition(ccp(0, 0));
+	rank_percent_case->setAnchorPoint(ccp(0.5,1));
+	rank_percent_case->setPosition(ccp(0, 7));
 	graph_back->addChild(rank_percent_case);
 	
 	KSLabelTTF* percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
 	percent_label->setColor(ccc3(255, 170, 20));
 	percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-	percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f+2));
+	percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f-2));
 	graph_back->addChild(percent_label);
 	
-	CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,230));
+	CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(257 + 195.f*rank_percent,7));
 	rank_percent_case->runAction(t_move);
 
 	CCScale9Sprite* info_back1 = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));

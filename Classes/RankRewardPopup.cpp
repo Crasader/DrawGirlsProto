@@ -125,7 +125,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	left_back->addChild(left_graph_back);
 	
 	CCSprite* left_graph_case = CCSprite::create("ending_graph.png");//"rankreward_graph.png");
-	left_graph_case->setPosition(ccp(left_graph_back->getContentSize().width/2.f, 21));
+	left_graph_case->setPosition(ccp(left_graph_back->getContentSize().width/2.f, 36));
 	left_graph_back->addChild(left_graph_case);
 	
 	Json::Value stage_reward_list = mySGD->rank_reward_data["stage"]["rewardList"];
@@ -205,14 +205,14 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	float stage_rank_percent = 1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt();
 	
 	CCSprite* stage_percent_case = CCSprite::create("gameresult_rank_percent.png");
-	stage_percent_case->setAnchorPoint(ccp(0.5,0));
-	stage_percent_case->setPosition(ccpFromSize(left_graph_case->getContentSize()) + ccp(0,-5));
+	stage_percent_case->setAnchorPoint(ccp(0.5,1));
+	stage_percent_case->setPosition(ccpFromSize(left_graph_case->getContentSize()) + ccp(0,0));
 	left_graph_case->addChild(stage_percent_case);
 	
 	KSLabelTTF* stage_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", stage_rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
 	stage_percent_label->setColor(ccc3(255, 170, 20));
 	stage_percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-	stage_percent_label->setPosition(ccpFromSize(stage_percent_case->getContentSize()/2.f) + ccp(1,2));
+	stage_percent_label->setPosition(ccpFromSize(stage_percent_case->getContentSize()/2.f) + ccp(1,-2));
 	stage_percent_case->addChild(stage_percent_label);
 	
 	
@@ -302,7 +302,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	right_back->addChild(right_graph_back);
 	
 	CCSprite* right_graph_case = CCSprite::create("ending_graph.png");// rankreward_graph.png");
-	right_graph_case->setPosition(ccp(right_graph_back->getContentSize().width/2.f, 21));
+	right_graph_case->setPosition(ccp(right_graph_back->getContentSize().width/2.f, 36));
 	right_graph_back->addChild(right_graph_case);
 	
 	Json::Value endless_reward_list = mySGD->rank_reward_data["endless"]["rewardList"];
@@ -383,13 +383,13 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	CCSprite* endless_percent_case = CCSprite::create("gameresult_rank_percent.png");
 	endless_percent_case->setAnchorPoint(ccp(0.5,0));
-	endless_percent_case->setPosition(ccpFromSize(right_graph_case->getContentSize()) + ccp(0,-5));
+	endless_percent_case->setPosition(ccpFromSize(right_graph_case->getContentSize()) + ccp(0,0));
 	right_graph_case->addChild(endless_percent_case);
 	
 	KSLabelTTF* endless_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", endless_rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
 	endless_percent_label->setColor(ccc3(255, 170, 20));
 	endless_percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-	endless_percent_label->setPosition(ccpFromSize(endless_percent_case->getContentSize()/2.f) + ccp(1,2));
+	endless_percent_label->setPosition(ccpFromSize(endless_percent_case->getContentSize()/2.f) + ccp(1,-2));
 	endless_percent_case->addChild(endless_percent_label);
 	
 	

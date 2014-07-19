@@ -415,7 +415,7 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	else if(t_type == kGoodsType_money)
 		title_string = myLoc->getLocalForKey(kMyLocalKey_heartNotEnought);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));

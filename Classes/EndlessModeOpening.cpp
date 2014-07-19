@@ -295,19 +295,19 @@ void EndlessModeOpening::setMain()
 	info_item->setEnabled(false);
 	
 	CCSprite* graph_img = CCSprite::create("endless_graph.png");
-	graph_img->setPosition(ccp(right_back->getContentSize().width/2.f, 83));
+	graph_img->setPosition(ccp(right_back->getContentSize().width/2.f, 100));
 	right_info_node->addChild(graph_img);
 	
 	rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
-	rank_percent_case->setAnchorPoint(ccp(0.5f,0.5f));
-	rank_percent_case->setPosition(ccp(graph_img->getContentSize().width,23));
+	rank_percent_case->setAnchorPoint(ccp(0.5f,1));
+	rank_percent_case->setPosition(ccp(graph_img->getContentSize().width,7));
 	graph_img->addChild(rank_percent_case);
 	
 	percent_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 12);
 	percent_label->disableOuterStroke();
 	percent_label->setOpacity(0);
 	percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1,
-																 rank_percent_case->getContentSize().height/2.f+3));
+																 rank_percent_case->getContentSize().height/2.f-3));
 	rank_percent_case->addChild(percent_label);
 	
 	

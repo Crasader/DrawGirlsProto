@@ -49,7 +49,7 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 		
 		m_container->addChild(KSTimer::create(0.3f, [=](){
 			CCSprite* beam_img = CCSprite::create("puzzle_unlock_beam.png");
-			beam_img->setPosition(ccp(0,30));
+			beam_img->setPosition(ccp(0,33));
 			beam_img->setScale(0.3f);
 			beam_img->setOpacity(0);
 			m_container->addChild(beam_img);
@@ -70,7 +70,7 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 				}));
 				
 				CCSprite* upgrade_4 = CCSprite::create("missile_upgrade_4.png");
-				upgrade_4->setPosition(ccp(0,30));
+				upgrade_4->setPosition(ccp(0,33));
 				upgrade_4->setScale(0.3f);
 				upgrade_4->setRotation(0);
 				upgrade_4->setOpacity(0);
@@ -126,7 +126,7 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 						}
 						
 						item_img = CCSprite::create(CCString::createWithFormat("item%d.png", item_type)->getCString());
-						item_img->setPosition(ccp(0,30));
+						item_img->setPosition(ccp(0,33));
 						item_img->setOpacity(0);
 						item_img->setScale(0.6f);
 						m_container->addChild(item_img);
@@ -184,10 +184,10 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 			regacha_button->setVisible(true);
 			m_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 6.f/30.f, [=](float t){
 				KS::setOpacity(regacha_button, 255*t);
-				regacha_button->setPosition(ccp(-65,-85-100+100*t));
+				regacha_button->setPosition(ccp(-65,-80-98+98*t));
 			}, [=](float t){
 				KS::setOpacity(regacha_button, 255);
-				regacha_button->setPosition(ccp(-65,-85));
+				regacha_button->setPosition(ccp(-65,-80));
 			}));
 		}));
 		
@@ -196,10 +196,10 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 			use_button->setVisible(true);
 			m_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 6.f/30.f, [=](float t){
 				KS::setOpacity(use_button, 255*t);
-				use_button->setPosition(ccp(65,-85-100+100*t));
+				use_button->setPosition(ccp(65,-80-98+98*t));
 			}, [=](float t){
 				KS::setOpacity(use_button, 255);
-				use_button->setPosition(ccp(65,-85));
+				use_button->setPosition(ccp(65,-80));
 				is_menu_enable = true;
 			}));
 		}));
@@ -250,33 +250,33 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	back_in->setContentSize(CCSizeMake(251, 128));
-	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,15));
+	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,18));
 	back_case->addChild(back_in);
 	
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");
 	
 	question_img = t_ccb.first;
-	question_img->setPosition(ccp(0, 30));
+	question_img->setPosition(ccp(0, 33));
 	m_container->addChild(question_img);
 	
 	question_manager = t_ccb.second;
 	question_manager->setDelegate(this);
 	
 	CCSprite* question_box = KS::loadCCBI<CCSprite*>(this, "startsetting_randombox.ccbi").first;
-	question_box->setPosition(ccp(0,30));
+	question_box->setPosition(ccp(0,33));
 	m_container->addChild(question_box);
 	
 	
 	item_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent1), mySGD->getFont().c_str(), 15);
 	item_title->disableOuterStroke();
-	item_title->setPosition(ccp(0,-20));
+	item_title->setPosition(ccp(0,-17));
 	m_container->addChild(item_title);
 	
 	item_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent2), mySGD->getFont().c_str(), 12);
 	item_ment->disableOuterStroke();
 	item_ment->setColor(ccc3(255, 170, 20));
-	item_ment->setPosition(ccp(0,-35));
+	item_ment->setPosition(ccp(0,-32));
 	m_container->addChild(item_ment);
 	
 	
@@ -287,7 +287,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	regacha_label->setPosition(ccp(0,10));
 	r_label->addChild(regacha_label);
 	
-	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
+	CCScale9Sprite* price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
 	price_back->setContentSize(CCSizeMake(82, 26));
 	price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
 	regacha_label->addChild(price_back);
@@ -337,7 +337,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	regacha_button = CCControlButton::create(r_label, regacha_back);
 	regacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::regachaAction), CCControlEventTouchUpInside);
 	regacha_button->setPreferredSize(CCSizeMake(117,60));
-	regacha_button->setPosition(ccp(-65,-85-98));
+	regacha_button->setPosition(ccp(-65,-80-98));
 	m_container->addChild(regacha_button);
 	
 	regacha_button->setVisible(false);
@@ -351,7 +351,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	use_button = CCControlButton::create(use_label, use_back);
 	use_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ItemGachaPopup::useAction), CCControlEventTouchUpInside);
 	use_button->setPreferredSize(CCSizeMake(117,60));//120,65
-	use_button->setPosition(ccp(65,-85-98));
+	use_button->setPosition(ccp(65,-80-98));
 	m_container->addChild(use_button);
 	
 	use_button->setVisible(false);
@@ -434,7 +434,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		item_img->removeFromParent();
 		item_title->setString("");
 		item_ment->setString("");
-		regacha_button->setPosition(ccp(-65,-85-100));
+		regacha_button->setPosition(ccp(-65,-80-98));
 		regacha_button->setVisible(false);
 		
 		if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0 && !is_stamp)
@@ -471,7 +471,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 			price_back->addChild(price_label);
 		}
 		
-		use_button->setPosition(ccp(65,-85-100));
+		use_button->setPosition(ccp(65,-80-98));
 		use_button->setVisible(false);
 		
 		question_manager->runAnimationsForSequenceNamed("Default Timeline");
