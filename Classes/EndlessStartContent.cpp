@@ -67,7 +67,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	
 	CCSprite* left_back = CCSprite::create("endless_popup.png");
-	left_back->setPosition(ccp(-120, 0));
+	left_back->setPosition(ccp(-132, 0));
 	addChild(left_back);
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
@@ -101,7 +101,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	
 	CCSprite* right_back = CCSprite::create("endless_popup.png");
-	right_back->setPosition(ccp(120, 0));
+	right_back->setPosition(ccp(132, 0));
 	addChild(right_back);
 	
 	CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->endless_flag.getV()).c_str());

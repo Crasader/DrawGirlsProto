@@ -176,7 +176,7 @@ void EndlessModeOpening::setMain()
 	tipBack->addChild(tipLbl);
 	
 	left_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	left_back->setContentSize(CCSizeMake(255, 212));
+	left_back->setContentSize(CCSizeMake(270, 212));
 	left_back->setPosition(ccp(25+left_back->getContentSize().width/2.f, main_case->getContentSize().height*0.44f));
 	main_case->addChild(left_back);
 	
@@ -212,7 +212,7 @@ void EndlessModeOpening::setMain()
 	rest_time_value->setPosition(ccp(rest_back->getContentSize().width-10 - rest_time_value->getContentSize().width/2.f, rest_back->getContentSize().height/2.f));
 	
 	right_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	right_back->setContentSize(CCSizeMake(165, 160));
+	right_back->setContentSize(CCSizeMake(150, 160));
 	right_back->setPosition(ccp(main_case->getContentSize().width-25-right_back->getContentSize().width/2.f, 149));
 	main_case->addChild(right_back);
 	
@@ -257,7 +257,7 @@ void EndlessModeOpening::setMain()
 												   this->info_item->setEnabled(false);
 												   this->reward_item->setEnabled(true);
 											   });
-	info_item->setPosition(ccp(right_back->getContentSize().width/2.f - 39, 145));
+	info_item->setPosition(ccp(right_back->getContentSize().width/2.f - 37, 145));
 	right_top_menu->addChild(info_item);
 	
 	CCSprite* n_reward = CCSprite::create("endless_bt_down.png");
@@ -289,7 +289,7 @@ void EndlessModeOpening::setMain()
 												   this->reward_item->setEnabled(false);
 												   this->info_item->setEnabled(true);
 											   });
-	reward_item->setPosition(ccp(right_back->getContentSize().width/2.f + 39, 145));
+	reward_item->setPosition(ccp(right_back->getContentSize().width/2.f + 37, 145));
 	right_top_menu->addChild(reward_item);
 	
 	info_item->setEnabled(false);
@@ -359,7 +359,7 @@ void EndlessModeOpening::setMain()
 																		straight_back->getContentSize().height/2.f));
 	straight_back->addChild(straight_content);
 	
-	ready_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), 18.5f, CCSizeMake(170, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
+	ready_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), 18.5f, CCSizeMake(156, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
 	ready_button->setPosition(ccp(right_back->getContentSize().width/2.f,-28));
 	right_back->addChild(ready_button);
 	ready_button->setFunction([=](CCObject* sender)
@@ -1045,7 +1045,7 @@ public:
 //	}
 	virtual CCSize cellSizeForTable(CCTableView *table)
 	{
-		return CCSizeMake(160, 42);
+		return CCSizeMake(150, 38);
 	}
 	virtual unsigned int numberOfCellsInTableView(CCTableView *table)
 	{
@@ -1076,7 +1076,7 @@ public:
 		CCScale9Sprite* rewardBack2 = CCScale9Sprite::create("mainpopup_pupple2.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 		rewardBack2->setPosition(ccp(0.f, 0.f));
 		rewardBack2->setAnchorPoint(ccp(0.f, 0.0f));
-		rewardBack2->setContentSize(CCSizeMake(163, 42));
+		rewardBack2->setContentSize(CCSizeMake(148, 42));
 		//			rewardBack2->setPosition(105,175);
 		setFormSetter(rewardBack2);
 		cell->addChild(rewardBack2);
@@ -1089,7 +1089,7 @@ public:
 			StyledLabelTTF* reward2Title = StyledLabelTTF::create(
 																														ccsf("<font color=#FFAA14 newline=13>%s</font><font color=#FFAA14>%s</font>",
 																																 left1.c_str(), left2.c_str()),
-																														mySGD->getFont().c_str(), 11,
+																														mySGD->getFont().c_str(), 9,
 																														999, StyledAlignment::kCenterAlignment);
 			reward2Title->setAnchorPoint(ccp(0.5f, 0.5f));
 			A = reward2Title;
@@ -1187,11 +1187,11 @@ public:
 		if(B)
 		{
 			
-			B->setPosition(ccp(41.5,32.5)); 			// dt (9.5,-6.0)
+			B->setPosition(ccp(36.5,32.5)); 			// dt (9.5,-6.0)
 		}
 		if(C)
 		{
-			C->setPosition(ccp(131.0,27.5 - 10.5)); 			// dt (-0.5,0.5)
+			C->setPosition(ccp(122.0,27.5 - 10.5)); 			// dt (-0.5,0.5)
 		}
 		return cell;
 	}
@@ -1215,7 +1215,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		right_reward_node->addChild(rtd);
 		rtd->m_rewardData = result_data["rewardInfo"];
 		
-		CCRect t_table_rect = CCRectMake(1.f, 1.f, 165, 127);
+		CCRect t_table_rect = CCRectMake(1.f, 1.f, 150, 127);
 		
 //		CCSprite* t_table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_table_rect.size.width, t_table_rect.size.height));
 //		t_table_back->setOpacity(100);
@@ -1313,7 +1313,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		
 		
-		CCRect table_rect = CCRectMake(6, left_back->getContentSize().height/2.f - 150/2.f - 30, 255, 150);
+		CCRect table_rect = CCRectMake(6, left_back->getContentSize().height/2.f - 150/2.f - 30, 263, 150);
 		
 //		CCSprite* table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_rect.size.width, table_rect.size.height));
 //		table_back->setOpacity(100);
@@ -1330,12 +1330,12 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		
 		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("rank_normal2.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-		list_cell_case->setContentSize(CCSizeMake(244, 31));
+		list_cell_case->setContentSize(CCSizeMake(259, 31));
 		list_cell_case->setPosition(ccp(5+list_cell_case->getContentSize().width/2.f,167));//list_cell_case->getContentSize().height/2.f+5));
 		list_cell_case->setTag(kCellCase);
 		left_back->addChild(list_cell_case);
 		
-		mySelection = CommonButton::create(CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 234, 31)), touch_priority);
+		mySelection = CommonButton::create(CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 249, 31)), touch_priority);
 		mySelection->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,160));//list_cell_case->getContentSize().height/2.f+5));
 		mySelection->setFunction([=](CCObject* obj){
 			Json::Value param;
@@ -1478,7 +1478,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 //	}
 	
 	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-	list_cell_case->setContentSize(CCSizeMake(244, 31));
+	list_cell_case->setContentSize(CCSizeMake(259, 31));
 	list_cell_case->setPosition(ccp(list_cell_case->getContentSize().width/2.f,list_cell_case->getContentSize().height/2.f));
 	cell->addChild(list_cell_case);
 	
@@ -1583,8 +1583,8 @@ void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* c
 		currentSelectedCell->removeFromParent();
 	}
 	currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
-	currentSelectedCell->setPosition(ccpFromSize(CCSizeMake(244, 31)/2.f));
-	currentSelectedCell->setContentSize(CCSizeMake(244, 31) + CCSizeMake(7,7)); 			// dt (6.0,9.5)
+	currentSelectedCell->setPosition(ccpFromSize(CCSizeMake(259, 31)/2.f));
+	currentSelectedCell->setContentSize(CCSizeMake(259, 31) + CCSizeMake(7,7)); 			// dt (6.0,9.5)
 //	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
 	cell->addChild(currentSelectedCell);
 	
@@ -1614,7 +1614,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 																					mySGD->getFont().c_str(),
 																					11.f, 0, StyledAlignment::kRightAlignment);
 	record_content->setAnchorPoint(ccp(1,0.5f));
-	record_content->setPosition(ccp(record_back->getContentSize().width-10, record_back->getContentSize().height/2.f));
+	record_content->setPosition(ccp(record_back->getContentSize().width-5, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_content);
 	
 	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", info["endlessData"]["score"].asInt())->getCString()).c_str());
