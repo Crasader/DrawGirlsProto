@@ -334,11 +334,11 @@ void RivalSelectPopup::startRivalAnimation()
 																																									  {
 																																										  title_label->setOpacity(255);
 																																										  
-																																										  CCSprite* n_left = CCSprite::create("subbutton_purple2.png");
+																																										  CCSprite* n_left = CCSprite::create("subbutton_purple4.png");
 																																										  KSLabelTTF* n_left_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  n_left_label->setPosition(ccpFromSize(n_left->getContentSize()/2.f));
 																																										  n_left->addChild(n_left_label);
-																																										  CCSprite* s_left = CCSprite::create("subbutton_purple2.png");
+																																										  CCSprite* s_left = CCSprite::create("subbutton_purple4.png");
 																																										  s_left->setColor(ccGRAY);
 																																										  KSLabelTTF* s_left_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  s_left_label->setPosition(ccpFromSize(s_left->getContentSize()/2.f));
@@ -350,11 +350,11 @@ void RivalSelectPopup::startRivalAnimation()
 																																										  select_menu->addChild(left_item);
 																																										  
 																																										  
-																																										  CCSprite* n_center = CCSprite::create("subbutton_purple2.png");
+																																										  CCSprite* n_center = CCSprite::create("subbutton_purple4.png");
 																																										  KSLabelTTF* n_center_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  n_center_label->setPosition(ccpFromSize(n_center->getContentSize()/2.f));
 																																										  n_center->addChild(n_center_label);
-																																										  CCSprite* s_center = CCSprite::create("subbutton_purple2.png");
+																																										  CCSprite* s_center = CCSprite::create("subbutton_purple4.png");
 																																										  s_center->setColor(ccGRAY);
 																																										  KSLabelTTF* s_center_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  s_center_label->setPosition(ccpFromSize(s_center->getContentSize()/2.f));
@@ -365,11 +365,11 @@ void RivalSelectPopup::startRivalAnimation()
 																																										  select_menu->addChild(center_item);
 																																										  
 																																										  
-																																										  CCSprite* n_right = CCSprite::create("subbutton_purple2.png");
+																																										  CCSprite* n_right = CCSprite::create("subbutton_purple4.png");
 																																										  KSLabelTTF* n_right_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  n_right_label->setPosition(ccpFromSize(n_right->getContentSize()/2.f));
 																																										  n_right->addChild(n_right_label);
-																																										  CCSprite* s_right = CCSprite::create("subbutton_purple2.png");
+																																										  CCSprite* s_right = CCSprite::create("subbutton_purple4.png");
 																																										  s_right->setColor(ccGRAY);
 																																										  KSLabelTTF* s_right_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  s_right_label->setPosition(ccpFromSize(s_right->getContentSize()/2.f));

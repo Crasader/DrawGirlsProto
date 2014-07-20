@@ -226,6 +226,8 @@ void StageImgLoader::successActionSet1()
 	unschedule(schedule_selector(StageImgLoader::successActionSet1));
 	lchunk_list[0].size = 0;
 	
+	CCLOG("success %s", downloading_list[0].download_filename.c_str());
+	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
 		endDownloadSet();
@@ -234,6 +236,8 @@ void StageImgLoader::successActionSet2()
 {
 	unschedule(schedule_selector(StageImgLoader::successActionSet2));
 	lchunk_list[1].size = 0;
+	
+	CCLOG("success %s", downloading_list[1].download_filename.c_str());
 	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
@@ -244,6 +248,8 @@ void StageImgLoader::successActionSet3()
 	unschedule(schedule_selector(StageImgLoader::successActionSet3));
 	lchunk_list[2].size = 0;
 	
+	CCLOG("success %s", downloading_list[2].download_filename.c_str());
+	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
 		endDownloadSet();
@@ -253,6 +259,8 @@ void StageImgLoader::successActionSet4()
 	unschedule(schedule_selector(StageImgLoader::successActionSet4));
 	lchunk_list[3].size = 0;
 	
+	CCLOG("success %s", downloading_list[3].download_filename.c_str());
+	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
 		endDownloadSet();
@@ -261,6 +269,8 @@ void StageImgLoader::successActionSet5()
 {
 	unschedule(schedule_selector(StageImgLoader::successActionSet5));
 	lchunk_list[4].size = 0;
+	
+	CCLOG("success %s", downloading_list[4].download_filename.c_str());
 	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
@@ -281,6 +291,8 @@ void StageImgLoader::failActionSet1()
 	unschedule(schedule_selector(StageImgLoader::failActionSet1));
 	lchunk_list[0].size = 0;
 	
+	CCLOG("fail %s", downloading_list[0].download_filename.c_str());
+	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
 		endDownloadSet();
@@ -289,6 +301,8 @@ void StageImgLoader::failActionSet2()
 {
 	unschedule(schedule_selector(StageImgLoader::failActionSet2));
 	lchunk_list[1].size = 0;
+	
+	CCLOG("fail %s", downloading_list[1].download_filename.c_str());
 	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
@@ -299,6 +313,8 @@ void StageImgLoader::failActionSet3()
 	unschedule(schedule_selector(StageImgLoader::failActionSet3));
 	lchunk_list[2].size = 0;
 	
+	CCLOG("fail %s", downloading_list[2].download_filename.c_str());
+	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
 		endDownloadSet();
@@ -307,6 +323,8 @@ void StageImgLoader::failActionSet4()
 {
 	unschedule(schedule_selector(StageImgLoader::failActionSet4));
 	lchunk_list[3].size = 0;
+	
+	CCLOG("fail %s", downloading_list[3].download_filename.c_str());
 	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
@@ -317,6 +335,8 @@ void StageImgLoader::failActionSet5()
 	unschedule(schedule_selector(StageImgLoader::failActionSet5));
 	lchunk_list[4].size = 0;
 	
+	CCLOG("fail %s", downloading_list[4].download_filename.c_str());
+	
 	end_cnt++;
 	if(total_download_cnt == end_cnt)
 		endDownloadSet();
@@ -324,12 +344,18 @@ void StageImgLoader::failActionSet5()
 
 void StageImgLoader::endDownloadSet()
 {
+	CCLOG("endDownloadSet");
+	
 	for(int i=0;i<total_download_cnt;i++)
 	{
 		if(downloading_list[i].is_fail)
+		{
 			downloading_list[i].fail_func(downloading_list[i].download_filename);
+		}
 		else
+		{
 			downloading_list[i].success_func(downloading_list[i].download_filename);
+		}
 	}
 }
 
@@ -367,6 +393,8 @@ void StageImgLoader::downloadImgSet(vector<DownloadImgInfo>& t_list)
 		downloading_list[i].success_func = t_list[i].success_func;
 		downloading_list[i].fail_func = t_list[i].fail_func;
 		downloading_list[i].is_fail = t_list[i].is_fail;
+		
+		CCLOG("download %s", t_list[i].download_filename.c_str());
 	}
 	
 	startDownloadSet();
