@@ -75,7 +75,7 @@ bool CardViewScene::init()
 	game_node->setScale(1.5f);
 	game_node->setAnchorPoint(ccp(0.5,0.5));
 	game_node->setContentSize(CCSizeMake(320,460));
-	game_node->setPosition(ccp(240,160));
+	game_node->setPosition(ccp(240,myDSH->ui_center_y));
 	setFormSetter(game_node);
 	addChild(game_node, kCV_Z_first_img);
 	
@@ -90,7 +90,7 @@ bool CardViewScene::init()
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
 	
-	first_img->setPosition(ccp(160,215));
+	first_img->setPosition(ccp(160,230));
 	first_img->setAnchorPoint(ccp(0.5,0.5));
 	setFormSetter(first_img);
 	first_img->setTouchEnabled(false);
@@ -100,11 +100,11 @@ bool CardViewScene::init()
 	{
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
-		safety_img->setPosition(ccp(160, 215));
+		safety_img->setPosition(ccp(160, 240));
 		game_node->addChild(safety_img, kCV_Z_first_img);
 	}
 	
-	CCPoint center_position = ccp(160,215);
+	CCPoint center_position = ccp(160,230);
 	
 	CCSprite* top_case = CCSprite::create("diary_frame_top.png");
 	top_case->setPosition(ccpAdd(center_position, ccp(0,215)));
@@ -340,24 +340,56 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	
 	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
 	
-	//왼쪽맞추기
-	if(game_node->getScale()*first_img->getContentSize().width/2.f*-1+50>a_p.x){
-		a_p.x = game_node->getScale()*first_img->getContentSize().width/2.f*-1+50;
-	}
+	//size가 860 * 320
+	int widthLimit = 320 * game_node->getScale();
+	int heightLimit = (430-screen_size.height/2.f) * game_node->getScale();
 	
-	//오른쪽맞추기
-	if(game_node->getScale()*first_img->getContentSize().width/2.f+screen_size.width/2.f-50<a_p.x){
-		a_p.x = game_node->getScale()*first_img->getContentSize().width/2.f+screen_size.width/2.f-50;
-	}
+	int checkWidth=0;
 	
+	float height = myDSH->ui_center_y*2;
+	float contentHalfWidth = game_node->getScale()*first_img->getContentSize().width/2.f;
+	float contentHalfHeight = game_node->getScale()*first_img->getContentSize().height/2.f;
+
+	
+	if(contentHalfWidth*2.f<=screen_size.width/2.f){
+			//왼쪽맞추기
+		if(contentHalfWidth*-1+widthLimit>a_p.x){
+			a_p.x = contentHalfWidth*-1+widthLimit;
+		}
+		
+		//오른쪽맞추기
+		if(contentHalfWidth+screen_size.width/2.f-widthLimit<a_p.x){
+			a_p.x = contentHalfWidth+screen_size.width/2.f-widthLimit;
+		}
+//		//top
+//		if(screen_size.height/2.f < a_p.y+game_node->getScale()*first_img->getContentSize().height/2.f){
+//			a_p.y=game_node->getScale()*first_img->getContentSize().height/2.f*-1+heightLimit;
+//		}
+//		//bottom
+//		if(a_p.y<game_node->getScale()*first_img->getContentSize().height/2.f){
+//			a_p.y = game_node->getScale()*first_img->getContentSize().height/2.f;
+//		}
+	}else{
+
+		
+		if(a_p.x<screen_size.width/2.f-contentHalfWidth){
+			a_p.x = screen_size.width/2.f-contentHalfWidth;
+		}
+		
+		if(contentHalfWidth<a_p.x){
+			a_p.x = contentHalfWidth;
+		}
+
+	}
 	//top
-	if(game_node->getScale()*first_img->getContentSize().height/2.f*-1+50>a_p.y){
-		a_p.y=game_node->getScale()*first_img->getContentSize().height/2.f*-1+50;
+	if(a_p.y < height - contentHalfHeight){
+		a_p.y=height - contentHalfHeight;
+	}else if(a_p.y>contentHalfHeight){
+		a_p.y=contentHalfHeight;
 	}
-	//bottom
-	if(game_node->getScale()*first_img->getContentSize().height/2.f+screen_size.height/2.f-50<a_p.y){
-		a_p.y = game_node->getScale()*first_img->getContentSize().height/2.f+screen_size.height/2.f-50;
-	}
+	
+
+	
 	
 //	if(game_node->getScale() <= 1.5f)
 //	{
