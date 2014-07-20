@@ -70,9 +70,18 @@ bool CardViewScene::init()
 //		}
 //	}
 	
-	CCSprite* back_img = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
+	CCSprite* back_img = CCSprite::create("ingame_outback.png");
 	back_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(back_img, kCV_Z_back);
+	
+//	CCSprite* temp = CCSprite::create("whitePaper.png");
+//	temp->setBlendFunc({GL_SRC_ALPHA, GL_ONE});
+//	temp->setPosition(ccp(240,myDSH->ui_center_y));
+//	addChild(temp);
+	
+	CCSprite* card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
+	card_back->setPosition(ccp(240,myDSH->ui_center_y));
+	addChild(card_back, kCV_Z_back);
 	
 //	CCSprite* title_name = CCSprite::create("temp_title_name.png");
 //	title_name->setPosition(ccp(240,myDSH->ui_center_y));
