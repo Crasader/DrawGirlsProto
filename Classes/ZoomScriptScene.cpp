@@ -75,7 +75,7 @@ bool ZoomScript::init()
 //		}
 //	}
 	
-	CCSprite* back_img = CCSprite::create("main_back.png");
+	CCSprite* back_img = CCSprite::create("ingame_outback.png");
 	back_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(back_img, kZS_Z_back);
 	
