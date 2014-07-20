@@ -845,6 +845,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_sound,
 	kMyLocalKey_elementalValue,
 	
+	kMyLocalKey_myCardCount,
+	kMyLocalKey_diaryView,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

@@ -1553,6 +1553,8 @@ void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		mySGD->total_card_cnt = result_data["lastCardNo"].asInt();
+		
 		card_data_load_list.clear();
 		
 		mySGD->initTakeCardInfo(result_data["list"], card_data_load_list);

@@ -47,7 +47,7 @@ class CardListViewer;
 class ListViewerScroll;
 class IntPoint;
 class CommonButton;
-class ScrollBar;
+//class ScrollBar;
 class KSLabelTTF;
 class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
@@ -71,42 +71,29 @@ private:
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
-	CCScale9Sprite* main_case;
+	CCSprite* main_case;
 	CCSprite* gray;
 	
-	CommonButton* align_default_menu;
-	CommonButton* align_take_menu;
-	CommonButton* align_rank_menu;
+	CCMenu* tab_menu;
 	
-	ScrollBar* m_scrollBar;
+	CCMenuItem* align_default_menu;
+	CCMenuItem* align_take_menu;
+	CCMenuItem* align_rank_menu;
+	CCMenuItem* diary_menu;
 	
-	int server_puzzle_list_count;
-	vector<int> server_puzzle_list_no;
-	vector<int> server_puzzle_stage_count;
-	vector<int> server_puzzle_start_stage;
-	vector<DefaultCardCellInfo> default_cell_info;
-	vector<CardSortInfo> not_default_card_list;
-	
-	vector<CardSortInfo> special_card_list;
-	
-	bool is_special_align_reverse;
+	KSLabelTTF* n_take_label;
+	KSLabelTTF* s_take_label;
+	KSLabelTTF* n_rank_label;
+	KSLabelTTF* s_rank_label;
 	
 	int recent_selected_card_number;
 	
 	int recent_sort_type;
 	
-	map<int, CCPoint> align_default_position_list;
-	
-	unsigned int default_align_number_of_cell;
 	CCTableView* card_table;
 	
 	CCScale9Sprite* take_count_back;
-	KSLabelTTF* title_content;
 	KSLabelTTF* title_label;
-	KSLabelTTF* n_special_show_label;
-	KSLabelTTF* s_special_show_label;
-	
-	bool is_normal_table;
 	
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
@@ -123,19 +110,14 @@ private:
 	void endHidePopup();
 	
 	CCPoint getContentPosition(int t_tag);
-//	void removeMountingCard();
-//	void mountingCard(int card_stage, int card_level);
+	
+	vector<CardSortInfo> card_list;
 	
 	void alignChange();
-//	void addMountedCase();
-//	void removeMountedCase();
 	
-	void specialChangeSortType(bool is_reverse);
 	void changeSortType( CardSortType t_type );
 	
 	bool is_menu_enable;
-	
-	void addDefaultAlignCard(int t_card_number, CCPoint t_position, CCNode* t_node, string t_ment);
 	
 	virtual bool ccTouchBegan (CCTouch * pTouch, CCEvent * pEvent);
 	virtual void ccTouchMoved (CCTouch * pTouch, CCEvent * pEvent);

@@ -168,6 +168,8 @@ void CardGiftPopup::resultSendAction(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		mySGD->total_card_cnt = result_data["lastCardNo"].asInt();
+		
 		mySGD->network_check_cnt = 0;
 		
 		vector<int> card_data_load_list;

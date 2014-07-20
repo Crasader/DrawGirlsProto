@@ -1394,6 +1394,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("사운드"), kMyLocalKey_sound);
 	ko->setObject(CCString::create("속성(%s)"), kMyLocalKey_elementalValue);
 	
+	ko->setObject(CCString::create("내카드수 "), kMyLocalKey_myCardCount);
+	ko->setObject(CCString::create("다이어리 보기"), kMyLocalKey_diaryView);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -2291,6 +2294,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("터치"), kMyLocalKey_touch);
 	en->setObject(CCString::create("사운드"), kMyLocalKey_sound);
 	en->setObject(CCString::create("속성(%s)"), kMyLocalKey_elementalValue);
+	
+	en->setObject(CCString::create("내카드수 "), kMyLocalKey_myCardCount);
+	en->setObject(CCString::create("다이어리 보기"), kMyLocalKey_diaryView);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3211,6 +3217,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("터치"), kMyLocalKey_touch);
 	ja->setObject(CCString::create("사운드"), kMyLocalKey_sound);
 	ja->setObject(CCString::create("속성(%s)"), kMyLocalKey_elementalValue);
+	
+	ja->setObject(CCString::create("내카드수 "), kMyLocalKey_myCardCount);
+	ja->setObject(CCString::create("다이어리 보기"), kMyLocalKey_diaryView);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

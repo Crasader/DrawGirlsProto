@@ -951,6 +951,7 @@ public:
 	int max_network_check_cnt;
 	
 	long long user_index;
+	int total_card_cnt;
 	
 private:
 	

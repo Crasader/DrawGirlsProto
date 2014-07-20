@@ -1886,6 +1886,8 @@ void SumranMailPopup::takedCard(int cardNo, function<void()> t_end_func){
 	{
 		if(result_data["result"]["code"] == GDSUCCESS)
 		{
+			mySGD->total_card_cnt = result_data["lastCardNo"].asInt();
+			
 			mySGD->network_check_cnt = 0;
 			
 			vector<int> card_data_load_list;

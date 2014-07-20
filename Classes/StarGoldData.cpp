@@ -14,6 +14,8 @@
 
 void StarGoldData::withdraw()
 {
+	total_card_cnt = 0;
+	
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
@@ -3431,6 +3433,8 @@ void StarGoldData::myInit()
 {
 	app_type = "light1";
 	app_version = 2;
+	
+	total_card_cnt = 0;
 	
 	max_network_check_cnt = 6; // 0.5초 단위로
 	network_check_cnt = 0;
