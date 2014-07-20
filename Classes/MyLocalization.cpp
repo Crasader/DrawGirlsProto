@@ -1398,7 +1398,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다이어리 보기"), kMyLocalKey_diaryView);
 	
 	ko->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
-	ko->setObject(CCString::create("<font newline=16>땅을 획득하려면<font color=961 newline=16>꾸욱 버튼을 누른상태에서<font newline=16>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
+	ko->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -2302,7 +2302,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("다이어리 보기"), kMyLocalKey_diaryView);
 	
 	en->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
-	en->setObject(CCString::create("<font newline=16>땅을 획득하려면<font color=961 newline=16>꾸욱 버튼을 누른상태에서<font newline=16>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
+	en->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3228,7 +3228,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("다이어리 보기"), kMyLocalKey_diaryView);
 	
 	ja->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
-	ja->setObject(CCString::create("<font newline=16>땅을 획득하려면<font color=961 newline=16>꾸욱 버튼을 누른상태에서<font newline=16>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
+	ja->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

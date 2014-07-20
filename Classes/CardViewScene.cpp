@@ -45,27 +45,34 @@ bool CardViewScene::init()
     {
         return false;
     }
+	
 	buy_morphing = nullptr;
 	startFormSetter(this);
-	CCLayer* top_bottom_layer = CCLayer::create();
-	top_bottom_layer->setPosition(ccp(0, 0));
-	addChild(top_bottom_layer, kCV_Z_back);
 	
-	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
-	top_bottom_layer->addChild(side_back);
 	
-	CCSize pattern_size = side_back->getTexture()->getContentSize();
+//	CCLayer* top_bottom_layer = CCLayer::create();
+//	top_bottom_layer->setPosition(ccp(0, 0));
+//	addChild(top_bottom_layer, kCV_Z_back);
+//	
+//	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
+//	top_bottom_layer->addChild(side_back);
+//	
+//	CCSize pattern_size = side_back->getTexture()->getContentSize();
+//	
+//	for(int i=0;i*pattern_size.width < 480;i++)
+//	{
+//		for(int j=0;j*pattern_size.height < myDSH->ui_top;j++)
+//		{
+//			CCSprite* t_pattern = CCSprite::createWithTexture(side_back->getTexture());
+//			t_pattern->setAnchorPoint(ccp(0,0));
+//			t_pattern->setPosition(ccp(i*pattern_size.width,j*pattern_size.height));
+//			side_back->addChild(t_pattern);
+//		}
+//	}
 	
-	for(int i=0;i*pattern_size.width < 480;i++)
-	{
-		for(int j=0;j*pattern_size.height < myDSH->ui_top;j++)
-		{
-			CCSprite* t_pattern = CCSprite::createWithTexture(side_back->getTexture());
-			t_pattern->setAnchorPoint(ccp(0,0));
-			t_pattern->setPosition(ccp(i*pattern_size.width,j*pattern_size.height));
-			side_back->addChild(t_pattern);
-		}
-	}
+	CCSprite* back_img = CCSprite::create("main_back.png");
+	back_img->setPosition(ccp(240,myDSH->ui_center_y));
+	addChild(back_img, kCV_Z_back);
 	
 //	CCSprite* title_name = CCSprite::create("temp_title_name.png");
 //	title_name->setPosition(ccp(240,myDSH->ui_center_y));
@@ -80,6 +87,12 @@ bool CardViewScene::init()
 	addChild(game_node, kCV_Z_first_img);
 	
 	int card_number = mySGD->selected_collectionbook;
+	
+	int sound_count = NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number);
+	for(int i=1;i<=sound_count;i++)
+	{
+		AudioEngine::sharedInstance()->preloadGroanEffect(NSDS_GS(kSDS_CI_int1_soundType_int1_s, card_number, i));
+	}
 	
 	is_morphing = mySGD->isCardMorphing(card_number);
 	

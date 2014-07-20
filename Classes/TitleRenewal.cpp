@@ -78,19 +78,36 @@ bool TitleRenewalScene::init()
 		white_back->setPosition(ccp(240,160));
 		addChild(white_back);
 		
-		auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
-		splash.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-			splash.first->removeFromParent();
-			endSplash();
-		});
-		splash.first->setPosition(ccp(240,160));
+		CCSprite* splash = CCSprite::create("splash_nhn_litqoo.png");
+		splash->setPosition(ccp(240,160));
+		addChild(splash);
 		
-		addChild(splash.first);
+		addChild(KSTimer::create(1.f, [=]()
+		{
+			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+												   {
+													   splash->setOpacity(255-255*t);
+												   }, [=](float t)
+												   {
+													   splash->setOpacity(255-255*t);
+													   splash->removeFromParent();
+													   endSplash();
+												   }));
+		}));
 		
-		//	addChild(KSTimer::create(3.f, [=]()
-		//	{
-		splash.second->runAnimationsForSequenceNamed("Default Timeline");
-		//	}));
+//		auto splash = KS::loadCCBI<CCSprite*>(this, "splash_nhn.ccbi");
+//		splash.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
+//			splash.first->removeFromParent();
+//			endSplash();
+//		});
+//		splash.first->setPosition(ccp(240,160));
+//		
+//		addChild(splash.first);
+//		
+//		//	addChild(KSTimer::create(3.f, [=]()
+//		//	{
+//		splash.second->runAnimationsForSequenceNamed("Default Timeline");
+//		//	}));
 	}
 	else
 	{
@@ -1839,7 +1856,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			NSDS_SI(kSDS_CI_int1_soundCnt_i, t_card["no"].asInt(), sound_cnt, false);
 			for(int j=1;j<=sound_cnt;j++)
 			{
-				NSDS_SI(kSDS_CI_int1_soundNumber_int1_i, t_card["no"].asInt(), j, t_card["sound"][j-1].asInt(), false);
+				NSDS_SS(kSDS_CI_int1_soundType_int1_s, t_card["no"].asInt(), j, t_card["sound"][j-1].asString(), false);
 			}
 			
 			NSDS_SI(kSDS_CI_int1_characterNo_i, t_card["no"].asInt(), t_card["characterNo"].asInt(), false);

@@ -118,7 +118,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	r_sound->setPosition(ccp(95,218));
 	target->addChild(r_sound);
 	
-	if(1)
+	if(NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number) > 0)
 	{
 		CCSprite* sound_img = CCSprite::create("diary_icon_sound.png");
 		sound_img->setPosition(ccp(95,197));

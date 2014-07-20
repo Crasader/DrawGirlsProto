@@ -192,6 +192,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	
 	CCMenuItemLambda* ok_item = CCMenuItemSpriteLambda::create(n_ok, s_ok, [=](CCObject* sender)
 															   {
+																   this->ok_menu->setEnabled(false);
 																   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																   onMinimumTime();
 															   });
