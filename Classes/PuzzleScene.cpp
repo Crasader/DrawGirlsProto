@@ -2793,7 +2793,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(107,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
+	top_heart->setPosition(ccp(110,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
 	addChild(top_heart, kPuzzleZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -2810,7 +2810,7 @@ void PuzzleScene::setTop()
 	heart_item->setTag(kPuzzleMenuTag_heartShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+50.5f,top_heart->getContentSize().height/2.f));
+	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+49.5f,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_menu);
 	
 	
@@ -2849,7 +2849,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
-	top_ruby->setPosition(ccp(310,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
+	top_ruby->setPosition(ccp(313,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
 	addChild(top_ruby, kPuzzleZorder_top);
 	
 	top_list.push_back(top_ruby);
@@ -2888,7 +2888,7 @@ void PuzzleScene::setTop()
 	option_item->setTag(kPuzzleMenuTag_option);
 	
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
-	option_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
+	option_menu->setPosition(ccp(429,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
 	addChild(option_menu, kPuzzleZorder_top);
 	
 	
@@ -2904,7 +2904,7 @@ void PuzzleScene::setTop()
 	achieve_item->setTag(kPuzzleMenuTag_achieve);
 	
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
-	achieve_menu->setPosition(ccp(395,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
+	achieve_menu->setPosition(ccp(401,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
 	achieve_node->addChild(achieve_menu);
 	
 	CCNode* postbox_node = CCNode::create();
@@ -2918,7 +2918,7 @@ void PuzzleScene::setTop()
 	postbox_item->setTag(kPuzzleMenuTag_postbox);
 	
 	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
-	postbox_menu->setPosition(ccp(363,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
+	postbox_menu->setPosition(ccp(374,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20));
 	postbox_node->addChild(postbox_menu);
 	
 	top_list.push_back(postbox_node);

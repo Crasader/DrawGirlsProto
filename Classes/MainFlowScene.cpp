@@ -633,7 +633,7 @@ void MainFlowScene::setTable()
 	puzzle_table->setAnchorPoint(CCPointZero);
 	puzzle_table->setDirection(kCCScrollViewDirectionHorizontal);
 	puzzle_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f+5.f));
+	puzzle_table->setPosition(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f+7.f));
 	puzzle_table->setDelegate(this);
 	addChild(puzzle_table, kMainFlowZorder_table);
 	puzzle_table->setTouchPriority(kCCMenuHandlerPriority+1);
@@ -1285,7 +1285,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->disableOuterStroke();
-				condition_title->setPosition(ccp(67.5f, 137));
+				condition_title->setPosition(ccp(67.5f, 121));
 				not_clear_img->addChild(condition_title);
 				
 				if(t_info.is_have_week_condition)
@@ -1310,21 +1310,21 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					
 					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), t_info.keep_week_start, t_info.keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
 					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 118.5f));
+					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else if(t_info.is_have_date_condition)
 				{
 					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), t_info.keep_date_start.substr(4,2).c_str(), t_info.keep_date_start.substr(6,2).c_str(), t_info.keep_date_start.substr(8,2).c_str(), t_info.keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
 					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 118.5f));
+					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else
 				{
 					KSLabelTTF* condition_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), mySGD->getFont().c_str(), 9);
 					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 118.5f));
+					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				
@@ -1358,7 +1358,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(10000000 + idx*10000 + t_info.need_ruby_value);
 					detail_button->setPreferredSize(CCSizeMake(90, 43));
-					detail_button->setPosition(ccp(67.5f,86.5f));
+					detail_button->setPosition(ccp(67.5f,70.5f));
 					not_clear_img->addChild(detail_button);
 				}
 				else
@@ -1375,7 +1375,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(0);
 					detail_button->setPreferredSize(CCSizeMake(90, 43));
-					detail_button->setPosition(ccp(67.5f,86.5f));
+					detail_button->setPosition(ccp(67.5f,70.5f));
 					not_clear_img->addChild(detail_button);
 				}
 			}
@@ -1403,12 +1403,12 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->disableOuterStroke();
-				condition_title->setPosition(ccp(67.5f, 137));
+				condition_title->setPosition(ccp(67.5f, 121));
 				not_clear_img->addChild(condition_title);
 				
 				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
 				condition_content->disableOuterStroke();
-				condition_content->setPosition(ccp(67.5f, 118.5f));
+				condition_content->setPosition(ccp(67.5f, 102.5f));
 				not_clear_img->addChild(condition_content);
 				
 				CCLabelTTF* c_label = CCLabelTTF::create();
@@ -1423,7 +1423,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 				detail_button->setTag(0);
 				detail_button->setPreferredSize(CCSizeMake(90, 43));
-				detail_button->setPosition(ccp(67.5f,86.5f));
+				detail_button->setPosition(ccp(67.5f,70.5f));
 				not_clear_img->addChild(detail_button);
 			}
 			else
@@ -2646,7 +2646,7 @@ void MainFlowScene::setBottom()
 	endless_item->setTag(kMainFlowMenuTag_endlessMode);
 	
 	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(35-240+290.f, n_endless->getContentSize().height/2.f+3));
+	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(19-240+290.f, n_endless->getContentSize().height/2.f+3));
 //	bottom_case->addChild(endless_menu);
 	addChild(endless_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(endless_menu);
@@ -4151,7 +4151,7 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(107,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8)); // 114
+	top_heart->setPosition(ccp(110,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8)); // 114
 	addChild(top_heart, kMainFlowZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -4178,7 +4178,7 @@ void MainFlowScene::setTop()
 	heart_item->setTag(kMainFlowMenuTag_heartShop);
 	
 	CCMenu* heart_menu = CCMenu::createWithItem(heart_item);
-	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+50.5f,top_heart->getContentSize().height/2.f));
+	heart_menu->setPosition(ccp(top_heart->getContentSize().width/2.f+49.5f,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_menu);
 	
 	
@@ -4213,7 +4213,7 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_ruby = CCSprite::create("mainflow_top_ruby.png");
 	top_ruby->setAnchorPoint(ccp(0.5f,1.f));
-	top_ruby->setPosition(ccp(310,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8)); // 325+5
+	top_ruby->setPosition(ccp(313,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8)); // 325+5
 	addChild(top_ruby, kMainFlowZorder_top);
 	
 	top_list.push_back(top_ruby);
@@ -4266,7 +4266,7 @@ void MainFlowScene::setTop()
 	option_item->setTag(kMainFlowMenuTag_option);
 	
 	CCMenu* option_menu = CCMenu::createWithItem(option_item);
-	option_menu->setPosition(ccp(427,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)); // 461
+	option_menu->setPosition(ccp(429,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)); // 461
 	addChild(option_menu, kMainFlowZorder_top);
 	
 	
@@ -4281,7 +4281,7 @@ void MainFlowScene::setTop()
 	achieve_item->setTag(kMainFlowMenuTag_achievement);
 	
 	CCMenu* achieve_menu = CCMenu::createWithItem(achieve_item);
-	achieve_menu->setPosition(ccp(395,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)); // 429
+	achieve_menu->setPosition(ccp(401,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)); // 429
 	achieve_node->addChild(achieve_menu);
 	
 
@@ -4296,7 +4296,7 @@ void MainFlowScene::setTop()
 	postbox_item->setTag(kMainFlowMenuTag_postbox);
 	
 	CCMenu* postbox_menu = CCMenu::createWithItem(postbox_item);
-	postbox_menu->setPosition(ccp(363,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)); // 397
+	postbox_menu->setPosition(ccp(374,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20)); // 397
 	postbox_node->addChild(postbox_menu);
 	
 	top_list.push_back(postbox_node);

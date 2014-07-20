@@ -76,15 +76,24 @@ private:
 	
 	CCMenu* tab_menu;
 	
-	CCMenuItem* align_default_menu;
-	CCMenuItem* align_take_menu;
-	CCMenuItem* align_rank_menu;
+	CCMenuItemSprite* align_default_menu;
+	CCMenuItemSprite* align_take_menu;
+	CCMenuItemSprite* align_rank_menu;
 	CCMenuItem* diary_menu;
 	
 	KSLabelTTF* n_take_label;
 	KSLabelTTF* s_take_label;
 	KSLabelTTF* n_rank_label;
 	KSLabelTTF* s_rank_label;
+	
+	bool is_take_reverse;
+	bool is_rank_reverse;
+	
+	void defaultMenuSet();
+	void takeMenuSet();
+	void rankMenuSet();
+	
+	void beforeMenuReset(int keep_type);
 	
 	int recent_selected_card_number;
 	

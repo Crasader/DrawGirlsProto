@@ -44,6 +44,9 @@ bool CardSettingPopup::init()
 	
 	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
 	
+	is_take_reverse = recent_sort_type == kCST_takeReverse;
+	is_rank_reverse = recent_sort_type == kCST_gradeDown;
+	
 	for(int i=0;i<mySGD->getHasGottenCardsSize();i++)
 	{
 		card_list.push_back(mySGD->getHasGottenCardData(i));
@@ -142,82 +145,14 @@ bool CardSettingPopup::init()
 //	else if(recent_sort_type == kCST_takeReverse)
 //		button_label_string = string(myLoc->getLocalForKey(kMyLocalKey_takeOrder)) + "▼";
 	
+	align_default_menu = NULL;
+	defaultMenuSet();
 	
+	align_take_menu = NULL;
+	takeMenuSet();
 	
-	CCSprite* n_default_img = CCSprite::create("tabbutton_up.png");
-	KSLabelTTF* n_default_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), mySGD->getFont().c_str(), 12);
-	n_default_label->disableOuterStroke();
-	n_default_label->setPosition(ccpFromSize(n_default_img->getContentSize()/2.f));
-	n_default_img->addChild(n_default_label);
-	
-	CCSprite* s_default_img = CCSprite::create("tabbutton_up.png");
-	s_default_img->setColor(ccGRAY);
-	KSLabelTTF* s_default_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), mySGD->getFont().c_str(), 12);
-	s_default_label->disableOuterStroke();
-	s_default_label->setPosition(ccpFromSize(s_default_img->getContentSize()/2.f));
-	s_default_img->addChild(s_default_label);
-	
-//	CCSprite* d_default_img = CCSprite::create("tabbutton_up.png");
-//	KSLabelTTF* d_default_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), mySGD->getFont().c_str(), 12);
-//	d_default_label->disableOuterStroke();
-//	d_default_label->setPosition(ccpFromSize(d_default_img->getContentSize()/2.f));
-//	d_default_img->addChild(d_default_label);
-	
-	align_default_menu = CCMenuItemSprite::create(n_default_img, s_default_img, this, menu_selector(CardSettingPopup::menuAction));
-	align_default_menu->setTag(kCSS_MT_alignDefault);
-	align_default_menu->setPosition(ccp(244,256.5f));
-	tab_menu->addChild(align_default_menu);
-	
-	
-	
-	string sign_str;
-	
-	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_take)
-		sign_str = "▼";
-	else
-		sign_str = "▲";
-	
-	CCSprite* n_take_img = CCSprite::create("tabbutton_up.png");
-	n_take_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12);
-	n_take_label->disableOuterStroke();
-	n_take_label->setPosition(ccpFromSize(n_take_img->getContentSize()/2.f));
-	n_take_img->addChild(n_take_label);
-	
-	CCSprite* s_take_img = CCSprite::create("tabbutton_up.png");
-	s_take_img->setColor(ccGRAY);
-	s_take_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12);
-	s_take_label->disableOuterStroke();
-	s_take_label->setPosition(ccpFromSize(s_take_img->getContentSize()/2.f));
-	s_take_img->addChild(s_take_label);
-	
-	align_take_menu = CCMenuItemSprite::create(n_take_img, s_take_img, this, menu_selector(CardSettingPopup::menuAction));
-	align_take_menu->setTag(kCSS_MT_alignTake);
-	align_take_menu->setPosition(ccp(319,256.5f));
-	tab_menu->addChild(align_take_menu);
-	
-	
-	if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_gradeUp)
-		sign_str = "▼";
-	else
-		sign_str = "▲";
-	
-	CCSprite* n_rank_img = CCSprite::create("tabbutton_up.png");
-	n_rank_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12);
-	n_rank_label->disableOuterStroke();
-	n_rank_label->setPosition(ccpFromSize(n_rank_img->getContentSize()/2.f));
-	n_rank_img->addChild(n_rank_label);
-	
-	CCSprite* s_rank_img = CCSprite::create("tabbutton_up.png");
-	s_rank_img->setColor(ccGRAY);
-	s_rank_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12);
-	s_rank_label->disableOuterStroke();
-	s_rank_label->setPosition(ccpFromSize(s_rank_img->getContentSize()/2.f));
-	s_rank_img->addChild(s_rank_label);
-	
-	align_rank_menu = CCMenuItemSprite::create(n_rank_img, s_rank_img, this, menu_selector(CardSettingPopup::menuAction));
-	align_rank_menu->setTag(kCSS_MT_alignRank);
-	align_rank_menu->setPosition(ccp(394,256.5f));
-	tab_menu->addChild(align_rank_menu);
+	align_rank_menu = NULL;
+	rankMenuSet();
 	
 	
 	
@@ -280,6 +215,154 @@ bool CardSettingPopup::init()
 	
 	
     return true;
+}
+
+void CardSettingPopup::defaultMenuSet()
+{
+	string filename;
+	
+	if(recent_sort_type == kCST_default)
+	{
+		filename = "tabbutton_up.png";
+	}
+	else
+	{
+		filename = "tabbutton_down.png";
+	}
+	
+	CCSprite* n_default_img = CCSprite::create(filename.c_str());
+	KSLabelTTF* n_default_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), mySGD->getFont().c_str(), 12.5f);
+	n_default_label->disableOuterStroke();
+	n_default_label->setPosition(ccpFromSize(n_default_img->getContentSize()/2.f) + ccp(0,2));
+	n_default_img->addChild(n_default_label);
+	
+	CCSprite* s_default_img = CCSprite::create(filename.c_str());
+	s_default_img->setColor(ccGRAY);
+	KSLabelTTF* s_default_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), mySGD->getFont().c_str(), 12.5f);
+	s_default_label->disableOuterStroke();
+	s_default_label->setPosition(ccpFromSize(s_default_img->getContentSize()/2.f) + ccp(0,2));
+	s_default_img->addChild(s_default_label);
+	
+	if(!align_default_menu)
+	{
+		align_default_menu = CCMenuItemSprite::create(n_default_img, s_default_img, this, menu_selector(CardSettingPopup::menuAction));
+		align_default_menu->setTag(kCSS_MT_alignDefault);
+		align_default_menu->setPosition(ccp(244,256.5f));
+		tab_menu->addChild(align_default_menu);
+	}
+	else
+	{
+		align_default_menu->setNormalImage(n_default_img);
+		align_default_menu->setSelectedImage(s_default_img);
+	}
+}
+void CardSettingPopup::takeMenuSet()
+{
+	string filename;
+	
+	if(recent_sort_type == kCST_take || recent_sort_type == kCST_takeReverse)
+	{
+		filename = "tabbutton_up.png";
+	}
+	else
+	{
+		filename = "tabbutton_down.png";
+	}
+	
+	string sign_str;
+	
+	if(is_take_reverse)
+		sign_str = "▼";
+	else
+		sign_str = "▲";
+	
+	CCSprite* n_take_img = CCSprite::create(filename.c_str());
+	n_take_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12.5f);
+	n_take_label->disableOuterStroke();
+	n_take_label->setPosition(ccpFromSize(n_take_img->getContentSize()/2.f) + ccp(0,2));
+	n_take_img->addChild(n_take_label);
+	
+	CCSprite* s_take_img = CCSprite::create(filename.c_str());
+	s_take_img->setColor(ccGRAY);
+	s_take_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12.5f);
+	s_take_label->disableOuterStroke();
+	s_take_label->setPosition(ccpFromSize(s_take_img->getContentSize()/2.f) + ccp(0,2));
+	s_take_img->addChild(s_take_label);
+	
+	if(!align_take_menu)
+	{
+		align_take_menu = CCMenuItemSprite::create(n_take_img, s_take_img, this, menu_selector(CardSettingPopup::menuAction));
+		align_take_menu->setTag(kCSS_MT_alignTake);
+		align_take_menu->setPosition(ccp(319,256.5f));
+		tab_menu->addChild(align_take_menu);
+	}
+	else
+	{
+		align_take_menu->setNormalImage(n_take_img);
+		align_take_menu->setSelectedImage(s_take_img);
+	}
+}
+void CardSettingPopup::rankMenuSet()
+{
+	string filename;
+	
+	if(recent_sort_type == kCST_gradeUp || recent_sort_type == kCST_gradeDown)
+	{
+		filename = "tabbutton_up.png";
+	}
+	else
+	{
+		filename = "tabbutton_down.png";
+	}
+	
+	string sign_str;
+	
+	if(is_rank_reverse)
+		sign_str = "▼";
+	else
+		sign_str = "▲";
+	
+	CCSprite* n_rank_img = CCSprite::create(filename.c_str());
+	n_rank_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12.5f);
+	n_rank_label->disableOuterStroke();
+	n_rank_label->setPosition(ccpFromSize(n_rank_img->getContentSize()/2.f) + ccp(0,2));
+	n_rank_img->addChild(n_rank_label);
+	
+	CCSprite* s_rank_img = CCSprite::create(filename.c_str());
+	s_rank_img->setColor(ccGRAY);
+	s_rank_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12.5f);
+	s_rank_label->disableOuterStroke();
+	s_rank_label->setPosition(ccpFromSize(s_rank_img->getContentSize()/2.f) + ccp(0,2));
+	s_rank_img->addChild(s_rank_label);
+	
+	if(!align_rank_menu)
+	{
+		align_rank_menu = CCMenuItemSprite::create(n_rank_img, s_rank_img, this, menu_selector(CardSettingPopup::menuAction));
+		align_rank_menu->setTag(kCSS_MT_alignRank);
+		align_rank_menu->setPosition(ccp(394,256.5f));
+		tab_menu->addChild(align_rank_menu);
+	}
+	else
+	{
+		align_rank_menu->setNormalImage(n_rank_img);
+		align_rank_menu->setSelectedImage(s_rank_img);
+	}
+}
+
+void CardSettingPopup::beforeMenuReset(int keep_type)
+{
+	if(keep_type == kCST_default)
+	{
+		defaultMenuSet();
+	}
+	else if(keep_type == kCST_take || keep_type == kCST_takeReverse)
+	{
+		takeMenuSet();
+	}
+	else if(keep_type == kCST_gradeUp || keep_type == kCST_gradeDown)
+	{
+		rankMenuSet();
+	}
 }
 
 void CardSettingPopup::changeSortType( CardSortType t_type )
@@ -486,57 +569,66 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		{
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_default)
 			{
+				int keep_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+				
 				changeSortType(kCST_default);
 				alignChange();
+				defaultMenuSet();
+				
+				beforeMenuReset(keep_sort_type);
 			}
 			
 			is_menu_enable = true;
 		}
 		else if(tag == kCSS_MT_alignRank)
 		{
+			int keep_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+			
+			if(keep_sort_type == kCST_gradeDown || keep_sort_type == kCST_gradeUp)
+				is_rank_reverse = !is_rank_reverse;
+			
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_gradeDown)
 			{
 				changeSortType(kCST_gradeDown);
 				alignChange();
+				rankMenuSet();
+				
+				beforeMenuReset(keep_sort_type);
 			}
 			else
 			{
 				changeSortType(kCST_gradeUp);
 				alignChange();
+				rankMenuSet();
+				
+				beforeMenuReset(keep_sort_type);
 			}
-			
-			string sign_str;
-			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_gradeUp)
-				sign_str = "▼";
-			else
-				sign_str = "▲";
-			
-			n_rank_label->setString((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str());
-			s_rank_label->setString((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str());
 			
 			is_menu_enable = true;
 		}
 		else if(tag == kCSS_MT_alignTake)
 		{
+			int keep_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+			
+			if(keep_sort_type == kCST_take || keep_sort_type == kCST_takeReverse)
+				is_take_reverse = !is_take_reverse;
+			
 			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_take)
 			{
 				changeSortType(kCST_take);
 				alignChange();
+				takeMenuSet();
+				
+				beforeMenuReset(keep_sort_type);
 			}
 			else
 			{
 				changeSortType(kCST_takeReverse);
 				alignChange();
+				takeMenuSet();
+				
+				beforeMenuReset(keep_sort_type);
 			}
-			
-			string sign_str;
-			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) == kCST_take)
-				sign_str = "▼";
-			else
-				sign_str = "▲";
-			
-			n_take_label->setString((myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str).c_str());
-			s_take_label->setString((myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str).c_str());
 			
 			is_menu_enable = true;
 		}
