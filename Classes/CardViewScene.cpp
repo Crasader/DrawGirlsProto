@@ -70,9 +70,18 @@ bool CardViewScene::init()
 //		}
 //	}
 	
-	CCSprite* back_img = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
+	CCSprite* back_img = CCSprite::create("ingame_outback.png");
 	back_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(back_img, kCV_Z_back);
+	
+//	CCSprite* temp = CCSprite::create("whitePaper.png");
+//	temp->setBlendFunc({GL_SRC_ALPHA, GL_ONE});
+//	temp->setPosition(ccp(240,myDSH->ui_center_y));
+//	addChild(temp);
+	
+	CCSprite* card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
+	card_back->setPosition(ccp(240,myDSH->ui_center_y));
+	addChild(card_back, kCV_Z_back);
 	
 //	CCSprite* title_name = CCSprite::create("temp_title_name.png");
 //	title_name->setPosition(ccp(240,myDSH->ui_center_y));
@@ -97,7 +106,7 @@ bool CardViewScene::init()
 	is_morphing = mySGD->isCardMorphing(card_number);
 	
 	CCLog("why two2");
-	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
 	first_img->setAnchorPoint(ccp(0.5,0.5));
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.

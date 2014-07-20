@@ -1357,10 +1357,11 @@ void KSCumberBase::cumberAttack(float dt)
 				"castframe" : 30,
 				"percent" : 1,
 				"target" : "no"})";
-				Json::Reader reader;
-				Json::Value attackCode;
-				reader.parse(patternData, attackCode);
-				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+//				Json::Reader reader;
+				Json::Value attackCode = patternData;
+                std::string cmName = "MP_attackWithKSCode";
+//				reader.parse(patternData, attackCode);
+				int ret = myGD->communication(cmName, getPosition(), patternData, this, true);
 				if(ret == 1)
 				{
 					attackBehavior(attackCode);
@@ -1408,6 +1409,7 @@ void KSCumberBase::cumberAttack(float dt)
 		{
 			// 안넣어져야할 조건
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
+
 			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
 				 currentSecond <= m_lastPattern.exeTime + 3)
 			{
@@ -1512,7 +1514,8 @@ void KSCumberBase::cumberAttack(float dt)
 			Json::Reader reader;
 			Json::Value attackCode;
 			reader.parse(patternData, attackCode);
-			int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+            string cmName = "MP_attackWithKSCode";
+			int ret = myGD->communication(cmName, getPosition(), patternData, this, true);
 			if(ret == 1)
 			{
 				attackBehavior(attackCode);
@@ -1535,7 +1538,8 @@ void KSCumberBase::cumberAttack(float dt)
 				Json::Reader reader;
 				Json::Value attackCode;
 				reader.parse(patternData, attackCode);
-				int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+                string cmName = "MP_attackWithKSCode";
+				int ret = myGD->communication(cmName, getPosition(), patternData, this, true);
 				if(ret == 1)
 				{
 					attackBehavior(attackCode);
@@ -1675,9 +1679,11 @@ void KSCumberBase::cumberAttack(float dt)
 				if(searched)
 				{
 					KS::KSLog("%", attackCode);
-					Json::FastWriter fw;
-					std::string patternData = fw.write(attackCode);
-					int ret = myGD->communication("MP_attackWithKSCode", getPosition(), patternData, this, true);
+					//Json::FastWriter fw;
+					//std::string patternData = fw.write(attackCode);
+                    std::string attackStr = attackCode.asString();
+                    std::string cmName = "MP_attackWithKSCode";
+					int ret = myGD->communication(cmName, getPosition(), attackStr, this, true);
 					if(ret == 1)
 					{
 						int cframe =  attackCode.get("castframe", 0).asInt() + attackCode.get("totalframe", 0).asInt() + attackCode.get("crashframe",0).asInt();

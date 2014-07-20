@@ -93,7 +93,7 @@ public:
 	std::map<std::string, std::function<void(CCObject*)>> V_CCO;
 	std::map<std::string, std::function<void(CCPoint)>> V_CCP;
 	std::map<std::string, std::function<void(CCPoint, ccColor4F, float)>> V_CCPCOLORF;
-	std::map<std::string, std::function<int(CCPoint, std::string, KSCumberBase*, bool)>> I_CCPStrCumberBaseB;
+	std::map<std::string, std::function<int(CCPoint, std::string&, KSCumberBase*, bool)>> I_CCPStrCumberBaseB;
 	std::map<std::string, std::function<void(CCPoint, int)>> V_CCPI;
 	
 	std::map<std::string, std::function<void(CCPoint, bool)>> V_CCPB;
@@ -211,7 +211,7 @@ public:
 	CCNode* getCommunicationNode(string funcName);
 	CCArray* getCommunicationArray(string funcName);
 	float Fcommunication(string funcName);
-	int communication(string funcName, CCPoint t_p, std::string t_i, KSCumberBase* cb, bool t_b);
+	int communication(std::string &funcName, CCPoint t_p, std::string &t_i, KSCumberBase* cb, bool t_b);
 	//bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2);
 	
 	bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2, bool b1, bool b2);

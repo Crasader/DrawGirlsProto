@@ -183,7 +183,7 @@ bool PopCake::init()
 
 void PopCake::successOriginalAction()
 {
-	n->init(mySIL->addImage("morphing_img.png"));
+	n->init(mySIL->addImage("morphing_img.png"), 0);
 }
 
 
