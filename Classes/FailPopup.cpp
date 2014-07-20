@@ -203,7 +203,7 @@ bool FailPopup::init()
 		title_str = myLoc->getLocalForKey(kMyLocalKey_failTitleGameover);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 21.5f);
-	title_label->setColor(ccc3(255, 170, 20));
+	title_label->setColor(ccc3(240, 45, 45));
 	title_label->setPosition(ccp(inner_left->getContentSize().width/2.f,154));
 	inner_left->addChild(title_label, kZ_FP_img);
 	

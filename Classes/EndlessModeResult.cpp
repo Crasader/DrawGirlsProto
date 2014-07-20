@@ -641,7 +641,10 @@ void EndlessModeResult::setMain()
 		left_result = myLoc->getLocalForKey(kMyLocalKey_clearTitle);
 	
 	KSLabelTTF* left_result_label = KSLabelTTF::create(left_result.c_str(), mySGD->getFont().c_str(), 21.5f);
-	left_result_label->setColor(ccc3(255, 170, 20));
+	if(mySGD->getStageGrade() <= 0)
+		left_result_label->setColor(ccc3(240, 45, 45));
+	else
+		left_result_label->enableGradation(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
 	left_result_label->setPosition(ccp(left_back->getContentSize().width/2.f, 154));
 	left_back->addChild(left_result_label);
 
@@ -766,8 +769,7 @@ void EndlessModeResult::setMain()
 	right_back->setPosition(ccp(main_case->getContentSize().width-132, main_case->getContentSize().height*0.58f+3));
 	main_case->addChild(right_back);
 	
-	CCSprite* you_back = CCSprite::create("endless_na.png");
-	you_back->setFlipX(true);
+	CCSprite* you_back = CCSprite::create("endless_you.png");
 	you_back->setPosition(ccp(right_back->getContentSize().width-20,right_back->getContentSize().height-18));
 	right_back->addChild(you_back);
 	KSLabelTTF* you_label = KSLabelTTF::create("You", mySGD->getFont().c_str(), 13);
@@ -782,7 +784,10 @@ void EndlessModeResult::setMain()
 		right_result = myLoc->getLocalForKey(kMyLocalKey_clearTitle);
 	
 	KSLabelTTF* right_result_label = KSLabelTTF::create(right_result.c_str(), mySGD->getFont().c_str(), 21.5f);
-	right_result_label->setColor(ccc3(255, 170, 20));
+	if(right_clear_grade.getV() <= 0)
+		right_result_label->setColor(ccc3(240, 45, 45));
+	else
+		right_result_label->enableGradation(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
 	right_result_label->setPosition(ccp(right_back->getContentSize().width/2.f, 154));
 	right_back->addChild(right_result_label);
 	
