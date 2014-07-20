@@ -240,6 +240,10 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		
 		if(graphdog->dateFormat("Ymd", mySGD->attendance_data["dayList"][i]["startDate"].asString()) == graphdog->dateFormat("Ymd", graphdog->getDate()))
 		{
+			CCSprite* grayback = CCSprite::create("attendance_specialday_check.png");
+			grayback->setPosition(ccpFromSize(t_back->getContentSize()/2.f));
+			t_back->addChild(grayback);
+			
 			CCSprite* check_img = CCSprite::create("popup_check2.png");
 			check_img->setPosition(ccpFromSize(t_back->getContentSize()/2.f));
 			t_back->addChild(check_img);

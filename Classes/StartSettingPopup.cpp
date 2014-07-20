@@ -481,7 +481,7 @@ void StartSettingPopup::setMain()
 			cnt_label->setPosition(ccp(16.5f, -18));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);
 			
-			if(is_unlocked)
+			if(!is_unlocked)
 				cnt_label->setVisible(false);
 			
 			CCSprite* clicked_img = CCSprite::create("startsetting_item_clicked.png");

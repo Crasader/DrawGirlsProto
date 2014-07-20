@@ -13,6 +13,8 @@
 #include "KSUtil.h"
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
+#include "StyledLabelTTF.h"
+#include "CommonAnimation.h"
 
 ///////////////////////////////////////////////// Button Side ////////////////////////////////////////////////////////////////////
 //void ControlButtonSide::ingSchedule()
@@ -1571,11 +1573,15 @@ void ControlJoystickButton::showDrawButtonTutorial()
 	is_show_draw_button_tutorial = true;
 	
 	draw_button_tutorial_img = CCSprite::create("ingame_tutorial_warning.png");
-	draw_button_tutorial_img->setPosition(ccp(-240, myDSH->ui_center_y));
+	draw_button_tutorial_img->setPosition(ccp(240, myDSH->ui_center_y));
 	addChild(draw_button_tutorial_img);
 	
-	CCMoveTo* t_move = CCMoveTo::create(0.5f, ccp(240, myDSH->ui_center_y));
-	draw_button_tutorial_img->runAction(t_move);
+	StyledLabelTTF* t_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buttonTutorialMent), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+	t_label->setAnchorPoint(ccp(0.5f,0.5f));
+	t_label->setPosition(ccpFromSize(draw_button_tutorial_img->getContentSize()/2.f));
+	draw_button_tutorial_img->addChild(t_label);
+	
+	CommonAnimation::openPopup(this, draw_button_tutorial_img, NULL);
 	
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -1590,12 +1596,12 @@ void ControlJoystickButton::hideDrawButtonTutorial()
 {
 	if(is_show_draw_button_tutorial)
 	{
-		CCMoveTo* t_move = CCMoveTo::create(0.4f, ccp(-240, myDSH->ui_center_y));
-		CCCallFunc* t_call = CCCallFunc::create(draw_button_tutorial_img, callfunc_selector(CCSprite::removeFromParent));
-		CCSequence* t_seq = CCSequence::create(t_move, t_call, NULL);
-		
-		draw_button_tutorial_img->runAction(t_seq);
+		CCSprite* t_img = draw_button_tutorial_img;
 		draw_button_tutorial_img = NULL;
+		CommonAnimation::closePopup(this, t_img, NULL, [=](){}, [=]()
+		{
+			t_img->removeFromParent();
+		});
 		
 		draw_button_tutorial_ccb->removeFromParent();
 		draw_button_tutorial_ccb = NULL;

@@ -849,6 +849,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_diaryView,
 	
 	kMyLocalKey_cardTakeCnt,
+	kMyLocalKey_buttonTutorialMent,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;
