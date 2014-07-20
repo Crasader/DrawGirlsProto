@@ -33,7 +33,7 @@ private:
 	
 	CCSprite* gray;
 	CCNode* m_container;
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	
 	CCNode* getRewardImg(string t_goods_str);
 	CCNode* getTakeRewardImg(string t_goods_str);
