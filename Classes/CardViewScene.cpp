@@ -82,7 +82,7 @@ bool CardViewScene::init()
 	game_node->setScale(1.5f);
 	game_node->setAnchorPoint(ccp(0.5,0.5));
 	game_node->setContentSize(CCSizeMake(320,460));
-	game_node->setPosition(ccp(240,160));
+	game_node->setPosition(ccp(240,myDSH->ui_center_y));
 	setFormSetter(game_node);
 	addChild(game_node, kCV_Z_first_img);
 	
@@ -103,7 +103,7 @@ bool CardViewScene::init()
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
 	
-	first_img->setPosition(ccp(160,215));
+	first_img->setPosition(ccp(160,230));
 	first_img->setAnchorPoint(ccp(0.5,0.5));
 	setFormSetter(first_img);
 	first_img->setTouchEnabled(false);
@@ -113,11 +113,11 @@ bool CardViewScene::init()
 	{
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
-		safety_img->setPosition(ccp(160, 215));
+		safety_img->setPosition(ccp(160, 240));
 		game_node->addChild(safety_img, kCV_Z_first_img);
 	}
 	
-	CCPoint center_position = ccp(160,215);
+	CCPoint center_position = ccp(160,230);
 	
 	CCSprite* top_case = CCSprite::create("diary_frame_top.png");
 	top_case->setPosition(ccpAdd(center_position, ccp(0,215)));
@@ -255,7 +255,7 @@ bool CardViewScene::init()
 	is_actioned = true;
 	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.5f;
+	minimum_scale = (screen_size.height*320)/(screen_size.width*430);
 	
 	//game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	
@@ -292,7 +292,7 @@ void CardViewScene::startTouchAction()
 	is_before_scrolling = is_scrolling;
 	
 	save_position = game_node->getPosition();
-	schedule(schedule_selector(CardViewScene::moveChecking));
+	//schedule(schedule_selector(CardViewScene::moveChecking));
 }
 
 void CardViewScene::moveChecking()
@@ -320,7 +320,7 @@ void CardViewScene::menuAction(CCObject *sender)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
-		unschedule(schedule_selector(CardViewScene::moveChecking));
+		//unschedule(schedule_selector(CardViewScene::moveChecking));
 		
 		is_actioned = true;
 		next_button->setVisible(false);
@@ -353,24 +353,55 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	
 	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
 	
-	//왼쪽맞추기
-	if(game_node->getScale()*first_img->getContentSize().width/2.f*-1+50>a_p.x){
-		a_p.x = game_node->getScale()*first_img->getContentSize().width/2.f*-1+50;
+	//size가 860 * 320
+	int widthLimit = 320 * game_node->getScale();
+	int heightLimit = (430-screen_size.height/2.f) * game_node->getScale();
+	
+	int checkWidth=0;
+	
+	float height = myDSH->ui_center_y*2;
+	float contentHalfWidth = game_node->getScale()*first_img->getContentSize().width/2.f;
+	float contentHalfHeight = game_node->getScale()*first_img->getContentSize().height/2.f;
+
+	
+	if(contentHalfWidth*2.f<=screen_size.width/2.f){
+			//왼쪽맞추기
+		if(contentHalfWidth*-1+widthLimit>a_p.x){
+			a_p.x = contentHalfWidth*-1+widthLimit;
+		}
+		
+		//오른쪽맞추기
+		if(contentHalfWidth+screen_size.width/2.f-widthLimit<a_p.x){
+			a_p.x = contentHalfWidth+screen_size.width/2.f-widthLimit;
+		}
+		
+
+
+	}else{
+
+		
+		if(a_p.x<screen_size.width/2.f-contentHalfWidth){
+			a_p.x = screen_size.width/2.f-contentHalfWidth;
+		}
+		
+		if(contentHalfWidth<a_p.x){
+			a_p.x = contentHalfWidth;
+		}
+		
+	}
+
+	
+	if(contentHalfHeight*2>=screen_size.height/2.f){
+		//top & bottom
+		if(a_p.y < height - contentHalfHeight){
+			a_p.y=height - contentHalfHeight;
+		}else if(a_p.y>contentHalfHeight){
+			a_p.y=contentHalfHeight;
+		}
+	}else{
+			a_p.y = myDSH->ui_center_y;
 	}
 	
-	//오른쪽맞추기
-	if(game_node->getScale()*first_img->getContentSize().width/2.f+screen_size.width/2.f-50<a_p.x){
-		a_p.x = game_node->getScale()*first_img->getContentSize().width/2.f+screen_size.width/2.f-50;
-	}
-	
-	//top
-	if(game_node->getScale()*first_img->getContentSize().height/2.f*-1+50>a_p.y){
-		a_p.y=game_node->getScale()*first_img->getContentSize().height/2.f*-1+50;
-	}
-	//bottom
-	if(game_node->getScale()*first_img->getContentSize().height/2.f+screen_size.height/2.f-50<a_p.y){
-		a_p.y = game_node->getScale()*first_img->getContentSize().height/2.f+screen_size.height/2.f-50;
-	}
 	
 //	if(game_node->getScale() <= 1.5f)
 //	{
@@ -519,6 +550,8 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				//					next_button->ccTouchMoved(touch, pEvent);
 				//				}
 				
+
+				
 				if(is_spin_mode)
 				{
 					this->unschedule(schedule_selector(CardViewScene::moveAnimation));
@@ -543,6 +576,9 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				}
 				else
 					this->moveListXY(ccpSub(touch_p, location));
+//				CCPoint after_position = ccpMult(location,-1);
+//				first_img->movingDistance(ccpSub(after_position, save_position));
+//				save_position = after_position;
 				touch_p = location;
 			}
 			else if(multiTouchData.size() == 2)
@@ -555,7 +591,7 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 					sub_point = ccpMult(sub_point, -1);
 					sub_point = ccpAdd(sub_point, it->second);
 					
-					avg_point = ccpAdd(sub_point, it->second);
+					avg_point = ccpAdd(avg_point, it->second);
 				}
 				
 				avg_point = ccpMult(avg_point,1/(float)multiTouchData.size());
@@ -630,6 +666,7 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 		
 		map<int, CCPoint>::iterator o_it;
 		o_it = multiTouchData.find((int)touch);
+		int touchSize = multiTouchData.size();
 		if(o_it != multiTouchData.end())
 		{
 			multiTouchData.erase((int)touch);
