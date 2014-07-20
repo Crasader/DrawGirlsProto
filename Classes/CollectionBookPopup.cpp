@@ -145,7 +145,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //	target->addChild(profile_back);
 	
 	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 50), kCCTextAlignmentLeft);
-	r_stage_profile->setPosition(ccp(25,157));
+	r_stage_profile->setPosition(ccp(25,159));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_profile->setAnchorPoint(ccp(0,1));
@@ -371,6 +371,20 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 
 void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 {
+	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
+	card_number_label->setColor(ccBLACK);
+	card_number_label->disableOuterStroke();
+	card_number_label->setAnchorPoint(ccp(0,0.5f));
+	card_number_label->setPosition(ccp(38,295));
+	target->addChild(card_number_label);
+	
+	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
+	take_cnt_label->setColor(ccBLACK);
+	take_cnt_label->disableOuterStroke();
+	take_cnt_label->setAnchorPoint(ccp(0,0.5f));
+	take_cnt_label->setPosition(ccp(38,28));
+	target->addChild(take_cnt_label);
+	
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(0.57);
 	r_card_img->setPosition(ccp(129,161));
