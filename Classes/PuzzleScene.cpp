@@ -568,11 +568,6 @@ bool PuzzleScene::init()
 		if(!mySGD->isTimeEvent(kTimeEventType_heart))
 		{
 			mySGD->addChangeGoods("clearHeartUp");
-			vector<CommandParam> t_list = mySGD->getChangeGoodsParam(nullptr);
-			for(int i=0;i<t_list.size();i++)
-			{
-				clear_command_list.push_back(t_list[i]);
-			}
 		}
 		
 		Json::Value card_param;
