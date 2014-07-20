@@ -1358,7 +1358,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(10000000 + idx*10000 + t_info.need_ruby_value);
 					detail_button->setPreferredSize(CCSizeMake(90, 43));
-					detail_button->setPosition(ccp(67.5f,70.5f));
+					detail_button->setPosition(ccp(67.5f,65.5f));
 					not_clear_img->addChild(detail_button);
 				}
 				else
@@ -1375,7 +1375,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 					detail_button->setTag(0);
 					detail_button->setPreferredSize(CCSizeMake(90, 43));
-					detail_button->setPosition(ccp(67.5f,70.5f));
+					detail_button->setPosition(ccp(67.5f,65.5f));
 					not_clear_img->addChild(detail_button);
 				}
 			}
@@ -1423,7 +1423,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
 				detail_button->setTag(0);
 				detail_button->setPreferredSize(CCSizeMake(90, 43));
-				detail_button->setPosition(ccp(67.5f,70.5f));
+				detail_button->setPosition(ccp(67.5f,65.5f));
 				not_clear_img->addChild(detail_button);
 			}
 			else
@@ -1435,9 +1435,9 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			}
 		}
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
-		title_label->setPosition(ccp(0,-56.f));
-		cell_node->addChild(title_label, 1);
+//		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
+//		title_label->setPosition(ccp(0,-56.f));
+//		cell_node->addChild(title_label, 1);
 		
 //		PuzzleListShadow* shadow_node = PuzzleListShadow::create(this, cell, ccpAdd(ccp((-480.f*screen_scale_x+480.f)/2.f, 160-table_size.height/2.f), ccp(table_size.width/2.f, table_size.height/2.f)), ccp(cellSizeForTable(table).width/2.f, cellSizeForTable(table).height/2.f), ccp(1.f,0), ccp(0.2f,0));
 //		cell->addChild(shadow_node, -1);
@@ -2646,7 +2646,7 @@ void MainFlowScene::setBottom()
 	endless_item->setTag(kMainFlowMenuTag_endlessMode);
 	
 	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(19-240+290.f, n_endless->getContentSize().height/2.f+3));
+	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
 //	bottom_case->addChild(endless_menu);
 	addChild(endless_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(endless_menu);
@@ -4135,7 +4135,7 @@ void MainFlowScene::setTop()
 	top_list.clear();
 	
 	CCNode* t_star_node = CCNode::create();
-	t_star_node->setPosition(ccp(23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	t_star_node->setPosition(ccp(28,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(t_star_node, kMainFlowZorder_top);
 	
 	total_star = KS::loadCCBI<CCSprite*>(this, "main_star.ccbi").first;
@@ -4151,7 +4151,7 @@ void MainFlowScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(110,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8)); // 114
+	top_heart->setPosition(ccp(108,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8)); // 114
 	addChild(top_heart, kMainFlowZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -4308,7 +4308,7 @@ void MainFlowScene::setTop()
 	
 	postbox_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));//"mainflow_new.png");
 	postbox_count_case->setContentSize(CCSizeMake(20, 20));
-	postbox_count_case->setPosition(postbox_menu->getPosition() + ccp(12,6));
+	postbox_count_case->setPosition(postbox_menu->getPosition() + ccp(6,6));
 	postbox_node->addChild(postbox_count_case);
 	
 	CCScaleTo* t_scale1 = CCScaleTo::create(0.1f, 1.3f);
@@ -4343,7 +4343,7 @@ void MainFlowScene::setTop()
 	
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	achievement_count_case->setContentSize(CCSizeMake(20, 20));
-	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12, 6));
+	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(6, 6));
 	achieve_node->addChild(achievement_count_case);
 	
 	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 8);

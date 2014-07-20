@@ -64,7 +64,7 @@ bool DiaryZoomPopup::init()
 	
 	int card_number = mySGD->selected_collectionbook;
 	
-	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
 
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.

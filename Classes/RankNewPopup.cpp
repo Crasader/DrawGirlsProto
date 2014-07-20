@@ -690,7 +690,7 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 //		left1 = KS::replaceAll(left1, "%", "%");
 //		left2 = KS::replaceAll(left2, "%", "%");
 		StyledLabelTTF* reward2Title = StyledLabelTTF::create(
-																													ccsf("<font color=#FFAA14 newline=13>%s</font><font color=#FFAA14>%s</font>",
+																													ccsf("<font color=#FFAA14 newline=8>%s</font><font color=#FFAA14>%s</font>",
 																															 left1.c_str(), left2.c_str()),
 																													mySGD->getFont().c_str(), 11,
 																													999, StyledAlignment::kCenterAlignment);

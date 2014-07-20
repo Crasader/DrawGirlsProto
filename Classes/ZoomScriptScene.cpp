@@ -119,7 +119,7 @@ bool ZoomScript::init()
 		AudioEngine::sharedInstance()->preloadGroanEffect(NSDS_GS(kSDS_CI_int1_soundType_int1_s, t_t_card, i));
 	}
 	
-	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
 
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
@@ -413,7 +413,7 @@ void ZoomScript::menuAction(CCObject *sender)
 				{
 					int t_card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, after_value);
 					
-					MyNode* t_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString()));
+					MyNode* t_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString()), t_card_number);
 					
 					if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()))
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
@@ -666,7 +666,7 @@ void ZoomScript::menuAction(CCObject *sender)
 				{
 					int t_card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade()+1);
 					
-					MyNode* t_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString()));
+					MyNode* t_node = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", t_card_number)->getCString()), t_card_number);
 					
 					if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()))
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
@@ -823,7 +823,7 @@ void ZoomScript::showtimeFirstAction()
 	if(is_exchanged)		card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
 	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
 	
-	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
 
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
@@ -893,7 +893,7 @@ void ZoomScript::showtimeFifthAction()
 	}
 	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
 	
-	third_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+	third_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
 	
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		third_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.

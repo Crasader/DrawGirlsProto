@@ -1024,8 +1024,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
 	ko->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
 	ko->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
-	ko->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
-	ko->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	ko->setObject(CCString::create("슬로우존 안에서는 이동속도가 느려져요."), kMyLocalKey_patternContent1003);
+	ko->setObject(CCString::create("붉은 원의 테두리에 닿으면 생명 하나를 잃어요."), kMyLocalKey_patternContent1004);
 	ko->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
 	ko->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
 	ko->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
@@ -1940,8 +1940,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
 	en->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
 	en->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
-	en->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
-	en->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	en->setObject(CCString::create("슬로우존 안에서는 이동속도가 느려져요."), kMyLocalKey_patternContent1003);
+	en->setObject(CCString::create("붉은 원의 테두리에 닿으면 생명 하나를 잃어요."), kMyLocalKey_patternContent1004);
 	en->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
 	en->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
 	en->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
@@ -2868,8 +2868,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
 	ja->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
 	ja->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
-	ja->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
-	ja->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	ja->setObject(CCString::create("슬로우존 안에서는 이동속도가 느려져요."), kMyLocalKey_patternContent1003);
+	ja->setObject(CCString::create("붉은 원의 테두리에 닿으면 생명 하나를 잃어요."), kMyLocalKey_patternContent1004);
 	ja->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
 	ja->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
 	ja->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);

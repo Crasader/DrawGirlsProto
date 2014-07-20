@@ -20,6 +20,8 @@
 #include "FormSetter.h"
 #include "CommonButton.h"
 #include "CommonAnimation.h"
+#include "StyledLabelTTF.h"
+
 enum EventShopProductCode
 {
 	kEventShopProductCode_begin = 0,
@@ -112,9 +114,8 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		
 		CCSprite* inner = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
 		
-		CCLabelTTF* ruby_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 12);
-		ruby_label->setColor(ccORANGE);
-		ruby_label->setPosition(ccp(inner->getContentSize().width/2.f, inner->getContentSize().height/2.f-5));
+		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		ruby_label->setPosition(ccp(inner->getContentSize().width/2.f, inner->getContentSize().height/2.f-7));
 		inner->addChild(ruby_label);
 		
 		content_node->addChild(inner, 2);

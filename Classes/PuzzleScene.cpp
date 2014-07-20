@@ -2785,7 +2785,7 @@ void PuzzleScene::setTop()
 	cancel_item->setTag(kPuzzleMenuTag_cancel);
 	
 	CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
-	cancel_menu->setPosition(ccp(23,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
+	cancel_menu->setPosition(ccp(28,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
 	addChild(cancel_menu, kPuzzleZorder_top);
 	
 	top_list.push_back(cancel_menu);
@@ -2793,7 +2793,7 @@ void PuzzleScene::setTop()
 	
 	CCSprite* top_heart = CCSprite::create("mainflow_top_heart.png");
 	top_heart->setAnchorPoint(ccp(0.5f,1.f));
-	top_heart->setPosition(ccp(110,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
+	top_heart->setPosition(ccp(108,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-8));
 	addChild(top_heart, kPuzzleZorder_top);
 	
 	top_list.push_back(top_heart);
@@ -2930,7 +2930,7 @@ void PuzzleScene::setTop()
 	
 	postbox_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	postbox_count_case->setContentSize(CCSizeMake(20, 20));
-	postbox_count_case->setPosition(postbox_menu->getPosition() + ccp(12,6));
+	postbox_count_case->setPosition(postbox_menu->getPosition() + ccp(6,6));
 	postbox_node->addChild(postbox_count_case);
 	postbox_count_case->setVisible(false);
 	
@@ -2966,7 +2966,7 @@ void PuzzleScene::setTop()
 	
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	achievement_count_case->setContentSize(CCSizeMake(20, 20));
-	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(12,6));
+	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(6,6));
 	achieve_node->addChild(achievement_count_case);
 	
 	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 8);
