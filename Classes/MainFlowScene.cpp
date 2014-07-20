@@ -869,6 +869,7 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 
 void MainFlowScene::puzzleLoadSuccess()
 {
+	mySGD->resetLabels();
 	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 }
 
@@ -4169,6 +4170,7 @@ void MainFlowScene::setTop()
 	heart_time = HeartTime::create();
 	heart_time->setPosition(ccp(top_heart->getContentSize().width/2.f-49.f,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_time);
+	mySGD->setHeartTime(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");
 	CCSprite* s_heart = CCSprite::create("mainflow_top_shop.png");
@@ -4407,7 +4409,7 @@ void MainFlowScene::countingMessage()
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	
 	//USE GETMESSAGELIST
-	hspConnector::get()->command("checkgiftboxhistory",p,[this](Json::Value r)
+	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
 								 {
 									 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
 									 

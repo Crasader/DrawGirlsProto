@@ -465,9 +465,6 @@ bool PuzzleScene::init()
 	{
 		keep_card_number = 0;
 		
-//		if(!mySGD->isTimeEvent(kTimeEventType_heart))
-//			myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
-		
 		bool is_not_empty_card[4] = {false,};
 		
 		clear_is_empty_piece = true;
@@ -568,6 +565,15 @@ bool PuzzleScene::init()
 													  }
 												  }));
 		
+		if(!mySGD->isTimeEvent(kTimeEventType_heart))
+		{
+			mySGD->addChangeGoods("clearHeartUp");
+			vector<CommandParam> t_list = mySGD->getChangeGoodsParam(nullptr);
+			for(int i=0;i<t_list.size();i++)
+			{
+				clear_command_list.push_back(t_list[i]);
+			}
+		}
 		
 		Json::Value card_param;
 		card_param["memberID"] = hspConnector::get()->getSocialID();
@@ -1457,6 +1463,7 @@ void PuzzleScene::puzzleBacking()
 											   puzzle_node->setPositionX(original_position.x - 600.f);
 											   KS::setOpacity(puzzle_node, 0);
 											   
+											   mySGD->resetLabels();
 											   CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 										   }));
 }
@@ -2801,6 +2808,7 @@ void PuzzleScene::setTop()
 	heart_time = HeartTime::create();
 	heart_time->setPosition(ccp(top_heart->getContentSize().width/2.f-49,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_time);
+	mySGD->setHeartTime(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");
 	CCSprite* s_heart = CCSprite::create("mainflow_top_shop.png");
@@ -3020,7 +3028,7 @@ void PuzzleScene::countingMessage()
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	
 	//USE GETMESSAGELIST
-	hspConnector::get()->command("checkgiftboxhistory",p,[this](Json::Value r)
+	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
 															 {
 																 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
 																 
