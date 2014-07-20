@@ -73,7 +73,7 @@ public:
 	}
 	void shootPetMissile(int jm_type, int cmCnt, float damage_per, CCPoint s_p);
 	enum PATTERN_RET_CODE{INVALID=0, VALID=1, NOCAST=2};
-	int attackWithKSCode(CCPoint startPosition, std::string pattern, KSCumberBase* cb, bool exe);
+	int attackWithKSCode(CCPoint startPosition, std::string &pattern, KSCumberBase* cb, bool exe);
 	int getJackMissileCnt();
 	void removeAllPattern();
 private:
