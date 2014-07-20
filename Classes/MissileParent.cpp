@@ -554,7 +554,8 @@ void MissileParent::endIngActionAP()
 int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD, KSCumberBase* cb, bool exe)
 {
 	Json::Value patternData;
-	
+	int valid = 1;
+	int invalid = 0;
 	// Attack Queue 가 있으면 patternD 무시하고 Attack Queue 에서 하나하나 빼서 씀.
 	if(cb->getAttackQueue().empty() == false)
 	{
@@ -582,12 +583,27 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 			reader.parse(patternD, patternData);
 		}
 	}
+	
+	if(patternData["pattern"].asInt() == 1020)
+	{
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"), root);
+		
+		// 기본값으로 서버에서 설정된 부하몹 개수로 함.
+		int n = MIN(patternData.get("maxchilds", root.size()).asInt() - myGD->getSubCumberCount(), patternData.get("childs", 1).asInt());
+		if(n <= 0) // 부하몹 생성할것이 없다면 false 리턴함.
+		{
+			return invalid;
+		}
+	}
+	
+	CCLOG(".. %s", patternD.c_str());
 	CCLOG("%s", boost::str(boost::format("%||") % patternData).c_str());
 	int castFrame = patternData.get("castframe", 120).asInt();
 	// 캐스팅 실패하면 캐스팅 시간 점점 줄음.
 	castFrame = MAX(30, castFrame - (castFrame * 0.1f)* cb->getCastingCancelCount());
-	int valid = 1;
-	int invalid = 0;
+	
 	
 	std::string pattern = patternData["pattern"].asString();
 	std::string atype = patternData["atype"].asString();
