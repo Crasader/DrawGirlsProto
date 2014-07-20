@@ -241,7 +241,7 @@ enum SDS_KEY
 	kSDS_CI_int1_category_s,
 	kSDS_CI_int1_level_i,
 	kSDS_CI_int1_soundCnt_i,
-	kSDS_CI_int1_soundNumber_int1_i,
+	kSDS_CI_int1_soundType_int1_s,
 	kSDS_CI_int1_characterNo_i,
 	kSDS_CI_end = 3999,
 	kSDS_AI_base = 4000,

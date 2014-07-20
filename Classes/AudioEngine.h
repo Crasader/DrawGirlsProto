@@ -78,6 +78,17 @@ public:
 			CCLOG("effect off!!");
 		effectOn = t_b;
 	}
+	
+	void preloadGroanEffect(string t_type)
+	{
+		auto iter = find(preloaded_groan_list.begin(), preloaded_groan_list.end(), t_type);
+		if(iter == preloaded_groan_list.end())
+		{
+			preloaded_groan_list.push_back(t_type);
+			mySAE->preloadEffect(string("groan" + t_type + ".wav").c_str());
+		}
+	}
+	
 	bool is_preloaded;
 	
 	void preloadEffectTitleStep(int t_step)
@@ -871,7 +882,7 @@ private:
 	string playing_sound_name;
 	int musicOn;
 	bool effectOn;
-	
+	vector<string> preloaded_groan_list;
 	bool back_down;
 	
 	AudioEngine() : CCObject()
@@ -880,6 +891,7 @@ private:
 		back_down = false;
 		is_preloaded = false;
 		soundEffects = new CCArray(1);
+		preloaded_groan_list.clear();
 	}
 	
 };
