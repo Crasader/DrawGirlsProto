@@ -153,25 +153,27 @@ void EndlessModeOpening::setMain()
 							  });
 	main_case->addChild(close_button, 2);
 	
+	
 	CCScale9Sprite* tip_marquee_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	tip_marquee_back->setContentSize(CCSizeMake(240, 26));
-	tip_marquee_back->setPosition(ccp(165+150, 250.f));
+	tip_marquee_back->setContentSize(CCSizeMake(278, 26));
+	tip_marquee_back->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-34));
 	main_case->addChild(tip_marquee_back);
 	
-	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 240, 25, "");
-	tipMaquee->addText("<font size=13>PVP랭킹은 연승이 중요해요.</font>");
-	tipMaquee->addText("<font size=13>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>");
-	tipMaquee->addText("<font size=13>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>");
-	tipMaquee->addText("<font size=13>랭킹은 매주 갱신됩니다.</font>");
-	tipMaquee->setPosition(ccp(0,0));//ccpFromSize(tip_marquee_back->getContentSize()/2.f));
+	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
+	tipMaquee->addText("<font size=12>PVP랭킹은 연승이 중요해요.</font>");
+	tipMaquee->addText("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>");
+	tipMaquee->addText("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>");
+	tipMaquee->addText("<font size=12>랭킹은 매주 갱신됩니다.</font>");
+	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
+	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
 	tip_marquee_back->addChild(tipMaquee);
 	
 	CCSprite* tipBack = CCSprite::create("tip.png");
-	tipBack->setPosition(ccp(190.f,250.f)); 			// dt (173.5,246.0)
+	tipBack->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-34));
 	main_case->addChild(tipBack);
-	KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 12.f);
-	tipLbl->disableOuterStroke();
+	KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
+//	tipLbl->disableOuterStroke();
 	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f);
 	tipBack->addChild(tipLbl);
 	

@@ -194,7 +194,7 @@ bool ClearPopup::init()
 	
 	title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 21.5f);
 	title->setScale(0);
-	title->setColor(ccc3(255, 170, 20));
+	title->enableGradation(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
 	title->setPosition(ccp(inner_left->getContentSize().width/2.f,154));
 	inner_left->addChild(title, kZ_CP_menu);
 	
