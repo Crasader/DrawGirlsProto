@@ -855,7 +855,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			ScrollMenu* get_menu = ScrollMenu::create(get_item, NULL);
 			get_menu->setPosition(ccp(360,cell_back->getContentSize().height/2.f));
 			cell_back->addChild(get_menu);
-			get_menu->setTouchPriority(-200);
+			get_menu->setTouchPriority(-188);
 			
 			string reward_type_str;
 			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
