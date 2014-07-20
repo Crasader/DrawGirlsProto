@@ -255,7 +255,7 @@ bool CardViewScene::init()
 	is_actioned = true;
 	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.5f;
+	minimum_scale = (screen_size.height*320)/(screen_size.width*430);
 	
 	//game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	
@@ -292,7 +292,7 @@ void CardViewScene::startTouchAction()
 	is_before_scrolling = is_scrolling;
 	
 	save_position = game_node->getPosition();
-	schedule(schedule_selector(CardViewScene::moveChecking));
+	//schedule(schedule_selector(CardViewScene::moveChecking));
 }
 
 void CardViewScene::moveChecking()
@@ -320,7 +320,7 @@ void CardViewScene::menuAction(CCObject *sender)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
-		unschedule(schedule_selector(CardViewScene::moveChecking));
+		//unschedule(schedule_selector(CardViewScene::moveChecking));
 		
 		is_actioned = true;
 		next_button->setVisible(false);
@@ -374,14 +374,9 @@ void CardViewScene::moveListXY(CCPoint t_p)
 		if(contentHalfWidth+screen_size.width/2.f-widthLimit<a_p.x){
 			a_p.x = contentHalfWidth+screen_size.width/2.f-widthLimit;
 		}
-//		//top
-//		if(screen_size.height/2.f < a_p.y+game_node->getScale()*first_img->getContentSize().height/2.f){
-//			a_p.y=game_node->getScale()*first_img->getContentSize().height/2.f*-1+heightLimit;
-//		}
-//		//bottom
-//		if(a_p.y<game_node->getScale()*first_img->getContentSize().height/2.f){
-//			a_p.y = game_node->getScale()*first_img->getContentSize().height/2.f;
-//		}
+		
+
+
 	}else{
 
 		
@@ -392,16 +387,20 @@ void CardViewScene::moveListXY(CCPoint t_p)
 		if(contentHalfWidth<a_p.x){
 			a_p.x = contentHalfWidth;
 		}
+		
+	}
 
-	}
-	//top
-	if(a_p.y < height - contentHalfHeight){
-		a_p.y=height - contentHalfHeight;
-	}else if(a_p.y>contentHalfHeight){
-		a_p.y=contentHalfHeight;
-	}
 	
-
+	if(contentHalfHeight*2>=screen_size.height/2.f){
+		//top & bottom
+		if(a_p.y < height - contentHalfHeight){
+			a_p.y=height - contentHalfHeight;
+		}else if(a_p.y>contentHalfHeight){
+			a_p.y=contentHalfHeight;
+		}
+	}else{
+			a_p.y = myDSH->ui_center_y;
+	}
 	
 	
 //	if(game_node->getScale() <= 1.5f)
@@ -551,6 +550,8 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				//					next_button->ccTouchMoved(touch, pEvent);
 				//				}
 				
+
+				
 				if(is_spin_mode)
 				{
 					this->unschedule(schedule_selector(CardViewScene::moveAnimation));
@@ -575,6 +576,9 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				}
 				else
 					this->moveListXY(ccpSub(touch_p, location));
+//				CCPoint after_position = ccpMult(location,-1);
+//				first_img->movingDistance(ccpSub(after_position, save_position));
+//				save_position = after_position;
 				touch_p = location;
 			}
 			else if(multiTouchData.size() == 2)
@@ -587,7 +591,7 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 					sub_point = ccpMult(sub_point, -1);
 					sub_point = ccpAdd(sub_point, it->second);
 					
-					avg_point = ccpAdd(sub_point, it->second);
+					avg_point = ccpAdd(avg_point, it->second);
 				}
 				
 				avg_point = ccpMult(avg_point,1/(float)multiTouchData.size());
@@ -662,6 +666,7 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 		
 		map<int, CCPoint>::iterator o_it;
 		o_it = multiTouchData.find((int)touch);
+		int touchSize = multiTouchData.size();
 		if(o_it != multiTouchData.end())
 		{
 			multiTouchData.erase((int)touch);
