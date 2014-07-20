@@ -52,12 +52,14 @@ public:
 	void update(float dt) ;
 	virtual void registerWithTouchDispatcher();
 	bool ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent);
+	
+	void putPercentWithIndex(int index);
 protected:
 	CCSprite* m_grayBack;
 	CCNode* m_container;
-
+	CCScale9Sprite* m_percentContainer;
 	CommonButton * cancel_menu;
-	CCScale9Sprite* back_img;
+	CCSprite* back_img;
 	float recent_percent;
 	CountingBMLabel * percent_label;
 	CCProgressTimer * progress_img;
@@ -80,12 +82,13 @@ protected:
 	CCLabelTTF* m_lblPercent;
 	StyledLabelTTF* m_desc2;
 	CCClippingNode* m_closer;
-	CCNode* m_graphNode;
-	CCNode* m_stencil;
-	CCSprite* m_gradient;
+//	CCNode* m_graphNode;
+//	CCNode* m_stencil;
+//	CCSprite* m_gradient;
 	std::function<void(void)> m_toDown, m_toUp;
 	CCNode* m_tutorialBox, *m_desc3;
-	CCNode* m_failBox, *m_failContent;
+	CCNode* m_failBox, *m_failContent, *m_failTitle;
+	std::set<int> m_percents;
 //	CCNode* m_command1;
 };
 #endif

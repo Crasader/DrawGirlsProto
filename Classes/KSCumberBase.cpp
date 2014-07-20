@@ -1408,6 +1408,7 @@ void KSCumberBase::cumberAttack(float dt)
 		{
 			// 안넣어져야할 조건
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
+
 			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
 				 currentSecond <= m_lastPattern.exeTime + 3)
 			{

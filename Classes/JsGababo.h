@@ -57,7 +57,7 @@ protected:
 	CCScale9Sprite* m_front1;
 	CCScale9Sprite* m_front2;
 	CCScale9Sprite* m_front3;
-	CCScale9Sprite* m_front4;
+	CCNode* m_realFront;
 	std::vector<BonusGameReward> m_rewards;
 	CCSprite* m_stepFrame;
 	CCSprite* m_stepSprite;
@@ -75,6 +75,10 @@ protected:
 	int m_tutorialStep;
 	CommonButton* m_ba, *m_ga, *m_bo;
 	CommonButton* m_confirmButton;
+	CCBAnimationManager* meManager;
+	CCBAnimationManager* npcManager;
+	CCSprite* m_meCharSprite;
+	CCSprite* m_npcCharSprite;
 };
 
 #endif
