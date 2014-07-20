@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>1</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -362,6 +362,37 @@
 					<dict>
 						<key>animatedProperties</key>
 						<dict>
+							<key>0</key>
+							<dict>
+								<key>scale</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>0.0</real>
+												<real>0.0</real>
+											</array>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>scale</string>
+									<key>type</key>
+									<integer>4</integer>
+								</dict>
+							</dict>
 							<key>1</key>
 							<dict>
 								<key>rotation</key>
@@ -482,13 +513,220 @@
 							</dict>
 						</dict>
 						<key>baseClass</key>
-						<string>CCSprite</string>
+						<string>CCLayer</string>
 						<key>children</key>
-						<array/>
+						<array>
+							<dict>
+								<key>animatedProperties</key>
+								<dict>
+									<key>1</key>
+									<dict/>
+								</dict>
+								<key>baseClass</key>
+								<string>CCSprite</string>
+								<key>children</key>
+								<array/>
+								<key>customClass</key>
+								<string></string>
+								<key>displayName</key>
+								<string>gababo_me_arm1</string>
+								<key>memberVarAssignmentName</key>
+								<string></string>
+								<key>memberVarAssignmentType</key>
+								<integer>0</integer>
+								<key>properties</key>
+								<array>
+									<dict>
+										<key>name</key>
+										<string>position</string>
+										<key>type</key>
+										<string>Position</string>
+										<key>value</key>
+										<array>
+											<real>23.818841934204102</real>
+											<real>3.7986111640930176</real>
+											<integer>0</integer>
+										</array>
+									</dict>
+									<dict>
+										<key>name</key>
+										<string>anchorPoint</string>
+										<key>type</key>
+										<string>Point</string>
+										<key>value</key>
+										<array>
+											<real>0.5</real>
+											<real>0.5</real>
+										</array>
+									</dict>
+									<dict>
+										<key>name</key>
+										<string>scale</string>
+										<key>type</key>
+										<string>ScaleLock</string>
+										<key>value</key>
+										<array>
+											<real>1</real>
+											<real>1</real>
+											<false/>
+											<integer>0</integer>
+										</array>
+									</dict>
+									<dict>
+										<key>name</key>
+										<string>ignoreAnchorPointForPosition</string>
+										<key>type</key>
+										<string>Check</string>
+										<key>value</key>
+										<false/>
+									</dict>
+									<dict>
+										<key>name</key>
+										<string>displayFrame</string>
+										<key>type</key>
+										<string>SpriteFrame</string>
+										<key>value</key>
+										<array>
+											<string></string>
+											<string>gababo_me_arm1.png</string>
+										</array>
+									</dict>
+								</array>
+							</dict>
+							<dict>
+								<key>animatedProperties</key>
+								<dict>
+									<key>1</key>
+									<dict>
+										<key>scale</key>
+										<dict>
+											<key>keyframes</key>
+											<array>
+												<dict>
+													<key>easing</key>
+													<dict>
+														<key>type</key>
+														<integer>1</integer>
+													</dict>
+													<key>name</key>
+													<string>scale</string>
+													<key>time</key>
+													<real>0.0</real>
+													<key>type</key>
+													<integer>4</integer>
+													<key>value</key>
+													<array>
+														<real>0.40000000596046448</real>
+														<real>0.40000000596046448</real>
+													</array>
+												</dict>
+												<dict>
+													<key>easing</key>
+													<dict>
+														<key>type</key>
+														<integer>1</integer>
+													</dict>
+													<key>name</key>
+													<string>scale</string>
+													<key>time</key>
+													<real>0.3333333432674408</real>
+													<key>type</key>
+													<integer>4</integer>
+													<key>value</key>
+													<array>
+														<real>1</real>
+														<real>1</real>
+													</array>
+												</dict>
+											</array>
+											<key>name</key>
+											<string>scale</string>
+											<key>type</key>
+											<integer>4</integer>
+										</dict>
+									</dict>
+								</dict>
+								<key>baseClass</key>
+								<string>CCSprite</string>
+								<key>children</key>
+								<array/>
+								<key>customClass</key>
+								<string></string>
+								<key>displayName</key>
+								<string>gababo_ba</string>
+								<key>memberVarAssignmentName</key>
+								<string></string>
+								<key>memberVarAssignmentType</key>
+								<integer>0</integer>
+								<key>properties</key>
+								<array>
+									<dict>
+										<key>name</key>
+										<string>position</string>
+										<key>type</key>
+										<string>Position</string>
+										<key>value</key>
+										<array>
+											<real>27.128593444824219</real>
+											<real>8.3724489212036133</real>
+											<integer>0</integer>
+										</array>
+									</dict>
+									<dict>
+										<key>name</key>
+										<string>anchorPoint</string>
+										<key>type</key>
+										<string>Point</string>
+										<key>value</key>
+										<array>
+											<real>0.0</real>
+											<real>0.5</real>
+										</array>
+									</dict>
+									<dict>
+										<key>baseValue</key>
+										<array>
+											<real>1</real>
+											<real>1</real>
+										</array>
+										<key>name</key>
+										<string>scale</string>
+										<key>type</key>
+										<string>ScaleLock</string>
+										<key>value</key>
+										<array>
+											<real>1</real>
+											<real>1</real>
+											<false/>
+											<integer>0</integer>
+										</array>
+									</dict>
+									<dict>
+										<key>name</key>
+										<string>ignoreAnchorPointForPosition</string>
+										<key>type</key>
+										<string>Check</string>
+										<key>value</key>
+										<false/>
+									</dict>
+									<dict>
+										<key>name</key>
+										<string>displayFrame</string>
+										<key>type</key>
+										<string>SpriteFrame</string>
+										<key>value</key>
+										<array>
+											<string></string>
+											<string>gababo_ba.png</string>
+										</array>
+									</dict>
+								</array>
+							</dict>
+						</array>
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>gababo_me_arm1</string>
+						<string>CCLayer</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
@@ -497,28 +735,21 @@
 						<array>
 							<dict>
 								<key>name</key>
-								<string>position</string>
-								<key>type</key>
-								<string>Position</string>
-								<key>value</key>
-								<array>
-									<real>8.2367839813232422</real>
-									<real>4.2637472152709961</real>
-									<integer>0</integer>
-								</array>
-							</dict>
-							<dict>
-								<key>name</key>
 								<string>anchorPoint</string>
 								<key>type</key>
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.17902569472789764</real>
-									<real>0.64888793230056763</real>
+									<real>0.0</real>
+									<real>0.0</real>
 								</array>
 							</dict>
 							<dict>
+								<key>baseValue</key>
+								<array>
+									<real>1</real>
+									<real>1</real>
+								</array>
 								<key>name</key>
 								<string>scale</string>
 								<key>type</key>
@@ -533,13 +764,13 @@
 							</dict>
 							<dict>
 								<key>baseValue</key>
-								<real>-82.974632263183594</real>
+								<real>0.0</real>
 								<key>name</key>
 								<string>rotation</string>
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-82.974632263183594</real>
+								<real>-12.000011444091797</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -547,18 +778,27 @@
 								<key>type</key>
 								<string>Check</string>
 								<key>value</key>
-								<false/>
+								<true/>
 							</dict>
 							<dict>
 								<key>name</key>
-								<string>displayFrame</string>
+								<string>touchEnabled</string>
+								<key>platform</key>
+								<string>iOS</string>
 								<key>type</key>
-								<string>SpriteFrame</string>
+								<string>Check</string>
 								<key>value</key>
-								<array>
-									<string></string>
-									<string>gababo_me_arm1.png</string>
-								</array>
+								<true/>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>mouseEnabled</string>
+								<key>platform</key>
+								<string>Mac</string>
+								<key>type</key>
+								<string>Check</string>
+								<key>value</key>
+								<true/>
 							</dict>
 						</array>
 					</dict>
@@ -736,7 +976,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>11.834659576416016</real>
+											<real>12</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -751,7 +991,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>4.0755653381347656</real>
+											<real>4</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -811,7 +1051,7 @@
 											<key>value</key>
 											<array>
 												<real>1</real>
-												<real>0.84091335535049438</real>
+												<real>0.85000002384185791</real>
 											</array>
 										</dict>
 										<dict>
@@ -873,8 +1113,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.77999293804168701</real>
-									<real>0.70440548658370972</real>
+									<real>0.75</real>
+									<real>0.69999998807907104</real>
 								</array>
 							</dict>
 							<dict>
@@ -890,7 +1130,7 @@
 								<key>value</key>
 								<array>
 									<real>1</real>
-									<real>1</real>
+									<real>0.85000002384185791</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -903,7 +1143,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>4</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -1036,7 +1276,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>1</real>
+											<real>-1</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -1109,8 +1349,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.60947889089584351</real>
-									<real>0.87417560815811157</real>
+									<real>0.60000002384185791</real>
+									<real>0.89999997615814209</real>
 								</array>
 							</dict>
 							<dict>
@@ -1134,7 +1374,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>6</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -1383,8 +1623,8 @@
 											<integer>3</integer>
 											<key>value</key>
 											<array>
-												<real>-2.5840892791748047</real>
-												<real>-4.5544571876525879</real>
+												<real>-3</real>
+												<real>-8</real>
 											</array>
 										</dict>
 										<dict>
@@ -1401,8 +1641,8 @@
 											<integer>3</integer>
 											<key>value</key>
 											<array>
-												<real>-2.5840892791748047</real>
-												<real>-5.329683780670166</real>
+												<real>-2.7209184169769287</real>
+												<real>-8</real>
 											</array>
 										</dict>
 										<dict>
@@ -1419,8 +1659,8 @@
 											<integer>3</integer>
 											<key>value</key>
 											<array>
-												<real>-2.5840892791748047</real>
-												<real>-4.5544571876525879</real>
+												<real>-3</real>
+												<real>-7.162755012512207</real>
 											</array>
 										</dict>
 										<dict>
@@ -1437,8 +1677,8 @@
 											<integer>3</integer>
 											<key>value</key>
 											<array>
-												<real>-2.5840892791748047</real>
-												<real>-4.5544571876525879</real>
+												<real>-3</real>
+												<real>-8</real>
 											</array>
 										</dict>
 									</array>
@@ -1584,8 +1824,8 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<real>-2.5840892791748047</real>
-									<real>-4.5544571876525879</real>
+									<real>-3</real>
+									<real>-8</real>
 								</array>
 								<key>name</key>
 								<string>position</string>
@@ -1593,8 +1833,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-2.5840892791748047</real>
-									<real>-4.5544571876525879</real>
+									<real>-2.9813945293426514</real>
+									<real>-7.2185711860656738</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1605,8 +1845,8 @@
 								<string>Point</string>
 								<key>value</key>
 								<array>
-									<real>0.55074387788772583</real>
-									<real>0.58842849731445312</real>
+									<real>0.5</real>
+									<real>0.5</real>
 								</array>
 							</dict>
 							<dict>
@@ -1634,8 +1874,8 @@
 								<string>FloatXY</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
+									<real>2.5714290142059326</real>
+									<real>-0.28571400046348572</real>
 								</array>
 							</dict>
 							<dict>
@@ -1919,7 +2159,7 @@
 								<key>value</key>
 								<array>
 									<real>1</real>
-									<real>1</real>
+									<real>1.0499999523162842</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -2066,7 +2306,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>-13.925676345825195</real>
+											<real>-14</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -2081,7 +2321,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>4.1108493804931641</real>
+											<real>4</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -2096,7 +2336,7 @@
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
-											<real>-16.338756561279297</real>
+											<real>-16</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -2143,7 +2383,7 @@
 								<key>value</key>
 								<array>
 									<real>-10.013345718383789</real>
-									<real>4.5867576599121094</real>
+									<real>4.5</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -2155,7 +2395,7 @@
 								<key>value</key>
 								<array>
 									<real>0.75030207633972168</real>
-									<real>0.7200513482093811</real>
+									<real>0.75</real>
 								</array>
 							</dict>
 							<dict>
@@ -2179,7 +2419,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>-8</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -2344,7 +2584,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>6.3568572998046875</real>
+									<real>6.5</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -2380,7 +2620,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>-0.66666656732559204</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -2427,7 +2667,7 @@
 						<key>value</key>
 						<array>
 							<real>0.0</real>
-							<real>0.0</real>
+							<real>0.12500020861625671</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -2579,7 +2819,7 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.011678934097290039</real>
+			<real>0.0</real>
 			<key>position</key>
 			<real>1.3333333730697632</real>
 			<key>resolution</key>
@@ -2607,7 +2847,7 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>0</integer>
+			<integer>-1</integer>
 			<key>length</key>
 			<real>1.3333333730697632</real>
 			<key>name</key>
@@ -2615,7 +2855,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1.3333333730697632</real>
+			<real>0.89999997615814209</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
