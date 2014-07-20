@@ -277,6 +277,8 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
 		{
 			SaveData::sharedObject()->resetAllData();
+			myDSH->removeCache();
+			mySDS->removeCache();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 			return;
 		}

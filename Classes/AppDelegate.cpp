@@ -116,6 +116,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 	if(myDSH->getIntegerForKey(kDSH_Key_clientVersion) < 1)
 	{
 		SaveData::sharedObject()->resetAllData();
+		myDSH->removeCache();
+		mySDS->removeCache();
 		myDSH->setIntegerForKey(kDSH_Key_clientVersion, 1);
 	}
 	
