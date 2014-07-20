@@ -939,7 +939,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	ko->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
 	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_stop);
-	ko->setObject(CCString::create("100% 도전하기"), kMyLocalKey_go100percent);
+	ko->setObject(CCString::create("도전하기"), kMyLocalKey_go100percent);
 	ko->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ko->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ko->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
@@ -1288,38 +1288,37 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
 	ko->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
-								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
-								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
-								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>안녕하세요!</font>"
+								   "<font color=#FFFFFF size=12 newline=14>난 카츠라기라고 해요.</font>"
+								   "<font color=#FFFFFF size=12 newline=14>아슬아슬하게 영역을</font>"
+								   "<font color=#FFFFFF size=12 newline=28>100% 획득 못했군요.</font>"
+								   "<font color=#FFFFFF size=12 newline=16>100% 영역획득 할 수 있게</font>"
+									 "<font color=#FFFFFF size=12>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	ko->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
-								   "<font color=#FFAA14 size=12 newline=16>0.3%를 추가로 획득할 수 있습니다.</font>"
-								   "<font color=#FFFFFF size=12 newline=30>기회는 총 3번 주어집니다.</font>"
-								   "<font color=#FFAA14 size=14 newline=15>자 그럼 100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>아래 게이지바에서 </font>"
+								   "<font color=#FFFFFF size=12 newline=14>분홍색 영역을 맞히면 퍼센트를</font>"
+								   "<font color=#FFFFFF size=12 newline=28>추가로 획득할 수 있어요.</font>"
+								   "<font color=#FFFFFF size=12 newline=14>기회는 총 3번 이에요!</font>"
+								   "<font color=#FFFFFF size=12 newline=14>100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
 	
-	ko->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=12>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
-	ko->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>100%에 성공시</font><font color=#FFAA14 size=12 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=12>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12>현재 획득 영역       </font><font color=#FFFF00 size=30 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
-	ko->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>분홍색 영역에 맞게</font>"
-								   "<font size=12 color=#FFAA14>멈춰 버튼 터치</font><font size=12 color=#FFFFFF>하세요!</font>"), kMyLocalKey_onePercentGame4);
+	ko->setObject(CCString::create("<font color=#FFAA14 size=11 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=11>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
+	ko->setObject(CCString::create("<font color=#FFAA14 size=11 newline=16>100%에 성공시</font><font color=#FFAA14 size=11 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=11>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=13>현재 획득 영역</font><font color=#FFFF00 size=35 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
+	ko->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>포인터가 분홍색 영역에</font>"
+								   "<font size=12 color=#FFFFFF newline=16>들어왔을 때</font><font size=12 color=#FFFFFF>멈춰 버튼을 눌러주세요!</font>"), kMyLocalKey_onePercentGame4);
 	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_onePercentGame5);
 	ko->setObject(CCString::create("100% 실패"), kMyLocalKey_onePercentGame6);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12>최종 획득 영역     </font>"
-								   "<font color=#FFAA14 size=30>%.1f%%</font>"), kMyLocalKey_onePercentGame7);
+	ko->setObject(CCString::create("<font color=#FF0000 size=12>최종 획득 영역     </font>"
+								   "<font color=#FF0000 size=30>%.1f%%</font>"), kMyLocalKey_onePercentGame7);
 	ko->setObject(CCString::create("닫기"), kMyLocalKey_onePercentGame8);
 	ko->setObject(CCString::create("100% 달성!!"), kMyLocalKey_onePercentGame9);
 	ko->setObject(CCString::create("카드 받기"), kMyLocalKey_onePercentGame10);
 	
 	ko->setObject(CCString::create("보상내용"), kMyLocalKey_endlessRewardInfo);
 	
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>가위 바위 보 중</font>"
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12>가위 바위 보 중</font>"
 								   "<font color=#FFAA14 size=12>하나를 선택 해 주세요.</font>"), kMyLocalKey_gababoContent1);
-	ko->setObject(CCString::create("<font size=12 newline=13>연</font>"
-								   "<font size=12 newline=13>승</font>"
-								   "<font size=12 newline=13>보</font>"
-								   "<font size=12 newline=13>상</font>"), kMyLocalKey_gababoContent2);
+	ko->setObject(CCString::create("<font size=12>연승보상</font>"), kMyLocalKey_gababoContent2);
 	ko->setObject(CCString::create("보상"), kMyLocalKey_gababoContent3);
 	ko->setObject(CCString::create("1승"), kMyLocalKey_gababoContent4);
 	ko->setObject(CCString::create("2승"), kMyLocalKey_gababoContent5);
@@ -1332,20 +1331,30 @@ void MyLocal::ko()
 								   "<font color=#FFAA14 size=12>한번 더!</font>"), kMyLocalKey_gababoContent10);
 	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>와우! 이겼어요!</font>"
 								   "<font color=#FFAA14 size=12>더 좋은 보상을 향해 한번 더!</font>"), kMyLocalKey_gababoContent11);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>세상에, 4판모두 이긴 사람은 당신이 처음이에요.</font>"
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font>"
 								   "<font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font>"
-								   "<font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다 할 수 있어요!</font>"
-								   "<font color=#FFAA14 size=12 newline=14>그럼 다음에 또 만나요!</font>"), kMyLocalKey_gababoContent12);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요. 너무 상심마세요!</font>"
-								   "<font color=#FFAA14 size=12>보너스게임은 퍼펙트 클리어시마다 할 수 있어요!</font>"), kMyLocalKey_gababoContent13);
+								   "<font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다</font>"
+								   "<font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>"), kMyLocalKey_gababoContent12);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font>"
+																 "<font color=#FFFFFF size=12>너무 상심마세요!</font>"
+								   "<font color=#FFAA14 size=12 newline=14>보너스게임은</font>"
+																 "<font color=#FFAA14 size=12 newline=14>퍼펙트 클리어시마다 할 수 있어요!</font>"
+																 "<font color=#FFFFFF size=12>다음엔 꼭 저를 이겨보세요!</font>"), kMyLocalKey_gababoContent13);
 	ko->setObject(CCString::create("루우비~!"), kMyLocalKey_gababoContent14);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>보너스 게임에 오신 것을 환영합니다!</font>"
-								   "<font color=#FFFFFF size=12 newline=14>벌써 퍼즐을 퍼펙트 클리어 하시다니 정말 대단해요!</font>"
-								   "<font color=#FFAA14 size=12>게임 설명은 최초 1회만 해드리니 잘 봐주세요!</font>"), kMyLocalKey_gababoContent15);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>보너스 게임에</font>"
+																 "<font color=#FFFFFF size=12 newline=14>오신 것을 환영합니다.</font>"
+																 "<font color=#FFFFFF size=12 newline=14>전 히바리라고 해요.</font>"
+																 "<font color=#FFFFFF size=12 newline=14>벌써 퍼즐을 퍼펙트 클리어</font>"
+																 "<font color=#FFFFFF size=12 newline=28>하시다니 정말 대단해요!</font>"
+								   "<font color=#FFAA14 size=12 newline=14>게임 설명은 최초 1회만</font>"
+																 "<font color=#FFAA14 size=12> 해드리니 잘 봐주세요!</font>"
+																 ), kMyLocalKey_gababoContent15);
 	ko->setObject(CCString::create("다 음"), kMyLocalKey_gababoContent16);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>게임은 가위바위보 입니다!</font>"
-								   "<font color=#FFAA14 size=12 newline=14>가위바위보 중 하나를 선택하여 저를 이기시면 됩니다.</font>"
-								   "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라 더 큰 보상이 있어요!</font>"
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=35>게임은 가위바위보 입니다!</font>"
+								   "<font color=#FFAA14 size=12 newline=14>버튼 3개중 하나를 선택하여</font>"
+																 "<font color=#FFAA14 size=12 newline=14>저에게 이기시면 됩니다.</font>"
+																 "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라</font>"
+								   "<font color=#FFAA14 size=12 newline=14>더 큰 보상이 있어요!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
 	ko->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
@@ -1852,7 +1861,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	en->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
 	en->setObject(CCString::create("STOP"), kMyLocalKey_stop);
-	en->setObject(CCString::create("100% 도전하기"), kMyLocalKey_go100percent);
+	en->setObject(CCString::create("도전하기"), kMyLocalKey_go100percent);
 	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	en->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	en->setObject(CCString::create("COMPLETE"), kMyLocalKey_endUpgrade);
@@ -2212,8 +2221,8 @@ void MyLocal::en()
 								   "<font size=12 color=#FFAA14>멈춰 버튼 터치</font><font size=12 color=#FFFFFF>하세요!</font>"), kMyLocalKey_onePercentGame4);
 	en->setObject(CCString::create("멈춰!"), kMyLocalKey_onePercentGame5);
 	en->setObject(CCString::create("100% 실패"), kMyLocalKey_onePercentGame6);
-	en->setObject(CCString::create("<font color=#FFFFFF size=12>최종 획득 영역     </font>"
-								   "<font color=#FFAA14 size=30>%.1f%%</font>"), kMyLocalKey_onePercentGame7);
+	en->setObject(CCString::create("<font color=#FF0000 size=12>최종 획득 영역     </font>"
+								   "<font color=#FF0000 size=30>%.1f%%</font>"), kMyLocalKey_onePercentGame7);
 	en->setObject(CCString::create("닫기"), kMyLocalKey_onePercentGame8);
 	en->setObject(CCString::create("100% 달성!!"), kMyLocalKey_onePercentGame9);
 	en->setObject(CCString::create("카드 받기"), kMyLocalKey_onePercentGame10);
@@ -2238,12 +2247,15 @@ void MyLocal::en()
 								   "<font color=#FFAA14 size=12>한번 더!</font>"), kMyLocalKey_gababoContent10);
 	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>와우! 이겼어요!</font>"
 								   "<font color=#FFAA14 size=12>더 좋은 보상을 향해 한번 더!</font>"), kMyLocalKey_gababoContent11);
-	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>세상에, 4판모두 이긴 사람은 당신이 처음이에요.</font>"
-								   "<font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font>"
-								   "<font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다 할 수 있어요!</font>"
-								   "<font color=#FFAA14 size=12 newline=14>그럼 다음에 또 만나요!</font>"), kMyLocalKey_gababoContent12);
-	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요. 너무 상심마세요!</font>"
-								   "<font color=#FFAA14 size=12>보너스게임은 퍼펙트 클리어시마다 할 수 있어요!</font>"), kMyLocalKey_gababoContent13);
+	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font>"
+																 "<font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font>"
+																 "<font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다</font>"
+																 "<font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>"), kMyLocalKey_gababoContent12);
+	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font>"
+																 "<font color=#FFFFFF size=12>너무 상심마세요!</font>"
+																 "<font color=#FFAA14 size=12 newline=14>보너스게임은</font>"
+																 "<font color=#FFAA14 size=12 newline=14>퍼펙트 클리어시마다 할 수 있어요!</font>"
+																 "<font color=#FFFFFF size=12>다음엔 꼭 저를 이겨보세요!</font>"), kMyLocalKey_gababoContent13);
 	en->setObject(CCString::create("루우비~!"), kMyLocalKey_gababoContent14);
 	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>보너스 게임에 오신 것을 환영합니다!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>벌써 퍼즐을 퍼펙트 클리어 하시다니 정말 대단해요!</font>"
@@ -2768,7 +2780,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 	ja->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
 	ja->setObject(CCString::create("STOP"), kMyLocalKey_stop);
-	ja->setObject(CCString::create("100% 도전하기"), kMyLocalKey_go100percent);
+	ja->setObject(CCString::create("도전하기"), kMyLocalKey_go100percent);
 	ja->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	ja->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	ja->setObject(CCString::create("업그레이드 완료"), kMyLocalKey_endUpgrade);
@@ -3133,13 +3145,13 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=12>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
 	ja->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>100%에 성공시</font><font color=#FFAA14 size=12 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=12>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
-	ja->setObject(CCString::create("<font color=#FFFFFF size=12>현재 획득 영역       </font><font color=#FFFF00 size=30 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
+	ja->setObject(CCString::create("<font color=#FFFFFF size=12>현재 획득 영역</font><font color=#FFFF00 size=30 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
 	ja->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>분홍색 영역에 맞게</font>"
 								   "<font size=12 color=#FFAA14>멈춰 버튼 터치</font><font size=12 color=#FFFFFF>하세요!</font>"), kMyLocalKey_onePercentGame4);
 	ja->setObject(CCString::create("멈춰!"), kMyLocalKey_onePercentGame5);
 	ja->setObject(CCString::create("100% 실패"), kMyLocalKey_onePercentGame6);
-	ja->setObject(CCString::create("<font color=#FFFFFF size=12>최종 획득 영역     </font>"
-								   "<font color=#FFAA14 size=30>%.1f%%</font>"), kMyLocalKey_onePercentGame7);
+	ja->setObject(CCString::create("<font color=#FF0000 size=12>최종 획득 영역     </font>"
+								   "<font color=#FF0000 size=30>%.1f%%</font>"), kMyLocalKey_onePercentGame7);
 	ja->setObject(CCString::create("닫기"), kMyLocalKey_onePercentGame8);
 	ja->setObject(CCString::create("100% 달성!!"), kMyLocalKey_onePercentGame9);
 	ja->setObject(CCString::create("카드 받기"), kMyLocalKey_onePercentGame10);
@@ -3164,12 +3176,15 @@ void MyLocal::ja()
 								   "<font color=#FFAA14 size=12>한번 더!</font>"), kMyLocalKey_gababoContent10);
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>와우! 이겼어요!</font>"
 								   "<font color=#FFAA14 size=12>더 좋은 보상을 향해 한번 더!</font>"), kMyLocalKey_gababoContent11);
-	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>세상에, 4판모두 이긴 사람은 당신이 처음이에요.</font>"
-								   "<font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font>"
-								   "<font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다 할 수 있어요!</font>"
-								   "<font color=#FFAA14 size=12 newline=14>그럼 다음에 또 만나요!</font>"), kMyLocalKey_gababoContent12);
-	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요. 너무 상심마세요!</font>"
-								   "<font color=#FFAA14 size=12>보너스게임은 퍼펙트 클리어시마다 할 수 있어요!</font>"), kMyLocalKey_gababoContent13);
+	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font>"
+																 "<font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font>"
+																 "<font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다</font>"
+																 "<font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>"), kMyLocalKey_gababoContent12);
+	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font>"
+																 "<font color=#FFFFFF size=12>너무 상심마세요!</font>"
+																 "<font color=#FFAA14 size=12 newline=14>보너스게임은</font>"
+																 "<font color=#FFAA14 size=12 newline=14>퍼펙트 클리어시마다 할 수 있어요!</font>"
+																 "<font color=#FFFFFF size=12>다음엔 꼭 저를 이겨보세요!</font>"), kMyLocalKey_gababoContent13);
 	ja->setObject(CCString::create("루우비~!"), kMyLocalKey_gababoContent14);
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>보너스 게임에 오신 것을 환영합니다!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>벌써 퍼즐을 퍼펙트 클리어 하시다니 정말 대단해요!</font>"
