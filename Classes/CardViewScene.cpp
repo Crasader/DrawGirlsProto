@@ -70,7 +70,7 @@ bool CardViewScene::init()
 //		}
 //	}
 	
-	CCSprite* back_img = CCSprite::create("ingame_outback.png");
+	CCSprite* back_img = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
 	back_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(back_img, kCV_Z_back);
 	

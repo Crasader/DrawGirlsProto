@@ -62,10 +62,15 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rivalSearch), mySGD->getFont().c_str(), 11);
+	CCScale9Sprite* title_tag = CCScale9Sprite::create("title_tag.png", CCRectMake(0, 0, 135, 30), CCRectMake(45, 14, 45, 2));
+	title_tag->setContentSize(CCSizeMake(160, 30));
+	title_tag->setPosition(ccp(80, back_case->getContentSize().height-35));
+	back_case->addChild(title_tag);
+	
+	title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rivalSearch), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
+	title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	select_menu = CCMenuLambda::create();
