@@ -3169,7 +3169,7 @@ void PlayUI::myInit ()
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		CCNode* junior_node = CCNode::create();
-		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-28.5f,0));
+		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-18.5f,0));
 		mission_back->addChild(junior_node);
 		
 		std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");

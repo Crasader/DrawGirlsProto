@@ -35,7 +35,7 @@ void ShowItemContent::menuAction(CCObject* sender)
 	{
 		show_content->removeFromParent();
 		show_content = CCSprite::create(CCString::createWithFormat("item%d.png", item_list[ing_close_cnt])->getCString());
-		show_content->setPosition(ccp(0, 40));
+		show_content->setPosition(ccp(0, 40 - 28));
 		addChild(show_content);
 		
 		item_title->setString(convertToItemCodeToItemName((ITEM_CODE)item_list[ing_close_cnt]).c_str());

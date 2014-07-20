@@ -288,7 +288,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	r_label->addChild(regacha_label);
 	
 	CCScale9Sprite* price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
-	price_back->setContentSize(CCSizeMake(82, 26));
+	price_back->setContentSize(CCSizeMake(82, 20));
 	price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
 	regacha_label->addChild(price_back);
 	
@@ -443,8 +443,8 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 			
 			regacha_label->removeAllChildren();
 			
-			CCScale9Sprite* price_back = CCScale9Sprite::create("subpop_darkred.png", CCRectMake(0,0,30,30), CCRectMake(14,14,2,2));
-			price_back->setContentSize(CCSizeMake(80, 30));
+			CCScale9Sprite* price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
+			price_back->setContentSize(CCSizeMake(82, 20));
 			price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
 			regacha_label->addChild(price_back);
 			

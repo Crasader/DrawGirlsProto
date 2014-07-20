@@ -1054,9 +1054,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font>제한시간 내에 달성도 <font color=961 newline=13>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ko->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
-	ko->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	ko->setObject(CCString::create("겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
 	ko->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
-	ko->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	ko->setObject(CCString::create("한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
 	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ko->setObject(CCString::create("미션"), kMyLocalKey_mission);
@@ -1957,9 +1957,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	en->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
-	en->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	en->setObject(CCString::create("겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
 	en->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
-	en->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	en->setObject(CCString::create("한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
 	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	en->setObject(CCString::create("미션"), kMyLocalKey_mission);
@@ -2884,9 +2884,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ja->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
-	ja->setObject(CCString::create("point1. 겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
+	ja->setObject(CCString::create("겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
 	ja->setObject(CCString::create("꼬인선! 걱정마세요! 그대로 획득할 수 있어요!"), kMyLocalKey_controlTip_lineTangle_content);
-	ja->setObject(CCString::create("point2. 한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
+	ja->setObject(CCString::create("한줄 먹기!"), kMyLocalKey_controlTip_slimLine_title);
 	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ja->setObject(CCString::create("미션"), kMyLocalKey_mission);
