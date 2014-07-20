@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>1</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -336,7 +336,7 @@
 									<key>name</key>
 									<string>position</string>
 									<key>time</key>
-									<real>1.3333333730697632</real>
+									<real>1.2999999523162842</real>
 									<key>type</key>
 									<integer>3</integer>
 									<key>value</key>
@@ -496,7 +496,7 @@
 											<key>name</key>
 											<string>rotation</string>
 											<key>time</key>
-											<real>1.3333333730697632</real>
+											<real>1.2999999523162842</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -642,6 +642,46 @@
 											<key>type</key>
 											<integer>4</integer>
 										</dict>
+										<key>visible</key>
+										<dict>
+											<key>keyframes</key>
+											<array>
+												<dict>
+													<key>easing</key>
+													<dict>
+														<key>type</key>
+														<integer>0</integer>
+													</dict>
+													<key>name</key>
+													<string>visible</string>
+													<key>time</key>
+													<real>0.0</real>
+													<key>type</key>
+													<integer>1</integer>
+													<key>value</key>
+													<true/>
+												</dict>
+												<dict>
+													<key>easing</key>
+													<dict>
+														<key>type</key>
+														<integer>0</integer>
+													</dict>
+													<key>name</key>
+													<string>visible</string>
+													<key>time</key>
+													<real>1.2999999523162842</real>
+													<key>type</key>
+													<integer>1</integer>
+													<key>value</key>
+													<true/>
+												</dict>
+											</array>
+											<key>name</key>
+											<string>visible</string>
+											<key>type</key>
+											<integer>1</integer>
+										</dict>
 									</dict>
 								</dict>
 								<key>baseClass</key>
@@ -658,6 +698,16 @@
 								<integer>0</integer>
 								<key>properties</key>
 								<array>
+									<dict>
+										<key>baseValue</key>
+										<integer>1</integer>
+										<key>name</key>
+										<string>visible</string>
+										<key>type</key>
+										<string>Check</string>
+										<key>value</key>
+										<false/>
+									</dict>
 									<dict>
 										<key>name</key>
 										<string>position</string>
@@ -693,7 +743,7 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>1</real>
+											<real>-1</real>
 											<real>1</real>
 											<false/>
 											<integer>0</integer>
@@ -719,6 +769,8 @@
 										</array>
 									</dict>
 								</array>
+								<key>seqExpanded</key>
+								<true/>
 							</dict>
 						</array>
 						<key>customClass</key>
@@ -754,8 +806,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
+									<real>1</real>
+									<real>1</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -799,6 +851,8 @@
 								<true/>
 							</dict>
 						</array>
+						<key>seqExpanded</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -2574,6 +2628,8 @@
 						<true/>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -2709,7 +2765,7 @@
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>266.33285522460938</real>
+			<real>512</real>
 			<key>sequenceId</key>
 			<integer>1</integer>
 			<key>soundChannel</key>
