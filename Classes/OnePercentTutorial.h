@@ -56,7 +56,7 @@ protected:
 	CCNode* m_container;
 
 	CommonButton * cancel_menu;
-	CCScale9Sprite* back_img;
+	CCSprite* back_img;
 	CCControlButton* gacha_button;
 	StyledLabelTTF* m_gachaDesc;
 	CCSprite* m_cursor;
