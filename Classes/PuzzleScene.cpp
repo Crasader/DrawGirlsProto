@@ -2121,6 +2121,7 @@ void PuzzleScene::openBeforeSettingPopup()
 	
 	StartSettingPopup* t_popup = StartSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -2133,6 +2134,7 @@ void PuzzleScene::openSettingPopup()
 	
 	StartSettingPopup* t_popup = StartSettingPopup::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
+	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
