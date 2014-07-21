@@ -428,8 +428,8 @@ public:
 			ccColor4B rgb = movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g? rgb.g + 40 : 0; // (rgb.b >= 10 ? 40 : 0);
-			float waveValue2 = rgb.r? rgb.r + 40 : 0; // (rgb.b >= 10 ? 40 : 0);
+			float waveValue = rgb.g? rgb.g + 40 : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
+			float waveValue2 = rgb.r? rgb.r + 40 : 0; // : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
 			float devider = -15.f;
 			float time1 = 0.15f;
 			float time2 = 0.5f;

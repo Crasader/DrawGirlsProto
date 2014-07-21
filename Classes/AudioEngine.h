@@ -3,6 +3,7 @@
 
 #include	"cocos2d.h"
 #include	"SimpleAudioEngine.h"
+#include <algorithm>
 
 using namespace cocos2d;
 using namespace CocosDenshion;
