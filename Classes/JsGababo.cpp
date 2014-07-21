@@ -12,6 +12,7 @@
 #include "StageImgLoader.h"
 #include "MyLocalization.h"
 #include "CommonAnimation.h"
+#include "FlagSelector.h"
 static int 	kAttackGa = 1;
 static int	kAttackBa = 2;
 static int	kAttackBo = 3;
@@ -62,22 +63,10 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	m_endFunction = endFunction;
 	m_rewards = rewards;
 	
-	CCSpriteBatchNode* back_batch = CCSpriteBatchNode::create("ingame_side_pattern.png");
-	back_batch->setPosition(ccp(240,160));
-	addChild(back_batch);
+	CCSprite* back_img = CCSprite::create("main_back.png");
+	back_img->setPosition(ccp(240,160));
+	addChild(back_img, 0);
 	
-	CCPoint base_position = ccp(-284,-180);
-	
-	for(int i=0;i*26 < 360;i++)
-	{
-		for(int j=0;j*48 < 568;j++)
-		{
-			CCSprite* t_back = CCSprite::createWithTexture(back_batch->getTexture());
-			t_back->setAnchorPoint(ccp(0,0));
-			t_back->setPosition(base_position + ccp(j*48, i*26));
-			back_batch->addChild(t_back);
-		}
-	}
 	
 //	auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	auto back = CCSprite::create("ingame_back2.png");
@@ -106,8 +95,61 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	auto tuto1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent1),
 										mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	setFormSetter(tuto1);
-	tuto1->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 37.5));
+	tuto1->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 37.5 - 2.f));
 	front->addChild(tuto1);
+	
+	KSLabelTTF* playerLbl = KSLabelTTF::create("PLAYER", mySGD->getFont().c_str(), 12.f);
+	playerLbl->setColor(ccc3(255, 255, 0));
+	realFront->addChild(playerLbl);
+	playerLbl->setPosition(ccp(40.0, 205.0)); 			// dt (40.0, 205.0)
+	
+	string flag = myDSH->getStringForKey(kDSH_Key_flag);
+	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
+	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
+	realFront->addChild(selectedFlagSpr);
+	selectedFlagSpr->setPosition(ccp(40.0, 228.0)); 			// dt (40.0, 228.0)
+	
+	KSLabelTTF* npcLbl = KSLabelTTF::create("NPC", mySGD->getFont().c_str(), 12.f);
+	npcLbl->setColor(ccc3(255, 255, 0));
+	realFront->addChild(npcLbl);
+	npcLbl->setPosition(ccp(235.0, 205.0)); 			// dt (235.0, 205.0)
+	
+	CCSprite* npcFlag = CCSprite::create("gababo_npc.png");
+	realFront->addChild(npcFlag);
+	npcFlag->setPosition(ccp(235.0, 228.0)); 			// dt (235.0, 228.0)
+
+	CCSprite* nameBar1 = CCSprite::create("gababo_namebar.png");
+	realFront->addChild(nameBar1);
+	nameBar1->setPosition(ccp(39.0, 96.0));
+
+	KSLabelTTF* nick1 = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 11.f);
+	nameBar1->addChild(nick1);
+	nick1->setPosition(ccpFromSize(nameBar1->getContentSize()) / 2.f);
+	
+	
+	CCSprite* nameBar2 = CCSprite::create("gababo_namebar.png");
+	realFront->addChild(nameBar2);
+	nameBar2->setPosition(ccp(234.5, 96.0));
+	
+	KSLabelTTF* nick2 = KSLabelTTF::create("COMPUTER", mySGD->getFont().c_str(), 11.f);
+	nameBar2->addChild(nick2);
+	nick2->setPosition(ccpFromSize(nameBar2->getContentSize()) / 2.f);
+	
+	setFormSetter(nameBar1);
+	setFormSetter(nameBar2);
+	setFormSetter(playerLbl);
+	setFormSetter(selectedFlagSpr);
+	setFormSetter(npcLbl);
+	setFormSetter(npcFlag);
+	
+	m_willToggleObjects.push_back(nameBar1);
+	m_willToggleObjects.push_back(nick1);
+	m_willToggleObjects.push_back(playerLbl);
+	m_willToggleObjects.push_back(selectedFlagSpr);
+	m_willToggleObjects.push_back(nameBar2);
+	m_willToggleObjects.push_back(nick2);
+	m_willToggleObjects.push_back(npcLbl);
+	m_willToggleObjects.push_back(npcFlag);
 	
 	auto meChar = KS::loadCCBI<CCSprite*>(this, "gababo_me.ccbi");
 	meChar.first->setPosition(ccp(50.5, 173.5));
@@ -115,6 +157,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	meManager = meChar.second;
 	back->addChild(meChar.first, 3);
 	setFormSetter(meChar.first);
+	m_willToggleObjects.push_back(meChar.first);
 	
 	auto npcChar = KS::loadCCBI<CCSprite*>(this, "gababo_you.ccbi");
 	back->addChild(npcChar.first, 3);
@@ -122,19 +165,20 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	npcManager = npcChar.second;
 	npcChar.first->setPosition(ccp(261.0, 173.5));
 	setFormSetter(npcChar.first);
+	m_willToggleObjects.push_back(npcChar.first);
 	
 	auto onSelection = [=]() // 바위 가위 보 셋중 하나 눌렀을 때~
 	{
 		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
 	};
-	auto baBox = CommonButton::create("", 1.f, CCSizeMake(166 / 2.f, 124 / 2.f), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), touchPriority);
+	auto baBox = CommonButton::create("", 1.f, CCSizeMake(83, 58), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), touchPriority);
 	
 	m_ba = baBox;
-	baBox->setPosition(ccp(49.0, 33.0));
+	baBox->setPosition(ccp(49.0, 33.0 - 2.5));
 	auto ba = CCSprite::create("ba.png");
 	ba->setRotation(-90);
-	ba->setPosition(ccpFromSize(baBox->getContentSize()) / 2.f + ccp(0, 10.5f - 9.5f + 8));
-	ba->setScale(0.5f);
+	ba->setPosition(ccpFromSize(baBox->getContentSize()) / 2.f + ccp(0, 10.5f - 9.5f + 8 - 3.f));
+	ba->setScale(0.75f);
 	baBox->addChild(ba, 10);
 	baBox->setFunction([=](CCObject*){
 		if(m_front1->getScaleY() <= 0.5f)
@@ -143,14 +187,15 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 		onSelection();
 	});
 	front->addChild(baBox);
-	auto gaBox = CommonButton::create("", 1.f, CCSizeMake(166 / 2.f, 124 / 2.f), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), touchPriority);
+	auto gaBox = CommonButton::create("", 1.f, CCSizeMake(83, 58), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), touchPriority);
 	m_ga = gaBox;
 	
-	gaBox->setPosition(ccp(141.5, 33.0));
+//	gaBox->setPosition(ccp(141.5, 33.0));
+	gaBox->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -8.5f));
 	auto ga = CCSprite::create("ga.png");
 	ga->setRotation(-90);
-	ga->setPosition(ccpFromSize(gaBox->getContentSize()) / 2.f + ccp(0, 10.5f - 6.5f - 4));
-	ga->setScale(0.5f);
+	ga->setPosition(ccpFromSize(gaBox->getContentSize()) / 2.f + ccp(0, -6.5f + 5.f));
+	ga->setScale(0.75f);
 	gaBox->addChild(ga, 10);
 	gaBox->setFunction([=](CCObject*){
 		if(m_front1->getScaleY() <= 0.5f)
@@ -159,13 +204,13 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 		onSelection();
 	});
 	front->addChild(gaBox);
-	auto boBox = CommonButton::create("", 1.f, CCSizeMake(166 / 2.f, 124 / 2.f), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), touchPriority);
-	boBox->setPosition(ccp(229.5, 31.0));
+	auto boBox = CommonButton::create("", 1.f, CCSizeMake(83, 58), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), touchPriority);
+	boBox->setPosition(ccp(219.5, 30.5));
 	auto bo = CCSprite::create("bo.png");
 	m_bo = boBox;
 	bo->setRotation(-90);
-	bo->setPosition(ccpFromSize(boBox->getContentSize()) / 2.f + ccp(0, 10.5f - 6.5f));
-	bo->setScale(0.5f);
+	bo->setPosition(ccpFromSize(boBox->getContentSize()) / 2.f + ccp(0, 10.5f - 6.5f - 3.5f));
+	bo->setScale(0.75f);
 	boBox->addChild(bo, 10);
 	boBox->setFunction([=](CCObject*){
 		if(m_front1->getScaleY() <= 0.5f)
@@ -180,6 +225,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	setFormSetter(m_bo);
 	CCSprite* stepFrame = CCSprite::create("gababo_frame.png");
 	m_stepFrame = stepFrame;
+	m_willToggleObjects.push_back(stepFrame);
 	back->addChild(stepFrame, 2);
 	//////////////////////
 	stepFrame->setScale(1.f);
@@ -221,6 +267,12 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	{
 		setupTutorial();
 		myDSH->setIntegerForKey(kDSH_Key_isShowGababoTutorial, 1);
+		
+		for(auto i : m_willToggleObjects)
+		{
+			i->setVisible(false);
+			i->setOpacity(0);
+		}
 	}
 	return true;
 }
@@ -316,11 +368,14 @@ void JsGababo::loadImage(int step)
 		m_stepSprite->removeFromParent();
 	m_stepSprite = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",
 																  NSDS_GI(1, kSDS_SI_level_int1_card_i, step))->getCString());
+	
+	m_willToggleObjects.push_back(m_stepSprite);
 	// CCSprite::create(boost::str(boost::format("ga%||.png") % step).c_str());
 	m_stepSprite->setScale(m_stepFrame->getContentSize().height / m_stepSprite->getContentSize().height);
 	m_stepSprite->setScale(m_stepSprite->getScale());
 	m_stepSprite->setPosition(m_stepFrame->getPosition());
 	m_back->addChild(m_stepSprite, 1);
+	
 	
 	setFormSetter(m_stepSprite);
 }
@@ -645,7 +700,7 @@ void JsGababo::onPressConfirm(CCObject* t)
 			contextSwitching(m_front3, m_front1, [=](){
 				rollBack();
 				auto lightPair = KS::loadCCBI<CCSprite*>(this, "gababo_change.ccbi");
-				lightPair.first->setScale(0.8f);
+//				lightPair.first->setScale(0.8f);
 				CCSprite* light = lightPair.first;
 				lightPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 					light->removeFromParent();
@@ -720,8 +775,8 @@ void JsGababo::showHandsMotionWrapper()
 		if(m_winCount == 0)
 		{
 			// 이길 확률 70 % 질 확률 15% 비길 확률 50%
-//			ProbSelector ps = {70.f, 15.f, 50.f};
-			ProbSelector ps = {70.f, 100000.f, 50.f};
+			ProbSelector ps = {70.f, 15.f, 50.f};
+//			ProbSelector ps = {70.f, 100000.f, 50.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 1)
@@ -838,8 +893,19 @@ void JsGababo::showHandsMotionWrapper()
 				}
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					m_confirmButton->setEnabled(true);
-					CCSprite* result_stamp = CCSprite::create("endless_winner.png");
 					
+					CCSprite* result_stamp = CCSprite::create("endless_winner.png");
+				
+					// YH 코드.
+					addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																								 {
+																									 KS::setOpacity(result_stamp, t*255);
+																									 result_stamp->setScale(2.5f-t*1.5f);
+																								 }, [=](float t)
+																								 {
+																									 KS::setOpacity(result_stamp, 255);
+																									 result_stamp->setScale(1.f);
+																								 }));
 					m_resultStamp = result_stamp;
 					CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", m_winCount)->getCString(), "winfont.fnt");
 					win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
@@ -852,8 +918,86 @@ void JsGababo::showHandsMotionWrapper()
 					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
 					result_stamp->setPosition(ccp(m_back->getContentSize().width / 2.f, 190));
+					{ // 처음에 강조하는 파티클, 좀 있다가 사라질 것.
+						CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
+						particle1->setPositionType(kCCPositionTypeRelative);
+						particle1->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+						particle1->setEmissionRate(300);
+						particle1->setAngle(180.0);
+						particle1->setAngleVar(180.0);
+						ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+						particle1->setBlendFunc(blendFunc);
+						particle1->setDuration(0.3f);
+						particle1->setEmitterMode(kCCParticleModeGravity);
+						particle1->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+						particle1->setStartColorVar(ccc4f(0,0,0,0.f));
+						particle1->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+						particle1->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+						particle1->setStartSize(40.0);
+						particle1->setStartSizeVar(10.0);
+						particle1->setEndSize(0.0);
+						particle1->setEndSizeVar(0.0);
+						particle1->setGravity(ccp(0,-100));
+						particle1->setRadialAccel(50.0);
+						particle1->setRadialAccelVar(20.0);
+						particle1->setSpeed(50);
+						particle1->setSpeedVar(30.0);
+						particle1->setTangentialAccel(0);
+						particle1->setTangentialAccelVar(0);
+						particle1->setTotalParticles(100);
+						particle1->setLife(2.0);
+						particle1->setLifeVar(0.5);
+						particle1->setStartSpin(0.0);
+						particle1->setStartSpinVar(0.f);
+						particle1->setEndSpin(0.0);
+						particle1->setEndSpinVar(0.f);
+						particle1->setPosVar(ccp(90,90));
+						particle1->setPosition(result_stamp->getPosition());
+						particle1->setAutoRemoveOnFinish(true);
+						m_back->addChild(particle1);
+					}
+					CCParticleSystemQuad* particle2;
+					{ // 유지되는 파티클.
+						particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+						particle2->setPositionType(kCCPositionTypeRelative);
+						particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+						particle2->setEmissionRate(80);
+						particle2->setAngle(360.0);
+						particle2->setAngleVar(0.0);
+						ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+						particle2->setBlendFunc(blendFunc);
+						particle2->setDuration(-1.0);
+						particle2->setEmitterMode(kCCParticleModeGravity);
+						particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+						particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+						particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+						particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+						particle2->setStartSize(25.0);
+						particle2->setStartSizeVar(10.0);
+						particle2->setEndSize(0.0);
+						particle2->setEndSizeVar(0.0);
+						particle2->setGravity(ccp(0,0));
+						particle2->setRadialAccel(3.0);
+						particle2->setRadialAccelVar(0.0);
+						particle2->setSpeed(0);
+						particle2->setSpeedVar(0.0);
+						particle2->setTangentialAccel(0);
+						particle2->setTangentialAccelVar(0);
+						particle2->setTotalParticles(10);
+						particle2->setLife(0.8);
+						particle2->setLifeVar(0.25);
+						particle2->setStartSpin(0.0);
+						particle2->setStartSpinVar(50.f);
+						particle2->setEndSpin(0.0);
+						particle2->setEndSpinVar(60.f);
+						particle2->setPosVar(ccp(80,80));
+						particle2->setPosition(result_stamp->getPosition());
+						m_back->addChild(particle2);
+					}
+	
 					
 					showEffect(result_stamp);
+//					particle2->removeFromParent();
 				});
 				m_currentJudge = "win";
 				
@@ -911,7 +1055,7 @@ void JsGababo::setupTutorial()
 																						CCRectMake(30, 115 - 30, 2, 2));
 	
 	setFormSetter(puppleInner);
-	puppleInner->setPosition(ccp(199.5, 189.0));
+	puppleInner->setPosition(ccp(193.0, 193.0));
 	puppleInner->setScaleX(-1.0); 			// dt -2.0
 	puppleInner->setContentSize(CCSizeMake(205.0, 177.5));
 	m_back->addChild(puppleInner, 5);
@@ -921,10 +1065,16 @@ void JsGababo::setupTutorial()
 													 12.f, 999, StyledAlignment::kCenterAlignment);
 	//	m_message = message;
 	message1->setAnchorPoint(ccp(0.5f, 0.5f));
-	message1->setPosition(ccp(207.5, 189.2));
+	message1->setPosition(ccp(202.0, 195.7));
 	m_back->addChild(message1, 6);
 
-	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 12.f, CCSizeMake(69, 46), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), m_touchPriority - 1);
+	CCScale9Sprite* button9Scale = nullptr;
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 12.f, CCSizeMake(114.5, 63.5),
+							button9Scale = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0,0,92,45), CCRectMake(45, 21, 2, 2)), m_touchPriority - 1);
+//	button->setContentSize(CCSizeMake(92, 65));
+//	button->setContentSize(CCSizeMake(120, 80));
+	button->setContentSize(CCSizeMake(132 / 2.f, 100 / 2.f));
+	// 92 x 45
 	button->setTouchPriority(m_touchPriority - 1);
 	button->setFunction([=](CCObject*){
 		if(button->isEnabled() == false)
@@ -937,7 +1087,7 @@ void JsGababo::setupTutorial()
 									);
 			CCSprite* tutoGababo;
 			tutoGababo = CCSprite::create("gababo_sum.png");
-			tutoGababo->setPosition(ccp(209.5, 217.0));
+			tutoGababo->setPosition(ccp(202.0, 224.0));
 			m_tutoGababo = tutoGababo;
 			m_back->addChild(tutoGababo, 6);
 			setFormSetter(tutoGababo);
@@ -946,24 +1096,39 @@ void JsGababo::setupTutorial()
 		{
 			button->setEnabled(false);
 			// 여기
-			addChild(KSGradualValue<float>::create(255.f, 0.f, 1.f, [=](float t){
+			addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t0){
+				float t = 255 + -255.f * t0 / 1.f;
+				float t2 = t0 * 255.f;
 				helper->setOpacity(t);
 				message1->setVisible(false);
 				button->setOpacity(t);
 				puppleInner->setOpacity(t);
 				m_tutoGababo->setOpacity(t);
-			}, [=](float t){
+				
+				for(auto iter : m_willToggleObjects)
+				{
+					iter->setOpacity(t2);
+					iter->setVisible(true);
+				}
+			}, [=](float t0){
+				float t = 255 + -255.f * t0 / 1.f;
+				float t2 = t0 * 255.f;
 				helper->setVisible(false);
 				button->setVisible(false);
 				puppleInner->setVisible(false);
 				m_tutoGababo->setOpacity(t);
+				for(auto iter : m_willToggleObjects)
+				{
+					iter->setOpacity(t2);
+					iter->setVisible(true);
+				}
 			}));
 			this->contextSwitching(nullptr, m_front1, nullptr, nullptr);
 		}
 		m_tutorialStep++;
 	});
 //	button->getTitleLabel()->setColor(ccc3(37, 15, 0));
-	button->setPosition(ccp(237.0, 54.0));
+	button->setPosition(ccp(185.0, 37.5));
 	m_realFront->addChild(button);
 	
 	setFormSetter(message1);

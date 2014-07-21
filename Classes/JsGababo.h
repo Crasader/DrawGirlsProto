@@ -80,6 +80,8 @@ protected:
 	CCSprite* m_meCharSprite;
 	CCSprite* m_npcCharSprite;
 	CCSprite* m_tutoGababo;
+	
+	std::vector<CCNodeRGBA*> m_willToggleObjects;
 };
 
 #endif

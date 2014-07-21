@@ -2850,18 +2850,30 @@ void CrashLazerWrapper::lineCrashMap( CCPoint t_sp, float t_angle, int t_width, 
 		{
 			CCPoint t_tp = ccp((i-1)*pixelSize+1,(j-1)*pixelSize+1);
 			CCPoint a_tp = spinTransform(t_tp, t_sp, t_angle);
-			if(crashRect.containsPoint(a_tp) && (myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline) && check_map[i][j] == 0)
+			if(crashRect.containsPoint(a_tp) && (myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline
+																					 || myGD->mapState[i][j] == mapNewline) && check_map[i][j] == 0)
 			{
 				if(a_tp.y < crashRect.origin.y + 1.5f || a_tp.y > crashRect.origin.y + crashRect.size.height - 1.5f)
 				{
 					for(int k=i-2;k<=i+2;k++)
+					{
 						for(int l=j-2;l<=j+2;l++)
-							check_map[k][l] = 1;
+						{
+							if(0 <= k && k < mapWidthOutlineEnd &&
+								 0 <= l && l < mapHeightOutlineEnd)
+							{
+								check_map[k][l] = 1;
+							}
+							
+						}
+					}
 
 //					crashMapForIntRect(IntRect(i-2, j-2, 5, 5));
 				}
 				else
+				{
 					check_map[i][j] = 1;
+				}
 //					crashMapForIntPoint(IntPoint(i,j));
 			}
 		}
