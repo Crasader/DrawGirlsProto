@@ -175,7 +175,6 @@ extern "C" {
      */
     void FiveRocks_trackPurchase(const char* productId, const char* currencyCode, double price, const char* campaignId);
 
-
     //////////////////////////////////////////////////
     // Exception Tracking
     //////////////////////////////////////////////////

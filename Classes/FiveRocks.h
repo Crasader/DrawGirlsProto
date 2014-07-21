@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
+    kFRUnsupportedOSVerError,
     kFRInactiveSessionError,
     kFRUnreachableFRHostError,
+    kFRNullParameterError,
+    kFRParameterTypeMismatchError,
     kFRTooManyValuesError,
     kFRInvalidValuesTypeError
 } FiveRocksErrorCode;
@@ -314,7 +317,7 @@ typedef enum {
  * @param parameter2
  *        the parameter of event, string type, can be nil
  * @param values
- *        NSDictionary that contains values of event
+ *        NSDictionary that contains values of event (key must be string & value must be number)
  */
 + (void)trackEvent:(NSString *)name
           category:(NSString *)category
