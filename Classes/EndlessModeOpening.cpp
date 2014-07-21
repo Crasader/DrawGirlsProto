@@ -1097,7 +1097,7 @@ public:
 			StyledLabelTTF* reward2Title = StyledLabelTTF::create(
 																														ccsf("<font color=#FFAA14 newline=13>%s</font><font color=#FFAA14>%s</font>",
 																																 left1.c_str(), left2.c_str()),
-																														mySGD->getFont().c_str(), 9,
+																														mySGD->getFont().c_str(), 8,
 																														999, StyledAlignment::kCenterAlignment);
 			reward2Title->setAnchorPoint(ccp(0.5f, 0.5f));
 			A = reward2Title;

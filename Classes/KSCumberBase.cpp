@@ -2158,7 +2158,7 @@ void KSCumberBase::followProcess(float dt)
 }
 void KSCumberBase::cumberFrame( float dt )
 {
-	m_frameCount++; // 쿰버의 프레임수를 잼.
+	m_frameCount++; // 쿰버의 프레임수를 젬.
 }
 
 void KSCumberBase::onStartGame()

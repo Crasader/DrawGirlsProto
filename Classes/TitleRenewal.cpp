@@ -1912,6 +1912,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					// ================================
 				}
 			}
+			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);

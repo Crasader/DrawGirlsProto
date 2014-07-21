@@ -276,7 +276,7 @@ private:
 	void myInit ();
 	
 	CC_SYNTHESIZE(int, default_gold, DefaultGold); // 기본 골드
-	CC_SYNTHESIZE(int, default_ruby, DefaultRuby); // 기본 잼
+	CC_SYNTHESIZE(int, default_ruby, DefaultRuby); // 기본 젬
 	
 };
 #undef LZZ_INLINE

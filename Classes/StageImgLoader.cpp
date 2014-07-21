@@ -33,6 +33,15 @@ CCSprite* StageImgLoader::getLoadedImg(string filename)
 
 //	return CCSprite::createWithTexture(texture);
 }
+
+StageImgLoader::~StageImgLoader()
+{
+	for(int i=0;i<handles.size();i++)
+	{
+		curl_easy_cleanup(handles[i]);
+	}
+}
+
 CCSprite* StageImgLoader::getLoadedImg(string filename, CCRect t_rect)
 {
 	CCTexture2D* texture = addImage(filename.c_str());
@@ -136,24 +145,16 @@ void* StageImgLoader::t_function(void *data)
 void* StageImgLoader::t_function2(void *data)
 {
 	do{
-		CURL *curl_handle;
-		CURLcode retCode = curl_global_init(CURL_GLOBAL_ALL); // _ALL -> _DEFAULT
-		if(retCode != CURLE_OK)
-		{
-			mySIL->downloading_list[(int)data].is_fail = true;
-			break;
-		}
-		curl_handle = curl_easy_init();
+//		CURLcode retCode = curl_global_init(CURL_GLOBAL_ALL); // _ALL -> _DEFAULT
+//		if(retCode != CURLE_OK)
+//		{
+//			mySIL->downloading_list[(int)data].is_fail = true;
+//			break;
+//		}
+		CURL *curl_handle = mySIL->handles[(int)data];
+		
 		curl_easy_setopt(curl_handle, CURLOPT_URL, mySIL->downloading_list[(int)data].download_url.c_str());
-		curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, true);
-		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&mySIL->lchunk_list[(int)data]);
-		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
-		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
-//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
-//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
-//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5); //5초대기
 
 		//		curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
 		
@@ -162,12 +163,9 @@ void* StageImgLoader::t_function2(void *data)
 			mySIL->downloading_list[(int)data].is_fail = true;
 			break;
 		}
-		curl_easy_cleanup(curl_handle);
 		
 		if(mySIL->lchunk_list[(int)data].stream)
 			fclose(mySIL->lchunk_list[(int)data].stream);
-		
-		curl_global_cleanup();
 		
 		//		while (lchunk.size!=0) {
 		//			usleep(10000);
@@ -301,6 +299,8 @@ void StageImgLoader::myInit()
 	lchunk_list.clear();
 	downloading_list.clear();
 	
+	//graphdog 에서 global_init 해줌 / 마찬가지로 global_cleanup 도 해줌
+	
 	for(int i=0;i<5;i++)
 	{
 		LMemoryStruct t_chunk;
@@ -318,5 +318,17 @@ void StageImgLoader::myInit()
 		t_info.is_fail = false;
 		
 		downloading_list.push_back(t_info);
+		
+		CURL* curl_handle = curl_easy_init();
+		handles.push_back(curl_handle);
+		
+		curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, true);
+		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
+		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
+		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
+		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5);
+		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5);
 	}
 }

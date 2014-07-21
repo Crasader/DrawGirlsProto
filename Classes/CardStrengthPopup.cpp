@@ -1169,7 +1169,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			if(offering_card_number <= 0)
 				addChild(ASPopupView::getCommonNoti(-210, "재료 카드를 선택해주세요."), kCardStrengthPopupZorder_popup);
 			else
-				addChild(ASPopupView::getCommonNoti(-210, "잼이 부족합니다."), kCardStrengthPopupZorder_popup);
+				addChild(ASPopupView::getCommonNoti(-210, "젬이 부족합니다."), kCardStrengthPopupZorder_popup);
 			is_menu_enable = true;
 		}
 	}

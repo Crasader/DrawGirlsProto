@@ -371,6 +371,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				NSDS_SS(stage_number, kSDS_SI_boss_s, stage_list[i]["boss"].asString(), false);
 				NSDS_SS(stage_number, kSDS_SI_junior_s, stage_list[i]["junior"].asString(), false);
 				NSDS_SI(stage_number, kSDS_SI_autoBalanceTry_i, stage_list[i]["autoBalanceTry"].asInt(), false);
+				
+				mySDS->fFlush(stage_number, kSDS_SI_base);
 			}
 		}
 		
@@ -533,6 +535,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					// ================================
 				}
 			}
+			
+			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}
 		
 		
@@ -697,8 +701,11 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					// ================================
 				}
 			}
+			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}
 		
+		mySDS->fFlush(puzzle_number, kSDS_PZ_bottom_s);
+		mySDS->fFlush(kSDS_CI_base);
 		
 		if(df_list.size() + sf_list.size() > 0) // need download
 		{
