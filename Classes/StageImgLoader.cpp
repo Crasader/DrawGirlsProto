@@ -97,11 +97,14 @@ void* StageImgLoader::t_function(void *data)
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&lchunk);
 		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-        curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1);
-//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, true);
-//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE, 5);
-//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL, 0);
-//		curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
+		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
+//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
+//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
+//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5); //5초대기
+
+		
+		
 		
 		if(curl_easy_perform(curl_handle) != CURLE_OK)
 		{
@@ -146,7 +149,12 @@ void* StageImgLoader::t_function2(void *data)
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&mySIL->lchunk_list[(int)data]);
 		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-        curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1);
+		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
+		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
+//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
+//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
+//		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5); //5초대기
+
 		//		curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
 		
 		if(curl_easy_perform(curl_handle) != CURLE_OK)
