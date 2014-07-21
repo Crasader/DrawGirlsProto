@@ -108,6 +108,7 @@ void* StageImgLoader::t_function(void *data)
 		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
 		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
+		curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, 20000);
 //		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
 //		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
 //		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5); //5초대기
@@ -327,6 +328,7 @@ void StageImgLoader::myInit()
 		curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
 		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
+		curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, 20000);
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5);
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5);
