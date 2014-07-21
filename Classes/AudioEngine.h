@@ -3,6 +3,7 @@
 
 #include	"cocos2d.h"
 #include	"SimpleAudioEngine.h"
+#include <algorithm>
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -697,6 +698,12 @@ public:
 	{
 		soundEffects->removeAllObjects();
 	}
+	
+	void playGroanEffect(string filename)
+	{
+		playEffect(("groan" + filename + ".png").c_str(), false);
+	}
+	
 	void playEffect(const char* filename, bool loop = false, bool cancut = false)
 	{
 		if(effectOn == false)

@@ -344,8 +344,8 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		nick_back->addChild(title_label);
 		
 		CCScale9Sprite* flag_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-		flag_back->setContentSize(CCSizeMake(251, 68));
-		flag_back->setPosition(ccpFromSize(nick_back->getContentSize()/2.f) + ccp(0,10));
+		flag_back->setContentSize(CCSizeMake(251, 58));
+		flag_back->setPosition(ccpFromSize(nick_back->getContentSize()/2.f) + ccp(0,15));
 		nick_back->addChild(flag_back);
 		
 		CCScale9Sprite* selector_back = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
@@ -355,7 +355,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 
 		CCScale9Sprite* nick_case = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 		nick_case->setContentSize(CCSizeMake(251,35));
-		nick_case->setPosition(ccp(nick_back->getContentSize().width/2.f,42));
+		nick_case->setPosition(ccp(nick_back->getContentSize().width/2.f,56));
 		nick_back->addChild(nick_case);
 		
 		
@@ -363,7 +363,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		t_back->setOpacity(0);
 		
 		input_text = CCEditBox::create(CCSizeMake(160, 35), t_back);
-		input_text->setPosition(ccp(110,42));
+		input_text->setPosition(ccp(110,56));
 		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
 		input_text->setFont(mySGD->getFont().c_str(), 13);
@@ -372,11 +372,11 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		nick_back->addChild(input_text,3);
 		
 		flag = FlagSelector::create();
-		flag->setPosition(35,90);
+		flag->setPosition(35,94);
 		nick_back->addChild(flag,100000);
 		
 		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 13, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), kCCMenuHandlerPriority);
-		ok_menu->setPosition(ccp(237,42));
+		ok_menu->setPosition(ccp(237,56));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
 								 CCNode* t_node = CCNode::create();
@@ -384,6 +384,12 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 								 menuAction(t_node);
 							 });
 		nick_back->addChild(ok_menu, 10, kTitleRenewal_MT_nick);
+	
+	KSLabelTTF* bottom_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nickBottomMent), mySGD->getFont().c_str(), 9);
+	bottom_label->disableOuterStroke();
+	bottom_label->setColor(ccBLACK);
+	bottom_label->setPosition(ccp(nick_back->getContentSize().width/2.f, 28));
+	nick_back->addChild(bottom_label);
 		
 		
 	}
@@ -2136,6 +2142,11 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	//////////////// temp : 친절한 튜토리얼 넣으면서 빼야 함
+	myDSH->setBoolForKey(kDSH_Key_isShowMainflowDimmed, true);
+	myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
+	//////////////// temp
+	
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());

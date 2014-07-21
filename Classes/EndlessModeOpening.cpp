@@ -519,7 +519,7 @@ void EndlessModeOpening::setMain()
 																	   t_arrow3->removeFromParent();
 																	   t_ment3->removeFromParent();
 																	   
-																	   t_stencil1->setContentSize(CCSizeMake(330, 130));
+																	   t_stencil1->setContentSize(CCSizeMake(300, 130));
 																	   t_stencil1->setPosition(ccp(240,143));
 																	   
 																	   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent18), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);

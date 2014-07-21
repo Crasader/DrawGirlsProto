@@ -54,6 +54,8 @@ public:
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
+	virtual void onEnterTransitionDidFinish();
+	
 	virtual ~FailPopup();
 	
 private:

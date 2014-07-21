@@ -28,6 +28,7 @@
 #include "FirstPurchasePopup.h"
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
+#include "StyledLabelTTF.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_gray = 0,
@@ -133,6 +134,8 @@ string ShopPopup::getPriceData(string t_code)
 	else if(t_code == "heartFromRuby6")
 		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 5);
 	
+	CCLOG("%s : %s", t_code.c_str(), return_value.c_str());
+	
 	return return_value;
 }
 
@@ -140,30 +143,45 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 {
 	if(recent_shop_code == kSC_ruby)
 	{
-		KSLabelTTF* ruby_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
-		ruby_label->setColor(ccc3(55, 35, 150));
-		ruby_label->disableOuterStroke();
-		ruby_label->setAnchorPoint(ccp(1.f,0.5f));
-		ruby_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
+		StyledLabelTTF* ruby_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		ruby_label->setAnchorPoint(ccp(0.5f,0.5f));
+		ruby_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-7));
 		t_target->addChild(ruby_label);
+		
+//		KSLabelTTF* ruby_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+//		ruby_label->setColor(ccc3(55, 35, 150));
+//		ruby_label->disableOuterStroke();
+//		ruby_label->setAnchorPoint(ccp(1.f,0.5f));
+//		ruby_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
+//		t_target->addChild(ruby_label);
 	}
 	else if(recent_shop_code == kSC_gold)
 	{
-		KSLabelTTF* gold_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
-		gold_label->setColor(ccc3(55, 35, 150));
-		gold_label->disableOuterStroke();
-		gold_label->setAnchorPoint(ccp(1.f,0.5f));
-		gold_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
+		StyledLabelTTF* gold_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		gold_label->setAnchorPoint(ccp(0.5f,0.5f));
+		gold_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-7));
 		t_target->addChild(gold_label);
+		
+//		KSLabelTTF* gold_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+//		gold_label->setColor(ccc3(55, 35, 150));
+//		gold_label->disableOuterStroke();
+//		gold_label->setAnchorPoint(ccp(1.f,0.5f));
+//		gold_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
+//		t_target->addChild(gold_label);
 	}
 	else if(recent_shop_code == kSC_heart)
 	{
-		KSLabelTTF* heart_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
-		heart_label->setColor(ccc3(55, 35, 150));
-		heart_label->disableOuterStroke();
-		heart_label->setAnchorPoint(ccp(1.f,0.5f));
-		heart_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
+		StyledLabelTTF* heart_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		heart_label->setAnchorPoint(ccp(0.5f,0.5f));
+		heart_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-7));
 		t_target->addChild(heart_label);
+		
+//		KSLabelTTF* heart_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+//		heart_label->setColor(ccc3(55, 35, 150));
+//		heart_label->disableOuterStroke();
+//		heart_label->setAnchorPoint(ccp(1.f,0.5f));
+//		heart_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
+//		t_target->addChild(heart_label);
 	}
 }
 

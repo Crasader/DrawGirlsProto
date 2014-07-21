@@ -26,6 +26,7 @@
 #include "CommonButton.h"
 #include "support/TransformUtils.h"
 #include "ks19937.h"
+#include "ServerDataSave.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -383,8 +384,12 @@ public:
 		if(m_isLoadedRGB == false)
 			return;
 		vector<int> tt;
-			
-		AudioEngine::sharedInstance()->playEffect(ccsf("groan%d.wav", ks19937::getIntValue(1, 13)) ,false);
+		
+		int sound_cnt = NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number);
+		if(sound_cnt > 0)
+		{
+			AudioEngine::sharedInstance()->playGroanEffect(NSDS_GS(kSDS_CI_int1_soundType_int1_s, ks19937::getIntValue(1, sound_cnt)));
+		}
 		
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = getParent()->convertToNodeSpace(touchLocation);
@@ -423,8 +428,8 @@ public:
 			ccColor4B rgb = movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g? rgb.g + 40 : 0; // (rgb.b >= 10 ? 40 : 0);
-			float waveValue2 = rgb.r? rgb.r + 40 : 0; // (rgb.b >= 10 ? 40 : 0);
+			float waveValue = rgb.g? rgb.g + 40 : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
+			float waveValue2 = rgb.r? rgb.r + 40 : 0; // : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
 			float devider = -15.f;
 			float time1 = 0.15f;
 			float time2 = 0.5f;
@@ -488,11 +493,11 @@ public:
 		triangulationWithPoints(m_points);
 	}
 	void triangulationWithPoints(const vector<Vertex3D>& points);
-	static MyNode* create(CCTexture2D* tex)
+	static MyNode* create(CCTexture2D* tex, int t_card_number)
 	{
 		MyNode* n = new MyNode();
 		
-		n->init(tex);
+		n->init(tex, t_card_number);
 		n->autorelease();
 		
 		return n;
@@ -584,7 +589,7 @@ public:
 			}
 		}
 	}
-	bool init(CCTexture2D* tex){
+	bool init(CCTexture2D* tex, int t_card_number){
 		CCLayer::init();
 		scheduleUpdate();
 		ignoreAnchorPointForPosition(false);
@@ -594,6 +599,7 @@ public:
 		setTouchEnabled(true);
 		m_imageRotationDegree = 0.f;
 		m_imageRotationDegreeX = 0.f;
+		card_number = t_card_number;
 		tex->retain();
 		texture = tex;//CCTextureCache::sharedTextureCache()->addImage("bmTest.png");
 		setContentSize(texture->getContentSize());
@@ -701,6 +707,7 @@ public:
 //		glEnable(GL_CULL_FACE);
 //    glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 //		glEnable(GL_DEPTH_TEST);
 		//glLoadIdentity();
 //		kmGLLoadMatrix
@@ -741,7 +748,8 @@ public:
 		
 		glDisable(GL_DEPTH_TEST);
 	}
-	bool m_isLoadedRGB;	
+	bool m_isLoadedRGB;
+	int card_number;
 	CC_SYNTHESIZE(float, m_imageRotationDegree, ImageRotationDegree);
 	CC_SYNTHESIZE(float, m_imageRotationDegreeX, ImageRotationDegreeX);
 };

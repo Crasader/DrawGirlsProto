@@ -120,7 +120,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.80000001192092896</real>
+									<real>0.73333334922790527</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -135,22 +135,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>0.96666663885116577</real>
-									<key>type</key>
-									<integer>5</integer>
-									<key>value</key>
-									<integer>80</integer>
-								</dict>
-								<dict>
-									<key>easing</key>
-									<dict>
-										<key>type</key>
-										<integer>1</integer>
-									</dict>
-									<key>name</key>
-									<string>opacity</string>
-									<key>time</key>
-									<real>1.1000000238418579</real>
+									<real>0.89999997615814209</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -169,7 +154,7 @@
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
-									<integer>0</integer>
+									<integer>80</integer>
 								</dict>
 								<dict>
 									<key>easing</key>
@@ -180,7 +165,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>2</real>
+									<real>1.2999999523162842</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -195,7 +180,22 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>2.1666667461395264</real>
+									<real>1.9333332777023315</real>
+									<key>type</key>
+									<integer>5</integer>
+									<key>value</key>
+									<integer>0</integer>
+								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>opacity</string>
+									<key>time</key>
+									<real>2.1333334445953369</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -210,7 +210,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>2.2999999523162842</real>
+									<real>2.4333333969116211</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -225,7 +225,7 @@
 									<key>name</key>
 									<string>opacity</string>
 									<key>time</key>
-									<real>2.3666665554046631</real>
+									<real>2.5666666030883789</real>
 									<key>type</key>
 									<integer>5</integer>
 									<key>value</key>
@@ -304,7 +304,7 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>80</integer>
+						<integer>0</integer>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -681,17 +681,17 @@
 			<key>chainedSequenceId</key>
 			<integer>0</integer>
 			<key>length</key>
-			<real>2.3666667938232422</real>
+			<real>2.5666666030883789</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1.1000000238418579</real>
+			<real>2.5666666030883789</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>266.33285522460938</real>
+			<real>200.79212951660156</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>

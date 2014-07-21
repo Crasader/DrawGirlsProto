@@ -291,9 +291,12 @@ bool EndlessModeResult::init()
 		send_command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
 	}
 	
-	tryTransaction();
-	
 	return true;
+}
+
+void EndlessModeResult::onEnterTransitionDidFinish()
+{
+	tryTransaction();
 }
 
 void EndlessModeResult::tryTransaction()
@@ -433,9 +436,7 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 	{
 		if(left_total_score.getV() > right_total_score.getV())
 		{
-			
 			ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
-			
 			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 			if(screen_scale_x < 1.f)
@@ -449,128 +450,103 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 				height_value = myDSH->ui_top;
 			
 			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+			
 			t_popup->setDimmedPosition(ccp(240, 160));
 			t_popup->setBasePosition(ccp(240, 160));
 			
+			
 			CCNode* t_container = CCNode::create();
 			t_popup->setContainerNode(t_container);
-			addChild(t_popup, 999);
 			
-			CCScale9Sprite* back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-			back_case->setContentSize(CCSizeMake(240,140));
-			back_case->setPosition(ccp(0,0));
-			t_container->addChild(back_case);
+			CCSprite* case_back = CCSprite::create("popup_small_back.png");
+			case_back->setPosition(CCPointZero);
+			t_container->addChild(case_back);
 			
-			CCScale9Sprite* back_in = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-			back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-10, back_case->getContentSize().height-46));
-			back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
-			back_case->addChild(back_in);
+			CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+			content_back->setContentSize(CCSizeMake(251, 113));
+			content_back->setPosition(ccp(0.0,-15.5)); 			// dt (0.0,-4.5)
+			t_container->addChild(content_back);
 			
-			KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinTitle), mySGD->getFont().c_str(), 15);
-			title_label->setColor(ccc3(255, 170, 20));
-			title_label->setAnchorPoint(ccp(0.5f,0.5f));
-			title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
+			KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinTitle), mySGD->getFont().c_str(), 12);
+			title_label->disableOuterStroke();
+			title_label->setPosition(ccp(-85,case_back->getContentSize().height/2.f-35));
 			t_container->addChild(title_label);
 			
-			KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinContent), mySGD->getFont().c_str(), 12);
-			sub_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-			sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-			sub_label->setPosition(ccp(0,5));
-			t_container->addChild(sub_label);
-			
-			CCSprite* t_gray = t_popup->getDimmedSprite();
+			KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessKeepWinContent), mySGD->getFont().c_str(), 12);
+			ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
+			content_back->addChild(ment_label);
 			
 			CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-			close_button->setPosition(ccp(back_case->getContentSize().width/2.f-25,back_case->getContentSize().height/2.f-25));
+			close_button->setPosition(ccp(case_back->getContentSize().width/2.f - 25, case_back->getContentSize().height/2.f - 22));
 			close_button->setFunction([=](CCObject* sender)
 									  {
-										  if(!t_popup->is_menu_enable)
-											  return;
-										  
-										  t_popup->is_menu_enable = false;
-										  
 										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 										  
-										  CommonAnimation::closePopup(t_popup, t_container, t_gray, [=](){
+										  CommonAnimation::closePopup(t_popup, t_container, t_popup->getDimmedSprite(), [=](){
 											  
 										  }, [=](){
 											  is_menu_enable = true;
 											  t_popup->removeFromParent();
 										  });
+										  t_popup->removeFromParent();
 									  });
 			t_container->addChild(close_button);
 			
-			t_popup->button_func_list.clear();
 			
-			t_popup->button_func_list.push_back([=](){
-				if(!t_popup->is_menu_enable)
-					return;
-				
-				t_popup->is_menu_enable = false;
-				
-				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-				
-				CommonAnimation::closePopup(this, t_container, t_gray, [=](){
-					
-				}, [=](){
-					t_gray->setOpacity(0);
-					KS::setOpacity(t_container, 0);
-					
-					
-					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f,
-														   [=](float t)
-														   {
-															   gray->setOpacity(255*t);
-														   }, [=](float t)
-														   {
-															   gray->setOpacity(0);
-															   if(target_final && delegate_final)
-																   (target_final->*delegate_final)();
-															   removeFromParent();
-														   }));
-					
-					addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f,
-														   [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
-															   addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f,
-																									  [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
-					
-					addChild(KSGradualValue<int>::create(255, 0, 0.15f,
-														 [=](int t)
-														 {
-															 KS::setOpacity(main_case, t);
-														 }, [=](int t)
-														 {
-															 KS::setOpacity(main_case, 0);
-														 }));
-					
-					t_popup->removeFromParent();
-				});
-			});
-			
-			CCLabelTTF* t2_label = CCLabelTTF::create();
-			
-			KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
-			ok_label->setPosition(ccp(0,0));
-			t2_label->addChild(ok_label);
-			
-			CCScale9Sprite* ok_back = CCScale9Sprite::create("common_button_lightpupple.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-			
-			CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
-			ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
-			ok_button->setTag(0);
-			ok_button->setPreferredSize(CCSizeMake(110,45));
-			ok_button->setPosition(ccp(0,-35));
+			CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
+			ok_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+45));
+			ok_button->setFunction([=](CCObject* sender)
+									  {
+										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+										  
+										  CommonAnimation::closePopup(this, t_container, t_popup->getDimmedSprite(), [=](){
+											  
+										  }, [=](){
+											  t_popup->getDimmedSprite()->setOpacity(0);
+											  KS::setOpacity(t_container, 0);
+											  
+											  
+											  addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f,
+																					 [=](float t)
+																					 {
+																						 gray->setOpacity(255*t);
+																					 }, [=](float t)
+																					 {
+																						 gray->setOpacity(0);
+																						 if(target_final && delegate_final)
+																							 (target_final->*delegate_final)();
+																						 removeFromParent();
+																					 }));
+											  
+											  addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f,
+																					 [=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(1.2f);
+																						 addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f,
+																																[=](float t){main_case->setScaleY(t);}, [=](float t){main_case->setScaleY(0.f);}));}));
+											  
+											  addChild(KSGradualValue<int>::create(255, 0, 0.15f,
+																				   [=](int t)
+																				   {
+																					   KS::setOpacity(main_case, t);
+																				   }, [=](int t)
+																				   {
+																					   KS::setOpacity(main_case, 0);
+																				   }));
+											  
+											  t_popup->removeFromParent();
+										  });
+									  });
 			t_container->addChild(ok_button);
 			
-			ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
 			
+			content_back->setContentSize(content_back->getContentSize() + CCSizeMake(0, -50));
+			content_back->setPositionY(content_back->getPositionY() + 25);
+
 			
-			t_popup->is_menu_enable = false;
-			CommonAnimation::openPopup(this, t_container, t_gray, [=](){
-				
-			}, [=](){
-				t_popup->is_menu_enable = true;
-			});
+			ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
+			
+			t_popup->getDimmedSprite()->setOpacity(0);
+			CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite());
+			addChild(t_popup, 999);
 		}
 		else
 		{
@@ -644,7 +620,7 @@ void EndlessModeResult::setMain()
 	if(mySGD->getStageGrade() <= 0)
 		left_result_label->setColor(ccc3(240, 45, 45));
 	else
-		left_result_label->enableGradation(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
+		left_result_label->setGradientColor(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
 	left_result_label->setPosition(ccp(left_back->getContentSize().width/2.f, 154));
 	left_back->addChild(left_result_label);
 
@@ -787,7 +763,7 @@ void EndlessModeResult::setMain()
 	if(right_clear_grade.getV() <= 0)
 		right_result_label->setColor(ccc3(240, 45, 45));
 	else
-		right_result_label->enableGradation(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
+		right_result_label->setGradientColor(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
 	right_result_label->setPosition(ccp(right_back->getContentSize().width/2.f, 154));
 	right_back->addChild(right_result_label);
 	
@@ -1552,18 +1528,17 @@ void EndlessModeResult::startCalcAnimation()
 																																		   t_popup_node->setPosition(ccp(240,160));
 																																		   t_clipping->addChild(t_popup_node);
 																																		   
-																																		   CCScale9Sprite* out_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-																																		   out_back->setContentSize(CCSizeMake(250, 130));
+																																		   CCSprite* out_back = CCSprite::create("popup_small_back.png");
 																																		   out_back->setPosition(ccp(0,0));
 																																		   t_popup_node->addChild(out_back);
 																																		   
 																																		   KSLabelTTF* t_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent16), mySGD->getFont().c_str(), 15);
-																																		   t_title_label->setColor(ccc3(255,170,20));
-																																		   t_title_label->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height-25));
+																																		   t_title_label->disableOuterStroke();
+																																		   t_title_label->setPosition(ccpFromSize(out_back->getContentSize()/2.f) + ccp(-85, out_back->getContentSize().height/2.f-35));
 																																		   out_back->addChild(t_title_label);
 																																		   
 																																		   CommonButton* t_close_button = CommonButton::createCloseButton(-99999);
-																																		   t_close_button->setPosition(ccp(out_back->getContentSize().width - 25, out_back->getContentSize().height - 25));
+																																		   t_close_button->setPosition(ccp(out_back->getContentSize().width - 25, out_back->getContentSize().height - 22));
 																																		   t_close_button->setFunction([=](CCObject* sender)
 																																									   {
 																																										   if(!is_menu_enable)
@@ -1611,9 +1586,9 @@ void EndlessModeResult::startCalcAnimation()
 																																		   out_back->addChild(t_close_button);
 																																		   t_close_button->setEnabled(false);
 																																		   
-																																		   CCScale9Sprite* in_back = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-																																		   in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-15.5f));
-																																		   in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-11, -41.5f));
+																																		   CCScale9Sprite* in_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+																																		   in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-15.f));
+																																		   in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-50, -80.f));
 																																		   out_back->addChild(in_back);
 																																		   
 																																		   StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);

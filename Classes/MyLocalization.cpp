@@ -847,8 +847,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
 	ko->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 	ko->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
-	ko->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
-	ko->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	ko->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
+	ko->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
+	ko->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
 	ko->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
 	ko->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
 	ko->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
@@ -1024,8 +1025,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
 	ko->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
 	ko->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
-	ko->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
-	ko->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	ko->setObject(CCString::create("슬로우존 안에서는 이동속도가 느려져요."), kMyLocalKey_patternContent1003);
+	ko->setObject(CCString::create("붉은 원의 테두리에 닿으면 생명 하나를 잃어요."), kMyLocalKey_patternContent1004);
 	ko->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
 	ko->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
 	ko->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
@@ -1157,7 +1158,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("PVP 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ko->setObject(CCString::create("<font color=961 newline=16>PVP는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ko->setObject(CCString::create("대전배패"), kMyLocalKey_endlessKeepWin);
+	ko->setObject(CCString::create("대전패배"), kMyLocalKey_endlessKeepWin);
 	
 	ko->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ko->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -1408,6 +1409,8 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
 	ko->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
+	
+	ko->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1770,8 +1773,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
 	en->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 	en->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
-	en->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
-	en->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	en->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
+	en->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
+	en->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
 	en->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
 	en->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
 	en->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
@@ -1940,8 +1944,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
 	en->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
 	en->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
-	en->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
-	en->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	en->setObject(CCString::create("슬로우존 안에서는 이동속도가 느려져요."), kMyLocalKey_patternContent1003);
+	en->setObject(CCString::create("붉은 원의 테두리에 닿으면 생명 하나를 잃어요."), kMyLocalKey_patternContent1004);
 	en->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
 	en->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
 	en->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
@@ -2068,7 +2072,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("PVP 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	en->setObject(CCString::create("<font color=961 newline=16>PVP는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	en->setObject(CCString::create("대전배패"), kMyLocalKey_endlessKeepWin);
+	en->setObject(CCString::create("대전패배"), kMyLocalKey_endlessKeepWin);
 	
 	en->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	en->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -2315,6 +2319,8 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
 	en->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
+	
+	en->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2686,8 +2692,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
 	ja->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 	ja->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
-	ja->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
-	ja->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	ja->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
+	ja->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
+	ja->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
 	ja->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
 	ja->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
 	ja->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
@@ -2868,8 +2875,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("따라와서 폭발해요."), kMyLocalKey_patternContent113);
 	ja->setObject(CCString::create("맵의 일부를 일정시간 가립니다."), kMyLocalKey_patternContent1001);
 	ja->setObject(CCString::create("일정시간 화면 전체를 뒤덮어 시야를 가려요."), kMyLocalKey_patternContent1002);
-	ja->setObject(CCString::create("영역안에서는 느려져요."), kMyLocalKey_patternContent1003);
-	ja->setObject(CCString::create("붉은 원 밖으로 나갈 수 없어요."), kMyLocalKey_patternContent1004);
+	ja->setObject(CCString::create("슬로우존 안에서는 이동속도가 느려져요."), kMyLocalKey_patternContent1003);
+	ja->setObject(CCString::create("붉은 원의 테두리에 닿으면 생명 하나를 잃어요."), kMyLocalKey_patternContent1004);
 	ja->setObject(CCString::create("일정시간 움직이지 못해요."), kMyLocalKey_patternContent1005);
 	ja->setObject(CCString::create("조작 방향의 반대로 움직여요."), kMyLocalKey_patternContent1006);
 	ja->setObject(CCString::create("보스가 다른위치로 순간이동해요."), kMyLocalKey_patternContent1007);
@@ -2997,7 +3004,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("PVP 오픈조건"), kMyLocalKey_endlessOpenConditionTitle);
 	ja->setObject(CCString::create("<font color=961 newline=16>PVP는 %d스테이지 플레이 후<font newline=16>자동으로 오픈됩니다."), kMyLocalKey_endlessOpenConditionContent);
 	
-	ja->setObject(CCString::create("대전배패"), kMyLocalKey_endlessKeepWin);
+	ja->setObject(CCString::create("대전패배"), kMyLocalKey_endlessKeepWin);
 	
 	ja->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
 	ja->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
@@ -3244,6 +3251,8 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
 	ja->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
+	
+	ja->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

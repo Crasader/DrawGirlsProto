@@ -33,6 +33,8 @@ public:
 	
 	CREATE_FUNC(EndlessModeResult);
 	
+	virtual void onEnterTransitionDidFinish();
+	
 private:
 	
 	int touch_priority;

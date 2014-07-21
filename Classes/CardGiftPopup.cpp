@@ -125,7 +125,7 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	search_button->setPosition(text_position + ccp(118,0) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
 	search_button->setFunction([=](CCObject* sender)
 							   {
-								   if(!is_menu_enable)
+								   if(!is_menu_enable || string(input_text->getText()) == "")
 									   return;
 								   
 								   is_menu_enable = false;

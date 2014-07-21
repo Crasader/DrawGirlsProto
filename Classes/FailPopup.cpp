@@ -405,21 +405,24 @@ bool FailPopup::init()
 																	  }
 																  }));
 	
-	LoadingLayer* t_loading = LoadingLayer::create(-9999);
-	addChild(t_loading, 9999);
-	
-	tryTransaction(t_loading);
-	
 	
 	is_saved_user_data = false;
-	
-	myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
 	
 	CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode(true);
 	curtain_node->setPosition(ccp(240,160));
 	addChild(curtain_node, kZ_FP_popup+5);
 	
 	return true;
+}
+
+void FailPopup::onEnterTransitionDidFinish()
+{
+	LoadingLayer* t_loading = LoadingLayer::create(-9999);
+	addChild(t_loading, 9999);
+	
+	tryTransaction(t_loading);
+	
+	myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
 }
 
 void FailPopup::controlButtonAction(CCObject* sender, CCControlEvent t_event)

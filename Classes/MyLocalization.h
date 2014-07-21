@@ -370,6 +370,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_eventShopTitle,
 	kMyLocalKey_eventShopMent1,
 	kMyLocalKey_eventShopMent2,
+	kMyLocalKey_eventShopMent3,
 	kMyLocalKey_mileageMent1,
 	kMyLocalKey_mileageMent2,
 	kMyLocalKey_mileageMent3,
@@ -850,6 +851,8 @@ typedef enum MyLocalKey_ {
 	
 	kMyLocalKey_cardTakeCnt,
 	kMyLocalKey_buttonTutorialMent,
+	
+	kMyLocalKey_nickBottomMent,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

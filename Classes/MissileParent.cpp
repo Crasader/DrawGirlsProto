@@ -551,21 +551,23 @@ void MissileParent::endIngActionAP()
 }
 
 
-int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD, KSCumberBase* cb, bool exe)
+int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD, KSCumberBase* cb, bool exe)
 {
 	Json::Value patternData;
 	int valid = 1;
 	int invalid = 0;
 	// Attack Queue 가 있으면 patternD 무시하고 Attack Queue 에서 하나하나 빼서 씀.
-	if(cb->getAttackQueue().empty() == false)
+	if(cb->getAttackQueue().empty() == false && cb->getAttackQueue().size()>0)
 	{
+        CCLOG("A");
 		patternData = cb->getAttackQueue().front();
 		cb->getAttackQueue().pop_front();
-	}
+	}  
 	else
 	{
 		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
 		{
+            CCLOG("B");
 			Json::Reader reader;
 			Json::Value createCumberPattern;
 			reader.parse(R"({
@@ -579,10 +581,15 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string patternD,
 		}
 		else
 		{
-			Json::Reader reader;
-			reader.parse(patternD, patternData);
+            CCLOG("C");
+			patternData=patternD;
 		}
 	}
+    
+    if(!patternData.isNull() || patternData.asString()==""){
+        CCLOG("it's null in attackWithKSCode");
+        patternData=patternD;
+    }
 	
 	if(patternData["pattern"].asInt() == 1020)
 	{
@@ -1670,8 +1677,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	jack_missile_node = CCNode::create();
 	addChild(jack_missile_node, 10);
 	
-	myGD->I_CCPStrCumberBaseB["MP_attackWithKSCode"] =
-	std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
+	myGD->I_CCPStrCumberBaseB["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
 	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);

@@ -35,7 +35,7 @@ private:
 	TouchSuctionLayer* suction;
 	
 	CCNode* m_container;
-	CCScale9Sprite* back_case;
+	CCSprite* back_case;
 	
 	LoadingLayer* loading_layer;
 	
