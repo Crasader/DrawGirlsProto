@@ -2272,64 +2272,19 @@ void ClearPopup::menuAction(CCObject* pSender)
 					{
 						ani_stars[i]->setOpacity(0);
 						CCSprite* t_star_ani = (CCSprite*)ani_stars[i]->getChildByTag(1);
-						t_star_ani->setOpacity(255);
-						t_star_ani->setScale(1.f);
-						
-						CCPoint origin_position = ani_stars[i]->getPosition();
-						CCPoint sub_position = ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42) - ani_stars[i]->getPosition();
-						CCPoint dis_position;
-						
-						if(i == 0)
+						if(t_star_ani)
 						{
-							dis_position = ccp(-20,0);
+							t_star_ani->setOpacity(255);
+							t_star_ani->setScale(1.f);
 							
-							addChild(KSGradualValue<float>::create(-1.f, 1.f, 6.f/30.f, [=](float t){
-								t_star_ani->setScale(1.2f-fabsf(t)*0.2f);
-							}, [=](float t){
-								t_star_ani->setScale(1.f);
-								
-								addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t){
-									if(t < 0.5f)
-										ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, t*2.f));
-									else
-										ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, (1.f-t)*2.f));
-//									ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t));
-								}, [=](float t){
-									((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setStartColor(ccc4f(0.f, 0.f, 0.f, 0.f));
-									((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setEndColor(ccc4f(0.f, 0.f, 0.f, 0.f));
-									((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setAutoRemoveOnFinish(true);
-									((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setDuration(0);
-									
-									ani_stars[i]->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42));
-									addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
-										t_star_ani->setScale(1.f + t*0.3f);
-										t_star_ani->setOpacity(255-t*255);
-									}, [=](float t){
-										t_star_ani->setScale(1.3f);
-										t_star_ani->setOpacity(0);
-										star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
-									}));
-								}));
-								
-								addChild(KSGradualValue<float>::create(0.f, 300, 15.f/30.f, [=](float t){
-									t_star_ani->setRotation(t);
-								}, [=](float t){
-									t_star_ani->removeFromParent();
-								}));
-								
-								
-							}));
-						}
-						else
-						{
-							if(i == 1)
-								dis_position = ccp(-10,10);
-							else if(i == 2)
-								dis_position = ccp(10,10);
-							else if(i == 3)
-								dis_position = ccp(20,20);
+							CCPoint origin_position = ani_stars[i]->getPosition();
+							CCPoint sub_position = ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42) - ani_stars[i]->getPosition();
+							CCPoint dis_position;
 							
-							addChild(KSTimer::create(13.f/30.f + (i-1)*19.f/30.f, [=](){
+							if(i == 0)
+							{
+								dis_position = ccp(-20,0);
+								
 								addChild(KSGradualValue<float>::create(-1.f, 1.f, 6.f/30.f, [=](float t){
 									t_star_ani->setScale(1.2f-fabsf(t)*0.2f);
 								}, [=](float t){
@@ -2340,22 +2295,26 @@ void ClearPopup::menuAction(CCObject* pSender)
 											ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, t*2.f));
 										else
 											ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, (1.f-t)*2.f));
-//										ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t));
+										//									ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t));
 									}, [=](float t){
-										((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setStartColor(ccc4f(0.f, 0.f, 0.f, 0.f));
-										((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setEndColor(ccc4f(0.f, 0.f, 0.f, 0.f));
-										((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setAutoRemoveOnFinish(true);
-										((CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2))->setDuration(0);
-										
-										ani_stars[i]->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42));
-										addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
-											t_star_ani->setScale(1.f + t*0.3f);
-											t_star_ani->setOpacity(255-t*255);
-										}, [=](float t){
-											t_star_ani->setScale(1.3f);
-											t_star_ani->setOpacity(0);
-											star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
-										}));
+										CCParticleSystemQuad* t_tag2 = (CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2);
+										if(t_tag2)
+										{
+											t_tag2->setStartColor(ccc4f(0.f, 0.f, 0.f, 0.f));
+											t_tag2->setEndColor(ccc4f(0.f, 0.f, 0.f, 0.f));
+											t_tag2->setAutoRemoveOnFinish(true);
+											t_tag2->setDuration(0);
+											
+											ani_stars[i]->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42));
+											addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+												t_star_ani->setScale(1.f + t*0.3f);
+												t_star_ani->setOpacity(255-t*255);
+											}, [=](float t){
+												t_star_ani->setScale(1.3f);
+												t_star_ani->setOpacity(0);
+												star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
+											}));
+										}
 									}));
 									
 									addChild(KSGradualValue<float>::create(0.f, 300, 15.f/30.f, [=](float t){
@@ -2366,7 +2325,59 @@ void ClearPopup::menuAction(CCObject* pSender)
 									
 									
 								}));
-							}));
+							}
+							else
+							{
+								if(i == 1)
+									dis_position = ccp(-10,10);
+								else if(i == 2)
+									dis_position = ccp(10,10);
+								else if(i == 3)
+									dis_position = ccp(20,20);
+								
+								addChild(KSTimer::create(13.f/30.f + (i-1)*19.f/30.f, [=](){
+									addChild(KSGradualValue<float>::create(-1.f, 1.f, 6.f/30.f, [=](float t){
+										t_star_ani->setScale(1.2f-fabsf(t)*0.2f);
+									}, [=](float t){
+										t_star_ani->setScale(1.f);
+										
+										addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t){
+											if(t < 0.5f)
+												ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, t*2.f));
+											else
+												ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t) + ccpMult(dis_position, (1.f-t)*2.f));
+											//										ani_stars[i]->setPosition(origin_position + ccpMult(sub_position,t));
+										}, [=](float t){
+											CCParticleSystemQuad* t_tag2 = (CCParticleSystemQuad*)ani_stars[i]->getChildByTag(2);
+											if(t_tag2)
+											{
+												t_tag2->setStartColor(ccc4f(0.f, 0.f, 0.f, 0.f));
+												t_tag2->setEndColor(ccc4f(0.f, 0.f, 0.f, 0.f));
+												t_tag2->setAutoRemoveOnFinish(true);
+												t_tag2->setDuration(0);
+												
+												ani_stars[i]->setPosition(ccp(25,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-42));
+												addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t){
+													t_star_ani->setScale(1.f + t*0.3f);
+													t_star_ani->setOpacity(255-t*255);
+												}, [=](float t){
+													t_star_ani->setScale(1.3f);
+													t_star_ani->setOpacity(0);
+													star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
+												}));
+											}
+										}));
+										
+										addChild(KSGradualValue<float>::create(0.f, 300, 15.f/30.f, [=](float t){
+											t_star_ani->setRotation(t);
+										}, [=](float t){
+											t_star_ani->removeFromParent();
+										}));
+										
+										
+									}));
+								}));
+							}
 						}
 					}
 					
