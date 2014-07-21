@@ -379,6 +379,7 @@ public:
 //	void setGold(int t_gold, bool is_write = true);
 	
 	void setHeartTime(HeartTime* t_heart);
+	HeartTime* getHeartTime();
 	
 	int getKeepGold();
 	

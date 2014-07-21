@@ -245,7 +245,6 @@ void StarGoldData::resetLabels()
 	gold_label = NULL;
 	friend_point_label = NULL;
 	ingame_gold_label = NULL;
-	heart_time = NULL;
 }
 
 void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
@@ -295,6 +294,11 @@ void StarGoldData::setGoldLabel( CCLabelBMFont* t_label )
 void StarGoldData::setHeartTime(HeartTime *t_heart)
 {
 	heart_time = t_heart;
+}
+
+HeartTime* StarGoldData::getHeartTime()
+{
+	return heart_time;
 }
 
 //int StarGoldData::getGold()

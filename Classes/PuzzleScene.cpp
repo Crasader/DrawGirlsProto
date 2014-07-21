@@ -2803,7 +2803,6 @@ void PuzzleScene::setTop()
 	heart_time = HeartTime::create();
 	heart_time->setPosition(ccp(top_heart->getContentSize().width/2.f-49,top_heart->getContentSize().height/2.f));
 	top_heart->addChild(heart_time);
-	mySGD->setHeartTime(heart_time);
 	
 	CCSprite* n_heart = CCSprite::create("mainflow_top_shop.png");
 	CCSprite* s_heart = CCSprite::create("mainflow_top_shop.png");
