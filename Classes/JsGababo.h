@@ -79,6 +79,7 @@ protected:
 	CCBAnimationManager* npcManager;
 	CCSprite* m_meCharSprite;
 	CCSprite* m_npcCharSprite;
+	CCSprite* m_tutoGababo;
 };
 
 #endif

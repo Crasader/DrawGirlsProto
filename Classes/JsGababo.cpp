@@ -175,7 +175,9 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	});
 	front->addChild(boBox);
 	
-	
+	setFormSetter(m_ba);
+	setFormSetter(m_ga);
+	setFormSetter(m_bo);
 	CCSprite* stepFrame = CCSprite::create("gababo_frame.png");
 	m_stepFrame = stepFrame;
 	back->addChild(stepFrame, 2);
@@ -205,15 +207,19 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	
 	setupReward();
 	setupCongMessage();
-	setupTutorial();
+	
 	setupHands();
 	loadImage(1);
-	if(myDSH->getIntegerForKey(kDSH_Key_isShowGababoTutorial))
+	
+	// 튜토 보여줬다면
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowGababoTutorial) && false)
 	{
 		m_front1->setScaleY(1.f);
+
 	}
 	else
 	{
+		setupTutorial();
 		myDSH->setIntegerForKey(kDSH_Key_isShowGababoTutorial, 1);
 	}
 	return true;
@@ -639,6 +645,7 @@ void JsGababo::onPressConfirm(CCObject* t)
 			contextSwitching(m_front3, m_front1, [=](){
 				rollBack();
 				auto lightPair = KS::loadCCBI<CCSprite*>(this, "gababo_change.ccbi");
+				lightPair.first->setScale(0.8f);
 				CCSprite* light = lightPair.first;
 				lightPair.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 					light->removeFromParent();
@@ -713,7 +720,8 @@ void JsGababo::showHandsMotionWrapper()
 		if(m_winCount == 0)
 		{
 			// 이길 확률 70 % 질 확률 15% 비길 확률 50%
-			ProbSelector ps = {70.f, 15.f, 50.f};
+//			ProbSelector ps = {70.f, 15.f, 50.f};
+			ProbSelector ps = {70.f, 100000.f, 50.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 1)
@@ -919,23 +927,36 @@ void JsGababo::setupTutorial()
 	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 12.f, CCSizeMake(69, 46), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), m_touchPriority - 1);
 	button->setTouchPriority(m_touchPriority - 1);
 	button->setFunction([=](CCObject*){
+		if(button->isEnabled() == false)
+			return;
+		
+		CCSprite* tutoGababo;
 		if(m_tutorialStep == 1)
 		{
 			message1->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent17)
 									);
+			CCSprite* tutoGababo;
+			tutoGababo = CCSprite::create("gababo_sum.png");
+			tutoGababo->setPosition(ccp(209.5, 217.0));
+			m_tutoGababo = tutoGababo;
+			m_back->addChild(tutoGababo, 6);
+			setFormSetter(tutoGababo);
 		}
 		else
 		{
+			button->setEnabled(false);
 			// 여기
 			addChild(KSGradualValue<float>::create(255.f, 0.f, 1.f, [=](float t){
 				helper->setOpacity(t);
 				message1->setVisible(false);
 				button->setOpacity(t);
 				puppleInner->setOpacity(t);
+				m_tutoGababo->setOpacity(t);
 			}, [=](float t){
 				helper->setVisible(false);
 				button->setVisible(false);
 				puppleInner->setVisible(false);
+				m_tutoGababo->setOpacity(t);
 			}));
 			this->contextSwitching(nullptr, m_front1, nullptr, nullptr);
 		}
