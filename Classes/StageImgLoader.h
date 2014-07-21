@@ -82,6 +82,9 @@ public:
 	
 	vector<LMemoryStruct> lchunk_list;
 	vector<DownloadImgInfo> downloading_list;
+	vector<CURL*> handles;
+	
+	virtual ~StageImgLoader();
 	
 private:
 	SaveData* my_savedata;
