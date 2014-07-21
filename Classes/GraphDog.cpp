@@ -389,13 +389,17 @@ void* GraphDog::t_function(void *_insertIndex)
 			try
 			{
 				
-				
+				CCLOG("check1");
 				vector<char> encText = base64To(std::string(resultStr.begin(), resultStr.end() - 1) ); // unbase64
 				//resultStr = desDecryption(graphdog->sKey, std::string(encText.begin(), encText.end())); // des Decryption
 				
+				CCLOG("check2");
 				resultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
+				
+				CCLOG("check3");
 				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
 				
+				CCLOG("check4");
 				Json::Value commandParam = command.commandStr;
 				if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
 					resultCode = CURLE_CHUNK_FAILED;
@@ -433,6 +437,8 @@ void* GraphDog::t_function(void *_insertIndex)
 		//resultCode = CURLE_CHUNK_FAILED;
 	}
 	
+	
+	CCLOG("check5");
 	//callbackparam 통신과 무관함. 넣어준거 그대로 피드백.
 	for(auto iter = command.commands.begin(); iter != command.commands.end(); ++iter)
 	{
@@ -446,6 +452,7 @@ void* GraphDog::t_function(void *_insertIndex)
 		}
 	}
 	
+	CCLOG("check6");
 	//	bool newToken = false;
 	//	// 새토큰발급일 경우
 	//	//if(resultobj["tokenUpdate"].getString()=="ok"){
@@ -525,6 +532,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	//		}
 	
 	
+	CCLOG("check8");
 	//CCLOG("t_function 12");
 	//@if(resultobj["state"].getString()=="ok"){
 	if(resultobj["state"].asString()=="ok"){
