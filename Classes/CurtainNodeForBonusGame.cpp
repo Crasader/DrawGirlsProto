@@ -2,9 +2,9 @@
 
 CurtainNodeForBonusGame::CurtainNodeForBonusGame()
 {
-	m_titleBonusGame = nullptr;
+//	m_titleBonusGame = nullptr;
 	m_titleStr = nullptr;
-	m_contentBack = nullptr;
+//	m_contentBack = nullptr;
 	 m_startMenu = nullptr;
 	m_onPressStartButton = nullptr;
 //	m_obtainReward = nullptr;
@@ -56,11 +56,11 @@ void CurtainNodeForBonusGame::menuAction(std::function<void(void)> callback)
 	}));
 	
 	
-	if(m_titleBonusGame)
-	{
-		CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 500));
-		m_titleBonusGame->runAction(title_move);
-	}
+//	if(m_titleBonusGame)
+//	{
+//		CCMoveTo* title_move = CCMoveTo::create(0.3f, ccp(240, 500));
+//		m_titleBonusGame->runAction(title_move);
+//	}
 	
 	if(m_titleStr)
 	{
@@ -69,11 +69,11 @@ void CurtainNodeForBonusGame::menuAction(std::function<void(void)> callback)
 		
 	}
 	
-	if(m_contentBack)
-	{
-		CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(-190, 150));
-		m_contentBack->runAction(content_move);
-	}
+//	if(m_contentBack)
+//	{
+//		CCMoveTo* content_move = CCMoveTo::create(0.3f, ccp(-190, 150));
+//		m_contentBack->runAction(content_move);
+//	}
 	
 	if(m_startMenu)
 	{
