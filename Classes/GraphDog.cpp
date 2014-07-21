@@ -555,17 +555,22 @@ void* GraphDog::t_function(void *_insertIndex)
 //		
 //	}
 	
+	CCLOG("check9");
 	GraphDog::get()->timestamp=resultobj.get("timestamp", 0).asInt64();
 	GraphDog::get()->date=resultobj.get("date", 0).asInt64();
 	GraphDog::get()->weekNo=resultobj.get("weekNo", 0).asInt();
 	GraphDog::get()->localTimestamp=GraphDog::get()->getTime();
 	
 	
+	CCLOG("check10");
 	command.result = resultobj;
 	command.chunk.resultCode = resultCode;
 	//	}
+	
+	CCLOG("check11");
 	pthread_mutex_unlock(&command.caller->t_functionMutex);
 	
+	CCLOG("check12");
 	return NULL;
 }
 
