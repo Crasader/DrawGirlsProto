@@ -171,7 +171,7 @@ bool CardViewScene::init()
 		
 		tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 			CCTouch* t_touch = new CCTouch();
-			t_touch->setTouchInfo(0, 0, 0);
+			t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
 			t_touch->autorelease();
 		
 			first_img->ccTouchEnded(t_touch, NULL);
@@ -219,7 +219,7 @@ bool CardViewScene::init()
 		tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 //			(this->*delegate_typing_after)();
 			CCTouch* t_touch = new CCTouch();
-			t_touch->setTouchInfo(0, 0, 0);
+			t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
 			t_touch->autorelease();
 			first_img->ccTouchEnded(t_touch, NULL);
 		});
