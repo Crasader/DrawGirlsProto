@@ -109,8 +109,9 @@ CCNode* LoadingTipScene::getMissionTipImage()
 {
 	CCNode* loading_tip_node = CCNode::create();
 	
-	
-	CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+	int rand_value = rand()%5+1;
+	mySGD->loading_tip_back_number = rand_value;
+	CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", rand_value));
 	loading_tip_back->setPosition(ccp(0,0));
 	loading_tip_back->setVisible(false);
 	loading_tip_node->addChild(loading_tip_back);
@@ -388,7 +389,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 	
 	if(!mySGD->is_endless_mode && !is_gameover && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
 	{
-		CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+		CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", mySGD->loading_tip_back_number));
 		loading_tip_back->setPosition(ccp(0,0));
 		loading_tip_node->addChild(loading_tip_back);
 		
@@ -589,7 +590,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 	{
 		int selected_loading_tip = mySGD->before_curtain_tip_type;
 		
-		CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+		CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", mySGD->loading_tip_back_number));
 		loading_tip_back->setPosition(ccp(0,0));
 		loading_tip_node->addChild(loading_tip_back);
 		
@@ -670,7 +671,10 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	
 	CCNode* loading_tip_node = CCNode::create();
 	
-	CCSprite* loading_tip_back = CCSprite::create("temp_title_back2.png");
+	int rand_value = rand()%5+1;
+	mySGD->loading_tip_back_number = rand_value;
+	
+	CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", rand_value));
 	loading_tip_back->setPosition(ccp(0,0));
 	loading_tip_back->setVisible(false);
 	loading_tip_node->addChild(loading_tip_back);

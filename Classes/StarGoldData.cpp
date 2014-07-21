@@ -28,6 +28,8 @@ void StarGoldData::withdraw()
 	star_label = NULL;
 	gold_label = NULL;
 	
+	heart_time = NULL;
+	
 	has_gotten_cards.clear();
 	puzzle_historys.clear();
 	piece_historys.clear();
@@ -188,8 +190,6 @@ CCSprite* StarGoldData::getLoadingImg()
 
 string StarGoldData::getFont()
 {
-	
-	
 	string font_name;
 //#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 //	font_name = "RixGoEB";
@@ -246,7 +246,6 @@ void StarGoldData::resetLabels()
 	gold_label = NULL;
 	friend_point_label = NULL;
 	ingame_gold_label = NULL;
-	heart_time = NULL;
 }
 
 void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
@@ -296,6 +295,11 @@ void StarGoldData::setGoldLabel( CCLabelBMFont* t_label )
 void StarGoldData::setHeartTime(HeartTime *t_heart)
 {
 	heart_time = t_heart;
+}
+
+HeartTime* StarGoldData::getHeartTime()
+{
+	return heart_time;
 }
 
 //int StarGoldData::getGold()
@@ -3454,6 +3458,8 @@ void StarGoldData::myInit()
 	network_check_cnt = 0;
 	
 	time_event_list.clear();
+	
+	heart_time = NULL;
 	
 	is_new_puzzle_card = false;
 	

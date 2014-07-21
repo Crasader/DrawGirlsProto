@@ -71,8 +71,15 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	back_case->addChild(title_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventShopTitle), mySGD->getFont().c_str(), 14);
+	title_label->disableOuterStroke();
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
 	title_back->addChild(title_label);
+	
+	KSLabelTTF* title_label_shadow = KSLabelTTF::create(title_label->getString(), mySGD->getFont().c_str(), 14);
+	title_label_shadow->setColor(ccBLACK);
+	title_label_shadow->enableOuterStroke(ccBLACK, 1, 60/255, true);
+	title_label_shadow->setPosition(ccpFromSize(title_label->getContentSize()/2.f) + ccp(0,-1));
+	title_label->addChild(title_label_shadow, -1);
 	
 	
 	CCScale9Sprite* tip_marquee_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));

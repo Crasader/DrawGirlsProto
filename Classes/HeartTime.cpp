@@ -15,6 +15,13 @@ HeartTime * HeartTime::create ()
 	t_ht->autorelease();
 	return t_ht;
 }
+
+HeartTime::~HeartTime()
+{
+	if(mySGD->getHeartTime() == this)
+		mySGD->setHeartTime(NULL);
+}
+
 bool HeartTime::startGame ()
 {
 	if(heart_list.size() <= 0)
@@ -292,5 +299,7 @@ void HeartTime::myInit ()
 			addChild(state_label);
 		}
 	}
+	
+	mySGD->setHeartTime(this);
 }
 #undef LZZ_INLINE

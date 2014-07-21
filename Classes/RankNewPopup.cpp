@@ -69,12 +69,23 @@ bool RankNewPopup::init()
 	main_case->addChild(title_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
+	title_label->disableOuterStroke();
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
-	setFormSetter(title_label);
 	title_back->addChild(title_label);
 	
-	CCScale9Sprite* main_inner_left = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//<<<<<<< HEAD
+//	CCScale9Sprite* main_inner_left = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//	
+//=======
+	KSLabelTTF* title_label_shadow = KSLabelTTF::create(title_label->getString(), mySGD->getFont().c_str(), 14);
+	title_label_shadow->setColor(ccBLACK);
+	title_label_shadow->enableOuterStroke(ccBLACK, 1, 60/255, true);
+	title_label_shadow->setPosition(ccpFromSize(title_label->getContentSize()/2.f) + ccp(0,-1));
+	title_label->addChild(title_label_shadow, -1);
 	
+	CCScale9Sprite* main_inner_left = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));                                                                        
+
+//>>>>>>> origin/standAlone
 	main_inner_left->setContentSize(CCSizeMake(298 / 2.f, 408 / 2.f));
 	main_inner_left->setPosition(ccp(378.5 + 1.f, 125.5));
 	setFormSetter(main_inner_left);

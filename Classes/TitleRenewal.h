@@ -110,12 +110,13 @@ private:
 	void downloadingFileAction();
 	void successDownloadAction();
 	void failDownloadAction();
+	void checkDownloading();
 	
-	int rest_download_cnt;
 	vector<DownloadImgInfo> download_set;
 	void startFileDownloadSet();
-	void successDownloadActionSet(string t_filename);
-	void failDownloadActionSet(string t_filename);
+	vector<int> is_enable_index;
+//	void successDownloadActionSet(string t_filename);
+//	void failDownloadActionSet(string t_filename);
 	
 	void resultGetCommonSetting(Json::Value result_data);
 	void resultGetAchieveList(Json::Value result_data);

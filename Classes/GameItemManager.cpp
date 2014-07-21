@@ -1758,6 +1758,8 @@ void FloatingCoinParent::startClearFloatCoin(float t_percent)
 	}
 	
 	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())));
+	if(t_coin_count <= 0)
+		t_coin_count = 1;
 	
 	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())), ccp(0,0), true));
 }

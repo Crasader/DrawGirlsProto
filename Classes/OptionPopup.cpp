@@ -210,6 +210,7 @@ bool OptionPopup::init()
 	
 	
 	
+	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);
 	//addChild(t_popup, 4);
 	
@@ -1092,7 +1093,6 @@ void OptionPopup::menuAction(CCObject* pSender)
 		StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_str.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		ment_label->setAnchorPoint(ccp(0.5f,0.5f));
 		addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(kMyLocalKey_optionSecretTitle), ment_label, [=](){is_menu_enable = true;}), kOP_Z_popup);
-		ment_label->setPosition(ccp(0,1));
 		
 		resetSafetyMenu();
 	}

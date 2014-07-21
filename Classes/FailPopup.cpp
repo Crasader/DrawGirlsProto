@@ -290,6 +290,7 @@ bool FailPopup::init()
 	main_menu->setTag(kMT_FP_main);
 	main_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(FailPopup::controlButtonAction), CCControlEventTouchUpInside);
 	main_menu->setPosition(ccp(347,45));
+	main_menu->setEnabled(false);
 	main_menu->setVisible(false);
 	main_case->addChild(main_menu, kZ_FP_menu);
 	main_menu->setTouchPriority(-190);
@@ -305,6 +306,7 @@ bool FailPopup::init()
 	replay_menu->setTag(kMT_FP_replay);
 	replay_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(FailPopup::controlButtonAction), CCControlEventTouchUpInside);
 	replay_menu->setPosition(ccp(132,45));
+	replay_menu->setEnabled(false);
 	replay_menu->setVisible(false);
 	main_case->addChild(replay_menu, kZ_FP_menu);
 	replay_menu->setTouchPriority(-190);
@@ -913,10 +915,14 @@ void FailPopup::closePopup()
 	if(is_end_popup_animation && is_saved_user_data)// && is_loaded_list)
 	{
 		main_menu->setVisible(true);
+		main_menu->setEnabled(true);
 		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
 		{
 			if(replay_menu)
+			{
 				replay_menu->setVisible(true);
+				replay_menu->setEnabled(true);
+			}
 		}
 		is_menu_enable = true;
 	}

@@ -379,6 +379,7 @@ public:
 //	void setGold(int t_gold, bool is_write = true);
 	
 	void setHeartTime(HeartTime* t_heart);
+	HeartTime* getHeartTime();
 	
 	int getKeepGold();
 	
@@ -952,6 +953,8 @@ public:
 	
 	long long user_index;
 	int total_card_cnt;
+	
+	int loading_tip_back_number;
 	
 private:
 	
