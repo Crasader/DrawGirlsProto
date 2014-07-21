@@ -2850,8 +2850,6 @@ bool StarGoldData::isChangedGoods()
 
 vector<CommandParam> StarGoldData::getChangeGoodsParam(jsonSelType t_callback)
 {
-	change_goods_callback = t_callback;
-	
 	vector<CommandParam> command_list;
 	command_list.clear();
 	
@@ -2883,7 +2881,7 @@ vector<CommandParam> StarGoldData::getChangeGoodsParam(jsonSelType t_callback)
 		
 		if(i == change_goods_list.size()-1)
 		{
-			command_list.push_back(CommandParam("exchange", param, json_selector(this, StarGoldData::resultChangeGoods)));
+			command_list.push_back(CommandParam("exchange", param, t_callback));
 		}
 		else
 		{
