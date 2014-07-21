@@ -157,14 +157,31 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	r_card_elemental_label->setAnchorPoint(ccp(0,0.5f));
 	target->addChild(r_card_elemental_label);
 	
-	string elemental_str = "성";
+	string elemental_str, elemental_filename;
+	int card_type = NSDS_GI(kSDS_CI_int1_type_i, card_number);
+	
+	if(card_type == 0)
+	{
+		elemental_str = "성";
+		elemental_filename = "diary_icon_light.png";
+	}
+	else if(card_type == 1)
+	{
+		elemental_str = "음";
+		elemental_filename = "diary_icon_shaded.png";
+	}
+	else if(card_type == 2)
+	{
+		elemental_str = "양";
+		elemental_filename = "diary_icon_sun.png";
+	}
 	
 	KSLabelTTF* r_elemental = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_elementalValue), elemental_str.c_str()), mySGD->getFont().c_str(), 9);
 	r_elemental->setColor(ccBLACK);
 	r_elemental->setPosition(ccp(45,80));
 	target->addChild(r_elemental);
 	
-	CCSprite* elemental_img = CCSprite::create("diary_icon_light.png");
+	CCSprite* elemental_img = CCSprite::create(elemental_filename.c_str());
 	elemental_img->setPosition(ccp(45,59));
 	target->addChild(elemental_img);
 	

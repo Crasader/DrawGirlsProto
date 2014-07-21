@@ -95,7 +95,7 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	title_label->setPosition(ccp(0, 80));
 	addChild(title_label);
 	
-	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 11.5f);
 	content_label->setPosition(ccp(0, 62));
 	addChild(content_label);
 	

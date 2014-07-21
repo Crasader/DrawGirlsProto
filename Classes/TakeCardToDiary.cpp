@@ -187,170 +187,130 @@ CCPoint TakeCardToDiary::getContentPosition(int t_tag)
 
 void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 {
-	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft);
-	r_stage_script->setPosition(ccp(25,152));
+	KSLabelTTF* r_stage_name = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 10);
+	r_stage_name->setPosition(ccp(32,273));
+	r_stage_name->setAnchorPoint(ccp(0,0.5f));
+	target->addChild(r_stage_name);
+	
+	
+	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 35), kCCTextAlignmentLeft);
+	r_stage_script->setPosition(ccp(25,261));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_script->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_script);
 	
 	
-	KSLabelTTF* r_stage_name = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft); //create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(180, 60), kCCTextAlignmentLeft);
-	r_stage_name->setColor(ccWHITE);
-	r_stage_name->enableOuterStroke(ccBLACK, 1);
-	r_stage_name->setPosition(ccp(32,109));
-	r_stage_name->setVerticalAlignment(kCCVerticalTextAlignmentTop);
-	r_stage_name->setAnchorPoint(ccp(0,1));
-	target->addChild(r_stage_name);
+	KSLabelTTF* r_touch = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_touch), mySGD->getFont().c_str(), 9);
+	r_touch->setColor(ccBLACK);
+	r_touch->setPosition(ccp(45,218));
+	target->addChild(r_touch);
 	
-	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(180, 100), kCCTextAlignmentLeft);
-	r_stage_profile->setPosition(ccp(32,95));
+	if(mySGD->isCardMorphing(card_number))
+	{
+		CCSprite* touch_img = CCSprite::create("diary_icon_touch.png");
+		touch_img->setPosition(ccp(45,197));
+		target->addChild(touch_img);
+	}
+	else
+	{
+		CCSprite* not_touch_img = CCSprite::create("diary_icon_lock.png");
+		not_touch_img->setPosition(ccp(45,197));
+		target->addChild(not_touch_img);
+	}
+	
+	KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
+	r_sound->setColor(ccBLACK);
+	r_sound->setPosition(ccp(95,218));
+	target->addChild(r_sound);
+	
+	if(NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number) > 0)
+	{
+		CCSprite* sound_img = CCSprite::create("diary_icon_sound.png");
+		sound_img->setPosition(ccp(95,197));
+		target->addChild(sound_img);
+	}
+	else
+	{
+		CCSprite* not_sound_img = CCSprite::create("diary_icon_lock.png");
+		not_sound_img->setPosition(ccp(95,197));
+		target->addChild(not_sound_img);
+	}
+	
+	
+	KSLabelTTF* r_profile_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_profile), mySGD->getFont().c_str(), 10);
+	r_profile_label->setPosition(ccp(32,170));
+	r_profile_label->setAnchorPoint(ccp(0,0.5f));
+	target->addChild(r_profile_label);
+	
+	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 50), kCCTextAlignmentLeft);
+	r_stage_profile->setPosition(ccp(25,159));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_profile->setAnchorPoint(ccp(0,1));
 	target->addChild(r_stage_profile);
 	
 	
+	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
+	r_card_elemental_label->setPosition(ccp(32,96));
+	r_card_elemental_label->setAnchorPoint(ccp(0,0.5f));
+	target->addChild(r_card_elemental_label);
 	
-	float mul_value = 0.88f;
-	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-	int level_number = NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+	string elemental_str, elemental_filename;
+	int card_type = NSDS_GI(kSDS_CI_int1_type_i, card_number);
 	
-	int position_index = 1;
-	
-	int stage_card_count = NSDS_GI(stage_number, kSDS_SI_cardCount_i);
-	target->setTag(stage_card_count);
-	
-	random_device rd;
-	default_random_engine e1(rd());
-	uniform_int_distribution<int> uniform_dist(-10, 10);
-	uniform_int_distribution<int> uniform_dist_x(8, 82);
-	uniform_int_distribution<int> uniform_dist_y(8, 112);
-	uniform_int_distribution<int> uniform_dist_cnt(1, 2);
-	uniform_int_distribution<int> uniform_dist_type(1, 3);
-	uniform_int_distribution<int> uniform_dist_rotate(-90,90);
-	
-	for(int i=1;i<=stage_card_count;i++)
+	if(card_type == 0)
 	{
-		if(i == level_number)
-			continue;
-		
-		int check_card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, i);
-		
-		int rotation_value;
-		CCPoint position_value;
-		
-		if(position_index == 1)
-		{
-			rotation_value = uniform_dist(e1);
-			position_value = ccpAdd(getContentPosition(kTCTD_MT_second), ccp(0,uniform_dist(e1)));
-		}
-		else if(position_index == 2)
-		{
-			rotation_value = uniform_dist(e1);
-			position_value = ccpAdd(getContentPosition(kTCTD_MT_third), ccp(0,uniform_dist(e1)));
-		}
-		else
-		{
-			rotation_value = uniform_dist(e1);
-			position_value = ccpAdd(getContentPosition(kTCTD_MT_forth), ccp(0,uniform_dist(e1)));
-		}
-		
-		if(mySGD->isHasGottenCards(check_card_number) != 0)
-		{
-			CCSprite* second_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png", check_card_number)->getCString());
-			second_img->setScale(mul_value);
-			second_img->setRotation(rotation_value);
-			second_img->setPosition(position_value);
-			target->addChild(second_img);
-			
-			CCSprite* img_case = CCSprite::create("diary_frame.png");
-			img_case->setPosition(ccp(second_img->getContentSize().width/2.f, second_img->getContentSize().height/2.f-4.f));
-			second_img->addChild(img_case);
-			
-			int tape_cnt = uniform_dist_cnt(e1);
-			for(int j=0;j<tape_cnt;j++)
-			{
-				int tape_type = uniform_dist_type(e1);
-				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
-				bool is_x = uniform_dist_cnt(e1) == 1;
-				bool is_first = uniform_dist_cnt(e1) == 1;
-				if(is_x)
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
-					else
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
-				}
-				else
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
-					else
-						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
-				}
-				img_case->addChild(tape_img);
-				tape_img->setRotation(uniform_dist_rotate(e1));
-			}
-		}
-		else
-		{
-			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
-			
-			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
-			no_label->disableOuterStroke();
-			no_label->setColor(ccc3(60, 60, 60));
-			no_label->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f));
-			no_img->addChild(no_label);
-			
-			no_img->setScale(mul_value);
-			no_img->setRotation(rotation_value);
-			no_img->setPosition(position_value);
-			target->addChild(no_img);
-			
-			CCSprite* img_case = CCSprite::create("diary_frame.png");
-			img_case->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f-4.f));
-			no_img->addChild(img_case);
-			
-			int tape_cnt = uniform_dist_cnt(e1);
-			for(int j=0;j<tape_cnt;j++)
-			{
-				int tape_type = uniform_dist_type(e1);
-				CCSprite* tape_img = CCSprite::create(CCString::createWithFormat("diary_tape%d.png", tape_type)->getCString());
-				bool is_x = uniform_dist_cnt(e1) == 1;
-				bool is_first = uniform_dist_cnt(e1) == 1;
-				if(is_x)
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 8));
-					else
-						tape_img->setPosition(ccp(uniform_dist_x(e1), 112));
-				}
-				else
-				{
-					if(is_first)
-						tape_img->setPosition(ccp(8, uniform_dist_y(e1)));
-					else
-						tape_img->setPosition(ccp(82, uniform_dist_y(e1)));
-				}
-				img_case->addChild(tape_img);
-				tape_img->setRotation(uniform_dist_rotate(e1));
-			}
-		}
-		position_index++;
+		elemental_str = "성";
+		elemental_filename = "diary_icon_light.png";
+	}
+	else if(card_type == 1)
+	{
+		elemental_str = "음";
+		elemental_filename = "diary_icon_shaded.png";
+	}
+	else if(card_type == 2)
+	{
+		elemental_str = "양";
+		elemental_filename = "diary_icon_sun.png";
 	}
 	
-	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat("STAGE %d", stage_number)->getCString(), mySGD->getFont().c_str(), 8);
+	
+	KSLabelTTF* r_elemental = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_elementalValue), elemental_str.c_str()), mySGD->getFont().c_str(), 9);
+	r_elemental->setColor(ccBLACK);
+	r_elemental->setPosition(ccp(45,80));
+	target->addChild(r_elemental);
+	
+	CCSprite* elemental_img = CCSprite::create(elemental_filename.c_str());
+	elemental_img->setPosition(ccp(45,59));
+	target->addChild(elemental_img);
+
+	
+	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+	
+	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
 	r_stage_label->setAnchorPoint(ccp(0,0.5f));
-	r_stage_label->setPosition(ccp(138, 287));
+	r_stage_label->setPosition(ccp(136, 288));
 	r_stage_label->setColor(ccBLACK);
-	r_stage_label->setHorizontalAlignment(kCCTextAlignmentCenter);
-	r_stage_label->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
 	target->addChild(r_stage_label);
 }
 
 void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 {
+	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
+	card_number_label->setColor(ccBLACK);
+	card_number_label->disableOuterStroke();
+	card_number_label->setAnchorPoint(ccp(0,0.5f));
+	card_number_label->setPosition(ccp(38,295));
+	target->addChild(card_number_label);
+	
+	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
+	take_cnt_label->setColor(ccBLACK);
+	take_cnt_label->disableOuterStroke();
+	take_cnt_label->setAnchorPoint(ccp(0,0.5f));
+	take_cnt_label->setPosition(ccp(38,28));
+	target->addChild(take_cnt_label);
+	
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(1.5f/myDSH->screen_convert_rate);
 	

@@ -847,8 +847,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
 	ko->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 	ko->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
-	ko->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
-	ko->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	ko->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
+	ko->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
+	ko->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
 	ko->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
 	ko->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
 	ko->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
@@ -1409,6 +1410,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
 	ko->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 	
+	ko->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
@@ -1770,8 +1773,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
 	en->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 	en->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
-	en->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
-	en->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	en->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
+	en->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
+	en->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
 	en->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
 	en->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
 	en->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
@@ -2316,6 +2320,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
 	en->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 	
+	en->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
+	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
 //	en->setObject(CCString::create("This is a game in which you\nhave to gain as much area as\npossible using up, down, left,\nand right gestures."), kMyLocalKey_tutorial1);
@@ -2686,8 +2692,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("아주 특별한 할인혜택의 기회가 있으니"), kMyLocalKey_mileageMent2);
 	ja->setObject(CCString::create("혜택을 꼭! 확인해주세요."), kMyLocalKey_mileageMent3);
 	ja->setObject(CCString::create("단 한번의 구매 찬스"), kMyLocalKey_eventShopTitle);
-	ja->setObject(CCString::create("당신만을 위한 특별한 기회! %s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent1);
-	ja->setObject(CCString::create("※ 이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent2);
+	ja->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
+	ja->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
+	ja->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
 	ja->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
 	ja->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
 	ja->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
@@ -3244,6 +3251,8 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("보유장수 %d"), kMyLocalKey_cardTakeCnt);
 	ja->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
+	
+	ja->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

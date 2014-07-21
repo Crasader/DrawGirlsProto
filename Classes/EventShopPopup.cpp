@@ -21,6 +21,7 @@
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
+#include "LabelTTFMarquee.h"
 
 enum EventShopProductCode
 {
@@ -57,27 +58,56 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	suction->setTouchEnabled(true);
 	
 	m_container = CCNode::create();
-	m_container->setPosition(ccp(240,160-22.f));
+	m_container->setPosition(ccp(240,160-14.f));
 	addChild(m_container);
 	
-	back_case = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0,0,50,50), CCRectMake(24,24,2,2));
-	back_case->setContentSize(CCSizeMake(480,280));
+	back_case = CCSprite::create("mainpopup2_back.png");
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventShopTitle), mySGD->getFont().c_str(), 15);
-	title_label->setColor(ccc3(255, 170, 20));
-	title_label->setAnchorPoint(ccp(0,0.5));
-	title_label->setPosition(ccp(20,256));
-	back_case->addChild(title_label);
+	CCScale9Sprite* title_back = CCScale9Sprite::create("title_tab.png", CCRectMake(0,0,90,35), CCRectMake(44, 17, 2, 1));
+	title_back->setContentSize(CCSizeMake(150, 35));
+	title_back->setPosition(ccp(90,back_case->getContentSize().height-13));
+	back_case->addChild(title_back);
 	
-	CCScale9Sprite* main_inner = CCScale9Sprite::create("mainpopup_front.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	main_inner->setContentSize(CCSizeMake(445, 228));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventShopTitle), mySGD->getFont().c_str(), 14);
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	title_back->addChild(title_label);
+	
+	
+	CCScale9Sprite* tip_marquee_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	tip_marquee_back->setContentSize(CCSizeMake(278, 26));
+	tip_marquee_back->setPosition(ccp(back_case->getContentSize().width*0.655f, back_case->getContentSize().height+2-34));
+	back_case->addChild(tip_marquee_back);
+	
+	string sale_percent_string = NSDS_GS(kSDS_GI_shopEventRuby_int1_sale_s, 0);
+	
+	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
+	tipMaquee->addText((string("<font size=12>") + myLoc->getLocalForKey(kMyLocalKey_eventShopMent1) + "</font>").c_str());
+	tipMaquee->addText((string("<font size=12>") + ccsf(myLoc->getLocalForKey(kMyLocalKey_eventShopMent2), sale_percent_string.c_str()) + "</font>").c_str());
+	tipMaquee->addText((string("<font size=12>") + ccsf(myLoc->getLocalForKey(kMyLocalKey_eventShopMent3), sale_percent_string.c_str()) + "</font>").c_str());
+	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
+	tipMaquee->startMarquee();
+	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
+	tip_marquee_back->addChild(tipMaquee);
+	
+	CCSprite* tipBack = CCSprite::create("tip.png");
+	tipBack->setPosition(ccp(back_case->getContentSize().width*0.417f, back_case->getContentSize().height+2-34));
+	back_case->addChild(tipBack);
+	KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
+	//	tipLbl->disableOuterStroke();
+	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f);
+	tipBack->addChild(tipLbl);
+	
+	
+	
+	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	main_inner->setContentSize(CCSizeMake(424, 204));
 	main_inner->setPosition(back_case->getContentSize().width/2.f, back_case->getContentSize().height*0.45f);
 	back_case->addChild(main_inner);
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(touch_priority);
-	close_menu->setPosition(ccp(453,257));
+	close_menu->setPosition(ccpFromSize(back_case->getContentSize()) + ccp(-20,-12));
 	close_menu->setFunction([=](CCObject* sender)
 							{
 								if(!this->is_menu_enable)
@@ -93,12 +123,10 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 							});
 	back_case->addChild(close_menu);
 	
-	string sale_percent_string = NSDS_GS(kSDS_GI_shopEventRuby_int1_sale_s, 0);
-	
-	KSLabelTTF* sub_ment1 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_eventShopMent1), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 11);
-	sub_ment1->setAnchorPoint(ccp(0,0.5f));
-	sub_ment1->setPosition(ccpAdd(title_label->getPosition(), ccp(title_label->getContentSize().width + 20,0)));
-	back_case->addChild(sub_ment1);
+//	KSLabelTTF* sub_ment1 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_eventShopMent1), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 11);
+//	sub_ment1->setAnchorPoint(ccp(0,0.5f));
+//	sub_ment1->setPosition(ccpAdd(title_label->getPosition(), ccp(title_label->getContentSize().width + 20,0)));
+//	back_case->addChild(sub_ment1);
 	
 	string filename = "shop_ruby%d.png";
 	
@@ -114,8 +142,9 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		
 		CCSprite* inner = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
 		
-		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-		ruby_label->setPosition(ccp(inner->getContentSize().width/2.f, inner->getContentSize().height/2.f-7));
+		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		ruby_label->setAnchorPoint(ccp(0.5f,0.5f));
+		ruby_label->setPosition(ccpFromSize(inner->getContentSize()/2.f) + ccp(0,-7));
 		inner->addChild(ruby_label);
 		
 		content_node->addChild(inner, 2);
@@ -127,18 +156,18 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		if(!sale_str.empty())
 		{
 			CCSprite* tab = CCSprite::create("shop_tab.png");
-			tab->setPosition(ccp(32,33));
+			tab->setPosition(ccp(-42,35.5f));
 			content_node->addChild(tab, 4);
 			
-			CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 10);
-			sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+3));
+			CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 14);
+			sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+1));
 			tab->addChild(sale_label);
 		}
 		
 		if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
 		{
-			CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1).c_str(), mySGD->getFont().c_str(), 12);
-			won_label->setPosition(ccp(0, -33));
+			CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1).c_str(), mySGD->getFont().c_str(), 14);
+			won_label->setPosition(ccp(0, -27));
 			content_node->addChild(won_label, 3);
 		}
 //		else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
@@ -174,10 +203,10 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	
 	
-	KSLabelTTF* sub_ment2 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_eventShopMent2), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 9);
-	sub_ment2->setAnchorPoint(ccp(1.f,0.5f));
-	sub_ment2->setPosition(ccp(back_case->getContentSize().width-20,15));
-	back_case->addChild(sub_ment2);
+//	KSLabelTTF* sub_ment2 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_eventShopMent2), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 9);
+//	sub_ment2->setAnchorPoint(ccp(1.f,0.5f));
+//	sub_ment2->setPosition(ccp(back_case->getContentSize().width-20,15));
+//	back_case->addChild(sub_ment2);
 	
 	
 	

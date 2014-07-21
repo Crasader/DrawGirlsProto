@@ -160,34 +160,40 @@ CCNode* LoadingTipScene::getMissionTipImage()
 //	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
 //	right_curtain->runAction(right_in);
 	
-	CCScale9Sprite* mission_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-	mission_back->setContentSize(CCSizeMake(320, 200));
+	CCSprite* mission_back = CCSprite::create("popup_small_back.png");
 	mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
 	loading_tip_back->addChild(mission_back);
 	
-	CCScale9Sprite* inner_back = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-	inner_back->setContentSize(CCSizeMake(mission_back->getContentSize().width-15, 100));
-	inner_back->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+10));
-	mission_back->addChild(inner_back);
-	
-	CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
-	mission_img->setContentSize(CCSizeMake(65, 22));
-	mission_img->setPosition(ccp(10+mission_img->getContentSize().width/2.f,mission_back->getContentSize().height-25));
-	mission_back->addChild(mission_img);
-	
 	KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
 	mission_img_label->setColor(ccc3(255, 170, 20));
-	mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
-	mission_img->addChild(mission_img_label);
+	mission_img_label->setPosition(ccp(mission_back->getContentSize().width/2.f-85, mission_back->getContentSize().height-35));
+	mission_back->addChild(mission_img_label);
 	
-	ok_img = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("button_ok_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
-	ok_img->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.18f));
+	CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	inner_back->setContentSize(CCSizeMake(mission_back->getContentSize().width-50, 75));
+	inner_back->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
+	mission_back->addChild(inner_back);
+	
+	ok_img = CCSprite::create("subbutton_purple4.png");// KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("button_ok_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
+	ok_img->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.2f+4));
 	mission_back->addChild(ok_img);
 	ok_img->setVisible(false);
 	
-	CCSprite* n_ok = CCSprite::create(CCString::createWithFormat("button_ok_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	ok_label->disableOuterStroke();
+	ok_label->setPosition(ccpFromSize(ok_img->getContentSize()/2.f));
+	ok_img->addChild(ok_label);
+	
+	CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 0.9f, 1.1f);
+	CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 1.1f, 0.9f);
+	CCSequence* t_seq = CCSequence::create(t_scale1, t_scale2, NULL);
+	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+	
+	ok_img->runAction(t_repeat);
+	
+	CCSprite* n_ok = CCSprite::create("subbutton_purple4.png");//CCString::createWithFormat("button_ok_%s.png", myLoc->getLocalCode()->getCString())->getCString());
 	n_ok->setOpacity(0);
-	CCSprite* s_ok = CCSprite::create(CCString::createWithFormat("button_ok_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+	CCSprite* s_ok = CCSprite::create("subbutton_purple4.png");//CCString::createWithFormat("button_ok_%s.png", myLoc->getLocalCode()->getCString())->getCString());
 	s_ok->setOpacity(0);
 	
 	CCMenuItemLambda* ok_item = CCMenuItemSpriteLambda::create(n_ok, s_ok, [=](CCObject* sender)
@@ -197,7 +203,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																   onMinimumTime();
 															   });
 	ok_menu = CCMenuLambda::createWithItem(ok_item);
-	ok_menu->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.18f));
+	ok_menu->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.2f+4));
 	mission_back->addChild(ok_menu);
 	ok_menu->setVisible(false);
 	ok_menu->setTouchPriority(-600);
@@ -211,18 +217,19 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	int stage_number = mySD->getSilType();
 	int mission_type = NSDS_GI(stage_number, kSDS_SI_missionType_i);
 	
-	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionTitle0+mission_type)), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionTitle0+mission_type)), mySGD->getFont().c_str(), 12);
 	title_img->setColor(ccc3(255, 170, 20));
-	title_img->setAnchorPoint(ccp(0,0.5f));
-	title_img->setPosition(ccp(mission_img->getPositionX() + mission_img->getContentSize().width/2.f+10, mission_img->getPositionY()));
+	title_img->setAnchorPoint(ccp(0.5f,0.5f));
+	mission_img_label->setPositionX(mission_img_label->getPositionX() - 2.5f - title_img->getContentSize().width/2.f);
+	title_img->setPosition(mission_img_label->getPosition() + ccp(mission_img_label->getContentSize().width/2.f + 5 + title_img->getContentSize().width/2.f, 0));
 	mission_back->addChild(title_img);
 	
 	if(mission_type == kCLEAR_bossLifeZero)
 	{
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-		main_ment->setOldAnchorPoint();
-		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
-		mission_back->addChild(main_ment);
+		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
+		inner_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -235,14 +242,14 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-		t_condition_label->setOldAnchorPoint();
-		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-		mission_back->addChild(t_condition_label);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+		inner_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-		main_ment->setOldAnchorPoint();
-		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-		mission_back->addChild(main_ment);
+		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+		inner_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -256,14 +263,14 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-		t_condition_label->setOldAnchorPoint();
-		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-		mission_back->addChild(t_condition_label);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+		inner_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-		main_ment->setOldAnchorPoint();
-		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-		mission_back->addChild(main_ment);
+		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+		inner_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -276,14 +283,14 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-		t_condition_label->setOldAnchorPoint();
-		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-		mission_back->addChild(t_condition_label);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+		inner_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-		main_ment->setOldAnchorPoint();
-		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-		mission_back->addChild(main_ment);
+		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+		inner_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -324,14 +331,14 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-		t_condition_label->setOldAnchorPoint();
-		t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-		mission_back->addChild(t_condition_label);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+		inner_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-		main_ment->setOldAnchorPoint();
-		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-		mission_back->addChild(main_ment);
+		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+		inner_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -342,9 +349,9 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	else if(mission_type == kCLEAR_sequenceChange)
 	{
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-		main_ment->setOldAnchorPoint();
-		main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
-		mission_back->addChild(main_ment);
+		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,0));
+		inner_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -436,69 +443,51 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 //		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
 //		right_curtain->runAction(right_seq);
 		
-		CCScale9Sprite* mission_back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		mission_back->setContentSize(CCSizeMake(320, 200));
+		CCSprite* mission_back = CCSprite::create("popup_small_back.png");
 		mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
 		loading_tip_back->addChild(mission_back);
 		
-		CCScale9Sprite* inner_back = CCScale9Sprite::create("mainpopup_pupple4.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
-		inner_back->setContentSize(CCSizeMake(mission_back->getContentSize().width-15, 100));
-		inner_back->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+10));
-		mission_back->addChild(inner_back);
-		
-		CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));
-		mission_img->setContentSize(CCSizeMake(65, 22));
-		mission_img->setPosition(ccp(10+mission_img->getContentSize().width/2.f,mission_back->getContentSize().height-25));
-		mission_back->addChild(mission_img);
-		
 		KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
 		mission_img_label->setColor(ccc3(255, 170, 20));
-		mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
-		mission_img->addChild(mission_img_label);
+		mission_img_label->setPosition(ccp(mission_back->getContentSize().width/2.f-85, mission_back->getContentSize().height-35));
+		mission_back->addChild(mission_img_label);
+		
+		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		inner_back->setContentSize(CCSizeMake(mission_back->getContentSize().width-50, 75));
+		inner_back->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
+		mission_back->addChild(inner_back);
 		
 		int stage_number = mySD->getSilType();
 		int mission_type = NSDS_GI(stage_number, kSDS_SI_missionType_i);
 		
-		KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionTitle0+mission_type)), mySGD->getFont().c_str(), 15);
+		KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionTitle0+mission_type)), mySGD->getFont().c_str(), 12);
 		title_img->setColor(ccc3(255, 170, 20));
-		title_img->setAnchorPoint(ccp(0,0.5f));
-		title_img->setPosition(ccp(mission_img->getPositionX() + mission_img->getContentSize().width/2.f+10, mission_img->getPositionY()));
+		title_img->setAnchorPoint(ccp(0.5f,0.5f));
+		mission_img_label->setPositionX(mission_img_label->getPositionX() - 2.5f - title_img->getContentSize().width/2.f);
+		title_img->setPosition(mission_img_label->getPosition() + ccp(mission_img_label->getContentSize().width/2.f + 5 + title_img->getContentSize().width/2.f, 0));
 		mission_back->addChild(title_img);
 		
 		
 		if(mission_type == kCLEAR_bossLifeZero)
 		{
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-			main_ment->setOldAnchorPoint();
-			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
-			mission_back->addChild(main_ment);
-			
-//			CCLabelTTF* main1_ment = CCLabelTTF::create("공격으로 보스몹의 에너지를", mySGD->getFont().c_str(), 17);
-//			main1_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+18));
-//			mission_back->addChild(main1_ment);
-//			
-//			CCLabelTTF* main2_ment = CCLabelTTF::create("모두 소진시키세요.", mySGD->getFont().c_str(), 17);
-//			main2_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-7));
-//			mission_back->addChild(main2_ment);
-//			
-//			CCLabelTTF* sub_ment = CCLabelTTF::create("보스의 에너지가 다 소진되어도 게임은 계속...", mySGD->getFont().c_str(), 12);
-//			sub_ment->setColor(ccc3(125, 125, 125));
-//			sub_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-37));
-//			mission_back->addChild(sub_ment);
+			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
+			inner_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_subCumberCatch)
 		{
 			int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
-
+			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-			t_condition_label->setOldAnchorPoint();
-			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-			mission_back->addChild(t_condition_label);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+			inner_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-			main_ment->setOldAnchorPoint();
-			mission_back->addChild(main_ment);
+			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+			inner_back->addChild(main_ment);
 			
 //			CCSprite* catch_count_img = CCSprite::create("mission_catch_count.png");
 //			catch_count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-30, mission_back->getContentSize().height/2.f+13));
@@ -517,56 +506,30 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int percent_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
 			int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
-
+			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-			t_condition_label->setOldAnchorPoint();
-			mission_back->addChild(t_condition_label);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+			inner_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-			main_ment->setOldAnchorPoint();
-			mission_back->addChild(main_ment);
-			
-//			CCSprite* count_img = CCSprite::create("mission_count.png");
-//			count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-40, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(count_img);
-//			
-//			CCLabelTTF* count_label = CCLabelTTF::create(CCString::createWithFormat("%d%% x %d", percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 23);
-//			count_label->setColor(ccc3(255, 240, 0));
-//			count_label->setPosition(ccp(mission_back->getContentSize().width/2.f+60, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(count_label);
-//			
-//			CCLabelTTF* main_ment = CCLabelTTF::create(CCString::createWithFormat("한번에 %d%%이상 영역을 %d번 획득하세요!", percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 17);
-//			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-23));
-//			mission_back->addChild(main_ment);
+			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+			inner_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_itemCollect)
 		{
 			int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
-
+			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-			t_condition_label->setOldAnchorPoint();
-			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-			mission_back->addChild(t_condition_label);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+			inner_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-			main_ment->setOldAnchorPoint();
-			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-			mission_back->addChild(main_ment);
-			
-//			CCSprite* count_img = CCSprite::create("mission_count2.png");
-//			count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-30, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(count_img);
-//			
-//			CCLabelTTF* count_label = CCLabelTTF::create(CCString::createWithFormat("%d개", count_value)->getCString(), mySGD->getFont().c_str(), 23);
-//			count_label->setColor(ccc3(255, 240, 0));
-//			count_label->setPosition(ccp(mission_back->getContentSize().width/2.f+40, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(count_label);
-//			
-//			CCLabelTTF* main_ment = CCLabelTTF::create(CCString::createWithFormat("%d개의 아이템을 획득하세요.", count_value)->getCString(), mySGD->getFont().c_str(), 17);
-//			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-23));
-//			mission_back->addChild(main_ment);
+			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+			inner_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_perfect)
 		{
@@ -593,61 +556,23 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		else if(mission_type == kCLEAR_timeLimit)
 		{
 			int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
-
+			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-			t_condition_label->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+25));
-			t_condition_label->setOldAnchorPoint();
-			mission_back->addChild(t_condition_label);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
+			inner_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-10));
-			main_ment->setOldAnchorPoint();
-			mission_back->addChild(main_ment);
-			
-//			CCSprite* count_img = CCSprite::create("mission_time.png");
-//			count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-30, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(count_img);
-//			
-//			CCLabelTTF* count_label = CCLabelTTF::create(CCString::createWithFormat("%d초", sec_value)->getCString(), mySGD->getFont().c_str(), 23);
-//			count_label->setColor(ccc3(255, 240, 0));
-//			count_label->setPosition(ccp(mission_back->getContentSize().width/2.f+40, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(count_label);
-//			
-//			CCLabelTTF* main_ment = CCLabelTTF::create("정해진 시간 내 클리어하세요.", mySGD->getFont().c_str(), 17);
-//			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-23));
-//			mission_back->addChild(main_ment);
+			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
+			inner_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_sequenceChange)
 		{
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
-			mission_back->addChild(main_ment);
-			main_ment->setOldAnchorPoint();
-//			CCLabelTTF* main1_ment = CCLabelTTF::create("게임 중 나오는 ", mySGD->getFont().c_str(), 17);
-//			main1_ment->setAnchorPoint(ccp(1,0.5));
-//			main1_ment->setPosition(ccp(mission_back->getContentSize().width/2.f-13, mission_back->getContentSize().height/2.f+20));
-//			mission_back->addChild(main1_ment);
-//			
-//			for(int i=0;i<6;i++)
-//			{
-//				CCSprite* t_img = CCSprite::create(CCString::createWithFormat("exchange_%d_act.png", i+1)->getCString());
-//				t_img->setPosition(ccp(main1_ment->getPositionX() + 9 + 18*i, mission_back->getContentSize().height/2.f+20));
-//				mission_back->addChild(t_img);
-//			}
-//			
-//			CCLabelTTF* main2_ment = CCLabelTTF::create("를", mySGD->getFont().c_str(), 17);
-//			main2_ment->setAnchorPoint(ccp(0,0.5));
-//			main2_ment->setPosition(ccp(main1_ment->getPositionX() + 18*6, mission_back->getContentSize().height/2.f+20));
-//			mission_back->addChild(main2_ment);
-//			
-//			CCLabelTTF* main3_ment = CCLabelTTF::create("순서대로 획득하세요!", mySGD->getFont().c_str(), 17);
-//			main3_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-6));
-//			mission_back->addChild(main3_ment);
-//			
-//			CCLabelTTF* sub_ment = CCLabelTTF::create("이 미션에서는 1단계 카드를 얻을 수 없어요!", mySGD->getFont().c_str(), 12);
-//			sub_ment->setColor(ccc3(125, 125, 125));
-//			sub_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-33));
-//			mission_back->addChild(sub_ment);
+			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
+			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,0));
+			inner_back->addChild(main_ment);
 		}
 		
 //		loading_tip_node->addChild(KSGradualValue<int>::create(255, 0, 0.2f, [=](int t)
