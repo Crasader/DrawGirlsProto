@@ -161,35 +161,12 @@ void* StageImgLoader::t_function2(void *data)
 		
 		curl_global_cleanup();
 		
-		if((int)data == 0)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet1), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 1)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet2), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 2)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet3), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 3)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet4), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 4)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::successActionSet5), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		
 		//		while (lchunk.size!=0) {
 		//			usleep(10000);
 		//		}
 	}while (0);
 	
-	if(mySIL->downloading_list[(int)data].is_fail)
-	{
-		if((int)data == 0)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet1), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 1)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet2), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 2)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet3), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 3)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet4), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-		else if((int)data == 4)
-			CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(StageImgLoader::failActionSet5), StageImgLoader::sharedInstance(), 0, 0, 0, false);
-	}
+	mySIL->downloading_list[(int)data].is_end = true;
 	
 	return NULL;
 }
@@ -223,62 +200,6 @@ void StageImgLoader::successAction()
 	}
 }
 
-void StageImgLoader::successActionSet1()
-{
-	unschedule(schedule_selector(StageImgLoader::successActionSet1));
-	lchunk_list[0].size = 0;
-	
-	CCLOG("success %s", downloading_list[0].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::successActionSet2()
-{
-	unschedule(schedule_selector(StageImgLoader::successActionSet2));
-	lchunk_list[1].size = 0;
-	
-	CCLOG("success %s", downloading_list[1].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::successActionSet3()
-{
-	unschedule(schedule_selector(StageImgLoader::successActionSet3));
-	lchunk_list[2].size = 0;
-	
-	CCLOG("success %s", downloading_list[2].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::successActionSet4()
-{
-	unschedule(schedule_selector(StageImgLoader::successActionSet4));
-	lchunk_list[3].size = 0;
-	
-	CCLOG("success %s", downloading_list[3].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::successActionSet5()
-{
-	unschedule(schedule_selector(StageImgLoader::successActionSet5));
-	lchunk_list[4].size = 0;
-	
-	CCLOG("success %s", downloading_list[4].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-
 void StageImgLoader::failAction()
 {
 	unschedule(schedule_selector(StageImgLoader::failAction));
@@ -286,79 +207,6 @@ void StageImgLoader::failAction()
 	
 	if(target_fail)
 		(target_fail->*delegate_fail)();
-}
-
-void StageImgLoader::failActionSet1()
-{
-	unschedule(schedule_selector(StageImgLoader::failActionSet1));
-	lchunk_list[0].size = 0;
-	
-	CCLOG("fail %s", downloading_list[0].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::failActionSet2()
-{
-	unschedule(schedule_selector(StageImgLoader::failActionSet2));
-	lchunk_list[1].size = 0;
-	
-	CCLOG("fail %s", downloading_list[1].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::failActionSet3()
-{
-	unschedule(schedule_selector(StageImgLoader::failActionSet3));
-	lchunk_list[2].size = 0;
-	
-	CCLOG("fail %s", downloading_list[2].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::failActionSet4()
-{
-	unschedule(schedule_selector(StageImgLoader::failActionSet4));
-	lchunk_list[3].size = 0;
-	
-	CCLOG("fail %s", downloading_list[3].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-void StageImgLoader::failActionSet5()
-{
-	unschedule(schedule_selector(StageImgLoader::failActionSet5));
-	lchunk_list[4].size = 0;
-	
-	CCLOG("fail %s", downloading_list[4].download_filename.c_str());
-	
-	end_cnt++;
-	if(total_download_cnt == end_cnt)
-		endDownloadSet();
-}
-
-void StageImgLoader::endDownloadSet()
-{
-	CCLOG("endDownloadSet");
-	
-	for(int i=0;i<total_download_cnt;i++)
-	{
-		if(downloading_list[i].is_fail)
-		{
-			downloading_list[i].fail_func(downloading_list[i].download_filename);
-		}
-		else
-		{
-			downloading_list[i].success_func(downloading_list[i].download_filename);
-		}
-	}
 }
 
 StageImgLoader* StageImgLoader::sharedInstance()
@@ -383,23 +231,27 @@ void StageImgLoader::downloadImg( string t_url, int t_size, string t_down_filena
 	startDownload(t_url, t_size);
 }
 
-void StageImgLoader::downloadImgSet(vector<DownloadImgInfo>& t_list)
+void StageImgLoader::downloadImg(DownloadImgInfo t_info, int t_index)
 {
-	total_download_cnt = t_list.size();
+	downloading_list[t_index].download_url = t_info.download_url;
+	downloading_list[t_index].download_size = t_info.download_size;
+	downloading_list[t_index].download_filename = t_info.download_filename;
+	downloading_list[t_index].is_end = t_info.is_end;
+	downloading_list[t_index].is_fail = t_info.is_fail;
 	
-	for(int i=0;i<t_list.size();i++)
+	lchunk_list[t_index].size = 0;
+	lchunk_list[t_index].filename = (writeable_path+downloading_list[t_index].download_filename).c_str();
+	lchunk_list[t_index].stream = NULL;
+	
+	pthread_t p_thread;
+	int thr_id;
+	// 쓰레드 생성 아규먼트로 1 을 넘긴다.
+	thr_id = pthread_create(&p_thread, NULL, t_function2, (void *)t_index);
+	if (thr_id < 0)
 	{
-		downloading_list[i].download_url = t_list[i].download_url;
-		downloading_list[i].download_size = t_list[i].download_size;
-		downloading_list[i].download_filename = t_list[i].download_filename;
-		downloading_list[i].success_func = t_list[i].success_func;
-		downloading_list[i].fail_func = t_list[i].fail_func;
-		downloading_list[i].is_fail = t_list[i].is_fail;
-		
-		CCLOG("download %s", t_list[i].download_filename.c_str());
+		perror("thread create error : ");
+		exit(0);
 	}
-	
-	startDownloadSet();
 }
 
 void StageImgLoader::removeTD()
@@ -432,27 +284,6 @@ void StageImgLoader::startDownload( string t_url, int t_size )
 	}
 }
 
-void StageImgLoader::startDownloadSet()
-{
-	end_cnt = 0;
-	for(int i=0;i<total_download_cnt;i++)
-	{
-		lchunk_list[i].size = 0;
-		lchunk_list[i].filename = (writeable_path+downloading_list[i].download_filename).c_str();
-		lchunk_list[i].stream = NULL;
-		
-		pthread_t p_thread;
-		int thr_id;
-		// 쓰레드 생성 아규먼트로 1 을 넘긴다.
-		thr_id = pthread_create(&p_thread, NULL, t_function2, (void *)i);
-		if (thr_id < 0)
-		{
-			perror("thread create error : ");
-			exit(0);
-		}
-	}
-}
-
 void StageImgLoader::myInit()
 {
 	my_savedata = SaveData::sharedObject();
@@ -475,8 +306,7 @@ void StageImgLoader::myInit()
 		t_info.download_url = "";
 		t_info.download_size = 0;
 		t_info.download_filename = "";
-		t_info.success_func = nullptr;
-		t_info.fail_func = nullptr;
+		t_info.is_end = true;
 		t_info.is_fail = false;
 		
 		downloading_list.push_back(t_info);

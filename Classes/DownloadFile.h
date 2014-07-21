@@ -26,7 +26,7 @@ public:
 	
 	bool operator==(const DownloadFile& right) const
 	{
-		return img == right.img && filename == right.filename;
+		return /*img == right.img && */filename == right.filename;
 	}
 };
 

@@ -29,7 +29,10 @@ void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 	t_df.img = result_data[t_key.c_str()]["image"].asString().c_str();
 	t_df.filename = CCSTR_CWF("puzzle%d_%s.png", puzzle_number, t_key.c_str())->getCString();
 	t_df.key = t_key.c_str();
-	df_list.push_back(t_df);
+	
+	auto iter = find(df_list.begin(), df_list.end(), t_df);
+	if(iter == df_list.end())
+		df_list.push_back(t_df);
 	// ================================
 }
 
@@ -261,7 +264,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 						t_sf.img = t_imgInfo["img"].asString().c_str();
 						t_sf.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
 						t_sf.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
-						sf_list.push_back(t_sf);
+						
+						auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+						if(iter == sf_list.end())
+							sf_list.push_back(t_sf);
 						// ================================
 						
 						CopyFile t_cf;
@@ -297,7 +303,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 							t_sf.img = t_detail["img"].asString().c_str();
 							t_sf.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 							t_sf.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
-							sf_list.push_back(t_sf);
+							
+							auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+							if(iter == sf_list.end())
+								sf_list.push_back(t_sf);
 							// ================================
 						}
 						
@@ -348,7 +357,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 							t_sf.img = t_silImgInfo["img"].asString().c_str();
 							t_sf.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
 							t_sf.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
-							sf_list.push_back(t_sf);
+							
+							auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+							if(iter == sf_list.end())
+								sf_list.push_back(t_sf);
 							// ================================
 						}
 					}
@@ -421,7 +433,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				t_sf.img = t_imgInfo["img"].asString().c_str();
 				t_sf.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
 				t_sf.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
-				sf_list.push_back(t_sf);
+				
+				auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+				if(iter == sf_list.end())
+					sf_list.push_back(t_sf);
 				// ================================
 				
 				CopyFile t_cf;
@@ -457,7 +472,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					t_sf.img = t_detail["img"].asString().c_str();
 					t_sf.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					t_sf.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
-					sf_list.push_back(t_sf);
+					
+					auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+					if(iter == sf_list.end())
+						sf_list.push_back(t_sf);
 					// ================================
 				}
 				
@@ -508,7 +526,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					t_sf.img = t_silImgInfo["img"].asString().c_str();
 					t_sf.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
 					t_sf.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
-					sf_list.push_back(t_sf);
+					
+					auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+					if(iter == sf_list.end())
+						sf_list.push_back(t_sf);
 					// ================================
 				}
 			}
@@ -574,15 +595,20 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				t_sf.img = t_imgInfo["img"].asString().c_str();
 				t_sf.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
 				t_sf.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
-				sf_list.push_back(t_sf);
-				// ================================
 				
-				CopyFile t_cf;
-				t_cf.from_filename = t_sf.filename.c_str();
-				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-				cf_list.push_back(t_cf);
-				
-				is_add_cf = true;
+				auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+				if(iter == sf_list.end())
+				{
+					sf_list.push_back(t_sf);
+					// ================================
+					
+					CopyFile t_cf;
+					t_cf.from_filename = t_sf.filename.c_str();
+					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+					cf_list.push_back(t_cf);
+					
+					is_add_cf = true;
+				}
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];
@@ -610,7 +636,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					t_sf.img = t_detail["img"].asString().c_str();
 					t_sf.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
 					t_sf.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
-					sf_list.push_back(t_sf);
+					
+					auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+					if(iter == sf_list.end())
+						sf_list.push_back(t_sf);
 					// ================================
 				}
 				
@@ -661,7 +690,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					t_sf.img = t_silImgInfo["img"].asString().c_str();
 					t_sf.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
 					t_sf.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
-					sf_list.push_back(t_sf);
+					
+					auto iter = find(sf_list.begin(), sf_list.end(), t_sf);
+					if(iter == sf_list.end())
+						sf_list.push_back(t_sf);
 					// ================================
 				}
 			}
@@ -703,6 +735,13 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				is_downloading = true;
 				
 				download_set.clear();
+				
+				is_enable_index.clear();
+				for(int i=0;i<5;i++)
+				{
+					is_enable_index.push_back(i);
+				}
+				
 				startDownloadSet();
 			}
 			else
@@ -846,6 +885,13 @@ void StageListDown::endOpenning()
 	addChild(download_state, kSLD_Z_content);
 	is_downloading = true;
 	download_set.clear();
+	
+	is_enable_index.clear();
+	for(int i=0;i<5;i++)
+	{
+		is_enable_index.push_back(i);
+	}
+	
 	startDownloadSet();
 }
 
@@ -1332,335 +1378,336 @@ void StageListDown::startDownload()
 	schedule(schedule_selector(StageListDown::downloadingAction));
 }
 
-void StageListDown::successActionSet(string t_filename)
-{
-	success_download_cnt++;
-	float download_percent = 100.f*success_download_cnt/int(df_list.size() + sf_list.size());
-	if(download_percent > 100.f)
-		download_percent = 100.f;
-	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
-	
-	loading_progress->stopAllActions();
-	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, loading_progress->getPercentage(), download_percent);
-	loading_progress->runAction(t_to);
-	
-	vector<DownloadImgInfo>::iterator iter = find(download_set.begin(), download_set.end(), DownloadImgInfo(t_filename));
-	
-	if(iter != download_set.end())
-	{
-		download_set.erase(iter);
-	}
-	
-	rest_download_cnt--;
-	
-	if(rest_download_cnt <= 0)
-	{
-		if(ing_download_cnt > df_list.size() + sf_list.size() && download_set.size() == 0)
-		{
-			// divide
-			for(int j=0;j<cut_list.size();j++)
-			{
-				CCImage *img = new CCImage;
-				img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
-				
-				CCImage *st_w = new CCImage;
-				CCImage *st_h = new CCImage;
-				
-				int puzzleCol,puzzleRow;
-				float puzzleColDis, puzzleRowDis, puzzleOffsetX, puzzleOffsetY;
-				float faceColDis, faceRowDis; //172, 172
-				float puzzleWidth,puzzleHeight;
-				
-				
-				if(cut_list[j].key == "face")
-				{
-					if(puzzle_number > 10000)
-					{
-						st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
-						st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
-					}
-					else
-					{
-						st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
-						st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
-					}
-				}
-				else
-				{
-					if(puzzle_number > 10000)
-					{
-						st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
-						st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
-					}
-					else
-					{
-						st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
-						st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
-					}
-				}
-				
-				if(puzzle_number > 10000)
-				{
-					puzzleCol=6;
-					puzzleRow=4;
-					puzzleColDis=100.f;
-					puzzleRowDis=100.f;
-					puzzleOffsetX=76.f;
-					puzzleOffsetY=76.f;
-					faceColDis=132.f;
-					faceRowDis=132.f;
-					puzzleWidth=652.f;
-					puzzleHeight=452.f;
-				}
-				else
-				{
-					puzzleCol=5;
-					puzzleRow=4;
-					puzzleColDis=120.f;
-					puzzleRowDis=120.f;
-					puzzleOffsetX=92.f;
-					puzzleOffsetY=92.f;
-					faceColDis=154.f;
-					faceRowDis=154.f;
-					puzzleWidth=664;
-					puzzleHeight=544;
-				}
-				
-				
-				for(int i=0;i<puzzleCol*puzzleRow;i++){
-					//피스의 좌표를 구합니다. 퍼즐은 5*4 개로 이루어져있습니다.
-					int x = i%puzzleCol;
-					int y = i/puzzleCol;
-					
-					CCImage *st = st_h;
-					if(puzzle_number > 10000)
-					{
-						if((x+(puzzleRow-1-y))%2 == 1)
-							st=st_w;
-					}
-					else
-					{
-						if(i%2==0)
-							st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
-					}
-					
-					//저장할파일명을 지정합니다.
-					string filename;
-					if(puzzle_number > 10000)
-						filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol)+1)->getCString();
-					else
-						filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
-					
-					//원본파일에서 자를 위치를 계산합니다.
-					int cutx, cuty;
-					if(cut_list[j].key == "face")
-					{
-						cutx = x*faceColDis+faceColDis/2.f;
-						cuty = y*faceRowDis+faceRowDis/2.f;
-					}
-					else if(cut_list[j].key == "original" || cut_list[j].key == "center")
-					{
-						cutx =x*puzzleColDis+puzzleOffsetX;
-						cuty =y*puzzleRowDis+puzzleOffsetY;
-					}
-					
-					//자르고 저장합니다.
-					bool isSuccess = PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
-					
-					//실패했으면 한번더 자르게 해줍니다.
-					if(!isSuccess){
-						i--;
-						continue;
-					}
-					
-					//테스트로 한번 붙여봅니다.
-					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
-					//				spr->setAnchorPoint(ccp(0.5,0.5));
-					//				spr->setPosition(ccp(cutx/2,cuty/2));
-					//				addChild(spr,1000);
-				}
-				
-				st_w->release(); //가로 피스 메모리해제
-				st_h->release(); //세로 피스 메모리해제
-				
-				//가장자리 자르기
-				//위쪽부터 잘라봅니다.
-				{
-					CCImage *st = new CCImage;
-					if(puzzle_number > 10000)
-						st->initWithImageFile("temp_puzzle_stencil_top.png");
-					else
-						st->initWithImageFile("puzzle_stencil_3_top.png");
-					
-					int cutx =puzzleWidth/2;
-					int cuty =puzzleHeight-st->getHeight()/2;
-					
-					string filename =CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, cut_list[j].key.c_str())->getCString();
-					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
-					
-					st->release(); //메모리해제
-					
-					//테스트로 한번 붙여봅니다.
-					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
-					//				spr->setAnchorPoint(ccp(0.5,0.5));
-					//				spr->setPosition(ccp(cutx/2,cuty/2));
-					//				addChild(spr,1000);
-				}
-				
-				//아래쪽 잘라봅니다.
-				{
-					CCImage *st = new CCImage;
-					if(puzzle_number > 10000)
-						st->initWithImageFile("temp_puzzle_stencil_bottom.png");
-					else
-						st->initWithImageFile("puzzle_stencil_3_bottom.png");
-					
-					int cutx =puzzleWidth/2;
-					int cuty =st->getHeight()/2;
-					
-					string filename =CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, cut_list[j].key.c_str())->getCString();
-					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
-					
-					st->release(); //메모리해제
-					
-					//테스트로 한번 붙여봅니다.
-					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
-					//				spr->setAnchorPoint(ccp(0.5,0.5));
-					//				spr->setPosition(ccp(cutx/2,cuty/2));
-					//				addChild(spr,1000);
-				}
-				
-				//왼쪽 잘라봅니다.
-				{
-					CCImage *st = new CCImage;
-					if(puzzle_number > 10000)
-						st->initWithImageFile("temp_puzzle_stencil_left.png");
-					else
-						st->initWithImageFile("puzzle_stencil_3_left.png");
-					
-					int cutx =st->getWidth()/2;
-					int cuty =puzzleHeight/2;
-					
-					string filename =CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, cut_list[j].key.c_str())->getCString();
-					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
-					
-					st->release(); //메모리해제
-					
-					//테스트로 한번 붙여봅니다.
-					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
-					//				spr->setAnchorPoint(ccp(0.5,0.5));
-					//				spr->setPosition(ccp(cutx/2,cuty/2));
-					//				addChild(spr,1000);
-				}
-				//오른쪽 잘라봅니다.
-				{
-					CCImage *st = new CCImage;
-					if(puzzle_number > 10000)
-						st->initWithImageFile("temp_puzzle_stencil_right.png");
-					else
-						st->initWithImageFile("puzzle_stencil_3_right.png");
-					
-					int cutx =puzzleWidth-st->getWidth()/2;
-					int cuty =puzzleHeight/2;
-					
-					string filename =CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, cut_list[j].key.c_str())->getCString();
-					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
-					
-					st->release(); //메모리해제
-					
-					//테스트로 한번 붙여봅니다.
-					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
-					//				spr->setAnchorPoint(ccp(0.5,0.5));
-					//				spr->setPosition(ccp(cutx/2,cuty/2));
-					//				addChild(spr,1000);
-				}
-				//메모리해제
-				img->release();
-			}
-			
-			
-			// reduce
-			for(int i=0;i<cf_list.size();i++)
-			{
-				CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
-				target_img->setAnchorPoint(ccp(0,0));
-				
-				if(cf_list[i].is_ani)
-				{
-					CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
-					ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
-					target_img->addChild(ani_img);
-				}
-				
-				target_img->setScale(0.2f);
-				
-				CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
-				t_texture->setSprite(target_img);
-				t_texture->begin();
-				t_texture->getSprite()->visit();
-				t_texture->end();
-				
-				t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
-			}
-			
-			
-			if(!df_list.empty())
-			{
-				for(int i=0;i<df_list.size();i++)
-				{
-					SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[i].key, df_list[i].img, false);
-				}
-			}
-			
-			if(!sf_list.empty())
-			{
-				for(int i=0;i<sf_list.size();i++)
-				{
-					SDS_SS(kSDF_cardInfo, sf_list[i].key, sf_list[i].img, false);
-				}
-				mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
-			}
-			
-			for(int i=0;i<save_version_list.size();i++)
-			{
-				NSDS_SI(save_version_list[i].x, kSDS_SI_version_i, save_version_list[i].y);
-				mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
-			}
-			
-			NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
-			mySDS->fFlush(puzzle_number, kSDS_PZ_base);
-			
-			addChild(KSTimer::create(0.3f, [=]()
-									 {
-										 if(success_func == nullptr)
-											 (target_success->*delegate_success)();
-										 else
-											 outOpenning();
-									 }));
-		}
-		else
-		{
-			startDownloadSet();
-		}
-	}
-}
+//void StageListDown::successActionSet(string t_filename)
+//{
+//	success_download_cnt++;
+//	float download_percent = 100.f*success_download_cnt/int(df_list.size() + sf_list.size());
+//	if(download_percent > 100.f)
+//		download_percent = 100.f;
+//	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
+//	
+//	loading_progress->stopAllActions();
+//	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, loading_progress->getPercentage(), download_percent);
+//	loading_progress->runAction(t_to);
+//	
+//	vector<DownloadImgInfo>::iterator iter = find(download_set.begin(), download_set.end(), DownloadImgInfo(t_filename));
+//	
+//	if(iter != download_set.end())
+//	{
+//		download_set.erase(iter);
+//	}
+//	
+//	rest_download_cnt--;
+//	
+//	if(rest_download_cnt <= 0)
+//	{
+//		if(ing_download_cnt > df_list.size() + sf_list.size() && download_set.size() == 0)
+//		{
+//			// divide
+//			for(int j=0;j<cut_list.size();j++)
+//			{
+//				CCImage *img = new CCImage;
+//				img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+//				
+//				CCImage *st_w = new CCImage;
+//				CCImage *st_h = new CCImage;
+//				
+//				int puzzleCol,puzzleRow;
+//				float puzzleColDis, puzzleRowDis, puzzleOffsetX, puzzleOffsetY;
+//				float faceColDis, faceRowDis; //172, 172
+//				float puzzleWidth,puzzleHeight;
+//				
+//				
+//				if(cut_list[j].key == "face")
+//				{
+//					if(puzzle_number > 10000)
+//					{
+//						st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
+//						st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+//					}
+//					else
+//					{
+//						st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+//						st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+//					}
+//				}
+//				else
+//				{
+//					if(puzzle_number > 10000)
+//					{
+//						st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+//						st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+//					}
+//					else
+//					{
+//						st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+//						st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+//					}
+//				}
+//				
+//				if(puzzle_number > 10000)
+//				{
+//					puzzleCol=6;
+//					puzzleRow=4;
+//					puzzleColDis=100.f;
+//					puzzleRowDis=100.f;
+//					puzzleOffsetX=76.f;
+//					puzzleOffsetY=76.f;
+//					faceColDis=132.f;
+//					faceRowDis=132.f;
+//					puzzleWidth=652.f;
+//					puzzleHeight=452.f;
+//				}
+//				else
+//				{
+//					puzzleCol=5;
+//					puzzleRow=4;
+//					puzzleColDis=120.f;
+//					puzzleRowDis=120.f;
+//					puzzleOffsetX=92.f;
+//					puzzleOffsetY=92.f;
+//					faceColDis=154.f;
+//					faceRowDis=154.f;
+//					puzzleWidth=664;
+//					puzzleHeight=544;
+//				}
+//				
+//				
+//				for(int i=0;i<puzzleCol*puzzleRow;i++){
+//					//피스의 좌표를 구합니다. 퍼즐은 5*4 개로 이루어져있습니다.
+//					int x = i%puzzleCol;
+//					int y = i/puzzleCol;
+//					
+//					CCImage *st = st_h;
+//					if(puzzle_number > 10000)
+//					{
+//						if((x+(puzzleRow-1-y))%2 == 1)
+//							st=st_w;
+//					}
+//					else
+//					{
+//						if(i%2==0)
+//							st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
+//					}
+//					
+//					//저장할파일명을 지정합니다.
+//					string filename;
+//					if(puzzle_number > 10000)
+//						filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol)+1)->getCString();
+//					else
+//						filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
+//					
+//					//원본파일에서 자를 위치를 계산합니다.
+//					int cutx, cuty;
+//					if(cut_list[j].key == "face")
+//					{
+//						cutx = x*faceColDis+faceColDis/2.f;
+//						cuty = y*faceRowDis+faceRowDis/2.f;
+//					}
+//					else if(cut_list[j].key == "original" || cut_list[j].key == "center")
+//					{
+//						cutx =x*puzzleColDis+puzzleOffsetX;
+//						cuty =y*puzzleRowDis+puzzleOffsetY;
+//					}
+//					
+//					//자르고 저장합니다.
+//					bool isSuccess = PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+//					
+//					//실패했으면 한번더 자르게 해줍니다.
+//					if(!isSuccess){
+//						i--;
+//						continue;
+//					}
+//					
+//					//테스트로 한번 붙여봅니다.
+//					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+//					//				spr->setAnchorPoint(ccp(0.5,0.5));
+//					//				spr->setPosition(ccp(cutx/2,cuty/2));
+//					//				addChild(spr,1000);
+//				}
+//				
+//				st_w->release(); //가로 피스 메모리해제
+//				st_h->release(); //세로 피스 메모리해제
+//				
+//				//가장자리 자르기
+//				//위쪽부터 잘라봅니다.
+//				{
+//					CCImage *st = new CCImage;
+//					if(puzzle_number > 10000)
+//						st->initWithImageFile("temp_puzzle_stencil_top.png");
+//					else
+//						st->initWithImageFile("puzzle_stencil_3_top.png");
+//					
+//					int cutx =puzzleWidth/2;
+//					int cuty =puzzleHeight-st->getHeight()/2;
+//					
+//					string filename =CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+//					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+//					
+//					st->release(); //메모리해제
+//					
+//					//테스트로 한번 붙여봅니다.
+//					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+//					//				spr->setAnchorPoint(ccp(0.5,0.5));
+//					//				spr->setPosition(ccp(cutx/2,cuty/2));
+//					//				addChild(spr,1000);
+//				}
+//				
+//				//아래쪽 잘라봅니다.
+//				{
+//					CCImage *st = new CCImage;
+//					if(puzzle_number > 10000)
+//						st->initWithImageFile("temp_puzzle_stencil_bottom.png");
+//					else
+//						st->initWithImageFile("puzzle_stencil_3_bottom.png");
+//					
+//					int cutx =puzzleWidth/2;
+//					int cuty =st->getHeight()/2;
+//					
+//					string filename =CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+//					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+//					
+//					st->release(); //메모리해제
+//					
+//					//테스트로 한번 붙여봅니다.
+//					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+//					//				spr->setAnchorPoint(ccp(0.5,0.5));
+//					//				spr->setPosition(ccp(cutx/2,cuty/2));
+//					//				addChild(spr,1000);
+//				}
+//				
+//				//왼쪽 잘라봅니다.
+//				{
+//					CCImage *st = new CCImage;
+//					if(puzzle_number > 10000)
+//						st->initWithImageFile("temp_puzzle_stencil_left.png");
+//					else
+//						st->initWithImageFile("puzzle_stencil_3_left.png");
+//					
+//					int cutx =st->getWidth()/2;
+//					int cuty =puzzleHeight/2;
+//					
+//					string filename =CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+//					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+//					
+//					st->release(); //메모리해제
+//					
+//					//테스트로 한번 붙여봅니다.
+//					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+//					//				spr->setAnchorPoint(ccp(0.5,0.5));
+//					//				spr->setPosition(ccp(cutx/2,cuty/2));
+//					//				addChild(spr,1000);
+//				}
+//				//오른쪽 잘라봅니다.
+//				{
+//					CCImage *st = new CCImage;
+//					if(puzzle_number > 10000)
+//						st->initWithImageFile("temp_puzzle_stencil_right.png");
+//					else
+//						st->initWithImageFile("puzzle_stencil_3_right.png");
+//					
+//					int cutx =puzzleWidth-st->getWidth()/2;
+//					int cuty =puzzleHeight/2;
+//					
+//					string filename =CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+//					PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+//					
+//					st->release(); //메모리해제
+//					
+//					//테스트로 한번 붙여봅니다.
+//					//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+//					//				spr->setAnchorPoint(ccp(0.5,0.5));
+//					//				spr->setPosition(ccp(cutx/2,cuty/2));
+//					//				addChild(spr,1000);
+//				}
+//				//메모리해제
+//				img->release();
+//			}
+//			
+//			
+//			// reduce
+//			for(int i=0;i<cf_list.size();i++)
+//			{
+//				CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+//				target_img->setAnchorPoint(ccp(0,0));
+//				
+//				if(cf_list[i].is_ani)
+//				{
+//					CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+//					ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+//					target_img->addChild(ani_img);
+//				}
+//				
+//				target_img->setScale(0.2f);
+//				
+//				CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+//				t_texture->setSprite(target_img);
+//				t_texture->begin();
+//				t_texture->getSprite()->visit();
+//				t_texture->end();
+//				
+//				t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+//			}
+//			
+//			
+//			if(!df_list.empty())
+//			{
+//				for(int i=0;i<df_list.size();i++)
+//				{
+//					SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[i].key, df_list[i].img, false);
+//				}
+//			}
+//			
+//			if(!sf_list.empty())
+//			{
+//				for(int i=0;i<sf_list.size();i++)
+//				{
+//					SDS_SS(kSDF_cardInfo, sf_list[i].key, sf_list[i].img, false);
+//				}
+//				mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+//			}
+//			
+//			for(int i=0;i<save_version_list.size();i++)
+//			{
+//				NSDS_SI(save_version_list[i].x, kSDS_SI_version_i, save_version_list[i].y);
+//				mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
+//			}
+//			
+//			NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
+//			mySDS->fFlush(puzzle_number, kSDS_PZ_base);
+//			
+//			addChild(KSTimer::create(0.3f, [=]()
+//									 {
+//										 if(success_func == nullptr)
+//											 (target_success->*delegate_success)();
+//										 else
+//											 outOpenning();
+//									 }));
+//		}
+//		else
+//		{
+//			startDownloadSet();
+//		}
+//	}
+//}
 
-void StageListDown::failActionSet(string t_filename)
-{
-	CCLOG("download fail : %s", t_filename.c_str());
-	
-	rest_download_cnt--;
-	
-	if(rest_download_cnt <= 0)
-	{
-		startDownloadSet();
-	}
-}
+//void StageListDown::failActionSet(string t_filename)
+//{
+//	CCLOG("download fail : %s", t_filename.c_str());
+//	
+//	rest_download_cnt--;
+//	
+//	if(rest_download_cnt <= 0)
+//	{
+//		startDownloadSet();
+//	}
+//}
 
 void StageListDown::startDownloadSet()
 {
 	int max_thread_cnt = 5;
 	int total_download_cnt = sf_list.size() + df_list.size();
+	int before_download_size = download_set.size();
 	
 	for(int i=download_set.size();ing_download_cnt <= total_download_cnt && i<max_thread_cnt;i++)
 	{
@@ -1683,8 +1730,7 @@ void StageListDown::startDownloadSet()
 		}
 		
 		t_info.is_fail = false;
-		t_info.success_func = bind(&StageListDown::successActionSet, this, std::placeholders::_1);
-		t_info.fail_func = bind(&StageListDown::failActionSet, this, std::placeholders::_1);
+		t_info.is_end = false;
 		download_set.push_back(t_info);
 		
 		ing_download_cnt++;
@@ -1692,11 +1738,296 @@ void StageListDown::startDownloadSet()
 	
 	if(download_set.size() > 0)
 	{
-		rest_download_cnt = download_set.size();
-		StageImgLoader::sharedInstance()->downloadImgSet(download_set);
+		for(int i=before_download_size;i<download_set.size();i++)
+		{
+			int will_download_index = is_enable_index.back();
+			CCLOG("start download idx : %d / filename : %s", will_download_index, download_set[i].download_filename.c_str());
+			mySIL->downloadImg(download_set[i], will_download_index);
+			is_enable_index.pop_back();
+		}
+		if(!is_downloading)
+		{
+			is_downloading = true;
+			schedule(schedule_selector(StageListDown::checkDownloading));
+		}
 	}
 	else
 	{
+		unschedule(schedule_selector(StageListDown::checkDownloading));
+		
+		// divide
+		for(int j=0;j<cut_list.size();j++)
+		{
+			CCImage *img = new CCImage;
+			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			
+			CCImage *st_w = new CCImage;
+			CCImage *st_h = new CCImage;
+			
+			int puzzleCol,puzzleRow;
+			float puzzleColDis, puzzleRowDis, puzzleOffsetX, puzzleOffsetY;
+			float faceColDis, faceRowDis; //172, 172
+			float puzzleWidth,puzzleHeight;
+			
+			
+			if(cut_list[j].key == "face")
+			{
+				if(puzzle_number > 10000)
+				{
+					st_w->initWithImageFile("stage_scissor.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("stage_scissor.png"); //피스조각(세로형)을 불러옵니다.
+				}
+				else
+				{
+					st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+				}
+			}
+			else
+			{
+				if(puzzle_number > 10000)
+				{
+					st_w->initWithImageFile("temp_puzzle_stencil_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("temp_puzzle_stencil_ph.png"); //피스조각(세로형)을 불러옵니다.
+				}
+				else
+				{
+					st_w->initWithImageFile("puzzle_stencil_1_pw.png"); //피스조각(가로형)을 불러옵니다.
+					st_h->initWithImageFile("puzzle_stencil_1_ph.png"); //피스조각(세로형)을 불러옵니다.
+				}
+			}
+			
+			if(puzzle_number > 10000)
+			{
+				puzzleCol=6;
+				puzzleRow=4;
+				puzzleColDis=100.f;
+				puzzleRowDis=100.f;
+				puzzleOffsetX=76.f;
+				puzzleOffsetY=76.f;
+				faceColDis=132.f;
+				faceRowDis=132.f;
+				puzzleWidth=652.f;
+				puzzleHeight=452.f;
+			}
+			else
+			{
+				puzzleCol=5;
+				puzzleRow=4;
+				puzzleColDis=120.f;
+				puzzleRowDis=120.f;
+				puzzleOffsetX=92.f;
+				puzzleOffsetY=92.f;
+				faceColDis=154.f;
+				faceRowDis=154.f;
+				puzzleWidth=664;
+				puzzleHeight=544;
+			}
+			
+			
+			for(int i=0;i<puzzleCol*puzzleRow;i++){
+				//피스의 좌표를 구합니다. 퍼즐은 5*4 개로 이루어져있습니다.
+				int x = i%puzzleCol;
+				int y = i/puzzleCol;
+				
+				CCImage *st = st_h;
+				if(puzzle_number > 10000)
+				{
+					if((x+(puzzleRow-1-y))%2 == 1)
+						st=st_w;
+				}
+				else
+				{
+					if(i%2==0)
+						st=st_w; //피스는 i가 짝수일때 st_w 이미지를 이용하여 자르고 홀수일때 st_h 이미지를 이용하여 자릅니다.
+				}
+				
+				//저장할파일명을 지정합니다.
+				string filename;
+				if(puzzle_number > 10000)
+					filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol)+1)->getCString();
+				else
+					filename =CCString::createWithFormat("puzzle%d_%s_piece%d.png", puzzle_number, cut_list[j].key.c_str(), (x+(puzzleRow-1-y)*puzzleCol))->getCString();
+				
+				//원본파일에서 자를 위치를 계산합니다.
+				int cutx, cuty;
+				if(cut_list[j].key == "face")
+				{
+					cutx = x*faceColDis+faceColDis/2.f;
+					cuty = y*faceRowDis+faceRowDis/2.f;
+				}
+				else if(cut_list[j].key == "original" || cut_list[j].key == "center")
+				{
+					cutx =x*puzzleColDis+puzzleOffsetX;
+					cuty =y*puzzleRowDis+puzzleOffsetY;
+				}
+				
+				//자르고 저장합니다.
+				bool isSuccess = PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				//실패했으면 한번더 자르게 해줍니다.
+				if(!isSuccess){
+					i--;
+					continue;
+				}
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			
+			st_w->release(); //가로 피스 메모리해제
+			st_h->release(); //세로 피스 메모리해제
+			
+			//가장자리 자르기
+			//위쪽부터 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				if(puzzle_number > 10000)
+					st->initWithImageFile("temp_puzzle_stencil_top.png");
+				else
+					st->initWithImageFile("puzzle_stencil_3_top.png");
+				
+				int cutx =puzzleWidth/2;
+				int cuty =puzzleHeight-st->getHeight()/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			
+			//아래쪽 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				if(puzzle_number > 10000)
+					st->initWithImageFile("temp_puzzle_stencil_bottom.png");
+				else
+					st->initWithImageFile("puzzle_stencil_3_bottom.png");
+				
+				int cutx =puzzleWidth/2;
+				int cuty =st->getHeight()/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			
+			//왼쪽 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				if(puzzle_number > 10000)
+					st->initWithImageFile("temp_puzzle_stencil_left.png");
+				else
+					st->initWithImageFile("puzzle_stencil_3_left.png");
+				
+				int cutx =st->getWidth()/2;
+				int cuty =puzzleHeight/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_left.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			//오른쪽 잘라봅니다.
+			{
+				CCImage *st = new CCImage;
+				if(puzzle_number > 10000)
+					st->initWithImageFile("temp_puzzle_stencil_right.png");
+				else
+					st->initWithImageFile("puzzle_stencil_3_right.png");
+				
+				int cutx =puzzleWidth-st->getWidth()/2;
+				int cuty =puzzleHeight/2;
+				
+				string filename =CCString::createWithFormat("puzzle%d_%s_right.png", puzzle_number, cut_list[j].key.c_str())->getCString();
+				PuzzleCache::getInstance()->cutImageAndSave(st, img, {cutx,cuty}, true,mySIL->getDocumentPath().c_str()+filename);
+				
+				st->release(); //메모리해제
+				
+				//테스트로 한번 붙여봅니다.
+				//				CCSprite *spr =  mySIL->getLoadedImg(filename);
+				//				spr->setAnchorPoint(ccp(0.5,0.5));
+				//				spr->setPosition(ccp(cutx/2,cuty/2));
+				//				addChild(spr,1000);
+			}
+			//메모리해제
+			img->release();
+		}
+		
+		
+		// reduce
+		for(int i=0;i<cf_list.size();i++)
+		{
+			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			target_img->setAnchorPoint(ccp(0,0));
+			
+			if(cf_list[i].is_ani)
+			{
+				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+				target_img->addChild(ani_img);
+			}
+			
+			target_img->setScale(0.2f);
+			
+			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			t_texture->setSprite(target_img);
+			t_texture->begin();
+			t_texture->getSprite()->visit();
+			t_texture->end();
+			
+			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+		}
+		
+		
+		if(!df_list.empty())
+		{
+			for(int i=0;i<df_list.size();i++)
+			{
+				SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[i].key, df_list[i].img, false);
+			}
+		}
+		
+		if(!sf_list.empty())
+		{
+			for(int i=0;i<sf_list.size();i++)
+			{
+				SDS_SS(kSDF_cardInfo, sf_list[i].key, sf_list[i].img, false);
+			}
+			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+		}
+		
+		for(int i=0;i<save_version_list.size();i++)
+		{
+			NSDS_SI(save_version_list[i].x, kSDS_SI_version_i, save_version_list[i].y);
+			mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
+		}
+		
+		NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
+		mySDS->fFlush(puzzle_number, kSDS_PZ_base);
+		
 		addChild(KSTimer::create(0.3f, [=]()
 								 {
 									 if(success_func == nullptr)
@@ -1704,6 +2035,58 @@ void StageListDown::startDownloadSet()
 									 else
 										 outOpenning();
 								 }));
+	}
+}
+
+void StageListDown::checkDownloading()
+{
+	int max_thread_cnt = 5;
+	bool is_successed = false;
+	for(int i=0;i<max_thread_cnt;i++)
+	{
+		if(mySIL->downloading_list[i].is_end)
+		{
+			if(mySIL->downloading_list[i].is_fail)
+			{
+				CCLOG("fail download idx : %d / filename : %s", i, mySIL->downloading_list[i].download_filename.c_str());
+				auto iter = find(download_set.begin(), download_set.end(), DownloadImgInfo(mySIL->downloading_list[i].download_filename));
+				if(iter != download_set.end())
+				{
+					CCLOG("start download idx : %d / filename : %s", i, iter->download_filename.c_str());
+					mySIL->downloadImg((*iter), i);
+				}
+				{
+					CCLOG("not found fail set");
+				}
+			}
+			else
+			{
+				CCLOG("success download idx : %d / filename : %s", i, mySIL->downloading_list[i].download_filename.c_str());
+				auto iter = find(download_set.begin(), download_set.end(), DownloadImgInfo(mySIL->downloading_list[i].download_filename));
+				if(iter != download_set.end())
+				{
+					download_set.erase(iter);
+				}
+				is_enable_index.push_back(i);
+				success_download_cnt++;
+				is_successed = true;
+			}
+		}
+	}
+	
+	float download_percent = 100.f*success_download_cnt/int(df_list.size() + sf_list.size());
+	if(download_percent > 100.f)
+		download_percent = 100.f;
+	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
+
+	loading_progress->setPercentage(download_percent);
+//	loading_progress->stopAllActions();
+//	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, loading_progress->getPercentage(), download_percent);
+//	loading_progress->runAction(t_to);
+	
+	if(is_successed || success_download_cnt >= df_list.size() + sf_list.size())
+	{
+		startDownloadSet();
 	}
 }
 

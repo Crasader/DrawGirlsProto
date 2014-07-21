@@ -92,10 +92,10 @@ private:
 	void failAction();
 	void downloadingAction();
 	
-	int rest_download_cnt;
+	vector<int> is_enable_index;
+	
 	int success_download_cnt;
-	void successActionSet(string t_filename);
-	void failActionSet(string t_filename);
+	void checkDownloading();
 	
 	void startGetStageList();
 	

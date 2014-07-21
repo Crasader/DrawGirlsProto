@@ -953,7 +953,7 @@ void MapScanner::setTopBottomBlock()
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 15);
 		lock_label->disableOuterStroke();
 		lock_label->setAnchorPoint(ccp(0.5f,0.5f));
-		lock_label->setPosition(ccp(0,top_block_lock->getContentSize().height/2.f));
+		lock_label->setPosition(ccp(0,31/2.f));
 		t_clipping->addChild(lock_label);
 	}
 	else
@@ -1071,7 +1071,7 @@ void MapScanner::setTopBottomBlock()
 		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 15);
 		lock_label->setAnchorPoint(ccp(0.5f,0.5f));
 		lock_label->disableOuterStroke();
-		lock_label->setPosition(ccp(0,-bottom_block_lock->getContentSize().height/2.f));
+		lock_label->setPosition(ccp(0,-31/2.f));
 		t_clipping->addChild(lock_label);
 	}
 	else
