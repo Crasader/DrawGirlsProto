@@ -2755,7 +2755,7 @@ void CrashLazerWrapper::myAction()
 			auto ret = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_head.ccbi");
 			KS::setBlendFunc(ret.first, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 			lazer_main = ret.first;
-			lazer_main->setScale(m_crashSize/8.f);
+			lazer_main->setScale(m_crashSize/8.f*0.7f);
 			lazer_main->setAnchorPoint(ccp(0,0.5));
 			lazer_main->setRotation(-angle);
 
