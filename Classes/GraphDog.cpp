@@ -370,7 +370,8 @@ void* GraphDog::t_function(void *_insertIndex)
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&command.chunk);
 	curl_easy_setopt(handle, CURLOPT_TIMEOUT, 20);
 	curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, 20);
-
+    curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
+    
 	CCLOG("t_function4");
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 	//	pthread_mutex_unlock(&graphdog->cmdsMutex);
