@@ -2052,6 +2052,7 @@ void StageListDown::checkDownloading()
 					CCLOG("start download idx : %d / filename : %s", i, iter->download_filename.c_str());
 					mySIL->downloadImg((*iter), i);
 				}
+				else
 				{
 					CCLOG("not found fail set");
 				}
@@ -2063,6 +2064,10 @@ void StageListDown::checkDownloading()
 				if(iter != download_set.end())
 				{
 					download_set.erase(iter);
+				}
+				else
+				{
+					CCLOG("not found success set");
 				}
 				is_enable_index.push_back(i);
 				success_download_cnt++;

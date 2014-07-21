@@ -694,7 +694,7 @@ void TitleRenewalScene::checkReceive()
 					state_label->setPosition(ccp(240,30));//130
 					
 					title_img->removeFromParent();
-					title_img = CCSprite::create("temp_title_back2.png");
+					title_img = CCSprite::create(ccsf("loading_%d.png", rand()%5+1));
 					title_img->setPosition(ccp(240,160));
 					addChild(title_img);
 					
@@ -2504,6 +2504,7 @@ void TitleRenewalScene::checkDownloading()
 					CCLOG("start download idx : %d / filename : %s", i, iter->download_filename.c_str());
 					mySIL->downloadImg((*iter), i);
 				}
+				else
 				{
 					CCLOG("not found fail set");
 				}
@@ -2515,6 +2516,10 @@ void TitleRenewalScene::checkDownloading()
 				if(iter != download_set.end())
 				{
 					download_set.erase(iter);
+				}
+				else
+				{
+					CCLOG("not found success set");
 				}
 				is_enable_index.push_back(i);
 				success_download_cnt++;
