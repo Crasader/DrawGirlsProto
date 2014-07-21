@@ -1315,11 +1315,15 @@ void FailPopup::endLoad()
 {
 	if(is_end_popup_animation && is_saved_user_data)// && is_loaded_list)
 	{
+		main_menu->setEnabled(true);
 		main_menu->setVisible(true);
 		if(myDSH->getIntegerForKey(kDSH_Key_heartCnt) > 0)
 		{
 			if(replay_menu)
+			{
+				replay_menu->setEnabled(true);
 				replay_menu->setVisible(true);
+			}
 		}
 		is_menu_enable = true;
 	}

@@ -61,6 +61,7 @@ bool HeartTime::startGame ()
 
 void HeartTime::refreshHeartTime()
 {
+	unschedule(schedule_selector(HeartTime::checkingTime));
 	removeAllChildren();
 	heart_list.clear();
 	
