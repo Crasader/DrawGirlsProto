@@ -171,7 +171,7 @@ bool CardViewScene::init()
 		
 		tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 			CCTouch* t_touch = new CCTouch();
-			t_touch->setTouchInfo(0, 0, 0);
+			t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
 			t_touch->autorelease();
 		
 			first_img->ccTouchEnded(t_touch, NULL);
@@ -219,7 +219,7 @@ bool CardViewScene::init()
 		tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 //			(this->*delegate_typing_after)();
 			CCTouch* t_touch = new CCTouch();
-			t_touch->setTouchInfo(0, 0, 0);
+			t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
 			t_touch->autorelease();
 			first_img->ccTouchEnded(t_touch, NULL);
 		});
@@ -374,17 +374,17 @@ void CardViewScene::moveListXY(CCPoint t_p)
 
 	
 	if(contentHalfWidth*2.f<=screen_size.width/2.f){
-			//왼쪽맞추기
-		if(contentHalfWidth*-1+widthLimit>a_p.x){
-			a_p.x = contentHalfWidth*-1+widthLimit;
-		}
+//			//왼쪽맞추기
+//		if(contentHalfWidth*-1+widthLimit>a_p.x){
+//			a_p.x = contentHalfWidth*-1+widthLimit;
+//		}
+//		
+//		//오른쪽맞추기
+//		if(contentHalfWidth+screen_size.width/2.f-widthLimit<a_p.x){
+//			a_p.x = contentHalfWidth+screen_size.width/2.f-widthLimit;
+//		}
 		
-		//오른쪽맞추기
-		if(contentHalfWidth+screen_size.width/2.f-widthLimit<a_p.x){
-			a_p.x = contentHalfWidth+screen_size.width/2.f-widthLimit;
-		}
-		
-
+		a_p.x=240;
 
 	}else{
 
@@ -400,7 +400,7 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	}
 
 	
-	if(contentHalfHeight*2>=screen_size.height/2.f){
+	if(contentHalfHeight*2>=height){
 		//top & bottom
 		if(a_p.y < height - contentHalfHeight){
 			a_p.y=height - contentHalfHeight;

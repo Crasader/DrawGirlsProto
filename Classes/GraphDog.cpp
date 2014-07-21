@@ -370,8 +370,9 @@ void* GraphDog::t_function(void *_insertIndex)
 	curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&command.chunk);
 	curl_easy_setopt(handle, CURLOPT_TIMEOUT, 20);
 	curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, 20);
-
-	//CCLOG("t_function4");
+    curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1);
+    
+	CCLOG("t_function4");
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 	//	pthread_mutex_unlock(&graphdog->cmdsMutex);
 	CURLcode resultCode = curl_easy_perform(handle);
@@ -407,14 +408,16 @@ void* GraphDog::t_function(void *_insertIndex)
 			}
 			catch(const std::string& msg)
 			{
-				//CCLOG("t_function FAILED1");
+				CCLOG("t_function FAILED1");
 				resultCode = CURLE_CHUNK_FAILED;
 			}
 			catch(stlencoders::decode_error &error)
 			{
+				CCLOG("t_function FAILED2");
 				resultCode = CURLE_CHUNK_FAILED;
 			}
 			catch(...){
+				CCLOG("t_function FAILED3");
 				resultCode = CURLE_CHUNK_FAILED;
 			}
 		}
@@ -422,11 +425,13 @@ void* GraphDog::t_function(void *_insertIndex)
 		{
 			//CCLOG("t_function FAILED2");
 			
+			CCLOG("t_function5 set CURLE_CHUNK_FAILED");
 			resultCode = CURLE_CHUNK_FAILED;
 		}
 	}
 	else
 	{
+		CCLOG("fuckfuckfuck %d",resultCode);
 		//resultCode = CURLE_CHUNK_FAILED;
 	}
 	
