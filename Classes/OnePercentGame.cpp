@@ -149,7 +149,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	currentGainArea->setAnchorPoint(ccp(0.5f,0.5f));
 	m_currentGainArea = currentGainArea;
 	currentGainArea->getLabelByTag(1)->setString(boost::str(boost::format("%|4.3|%%") % (recent_percent * 100.f)).c_str());
-	currentGainArea->setPosition(ccp(0, 70));
+	currentGainArea->setPosition(ccp(0, 65.f));
 	m_container->addChild(currentGainArea, kOnePercentGame_Z_content);
 
 	CCSprite* tutorialBox = CCSprite::create("kt_talkbox_botton.png");
@@ -179,14 +179,14 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	StyledLabelTTF* command1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame4),
 																										mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	command1->setAnchorPoint(ccp(0.5f,0.5f));
-	command1->setPosition(ccpFromSize(tutorialBox->getContentSize()) / 2.f + ccp(0, 5));
+	command1->setPosition(ccpFromSize(tutorialBox->getContentSize()) / 2.f + ccp(-1.f, 10));
 	
 	tutorialBox->addChild(command1);
 	m_container->addChild(tutorialBox, kOnePercentGame_Z_content + 1);
 	setFormSetter(command1);
 	StyledLabelTTF* desc2 = StyledLabelTTF::create(
 			CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
-			mySGD->getFont().c_str(), 11.f, 0, StyledAlignment::kCenterAlignment);
+			mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 	m_container->addChild(desc2, kOnePercentGame_Z_content);
 	desc2->setPosition(ccp(0.0,-39.0 - 5.f)); 			// dt (0.0,-36.5)
 	m_desc2 = desc2;
@@ -343,11 +343,11 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 //	m_container->addChild(tempNode, kOnePercentGame_Z_content);
 //	tempNode->setPosition(ccp(61.5,22.5)); 			// dt (-33.5,0.0)
 	
-	KSLabelTTF* _100 = KSLabelTTF::create("100.0%", mySGD->getFont().c_str(), 11.f);
+	KSLabelTTF* _100 = KSLabelTTF::create("100.0%", mySGD->getFont().c_str(), 9.f);
 	_100->setAnchorPoint(ccp(0.5f, 0.5f));
 	_100->setColor(ccc3(255, 0, 0));
 	m_percentContainer->addChild(_100, kOnePercentGame_Z_content);
-	KSLabelTTF* _99 = KSLabelTTF::create("99.0%", mySGD->getFont().c_str(), 11.f);
+	KSLabelTTF* _99 = KSLabelTTF::create("99.0%", mySGD->getFont().c_str(), 9.f);
 	_99->setAnchorPoint(ccp(0.5f, 0.5f));
 	_99->setColor(ccc3(255, 255, 0));
 	m_percentContainer->addChild(_99, kOnePercentGame_Z_content);
@@ -397,7 +397,9 @@ void OnePercentGame::gameUISetting(bool hide)
 	
 	CCNode* tempNode = CCNode::create();
 	CCClippingNode* cNode = CCClippingNode::create();
-	cNode->setStencil(CCSprite::create("one_percent_gacha_color.png"));
+	auto mask = CCSprite::create("one_percent_gacha_color.png");
+	cNode->setStencil(mask);
+	mask->setScale(1.4f);
 	
 	int t_grade = 3;
 	if(mySGD->is_exchanged)
@@ -406,7 +408,7 @@ void OnePercentGame::gameUISetting(bool hide)
 	if(girl == nullptr)
 		girl = CCSprite::create();
 	cNode->addChild(girl);
-	girl->setScale(130 / girl->getContentSize().width);
+	girl->setScale(130 / girl->getContentSize().width * 1.4f);
 	//		setFormSetter(girl);
 	cNode->setAlphaThreshold(0.1f);
 	tempNode->addChild(cNode, kOnePercentGame_Z_content);
@@ -414,9 +416,11 @@ void OnePercentGame::gameUISetting(bool hide)
 	if(m_shutter == nullptr)
 	{
 		CCSprite* shutter = CCSprite::create("one_percent_gacha_box_02.png"); // 셔터.
+		shutter->setScale(1.4f);
 		m_shutter = shutter;
 		cNode->addChild(shutter, kOnePercentGame_Z_content);
 		CCSprite* imageBack = CCSprite::create("one_percent_gacha_box_01.png"); // 액자 테두리
+		// 194 258
 		imageBack->setScale(1.4f);
 		setFormSetter(imageBack);
 		tempNode->addChild(imageBack, kOnePercentGame_Z_content);
@@ -657,10 +661,10 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 						m_desc2->removeFromParent();
 						StyledLabelTTF* desc2 = StyledLabelTTF::create(
 																													 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 2, 0.3f)->getCString(),
-																													 mySGD->getFont().c_str(), 12.f, 0, StyledAlignment::kCenterAlignment);
+																													 mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 						m_container->addChild(desc2, kOnePercentGame_Z_content);
 						m_desc2 = desc2;
-						desc2->setPosition(ccp(0.0,-39.0)); 			// dt (0.0,-36.5)
+						desc2->setPosition(ccp(0.0,-39.0 - 5.f)); 			// dt (0.0,-36.5)
 					}));
 				}
 				
@@ -753,9 +757,9 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 						m_desc2->removeFromParent();
 						StyledLabelTTF* desc2 = StyledLabelTTF::create(
 																													 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 1, 0.4f)->getCString(),
-																													 mySGD->getFont().c_str(), 12.f, 0, StyledAlignment::kCenterAlignment);
+																													 mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 						m_container->addChild(desc2, kOnePercentGame_Z_content);
-						desc2->setPosition(ccp(0.0,-39.0)); 			// dt (0.0,-36.5)
+						desc2->setPosition(ccp(0.0,-39.0 - 5.f)); 			// dt (0.0,-36.5)
 						m_desc2 = desc2;
 					}));
 				}
@@ -919,7 +923,7 @@ void OnePercentGame::showFail()
 																					 12.f,
 																					 999,
 																				 StyledAlignment::kCenterAlignment);
-	failContent->setPosition(ccp(0.0, -5.0 + 28.f)); 			// dt (0.0, -5.0)
+	failContent->setPosition(ccp(0.0, 29.5f)); 			// dt (0.0, -5.0)
 
 	m_failContent = failContent;
 	setFormSetter(failContent);

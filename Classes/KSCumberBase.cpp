@@ -1450,7 +1450,11 @@ void KSCumberBase::cumberAttack(float dt)
 			//안그을땐 초기화
 			m_adderCnt = 0;
 		}
-		
+		// 사냥꾼 미션 & 현재 쫄자가 0 마리 이하라면
+		if(mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
+		{
+			attackProb = 0.4f; // 엄청난 공격확률
+		}
 //		// 많이 맞았으면 공격확률 높임.
 //		if(getLife() / getTotalLife() <= 0.3f)
 //		{

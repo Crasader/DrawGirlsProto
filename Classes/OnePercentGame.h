@@ -67,8 +67,8 @@ protected:
 	CCControlButton* gacha_button;
 	CCSprite* m_cursor;
 	int m_cursorDirection;
-	static const int leftLimit = -115;
-	static const int rightLimit = 115;
+	static const int leftLimit = -100;
+	static const int rightLimit = 100;
 	static const int graphHeight = 176;
 	int m_99State;
 	CCNode* m_currentGainArea, *m_desc;

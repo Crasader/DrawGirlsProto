@@ -2365,6 +2365,9 @@ void MainFlowScene::setBottom()
 	
 	
 	Json::Value v = mySGD->cgp_data;
+//	Json::Reader r;
+//	r.parse(R"( {"buttonurl":"http://images.hangame.co.kr/mobile/cgp/2012.10/cgp_icon_wooproo.png","eventurl":"","typecode":1,"promotionstate":"CGP_PROMOTION_EXISTS","bubbletext":""} )",
+//					v);
 	std::string pState = v["promotionstate"].asString();
 	
 	// 아무것도 하지마!!
@@ -2417,11 +2420,9 @@ void MainFlowScene::setBottom()
 		cgp_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 		
 		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
-			if(!is_menu_enable)
+			if(cgp_item->isEnabled() == false)
 				return;
-			
-			is_menu_enable = false;
-			
+			cgp_item->setEnabled(false);
 			hspConnector::get()->launchPromotion();
 			
 			auto iter = find(bottom_list.begin(), bottom_list.end(), cgp_menu);

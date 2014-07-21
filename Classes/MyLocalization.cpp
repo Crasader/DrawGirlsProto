@@ -665,7 +665,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("메세지\n알림"), kMyLocalKey_messageNoti);
 	ko->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ko->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
-	ko->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
+	ko->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	ko->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
 	ko->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	ko->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
@@ -1166,9 +1166,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	ko->setObject(CCString::create("닉네임 오류"), kMyLocalKey_nicknameError);
 	ko->setObject(CCString::create("<font color=#FFFFFF>남은 판수 </font>"
-																								"<font color=#FFAA14 size=14>%d회 / </font>"
+																								"<font color=#FFAA14 size=12>%d회 / </font>"
 																								"<font color=#FFFFFF>성공시 </font>"
-																								"<font color=#FFAA14>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
+																								"<font color=#FFAA14 size=12>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
 	ko->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
@@ -1289,18 +1289,18 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
 	ko->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>안녕하세요!</font>"
-								   "<font color=#FFFFFF size=12 newline=14>난 카츠라기라고 해요.</font>"
-								   "<font color=#FFFFFF size=12 newline=14>아슬아슬하게 영역을</font>"
-								   "<font color=#FFFFFF size=12 newline=28>100% 획득 못했군요.</font>"
-								   "<font color=#FFFFFF size=12 newline=16>100% 영역획득 할 수 있게</font>"
-									 "<font color=#FFFFFF size=12>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=10 newline=14>안녕하세요!</font>"
+								   "<font color=#FFFFFF size=10 newline=14>난 카츠라기라고 해요.</font>"
+								   "<font color=#FFFFFF size=10 newline=14>아슬아슬하게 영역을</font>"
+								   "<font color=#FFFFFF size=10 newline=28>100% 획득 못했군요.</font>"
+								   "<font color=#FFFFFF size=10 newline=16>100% 영역획득 할 수 있게</font>"
+									 "<font color=#FFFFFF size=10>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	ko->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=14>아래 게이지바에서 </font>"
-								   "<font color=#FFFFFF size=12 newline=14>분홍색 영역을 맞히면 퍼센트를</font>"
-								   "<font color=#FFFFFF size=12 newline=28>추가로 획득할 수 있어요.</font>"
-								   "<font color=#FFFFFF size=12 newline=14>기회는 총 3번 이에요!</font>"
-								   "<font color=#FFFFFF size=12 newline=14>100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
+	ko->setObject(CCString::create("<font color=#FFFFFF size=10 newline=14>아래 게이지바에서 </font>"
+								   "<font color=#FFFFFF size=10 newline=14>분홍색 영역을 맞히면 퍼센트를</font>"
+								   "<font color=#FFFFFF size=10 newline=28>추가로 획득할 수 있어요.</font>"
+								   "<font color=#FFFFFF size=10 newline=14>기회는 총 3번 이에요!</font>"
+								   "<font color=#FFFFFF size=10 newline=14>100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
 	
 	ko->setObject(CCString::create("<font color=#FFAA14 size=11 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=11>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
 	ko->setObject(CCString::create("<font color=#FFAA14 size=11 newline=16>100%에 성공시</font><font color=#FFAA14 size=11 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=11>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
@@ -1591,7 +1591,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 	en->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	en->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
-	en->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
+	en->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	en->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
 	en->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	en->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
@@ -2510,7 +2510,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 	ja->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ja->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
-	ja->setObject(CCString::create("*30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
+	ja->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
 	ja->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
 	ja->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	ja->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);

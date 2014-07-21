@@ -187,8 +187,8 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	main_case->addChild(allReceive, 1);
 
 	auto giftBoxAlertBox = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
-	giftBoxAlertBox->setPosition(ccp(370.0, 246.5));
-	giftBoxAlertBox->setContentSize(CCSizeMake(148.0, 19.5)); 			// dt (-50.0, 1.5)
+	giftBoxAlertBox->setPosition(ccp(326.0, 246.5));
+	giftBoxAlertBox->setContentSize(CCSizeMake(224.5, 19.5));
 	main_case->addChild(giftBoxAlertBox);
 
 	
@@ -196,7 +196,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	setFormSetter(giftboxAlert);
 	setFormSetter(giftBoxAlertBox);
 	giftboxAlert->setAnchorPoint(ccp(0,0.5));
-	giftboxAlert->setPosition(ccpFromSize(giftBoxAlertBox->getContentSize()) / 2.f + ccp(-91.5 + 22.5, 1));
+	giftboxAlert->setPosition(ccpFromSize(giftBoxAlertBox->getContentSize()) / 2.f + ccp(-91.5 + 22.5 + 25.f - 36.5f, 1));
 	giftBoxAlertBox->addChild(giftboxAlert, 1);
 	
 	
@@ -543,6 +543,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				btnReceive->setTitleSize(12.f);
 				btnReceive->setTouchPriority(-200);
 				btnReceive->setTitleColor(ccc3(255, 255, 255));
+				btnReceive->getTitleLabel()->disableOuterStroke();
 				btnReceive->setFunction([=](CCObject*)
 																{
 																	//						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
@@ -1457,6 +1458,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 		score = KSLabelTTF::create(comment.c_str(),mySGD->getFont().c_str(), 9);
 		score->setColor(ccc3(54, 36, 148));
+		score->disableOuterStroke();
 		score->setPosition(ccp(69.0, 7.5));
 		score->setAnchorPoint(CCPointZero);
 		score->setTag(kMP_MT_score);

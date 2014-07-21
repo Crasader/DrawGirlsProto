@@ -69,7 +69,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	clippingNode->addChild(inner_back);
 
 	CCSprite* katsu = CCSprite::create("kt_cha_katsuragi_1.png");
-	katsu->setPosition(ccp(-62.5, 9.5));
+	katsu->setPosition(ccp(-67.0, 5.5));
 	clippingNode->addChild(katsu);
 	setFormSetter(katsu);
 	//m_container->addChild(inner_back, kOnePercentTutorial_Z_back);
@@ -95,7 +95,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	m_container->addChild(puppleInner, kOnePercentTutorial_Z_back);
 	setFormSetter(puppleInner);
 	m_gachaDesc = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial2),
-																			 mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+																			 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	m_container->addChild(m_gachaDesc, kOnePercentTutorial_Z_content);
 	m_gachaDesc->setAnchorPoint(ccp(0.5f,0.5f));
 	m_gachaDesc->setPosition(ccp(35.5, 33.5));
@@ -156,7 +156,7 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 		m_gachaDesc->removeFromParent();
 		
 		m_gachaDesc = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial4),
-																				 mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		t_parent->addChild(m_gachaDesc, kOnePercentTutorial_Z_content);
 		m_gachaDesc->setAnchorPoint(ccp(0.5f,0.5f));
 		m_gachaDesc->setPosition(t_position); 			// dt (0.0, 71.5)
@@ -182,7 +182,7 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		StyledLabelTTF* desc2 = StyledLabelTTF::create(
 																									 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
-																									 mySGD->getFont().c_str(), 11.f, 0, StyledAlignment::kCenterAlignment);
+																									 mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 		m_container->addChild(desc2, kOnePercentTutorial_Z_content);
 		desc2->setPosition(ccp(0.0, -39.0 - 5.f));
 		setFormSetter(desc2);

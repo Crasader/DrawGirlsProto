@@ -438,8 +438,12 @@ private:
 		curl_easy_setopt(curl_handle, CURLOPT_COOKIEJAR,"sessid");
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		curl_easy_setopt(curl_handle, CURLOPT_POST, true);
-		curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT, 20);
-        curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1);
+		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
+		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
+		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
+		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
+		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5); //5초대기
+		
 		
 		isLogin=false;
 		errorCount=0;

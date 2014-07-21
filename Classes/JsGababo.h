@@ -71,6 +71,7 @@ protected:
 	StyledLabelTTF* m_message;
 	std::string m_currentJudge;
 	CCNode* m_resultStamp;
+	CCNode* m_resultParticle;
 	CCSprite* m_currentRewardCursor;
 	int m_tutorialStep;
 	CommonButton* m_ba, *m_ga, *m_bo;
@@ -80,6 +81,8 @@ protected:
 	CCSprite* m_meCharSprite;
 	CCSprite* m_npcCharSprite;
 	CCSprite* m_tutoGababo;
+	
+	std::vector<CCNodeRGBA*> m_willToggleObjects;
 };
 
 #endif

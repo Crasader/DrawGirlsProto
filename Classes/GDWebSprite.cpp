@@ -71,8 +71,13 @@ void* GDWebSprite::t_function(void * _caller)
         curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, true);
         curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
         curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
-        curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-        curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1);
+				curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+				curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
+				curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
+				curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
+				curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
+				curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5); //5초대기
+			
         if(curl_easy_perform(curl_handle) == CURLE_OK){
             //CCLOG("finish downloadIndex : %d", GDWebSpriteManager::get()->downloadIndex);
             GDWebSpriteManager::get()->chunks.push(pair<GDWebSpriteMemoryStruct, int>(chunk, downI));
