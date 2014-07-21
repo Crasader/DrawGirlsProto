@@ -1167,22 +1167,23 @@ void ShopPopup::menuAction(CCObject* pSender)
 										
 										if(target_heartTime)
 										{
-											CCNode* target_parent = target_heartTime->getParent();
-											CCPoint heart_time_position = target_heartTime->getPosition();
-											int heart_time_tag = target_heartTime->getTag();
-											
-											target_heartTime->removeFromParent();
-											target_heartTime = HeartTime::create();
-											target_heartTime->setPosition(heart_time_position);
-											target_parent->addChild(target_heartTime, 0, heart_time_tag);
-											if(before_code == kShopBeforeCode_stagesetting)
-												((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_mainflow)
-												((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_puzzle)
-												((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-											else if(before_code == kShopBeforeCode_startsetting)
-												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+											target_heartTime->refreshHeartTime();
+//											CCNode* target_parent = target_heartTime->getParent();
+//											CCPoint heart_time_position = target_heartTime->getPosition();
+//											int heart_time_tag = target_heartTime->getTag();
+//											
+//											target_heartTime->removeFromParent();
+//											target_heartTime = HeartTime::create();
+//											target_heartTime->setPosition(heart_time_position);
+//											target_parent->addChild(target_heartTime, 0, heart_time_tag);
+//											if(before_code == kShopBeforeCode_stagesetting)
+//												((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
+//											else if(before_code == kShopBeforeCode_mainflow)
+//												((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+//											else if(before_code == kShopBeforeCode_puzzle)
+//												((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+//											else if(before_code == kShopBeforeCode_startsetting)
+//												((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 										}
 										
 										fail_func = [=]()
@@ -1192,22 +1193,23 @@ void ShopPopup::menuAction(CCObject* pSender)
 											
 											if(target_heartTime)
 											{
-												CCNode* target_parent = target_heartTime->getParent();
-												CCPoint heart_time_position = target_heartTime->getPosition();
-												int heart_time_tag = target_heartTime->getTag();
-												
-												target_heartTime->removeFromParent();
-												target_heartTime = HeartTime::create();
-												target_heartTime->setPosition(heart_time_position);
-												target_parent->addChild(target_heartTime, 0, heart_time_tag);
-												if(before_code == kShopBeforeCode_stagesetting)
-													((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_mainflow)
-													((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_puzzle)
-													((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
-												else if(before_code == kShopBeforeCode_startsetting)
-													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+												target_heartTime->refreshHeartTime();
+//												CCNode* target_parent = target_heartTime->getParent();
+//												CCPoint heart_time_position = target_heartTime->getPosition();
+//												int heart_time_tag = target_heartTime->getTag();
+//												
+//												target_heartTime->removeFromParent();
+//												target_heartTime = HeartTime::create();
+//												target_heartTime->setPosition(heart_time_position);
+//												target_parent->addChild(target_heartTime, 0, heart_time_tag);
+//												if(before_code == kShopBeforeCode_stagesetting)
+//													((StageSettingPopup*)(target_parent->getParent()))->heart_time = target_heartTime;
+//												else if(before_code == kShopBeforeCode_mainflow)
+//													((MainFlowScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+//												else if(before_code == kShopBeforeCode_puzzle)
+//													((PuzzleScene*)(target_parent->getParent()))->heart_time = target_heartTime;
+//												else if(before_code == kShopBeforeCode_startsetting)
+//													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 											}
 										};
 										
