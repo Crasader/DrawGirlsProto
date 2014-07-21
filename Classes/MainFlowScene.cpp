@@ -1114,13 +1114,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		CCSprite* n_locked_back = CCSprite::create("mainflow_puzzle_lock.png"); //mySIL->getLoadedImg("mainflow_puzzle_lock.png");
 		cell_node->addChild(n_locked_back);
 		
-		CCLabelTTF* rate_label = CCLabelTTF::create("??/??", mySGD->getFont().c_str(), 10);
-		rate_label->setPosition(ccp(-15, -71.5f));
-		cell_node->addChild(rate_label);
+//		CCLabelTTF* rate_label = CCLabelTTF::create("??/??", mySGD->getFont().c_str(), 10);
+//		rate_label->setPosition(ccp(-15, -71.5f));
+//		cell_node->addChild(rate_label);
 		
 		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
+		locked_label->setColor(ccc3(50, 145, 145));
 		locked_label->enableOuterStroke(ccBLACK, 1.f);
-		locked_label->setPosition(ccp(67.5f,133.f));
+		locked_label->setPosition(ccp(67.5f,95.f));
 		n_locked_back->addChild(locked_label);
 		
 		return cell;
