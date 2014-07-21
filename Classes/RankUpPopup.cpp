@@ -320,7 +320,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	next_take_card->setScale(0.9f);
 	m_container->addChild(next_take_card);
 	
-	base_position = ccp(55-(after_grade-1)/2.f*distance, -35);
+	base_position = ccp(55-(after_grade-1)/2.f*distance, -27);
 	for(int i=0;i<after_grade;i++)
 	{
 		CCSprite* t_star = CCSprite::create("gage_star_gold.png");
