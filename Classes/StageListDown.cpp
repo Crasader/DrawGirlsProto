@@ -732,7 +732,6 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				download_state->enableOuterStroke(ccBLACK, 1.f);
 				download_state->setPosition(ccp(240,38));
 				addChild(download_state, kSLD_Z_content);
-				is_downloading = true;
 				
 				download_set.clear();
 				
@@ -883,7 +882,6 @@ void StageListDown::endOpenning()
 	download_state->enableOuterStroke(ccBLACK, 1.f);
 	download_state->setPosition(ccp(240,90));
 	addChild(download_state, kSLD_Z_content);
-	is_downloading = true;
 	download_set.clear();
 	
 	is_enable_index.clear();
@@ -956,7 +954,6 @@ void StageListDown::menuAction(CCObject *sender)
 			ing_download_cnt = 1;
 		if(int(df_list.size()+sf_list.size()) > 0)
 			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
-		is_downloading = true;
 		startDownload();
 	}
 }

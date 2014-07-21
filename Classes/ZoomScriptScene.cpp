@@ -171,7 +171,7 @@ bool ZoomScript::init()
 	addChild(script_case, kZS_Z_script_case);
 	
 	
-	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(80,50), CommonButtonYellow, -160);
+	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
 	next_button->setTitleColor(ccc3(50, 20, 0));
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
 	next_button->setPosition(ccp(480-50,30));

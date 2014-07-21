@@ -547,6 +547,8 @@ void AchievePopup::setAchieveTable()
 	main_case->addChild(achieve_table, kAchievePopupZorder_table);
 	achieve_table->setTouchPriority(-190);
 	
+	achieve_table->reloadData();
+	
 //	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
 //																										 CCRect(0, 0, 12, 33), CCRectMake(5, 5, 3, 20));
 //	m_scrollBar = ScrollBar::createScrollbar(achieve_table, -18, NULL, scrollBar, -191);
