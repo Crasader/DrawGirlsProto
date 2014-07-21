@@ -1351,14 +1351,14 @@ void MyLocal::ko()
 																 "<font color=#FFAA14 size=12> 해드리니 잘 봐주세요!</font>"
 																 ), kMyLocalKey_gababoContent15);
 	ko->setObject(CCString::create("다 음"), kMyLocalKey_gababoContent16);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=35>게임은 가위바위보 입니다!</font>"
+	ko->setObject(CCString::create("<font color=#FFFFFF size=12 newline=43>게임은 가위바위보 입니다!</font>"
 								   "<font color=#FFAA14 size=12 newline=14>버튼 3개중 하나를 선택하여</font>"
 																 "<font color=#FFAA14 size=12 newline=14>저에게 이기시면 됩니다.</font>"
 																 "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라</font>"
 								   "<font color=#FFAA14 size=12 newline=14>더 큰 보상이 있어요!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
-	ko->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
+	ko->setObject(CCString::create("+%d"), kMyLocalKey_gababoReward);
 	
 	ko->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
 	ko->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
@@ -2270,7 +2270,7 @@ void MyLocal::en()
 								   "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라 더 큰 보상이 있어요!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
-	en->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
+	en->setObject(CCString::create("+%d"), kMyLocalKey_gababoReward);
 	
 	en->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
 	en->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);
@@ -3202,7 +3202,7 @@ void MyLocal::ja()
 								   "<font color=#FFAA14 size=12 newline=14>연승 횟수에 따라 더 큰 보상이 있어요!</font>"
 								   "<font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>"), kMyLocalKey_gababoContent17);
 	
-	ja->setObject(CCString::create("x%d"), kMyLocalKey_gababoReward);
+	ja->setObject(CCString::create("+%d"), kMyLocalKey_gababoReward);
 	
 	ja->setObject(CCString::create("PVP 튜토리얼 중에는 나가실 수 없습니다."), kMyLocalKey_notGohomeEndlessTutorialMent);
 	ja->setObject(CCString::create("PVP 중에는 재시도할 수 없습니다."), kMyLocalKey_notReplayEndlessMent);

@@ -2769,11 +2769,13 @@ void MainFlowScene::setBottom()
 //	n_etc_label->setPosition(ccp(n_etc_img->getContentSize().width/2.f, 7));
 //	n_etc_img->addChild(n_etc_label);
 	KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-	n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(0,25));
+	
+	n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-5,18));
+	n_event_ment->setAnchorPoint(ccp(1,0.5));
 	n_etc_img->addChild(n_event_ment);
 	
 	CCScale9Sprite* n_event_ment_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));//"mainflow_new.png");
-	n_event_ment_case->setContentSize(n_event_ment->getContentSize() + CCSizeMake(12, 10));
+	n_event_ment_case->setContentSize(n_event_ment->getContentSize() + CCSizeMake(12, 9));
 	n_event_ment_case->setPosition(ccpFromSize(n_event_ment->getContentSize()/2.f));
 	n_event_ment->addChild(n_event_ment_case, -1);
 	

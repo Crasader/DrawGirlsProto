@@ -2457,8 +2457,8 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 	}
 	
-	if(m_attackPercent<=0 && m_maxSpeed>1.0)m_maxSpeed=1.f;
-	if(m_maxSpeed>1.5)m_maxSpeed=1.5;
+	if(m_attackPercent<=0 && m_maxSpeed>0.8f)m_maxSpeed=0.8f;
+	if(m_maxSpeed>1.2f)m_maxSpeed=1.2f;
 	settingFuryRule();
 	
 	CCLOG("#################### Change Balnace1 ############################");
