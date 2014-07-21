@@ -345,6 +345,7 @@ bool ClearPopup::init()
 	ok_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearPopup::controlButtonAction), CCControlEventTouchUpInside);
 	ok_menu->setPosition(ccp(347,45));
 	ok_menu->setVisible(false);
+	ok_menu->setEnabled(false);
 	main_case->addChild(ok_menu, kZ_CP_menu);
 	ok_menu->setTouchPriority(-200);
 	
@@ -360,6 +361,7 @@ bool ClearPopup::init()
 	replay_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearPopup::controlButtonAction), CCControlEventTouchUpInside);
 	replay_menu->setPosition(ccp(132,45));
 	replay_menu->setVisible(false);
+	replay_menu->setEnabled(false);
 	main_case->addChild(replay_menu, kZ_CP_menu);
 	replay_menu->setTouchPriority(-200);
 	
@@ -1945,6 +1947,8 @@ void ClearPopup::startCalcAnimation()
 										}, [=](float t){
 											ok_menu->setPosition(ok_origin_position);
 											KS::setOpacity(ok_menu, 255);
+											ok_menu->setEnabled(true);
+											replay_menu->setEnabled(true);
 											closePopup();
 										}));
 									}));
