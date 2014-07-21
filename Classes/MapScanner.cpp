@@ -950,7 +950,7 @@ void MapScanner::setTopBottomBlock()
 		
 		t_clipping->setAlphaThreshold(0.1f);
 		
-		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 15);
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont().c_str(), 15);
 		lock_label->disableOuterStroke();
 		lock_label->setAnchorPoint(ccp(0.5f,0.5f));
 		lock_label->setPosition(ccp(0,31/2.f));
@@ -963,7 +963,7 @@ void MapScanner::setTopBottomBlock()
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
 		
-		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 15);
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont().c_str(), 15);
 		lock_label->disableOuterStroke();
 		lock_label->setPosition(ccp(top_block_lock->getContentSize().width/2.f,top_block_lock->getContentSize().height/2.f));
 		top_block_lock->addChild(lock_label);
@@ -1068,7 +1068,7 @@ void MapScanner::setTopBottomBlock()
 		
 		t_clipping->setAlphaThreshold(0.1f);
 		
-		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 15);
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont().c_str(), 15);
 		lock_label->setAnchorPoint(ccp(0.5f,0.5f));
 		lock_label->disableOuterStroke();
 		lock_label->setPosition(ccp(0,-31/2.f));
@@ -1081,7 +1081,7 @@ void MapScanner::setTopBottomBlock()
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
 		
-		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont2().c_str(), 15);
+		KSLabelTTF* lock_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_locked), mySGD->getFont().c_str(), 15);
 		lock_label->disableOuterStroke();
 		lock_label->setPosition(ccp(bottom_block_lock->getContentSize().width/2.f,bottom_block_lock->getContentSize().height/2.f));
 		bottom_block_lock->addChild(lock_label);

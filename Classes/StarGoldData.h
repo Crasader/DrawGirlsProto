@@ -954,6 +954,8 @@ public:
 	long long user_index;
 	int total_card_cnt;
 	
+	int loading_tip_back_number;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
