@@ -321,12 +321,12 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 {
 	GraphDogLib::JsonToLog("resultHSLogin", result_data);
 	
-//	if(result_data["result"]["code"].asInt() == GDSUCCESS)
-//	{
-//		successLogin();
-//	}
-//	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
-//	{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		successLogin();
+	}
+	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
+	{
 		is_menu_enable = true;
 		
 		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
@@ -392,25 +392,25 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	nick_back->addChild(bottom_label);
 		
 		
-//	}
-//	else if(result_data["result"]["code"].asInt() == GDBLOCKEDUSER)
-//	{
-//		
-//		CCLog("ffff %s",result_data["blockReason"].asString().c_str());
-//		CCLog("ffff %s",CCString::createWithFormat("%s \n\n %s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString());
-//		
-//		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_blocked), CCString::createWithFormat("%s \n%s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString(),[](){
-//			//mySGD->resetLabels();
-//			//CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-//		});
-//		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
-//	}
-//	else
-//	{
-//		Json::Value param;
-//		param["memberID"] = hspConnector::get()->getSocialID();
-//		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
-//	}
+	}
+	else if(result_data["result"]["code"].asInt() == GDBLOCKEDUSER)
+	{
+		
+		CCLog("ffff %s",result_data["blockReason"].asString().c_str());
+		CCLog("ffff %s",CCString::createWithFormat("%s \n\n %s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString());
+		
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_blocked), CCString::createWithFormat("%s \n%s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString(),[](){
+			//mySGD->resetLabels();
+			//CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+	}
+	else
+	{
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getSocialID();
+		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
+	}
 }
 
 void TitleRenewalScene::successLogin()
