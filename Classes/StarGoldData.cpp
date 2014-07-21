@@ -28,6 +28,8 @@ void StarGoldData::withdraw()
 	star_label = NULL;
 	gold_label = NULL;
 	
+	heart_time = NULL;
+	
 	has_gotten_cards.clear();
 	puzzle_historys.clear();
 	piece_historys.clear();
@@ -188,8 +190,6 @@ CCSprite* StarGoldData::getLoadingImg()
 
 string StarGoldData::getFont()
 {
-	
-	
 	string font_name;
 //#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 //	font_name = "RixGoEB";
@@ -3453,6 +3453,8 @@ void StarGoldData::myInit()
 	network_check_cnt = 0;
 	
 	time_event_list.clear();
+	
+	heart_time = NULL;
 	
 	is_new_puzzle_card = false;
 	
