@@ -59,12 +59,12 @@ bool OnePercentTutorial::init(float originalPercent,
 	m_container->addChild(clippingNode, kOnePercentTutorial_Z_back);
 
 	CCScale9Sprite* innerStencil = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	innerStencil->setContentSize(CCSizeMake(450 / 2.f, 176.5f));
+	innerStencil->setContentSize(CCSizeMake(450 / 2.f + 8.f, 176.5f - 5.f));
 	innerStencil->setPosition(ccp(0.0, 6.0));
 	clippingNode->setStencil(innerStencil);
 	
 	CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	inner_back->setContentSize(CCSizeMake(450 / 2.f, 176.5f));
+	inner_back->setContentSize(CCSizeMake(450 / 2.f + 8.f, 176.5f - 5.f));
 	inner_back->setPosition(ccp(0.0, 6.0));
 	clippingNode->addChild(inner_back);
 
@@ -116,7 +116,7 @@ bool OnePercentTutorial::init(float originalPercent,
 //	gachaNode->setScale(0.7f);
 	gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::gachaAction), CCControlEventTouchUpInside);
 	gacha_button->setPreferredSize(CCSizeMake(350/2.f, 86 / 2.f));
-	gacha_button->setPosition(ccp(back_img->getContentSize().width/2.f, 30));
+	gacha_button->setPosition(ccp(back_img->getContentSize().width/2.f, 32.5));
 	back_img->addChild(gacha_button);
 	gacha_button->setTouchPriority(-180);
 	setFormSetter(gacha_label);
@@ -132,7 +132,7 @@ bool OnePercentTutorial::init(float originalPercent,
 		}
 	});
 	
-	cancel_menu->setPosition(ccp(back_img->getContentSize().width-25, back_img->getContentSize().height-22));
+	cancel_menu->setPosition(ccpFromSize(back_img->getContentSize()) + ccp(-25 + 7.5f, -25 + 0.5f));
 	back_img->addChild(cancel_menu);
 	CCFadeTo* gray_fade = CCFadeTo::create(0.25f, 255);
 	m_grayBack->runAction(gray_fade);
@@ -182,9 +182,9 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		StyledLabelTTF* desc2 = StyledLabelTTF::create(
 																									 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
-																									 mySGD->getFont().c_str(), 12.f, 0, StyledAlignment::kCenterAlignment);
+																									 mySGD->getFont().c_str(), 11.f, 0, StyledAlignment::kCenterAlignment);
 		m_container->addChild(desc2, kOnePercentTutorial_Z_content);
-		desc2->setPosition(ccp(0.0, -39.0));
+		desc2->setPosition(ccp(0.0, -39.0 - 5.f));
 		setFormSetter(desc2);
 	}
 	else if(m_tutorialStep == 2)
