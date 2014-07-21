@@ -27,6 +27,7 @@ JsGababo::JsGababo()
 	//	m_gameStep = 1;
 	m_winCount = 0;
 	m_resultStamp = nullptr;
+	m_resultParticle = nullptr;
 	m_tutorialStep = 1;
 }
 JsGababo::~JsGababo()
@@ -744,6 +745,11 @@ void JsGababo::onPressConfirm(CCObject* t)
 		}));
 		
 	}
+	if(m_resultParticle)
+	{
+		m_resultParticle->removeFromParent();
+		m_resultParticle = nullptr;
+	}
 }
 
 void JsGababo::showHandsMotionWrapper()
@@ -959,6 +965,7 @@ void JsGababo::showHandsMotionWrapper()
 					CCParticleSystemQuad* particle2;
 					{ // 유지되는 파티클.
 						particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+						m_resultParticle = particle2;
 						particle2->setPositionType(kCCPositionTypeRelative);
 						particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
 						particle2->setEmissionRate(80);
