@@ -831,7 +831,7 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 			if(offering_stone_idx <= -1)
 				addChild(ASPopupView::getCommonNoti(-210, "재료 스톤을 선택해주세요."), kBeautyStoneStrengthPopupZorder_popup);
 			else
-				addChild(ASPopupView::getCommonNoti(-210, "잼이 부족합니다."), kBeautyStoneStrengthPopupZorder_popup);
+				addChild(ASPopupView::getCommonNoti(-210, "젬이 부족합니다."), kBeautyStoneStrengthPopupZorder_popup);
 			is_menu_enable = true;
 		}
 	}
