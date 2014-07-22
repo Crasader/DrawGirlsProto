@@ -1869,7 +1869,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("계정연결"), kMyLocalKey_accountLink);
 	en->setObject(CCString::create("최고 레벨 %d"), kMyLocalKey_maxLevel);
 	en->setObject(CCString::create("COMPLETE"), kMyLocalKey_endUpgrade);
-	en->setObject(CCString::create("%d성 카드 획득방법"), kMyLocalKey_cardLockedTitle);
+	en->setObject(CCString::create("%d단계 카드 획득방법"), kMyLocalKey_cardLockedTitle);
 	en->setObject(CCString::create("<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent1);
 	en->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent2);
 	en->setObject(CCString::create("<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent3);

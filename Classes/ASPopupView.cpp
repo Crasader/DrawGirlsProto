@@ -367,7 +367,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 		t_container->addChild(close_button);
 		
 		content_back->setContentSize(content_back->getContentSize() + CCSizeMake(0, -50));
-		content_back->setPosition(content_back->getPosition() + ccp(0,25));
+		content_back->setPosition(content_back->getPosition() + ccp(0,10));
 		ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
 	}
 	
