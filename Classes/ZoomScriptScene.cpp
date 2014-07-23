@@ -261,7 +261,8 @@ void ZoomScript::typingAnimation()
 				CCTouch* t_touch = new CCTouch();
 				t_touch->setTouchInfo(0, 0, 0);
 				t_touch->autorelease();
-				target_node->ccTouchEnded(t_touch, NULL);
+				if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+					target_node->ccTouchEnded(t_touch, NULL);
 			});
 		}
 	}
@@ -271,7 +272,8 @@ void ZoomScript::typingAnimation()
 		t_touch->setTouchInfo(0, 0, 0);
 		t_touch->autorelease();
 		
-		target_node->ccTouchEnded(t_touch, NULL);
+		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+			target_node->ccTouchEnded(t_touch, NULL);
 		
 		unschedule(schedule_selector(ZoomScript::typingAnimation));
 		(this->*delegate_typing_after)();
@@ -302,13 +304,15 @@ void ZoomScript::moveChecking()
 	
 	if(is_scrolling)
 	{
-		target_node->movingDistance(ccpSub(after_position, save_position));
+		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+			target_node->movingDistance(ccpSub(after_position, save_position));
 		is_before_scrolling = is_scrolling;
 	}
 	else if(is_before_scrolling)
 	{
 		is_before_scrolling = false;
-		target_node->movingDistance(CCPointZero);
+		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+			target_node->movingDistance(CCPointZero);
 	}
 	save_position = after_position;
 }
@@ -1380,7 +1384,8 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				
 				if((int)touch == first_touch_p && (((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
-					target_node->ccTouchEnded(touch, pEvent);
+					if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+						target_node->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{

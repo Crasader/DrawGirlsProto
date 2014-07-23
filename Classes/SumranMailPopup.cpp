@@ -147,6 +147,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), -200);
 	allReceive->setTitleSize(12.f);
 	allReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_allAccept));
+	allReceive->getTitleLabel()->disableOuterStroke();
 //	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setTitleColor(ccc3(255, 255, 255));
 	allReceive->setTitleColorForDisable(ccc3(90, 60, 30));
@@ -197,7 +198,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	setFormSetter(giftboxAlert);
 	setFormSetter(giftBoxAlertBox);
 	giftboxAlert->setAnchorPoint(ccp(0,0.5));
-	giftboxAlert->setPosition(ccpFromSize(giftBoxAlertBox->getContentSize()) / 2.f + ccp(-91.5 + 22.5 + 25.f - 36.5f, 1));
+	giftboxAlert->setPosition(ccpFromSize(giftBoxAlertBox->getContentSize()) / 2.f + ccp(-94.5, 1));
 	giftBoxAlertBox->addChild(giftboxAlert, 1);
 	
 	

@@ -94,7 +94,24 @@ bool TitleRenewalScene::init()
 												   {
 													   splash->setOpacity(255-255*t);
 													   splash->removeFromParent();
-													   endSplash();
+													   
+													   CCSprite* marvelous_splash = CCSprite::create("splash_marvelous.png");
+													   marvelous_splash->setPosition(ccp(240,160));
+													   addChild(marvelous_splash);
+													   
+													   addChild(KSTimer::create(1.f, [=]()
+																				{
+																					addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																														   {
+																															   marvelous_splash->setOpacity(255-255*t);
+																														   }, [=](float t)
+																														   {
+																															   marvelous_splash->setOpacity(255-255*t);
+																															   marvelous_splash->removeFromParent();
+																															   
+																															   endSplash();
+																														   }));
+																				}));
 												   }));
 		}));
 		
