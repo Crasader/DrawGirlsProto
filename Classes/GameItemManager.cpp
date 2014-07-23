@@ -1796,7 +1796,7 @@ void GameItemManager::startItemSetting()
 {
 	for(int i=0;i<2;i++)
 	{
-		if(rand()%2 == 0)
+		if(myGD->jack_base_speed + myGD->Fcommunication("Jack_getSpeedUpValue") >= 2.f)
 		{
 			GameItemAttack* t_gia = GameItemAttack::create(true);
 			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
@@ -1804,9 +1804,18 @@ void GameItemManager::startItemSetting()
 		}
 		else
 		{
-			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
-			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_gisu);
+			if(rand()%2 == 0)
+			{
+				GameItemAttack* t_gia = GameItemAttack::create(true);
+				t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+				addChild(t_gia);
+			}
+			else
+			{
+				GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(true);
+				t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+				addChild(t_gisu);
+			}
 		}
 	}
 	
@@ -1915,7 +1924,7 @@ void GameItemManager::counting()
 	
 	if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2*(double_item_cnt > 0 ? 2 : 1))
 	{
-		if(rand()%2 == 0)
+		if(myGD->jack_base_speed + myGD->Fcommunication("Jack_getSpeedUpValue") >= 2.f)
 		{
 			GameItemAttack* t_gia = GameItemAttack::create(false);
 			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
@@ -1923,9 +1932,18 @@ void GameItemManager::counting()
 		}
 		else
 		{
-			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(false);
-			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-			addChild(t_gisu);
+			if(rand()%2 == 0)
+			{
+				GameItemAttack* t_gia = GameItemAttack::create(false);
+				t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+				addChild(t_gia);
+			}
+			else
+			{
+				GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(false);
+				t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+				addChild(t_gisu);
+			}
 		}
 		
 		create_counting_value = rand()%5 + 10-selected_item_cnt-double_item_cnt;
@@ -1962,9 +1980,18 @@ void GameItemManager::addItem()
 	}
 	else if(create_item == kIC_speedUp)
 	{
-		GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
-		t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
-		addChild(t_gisu);
+		if(myGD->jack_base_speed + myGD->Fcommunication("Jack_getSpeedUpValue") >= 2.f)
+		{
+			GameItemAttack* t_gia = GameItemAttack::create(rand()%2 == 0);
+			t_gia->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_gia);
+		}
+		else
+		{
+			GameItemSpeedUp* t_gisu = GameItemSpeedUp::create(rand()%2 == 0);
+			t_gisu->setTakeEffectFunc(this, callfuncCCp_selector(GameItemManager::showTakeItemEffect));
+			addChild(t_gisu);
+		}
 	}
 	else if(create_item == kIC_fast)
 	{
