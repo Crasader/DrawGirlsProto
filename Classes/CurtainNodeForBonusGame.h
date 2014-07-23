@@ -84,6 +84,9 @@ public:
 		m_rightCurtain->setPosition(ccp(560,160));
 		addChild(m_rightCurtain, kBonusGameZorder_curtain);
 
+		// 커튼 없애기
+		m_leftCurtain->setVisible(false);
+		m_rightCurtain->setVisible(false);
 		/*
 		 
 		 
@@ -239,7 +242,9 @@ public:
 		m_rightCurtain->setAnchorPoint(ccp(0.f, 0.5f));
 		m_rightCurtain->setPosition(ccp(560,160));
 		addChild(m_rightCurtain, kBonusGameZorder_curtain);
-		
+		m_leftCurtain->setVisible(false);
+		m_rightCurtain->setVisible(false);
+
 		
 		auto contentBack = CCSprite::create("popup_large_back.png");
 		contentBack->setPosition(ccp(240.0,155.0)); 			// dt (0.0,5.0)
