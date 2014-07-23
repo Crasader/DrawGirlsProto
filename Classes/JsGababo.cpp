@@ -64,9 +64,29 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	m_endFunction = endFunction;
 	m_rewards = rewards;
 	
-	CCSprite* back_img = CCSprite::create("main_back.png");
-	back_img->setPosition(ccp(240,160));
-	addChild(back_img, 0);
+	float height_value = 320.f;
+	if(myDSH->screen_convert_rate < 1.f)
+		height_value = 320.f/myDSH->screen_convert_rate;
+	
+	if(height_value < myDSH->ui_top)
+		height_value = myDSH->ui_top;
+	
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	CCSprite* dimmed_sprite = CCSprite::create("whitePaper.png");
+	dimmed_sprite->setPosition(ccp(240, myDSH->ui_center_y));
+	dimmed_sprite->setColor(ccc3(0, 0, 0));
+	dimmed_sprite->setOpacity(100);
+	dimmed_sprite->setScaleX(screen_scale_x*480.f);
+	dimmed_sprite->setScaleY(height_value);// /myDSH->screen_convert_rate));
+//	t_popup->addChild(dimmed_sprite, -1);
+//	C
+//	CCSprite* back_img = CCSprite::create("main_back.png");
+//	back_img->setPosition(ccp(240,160));
+	addChild(dimmed_sprite, 0);
 	
 	
 //	auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));

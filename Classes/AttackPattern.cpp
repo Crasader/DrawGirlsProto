@@ -3644,7 +3644,7 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 	addChild(grang);
 	grang->setPosition(ip2ccp(mapPoint));
 	
-	addChild(KSTimer::create(2.3f, [=](){
+	addChild(KSTimer::create(1.5f, [=](){
 		addChild(KSSchedule::create([=](float dt){
 			Json::Reader reader;
 			Json::Value root;
