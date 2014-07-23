@@ -388,10 +388,11 @@ void CumberParent::createSubCumber(IntPoint s_p)
 		t_SC->applyAutoBalance();
 		t_SC->startAnimationNoDirection();
 		t_SC->onStartGame();
+		t_SC->setScale(0.1);
 		addChild(t_SC);
 		subCumberArray.push_back(t_SC);	
 		t_SC->setPosition(ip2ccp(s_p));
-
+		addChild(KSGradualValue<float>::create(0.1f, 1.0f, 0.5f, [=](float d){t_SC->setScale(d);}, [=](float d){t_SC->setScale(1);}));
 	}
 }
 

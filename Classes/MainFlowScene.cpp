@@ -1006,7 +1006,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 					int open_puzzle_number = NSDS_GI(kSDS_GI_puzzleList_int1_no_i, mySGD->getOpenPuzzleCount()+1);
 					PuzzleHistory t_history = mySGD->getPuzzleHistory(open_puzzle_number);
 					t_history.is_open = true;
-					t_history.open_type = "잼소모";
+					t_history.open_type = "젬소모";
 					
 					mySGD->changeGoodsTransaction({mySGD->getUpdatePuzzleHistoryParam(t_history, [=](Json::Value result_data)
 																					  {
@@ -1114,13 +1114,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		CCSprite* n_locked_back = CCSprite::create("mainflow_puzzle_lock.png"); //mySIL->getLoadedImg("mainflow_puzzle_lock.png");
 		cell_node->addChild(n_locked_back);
 		
-		CCLabelTTF* rate_label = CCLabelTTF::create("??/??", mySGD->getFont().c_str(), 10);
-		rate_label->setPosition(ccp(-15, -71.5f));
-		cell_node->addChild(rate_label);
+//		CCLabelTTF* rate_label = CCLabelTTF::create("??/??", mySGD->getFont().c_str(), 10);
+//		rate_label->setPosition(ccp(-15, -71.5f));
+//		cell_node->addChild(rate_label);
 		
 		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
+		locked_label->setColor(ccc3(50, 145, 145));
 		locked_label->enableOuterStroke(ccBLACK, 1.f);
-		locked_label->setPosition(ccp(67.5f,133.f));
+		locked_label->setPosition(ccp(67.5f,95.f));
 		n_locked_back->addChild(locked_label);
 		
 		return cell;
@@ -1259,7 +1260,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		
 		if(t_info.is_base_condition_success)//mySGD->getPuzzleHistory(puzzle_number-1).is_clear) // 기본조건 충족 했는가
 		{
-			// 잼 구매 혹은 시간이 되야 열림
+			// 젬 구매 혹은 시간이 되야 열림
 			
 //			CCSprite* n_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
 //			CCSprite* s_buy = CCSprite::create("mainflow_puzzle_open_buy.png");
@@ -1750,7 +1751,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
 		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
 		t_history.is_open = true;
-		t_history.open_type = "잼결제";
+		t_history.open_type = "젬결제";
 		
 		mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
 		

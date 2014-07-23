@@ -613,12 +613,12 @@ void MapScanner::exchangeMS()
 			r+=rm;
 			g+=gm;
 			b+=bm;
-			if(r>orir)mark=0;
+			if(r>orir || b>orib || g>orig)mark=0;
 		}else{
 			r-=rm;
 			g-=gm;
 			b-=bm;
-			if(r<0)mark=1;
+			if(r<0 || g<0 || b<0)mark=1;
 		}
 		
 		t_spr->setColorSilhouette(r, g, b);

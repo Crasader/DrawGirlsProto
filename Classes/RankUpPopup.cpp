@@ -278,13 +278,13 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	CCSprite* card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", t_card_type.c_str())->getCString());
 	card_case->setPosition(ccp(recent_take_card->getContentSize().width/2.f, recent_take_card->getContentSize().height/2.f));
 	recent_take_card->addChild(card_case);
-	recent_take_card->setPosition(ccp(-55,0));
+	recent_take_card->setPosition(ccp(-55,8));
 	m_container->addChild(recent_take_card);
 	
 	KSLabelTTF* recent_card_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recentTakeCard), mySGD->getFont().c_str(), 12);
 	recent_card_ment->setColor(ccc3(255, 170, 0));
 	recent_card_ment->enableOuterStroke(ccBLACK, 1.f);
-	recent_card_ment->setPosition(ccp(-55,38));
+	recent_card_ment->setPosition(ccp(-55,46));
 	m_container->addChild(recent_card_ment);
 	
 	float distance = 15;
@@ -315,12 +315,12 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	CCSprite* next_card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", t_card_type.c_str())->getCString());
 	next_card_case->setPosition(ccp(43, 32));
 	next_take_card->addChild(next_card_case);
-	next_take_card->setPosition(ccp(55,0));
+	next_take_card->setPosition(ccp(55,8));
 	next_card_case->setRotation(-90);
-	
+	next_take_card->setScale(0.9f);
 	m_container->addChild(next_take_card);
 	
-	base_position = ccp(55-(after_grade-1)/2.f*distance, -35);
+	base_position = ccp(55-(after_grade-1)/2.f*distance, -27);
 	for(int i=0;i<after_grade;i++)
 	{
 		CCSprite* t_star = CCSprite::create("gage_star_gold.png");
@@ -332,7 +332,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");
 	
 	question_img = t_ccb.first;
-	question_img->setPosition(ccp(55, 0));
+	question_img->setPosition(ccp(55, 8));
 	m_container->addChild(question_img);
 	
 	question_manager = t_ccb.second;
@@ -340,7 +340,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	
 	rankup_rate_back = CCSprite::create("rankup_ratearrow.png");
-	rankup_rate_back->setPosition(ccp(0,5));
+	rankup_rate_back->setPosition(ccp(0,13));
 	m_container->addChild(rankup_rate_back);
 	
 	KSLabelTTF* rate_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpRate), mySGD->getFont().c_str(), 8);
@@ -418,11 +418,9 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	if(!is_time_event)
 	{
-		rankup_button->setPosition(rankup_button->getPosition() + ccp(0,-5));
-		
 		StyledLabelTTF* fail_rate_up_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_rankUpFailRateUp), mySGD->getRankUpRateDistance()*100.f), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
 		fail_rate_up_label->setAnchorPoint(ccp(0.5f,0.5f));
-		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,30));
+		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,43));
 		m_container->addChild(fail_rate_up_label);
 	}
 	

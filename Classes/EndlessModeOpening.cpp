@@ -1097,7 +1097,7 @@ public:
 			StyledLabelTTF* reward2Title = StyledLabelTTF::create(
 																														ccsf("<font color=#FFAA14 newline=13>%s</font><font color=#FFAA14>%s</font>",
 																																 left1.c_str(), left2.c_str()),
-																														mySGD->getFont().c_str(), 9,
+																														mySGD->getFont().c_str(), 8,
 																														999, StyledAlignment::kCenterAlignment);
 			reward2Title->setAnchorPoint(ccp(0.5f, 0.5f));
 			A = reward2Title;
@@ -1414,7 +1414,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		selectedFlagSpr->setScale(0.8f);
 		list_cell_case->addChild(selectedFlagSpr);
 		
-		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(62, 15), CCTextAlignment::kCCTextAlignmentLeft);
+		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(85, 15), CCTextAlignment::kCCTextAlignmentLeft);
 		nick_label->setColor(ccc3(53, 41, 144));
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->disableOuterStroke();
@@ -1432,7 +1432,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), mySGD->endless_my_high_victory.getV()),
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
-		victory_label->setPosition(ccp(175, list_cell_case->getContentSize().height/2.f));
+		victory_label->setPosition(ccp(185, list_cell_case->getContentSize().height/2.f));
 		list_cell_case->addChild(victory_label);
 		///////////////////////////////////
 		
@@ -1528,7 +1528,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);
 	
-	KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(62, 15), CCTextAlignment::kCCTextAlignmentLeft);
+	KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(85, 15), CCTextAlignment::kCCTextAlignmentLeft);
 	nick_label->setColor(ccc3(53, 41, 144));
 	nick_label->setAnchorPoint(ccp(0,0.5f));
 	nick_label->disableOuterStroke();
@@ -1546,7 +1546,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), rank_list[idx].victory.getV()),
 												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
-	victory_label->setPosition(ccp(175,list_cell_case->getContentSize().height/2.f));
+	victory_label->setPosition(ccp(185,list_cell_case->getContentSize().height/2.f));
 	list_cell_case->addChild(victory_label);
 	
 	if(idx == currentSelectedIdx)

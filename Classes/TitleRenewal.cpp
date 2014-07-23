@@ -312,11 +312,18 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	}
 	else
 	{
-		Json::Value param;
-		param["ManualLogin"] = true;
-		param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 		
-		hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[=](){
+		
+			Json::Value param;
+			param["ManualLogin"] = true;
+			param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+			
+			hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+
+		
+		});
+		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	}
 }
 
@@ -1912,6 +1919,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					// ================================
 				}
 			}
+			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
