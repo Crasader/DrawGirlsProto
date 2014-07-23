@@ -293,7 +293,7 @@ void ZoomScript::startTouchAction()
 	is_before_scrolling = is_scrolling;
 	
 	save_position = game_node->getPosition();
-	schedule(schedule_selector(ZoomScript::moveChecking));
+	//schedule(schedule_selector(ZoomScript::moveChecking));
 }
 
 void ZoomScript::moveChecking()
@@ -320,7 +320,7 @@ void ZoomScript::menuAction(CCObject *sender)
 	
 	if(!is_actioned)
 	{
-		unschedule(schedule_selector(ZoomScript::moveChecking));
+		//unschedule(schedule_selector(ZoomScript::moveChecking));
 		
 		is_actioned = true;
 		next_button->setVisible(false);
