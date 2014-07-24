@@ -122,6 +122,8 @@ struct CommandParam
 	//		param(p), target(t), selector(s) {}
 };
 
+using namespace GraphDogLib;
+
 class GraphDog: public CCObject{
 public:
 	//시작설정
@@ -300,53 +302,7 @@ public:
 		longTimeErrorFunc = func;
 	}
 	
-	std::string IntToString (long long int number)
-	{
-		std::ostringstream convStream;
 		
-		convStream << number;
-		
-		return convStream.str();
-	}
-	
-	void ReplaceString(std::string & strCallId, const char * pszBefore, const char * pszAfter )
-	{
-		size_t iPos = strCallId.find( pszBefore );
-		size_t iBeforeLen = strlen( pszBefore );
-		while( iPos < std::string::npos )
-		{
-			strCallId.replace( iPos, iBeforeLen, pszAfter );
-			iPos = strCallId.find( pszBefore, iPos );
-		}
-	}
-	
-	string dateFormat(string format, string datestring){
-		if(datestring.length()<14)datestring = "19870620120000";
-		string y = datestring.substr(0,4);
-		string sy = datestring.substr(2,2);
-		string m = datestring.substr(4,2);
-		string d = datestring.substr(6,2);
-		string h = datestring.substr(8,2);
-		string sh = IntToString(atoi(h.c_str())%12);
-		string i = datestring.substr(10,2);
-		string s = datestring.substr(12,2);
-		
-		ReplaceString(format,"y",sy.c_str());
-		ReplaceString(format,"Y",y.c_str());
-		ReplaceString(format,"m",m.c_str());
-		ReplaceString(format,"d",d.c_str());
-		ReplaceString(format,"h",sh.c_str());
-		ReplaceString(format,"H",h.c_str());
-		ReplaceString(format,"i",i.c_str());
-		ReplaceString(format,"s",s.c_str());
-		
-		return format;
-	}
-	
-	string dateFormat(string format, long long int datestring){
-		return dateFormat(format,IntToString(datestring));
-	}
-	
 	static GraphDog* get()
 	{
 		static GraphDog* _ins = 0;
@@ -439,8 +395,8 @@ private:
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		curl_easy_setopt(curl_handle, CURLOPT_POST, true);
 		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
-		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 20000);
-		curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, 20000);
+		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 100000); // 연결까지 기다릴 시간.
+		curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, 20000); //총 curl실행시간.
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPINTVL,5); //5초대기

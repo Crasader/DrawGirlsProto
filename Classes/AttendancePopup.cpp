@@ -19,6 +19,7 @@
 #include "CommonAnimation.h"
 #include "ScrollBar.h"
 #include "StyledLabelTTF.h"
+#include "GraphDog.h"
 
 AttendancePopup* AttendancePopup::create(int t_touch_priority, function<void()> t_end_func)
 {
@@ -218,7 +219,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		t_back->setPosition(base_position + d_position*i);
 		back_case->addChild(t_back);
 		
-		KSLabelTTF* day_label = KSLabelTTF::create(graphdog->dateFormat("m/d", mySGD->attendance_data["dayList"][i]["startDate"].asString()).c_str(), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* day_label = KSLabelTTF::create(GraphDogLib::dateFormat("m/d", mySGD->attendance_data["dayList"][i]["startDate"].asString()).c_str(), mySGD->getFont().c_str(), 10);
 		day_label->disableOuterStroke();
 		day_label->setPosition(ccp(23,60.f));
 		t_back->addChild(day_label);
@@ -244,7 +245,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			t_back->addChild(bottom_node);
 		}
 		
-		if(graphdog->dateFormat("Ymd", mySGD->attendance_data["dayList"][i]["startDate"].asString()) == graphdog->dateFormat("Ymd", graphdog->getDate()))
+		if(GraphDogLib::dateFormat("Ymd", mySGD->attendance_data["dayList"][i]["startDate"].asString()) == GraphDogLib::dateFormat("Ymd", graphdog->getDate()))
 		{
 			CCSprite* grayback = CCSprite::create("attendance_specialday_check.png");
 			grayback->setPosition(ccpFromSize(t_back->getContentSize()/2.f));

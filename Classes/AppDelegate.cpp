@@ -281,7 +281,14 @@ bool AppDelegate::applicationDidFinishLaunching()
 	pDirector->setContentScaleFactor(2.0);
 	
 	// turn on display FPS
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	pDirector->setDisplayStats(true);
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	pDirector->setDisplayStats(false);
+
+#endif
 	
 	// set FPS. the default value is 1.0/60 if you don't call this
 	pDirector->setAnimationInterval(1.0 / 60);

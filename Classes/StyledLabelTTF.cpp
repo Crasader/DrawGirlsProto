@@ -2,6 +2,7 @@
 #include "jsoncpp/json.h"
 #include "ks19937.h"
 #include "KSLabelTTF.h"
+#include "GDLib.h"
 #include <string>
 
 using namespace boost;
@@ -60,6 +61,7 @@ void StyledLabelTTF::updateTexture()
 	
 	Json::Value jsonStyle;
 	bool lineBreak = false;
+	float lineMaxHeight=0;
 	for(auto iter = m_texts.begin(); iter != m_texts.end(); ++iter)
 	{
 		StyledText t = *iter;
@@ -71,7 +73,7 @@ void StyledLabelTTF::updateTexture()
 		
 		this->setContentSize(CCSizeMake(m_currentPosition, abs(m_currentLinePosition)));
 		
-		if(jsonStyle.get("linebreak", false).asBool()) // 줄바꿈이거나 마지막 요소이면.
+		if(jsonStyle.get("linebreak", false).asBool() || st.m_text=="$N$") // 줄바꿈이거나 마지막 요소이면.
 		{
 			lineBreak = true;
 			if(m_currentAlignment == StyledAlignment::kLeftAlignment)
@@ -87,7 +89,13 @@ void StyledLabelTTF::updateTexture()
 			{
 				m_oneLineContainer->setPosition(ccp(-m_oneLineSize, 0));
 			}
+			
+			if(st.m_text=="$N$"){
+				jsonStyle["linespacing"]=lineMaxHeight;
+			}
+			
 			m_oneLineSize = 0.f;
+			lineMaxHeight=0;
 			m_oneLineContainer = CCNode::create();
 			oneLineContainer.push_back(m_oneLineContainer);
 			m_oneLineContainer->setTag(1);
@@ -125,6 +133,7 @@ void StyledLabelTTF::updateTexture()
 					m_firstLineMaxY = firstLineMaxY = maxY;
 				}
 				maxX = MAX(maxX, m_oneLineSize);
+				if(lineMaxHeight<ttf->getContentSize().height)lineMaxHeight=ttf->getContentSize().height;
 			}
 			else
 			{
@@ -140,6 +149,11 @@ void StyledLabelTTF::updateTexture()
 				maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
 				minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
 				maxX = MAX(maxX, m_oneLineSize);
+				
+				
+				maxX = MAX(maxX, m_oneLineSize);
+				if(lineMaxHeight<sprite->getContentSize().height)lineMaxHeight=sprite->getContentSize().height;
+				
 				if(lineBreak == false)
 				{
 					m_firstLineMinY = firstLineMinY = minY;
@@ -346,19 +360,39 @@ bool StyledLabelTTF::isSameStringAtIndex(std::string str, int idx, std::string o
 	return true;
 }
 
+string StyledLabelTTF::getSameStringAtIndex(std::string str, int idx, std::string option){
+	int j=0;
+	string r = "";
+	for(int i=idx;i<idx+option.length();i++){
+		r+=str[i];
+		if(i>=str.length())break;
+		if(str[i]!=option[j])break;
+		j++;
+	}
+	return r.c_str();
+	
+}
+
 
 void StyledLabelTTF::setStringByTag(const char* text){
 	m_currentPosition = (0.f);
 	m_oneLineSize = (0.f);
 	m_currentLinePosition = (0.f);
-	m_fontSize = (12.f);
-	m_fontColor = (999);
+	if(!m_fontSize)m_fontSize = (12.f);
+	if(!m_fontSize)m_fontColor = (999);
 	
 	if(m_string==text)
 		return;
 	
 	//<|rgb|size|newline|tag>   ex)   <|900|15|15|>안녕하세요   ->빨간색 15 사이즈 텍스트
 	std::string str = text;
+	
+	if(str[0]!='<'){
+		str = "<font>"+str;
+	}
+	
+	GraphDogLib::ReplaceString(str,"<br>","<font newline=0>$N$</font>");
+
 	Json::Value sData;
 	int labelNo=0;
 	int lastIncludeContentTagNo=-1;
