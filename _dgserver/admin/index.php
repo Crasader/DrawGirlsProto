@@ -2,12 +2,46 @@
 
 include "../lib.php";
 
+
+$admin = new AdminUser($_SESSION["admin_no"]);
+if($admin->isLogined() && !$_GET["mode"]){
+	?>
+
+	<script>
+	location.href = 'admin.php';
+	</script>
+
+	<?php
+	exit;
+}
+ //$aa = new CardHistory2(12,11002);
+
+// echo json_encode($aa->getArrayData());
+
+// $aa->count += 1;
+
+// if($aa->save()){
+// 	echo "ok count++";
+// }
+// //CardHistory2::construct();
+// // while($rData = CardHistory2::getRowByQuery("limit 10")){
+// // 	echo json_encode($rData);
+// // }
+// echo "<br><br>";
+
+
+ //echo LogManager::printLog();
+// echo "<br><br>";
+// var_dump(DBGroup::create("user"));
 ?>
 <html>
 <head>
 <title>Login</title>
 	<script>
 		var gid = '<?=$gid?>';
+
+
+
 	</script>
 	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
@@ -37,6 +71,17 @@ include "../lib.php";
 				alert("error","로그인실패");
 			}
 		}
+
+
+		var abc ="88899626759588789";
+		var efg =j2s(abc);
+		console.log("---------------------------------------");
+		console.log(abc);
+		console.log(efg);
+		efg = s2j(abc)
+		console.log("---------------------------------------");
+		console.log(abc);
+
 	</script>
 </head>
 <body>
@@ -527,7 +572,7 @@ $cPattern[]=$crash;
 $crash=array();
 $crash["data"] = json_decode('{"atype":"crash","target":"yes","crashframe":180,"crashsize":50,"pattern":"107"}',true);
 $crash["option"] = "crashsize";
-$crash["option_max"] = 30;
+$crash["option_max"] = 15;
 $crash["option_min"] = 5;
 $crash["option_type"] = "int";
 $crash["castframe"]="crashframe";

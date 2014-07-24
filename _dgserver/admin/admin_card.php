@@ -26,7 +26,7 @@ var showCardImg = function(value,option){
 </form>
 
 </center>
-<table class="LQDataTable" dbSource="dataManager2.php" dbClass="UserLog" autoSetting="true" dbWhere='' name="datatable" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Card" autoSetting="true" dbWhere='' dbLimit="200" name="datatable" border=1 align=center>
 	<thead>
 	</thead>
 	<tbody datazone>

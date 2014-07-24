@@ -420,33 +420,31 @@ function getshoplist($p){
 	$r=array();
 	$list = array();
 	$oldlistname = "";
-	while($shopInfo = Shop::getRowByQuery("order by type asc, count asc")){
-			$script=json_decode($shopInfo["priceName"],true);
-			$shopInfo["priceName"] = $script[CurrentUserInfo::$language]?$script[CurrentUserInfo::$language]:$script["en"];
-
-
-			$script=json_decode($shopInfo["countName"],true);
-			$shopInfo["countName"] = $script[CurrentUserInfo::$language]?$script[CurrentUserInfo::$language]:$script["en"];
-
+	$shopLoad=false;
+	while($shopInfo = Shop::getRowByQuery("where cc='".CurrentUserInfo::$country."' order by type asc, count asc")){
 			$shopInfo["data"]=json_decode($shopInfo["data"],true);
 			$id = $shopInfo["id"];
 			$r[$id]=$shopInfo;
+			$shopLoad=true;
 	}
+	if(!$shopLoad){
+		while($shopInfo = Shop::getRowByQuery("where cc='kr' order by type asc, count asc")){
+			$shopInfo["data"]=json_decode($shopInfo["data"],true);
+			$id = $shopInfo["id"];
+			$r[$id]=$shopInfo;
+			$shopLoad=true;
+		}
+	}
+
 	$today = TimeManager::getCurrentDateTime();
 	$nowtime = TimeManager::getCurrentTime();
 	$ingEvent = false;
-	while($shopInfo = ShopEvent::getRowByQuery("where startDate<=".$today." and endDate>=".$today." and startTime<=".$nowtime." and endTime>=".$nowtime." order by type asc, count asc")){
-			$script=json_decode($shopInfo["priceName"],true);
-			$shopInfo["priceName"] = $script[CurrentUserInfo::$language]?$script[CurrentUserInfo::$language]:$script["en"];
-
-
-			$script=json_decode($shopInfo["countName"],true);
-			$shopInfo["countName"] = $script[CurrentUserInfo::$language]?$script[CurrentUserInfo::$language]:$script["en"];
-
+	while($shopInfo = ShopEvent::getRowByQuery("where startDate<=".$today." and endDate>=".$today." and startTime<=".$nowtime." and endTime>=".$nowtime." and cc='".CurrentUserInfo::$country."' order by type asc, count asc")){
 			$shopInfo["data"]=json_decode($shopInfo["data"],true);
 			$id = $shopInfo["id"];
 			$r[$id]=$shopInfo;
 			$ingEvent = true;
+			LogManager::addLog("find event".json_encode($shopInfo));
 	}
 
 	$r["event"]=$ingEvent;
@@ -1406,6 +1404,7 @@ function help_writelog(){
 
 
 function writelog($p){
+	LogManager::addLog("----start write log---");
 	
 	if(!$p["input"])$p["input"]=$p["content"];
 	if(!$p["memberID"])$p["memberID"]=1;
@@ -1482,16 +1481,18 @@ function dropoutuser($p){
 
 		
 		if($user->isLoaded()){
-			CommitManager::setSuccess($memberID,StageScore::removeRowByQuery("where memberID=".$user->memberID));
-			CommitManager::setSuccess($memberID,WeeklyScore::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,PieceHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,CardHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,PuzzleHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,ArchivementHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,CharacterHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,UserProperty::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,UserStorage::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
-			CommitManager::setSuccess($memberID,GiftBoxHistory::removeRowByQuery("where memberID=".$user->memberID,$user->getUserIndex()->getShardConnection()));
+			CommitManager::setSuccess($memberID,StageScore::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,WeeklyScore::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,PieceHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,CardHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,PuzzleHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,ArchivementHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,CharacterHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			//CommitManager::setSuccess($memberID,UserProperty::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,UserStorage::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,GiftBoxHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,CuponHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
+			CommitManager::setSuccess($memberID,UserPropertyHistory::removeRowByQueryWithShardKey("where memberID=".$user->memberID,$memberID));
 			CommitManager::setSuccess($memberID,$user->remove());
 
 			if(CommitManager::commit($memberID)){
@@ -1622,11 +1623,12 @@ function join($p){
 
 	CommitManager::begin($memberID);
 	$user = UserData::create($memberID);
+	$userIndex = $user->getUserIndex();
 	$user->memberID = $memberID;
 	$user->flag = $p["flag"];
 	$user->country = CurrentUserInfo::$country;
 
-    LogManager::addLog("join1 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
+    LogManager::addLog("join1 userindex is ".json_encode($userIndex->getArrayData(true)));
 
 	
 	//이미 가입한유저
@@ -1644,9 +1646,9 @@ function join($p){
 
 	//SELECT * FROM drawgirls.aFaultyNickTable where 'ㄱ' regexp `pattern`; 
 	while($rData = FaultyNick::getRowByQuery("where '".addslashes($nick)."' regexp `nick` and isInclusionRule=1 limit 1")){
-		if($rData){
+		//if($rData){
 			return ResultState::makeReturn(2009);
-		}
+		//}
 	}
 
 	
@@ -1661,14 +1663,13 @@ function join($p){
 
     LogManager::addLog("join user DeviceID s1 ".$user->deviceID);
 
-	$user->m__userIndex->nick = $nick;
+	$userIndex->nick = $nick;
 	$user->nick = $nick;
 	$user->joinDate=TimeManager::getCurrentDateTime();
 	
-    LogManager::addLog("join2 userindex is ".json_encode($user->m__userIndex->getArrayData(true)));
+    LogManager::addLog("join2 userindex is ".json_encode($userIndex->getArrayData(true)));
 
-	if($user->m__userIndex->save()){
-		$user->setDBInfo($user->m__userIndex->getShardDBInfo());
+	if($userIndex->save()){
 		if($user->save()){
 			$r["data"] = $user->getArrayData(true);
 			$r["result"]=ResultState::successToArray();
@@ -1762,6 +1763,7 @@ function help_getuserdata(){
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID를 안넣음");
 	$r["result"][]=ResultState::toArray(2003,"정보로드실패");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFINDUSER,"정보얻기실패");
 	
 	return $r;
 }
@@ -1801,7 +1803,7 @@ function getuserdata($p){
 	}else{
 		$r["state"]="error";
 		$r["errorCode"]=10010;
-		$r["result"]=ResultState::toArray(2002,"memberID");
+		$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"memberID");
 	}
 	
 	return $r;
@@ -2728,6 +2730,11 @@ function checkweeklyreward($p){
 		$rewardInfo = new CommonSetting("weeklyReward_kr");
 	}
 	$nrinfo=array();
+
+	if(!is_array($rewardInfo->value) || empty($rewardInfo->value)){
+		LogManager::addLog("checkweeklyreward error ".var_export($rewardInfo,true));
+		return ResultState::makeReturn(2002,"memberID");
+	}	
 	foreach ($rewardInfo->value as $key => $value) {
 		$nrinfo[]=$value;
 	}
@@ -2739,6 +2746,8 @@ function checkweeklyreward($p){
 	
 	
 	}else if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNo()){
+	
+	//위의 if제거하고 아래 if주석풀면 계속 해서 확인함
 	//if(1){
 		$r["sendGift"]=false;
 		$r["lastWeek"]=$userInfo->eventCheckWeek;
@@ -3316,7 +3325,7 @@ function getpuzzlehistory($p){
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
 	$dataList = array();
-    while($rData = PuzzleHistory::getRowByQuery("where memberID='".$memberID."'")){
+    while($rData = PuzzleHistory::getRowByQueryWithShardKey("where memberID='".$memberID."'",$memberID)){
     	$dataList[]=$rData;
     }
 
@@ -3438,7 +3447,7 @@ function getpiecehistory($p){
 
 	$dataList = array();
 	//echo "fuck this??";
-    while($rData = PieceHistory::getRowByQuery("where memberID='".$memberID."'")){
+    while($rData = PieceHistory::getRowByQueryWithShardKey("where memberID='".$memberID."'",$memberID)){
 
 		//echo "fuck this2??";
     	$rData["clearDateList"]=json_decode($rData["clearDateList"],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
@@ -3548,10 +3557,14 @@ function getcardhistory($p){
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
 	$dataList = array();
-    while($rData = CardHistory::getRowByQuery("where memberID='".$memberID."'")){
+    while($rData = CardHistory::getRowByQueryWithShardKey("where memberID='".$memberID."'",$memberID)){
     	$rData["comment"]=stripslashes($rData["comment"]);
 		$dataList[]=$rData;
     }
+
+    $q = Card::getQueryResultWithShardKey("select no from ".Card::getDBTable()." order by no desc limit 1",1);
+    $d = mysql_fetch_array($q);
+    $r["lastCardNo"]=110; //$d["no"];
 
 
 	$r["list"]=$dataList;
@@ -3657,6 +3670,8 @@ function help_updateuserpropertyhistory(){
 
 
 function updateuserpropertyhistory($p){		
+	LogManager::addLog("== start == updateuserpropertyhistory =================================".json_encode($p));
+	
 	$memberID=$p["memberID"];
 	$count=$p["count"];
 
@@ -3679,7 +3694,8 @@ function updateuserpropertyhistory($p){
 	$userHistory->exchangeID = $p["exchangeID"];
 	$userHistory->regDate = TimeManager::getCurrentDateTime();
 
-
+	LogManager::addLog("== save start == updateuserpropertyhistory =================================");
+	
 	if(!$userHistory->save()){
 		$r["result"] = ResultState::toArray(2014,"Dont Save gold");
 		return $r;
@@ -3923,6 +3939,7 @@ function changeuserproperties($p){
 				$minusPropertyValue = $userStorage->{$pType}-$value["count"];
 				CommitManager::setSuccess($memberID,false);
 			}else{
+				LogManager::addLog("another propertys =========================");
 				$param["memberID"]=$memberID;
 				$param["type"]=$value["type"];
 				$param["count"]=$value["count"];
@@ -3935,6 +3952,7 @@ function changeuserproperties($p){
 
 				$result = $this->updateuserpropertyhistory($param);	
 				if(!ResultState::successCheck($result["result"])){
+					LogManager::addLog("save fail another prop");
 					CommitManager::setSuccess($memberID,false);
 				}
 
@@ -4183,7 +4201,7 @@ function getuserproperties($p){
 	$checkRuby = false;
 	$fRuby=array();
 	$pRuby=array();
-    while($rData = UserProperty::getRowByQuery("where memberID='".$memberID."'")){
+    while($rData = UserProperty::getRowByQueryWithShardKey("where memberID='".$memberID."'",$memberID)){
     	unset($rData["memberID"]);
     	unset($rData["no"]);
     	if($rData["type"]=="fr"){
@@ -4350,7 +4368,7 @@ function getarchivementhistory($p){
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
 	$dataList = array();
-    while($rData = ArchivementHistory::getRowByQuery("where memberID=".$memberID)){
+    while($rData = ArchivementHistory::getRowByQueryWithShardKey("where memberID=".$memberID,$memberID)){
 		$dataList[]=$rData;
     }
 
@@ -4434,8 +4452,17 @@ function getgiftboxhistory($p){
 	if($includeConfirm)$where = $where." and regDate>$lastDay order by regDate desc";
 	else $where = $where." and confirmDate='' and regDate>$lastDay order by regDate desc";
 	$dataList = array();
-    while($rData = GiftBoxHistory::getRowByQuery($where)){
-    	if($rData["reward"])$rData["reward"] = json_decode($rData["reward"],true);
+    while($rData = GiftBoxHistory::getRowByQueryWithShardKey($where,$memberID)){
+    	if($rData["reward"]){
+    		$rData["reward"] = json_decode($rData["reward"],true);
+			
+			if($rData["exchangeList"]){
+				$rData["exchangeList"] = json_decode($rData["exchangeList"],true);
+				$rData["reward"] = Exchange::mergeCustom($rData["reward"],$rData["exchangeList"]);
+				unset($rData["exchangeList"]);
+			}
+    	
+    	}
 		$dataList[]=$rData;
     }
 
@@ -4631,18 +4658,17 @@ function confirmallgiftboxhistory($p){
 	$giftBoxNoList=$p["giftBoxNoList"];
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	
-	$obj = new GiftBoxHistory($memberID);
-
+	
 	CommitManager::begin($memberID);
 
 	$cResult = array();
 
 	$param["memberID"]=$memberID;
-	$param["exchangeIDList"]=$obj->getAllExchangeID();
+	$param["exchangeIDList"]=GiftBoxHistory::getAllExchangeID($memberID);
 	LogManager::addLog("exchangeIDlist is ".json_encode($param["exchangeIDList"]));
 	$cResult = $this->exchangeByList($param);
 
-	$rrrr = $obj->confirmAll();
+	$rrrr = GiftBoxHistory::confirmAll($memberID);
 
 	LogManager::addLog("confirm result is ".$rrrr);
 
@@ -4653,9 +4679,7 @@ function confirmallgiftboxhistory($p){
 		LogManager::addLog("cresult is false ".json_encode($cResult));
 		CommitManager::setSuccess($memberID,false);
 	}
-
-	$obj->confirmDate=TimeManager::getCurrentDateTime();
-
+	
 	if(CommitManager::commit($memberID)){
 		$r["result"]=ResultState::successToArray();
 		$r["list"]=$cResult["list"];
@@ -4686,9 +4710,11 @@ function checkgiftboxhistory($p){
 	$where = "where memberID=".$memberID;
 	$where = $where." and confirmDate='' limit 1";
 
-	$userInfo = UserData::create($memberID);
-	LogManager::addLog("select count(*) from ".DBManager::getST("giftboxhistory")." ".$where);
-	$cnt = mysql_fetch_array(mysql_query("select count(*) from ".DBManager::getST("giftboxhistory")." ".$where,$userInfo->getUserIndex()->getShardConnection()));
+	//$userInfo = UserIndex::create($memberID);
+	$q = GiftBoxHistory::getQueryResultWithShardKey("select count(*) from ".GiftBoxHistory::getDBTable()." ".$where,$memberID);
+	LogManager::addLog("select count(*) from ".GiftBoxHistory::getDBTable()." ".$where);
+	if(!$q)return ResultState::makeReturn(2002,"memberID");
+	$cnt = mysql_fetch_array($q);
     if($cnt[0]>0){
     	$r["haveNewGift"] = true;
     	$r["haveNewGiftCnt"]=$cnt[0];
@@ -4722,7 +4748,7 @@ function getcharacterhistory($p){
 
 	$where = "where memberID=".$memberID;
 	$dataList = array();
-    while($rData = CharacterHistory::getRowByQuery($where)){
+    while($rData = CharacterHistory::getRowByQueryWithShardKey($where,$memberID)){
 
 		$powerInfo = Character::getPowerInfo($rData["level"]);
 		$rData=array_merge($rData,$powerInfo);
@@ -5363,7 +5389,7 @@ function help_finishendlessplay(){
 
 function finishendlessplay($p){
 	$memberID=$p["memberID"];
-
+	LogManager::addLog("start finishendlessplay");
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
 	$endlessRank = new EndlessRank($memberID,TimeManager::getCurrentWeekNo());
@@ -5429,6 +5455,7 @@ function finishendlessplay($p){
 			$param["reward"]=$ew["reward"];
 			$sR = $this->sendgiftboxhistory($param);
 			if(!ResultState::successCheck($sR["result"])){
+				LogManager::addLog("sendgift save fail");
 				CommitManager::setSuccess($memberID,false);
 			}
 		}
@@ -5439,9 +5466,11 @@ function finishendlessplay($p){
 	$r["endlessData"]=$endlessData;
 
 	if(!$userData->save()){
+		LogManager::addLog("userdata save fail");
 		CommitManager::setSuccess($memberID,false);
 	}
 	if(!$endlessRank->save()){
+		LogManager::addLog("endlessrank save fail");
 		CommitManager::setSuccess($memberID,false);
 	}
 	if(CommitManager::commit($memberID)){
@@ -5665,11 +5694,14 @@ function help_checkattendenceevent(){
 
 function checkattendenceevent($p){
 	$memberID=$p["memberID"];
-
+	LogManager::addLog("== start checkattendenceevent ==========================");
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	$userData = UserData::create($memberID);
 	
 	$r["sendGift"]=false;
+
+
+	LogManager::addLog("== check checkattendenceevent ==========================");
 
 	//아래코드를 초기화하면 출첵이 계속 뜬다
 	if($userData->eventCheckDate==TimeManager::getCurrentDate()){
@@ -5677,6 +5709,9 @@ function checkattendenceevent($p){
 		//$r["dayList"]=LoginEvent::getRewardDays();
 		return $r;
 	}
+
+
+	LogManager::addLog("== info check checkattendenceevent ==========================");
 
 	//1. 어제출석정보가 있는지. 없으면 출첵정보초기화
 	if($userData->eventCheckDate!=TimeManager::getYesterDayDate()){
@@ -5763,6 +5798,7 @@ function usecupon($p){
 		return ResultState::makeReturn(ResultState::GDDONTFIND);
 	}
 	
+	LogManager::addLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ start CuponManager"); 
 
 	// 2. 쿠폰정보로드
 	$cuponInfo = new CuponManager($cuponCode->cuponNo);
@@ -5776,6 +5812,9 @@ function usecupon($p){
 
 	CommitManager::begin($memberID);
 
+
+	LogManager::addLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ start CuponHistory"); 
+
 	// 3. 사용내역로드. 사용했으면 튕구기
 	$cuponHistory = new CuponHistory($cuponCode->cuponCode,$memberID);
 	
@@ -5783,22 +5822,27 @@ function usecupon($p){
 		return ResultState::makeReturn(ResultState::GDALREADY);	
 	}
 
-	$cuponUsedInfo = new CuponUsedInfo($cuponCode->cuponCode,$cuponCode->serverNo);
+
+	LogManager::addLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ start CuponUsedInfo"); 
+	$cuponUsedInfo = new CuponUsedInfo($cuponCode->cuponCode);
 	if($cuponUsedInfo->useDate>0 && !$cuponInfo->isCommon){
 		return ResultState::makeReturn(ResultState::GDALREADY);
 	}
 
 	// 4. 보상지급 히스토리등록 폐기처리
 	
+	LogManager::addLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ start save usedInfo");
 	//사용등록
 	if(!$cuponInfo->isCommon){
 		$cuponUsedInfo->useDate = $today;
 		$cuponUsedInfo->memberID = $memberID;
 		if(!$cuponUsedInfo->save()){
-		CommitManager::setSuccess($memberID,false);
+			CommitManager::setSuccess($memberID,false);
 		}
 	}
 
+
+	LogManager::addLog("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ start sendgift");
 	//보상지급
 	$param["memberID"]=$memberID;
 	$param["sender"]="Cupon";
@@ -5941,6 +5985,14 @@ function getheart($p){
 			// $userStorage->h += $nHeart;
 			if($userStorage->h+$nHeart>$heartMax->value)$nHeart=$heartMax->value-$userStorage->h;
 			if($use)$nHeart-=1;
+			
+			if($nHeart==0){
+				$r["max"]=$heartMax->value;
+				$r["heart"]=0;
+				$r["result"]=ResultState::toArray(ResultState::GDSUCCESS);
+				return $r;
+			}
+
 			$ep["memberID"]=$memberID;
 			$ep["exchangeID"]="getHeart";
 			$ep["list"][]=array("type"=>"h","count"=>$nHeart);
