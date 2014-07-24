@@ -1331,7 +1331,7 @@ void StarGoldData::addHasGottenCardNumber( int card_number )
 		CardSortInfo t_info = has_gotten_cards[i];
 		if(t_info.card_number.getV() == card_number)
 		{
-			t_info.count = t_info.count.getV() + getClearTakeCardCnt();
+			has_gotten_cards[i].count = t_info.count.getV() + getClearTakeCardCnt();
 			is_found = true;
 		}
 	}

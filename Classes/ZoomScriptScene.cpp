@@ -251,19 +251,23 @@ void ZoomScript::typingAnimation()
 			
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
-			auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
-			zoom_img = tuto.first;
-			tuto.second->runAnimationsForSequenceNamed("Default Timeline");
-			zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
-			addChild(zoom_img, kZS_Z_script_case);
-			tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-				(this->*delegate_typing_after)();
-				CCTouch* t_touch = new CCTouch();
-				t_touch->setTouchInfo(0, 0, 0);
-				t_touch->autorelease();
-				if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
-					target_node->ccTouchEnded(t_touch, NULL);
-			});
+			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+			{
+				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+				zoom_img = tuto.first;
+				tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+				zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+				addChild(zoom_img, kZS_Z_script_case);
+				
+				tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
+					(this->*delegate_typing_after)();
+					CCTouch* t_touch = new CCTouch();
+					t_touch->setTouchInfo(0, 0, 0);
+					t_touch->autorelease();
+					if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+						target_node->ccTouchEnded(t_touch, NULL);
+				});
+			}
 		}
 	}
 	else

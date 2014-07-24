@@ -740,7 +740,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다시하기"), kMyLocalKey_regame);
 	ko->setObject(CCString::create("메인으로"), kMyLocalKey_toMain);
 	ko->setObject(CCString::create("이전 스테이지를\n클리어 해주세요!"), kMyLocalKey_beforeNotClearPuzzle);
-	ko->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
+	ko->setObject(CCString::create("이전액자를\n모두클리어하면\n다음액자가나타납니다."), kMyLocalKey_waitForUpdate);
 	ko->setObject(CCString::create("기다릴게요!\n제 사진\n모아주세요!"), kMyLocalKey_diaryNoImg);
 	ko->setObject(CCString::create("보상"), kMyLocalKey_reward);
 	ko->setObject(CCString::create("스피드"), kMyLocalKey_speed);
@@ -808,12 +808,12 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("파워"), kMyLocalKey_power);
 	ko->setObject(CCString::create("뽑기"), kMyLocalKey_gacha);
 	ko->setObject(CCString::create("일일미션을 완료해보세요!\n선물함으로 선물을 드려요! ^^"), kMyLocalKey_stageListDown);
-	ko->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
-	ko->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
-	ko->setObject(CCString::create("젬로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ko->setObject(CCString::create("액자오픈조건"), kMyLocalKey_frameOpenConditionTitle);
+	ko->setObject(CCString::create("이전액자클리어\n+별%d개이상"), kMyLocalKey_frameOpenConditionContent);
+	ko->setObject(CCString::create("젬으로오픈"), kMyLocalKey_frameOpenConditionContentRuby);
 	ko->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
-	ko->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
-	ko->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
+	ko->setObject(CCString::create("%s월%s일%s:%s오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
+	ko->setObject(CCString::create("자세히보기"), kMyLocalKey_detailView);
 	ko->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	ko->setObject(CCString::create("<font newline=14 strokecolor=000>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 따라 별을 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>별 갯수는 총 10개<font newline=14>입니다."), kMyLocalKey_detailConditionPopupContent);
 //	ko->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=13>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
@@ -1227,7 +1227,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 	ko->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
-	ko->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	ko->setObject(CCString::create("<font newline=16>획득한<font color=999>별갯수"), kMyLocalKey_mainflowDimmed2);
 	ko->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
 	ko->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
 	ko->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
@@ -1235,7 +1235,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
 	ko->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
 	ko->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
-	ko->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
+	ko->setObject(CCString::create("<font newline=16>오늘의<font newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 	ko->setObject(CCString::create("모든 피스 획득!"), kMyLocalKey_puzzleClearCardTitle);
 	ko->setObject(CCString::create("<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzleClearCardContent);
@@ -1411,6 +1411,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 	
 	ko->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
+	ko->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_pleaseInputID);
+	ko->setObject(CCString::create("유효하지 않은 아이디 입니다."), kMyLocalKey_invalidID);
+	ko->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -1666,7 +1669,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("AGAIN TO"), kMyLocalKey_regame);
 	en->setObject(CCString::create("MAIN"), kMyLocalKey_toMain);
 	en->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
-	en->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
+	en->setObject(CCString::create("이전액자를\n모두클리어하면\n다음액자가나타납니다."), kMyLocalKey_waitForUpdate);
 	en->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	en->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	en->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -1734,12 +1737,12 @@ void MyLocal::en()
 	en->setObject(CCString::create("Damage"), kMyLocalKey_power);
 	en->setObject(CCString::create("Gacha"), kMyLocalKey_gacha);
 	en->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
-	en->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
-	en->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
-	en->setObject(CCString::create("젬로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	en->setObject(CCString::create("액자오픈조건"), kMyLocalKey_frameOpenConditionTitle);
+	en->setObject(CCString::create("이전액자클리어\n+별%d개이상"), kMyLocalKey_frameOpenConditionContent);
+	en->setObject(CCString::create("젬으로오픈"), kMyLocalKey_frameOpenConditionContentRuby);
 	en->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
-	en->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
-	en->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
+	en->setObject(CCString::create("%s월%s일%s:%s오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
+	en->setObject(CCString::create("자세히보기"), kMyLocalKey_detailView);
 	en->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	en->setObject(CCString::create("<font newline=14>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 따라 별을 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>별 갯수는 총 10개<font newline=14>입니다."), kMyLocalKey_detailConditionPopupContent);
 //	en->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=12>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
@@ -2145,7 +2148,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 	en->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
-	en->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	en->setObject(CCString::create("<font newline=16>획득한<font color=999>별갯수"), kMyLocalKey_mainflowDimmed2);
 	en->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
 	en->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
 	en->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
@@ -2153,7 +2156,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
 	en->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
 	en->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
-	en->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
+	en->setObject(CCString::create("<font newline=16>오늘의<font newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 	en->setObject(CCString::create("모든 피스 획득!"), kMyLocalKey_puzzleClearCardTitle);
 	en->setObject(CCString::create("<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzleClearCardContent);
@@ -2321,6 +2324,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 	
 	en->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
+	en->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_pleaseInputID);
+	en->setObject(CCString::create("유효하지 않은 아이디 입니다."), kMyLocalKey_invalidID);
+	en->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2585,7 +2591,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("again to"), kMyLocalKey_regame);
 	ja->setObject(CCString::create("MAIN"), kMyLocalKey_toMain);
 	ja->setObject(CCString::create("Please clear\nthe previous stage."), kMyLocalKey_beforeNotClearPuzzle);
-	ja->setObject(CCString::create("이전 액자를\n모두 클리어하면\n다음액자가 나타납니다."), kMyLocalKey_waitForUpdate);
+	ja->setObject(CCString::create("이전액자를\n모두클리어하면\n다음액자가나타납니다."), kMyLocalKey_waitForUpdate);
 	ja->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	ja->setObject(CCString::create("Reward"), kMyLocalKey_reward);
 	ja->setObject(CCString::create("Speed"), kMyLocalKey_speed);
@@ -2653,12 +2659,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Damage"), kMyLocalKey_power);
 	ja->setObject(CCString::create("Gacha"), kMyLocalKey_gacha);
 	ja->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
-	ja->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_frameOpenConditionTitle);
-	ja->setObject(CCString::create("이전 액자 전체 클리어\n+ 별 %d개 이상"), kMyLocalKey_frameOpenConditionContent);
-	ja->setObject(CCString::create("젬로 오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ja->setObject(CCString::create("액자오픈조건"), kMyLocalKey_frameOpenConditionTitle);
+	ja->setObject(CCString::create("이전액자클리어\n+별%d개이상"), kMyLocalKey_frameOpenConditionContent);
+	ja->setObject(CCString::create("젬으로오픈"), kMyLocalKey_frameOpenConditionContentRuby);
 	ja->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
-	ja->setObject(CCString::create("%s월 %s일 %s:%s 오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
-	ja->setObject(CCString::create("자세히 보기"), kMyLocalKey_detailView);
+	ja->setObject(CCString::create("%s월%s일%s:%s오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
+	ja->setObject(CCString::create("자세히보기"), kMyLocalKey_detailView);
 	ja->setObject(CCString::create("별 획득 방법"), kMyLocalKey_detailConditionPopupTitle);
 	ja->setObject(CCString::create("<font newline=14>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 따라 별을 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>별 갯수는 총 10개<font newline=14>입니다."), kMyLocalKey_detailConditionPopupContent);
 //	ja->setObject(CCString::create("<font color=999 size=12>스테이지에서 <font color=990 size=12>4가지 등급<font color=999 size=12 newline=13>을 모두 Clear하면<font color=990 size=12>별 10개<font color=999 size=12>를 모을 수 있습니다."), kMyLocalKey_detailConditionPopupContent2);
@@ -3077,7 +3083,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("저를 찾아주세요! 곳곳에 숨겨져 있어요!"), kMyLocalKey_achieveHiddenContent);
 	
 	ja->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
-	ja->setObject(CCString::create("<font newline=20>각 스테이지에서 획득한<font color=961>별의 총 갯수<font newline=20>입니다."), kMyLocalKey_mainflowDimmed2);
+	ja->setObject(CCString::create("<font newline=16>획득한<font color=999>별갯수"), kMyLocalKey_mainflowDimmed2);
 	ja->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
 	ja->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
 	ja->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
@@ -3085,7 +3091,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font newline=20>랭킹"), kMyLocalKey_mainflowDimmed7);
 	ja->setObject(CCString::create("<font newline=20>상점"), kMyLocalKey_mainflowDimmed8);
 	ja->setObject(CCString::create("<font newline=20>카드"), kMyLocalKey_mainflowDimmed9);
-	ja->setObject(CCString::create("<font size=13 newline=16>오늘의<font size=13 newline=16>미션"), kMyLocalKey_mainflowDimmed10);
+	ja->setObject(CCString::create("<font newline=16>오늘의<font newline=16>미션"), kMyLocalKey_mainflowDimmed10);
 	
 	ja->setObject(CCString::create("모든 피스 획득!"), kMyLocalKey_puzzleClearCardTitle);
 	ja->setObject(CCString::create("<font color=961>모든 피스를 획득<font newline=18>하셨네요!<font color=961 newline=18>보상으로 특별한 카드 한 장을 드릴께요!"), kMyLocalKey_puzzleClearCardContent);
@@ -3253,6 +3259,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!"), kMyLocalKey_buttonTutorialMent);
 	
 	ja->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
+	ja->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_pleaseInputID);
+	ja->setObject(CCString::create("유효하지 않은 아이디 입니다."), kMyLocalKey_invalidID);
+	ja->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
+	
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
