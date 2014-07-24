@@ -121,12 +121,39 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	
 	found_back = NULL;
 	
+	result_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftNotFound), mySGD->getFont().c_str(), 12);
+	result_label->setPosition(ccp(240,117) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
+	main_inner->addChild(result_label, 1001);
+	
 	CommonButton* search_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftSearch), 12, CCSizeMake(60, 35), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0, 0, 62, 32), CCRectMake(30, 15, 2, 2)), touch_priority-1);
 	search_button->setPosition(text_position + ccp(118,0) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
 	search_button->setFunction([=](CCObject* sender)
 							   {
-								   if(!is_menu_enable || string(input_text->getText()) == "")
+								   if(!is_menu_enable)
 									   return;
+								   
+								   if(string(input_text->getText()) == "")
+									{
+										if(found_back)
+										{
+											found_back->setVisible(false);
+										}
+										
+										result_label->setString(myLoc->getLocalForKey(kMyLocalKey_pleaseInputID));
+										result_label->setVisible(true);
+										return;
+									}
+								   else if(KS::strToLongLongForDG(input_text->getText()) <= 0)
+									{
+										if(found_back)
+										{
+											found_back->setVisible(false);
+										}
+										
+										result_label->setString(myLoc->getLocalForKey(kMyLocalKey_invalidID));
+										result_label->setVisible(true);
+										return;
+									}
 								   
 								   is_menu_enable = false;
 								   
@@ -148,10 +175,6 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 								   myHSP->command("getuserdata", t_param, json_selector(this, CardGiftPopup::resultGetUserData));
 							   });
 	main_inner->addChild(search_button, 1000);
-	
-	result_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftNotFound), mySGD->getFont().c_str(), 12);
-	result_label->setPosition(ccp(240,117) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
-	main_inner->addChild(result_label, 1001);
 		
 	CommonAnimation::openPopup(this, main_case, gray,
 							   [=](){}, [=]()
@@ -247,6 +270,12 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 	{
 		mySGD->network_check_cnt = 0;
 		
+		if(found_back)
+		{
+			found_back->removeFromParent();
+			found_back = NULL;
+		}
+		
 		found_back = CCScale9Sprite::create("rank_normal2.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 		found_back->setContentSize(CCSizeMake(224, 35));
 		found_back->setPosition(ccp(240,117) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
@@ -296,6 +325,12 @@ void CardGiftPopup::resultGetUserData(Json::Value result_data)
 	{
 		mySGD->network_check_cnt = 0;
 		
+		if(found_back)
+		{
+			found_back->setVisible(false);
+		}
+		
+		this->result_label->setString(myLoc->getLocalForKey(kMyLocalKey_cardGiftNotFound));
 		this->result_label->setVisible(true);
 		
 		t_loading->removeFromParent();

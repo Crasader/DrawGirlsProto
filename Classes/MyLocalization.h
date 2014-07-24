@@ -853,6 +853,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_buttonTutorialMent,
 	
 	kMyLocalKey_nickBottomMent,
+	kMyLocalKey_pleaseInputID,
+	kMyLocalKey_invalidID,
+	kMyLocalKey_tutorialNextButton,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;
