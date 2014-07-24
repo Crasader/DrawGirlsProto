@@ -412,26 +412,22 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	
 	else if(t_code == kAchievementCode_hidden_returnee) // (히든)
 	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_returnee);	}
-	else if(t_code == kAchievementCode_hidden_bigHand1) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_bigHand1);	}
-	else if(t_code == kAchievementCode_hidden_bigHand2) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_bigHand2);	}
+	else if(t_code == kAchievementCode_hidden_bigHand1 || t_code == kAchievementCode_hidden_bigHand2) // (히든)
+	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_holder) // (히든)
 	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_holder);	}
 	else if(t_code == kAchievementCode_hidden_noSound) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_noSound);	}
+	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_shopper1) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_enterShopCnt);	}
+	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_shopper2 || t_code == kAchievementCode_hidden_shopper3) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieve_itemBuyCnt);	}
-	else if(t_code == kAchievementCode_hidden_breathtaking1) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_breathtaking1);	}
-	else if(t_code == kAchievementCode_hidden_breathtaking2) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_breathtaking2);	}
+	{	return_value = mySGD->getUserdataAchieveItemBuyCount();	}
+	else if(t_code == kAchievementCode_hidden_breathtaking1 || t_code == kAchievementCode_hidden_breathtaking2) // (히든)
+	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_dieEasy) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_dieEasy);	}
+	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_speedMania) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_speedMania);	}
+	{	return_value = data_map[t_code].getIngCount();	}
 	
 	return return_value;
 }

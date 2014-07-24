@@ -2265,7 +2265,7 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 {
 	for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
 	{
-		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
 		   mySGD->getUserdataAchieveItemBuyCount() + cnt >= myAchieve->getCondition((AchievementCode)i))
 		{
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);

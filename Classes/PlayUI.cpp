@@ -1019,7 +1019,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 				   t_p == t_beforePercentage + myAchieve->getCondition(AchievementCode(i))/0.001f)
 				{
-					myAchieve->changeIngCount(AchievementCode(i), 1);
+					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 					AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 				}
@@ -1202,7 +1202,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 											  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 												 playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
 											  {
-												  myAchieve->changeIngCount(AchievementCode(i), 1);
+												  myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 												  AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 												  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 											  }
