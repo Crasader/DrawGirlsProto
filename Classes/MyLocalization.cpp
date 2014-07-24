@@ -1130,7 +1130,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("유효기간이 만료 쿠폰입니다."), kMyLocalKey_couponExpire);
 	ko->setObject(CCString::create("잘못된 사용입니다."), kMyLocalKey_couponOserror);
 	ko->setObject(CCString::create("쿠폰을 찾을 수 없습니다."), kMyLocalKey_couponDontfind);
-	ko->setObject(CCString::create("통신이 원활하지 않습니다. 잠시후 다시 시도해주세요."), kMyLocalKey_couponOtherError);
+	ko->setObject(CCString::create("통신이 원활하지 않습니다.\n잠시후 다시 시도해주세요."), kMyLocalKey_couponOtherError);
 	
 	ko->setObject(CCString::create("액자 오픈 조건"), kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle);
 	ko->setObject(CCString::create("<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요."), kMyLocalKey_notOpenPuzzleNotEnoughtStarContent);

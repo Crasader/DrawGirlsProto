@@ -168,32 +168,32 @@ void KSLabelTTF::updateColor()
 //			0.f
 		};
 		
-		// (-1, -1)
+
 		ccColor4F m_pSquareColors[4];
 		m_pSquareColors[0].r = E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c));
 		m_pSquareColors[0].g = E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c));
 		m_pSquareColors[0].b = E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c));
 		m_pSquareColors[0].a = E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c));
-		// (1, -1)
+		
 		m_pSquareColors[1].r = E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c));
 		m_pSquareColors[1].g = E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c));
 		m_pSquareColors[1].b = E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c));
 		m_pSquareColors[1].a = E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c));
-		// (-1, 1)
+		
 		m_pSquareColors[2].r = E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c));
 		m_pSquareColors[2].g = E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c));
 		m_pSquareColors[2].b = E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c));
 		m_pSquareColors[2].a = E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c));
-		// (1, 1)
+		
 		m_pSquareColors[3].r = E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c));
 		m_pSquareColors[3].g = E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c));
 		m_pSquareColors[3].b = E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c));
 		m_pSquareColors[3].a = E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c));
 	
 		m_sQuad.bl.colors = ccc4BFromccc4F(m_pSquareColors[0]);
-		m_sQuad.br.colors = ccc4BFromccc4F(m_pSquareColors[1]);
+		m_sQuad.br.colors = ccc4BFromccc4F(m_pSquareColors[3]);
 		m_sQuad.tl.colors = ccc4BFromccc4F(m_pSquareColors[2]);
-		m_sQuad.tr.colors = ccc4BFromccc4F(m_pSquareColors[3]);
+		m_sQuad.tr.colors = ccc4BFromccc4F(m_pSquareColors[1]);
 		
 		// renders using batch node
 		if (m_pobBatchNode)

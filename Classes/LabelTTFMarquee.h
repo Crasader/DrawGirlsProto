@@ -29,6 +29,7 @@ public:
 	int m_strIndex;
 	int m_stopIndex;
 	int m_isMoving;
+	int m_space;
 	bool init(const ccColor4B &color, GLfloat width, GLfloat height, string text){
 		if(!CCNode::init()){
 			return false;
@@ -36,6 +37,7 @@ public:
 		m_isMoving = false;
 		m_strIndex = 0;
 		m_stopIndex= -1;
+		m_space = 100;
 		m_texts.push_back(text);
 		
 		this->setContentSize(CCSizeMake(width, height));
@@ -140,6 +142,9 @@ public:
 		this->unschedule(schedule_selector(LabelTTFMarquee::marquee));
 	}
 	
+	void setSpace(int space){
+		m_space=space;
+	}
 	
 	void marquee(float dt){
 		setTextPosition();
@@ -165,9 +170,9 @@ public:
 		StyledLabelTTF* firstLabel = this->getFirstLabel();
 		StyledLabelTTF* lastLabel = this->getLastLabel();
 		
-		float labelTerm =firstLabel->getContentSize().width + 100;
+		float labelTerm =firstLabel->getContentSize().width + m_space;
 		if(firstLabel->getContentSize().width>labelTerm){
-			labelTerm = firstLabel->getContentSize().width + 100;
+			labelTerm = firstLabel->getContentSize().width + m_space;
 		}
 		
 		firstLabel->setPositionX(firstLabel->getPositionX()-1);
@@ -180,7 +185,7 @@ public:
 		
 		if(firstLabel->getPositionX()<firstLabel->getContentSize().width*-1){
 
-			float nextP = lastLabel->getPositionX() + lastLabel->getContentSize().width + 100;
+			float nextP = lastLabel->getPositionX() + lastLabel->getContentSize().width + m_space;
 			if(nextP < this->getContentSize().width)nextP = this->getContentSize().width;
 			firstLabel->setPositionX(nextP);
 			
