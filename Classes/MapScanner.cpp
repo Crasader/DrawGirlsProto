@@ -657,10 +657,9 @@ void MapScanner::randomingRectView( CCPoint t_p )
 	int base_value = roundf(-t_p.y/((480.f-myGD->boarder_value*2)/(320.f))/2.f); // 중간 괄호 : myGD->game_scale
 
 	int gacha_cnt = mySGD->getStartMapGachaCnt();
-
-	if(gacha_cnt)
-		if(gacha_cnt > 1)
-			gacha_cnt = 1;
+	
+	if(gacha_cnt > 1)
+		gacha_cnt = 1;
 
 	gacha_cnt = rand()%(gacha_cnt*5+1);
 
@@ -683,10 +682,10 @@ void MapScanner::randomingRectView( CCPoint t_p )
 		init_rect.size.height = uniform_dist(e1) + 40;//rand()%(maxSize.height-minSize.height + 1) + minSize.height
 	}
 
-	IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-2);
+	IntPoint maxPoint = IntPoint(mapWidthInnerEnd-init_rect.size.width-2-mapWidthInnerBegin-20, init_rect.size.height-4);
 
 	init_rect.origin.x = rand()%maxPoint.x+10;//mapWidthInnerBegin+10;
-	init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/((480.f-myGD->boarder_value*2)/(320.f))/2.f)-init_rect.size.height+1; // 중간 괄호 : myGD->game_scale
+	init_rect.origin.y = rand()%maxPoint.y+base_value+roundf(screen_height/((480.f-myGD->boarder_value*2)/(320.f))/2.f)-init_rect.size.height+2; // 중간 괄호 : myGD->game_scale
 
 	if(!random_rect_img)
 	{

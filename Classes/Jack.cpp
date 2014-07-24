@@ -2208,6 +2208,12 @@ void Jack::endReviveJack()
 //	CCRepeatForever* jack_repeat = CCRepeatForever::create(jack_animate);
 //	jackImg->runAction(jack_repeat);
 
+	if(myGD->mapState[afterPoint.x][afterPoint.y] != mapOldline)
+	{
+		IntMoveState searchFirstMoveState = IntMoveState(afterPoint.x, afterPoint.y, directionStop);
+		searchAndMoveOldline(searchFirstMoveState);
+	}
+	
 	setTouchPointByJoystick(CCPointZero, directionStop, true);
 	setJackState(jackStateNormal);
 	if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("stop"))
