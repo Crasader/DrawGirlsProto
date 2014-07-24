@@ -55,7 +55,7 @@ using namespace std;
 
 #include <zlib.h>
 
-
+#define TRACE() CCLog("%s %d", __FILE__, __LINE__);
 namespace KS
 {
 	//	CCSprite* spriteWithSpriteFrameName(const char *pszSpriteFrameName);
