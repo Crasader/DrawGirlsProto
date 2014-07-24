@@ -32,6 +32,7 @@ import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPResult.HSPResultCode;
 import com.hangame.hsp.HSPServiceProperties;
+import com.hangame.hsp.HSPServiceProperties.HSPLaunchingState;
 import com.hangame.hsp.HSPServiceProperties.HSPServerName;
 import com.hangame.hsp.HSPState;
 import com.hangame.hsp.HSPUtil;
@@ -505,6 +506,8 @@ public class hspConnector {
 								error.put("isSuccess", result.isSuccess());
 								error.put("localizedDescription",
 										result.getDetail());
+								HSPServiceProperties properties = HSPCore.getInstance().getServiceProperties();
+								r.put("serviceprop", properties.getLaunchingState());
 								r.put("error", error);
 							} catch (JSONException e) {
 

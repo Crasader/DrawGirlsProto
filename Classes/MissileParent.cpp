@@ -565,9 +565,10 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	}  
 	else
 	{
-		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
+		// 사냥꾼 미션이고 부하몹이 0 이하라면 부하몹 생성.
+		if(mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
 		{
-            CCLOG("B");
+			CCLOG("B");
 			Json::Reader reader;
 			Json::Value createCumberPattern;
 			reader.parse(R"({
@@ -581,16 +582,16 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		}
 		else
 		{
-            CCLOG("C");
 			patternData=patternD;
 		}
 	}
     
-    if(!patternData.isNull() || patternData.asString()==""){
-        CCLOG("it's null in attackWithKSCode");
-        patternData=patternD;
-    }
+	if(patternData.isNull() || patternData.asString()==""){
+		CCLOG("it's null in attackWithKSCode");
+		patternData = patternD;
+	}
 	
+	KS::KSLog("%", patternData);
 	if(patternData["pattern"].asInt() == 1020)
 	{
 		Json::Reader reader;

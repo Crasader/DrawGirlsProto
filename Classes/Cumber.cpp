@@ -392,7 +392,11 @@ void CumberParent::createSubCumber(IntPoint s_p)
 		addChild(t_SC);
 		subCumberArray.push_back(t_SC);	
 		t_SC->setPosition(ip2ccp(s_p));
-		addChild(KSGradualValue<float>::create(0.1f, 1.0f, 0.5f, [=](float d){t_SC->setScale(d);}, [=](float d){t_SC->setScale(1);}));
+//		addChild(KSGradualValue<float>::create(0.1f, 1.0f, 0.5f, [=](float d){
+//			t_SC->setScale(d);
+//		}, [=](float d){
+//			t_SC->setScale(1);
+//		}));
 	}
 }
 

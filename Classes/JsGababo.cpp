@@ -202,6 +202,9 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	ba->setScale(0.75f);
 	baBox->addChild(ba, 10);
 	baBox->setFunction([=](CCObject*){
+		if(baBox->isEnabled() == false)
+			return;
+		baBox->setEnabled(false);
 		if(m_front1->getScaleY() <= 0.5f)
 			return;
 		m_mySelection = kAttackBa;
@@ -219,6 +222,9 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	ga->setScale(0.75f);
 	gaBox->addChild(ga, 10);
 	gaBox->setFunction([=](CCObject*){
+		if(gaBox->isEnabled() == false)
+			return;
+		gaBox->setEnabled(false);
 		if(m_front1->getScaleY() <= 0.5f)
 			return;
 		m_mySelection = kAttackGa;
@@ -234,6 +240,9 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	bo->setScale(0.75f);
 	boBox->addChild(bo, 10);
 	boBox->setFunction([=](CCObject*){
+		if(boBox->isEnabled() == false)
+			return;
+		boBox->setEnabled(false);
 		if(m_front1->getScaleY() <= 0.5f)
 			return;
 		m_mySelection = kAttackBo;
@@ -701,6 +710,9 @@ void JsGababo::onPressConfirm(CCObject* t)
 		m_bo->setEnabled(false);
 		//addChild(KSTimer::create(2.0f, [=](){
 			contextSwitching(m_front3, m_front1, rollBack, [=](){
+				m_ga->setEnabled(true);
+				m_ba->setEnabled(true);
+				m_bo->setEnabled(true);
 			});
 		//}));
 		//		contextSwitching(m_front1, m_front2, bind(&JsGababo::showHandsMotionWrapper, this), nullptr);
@@ -735,7 +747,11 @@ void JsGababo::onPressConfirm(CCObject* t)
 				addChild(KSTimer::create(2.2f, [=](){
 					loadImage(m_winCount);
 				}));
-			}, nullptr);
+			}, [=](){
+				m_ga->setEnabled(true);
+				m_ba->setEnabled(true);
+				m_bo->setEnabled(true);
+			});
 		}
 		else
 		{
