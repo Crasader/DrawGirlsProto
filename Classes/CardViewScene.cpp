@@ -148,9 +148,9 @@ bool CardViewScene::init()
 //	zoom_img = CCSprite::create("ending_expand.png");
 	
 	
-	CCPoint morphing_position = ccp(435,45);
+	CCPoint morphing_position = ccp(447,45);
 	
-	string morphing_filename;
+	string morphing_filename = "";
 	auto liveGirl = [=](){
 		is_actioned = false;
 		is_morphing = true;
@@ -159,9 +159,9 @@ bool CardViewScene::init()
 			buy_morphing->removeFromParent();
 		
 		morphing_img->removeFromParent();
-		morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
-		morphing_img->setPosition(morphing_position);
-		addChild(morphing_img, kCV_Z_next_button);
+//		morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
+//		morphing_img->setPosition(morphing_position);
+//		addChild(morphing_img, kCV_Z_next_button);
 		
 		
 		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
@@ -182,7 +182,7 @@ bool CardViewScene::init()
 	};
 	if(!is_morphing)
 	{
-		buy_morphing = CommonButton::create("", 10, CCSizeMake(63, 63), CommonButtonLightPupple, -160);
+		buy_morphing = CommonButton::create("", 10, CCSizeMake(63, 63), CCScale9Sprite::create("whitepaper2.png", CCRectMake(0, 0, 63, 63), CCRectMake(31, 31, 1, 1)), -160);
 		buy_morphing->setPosition(morphing_position);
 		buy_morphing->setFunction([=](CCObject* sender)
 								  {
@@ -205,7 +205,7 @@ bool CardViewScene::init()
 	}
 	else
 	{
-		morphing_filename = "morphing_heart_on.ccbi";
+//		morphing_filename = "morphing_heart_on.ccbi";
 		
 		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
 		
@@ -226,10 +226,12 @@ bool CardViewScene::init()
 	}
 	
 	
-	
-	morphing_img = KS::loadCCBI<CCSprite*>(this, morphing_filename.c_str()).first;
-	morphing_img->setPosition(morphing_position);
-	addChild(morphing_img, kCV_Z_next_button);
+	if(morphing_filename != "")
+	{
+		morphing_img = KS::loadCCBI<CCSprite*>(this, morphing_filename.c_str()).first;
+		morphing_img->setPosition(morphing_position);
+		addChild(morphing_img, kCV_Z_next_button);
+	}
 	
 	if(!is_morphing && mySGD->is_morphing_noti)
 	{

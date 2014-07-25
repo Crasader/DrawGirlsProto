@@ -857,6 +857,14 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_invalidID,
 	kMyLocalKey_tutorialNextButton,
 	
+	kMyLocalKey_puzzleDimmed1,
+	kMyLocalKey_puzzleDimmed2,
+	kMyLocalKey_puzzleDimmed3,
+	kMyLocalKey_puzzleDimmed4,
+	
+	kMyLocalKey_stageSettingDimmed1,
+	kMyLocalKey_stageSettingDimmed2,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

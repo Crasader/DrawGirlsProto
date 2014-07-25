@@ -264,9 +264,12 @@ void ZoomScript::typingAnimation()
 					CCTouch* t_touch = new CCTouch();
 					t_touch->setTouchInfo(0, 0, 0);
 					t_touch->autorelease();
-					if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
-						target_node->ccTouchEnded(t_touch, NULL);
+					target_node->ccTouchEnded(t_touch, NULL);
 				});
+			}
+			else
+			{
+				(this->*delegate_typing_after)();
 			}
 		}
 	}

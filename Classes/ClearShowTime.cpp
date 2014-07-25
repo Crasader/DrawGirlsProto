@@ -126,21 +126,25 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 		addChild(safety_img, kCST_Z_clear);
 	}
 
-	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
+//	CCSpriteBatchNode* side_back = CCSpriteBatchNode::create("ingame_side_pattern.png");
+//	addChild(side_back);
+//	
+//	CCSize pattern_size = side_back->getTexture()->getContentSize();
+//	
+//	for(int i=0;i*pattern_size.width < 480;i++)
+//	{
+//		for(int j=0;j*pattern_size.height < myDSH->ui_top;j++)
+//		{
+//			CCSprite* t_pattern = CCSprite::createWithTexture(side_back->getTexture());
+//			t_pattern->setAnchorPoint(ccp(0,0));
+//			t_pattern->setPosition(ccp(i*pattern_size.width,j*pattern_size.height));
+//			side_back->addChild(t_pattern);
+//		}
+//	}
+	
+	CCSprite* side_back = CCSprite::create("ingame_outback.png");
+	side_back->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(side_back);
-	
-	CCSize pattern_size = side_back->getTexture()->getContentSize();
-	
-	for(int i=0;i*pattern_size.width < 480;i++)
-	{
-		for(int j=0;j*pattern_size.height < myDSH->ui_top;j++)
-		{
-			CCSprite* t_pattern = CCSprite::createWithTexture(side_back->getTexture());
-			t_pattern->setAnchorPoint(ccp(0,0));
-			t_pattern->setPosition(ccp(i*pattern_size.width,j*pattern_size.height));
-			side_back->addChild(t_pattern);
-		}
-	}
 	
 //	CCSprite* top_back = CCSprite::create("top_back.png");
 //	top_back->setAnchorPoint(ccp(0.5,0));
