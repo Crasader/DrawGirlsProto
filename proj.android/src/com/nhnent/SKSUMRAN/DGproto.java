@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-package com.nhnent.SKDDMK;
+package com.nhnent.SKSUMRAN;
 import io.fiverocks.android.FiveRocks;
 
 import java.security.MessageDigest;
@@ -67,9 +67,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
-		
+	
 
-		if(com.litqoo.lib.hspConnector.setup(10316, "SKDDMK", "1.0.0.KG")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.0.KG")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
@@ -165,7 +165,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
         								 if (result.isSuccess() == false) {
         									 //Log.i("litqoo", "HSP Login Error = " + result);
 
-        									 // 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
+        									 // ??????????????????????????? ??????????????????????????? ����?????????????????����??�? ????????????????????????��?????????????????????�?.
         									 int errorCode = result.getCode();
         									 String errorDescription = result.getDetail();
 
