@@ -67,7 +67,7 @@ include "header.php";
 	<tr><td>
 
 <?php
-$categorys = array("card","monster","sil","item","mission","pattern","theme","thumbnail","puzzle","piece","ui","etc","frame");
+$categorys = array("card","cbt","monster","sil","item","mission","pattern","theme","thumbnail","puzzle","piece","ui","etc","frame");
 
 
 $uploaderForm = '<select name="category" id="imageCategory">';
@@ -80,9 +80,9 @@ $uploaderForm.="</select>";
 
 $uploaderForm.='writeMode :
 <select name="writeMode">
+<option value="random">random : 랜덤파일명</option>
 <option value="update">update : 숫자늘리기</option>
 <option value="overwrite">overwrite : 덮어쓰기</option>
-<option value="random">random : 랜덤파일명</option>
 </select>';
 
 ?>

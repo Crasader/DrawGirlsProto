@@ -16,7 +16,7 @@ var showPuzzleImg = function(value,option){
 
 	</td></tr></table><br><br>
 	
-<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Puzzle" autoSetting="true" dbWhere='' name="datatable" dbSort='{"order":"asc"}' border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Puzzle" autoSetting="true" dbWhere='' name="datatable" dbSort='{"order":"asc"}' dbLimit="100" border=1 align=center>
 	<thead>
 	</thead>
 	<tbody datazone>

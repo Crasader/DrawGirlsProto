@@ -3,7 +3,21 @@ include "manage_header.php";
 ?>
 <script>
 
+	var loadFunc = function(table,data){
+		var defaultData = s2j(table.attr("defaultData"));
+		if(typeof(defaultData)=="undefined")defaultData={};
+
+		if(typeof(data["data"])=="object" && data["data"].length>0 && typeof(data["data"][0]["memberID"])!="undefined"){
+			defaultData["memberID"]=data["data"][0]["memberID"];
+		} 
+
+		table.attr("defaultData",j2s(defaultData));
+	}
+
 $(document).ready(function(){
+
+	setLoadDataCallBack("datatable",loadFunc);
+
 	$('body').on('click','.findUser',function(){
 		
 		var datatable = getDataTable("datatable");

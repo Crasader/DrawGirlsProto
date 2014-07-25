@@ -2,7 +2,9 @@
 #include "jsoncpp/json.h"
 #include "ks19937.h"
 #include "KSLabelTTF.h"
+#include "GDLib.h"
 #include <string>
+#include "utf8.h"
 
 using namespace boost;
 
@@ -11,7 +13,9 @@ m_currentPosition(0.f),
 m_oneLineSize(0.f),
 m_currentLinePosition(0.f),
 m_fontSize(12.f),
-m_fontColor(999)
+m_fontColor(999),
+m_trimStart(-1),
+m_trimEnd(-1)
 {
 	
 }
@@ -60,7 +64,18 @@ void StyledLabelTTF::updateTexture()
 	
 	Json::Value jsonStyle;
 	bool lineBreak = false;
-	for(auto iter = m_texts.begin(); iter != m_texts.end(); ++iter)
+	
+	std::vector<StyledText> trimedTexts;
+	if(getTrimStart() == -1 && getTrimEnd() == -1)
+	{
+		trimedTexts = m_texts;
+	}
+	else
+	{
+		trimedTexts = getTrimedTexts(m_texts, getTrimStart(), getTrimEnd());
+	}
+	float lineMaxHeight=0;
+	for(auto iter = trimedTexts.begin(); iter != trimedTexts.end(); ++iter)
 	{
 		StyledText t = *iter;
 		
@@ -71,7 +86,7 @@ void StyledLabelTTF::updateTexture()
 		
 		this->setContentSize(CCSizeMake(m_currentPosition, abs(m_currentLinePosition)));
 		
-		if(jsonStyle.get("linebreak", false).asBool()) // 줄바꿈이거나 마지막 요소이면.
+		if(jsonStyle.get("linebreak", false).asBool() || st.m_text=="$N$") // 줄바꿈이거나 마지막 요소이면.
 		{
 			lineBreak = true;
 			if(m_currentAlignment == StyledAlignment::kLeftAlignment)
@@ -87,7 +102,13 @@ void StyledLabelTTF::updateTexture()
 			{
 				m_oneLineContainer->setPosition(ccp(-m_oneLineSize, 0));
 			}
+			
+			if(st.m_text=="$N$"){
+				jsonStyle["linespacing"]=lineMaxHeight;
+			}
+			
 			m_oneLineSize = 0.f;
+			lineMaxHeight=0;
 			m_oneLineContainer = CCNode::create();
 			oneLineContainer.push_back(m_oneLineContainer);
 			m_oneLineContainer->setTag(1);
@@ -125,25 +146,49 @@ void StyledLabelTTF::updateTexture()
 					m_firstLineMaxY = firstLineMaxY = maxY;
 				}
 				maxX = MAX(maxX, m_oneLineSize);
+				if(lineMaxHeight<ttf->getContentSize().height)lineMaxHeight=ttf->getContentSize().height;
 			}
 			else
 			{
 				CCSprite* sprite = CCSprite::create(jsonStyle["img"].asString().c_str());
-				sprite->setScale(jsonStyle.get("scale", 1.f).asFloat());
-				
-				m_oneLineContainer->addChild(sprite);
-				sprite->setAnchorPoint(ccp(0.f, 0.5f));
-				sprite->setPosition(ccp(m_currentPosition, m_currentLinePosition));
-				
-				m_currentPosition += sprite->getContentSize().width;
-				m_oneLineSize += sprite->getContentSize().width;
-				maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
-				minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
-				maxX = MAX(maxX, m_oneLineSize);
-				if(lineBreak == false)
+
+				if(sprite)
 				{
-					m_firstLineMinY = firstLineMinY = minY;
-					m_firstLineMaxY = firstLineMaxY = maxY;
+					sprite->setScale(jsonStyle.get("scale", 1.f).asFloat());
+					
+					m_oneLineContainer->addChild(sprite);
+					sprite->setAnchorPoint(ccp(0.f, 0.5f));
+					sprite->setPosition(ccp(m_currentPosition, m_currentLinePosition));
+					
+					m_currentPosition += sprite->getContentSize().width;
+					m_oneLineSize += sprite->getContentSize().width;
+					maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+					minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+					maxX = MAX(maxX, m_oneLineSize);
+					
+					
+					maxX = MAX(maxX, m_oneLineSize);
+					if(lineMaxHeight<sprite->getContentSize().height)lineMaxHeight=sprite->getContentSize().height;
+					
+					if(lineBreak == false)
+					{
+						sprite->setScale(jsonStyle.get("scale", 1.f).asFloat());
+						
+						m_oneLineContainer->addChild(sprite);
+						sprite->setAnchorPoint(ccp(0.f, 0.5f));
+						sprite->setPosition(ccp(m_currentPosition, m_currentLinePosition));
+						
+						m_currentPosition += sprite->getContentSize().width;
+						m_oneLineSize += sprite->getContentSize().width;
+						maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+						minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+						maxX = MAX(maxX, m_oneLineSize);
+						if(lineBreak == false)
+						{
+							m_firstLineMinY = firstLineMinY = minY;
+							m_firstLineMaxY = firstLineMaxY = maxY;
+						}
+					}
 				}
 			}
 		}
@@ -346,19 +391,39 @@ bool StyledLabelTTF::isSameStringAtIndex(std::string str, int idx, std::string o
 	return true;
 }
 
+string StyledLabelTTF::getSameStringAtIndex(std::string str, int idx, std::string option){
+	int j=0;
+	string r = "";
+	for(int i=idx;i<idx+option.length();i++){
+		r+=str[i];
+		if(i>=str.length())break;
+		if(str[i]!=option[j])break;
+		j++;
+	}
+	return r.c_str();
+	
+}
+
 
 void StyledLabelTTF::setStringByTag(const char* text){
 	m_currentPosition = (0.f);
 	m_oneLineSize = (0.f);
 	m_currentLinePosition = (0.f);
-	m_fontSize = (12.f);
-	m_fontColor = (999);
+	if(!m_fontSize)m_fontSize = (12.f);
+	if(!m_fontSize)m_fontColor = (999);
 	
 	if(m_string==text)
 		return;
 	
 	//<|rgb|size|newline|tag>   ex)   <|900|15|15|>안녕하세요   ->빨간색 15 사이즈 텍스트
 	std::string str = text;
+	
+	if(str[0]!='<'){
+		str = "<font>"+str;
+	}
+	
+	GraphDogLib::ReplaceString(str,"<br>","<font newline=0>$N$</font>");
+
 	Json::Value sData;
 	int labelNo=0;
 	int lastIncludeContentTagNo=-1;
@@ -561,4 +626,48 @@ void StyledLabelTTF::setOldAnchorPoint()
 	{
 		setAnchorPoint(ccp(1.f, 1.f - (firstLineSize / 2) / getContentSize().height));
 	}
+}
+
+std::vector<StyledText> StyledLabelTTF::getTrimedTexts(const std::vector<StyledText>& texts, int s, int e)
+{
+	// 루프 돌면서 s 에서 e 까지 자름.
+	std::vector<StyledText> retValue;
+	int cursor = 0;
+	for(auto text : texts)
+	{
+		StyledText chunk(text.m_style);
+		std::basic_string<wchar_t> result;
+		utf8::utf8to16(text.m_text.begin(), text.m_text.end(), back_inserter(result));
+		std::basic_string<wchar_t> convert;
+		for(int c = 0; c<result.size(); c++)
+		{
+			if(s <= cursor && cursor < e)
+			{
+				convert += result[c];
+//				chunk.m_text += text.m_text[c];
+			}
+			cursor++;
+		}
+		utf8::utf16to8(convert.begin(), convert.end(), std::back_inserter(chunk.m_text));
+		retValue.push_back(chunk);
+	}
+	return retValue;
+}
+void StyledLabelTTF::trimText(int s, int e)
+{
+	setTrimStart(s);
+	setTrimEnd(e);
+	
+	updateTexture();
+}
+int StyledLabelTTF::getTextLength()
+{
+	int sum = 0;
+	for(auto it : m_texts)
+	{
+		std::basic_string<wchar_t> result;
+		utf8::utf8to16(it.m_text.begin(), it.m_text.end(), back_inserter(result));
+		sum += result.size();
+	}
+	return sum;
 }

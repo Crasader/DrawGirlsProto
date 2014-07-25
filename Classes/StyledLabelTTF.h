@@ -135,6 +135,7 @@ public:
 	
 	bool isSameStringAtIndex(std::string str, int idx, std::string option);
 	
+	std::string getSameStringAtIndex(std::string str, int idx, std::string option);
 	void updateTexture();
 	static unsigned int makeRGB(unsigned char R, unsigned char G, unsigned char B)
 	{
@@ -174,13 +175,17 @@ protected:
 	StyledAlignment m_currentAlignment;
 	
 	float m_maxWidth;
-	
 public:
 	std::vector<StyledText> getTexts()
 	{
 		return m_texts;
 	}
-
+	
+	std::vector<StyledText> getTrimedTexts(const std::vector<StyledText>& texts, int s, int e);
+	CC_SYNTHESIZE(int, m_trimStart, TrimStart);
+	CC_SYNTHESIZE(int, m_trimEnd, TrimEnd);
+	void trimText(int s, int e);
+	int getTextLength();
 };
 
 #endif

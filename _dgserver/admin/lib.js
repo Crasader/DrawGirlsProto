@@ -18,7 +18,9 @@
 		if(value)_val = value;
 		else _val="";
 		
-		var op="<input type='image' value='"+_val+"' "+img+" class='imageSelector LQEditor' width=100>";
+		
+		var op="<input type='text' value='"+_val+"' class='LQEditor imageSelector'>";
+		op+="<input type='button' value='선택하기' class='imageSelectorBtn' width=100>";
 		return op;
 	}
 
@@ -32,7 +34,11 @@
 		var getsize = "true";
 		//if(option["getSize"])getsize="true";
 		
-		var op="<input type='text' value='"+_val+"' getSize='"+getsize+"' class='resourceSelector LQEditor' width=100><br><input type='button' value='select' class='resourceSelectorBtn'>";
+		//var op="<input type='text' value='"+_val+"' getSize='"+getsize+"' class='resourceSelector LQEditor' width=100><br><input type='button' value='select' class='resourceSelectorBtn'>";
+		
+		var op="<input type='text' value='"+_val+"' class='LQEditor resourceSelector'>";
+		op+="<input type='button' value='선택하기' class='resourceSelectorBtn' width=100>";
+
 		return op;
 	}
 	
@@ -79,8 +85,10 @@
 	}
 
 	$(document).ready(function(){
-		$('body').on('click','.imageSelector',function(){
-			var delkey = addDelegate2($(this));
+
+		$('body').on('click','.imageSelectorBtn',function(){
+
+			var delkey = addDelegate2($(this).parent().find(".LQEditor"));
 			window.open('./admin_images.php?gid=nothing&delkey='+delkey,'imageselector','width=1000 height=800 menubar=no status=no');
 		});
 		
