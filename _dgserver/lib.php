@@ -597,7 +597,7 @@ function reloadPuzzleInfo(){
 			$reward = $stageReward[$ci];
 			$grade = $ci+1;
 			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs1 = "update ".DBManager::getMT("card")." set missile='".$sString."',reward=$reward,piece=".$stageData[no].",grade=$grade,category='normal' where no=".$cards[$ci]; //
+			$qs1 = "update ".DBManager::getMT("card")." set piece=".$stageData[no].",grade=$grade,category='normal' where no=".$cards[$ci]; //
 			mysql_query($qs1,DBManager::getMainConnection());
 			LogManager::addLog("Q--->".$qs1);
 			LogManager::addLog("--->".mysql_error());

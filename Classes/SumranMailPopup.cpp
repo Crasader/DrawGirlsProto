@@ -558,7 +558,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		{
 			case kGift:
 				
-				comment = GraphDog::get()->dateFormat("m/d h:i",mail.get("regDate","Event").asString().c_str());
+				comment = GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Event").asString().c_str());
 				
 				
 				btnReceive = CommonButton::create(CCSprite::create("subbutton_purple.png"), -200);

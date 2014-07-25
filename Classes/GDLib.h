@@ -42,6 +42,10 @@ namespace GraphDogLib {
 	void openUpdate(string);
 	
 	
+	std::string IntToString (long long int number);
+	void ReplaceString(std::string & strCallId, const char * pszBefore, const char * pszAfter );
+	string dateFormat(string format, string datestring);
+		string dateFormat(string format, long long int datestring);
 	int match(const char *string, const char *pattern);
 
 	

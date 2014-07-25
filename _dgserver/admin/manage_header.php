@@ -3,7 +3,13 @@ include_once("../lib.php");
 
 $admin = new AdminUser($_SESSION["admin_no"]);
 if(!$admin->isLogined()){
-	echo "fail";
+	?>
+
+	<script>
+	location.href = 'index.php';
+	</script>
+
+	<?php
 	exit;
 }
 
@@ -12,8 +18,9 @@ $left_menu[]=array("title"=>"","url"=>"");
 
 ?>
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>
 			<?php
@@ -37,9 +44,9 @@ $left_menu[]=array("title"=>"","url"=>"");
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/black-tie/jquery-ui.css">
 		<script src="jquery-ui-timepicker-addon.js"></script>
 		<script src="jquery.form.js"></script>
-		<script src="lib.js"></script>
-		<script src="LQDataTable.js"></script>
-
+		<script src="lib.js" charset="UTF-8"></script>
+		<script src="LQDataTable.js" charset="UTF-8"></script>
+		<script src="LQEditor.js"></script>
 		<link rel="stylesheet" href="LQDataTable.css">
 		<!-- Latest compiled and minified CSS -->
 
@@ -50,7 +57,6 @@ $left_menu[]=array("title"=>"","url"=>"");
 		<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
 		<link rel="stylesheet" href="jqueryupload/css/jquery.fileupload.css">
 
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 	</head>
 <body>
 
@@ -110,6 +116,12 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_userData.php?gid=<?=$gid?>>userdata<br>유저목록</a></li>
 							</ul>
 		            	</li>
+		            	<li>랭킹
+							<ul class="nav">
+								<li><a href=manage_stageRank.php?gid=<?=$gid?>>stageRank<br>스테이지</a></li>
+								<li><a href=manage_pvpRank.php?gid=<?=$gid?>>pvpRank<br>PVP</a></li>
+							</ul>
+		            	</li>
 						<?php
 							}
 
@@ -122,6 +134,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_loginEvent.php?gid=<?=$gid?>>loginEvent<br>로그인이벤트</a></li>
 								<li><a href=manage_shopEvent.php?gid=<?=$gid?>>shopEvent<br>할인이벤트</a></li>
 								<li><a href=manage_timeEvent.php?gid=<?=$gid?>>timeEvent<br>타임이벤트</a></li>
+								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>attendenceEvent<br>출석이벤트</a></li>
 								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>cuponManager<br>쿠폰관리</a></li>
 								<li><a href=manage_cuponCode.php?gid=<?=$gid?>>cuponCode<br>쿠폰코드</a></li>
 							</ul>
@@ -133,9 +146,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 						?>
 		            	<li>미완성
 							<ul class="nav">
-								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>attendenceEvent<br>출석이벤트</a></li>
 								<li><a href=manage_balance.php?gid=<?=$gid?>>balance<br>벨런스</a></li>
-								<li><a href=manage_userPropertyHistory.php?gid=<?=$gid?>>userPropertyHistory<br>보관함히스토리</a></li>
 								<li><a href=manage_endlessPlayList.php?gid=<?=$gid?>>PVPPlayData<br>PVP플레이데이터</a></li>
 								<li><a href=admin_help.php?gid=<?=$gid?>>EditGame<br>관리툴</a></li>
 								<li><a href=manage_adminUser.php?gid=<?=$gid?>>adminUser<br>관리자목록</a></li>

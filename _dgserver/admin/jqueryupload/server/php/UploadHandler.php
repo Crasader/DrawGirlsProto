@@ -1,6 +1,7 @@
 <?php
 /*
  * jQuery File Upload Plugin PHP Class 6.10.0
+
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan

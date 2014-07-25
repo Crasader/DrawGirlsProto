@@ -135,6 +135,7 @@ public:
 	
 	bool isSameStringAtIndex(std::string str, int idx, std::string option);
 	
+	std::string getSameStringAtIndex(std::string str, int idx, std::string option);
 	void updateTexture();
 	static unsigned int makeRGB(unsigned char R, unsigned char G, unsigned char B)
 	{

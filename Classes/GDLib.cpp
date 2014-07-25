@@ -36,6 +36,56 @@
 
 namespace GraphDogLib {
 
+	
+	
+	std::string IntToString (long long int number)
+	{
+		std::ostringstream convStream;
+		
+		convStream << number;
+		
+		return convStream.str();
+	}
+	
+	void ReplaceString(std::string & strCallId, const char * pszBefore, const char * pszAfter )
+	{
+		size_t iPos = strCallId.find( pszBefore );
+		size_t iBeforeLen = strlen( pszBefore );
+		while( iPos < std::string::npos )
+		{
+			strCallId.replace( iPos, iBeforeLen, pszAfter );
+			iPos = strCallId.find( pszBefore, iPos );
+		}
+	}
+	
+	string dateFormat(string format, string datestring){
+		if(datestring.length()<14)datestring = "19870620120000";
+		string y = datestring.substr(0,4);
+		string sy = datestring.substr(2,2);
+		string m = datestring.substr(4,2);
+		string d = datestring.substr(6,2);
+		string h = datestring.substr(8,2);
+		string sh = IntToString(atoi(h.c_str())%12);
+		string i = datestring.substr(10,2);
+		string s = datestring.substr(12,2);
+		
+		ReplaceString(format,"y",sy.c_str());
+		ReplaceString(format,"Y",y.c_str());
+		ReplaceString(format,"m",m.c_str());
+		ReplaceString(format,"d",d.c_str());
+		ReplaceString(format,"h",sh.c_str());
+		ReplaceString(format,"H",h.c_str());
+		ReplaceString(format,"i",i.c_str());
+		ReplaceString(format,"s",s.c_str());
+		
+		return format;
+	}
+	
+	string dateFormat(string format, long long int datestring){
+		return dateFormat(format,IntToString(datestring));
+	}
+
+	
 	int match(const char *string, const char *pattern)
 	{
 		int    status;

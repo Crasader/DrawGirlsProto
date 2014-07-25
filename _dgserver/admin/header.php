@@ -1,7 +1,17 @@
 <?php
 include_once("../lib.php");
 
+$admin = new AdminUser($_SESSION["admin_no"]);
+if(!$admin->isLogined()){
+	?>
 
+	<script>
+	location.href = 'index.php';
+	</script>
+
+	<?php
+	exit;
+}
 ?>
 
 <html>
@@ -30,6 +40,7 @@ echo $lname[1];
 		<script src="jquery-ui-timepicker-addon.js"></script>
 		<script src="lib.js"></script>
 		<script src="LQDataTable.js"></script>
+		<script src="LQEditor.js"></script>
 		<link rel="stylesheet" href="LQDataTable.css">
 		<!-- Latest compiled and minified CSS -->
 
