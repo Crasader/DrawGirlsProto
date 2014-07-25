@@ -3194,6 +3194,10 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek)
 		{
 			userdata_storage[(UserdataType)i] = result_data["endlessData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
+			if(i == kUserdataType_endlessData_ingWin)
+			{
+				endless_my_victory = userdata_storage[(UserdataType)i].getV();
+			}
 		}
 		else
 		{
