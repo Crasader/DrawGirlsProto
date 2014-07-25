@@ -3,6 +3,7 @@
 #include "ks19937.h"
 #include "KSLabelTTF.h"
 #include <string>
+#include "utf8.h"
 
 using namespace boost;
 
@@ -587,14 +588,19 @@ std::vector<StyledText> StyledLabelTTF::getTrimedTexts(const std::vector<StyledT
 	for(auto text : texts)
 	{
 		StyledText chunk(text.m_style);
-		for(int c = 0; c<text.m_text.size(); c++)
+		std::basic_string<wchar_t> result;
+		utf8::utf8to16(text.m_text.begin(), text.m_text.end(), back_inserter(result));
+		std::basic_string<wchar_t> convert;
+		for(int c = 0; c<result.size(); c++)
 		{
 			if(s <= cursor && cursor < e)
 			{
-				chunk.m_text += text.m_text[c];
+				convert += result[c];
+//				chunk.m_text += text.m_text[c];
 			}
 			cursor++;
 		}
+		utf8::utf16to8(convert.begin(), convert.end(), std::back_inserter(chunk.m_text));
 		retValue.push_back(chunk);
 	}
 	return retValue;
@@ -611,8 +617,9 @@ int StyledLabelTTF::getTextLength()
 	int sum = 0;
 	for(auto it : m_texts)
 	{
-		sum += it.m_text.size();
-		
+		std::basic_string<wchar_t> result;
+		utf8::utf8to16(it.m_text.begin(), it.m_text.end(), back_inserter(result));
+		sum += result.size();
 	}
 	return sum;
 }
