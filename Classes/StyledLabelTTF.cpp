@@ -11,7 +11,9 @@ m_currentPosition(0.f),
 m_oneLineSize(0.f),
 m_currentLinePosition(0.f),
 m_fontSize(12.f),
-m_fontColor(999)
+m_fontColor(999),
+m_trimStart(-1),
+m_trimEnd(-1)
 {
 	
 }
@@ -60,7 +62,17 @@ void StyledLabelTTF::updateTexture()
 	
 	Json::Value jsonStyle;
 	bool lineBreak = false;
-	for(auto iter = m_texts.begin(); iter != m_texts.end(); ++iter)
+	
+	std::vector<StyledText> trimedTexts;
+	if(getTrimStart() == -1 && getTrimEnd() == -1)
+	{
+		trimedTexts = m_texts;
+	}
+	else
+	{
+		trimedTexts = getTrimedTexts(m_texts, getTrimStart(), getTrimEnd());
+	}
+	for(auto iter = trimedTexts.begin(); iter != trimedTexts.end(); ++iter)
 	{
 		StyledText t = *iter;
 		
@@ -129,21 +141,25 @@ void StyledLabelTTF::updateTexture()
 			else
 			{
 				CCSprite* sprite = CCSprite::create(jsonStyle["img"].asString().c_str());
-				sprite->setScale(jsonStyle.get("scale", 1.f).asFloat());
-				
-				m_oneLineContainer->addChild(sprite);
-				sprite->setAnchorPoint(ccp(0.f, 0.5f));
-				sprite->setPosition(ccp(m_currentPosition, m_currentLinePosition));
-				
-				m_currentPosition += sprite->getContentSize().width;
-				m_oneLineSize += sprite->getContentSize().width;
-				maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
-				minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
-				maxX = MAX(maxX, m_oneLineSize);
-				if(lineBreak == false)
+				if(sprite)
 				{
-					m_firstLineMinY = firstLineMinY = minY;
-					m_firstLineMaxY = firstLineMaxY = maxY;
+					sprite->setScale(jsonStyle.get("scale", 1.f).asFloat());
+					
+					m_oneLineContainer->addChild(sprite);
+					sprite->setAnchorPoint(ccp(0.f, 0.5f));
+					sprite->setPosition(ccp(m_currentPosition, m_currentLinePosition));
+					
+					m_currentPosition += sprite->getContentSize().width;
+					m_oneLineSize += sprite->getContentSize().width;
+					maxY = MAX(maxY, m_currentLinePosition + sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+					minY = MIN(minY, m_currentLinePosition - sprite->getContentSize().height * sprite->getScaleY() / 2.f);
+					maxX = MAX(maxX, m_oneLineSize);
+					if(lineBreak == false)
+					{
+						m_firstLineMinY = firstLineMinY = minY;
+						m_firstLineMaxY = firstLineMaxY = maxY;
+					}
+					
 				}
 			}
 		}
@@ -561,4 +577,42 @@ void StyledLabelTTF::setOldAnchorPoint()
 	{
 		setAnchorPoint(ccp(1.f, 1.f - (firstLineSize / 2) / getContentSize().height));
 	}
+}
+
+std::vector<StyledText> StyledLabelTTF::getTrimedTexts(const std::vector<StyledText>& texts, int s, int e)
+{
+	// 루프 돌면서 s 에서 e 까지 자름.
+	std::vector<StyledText> retValue;
+	int cursor = 0;
+	for(auto text : texts)
+	{
+		StyledText chunk(text.m_style);
+		for(int c = 0; c<text.m_text.size(); c++)
+		{
+			if(s <= cursor && cursor < e)
+			{
+				chunk.m_text += text.m_text[c];
+			}
+			cursor++;
+		}
+		retValue.push_back(chunk);
+	}
+	return retValue;
+}
+void StyledLabelTTF::trimText(int s, int e)
+{
+	setTrimStart(s);
+	setTrimEnd(e);
+	
+	updateTexture();
+}
+int StyledLabelTTF::getTextLength()
+{
+	int sum = 0;
+	for(auto it : m_texts)
+	{
+		sum += it.m_text.size();
+		
+	}
+	return sum;
 }
