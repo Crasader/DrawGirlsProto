@@ -345,6 +345,24 @@
 										<real>0.0</real>
 									</array>
 								</dict>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>position</string>
+									<key>time</key>
+									<real>1.3333333730697632</real>
+									<key>type</key>
+									<integer>3</integer>
+									<key>value</key>
+									<array>
+										<real>0.0</real>
+										<real>0.0</real>
+									</array>
+								</dict>
 							</array>
 							<key>name</key>
 							<string>position</string>
@@ -421,7 +439,7 @@
 											<key>name</key>
 											<string>rotation</string>
 											<key>time</key>
-											<real>0.3333333432674408</real>
+											<real>0.26666668057441711</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -436,7 +454,7 @@
 											<key>name</key>
 											<string>rotation</string>
 											<key>time</key>
-											<real>0.5</real>
+											<real>0.43333333730697632</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -451,7 +469,7 @@
 											<key>name</key>
 											<string>rotation</string>
 											<key>time</key>
-											<real>0.76666665077209473</real>
+											<real>0.69999998807907104</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -466,7 +484,7 @@
 											<key>name</key>
 											<string>rotation</string>
 											<key>time</key>
-											<real>0.93333333730697632</real>
+											<real>0.86666667461395264</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -481,7 +499,7 @@
 											<key>name</key>
 											<string>rotation</string>
 											<key>time</key>
-											<real>1.1666666269302368</real>
+											<real>1.1333333253860474</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -497,6 +515,21 @@
 											<string>rotation</string>
 											<key>time</key>
 											<real>1.2999999523162842</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>0.0</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>1.3333333730697632</real>
 											<key>type</key>
 											<integer>2</integer>
 											<key>value</key>
@@ -627,7 +660,7 @@
 													<key>name</key>
 													<string>scale</string>
 													<key>time</key>
-													<real>0.3333333432674408</real>
+													<real>0.26666668057441711</real>
 													<key>type</key>
 													<integer>4</integer>
 													<key>value</key>
@@ -670,7 +703,7 @@
 													<key>name</key>
 													<string>visible</string>
 													<key>time</key>
-													<real>1.2999999523162842</real>
+													<real>1.3333333730697632</real>
 													<key>type</key>
 													<integer>1</integer>
 													<key>value</key>
