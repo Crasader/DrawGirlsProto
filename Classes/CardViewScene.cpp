@@ -266,7 +266,7 @@ bool CardViewScene::init()
 	is_actioned = true;
 	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	minimum_scale = (screen_size.height*320)/(screen_size.width*430);
+	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.2f;
 	
 	//game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	
@@ -361,7 +361,7 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	
 	if(t_p.y > CV_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.y = CV_SCROLL_SPEED_MAX_BASE/game_node->getScale();
 	if(t_p.y < -CV_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.y = -CV_SCROLL_SPEED_MAX_BASE/game_node->getScale();
-	
+	//240,160
 	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
 	
 	//size가 860 * 320
@@ -371,20 +371,11 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	int checkWidth=0;
 	
 	float height = myDSH->ui_center_y*2;
-	float contentHalfWidth = game_node->getScale()*first_img->getContentSize().width/2.f;
-	float contentHalfHeight = game_node->getScale()*first_img->getContentSize().height/2.f;
+	float contentHalfWidth = game_node->getScale()*game_node->getContentSize().width/2.f;
+	float contentHalfHeight = game_node->getScale()*game_node->getContentSize().height/2.f;
 
 	
 	if(contentHalfWidth*2.f<=screen_size.width/2.f){
-//			//왼쪽맞추기
-//		if(contentHalfWidth*-1+widthLimit>a_p.x){
-//			a_p.x = contentHalfWidth*-1+widthLimit;
-//		}
-//		
-//		//오른쪽맞추기
-//		if(contentHalfWidth+screen_size.width/2.f-widthLimit<a_p.x){
-//			a_p.x = contentHalfWidth+screen_size.width/2.f-widthLimit;
-//		}
 		
 		a_p.x=240;
 
