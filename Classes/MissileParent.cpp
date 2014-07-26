@@ -551,7 +551,7 @@ void MissileParent::endIngActionAP()
 }
 
 
-int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD, KSCumberBase* cb, bool exe)
+int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternDParam, KSCumberBase* cb, bool exe)
 {
 	Json::Value patternData;
 	int valid = 1;
@@ -582,13 +582,13 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		}
 		else
 		{
-			patternData=patternD;
+			patternData = patternDParam;
 		}
 	}
     
 	if(patternData.isNull() || patternData.asString()==""){
 		CCLOG("it's null in attackWithKSCode");
-		patternData = patternD;
+		patternData = patternDParam;
 	}
 	
 	KS::KSLog("%", patternData);
@@ -606,7 +606,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		}
 	}
 	
-	CCLOG(".. %s", patternD.c_str());
+	std::string patternD = patternData.asString();
+	CCLOG(".. %s", patternDParam.c_str());
 	CCLOG("%s", boost::str(boost::format("%||") % patternData).c_str());
 	int castFrame = patternData.get("castframe", 120).asInt();
 	// 캐스팅 실패하면 캐스팅 시간 점점 줄음.

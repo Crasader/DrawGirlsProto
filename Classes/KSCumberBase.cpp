@@ -2743,7 +2743,7 @@ void KSCumberBase::caughtAnimation()
 				KS::KSLog("%", *attackIter);
 				if( (*attackIter).get("pattern", "").asString() == "1020" )
 				{
-					cumber->getAttackQueue().push_back(*iter);
+					cumber->getAttackQueue().push_back(*attackIter);
 					found = true;
 					break;
 				}
