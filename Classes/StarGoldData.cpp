@@ -199,8 +199,8 @@ string StarGoldData::getFont()
 //	
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-//	font_name = "jrNaver";
-	font_name = "RixGoEB";
+	font_name = "jrNaver";
+//	font_name = "RixGoEB";
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	font_name = "fonts/jrNaver.ttf"; //RixHeadEB.ttf //RixMGoB.ttf //RixJGoB
 #endif
@@ -3194,6 +3194,10 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek)
 		{
 			userdata_storage[(UserdataType)i] = result_data["endlessData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
+			if(i == kUserdataType_endlessData_ingWin)
+			{
+				endless_my_victory = userdata_storage[(UserdataType)i].getV();
+			}
 		}
 		else
 		{

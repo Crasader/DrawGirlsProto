@@ -586,7 +586,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		}
 	}
     
-	if(patternData.isNull() || patternData.asString()==""){
+	if(patternData.isNull() || patternData.asString()=="" || patternData.isBool()){
 		CCLOG("it's null in attackWithKSCode");
 		patternData = patternDParam;
 	}

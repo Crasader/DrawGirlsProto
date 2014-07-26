@@ -320,7 +320,7 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	float screen_height = screen_width*screen_size.height/screen_size.width;
 	float img_height = 430*r_card_img->getScale();
 	
-	r_card_img->setPosition(ccp(240, screen_height-img_height/2.f));
+	r_card_img->setPosition(ccp(240, myDSH->ui_center_y));
 	target->addChild(r_card_img);
 	
 	smaller_img = r_card_img;
