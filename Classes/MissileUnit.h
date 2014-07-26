@@ -22,8 +22,10 @@ USING_NS_CC;
 class MissileUnit : public CCSprite
 {
 public:
-	static MissileUnit * create (CCPoint t_sp, float t_angle, float t_distance, std::string imgFilename, CCSize t_cs, float t_da, float t_reduce_da);
+	static MissileUnit * create (CCPoint t_sp, float t_angle, float t_distance, std::string imgFilename, CCSize t_cs, float t_da, float t_reduce_da,
+															 bool isSuper = false);
 private:
+	bool isSuper;
 	float angle;
 	float distance;
 	CCSize crashSize;
@@ -35,7 +37,7 @@ private:
 	void removeEffect ();
 	void selfRemove ();
 	void move ();
-	void myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, float t_da, float t_reduce_da);
+	void myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, float t_da, float t_reduce_da, bool isSuper);
 };
 class MissileUnit2 : public CCSprite
 {
@@ -697,8 +699,9 @@ public:
 		CURVE = 1,
 		RIGHTLINE = 0
 	};
-	static MathmaticalMissileUnit * create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve);
-	static MathmaticalMissileUnit * create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs);
+	static MathmaticalMissileUnit * create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve,
+																					bool isSuper);
+	static MathmaticalMissileUnit * create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs, bool isSuper);
 	CCPoint CatMull (CCPoint P0, CCPoint P1, CCPoint P2, CCPoint P3, float t, CurveDisposition curve);
 	double CatMullLength (CCPoint P0, CCPoint P1, CCPoint P2, CCPoint P3, CurveDisposition curve);
 	double IntegralTarget (CCPoint P0, CCPoint P1, CCPoint P2, CCPoint P3, double t);
@@ -707,7 +710,8 @@ public:
 	double smps (std::function <double(CCPoint, CCPoint, CCPoint, CCPoint, double)> f, CCPoint A, CCPoint B, CCPoint C, CCPoint D, double a, double b, int n);
 	void removeEffect ();
 	void selfRemove ();
-	void myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve, std::string const & fn);
+	void myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve, std::string const & fn,
+							 bool isSuper);
 	CCPoint myFunction (float fc);
 	void move (float dt);
 protected:
@@ -722,6 +726,7 @@ protected:
 	CCSize m_crashSize;
 	float m_isChecking;
 	int m_frameCount;
+	bool m_isSuper;
 };
 class RunDownSaw : public CrashMapObject
 {
