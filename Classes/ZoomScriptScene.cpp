@@ -19,6 +19,7 @@
 #include "bustMorphing.h"
 #include "MyLocalization.h"
 #include "RankUpPopup.h"
+#include "FormSetter.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -88,7 +89,10 @@ bool ZoomScript::init()
 //	addChild(title_name, kZS_Z_back);
 	
 	game_node = CCNode::create();
-	game_node->setScale(1.5f);
+	game_node->setAnchorPoint(ccp(0.5,0.5));
+	game_node->setContentSize(CCSizeMake(320,460));
+	game_node->setPosition(ccp(240,myDSH->ui_center_y));
+	setFormSetter(game_node);
 	addChild(game_node, kZS_Z_first_img);
 	
 	silType = mySD->getSilType();
@@ -125,7 +129,9 @@ bool ZoomScript::init()
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
 	
-	first_img->setPosition(ccp(160,215));
+	
+	first_img->setPosition(ccp(160,230));
+	first_img->setAnchorPoint(ccp(0.5,0.5));
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
@@ -133,11 +139,11 @@ bool ZoomScript::init()
 	{
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
-		safety_img->setPosition(ccp(160, 215));
+		safety_img->setPosition(ccp(160, 240));
 		game_node->addChild(safety_img, kZS_Z_second_img);
 	}
 	
-	CCPoint center_position = ccp(160,215);
+	CCPoint center_position = ccp(160,230);
 	
 	CCSprite* top_case = CCSprite::create("diary_frame_top.png");
 	top_case->setPosition(ccpAdd(center_position, ccp(0,215)));
@@ -195,19 +201,19 @@ bool ZoomScript::init()
 	is_actioned = true;
 	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.5f;
+	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.2f;
 	
-	game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+	//game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	
 	return true;
 }
 
 void ZoomScript::onEnterTransitionDidFinish()
 {
-	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
+	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
 	CCDelayTime* delay1 = CCDelayTime::create(1.f);
 	
-	CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
+	CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
 	CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
 	CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 	
@@ -262,7 +268,7 @@ void ZoomScript::typingAnimation()
 				tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
 					(this->*delegate_typing_after)();
 					CCTouch* t_touch = new CCTouch();
-					t_touch->setTouchInfo(0, 0, 0);
+					t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
 					t_touch->autorelease();
 					target_node->ccTouchEnded(t_touch, NULL);
 				});
@@ -276,7 +282,7 @@ void ZoomScript::typingAnimation()
 	else
 	{
 		CCTouch* t_touch = new CCTouch();
-		t_touch->setTouchInfo(0, 0, 0);
+		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
 		t_touch->autorelease();
 		
 		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
@@ -445,7 +451,7 @@ void ZoomScript::menuAction(CCObject *sender)
 																	   mySGD->is_clear_diary = true;
 																	   
 																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
 																	   
 																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
 																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
@@ -547,7 +553,7 @@ void ZoomScript::menuAction(CCObject *sender)
 																	   mySGD->is_clear_diary = true;
 																	   
 																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
 																	   
 																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
 																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
@@ -569,7 +575,7 @@ void ZoomScript::menuAction(CCObject *sender)
 						mySGD->is_clear_diary = true;
 						
 						CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-						CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+						CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
 						
 						CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
 						CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
@@ -698,7 +704,7 @@ void ZoomScript::menuAction(CCObject *sender)
 																	   mySGD->is_clear_diary = true;
 																	   
 																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
 																	   
 																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
 																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
@@ -751,7 +757,7 @@ void ZoomScript::menuAction(CCObject *sender)
 																	   mySGD->is_clear_diary = true;
 																	   
 																	   CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+																	   CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
 																	   
 																	   CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
 																	   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
@@ -773,7 +779,7 @@ void ZoomScript::menuAction(CCObject *sender)
 						mySGD->is_clear_diary = true;
 						
 						CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-						CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+						CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
 						
 						CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
 						CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
@@ -794,7 +800,7 @@ void ZoomScript::menuAction(CCObject *sender)
 					mySGD->is_clear_diary = true;
 					
 					CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
-					CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
+					CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
 					
 					CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
 					CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
@@ -839,7 +845,7 @@ void ZoomScript::showtimeFirstAction()
 		second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
 	
-	second_img->setPosition(ccp(160,215));
+	second_img->setPosition(ccp(160,230));
 	second_img->setTouchEnabled(false);
 	game_node->addChild(second_img, kZS_Z_second_img);
 	
@@ -849,14 +855,16 @@ void ZoomScript::showtimeFirstAction()
 		
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
-		safety_img->setPosition(ccp(160, 215));
+		safety_img->setPosition(ccp(160, 240));
 		game_node->addChild(safety_img, kZS_Z_second_img);
 	}
 	
 	target_node = second_img;
 	
-	game_node->setScale(1.5f);
-	game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+	game_node->setScale(1.f);
+	game_node->setAnchorPoint(ccp(0.5,0.5));
+	game_node->setContentSize(CCSizeMake(320,460));
+	//game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	first_img->removeFromParentAndCleanup(true);
 	first_img = NULL;
 	
@@ -926,7 +934,7 @@ void ZoomScript::showtimeFifthAction()
 	target_node = third_img;
 	
 	game_node->setScale(1.5f);
-	game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+	game_node->setPosition(ccp(240,myDSH->ui_center_y));//ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
 	if(second_img)
 		second_img->removeFromParent();
 	else
@@ -958,13 +966,13 @@ void ZoomScript::showtimeFifthAction()
 
 void ZoomScript::showtimeSecondAction()
 {
-	white_paper->removeFromParent();
+	white_paper->runAction(CCFadeOut::create(0.5f));
 	
 	CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
+	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
 	CCDelayTime* delay2 = CCDelayTime::create(1.f);
 	
-	CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
+	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
 	CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
 	CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 	
@@ -1015,6 +1023,9 @@ void ZoomScript::rankupAction()
 
 void ZoomScript::showtimeThirdAction()
 {
+	white_paper->removeFromParent();
+
+	
 	if(is_exchanged && NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3)))
 	{
 		startStageAnimation();
@@ -1081,28 +1092,78 @@ void ZoomScript::moveListXY(CCPoint t_p)
 	
 	if(t_p.y > ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.y = ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale();
 	if(t_p.y < -ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale())		t_p.y = -ZS_SCROLL_SPEED_MAX_BASE/game_node->getScale();
-	
+//	
+//	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
+//	
+//	if(game_node->getScale() <= 1.5f)
+//	{
+//		if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
+//			a_p.x = (480.f-320.f*game_node->getScale())/2.f+40.f;
+//		else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
+//			a_p.x = (480.f-320.f*game_node->getScale())/2.f-40.f;
+//	}
+//	else
+//	{
+//		if(a_p.x > 40.f)
+//			a_p.x = 40.f;
+//		else if(a_p.x < 480-320*game_node->getScale()-40.f)
+//			a_p.x = 480-320*game_node->getScale()-40.f;
+//	}
+//	
+//	if(a_p.y > 0+40.f)
+//		a_p.y = 0+40.f;
+//	if(a_p.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
+//		a_p.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f;
+//	
+//	game_node->setPosition(a_p);
+
+
+	// 120, 0  ->   +120 + 160
 	CCPoint a_p = ccpSub(game_node->getPosition(), t_p);
 	
-	if(game_node->getScale() <= 1.5f)
-	{
-		if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
-			a_p.x = (480.f-320.f*game_node->getScale())/2.f+40.f;
-		else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
-			a_p.x = (480.f-320.f*game_node->getScale())/2.f-40.f;
-	}
-	else
-	{
-		if(a_p.x > 40.f)
-			a_p.x = 40.f;
-		else if(a_p.x < 480-320*game_node->getScale()-40.f)
-			a_p.x = 480-320*game_node->getScale()-40.f;
+	
+	//size가 860 * 320
+	int widthLimit = 320 * game_node->getScale();
+	int heightLimit = (430-screen_size.height/2.f) * game_node->getScale();
+	
+	int checkWidth=0;
+	
+	float height = myDSH->ui_center_y*2;
+	float contentHalfWidth = game_node->getScale()*game_node->getContentSize().width/2.f;
+	float contentHalfHeight = game_node->getScale()*game_node->getContentSize().height/2.f;
+	
+	
+	if(contentHalfWidth*2.f<=screen_size.width/2.f){
+		
+		a_p.x=240;
+		
+	}else{
+		
+		
+		if(a_p.x<screen_size.width/2.f-contentHalfWidth){
+			a_p.x = screen_size.width/2.f-contentHalfWidth;
+		}
+		
+		if(contentHalfWidth<a_p.x){
+			a_p.x = contentHalfWidth;
+		}
+		
 	}
 	
-	if(a_p.y > 0+40.f)
-		a_p.y = 0+40.f;
-	if(a_p.y < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
-		a_p.y = -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f;
+	
+	if(contentHalfHeight*2>=height){
+		//top & bottom
+		if(a_p.y < height - contentHalfHeight){
+			a_p.y=height - contentHalfHeight;
+		}else if(a_p.y>contentHalfHeight){
+			a_p.y=contentHalfHeight;
+		}
+	}else{
+		a_p.y = myDSH->ui_center_y;
+	}
+
+	
+	
 	
 	game_node->setPosition(a_p);
 }
@@ -1270,12 +1331,16 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			else if(multiTouchData.size() == 2)
 			{
 				CCPoint sub_point = CCPointZero;
+				CCPoint avg_point = CCPointZero;
 				map<int, CCPoint>::iterator it;
 				for(it = multiTouchData.begin();it!=multiTouchData.end();it++)
 				{
 					sub_point = ccpMult(sub_point, -1);
 					sub_point = ccpAdd(sub_point, it->second);
+					
+					avg_point = ccpAdd(avg_point, it->second);
 				}
+				avg_point = ccpMult(avg_point,1/(float)multiTouchData.size());
 
 				script_label->setVisible(false);
 				script_case->setVisible(false);
@@ -1288,41 +1353,46 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				else if(after_scale < minimum_scale)		after_scale = minimum_scale;
 				zoom_base_distance = changed_distance;
 				game_node->setScale(after_scale);
-
-				CCPoint a_p;
-				{
-					float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
-					comp_scale = game_node->getScale() - comp_scale;
-					
-					a_p.x = game_node->getPositionX() - 320*comp_scale/2.f;
-				}
 				
-				if(game_node->getScale() <= 1.5f)
-				{
-					if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
-						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f+40.f);
-					else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
-						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f-40.f);
-				}
-				else
-				{
-					game_node->setPositionX(a_p.x);
+				this->moveListXY(ccpSub(old_center_pos, avg_point));
+				
+				old_center_pos = avg_point;
 
-					if(game_node->getPositionX() > 40.f)
-						game_node->setPositionX(40.f);
-					else if(game_node->getPositionX() < 480-320*game_node->getScale()-40.f)
-						game_node->setPositionX(480-320*game_node->getScale()-40.f);
-				}
-
-				float comp_scale = before_scale;
-				comp_scale = game_node->getScale() - comp_scale;
-
-				game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
-
-				if(game_node->getPositionY() > 0+40.f)
-					game_node->setPositionY(0+40.f);
-				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
-					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
+				
+//				CCPoint a_p;
+//				{
+//					float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
+//					comp_scale = game_node->getScale() - comp_scale;
+//					
+//					a_p.x = game_node->getPositionX() - 320*comp_scale/2.f;
+//				}
+//				
+//				if(game_node->getScale() <= 1.5f)
+//				{
+//					if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
+//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f+40.f);
+//					else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
+//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f-40.f);
+//				}
+//				else
+//				{
+//					game_node->setPositionX(a_p.x);
+//
+//					if(game_node->getPositionX() > 40.f)
+//						game_node->setPositionX(40.f);
+//					else if(game_node->getPositionX() < 480-320*game_node->getScale()-40.f)
+//						game_node->setPositionX(480-320*game_node->getScale()-40.f);
+//				}
+//
+//				float comp_scale = before_scale;
+//				comp_scale = game_node->getScale() - comp_scale;
+//
+//				game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
+//
+//				if(game_node->getPositionY() > 0+40.f)
+//					game_node->setPositionY(0+40.f);
+//				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
+//					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
 			}
 		}
 	}

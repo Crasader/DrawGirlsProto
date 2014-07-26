@@ -2408,6 +2408,13 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
 	
+	if(mySGD->is_endless_mode){
+		vCount = mySGD->endless_my_victory.getV()*3+5;
+		CCLOG("it's PVP mode!! now victory is %d",vCount);
+	}
+	
+
+	
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
 
 	CCLOG("#################### autobalance ############################");
@@ -2743,7 +2750,7 @@ void KSCumberBase::caughtAnimation()
 				KS::KSLog("%", *attackIter);
 				if( (*attackIter).get("pattern", "").asString() == "1020" )
 				{
-					cumber->getAttackQueue().push_back(*iter);
+					cumber->getAttackQueue().push_back(*attackIter);
 					found = true;
 					break;
 				}
