@@ -44,6 +44,7 @@
 #include "CurtainNodeForBonusGame.h"
 #include "AchieveNoti.h"
 #include "JsGababo.h"
+#include "TypingBox.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -101,176 +102,183 @@ bool PuzzleScene::init()
 	
 	if(before_scene_name == "other")
 	{
-		bool have_not_cleared_stage = false;
-		vector<int> not_cleared_stage_list;
-		vector<int> cleared_stage_list;
-		
-		for(int i=start_stage;i<start_stage+stage_count;i++)
+		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1)
 		{
-			int stage_card_count = 4;//NSDS_GI(i, kSDS_SI_cardCount_i);
-			have_not_cleared_stage = true;
-			for(int j=1;j<=stage_card_count && have_not_cleared_stage;j++)
-			{
-				if(mySGD->isHasGottenCards(i, j) > 0)
-					have_not_cleared_stage = false;
-			}
-			
-			if(have_not_cleared_stage)
-				not_cleared_stage_list.push_back(i);
-			else
-				cleared_stage_list.push_back(i);
+			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, 1);
 		}
-		
-		if(have_not_cleared_stage) // 아직 못 깬 스테이지가 있다
+		else
 		{
-			bool have_can_enter_stage = false;
-			
-			vector<int> can_enter_stage_list;
-			vector<int> can_enter_stage_level_list;
-			vector<int> can_enter_stage_pieceNumber_list;
-			
-			for(int i=0;i<not_cleared_stage_list.size();i++)
-			{
-				int stage_number = not_cleared_stage_list[i];
-				if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
-				   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
-					(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 ||
-					 mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
-				{
-					have_can_enter_stage = true;
-					can_enter_stage_list.push_back(stage_number);
-					can_enter_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
-					can_enter_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
-				}
-			}
-			
-			if(have_can_enter_stage) // 못 깬 스테이지 중에 입장가능한 스테이지가 있다
-			{
-				// 못 깬 스테이지 중 입장 가능한 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
-				int minimum_index = 0;
-				int minimum_level = can_enter_stage_level_list[minimum_index];
-				int minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
-				
-				for(int i=1;i<can_enter_stage_list.size();i++)
-				{
-					if(can_enter_stage_level_list[i] <= minimum_level && can_enter_stage_pieceNumber_list[i] < minimum_pieceNumber)
-					{
-						minimum_index = i;
-						minimum_level = can_enter_stage_level_list[minimum_index];
-						minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
-					}
-				}
-				
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, can_enter_stage_list[minimum_index]);
-			}
-			else // 못 깬 스테이지 중에 입장가능한 스테이지가 없다
-			{
-				int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
-				if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
-				{
-					// 깬 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
-					
-					vector<int> cleared_stage_level_list;
-					vector<int> cleared_stage_pieceNumber_list;
-					
-					for(int i=0;i<cleared_stage_list.size();i++)
-					{
-						int stage_number = cleared_stage_list[i];
-						cleared_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
-						cleared_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
-					}
-					
-					int minimum_index = 0;
-					int minimum_level = cleared_stage_level_list[minimum_index];
-					int minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
-					
-					for(int i=1;i<cleared_stage_list.size();i++)
-					{
-						if(cleared_stage_level_list[i] <= minimum_level && cleared_stage_pieceNumber_list[i] < minimum_pieceNumber)
-						{
-							minimum_index = i;
-							minimum_level = cleared_stage_level_list[minimum_index];
-							minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
-						}
-					}
-					
-					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, cleared_stage_list[minimum_index]);
-				}
-			}
-		}
-		else // 모든 스테이지를 클리어는 했다
-		{
-			bool is_perfect = true;
-			
-			vector<int> perfect_stage_list;
-			vector<int> perfect_stage_pieceNumber_list;
-			
-			vector<int> not_perfect_stage_list;
-			vector<int> not_perfect_stage_level_list;
-			vector<int> not_perfect_stage_pieceNumber_list;
+			bool have_not_cleared_stage = false;
+			vector<int> not_cleared_stage_list;
+			vector<int> cleared_stage_list;
 			
 			for(int i=start_stage;i<start_stage+stage_count;i++)
 			{
-				bool is_stage_perfect = true;
 				int stage_card_count = 4;//NSDS_GI(i, kSDS_SI_cardCount_i);
-				for(int j=1;j<=stage_card_count;j++)
+				have_not_cleared_stage = true;
+				for(int j=1;j<=stage_card_count && have_not_cleared_stage;j++)
 				{
-					if(mySGD->isHasGottenCards(i, j) <= 0)
-					{
-						is_stage_perfect = false;
-						break;
-					}
+					if(mySGD->isHasGottenCards(i, j) > 0)
+						have_not_cleared_stage = false;
 				}
 				
-				if(is_stage_perfect)
-				{
-					perfect_stage_list.push_back(i);
-					perfect_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
-				}
+				if(have_not_cleared_stage)
+					not_cleared_stage_list.push_back(i);
 				else
-				{
-					is_perfect = false;
-					not_perfect_stage_list.push_back(i);
-					not_perfect_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, i));
-					not_perfect_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
-				}
+					cleared_stage_list.push_back(i);
 			}
 			
-			if(is_perfect) // 각 피스의 모든 카드를 획득한 퍼펙트 상태이다
+			if(have_not_cleared_stage) // 아직 못 깬 스테이지가 있다
 			{
-				// 퍼펙트 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
-				int minimum_index = 0;
-				int minimum_pieceNumber = perfect_stage_pieceNumber_list[minimum_index];
+				bool have_can_enter_stage = false;
 				
-				for(int i=1;i<perfect_stage_list.size();i++)
+				vector<int> can_enter_stage_list;
+				vector<int> can_enter_stage_level_list;
+				vector<int> can_enter_stage_pieceNumber_list;
+				
+				for(int i=0;i<not_cleared_stage_list.size();i++)
 				{
-					if(perfect_stage_pieceNumber_list[i] < minimum_pieceNumber)
+					int stage_number = not_cleared_stage_list[i];
+					if(stage_number == 1 || mySGD->isClearPiece(stage_number) ||
+					   (NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, stage_number) == 0 &&
+						(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number) == 0 ||
+						 mySGD->isClearPiece(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, stage_number)))))
 					{
-						minimum_index = i;
-						minimum_pieceNumber = perfect_stage_pieceNumber_list[minimum_index];
+						have_can_enter_stage = true;
+						can_enter_stage_list.push_back(stage_number);
+						can_enter_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
+						can_enter_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
 					}
 				}
 				
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, perfect_stage_list[minimum_index]);
+				if(have_can_enter_stage) // 못 깬 스테이지 중에 입장가능한 스테이지가 있다
+				{
+					// 못 깬 스테이지 중 입장 가능한 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+					int minimum_index = 0;
+					int minimum_level = can_enter_stage_level_list[minimum_index];
+					int minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+					
+					for(int i=1;i<can_enter_stage_list.size();i++)
+					{
+						if(can_enter_stage_level_list[i] <= minimum_level && can_enter_stage_pieceNumber_list[i] < minimum_pieceNumber)
+						{
+							minimum_index = i;
+							minimum_level = can_enter_stage_level_list[minimum_index];
+							minimum_pieceNumber = can_enter_stage_pieceNumber_list[minimum_index];
+						}
+					}
+					
+					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, can_enter_stage_list[minimum_index]);
+				}
+				else // 못 깬 스테이지 중에 입장가능한 스테이지가 없다
+				{
+					int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
+					if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
+					{
+						// 깬 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+						
+						vector<int> cleared_stage_level_list;
+						vector<int> cleared_stage_pieceNumber_list;
+						
+						for(int i=0;i<cleared_stage_list.size();i++)
+						{
+							int stage_number = cleared_stage_list[i];
+							cleared_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, stage_number));
+							cleared_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number));
+						}
+						
+						int minimum_index = 0;
+						int minimum_level = cleared_stage_level_list[minimum_index];
+						int minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
+						
+						for(int i=1;i<cleared_stage_list.size();i++)
+						{
+							if(cleared_stage_level_list[i] <= minimum_level && cleared_stage_pieceNumber_list[i] < minimum_pieceNumber)
+							{
+								minimum_index = i;
+								minimum_level = cleared_stage_level_list[minimum_index];
+								minimum_pieceNumber = cleared_stage_pieceNumber_list[minimum_index];
+							}
+						}
+						
+						myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, cleared_stage_list[minimum_index]);
+					}
+				}
 			}
-			else // 퍼펙트 아닌 상태이다
+			else // 모든 스테이지를 클리어는 했다
 			{
-				// 미완성 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
-				int minimum_index = 0;
-				int minimum_level = not_perfect_stage_level_list[minimum_index];
-				int minimum_pieceNumber = not_perfect_stage_pieceNumber_list[minimum_index];
+				bool is_perfect = true;
 				
-				for(int i=1;i<not_perfect_stage_list.size();i++)
+				vector<int> perfect_stage_list;
+				vector<int> perfect_stage_pieceNumber_list;
+				
+				vector<int> not_perfect_stage_list;
+				vector<int> not_perfect_stage_level_list;
+				vector<int> not_perfect_stage_pieceNumber_list;
+				
+				for(int i=start_stage;i<start_stage+stage_count;i++)
 				{
-					if(not_perfect_stage_level_list[i] <= minimum_level && not_perfect_stage_pieceNumber_list[i] < minimum_pieceNumber)
+					bool is_stage_perfect = true;
+					int stage_card_count = 4;//NSDS_GI(i, kSDS_SI_cardCount_i);
+					for(int j=1;j<=stage_card_count;j++)
 					{
-						minimum_index = i;
-						minimum_level = not_perfect_stage_level_list[minimum_index];
-						minimum_pieceNumber = not_perfect_stage_pieceNumber_list[minimum_index];
+						if(mySGD->isHasGottenCards(i, j) <= 0)
+						{
+							is_stage_perfect = false;
+							break;
+						}
+					}
+					
+					if(is_stage_perfect)
+					{
+						perfect_stage_list.push_back(i);
+						perfect_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
+					}
+					else
+					{
+						is_perfect = false;
+						not_perfect_stage_list.push_back(i);
+						not_perfect_stage_level_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_level_i, i));
+						not_perfect_stage_pieceNumber_list.push_back(NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, i));
 					}
 				}
 				
-				myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, not_perfect_stage_list[minimum_index]);
+				if(is_perfect) // 각 피스의 모든 카드를 획득한 퍼펙트 상태이다
+				{
+					// 퍼펙트 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+					int minimum_index = 0;
+					int minimum_pieceNumber = perfect_stage_pieceNumber_list[minimum_index];
+					
+					for(int i=1;i<perfect_stage_list.size();i++)
+					{
+						if(perfect_stage_pieceNumber_list[i] < minimum_pieceNumber)
+						{
+							minimum_index = i;
+							minimum_pieceNumber = perfect_stage_pieceNumber_list[minimum_index];
+						}
+					}
+					
+					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, perfect_stage_list[minimum_index]);
+				}
+				else // 퍼펙트 아닌 상태이다
+				{
+					// 미완성 스테이지 중 가장 낮은 level의 스테이지 중 가장 낮은 피스번호를 가진 스테이지를 선택
+					int minimum_index = 0;
+					int minimum_level = not_perfect_stage_level_list[minimum_index];
+					int minimum_pieceNumber = not_perfect_stage_pieceNumber_list[minimum_index];
+					
+					for(int i=1;i<not_perfect_stage_list.size();i++)
+					{
+						if(not_perfect_stage_level_list[i] <= minimum_level && not_perfect_stage_pieceNumber_list[i] < minimum_pieceNumber)
+						{
+							minimum_index = i;
+							minimum_level = not_perfect_stage_level_list[minimum_index];
+							minimum_pieceNumber = not_perfect_stage_pieceNumber_list[minimum_index];
+						}
+					}
+					
+					myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, not_perfect_stage_list[minimum_index]);
+				}
 			}
 		}
 	}
@@ -755,6 +763,242 @@ bool PuzzleScene::init()
 			puzzleOpenning();
 			rightOpenning();
 			topOpenning();
+			
+			if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_showedScenario, 2);
+				
+				CCNode* scenario_node = CCNode::create();
+				addChild(scenario_node, 9999);
+				
+				CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+				float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+				if(screen_scale_x < 1.f)
+					screen_scale_x = 1.f;
+				
+				float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+				
+				
+				CCNode* t_stencil_node = CCNode::create();
+				
+				
+				CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+				t_clipping->setAlphaThreshold(0.1f);
+				
+				float change_scale = 1.f;
+				CCPoint change_origin = ccp(0,0);
+				if(screen_scale_x > 1.f)
+				{
+					change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+					change_scale = screen_scale_x;
+				}
+				if(screen_scale_y > 1.f)
+					change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+				CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+				t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+				
+				
+				CCSprite* t_gray = CCSprite::create("back_gray.png");
+				t_gray->setScaleX(screen_scale_x);
+				t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+				t_gray->setOpacity(0);
+				t_gray->setPosition(ccp(240,160));
+				t_clipping->addChild(t_gray);
+				
+				t_clipping->setInverted(true);
+				scenario_node->addChild(t_clipping, 0);
+				
+				
+				CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+				ikaruga->setAnchorPoint(ccp(0,0));
+				ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+				scenario_node->addChild(ikaruga, 1);
+				
+				TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+				typing_box->setHide();
+				scenario_node->addChild(typing_box, 2);
+				
+				CCSprite* n_skip = CCSprite::create("kt_skip.png");
+				CCSprite* s_skip = CCSprite::create("kt_skip.png");
+				s_skip->setColor(ccGRAY);
+				
+				CCMenuLambda* skip_menu = CCMenuLambda::create();
+				skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150));
+				scenario_node->addChild(skip_menu, 3);
+				skip_menu->setTouchPriority(-19999);
+				skip_menu->setEnabled(false);
+				
+				CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
+																			 {
+																				 skip_menu->setEnabled(false);
+																				 
+																				 is_menu_enable = true;
+																				 CCNode* t_node = CCNode::create();
+																				 t_node->setTag(kPuzzleMenuTag_start);
+																				 menuAction(t_node);
+																				 
+																				 addChild(KSTimer::create(0.1f, [=]()
+																										  {
+																											  scenario_node->removeFromParent();
+																										  }));
+																			 });
+				skip_menu->addChild(skip_item);
+				
+				typing_box->showAnimation(0.3f);
+				
+				function<void()> end_func3 = [=]()
+				{
+					skip_menu->setEnabled(false);
+					
+					is_menu_enable = true;
+					CCNode* t_node = CCNode::create();
+					t_node->setTag(kPuzzleMenuTag_start);
+					menuAction(t_node);
+					
+					addChild(KSTimer::create(0.1f, [=]()
+											 {
+												 scenario_node->removeFromParent();
+											 }));
+				};
+				
+				function<void()> end_func2 = [=]()
+				{
+					ikaruga->setVisible(true);
+					
+					typing_box->setVisible(true);
+					typing_box->setTouchSuction(true);
+					
+					typing_box->startTyping("먼저 게임준비하러 가볼까요?", end_func3);
+				};
+				
+				function<void()> end_func1 = [=]()
+				{
+					skip_menu->setVisible(false);
+					
+					ikaruga->setVisible(false);
+					
+					typing_box->setTouchOffScrollAndButton();
+					typing_box->setVisible(false);
+					
+					CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
+					t_arrow1->setScale(0.6f);
+					t_arrow1->setRotation(180);
+					t_arrow1->setPosition(ccp(230,233));
+					t_clipping->addChild(t_arrow1);
+					
+					StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kRightAlignment);
+					t_ment1->setAnchorPoint(ccp(1,0.5f));
+					t_ment1->setPosition(t_arrow1->getPosition() + ccp(-t_arrow1->getContentSize().width/2.f*t_arrow1->getScale() - 3, 0));
+					t_clipping->addChild(t_ment1);
+					
+					CCSprite* t_arrow2 = CCSprite::create("kt_arrow_big.png");
+					t_arrow2->setScale(0.6f);
+					t_arrow2->setRotation(45);
+					t_arrow2->setPosition(ccp(170,140));
+					t_clipping->addChild(t_arrow2);
+					
+					CCSprite* t_arrow3 = CCSprite::create("kt_arrow_big.png");
+					t_arrow3->setScale(0.6f);
+					t_arrow3->setRotation(-45);
+					t_arrow3->setPosition(ccp(170,88));
+					t_clipping->addChild(t_arrow3);
+					
+					StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+					t_ment2->setAnchorPoint(ccp(0.f,0.5f));
+					t_ment2->setPosition(ccp(190, (t_arrow2->getPositionY()+t_arrow3->getPositionY())/2.f));
+					t_clipping->addChild(t_ment2);
+					
+					CCSprite* t_arrow4 = CCSprite::create("kt_arrow_big.png");
+					t_arrow4->setScale(0.6f);
+					t_arrow4->setRotation(-90);
+					t_arrow4->setPosition(ccp(409.5f,270));
+					t_clipping->addChild(t_arrow4);
+					
+					StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+					t_ment3->setAnchorPoint(ccp(1,0.5f));
+					t_ment3->setPosition(t_arrow4->getPosition() + ccp(-t_arrow4->getContentSize().width/2.f*t_arrow4->getScale() - 3, 0));
+					t_clipping->addChild(t_ment3);
+					
+					CCSprite* t_arrow5 = CCSprite::create("kt_arrow_big.png");
+					t_arrow5->setScale(0.6f);
+					t_arrow5->setRotation(180);
+					t_arrow5->setPosition(ccp(315,32));
+					t_clipping->addChild(t_arrow5);
+					
+					StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kRightAlignment);
+					t_ment4->setAnchorPoint(ccp(1,0.5f));
+					t_ment4->setPosition(t_arrow5->getPosition() + ccp(-t_arrow5->getContentSize().width/2.f*t_arrow5->getScale() - 3, 0));
+					t_clipping->addChild(t_ment4);
+					
+					
+					CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+					t_stencil1->setContentSize(CCSizeMake(70, 70));
+					t_stencil1->setPosition(ccp(291, 234));
+					t_stencil_node->addChild(t_stencil1);
+					
+					CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+					t_stencil2->setContentSize(CCSizeMake(70, 70));
+					t_stencil2->setPosition(ccp(111, 174));
+					t_stencil_node->addChild(t_stencil2);
+					
+					CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+					t_stencil3->setContentSize(CCSizeMake(70, 70));
+					t_stencil3->setPosition(ccp(111, 54));
+					t_stencil_node->addChild(t_stencil3);
+					
+					CCScale9Sprite* t_stencil4 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+					t_stencil4->setContentSize(CCSizeMake(125, 186));
+					t_stencil4->setPosition(ccp(409.5f, 153.5f));
+					t_stencil_node->addChild(t_stencil4);
+					
+					CCScale9Sprite* t_stencil5 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+					t_stencil5->setContentSize(CCSizeMake(135, 50));
+					t_stencil5->setPosition(ccp(409.5f, 32));
+					t_stencil_node->addChild(t_stencil5);
+					
+					TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+					scenario_node->addChild(t_suction);
+					t_suction->setTouchEnabled(true);
+					t_suction->touch_began_func = [=]()
+					{
+						skip_menu->setVisible(true);
+						t_suction->is_on_touch_began_func = false;
+						t_stencil_node->removeAllChildren();
+						t_arrow1->removeFromParent();
+						t_arrow2->removeFromParent();
+						t_arrow3->removeFromParent();
+						t_arrow4->removeFromParent();
+						t_arrow5->removeFromParent();
+						t_ment1->removeFromParent();
+						t_ment2->removeFromParent();
+						t_ment3->removeFromParent();
+						t_ment4->removeFromParent();
+						end_func2();
+						t_suction->removeFromParent();
+					};
+					t_suction->is_on_touch_began_func = true;
+					
+					typing_box->setTouchSuction(false);
+				};
+				
+				scenario_node->addChild(KSTimer::create(0.3f, [=]()
+														{
+															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																						  {
+																							  t_gray->setOpacity(t*255);
+																							  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																							  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+																						  }, [=](float t)
+																						  {
+																							  t_gray->setOpacity(255);
+																							  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																							  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+																							  skip_menu->setEnabled(true);
+																							  
+																							  typing_box->startTyping("이곳은 스테이지를 선택할 수 있는\n퍼즐화면입니다.", end_func1);
+																						  }));
+														}));
+			}
 		}
 		
 		if(mySGD->is_before_stage_img_download)

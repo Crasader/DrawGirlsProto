@@ -2200,7 +2200,6 @@ void TitleRenewalScene::endingAction()
 void TitleRenewalScene::changeScene()
 {
 	//////////////// temp : 친절한 튜토리얼 넣으면서 빼야 함
-	myDSH->setBoolForKey(kDSH_Key_isShowMainflowDimmed, true);
 	myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
 	//////////////// temp
 	

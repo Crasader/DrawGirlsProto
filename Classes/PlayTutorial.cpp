@@ -20,6 +20,7 @@
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h"
 #include "AchieveNoti.h"
+#include "TypingBox.h"
 
 #define minimumDistanceJ	8.f
 #define JoystickCenterLimit	30.f
@@ -1569,6 +1570,8 @@ bool PlayTutorial::init()
 		return false;
 	}
 	
+	myDSH->setIntegerForKey(kDSH_Key_showedScenario, 4);
+	
 	map_data.clear();
 	height_value = int(myDSH->ui_top/2);
 	map_data.resize(240*height_value);
@@ -1628,50 +1631,128 @@ bool PlayTutorial::init()
 	curtain_node->setScale(myDSH->screen_convert_rate);
 	addChild(curtain_node, 200);
 	
-	StoryManager* t_sm = StoryManager::create(-500);
-	addChild(t_sm, 100);
 	
-	addChild(KSTimer::create(1.f, [=]()
-					{
+	CCNode* scenario_node = CCNode::create();
+	addChild(scenario_node, 99);
 	
-	CCSprite* gray = CCSprite::create("back_gray.png");
-	gray->setOpacity(0);
-	gray->setPosition(ccp(0,-160+myDSH->ui_center_y));
-	gray->setScaleY(myDSH->ui_top/320.f);
-	gray->runAction(CCFadeTo::create(0.5f, 255));
-	t_sm->back_node->addChild(gray);
+	CCNode* t_stencil_node = CCNode::create();
 	
-	AudioEngine::sharedInstance()->playEffect("ment_tutorial_start.mp3", false, true);
-						addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial1.mp3", false, true);
-						addChild(KSTimer::create(2.4f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial2.mp3", false, true);
-						}));
-						}));
-						
-						
-						
-	t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial1), [=]()
-				  //"조작방법에 대한 튜토리얼을 시작하겠습니다.\n가운데 빨간 동그라미가 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
+	CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+	t_clipping->setAlphaThreshold(0.1f);
+	
+	float change_scale_y = 1.f;
+	CCPoint change_origin = ccp(0,0);
+	change_scale_y = myDSH->ui_top/320.f;
+	CCSize win_size = CCSizeMake(480, 320);
+	t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width, win_size.height*change_scale_y));
+	
+	CCSprite* t_gray = CCSprite::create("back_gray.png");
+	t_gray->setScaleY(change_scale_y);
+	t_gray->setOpacity(0);
+	t_gray->setPosition(ccp(240,myDSH->ui_center_y));
+	t_clipping->addChild(t_gray);
+	
+	t_clipping->setInverted(true);
+	scenario_node->addChild(t_clipping, 0);
+	
+	CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
+	asuka->setAnchorPoint(ccp(1,0));
+	asuka->setPosition(ccp(480+asuka->getContentSize().width, 0));
+	scenario_node->addChild(asuka, 1);
+	
+	CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+	ikaruga->setAnchorPoint(ccp(0,0));
+	ikaruga->setPosition(ccp(-ikaruga->getContentSize().width/3.f, 0));
+	ikaruga->setVisible(false);
+	scenario_node->addChild(ikaruga, 1);
+	
+	TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+	scenario_node->addChild(typing_box, 2);
+	
+	typing_box->setTouchOffScrollAndButton();
+	typing_box->setVisible(false);
+	typing_box->setTouchSuction(false);
+	
+	TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+	scenario_node->addChild(typing_box2, 2);
+	typing_box2->setHide();
+	
+	typing_box2->showAnimation(0.3f);
+	
+	function<void()> end_func3 = [=]()
 	{
-		gray->runAction(CCFadeTo::create(0.3f, 0));
-		controler->joystickSetVisible(true);
-		mark_img->setVisible(true);
+		StoryManager* t_sm = StoryManager::create(-500);
+		addChild(t_sm, 100);
 		
-		AudioEngine::sharedInstance()->playEffect("ment_tutorial3.mp3", false, true);
+		addChild(KSTimer::create(0.5f, [=]()
+								 {
+									 CCSprite* gray = CCSprite::create("back_gray.png");
+									 gray->setOpacity(0);
+									 gray->setPosition(ccp(0,-160+myDSH->ui_center_y));
+									 gray->setScaleY(myDSH->ui_top/320.f);
+									 gray->runAction(CCFadeTo::create(0.5f, 255));
+									 t_sm->back_node->addChild(gray);
+									 
+//									 AudioEngine::sharedInstance()->playEffect("ment_tutorial_start.mp3", false, true);
+//									 addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial1.mp3", false, true);
+//										 addChild(KSTimer::create(2.4f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial2.mp3", false, true);
+//										 }));
+//									 }));
+									 
+									 
+									 
+									 t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial1), [=]()
+												   //"가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
+												   {
+													   gray->runAction(CCFadeTo::create(0.3f, 0));
+													   controler->joystickSetVisible(true);
+													   mark_img->setVisible(true);
+													   
+//													   AudioEngine::sharedInstance()->playEffect("ment_tutorial3.mp3", false, true);
+//													   
+//													   addChild(KSTimer::create(2.6f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial4.mp3", false, true);
+//														   addChild(KSTimer::create(3.7f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial5.mp3", false, true);
+//															   
+//														   }));
+//													   }));
+													   t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial2), [=]()
+																	 //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
+																	 {
+																		 top_label->setString(myLoc->getLocalForKey(kMyLocalKey_tutorial3));//"캐릭터를 위로 이동시키기");
+																		 tutorial_step = 1;
+																		 t_sm->removeFromParent();
+																	 }, CCSizeMake(350,100), ccp(0,-110), 12, true);
+												   }, CCSizeMake(350,100), ccp(0,-110), 12, true);
+								 }));
 		
-		addChild(KSTimer::create(2.6f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial4.mp3", false, true);
-			addChild(KSTimer::create(3.7f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial5.mp3", false, true);
-				
-			}));
-		}));
-		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial2), [=]()
-					  //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
-		{
-			top_label->setString(myLoc->getLocalForKey(kMyLocalKey_tutorial3));//"캐릭터를 위로 이동시키기");
-			tutorial_step = 1;
-			t_sm->removeFromParent();
-		});
-	});
-					}));
+		addChild(KSTimer::create(0.1f, [=]()
+								 {
+									scenario_node->removeFromParent();
+								 }));
+	};
+	
+	function<void()> end_func2 = [=]()
+	{
+		typing_box->startTyping("이곳은 처음이실테니\n컨트롤 방법부터 설명드리겠습니다.", end_func3);
+	};
+	
+	function<void()> end_func1 = [=]()
+	{
+		TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
+		typing_box->startTyping("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠.", end_func2);
+	};
+	
+	scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+														  {
+															  t_gray->setOpacity(t*255);
+															  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+														  }, [=](float t)
+														  {
+															  t_gray->setOpacity(255);
+															  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+															  
+															  typing_box2->startTyping("이런곳은 처음인데 여긴 어디지?", end_func1);
+														  }));
 	
 	return true;
 }
@@ -1708,12 +1789,12 @@ void PlayTutorial::nextStep()
 		area_take_sample->setPosition(ccp(240,210));
 		addChild(area_take_sample, 101);
 		
-		AudioEngine::sharedInstance()->playEffect("ment_tutorial6.mp3", false, true);
-		addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial7.mp3", false, true);
-			addChild(KSTimer::create(5.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial8.mp3", false, true);
-				
-			}));
-		}));
+//		AudioEngine::sharedInstance()->playEffect("ment_tutorial6.mp3", false, true);
+//		addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial7.mp3", false, true);
+//			addChild(KSTimer::create(5.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial8.mp3", false, true);
+//				
+//			}));
+//		}));
 		
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
@@ -1728,7 +1809,7 @@ void PlayTutorial::nextStep()
 			startCatching();
 			
 			t_sm->removeFromParent();
-		});
+		}, CCSizeMake(350,100), ccp(0,-110), 12, true);
 	}
 	else if(tutorial_step == 4)
 	{
@@ -1759,7 +1840,7 @@ void PlayTutorial::nextStep()
 		
 		view_img->startSilhouette();
 		
-		AudioEngine::sharedInstance()->playEffect("ment_tutorial9.mp3", false, true);
+//		AudioEngine::sharedInstance()->playEffect("ment_tutorial9.mp3", false, true);
 		
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial6), [=]()
 					  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
@@ -1840,12 +1921,12 @@ void PlayTutorial::nextStep()
 											  time_case->setVisible(true);
 											  
 											  
-											  AudioEngine::sharedInstance()->playEffect("ment_tutorial10.mp3", false, true);
-											  addChild(KSTimer::create(1.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial11.mp3", false, true);
-												  addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial12.mp3", false, true);
-													  
-												  }));
-											  }));
+//											  AudioEngine::sharedInstance()->playEffect("ment_tutorial10.mp3", false, true);
+//											  addChild(KSTimer::create(1.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial11.mp3", false, true);
+//												  addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial12.mp3", false, true);
+//													  
+//												  }));
+//											  }));
 											  
 											  
 											  AchievementCode i = kAchievementCode_tutorial;
@@ -1861,27 +1942,87 @@ void PlayTutorial::nextStep()
 												  }
 											  }
 											  
-											  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
-															//"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
-															{
-																AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-																t_sm->removeFromParent();
-																mySGD->setNextSceneName("maingame");
-																
-																AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
-																
-																LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-																CCNode* t_main_node = loading_tip->getChildByTag(9999);
-																if(t_main_node)
-																{
-																	t_main_node->setScale(myDSH->screen_convert_rate);
-																	t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
-																}
-																
-																addChild(loading_tip, 999);
-															});
+											  
+											  CCNode* scenario_node = CCNode::create();
+											  addChild(scenario_node, 101);
+											  
+											  CCNode* t_stencil_node = CCNode::create();
+											  
+											  CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+											  t_clipping->setAlphaThreshold(0.1f);
+											  
+											  float change_scale_y = 1.f;
+											  CCPoint change_origin = ccp(0,0);
+											  change_scale_y = myDSH->ui_top/320.f;
+											  CCSize win_size = CCSizeMake(480, 320);
+											  t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width, win_size.height*change_scale_y));
+											  
+											  CCSprite* t_gray = CCSprite::create("back_gray.png");
+											  t_gray->setScaleY(change_scale_y);
+											  t_gray->setPosition(ccp(240,myDSH->ui_center_y));
+											  t_clipping->addChild(t_gray);
+											  
+											  t_clipping->setInverted(true);
+											  scenario_node->addChild(t_clipping, 0);
+											  
+											  CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+											  ikaruga->setAnchorPoint(ccp(0,0));
+											  ikaruga->setPosition(ccp(-ikaruga->getContentSize().width/3.f, 0));
+											  scenario_node->addChild(ikaruga, 1);
+											  
+											  TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+											  scenario_node->addChild(typing_box, 2);
+											  
+											  function<void()> end_func1 = [=]()
+											  {
+												  myDSH->setIntegerForKey(kDSH_Key_showedScenario, 5);
+												  mySGD->setNextSceneName("maingame");
+												  
+												  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+												  
+												  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+												  CCNode* t_main_node = loading_tip->getChildByTag(9999);
+												  if(t_main_node)
+												  {
+													  t_main_node->setScale(myDSH->screen_convert_rate);
+													  t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+												  }
+												  
+												  addChild(loading_tip, 999);
+												  
+												  addChild(KSTimer::create(0.1f, [=]()
+																		   {
+																			   scenario_node->removeFromParent();
+																		   }));
+											  };
+											  
+											  typing_box->startTyping("제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?", end_func1);
+											  
+											  
+											  
+											  
+//											  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
+//															//"기본 튜토리얼을 모두 진행하셨습니다.\n본 게임으로 들아갑니다.", [=]()
+//															{
+//																AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+//																t_sm->removeFromParent();
+//																mySGD->setNextSceneName("maingame");
+//																
+//																AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+//																
+//																LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+//																CCNode* t_main_node = loading_tip->getChildByTag(9999);
+//																if(t_main_node)
+//																{
+//																	t_main_node->setScale(myDSH->screen_convert_rate);
+//																	t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+//																}
+//																
+//																addChild(loading_tip, 999);
+//															});
 											  
 											  t_suction->removeFromParent();
+											  t_sm->removeFromParent();
 										  };
 										  t_suction->is_on_touch_began_func = true;
 										  t_suction->setTouchEnabled(true);
@@ -1890,56 +2031,7 @@ void PlayTutorial::nextStep()
 								  }));
 							  }));
 						  }));
-						  
-//						  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial7), [=]()
-//										//"제한시간 내에 달성도 85%를 넘기면 클리어!!", [=]()
-//										{
-////											LoadingLayer* t_loading = LoadingLayer::create(-9999);
-////											addChild(t_loading, 9999);
-////											
-////											mySGD->addChangeGoods(kGoodsType_gold, mySGD->getIngameTutorialRewardGold(), "컨트롤튜토리얼보상");
-////											mySGD->changeGoods([=](Json::Value result_data){
-////												t_loading->removeFromParent();
-////												if(result_data["result"]["code"].asInt() == GDSUCCESS)
-////												{
-//													clear_condition->stopAllActions();
-//													clear_condition->setVisible(true);
-//													
-//													time_label->stopAllActions();
-//													time_label->setVisible(true);
-//													
-//													time_case->stopAllActions();
-//													time_case->setVisible(true);
-//													
-//													
-//													AudioEngine::sharedInstance()->playEffect("ment_tutorial10.mp3", false, true);
-//													addChild(KSTimer::create(1.8f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial11.mp3", false, true);
-//														addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial12.mp3", false, true);
-//															
-//														}));
-//													}));
-//													
-//													t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
-//																  //"기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다.", [=]()
-//																  {
-//																	  AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-//																	  t_sm->removeFromParent();
-//																	  mySGD->setNextSceneName("maingame");
-//																	  
-//																	  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
-//																	  
-//																	  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-//																	  loading_tip->setPositionY(loading_tip->getPositionY()-160+myDSH->ui_center_y);
-//																	  addChild(loading_tip, 999);
-//																  });
-////												}
-////												else
-////												{
-////													
-////												}
-////											});
-//										}, CCSizeMake(350,60), ccp(0,0), 12);
-					  });
+					  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
 	}
 }
 
