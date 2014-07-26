@@ -760,7 +760,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 	{
 		CCSprite* loading_tip_back = CCSprite::create("main_back.png");
 		loading_tip_back->setPosition(ccp(0,0));
-		loading_tip_node->addChild(loading_tip_back);
+		loading_tip_node->addChild(loading_tip_back, 0, 1);
 		
 		CCDelayTime* back_delay = CCDelayTime::create(0.3f);
 		CCCallFunc* back_remove = CCCallFunc::create(loading_tip_back, callfunc_selector(CCSprite::removeFromParent));
@@ -963,7 +963,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		
 		CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", mySGD->loading_tip_back_number));
 		loading_tip_back->setPosition(ccp(0,0));
-		loading_tip_node->addChild(loading_tip_back);
+		loading_tip_node->addChild(loading_tip_back, 0, 1);
 		
 		CCDelayTime* back_delay = CCDelayTime::create(0.3f);
 		CCCallFunc* back_remove = CCCallFunc::create(loading_tip_back, callfunc_selector(CCSprite::removeFromParent));
@@ -1048,7 +1048,7 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", rand_value));
 	loading_tip_back->setPosition(ccp(0,0));
 	loading_tip_back->setVisible(false);
-	loading_tip_node->addChild(loading_tip_back);
+	loading_tip_node->addChild(loading_tip_back, 0, 1);
 	
 	CCDelayTime* back_delay = CCDelayTime::create(0.3f);
 	CCShow* back_show = CCShow::create();
@@ -1160,6 +1160,8 @@ CCSprite* LoadingTipScene::getLoadingTipImage()
 //	CCSprite* content_img = CCSprite::create(tip_filename.c_str());
 //	content_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
 //	loading_tip_back->addChild(content_img);
+	
+	loading_tip_back->setTag(1);
 	
 	return loading_tip_back;
 }
