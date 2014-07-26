@@ -42,6 +42,8 @@
 #include "EmptyItemSalePopup.h"
 #include "EventShopPopup.h"
 #include "TodayMissionPopup.h"
+#include "TypingBox.h"
+#include "StyledLabelTTF.h"
 
 #include "FormSetter.h"
 
@@ -319,13 +321,226 @@ bool FailPopup::init()
 	main_case->addChild(loading_img, kZ_FP_img);
 	reader->release();
 	
-	if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 6)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 1000);
+		
+		CCNode* scenario_node = CCNode::create();
+		addChild(scenario_node, 9999);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		
+		
+		CCNode* t_stencil_node = CCNode::create();
+		
+		
+		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+		t_clipping->setAlphaThreshold(0.1f);
+		
+		float change_scale = 1.f;
+		CCPoint change_origin = ccp(0,0);
+		if(screen_scale_x > 1.f)
+		{
+			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+			change_scale = screen_scale_x;
+		}
+		if(screen_scale_y > 1.f)
+			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		
+		
+		CCSprite* t_gray = CCSprite::create("back_gray.png");
+		t_gray->setScaleX(screen_scale_x);
+		t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+		t_gray->setOpacity(0);
+		t_gray->setPosition(ccp(240,160));
+		t_clipping->addChild(t_gray);
+		
+		t_clipping->setInverted(true);
+		scenario_node->addChild(t_clipping, 0);
+		
+		
+		CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+		ikaruga->setAnchorPoint(ccp(0,0));
+		ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+		scenario_node->addChild(ikaruga, 1);
+		
+		CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
+		asuka->setAnchorPoint(ccp(1,0));
+		asuka->setPosition(ccp(240+240*screen_scale_x+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f, 160-160*screen_scale_y));
+		scenario_node->addChild(asuka);
+		asuka->setVisible(false);
+		
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+		typing_box->setHide();
+		scenario_node->addChild(typing_box, 2);
+		
+		TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+		scenario_node->addChild(typing_box2, 2);
+		
+		typing_box2->setTouchOffScrollAndButton();
+		typing_box2->setVisible(false);
+		typing_box2->setTouchSuction(false);
+		
+		CCSprite* n_skip = CCSprite::create("kt_skip.png");
+		CCSprite* s_skip = CCSprite::create("kt_skip.png");
+		s_skip->setColor(ccGRAY);
+		
+		CCMenuLambda* skip_menu = CCMenuLambda::create();
+		skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150));
+		scenario_node->addChild(skip_menu, 3);
+		skip_menu->setTouchPriority(-19999);
+		skip_menu->setEnabled(false);
+		
+		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
+																	 {
+																		 is_menu_enable = false;
+																		 skip_menu->setEnabled(false);
+																		 
+																		 addChild(KSTimer::create(0.1f, [=]()
+																								  {
+																									  scenario_node->removeFromParent();
+																								  }));
+																	 });
+		skip_menu->addChild(skip_item);
+		
+		typing_box->showAnimation(0.3f);
+		
+		function<void()> end_func4 = [=]()
+		{
+			skip_menu->setEnabled(false);
+			
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 scenario_node->removeFromParent();
+									 }));
+		};
+		
+		function<void()> end_func3 = [=]()
+		{
+			TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, asuka);
+			typing_box2->startTyping("네! 그럼 최선을 다 해보겠습니다!", end_func4);
+		};
+		
+		function<void()> end_func2 = [=]()
+		{
+			ikaruga->setVisible(true);
+			
+			typing_box->setVisible(true);
+			typing_box->setTouchSuction(true);
+			
+			typing_box->startTyping("그럼 계속 해볼까요?\n5스테이지 클리어후 메인화면에서 뵙기로 하죠!", end_func3);
+		};
+		
+		function<void()> end_func1 = [=]()
+		{
+			skip_menu->setVisible(false);
+			
+			ikaruga->setVisible(false);
+			
+			typing_box->setTouchOffScrollAndButton();
+			typing_box->setVisible(false);
+			
+			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
+			t_arrow1->setScale(0.6f);
+			t_arrow1->setRotation(-90);
+			t_arrow1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f) + ccp(-20,48));
+			t_clipping->addChild(t_arrow1);
+			
+			StyledLabelTTF* t_ment1 = StyledLabelTTF::create("클리어 등급", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+			t_ment1->setAnchorPoint(ccp(0,0.5f));
+			t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().width/2.f*t_arrow1->getScale() + 3, 0));
+			t_clipping->addChild(t_ment1);
+			
+			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			t_stencil1->setContentSize(CCSizeMake(200, 55));
+			t_stencil1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f));
+			t_stencil_node->addChild(t_stencil1);
+			
+			
+			CCSprite* t_arrow2 = CCSprite::create("kt_arrow_big.png");
+			t_arrow2->setScale(0.6f);
+			t_arrow2->setRotation(90);
+			t_arrow2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-115.f) + ccp(-20,0));
+			t_clipping->addChild(t_arrow2);
+			
+			StyledLabelTTF* t_ment2 = StyledLabelTTF::create("점수 정보", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+			t_ment2->setAnchorPoint(ccp(0,0.5f));
+			t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().width/2.f*t_arrow2->getScale() + 3, 0));
+			t_clipping->addChild(t_ment2);
+			
+			CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			t_stencil2->setContentSize(CCSizeMake(200, 90));
+			t_stencil2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-45.f));
+			t_stencil_node->addChild(t_stencil2);
+			
+			
+			CCSprite* t_arrow3 = CCSprite::create("kt_arrow_big.png");
+			t_arrow3->setScale(0.6f);
+			t_arrow3->setRotation(90);
+			t_arrow3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f-115) + ccp(-30,0));
+			t_clipping->addChild(t_arrow3);
+			
+			StyledLabelTTF* t_ment3 = StyledLabelTTF::create("스테이지 랭킹", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+			t_ment3->setAnchorPoint(ccp(0,0.5f));
+			t_ment3->setPosition(t_arrow3->getPosition() + ccp(t_arrow3->getContentSize().width/2.f*t_arrow3->getScale() + 3, 0));
+			t_clipping->addChild(t_ment3);
+			
+			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			t_stencil3->setContentSize(CCSizeMake(210, 185));
+			t_stencil3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f+3));
+			t_stencil_node->addChild(t_stencil3);
+			
+			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+			scenario_node->addChild(t_suction);
+			t_suction->setTouchEnabled(true);
+			t_suction->touch_began_func = [=]()
+			{
+				skip_menu->setVisible(true);
+				t_suction->is_on_touch_began_func = false;
+				t_stencil_node->removeAllChildren();
+				t_arrow1->removeFromParent();
+				t_arrow2->removeFromParent();
+				t_arrow3->removeFromParent();
+				t_ment1->removeFromParent();
+				t_ment2->removeFromParent();
+				t_ment3->removeFromParent();
+				end_func2();
+				t_suction->removeFromParent();
+			};
+			t_suction->is_on_touch_began_func = true;
+			
+			typing_box->setTouchSuction(false);
+		};
+		
+		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+															  {
+																  t_gray->setOpacity(t*255);
+																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+															  }, [=](float t)
+															  {
+																  t_gray->setOpacity(255);
+																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+																  skip_menu->setEnabled(true);
+																  
+																  typing_box->startTyping("이런.. 다음엔 더 잘 할 수 있겠죠?\n여긴 게임이 끝나면 오게 됩니다.", end_func1);
+															  }));
+	}
+	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_emptyItem);
 		addChild(t_popup, kZ_FP_popup+1);
 	}
 	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0 &&
-			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount() >= mySGD->getStupidNpuHelpFailCount())
+			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount()+1 >= mySGD->getStupidNpuHelpFailCount())
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
 		addChild(t_popup, kZ_FP_popup+1);

@@ -44,6 +44,7 @@
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h"
 #include "OnePercentTutorial.h"
+#include "TypingBox.h"
 
 //#include "ScreenSide.h"
 
@@ -1481,7 +1482,180 @@ void Maingame::removeConditionLabel()
 	myGIM->startItemSetting();
 	myGIM->startCounting();
 
-	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 5)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 6);
+		
+		bool t_jack_stun = myJack->isStun;
+		
+		CCNode* exit_target = this;
+		mControl->setTouchEnabled(false);
+		exit_target->onExit();
+		
+		CCNode* scenario_node = CCNode::create();
+		getParent()->addChild(scenario_node, 9999);
+		
+		float screen_scale_y = myDSH->ui_top/320.f;
+		
+		CCNode* t_stencil_node = CCNode::create();
+		
+		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+		t_clipping->setAlphaThreshold(0.1f);
+		
+		CCPoint change_origin = ccp(0,0);
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, 480*screen_scale_y, 320*screen_scale_y));
+		
+		CCSprite* t_gray = CCSprite::create("back_gray.png");
+		t_gray->setScaleY(screen_scale_y);
+		t_gray->setOpacity(0);
+		t_gray->setPosition(ccp(240,myDSH->ui_center_y));
+		t_clipping->addChild(t_gray);
+		
+		t_clipping->setInverted(true);
+		scenario_node->addChild(t_clipping, 0);
+		
+		
+		CCSprite* asuka = CCSprite::create("kt_cha_ikaruga_1.png");
+		asuka->setAnchorPoint(ccp(1,0));
+		asuka->setPosition(ccp(480+asuka->getContentSize().width, 0));
+		scenario_node->addChild(asuka, 1);
+		
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+		typing_box->setHide();
+		scenario_node->addChild(typing_box, 2);
+		
+		CCSprite* n_skip = CCSprite::create("kt_skip.png");
+		CCSprite* s_skip = CCSprite::create("kt_skip.png");
+		s_skip->setColor(ccGRAY);
+		
+		CCMenuLambda* skip_menu = CCMenuLambda::create();
+		skip_menu->setPosition(ccp(35, myDSH->ui_top - 25 + 150));
+		scenario_node->addChild(skip_menu, 3);
+		skip_menu->setTouchPriority(-19999);
+		skip_menu->setEnabled(false);
+		
+		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
+																	 {
+																		 skip_menu->setEnabled(false);
+																		 
+																		 mControl->isStun = false;
+																		 myJack->isStun = t_jack_stun;
+																		 
+																		 exit_target->onEnter();
+																		 startControl();
+																		 ((ControlJoystickButton*)mControl)->resetTouch();
+																		 
+																		 addChild(KSTimer::create(0.1f, [=]()
+																								  {
+																									  scenario_node->removeFromParent();
+																								  }));
+																	 });
+		skip_menu->addChild(skip_item);
+		
+		typing_box->showAnimation(0.3f);
+		
+		function<void()> end_func4 = [=]()
+		{
+			scenario_node->removeChildByTag(3);
+			
+			skip_menu->setEnabled(false);
+			
+			mControl->isStun = false;
+			myJack->isStun = t_jack_stun;
+			
+			exit_target->onEnter();
+			startControl();
+			((ControlJoystickButton*)mControl)->resetTouch();
+			
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 scenario_node->removeFromParent();
+									 }));
+		};
+		
+		function<void()> end_func3 = [=]()
+		{
+			skip_menu->setVisible(true);
+			
+			scenario_node->removeChildByTag(2);
+			
+			CCSprite* t_arrow3 = CCSprite::create("kt_arrow_big.png");
+			t_arrow3->setRotation(90);
+			t_arrow3->setPosition(ccp(480-35, myDSH->ui_top-25-65));
+			scenario_node->addChild(t_arrow3, 4, 3);
+			
+			CCMoveTo* down_action = CCMoveTo::create(0.4f, ccp(480-35, myDSH->ui_top-25-95));
+			CCMoveTo* up_action = CCMoveTo::create(0.4f, ccp(480-35, myDSH->ui_top-25-65));
+			CCSequence* t_seq = CCSequence::create(down_action, up_action, NULL);
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+			
+			t_arrow3->runAction(t_repeat);
+			
+			typing_box->startTyping("여기에 점수와 획득한 골드, 그리고 콤보가\n표시됩니다. 자 이제 시작해 볼까요?", end_func4);
+		};
+		
+		function<void()> end_func2 = [=]()
+		{
+			skip_menu->setVisible(false);
+			
+			scenario_node->removeChildByTag(1);
+			
+			CCSprite* t_arrow2 = CCSprite::create("kt_arrow_big.png");
+			t_arrow2->setRotation(90);
+			t_arrow2->setPosition(ccp(25, myDSH->ui_top-25-50));
+			scenario_node->addChild(t_arrow2, 4, 2);
+			
+			CCMoveTo* down_action = CCMoveTo::create(0.4f, ccp(25, myDSH->ui_top-25-80));
+			CCMoveTo* up_action = CCMoveTo::create(0.4f, ccp(25, myDSH->ui_top-25-50));
+			CCSequence* t_seq = CCSequence::create(down_action, up_action, NULL);
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+			
+			t_arrow2->runAction(t_repeat);
+			
+			typing_box->startTyping("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요.", end_func3);
+		};
+		
+		function<void()> end_func1 = [=]()
+		{
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.2f, [=](float t)
+																  {
+																	  t_gray->setOpacity(255-255*t);
+																  }, [=](float t)
+																  {
+																	  t_gray->setOpacity(0);
+																	  t_gray->removeFromParent();
+																  }));
+			
+			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
+			t_arrow1->setPosition(ccp(110, myDSH->ui_center_y));
+			scenario_node->addChild(t_arrow1, 4, 1);
+			
+			CCMoveTo* right_action = CCMoveTo::create(0.4f, ccp(140, myDSH->ui_center_y));
+			CCMoveTo* left_action = CCMoveTo::create(0.4f, ccp(110, myDSH->ui_center_y));
+			CCSequence* t_seq = CCSequence::create(right_action, left_action, NULL);
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+			
+			t_arrow1->runAction(t_repeat);
+			
+			typing_box->startTyping("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?", end_func2);
+		};
+		
+		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+															  {
+																  t_gray->setOpacity(255*t);
+																  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+																  skip_menu->setPositionY(myDSH->ui_top - 25 + 150 - 150*t);
+															  }, [=](float t)
+															  {
+																  t_gray->setOpacity(255);
+																  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+																  skip_menu->setPositionY(myDSH->ui_top - 25 + 150 - 150*t);
+																  skip_menu->setEnabled(true);
+																  
+																  typing_box->startTyping("잠깐!\n깜빡하고 지나갈 뻔했네요.", end_func1);
+															  }));
+	}
+	else if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 	{
 		bool t_jack_stun = myJack->isStun;
 		

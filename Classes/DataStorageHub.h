@@ -146,8 +146,10 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_stageHighRank_int1,
 	
-	kDSH_Key_isShowMainflowDimmed,
+	kDSH_Key_showedScenario,
 	kDSH_Key_isShowEndlessModeTutorial,
+	
+	
 	kSDH_Key_isShowOnePercentTutorial,
 	kDSH_Key_isShowGababoTutorial,
 	kDSH_Key_accountType,
@@ -158,7 +160,10 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_isCheckTerms,
 	kDSH_Key_savedMemberID,
-	kDSH_Key_timeZone
+	kDSH_Key_timeZone,
+	
+	kDSH_Key_showedKindTutorial_int1
+	
 }DSH_Key;
 
 enum SpecialTutorialCode{

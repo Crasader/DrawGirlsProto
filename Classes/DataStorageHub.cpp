@@ -761,7 +761,7 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_atTimeShowEventRubyShop] = "ats_ers";
 	return_value[kDSH_Key_atTimeShowLevelupGuide] = "ats_lg";
 	return_value[kDSH_Key_stageHighRank_int1] = "stghr%d";
-	return_value[kDSH_Key_isShowMainflowDimmed] = "ismfd";
+	return_value[kDSH_Key_showedScenario] = "ssnro";
 	return_value[kDSH_Key_isShowEndlessModeTutorial] = "isemt";
 	return_value[kSDH_Key_isShowOnePercentTutorial] = "issopt";
 	return_value[kDSH_Key_isShowGababoTutorial] = "issgt";
@@ -774,5 +774,7 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_isCheckTerms] = "ichkt";
 	return_value[kDSH_Key_savedMemberID] = "smid";
 	return_value[kDSH_Key_timeZone] = "tmzn";
+	
+	return_value[kDSH_Key_showedKindTutorial_int1] = "skt%d";
 }
 #undef LZZ_INLINE

@@ -41,6 +41,10 @@ private:
 	
 	bool is_menu_enable;
 	
+	string kt_string1, kt_string2;
+	
+	function<void()> addKindTutorial;
+	
 	
 	void menuAction(CCObject* sender);
 	

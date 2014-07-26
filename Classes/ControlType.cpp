@@ -1576,7 +1576,7 @@ void ControlJoystickButton::showDrawButtonTutorial()
 	draw_button_tutorial_img->setPosition(ccp(240, myDSH->ui_center_y));
 	addChild(draw_button_tutorial_img);
 	
-	StyledLabelTTF* t_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buttonTutorialMent), mySGD->getFont().c_str(), 20, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* t_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buttonTutorialMent), mySGD->getFont().c_str(), 16, 999, StyledAlignment::kCenterAlignment);
 	t_label->setAnchorPoint(ccp(0.5f,0.5f));
 	t_label->setPosition(ccpFromSize(draw_button_tutorial_img->getContentSize()/2.f));
 	draw_button_tutorial_img->addChild(t_label);
