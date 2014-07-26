@@ -15,15 +15,15 @@
 #include "KSUtil.h"
 #include "StyledLabelTTF.h"
 
-TypingBox* TypingBox::create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position)
+TypingBox* TypingBox::create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position)
 {
 	TypingBox* t_tb = new TypingBox();
-	t_tb->myInit(t_touch_priority, t_box_filename, t_box_9_out, t_box_9_in, t_box_in_label, t_box_in_size, t_box_position);
+	t_tb->myInit(t_touch_priority, t_box_filename, t_box_9_out, t_box_9_in, t_box_in_label, t_box_in_size, t_box_position, t_button_position);
 	t_tb->autorelease();
 	return t_tb;
 }
 
-void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position)
+void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position)
 {
 	touch_priority = t_touch_priority;
 	box_filename = t_box_filename;
@@ -32,6 +32,7 @@ void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box
 	box_in_label = t_box_in_label;
 	box_in_size = t_box_in_size;
 	box_position = t_box_position;
+	button_position = t_button_position;
 	
 	box_string = "";
 	
@@ -77,7 +78,7 @@ void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box
 	next_button = CCControlButton::create(label_node, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
 	next_button->addTargetWithActionForControlEvents(this, cccontrol_selector(TypingBox::controlButtonAction), CCControlEventTouchUpInside);
 	next_button->setPreferredSize(CCSizeMake(92, 45));
-	next_button->setPosition(ccp(425,25));
+	next_button->setPosition(button_position);
 	addChild(next_button);
 	next_button->setTouchPriority(touch_priority-2);
 	next_button->setVisible(false);

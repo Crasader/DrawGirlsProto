@@ -37,7 +37,7 @@ public:
 	
 	//"kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64)
 	//"kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64)
-	static TypingBox* create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position);
+	static TypingBox* create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position = ccp(425,25));
 	void setHide();
 	void showAnimation(float t_time);
 	void startTyping(string t_box_string, function<void()> t_end_func);
@@ -56,6 +56,7 @@ private:
 	CCRect box_in_label;
 	CCSize box_in_size;
 	CCPoint box_position;
+	CCPoint button_position;
 	string box_string;
 	int add_string_frame;
 	int typing_frame;
@@ -75,7 +76,7 @@ private:
 	
 	void controlButtonAction(CCObject* sender, CCControlEvent t_event);
 	
-	void myInit(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position);
+	void myInit(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position);
 	
 	void typing();
 	

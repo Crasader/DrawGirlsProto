@@ -911,7 +911,7 @@ bool PuzzleScene::init()
 					CCSprite* t_arrow4 = CCSprite::create("kt_arrow_big.png");
 					t_arrow4->setScale(0.6f);
 					t_arrow4->setRotation(-90);
-					t_arrow4->setPosition(ccp(409.5f,270));
+					t_arrow4->setPosition(ccp(434.5f,270));
 					t_clipping->addChild(t_arrow4);
 					
 					StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
