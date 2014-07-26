@@ -3659,8 +3659,8 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 			{
 				myGD->communication("CP_createSubCumber", mapPoint);
 			}
-			m_cumber->setAttackPattern(nullptr);
-			myGD->communication("CP_onPatternEndOf", m_cumber);
+//			m_cumber->setAttackPattern(nullptr);
+//			myGD->communication("CP_onPatternEndOf", m_cumber);
 			removeFromParent();
 			return false; // 한번만 실행
 		}));
