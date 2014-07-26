@@ -759,6 +759,7 @@ public:
 	int m_oneShotNumber; // 쉬지 않고 쏘는 개수.
 	int m_oneShotTerm; // 쐈다가 쉬는 프레임수.
 	int m_gunNumber; // 총의 개수.
+	bool m_isSuper; // 슈퍼 미사일인가.
 	vector<CCPoint> m_path;
 	int m_frame;
 	int m_totalFrame;

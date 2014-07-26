@@ -988,7 +988,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				pattern_container->addChild(t);
 				KSCumberBase* cumber = (KSCumberBase*)cb;
 				cumber->setAttackPattern(nullptr);
-				
 			};
 			castBranch(atype, func, warningFileName);
 		}
@@ -1461,6 +1460,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				cumber->setAttackPattern(nullptr);
 				//cumber->setAttackPattern(t);
 				
+				myGD->communication("MP_endIngActionAP");
+				myGD->communication("CP_onPatternEndOf", cb);
 			};
 			castBranch(atype, func, warningFileName);
 			

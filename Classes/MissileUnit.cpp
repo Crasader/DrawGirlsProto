@@ -17,18 +17,20 @@
 #include "KSUtil.h"
 #include "GameData.h"
 #include "DataStorageHub.h"
+#include "Jack.h"
 
 #define LZZ_INLINE inline
 
 using namespace std;
 using namespace placeholders;
 static ProbSelector randomObj = {9, 1};
-MissileUnit * MissileUnit::create (CCPoint t_sp, float t_angle, float t_distance, string imgFilename, CCSize t_cs, float t_da, float t_reduce_da)
+MissileUnit * MissileUnit::create (CCPoint t_sp, float t_angle, float t_distance, string imgFilename, CCSize t_cs, float t_da, float t_reduce_da,
+																	 bool isSuper)
 {
 	MissileUnit* t_mu = new MissileUnit();
 	if(t_mu && t_mu->initWithFile(imgFilename.c_str()))
 	{
-		t_mu->myInit(t_sp, t_angle, t_distance, t_cs, t_da, t_reduce_da);
+		t_mu->myInit(t_sp, t_angle, t_distance, t_cs, t_da, t_reduce_da, isSuper);
 		t_mu->autorelease();
 		return t_mu;
 	}
@@ -107,7 +109,9 @@ void MissileUnit::move ()
 		{
 			is_checking = false;
 			//				if(mySGD->getIsHard() || myGD->getJackState())
-			if(myGD->getJackState() && !myGD->getCommunicationBool("PM_isShortLine"))
+			// 수퍼 미사일이거나 맵 밖이라면 죽임.
+			if(isSuper ||
+				 (myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine")))
 			{
 				myGD->communication("CP_jackCrashDie");
 				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -149,10 +153,11 @@ void MissileUnit::move ()
 	
 	da *= reduce_da;
 }
-void MissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, float t_da, float t_reduce_da)
+void MissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, float t_da, float t_reduce_da,
+													bool t_isSuper)
 {
 	is_checking = true;
-	
+	isSuper = t_isSuper;
 	crashSize = t_cs;
 	angle = t_angle;
 	distance = t_distance;
@@ -4114,24 +4119,24 @@ void MeteorStorm::myInit (CCPoint t_sp, CCPoint t_fp, int t_moving_frame)
 	addChild(outer_fire_particle);
 	
 }
-MathmaticalMissileUnit * MathmaticalMissileUnit::create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve)
+MathmaticalMissileUnit * MathmaticalMissileUnit::create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve, bool isSuper)
 {
 	MathmaticalMissileUnit* t_mu = new MathmaticalMissileUnit();
 	if(t_mu && t_mu->initWithFile(imgFilename.c_str()))
 	{
-		t_mu->myInit(t_sp, t_angle, t_speed, t_cs, path, curve, imgFilename);
+		t_mu->myInit(t_sp, t_angle, t_speed, t_cs, path, curve, imgFilename, isSuper);
 		t_mu->autorelease();
 		return t_mu;
 	}
 	CC_SAFE_DELETE(t_mu);
 	return NULL;
 }
-MathmaticalMissileUnit * MathmaticalMissileUnit::create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs)
+MathmaticalMissileUnit * MathmaticalMissileUnit::create (CCPoint t_sp, float t_angle, float t_speed, string imgFilename, CCSize t_cs, bool isSuper)
 {
 	MathmaticalMissileUnit* t_mu = new MathmaticalMissileUnit();
 	if(t_mu && t_mu->initWithFile(imgFilename.c_str()))
 	{
-		t_mu->myInit(t_sp, t_angle, t_speed, t_cs, std::vector<CCPoint>(), CurveDisposition::RIGHTLINE, "");
+		t_mu->myInit(t_sp, t_angle, t_speed, t_cs, std::vector<CCPoint>(), CurveDisposition::RIGHTLINE, "", isSuper);
 		t_mu->autorelease();
 		return t_mu;
 	}
@@ -4209,7 +4214,8 @@ void MathmaticalMissileUnit::selfRemove ()
 {
 	removeFromParentAndCleanup(true);
 }
-void MathmaticalMissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve, std::string const & fn)
+void MathmaticalMissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, vector <CCPoint> const & path, enum CurveDisposition curve, std::string const & fn,
+																		 bool isSuper)
 {
 	m_frameCount = 0;
 	m_isChecking = true;
@@ -4217,7 +4223,7 @@ void MathmaticalMissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distan
 	m_speed = t_distance;
 	m_crashSize = t_cs;
 	firePosition = t_sp;
-	
+	m_isSuper = isSuper;
 	m_fileName = fn;
 	m_catmullIndex = 0;
 	m_catmullvar = 0.0;
@@ -4317,7 +4323,7 @@ void MathmaticalMissileUnit::move (float dt)
 		{
 			m_isChecking = false;
 			//				if(mySGD->getIsHard() || myGD->getJackState())
-			if(myGD->getJackState() && !myGD->getCommunicationBool("PM_isShortLine"))
+			if(m_isSuper || (myGD->getJackState() && !myGD->getCommunicationBool("PM_isShortLine")))
 			{
 				myGD->communication("CP_jackCrashDie");
 				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);

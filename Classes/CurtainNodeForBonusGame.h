@@ -96,15 +96,41 @@ public:
 		 
 		 */
 		
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* dimmed_sprite = CCSprite::create("whitePaper.png");
+		dimmed_sprite->setPosition(ccp(240, myDSH->ui_center_y));
+		dimmed_sprite->setColor(ccc3(0, 0, 0));
+		dimmed_sprite->setOpacity(100);
+		dimmed_sprite->setScaleX(screen_scale_x*480.f);
+		dimmed_sprite->setScaleY(height_value);// /myDSH->screen_convert_rate));
+		addChild(dimmed_sprite, 0);
+		
 		auto back = CCSprite::create("ingame_back2.png");
 		//	back->setContentSize(CCSizeMake(357, 308));
 		back->setPosition(ccp(240, 160));
 		addChild(back, kBonusGameZorder_content);
 		
-		KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 14);
+		KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 15);
 		titleLbl->setPosition(ccp(84.0, 301.0));
 		back->addChild(titleLbl);
 		setFormSetter(titleLbl);
+		
+		KSLabelTTF* title_label_shadow = KSLabelTTF::create(titleLbl->getString(), mySGD->getFont().c_str(), 15);
+		title_label_shadow->setColor(ccBLACK);
+		title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
+		title_label_shadow->setPosition(ccpFromSize(titleLbl->getContentSize()/2.f) + ccp(0,-1));
+		titleLbl->addChild(title_label_shadow, -1);
 		
 		auto realFront = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 		realFront->setContentSize(CCSizeMake(548 / 2.f, 506 / 2.f));
@@ -245,6 +271,26 @@ public:
 		m_leftCurtain->setVisible(false);
 		m_rightCurtain->setVisible(false);
 
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* dimmed_sprite = CCSprite::create("whitePaper.png");
+		dimmed_sprite->setPosition(ccp(240, myDSH->ui_center_y));
+		dimmed_sprite->setColor(ccc3(0, 0, 0));
+		dimmed_sprite->setOpacity(100);
+		dimmed_sprite->setScaleX(screen_scale_x*480.f);
+		dimmed_sprite->setScaleY(height_value);// /myDSH->screen_convert_rate));
+		addChild(dimmed_sprite, 0);
+
 		
 		auto contentBack = CCSprite::create("popup_large_back.png");
 		contentBack->setPosition(ccp(240.0,155.0)); 			// dt (0.0,5.0)
@@ -264,7 +310,7 @@ public:
 		rName->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5 + 41.f - 19.f));
 		contentBack->addChild(rName);
 		
-		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 16.f);
+		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 13.f);
 		rLabel->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5 - 19.f + 22 + 18.f));
 //		rLabel->setColor(ccc3(254, 250, 50));
 		rLabel->setColor(ccc3(255, 255, 255));
@@ -275,14 +321,14 @@ public:
 																										 "<font color=#FFFFFF newline=12>보상선물은 선물함에서 확인하세요.</font>"
 																										 "<font color=#FFFFFF>그럼 퍼펙트 클리어 후 다시 만나요!</font>"
 																										 , mySGD->getFont().c_str(),
-																										 12.f, 999, StyledAlignment::kCenterAlignment);
+																										 13.f, 999, StyledAlignment::kCenterAlignment);
 		contentBack->addChild(comment);
 		comment->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -12.5 + 10.f));
 		setFormSetter(comment);
 //		auto m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
 //																			 buttonBack, m_touchPriority - 1);
 //		m_startMenu->setPosition( ccp(240, 65.f) );
-		auto obtainReward = CommonButton::create(getLocal(LK::kRewardConfirm), 23.f, CCSizeMake(160, 50),
+		auto obtainReward = CommonButton::create(getLocal(LK::kRewardConfirm), 13.f, CCSizeMake(160, 50),
 																						 CCScale9Sprite::create("mainbutton_purple.png"),
 																						 m_touchPriority -1);
 		

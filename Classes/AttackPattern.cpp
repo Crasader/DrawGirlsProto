@@ -28,6 +28,8 @@ void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::stri
 	m_totalDegree = pattern["totaldegree"].asInt();
 	m_totalFrame = pattern["totalframe"].asInt(); // 200 프레임 동안
 	m_randomDegree = pattern["randomdegree"].asInt(); // 랜덤각.
+	m_isSuper = pattern.get("super", false).asBool(); // ["issuper"].asBool();
+	
 	
 	KS::KSLog("%", pattern);
 	m_isCurve = pattern.get("curve", false).asInt();
@@ -154,7 +156,8 @@ void CommonBulletPattern::update(float dt)
 					{
 						MathmaticalMissileUnit* t_mu = MathmaticalMissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
 																					  imgFileName.c_str(), t_mSize,
-																					  m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE);
+																					  m_path, m_isCurve ? MathmaticalMissileUnit::CURVE : MathmaticalMissileUnit::RIGHTLINE,
+																																					m_isSuper);
 						batchNode->addChild(t_mu);
 						t_mu->setOpacity(200);
 					}
@@ -165,7 +168,7 @@ void CommonBulletPattern::update(float dt)
 //						missileNode->addChild(t_mu);
 //						t_mu->setScale(0.8f);
 						MissileUnit* t_mu2 = MissileUnit::create(ip2ccp(myGD->getMainCumberPoint(m_cumber)), gun.degree.getValue(), gun.bulletSpeed,
-																																					imgFileName.c_str(), t_mSize,0, 0);
+																																					imgFileName.c_str(), t_mSize,0, 0, m_isSuper);
 						batchNode->addChild(t_mu2);
 						t_mu2->setOpacity(200);
 					}
@@ -2783,7 +2786,7 @@ void CrashLazerWrapper::myAction()
 //				lazer_main->addChild(laser3,10);
 //			}
 			
-			for(int i=1; i<15; i++)
+			for(int i=1; i<20; i++)
 			{
 				auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_body.ccbi");
 				
@@ -3656,8 +3659,8 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 			{
 				myGD->communication("CP_createSubCumber", mapPoint);
 			}
-			m_cumber->setAttackPattern(nullptr);
-			myGD->communication("CP_onPatternEndOf", m_cumber);
+//			m_cumber->setAttackPattern(nullptr);
+//			myGD->communication("CP_onPatternEndOf", m_cumber);
 			removeFromParent();
 			return false; // 한번만 실행
 		}));
