@@ -96,15 +96,41 @@ public:
 		 
 		 */
 		
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* dimmed_sprite = CCSprite::create("whitePaper.png");
+		dimmed_sprite->setPosition(ccp(240, myDSH->ui_center_y));
+		dimmed_sprite->setColor(ccc3(0, 0, 0));
+		dimmed_sprite->setOpacity(100);
+		dimmed_sprite->setScaleX(screen_scale_x*480.f);
+		dimmed_sprite->setScaleY(height_value);// /myDSH->screen_convert_rate));
+		addChild(dimmed_sprite, 0);
+		
 		auto back = CCSprite::create("ingame_back2.png");
 		//	back->setContentSize(CCSizeMake(357, 308));
 		back->setPosition(ccp(240, 160));
 		addChild(back, kBonusGameZorder_content);
 		
-		KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 14);
+		KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 15);
 		titleLbl->setPosition(ccp(84.0, 301.0));
 		back->addChild(titleLbl);
 		setFormSetter(titleLbl);
+		
+		KSLabelTTF* title_label_shadow = KSLabelTTF::create(titleLbl->getString(), mySGD->getFont().c_str(), 15);
+		title_label_shadow->setColor(ccBLACK);
+		title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
+		title_label_shadow->setPosition(ccpFromSize(titleLbl->getContentSize()/2.f) + ccp(0,-1));
+		titleLbl->addChild(title_label_shadow, -1);
 		
 		auto realFront = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 		realFront->setContentSize(CCSizeMake(548 / 2.f, 506 / 2.f));
@@ -244,6 +270,26 @@ public:
 		addChild(m_rightCurtain, kBonusGameZorder_curtain);
 		m_leftCurtain->setVisible(false);
 		m_rightCurtain->setVisible(false);
+
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		CCSprite* dimmed_sprite = CCSprite::create("whitePaper.png");
+		dimmed_sprite->setPosition(ccp(240, myDSH->ui_center_y));
+		dimmed_sprite->setColor(ccc3(0, 0, 0));
+		dimmed_sprite->setOpacity(100);
+		dimmed_sprite->setScaleX(screen_scale_x*480.f);
+		dimmed_sprite->setScaleY(height_value);// /myDSH->screen_convert_rate));
+		addChild(dimmed_sprite, 0);
 
 		
 		auto contentBack = CCSprite::create("popup_large_back.png");

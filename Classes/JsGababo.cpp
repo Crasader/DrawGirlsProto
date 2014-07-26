@@ -755,9 +755,9 @@ void JsGababo::onPressConfirm(CCObject* t)
 					loadImage(m_winCount);
 				}));
 			}, [=](){
-				m_ga->setEnabled(true);
-				m_ba->setEnabled(true);
-				m_bo->setEnabled(true);
+//				m_ga->setEnabled(true);
+//				m_ba->setEnabled(true);
+//				m_bo->setEnabled(true);
 			});
 		}
 		else
