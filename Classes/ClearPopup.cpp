@@ -1391,7 +1391,6 @@ void ClearPopup::endTakeCard()
 		
 		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
 																	 {
-																		 is_menu_enable = false;
 																		 skip_menu->setEnabled(false);
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()

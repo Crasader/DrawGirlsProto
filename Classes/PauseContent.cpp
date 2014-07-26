@@ -80,6 +80,11 @@ void PauseContent::gohomeAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 5)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 6);
+	}
+	
 	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 	{
 		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_notGohomeEndlessTutorialMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
@@ -95,6 +100,11 @@ void PauseContent::replayAction(CCObject* sender, CCControlEvent t_event)
 	is_menu_enable = false;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 5)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 6);
+	}
 	
 	if(mySGD->is_endless_mode)
 	{

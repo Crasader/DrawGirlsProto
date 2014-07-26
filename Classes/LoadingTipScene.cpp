@@ -22,6 +22,7 @@
 #include "CCMenuLambda.h"
 #include "PlayTutorial.h"
 #include "StyledLabelTTF.h"
+#include "TypingBox.h"
 
 CCScene* LoadingTipScene::scene()
 {
@@ -76,6 +77,8 @@ bool LoadingTipScene::init()
 			tip_img->setPosition(ccp(240,160));
 			addChild(tip_img, kLoadingTipZorder_back, 9999);
 			
+			content_node = tip_img;
+			
 			CCDelayTime* t_delay = CCDelayTime::create(0.6f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::readyLoading));
 			CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
@@ -87,6 +90,8 @@ bool LoadingTipScene::init()
 			tip_img->setPosition(ccp(240,160));
 			addChild(tip_img, kLoadingTipZorder_back, 9999);
 			
+			content_node = tip_img;
+			
 			readyLoading();
 		}
 	}
@@ -95,6 +100,8 @@ bool LoadingTipScene::init()
 		CCNode* tip_img = getMissionTipImage();
 		tip_img->setPosition(ccp(240,160));
 		addChild(tip_img, kLoadingTipZorder_back, 9999);
+		
+		content_node = tip_img;
 		
 		CCDelayTime* t_delay = CCDelayTime::create(0.6f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(LoadingTipScene::readyLoading));
@@ -109,12 +116,10 @@ CCNode* LoadingTipScene::getMissionTipImage()
 {
 	CCNode* loading_tip_node = CCNode::create();
 	
-	int rand_value = rand()%5+1;
-	mySGD->loading_tip_back_number = rand_value;
-	CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", rand_value));
+	CCSprite* loading_tip_back = CCSprite::create("main_back.png");
 	loading_tip_back->setPosition(ccp(0,0));
 	loading_tip_back->setVisible(false);
-	loading_tip_node->addChild(loading_tip_back);
+	loading_tip_node->addChild(loading_tip_back, 0, 1);
 	
 	CCDelayTime* back_delay = CCDelayTime::create(0.3f);
 	CCShow* back_show = CCShow::create();
@@ -142,42 +147,14 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	black_img->runAction(black_seq);
 	
 	
-//	CCSprite* left_curtain = CCSprite::create("curtain_left.png");
-//	left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-//	left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
-//	left_curtain->setPosition(ccp(-240, 0));
-//	loading_tip_node->addChild(left_curtain);
-//	
-//	CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(0,0));
-//	left_curtain->runAction(left_in);
-//	
-//	CCSprite* right_curtain = CCSprite::create("curtain_left.png");
-//	right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-//	right_curtain->setFlipX(true);
-//	right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
-//	right_curtain->setPosition(ccp(240,0));
-//	loading_tip_node->addChild(right_curtain);
-//	
-//	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
-//	right_curtain->runAction(right_in);
-	
-	CCSprite* mission_back = CCSprite::create("popup_small_back.png");
-	mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
-	loading_tip_back->addChild(mission_back);
-	
-	KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
-	mission_img_label->setColor(ccc3(255, 170, 20));
-	mission_img_label->setPosition(ccp(mission_back->getContentSize().width/2.f-85, mission_back->getContentSize().height-35));
-	mission_back->addChild(mission_img_label);
-	
-	CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	inner_back->setContentSize(CCSizeMake(mission_back->getContentSize().width-50, 75));
-	inner_back->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
-	mission_back->addChild(inner_back);
+	CCScale9Sprite* mission_back = CCScale9Sprite::create("common_mission.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	mission_back->setContentSize(CCSizeMake(256, 103));
+	mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f+40));
+	loading_tip_back->addChild(mission_back,3);
 	
 	ok_img = CCSprite::create("subbutton_purple4.png");// KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("button_ok_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
-	ok_img->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.2f+4));
-	mission_back->addChild(ok_img);
+	ok_img->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f-90));
+	loading_tip_back->addChild(ok_img);
 	ok_img->setVisible(false);
 	
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
@@ -203,34 +180,27 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																   onMinimumTime();
 															   });
+	ok_item->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f-90));
 	ok_menu = CCMenuLambda::createWithItem(ok_item);
-	ok_menu->setPosition(ccp(mission_back->getContentSize().width*0.5f, mission_back->getContentSize().height*0.2f+4));
-	mission_back->addChild(ok_menu);
+	ok_menu->setPosition(CCPointZero);
+	loading_tip_back->addChild(ok_menu);
 	ok_menu->setVisible(false);
 	ok_menu->setTouchPriority(-600);
 	
 	
-//	no_review = CommonButton::create("다시보지않기", 13, CCSizeMake(100, 50), CommonButtonGreen, -600);
-//	no_review->setPosition(ccp(mission_back->getContentSize().width*0.3f, mission_back->getContentSize().height*0.18f));
-//	mission_back->addChild(no_review);
-//	no_review->setVisible(false);
-	
 	int stage_number = mySD->getSilType();
 	int mission_type = NSDS_GI(stage_number, kSDS_SI_missionType_i);
 	
-	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionTitle0+mission_type)), mySGD->getFont().c_str(), 12);
-	title_img->setColor(ccc3(255, 170, 20));
-	title_img->setAnchorPoint(ccp(0.5f,0.5f));
-	mission_img_label->setPositionX(mission_img_label->getPositionX() - 2.5f - title_img->getContentSize().width/2.f);
-	title_img->setPosition(mission_img_label->getPosition() + ccp(mission_img_label->getContentSize().width/2.f + 5 + title_img->getContentSize().width/2.f, 0));
+	CCSprite* title_img = CCSprite::create("mission_title.png");
+	title_img->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height-24));
 	mission_back->addChild(title_img);
 	
 	if(mission_type == kCLEAR_bossLifeZero)
 	{
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
-		inner_back->addChild(main_ment);
+		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
+		mission_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -242,15 +212,181 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
+		CCNode* junior_node = CCNode::create();
+		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-18.5f,0));
+		mission_back->addChild(junior_node);
+		
+		std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
+		
+		Json::Reader reader;
+		Json::Value juniorJson;
+		reader.parse(juniorInfo, juniorJson);
+		
+		int juniorIndex = 0;
+		juniorJson = juniorJson[juniorIndex];
+		{
+			std::string juniorType = juniorJson["type"].asString();
+			std::string ccbiName = juniorType;
+			std::string ccbiname2 = ccbiName;
+			
+			if(ccbiname2.substr(0,1)=="1") {
+				ccbiname2="bear";
+			}
+			////////////////////////////////////////////
+			
+			//		m_directionAngleDegree = m_well512.GetValue(0, 360);
+			
+			//		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+			//		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
+			
+			//		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+			
+			
+			std::string _ccbiName = (ccbiname2 + ".ccbi").c_str();
+			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+			cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(nodeLoader);
+			CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), this);
+			
+			CCSprite* m_juniorSprite = dynamic_cast<CCSprite*>(p);
+			//			m_juniorAnimation = reader->getAnimationManager();
+			//			m_juniorAnimation->setDelegate(this);
+			reader->release();
+			
+			if(m_juniorSprite != NULL)
+			{
+				junior_node->addChild(m_juniorSprite, 1001);
+				m_juniorSprite->setScale(0.5f);
+				m_juniorSprite->setPosition(CCPointZero);
+			}
+		}
+		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-		inner_back->addChild(t_condition_label);
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(25,0));
+		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-		inner_back->addChild(main_ment);
+		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
+		mission_back->addChild(main_ment);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_catcher))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_catcher, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* yagyu = CCSprite::create("kt_cha_yagyu_1.png");
+			yagyu->setAnchorPoint(ccp(0,0));
+			yagyu->setPosition(ccp(240-240*screen_scale_x-yagyu->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(yagyu, 1);
+			
+			CCSprite* hibari = CCSprite::create("kt_cha_hibari_1.png");
+			hibari->setAnchorPoint(ccp(1,0));
+			hibari->setPosition(ccp(240+240*screen_scale_x+hibari->getContentSize().width, 160-160*screen_scale_y));
+			hibari->setVisible(false);
+			scenario_node->addChild(hibari, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				yagyu->setVisible(false);
+				hibari->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping("응! 야규짱!", end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping("껄끄러운 게임미션이로군.\n히바리. 이번 게임에선 부하몬스터를\n표시된 갯수만큼 가둬잡아야 클리어할 수 있어.\n너라면 충분히 해낼 수 있을꺼야.", end_func1);
+																  }));
+		}
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -265,13 +401,13 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-		inner_back->addChild(t_condition_label);
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,10));
+		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-		inner_back->addChild(main_ment);
+		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-10));
+		mission_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -285,13 +421,128 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-		inner_back->addChild(t_condition_label);
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
+		mission_back->addChild(t_condition_label);
 		
-		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-		inner_back->addChild(main_ment);
+		CCSprite* item_img = CCSprite::create("mission_item_set.png");
+		item_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
+		mission_back->addChild(item_img);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_collector))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_collector, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
+			asuka->setAnchorPoint(ccp(0,0));
+			asuka->setPosition(ccp(240-240*screen_scale_x-asuka->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(asuka, 1);
+			
+			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			ikaruga->setAnchorPoint(ccp(1,0));
+			ikaruga->setPosition(ccp(240+240*screen_scale_x+ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			ikaruga->setVisible(false);
+			scenario_node->addChild(ikaruga, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				asuka->setVisible(false);
+				ikaruga->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping("네. 주어진 갯수만큼 생성되는 아이템을\n먹어야 클리어 됩니다.\n클리어하기 더 어려워지겠는데요?", end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping("이번엔 게임미션이 조금 다른것 같아요.", end_func1);
+																  }));
+		}
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -331,15 +582,133 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 		
+		CCSprite* time_img = CCSprite::create("item8.png");
+		time_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-20,0));
+		mission_back->addChild(time_img);
+		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-		t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-		inner_back->addChild(t_condition_label);
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(20,0));
+		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-		inner_back->addChild(main_ment);
+		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
+		mission_back->addChild(main_ment);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_business))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_business, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			ikaruga->setAnchorPoint(ccp(0,0));
+			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(ikaruga, 1);
+			
+			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+			katsuragi->setAnchorPoint(ccp(1,0));
+			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+			katsuragi->setVisible(false);
+			scenario_node->addChild(katsuragi, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				ikaruga->setVisible(false);
+				katsuragi->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping("알고있어!! 게임중에 생기는 시간아이템을\n적절히 먹으면서 플레이하면 문제없을꺼야!!", end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping("게임시간이 엄청나게 줄어들었어요.\n조금 서둘러야겠는걸요.", end_func1);
+																  }));
+		}
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -351,8 +720,8 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-		main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,0));
-		inner_back->addChild(main_ment);
+		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,0));
+		mission_back->addChild(main_ment);
 		
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
@@ -389,7 +758,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 	
 	if(!mySGD->is_endless_mode && !is_gameover && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
 	{
-		CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", mySGD->loading_tip_back_number));
+		CCSprite* loading_tip_back = CCSprite::create("main_back.png");
 		loading_tip_back->setPosition(ccp(0,0));
 		loading_tip_node->addChild(loading_tip_back);
 		
@@ -419,53 +788,17 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		black_img->runAction(black_seq);
 		
 		
+		CCScale9Sprite* mission_back = CCScale9Sprite::create("common_mission.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+		mission_back->setContentSize(CCSizeMake(256, 103));
+		mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f+40));
+		loading_tip_back->addChild(mission_back,3);
 		
-		
-//		CCSprite* left_curtain = CCSprite::create("curtain_left.png");
-//		left_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-//		left_curtain->setAnchorPoint(ccp(1.f, 0.5f));
-//		left_curtain->setPosition(ccp(0, 0));
-//		loading_tip_node->addChild(left_curtain);
-//		
-//		CCDelayTime* left_delay = CCDelayTime::create(0.5f);
-//		CCMoveTo* left_in = CCMoveTo::create(0.5f, ccp(-300,0));
-//		CCSequence* left_seq = CCSequence::create(left_delay, left_in, NULL);
-//		left_curtain->runAction(left_seq);
-//		
-//		CCSprite* right_curtain = CCSprite::create("curtain_left.png");
-//		right_curtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-//		right_curtain->setFlipX(true);
-//		right_curtain->setAnchorPoint(ccp(0.f, 0.5f));
-//		right_curtain->setPosition(ccp(0,0));
-//		loading_tip_node->addChild(right_curtain);
-//		
-//		CCDelayTime* right_delay = CCDelayTime::create(0.5f);
-//		CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(300,0));
-//		CCSequence* right_seq = CCSequence::create(right_delay, right_in, NULL);
-//		right_curtain->runAction(right_seq);
-		
-		CCSprite* mission_back = CCSprite::create("popup_small_back.png");
-		mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f));
-		loading_tip_back->addChild(mission_back);
-		
-		KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
-		mission_img_label->setColor(ccc3(255, 170, 20));
-		mission_img_label->setPosition(ccp(mission_back->getContentSize().width/2.f-85, mission_back->getContentSize().height-35));
-		mission_back->addChild(mission_img_label);
-		
-		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-		inner_back->setContentSize(CCSizeMake(mission_back->getContentSize().width-50, 75));
-		inner_back->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f+8));
-		mission_back->addChild(inner_back);
 		
 		int stage_number = mySD->getSilType();
 		int mission_type = NSDS_GI(stage_number, kSDS_SI_missionType_i);
 		
-		KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionTitle0+mission_type)), mySGD->getFont().c_str(), 12);
-		title_img->setColor(ccc3(255, 170, 20));
-		title_img->setAnchorPoint(ccp(0.5f,0.5f));
-		mission_img_label->setPositionX(mission_img_label->getPositionX() - 2.5f - title_img->getContentSize().width/2.f);
-		title_img->setPosition(mission_img_label->getPosition() + ccp(mission_img_label->getContentSize().width/2.f + 5 + title_img->getContentSize().width/2.f, 0));
+		CCSprite* title_img = CCSprite::create("mission_title.png");
+		title_img->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height-24));
 		mission_back->addChild(title_img);
 		
 		
@@ -473,35 +806,70 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
-			inner_back->addChild(main_ment);
+			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
+			mission_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_subCumberCatch)
 		{
 			int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
+			CCNode* junior_node = CCNode::create();
+			junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-18.5f,0));
+			mission_back->addChild(junior_node);
+			
+			std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
+			
+			Json::Reader reader;
+			Json::Value juniorJson;
+			reader.parse(juniorInfo, juniorJson);
+			
+			int juniorIndex = 0;
+			juniorJson = juniorJson[juniorIndex];
+			{
+				std::string juniorType = juniorJson["type"].asString();
+				std::string ccbiName = juniorType;
+				std::string ccbiname2 = ccbiName;
+				
+				if(ccbiname2.substr(0,1)=="1") {
+					ccbiname2="bear";
+				}
+				////////////////////////////////////////////
+				
+				//		m_directionAngleDegree = m_well512.GetValue(0, 360);
+				
+				//		CCNodeLoaderLibrary * ccNodeLoaderLibrary = CCNodeLoaderLibrary::newDefaultCCNodeLoaderLibrary();
+				//		ccNodeLoaderLibrary->registerCCNodeLoader("CircleBossCCB", CircleLoader::loader());
+				
+				//		cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(ccNodeLoaderLibrary);
+				
+				
+				std::string _ccbiName = (ccbiname2 + ".ccbi").c_str();
+				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+				cocos2d::extension::CCBReader* reader = new cocos2d::extension::CCBReader(nodeLoader);
+				CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), loading_tip_node);
+				
+				CCSprite* m_juniorSprite = dynamic_cast<CCSprite*>(p);
+				//			m_juniorAnimation = reader->getAnimationManager();
+				//			m_juniorAnimation->setDelegate(this);
+				reader->release();
+				
+				if(m_juniorSprite != NULL)
+				{
+					junior_node->addChild(m_juniorSprite, 1001);
+					m_juniorSprite->setScale(0.5f);
+					m_juniorSprite->setPosition(CCPointZero);
+				}
+			}
+			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-			inner_back->addChild(t_condition_label);
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(25,0));
+			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-			inner_back->addChild(main_ment);
-			
-//			CCSprite* catch_count_img = CCSprite::create("mission_catch_count.png");
-//			catch_count_img->setPosition(ccp(mission_back->getContentSize().width/2.f-30, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(catch_count_img);
-//			
-//			CCLabelTTF* count_label = CCLabelTTF::create(CCString::createWithFormat("%d마리", catch_count)->getCString(), mySGD->getFont().c_str(), 23);
-//			count_label->setColor(ccc3(255, 240, 0));
-//			count_label->setPosition(ccp(mission_back->getContentSize().width/2.f+50, mission_back->getContentSize().height/2.f+13));
-//			mission_back->addChild(count_label);
-//			
-//			CCLabelTTF* main_ment = CCLabelTTF::create("부하몹을 가두어 잡으세요.", mySGD->getFont().c_str(), 17);
-//			main_ment->setPosition(ccp(mission_back->getContentSize().width/2.f, mission_back->getContentSize().height/2.f-23));
-//			mission_back->addChild(main_ment);
+			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
+			mission_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_bigArea)
 		{
@@ -510,13 +878,13 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-			inner_back->addChild(t_condition_label);
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,10));
+			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-			inner_back->addChild(main_ment);
+			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-10));
+			mission_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_itemCollect)
 		{
@@ -524,13 +892,12 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-			inner_back->addChild(t_condition_label);
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
+			mission_back->addChild(t_condition_label);
 			
-			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-			inner_back->addChild(main_ment);
+			CCSprite* item_img = CCSprite::create("mission_item_set.png");
+			item_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
+			mission_back->addChild(item_img);
 		}
 		else if(mission_type == kCLEAR_perfect)
 		{
@@ -558,22 +925,26 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 			
+			CCSprite* time_img = CCSprite::create("item8.png");
+			time_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-20,0));
+			mission_back->addChild(time_img);
+			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-			t_condition_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,10));
-			inner_back->addChild(t_condition_label);
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(20,0));
+			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,-10));
-			inner_back->addChild(main_ment);
+			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
+			mission_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_sequenceChange)
 		{
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
-			main_ment->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,0));
-			inner_back->addChild(main_ment);
+			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,0));
+			mission_back->addChild(main_ment);
 		}
 		
 //		loading_tip_node->addChild(KSGradualValue<int>::create(255, 0, 0.2f, [=](int t)
@@ -804,8 +1175,8 @@ void LoadingTipScene::readyLoading()
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader = new CCBReader(nodeLoader);
 	CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-	loading_progress_img->setPosition(ccp(240,38));
-	addChild(loading_progress_img, kLoadingTipZorder_content);
+	loading_progress_img->setPosition(ccpFromSize(content_node->getChildByTag(1)->getContentSize()/2.f) + ccp(0,-45));
+	content_node->getChildByTag(1)->addChild(loading_progress_img, 1);
 	reader->release();
 	
 	if(next_scene_name == "maingame")
@@ -843,13 +1214,13 @@ void LoadingTipScene::readyLoading()
 	
 	progress_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", (100.f*ing_load_img)/total_load_img)->getCString(), mySGD->getFont().c_str(), 11);
 	progress_label->enableOuterStroke(ccBLACK, 1.f);
-	progress_label->setPosition(ccp(240,38));
-	addChild(progress_label, kLoadingTipZorder_content);
+	progress_label->setPosition(ccpFromSize(content_node->getChildByTag(1)->getContentSize()/2.f) + ccp(0,-45));
+	content_node->getChildByTag(1)->addChild(progress_label, 1);
 	
 	if((next_scene_name == "maingame" || next_scene_name == "playtutorial") && !is_mission_tip)
 	{
-		loading_progress_img->setPosition(ccp(240,120));
-		progress_label->setPosition(ccp(240,120));
+		loading_progress_img->setPosition(ccpFromSize(content_node->getChildByTag(1)->getContentSize()/2.f) + ccp(0,-40));
+		progress_label->setPosition(ccpFromSize(content_node->getChildByTag(1)->getContentSize()/2.f) + ccp(0,-40));
 	}
 	
 	is_minimum_time = false;
@@ -893,6 +1264,7 @@ void LoadingTipScene::showButton()
 	else
 	{
 		ok_img->setVisible(true);
+		no_img->setVisible(true);
 		ok_menu->setVisible(true);
 //		no_review->setVisible(true);
 	}

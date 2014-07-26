@@ -1516,8 +1516,9 @@ void Maingame::removeConditionLabel()
 		
 		
 		CCSprite* asuka = CCSprite::create("kt_cha_ikaruga_1.png");
+		asuka->setScale(1.f-(360-myDSH->ui_top)*3.f/16.f);
 		asuka->setAnchorPoint(ccp(1,0));
-		asuka->setPosition(ccp(480+asuka->getContentSize().width, 0));
+		asuka->setPosition(ccp(480+asuka->getContentSize().width*asuka->getScale(), 0));
 		scenario_node->addChild(asuka, 1);
 		
 		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
@@ -1643,12 +1644,12 @@ void Maingame::removeConditionLabel()
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 															  {
 																  t_gray->setOpacity(255*t);
-																  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+																  asuka->setPositionX(480+asuka->getContentSize().width*asuka->getScale() - asuka->getContentSize().width*asuka->getScale()*2.f/3.f*t);
 																  skip_menu->setPositionY(myDSH->ui_top - 25 + 150 - 150*t);
 															  }, [=](float t)
 															  {
 																  t_gray->setOpacity(255);
-																  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+																  asuka->setPositionX(480+asuka->getContentSize().width*asuka->getScale() - asuka->getContentSize().width*asuka->getScale()*2.f/3.f*t);
 																  skip_menu->setPositionY(myDSH->ui_top - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  

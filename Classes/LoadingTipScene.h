@@ -59,7 +59,9 @@ private:
 	
 	CCSprite* ok_img;
 	CCMenuLambda* ok_menu;
-//	CommonButton* no_review;
+	CCScale9Sprite* no_img;
+	
+	CCNode* content_node;
 	
 	void endLoadingTip();
 	
