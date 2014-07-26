@@ -264,7 +264,7 @@ public:
 		rName->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5 + 41.f - 19.f));
 		contentBack->addChild(rName);
 		
-		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 16.f);
+		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 13.f);
 		rLabel->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5 - 19.f + 22 + 18.f));
 //		rLabel->setColor(ccc3(254, 250, 50));
 		rLabel->setColor(ccc3(255, 255, 255));
@@ -275,14 +275,14 @@ public:
 																										 "<font color=#FFFFFF newline=12>보상선물은 선물함에서 확인하세요.</font>"
 																										 "<font color=#FFFFFF>그럼 퍼펙트 클리어 후 다시 만나요!</font>"
 																										 , mySGD->getFont().c_str(),
-																										 12.f, 999, StyledAlignment::kCenterAlignment);
+																										 13.f, 999, StyledAlignment::kCenterAlignment);
 		contentBack->addChild(comment);
 		comment->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -12.5 + 10.f));
 		setFormSetter(comment);
 //		auto m_startMenu = CommonButton::create("보상받기", 23.f, CCSizeMake(160, 50),
 //																			 buttonBack, m_touchPriority - 1);
 //		m_startMenu->setPosition( ccp(240, 65.f) );
-		auto obtainReward = CommonButton::create(getLocal(LK::kRewardConfirm), 23.f, CCSizeMake(160, 50),
+		auto obtainReward = CommonButton::create(getLocal(LK::kRewardConfirm), 13.f, CCSizeMake(160, 50),
 																						 CCScale9Sprite::create("mainbutton_purple.png"),
 																						 m_touchPriority -1);
 		

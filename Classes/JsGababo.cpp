@@ -96,10 +96,17 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	m_back = back;
 	addChild(back);
 
-	KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 14);
+	KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 15);
+	titleLbl->disableOuterStroke();
 	titleLbl->setPosition(ccp(84.0, 301.0));
 	back->addChild(titleLbl);
 	setFormSetter(titleLbl);
+	
+	KSLabelTTF* title_label_shadow = KSLabelTTF::create(titleLbl->getString(), mySGD->getFont().c_str(), 15);
+	title_label_shadow->setColor(ccBLACK);
+	title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
+	title_label_shadow->setPosition(ccpFromSize(titleLbl->getContentSize()/2.f) + ccp(0,-1));
+	titleLbl->addChild(title_label_shadow, -1);
 	
 	auto realFront = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	m_realFront = realFront;
@@ -1112,7 +1119,7 @@ void JsGababo::setupTutorial()
 	m_back->addChild(message1, 6);
 
 	CCScale9Sprite* button9Scale = nullptr;
-	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 12.f, CCSizeMake(114.5, 63.5),
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 15.f, CCSizeMake(114.5, 63.5),
 							button9Scale = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0,0,92,45), CCRectMake(45, 21, 2, 2)), m_touchPriority - 1);
 //	button->setContentSize(CCSizeMake(92, 65));
 //	button->setContentSize(CCSizeMake(120, 80));

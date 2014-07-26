@@ -72,7 +72,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	KSLabelTTF* title_label_shadow = KSLabelTTF::create(main_title->getString(), mySGD->getFont().c_str(), 14);
 	title_label_shadow->setColor(ccBLACK);
-	title_label_shadow->enableOuterStroke(ccBLACK, 1, 60/255, true);
+	title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
 	title_label_shadow->setPosition(ccpFromSize(main_title->getContentSize()/2.f) + ccp(0,-1));
 	main_title->addChild(title_label_shadow, -1);
 	

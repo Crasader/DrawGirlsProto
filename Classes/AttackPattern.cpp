@@ -2783,7 +2783,7 @@ void CrashLazerWrapper::myAction()
 //				lazer_main->addChild(laser3,10);
 //			}
 			
-			for(int i=1; i<15; i++)
+			for(int i=1; i<20; i++)
 			{
 				auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_laser1_body.ccbi");
 				
