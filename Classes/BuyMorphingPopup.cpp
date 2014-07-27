@@ -262,7 +262,7 @@ void BuyMorphingPopup::buyAction(CCObject* sender, CCControlEvent t_event)
 	else
 	{
 		StyledLabelTTF* t_content = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_notEnoughtMorphingContent), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
-		t_content->setAnchorPoint(ccp(0.5f,0.83f));
+		t_content->setAnchorPoint(ccp(0.5f,0.5f));
 		
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_notEnoughtMorphingTitle), t_content,
 							   [=]()

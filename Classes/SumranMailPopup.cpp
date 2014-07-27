@@ -90,7 +90,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
 	title_label->disableOuterStroke();
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	setFormSetter(title_label);
 	title_back->addChild(title_label);
 	
@@ -414,7 +414,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	main_case->addChild(barBack, kMP_Z_mailTable - 1);
 	//320x320 테이블 뷰 생성
 
-	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
+	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 203.f));
 	setFormSetter(mailTableView);	
 //	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
@@ -433,7 +433,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	//기준점 0,0
 	// 좌표 수동으로 잡느라 이리 됨
 	//FormSetter::get()->addObject("testksoo", mailTableView);
-	mailTableView->setPosition(ccp(33.0, 56.0));
+	mailTableView->setPosition(ccp(33.0, 30.0));
 	
 	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 	mailTableView->setDelegate(this);
@@ -529,6 +529,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 		title = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(), 13); // "님의"
+		title->disableOuterStroke();
 		title->setPosition(ccp(53.5, 19.5));
 		title->setColor(ccc3(255, 255, 255));
 		title->setAnchorPoint(CCPointZero);
