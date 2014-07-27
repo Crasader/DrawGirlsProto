@@ -2391,10 +2391,12 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_postbox)
 		{
+            TRACE();
 			SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
 			addChild(t_pp, kMainFlowZorder_popup);
 			
 			postbox_count_case->setVisible(false);
+            TRACE();
 		}
 		else if(tag == kMainFlowMenuTag_option)
 		{
@@ -4469,8 +4471,9 @@ void MainFlowScene::setTop()
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
-	countingMessage();
-	
+    TRACE();
+	countingtMessage();
+	TRACE();
 	
 	
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
@@ -4570,6 +4573,7 @@ void MainFlowScene::countingMessage()
 									 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
 									 TRACE();
 								 });
+	TRACE();
 }
 
 void MainFlowScene::countingAchievement()
@@ -4628,8 +4632,10 @@ void MainFlowScene::achievePopupClose()
 
 void MainFlowScene::mailPopupClose()
 {
+    TRACE();
 	countingMessage();
 	is_menu_enable = true;
+    TRACE();
 }
 
 void MainFlowScene::tutorialCardSettingClose()
