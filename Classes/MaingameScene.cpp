@@ -144,6 +144,7 @@ bool Maingame::init()
 	myGD->V_I["Main_scoreAttackMissile"] = std::bind(&Maingame::scoreAttackMissile, this, _1);
 	myGD->V_CCP["Main_showScoreMissileEffect"] = std::bind(&Maingame::showScoreMissileEffect, this, _1);
 	myGD->V_V["Main_checkHideStartMapGacha"] = std::bind(&Maingame::checkHideStartMapGacha, this);
+	myGD->V_V["Main_stopBackingCheck"] = std::bind(&Maingame::stopBackingCheck, this);
 	
 	mControl = NULL;
 	is_line_die = false;
@@ -2074,6 +2075,27 @@ void Maingame::stunBackTracking()
 //		AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
 		schedule(schedule_selector(Maingame::stunBacking));
 	}
+}
+
+void Maingame::stopBackingCheck()
+{
+	unschedule(schedule_selector(Maingame::checkingBacking));
+	
+	if(isCheckingBacking)
+	{
+		myJack->endBackTracking();
+		isCheckingBacking = false;
+	}
+	unschedule(schedule_selector(Maingame::stunBacking));
+	
+	if(((ControlJoystickButton*)mControl)->isBacking)
+	{
+		((ControlJoystickButton*)mControl)->isBacking = false;
+		myJack->endBackTracking();
+	}
+	unschedule(schedule_selector(Maingame::backTracking));
+	
+	myJack->willBackTracking = false;
 }
 
 void Maingame::stunBacking()

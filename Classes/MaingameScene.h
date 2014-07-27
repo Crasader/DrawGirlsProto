@@ -304,6 +304,8 @@ private:
 	void showDrawButtonTutorial();
 	void hideDrawButtonTutorial();
 	
+	void stopBackingCheck();
+	
 	void showClearTimeEvent(function<void()> no_func, function<void()> yes_func);
 	
 	bool is_gohome;
