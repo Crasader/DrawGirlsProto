@@ -1312,7 +1312,7 @@ void Maingame::gachaOn()
 									  else
 									  {
 										  mySGD->clearChangeGoods();
-										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
+										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
 											  mControl->isStun = false;
 											  myJack->isStun = t_jack_stun;
 											  exit_target->onEnter();
@@ -1642,7 +1642,7 @@ void Maingame::removeConditionLabel()
 			
 			t_arrow3->runAction(t_repeat);
 			
-			typing_box->startTyping("여기에 점수와 획득한 골드, 그리고 콤보가\n표시됩니다. 자 이제 시작해 볼까요?", end_func4);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent25), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -1663,7 +1663,7 @@ void Maingame::removeConditionLabel()
 			
 			t_arrow2->runAction(t_repeat);
 			
-			typing_box->startTyping("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요.", end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent24), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
@@ -1688,7 +1688,7 @@ void Maingame::removeConditionLabel()
 			
 			t_arrow1->runAction(t_repeat);
 			
-			typing_box->startTyping("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?", end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent23), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -1703,7 +1703,7 @@ void Maingame::removeConditionLabel()
 																  skip_menu->setPositionY(myDSH->ui_top - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("잠깐!\n깜빡하고 지나갈 뻔했네요.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent22), end_func1);
 															  }));
 	}
 	else if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
@@ -1768,7 +1768,7 @@ void Maingame::removeConditionLabel()
 		{
 			scenario_node->removeChildByTag(1);
 			
-			typing_box->startTyping("행운을 빌어요.", end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent59), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
@@ -1795,7 +1795,7 @@ void Maingame::removeConditionLabel()
 //			
 //			t_arrow2->runAction(t_repeat2);
 			
-			typing_box->startTyping("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깍을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!", end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent58), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -1805,7 +1805,7 @@ void Maingame::removeConditionLabel()
 															  {
 																  asuka->setPositionX(480+asuka->getContentSize().width*asuka->getScale() - asuka->getContentSize().width*asuka->getScale()*2.f/3.f*t);
 																  
-																  typing_box->startTyping("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent57), end_func1);
 															  }));
 		
 		

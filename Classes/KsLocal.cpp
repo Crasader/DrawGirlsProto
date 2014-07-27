@@ -84,8 +84,8 @@ void KsLocal::ko()
 	obj[LK::kTouchDesc1] = "<font color=#FFFFFF size=11 newline=20>최대한 많이 터치를 하세요.</font>"
 																														 "<font color=#FFFFFF size=11>돈이 쏟아져요!</font>";
 	
-	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=12>축하합니다.</font>"
-																										 "<font color=#FFFFFF newline=12>보상선물은 선물함에서 확인하세요.</font>"
+	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font>"
+																										 "<font color=#FFFFFF newline=15>보상선물은 선물함에서 확인하세요.</font>"
 																										 "<font color=#FFFFFF>그럼 퍼펙트 클리어 후 다시 만나요!</font>";
 	
 	

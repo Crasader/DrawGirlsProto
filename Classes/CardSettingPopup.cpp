@@ -276,12 +276,12 @@ bool CardSettingPopup::init()
 		
 		function<void()> end_func2 = [=]()
 		{
-			typing_box->startTyping("상단의 정렬버튼을 눌러 여러가지 옵션으로\n정렬기능을 이용할 수도 있습니다.", end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial5), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
 		{
-			typing_box->startTyping("내가 획득한 카드나 다이어리 보기 버튼을\n터치하면 카드의 상세 내용을 확인할 수\n있는 다이어리로 이동합니다.", end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial4), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -294,7 +294,7 @@ bool CardSettingPopup::init()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("하하! 또 만나네요.\n내카드에서는 스테이지에서 획득한 카드를\n확인할 수 있어요.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial3), end_func1);
 															  }));
 	}
 	

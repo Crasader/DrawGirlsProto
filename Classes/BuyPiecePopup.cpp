@@ -179,7 +179,7 @@ void BuyPiecePopup::buyAction(CCObject* sender, CCControlEvent t_event)
 										  if(result_data["result"]["code"].asInt() != GDSUCCESS)
 										  {
 											  mySGD->clearChangeGoods();
-											  addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+											  addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 										  }
 										  else
 										  {

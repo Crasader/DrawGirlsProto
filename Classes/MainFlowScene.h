@@ -23,6 +23,7 @@ enum MainFlowZorder{
 	kMainFlowZorder_table,
 	kMainFlowZorder_top,
 	kMainFlowZorder_uiButton,
+	kMainFlowZorder_uiButton2,
 	kMainFlowZorder_popup
 };
 

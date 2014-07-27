@@ -396,6 +396,7 @@ bool OptionPopup::init()
 	main_case->addChild(system_tab, kOP_Z_back);
 	
 	KSLabelTTF* system_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_system), mySGD->getFont().c_str(), 12);
+	system_label->setColor(ccc3(20, 50, 70));
 	system_label->disableOuterStroke();
 	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.5f));
 	system_tab->addChild(system_label);
@@ -544,6 +545,7 @@ bool OptionPopup::init()
 	main_case->addChild(alert_tab, kOP_Z_back);
 	
 	KSLabelTTF* alert_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noti), mySGD->getFont().c_str(), 12);
+	alert_label->setColor(ccc3(20, 50, 70));
 	alert_label->disableOuterStroke();
 	alert_label->setPosition(ccp(alert_tab->getContentSize().width*0.45f, alert_tab->getContentSize().height*0.5f));
 	alert_tab->addChild(alert_label);

@@ -1733,13 +1733,13 @@ bool PlayTutorial::init()
 	
 	function<void()> end_func2 = [=]()
 	{
-		typing_box->startTyping("이곳은 처음이실테니\n컨트롤 방법부터 설명드리겠습니다.", end_func3);
+		typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent20), end_func3);
 	};
 	
 	function<void()> end_func1 = [=]()
 	{
 		TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
-		typing_box->startTyping("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠.", end_func2);
+		typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent19), end_func2);
 	};
 	
 	scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -1751,7 +1751,7 @@ bool PlayTutorial::init()
 															  t_gray->setOpacity(255);
 															  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
 															  
-															  typing_box2->startTyping("이런곳은 처음인데 여긴 어디지?", end_func1);
+															  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent18), end_func1);
 														  }));
 	
 	return true;
@@ -1996,7 +1996,7 @@ void PlayTutorial::nextStep()
 																		   }));
 											  };
 											  
-											  typing_box->startTyping("제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?", end_func1);
+											  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent21), end_func1);
 											  
 											  
 											  

@@ -92,9 +92,6 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								  
-								  select_menu->setEnabled(false);
-								  select_menu->removeAllChildren();
-								  
 									CommonAnimation::closePopup(this, m_container, gray, [=](){
 										
 									}, [=](){

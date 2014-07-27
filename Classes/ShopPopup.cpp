@@ -749,6 +749,7 @@ bool ShopPopup::init()
 	
 	CCSprite* d_ruby_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* d_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	d_ruby_label->disableOuterStroke();
 	d_ruby_label->setPosition(ccpFromSize(d_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	d_ruby_img->addChild(d_ruby_label);
 	
@@ -775,6 +776,7 @@ bool ShopPopup::init()
 	
 	CCSprite* d_gold_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* d_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	d_gold_label->disableOuterStroke();
 	d_gold_label->setPosition(ccpFromSize(d_gold_img->getContentSize()/2.f) + ccp(0,2));
 	d_gold_img->addChild(d_gold_label);
 	
@@ -801,6 +803,7 @@ bool ShopPopup::init()
 	
 	CCSprite* d_heart_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* d_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	d_heart_label->disableOuterStroke();
 	d_heart_label->setPosition(ccpFromSize(d_heart_img->getContentSize()/2.f) + ccp(0,2));
 	d_heart_img->addChild(d_heart_label);
 	
@@ -1137,7 +1140,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										{
 											is_menu_enable = true;
 											mySGD->clearChangeGoods();
-											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 										}
 									});
 									
@@ -1155,7 +1158,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										{
 											loading_layer->removeFromParent();
 											
-											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 											
 											is_menu_enable = true;
 										}
