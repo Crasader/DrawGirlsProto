@@ -89,7 +89,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	ruby_img->setPosition(ccp(0,18));
 	m_container->addChild(ruby_img);
 	
-	KSLabelTTF* ruby100_img = KSLabelTTF::create("젬 100개", mySGD->getFont().c_str(), 20);
+	KSLabelTTF* ruby100_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gem100), mySGD->getFont().c_str(), 20);
 	ruby100_img->setColor(ccc3(40, 215, 255));
 	ruby100_img->enableOuterStroke(ccBLACK, 1);
 	ruby100_img->setPosition(ccp(45,43));

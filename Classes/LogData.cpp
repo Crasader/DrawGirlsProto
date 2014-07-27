@@ -19,54 +19,54 @@ int LogData::getLogCount ()
 	}
 void LogData::addLog (LOG_KEY t_key, int t_time)
         {
-		int log_count = getLogCount();
-		log_count++;
-		
-		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time)->getCString());
-		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
+//		int log_count = getLogCount();
+//		log_count++;
+//		
+//		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time)->getCString());
+//		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
 	}
 void LogData::addLog (LOG_KEY t_key, int t_time, float t_percent)
         {
-		int log_count = getLogCount();
-		log_count++;
-		
-		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_percent)->getCString());
-		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
+//		int log_count = getLogCount();
+//		log_count++;
+//		
+//		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_percent)->getCString());
+//		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
 	}
 void LogData::addLog (LOG_KEY t_key, int t_time, int t_i1)
         {
-		int log_count = getLogCount();
-		log_count++;
-		
-		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_i1)->getCString());
-		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
+//		int log_count = getLogCount();
+//		log_count++;
+//		
+//		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_i1)->getCString());
+//		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
 	}
 void LogData::addLog (LOG_KEY t_key, int t_time, string t_str1)
         {
-		int log_count = getLogCount();
-		log_count++;
-		
-		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_str1.c_str())->getCString());
-		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
+//		int log_count = getLogCount();
+//		log_count++;
+//		
+//		myDefault->addKeyValue(kSDF_log, CCString::createWithFormat(getRKey(kLOG_data).c_str(), log_count)->getCString(), CCString::createWithFormat(getRKey(t_key).c_str(), t_time, t_str1.c_str())->getCString());
+//		myDefault->setKeyValue(kSDF_log, getRKey(kLOG_count), log_count);
 	}
 void LogData::sendLog (string t_category)
         {
-		Json::Value param;
-		
-		param["memberID"] = hspConnector::get()->getSocialID();
-		
-		Json::Value contents;
-		int loop_cnt = getLogCount();
-		for(int i=1;i<=loop_cnt;i++)
-		{
-			contents[i-1] = getLog(kLOG_data, i);
-		}
-		
-		param["content"] = contents;
-		param["category"] = t_category.c_str();
-		
-		hspConnector::get()->command("writelog", param, nullptr);
-		myDefault->resetData(kSDF_log);
+//		Json::Value param;
+//		
+//		param["memberID"] = hspConnector::get()->getSocialID();
+//		
+//		Json::Value contents;
+//		int loop_cnt = getLogCount();
+//		for(int i=1;i<=loop_cnt;i++)
+//		{
+//			contents[i-1] = getLog(kLOG_data, i);
+//		}
+//		
+//		param["content"] = contents;
+//		param["category"] = t_category.c_str();
+//		
+//		hspConnector::get()->command("writelog", param, nullptr);
+//		myDefault->resetData(kSDF_log);
 	}
 CommandParam LogData::getSendLogCommand(string t_category)
 {

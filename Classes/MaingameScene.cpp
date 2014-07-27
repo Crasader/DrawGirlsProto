@@ -310,44 +310,87 @@ void Maingame::onEnterTransitionDidFinish()
 
 void Maingame::startStory()
 {
-	StoryManager* t_sm = StoryManager::create(-500);
-	addChild(t_sm, 100);
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,80));
+	addChild(t_tb, 100);
 	
-	t_sm->addMent(true, "", "", intro_boss->start_ment.c_str(), [=]()
-				  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
-				  {
-					  CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
-					  CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
-					  CCCallFunc* t_call1 = CCCallFunc::create(intro_boss, callfunc_selector(CCNode::removeFromParent));
-					  CCSequence* t_seq1 = CCSequence::create(t_delay1, t_move1, t_call1, NULL);
-					  
-					  intro_boss->runAction(t_seq1);
-					  
-					  CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 3);
-					  CCDelayTime* t_delay2 = CCDelayTime::create(0.3f);
-					  CCCallFunc* t_call2 = CCCallFunc::create(intro_clipping, callfunc_selector(CCNode::removeFromParent));
-					  CCSequence* t_seq2 = CCSequence::create(t_scale2, t_delay2, t_call2, NULL);
-					  
-					  intro_stencil->runAction(t_seq2);
-					  
-					  intro_out_line->setScale(0.4f);
-					  CCScaleTo* t_scale3 = CCScaleTo::create(0.5f, 4.f);
-					  CCDelayTime* t_delay4 = CCDelayTime::create(0.3f);
-					  CCCallFunc* t_call5 = CCCallFunc::create(intro_out_line, callfunc_selector(CCNode::removeFromParent));
-					  CCSequence* t_seq4 = CCSequence::create(t_scale3, t_delay4, t_call5, NULL);
-					  
-					  intro_out_line->runAction(t_seq4);
-					  
-					  
-//					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
-					  
-					  CCDelayTime* t_delay3 = CCDelayTime::create(0.8f);
-					  CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(Maingame::endIntro));
-					  CCCallFunc* t_call4 = CCCallFunc::create(t_sm, callfunc_selector(StoryManager::removeFromParent));
-					  CCSequence* t_seq3 = CCSequence::create(t_delay3, t_call3, t_call4, NULL);
-					  
-					  t_sm->runAction(t_seq3);
-				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
+	function<void()> end_func1 = [=]()
+	{
+		t_tb->setTouchOffScrollAndButton();
+		t_tb->setTouchSuction(false);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+		CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
+		CCCallFunc* t_call1 = CCCallFunc::create(intro_boss, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq1 = CCSequence::create(t_delay1, t_move1, t_call1, NULL);
+		
+		intro_boss->runAction(t_seq1);
+		
+		CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 3);
+		CCDelayTime* t_delay2 = CCDelayTime::create(0.3f);
+		CCCallFunc* t_call2 = CCCallFunc::create(intro_clipping, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq2 = CCSequence::create(t_scale2, t_delay2, t_call2, NULL);
+		
+		intro_stencil->runAction(t_seq2);
+		
+		intro_out_line->setScale(0.4f);
+		CCScaleTo* t_scale3 = CCScaleTo::create(0.5f, 4.f);
+		CCDelayTime* t_delay4 = CCDelayTime::create(0.3f);
+		CCCallFunc* t_call5 = CCCallFunc::create(intro_out_line, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq4 = CCSequence::create(t_scale3, t_delay4, t_call5, NULL);
+		
+		intro_out_line->runAction(t_seq4);
+		
+		
+		//					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
+		
+		CCDelayTime* t_delay3 = CCDelayTime::create(0.8f);
+		CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(Maingame::endIntro));
+		CCCallFunc* t_call4 = CCCallFunc::create(t_tb, callfunc_selector(TypingBox::removeFromParent));
+		CCSequence* t_seq3 = CCSequence::create(t_delay3, t_call3, t_call4, NULL);
+		
+		t_tb->runAction(t_seq3);
+	};
+	
+	t_tb->startTyping(intro_boss->start_ment.c_str(), end_func1);
+	
+//	StoryManager* t_sm = StoryManager::create(-500);
+//	addChild(t_sm, 100);
+//	
+//	t_sm->addMent(true, "", "", intro_boss->start_ment.c_str(), [=]()
+//				  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
+//				  {
+//					  CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+//					  CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
+//					  CCCallFunc* t_call1 = CCCallFunc::create(intro_boss, callfunc_selector(CCNode::removeFromParent));
+//					  CCSequence* t_seq1 = CCSequence::create(t_delay1, t_move1, t_call1, NULL);
+//					  
+//					  intro_boss->runAction(t_seq1);
+//					  
+//					  CCScaleTo* t_scale2 = CCScaleTo::create(0.5f, 3);
+//					  CCDelayTime* t_delay2 = CCDelayTime::create(0.3f);
+//					  CCCallFunc* t_call2 = CCCallFunc::create(intro_clipping, callfunc_selector(CCNode::removeFromParent));
+//					  CCSequence* t_seq2 = CCSequence::create(t_scale2, t_delay2, t_call2, NULL);
+//					  
+//					  intro_stencil->runAction(t_seq2);
+//					  
+//					  intro_out_line->setScale(0.4f);
+//					  CCScaleTo* t_scale3 = CCScaleTo::create(0.5f, 4.f);
+//					  CCDelayTime* t_delay4 = CCDelayTime::create(0.3f);
+//					  CCCallFunc* t_call5 = CCCallFunc::create(intro_out_line, callfunc_selector(CCNode::removeFromParent));
+//					  CCSequence* t_seq4 = CCSequence::create(t_scale3, t_delay4, t_call5, NULL);
+//					  
+//					  intro_out_line->runAction(t_seq4);
+//					  
+//					  
+////					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
+//					  
+//					  CCDelayTime* t_delay3 = CCDelayTime::create(0.8f);
+//					  CCCallFunc* t_call3 = CCCallFunc::create(this, callfunc_selector(Maingame::endIntro));
+//					  CCCallFunc* t_call4 = CCCallFunc::create(t_sm, callfunc_selector(StoryManager::removeFromParent));
+//					  CCSequence* t_seq3 = CCSequence::create(t_delay3, t_call3, t_call4, NULL);
+//					  
+//					  t_sm->runAction(t_seq3);
+//				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
 }
 
 void Maingame::endIntro()
@@ -2248,643 +2291,661 @@ void Maingame::clearScenario()
 
 void Maingame::clearScenario2()
 {
-	StoryManager* t_sm = StoryManager::create(-500);
-	addChild(t_sm, 100);
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,80));
+	addChild(t_tb, 100);
 	
-	t_sm->addMent(true, "", "", intro_boss->clear_ment.c_str(), [=]()
-				  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
-				  {
-					  CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
-					  CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
-					  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
-					  CCCallFunc* t_call1 = CCCallFunc::create(intro_boss, callfunc_selector(CCNode::removeFromParent));
-					  CCSequence* t_seq1 = CCSequence::create(t_delay1, t_move1, t_call0, t_call1, NULL);
-					  
-					  intro_boss->runAction(t_seq1);
-					  
-					  //					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
-					  
-					  
-//					  ASPopupView* t_popup = ASPopupView::create(-600);
+	function<void()> end_func1 = [=]()
+	{
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+		CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
+		CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
+		CCCallFunc* t_call1 = CCCallFunc::create(intro_boss, callfunc_selector(CCNode::removeFromParent));
+		CCSequence* t_seq1 = CCSequence::create(t_delay1, t_move1, t_call0, t_call1, NULL);
+		
+		intro_boss->runAction(t_seq1);
+		
+		t_tb->removeFromParent();
+	};
+	
+	t_tb->startTyping(intro_boss->clear_ment.c_str(), end_func1);
+	
+//	StoryManager* t_sm = StoryManager::create(-500);
+//	addChild(t_sm, 100);
+//	
+//	t_sm->addMent(true, "", "", intro_boss->clear_ment.c_str(), [=]()
+//				  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
+//				  {
+//					  CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
+//					  CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
+//					  CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
+//					  CCCallFunc* t_call1 = CCCallFunc::create(intro_boss, callfunc_selector(CCNode::removeFromParent));
+//					  CCSequence* t_seq1 = CCSequence::create(t_delay1, t_move1, t_call0, t_call1, NULL);
 //					  
-//					  float height_value = myDSH->ui_top;
+//					  intro_boss->runAction(t_seq1);
 //					  
-//					  t_popup->setDimmedSize(CCSizeMake(480.f, height_value));
-//					  t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-//					  
-//					  CCSprite* dimmed_img = t_popup->getDimmedSprite();
-//					  dimmed_img->setOpacity(0);
-//					  dimmed_img->runAction(CCFadeTo::create(0.3f, 100));
-//					  
-//					  CCNode* t_container = CCNode::create();
-//					  t_popup->setContainerNode(t_container);
-//					  addChild(t_popup, shutterZorder+5);
-//					  
-//					  t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-//					  
-//					  CCSprite* title_img = CCSprite::create(CCString::createWithFormat("ending_reward_%s.png", myLoc->getSupportLocalCode())->getCString());
-//					  title_img->setPosition(ccp(0,75));
-//					  title_img->setOpacity(0);
-//					  t_container->addChild(title_img);
-//					  
-//					  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectClearBox), mySGD->getFont().c_str(), 18);
-//					  title_label->enableOuterStroke(ccBLACK, 1.f);
-//					  title_label->setPosition(ccp(0,40));
-//					  title_label->setOpacity(0);
-//					  t_container->addChild(title_label);
-//					  
-//					  int reward_type;
-//					  int random_value;
-//					  random_value = rand()%1000;
-//					  int gold_get_rate = 500;
-//					  int gold_or_item_get_rate = gold_get_rate + 300;
-//					  
-//					  if(random_value < gold_get_rate)
-//					  {
-//						  // gold
-//						  reward_type = 1;
-//					  }
-//					  else if(random_value < gold_or_item_get_rate)
-//					  {
-//						  // gold or item
-//						  reward_type = 2;
-//					  }
-//					  else
-//					  {
-//						  // stone
-//						  reward_type = 3;
-//					  }
-//					  
-//					  CCSprite* goldbox1 = CCSprite::create("goldbox_off.png");
-//					  goldbox1->setOpacity(0);
-//					  goldbox1->setPosition(ccp(0,-30));
-//					  t_container->addChild(goldbox1);
-//					  
-//					  CCSprite* goldbox2 = CCSprite::create("goldbox_off.png");
-//					  goldbox2->setOpacity(0);
-//					  goldbox2->setPosition(ccp(0,-30));
-//					  t_container->addChild(goldbox2);
-//					  
-//					  CCSprite* goldbox3 = CCSprite::create("goldbox_off.png");
-//					  goldbox3->setOpacity(0);
-//					  goldbox3->setPosition(ccp(0,-30));
-//					  t_container->addChild(goldbox3);
+//					  //					  t_sm->addMent(true, "", "", "시노비결계!", nullptr);
 //					  
 //					  
-//					  CCMenuLambda* goldbox_menu = CCMenuLambda::create();
-//					  goldbox_menu->setPosition(ccp(0,-30));
-//					  t_container->addChild(goldbox_menu);
-//					  goldbox_menu->setVisible(false);
-//					  goldbox_menu->setTouchPriority(t_popup->getTouchPriority()-1);
-//					  
-//					  
-//					  CCSprite* n_goldbox1 = CCSprite::create("goldbox_off.png");
-//					  n_goldbox1->setOpacity(0);
-//					  CCSprite* s_goldbox1 = CCSprite::create("goldbox_off.png");
-//					  s_goldbox1->setOpacity(0);
-//					  
-//					  CCMenuItemLambda* goldbox1_item = CCMenuItemSpriteLambda::create(n_goldbox1, s_goldbox1, [=](CCObject* sender)
-//																					   {
-//																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
-//																						   
-//																						   goldbox1->removeFromParent();
-//																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
-//																						   goldbox4->setPosition(ccp(-150,-30));
-//																						   t_container->addChild(goldbox4, 2);
-//																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   goldbox2->removeFromParent();
-//																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
-//																						   goldbox5->setPosition(ccp(0,-30));
-//																						   t_container->addChild(goldbox5, 2);
-//																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   goldbox3->removeFromParent();
-//																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
-//																						   goldbox6->setPosition(ccp(150,-30));
-//																						   t_container->addChild(goldbox6, 2);
-//																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   
-//																						   CCNode* gold_node = CCNode::create();
-//																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
-//																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_gold->setPosition(ccp(0,20));
-//																						   gold_node->addChild(item_gold);
-//																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
-//																						   t_gold_img->setPosition(ccp(0, -20));
-//																						   gold_node->addChild(t_gold_img);
-//																						   
-//																						   
-//																						   CCNode* gold_item_node = CCNode::create();
-//																						   KSLabelTTF* item_gold_or_item;
-//																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
-//																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_gold_or_item->setPosition(ccp(0,20));
-//																						   gold_item_node->addChild(item_gold_or_item);
-//																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
-//																						   t_gold_img2->setPosition(ccp(0, -20));
-//																						   gold_item_node->addChild(t_gold_img2);
-//																						   
-//																						   
-//																						   CCNode* stone_node = CCNode::create();
-//																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
-//																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_stone->setPosition(ccp(0,20));
-//																						   stone_node->addChild(item_stone);
-//																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
-//																						   t_stone_img->setPosition(ccp(0, -20));
-//																						   stone_node->addChild(t_stone_img);
-//																						   
-//																						   int random_left_right = rand()%2;
-//																						   
-//																						   CCNode* selected_node;
-//																						   KSLabelTTF* another_label1;
-//																						   KSLabelTTF* another_label2;
-//																						   CCSprite* another_img1;
-//																						   CCSprite* another_img2;
-//																						   if(reward_type == 1)
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(100);
-//																							   gold_node->setPosition(ccp(-150,-30));
-//																							   selected_node = gold_node;
-//																							   another_label1 = item_gold_or_item;
-//																							   another_img1 = t_gold_img2;
-//																							   another_label2 = item_stone;
-//																							   another_img2 = t_stone_img;
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_item_node->setPosition(ccp(0,-30));
-//																								   stone_node->setPosition(ccp(150,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_item_node->setPosition(ccp(150,-30));
-//																								   stone_node->setPosition(ccp(0,-30));
-//																							   }
-//																						   }
-//																						   else if(reward_type == 2)
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(200);
-//																							   
-//																							   gold_item_node->setPosition(ccp(-150,-30));
-//																							   selected_node = gold_item_node;
-//																							   another_label1 = item_gold;
-//																							   another_img1 = t_gold_img;
-//																							   another_label2 = item_stone;
-//																							   another_img2 = t_stone_img;
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_node->setPosition(ccp(0,-30));
-//																								   stone_node->setPosition(ccp(150,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_node->setPosition(ccp(150,-30));
-//																								   stone_node->setPosition(ccp(0,-30));
-//																							   }
-//																						   }
-//																						   else
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(300);
-//																							   
-//																							   stone_node->setPosition(ccp(-150,-30));
-//																							   selected_node = stone_node;
-//																							   another_label1 = item_gold_or_item;
-//																							   another_label2 = item_gold;
-//																							   another_img1 = t_gold_img2;
-//																							   another_img2 = t_gold_img;
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_node->setPosition(ccp(0,-30));
-//																								   gold_item_node->setPosition(ccp(150,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_node->setPosition(ccp(150,-30));
-//																								   gold_item_node->setPosition(ccp(0,-30));
-//																							   }
-//																						   }
-//																						   
-//																						   t_container->addChild(gold_node);
-//																						   t_container->addChild(gold_item_node);
-//																						   t_container->addChild(stone_node);
-//																						   
-//																							 
-//																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
-//																																			   {
-//																																				   
-//																																					 
-//																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																			   }, [=](float t)
-//																																			   {
-//																																				   another_img1->setColor(ccc3(155, 155, 155));
-//																																				   another_img2->setColor(ccc3(155, 155, 155));
-//																																				   another_label1->setColor(ccc3(155, 155, 155));
-//																																				   another_label2->setColor(ccc3(155, 155, 155));
-//																																			   }));
-//																						   
-//																						   goldbox_menu->setVisible(false);
-//																						   
-//																						   myDSH->saveAllUserData(nullptr);
-//																						   
-//																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
-//																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
-//																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-//																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
-//																						   dimmed_img->runAction(t_seq);
-//																					   });
-//					  goldbox1_item->setPosition(ccp(-150,-30));
-//					  goldbox_menu->addChild(goldbox1_item);
-//					  
-//					  
-//					  CCSprite* n_goldbox2 = CCSprite::create("goldbox_off.png");
-//					  n_goldbox2->setOpacity(0);
-//					  CCSprite* s_goldbox2 = CCSprite::create("goldbox_off.png");
-//					  s_goldbox2->setOpacity(0);
-//					  
-//					  CCMenuItemLambda* goldbox2_item = CCMenuItemSpriteLambda::create(n_goldbox2, s_goldbox2, [=](CCObject* sender)
-//																					   {
-//																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
-//																						   
-//																						   goldbox1->removeFromParent();
-//																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
-//																						   goldbox4->setPosition(ccp(-150,-30));
-//																						   t_container->addChild(goldbox4, 2);
-//																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   goldbox2->removeFromParent();
-//																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
-//																						   goldbox5->setPosition(ccp(0,-30));
-//																						   t_container->addChild(goldbox5, 2);
-//																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   goldbox3->removeFromParent();
-//																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
-//																						   goldbox6->setPosition(ccp(150,-30));
-//																						   t_container->addChild(goldbox6, 2);
-//																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   CCNode* gold_node = CCNode::create();
-//																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
-//																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_gold->setPosition(ccp(0,20));
-//																						   gold_node->addChild(item_gold);
-//																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
-//																						   t_gold_img->setPosition(ccp(0, -20));
-//																						   gold_node->addChild(t_gold_img);
-//																						   
-//																						   
-//																						   CCNode* gold_item_node = CCNode::create();
-//																						   KSLabelTTF* item_gold_or_item;
-//																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
-//																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_gold_or_item->setPosition(ccp(0,20));
-//																						   gold_item_node->addChild(item_gold_or_item);
-//																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
-//																						   t_gold_img2->setPosition(ccp(0, -20));
-//																						   gold_item_node->addChild(t_gold_img2);
-//																						   
-//																						   
-//																						   CCNode* stone_node = CCNode::create();
-//																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
-//																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_stone->setPosition(ccp(0,20));
-//																						   stone_node->addChild(item_stone);
-//																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
-//																						   t_stone_img->setPosition(ccp(0, -20));
-//																						   stone_node->addChild(t_stone_img);
-//																						   
-//																						   int random_left_right = rand()%2;
-//																						   
-//																						   CCNode* selected_node;
-//																						   KSLabelTTF* another_label1;
-//																						   KSLabelTTF* another_label2;
-//																						   CCSprite* another_img1;
-//																						   CCSprite* another_img2;
-//																						   
-//																						   if(reward_type == 1)
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(100);
-//																							   
-//																							   selected_node = gold_node;
-//																							   another_label1 = item_gold_or_item;
-//																							   another_img1 = t_gold_img2;
-//																							   another_label2 = item_stone;
-//																							   another_img2 = t_stone_img;
-//																							   
-//																							   gold_node->setPosition(ccp(0,-30));
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_item_node->setPosition(ccp(-150,-30));
-//																								   stone_node->setPosition(ccp(150,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_item_node->setPosition(ccp(150,-30));
-//																								   stone_node->setPosition(ccp(-150,-30));
-//																							   }
-//																						   }
-//																						   else if(reward_type == 2)
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(200);
-//																							   
-//																							   selected_node = gold_item_node;
-//																							   another_label1 = item_gold;
-//																							   another_img1 = t_gold_img;
-//																							   another_label2 = item_stone;
-//																							   another_img2 = t_stone_img;
-//																							   
-//																							   gold_item_node->setPosition(ccp(0,-30));
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_node->setPosition(ccp(-150,-30));
-//																								   stone_node->setPosition(ccp(150,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_node->setPosition(ccp(150,-30));
-//																								   stone_node->setPosition(ccp(-150,-30));
-//																							   }
-//																						   }
-//																						   else
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(300);
-//																							   
-//																							   selected_node = stone_node;
-//																							   another_label1 = item_gold_or_item;
-//																							   another_label2 = item_gold;
-//																							   another_img1 = t_gold_img2;
-//																							   another_img2 = t_gold_img;
-//																							   
-//																							   stone_node->setPosition(ccp(0,-30));
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_node->setPosition(ccp(-150,-30));
-//																								   gold_item_node->setPosition(ccp(150,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_node->setPosition(ccp(150,-30));
-//																								   gold_item_node->setPosition(ccp(-150,-30));
-//																							   }
-//																						   }
-//																						   t_container->addChild(gold_node);
-//																						   t_container->addChild(gold_item_node);
-//																						   t_container->addChild(stone_node);
-//																						   
-//																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
-//																																			   {
-//																																				   selected_node->setScale(1.f+t*0.5f);
-//																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																			   }, [=](float t)
-//																																			   {
-//																																				   selected_node->setScale(1.5f);
-//																																				   another_img1->setColor(ccc3(155, 155, 155));
-//																																				   another_img2->setColor(ccc3(155, 155, 155));
-//																																				   another_label1->setColor(ccc3(155, 155, 155));
-//																																				   another_label2->setColor(ccc3(155, 155, 155));
-//																																			   }));
-//																						   
-//																						   goldbox_menu->setVisible(false);
-//																						   
-//																						   myDSH->saveAllUserData(nullptr);
-//																						   
-//																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
-//																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
-//																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-//																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
-//																						   dimmed_img->runAction(t_seq);
-//																					   });
-//					  goldbox2_item->setPosition(ccp(0,-30));
-//					  goldbox_menu->addChild(goldbox2_item);
-//					  
-//					  
-//					  CCSprite* n_goldbox3 = CCSprite::create("goldbox_off.png");
-//					  n_goldbox3->setOpacity(0);
-//					  CCSprite* s_goldbox3 = CCSprite::create("goldbox_off.png");
-//					  s_goldbox3->setOpacity(0);
-//					  
-//					  CCMenuItemLambda* goldbox3_item = CCMenuItemSpriteLambda::create(n_goldbox3, s_goldbox3, [=](CCObject* sender)
-//																					   {
-//																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
-//																						   
-//																						   goldbox1->removeFromParent();
-//																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
-//																						   goldbox4->setPosition(ccp(-150,-30));
-//																						   t_container->addChild(goldbox4, 2);
-//																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   goldbox2->removeFromParent();
-//																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
-//																						   goldbox5->setPosition(ccp(0,-30));
-//																						   t_container->addChild(goldbox5, 2);
-//																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   goldbox3->removeFromParent();
-//																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
-//																						   goldbox6->setPosition(ccp(150,-30));
-//																						   t_container->addChild(goldbox6, 2);
-//																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
-//																						   
-//																						   CCNode* gold_node = CCNode::create();
-//																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
-//																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_gold->setPosition(ccp(0,20));
-//																						   gold_node->addChild(item_gold);
-//																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
-//																						   t_gold_img->setPosition(ccp(0, -20));
-//																						   gold_node->addChild(t_gold_img);
-//																						   
-//																						   
-//																						   CCNode* gold_item_node = CCNode::create();
-//																						   KSLabelTTF* item_gold_or_item;
-//																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
-//																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_gold_or_item->setPosition(ccp(0,20));
-//																						   gold_item_node->addChild(item_gold_or_item);
-//																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
-//																						   t_gold_img2->setPosition(ccp(0, -20));
-//																						   gold_item_node->addChild(t_gold_img2);
-//																						   
-//																						   
-//																						   CCNode* stone_node = CCNode::create();
-//																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
-//																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
-//																						   item_stone->setPosition(ccp(0,20));
-//																						   stone_node->addChild(item_stone);
-//																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
-//																						   t_stone_img->setPosition(ccp(0, -20));
-//																						   stone_node->addChild(t_stone_img);
-//																						   
-//																						   int random_left_right = rand()%2;
-//																						   
-//																						   CCNode* selected_node;
-//																						   KSLabelTTF* another_label1;
-//																						   KSLabelTTF* another_label2;
-//																						   CCSprite* another_img1;
-//																						   CCSprite* another_img2;
-//																						   
-//																						   if(reward_type == 1)
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(100);
-//																							   
-//																							   selected_node = gold_node;
-//																							   another_label1 = item_gold_or_item;
-//																							   another_img1 = t_gold_img2;
-//																							   another_label2 = item_stone;
-//																							   another_img2 = t_stone_img;
-//																							   
-//																							   gold_node->setPosition(ccp(150,-30));
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_item_node->setPosition(ccp(-150,-30));
-//																								   stone_node->setPosition(ccp(0,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_item_node->setPosition(ccp(0,-30));
-//																								   stone_node->setPosition(ccp(-150,-30));
-//																							   }
-//																						   }
-//																						   else if(reward_type == 2)
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(200);
-//																							   
-//																							   selected_node = gold_item_node;
-//																							   another_label1 = item_gold;
-//																							   another_img1 = t_gold_img;
-//																							   another_label2 = item_stone;
-//																							   another_img2 = t_stone_img;
-//																							   
-//																							   gold_item_node->setPosition(ccp(150,-30));
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_node->setPosition(ccp(-150,-30));
-//																								   stone_node->setPosition(ccp(0,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_node->setPosition(ccp(0,-30));
-//																								   stone_node->setPosition(ccp(-150,-30));
-//																							   }
-//																						   }
-//																						   else
-//																						   {
-//																							   mySGD->addChangeGoodsIngameGold(300);
-//																							   
-//																							   selected_node = stone_node;
-//																							   another_label1 = item_gold_or_item;
-//																							   another_label2 = item_gold;
-//																							   another_img1 = t_gold_img2;
-//																							   another_img2 = t_gold_img;
-//																							   
-//																							   stone_node->setPosition(ccp(150,-30));
-//																							   if(random_left_right == 0)
-//																							   {
-//																								   gold_node->setPosition(ccp(-150,-30));
-//																								   gold_item_node->setPosition(ccp(0,-30));
-//																							   }
-//																							   else
-//																							   {
-//																								   gold_node->setPosition(ccp(0,-30));
-//																								   gold_item_node->setPosition(ccp(-150,-30));
-//																							   }
-//																						   }
-//																						   t_container->addChild(gold_node);
-//																						   t_container->addChild(gold_item_node);
-//																						   t_container->addChild(stone_node);
-//																						   
-//																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
-//																																			   {
-//																																				   selected_node->setScale(1.f+t*0.5f);
-//																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
-//																																			   }, [=](float t)
-//																																			   {
-//																																				   selected_node->setScale(1.5f);
-//																																				   another_img1->setColor(ccc3(155, 155, 155));
-//																																				   another_img2->setColor(ccc3(155, 155, 155));
-//																																				   another_label1->setColor(ccc3(155, 155, 155));
-//																																				   another_label2->setColor(ccc3(155, 155, 155));
-//																																			   }));
-//																						   
-//																						   goldbox_menu->setVisible(false);
-//																						   
-//																						   myDSH->saveAllUserData(nullptr);
-//																						   
-//																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
-//																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
-//																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
-//																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
-//																						   dimmed_img->runAction(t_seq);
-//																					   });
-//					  goldbox3_item->setPosition(ccp(150,-30));
-//					  goldbox_menu->addChild(goldbox3_item);
-//					  
-//					  CCSprite* falling_box = CCSprite::create("goldbox_off.png");
-//					  falling_box->setPosition(ccp(0,600));
-//					  t_container->addChild(falling_box);
-//					  
-//					  t_container->addChild(KSGradualValue<float>::create(0, 1.f, 1.f, [=](float t)
-//																		  {
-//																			  float t_t;
-//																			  if (t < 1 / 2.75)
-//																			  {
-//																				  t_t = 7.5625f * t * t;
-//																			  } else if (t < 2 / 2.75)
-//																			  {
-//																				  t -= 1.5f / 2.75f;
-//																				  t_t = 7.5625f * t * t + 0.75f;
-//																			  } else if(t < 2.5 / 2.75)
-//																			  {
-//																				  t -= 2.25f / 2.75f;
-//																				  t_t = 7.5625f * t * t + 0.9375f;
-//																			  }
-//																			  else
-//																			  {
-//																				  t -= 2.625f / 2.75f;
-//																				  t_t = 7.5625f * t * t + 0.984375f;
-//																			  }
-//																			  
-//																			  falling_box->setPositionY(600.f - 630.f*t_t);
-//																		  }, [=](float t)
-//																		  {
-//																			  falling_box->setPositionY(-30);
-//																			  
-//																			  t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-//																																  {
-//																																	  title_img->setOpacity(t*255);
-//																																	  title_label->setOpacity(t*255);
-//																																	  goldbox1->setOpacity(t*255);
-//																																	  goldbox2->setOpacity(t*255);
-//																																	  goldbox3->setOpacity(t*255);
-//																																	  goldbox1->setPositionX(-150.f*t);
-//																																	  goldbox3->setPositionX(150.f*t);
-//																																  }, [=](float t)
-//																																  {
-//																																	  falling_box->removeFromParent();
-//																																	  title_img->setOpacity(255);
-//																																	  title_label->setOpacity(255);
-//																																	  goldbox1->setOpacity(255);
-//																																	  goldbox2->setOpacity(255);
-//																																	  goldbox3->setOpacity(255);
-//																																	  goldbox1->setPositionX(-150.f);
-//																																	  goldbox3->setPositionX(150.f);
-//																																	  
-//																																	  goldbox_menu->setVisible(true);
-//																																  }));
-//																		  }));
-					  t_sm->removeFromParent();
-				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
+////					  ASPopupView* t_popup = ASPopupView::create(-600);
+////					  
+////					  float height_value = myDSH->ui_top;
+////					  
+////					  t_popup->setDimmedSize(CCSizeMake(480.f, height_value));
+////					  t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+////					  
+////					  CCSprite* dimmed_img = t_popup->getDimmedSprite();
+////					  dimmed_img->setOpacity(0);
+////					  dimmed_img->runAction(CCFadeTo::create(0.3f, 100));
+////					  
+////					  CCNode* t_container = CCNode::create();
+////					  t_popup->setContainerNode(t_container);
+////					  addChild(t_popup, shutterZorder+5);
+////					  
+////					  t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+////					  
+////					  CCSprite* title_img = CCSprite::create(CCString::createWithFormat("ending_reward_%s.png", myLoc->getSupportLocalCode())->getCString());
+////					  title_img->setPosition(ccp(0,75));
+////					  title_img->setOpacity(0);
+////					  t_container->addChild(title_img);
+////					  
+////					  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectClearBox), mySGD->getFont().c_str(), 18);
+////					  title_label->enableOuterStroke(ccBLACK, 1.f);
+////					  title_label->setPosition(ccp(0,40));
+////					  title_label->setOpacity(0);
+////					  t_container->addChild(title_label);
+////					  
+////					  int reward_type;
+////					  int random_value;
+////					  random_value = rand()%1000;
+////					  int gold_get_rate = 500;
+////					  int gold_or_item_get_rate = gold_get_rate + 300;
+////					  
+////					  if(random_value < gold_get_rate)
+////					  {
+////						  // gold
+////						  reward_type = 1;
+////					  }
+////					  else if(random_value < gold_or_item_get_rate)
+////					  {
+////						  // gold or item
+////						  reward_type = 2;
+////					  }
+////					  else
+////					  {
+////						  // stone
+////						  reward_type = 3;
+////					  }
+////					  
+////					  CCSprite* goldbox1 = CCSprite::create("goldbox_off.png");
+////					  goldbox1->setOpacity(0);
+////					  goldbox1->setPosition(ccp(0,-30));
+////					  t_container->addChild(goldbox1);
+////					  
+////					  CCSprite* goldbox2 = CCSprite::create("goldbox_off.png");
+////					  goldbox2->setOpacity(0);
+////					  goldbox2->setPosition(ccp(0,-30));
+////					  t_container->addChild(goldbox2);
+////					  
+////					  CCSprite* goldbox3 = CCSprite::create("goldbox_off.png");
+////					  goldbox3->setOpacity(0);
+////					  goldbox3->setPosition(ccp(0,-30));
+////					  t_container->addChild(goldbox3);
+////					  
+////					  
+////					  CCMenuLambda* goldbox_menu = CCMenuLambda::create();
+////					  goldbox_menu->setPosition(ccp(0,-30));
+////					  t_container->addChild(goldbox_menu);
+////					  goldbox_menu->setVisible(false);
+////					  goldbox_menu->setTouchPriority(t_popup->getTouchPriority()-1);
+////					  
+////					  
+////					  CCSprite* n_goldbox1 = CCSprite::create("goldbox_off.png");
+////					  n_goldbox1->setOpacity(0);
+////					  CCSprite* s_goldbox1 = CCSprite::create("goldbox_off.png");
+////					  s_goldbox1->setOpacity(0);
+////					  
+////					  CCMenuItemLambda* goldbox1_item = CCMenuItemSpriteLambda::create(n_goldbox1, s_goldbox1, [=](CCObject* sender)
+////																					   {
+////																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
+////																						   
+////																						   goldbox1->removeFromParent();
+////																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
+////																						   goldbox4->setPosition(ccp(-150,-30));
+////																						   t_container->addChild(goldbox4, 2);
+////																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   goldbox2->removeFromParent();
+////																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
+////																						   goldbox5->setPosition(ccp(0,-30));
+////																						   t_container->addChild(goldbox5, 2);
+////																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   goldbox3->removeFromParent();
+////																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
+////																						   goldbox6->setPosition(ccp(150,-30));
+////																						   t_container->addChild(goldbox6, 2);
+////																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   
+////																						   CCNode* gold_node = CCNode::create();
+////																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
+////																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_gold->setPosition(ccp(0,20));
+////																						   gold_node->addChild(item_gold);
+////																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
+////																						   t_gold_img->setPosition(ccp(0, -20));
+////																						   gold_node->addChild(t_gold_img);
+////																						   
+////																						   
+////																						   CCNode* gold_item_node = CCNode::create();
+////																						   KSLabelTTF* item_gold_or_item;
+////																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
+////																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_gold_or_item->setPosition(ccp(0,20));
+////																						   gold_item_node->addChild(item_gold_or_item);
+////																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
+////																						   t_gold_img2->setPosition(ccp(0, -20));
+////																						   gold_item_node->addChild(t_gold_img2);
+////																						   
+////																						   
+////																						   CCNode* stone_node = CCNode::create();
+////																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
+////																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_stone->setPosition(ccp(0,20));
+////																						   stone_node->addChild(item_stone);
+////																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
+////																						   t_stone_img->setPosition(ccp(0, -20));
+////																						   stone_node->addChild(t_stone_img);
+////																						   
+////																						   int random_left_right = rand()%2;
+////																						   
+////																						   CCNode* selected_node;
+////																						   KSLabelTTF* another_label1;
+////																						   KSLabelTTF* another_label2;
+////																						   CCSprite* another_img1;
+////																						   CCSprite* another_img2;
+////																						   if(reward_type == 1)
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(100);
+////																							   gold_node->setPosition(ccp(-150,-30));
+////																							   selected_node = gold_node;
+////																							   another_label1 = item_gold_or_item;
+////																							   another_img1 = t_gold_img2;
+////																							   another_label2 = item_stone;
+////																							   another_img2 = t_stone_img;
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_item_node->setPosition(ccp(0,-30));
+////																								   stone_node->setPosition(ccp(150,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_item_node->setPosition(ccp(150,-30));
+////																								   stone_node->setPosition(ccp(0,-30));
+////																							   }
+////																						   }
+////																						   else if(reward_type == 2)
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(200);
+////																							   
+////																							   gold_item_node->setPosition(ccp(-150,-30));
+////																							   selected_node = gold_item_node;
+////																							   another_label1 = item_gold;
+////																							   another_img1 = t_gold_img;
+////																							   another_label2 = item_stone;
+////																							   another_img2 = t_stone_img;
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_node->setPosition(ccp(0,-30));
+////																								   stone_node->setPosition(ccp(150,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_node->setPosition(ccp(150,-30));
+////																								   stone_node->setPosition(ccp(0,-30));
+////																							   }
+////																						   }
+////																						   else
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(300);
+////																							   
+////																							   stone_node->setPosition(ccp(-150,-30));
+////																							   selected_node = stone_node;
+////																							   another_label1 = item_gold_or_item;
+////																							   another_label2 = item_gold;
+////																							   another_img1 = t_gold_img2;
+////																							   another_img2 = t_gold_img;
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_node->setPosition(ccp(0,-30));
+////																								   gold_item_node->setPosition(ccp(150,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_node->setPosition(ccp(150,-30));
+////																								   gold_item_node->setPosition(ccp(0,-30));
+////																							   }
+////																						   }
+////																						   
+////																						   t_container->addChild(gold_node);
+////																						   t_container->addChild(gold_item_node);
+////																						   t_container->addChild(stone_node);
+////																						   
+////																							 
+////																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
+////																																			   {
+////																																				   
+////																																					 
+////																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																			   }, [=](float t)
+////																																			   {
+////																																				   another_img1->setColor(ccc3(155, 155, 155));
+////																																				   another_img2->setColor(ccc3(155, 155, 155));
+////																																				   another_label1->setColor(ccc3(155, 155, 155));
+////																																				   another_label2->setColor(ccc3(155, 155, 155));
+////																																			   }));
+////																						   
+////																						   goldbox_menu->setVisible(false);
+////																						   
+////																						   myDSH->saveAllUserData(nullptr);
+////																						   
+////																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
+////																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
+////																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
+////																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
+////																						   dimmed_img->runAction(t_seq);
+////																					   });
+////					  goldbox1_item->setPosition(ccp(-150,-30));
+////					  goldbox_menu->addChild(goldbox1_item);
+////					  
+////					  
+////					  CCSprite* n_goldbox2 = CCSprite::create("goldbox_off.png");
+////					  n_goldbox2->setOpacity(0);
+////					  CCSprite* s_goldbox2 = CCSprite::create("goldbox_off.png");
+////					  s_goldbox2->setOpacity(0);
+////					  
+////					  CCMenuItemLambda* goldbox2_item = CCMenuItemSpriteLambda::create(n_goldbox2, s_goldbox2, [=](CCObject* sender)
+////																					   {
+////																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
+////																						   
+////																						   goldbox1->removeFromParent();
+////																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
+////																						   goldbox4->setPosition(ccp(-150,-30));
+////																						   t_container->addChild(goldbox4, 2);
+////																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   goldbox2->removeFromParent();
+////																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
+////																						   goldbox5->setPosition(ccp(0,-30));
+////																						   t_container->addChild(goldbox5, 2);
+////																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   goldbox3->removeFromParent();
+////																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
+////																						   goldbox6->setPosition(ccp(150,-30));
+////																						   t_container->addChild(goldbox6, 2);
+////																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   CCNode* gold_node = CCNode::create();
+////																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
+////																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_gold->setPosition(ccp(0,20));
+////																						   gold_node->addChild(item_gold);
+////																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
+////																						   t_gold_img->setPosition(ccp(0, -20));
+////																						   gold_node->addChild(t_gold_img);
+////																						   
+////																						   
+////																						   CCNode* gold_item_node = CCNode::create();
+////																						   KSLabelTTF* item_gold_or_item;
+////																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
+////																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_gold_or_item->setPosition(ccp(0,20));
+////																						   gold_item_node->addChild(item_gold_or_item);
+////																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
+////																						   t_gold_img2->setPosition(ccp(0, -20));
+////																						   gold_item_node->addChild(t_gold_img2);
+////																						   
+////																						   
+////																						   CCNode* stone_node = CCNode::create();
+////																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
+////																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_stone->setPosition(ccp(0,20));
+////																						   stone_node->addChild(item_stone);
+////																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
+////																						   t_stone_img->setPosition(ccp(0, -20));
+////																						   stone_node->addChild(t_stone_img);
+////																						   
+////																						   int random_left_right = rand()%2;
+////																						   
+////																						   CCNode* selected_node;
+////																						   KSLabelTTF* another_label1;
+////																						   KSLabelTTF* another_label2;
+////																						   CCSprite* another_img1;
+////																						   CCSprite* another_img2;
+////																						   
+////																						   if(reward_type == 1)
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(100);
+////																							   
+////																							   selected_node = gold_node;
+////																							   another_label1 = item_gold_or_item;
+////																							   another_img1 = t_gold_img2;
+////																							   another_label2 = item_stone;
+////																							   another_img2 = t_stone_img;
+////																							   
+////																							   gold_node->setPosition(ccp(0,-30));
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_item_node->setPosition(ccp(-150,-30));
+////																								   stone_node->setPosition(ccp(150,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_item_node->setPosition(ccp(150,-30));
+////																								   stone_node->setPosition(ccp(-150,-30));
+////																							   }
+////																						   }
+////																						   else if(reward_type == 2)
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(200);
+////																							   
+////																							   selected_node = gold_item_node;
+////																							   another_label1 = item_gold;
+////																							   another_img1 = t_gold_img;
+////																							   another_label2 = item_stone;
+////																							   another_img2 = t_stone_img;
+////																							   
+////																							   gold_item_node->setPosition(ccp(0,-30));
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_node->setPosition(ccp(-150,-30));
+////																								   stone_node->setPosition(ccp(150,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_node->setPosition(ccp(150,-30));
+////																								   stone_node->setPosition(ccp(-150,-30));
+////																							   }
+////																						   }
+////																						   else
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(300);
+////																							   
+////																							   selected_node = stone_node;
+////																							   another_label1 = item_gold_or_item;
+////																							   another_label2 = item_gold;
+////																							   another_img1 = t_gold_img2;
+////																							   another_img2 = t_gold_img;
+////																							   
+////																							   stone_node->setPosition(ccp(0,-30));
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_node->setPosition(ccp(-150,-30));
+////																								   gold_item_node->setPosition(ccp(150,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_node->setPosition(ccp(150,-30));
+////																								   gold_item_node->setPosition(ccp(-150,-30));
+////																							   }
+////																						   }
+////																						   t_container->addChild(gold_node);
+////																						   t_container->addChild(gold_item_node);
+////																						   t_container->addChild(stone_node);
+////																						   
+////																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
+////																																			   {
+////																																				   selected_node->setScale(1.f+t*0.5f);
+////																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																			   }, [=](float t)
+////																																			   {
+////																																				   selected_node->setScale(1.5f);
+////																																				   another_img1->setColor(ccc3(155, 155, 155));
+////																																				   another_img2->setColor(ccc3(155, 155, 155));
+////																																				   another_label1->setColor(ccc3(155, 155, 155));
+////																																				   another_label2->setColor(ccc3(155, 155, 155));
+////																																			   }));
+////																						   
+////																						   goldbox_menu->setVisible(false);
+////																						   
+////																						   myDSH->saveAllUserData(nullptr);
+////																						   
+////																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
+////																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
+////																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
+////																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
+////																						   dimmed_img->runAction(t_seq);
+////																					   });
+////					  goldbox2_item->setPosition(ccp(0,-30));
+////					  goldbox_menu->addChild(goldbox2_item);
+////					  
+////					  
+////					  CCSprite* n_goldbox3 = CCSprite::create("goldbox_off.png");
+////					  n_goldbox3->setOpacity(0);
+////					  CCSprite* s_goldbox3 = CCSprite::create("goldbox_off.png");
+////					  s_goldbox3->setOpacity(0);
+////					  
+////					  CCMenuItemLambda* goldbox3_item = CCMenuItemSpriteLambda::create(n_goldbox3, s_goldbox3, [=](CCObject* sender)
+////																					   {
+////																						   AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3", false);
+////																						   
+////																						   goldbox1->removeFromParent();
+////																						   CCSprite* goldbox4 = CCSprite::create("goldbox_on.png");
+////																						   goldbox4->setPosition(ccp(-150,-30));
+////																						   t_container->addChild(goldbox4, 2);
+////																						   goldbox4->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   goldbox2->removeFromParent();
+////																						   CCSprite* goldbox5 = CCSprite::create("goldbox_on.png");
+////																						   goldbox5->setPosition(ccp(0,-30));
+////																						   t_container->addChild(goldbox5, 2);
+////																						   goldbox5->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   goldbox3->removeFromParent();
+////																						   CCSprite* goldbox6 = CCSprite::create("goldbox_on.png");
+////																						   goldbox6->setPosition(ccp(150,-30));
+////																						   t_container->addChild(goldbox6, 2);
+////																						   goldbox6->runAction(CCFadeTo::create(0.5f, 0));
+////																						   
+////																						   CCNode* gold_node = CCNode::create();
+////																						   KSLabelTTF* item_gold = KSLabelTTF::create("GOLD 100", mySGD->getFont().c_str(), 12);
+////																						   item_gold->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_gold->setPosition(ccp(0,20));
+////																						   gold_node->addChild(item_gold);
+////																						   CCSprite* t_gold_img = CCSprite::create("shop_gold3.png");
+////																						   t_gold_img->setPosition(ccp(0, -20));
+////																						   gold_node->addChild(t_gold_img);
+////																						   
+////																						   
+////																						   CCNode* gold_item_node = CCNode::create();
+////																						   KSLabelTTF* item_gold_or_item;
+////																						   item_gold_or_item = KSLabelTTF::create("GOLD 200", mySGD->getFont().c_str(), 12);
+////																						   item_gold_or_item->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_gold_or_item->setPosition(ccp(0,20));
+////																						   gold_item_node->addChild(item_gold_or_item);
+////																						   CCSprite* t_gold_img2 = CCSprite::create("shop_gold3.png");
+////																						   t_gold_img2->setPosition(ccp(0, -20));
+////																						   gold_item_node->addChild(t_gold_img2);
+////																						   
+////																						   
+////																						   CCNode* stone_node = CCNode::create();
+////																						   KSLabelTTF* item_stone = KSLabelTTF::create("GOLD 300", mySGD->getFont().c_str(), 12);
+////																						   item_stone->enableOuterStroke(ccBLACK, 1.f);
+////																						   item_stone->setPosition(ccp(0,20));
+////																						   stone_node->addChild(item_stone);
+////																						   CCSprite* t_stone_img = CCSprite::create("shop_gold3.png");
+////																						   t_stone_img->setPosition(ccp(0, -20));
+////																						   stone_node->addChild(t_stone_img);
+////																						   
+////																						   int random_left_right = rand()%2;
+////																						   
+////																						   CCNode* selected_node;
+////																						   KSLabelTTF* another_label1;
+////																						   KSLabelTTF* another_label2;
+////																						   CCSprite* another_img1;
+////																						   CCSprite* another_img2;
+////																						   
+////																						   if(reward_type == 1)
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(100);
+////																							   
+////																							   selected_node = gold_node;
+////																							   another_label1 = item_gold_or_item;
+////																							   another_img1 = t_gold_img2;
+////																							   another_label2 = item_stone;
+////																							   another_img2 = t_stone_img;
+////																							   
+////																							   gold_node->setPosition(ccp(150,-30));
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_item_node->setPosition(ccp(-150,-30));
+////																								   stone_node->setPosition(ccp(0,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_item_node->setPosition(ccp(0,-30));
+////																								   stone_node->setPosition(ccp(-150,-30));
+////																							   }
+////																						   }
+////																						   else if(reward_type == 2)
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(200);
+////																							   
+////																							   selected_node = gold_item_node;
+////																							   another_label1 = item_gold;
+////																							   another_img1 = t_gold_img;
+////																							   another_label2 = item_stone;
+////																							   another_img2 = t_stone_img;
+////																							   
+////																							   gold_item_node->setPosition(ccp(150,-30));
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_node->setPosition(ccp(-150,-30));
+////																								   stone_node->setPosition(ccp(0,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_node->setPosition(ccp(0,-30));
+////																								   stone_node->setPosition(ccp(-150,-30));
+////																							   }
+////																						   }
+////																						   else
+////																						   {
+////																							   mySGD->addChangeGoodsIngameGold(300);
+////																							   
+////																							   selected_node = stone_node;
+////																							   another_label1 = item_gold_or_item;
+////																							   another_label2 = item_gold;
+////																							   another_img1 = t_gold_img2;
+////																							   another_img2 = t_gold_img;
+////																							   
+////																							   stone_node->setPosition(ccp(150,-30));
+////																							   if(random_left_right == 0)
+////																							   {
+////																								   gold_node->setPosition(ccp(-150,-30));
+////																								   gold_item_node->setPosition(ccp(0,-30));
+////																							   }
+////																							   else
+////																							   {
+////																								   gold_node->setPosition(ccp(0,-30));
+////																								   gold_item_node->setPosition(ccp(-150,-30));
+////																							   }
+////																						   }
+////																						   t_container->addChild(gold_node);
+////																						   t_container->addChild(gold_item_node);
+////																						   t_container->addChild(stone_node);
+////																						   
+////																						   t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.7f, [=](float t)
+////																																			   {
+////																																				   selected_node->setScale(1.f+t*0.5f);
+////																																				   another_img1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_img2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_label1->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																				   another_label2->setColor(ccc3(255-t*100, 255-t*100, 255-t*100));
+////																																			   }, [=](float t)
+////																																			   {
+////																																				   selected_node->setScale(1.5f);
+////																																				   another_img1->setColor(ccc3(155, 155, 155));
+////																																				   another_img2->setColor(ccc3(155, 155, 155));
+////																																				   another_label1->setColor(ccc3(155, 155, 155));
+////																																				   another_label2->setColor(ccc3(155, 155, 155));
+////																																			   }));
+////																						   
+////																						   goldbox_menu->setVisible(false);
+////																						   
+////																						   myDSH->saveAllUserData(nullptr);
+////																						   
+////																						   CCFadeTo* dimmed_fade = CCFadeTo::create(1.f, 0);
+////																						   CCCallFunc* dimmed_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
+////																						   CCCallFunc* remove_call = CCCallFunc::create(t_popup, callfunc_selector(CCLayer::removeFromParent));
+////																						   CCSequence* t_seq = CCSequence::create(CCDelayTime::create(1.0),dimmed_fade, dimmed_call, remove_call, NULL);
+////																						   dimmed_img->runAction(t_seq);
+////																					   });
+////					  goldbox3_item->setPosition(ccp(150,-30));
+////					  goldbox_menu->addChild(goldbox3_item);
+////					  
+////					  CCSprite* falling_box = CCSprite::create("goldbox_off.png");
+////					  falling_box->setPosition(ccp(0,600));
+////					  t_container->addChild(falling_box);
+////					  
+////					  t_container->addChild(KSGradualValue<float>::create(0, 1.f, 1.f, [=](float t)
+////																		  {
+////																			  float t_t;
+////																			  if (t < 1 / 2.75)
+////																			  {
+////																				  t_t = 7.5625f * t * t;
+////																			  } else if (t < 2 / 2.75)
+////																			  {
+////																				  t -= 1.5f / 2.75f;
+////																				  t_t = 7.5625f * t * t + 0.75f;
+////																			  } else if(t < 2.5 / 2.75)
+////																			  {
+////																				  t -= 2.25f / 2.75f;
+////																				  t_t = 7.5625f * t * t + 0.9375f;
+////																			  }
+////																			  else
+////																			  {
+////																				  t -= 2.625f / 2.75f;
+////																				  t_t = 7.5625f * t * t + 0.984375f;
+////																			  }
+////																			  
+////																			  falling_box->setPositionY(600.f - 630.f*t_t);
+////																		  }, [=](float t)
+////																		  {
+////																			  falling_box->setPositionY(-30);
+////																			  
+////																			  t_container->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+////																																  {
+////																																	  title_img->setOpacity(t*255);
+////																																	  title_label->setOpacity(t*255);
+////																																	  goldbox1->setOpacity(t*255);
+////																																	  goldbox2->setOpacity(t*255);
+////																																	  goldbox3->setOpacity(t*255);
+////																																	  goldbox1->setPositionX(-150.f*t);
+////																																	  goldbox3->setPositionX(150.f*t);
+////																																  }, [=](float t)
+////																																  {
+////																																	  falling_box->removeFromParent();
+////																																	  title_img->setOpacity(255);
+////																																	  title_label->setOpacity(255);
+////																																	  goldbox1->setOpacity(255);
+////																																	  goldbox2->setOpacity(255);
+////																																	  goldbox3->setOpacity(255);
+////																																	  goldbox1->setPositionX(-150.f);
+////																																	  goldbox3->setPositionX(150.f);
+////																																	  
+////																																	  goldbox_menu->setVisible(true);
+////																																  }));
+////																		  }));
+//					  t_sm->removeFromParent();
+//				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
 }
 
 void Maingame::clearScenario3()
@@ -2974,23 +3035,43 @@ void Maingame::failScenario()
 
 void Maingame::failScenario2()
 {
-	StoryManager* t_sm = StoryManager::create(-500);
-	addChild(t_sm, 100);
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,80));
+	addChild(t_tb, 100);
 	
-	t_sm->addMent(true, "", "", intro_boss->fail_ment.c_str(), [=]()
-				  {
-					  CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
-					  curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
-					  curtain_node->setScale(myDSH->screen_convert_rate);
-					  addChild(curtain_node, shutterZorder+5);
-					  
-					  CCDelayTime* t_delay = CCDelayTime::create(0.7f);
-					  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
-					  CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
-					  curtain_node->runAction(t_seq);
-					  
-					  t_sm->removeFromParent();
-				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
+	function<void()> end_func1 = [=]()
+	{
+		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
+		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+		curtain_node->setScale(myDSH->screen_convert_rate);
+		addChild(curtain_node, shutterZorder+5);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(0.7f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+		curtain_node->runAction(t_seq);
+		
+		t_tb->removeFromParent();
+	};
+	
+	t_tb->startTyping(intro_boss->fail_ment.c_str(), end_func1);
+	
+//	StoryManager* t_sm = StoryManager::create(-500);
+//	addChild(t_sm, 100);
+//	
+//	t_sm->addMent(true, "", "", intro_boss->fail_ment.c_str(), [=]()
+//				  {
+//					  CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
+//					  curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+//					  curtain_node->setScale(myDSH->screen_convert_rate);
+//					  addChild(curtain_node, shutterZorder+5);
+//					  
+//					  CCDelayTime* t_delay = CCDelayTime::create(0.7f);
+//					  CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
+//					  CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+//					  curtain_node->runAction(t_seq);
+//					  
+//					  t_sm->removeFromParent();
+//				  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
 	
 }
 

@@ -866,6 +866,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_stageSettingDimmed2,
 	
 	kMyLocalKey_noReview,
+	kMyLocalKey_gem100,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

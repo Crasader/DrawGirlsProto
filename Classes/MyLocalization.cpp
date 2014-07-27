@@ -1424,6 +1424,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font>시작버튼</font>"), kMyLocalKey_stageSettingDimmed2);
 	
 	ko->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
+	ko->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -2340,6 +2341,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
 	
 	en->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
+	en->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3278,6 +3280,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
 	
 	ja->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
+	ja->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
