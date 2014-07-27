@@ -328,6 +328,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	back_case->addChild(back_in,2);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 16);
+	title_label->disableOuterStroke();
 	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-30));
 	back_case->addChild(title_label);
 	

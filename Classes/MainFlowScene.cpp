@@ -2169,7 +2169,10 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
 		content_label->setAnchorPoint(ccp(0.5f,0.5f));
 		
-		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800, myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), (CCNode*)content_label, [=](){is_menu_enable = true;},CCPointZero,true);
+		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800,
+																											myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle),
+																											(CCNode*)content_label, [=](){is_menu_enable = true;},
+																											12.f, CCPointZero,true);
 		
 	//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
 		addChild(t_popup, kMainFlowZorder_popup);
@@ -2274,6 +2277,19 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_event,
 	kMainFlowMenuTag_endlessMode
 };
+
+void MainFlowScene::showShopPopup(int t_code)
+{
+    is_menu_enable = false;
+    
+    ShopPopup* t_shop = ShopPopup::create();
+    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+    t_shop->targetHeartTime(heart_time);
+    t_shop->setShopCode((ShopCode)t_code);
+    t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+//    t_shop->addGray();
+    addChild(t_shop, kMainFlowZorder_popup+100);
+}
 
 void MainFlowScene::menuAction(CCObject* sender)
 {
@@ -2511,7 +2527,9 @@ void MainFlowScene::menuAction(CCObject* sender)
 				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 				sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 				
-				addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), sub_label, [=](){is_menu_enable = true;}, ccp(0,0), true), 999);
+				addChild(ASPopupView::getCommonNoti(-999,
+																						myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), sub_label, [=](){is_menu_enable = true;},
+																						12.f, ccp(0,0), true), 999);
 				
 //				ASPopupView* t_popup = ASPopupView::create(-999);
 //				

@@ -268,7 +268,7 @@ void BuyMorphingPopup::buyAction(CCObject* sender, CCControlEvent t_event)
 							   [=]()
 							   {
 								   is_menu_enable = true;
-							   }, ccp(240, myDSH->ui_center_y), true), 9999);
+							   }, 10.f, ccp(240, myDSH->ui_center_y), true), 9999);
 	}
 }
 

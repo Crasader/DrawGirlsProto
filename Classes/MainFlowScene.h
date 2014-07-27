@@ -82,6 +82,8 @@ public:
 	
 	void showEndlessOpening();
 	void showEndlessResult();
+    
+    void showShopPopup(int t_code);
 	
 private:
 	
