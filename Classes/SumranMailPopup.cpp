@@ -414,7 +414,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	main_case->addChild(barBack, kMP_Z_mailTable - 1);
 	//320x320 테이블 뷰 생성
 
-	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 174.f));
+	mailTableView = CCTableView::create(this, CCSizeMake(455.f, 203.f));
 	setFormSetter(mailTableView);	
 //	CCScale9Sprite* bar = CCScale9Sprite::create("postbox_bar.png");
 	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
@@ -433,7 +433,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	//기준점 0,0
 	// 좌표 수동으로 잡느라 이리 됨
 	//FormSetter::get()->addObject("testksoo", mailTableView);
-	mailTableView->setPosition(ccp(33.0, 56.0));
+	mailTableView->setPosition(ccp(33.0, 30.0));
 	
 	//데이터를 가져오고나 터치 이벤트를 반환해줄 대리자를 이 클래스로 설정.
 	mailTableView->setDelegate(this);
