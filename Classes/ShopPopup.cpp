@@ -322,19 +322,19 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			if(recent_shop_code == kSC_ruby)
 			{
 				sale_str = NSDS_GS(kSDS_GI_shopRuby_int1_sale_s, i-1);
-				price_type = NSDS_GS(kSDS_GI_shopRuby_int1_priceType_s, i-1);
+				price_type = mySGD->getGoodsTypeToKey(kGoodsType_money);//NSDS_GS(kSDS_GI_shopRuby_int1_priceType_s, i-1);
 				price_key = "wonToRuby%d";
 			}
 			else if(recent_shop_code == kSC_gold)
 			{
 				sale_str = NSDS_GS(kSDS_GI_shopGold_int1_sale_s, i-1);
-				price_type = NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, i-1);
+				price_type = mySGD->getGoodsTypeToKey(kGoodsType_ruby);//NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, i-1);
 				price_key = "rubyToGold%d";
 			}
 			else if(recent_shop_code == kSC_heart)
 			{
 				sale_str = NSDS_GS(kSDS_GI_shopCoin_int1_sale_s, i-1);
-				price_type = NSDS_GS(kSDS_GI_shopCoin_int1_priceType_s, i-1);
+				price_type = mySGD->getGoodsTypeToKey(kGoodsType_ruby); //NSDS_GS(kSDS_GI_shopCoin_int1_priceType_s, i-1);
 				price_key = "rubyToHeart%d";
 			}
 			

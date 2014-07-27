@@ -201,7 +201,7 @@ bool ZoomScript::init()
 	is_actioned = true;
 	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.2f;
+	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.25f;
 	
 	//game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	
@@ -210,15 +210,15 @@ bool ZoomScript::init()
 
 void ZoomScript::onEnterTransitionDidFinish()
 {
-	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
+	CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
 	CCDelayTime* delay1 = CCDelayTime::create(1.f);
 	
-	CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
-	CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
+	CCMoveTo* move2 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+	CCScaleTo* t_scale = CCScaleTo::create(0.5f, minimum_scale);
 	CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 	
 //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
-	CCDelayTime* delay2 = CCDelayTime::create(1.f);
+	CCDelayTime* delay2 = CCDelayTime::create(0.5f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::startScript));
 	game_node->runAction(CCSequence::create(move1, delay1, t_spawn, delay2, t_call, NULL));
 }
@@ -969,15 +969,15 @@ void ZoomScript::showtimeSecondAction()
 	white_paper->runAction(CCFadeOut::create(0.5f));
 	
 	CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
-	CCDelayTime* delay2 = CCDelayTime::create(1.f);
+	CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+	CCDelayTime* delay2 = CCDelayTime::create(0.5f);
 	
-	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(240,myDSH->ui_center_y));
-	CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
+	CCMoveTo* move2 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+	CCScaleTo* t_scale = CCScaleTo::create(0.5f, minimum_scale);
 	CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 	
 //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
-	CCDelayTime* delay3 = CCDelayTime::create(1.f);
+	CCDelayTime* delay3 = CCDelayTime::create(0.5f);
 	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeThirdAction));
 	
 	CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
@@ -1132,16 +1132,15 @@ void ZoomScript::moveListXY(CCPoint t_p)
 	float contentHalfWidth = game_node->getScale()*game_node->getContentSize().width/2.f;
 	float contentHalfHeight = game_node->getScale()*game_node->getContentSize().height/2.f;
 	
-	
-	if(contentHalfWidth*2.f<=screen_size.width/2.f){
+	if(contentHalfWidth*2.f<=480){
 		
 		a_p.x=240;
 		
 	}else{
 		
 		
-		if(a_p.x<screen_size.width/2.f-contentHalfWidth){
-			a_p.x = screen_size.width/2.f-contentHalfWidth;
+		if(a_p.x<480-contentHalfWidth){
+			a_p.x = 480-contentHalfWidth;
 		}
 		
 		if(contentHalfWidth<a_p.x){
@@ -1161,6 +1160,7 @@ void ZoomScript::moveListXY(CCPoint t_p)
 	}else{
 		a_p.y = myDSH->ui_center_y;
 	}
+	
 
 	
 	
