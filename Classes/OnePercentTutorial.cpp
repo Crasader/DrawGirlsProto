@@ -69,7 +69,8 @@ bool OnePercentTutorial::init(float originalPercent,
 	clippingNode->addChild(inner_back);
 
 	CCSprite* katsu = CCSprite::create("kt_cha_katsuragi_1.png");
-	katsu->setPosition(ccp(-67.0, 5.5));
+	katsu->setScale(0.8f);
+	katsu->setPosition(ccp(-80.5, 9.5));
 	clippingNode->addChild(katsu);
 	setFormSetter(katsu);
 	//m_container->addChild(inner_back, kOnePercentTutorial_Z_back);
@@ -78,9 +79,12 @@ bool OnePercentTutorial::init(float originalPercent,
 	setFormSetter(inner_back);
 	
 	KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
+	titleLbl->disableOuterStroke();
 	titleLbl->setPosition(ccp(89.0, 247.5));
 //	titleLbl->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height-25)); 			// dt (6.0, 112.5)
 	back_img->addChild(titleLbl);
+	
+	CommonAnimation::applyShadow(titleLbl, 11);
 	setFormSetter(titleLbl);
 	auto puppleInner = CCScale9Sprite::create("kt_talkbox_purple.png",
 																						CCRectMake(0, 0, 170.f/2.f, 230/2.f),

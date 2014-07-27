@@ -494,10 +494,10 @@ void TitleRenewalScene::successLogin()
 		}));
 	}));
 	
-	if(myLog->getLogCount() > 0)
-	{
-		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
-	}
+//	if(myLog->getLogCount() > 0)
+//	{
+//		myLog->sendLog(CCString::createWithFormat("ting_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
+//	}
 	
 	AudioEngine::sharedInstance()->playEffect("ment_title.mp3");
 	addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);}));

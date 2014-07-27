@@ -399,7 +399,7 @@ void* GraphDog::t_function(void *_insertIndex)
 				CCLOG("check3");
 				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
 				
-				CCLOG("check4");
+				CCLOG("check4 %s",resultobj.asString().c_str());
 				Json::Value commandParam = command.commandStr;
 				if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
 					resultCode = CURLE_CHUNK_FAILED;
@@ -610,13 +610,16 @@ void GraphDog::receivedCommand(float dt)
 		try {
 			if(commands.chunk.resultCode == CURLE_AGAIN)
 			{
+				CCLOG("commands.chunk.resultCode == CURLE_AGAIN");
 				throw commands.chunk.resultCode;
 			}
 			else if(commands.chunk.resultCode != CURLE_OK)
 			{
 				
+				CCLOG("commands.chunk.resultCode != CURLE_OK");
 				//다시시도하시겠습니까 팝업펑크가 있으면 띄운다.
 				if(commandRetryFunc!=nullptr){
+					CCLOG("commandRetryFunc!=nullptr");
 					std::vector<CommandParam> vcp;
 					for(std::map<string, CommandType>::const_iterator iter = commands.commands.begin(); iter != commands.commands.end(); ++iter)
 					{
@@ -629,7 +632,9 @@ void GraphDog::receivedCommand(float dt)
 						vcp.push_back(cp);
 					}
 					
+					CCLOG("commands.errorCnt<=1");
 					if(commands.errorCnt<=1){
+						CCLOG("commands.chunk.resultCode != CURLE_OK");
 						this->command(vcp,commands.errorCnt+1);
 					}else{
 						commandRetryFunc(vcp);
@@ -763,8 +768,10 @@ void GraphDog::receivedCommand(float dt)
 				
 				if(retryCnt){
 					if(commands.errorCnt<=1){
+                        CCLOG("commands.errorCnt<=1");
 						this->command(vcp,commands.errorCnt+1);
 					}else{
+                        CCLOG("!! commands.errorCnt<=1");
 						commandRetryFunc(vcp);
 					}
 				}
