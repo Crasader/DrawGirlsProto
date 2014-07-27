@@ -124,7 +124,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	setFormSetter(titleLbl);
 //	titleLbl->setPosition(ccp(0, 40));
 	
-	CommonAnimation::applyShadow(titleLbl);
+	CommonAnimation::applyShadow(titleLbl, 12);
 
 	
 	CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));

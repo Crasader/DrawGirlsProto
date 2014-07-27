@@ -84,7 +84,7 @@ bool OnePercentTutorial::init(float originalPercent,
 //	titleLbl->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height-25)); 			// dt (6.0, 112.5)
 	back_img->addChild(titleLbl);
 	
-	CommonAnimation::applyShadow(titleLbl, 11);
+	CommonAnimation::applyShadow(titleLbl, 12);
 	setFormSetter(titleLbl);
 	auto puppleInner = CCScale9Sprite::create("kt_talkbox_purple.png",
 																						CCRectMake(0, 0, 170.f/2.f, 230/2.f),
