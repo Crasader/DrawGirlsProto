@@ -205,6 +205,7 @@ void Maingame::hideDrawButtonTutorial()
 
 void Maingame::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
 //	if(mySD->getSilType() == 1)
 //	{
 //		if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_control))
