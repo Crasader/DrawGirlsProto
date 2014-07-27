@@ -592,6 +592,17 @@ void OnePercentGacha::setBack ()
 		CCSprite* pass_ticket = CCSprite::create("pass_ticket5.png");
 		pass_ticket->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 		price_back->addChild(pass_ticket);
+		
+		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+		pass_count_case->setContentSize(CCSizeMake(20, 20));
+		pass_count_case->setPosition(pass_ticket->getPosition() + ccp(6,6));
+		pass_ticket->addChild(pass_count_case);
+		
+		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass5)), mySGD->getFont().c_str(), 8);
+		pass_count_label->setColor(ccc3(255, 255, 255));
+		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+		pass_count_case->addChild(pass_count_label);
+		
 		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 20);
 		free_label->setColor(ccWHITE);
 		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));

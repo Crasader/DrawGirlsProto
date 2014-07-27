@@ -167,6 +167,17 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		price_type = CCSprite::create("pass_ticket3.png");
 		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-29,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_type);
+		
+		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+		pass_count_case->setContentSize(CCSizeMake(20, 20));
+		pass_count_case->setPosition(price_type->getPosition() + ccp(6,6));
+		price_type->addChild(pass_count_case);
+		
+		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
+		pass_count_label->setColor(ccc3(255, 255, 255));
+		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+		pass_count_case->addChild(pass_count_label);
+		
 		price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
 		price_label->disableOuterStroke();
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+10,price_back->getContentSize().height/2.f));
@@ -471,6 +482,16 @@ void MissileUpgradePopup::setAfterUpgrade()
 			price_type = CCSprite::create("pass_ticket3.png");
 			price_type->setPosition(t_position);
 			parent_node->addChild(price_type);
+			
+			CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+			pass_count_case->setContentSize(CCSizeMake(20, 20));
+			pass_count_case->setPosition(price_type->getPosition() + ccp(6,6));
+			price_type->addChild(pass_count_case);
+			
+			CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
+			pass_count_label->setColor(ccc3(255, 255, 255));
+			pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+			pass_count_case->addChild(pass_count_label);
 			
 			price_label->setString(myLoc->getLocalForKey(kMyLocalKey_free));
 		}

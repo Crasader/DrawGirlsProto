@@ -171,7 +171,7 @@ bool ZoomScript::init()
 	script_label->setPosition(ccp(210,30));
 	addChild(script_label, kZS_Z_script_label);
 	
-	script_case = CCSprite::create("ending_script_case.png");
+	script_case = CCScale9Sprite::create("common_shadowgray2.png", CCRectMake(0, 0, 23, 23), CCRectMake(10, 10, 3, 3));
 	script_case->setVisible(false);
 	script_case->setPosition(ccp(210,30));
 	addChild(script_case, kZS_Z_script_case);
@@ -227,6 +227,9 @@ void ZoomScript::startScript()
 {
 	script_label->setString("");
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
+	
+	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
+	script_case->setContentSize(t_label->getContentSize() + CCSizeMake(20, 20));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));

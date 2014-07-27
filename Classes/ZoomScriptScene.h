@@ -46,7 +46,7 @@ private:
 	
 	MyNode* first_img;
 	CCLabelTTF* script_label;
-	CCSprite* script_case;
+	CCScale9Sprite* script_case;
 	
 	CommonButton* next_button;
 	CCSprite* showtime_back;
