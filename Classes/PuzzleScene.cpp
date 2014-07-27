@@ -2292,6 +2292,7 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 
 void PuzzleScene::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
     TRACE();
 }
 
@@ -2315,7 +2316,7 @@ void PuzzleScene::autoTurnPiece()
 {
 	if(!is_menu_enable)
 		return;
-	
+
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
