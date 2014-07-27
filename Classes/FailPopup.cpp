@@ -357,9 +357,10 @@ bool FailPopup::init()
 		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		
 		
-		CCSprite* t_gray = CCSprite::create("back_gray.png");
+		CCSprite* t_gray = CCSprite::create("whitePaper.png");
 		t_gray->setScaleX(screen_scale_x);
 		t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+		t_gray->setColor(ccBLACK);
 		t_gray->setOpacity(0);
 		t_gray->setPosition(ccp(240,160));
 		t_clipping->addChild(t_gray);
@@ -532,12 +533,12 @@ bool FailPopup::init()
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 															  {
-																  t_gray->setOpacity(t*255);
+																  t_gray->setOpacity(t*255*0.8f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 															  }, [=](float t)
 															  {
-																  t_gray->setOpacity(255);
+																  t_gray->setOpacity(255*0.8f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);

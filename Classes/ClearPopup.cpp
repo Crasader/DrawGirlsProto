@@ -1540,12 +1540,12 @@ void ClearPopup::endTakeCard()
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 															  {
-																  t_gray->setOpacity(t*255*80.f);
+																  t_gray->setOpacity(t*255*0.8f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 															  }, [=](float t)
 															  {
-																  t_gray->setOpacity(255*80.f);
+																  t_gray->setOpacity(255*0.8f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
