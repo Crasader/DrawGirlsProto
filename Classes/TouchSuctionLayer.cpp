@@ -85,6 +85,12 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 				(target_touch_began->*delegate_touch_began)();
 			else
 				CCLOG("%s : %d", swallow_ment.c_str(), touch_priority);
+			
+			if(is_on_touch_began_func)
+			{
+				CCLOG("setted touch_func");
+				touch_began_func();
+			}
 		}
 	}
 	else if(is_setted_swallow_rect)
@@ -100,6 +106,12 @@ bool TouchSuctionLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 				(target_touch_began->*delegate_touch_began)();
 			else
 				CCLOG("%s : %d", swallow_ment.c_str(), touch_priority);
+			
+			if(is_on_touch_began_func)
+			{
+				CCLOG("setted touch_func");
+				touch_began_func();
+			}
 		}
 	}
 	else

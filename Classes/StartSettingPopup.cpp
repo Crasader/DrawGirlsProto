@@ -438,10 +438,9 @@ void StartSettingPopup::setMain()
 		
 		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
 																	 {
-																		 is_menu_enable = false;
 																		 skip_menu->setEnabled(false);
 																		 
-																		 callStart();
+//																		 callStart();
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
@@ -455,7 +454,6 @@ void StartSettingPopup::setMain()
 		
 		function<void()> end_func4 = [=]()
 		{
-			is_menu_enable = false;
 			skip_menu->setEnabled(false);
 			
 			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -464,7 +462,7 @@ void StartSettingPopup::setMain()
 																  }, [=](float t)
 																  {
 																	  t_gray->setOpacity(0);
-																	  callStart();
+//																	  callStart();
 																	  scenario_node->removeFromParent();
 																  }));
 		};
@@ -1126,8 +1124,8 @@ void StartSettingPopup::setMain()
 				screen_scale_x = 1.f;
 			
 			CCNode* t_stencil_node = CCNode::create();
-			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-			t_stencil1->setContentSize(start_button->getContentSize() + CCSizeMake(10, 10));
+			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+			t_stencil1->setContentSize(start_button->getContentSize() + CCSizeMake(5, 5));
 			t_stencil1->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + start_button->getPosition());
 			t_stencil_node->addChild(t_stencil1);
 			
@@ -1156,18 +1154,28 @@ void StartSettingPopup::setMain()
 			t_gray->setPosition(ccp(240,160));
 			t_clipping->addChild(t_gray);
 			
-			CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
-			t_arrow1->setRotation(180);
-			t_arrow1->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 15));
+			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
+			t_arrow1->setRotation(-90);
+			t_arrow1->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 30));
 			t_clipping->addChild(t_arrow1);
 			
-			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent5), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-			t_ment1->setAnchorPoint(ccp(0.5f,0.f));
-			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
-			t_clipping->addChild(t_ment1);
+			CCMoveTo* t_up = CCMoveTo::create(0.4f, t_arrow1->getPosition() + ccp(0,30));
+			CCMoveTo* t_down = CCMoveTo::create(0.4f, t_arrow1->getPosition());
+			CCSequence* t_seq = CCSequence::create(t_up, t_down, NULL);
+			
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+			
+			t_arrow1->runAction(t_repeat);
+			
+			TouchSuctionLayer* t_suction_temp = TouchSuctionLayer::create(-9998);
+			addChild(t_suction_temp);
+			t_suction_temp->setTouchEnabled(true);
 			
 			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
 			addChild(t_suction);
+			
+			t_suction->setSwallowRect(CCRectMake(t_stencil1->getPosition().x-t_stencil1->getContentSize().width/2.f, t_stencil1->getPosition().y-t_stencil1->getContentSize().height/2.f, t_stencil1->getContentSize().width, t_stencil1->getContentSize().height));
+			
 			t_suction->setTouchEnabled(true);
 			
 			t_clipping->setInverted(true);
@@ -1192,7 +1200,9 @@ void StartSettingPopup::setMain()
 														   tutorial_success_func = [=]()
 														   {
 															   t_arrow1->removeFromParent();
-															   t_ment1->removeFromParent();
+															   
+															   t_suction_temp->removeFromParent();
+															   t_suction->removeFromParent();
 															   
 															   addChild(KSGradualValue<float>::create(1.f, 0.f, 0.5f, [=](float t)
 																									  {
@@ -1200,8 +1210,6 @@ void StartSettingPopup::setMain()
 																									  }, [=](float t)
 																									  {
 																										  t_gray->setOpacity(255*t);
-																										  
-																										  t_suction->removeFromParent();
 																										  
 																										  t_clipping->removeFromParent();
 																									  }));

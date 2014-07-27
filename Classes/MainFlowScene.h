@@ -124,6 +124,8 @@ private:
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
 	
+	function<void()> kind_tutorial_pvp;
+	
 	void showClearPopup();
 	void hideClearPopup();
 	void showFailPopup();

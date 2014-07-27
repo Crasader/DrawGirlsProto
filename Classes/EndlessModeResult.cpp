@@ -29,6 +29,7 @@
 #include "CommonAnimation.h"
 #include "EndlessSeqWinRewardPopup.h"
 #include "StyledLabelTTF.h"
+#include "TypingBox.h"
 
 enum EndlessModeResultZorder
 {
@@ -1386,21 +1387,22 @@ void EndlessModeResult::startCalcAnimation()
 																			   
 																			   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 																				{
+																					CCNode* scenario_node = CCNode::create();
+																					addChild(scenario_node, 9999);
+																					
 																					CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 																					float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 																					if(screen_scale_x < 1.f)
 																						screen_scale_x = 1.f;
 																					
+																					float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																					
+																					
 																					CCNode* t_stencil_node = CCNode::create();
-																					CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-																					t_stencil1->setContentSize(left_back->getContentSize() + CCSizeMake(10, 10));
-																					t_stencil1->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + left_back->getPosition());
-																					t_stencil_node->addChild(t_stencil1);
+																					
 																					
 																					CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
 																					t_clipping->setAlphaThreshold(0.1f);
-																					
-																					float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 																					
 																					float change_scale = 1.f;
 																					CCPoint change_origin = ccp(0,0);
@@ -1422,186 +1424,210 @@ void EndlessModeResult::startCalcAnimation()
 																					t_gray->setPosition(ccp(240,160));
 																					t_clipping->addChild(t_gray);
 																					
-																					CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
-																					t_arrow1->setRotation(180);
-																					t_arrow1->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 10));
-																					t_clipping->addChild(t_arrow1);
-																					
-																					StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent12), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-																					t_ment1->setAnchorPoint(ccp(0.5f,0.f));
-																					t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
-																					t_clipping->addChild(t_ment1);
-																					
-																					CCNode* scroll_ment_node = CCNode::create();
-																					scroll_ment_node->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + right_back->getPosition() + ccpFromSize(right_back->getContentSize()/(-2.f)) +
-																												  right_table->getPosition() + ccp(right_back->getContentSize().width-20, 90)/2.f);
-																					t_clipping->addChild(scroll_ment_node);
-																					
-																					CCSprite* scroll_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
-																					scroll_arrow1->setPosition(ccp(0,20));
-																					scroll_ment_node->addChild(scroll_arrow1);
-																					
-																					CCSprite* scroll_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
-																					scroll_arrow2->setRotation(180);
-																					scroll_arrow2->setPosition(ccp(0,-20));
-																					scroll_ment_node->addChild(scroll_arrow2);
-																					
-																					StyledLabelTTF* scroll_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent14), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-																					scroll_label->setAnchorPoint(ccp(0.5f,0.5f));
-																					scroll_label->setPosition(ccp(0,0));
-																					scroll_ment_node->addChild(scroll_label);
-																					
-																					
-																					TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
-																					addChild(t_suction);
-																					t_suction->setTouchEnabled(true);
-																					
 																					t_clipping->setInverted(true);
-																					addChild(t_clipping, 9999);
+																					scenario_node->addChild(t_clipping, 0);
 																					
-																					addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
-																														   {
-																															   t_gray->setOpacity(t*255);
-																														   }, [=](float t)
-																														   {
-																															   t_gray->setOpacity(255);
-																															   
-																															   t_suction->is_on_touch_began_func = true;
-																															   t_suction->touch_began_func = [=]()
-																															   {
-																																   t_suction->is_on_touch_began_func = false;
-																																   
-																																   t_arrow1->removeFromParent();
-																																   t_ment1->removeFromParent();
-																																   
-																																   t_stencil1->setContentSize(right_back->getContentSize() + CCSizeMake(10, 10));
-																																   t_stencil1->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + right_back->getPosition());
-																																   
-																																   CCSprite* t_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
-																																   t_arrow2->setRotation(180);
-																																   t_arrow2->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 10));
-																																   t_clipping->addChild(t_arrow2);
-																																   
-																																   StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent13), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
-																																   t_ment2->setAnchorPoint(ccp(0.5f,0.f));
-																																   t_ment2->setPosition(t_arrow2->getPosition() + ccp(0, t_arrow2->getContentSize().height/2.f + 3));
-																																   t_clipping->addChild(t_ment2);
-																																   
-																																   scroll_ment_node->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + left_back->getPosition() + ccpFromSize(left_back->getContentSize()/(-2.f)) +
-																																								 left_table->getPosition() + ccp((480-30)/2.f-20, 90)/2.f);
-																																   
-																																   t_suction->is_on_touch_began_func = true;
-																																   t_suction->touch_began_func = [=]()
-																																   {
-																																	   t_suction->is_on_touch_began_func = false;
-																																	   
-																																	   t_arrow2->removeFromParent();
-																																	   t_ment2->removeFromParent();
-																																	   
-																																	   scroll_ment_node->removeFromParent();
-																																	   
-																																	   t_stencil1->setContentSize(CCSizeMake(200, 55) + CCSizeMake(10, 10));
-																																	   t_stencil1->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + ccp(main_case->getContentSize().width/2.f, 35) + ccp(-main_case->getContentSize().width/2.f+right_back->getPositionX(), 0));
-																																	   
-																																	   CCSprite* t_arrow3 = CCSprite::create("main_tutorial_arrow1.png");
-																																	   t_arrow3->setRotation(180);
-																																	   t_arrow3->setPosition(t_stencil1->getPosition() + ccp(0, t_stencil1->getContentSize().height/2.f + 15));
-																																	   t_clipping->addChild(t_arrow3);
-																																	   
-																																	   StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent15), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
-																																	   t_ment3->setAnchorPoint(ccp(0.5f,0.f));
-																																	   t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, t_arrow3->getContentSize().height/2.f + 3));
-																																	   t_clipping->addChild(t_ment3);
-																																	   
-																																	   t_suction->is_on_touch_began_func = true;
-																																	   t_suction->touch_began_func = [=]()
-																																	   {
-																																		   t_suction->is_on_touch_began_func = false;
-																																		   
-																																		   t_arrow3->removeFromParent();
-																																		   t_ment3->removeFromParent();
-																																		   
-																																		   t_stencil1->setContentSize(CCSizeMake(10, 10));
-																																		   t_stencil1->setPosition(ccp(-500,-500));
-																																		   
-																																		   CCNode* t_popup_node = CCNode::create();
-																																		   t_popup_node->setPosition(ccp(240,160));
-																																		   t_clipping->addChild(t_popup_node);
-																																		   
-																																		   CCSprite* out_back = CCSprite::create("popup_small_back.png");
-																																		   out_back->setPosition(ccp(0,0));
-																																		   t_popup_node->addChild(out_back);
-																																		   
-																																		   KSLabelTTF* t_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent16), mySGD->getFont().c_str(), 15);
-																																		   t_title_label->disableOuterStroke();
-																																		   t_title_label->setPosition(ccpFromSize(out_back->getContentSize()/2.f) + ccp(-85, out_back->getContentSize().height/2.f-35));
-																																		   out_back->addChild(t_title_label);
-																																		   
-																																		   CommonButton* t_close_button = CommonButton::createCloseButton(-99999);
-																																		   t_close_button->setPosition(ccp(out_back->getContentSize().width - 25, out_back->getContentSize().height - 22));
-																																		   t_close_button->setFunction([=](CCObject* sender)
-																																									   {
-																																										   if(!is_menu_enable)
-																																											   return;
-																																										   
-																																										   is_menu_enable = false;
-																																										   
-																																										   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																																										   
-																																										   t_close_button->setEnabled(false);
-																																										   CommonAnimation::closePopup(this, t_popup_node, NULL);
-																																										   addChild(KSGradualValue<float>::create(255, 0, 0.25f, [=](float t)
-																																																				  {
-																																																					  t_gray->setOpacity(t);
-																																																				  }, [=](float t)
-																																																				  {
-																																																					  t_gray->setOpacity(0);
-																																																					  
-																																																					  myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
-																																																					  
-																																																					  ready_loading = LoadingLayer::create(-999);
-																																																					  addChild(ready_loading, 999);
-																																																					  
-																																																					  vector<CommandParam> command_list;
-																																																					  command_list.clear();
-																																																					  
-																																																					  Json::Value param3;
-																																																					  param3["memberID"] = myHSP->getMemberID();
-																																																					  
-																																																					  command_list.push_back(CommandParam("starttransaction", param3, nullptr));
-																																																					  
-																																																					  Json::Value param;
-																																																					  param["memberID"] = myHSP->getMemberID();
-																																																					  param["win"] = mySGD->getUserdataEndlessIngWin();
-																																																					  param["highPiece"] = mySGD->getUserdataHighPiece();
-																																																					  command_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
-																																																					  
-																																																					  myHSP->command(command_list);
-																																																					  
-																																																					  t_suction->removeFromParent();
-																																																					  
-																																																					  t_clipping->removeFromParent();
-																																																				  }));
-																																									   });
-																																		   out_back->addChild(t_close_button);
-																																		   t_close_button->setEnabled(false);
-																																		   
-																																		   CCScale9Sprite* in_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-																																		   in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-15.f));
-																																		   in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-50, -80.f));
-																																		   out_back->addChild(in_back);
-																																		   
-																																		   StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-																																		   t_content_label->setAnchorPoint(ccp(0.5f, 0.5f));
-																																		   t_content_label->setPosition(ccpFromSize(in_back->getContentSize()/2.f));
-																																		   in_back->addChild(t_content_label);
-																																		   
-																																		   CommonAnimation::openPopup(this, t_popup_node, NULL, nullptr, [=](){t_close_button->setEnabled(true);});
-																																	   };
-																																   };
-																															   };
-																															   
-																														   }));
+																					CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+																					ikaruga->setAnchorPoint(ccp(0,0));
+																					ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+																					scenario_node->addChild(ikaruga, 1);
+																					
+																					TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+																					typing_box->setHide();
+																					scenario_node->addChild(typing_box, 2);
+																																										
+																					typing_box->showAnimation(0.3f);
+																					
+																					function<void()> end_func3 = [=]()
+																					{
+																						myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
+																						
+//																						t_gray->removeFromParent();
+																						
+																						CCNode* t_popup_node = CCNode::create();
+																						t_popup_node->setPosition(ccp(240,160));
+																						addChild(t_popup_node, 9999);
+																						
+																						TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																						t_popup_node->addChild(t_suction);
+																						t_suction->setTouchEnabled(true);
+																						
+																						CCSprite* out_back = CCSprite::create("popup_small_back.png");
+																						out_back->setPosition(ccp(0,0));
+																						t_popup_node->addChild(out_back);
+																						
+																						KSLabelTTF* t_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent16), mySGD->getFont().c_str(), 15);
+																						t_title_label->disableOuterStroke();
+																						t_title_label->setPosition(ccpFromSize(out_back->getContentSize()/2.f) + ccp(-85, out_back->getContentSize().height/2.f-35));
+																						out_back->addChild(t_title_label);
+																						
+																						CommonButton* t_close_button = CommonButton::createCloseButton(-99999);
+																						t_close_button->setPosition(ccp(out_back->getContentSize().width - 25, out_back->getContentSize().height - 22));
+																						t_close_button->setFunction([=](CCObject* sender)
+																													{
+																														if(!is_menu_enable)
+																															return;
+																														
+																														is_menu_enable = false;
+																														
+																														AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																														
+																														t_close_button->setEnabled(false);
+																														CommonAnimation::closePopup(this, t_popup_node, NULL);
+																														addChild(KSGradualValue<float>::create(255, 0, 0.25f, [=](float t)
+																																							   {
+																																							   }, [=](float t)
+																																							   {
+																																								   is_menu_enable = true;
+																																								   addChild(KSTimer::create(0.1f, [=]()
+																																															{
+																																																scenario_node->removeFromParent();
+																																															}));
+																																								   t_popup_node->removeFromParent();
+																																							   }));
+																													});
+																						out_back->addChild(t_close_button);
+																						t_close_button->setEnabled(false);
+																						
+																						CCScale9Sprite* in_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+																						in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-15.f));
+																						in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-50, -80.f));
+																						out_back->addChild(in_back);
+																						
+																						StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																						t_content_label->setAnchorPoint(ccp(0.5f, 0.5f));
+																						t_content_label->setPosition(ccpFromSize(in_back->getContentSize()/2.f));
+																						in_back->addChild(t_content_label);
+																						
+																						CommonAnimation::openPopup(this, t_popup_node, NULL, nullptr, [=](){t_close_button->setEnabled(true);});
+																					};
+																					
+																					function<void()> end_func2 = [=]()
+																					{
+																						CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+																						t_stencil2->setContentSize(right_back->getContentSize() + CCSizeMake(10, 10));
+																						t_stencil2->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + right_back->getPosition());
+																						t_stencil_node->addChild(t_stencil2);
+																						
+																						CCSprite* t_arrow2 = CCSprite::create("kt_arrow_big.png");
+																						t_arrow2->setScale(0.6f);
+																						t_arrow2->setRotation(-90);
+																						t_arrow2->setPosition(t_stencil2->getPosition() + ccp(-25,t_stencil2->getContentSize().height/2.f + 25));
+																						t_clipping->addChild(t_arrow2);
+																						
+																						StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent13), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+																						t_ment2->setAnchorPoint(ccp(0.f,0.5f));
+																						t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().height/2.f*t_arrow2->getScale() + 3, 0));
+																						t_clipping->addChild(t_ment2);
+																						
+																						CCNode* scroll_ment_node = CCNode::create();
+																						scroll_ment_node->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + left_back->getPosition() + ccpFromSize(left_back->getContentSize()/(-2.f)) +
+																													  left_table->getPosition() + ccp((480-30)/2.f-20, 90)/2.f + ccp(0,-13));
+																						t_clipping->addChild(scroll_ment_node);
+																						
+																						CCSprite* scroll_arrow1 = CCSprite::create("kt_arrow.png");
+																						scroll_arrow1->setPosition(ccp(0,20));
+																						scroll_ment_node->addChild(scroll_arrow1);
+																						
+																						CCSprite* scroll_arrow2 = CCSprite::create("kt_arrow.png");
+																						scroll_arrow2->setRotation(180);
+																						scroll_arrow2->setPosition(ccp(0,-20));
+																						scroll_ment_node->addChild(scroll_arrow2);
+																						
+																						StyledLabelTTF* scroll_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent14), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+																						scroll_label->setAnchorPoint(ccp(0.5f,0.5f));
+																						scroll_label->setPosition(ccp(0,0));
+																						scroll_ment_node->addChild(scroll_label);
+																						
+																						
+																						
+																						TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																						scenario_node->addChild(t_suction);
+																						t_suction->setTouchEnabled(true);
+																						t_suction->touch_began_func = [=]()
+																						{
+																							t_suction->is_on_touch_began_func = false;
+																							
+																							t_stencil_node->removeAllChildren();
+																							t_arrow2->removeFromParent();
+																							t_ment2->removeFromParent();
+																							scroll_ment_node->removeFromParent();
+																							end_func3();
+																							t_suction->removeFromParent();
+																						};
+																						t_suction->is_on_touch_began_func = true;
+																					};
+																					
+																					function<void()> end_func1 = [=]()
+																					{
+																						ikaruga->setVisible(false);
+																						
+																						typing_box->setTouchOffScrollAndButton();
+																						typing_box->setTouchSuction(false);
+																						typing_box->setVisible(false);
+																						
+																						CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+																						t_stencil1->setContentSize(left_back->getContentSize() + CCSizeMake(10, 10));
+																						t_stencil1->setPosition(main_case->getPosition() - ccpFromSize(main_case->getContentSize()/2.f) + left_back->getPosition());
+																						t_stencil_node->addChild(t_stencil1);
+																						
+																						CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
+																						t_arrow1->setScale(0.6f);
+																						t_arrow1->setRotation(-90);
+																						t_arrow1->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 25));
+																						t_clipping->addChild(t_arrow1);
+																						
+																						StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent12), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+																						t_ment1->setAnchorPoint(ccp(0.f,0.5f));
+																						t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().height/2.f*t_arrow1->getScale() + 3, 0));
+																						t_clipping->addChild(t_ment1);
+																						
+																						CCNode* scroll_ment_node = CCNode::create();
+																						scroll_ment_node->setPosition(main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + right_back->getPosition() + ccpFromSize(right_back->getContentSize()/(-2.f)) +
+																													  right_table->getPosition() + ccp(right_back->getContentSize().width-20, 90)/2.f + ccp(9,-13));
+																						t_clipping->addChild(scroll_ment_node);
+																						
+																						CCSprite* scroll_arrow1 = CCSprite::create("kt_arrow.png");
+																						scroll_arrow1->setPosition(ccp(0,20));
+																						scroll_ment_node->addChild(scroll_arrow1);
+																						
+																						CCSprite* scroll_arrow2 = CCSprite::create("kt_arrow.png");
+																						scroll_arrow2->setRotation(180);
+																						scroll_arrow2->setPosition(ccp(0,-20));
+																						scroll_ment_node->addChild(scroll_arrow2);
+																						
+																						StyledLabelTTF* scroll_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent14), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+																						scroll_label->setAnchorPoint(ccp(0.5f,0.5f));
+																						scroll_label->setPosition(ccp(0,0));
+																						scroll_ment_node->addChild(scroll_label);
+																						
+																						TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+																						scenario_node->addChild(t_suction);
+																						t_suction->setTouchEnabled(true);
+																						t_suction->touch_began_func = [=]()
+																						{
+																							t_suction->is_on_touch_began_func = false;
+																							t_stencil_node->removeAllChildren();
+																							t_arrow1->removeFromParent();
+																							t_ment1->removeFromParent();
+																							scroll_ment_node->removeFromParent();
+																							end_func2();
+																							t_suction->removeFromParent();
+																						};
+																						t_suction->is_on_touch_began_func = true;
+																					};
+																					
+																					scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																																		  {
+																																			  t_gray->setOpacity(t*255);
+																																			  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																																		  }, [=](float t)
+																																		  {
+																																			  t_gray->setOpacity(255);
+																																			  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																																			  
+																																			  typing_box->startTyping("PVP가 끝나면 이곳으로 와요.", end_func1);
+																																		  }));
 																				}
 
 																		   }));

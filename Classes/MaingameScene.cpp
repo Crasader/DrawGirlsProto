@@ -1664,229 +1664,336 @@ void Maingame::removeConditionLabel()
 		mControl->setTouchEnabled(false);
 		exit_target->onExit();
 		
-		CCNode* tutorial_node = CCNode::create();
-		getParent()->addChild(tutorial_node);
+		CCNode* scenario_node = CCNode::create();
+		getParent()->addChild(scenario_node, 9999);
 		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
+		float screen_scale_y = myDSH->ui_top/320.f;
 		
 		CCNode* t_stencil_node = CCNode::create();
-		CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
-		t_stencil1->setContentSize(CCSizeMake(320*thumb_texture->getScale(), 430*thumb_texture->getScale()) + CCSizeMake(20, 40));
-		t_stencil1->setPosition(ccp(40, myDSH->ui_center_y-10));
-		t_stencil_node->addChild(t_stencil1);
 		
 		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
 		t_clipping->setAlphaThreshold(0.1f);
 		
-		float screen_scale_y = myDSH->ui_top/320.f;
-		
-		float change_scale = 1.f;
 		CCPoint change_origin = ccp(0,0);
-//		if(screen_scale_x > 1.f)
-//		{
-//			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
-//			change_scale = screen_scale_x;
-//		}
-//		if(screen_scale_y > 1.f)
-//			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
-		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, 480*screen_scale_y, 320*screen_scale_y));
 		
-		
-		CCSprite* t_gray = CCSprite::create("back_gray.png");
-		t_gray->setScaleX(screen_scale_x);
-		t_gray->setScaleY(myDSH->ui_top/320.f);
-		t_gray->setOpacity(0);
-		t_gray->setPosition(ccp(240,myDSH->ui_center_y));
-		t_clipping->addChild(t_gray);
-		
-		CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
-		t_arrow1->setRotation(-90);
-		t_arrow1->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15,0));
-		t_clipping->addChild(t_arrow1);
-		
-		StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent6), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-		t_ment1->setAnchorPoint(ccp(0.f,0.5f));
-		t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().width/2.f + 3, 0));
-		t_clipping->addChild(t_ment1);
-		
-		CCSprite* t_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
-		t_arrow2->setRotation(-90);
-		t_arrow2->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, -25));
-		t_clipping->addChild(t_arrow2);
-		
-		StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-		t_ment2->setAnchorPoint(ccp(0.f,0.5f));
-		t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().width/2.f + 3, 0));
-		t_clipping->addChild(t_ment2);
-		
-		CCSprite* t_arrow3 = CCSprite::create("main_tutorial_arrow1.png");
-		t_arrow3->setRotation(-90);
-		t_arrow3->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, -43));
-		t_clipping->addChild(t_arrow3);
-		
-		StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent8), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-		t_ment3->setAnchorPoint(ccp(0.f,0.5f));
-		t_ment3->setPosition(t_arrow3->getPosition() + ccp(t_arrow3->getContentSize().width/2.f + 3, 0));
-		t_clipping->addChild(t_ment3);
-		
-		
-		float item_scale = 0.18f;
-		CCPoint item_base_position = ccp(40, myDSH->ui_center_y-10) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
-		CCPoint distance_position = ccp(14,0);
-		
-		CCNode* temp_item_node = CCNode::create();
-		tutorial_node->addChild(temp_item_node);
-		
-		vector<ITEM_CODE> t_vec_list;
-		t_vec_list.clear();
-		t_vec_list.push_back(kIC_baseSpeedUp);
-		t_vec_list.push_back(kIC_doubleItem);
-		t_vec_list.push_back(kIC_magnet);
-		t_vec_list.push_back(kIC_heartUp);
-		
-		for(int i=0;i<t_vec_list.size();i++)
-		{
-			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", t_vec_list[i])->getCString());
-			item_img->setScale(item_scale);
-			item_img->setOpacity(150);
-			item_img->setPosition(ccpAdd(item_base_position, ccpMult(distance_position, i)));
-			temp_item_node->addChild(item_img);
-			
-			CCSprite* item_case = CCSprite::create("ingame_itembox.png");
-			item_case->setPosition(ccp(item_img->getContentSize().width/2.f, item_img->getContentSize().height/2.f));
-			item_case->setScale(1.f/0.4f);
-			item_case->setOpacity(150);
-			item_img->addChild(item_case, -1);
-		}
-		
-		
-		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
-		tutorial_node->addChild(t_suction);
-		t_suction->setTouchEnabled(true);
+//		CCSprite* t_gray = CCSprite::create("back_gray.png");
+//		t_gray->setScaleY(screen_scale_y);
+//		t_gray->setOpacity(0);
+//		t_gray->setPosition(ccp(240,myDSH->ui_center_y));
+//		t_clipping->addChild(t_gray);
 		
 		t_clipping->setInverted(true);
-		tutorial_node->addChild(t_clipping, 9999);
+		scenario_node->addChild(t_clipping, 0);
 		
-		tutorial_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
-											   {
-												   t_gray->setOpacity(t*255);
-											   }, [=](float t)
-											   {
-												   t_gray->setOpacity(255);
-												   
-												   
-												   t_suction->is_on_touch_began_func = true;
-												   t_suction->touch_began_func = [=]()
-												   {
-													   t_suction->is_on_touch_began_func = false;
-													   
-													   temp_item_node->removeFromParent();
-													   
-													   t_arrow1->removeFromParent();
-													   t_ment1->removeFromParent();
-													   
-													   t_arrow2->removeFromParent();
-													   t_ment2->removeFromParent();
-													   
-													   t_arrow3->removeFromParent();
-													   t_ment3->removeFromParent();
-													   
-													   t_stencil1->setPosition(ccp(440, myDSH->ui_center_y-10));
-													   
-													   CCSprite* t_arrow4 = CCSprite::create("main_tutorial_arrow1.png");
-													   t_arrow4->setRotation(90);
-													   t_arrow4->setPosition(t_stencil1->getPosition() + ccp(-t_stencil1->getContentSize().width/2.f - 15, 0));
-													   t_clipping->addChild(t_arrow4);
-													   
-													   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent9), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
-													   t_ment4->setAnchorPoint(ccp(1.f,0.5f));
-													   t_ment4->setPosition(t_arrow4->getPosition() + ccp(-t_arrow4->getContentSize().width/2.f - 3, 0));
-													   t_clipping->addChild(t_ment4);
-													   
-													   t_suction->is_on_touch_began_func = true;
-													   t_suction->touch_began_func = [=]()
-													   {
-														   t_suction->is_on_touch_began_func = false;
-														   
-														   t_arrow4->removeFromParent();
-														   t_ment4->removeFromParent();
-														   
-														   t_stencil1->setContentSize(CCSizeMake(70, 70));
-														   t_stencil1->setPosition(ccp(40, myDSH->ui_center_y-10 + 75));
-														   
-														   CCLabelBMFont* t_combo_label = CCLabelBMFont::create("288", "combo.fnt");
-														   t_combo_label->setAnchorPoint(ccp(0.5f,0.5f));
-														   t_combo_label->setPosition(t_stencil1->getPosition() + ccp(0,-4));
-														   t_combo_label->setScale(1.f/game_node->getScale());
-														   tutorial_node->addChild(t_combo_label);
-														   
-														   CCSprite* t_combo_front = CCSprite::create("combo_front.png");
-														   t_combo_front->setAnchorPoint(ccp(0.5f,0.5f));
-														   t_combo_front->setPosition(t_stencil1->getPosition() + ccp(0,-10));
-														   t_combo_front->setScale(0.6f/game_node->getScale());
-														   tutorial_node->addChild(t_combo_front);
-														   
-														   CCSprite* t_arrow5 = CCSprite::create("main_tutorial_arrow1.png");
-														   t_arrow5->setRotation(-90);
-														   t_arrow5->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, 0));
-														   t_clipping->addChild(t_arrow5);
-														   
-														   StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent10), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-														   t_ment5->setAnchorPoint(ccp(0.f,0.5f));
-														   t_ment5->setPosition(t_arrow5->getPosition() + ccp(t_arrow5->getContentSize().width/2.f + 3, 0));
-														   t_clipping->addChild(t_ment5);
-														   
-														   t_suction->is_on_touch_began_func = true;
-														   t_suction->touch_began_func = [=]()
-														   {
-															   t_suction->is_on_touch_began_func = false;
-															   
-															   t_combo_label->removeFromParent();
-															   t_combo_front->removeFromParent();
-															   
-															   t_arrow5->removeFromParent();
-															   t_ment5->removeFromParent();
-															   
-															   t_stencil1->setPosition(ccp(-100,-100));
-															   
-															   KSLabelTTF* t_final_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent11), mySGD->getFont().c_str(), 15);
-															   t_final_label->setColor(ccc3(100, 200, 255));
-															   t_final_label->enableOuterStroke(ccBLACK, 2.f);
-															   t_final_label->setPosition(ccp(240, 50));
-															   t_clipping->addChild(t_final_label);
-															   
-															   t_suction->is_on_touch_began_func = true;
-															   t_suction->touch_began_func = [=]()
-															   {
-																   t_suction->is_on_touch_began_func = false;
-																   
-																   t_final_label->removeFromParent();
-																   
-																   tutorial_node->addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
-																														 {
-																															 t_gray->setOpacity(255*t);
-																														 }, [=](float t)
-																														 {
-																															 t_gray->setOpacity(255*t);
-																															 
-																															 mControl->isStun = false;
-																															 myJack->isStun = t_jack_stun;
-																															 
-																															 exit_target->onEnter();
-																															 startControl();
-																															 ((ControlJoystickButton*)mControl)->resetTouch();
-																															 tutorial_node->removeFromParent();
-																														 }));
-															   };
-														   };
-													   };
-												   };
-												   
-											   }));
+		
+		CCSprite* asuka = CCSprite::create("kt_cha_ikaruga_1.png");
+		asuka->setScale(1.f-(360-myDSH->ui_top)*3.f/16.f);
+		asuka->setAnchorPoint(ccp(1,0));
+		asuka->setPosition(ccp(480+asuka->getContentSize().width*asuka->getScale(), 0));
+		scenario_node->addChild(asuka, 1);
+		
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+		typing_box->setHide();
+		scenario_node->addChild(typing_box, 2);
+		
+		typing_box->showAnimation(0.3f);
+		
+		function<void()> end_func3 = [=]()
+		{
+			mControl->isStun = false;
+			myJack->isStun = t_jack_stun;
+			
+			exit_target->onEnter();
+			startControl();
+			((ControlJoystickButton*)mControl)->resetTouch();
+			
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 scenario_node->removeFromParent();
+									 }));
+		};
+		
+		function<void()> end_func2 = [=]()
+		{
+			scenario_node->removeChildByTag(1);
+			
+			typing_box->startTyping("행운을 빌어요.", end_func3);
+		};
+		
+		function<void()> end_func1 = [=]()
+		{
+			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
+			t_arrow1->setPosition(ccp(110, myDSH->ui_center_y+65));
+			scenario_node->addChild(t_arrow1, 1, 1);
+			
+			CCMoveTo* right_action = CCMoveTo::create(0.4f, t_arrow1->getPosition() + ccp(30,0));
+			CCMoveTo* left_action = CCMoveTo::create(0.4f, t_arrow1->getPosition());
+			CCSequence* t_seq = CCSequence::create(right_action, left_action, NULL);
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
+			
+			t_arrow1->runAction(t_repeat);
+			
+//			CCSprite* t_arrow2 = CCSprite::create("kt_arrow_big.png");
+//			t_arrow2->setPosition(ccp(480-110, myDSH->ui_center_y+75));
+//			scenario_node->addChild(t_arrow2, 1, 2);
+//			
+//			CCMoveTo* left_action2 = CCMoveTo::create(0.4f, t_arrow2->getPosition() + ccp(-30,0));
+//			CCMoveTo* right_action2 = CCMoveTo::create(0.4f, t_arrow2->getPosition());
+//			CCSequence* t_seq2 = CCSequence::create(left_action2, right_action2, NULL);
+//			CCRepeatForever* t_repeat2 = CCRepeatForever::create(t_seq2);
+//			
+//			t_arrow2->runAction(t_repeat2);
+			
+			typing_box->startTyping("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깍을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!", end_func2);
+		};
+		
+		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+															  {
+																  asuka->setPositionX(480+asuka->getContentSize().width*asuka->getScale() - asuka->getContentSize().width*asuka->getScale()*2.f/3.f*t);
+															  }, [=](float t)
+															  {
+																  asuka->setPositionX(480+asuka->getContentSize().width*asuka->getScale() - asuka->getContentSize().width*asuka->getScale()*2.f/3.f*t);
+																  
+																  typing_box->startTyping("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요.", end_func1);
+															  }));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		CCNode* tutorial_node = CCNode::create();
+//		getParent()->addChild(tutorial_node);
+//		
+//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//		if(screen_scale_x < 1.f)
+//			screen_scale_x = 1.f;
+//		
+//		CCNode* t_stencil_node = CCNode::create();
+//		CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+//		t_stencil1->setContentSize(CCSizeMake(320*thumb_texture->getScale(), 430*thumb_texture->getScale()) + CCSizeMake(20, 40));
+//		t_stencil1->setPosition(ccp(40, myDSH->ui_center_y-10));
+//		t_stencil_node->addChild(t_stencil1);
+//		
+//		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+//		t_clipping->setAlphaThreshold(0.1f);
+//		
+//		float screen_scale_y = myDSH->ui_top/320.f;
+//		
+//		float change_scale = 1.f;
+//		CCPoint change_origin = ccp(0,0);
+////		if(screen_scale_x > 1.f)
+////		{
+////			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+////			change_scale = screen_scale_x;
+////		}
+////		if(screen_scale_y > 1.f)
+////			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+//		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+//		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//		
+//		
+//		CCSprite* t_gray = CCSprite::create("back_gray.png");
+//		t_gray->setScaleX(screen_scale_x);
+//		t_gray->setScaleY(myDSH->ui_top/320.f);
+//		t_gray->setOpacity(0);
+//		t_gray->setPosition(ccp(240,myDSH->ui_center_y));
+//		t_clipping->addChild(t_gray);
+//		
+//		CCSprite* t_arrow1 = CCSprite::create("main_tutorial_arrow1.png");
+//		t_arrow1->setRotation(-90);
+//		t_arrow1->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15,0));
+//		t_clipping->addChild(t_arrow1);
+//		
+//		StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent6), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//		t_ment1->setAnchorPoint(ccp(0.f,0.5f));
+//		t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().width/2.f + 3, 0));
+//		t_clipping->addChild(t_ment1);
+//		
+//		CCSprite* t_arrow2 = CCSprite::create("main_tutorial_arrow1.png");
+//		t_arrow2->setRotation(-90);
+//		t_arrow2->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, -25));
+//		t_clipping->addChild(t_arrow2);
+//		
+//		StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//		t_ment2->setAnchorPoint(ccp(0.f,0.5f));
+//		t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().width/2.f + 3, 0));
+//		t_clipping->addChild(t_ment2);
+//		
+//		CCSprite* t_arrow3 = CCSprite::create("main_tutorial_arrow1.png");
+//		t_arrow3->setRotation(-90);
+//		t_arrow3->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, -43));
+//		t_clipping->addChild(t_arrow3);
+//		
+//		StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent8), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//		t_ment3->setAnchorPoint(ccp(0.f,0.5f));
+//		t_ment3->setPosition(t_arrow3->getPosition() + ccp(t_arrow3->getContentSize().width/2.f + 3, 0));
+//		t_clipping->addChild(t_ment3);
+//		
+//		
+//		float item_scale = 0.18f;
+//		CCPoint item_base_position = ccp(40, myDSH->ui_center_y-10) + ccpMult(ccp(-160,-215), 0.17f) + ccp(7,-7);
+//		CCPoint distance_position = ccp(14,0);
+//		
+//		CCNode* temp_item_node = CCNode::create();
+//		tutorial_node->addChild(temp_item_node);
+//		
+//		vector<ITEM_CODE> t_vec_list;
+//		t_vec_list.clear();
+//		t_vec_list.push_back(kIC_baseSpeedUp);
+//		t_vec_list.push_back(kIC_doubleItem);
+//		t_vec_list.push_back(kIC_magnet);
+//		t_vec_list.push_back(kIC_heartUp);
+//		
+//		for(int i=0;i<t_vec_list.size();i++)
+//		{
+//			GraySprite* item_img = GraySprite::create(CCString::createWithFormat("item%d.png", t_vec_list[i])->getCString());
+//			item_img->setScale(item_scale);
+//			item_img->setOpacity(150);
+//			item_img->setPosition(ccpAdd(item_base_position, ccpMult(distance_position, i)));
+//			temp_item_node->addChild(item_img);
+//			
+//			CCSprite* item_case = CCSprite::create("ingame_itembox.png");
+//			item_case->setPosition(ccp(item_img->getContentSize().width/2.f, item_img->getContentSize().height/2.f));
+//			item_case->setScale(1.f/0.4f);
+//			item_case->setOpacity(150);
+//			item_img->addChild(item_case, -1);
+//		}
+//		
+//		
+//		TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+//		tutorial_node->addChild(t_suction);
+//		t_suction->setTouchEnabled(true);
+//		
+//		t_clipping->setInverted(true);
+//		tutorial_node->addChild(t_clipping, 9999);
+//		
+//		tutorial_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+//											   {
+//												   t_gray->setOpacity(t*255);
+//											   }, [=](float t)
+//											   {
+//												   t_gray->setOpacity(255);
+//												   
+//												   
+//												   t_suction->is_on_touch_began_func = true;
+//												   t_suction->touch_began_func = [=]()
+//												   {
+//													   t_suction->is_on_touch_began_func = false;
+//													   
+//													   temp_item_node->removeFromParent();
+//													   
+//													   t_arrow1->removeFromParent();
+//													   t_ment1->removeFromParent();
+//													   
+//													   t_arrow2->removeFromParent();
+//													   t_ment2->removeFromParent();
+//													   
+//													   t_arrow3->removeFromParent();
+//													   t_ment3->removeFromParent();
+//													   
+//													   t_stencil1->setPosition(ccp(440, myDSH->ui_center_y-10));
+//													   
+//													   CCSprite* t_arrow4 = CCSprite::create("main_tutorial_arrow1.png");
+//													   t_arrow4->setRotation(90);
+//													   t_arrow4->setPosition(t_stencil1->getPosition() + ccp(-t_stencil1->getContentSize().width/2.f - 15, 0));
+//													   t_clipping->addChild(t_arrow4);
+//													   
+//													   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent9), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
+//													   t_ment4->setAnchorPoint(ccp(1.f,0.5f));
+//													   t_ment4->setPosition(t_arrow4->getPosition() + ccp(-t_arrow4->getContentSize().width/2.f - 3, 0));
+//													   t_clipping->addChild(t_ment4);
+//													   
+//													   t_suction->is_on_touch_began_func = true;
+//													   t_suction->touch_began_func = [=]()
+//													   {
+//														   t_suction->is_on_touch_began_func = false;
+//														   
+//														   t_arrow4->removeFromParent();
+//														   t_ment4->removeFromParent();
+//														   
+//														   t_stencil1->setContentSize(CCSizeMake(70, 70));
+//														   t_stencil1->setPosition(ccp(40, myDSH->ui_center_y-10 + 75));
+//														   
+//														   CCLabelBMFont* t_combo_label = CCLabelBMFont::create("288", "combo.fnt");
+//														   t_combo_label->setAnchorPoint(ccp(0.5f,0.5f));
+//														   t_combo_label->setPosition(t_stencil1->getPosition() + ccp(0,-4));
+//														   t_combo_label->setScale(1.f/game_node->getScale());
+//														   tutorial_node->addChild(t_combo_label);
+//														   
+//														   CCSprite* t_combo_front = CCSprite::create("combo_front.png");
+//														   t_combo_front->setAnchorPoint(ccp(0.5f,0.5f));
+//														   t_combo_front->setPosition(t_stencil1->getPosition() + ccp(0,-10));
+//														   t_combo_front->setScale(0.6f/game_node->getScale());
+//														   tutorial_node->addChild(t_combo_front);
+//														   
+//														   CCSprite* t_arrow5 = CCSprite::create("main_tutorial_arrow1.png");
+//														   t_arrow5->setRotation(-90);
+//														   t_arrow5->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, 0));
+//														   t_clipping->addChild(t_arrow5);
+//														   
+//														   StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent10), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//														   t_ment5->setAnchorPoint(ccp(0.f,0.5f));
+//														   t_ment5->setPosition(t_arrow5->getPosition() + ccp(t_arrow5->getContentSize().width/2.f + 3, 0));
+//														   t_clipping->addChild(t_ment5);
+//														   
+//														   t_suction->is_on_touch_began_func = true;
+//														   t_suction->touch_began_func = [=]()
+//														   {
+//															   t_suction->is_on_touch_began_func = false;
+//															   
+//															   t_combo_label->removeFromParent();
+//															   t_combo_front->removeFromParent();
+//															   
+//															   t_arrow5->removeFromParent();
+//															   t_ment5->removeFromParent();
+//															   
+//															   t_stencil1->setPosition(ccp(-100,-100));
+//															   
+//															   KSLabelTTF* t_final_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent11), mySGD->getFont().c_str(), 15);
+//															   t_final_label->setColor(ccc3(100, 200, 255));
+//															   t_final_label->enableOuterStroke(ccBLACK, 2.f);
+//															   t_final_label->setPosition(ccp(240, 50));
+//															   t_clipping->addChild(t_final_label);
+//															   
+//															   t_suction->is_on_touch_began_func = true;
+//															   t_suction->touch_began_func = [=]()
+//															   {
+//																   t_suction->is_on_touch_began_func = false;
+//																   
+//																   t_final_label->removeFromParent();
+//																   
+//																   tutorial_node->addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+//																														 {
+//																															 t_gray->setOpacity(255*t);
+//																														 }, [=](float t)
+//																														 {
+//																															 t_gray->setOpacity(255*t);
+//																															 
+//																															 mControl->isStun = false;
+//																															 myJack->isStun = t_jack_stun;
+//																															 
+//																															 exit_target->onEnter();
+//																															 startControl();
+//																															 ((ControlJoystickButton*)mControl)->resetTouch();
+//																															 tutorial_node->removeFromParent();
+//																														 }));
+//															   };
+//														   };
+//													   };
+//												   };
+//												   
+//											   }));
 	}
 	
 	schedule(schedule_selector(Maingame::counting));
