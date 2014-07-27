@@ -2195,6 +2195,8 @@ void Jack::endReviveJack()
 {
 	isDie = false;
 	isStun = false;
+	
+	myGD->communication("Main_stopBackingCheck");
 
 //	CCTexture2D* jack_texture = CCTextureCache::sharedTextureCache()->addImage("jack2.png");
 //
