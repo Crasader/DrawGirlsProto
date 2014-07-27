@@ -208,6 +208,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	baBox->setFunction([=](CCObject*){
 		if(baBox->isEnabled() == false)
 			return;
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		baBox->setEnabled(false);
 		if(m_front1->getScaleY() <= 0.5f)
 			return;
@@ -228,6 +229,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	gaBox->setFunction([=](CCObject*){
 		if(gaBox->isEnabled() == false)
 			return;
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		gaBox->setEnabled(false);
 		if(m_front1->getScaleY() <= 0.5f)
 			return;
@@ -246,6 +248,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	boBox->setFunction([=](CCObject*){
 		if(boBox->isEnabled() == false)
 			return;
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		boBox->setEnabled(false);
 		if(m_front1->getScaleY() <= 0.5f)
 			return;
@@ -529,6 +532,7 @@ void JsGababo::showHandsMotion(std::function<void(void)> endLeft, std::function<
 			if(endLeft) {
 				endLeft();
 			}
+			AudioEngine::sharedInstance()->playEffect("se_mg_mini.mp3");
 		}
 	});
 	npcManager->runAnimationsForSequenceNamed("gababo_start");
@@ -689,6 +693,7 @@ void JsGababo::onPressConfirm(CCObject* t)
 	if(m_front3->getScaleY() <= 0.5f)
 		return;
 	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	meManager->runAnimationsForSequenceNamed("Default Timeline");
 	npcManager->runAnimationsForSequenceNamed("Default Timeline");
 	m_leftHand->removeFromParent();
@@ -709,6 +714,7 @@ void JsGababo::onPressConfirm(CCObject* t)
 	};
 	if(m_currentJudge == "draw")
 	{
+		AudioEngine::sharedInstance()->playEffect("sg_mg_fail.mp3");
 		m_ba->setEnabled(false);
 		m_ga->setEnabled(false);
 		m_bo->setEnabled(false);
@@ -736,6 +742,8 @@ void JsGababo::onPressConfirm(CCObject* t)
 			m_bo->setEnabled(false);
 			contextSwitching(m_front3, m_front1, [=](){
 				rollBack();
+				
+				AudioEngine::sharedInstance()->playEffect("sg_mg_light.mp3");
 				auto lightPair = KS::loadCCBI<CCSprite*>(this, "gababo_change.ccbi");
 //				lightPair.first->setScale(0.8f);
 				CCSprite* light = lightPair.first;
@@ -942,6 +950,7 @@ void JsGababo::showHandsMotionWrapper()
 					
 					CCSprite* result_stamp = CCSprite::create("endless_winner.png");
 				
+					AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
 					// YH 코드.
 					addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																								 {
@@ -1072,6 +1081,7 @@ void JsGababo::showHandsMotionWrapper()
 }
 void JsGababo::showResult()
 {
+	AudioEngine::sharedInstance()->playEffect("sg_mg_fail.mp3");
 	BonusGameReward gr1 = m_rewards[m_winCount];
 	//	gr1.spriteName = "shop_ruby2.png";
 	//	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
@@ -1127,7 +1137,11 @@ void JsGababo::setupTutorial()
 	button->setFunction([=](CCObject*){
 		if(button->isEnabled() == false)
 			return;
+	
 		
+			
+			
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 		CCSprite* tutoGababo;
 		if(m_tutorialStep == 1)
 		{
@@ -1203,4 +1217,19 @@ int JsGababo::loseSkill(int i)
 int JsGababo::drawSkill(int i)
 {
 	return i;
+}
+SEL_CallFuncN JsGababo::onResolveCCBCCCallFuncSelector(CCObject * pTarget, const char* pSelectorName)
+{
+	CCB_SELECTORRESOLVER_CALLFUNC_GLUE(this, "firstsound", JsGababo::firstSound);
+	CCB_SELECTORRESOLVER_CALLFUNC_GLUE(this, "secondsound", JsGababo::secondSound);
+	return NULL;
+}
+
+void JsGababo::firstSound()
+{
+	CCLog("first Sound");
+}
+void JsGababo::secondSound()
+{
+	CCLog("second Sound"); 
 }
