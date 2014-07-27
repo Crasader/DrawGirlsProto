@@ -214,7 +214,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		CCNode* junior_node = CCNode::create();
-		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-18.5f,0));
+		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-11.5f,0));
 		mission_back->addChild(junior_node);
 		
 		std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
@@ -263,7 +263,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		
 		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(25,0));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(18,0));
 		mission_back->addChild(t_condition_label);
 		
 		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
@@ -584,6 +584,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 		
 		CCSprite* time_img = CCSprite::create("item8.png");
+		time_img->setScale(0.5f);
 		time_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-20,0));
 		mission_back->addChild(time_img);
 		
@@ -815,7 +816,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
 			CCNode* junior_node = CCNode::create();
-			junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-18.5f,0));
+			junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-11.5f,0));
 			mission_back->addChild(junior_node);
 			
 			std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
@@ -864,7 +865,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
-			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(25,0));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(18,0));
 			mission_back->addChild(t_condition_label);
 			
 			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
@@ -927,6 +928,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			int sec_value = mySDS->getIntegerForKey(kSDF_stageInfo, stage_number, "playtime") - mySD->getClearConditionTimeLimit();
 			
 			CCSprite* time_img = CCSprite::create("item8.png");
+			time_img->setScale(0.5f);
 			time_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-20,0));
 			mission_back->addChild(time_img);
 			

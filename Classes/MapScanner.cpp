@@ -922,7 +922,7 @@ void MapScanner::setTopBottomBlock()
 		top_block_lock->setPosition(ccp(160,(myGD->limited_step_top-1)*pixelSize));
 		addChild(top_block_lock, blockZorder);
 		
-		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, top_block_lock->getContentSize().width, top_block_lock->getContentSize().height-sub_value)));
+		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, sub_value, top_block_lock->getContentSize().width, top_block_lock->getContentSize().height)));
 		
 //		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 //		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -1040,7 +1040,7 @@ void MapScanner::setTopBottomBlock()
 		bottom_block_lock->setPosition(ccp(160,(myGD->limited_step_bottom-1)*pixelSize+2));
 		addChild(bottom_block_lock, blockZorder);
 		
-		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, bottom_block_lock->getContentSize().width, bottom_block_lock->getContentSize().height-sub_value)));
+		CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("temp_block_lock.png", CCRectMake(0, 0, bottom_block_lock->getContentSize().width, bottom_block_lock->getContentSize().height)));
 		
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
