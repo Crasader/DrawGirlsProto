@@ -4472,7 +4472,7 @@ void MainFlowScene::setTop()
 	postbox_count_case->addChild(postbox_count_label);
 	
     TRACE();
-	countingtMessage();
+	countingMessage();
 	TRACE();
 	
 	
