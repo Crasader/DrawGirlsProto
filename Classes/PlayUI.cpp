@@ -3289,13 +3289,13 @@ void PlayUI::myInit ()
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		CCSprite* item_img = CCSprite::create("mission_item.png");
-		item_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-25,0));
+		item_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-21,0));
 		mission_back->addChild(item_img);
 		
 		
 		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat("/%d", clr_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 12);
 		t_condition_label->setAnchorPoint(ccp(0,0.5f));
-		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,0));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,-1));
 		addChild(t_condition_label, 2);
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(t_condition_label);

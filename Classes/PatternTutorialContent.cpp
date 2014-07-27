@@ -112,11 +112,13 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	
 	pattern_title = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))), mySGD->getFont().c_str(), 14.f);
 	pattern_title->setColor(ccc3(255, 170, 20));
+	pattern_title->disableOuterStroke();
 	pattern_title->setAnchorPoint(ccp(0.5f,0.5f));
 	pattern_title->setPosition(ccp(case_back->getContentSize().width/2.f, 50));
 	case_back->addChild(pattern_title);
 	
 	pattern_content = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))), mySGD->getFont().c_str(), 12);
+	pattern_content->disableOuterStroke();
 	pattern_content->setAnchorPoint(ccp(0.5f,0.5f));
 	pattern_content->setPosition(ccp(case_back->getContentSize().width/2.f, 28));
 	case_back->addChild(pattern_content);

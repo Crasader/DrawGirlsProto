@@ -87,7 +87,7 @@ void PauseContent::gohomeAction(CCObject* sender, CCControlEvent t_event)
 	
 	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_notGohomeEndlessTutorialMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_notGohomeEndlessTutorialMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
 	}
 	else
 		gohome_selector();
@@ -108,7 +108,7 @@ void PauseContent::replayAction(CCObject* sender, CCControlEvent t_event)
 	
 	if(mySGD->is_endless_mode)
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_notReplayEndlessMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_notReplayEndlessMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
 	}
 	else
 		replay_selector();

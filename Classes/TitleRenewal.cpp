@@ -724,18 +724,18 @@ void TitleRenewalScene::checkReceive()
 					
 					CCSprite* title_name = CCSprite::create("temp_title_name.png");
 					title_name->setAnchorPoint(ccp(0.5,0));
-					title_name->setPosition(ccp(240,160));//10));
+					title_name->setPosition(ccp(240,137));//10));
 					addChild(title_name, 1);
 					
 //					CCSprite* logo_img = CCSprite::create("temp_title_sumlanlogo.png");
 //					logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
 //					addChild(logo_img, 1);
 					
-					CCSprite* progress_back = CCSprite::create("temp_title_loading_back.png");
+					CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
 					progress_back->setPosition(ccp(240,80));
 					addChild(progress_back, 1);
 					
-					progress_timer = CCProgressTimer::create(CCSprite::create("temp_title_loading_center.png"));
+					progress_timer = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
 					progress_timer->setType(kCCProgressTimerTypeBar);
 					progress_timer->setMidpoint(ccp(0,0));
 					progress_timer->setBarChangeRate(ccp(1,0));
@@ -743,9 +743,9 @@ void TitleRenewalScene::checkReceive()
 					progress_timer->setPosition(ccp(240, 80));
 					addChild(progress_timer, 1);
 					
-					CCSprite* progress_top = CCSprite::create("temp_title_loading_front.png");
-					progress_top->setPosition(ccp(240,80));
-					addChild(progress_top, 1);
+//					CCSprite* progress_top = CCSprite::create("temp_title_loading_front.png");
+//					progress_top->setPosition(ccp(240,80));
+//					addChild(progress_top, 1);
 					
 					
 					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.8f, [=](float t){
@@ -2199,6 +2199,8 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	myDSH->setIntegerForKey(kDSH_Key_showedScenario, 0);
+	
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
