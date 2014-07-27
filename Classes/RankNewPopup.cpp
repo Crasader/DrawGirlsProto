@@ -132,7 +132,6 @@ bool RankNewPopup::init()
 		
 		KSLabelTTF* rewardTitle = KSLabelTTF::create("보상내용", mySGD->getFont().c_str(), 13.f);
 		rewardTitle->setPosition(ccp(40.5f,  189.5f));
-		//rewardTitle->setColor(ccc3(255, 170, 22));
 		main_inner_left->addChild(rewardTitle);
 		setFormSetter(rewardTitle);
 		
