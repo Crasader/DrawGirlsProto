@@ -52,19 +52,20 @@ enum SetMapType{
 };
 
 enum mapType{
-	mapBlock = -4,
-	mapScaningEmptyCumber,
-	mapScaningEmptySide,
-	mapOutline,
-	mapEmpty,
-	mapOldline,
-	mapOldget,
-	mapNewline,
-	mapNewget,
-	mapScaningCheckLine,
-	mapScaningCheckGet,
-	mapRealNewline
+	mapBlock = -4, // 잠금에서 쓰는지 확인
+	mapScaningEmptyCumber, // 스캐닝들은 연산 중간에 쓰는거
+	mapScaningEmptySide, // 연산 중간에 쓰는거
+	mapOutline, // 아래쪽 아웃라인 (완전히 바깥라인) & 잠금 영역도 이것으로 씀.
+	mapEmpty, // 아무것도 없는거(획득할 수 있는 영역)
+	mapOldline, // 획득한 라인
+	mapOldget, // 획득한 영역
+	mapNewline, // 긋고 있는 선
+	mapNewget, // 스캔중에 임시로 쓰는거.
+	mapScaningCheckLine, // 임시로 쓰는거
+	mapScaningCheckGet, // 연산중에 임시로 쓰는거
+	mapRealNewline // 연산 할 때 쓰는거..
 };
+
 
 enum JackBaseSpeedTag{
 	kJackBaseSpeedTag_level1 = 0,
