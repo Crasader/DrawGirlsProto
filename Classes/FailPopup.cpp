@@ -404,6 +404,13 @@ bool FailPopup::init()
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
+																									  if(is_today_mission_success)
+																									  {
+																										  mySGD->is_today_mission_first = false;
+																										  TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+																										  addChild(t_popup, kZ_FP_popup);
+																									  }
+																									  
 																									  scenario_node->removeFromParent();
 																								  }));
 																	 });
@@ -417,6 +424,13 @@ bool FailPopup::init()
 			
 			addChild(KSTimer::create(0.1f, [=]()
 									 {
+										 if(is_today_mission_success)
+										 {
+											 mySGD->is_today_mission_first = false;
+											 TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+											 addChild(t_popup, kZ_FP_popup);
+										 }
+										 
 										 scenario_node->removeFromParent();
 									 }));
 		};
@@ -531,19 +545,52 @@ bool FailPopup::init()
 	}
 	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)
 	{
-		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_emptyItem);
+		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=]()
+		{
+			if(is_today_mission_success)
+			{
+				mySGD->is_today_mission_first = false;
+				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+				addChild(t_popup, kZ_FP_popup);
+			}
+		}, [=](){}, kPurchaseGuideType_emptyItem);
 		addChild(t_popup, kZ_FP_popup+1);
 	}
 	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0 &&
 			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount()+1 >= mySGD->getStupidNpuHelpFailCount())
 	{
-		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
+		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=]()
+		{
+			if(is_today_mission_success)
+			{
+				mySGD->is_today_mission_first = false;
+				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+				addChild(t_popup, kZ_FP_popup);
+			}
+		}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
 		addChild(t_popup, kZ_FP_popup+1);
 	}
-	else// if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
+	else if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
 	{
-		EventShopPopup* t_popup = EventShopPopup::create(-300, [=](){});
+		EventShopPopup* t_popup = EventShopPopup::create(-300, [=]()
+		{
+			if(is_today_mission_success)
+			{
+				mySGD->is_today_mission_first = false;
+				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+				addChild(t_popup, kZ_FP_popup);
+			}
+		});
 		addChild(t_popup, kZ_FP_popup+1);
+	}
+	else
+	{
+		if(is_today_mission_success)
+		{
+			mySGD->is_today_mission_first = false;
+			TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+			addChild(t_popup, kZ_FP_popup);
+		}
 	}
 	
 	Json::Value param2;
@@ -605,12 +652,6 @@ bool FailPopup::init()
 																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
 																			{
 																				is_today_mission_success = true;
-																				if(is_today_mission_success)
-																				{
-																					mySGD->is_today_mission_first = false;
-																					TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
-																					addChild(t_popup, kZ_FP_popup);
-																				}
 																			}
 																		  else
 																			{
@@ -1102,12 +1143,6 @@ void FailPopup::startCalcAnimation()
 									left_table->setContentOffset(ccp(0, -2*28+56));
 									
 									left_table->setTouchEnabled(true);
-								
-									if(is_today_mission_success)
-									{
-										TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
-										addChild(t_popup, kZ_FP_popup);
-									}
 									
 									is_end_popup_animation = true;
 									

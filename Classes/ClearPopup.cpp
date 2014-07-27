@@ -1410,6 +1410,14 @@ void ClearPopup::endTakeCard()
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
+																									  if(is_today_mission_success)
+																									  {
+																										  mySGD->is_today_mission_first = false;
+																										  
+																										  TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
+																										  addChild(t_popup, kZ_CP_popup);
+																									  }
+																									  
 																									  scenario_node->removeFromParent();
 																								  }));
 																	 });
@@ -1423,6 +1431,14 @@ void ClearPopup::endTakeCard()
 			
 			addChild(KSTimer::create(0.1f, [=]()
 									 {
+										 if(is_today_mission_success)
+										 {
+											 mySGD->is_today_mission_first = false;
+											 
+											 TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
+											 addChild(t_popup, kZ_CP_popup);
+										 }
+										 
 										 scenario_node->removeFromParent();
 									 }));
 		};
@@ -1534,6 +1550,16 @@ void ClearPopup::endTakeCard()
 																  
 																  typing_box->startTyping("축하합니다. 첫 번째 시험을 통과하셨군요.\n게임이 끝나면 이곳으로 오게 됩니다.", end_func1);
 															  }));
+	}
+	else
+	{
+		if(is_today_mission_success)
+		{
+			mySGD->is_today_mission_first = false;
+			
+			TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
+			addChild(t_popup, kZ_CP_popup);
+		}
 	}
 	
 	
@@ -2130,14 +2156,6 @@ void ClearPopup::startCalcAnimation()
 									left_table->setContentOffset(ccp(0, -2*21+42));
 									
 									left_table->setTouchEnabled(true);
-									
-									if(is_today_mission_success)
-									{
-										mySGD->is_today_mission_first = false;
-										
-										TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){});
-										addChild(t_popup, kZ_CP_popup);
-									}
 									
 									is_end_popup_animation = true;
 									endLoad();
