@@ -121,7 +121,7 @@ public:
 		back->setPosition(ccp(240, 160));
 		addChild(back, kBonusGameZorder_content);
 		
-		KSLabelTTF* titleLbl = KSLabelTTF::create("보너스 게임", mySGD->getFont().c_str(), 15);
+		KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kBonusGame), mySGD->getFont().c_str(), 15);
 		titleLbl->setPosition(ccp(84.0, 301.0));
 		back->addChild(titleLbl);
 		setFormSetter(titleLbl);
@@ -148,7 +148,7 @@ public:
 		//////////////////////////////////////////////////////
 		
 		CCScale9Sprite* buttonBack = CCScale9Sprite::create("mainbutton_purple.png");
-		m_startMenu = CommonButton::create("게임시작", 23.f, CCSizeMake(175.f, 55.f),
+		m_startMenu = CommonButton::create(getLocal(LK::kBonusGameStart), 23.f, CCSizeMake(175.f, 55.f),
 																			 buttonBack, m_touchPriority - 1);
 		//		m_startMenu->setTitleColorForDisable(ccc3(37, 18, 0));
 		//		m_startMenu->setTitleColor(ccc3(37, 18, 0));
@@ -174,7 +174,7 @@ public:
 
 		value3["linebreak"] = true;
 		value3["linespacing"] = 20.f;
-		KSLabelTTF* desc = KSLabelTTF::create("게임 설명", mySGD->getFont().c_str(), 13.f);
+		KSLabelTTF* desc = KSLabelTTF::create(getLocal(LK::kBonusGameDesc), mySGD->getFont().c_str(), 13.f);
 		desc->setColor(ccc3(180, 255, 0));
 
 		desc->setPosition(ccp(realFront->getContentSize().width/2.f, realFront->getContentSize().height/2.f+20));
@@ -187,18 +187,15 @@ public:
 		
 		if(m_gameCode == kBonusGameCode_gababo)
 		{
-			KSLabelTTF* title_gamename = KSLabelTTF::create("가위! 바위! 보!", mySGD->getFont().c_str(), 33.f);
+			KSLabelTTF* title_gamename = KSLabelTTF::create(getLocal(LK::kBonusGameGababo), mySGD->getFont().c_str(), 33.f);
 			title_gamename->setColor(ccc3(255, 230, 0));
 			title_gamename->enableOuterStroke(ccc3(0, 0, 0), 2.f, true);
 			title_gamename->setPosition(ccpFromSize(realFront->getContentSize()) / 2.f + ccp(0, 80.f));
 			realFront->addChild(title_gamename);
 
-			StyledLabelTTF* content_front = StyledLabelTTF::create({
-				{"캐릭터와 눈치를 보며", value1.toStyledString()},
-				{"", value3.toStyledString()},
-				{"가위바위보를 해보세요!", value1.toStyledString()},
-				{"", value3.toStyledString()}
-			}, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* content_front = StyledLabelTTF::create(getLocal(LK::kGababoDesc1),
+																														 mySGD->getFont().c_str(),
+																														 11.f, 999, StyledAlignment::kCenterAlignment);
 			content_front->setPosition(ccp(realFront->getContentSize().width/2.f, realFront->getContentSize().height/2.f-2));
 			realFront->addChild(content_front);
 			content_front->setOldAnchorPoint();
@@ -208,17 +205,14 @@ public:
 		}
 		if(m_gameCode == kBonusGameCode_touchtouch)
 		{
-			KSLabelTTF* title_gamename = KSLabelTTF::create("터치! 터치!", mySGD->getFont().c_str(), 24.f);
+			KSLabelTTF* title_gamename = KSLabelTTF::create(getLocal(LK::kBonusGameTouch), mySGD->getFont().c_str(), 24.f);
 
 			title_gamename->setPosition(ccpFromSize(realFront->getContentSize()) / 2.f + ccp(0, 80.f));
 			realFront->addChild(title_gamename);
 
-			StyledLabelTTF* content_front = StyledLabelTTF::create({
-				{"최대한 많이 터치를 하세요.", value1.toStyledString()},
-				{"", value3.toStyledString()},
-				{"돈이 쏟아져요!", value1.toStyledString()},
-				{"", value3.toStyledString()}
-			}, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* content_front = StyledLabelTTF::create(getLocal(LK::kTouchDesc1),
+																														 mySGD->getFont().c_str(),
+																														 11.f, 999, StyledAlignment::kCenterAlignment);
 			content_front->setPosition(ccp(realFront->getContentSize().width/2.f, realFront->getContentSize().height/2.f-2));
 			content_front->setOldAnchorPoint();
 			realFront->addChild(content_front);
@@ -317,10 +311,7 @@ public:
 		rLabel->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 		contentBack->addChild(rLabel);
 	
-		StyledLabelTTF* comment = StyledLabelTTF::create("<font color=#FFFFFF newline=12>축하합니다.</font>"
-																										 "<font color=#FFFFFF newline=12>보상선물은 선물함에서 확인하세요.</font>"
-																										 "<font color=#FFFFFF>그럼 퍼펙트 클리어 후 다시 만나요!</font>"
-																										 , mySGD->getFont().c_str(),
+		StyledLabelTTF* comment = StyledLabelTTF::create(getLocal(LK::kBonusCong), mySGD->getFont().c_str(),
 																										 13.f, 999, StyledAlignment::kCenterAlignment);
 		contentBack->addChild(comment);
 		comment->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -12.5 + 10.f));
