@@ -497,6 +497,7 @@ bool MainFlowScene::init()
 
 void MainFlowScene::updateCardHistory(CCNode *t_loading)
 {
+	TRACE();
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = keep_card_number;
@@ -504,18 +505,22 @@ void MainFlowScene::updateCardHistory(CCNode *t_loading)
 	
 	hspConnector::get()->command("updateCardHistory", param, [=](Json::Value result_data)
 								 {
+									 TRACE();
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
+										 TRACE();
 										 mySGD->network_check_cnt = 0;
 										 
 										 t_loading->removeFromParent();
 									 }
 									 else
 									 {
+										 TRACE();
 										 mySGD->network_check_cnt++;
 										 
 										 if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
 										 {
+											 TRACE();
 											 mySGD->network_check_cnt = 0;
 											 
 											 ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
@@ -1287,7 +1292,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			
 			if(t_info.before_locked_puzzle_count == 0)
 			{
-				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 11.5f);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->disableOuterStroke();
 				condition_title->setPosition(ccp(67.5f, 121));
@@ -1313,21 +1318,21 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					else if(t_info.keep_weekday == 6)
 						weekday_string = "토요일";
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), t_info.keep_week_start, t_info.keep_week_end)->getCString(), mySGD->getFont().c_str(), 9);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), t_info.keep_week_start, t_info.keep_week_end)->getCString(), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else if(t_info.is_have_date_condition)
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), t_info.keep_date_start.substr(4,2).c_str(), t_info.keep_date_start.substr(6,2).c_str(), t_info.keep_date_start.substr(8,2).c_str(), t_info.keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 9);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), t_info.keep_date_start.substr(4,2).c_str(), t_info.keep_date_start.substr(6,2).c_str(), t_info.keep_date_start.substr(8,2).c_str(), t_info.keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), mySGD->getFont().c_str(), 9);
+					KSLabelTTF* condition_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
@@ -1369,7 +1374,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				else
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
-					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
 					detail_label->disableOuterStroke();
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
@@ -1405,19 +1410,19 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			
 			if(t_info.before_locked_puzzle_count == 0)
 			{
-				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 11.5f);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->disableOuterStroke();
 				condition_title->setPosition(ccp(67.5f, 121));
 				not_clear_img->addChild(condition_title);
 				
-				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 9);
+				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
 				condition_content->disableOuterStroke();
 				condition_content->setPosition(ccp(67.5f, 102.5f));
 				not_clear_img->addChild(condition_content);
 				
 				CCLabelTTF* c_label = CCLabelTTF::create();
-				KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
 				detail_label->disableOuterStroke();
 				detail_label->setPosition(ccp(0,0));
 				c_label->addChild(detail_label);
@@ -4528,18 +4533,22 @@ void MainFlowScene::setTop()
 
 void MainFlowScene::countingMessage()
 {
+	TRACE();
 	postbox_count_case->setVisible(false);
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getSocialID();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
-	
 	//USE GETMESSAGELIST
 	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
 								 {
+									 TRACE();
 									 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
 									 
 									 if(r["result"]["code"].asInt() != GDSUCCESS)
-										 return;
+										{
+											TRACE();
+											return;
+										}
 									 
 									 int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
 									 
@@ -4559,6 +4568,7 @@ void MainFlowScene::countingMessage()
 									 postbox_count_case->setVisible(message_cnt > 0);
 									 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
 									 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
+									 TRACE();
 								 });
 }
 
@@ -4636,11 +4646,14 @@ void MainFlowScene::closeFriendPoint()
 
 void MainFlowScene::callTimeInfo()
 {
+	TRACE();
 	mySGD->keep_time_info.is_loaded = false;
 	hspConnector::get()->command("gettimeinfo", Json::Value(), [=](Json::Value result_data)
 								 {
+									 TRACE();
 									if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									{
+										TRACE();
 										mySGD->keep_time_info.timestamp = result_data["timestamp"].asUInt();
 										mySGD->keep_time_info.weekNo = result_data["weekNo"].asUInt();
 										mySGD->keep_time_info.weekday = result_data["weekday"].asInt();
@@ -4650,9 +4663,11 @@ void MainFlowScene::callTimeInfo()
 										
 										if(!is_table_openning)
 											tableRefresh();
+										TRACE();
 									}
 									else
 									{
+										TRACE();
 										addChild(KSTimer::create(1.f, [=](){callTimeInfo();}));
 									}
 								 });

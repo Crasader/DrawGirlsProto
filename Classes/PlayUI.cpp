@@ -655,7 +655,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	
 	setPosition(CCPointZero);
 	
-	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterNo.getV()) + t_step*0.1f >= 2.f)
+	if(myGD->jack_base_speed + t_step*0.1f >= 2.f)
 	{
 		CCSprite* speed_label = CCSprite::create("speed_max.png");
 		speed_label->setPosition(ccp(0,0));

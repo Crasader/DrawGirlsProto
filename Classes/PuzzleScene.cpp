@@ -542,8 +542,10 @@ bool PuzzleScene::init()
 		transaction_param["memberID"] = hspConnector::get()->getMemberID();
 		clear_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
 												  {
+													  TRACE();
 													  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 													  {
+														  TRACE();
 														  mySGD->network_check_cnt = 0;
 														  
 														  t_loading->removeFromParent();
@@ -552,6 +554,7 @@ bool PuzzleScene::init()
 													  }
 													  else
 													  {
+														  TRACE();
 														  mySGD->network_check_cnt++;
 														  
 														  if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
@@ -585,8 +588,10 @@ bool PuzzleScene::init()
 		
 		clear_command_list.push_back(CommandParam("updateCardHistory", card_param, [=](Json::Value result_data)
 												  {
+													  TRACE();
 													  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 														{
+															TRACE();
 															for(int i=kAchievementCode_cardCollection1;i<=kAchievementCode_cardCollection3;i++)
 															{
 																if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
@@ -646,10 +651,12 @@ bool PuzzleScene::init()
 		{
 			clear_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, [=](Json::Value result_data)
 											  {
+												  TRACE();
 												  if(result_data["result"]["code"] == GDSUCCESS)
 													{
-														
+														TRACE();
 													}
+												  TRACE();
 											  }));
 		}
 
@@ -707,19 +714,24 @@ bool PuzzleScene::init()
 			
 			clear_command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, [=](Json::Value result_data)
 																			{
+																				TRACE();
 																				GraphDogLib::JsonToLog("clear or perfect puzzle", result_data);
-																				
+																				TRACE();
 																				if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																				{
+																					TRACE();
 																					if(result_data["sendGift"].asBool())
 																					{
+																						TRACE();
 																						mySGD->new_puzzle_card_info = result_data["giftData"];
 																						mySGD->is_new_puzzle_card = true;
 																					}
 																				}
+																				TRACE();
 																			}));
 		}
 		
+		TRACE();
 		myHSP->command(clear_command_list);
 	}
 	
@@ -1122,6 +1134,7 @@ void PuzzleScene::endReady()
 
 void PuzzleScene::updateCardHistory(CCNode *t_loading)
 {
+	TRACE();
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
 	param["cardNo"] = keep_card_number;
@@ -1129,8 +1142,10 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 	
 	hspConnector::get()->command("updateCardHistory", param, [=](Json::Value result_data)
 								 {
+									 TRACE();
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
+										 TRACE();
 										 mySGD->network_check_cnt = 0;
 										 
 										 t_loading->removeFromParent();
@@ -1171,6 +1186,7 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 									 }
 									 else
 									 {
+										 TRACE();
 										 mySGD->network_check_cnt++;
 										 
 										 if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
@@ -1190,6 +1206,7 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 																	  }));
 										 }
 									 }
+									 TRACE();
 								 });
 }
 
@@ -2624,6 +2641,7 @@ void PuzzleScene::setRight()
 	{
 		if(saved_ranking_stage_number == -1 || saved_ranking_stage_number != selected_stage_number)
 		{
+			TRACE();
 			if(!loading_progress_img)
 			{
 				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -2633,7 +2651,7 @@ void PuzzleScene::setRight()
 				right_body->addChild(loading_progress_img);
 				reader->release();
 			}
-			
+			TRACE();
 			Json::Value param;
 			param["memberID"] = hspConnector::get()->getSocialID();
 			param["stageNo"] = selected_stage_number;
@@ -2690,6 +2708,7 @@ void PuzzleScene::setRight()
 
 void PuzzleScene::resultGetRank(Json::Value result_data)
 {
+	TRACE();
 	if(loading_progress_img)
 	{
 		loading_progress_img->removeFromParent();
@@ -2698,6 +2717,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		TRACE();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		saved_ranking_data = result_data;
@@ -2890,6 +2910,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
+		TRACE();
 		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
 		right_body->addChild(fail_label);
@@ -3262,6 +3283,7 @@ void PuzzleScene::setTop()
 
 void PuzzleScene::countingMessage()
 {
+	TRACE();
 	postbox_count_case->setVisible(false);
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getSocialID();
@@ -3270,10 +3292,14 @@ void PuzzleScene::countingMessage()
 	//USE GETMESSAGELIST
 	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
 															 {
+																 TRACE();
 																 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
-																 
+																 TRACE();
 																 if(r["result"]["code"].asInt() != GDSUCCESS)
-																	 return;
+																	{
+																		TRACE();
+																		return;
+																	}
 																 
 																 int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
 																 
@@ -3293,6 +3319,7 @@ void PuzzleScene::countingMessage()
 																 postbox_count_case->setVisible(message_cnt > 0);
 																 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
 																 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
+																 TRACE();
 															 });
 }
 
