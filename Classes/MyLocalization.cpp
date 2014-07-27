@@ -2350,6 +2350,13 @@ void MyLocal::en()
 	en->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	en->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
+	en->setObject(CCString::create("<font size=12>PVP랭킹은 연승이 중요해요.</font>"), kMyLocalKey_endlessOpeningMarquee1);
+	en->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	en->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	en->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	en->setObject(CCString::create("<font size=13>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	en->setObject(CCString::create("<font size=13>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
 //	en->setObject(CCString::create("This is a game in which you\nhave to gain as much area as\npossible using up, down, left,\nand right gestures."), kMyLocalKey_tutorial1);
@@ -3288,6 +3295,13 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	ja->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
+	
+	ja->setObject(CCString::create("<font size=12>PVP랭킹은 연승이 중요해요.</font>"), kMyLocalKey_endlessOpeningMarquee1);
+	ja->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	ja->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	ja->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ja->setObject(CCString::create("<font size=13>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ja->setObject(CCString::create("<font size=13>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
