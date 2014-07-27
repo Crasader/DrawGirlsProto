@@ -514,6 +514,7 @@ bool ClearPopup::init()
 
 void ClearPopup::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
 	addChild(t_loading, 9999);
 	tryTransaction(t_loading);

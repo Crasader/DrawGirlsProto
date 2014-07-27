@@ -300,6 +300,7 @@ bool EndlessModeResult::init()
 
 void EndlessModeResult::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
 	tryTransaction();
 }
 

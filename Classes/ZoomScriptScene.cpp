@@ -210,6 +210,7 @@ bool ZoomScript::init()
 
 void ZoomScript::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
 	CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
 	CCDelayTime* delay1 = CCDelayTime::create(1.f);
 	
