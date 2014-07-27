@@ -248,6 +248,7 @@ void EndlessModeOpening::setMain()
 	s_info->addChild(s_info_label);
 	CCSprite* d_info = CCSprite::create("endless_bt_up.png");
 	KSLabelTTF* d_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
+	d_info_label->setColor(ccc3(20, 50, 70));
 	d_info_label->disableOuterStroke();
 	d_info_label->setPosition(ccpFromSize(d_info->getContentSize()/2.f));
 	d_info->addChild(d_info_label);
@@ -280,6 +281,7 @@ void EndlessModeOpening::setMain()
 	s_reward->addChild(s_reward_label);
 	CCSprite* d_reward = CCSprite::create("endless_bt_up.png");
 	KSLabelTTF* d_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
+	d_reward_label->setColor(ccc3(20, 50, 70));
 	d_reward_label->disableOuterStroke();
 	d_reward_label->setPosition(ccpFromSize(d_reward->getContentSize()/2.f));
 	d_reward->addChild(d_reward_label);
