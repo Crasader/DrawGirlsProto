@@ -3780,7 +3780,7 @@ void PoisonLine::myInit (IntPoint t_sp, int frame)
 	mapPoint = t_sp;
 	
 	//		initWithFile("poison_line.png");
-	auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution5.ccbi");
+	auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution7.ccbi");
 	line = ret.first;
 	KS::setBlendFunc(line, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	line->setPositionType(kCCPositionTypeGrouped);

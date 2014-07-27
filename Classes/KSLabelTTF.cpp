@@ -417,6 +417,7 @@ void KSLabelTTF::enableGradation(ccColor4B startColor, ccColor4B endColor, CCPoi
 	m_endColor = endColor;
 	m_alongVector = alongVector;
 	m_gradationMode = true;
+//	updateColor();
 	updateTexture();
 	// test!!!!
 }
@@ -429,5 +430,7 @@ void KSLabelTTF::disableGradation()
 		m_clippingNodeForGra = nullptr;
 	}
 	updateTexture();
+	
+//	updateColor();
 }
 
