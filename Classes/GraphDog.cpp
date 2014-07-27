@@ -244,6 +244,12 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 		cmdQueue.commands[buf] = cmd;
 		cmdCollect.push_back(cmd);
 	}
+    
+    if(i==0){
+        CCLOG("FUCKFUCK");
+        TRACE();
+    }
+//    CCAssert(i!=0, "funck why i == 0");
 	
 	
 	jsonTotalCmd["country"]=hspConnector::get()->getCountryCode();
@@ -272,12 +278,16 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 	int thr_id;
 	
 	// 쓰레드 생성 아규먼트로 1 을 넘긴다.
+    TRACE();
 	thr_id = pthread_create(&p_thread, NULL, t_function, (void*)insertIndex);
-	if (thr_id < 0)
+	TRACE();
+    if (thr_id < 0)
 	{
 		//쓰레드생성오류시
 		//@ JsonBox::Object resultobj;
-		Json::Value resultobj;
+        CCLOG("thread create error!!!!");
+		TRACE();
+        Json::Value resultobj;
 		//@		resultobj["state"]= JsonBox::Value("error");
 		//@		resultobj["errorMsg"]=JsonBox::Value("don't create thread");
 		//@		resultobj["errorCode"]=JsonBox::Value(1001);
@@ -287,7 +297,8 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 		resultobj["state"]= "error";
 		resultobj["errorMsg"]="don't create thread";
 		resultobj["errorCode"]=1001;
-		
+        
+        TRACE();
 		for(std::vector<CommandType>::const_iterator iter = cmdCollect.begin(); iter != cmdCollect.end(); ++iter)
 		{
 			//@@if( iter->target != 0 && iter->selector != 0)
@@ -295,10 +306,13 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 			if(iter->func!=NULL)iter->func(resultobj);
 		}
 		
+        TRACE();
 		if( cmdQueue.chunk.memory )
 			free(cmdQueue.chunk.memory);
 		commandQueue.erase(insertIndex);
-		return false;
+		
+        TRACE();
+        return false;
 	}
 	
 	return true;
