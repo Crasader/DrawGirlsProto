@@ -226,11 +226,11 @@ void StartSettingPopup::setMain()
 	{
 		CCScale9Sprite* mission_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 		mission_back->setContentSize(CCSizeMake(278, 26));
-		mission_back->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-34));
+		mission_back->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-23.5f));
 		main_case->addChild(mission_back);
 		
 		CCRect mission_size = CCRectMake(0, 0, 225, 22);
-		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+97, main_case->getContentSize().height+2-34);
+		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+97, main_case->getContentSize().height+2-23.5f);
 		
 //		CCSprite* temp_mission = CCSprite::create("whitePaper.png", mission_size);
 //		temp_mission->setOpacity(100);
@@ -256,14 +256,13 @@ void StartSettingPopup::setMain()
 			mission_label->runAction(t_repeat);
 		}
 		
-		CCScale9Sprite* mission_title_back = CCScale9Sprite::create("tip.png", CCRectMake(0, 0, 55, 32), CCRectMake(27, 15, 1, 2));
-		mission_title_back->setContentSize(CCSizeMake(55, 32));
-		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-34));
+		CCSprite* mission_title_back = CCSprite::create("tabbutton_up.png");
+		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-25));
 		main_case->addChild(mission_title_back);
 		
 		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 10.5f);
 		mission_title_label->disableOuterStroke();
-		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f));
+		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f) + ccp(0,1));
 		mission_title_back->addChild(mission_title_label);
 		
 //		CCScale9Sprite* mission_img = CCScale9Sprite::create("common_time.png", CCRectMake(0, 0, 22, 22), CCRectMake(10, 10, 2, 2));

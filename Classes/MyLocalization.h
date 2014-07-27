@@ -868,6 +868,13 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_noReview,
 	kMyLocalKey_gem100,
 	
+	kMyLocalKey_endlessOpeningMarquee1,
+	kMyLocalKey_endlessOpeningMarquee2,
+	kMyLocalKey_endlessOpeningMarquee3,
+	kMyLocalKey_endlessOpeningMarquee4,
+	kMyLocalKey_rankNewMarquee1,
+	kMyLocalKey_rankNewMarquee2,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

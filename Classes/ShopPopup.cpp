@@ -655,6 +655,9 @@ bool ShopPopup::init()
 	
 	is_add_gray = false;
 	
+	is_continue = false;
+	continue_end = nullptr;
+	
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -1090,14 +1093,46 @@ void ShopPopup::menuAction(CCObject* pSender)
 										
 										if(result_data["result"]["code"].asInt() == GDSUCCESS)
 										{
-											
+											if(is_continue)
+											{
+												is_menu_enable = false;
+												
+												if(is_add_gray)
+												{
+													addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+																						   {
+																							   gray->setOpacity(255*t);
+																						   }, [=](float t)
+																						   {
+																							   gray->setOpacity(255*t);
+																							   gray->removeFromParent();
+																						   }));
+												}
+												
+												CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+													
+												}, [=]()
+																			{
+																				if(target_final)
+																					(target_final->*delegate_final)();
+																				if(is_set_close_func)
+																					close_func();
+																				if(continue_end != nullptr)
+																					continue_end();
+																				removeFromParent();
+																			});
+											}
+											else
+											{
+												is_menu_enable = true;
+											}
 										}
 										else
 										{
+											is_menu_enable = true;
 											mySGD->clearChangeGoods();
 											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 										}
-										is_menu_enable = true;
 									});
 									
 									
@@ -2529,7 +2564,39 @@ void ShopPopup::requestItemDelivery()
 //			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
 			loading_layer->removeFromParent();
-			is_menu_enable = true;
+			if(is_continue)
+			{
+				is_menu_enable = false;
+				
+				if(is_add_gray)
+				{
+					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+														   {
+															   gray->setOpacity(255*t);
+														   }, [=](float t)
+														   {
+															   gray->setOpacity(255*t);
+															   gray->removeFromParent();
+														   }));
+				}
+				
+				CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+					
+				}, [=]()
+											{
+												if(target_final)
+													(target_final->*delegate_final)();
+												if(is_set_close_func)
+													close_func();
+												if(continue_end != nullptr)
+													continue_end();
+												removeFromParent();
+											});
+			}
+			else
+			{
+				is_menu_enable = true;
+			}
 		}
 		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
 		{

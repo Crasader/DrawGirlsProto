@@ -62,6 +62,9 @@ public:
 	
 	void setShopCode(ShopCode t_code);
 	
+	bool is_continue;
+	function<void()> continue_end;
+	
 private:
 	bool is_add_gray;
 	bool is_set_close_func;

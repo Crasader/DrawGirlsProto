@@ -81,7 +81,7 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	CCScale9Sprite* tip_marquee_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	tip_marquee_back->setContentSize(CCSizeMake(278, 26));
-	tip_marquee_back->setPosition(ccp(back_case->getContentSize().width*0.655f, back_case->getContentSize().height+2-34));
+	tip_marquee_back->setPosition(ccp(back_case->getContentSize().width*0.655f, back_case->getContentSize().height+2-23.5f));
 	back_case->addChild(tip_marquee_back);
 	
 	string sale_percent_string = NSDS_GS(kSDS_GI_shopEventRuby_int1_sale_s, 0);
@@ -95,12 +95,12 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
 	tip_marquee_back->addChild(tipMaquee);
 	
-	CCSprite* tipBack = CCSprite::create("tip.png");
-	tipBack->setPosition(ccp(back_case->getContentSize().width*0.417f, back_case->getContentSize().height+2-34));
+	CCSprite* tipBack = CCSprite::create("tabbutton_up.png");
+	tipBack->setPosition(ccp(back_case->getContentSize().width*0.417f, back_case->getContentSize().height+2-25));
 	back_case->addChild(tipBack);
 	KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
 	//	tipLbl->disableOuterStroke();
-	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f);
+	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f + ccp(0,1));
 	tipBack->addChild(tipLbl);
 	
 	

@@ -1426,6 +1426,13 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	ko->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
+	ko->setObject(CCString::create("<font size=12>PVP랭킹은 연승이 중요해요.</font>"), kMyLocalKey_endlessOpeningMarquee1);
+	ko->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	ko->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	ko->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ko->setObject(CCString::create("<font size=13>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ko->setObject(CCString::create("<font size=13>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
 //	ko->setObject(CCString::create("왼쪽으로 제스쳐를 해보세요."), kMyLocalKey_tutorial10);
