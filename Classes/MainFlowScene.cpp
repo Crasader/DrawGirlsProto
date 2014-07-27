@@ -1031,7 +1031,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 													  if(result_data["result"]["code"].asInt() != GDSUCCESS)
 														{
 															mySGD->clearChangeGoods();
-															addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+															addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 														}
 													  else
 														{
@@ -3232,35 +3232,27 @@ void MainFlowScene::setBottom()
 //	bottom_list.push_back(etc_frame);
 	
 	CCSprite* n_etc_img = CCSprite::create("mainflow_etc_event.png");
-//	KSLabelTTF* n_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
-//	n_etc_label->enableOuterStroke(ccBLACK, 1.f);
-//	n_etc_label->setPosition(ccp(n_etc_img->getContentSize().width/2.f, 7));
-//	n_etc_img->addChild(n_etc_label);
 	
-	KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-	
-	n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-5,18));
-	n_event_ment->setAnchorPoint(ccp(1,0.5));
-	n_etc_img->addChild(n_event_ment);
+//	KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+//	n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-5,18));
+//	n_event_ment->setAnchorPoint(ccp(1,0.5));
+//	n_etc_img->addChild(n_event_ment);
 	
 	CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
-	n_event_ment_case->setPosition(ccpFromSize(n_event_ment->getContentSize()/2.f) + ccp(0,-1));
-	n_event_ment->addChild(n_event_ment_case, -1);
+	n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
+	n_etc_img->addChild(n_event_ment_case);
 	
 	
 	CCSprite* s_etc_img = CCSprite::create("mainflow_etc_event.png");
 	s_etc_img->setColor(ccGRAY);
-//	KSLabelTTF* s_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
-//	s_etc_label->enableOuterStroke(ccBLACK, 1.f);
-//	s_etc_label->setPosition(ccp(s_etc_img->getContentSize().width/2.f, 7));
-//	s_etc_img->addChild(s_etc_label);
-	KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-	s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(0,25));
-	s_etc_img->addChild(s_event_ment);
+	
+//	KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+//	s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(0,25));
+//	s_etc_img->addChild(s_event_ment);
 	
 	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
-	s_event_ment_case->setPosition(ccpFromSize(s_event_ment->getContentSize()/2.f) + ccp(0,-1));
-	s_event_ment->addChild(s_event_ment_case, -1);
+	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
+	s_etc_img->addChild(s_event_ment_case);
 	
 	
 	CCMenuLambda* etc_menu = CCMenuLambda::create();

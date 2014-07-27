@@ -175,6 +175,8 @@ void StartSettingPopup::setMain()
 	tab_label->setPosition(ccp(left_tab->getContentSize().width/2.f,left_tab->getContentSize().height/2.f+1.5f));
 	left_tab->addChild(tab_label);
 	
+	CommonAnimation::applyShadow(tab_label);
+	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	right_back->setContentSize(CCSizeMake(280, 145));
 	right_back->setPosition(main_case->getContentSize().width*0.655f, main_case->getContentSize().height*0.545f);
@@ -222,8 +224,8 @@ void StartSettingPopup::setMain()
 		}
 	}
 	
-	if(!mySGD->is_endless_mode)
-	{
+//	if(!mySGD->is_endless_mode)
+//	{
 		CCScale9Sprite* mission_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 		mission_back->setContentSize(CCSizeMake(278, 26));
 		mission_back->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-23.5f));
@@ -257,7 +259,7 @@ void StartSettingPopup::setMain()
 		}
 		
 		CCSprite* mission_title_back = CCSprite::create("tabbutton_up.png");
-		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-25));
+		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f+9, main_case->getContentSize().height+2-25));
 		main_case->addChild(mission_title_back);
 		
 		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 10.5f);
@@ -275,7 +277,7 @@ void StartSettingPopup::setMain()
 //		mission_img_label->setColor(ccc3(255, 170, 20));
 //		mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
 //		mission_img->addChild(mission_img_label);
-	}
+//	}
 	
 	
 	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);
@@ -439,6 +441,7 @@ void StartSettingPopup::setMain()
 																	 {
 																		 skip_menu->setEnabled(false);
 																		 
+																		 is_menu_enable = false;
 																		 callStart();
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
@@ -461,6 +464,7 @@ void StartSettingPopup::setMain()
 																  }, [=](float t)
 																  {
 																	  t_gray->setOpacity(0);
+																	  is_menu_enable = false;
 																	  callStart();
 																	  scenario_node->removeFromParent();
 																  }));
@@ -982,7 +986,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(n_upgrade);
 		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(n_level);
-		n_level->disableOuterStroke();
+		n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		n_level->setPosition(ccp(70,46));
 		n_upgrade->addChild(n_level);
 		
@@ -991,7 +995,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(s_upgrade);
 		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(s_level);
-		s_level->disableOuterStroke();
+		s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		s_level->setPosition(ccp(70,46));
 		s_upgrade->addChild(s_level);
 		
@@ -1663,7 +1667,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		CCLOG("save userdata fail!!!");
 		mySGD->clearChangeGoods();
 		
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}
@@ -2017,7 +2021,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});
@@ -2060,7 +2064,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});
