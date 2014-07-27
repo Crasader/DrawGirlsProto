@@ -70,7 +70,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	back_case->addChild(main_title);
 	setFormSetter(main_title);
 	
-	CommonAnimation::applyShadow(title_label);
+	CommonAnimation::applyShadow(main_title);
 
 	
 	KSLabelTTF* main_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceContent), mySGD->getFont().c_str(), 10);
