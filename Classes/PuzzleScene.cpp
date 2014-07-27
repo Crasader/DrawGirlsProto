@@ -2401,8 +2401,10 @@ void PuzzleScene::openSettingPopup()
 
 void PuzzleScene::mailPopupClose()
 {
+    TRACE();
 	countingMessage();
 	is_menu_enable = true;
+    TRACE();
 }
 
 void PuzzleScene::heartRefresh()
@@ -3229,8 +3231,9 @@ void PuzzleScene::setTop()
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
+    TRACE();
 	countingMessage();
-	
+	TRACE();
 	
 	
 	achievement_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
@@ -3262,9 +3265,9 @@ void PuzzleScene::setTop()
 //																KS::setOpacity(achievement_count_case, 255);
 //															return true;
 //														}));
-	
+	TRACE();
 	countingAchievement();
-	
+	TRACE();
 	
 	
 	CCSprite* n_event = CCSprite::create("mainflow_new_event.png");
@@ -3321,6 +3324,7 @@ void PuzzleScene::countingMessage()
 																 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
 																 TRACE();
 															 });
+    TRACE();
 }
 
 void PuzzleScene::countingAchievement()

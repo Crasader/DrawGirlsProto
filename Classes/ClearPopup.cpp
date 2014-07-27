@@ -1360,9 +1360,10 @@ void ClearPopup::endTakeCard()
 		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		
 		
-		CCSprite* t_gray = CCSprite::create("back_gray.png");
+		CCSprite* t_gray = CCSprite::create("whitePaper.png");
 		t_gray->setScaleX(screen_scale_x);
 		t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+		t_gray->setColor(ccBLACK);
 		t_gray->setOpacity(0);
 		t_gray->setPosition(ccp(240,160));
 		t_clipping->addChild(t_gray);
@@ -1452,52 +1453,48 @@ void ClearPopup::endTakeCard()
 			typing_box->setVisible(false);
 			
 			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
-			t_arrow1->setScale(0.6f);
+			t_arrow1->setScale(0.5f);
 			t_arrow1->setRotation(-90);
-			t_arrow1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f) + ccp(-20,48));
+			t_arrow1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f) + ccp(0,48));
 			t_clipping->addChild(t_arrow1);
 			
-			StyledLabelTTF* t_ment1 = StyledLabelTTF::create("클리어 등급", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
-			t_ment1->setAnchorPoint(ccp(0,0.5f));
-			t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().width/2.f*t_arrow1->getScale() + 3, 0));
+			StyledLabelTTF* t_ment1 = StyledLabelTTF::create("클리어 등급", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_ment1->setAnchorPoint(ccp(0.5f,0));
+			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f*t_arrow1->getScale() + 3));
 			t_clipping->addChild(t_ment1);
 			
 			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil1->setContentSize(CCSizeMake(200, 55));
-			t_stencil1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f));
+			t_stencil1->setContentSize(CCSizeMake(200, 145));
+			t_stencil1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-11.5f));
 			t_stencil_node->addChild(t_stencil1);
 			
 			
 			CCSprite* t_arrow2 = CCSprite::create("kt_arrow_big.png");
-			t_arrow2->setScale(0.6f);
+			t_arrow2->setScale(0.5f);
 			t_arrow2->setRotation(90);
-			t_arrow2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-115.f) + ccp(-20,0));
+			t_arrow2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-115.f) + ccp(0,5));
 			t_clipping->addChild(t_arrow2);
 			
-			StyledLabelTTF* t_ment2 = StyledLabelTTF::create("점수 정보", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
-			t_ment2->setAnchorPoint(ccp(0,0.5f));
-			t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().width/2.f*t_arrow2->getScale() + 3, 0));
+			StyledLabelTTF* t_ment2 = StyledLabelTTF::create("점수 정보", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_ment2->setAnchorPoint(ccp(0.5f,1));
+			t_ment2->setPosition(t_arrow2->getPosition() + ccp(0, -t_arrow2->getContentSize().height/2.f*t_arrow2->getScale() - 3));
 			t_clipping->addChild(t_ment2);
 			
-			CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil2->setContentSize(CCSizeMake(200, 90));
-			t_stencil2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-45.f));
-			t_stencil_node->addChild(t_stencil2);
 			
 			
 			CCSprite* t_arrow3 = CCSprite::create("kt_arrow_big.png");
-			t_arrow3->setScale(0.6f);
+			t_arrow3->setScale(0.5f);
 			t_arrow3->setRotation(90);
-			t_arrow3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f-115) + ccp(-30,0));
+			t_arrow3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f-115) + ccp(0,5));
 			t_clipping->addChild(t_arrow3);
 			
-			StyledLabelTTF* t_ment3 = StyledLabelTTF::create("스테이지 랭킹", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
-			t_ment3->setAnchorPoint(ccp(0,0.5f));
-			t_ment3->setPosition(t_arrow3->getPosition() + ccp(t_arrow3->getContentSize().width/2.f*t_arrow3->getScale() + 3, 0));
+			StyledLabelTTF* t_ment3 = StyledLabelTTF::create("스테이지 랭킹", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_ment3->setAnchorPoint(ccp(0.5f,1));
+			t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, -t_arrow3->getContentSize().height/2.f*t_arrow3->getScale() - 3));
 			t_clipping->addChild(t_ment3);
 			
 			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil3->setContentSize(CCSizeMake(210, 185));
+			t_stencil3->setContentSize(CCSizeMake(210, 180));
 			t_stencil3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f+3));
 			t_stencil_node->addChild(t_stencil3);
 			
@@ -1525,12 +1522,12 @@ void ClearPopup::endTakeCard()
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 															  {
-																  t_gray->setOpacity(t*255);
+																  t_gray->setOpacity(t*255*80.f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 															  }, [=](float t)
 															  {
-																  t_gray->setOpacity(255);
+																  t_gray->setOpacity(255*80.f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);

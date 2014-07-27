@@ -655,6 +655,9 @@ bool ShopPopup::init()
 	
 	is_add_gray = false;
 	
+	is_continue = false;
+	continue_end = nullptr;
+	
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -732,6 +735,7 @@ bool ShopPopup::init()
 	
 	CCSprite* n_ruby_img = CCSprite::create("tabbutton_down.png");
 	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	n_ruby_label->disableOuterStroke();
 	n_ruby_label->setPosition(ccpFromSize(n_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	n_ruby_img->addChild(n_ruby_label);
 	
@@ -739,6 +743,7 @@ bool ShopPopup::init()
 	s_ruby_img->setColor(ccGRAY);
 	KSLabelTTF* s_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	s_ruby_label->setColor(ccGRAY);
+	s_ruby_label->disableOuterStroke();
 	s_ruby_label->setPosition(ccpFromSize(s_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	s_ruby_img->addChild(s_ruby_label);
 	
@@ -756,6 +761,7 @@ bool ShopPopup::init()
 	
 	CCSprite* n_gold_img = CCSprite::create("tabbutton_down.png");
 	KSLabelTTF* n_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	n_gold_label->disableOuterStroke();
 	n_gold_label->setPosition(ccpFromSize(n_gold_img->getContentSize()/2.f) + ccp(0,2));
 	n_gold_img->addChild(n_gold_label);
 	
@@ -763,6 +769,7 @@ bool ShopPopup::init()
 	s_gold_img->setColor(ccGRAY);
 	KSLabelTTF* s_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	s_gold_label->setColor(ccGRAY);
+	s_gold_label->disableOuterStroke();
 	s_gold_label->setPosition(ccpFromSize(s_gold_img->getContentSize()/2.f) + ccp(0,2));
 	s_gold_img->addChild(s_gold_label);
 	
@@ -780,12 +787,14 @@ bool ShopPopup::init()
 	
 	CCSprite* n_heart_img = CCSprite::create("tabbutton_down.png");
 	KSLabelTTF* n_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	n_heart_label->disableOuterStroke();
 	n_heart_label->setPosition(ccpFromSize(n_heart_img->getContentSize()/2.f) + ccp(0,2));
 	n_heart_img->addChild(n_heart_label);
 	
 	CCSprite* s_heart_img = CCSprite::create("tabbutton_down.png");
 	s_heart_img->setColor(ccGRAY);
 	KSLabelTTF* s_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	s_heart_label->disableOuterStroke();
 	s_heart_label->setColor(ccGRAY);
 	s_heart_label->setPosition(ccpFromSize(s_heart_img->getContentSize()/2.f) + ccp(0,2));
 	s_heart_img->addChild(s_heart_label);
@@ -1090,14 +1099,46 @@ void ShopPopup::menuAction(CCObject* pSender)
 										
 										if(result_data["result"]["code"].asInt() == GDSUCCESS)
 										{
-											
+											if(is_continue)
+											{
+												is_menu_enable = false;
+												
+												if(is_add_gray)
+												{
+													addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+																						   {
+																							   gray->setOpacity(255*t);
+																						   }, [=](float t)
+																						   {
+																							   gray->setOpacity(255*t);
+																							   gray->removeFromParent();
+																						   }));
+												}
+												
+												CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+													
+												}, [=]()
+																			{
+																				if(target_final)
+																					(target_final->*delegate_final)();
+																				if(is_set_close_func)
+																					close_func();
+																				if(continue_end != nullptr)
+																					continue_end();
+																				removeFromParent();
+																			});
+											}
+											else
+											{
+												is_menu_enable = true;
+											}
 										}
 										else
 										{
+											is_menu_enable = true;
 											mySGD->clearChangeGoods();
 											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 										}
-										is_menu_enable = true;
 									});
 									
 									
@@ -2529,7 +2570,39 @@ void ShopPopup::requestItemDelivery()
 //			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
 			loading_layer->removeFromParent();
-			is_menu_enable = true;
+			if(is_continue)
+			{
+				is_menu_enable = false;
+				
+				if(is_add_gray)
+				{
+					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+														   {
+															   gray->setOpacity(255*t);
+														   }, [=](float t)
+														   {
+															   gray->setOpacity(255*t);
+															   gray->removeFromParent();
+														   }));
+				}
+				
+				CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+					
+				}, [=]()
+											{
+												if(target_final)
+													(target_final->*delegate_final)();
+												if(is_set_close_func)
+													close_func();
+												if(continue_end != nullptr)
+													continue_end();
+												removeFromParent();
+											});
+			}
+			else
+			{
+				is_menu_enable = true;
+			}
 		}
 		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
 		{

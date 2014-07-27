@@ -421,25 +421,24 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		
 		
 		CCScale9Sprite* tipBack = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-		tipBack->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-34));
+		tipBack->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-23.5f));
 		main_case->addChild(tipBack, 2);
 		
-		CCScale9Sprite* title_back = CCScale9Sprite::create("tip.png", CCRectMake(0, 0, 55, 32), CCRectMake(27, 15, 1, 2));
-		title_back->setContentSize(CCSizeMake(55, 32));
-		title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-34));
+		CCSprite* title_back = CCSprite::create("tabbutton_up.png");
+		title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-25));
 		main_case->addChild(title_back, 3);
 		
 		tipBack->setContentSize(CCSizeMake(278, 26));
 		KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
 		//tipLbl->setColor(ccc3(255, 155, 0));
 		title_back->addChild(tipLbl, 4);
-		tipLbl->setPosition(ccpFromSize(title_back->getContentSize()) / 2.f);
+		tipLbl->setPosition(ccpFromSize(title_back->getContentSize()) / 2.f + ccp(0,1));
 		
 		CCRect mission_size = CCRectMake(0, 0, 225, 22);
-		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+97, main_case->getContentSize().height+2-34);
+		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+97, main_case->getContentSize().height+2-23.5f);
 		LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, "");
-		tipMaquee->addText("<font size=13>무한모드 점수는 합산되지 않습니다.</font>");
-		tipMaquee->addText("<font size=13>이번주 플레이 누적 점수입니다.</font>");
+		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee1));
+		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee2));
 		tipMaquee->setPosition(mission_position);
 		tipMaquee->startMarquee();
 		tipMaquee->setFontSize(12.f);

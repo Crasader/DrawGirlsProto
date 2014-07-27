@@ -226,6 +226,11 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									  is_menu_enable = true;
 									  schedule(schedule_selector(ContinueContent::countingSchedule));
 								  });
+			t_popup->is_continue = true;
+			t_popup->continue_end = [=]()
+			{
+				continueAction(NULL, CCControlEventTouchUpInside);
+			};
 			getParent()->addChild(t_popup);
 		}
 	}
