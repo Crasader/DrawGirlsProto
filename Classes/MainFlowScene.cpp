@@ -2275,6 +2275,19 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_endlessMode
 };
 
+void MainFlowScene::showShopPopup(int t_code)
+{
+    is_menu_enable = false;
+    
+    ShopPopup* t_shop = ShopPopup::create();
+    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+    t_shop->targetHeartTime(heart_time);
+    t_shop->setShopCode((ShopCode)t_code);
+    t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+//    t_shop->addGray();
+    addChild(t_shop, kMainFlowZorder_popup+100);
+}
+
 void MainFlowScene::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
