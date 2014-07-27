@@ -1305,6 +1305,7 @@ void StartSettingPopup::gachaMenuCreate()
 																		   
 																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 15, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 																			 setFormSetter(item_title_label);
+																		   item_title_label->setColor(ccc3(255, 170, 20));
 																		   item_title_label->setAnchorPoint(ccp(0,1));
 																		   item_title_label->setPosition(title_position);
 																		   main_case->addChild(item_title_label);
@@ -1959,7 +1960,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		//		option_rect->setPosition(option_position);
 		//		main_case->addChild(option_rect);
 		
-		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 11.5f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
+		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10.f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
 		setFormSetter(option_label);
 		option_label->setAnchorPoint(ccp(0,1));
 		option_label->setPosition(option_position);

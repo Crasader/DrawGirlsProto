@@ -292,7 +292,7 @@ void Maingame::onEnterTransitionDidFinish()
 			addChild(intro_boss, introZorder);
 			
 			CCDelayTime* t_delay = CCDelayTime::create(1.f);
-			CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+			CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y+10));
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::startStory));
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
 			intro_boss->runAction(t_seq);
@@ -311,7 +311,7 @@ void Maingame::onEnterTransitionDidFinish()
 
 void Maingame::startStory()
 {
-	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,80));
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,myDSH->ui_center_y-65));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
@@ -2304,7 +2304,7 @@ void Maingame::clearScenario()
 		addChild(intro_boss, introZorder);
 		
 		CCDelayTime* t_delay = CCDelayTime::create(1.f);
-		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y+10));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario2));
 		CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
 		intro_boss->runAction(t_seq);
@@ -2313,7 +2313,7 @@ void Maingame::clearScenario()
 
 void Maingame::clearScenario2()
 {
-	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,80));
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,myDSH->ui_center_y-65));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
@@ -3048,7 +3048,7 @@ void Maingame::failScenario()
 		addChild(intro_boss, introZorder);
 		
 		CCDelayTime* t_delay = CCDelayTime::create(1.f);
-		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y));
+		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y+10));
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::failScenario2));
 		CCSequence* t_seq = CCSequence::create(t_delay, t_move, t_call, NULL);
 		intro_boss->runAction(t_seq);
@@ -3057,7 +3057,7 @@ void Maingame::failScenario()
 
 void Maingame::failScenario2()
 {
-	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,80));
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(120, 40), ccp(240,myDSH->ui_center_y-65));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
