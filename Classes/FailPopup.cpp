@@ -602,8 +602,10 @@ bool FailPopup::init()
 	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
+																	  TRACE();
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
+																		  TRACE();
 																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
 																			{
 																				is_today_mission_success = true;
@@ -619,6 +621,7 @@ bool FailPopup::init()
 																				is_today_mission_success = false;
 																			}
 																	  }
+																	  TRACE();
 																  }));
 	
 	
@@ -648,8 +651,10 @@ void FailPopup::controlButtonAction(CCObject* sender, CCControlEvent t_event)
 
 void FailPopup::tryTransaction(CCNode* t_loading)
 {
+	TRACE();
 	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
 								  {
+									  TRACE();
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
 										  CCLOG("FailPopup transaction success");
@@ -681,6 +686,7 @@ void FailPopup::tryTransaction(CCNode* t_loading)
 																	   }));
 										  }
 									  }
+									  TRACE();
 								  });
 }
 
@@ -691,8 +697,10 @@ FailPopup::~FailPopup()
 
 void FailPopup::resultGetTime(Json::Value result_data)
 {
+	TRACE();
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		TRACE();
 		mySGD->keep_time_info.timestamp = result_data["timestamp"].asUInt();
 		mySGD->keep_time_info.weekNo = result_data["weekNo"].asUInt();
 		mySGD->keep_time_info.weekday = result_data["weekday"].asInt();
@@ -791,13 +799,15 @@ void FailPopup::resultGetTime(Json::Value result_data)
 			}
 		}
 	}
+	TRACE();
 }
 
 void FailPopup::resultGetRank(Json::Value result_data)
 {
+	TRACE();
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		
+		TRACE();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
@@ -981,12 +991,14 @@ void FailPopup::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
+		TRACE();
 		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(loading_img->getPosition());
 		main_case->addChild(fail_label, kZ_FP_img);
 	}
 	
 	loading_img->removeFromParent();
+	TRACE();
 }
 
 void FailPopup::endDecreaseCardDuration()

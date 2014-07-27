@@ -411,7 +411,7 @@ bool ClearPopup::init()
 		PieceHistory t_history = mySGD->getPieceHistory(open_stage);
 		t_history.is_open = true;
 		send_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, [=](Json::Value result_data){
-			
+			TRACE();
 		}));
 	}
 	
@@ -491,8 +491,10 @@ bool ClearPopup::init()
 	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
+																	  TRACE();
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
+																		  TRACE();
 																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
 																			{
 																				is_today_mission_success = true;
@@ -501,6 +503,7 @@ bool ClearPopup::init()
 																			{
 																				is_today_mission_success = false;
 																			}
+																		  TRACE();
 																	  }
 																  }));
 	
@@ -521,10 +524,13 @@ void ClearPopup::controlButtonAction(CCObject* sender, CCControlEvent t_event)
 
 void ClearPopup::tryTransaction(CCNode* t_loading)
 {
+	TRACE();
 	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
 								  {
+									  TRACE();
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
+										  TRACE();
 										  CCLOG("ClearPopup transaction success");
 										  
 										  mySGD->network_check_cnt = 0;
@@ -533,6 +539,7 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 									  }
 									  else
 									  {
+										  TRACE();
 										  CCLOG("ClearPopup transaction fail");
 										  
 										  mySGD->network_check_cnt++;
@@ -554,6 +561,7 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 																	   }));
 										  }
 									  }
+									  TRACE();
 								  });
 }
 
@@ -564,8 +572,10 @@ ClearPopup::~ClearPopup()
 
 void ClearPopup::resultGetTime(Json::Value result_data)
 {
+	TRACE();
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		TRACE();
 		mySGD->keep_time_info.timestamp = result_data["timestamp"].asUInt();
 		mySGD->keep_time_info.weekNo = result_data["weekNo"].asUInt();
 		mySGD->keep_time_info.weekday = result_data["weekday"].asInt();
@@ -664,6 +674,7 @@ void ClearPopup::resultGetTime(Json::Value result_data)
 			}
 		}
 	}
+	TRACE();
 }
 
 //void ClearPopup::frontFlip()
@@ -676,11 +687,12 @@ void ClearPopup::resultGetTime(Json::Value result_data)
 //}
 void ClearPopup::resultGetRank(Json::Value result_data)
 {
+	TRACE();
 	cell_action_list.clear();
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		
+		TRACE();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
@@ -990,12 +1002,14 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
-		hspConnector::get()->command(send_command_list);
+		TRACE();
+		hspConnector::get()->command(send_command_list); // 987987987
 		
 //		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 //		fail_label->setPosition(loading_img->getPosition());
 //		main_case->addChild(fail_label, kZ_CP_img);
 	}
+	TRACE();
 }
 
 void ClearPopup::showPopup()

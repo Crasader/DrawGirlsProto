@@ -250,16 +250,19 @@ bool EndlessModeResult::init()
 	
 	send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
 											 {
+												 TRACE();
 												 GraphDogLib::JsonToLog("finishendlessplay", result_data);
-												 
+												 TRACE();
 												 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 													{
+														TRACE();
 														if(result_data["sendGift"].asBool())
 														{
 															is_menu_enable = false;
 															EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, [=](){is_menu_enable = true;}, result_data);
 															addChild(t_popup, 999);
 														}
+														TRACE();
 													}
 											 }));
 	
@@ -302,10 +305,13 @@ void EndlessModeResult::onEnterTransitionDidFinish()
 
 void EndlessModeResult::tryTransaction()
 {
+	TRACE();
 	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
 								  {
+									  TRACE();
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
+										  TRACE();
 										  mySGD->network_check_cnt = 0;
 										  
 										  ready_loading->removeFromParent();
@@ -313,6 +319,7 @@ void EndlessModeResult::tryTransaction()
 									  }
 									  else
 									  {
+										  TRACE();
 										  mySGD->network_check_cnt++;
 										  
 										  if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
@@ -332,6 +339,7 @@ void EndlessModeResult::tryTransaction()
 																	   }));
 										  }
 									  }
+									  TRACE();
 								  });
 }
 
@@ -588,6 +596,7 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 		param["highPiece"] = mySGD->getUserdataHighPiece();
 		command_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
 		
+		TRACE();
 		myHSP->command(command_list);
 	}
 }
@@ -2245,6 +2254,7 @@ void EndlessModeResult::flipRight(string t_top_title, int t_top_content, string 
 
 void EndlessModeResult::reSetEndlessRank()
 {
+	TRACE();
 	Json::Value param;
 	param.clear();
 	param["memberID"] = myHSP->getMemberID();
@@ -2256,8 +2266,10 @@ void EndlessModeResult::reSetEndlessRank()
 	
 	myHSP->command("finishendlessplay", param, [=](Json::Value result_data)
 										{
+											TRACE();
 											if(result_data["result"]["code"].asInt() != GDSUCCESS)
 											{
+												TRACE();
 												mySGD->network_check_cnt++;
 												
 												if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
@@ -2279,6 +2291,7 @@ void EndlessModeResult::reSetEndlessRank()
 											}
 											else
 											{
+												TRACE();
 												mySGD->network_check_cnt = 0;
 												
 												ready_loading->removeFromParent();
@@ -2301,14 +2314,18 @@ void EndlessModeResult::reSetEndlessRank()
 //													end_func(); removeFromParent();
 												});
 											}
+											TRACE();
 										});
 }
 
 void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 {
+	TRACE();
 	GraphDogLib::JsonToLog("getendlessplaydata : %s", result_data);
+	TRACE();
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		TRACE();
 		mySGD->resetReplayPlayingInfo();
 		
 		if(!result_data["rival"]["playData"].isNull())
@@ -2332,11 +2349,13 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 	}
 	else
 	{
+		TRACE();
 		ready_loading->removeFromParent();
 		ready_loading = NULL;
 		
 		addChild(ASPopupView::getCommonNoti(-999, "뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), 999);
 	}
+	TRACE();
 }
 
 void EndlessModeResult::saveStageInfo(Json::Value result_data)

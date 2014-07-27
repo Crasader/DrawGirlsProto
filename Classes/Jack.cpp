@@ -1599,8 +1599,8 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		{
 			myLog->addLog(kLOG_die_missileToLine, myGD->getCommunication("UI_getUseTime"));
 			
-//			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace))
-//			{
+			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace))
+			{
 				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupMissileTrace, true);
 				CCNode* exit_target = getParent()->getParent();
 				exit_target->onExit();
@@ -1675,14 +1675,14 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				}, [=](){
 					close_menu->setVisible(true);
 				});
-//			}
+			}
 		}
 		else if(die_type == DieType::kDieType_shockwave)
 		{
 			myLog->addLog(kLOG_die_shockwave, myGD->getCommunication("UI_getUseTime"));
 			
-//			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupShockWave))
-//			{
+			if(!myDSH->getBoolForKey(kDSH_Key_wasTutorialPopupShockWave))
+			{
 				myDSH->setBoolForKey(kDSH_Key_wasTutorialPopupShockWave, true);
 				CCNode* exit_target = getParent()->getParent();
 				exit_target->onExit();
@@ -1758,7 +1758,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 					close_menu->setVisible(true);
 				});
 				
-//			}
+			}
 		}
 		else if(die_type == DieType::kDieType_timeover)
 		{
