@@ -493,13 +493,19 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		CCPoint stage_after_position;
 		if(mySGD->rank_reward_data["stage"]["myrank"].asInt() <= 10)
 		{
-			stage_after_position = ccp(26.5f*(mySGD->rank_reward_data["stage"]["myrank"].asInt()/11.f), left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			if(mySGD->rank_reward_data["stage"]["alluser"].asInt() == 0)
+				stage_after_position = ccp(0, left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			else
+				stage_after_position = ccp(left_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt()), left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
 			stage_percent_label->setFontSize(12);
 			stage_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["stage"]["myrank"].asInt())->getCString());
 		}
 		else
 		{
-			stage_after_position = ccp(26.5f + (left_graph_case->getContentSize().width-26.5f)*mySGD->rank_reward_data["stage"]["myrank"].asInt()/(mySGD->rank_reward_data["stage"]["alluser"].asInt()-10), left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			if(mySGD->rank_reward_data["stage"]["alluser"].asInt() == 0)
+				stage_after_position = ccp(0, left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			else
+				stage_after_position = ccp(left_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt()), left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
 		}
 		
 		CCMoveTo* stage_move = CCMoveTo::create(0.5f, stage_after_position);
@@ -509,13 +515,19 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		CCPoint endless_after_position;
 		if(mySGD->rank_reward_data["endless"]["myrank"].asInt() <= 10)
 		{
-			endless_after_position = ccp(26.5f*(mySGD->rank_reward_data["endless"]["myrank"].asInt()/11.f), right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			if(mySGD->rank_reward_data["endless"]["alluser"].asInt() == 0)
+				endless_after_position = ccp(0, right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			else
+				endless_after_position = ccp(right_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt()), right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
 			endless_percent_label->setFontSize(12);
 			endless_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["endless"]["myrank"].asInt())->getCString());
 		}
 		else
 		{
-			endless_after_position = ccp(26.5f + (right_graph_case->getContentSize().width-26.5f)*mySGD->rank_reward_data["endless"]["myrank"].asInt()/(mySGD->rank_reward_data["endless"]["alluser"].asInt()-10), right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			if(mySGD->rank_reward_data["endless"]["alluser"].asInt() == 0)
+				endless_after_position = ccp(0, right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+			else
+				endless_after_position = ccp(right_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt()), right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
 		}
 		
 		CCMoveTo* endless_move = CCMoveTo::create(0.5f, endless_after_position);

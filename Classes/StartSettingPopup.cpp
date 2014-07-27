@@ -1947,6 +1947,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 15, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		setFormSetter(item_title_label);
+		item_title_label->setColor(ccc3(255, 170, 20));
 		item_title_label->setAnchorPoint(ccp(0,1));
 		item_title_label->setPosition(title_position);
 		main_case->addChild(item_title_label);
