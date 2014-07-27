@@ -126,11 +126,9 @@ public:
 		back->addChild(titleLbl);
 		setFormSetter(titleLbl);
 		
-		KSLabelTTF* title_label_shadow = KSLabelTTF::create(titleLbl->getString(), mySGD->getFont().c_str(), 15);
-		title_label_shadow->setColor(ccBLACK);
-		title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
-		title_label_shadow->setPosition(ccpFromSize(titleLbl->getContentSize()/2.f) + ccp(0,-1));
-		titleLbl->addChild(title_label_shadow, -1);
+		CommonAnimation::applyShadow(titleLbl);
+
+		
 		
 		auto realFront = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 		realFront->setContentSize(CCSizeMake(548 / 2.f, 506 / 2.f));

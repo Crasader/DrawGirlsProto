@@ -5,6 +5,7 @@
 USING_NS_CC;
 #include <functional>
 
+class KSLabelTTF;
 class CommonAnimation
 {
 public:
@@ -14,6 +15,7 @@ public:
 												std::function<void(void)> ingFunctor = nullptr, std::function<void(void)> endFunctor = nullptr);
 	static void closePopup(CCNode* node, CCNode* t_container, CCNodeRGBA* gray,
 												std::function<void(void)> ingFunctor = nullptr, std::function<void(void)> endFunctor = nullptr);
+	static void applyShadow(KSLabelTTF* parent);
 	//virtual void registerWithTouchDispatcher();
 };
 

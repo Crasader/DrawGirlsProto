@@ -677,11 +677,8 @@ bool ShopPopup::init()
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
 	title_back->addChild(title_label);
 	
-	KSLabelTTF* title_label_shadow = KSLabelTTF::create(title_label->getString(), mySGD->getFont().c_str(), 15);
-	title_label_shadow->setColor(ccBLACK);
-	title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
-	title_label_shadow->setPosition(ccpFromSize(title_label->getContentSize()/2.f) + ccp(0,-1));
-	title_label->addChild(title_label_shadow, -1);
+	CommonAnimation::applyShadow(title_label);
+
 	
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	main_inner->setContentSize(CCSizeMake(424, 204));

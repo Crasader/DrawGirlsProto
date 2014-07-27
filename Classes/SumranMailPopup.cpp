@@ -94,11 +94,8 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	setFormSetter(title_label);
 	title_back->addChild(title_label);
 	
-	KSLabelTTF* title_label_shadow = KSLabelTTF::create(title_label->getString(), mySGD->getFont().c_str(), 15);
-	title_label_shadow->setColor(ccBLACK);
-	title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
-	title_label_shadow->setPosition(ccpFromSize(title_label->getContentSize()/2.f) + ccp(0,-1));
-	title_label->addChild(title_label_shadow, -1);
+	CommonAnimation::applyShadow(title_label);
+
 	
 	m_nothingMessage = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nogift), mySGD->getFont().c_str(), 14);
 	m_nothingMessage->setPosition(ccpMult(main_case->getContentSize(),0.5));

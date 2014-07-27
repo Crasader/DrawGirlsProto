@@ -485,8 +485,8 @@ void Maingame::finalSetting()
 	addChild(myUI, myUIZorder);
 	myUI->clear_time_event_func = bind(&Maingame::showClearTimeEvent, this, _1, _2);
 
-//	OnePercentTutorial* opt = OnePercentTutorial::create(0.99, nullptr, nullptr);
-//	addChild(opt, 9999);
+	OnePercentTutorial* opt = OnePercentTutorial::create(0.99, nullptr, nullptr);
+	addChild(opt, 9999);
 //	OnePercentGame* opg = OnePercentGame::create(0.99, nullptr, nullptr);
 //	addChild(opg, 9999);
 	myUI->setMaxBossLife(mySD->getBossMaxLife());
