@@ -90,7 +90,7 @@ bool FailPopup::init()
 	send_command_list.clear();
 	
 	
-	send_command_list.push_back(myLog->getSendLogCommand(CCString::createWithFormat("fail_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString()));
+//	send_command_list.push_back(myLog->getSendLogCommand(CCString::createWithFormat("fail_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString()));
 	
 	if(mySGD->getScore() > myDSH->getIntegerForKey(kDSH_Key_allHighScore))
 	{

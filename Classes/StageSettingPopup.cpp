@@ -783,10 +783,10 @@ void StageSettingPopup::goToGame()
 {
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	
-	Json::Value param;
-	param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
-	
-	hspConnector::get()->command("increaseStats", param, NULL);
+//	Json::Value param;
+//	param["key"] = CCSTR_CWF("stage_start_%d", mySD->getSilType())->getCString();
+//	
+//	hspConnector::get()->command("increaseStats", param, NULL);
 	
 	mySGD->resetLabels();
 	myGD->resetGameData();
