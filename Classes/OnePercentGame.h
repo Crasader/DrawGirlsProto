@@ -54,6 +54,7 @@ public:
 	bool ccTouchBegan(CCTouch* pTouch, CCEvent* pEvent);
 	
 	void putPercentWithIndex(int index);
+	CCTexture2D* getTextureWithGraphImg(int i);
 protected:
 	CCSprite* m_grayBack;
 	CCNode* m_container;
@@ -72,8 +73,10 @@ protected:
 	static const int graphHeight = 176;
 	int m_99State;
 	CCNode* m_currentGainArea, *m_desc;
-	int m_validSize;
+//	int m_validSize;
+	deque<int> m_validSizes;
 	CCSprite* m_validArea;
+	CCSprite* m_validSprite;
 	CCSprite* m_shutter;
 	bool m_touchEnable;
 	std::function<void(void)> m_cancelGacha;
@@ -89,6 +92,7 @@ protected:
 	CCNode* m_tutorialBox, *m_desc3;
 	CCNode* m_failBox, *m_failContent, *m_failTitle;
 	std::set<int> m_percents;
+	CCClippingNode* m_clippingNode;
 //	CCNode* m_command1;
 };
 #endif

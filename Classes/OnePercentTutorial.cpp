@@ -170,11 +170,11 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		m_container->addChild(progress_back, kOnePercentTutorial_Z_content);
 		progress_back->setPosition(ccp(0, -67));
-		CCSprite* validArea = CCSprite::create();
-		validArea->setTextureRect(CCRectMake(0, 0, 50, 15));
+		CCSprite* validArea = CCSprite::create("one_percent_graph100.png");
+//		validArea->setTextureRect(CCRectMake(0, 0, 50, 15));
 		validArea->setPosition(ccp(0, -67));
 		m_container->addChild(validArea, kOnePercentTutorial_Z_content);
-		validArea->setColor(ccc3(232, 0, 192));
+//		validArea->setColor(ccc3(232, 0, 192));
 		
 		setFormSetter(progress_back);
 		setFormSetter(validArea);
