@@ -195,11 +195,11 @@ bool AccountManagerPopup::init(int touchP)
 				
 				toAnotherAccount->setContainerNode(back);
 //				back->setContentSize(CCSizeMake(550 / 2.f, 432 / 2.f));
-				front->setContentSize(CCSizeMake(251,128));
+				front->setContentSize(CCSizeMake(251,126));
 				
 				
 				back->addChild(front);
-				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,15));
+				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,20));
 
 				//					toAnotherAccount->addChild(back);
 				//					CommonAnimation::openPopup(this, back, nullptr);
@@ -339,12 +339,12 @@ bool AccountManagerPopup::init(int touchP)
 		warningPopup->setContainerNode(back);
 		//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
 		//	back->setContentSize(CCSizeMake(200, 200));
-		front->setContentSize(CCSizeMake(251, 282 / 2.f));
+		front->setContentSize(CCSizeMake(251, 282 / 2.f-2));
 
 
 		back->addChild(front);
 
-		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,15));
+		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,20));
 
 		KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kWarningDesc), mySGD->getFont().c_str(), 12.f);
 		//	titleLbl->setColor(ccc3(255, 170, 20));

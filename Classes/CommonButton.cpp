@@ -370,6 +370,31 @@ void CommonButton::setPrice(PriceType priceType, int price){
 		m_priceTypeSprite->setScale(0.9);
 		m_priceTypeSprite->setPosition(ccp(m_priceLbl->getPositionX()-m_priceLbl->getContentSize().width/2-20+2,m_priceLbl->getPositionY()));//getContentSize().height/2.f-m_priceTypeSprite->getContentSize().height/2.f-2));
 		m_btn->addChild(m_priceTypeSprite,11);
+		
+		if(m_priceType == PriceTypePass1 || m_priceType == PriceTypePass2 || m_priceType == PriceTypePass3 || m_priceType == PriceTypePass4 || m_priceType == PriceTypePass5)
+		{
+			GoodsType t_type = kGoodsType_pass6;
+			if(m_priceType == PriceTypePass1)
+				t_type = kGoodsType_pass1;
+			else if(m_priceType == PriceTypePass2)
+				t_type = kGoodsType_pass2;
+			else if(m_priceType == PriceTypePass3)
+				t_type = kGoodsType_pass3;
+			else if(m_priceType == PriceTypePass4)
+				t_type = kGoodsType_pass4;
+			else if(m_priceType == PriceTypePass5)
+				t_type = kGoodsType_pass5;
+			
+			CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+			pass_count_case->setContentSize(CCSizeMake(20, 20));
+			pass_count_case->setPosition(ccpFromSize(m_priceTypeSprite->getContentSize()/2.f) + ccp(9,6));
+			m_priceTypeSprite->addChild(pass_count_case);
+			
+			CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(t_type)), mySGD->getFont().c_str(), 8);
+			pass_count_label->setColor(ccc3(255, 255, 255));
+			pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+			pass_count_case->addChild(pass_count_label);
+		}
 	}
 	
 	

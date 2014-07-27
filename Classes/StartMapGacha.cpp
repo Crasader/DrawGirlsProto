@@ -62,7 +62,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 		
 		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 		pass_count_case->setContentSize(CCSizeMake(20, 20));
-		pass_count_case->setPosition(pass_ticket->getPosition() + ccp(6,6));
+		pass_count_case->setPosition(ccpFromSize(pass_ticket->getContentSize()/2.f) + ccp(9,6));
 		pass_ticket->addChild(pass_count_case);
 		
 		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass2)), mySGD->getFont().c_str(), 8);

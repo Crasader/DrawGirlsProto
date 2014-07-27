@@ -149,7 +149,7 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		ruby_label->setAnchorPoint(ccp(0.5f,0.5f));
 		ruby_label->setPosition(ccpFromSize(inner->getContentSize()/2.f) + ccp(0,-7));
-		inner->addChild(ruby_label);
+		inner->addChild(ruby_label, 3);
 		
 		content_node->addChild(inner, 2);
 		
