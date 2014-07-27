@@ -222,7 +222,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 															  {
 																  ikaruga->setPositionX(-240-ikaruga->getContentSize().width*ikaruga->getScale() + ikaruga->getContentSize().width*ikaruga->getScale()*2.f/3.f*t);
 																  
-																  typing_box->startTyping("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만..", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent60), end_func1);
 															  }));
 	}
 }

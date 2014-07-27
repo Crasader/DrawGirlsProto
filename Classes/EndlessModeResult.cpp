@@ -1638,7 +1638,7 @@ void EndlessModeResult::startCalcAnimation()
 																																			  t_gray->setOpacity(255);
 																																			  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																																			  
-																																			  typing_box->startTyping("PVP가 끝나면 이곳으로 와요.", end_func1);
+																																			  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent61), end_func1);
 																																		  }));
 																				}
 

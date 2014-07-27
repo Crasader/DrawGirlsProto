@@ -372,7 +372,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping("응! 야규짱!", end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial12), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -385,7 +385,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																  {
 																	  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping("껄끄러운 게임미션이로군.\n히바리. 이번 게임에선 부하몬스터를\n표시된 갯수만큼 가둬잡아야 클리어할 수 있어.\n너라면 충분히 해낼 수 있을꺼야.", end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial11), end_func1);
 																  }));
 		}
 		
@@ -528,7 +528,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping("네. 주어진 갯수만큼 생성되는 아이템을\n먹어야 클리어 됩니다.\n클리어하기 더 어려워지겠는데요?", end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial14), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -541,7 +541,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																  {
 																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping("이번엔 게임미션이 조금 다른것 같아요.", end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial13), end_func1);
 																  }));
 		}
 		
@@ -695,7 +695,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping("알고있어!! 게임중에 생기는 시간아이템을\n적절히 먹으면서 플레이하면 문제없을꺼야!!", end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial16), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -708,7 +708,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																  {
 																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping("게임시간이 엄청나게 줄어들었어요.\n조금 서둘러야겠는걸요.", end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial15), end_func1);
 																  }));
 		}
 		

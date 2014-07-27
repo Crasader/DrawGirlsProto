@@ -217,18 +217,18 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 		
 		if(item_list[ing_close_cnt] == kIC_baseSpeedUp)
 		{
-			kt_string1 = "앗! 이건 뭐죠?";
-			kt_string2 = "이 신발을 착용하면 게임을\n더 빠른 스피드로 시작할 수 있어요.\n무료로 몇개 지급되니 사용해보세요.";
+			kt_string1 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial17);
+			kt_string2 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial18);
 		}
 		else if(item_list[ing_close_cnt] == kIC_doubleItem)
 		{
-			kt_string1 = "새로운 아이템이 등장했네요.";
-			kt_string2 = "게임중에 아이템이 두배로 더 많이\n나오도록 해주는 인법서군요.\n많은 도움이 될겁니다.";
+			kt_string1 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial19);
+			kt_string2 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial20);
 		}
 		else if(item_list[ing_close_cnt] == kIC_magnet)
 		{
-			kt_string1 = "이건 자석인가?";
-			kt_string2 = "네. 게임중에 생기는 골드나 아이템을\n더 쉽게 먹을 수 있도록 도와주는\n아이템입니다.";
+			kt_string1 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial21);
+			kt_string2 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial22);
 		}
 		
 		function<void()> end_func2 = [=]()

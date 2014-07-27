@@ -102,7 +102,7 @@ bool PuzzleScene::init()
 	
 	if(before_scene_name == "other")
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1)
+		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1 && puzzle_number == 1)
 		{
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, 1);
 		}
@@ -880,7 +880,7 @@ bool PuzzleScene::init()
 					typing_box->setVisible(true);
 					typing_box->setTouchSuction(true);
 					
-					typing_box->startTyping("먼저 게임준비하러 가볼까요?", end_func3);
+					typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent14), end_func3);
 				};
 				
 				function<void()> end_func1 = [=]()
@@ -1007,7 +1007,7 @@ bool PuzzleScene::init()
 																							  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																							  skip_menu->setEnabled(true);
 																							  
-																							  typing_box->startTyping("이곳은 스테이지를 선택할 수 있는\n퍼즐화면입니다.", end_func1);
+																							  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent13), end_func1);
 																						  }));
 														}));
 			}
