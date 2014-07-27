@@ -116,12 +116,16 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	m_container->addChild(back_img, kOnePercentGame_Z_back);
 	
 	KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
+	titleLbl->disableOuterStroke();
 	titleLbl->setPosition(ccp(89.0, 247.5));
 //	titleLbl->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height - 25)); 			// dt (6.0, 112.5)
 //	titleLbl->setColor(ccc3(255, 170, 20));
 	back_img->addChild(titleLbl);
 	setFormSetter(titleLbl);
 //	titleLbl->setPosition(ccp(0, 40));
+	
+	CommonAnimation::applyShadow(titleLbl);
+
 	
 	CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	inner_back->setContentSize(CCSizeMake(450 / 2.f + 8, 176.5f - 5.f));

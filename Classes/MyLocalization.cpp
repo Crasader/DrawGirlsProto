@@ -1289,11 +1289,11 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
 	ko->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
-	ko->setObject(CCString::create("<font color=#FFFFFF size=10 newline=14>안녕하세요!</font>"
-								   "<font color=#FFFFFF size=10 newline=14>난 카츠라기라고 해요.</font>"
-								   "<font color=#FFFFFF size=10 newline=14>아슬아슬하게 영역을</font>"
-								   "<font color=#FFFFFF size=10 newline=28>100% 획득 못했군요.</font>"
-								   "<font color=#FFFFFF size=10 newline=16>100% 영역획득 할 수 있게</font>"
+	ko->setObject(CCString::create("<font color=#FFFFFF size=10 newline=12>안녕하세요!</font>"
+								   "<font color=#FFFFFF size=10 newline=12>난 카츠라기라고 해요.</font>"
+								   "<font color=#FFFFFF size=10 newline=12>아슬아슬하게 영역을</font>"
+								   "<font color=#FFFFFF size=10 newline=24>100% 획득 못했군요.</font>"
+								   "<font color=#FFFFFF size=10 newline=12>100% 영역획득 할 수 있게</font>"
 									 "<font color=#FFFFFF size=10>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	ko->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	ko->setObject(CCString::create("<font color=#FFFFFF size=10 newline=14>아래 게이지바에서 </font>"
@@ -2220,11 +2220,12 @@ void MyLocal::en()
 	en->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
 	en->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
-	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
-								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
-								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
-								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
+	en->setObject(CCString::create("<font color=#FFFFFF size=10 newline=12>안녕하세요!</font>"
+																 "<font color=#FFFFFF size=10 newline=12>난 카츠라기라고 해요.</font>"
+																 "<font color=#FFFFFF size=10 newline=12>아슬아슬하게 영역을</font>"
+																 "<font color=#FFFFFF size=10 newline=24>100% 획득 못했군요.</font>"
+																 "<font color=#FFFFFF size=10 newline=12>100% 영역획득 할 수 있게</font>"
+																 "<font color=#FFFFFF size=10>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	en->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
 								   "<font color=#FFAA14 size=12 newline=16>0.3%를 추가로 획득할 수 있습니다.</font>"
@@ -3157,11 +3158,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
 	
 	ja->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
-	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아슬아슬하게 영역을 100% 획득을 못했군요!</font>"
-								   "<font color=#FFAA14 size=12 newline=30>보너스 영역 뽑기에 도전해보세요!</font>"
-								   "<font color=#FFAA14 size=14 newline=18>100% 영역 획득 성공시</font>"
-								   "<font color=#FFAA14 size=14>두 단계 위 등급 카드를 획득</font>"
-								   "<font color=#FFFFFF size=14 newline=18>할 수 있어요!</font>"), kMyLocalKey_onePercentTutorial2);
+	ja->setObject(CCString::create("<font color=#FFFFFF size=10 newline=12>안녕하세요!</font>"
+																 "<font color=#FFFFFF size=10 newline=12>난 카츠라기라고 해요.</font>"
+																 "<font color=#FFFFFF size=10 newline=12>아슬아슬하게 영역을</font>"
+																 "<font color=#FFFFFF size=10 newline=24>100% 획득 못했군요.</font>"
+																 "<font color=#FFFFFF size=10 newline=12>100% 영역획득 할 수 있게</font>"
+																 "<font color=#FFFFFF size=10>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	ja->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
 								   "<font color=#FFAA14 size=12 newline=16>0.3%를 추가로 획득할 수 있습니다.</font>"

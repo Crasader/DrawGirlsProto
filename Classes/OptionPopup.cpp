@@ -239,7 +239,10 @@ bool OptionPopup::init()
 	title_label->disableOuterStroke();
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
 	title_back->addChild(title_label);
-	
+
+	CommonAnimation::applyShadow(title_label);
+
+
 	
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	main_inner->setContentSize(CCSizeMake(424, 194));
