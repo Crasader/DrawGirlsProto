@@ -72,7 +72,7 @@ bool RankNewPopup::init()
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
 	title_label->disableOuterStroke();
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	title_back->addChild(title_label);
 	
 //<<<<<<< HEAD
@@ -395,7 +395,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		rest_back->setContentSize(CCSizeMake(194 / 2.f, 40 / 2.f));
 		rankBack->addChild(rest_back);
 		KSLabelTTF* lefttime_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10.5f);
-		lefttime_label->setPosition(ccp(77.5 + 5.f,11.0)); 			// dt (77.5,11.0)
+		lefttime_label->setPosition(ccp(77.5 + 5.f + 6,11.0  - 2 )); 			// dt (77.5,11.0)
 		//lefttime_label->setColor(ccc3(255, 170, 20));
 		lefttime_label->setAnchorPoint(ccp(1,0.5));
 		rest_back->addChild(lefttime_label); // , kZ_CP_img);
@@ -483,7 +483,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 																					 }));
 		percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1,
-																	 rank_percent_case->getContentSize().height/2.f - 2));
+																	 rank_percent_case->getContentSize().height/2.f - 4));
 		rank_percent_case->addChild(percent_label, kZ_CP_img);
 		setFormSetter(rank_percent_case);
 		
@@ -774,7 +774,7 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 		//		left1 = KS::replaceAll(left1, "%", "%");
 		//		left2 = KS::replaceAll(left2, "%", "%");
 		StyledLabelTTF* reward2Title = StyledLabelTTF::create(
-																													ccsf("<font color=#FFAA14 newline=13>%s</font><font color=#FFAA14>%s</font>",
+																													ccsf("<font color=#FFAA14 newline=11>%s</font><font color=#FFAA14>%s</font>",
 																															 left1.c_str(), left2.c_str()),
 																													mySGD->getFont().c_str(), 8,
 																													999, StyledAlignment::kCenterAlignment);
@@ -862,7 +862,7 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 	rewardBack2->addChild(reward2Img);
 	KSLabelTTF* reward2Detail = KSLabelTTF::create(ccsf("x %d", rubyCount), mySGD->getFont().c_str(), 10.f);
 	reward2Detail->setScale(2.0f);
-	reward2Detail->setPosition(ccpFromSize(reward2Img->getContentSize()) / 2.f + ccp(0, -20 + 6));
+	reward2Detail->setPosition(ccpFromSize(reward2Img->getContentSize()) / 2.f + ccp(0, -20 + 8));
 	setFormSetter(reward2Img);
 	C = reward2Img;
 	reward2Detail->setColor(ccc3(255, 255, 255));

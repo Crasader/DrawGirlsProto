@@ -90,7 +90,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
 	title_label->disableOuterStroke();
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	setFormSetter(title_label);
 	title_back->addChild(title_label);
 	
@@ -529,6 +529,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 		title = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(), 13); // "님의"
+		title->disableOuterStroke();
 		title->setPosition(ccp(53.5, 19.5));
 		title->setColor(ccc3(255, 255, 255));
 		title->setAnchorPoint(CCPointZero);
