@@ -1089,11 +1089,31 @@ void MeteorWrapper::myAction()
 	if(ingFrame%mRate == 0)
 	{
 		CCPoint random_fp;
-
-		int screenHeight = (myGD->limited_step_top - myGD->limited_step_bottom)*pixelSize;
-		random_fp.x = m_well512.GetValue(240);
-		random_fp.y = m_well512.GetValue(myGD->getJackPoint().y * pixelSize - screenHeight / 2.f,
-			myGD->getJackPoint().y * pixelSize + screenHeight / 2.f);
+		int loopLimit = 0;
+		// 적절한 위치를 찾을 때 까지.
+		while(1)
+		{
+			loopLimit++;
+			int screenHeight = (myGD->limited_step_top - myGD->limited_step_bottom)*pixelSize;
+			random_fp.x = m_well512.GetValue(240);
+			random_fp.y = m_well512.GetValue(myGD->getJackPoint().y * pixelSize - screenHeight / 2.f,
+																			 myGD->getJackPoint().y * pixelSize + screenHeight / 2.f);
+			
+			IntPoint tempPoint = ccp2ip(random_fp);
+			if(tempPoint.isInnerMap())
+			{
+				if(myGD->mapState[tempPoint.x][tempPoint.y] != mapType::mapOutline) // valid area
+				{
+					break;
+				}
+			}
+			
+			// 혹시나 모를 무한 루프를 대비해 적당히 찾다가 못찾으면 나옴.
+			if(loopLimit >= 200)
+			{
+				break;
+			}
+		}
 
 		CCPoint random_sp;
 		random_sp.x = random_fp.x + 500;

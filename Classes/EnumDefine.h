@@ -10,15 +10,16 @@
 #define DrawingJack_EnumDefine_h
 
 enum mapLoopRange{
-	mapWidthOutlineBegin = 0,
-	mapWidthOutlineEnd = 162,
-	mapHeightOutlineBegin = 0,
-	mapHeightOutlineEnd = 217,
+	mapWidthOutlineBegin = 0, // 실제 맵이 아니고 맵 가장자리에 임시로 틀 하나 놔둔거지
+	mapWidthOutlineEnd = 162, // 마찬가지 실제 맵이 아님
+	mapHeightOutlineBegin = 0, // 실제 맵이 아님
+	mapHeightOutlineEnd = 217, // 실제 맵이 아님
+	// 이 까지는 루프를 돌 때 신경 ㄴ ㄴ
 	
-	mapWidthInnerBegin = 1,
-	mapWidthInnerEnd = 161,
-	mapHeightInnerBegin = 1,
-	mapHeightInnerEnd = 216,
+	mapWidthInnerBegin = 1, // 실제 공간
+	mapWidthInnerEnd = 161, // 실제 공간
+	mapHeightInnerBegin = 1, // 실제 공간
+	mapHeightInnerEnd = 216, // 실제 공간
 };
 
 enum DieType{
