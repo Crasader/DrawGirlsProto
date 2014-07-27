@@ -19,6 +19,8 @@
 #include "FormSetter.h"
 #include "ScrollBar.h"
 #include "CommonAnimation.h"
+#include "TypingBox.h"
+#include "CCMenuLambda.h"
 
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -260,6 +262,82 @@ bool RankNewPopup::init()
 	param["limit"]=50;
 	
 	hspConnector::get()->command("getweeklyrankbyalluser", param, json_selector(this, RankNewPopup::resultGetRank));
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_rank))
+	{
+		myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_rank, true);
+		
+		CCNode* scenario_node = CCNode::create();
+		addChild(scenario_node, 9999);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		
+		
+		CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+		ikaruga->setAnchorPoint(ccp(0,0));
+		ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+		scenario_node->addChild(ikaruga, 1);
+		
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+		typing_box->setHide();
+		scenario_node->addChild(typing_box, 2);
+		
+		CCSprite* n_skip = CCSprite::create("kt_skip.png");
+		CCSprite* s_skip = CCSprite::create("kt_skip.png");
+		s_skip->setColor(ccGRAY);
+		
+		CCMenuLambda* skip_menu = CCMenuLambda::create();
+		skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150));
+		scenario_node->addChild(skip_menu, 3);
+		skip_menu->setTouchPriority(-19999);
+		skip_menu->setEnabled(false);
+		
+		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
+																	 {
+																		 skip_menu->setEnabled(false);
+																		 
+																		 addChild(KSTimer::create(0.1f, [=]()
+																								  {
+																									  scenario_node->removeFromParent();
+																								  }));
+																	 });
+		skip_menu->addChild(skip_item);
+		
+		typing_box->showAnimation(0.3f);
+		
+		function<void()> end_func2 = [=]()
+		{
+			skip_menu->setEnabled(false);
+			
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 scenario_node->removeFromParent();
+									 }));
+		};
+		
+		function<void()> end_func1 = [=]()
+		{
+			typing_box->startTyping("순위마다 보상 내용이 다르니\n잘 확인해 주세요.", end_func2);
+		};
+		
+		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+															  {
+																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+															  }, [=](float t)
+															  {
+																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+																  skip_menu->setEnabled(true);
+																  
+																  typing_box->startTyping("어머! 여기서 또 만나네요?\n이번엔 랭킹에 대해 설명해 드릴께요.\n \n주간랭킹은 일주일 동안 획득한 스테이지\n점수를 합산하여 랭킹이 산정됩니다.", end_func1);
+															  }));
+	}
 	
 	return true;
 }

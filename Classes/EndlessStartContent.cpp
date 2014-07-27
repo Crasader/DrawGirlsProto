@@ -16,6 +16,8 @@
 #include "CommonButton.h"
 #include "FlagSelector.h"
 #include "CommonAnimation.h"
+#include "TypingBox.h"
+
 EndlessStartContent* EndlessStartContent::create(int t_touch_priority, function<void(CCObject*)> t_selector)
 {
 	EndlessStartContent* t_ctc = new EndlessStartContent();
@@ -157,11 +159,74 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 		is_menu_enable = true;
 	});
 	
-//	addChild(KSGradualValue<int>::create(0, 255, 0.25f, [=](int t)
-//										 {
-//											 
-//										 }, [=](int t)
-//										 {
-//											 
-//										 }));
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+	{
+		CCNode* scenario_node = CCNode::create();
+		addChild(scenario_node, 9999);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		
+		
+		CCNode* t_stencil_node = CCNode::create();
+		
+		
+		CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+		t_clipping->setAlphaThreshold(0.1f);
+		
+		float change_scale = 1.f;
+		CCPoint change_origin = ccp(0,0);
+		if(screen_scale_x > 1.f)
+		{
+			change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+			change_scale = screen_scale_x;
+		}
+		if(screen_scale_y > 1.f)
+			change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+		CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+		
+		t_clipping->setInverted(true);
+		scenario_node->addChild(t_clipping, 0);
+		
+		
+		CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+		ikaruga->setScale(1.f-(360-myDSH->ui_top)*3.f/16.f);
+		ikaruga->setAnchorPoint(ccp(0,0));
+		ikaruga->setPosition(ccp(-240-ikaruga->getContentSize().width*ikaruga->getScale(), -myDSH->ui_center_y));
+		scenario_node->addChild(ikaruga, 1);
+		
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50)-ccp(240,myDSH->ui_center_y), ccp(425,25)-ccp(240,myDSH->ui_center_y));
+		typing_box->setHide();
+		scenario_node->addChild(typing_box, 2);
+		
+		typing_box->showAnimation(0.3f);
+		
+		function<void()> end_func1 = [=]()
+		{
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 scenario_node->removeFromParent();
+									 }));
+		};
+		
+		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+															  {
+																  ikaruga->setPositionX(-240-ikaruga->getContentSize().width*ikaruga->getScale() + ikaruga->getContentSize().width*ikaruga->getScale()*2.f/3.f*t);
+															  }, [=](float t)
+															  {
+																  ikaruga->setPositionX(-240-ikaruga->getContentSize().width*ikaruga->getScale() + ikaruga->getContentSize().width*ikaruga->getScale()*2.f/3.f*t);
+																  
+																  typing_box->startTyping("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만..", end_func1);
+															  }));
+	}
 }
+
+
+
+

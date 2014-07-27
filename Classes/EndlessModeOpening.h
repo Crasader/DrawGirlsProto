@@ -78,6 +78,8 @@ private:
 	function<void()> tutorial_success_func;
 	function<void()> tutorial_fail_func;
 	
+	function<void()> kind_tutorial_pvp;
+	
 	bool is_menu_enable;
 	
 	CCSprite* gray;

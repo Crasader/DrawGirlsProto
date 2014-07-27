@@ -833,9 +833,9 @@ bool PuzzleScene::init()
 																				 skip_menu->setEnabled(false);
 																				 
 																				 is_menu_enable = true;
-																				 CCNode* t_node = CCNode::create();
-																				 t_node->setTag(kPuzzleMenuTag_start);
-																				 menuAction(t_node);
+//																				 CCNode* t_node = CCNode::create();
+//																				 t_node->setTag(kPuzzleMenuTag_start);
+//																				 menuAction(t_node);
 																				 
 																				 addChild(KSTimer::create(0.1f, [=]()
 																										  {
@@ -851,9 +851,9 @@ bool PuzzleScene::init()
 					skip_menu->setEnabled(false);
 					
 					is_menu_enable = true;
-					CCNode* t_node = CCNode::create();
-					t_node->setTag(kPuzzleMenuTag_start);
-					menuAction(t_node);
+//					CCNode* t_node = CCNode::create();
+//					t_node->setTag(kPuzzleMenuTag_start);
+//					menuAction(t_node);
 					
 					addChild(KSTimer::create(0.1f, [=]()
 											 {

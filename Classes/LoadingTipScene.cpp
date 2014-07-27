@@ -62,6 +62,7 @@ bool LoadingTipScene::init()
 	setKeypadEnabled(true);
 	
 	next_scene_name = mySGD->getNextSceneName();
+	no_img = NULL;
 	
 	
 	if(next_scene_name == "maingame" && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_default)
@@ -1266,7 +1267,8 @@ void LoadingTipScene::showButton()
 	else
 	{
 		ok_img->setVisible(true);
-		no_img->setVisible(true);
+		if(no_img)
+			no_img->setVisible(true);
 		ok_menu->setVisible(true);
 //		no_review->setVisible(true);
 	}
