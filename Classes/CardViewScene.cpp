@@ -266,7 +266,7 @@ bool CardViewScene::init()
 	is_actioned = true;
 	
 	screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.2f;
+	minimum_scale = (screen_size.height*320)/(screen_size.width*430)*1.25f;
 	
 	//game_node->setPosition(ccp(0,-430*1.5f+480.f*screen_size.height/screen_size.width));
 	
@@ -375,15 +375,15 @@ void CardViewScene::moveListXY(CCPoint t_p)
 	float contentHalfHeight = game_node->getScale()*game_node->getContentSize().height/2.f;
 
 	
-	if(contentHalfWidth*2.f<=screen_size.width/2.f){
+	if(contentHalfWidth*2.f<=480){
 		
 		a_p.x=240;
 
 	}else{
 
 		
-		if(a_p.x<screen_size.width/2.f-contentHalfWidth){
-			a_p.x = screen_size.width/2.f-contentHalfWidth;
+		if(a_p.x<480-contentHalfWidth){
+			a_p.x = 480-contentHalfWidth;
 		}
 		
 		if(contentHalfWidth<a_p.x){
