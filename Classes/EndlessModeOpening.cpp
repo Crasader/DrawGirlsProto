@@ -499,7 +499,7 @@ void EndlessModeOpening::setMain()
 																											  }));
 																				 };
 																				 
-																				 typing_box->startTyping("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요.", end_func3);
+																				 typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent56), end_func3);
 																			 };
 																			 
 																			 this->tutorial_fail_func = [=]()
@@ -575,7 +575,7 @@ void EndlessModeOpening::setMain()
 												 }));
 					};
 					
-					typing_box->startTyping("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요.", end_func3);
+					typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent56), end_func3);
 				};
 				
 				this->tutorial_fail_func = [=]()
@@ -617,7 +617,7 @@ void EndlessModeOpening::setMain()
 				t_clipping->addChild(t_arrow2, 0, 2);
 
 				
-				typing_box->startTyping("다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠.", end_func2);
+				typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent55), end_func2);
 			};
 			
 			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -645,10 +645,8 @@ void EndlessModeOpening::setMain()
 																	  t_clipping->addChild(t_arrow1, 0, 1);
 
 																	  
-																	  typing_box->startTyping("이건 내 정보예요.\n보상내용도 나중에 확인해보세요.", end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent54), end_func1);
 																  }));
-			
-			//123123123
 			
 			
 			

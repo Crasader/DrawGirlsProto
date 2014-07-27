@@ -491,6 +491,11 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 			close_button->setPosition(ccp(case_back->getContentSize().width/2.f - 25, case_back->getContentSize().height/2.f - 22));
 			close_button->setFunction([=](CCObject* sender)
 									  {
+										  if(!t_popup->is_menu_enable)
+											  return;
+										  
+										  t_popup->is_menu_enable = false;
+										  
 										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 										  
 										  CommonAnimation::closePopup(t_popup, t_container, t_popup->getDimmedSprite(), [=](){
@@ -507,6 +512,11 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 			ok_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+45));
 			ok_button->setFunction([=](CCObject* sender)
 									  {
+										  if(!t_popup->is_menu_enable)
+											  return;
+										  
+										  t_popup->is_menu_enable = false;
+										  
 										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 										  
 										  CommonAnimation::closePopup(this, t_container, t_popup->getDimmedSprite(), [=](){
@@ -555,7 +565,10 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 			ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
 			
 			t_popup->getDimmedSprite()->setOpacity(0);
-			CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite());
+			CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite(), nullptr, [=]()
+									   {
+										   t_popup->is_menu_enable = true;
+									   });
 			addChild(t_popup, 999);
 		}
 		else
@@ -1638,7 +1651,7 @@ void EndlessModeResult::startCalcAnimation()
 																																			  t_gray->setOpacity(255);
 																																			  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																																			  
-																																			  typing_box->startTyping("PVP가 끝나면 이곳으로 와요.", end_func1);
+																																			  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent61), end_func1);
 																																		  }));
 																				}
 

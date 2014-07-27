@@ -245,7 +245,7 @@ bool AchievePopup::init()
 		
 		function<void()> end_func1 = [=]()
 		{
-			typing_box->startTyping("모든보상받기 버튼을 누르면 달성한 업적\n보상을 모두 한번에 받을 수 있어요!", end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial2), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -258,7 +258,7 @@ bool AchievePopup::init()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("업적 메뉴에서는 게임 중 달성한 업적을\n확인하고 보상을 받을 수 있습니다.\n앞으로 해야 할 업적들이 정말 많군요!", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial1), end_func1);
 															  }));
 	}
 	

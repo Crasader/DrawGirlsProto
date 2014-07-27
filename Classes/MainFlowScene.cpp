@@ -1674,13 +1674,13 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														function<void()> end_func8 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, yagyu);
-																															typing_box->startTyping("어... 어떻게 라는 건 잘 모르겠고.\n교내에서 아직 있으니까 주변의 적을 정리 하자.", end_func9);
+																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent41), end_func9);
 																														};
 																														
 																														function<void()> end_func7 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box, typing_box2, yagyu, hibari);
-																															typing_box2->startTyping("야규! 히바리를 도와주었구나!", end_func8);
+																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent40), end_func8);
 																														};
 																														
 																														function<void()> end_func6 = [=]()
@@ -1700,7 +1700,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																													  
 																																													  typing_box2->setTouchSuction(false);
 																																													  
-																																													  typing_box->startTyping("히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!", end_func7);
+																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent39), end_func7);
 																																												  }));
 																															typing_box2->setTouchOffScrollAndButton();
 																															typing_box2->setVisible(false);
@@ -1709,25 +1709,25 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														function<void()> end_func5 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
-																															typing_box2->startTyping("응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!", end_func6);
+																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent38), end_func6);
 																														};
 																														
 																														function<void()> end_func4 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
-																															typing_box->startTyping("히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계안에서 훈련하기 때문에\n보통 사람들은 볼수없으니까.", end_func5);
+																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent37), end_func5);
 																														};
 																														
 																														function<void()> end_func3 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
-																															typing_box2->startTyping("흐응... 비밀이라니...\n조금 긴장하게 되..", end_func4);
+																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent36), end_func4);
 																														};
 																														
 																														function<void()> end_func2 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
-																															typing_box->startTyping("쉿. 일반 학생들이 다니는 교정안에서는\n닌자에관한 이야기는 하지 않는게 좋아.\n이곳의 닌자 양성 클래스는\n일반 학생들에겐 비밀이니까!", end_func3);
+																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent35), end_func3);
 																														};
 																														
 																														function<void()> end_func1 = [=]()
@@ -1747,7 +1747,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																													  
 																																													  typing_box->setTouchSuction(false);
 																																													  
-																																													  typing_box2->startTyping("어랏. 아스카도 한조국립대에서 훈련하는거야?\n같이 최고의 닌자를 꿈꿀수있겠구나!!", end_func2);
+																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent34), end_func2);
 																																												  }));
 																															typing_box->setTouchOffScrollAndButton();
 																															typing_box->setVisible(false);
@@ -1765,7 +1765,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																																												  skip_menu->setEnabled(true);
 																																												  
-																																												  typing_box->startTyping("휴.. 이걸로 시험끝!!\n드디어 훈련시작이네~!", end_func1);
+																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent33), end_func1);
 																																											  }));
 																													}
 																													else if(is_unlock_puzzle == 3)
@@ -1829,7 +1829,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														function<void()> end_func10 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
-																															typing_box2->startTyping("아이의 즐거움을 잽싸게 뺏는\n배짱좋은 녀석이군.\n그런 썩은 자식은 우리들이 혼내줄테다!!", end_func11);
+																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent52), end_func11);
 																														};
 																														
 																														function<void()> end_func9 = [=]()
@@ -1837,7 +1837,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																															boy->setVisible(false);
 																															ikaruga->setVisible(true);
 																															
-																															typing_box->startTyping("소매치기예요!!", end_func10);
+																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent51), end_func10);
 																														};
 																														
 																														function<void()> end_func8 = [=]()
@@ -1857,7 +1857,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																													  
 																																													  typing_box2->setTouchSuction(false);
 																																													  
-																																													  typing_box->startTyping("으앙~ 마스크쓴 누나한테\n과자 뺏겼어!!", end_func9);
+																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
 																																												  }));
 																															typing_box2->setTouchOffScrollAndButton();
 																															typing_box2->setVisible(false);
@@ -1866,7 +1866,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														function<void()> end_func7 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
-																															typing_box2->startTyping("어, 응.. 음... 뭐라고 할까\n소화불량이라고나 할까...\n어쨋든 좀 더 몸을 움직이려고... 응?", end_func8);
+																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent49), end_func8);
 																														};
 																														
 																														function<void()> end_func6 = [=]()
@@ -1886,7 +1886,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																													  
 																																													  typing_box2->setTouchSuction(false);
 																																													  
-																																													  typing_box->startTyping("카츠라기님. 오늘 훈련은 끝났는데\n집에 안가세요?", end_func7);
+																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent48), end_func7);
 																																												  }));
 																															typing_box2->setTouchOffScrollAndButton();
 																															typing_box2->setVisible(false);
@@ -1910,7 +1910,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																													  
 																																													  typing_box->setTouchSuction(false);
 																																													  
-																																													  typing_box2->startTyping("이카루가.. 그리고\n야규, 아스카, 히바리도 마침 딱 있었네!", end_func6);
+																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent47), end_func6);
 																																												  }));
 																															typing_box->setTouchOffScrollAndButton();
 																															typing_box->setVisible(false);
@@ -1919,19 +1919,19 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														function<void()> end_func4 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
-																															typing_box->startTyping("응!", end_func5);
+																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent46), end_func5);
 																														};
 																														
 																														function<void()> end_func3 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box, typing_box2, hibari, yagyu);
-																															typing_box2->startTyping("내.. 내가 말하고 싶은건 그것뿐이야..\n히바리, 내일은 히바리가 좋아하는\n우사네 찻집에 가자.", end_func4);
+																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent45), end_func4);
 																														};
 																														
 																														function<void()> end_func2 = [=]()
 																														{
 																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
-																															typing_box->startTyping("야규..", end_func3);
+																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent44), end_func3);
 																														};
 																														
 																														function<void()> end_func1 = [=]()
@@ -1951,7 +1951,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																													  
 																																													  typing_box->setTouchSuction(false);
 																																													  
-																																													  typing_box2->startTyping("히바리는 거치적 거리는 존재따위가 아니야.\n우리들은 모두 강하다고 인정받았으니까.\n히바리의 강한 점은 내가 제일 잘 알고있고,\n또 모두들 알고있어.\n그러니까 더 자신에게 자신감을 가져.", end_func2);
+																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent43), end_func2);
 																																												  }));
 																															typing_box->setTouchOffScrollAndButton();
 																															typing_box->setVisible(false);
@@ -1969,16 +1969,44 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																																												  skip_menu->setEnabled(true);
 																																												  
-																																												  typing_box->startTyping("야규, 아까는 도와줘서 고마워.\n히바리는 거치적거리니까\n이대로면 모두한테 폐를 끼치게되.", end_func1);
+																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent42), end_func1);
 																																											  }));
 																													}
 																													else if(is_unlock_puzzle == 4)
 																													{
 																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 4000);
+																														
+																														skip_menu->setEnabled(false);
+																														
+																														mySGD->setIsUnlockPuzzle(0);
+																														is_unlock_puzzle = 0;
+																														
+																														endUnlockAnimation();
+																														
+																														t_end_func();
+																														
+																														addChild(KSTimer::create(0.1f, [=]()
+																																				 {
+																																					 scenario_node->removeFromParent();
+																																				 }));
 																													}
 																													else if(is_unlock_puzzle == 5)
 																													{
 																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 5000);
+																														
+																														skip_menu->setEnabled(false);
+																														
+																														mySGD->setIsUnlockPuzzle(0);
+																														is_unlock_puzzle = 0;
+																														
+																														endUnlockAnimation();
+																														
+																														t_end_func();
+																														
+																														addChild(KSTimer::create(0.1f, [=]()
+																																				 {
+																																					 scenario_node->removeFromParent();
+																																				 }));
 																													}
 																												}
 																										  }));
@@ -3136,25 +3164,25 @@ void MainFlowScene::setBottom()
 			if(ing_win > 0)
 			{
 				CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-				n_win_back->setContentSize(CCSizeMake(60, 20));
 				n_endless->addChild(n_win_back);
 				
-				CCLabelTTF* n_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 				n_win_back->addChild(n_win_label);
 				
 //				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-				n_win_back->setPosition(ccp(n_endless->getContentSize().width-20, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+				n_win_back->setPosition(ccp(n_endless->getContentSize().width-10, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
 				n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
 				
 				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-				s_win_back->setContentSize(CCSizeMake(60, 20));
 				s_endless->addChild(s_win_back);
 				
-				CCLabelTTF* s_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 				s_win_back->addChild(s_win_label);
 				
 //				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-				s_win_back->setPosition(ccp(s_endless->getContentSize().width-20, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+				s_win_back->setPosition(ccp(s_endless->getContentSize().width-10, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
 				s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
 				
 				refresh_ing_win_func = [=]()
@@ -3179,25 +3207,25 @@ void MainFlowScene::setBottom()
 					if(mySGD->endless_my_victory.getV() > 0)
 					{
 						CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-						n_win_back->setContentSize(CCSizeMake(60, 20));
 						n_endless->addChild(n_win_back);
 						
-						CCLabelTTF* n_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 						n_win_back->addChild(n_win_label);
 						
 //						n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-						n_win_back->setPosition(ccp(n_endless->getContentSize().width-20, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+						n_win_back->setPosition(ccp(n_endless->getContentSize().width-10, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
 						n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
 						
 						CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-						s_win_back->setContentSize(CCSizeMake(60, 20));
 						s_endless->addChild(s_win_back);
 						
-						CCLabelTTF* s_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 						s_win_back->addChild(s_win_label);
 						
 //						s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-						s_win_back->setPosition(ccp(s_endless->getContentSize().width-20, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+						s_win_back->setPosition(ccp(s_endless->getContentSize().width-10, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
 						s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
 					}
 				};
@@ -3569,7 +3597,7 @@ void MainFlowScene::topOnLight()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("우와! 실력이 일취월장인데요?\n벌써 실력이 많이 늘었네요.\n이젠 다른사람과 대전을 해볼까요?\n \n따라오세요.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent53), end_func1);
 															  }));
 	};
 	
@@ -3714,7 +3742,7 @@ void MainFlowScene::topOnLight()
 		function<void()> end_func12 = [=]()
 		{
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping("그럼 시험장으로 이동 하죠.\n1번액자로 입장합니다.", end_func13);
+			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent12), end_func13);
 			
 			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 			t_stencil1->setContentSize(CCSizeMake(120, 210));
@@ -3734,7 +3762,7 @@ void MainFlowScene::topOnLight()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping("숙지하겠습니다.", end_func12);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent11), end_func12);
 		};
 		
 		function<void()> end_func10 = [=]()
@@ -3903,36 +3931,36 @@ void MainFlowScene::topOnLight()
 		
 		function<void()> end_func9 = [=](){
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping("그전에 간단히 메뉴들을 소개해드릴께요.", end_func10);
+			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent10), end_func10);
 		};
 		
 		function<void()> end_func8 = [=](){
 			TypingBox::changeTypingBox(typing_box2, typing_box, ikaruga, asuka);
-			typing_box->startTyping("네. 그러면 잘 부탁 드리겠습니다.", end_func9);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent9), end_func9);
 		};
 		
 		function<void()> end_func7 = [=](){
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다.", end_func8);
+			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent8), end_func8);
 		};
 		
 		function<void()> end_func6 = [=](){
-			typing_box->startTyping("어떤 시험인가요?", end_func7);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent7), end_func7);
 		};
 		
 		function<void()> end_func5 = [=](){
 			TypingBox::changeTypingBox(typing_box2, typing_box, ikaruga, asuka);
-			typing_box->startTyping("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다.", end_func6);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent6), end_func6);
 		};
 		
 		function<void()> end_func4 = [=](){
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을 하신다는군요.", end_func5);
+			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent5), end_func5);
 		};
 		
 		function<void()> end_func3 = [=](){
 			TypingBox::changeTypingBox(typing_box2, typing_box, ikaruga, asuka);
-			typing_box->startTyping("앗 안녕하세요.\n저는 아스카 라고합니다.", end_func4);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent4), end_func4);
 		};
 		
 		function<void()> end_func2 = [=](){
@@ -3951,14 +3979,14 @@ void MainFlowScene::topOnLight()
 																	  
 																	  typing_box->setTouchSuction(false);
 																	  
-																	  typing_box2->startTyping("안녕하세요.\n저는 한조국립대 학생 리더인 이카루가입니다.", end_func3);
+																	  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent3), end_func3);
 																  }));
 			typing_box->setTouchOffScrollAndButton();
 			typing_box->setVisible(false);
 		};
 		
 		function<void()> end_func1 = [=](){
-			typing_box->startTyping("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할수있겠는데?!", end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent2), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -3973,7 +4001,7 @@ void MainFlowScene::topOnLight()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("드디어 오늘부터 닌자훈련을 시작하는구나!!\n할아버지의 명성에 걸 맞는\n훌륭한 닌자가 될꺼야!", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent1), end_func1);
 															  }));
 	}
 	else if(mySGD->is_on_attendance)
@@ -4273,6 +4301,11 @@ void MainFlowScene::topPuzzleMode()
 														{
 															top_list[0]->setPositionX(original_position.x-150.f);
 														}));
+}
+
+void MainFlowScene::onEnterTransitionDidFinish()
+{
+    TRACE();
 }
 
 void MainFlowScene::setTop()

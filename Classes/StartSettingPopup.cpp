@@ -477,7 +477,7 @@ void StartSettingPopup::setMain()
 			t_clipping->removeChildByTag(1);
 			t_stencil_node->removeChildByTag(2);
 			
-			typing_box->startTyping("지금은 하트가 충분하니\n바로 시작하죠.", end_func4);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent17), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -488,7 +488,7 @@ void StartSettingPopup::setMain()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping("게임을 시작하려면 하트가 필요합니다.", end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent16), end_func3);
 			
 			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
 			t_arrow1->setScale(0.6f);
@@ -575,7 +575,7 @@ void StartSettingPopup::setMain()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("이곳은 게임시작 전에 아이템구입이나\n미사일을 업그레이드 시킬 수 있는\n게임시작화면입니다.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent15), end_func1);
 															  }));
 	}
 	
@@ -843,7 +843,7 @@ void StartSettingPopup::setMain()
 			function<void()> end_func2 = [=]()
 			{
 				TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
-				typing_box->startTyping("특별한 아이템을 뽑을 수 있는 상자입니다.\n운이 좋으면 목숨 하나가 추가되는\n부활아이템을 얻을 수 있죠.", end_func3);
+				typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial10), end_func3);
 			};
 			
 			function<void()> end_func1 = [=]()
@@ -863,7 +863,7 @@ void StartSettingPopup::setMain()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping("이건 뭐죠? 아이템인가요?", end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial9), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -878,7 +878,7 @@ void StartSettingPopup::setMain()
 																	  t_gray->setOpacity(255);
 																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping("드디어 뽑기상자가 등장했네요.", end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial8), end_func1);
 																  }));
 		}
 	}
