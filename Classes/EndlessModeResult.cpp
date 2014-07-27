@@ -616,10 +616,10 @@ void EndlessModeResult::setMain()
 	CCSprite* me_back = CCSprite::create("endless_na.png");
 	me_back->setPosition(ccp(20,left_back->getContentSize().height-18));
 	left_back->addChild(me_back);
-	KSLabelTTF* me_label = KSLabelTTF::create("Me", mySGD->getFont().c_str(), 13);
-	me_label->disableOuterStroke();
-	me_label->setPosition(ccpFromSize(me_back->getContentSize()/2.f));
-	me_back->addChild(me_label);
+//	KSLabelTTF* me_label = KSLabelTTF::create("Me", mySGD->getFont().c_str(), 13);
+//	me_label->disableOuterStroke();
+//	me_label->setPosition(ccpFromSize(me_back->getContentSize()/2.f));
+//	me_back->addChild(me_label);
 	
 	string left_result;
 	if(mySGD->getStageGrade() <= 0)
@@ -718,6 +718,7 @@ void EndlessModeResult::setMain()
 	left_title->addChild(left_flag);
 	
 	KSLabelTTF* left_nick = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 13);
+	left_nick->setColor(ccc3(20, 50, 70));
 	left_nick->disableOuterStroke();
 	left_nick->setPosition(ccp(0, 16));
 	left_title->addChild(left_nick);
@@ -759,10 +760,10 @@ void EndlessModeResult::setMain()
 	CCSprite* you_back = CCSprite::create("endless_you.png");
 	you_back->setPosition(ccp(right_back->getContentSize().width-20,right_back->getContentSize().height-18));
 	right_back->addChild(you_back);
-	KSLabelTTF* you_label = KSLabelTTF::create("You", mySGD->getFont().c_str(), 13);
-	you_label->disableOuterStroke();
-	you_label->setPosition(ccpFromSize(you_back->getContentSize()/2.f));
-	you_back->addChild(you_label);
+//	KSLabelTTF* you_label = KSLabelTTF::create("You", mySGD->getFont().c_str(), 13);
+//	you_label->disableOuterStroke();
+//	you_label->setPosition(ccpFromSize(you_back->getContentSize()/2.f));
+//	you_back->addChild(you_label);
 	
 	string right_result;
 	if(right_clear_grade.getV() <= 0)
@@ -861,6 +862,7 @@ void EndlessModeResult::setMain()
 	right_title->addChild(right_flag);
 	
 	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->temp_endless_nick.getV().c_str(), mySGD->getFont().c_str(), 13);
+	right_nick->setColor(ccc3(20, 50, 70));
 	right_nick->disableOuterStroke();
 	right_nick->setPosition(ccp(0, 16));
 	right_title->addChild(right_nick);
