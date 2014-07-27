@@ -244,6 +244,9 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 		cmdQueue.commands[buf] = cmd;
 		cmdCollect.push_back(cmd);
 	}
+    
+    
+    CCAssert(i!=0, "funck why i == 0");
 	
 	
 	jsonTotalCmd["country"]=hspConnector::get()->getCountryCode();
