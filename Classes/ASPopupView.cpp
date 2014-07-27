@@ -72,7 +72,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	content_back->setPosition(ccp(0.0,-13)); 			// dt (0.0,-4.5)
 	t_container->addChild(content_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), 10);
 	setFormSetter(title_label);
 //	title_label->setColor(ccc3(255, 170, 20));
 	title_label->disableOuterStroke();
