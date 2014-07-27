@@ -1314,6 +1314,9 @@ void LoadingTipScene::countingFunc(CCObject *sender)
 void LoadingTipScene::endLoadingTip()
 {
 	mySGD->resetLabels();
+    
+    CCLOG("replace scene : %s", next_scene_name.c_str());
+    
 	if(next_scene_name == "maingame")
 		CCDirector::sharedDirector()->replaceScene(Maingame::scene());
 	else if(next_scene_name == "newmainflow")
