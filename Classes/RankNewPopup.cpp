@@ -430,6 +430,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		
 		tipBack->setContentSize(CCSizeMake(278, 26));
 		KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
+		tipLbl->disableOuterStroke();
 		//tipLbl->setColor(ccc3(255, 155, 0));
 		title_back->addChild(tipLbl, 4);
 		tipLbl->setPosition(ccpFromSize(title_back->getContentSize()) / 2.f + ccp(0,1));

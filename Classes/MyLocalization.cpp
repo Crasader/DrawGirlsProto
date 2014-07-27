@@ -1430,8 +1430,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
 	ko->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
 	ko->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	ko->setObject(CCString::create("<font size=13>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	ko->setObject(CCString::create("<font size=13>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ko->setObject(CCString::create("<font size=13 strokesize=0>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ko->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
 //	ko->setObject(CCString::create("획득한 영역의 외곽선 방향으로\n제스쳐를 하면 해당 방향으로\n외곽선을 따라 이동하게 됩니다."), kMyLocalKey_tutorial9);
@@ -2354,8 +2354,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
 	en->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
 	en->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	en->setObject(CCString::create("<font size=13>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	en->setObject(CCString::create("<font size=13>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	en->setObject(CCString::create("<font size=13  strokesize=0>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	en->setObject(CCString::create("<font size=13> strokesize=0이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3300,8 +3300,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
 	ja->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
 	ja->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	ja->setObject(CCString::create("<font size=13>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	ja->setObject(CCString::create("<font size=13>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ja->setObject(CCString::create("<font size=13 strokesize=0>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ja->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
