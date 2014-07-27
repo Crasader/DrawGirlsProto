@@ -441,6 +441,8 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
+    CCLOG("clicked button : %d", tag);
+    
 	if(tag == kMT_EMR_stop)
 	{
 		if(left_total_score.getV() > right_total_score.getV())
@@ -497,7 +499,6 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 											  is_menu_enable = true;
 											  t_popup->removeFromParent();
 										  });
-										  t_popup->removeFromParent();
 									  });
 			t_container->addChild(close_button);
 			
