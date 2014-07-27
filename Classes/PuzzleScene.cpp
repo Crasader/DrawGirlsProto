@@ -2944,6 +2944,7 @@ void PuzzleScene::setRightTopButton()
 		s_stage->addChild(s_label);
 		CCSprite* d_stage = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_stage->getContentSize().width, n_stage->getContentSize().height));
 		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		d_label->setColor(ccc3(20, 50, 70));
 		d_label->disableOuterStroke();
 		d_label->setPosition(ccpFromSize(d_stage->getContentSize()/2.f));
 		d_stage->addChild(d_label);
@@ -2975,6 +2976,7 @@ void PuzzleScene::setRightTopButton()
 		s_ranking->addChild(s_label);
 		CCSprite* d_ranking = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_ranking->getContentSize().width, n_ranking->getContentSize().height));
 		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		d_label->setColor(ccc3(20, 50, 70));
 		d_label->disableOuterStroke();
 		d_label->setPosition(ccpFromSize(d_ranking->getContentSize()/2.f));
 		d_ranking->addChild(d_label);
