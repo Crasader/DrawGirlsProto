@@ -279,6 +279,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 	{
 		//쓰레드생성오류시
 		//@ JsonBox::Object resultobj;
+        CCLOG("thread create error!!!!");
 		TRACE();
         Json::Value resultobj;
 		//@		resultobj["state"]= JsonBox::Value("error");
