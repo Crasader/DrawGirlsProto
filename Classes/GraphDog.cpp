@@ -768,8 +768,10 @@ void GraphDog::receivedCommand(float dt)
 				
 				if(retryCnt){
 					if(commands.errorCnt<=1){
+                        CCLOG("commands.errorCnt<=1");
 						this->command(vcp,commands.errorCnt+1);
 					}else{
+                        CCLOG("!! commands.errorCnt<=1");
 						commandRetryFunc(vcp);
 					}
 				}
