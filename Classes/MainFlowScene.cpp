@@ -4303,6 +4303,11 @@ void MainFlowScene::topPuzzleMode()
 														}));
 }
 
+void MainFlowScene::onEnterTransitionDidFinish()
+{
+    TRACE();
+}
+
 void MainFlowScene::setTop()
 {
 	top_list.clear();

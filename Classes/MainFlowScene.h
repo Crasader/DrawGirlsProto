@@ -84,6 +84,8 @@ public:
 	void showEndlessResult();
     
     void showShopPopup(int t_code);
+    
+    virtual void onEnterTransitionDidFinish();
 	
 private:
 	
