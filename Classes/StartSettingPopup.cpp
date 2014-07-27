@@ -440,7 +440,7 @@ void StartSettingPopup::setMain()
 																	 {
 																		 skip_menu->setEnabled(false);
 																		 
-//																		 callStart();
+																		 callStart();
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
@@ -462,7 +462,7 @@ void StartSettingPopup::setMain()
 																  }, [=](float t)
 																  {
 																	  t_gray->setOpacity(0);
-//																	  callStart();
+																	  callStart();
 																	  scenario_node->removeFromParent();
 																  }));
 		};

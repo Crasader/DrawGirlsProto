@@ -3632,17 +3632,17 @@ void MainFlowScene::topOnLight()
 		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
 																	 {
 																		 skip_menu->setEnabled(false);
-//																		 int puzzle_number = 1000-999;
-//																		 myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-//																		 
-//																		 StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
-//																													  {
-//																														  mySGD->is_before_stage_img_download = true;
-//																														  topOuting();
-//																														  bottomPuzzleMode();
-//																														  tableDownloading(t_func);
-//																													  }, [=](){puzzleLoadSuccess();});
-//																		 addChild(t_sld, kMainFlowZorder_popup);
+																		 int puzzle_number = 1000-999;
+																		 myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+																		 
+																		 StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+																													  {
+																														  mySGD->is_before_stage_img_download = true;
+																														  topOuting();
+																														  bottomPuzzleMode();
+																														  tableDownloading(t_func);
+																													  }, [=](){puzzleLoadSuccess();});
+																		 addChild(t_sld, kMainFlowZorder_popup);
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
@@ -3669,17 +3669,17 @@ void MainFlowScene::topOnLight()
 			t_stencil_node->removeAllChildren();
 			t_clipping->removeChildByTag(2);
 			
-//			int puzzle_number = 1000-999;
-//			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-//			
-//			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
-//														 {
-//															 mySGD->is_before_stage_img_download = true;
-//															 topOuting();
-//															 bottomPuzzleMode();
-//															 tableDownloading(t_func);
-//														 }, [=](){puzzleLoadSuccess();});
-//			addChild(t_sld, kMainFlowZorder_popup);
+			int puzzle_number = 1000-999;
+			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+			
+			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+														 {
+															 mySGD->is_before_stage_img_download = true;
+															 topOuting();
+															 bottomPuzzleMode();
+															 tableDownloading(t_func);
+														 }, [=](){puzzleLoadSuccess();});
+			addChild(t_sld, kMainFlowZorder_popup);
 			
 			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 												   {
