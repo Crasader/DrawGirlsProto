@@ -3136,25 +3136,25 @@ void MainFlowScene::setBottom()
 			if(ing_win > 0)
 			{
 				CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-				n_win_back->setContentSize(CCSizeMake(60, 20));
 				n_endless->addChild(n_win_back);
 				
-				CCLabelTTF* n_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 				n_win_back->addChild(n_win_label);
 				
 //				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-				n_win_back->setPosition(ccp(n_endless->getContentSize().width-20, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+				n_win_back->setPosition(ccp(n_endless->getContentSize().width-10, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
 				n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
 				
 				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-				s_win_back->setContentSize(CCSizeMake(60, 20));
 				s_endless->addChild(s_win_back);
 				
-				CCLabelTTF* s_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 				s_win_back->addChild(s_win_label);
 				
 //				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-				s_win_back->setPosition(ccp(s_endless->getContentSize().width-20, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+				s_win_back->setPosition(ccp(s_endless->getContentSize().width-10, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
 				s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
 				
 				refresh_ing_win_func = [=]()
@@ -3179,25 +3179,25 @@ void MainFlowScene::setBottom()
 					if(mySGD->endless_my_victory.getV() > 0)
 					{
 						CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-						n_win_back->setContentSize(CCSizeMake(60, 20));
 						n_endless->addChild(n_win_back);
 						
-						CCLabelTTF* n_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 						n_win_back->addChild(n_win_label);
 						
 //						n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-						n_win_back->setPosition(ccp(n_endless->getContentSize().width-20, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+						n_win_back->setPosition(ccp(n_endless->getContentSize().width-10, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
 						n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
 						
 						CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-						s_win_back->setContentSize(CCSizeMake(60, 20));
 						s_endless->addChild(s_win_back);
 						
-						CCLabelTTF* s_win_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 						s_win_back->addChild(s_win_label);
 						
 //						s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-						s_win_back->setPosition(ccp(s_endless->getContentSize().width-20, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+						s_win_back->setPosition(ccp(s_endless->getContentSize().width-10, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
 						s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
 					}
 				};

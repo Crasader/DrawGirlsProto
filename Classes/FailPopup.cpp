@@ -218,6 +218,7 @@ bool FailPopup::init()
 		int stage_number = mySD->getSilType();
 		
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		stage_number_label->setColor(ccc3(20, 40, 70));
 		stage_number_label->disableOuterStroke();
 		stage_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(stage_number_label);
@@ -231,6 +232,7 @@ bool FailPopup::init()
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		piece_number_label->setColor(ccc3(20, 40, 70));
 		piece_number_label->disableOuterStroke();
 		piece_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(piece_number_label);

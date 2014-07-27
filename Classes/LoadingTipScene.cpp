@@ -214,7 +214,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
 		CCNode* junior_node = CCNode::create();
-		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-11.5f,0));
+		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-25.5f,0));
 		mission_back->addChild(junior_node);
 		
 		std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
@@ -816,7 +816,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			int catch_count = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
 			CCNode* junior_node = CCNode::create();
-			junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-11.5f,0));
+			junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-25.5f,0));
 			mission_back->addChild(junior_node);
 			
 			std::string juniorInfo = mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior");
