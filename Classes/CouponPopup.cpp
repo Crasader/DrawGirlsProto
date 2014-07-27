@@ -284,7 +284,8 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 	t_container->addChild(back_case);
 	
 	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-82));
+//	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-82));
+	back_in->setContentSize(CCSizeMake(502 / 2.f, 226 / 2.f));
 	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-9));
 	back_case->addChild(back_in);
 	
@@ -298,7 +299,7 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 	sub_label->setColor(ccc3(255, 170, 20));
 	sub_label->disableOuterStroke();
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-	sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
+	sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f) + ccp(0, 5));
 	back_in->addChild(sub_label);
 	
 	CCSprite* gray = t_popup->getDimmedSprite();
@@ -376,6 +377,7 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 											input_text3->setEnabled(true);
 											
 											this->is_menu_enable = true;
+                                            t_popup->removeFromParent();
 										}
 										
 										

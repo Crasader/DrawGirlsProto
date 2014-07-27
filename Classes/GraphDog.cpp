@@ -248,6 +248,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
     if(i==0){
         CCLOG("FUCKFUCK");
         TRACE();
+				return false;
     }
 //    CCAssert(i!=0, "funck why i == 0");
 	

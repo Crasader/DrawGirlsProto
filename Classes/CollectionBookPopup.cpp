@@ -76,6 +76,7 @@ CCPoint CollectionBookPopup::getContentPosition(int t_tag)
 void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 {
 	KSLabelTTF* r_stage_name = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_name_s, card_number).c_str(), mySGD->getFont().c_str(), 10);
+	r_stage_name->disableOuterStroke();
 	r_stage_name->setPosition(ccp(32,273));
 	r_stage_name->setAnchorPoint(ccp(0,0.5f));
 	target->addChild(r_stage_name);
@@ -133,6 +134,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	
 	
 	KSLabelTTF* r_profile_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_profile), mySGD->getFont().c_str(), 10);
+	r_profile_label->disableOuterStroke();
 	r_profile_label->setPosition(ccp(32,170));
 	r_profile_label->setAnchorPoint(ccp(0,0.5f));
 	target->addChild(r_profile_label);
@@ -153,6 +155,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	
 	
 	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
+	r_card_elemental_label->disableOuterStroke();
 	r_card_elemental_label->setPosition(ccp(32,96));
 	r_card_elemental_label->setAnchorPoint(ccp(0,0.5f));
 	target->addChild(r_card_elemental_label);

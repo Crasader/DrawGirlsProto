@@ -61,6 +61,8 @@ public:
 	{
 		hspConnector::get()->removeTarget(this);
 	}
+    
+    virtual void onEnterTransitionDidFinish();
 private:
 	
 	int keep_card_number;

@@ -441,6 +441,8 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 	
 	int tag = ((CCNode*)sender)->getTag();
 	
+    CCLOG("clicked button : %d", tag);
+    
 	if(tag == kMT_EMR_stop)
 	{
 		if(left_total_score.getV() > right_total_score.getV())
@@ -489,6 +491,11 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 			close_button->setPosition(ccp(case_back->getContentSize().width/2.f - 25, case_back->getContentSize().height/2.f - 22));
 			close_button->setFunction([=](CCObject* sender)
 									  {
+										  if(!t_popup->is_menu_enable)
+											  return;
+										  
+										  t_popup->is_menu_enable = false;
+										  
 										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 										  
 										  CommonAnimation::closePopup(t_popup, t_container, t_popup->getDimmedSprite(), [=](){
@@ -497,7 +504,6 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 											  is_menu_enable = true;
 											  t_popup->removeFromParent();
 										  });
-										  t_popup->removeFromParent();
 									  });
 			t_container->addChild(close_button);
 			
@@ -506,6 +512,11 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 			ok_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+45));
 			ok_button->setFunction([=](CCObject* sender)
 									  {
+										  if(!t_popup->is_menu_enable)
+											  return;
+										  
+										  t_popup->is_menu_enable = false;
+										  
 										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 										  
 										  CommonAnimation::closePopup(this, t_container, t_popup->getDimmedSprite(), [=](){
@@ -554,7 +565,10 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 			ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
 			
 			t_popup->getDimmedSprite()->setOpacity(0);
-			CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite());
+			CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite(), nullptr, [=]()
+									   {
+										   t_popup->is_menu_enable = true;
+									   });
 			addChild(t_popup, 999);
 		}
 		else
@@ -615,10 +629,10 @@ void EndlessModeResult::setMain()
 	CCSprite* me_back = CCSprite::create("endless_na.png");
 	me_back->setPosition(ccp(20,left_back->getContentSize().height-18));
 	left_back->addChild(me_back);
-	KSLabelTTF* me_label = KSLabelTTF::create("Me", mySGD->getFont().c_str(), 13);
-	me_label->disableOuterStroke();
-	me_label->setPosition(ccpFromSize(me_back->getContentSize()/2.f));
-	me_back->addChild(me_label);
+//	KSLabelTTF* me_label = KSLabelTTF::create("Me", mySGD->getFont().c_str(), 13);
+//	me_label->disableOuterStroke();
+//	me_label->setPosition(ccpFromSize(me_back->getContentSize()/2.f));
+//	me_back->addChild(me_label);
 	
 	string left_result;
 	if(mySGD->getStageGrade() <= 0)
@@ -717,6 +731,7 @@ void EndlessModeResult::setMain()
 	left_title->addChild(left_flag);
 	
 	KSLabelTTF* left_nick = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 13);
+	left_nick->setColor(ccc3(20, 50, 70));
 	left_nick->disableOuterStroke();
 	left_nick->setPosition(ccp(0, 16));
 	left_title->addChild(left_nick);
@@ -758,10 +773,10 @@ void EndlessModeResult::setMain()
 	CCSprite* you_back = CCSprite::create("endless_you.png");
 	you_back->setPosition(ccp(right_back->getContentSize().width-20,right_back->getContentSize().height-18));
 	right_back->addChild(you_back);
-	KSLabelTTF* you_label = KSLabelTTF::create("You", mySGD->getFont().c_str(), 13);
-	you_label->disableOuterStroke();
-	you_label->setPosition(ccpFromSize(you_back->getContentSize()/2.f));
-	you_back->addChild(you_label);
+//	KSLabelTTF* you_label = KSLabelTTF::create("You", mySGD->getFont().c_str(), 13);
+//	you_label->disableOuterStroke();
+//	you_label->setPosition(ccpFromSize(you_back->getContentSize()/2.f));
+//	you_back->addChild(you_label);
 	
 	string right_result;
 	if(right_clear_grade.getV() <= 0)
@@ -860,6 +875,7 @@ void EndlessModeResult::setMain()
 	right_title->addChild(right_flag);
 	
 	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->temp_endless_nick.getV().c_str(), mySGD->getFont().c_str(), 13);
+	right_nick->setColor(ccc3(20, 50, 70));
 	right_nick->disableOuterStroke();
 	right_nick->setPosition(ccp(0, 16));
 	right_title->addChild(right_nick);
@@ -1635,7 +1651,7 @@ void EndlessModeResult::startCalcAnimation()
 																																			  t_gray->setOpacity(255);
 																																			  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																																			  
-																																			  typing_box->startTyping("PVP가 끝나면 이곳으로 와요.", end_func1);
+																																			  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent61), end_func1);
 																																		  }));
 																				}
 

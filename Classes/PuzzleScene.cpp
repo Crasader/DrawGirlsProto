@@ -102,7 +102,7 @@ bool PuzzleScene::init()
 	
 	if(before_scene_name == "other")
 	{
-		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1)
+		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1 && puzzle_number == 1)
 		{
 			myDSH->setIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number, 1);
 		}
@@ -880,7 +880,7 @@ bool PuzzleScene::init()
 					typing_box->setVisible(true);
 					typing_box->setTouchSuction(true);
 					
-					typing_box->startTyping("먼저 게임준비하러 가볼까요?", end_func3);
+					typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent14), end_func3);
 				};
 				
 				function<void()> end_func1 = [=]()
@@ -1007,7 +1007,7 @@ bool PuzzleScene::init()
 																							  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																							  skip_menu->setEnabled(true);
 																							  
-																							  typing_box->startTyping("이곳은 스테이지를 선택할 수 있는\n퍼즐화면입니다.", end_func1);
+																							  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent13), end_func1);
 																						  }));
 														}));
 			}
@@ -1348,17 +1348,17 @@ void PuzzleScene::endGetStar()
 				Json::Value reward_info = mySGD->getAllClearReward();
 				
 				BonusGameReward gr1;
-				gr1.spriteName = "morphing_heart2.png";
+				gr1.spriteName = "morphing_heart3.png";
 				gr1.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
 				
 				BonusGameReward gr2;
-				gr2.spriteName = "morphing_heart2.png";
+				gr2.spriteName = "morphing_heart3.png";
 				gr2.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
 				BonusGameReward gr3;
-				gr3.spriteName = "morphing_heart2.png";
+				gr3.spriteName = "morphing_heart3.png";
 				gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 				BonusGameReward gr4;
-				gr4.spriteName = "morphing_heart2.png";
+				gr4.spriteName = "morphing_heart3.png";
 				gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
 //				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //											 {
@@ -2290,6 +2290,12 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 					   });
 }
 
+void PuzzleScene::onEnterTransitionDidFinish()
+{
+    CCLayer::onEnterTransitionDidFinish();
+    TRACE();
+}
+
 void PuzzleScene::showShopPopup(ShopCode t_code)
 {
 	ShopPopup* t_shop = ShopPopup::create();
@@ -2310,7 +2316,7 @@ void PuzzleScene::autoTurnPiece()
 {
 	if(!is_menu_enable)
 		return;
-	
+
 	
 	int start_stage = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -2944,6 +2950,7 @@ void PuzzleScene::setRightTopButton()
 		s_stage->addChild(s_label);
 		CCSprite* d_stage = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_stage->getContentSize().width, n_stage->getContentSize().height));
 		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		d_label->setColor(ccc3(20, 50, 70));
 		d_label->disableOuterStroke();
 		d_label->setPosition(ccpFromSize(d_stage->getContentSize()/2.f));
 		d_stage->addChild(d_label);
@@ -2975,6 +2982,7 @@ void PuzzleScene::setRightTopButton()
 		s_ranking->addChild(s_label);
 		CCSprite* d_ranking = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_ranking->getContentSize().width, n_ranking->getContentSize().height));
 		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		d_label->setColor(ccc3(20, 50, 70));
 		d_label->disableOuterStroke();
 		d_label->setPosition(ccpFromSize(d_ranking->getContentSize()/2.f));
 		d_ranking->addChild(d_label);

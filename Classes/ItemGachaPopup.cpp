@@ -493,7 +493,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}

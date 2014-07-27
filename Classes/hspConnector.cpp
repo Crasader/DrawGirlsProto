@@ -412,7 +412,7 @@ string hspConnector::getTimeZone(){
 	
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	CCLOG("mytime zone is : %s",r.c_str());
-	return r;
+	return r.c_str();
 }
 
 

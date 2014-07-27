@@ -218,6 +218,7 @@ bool FailPopup::init()
 		int stage_number = mySD->getSilType();
 		
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		stage_number_label->setColor(ccc3(20, 40, 70));
 		stage_number_label->disableOuterStroke();
 		stage_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(stage_number_label);
@@ -231,6 +232,7 @@ bool FailPopup::init()
 //		int piece_number = NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number);
 		
 		KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat("STAGE  %d", stage_number)->getCString(),	mySGD->getFont().c_str(), 11);
+		piece_number_label->setColor(ccc3(20, 40, 70));
 		piece_number_label->disableOuterStroke();
 		piece_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(piece_number_label);
@@ -355,9 +357,10 @@ bool FailPopup::init()
 		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		
 		
-		CCSprite* t_gray = CCSprite::create("back_gray.png");
+		CCSprite* t_gray = CCSprite::create("whitePaper.png");
 		t_gray->setScaleX(screen_scale_x);
 		t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+		t_gray->setColor(ccBLACK);
 		t_gray->setOpacity(0);
 		t_gray->setPosition(ccp(240,160));
 		t_clipping->addChild(t_gray);
@@ -438,7 +441,7 @@ bool FailPopup::init()
 		function<void()> end_func3 = [=]()
 		{
 			TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, asuka);
-			typing_box2->startTyping("네! 그럼 최선을 다 해보겠습니다!", end_func4);
+			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent31), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -448,7 +451,7 @@ bool FailPopup::init()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping("그럼 계속 해볼까요?\n5스테이지 클리어후 메인화면에서 뵙기로 하죠!", end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent30), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
@@ -466,7 +469,7 @@ bool FailPopup::init()
 			t_arrow1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f) + ccp(0,48));
 			t_clipping->addChild(t_arrow1);
 			
-			StyledLabelTTF* t_ment1 = StyledLabelTTF::create("클리어 등급", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent29), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment1->setAnchorPoint(ccp(0.5f,0));
 			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f*t_arrow1->getScale() + 3));
 			t_clipping->addChild(t_ment1);
@@ -483,7 +486,7 @@ bool FailPopup::init()
 			t_arrow2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-115.f) + ccp(0,5));
 			t_clipping->addChild(t_arrow2);
 			
-			StyledLabelTTF* t_ment2 = StyledLabelTTF::create("점수 정보", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent28), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment2->setAnchorPoint(ccp(0.5f,1));
 			t_ment2->setPosition(t_arrow2->getPosition() + ccp(0, -t_arrow2->getContentSize().height/2.f*t_arrow2->getScale() - 3));
 			t_clipping->addChild(t_ment2);
@@ -496,7 +499,7 @@ bool FailPopup::init()
 			t_arrow3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f-115) + ccp(0,5));
 			t_clipping->addChild(t_arrow3);
 			
-			StyledLabelTTF* t_ment3 = StyledLabelTTF::create("스테이지 랭킹", mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent27), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment3->setAnchorPoint(ccp(0.5f,1));
 			t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, -t_arrow3->getContentSize().height/2.f*t_arrow3->getScale() - 3));
 			t_clipping->addChild(t_ment3);
@@ -530,17 +533,17 @@ bool FailPopup::init()
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 															  {
-																  t_gray->setOpacity(t*255);
+																  t_gray->setOpacity(t*255*0.8f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 															  }, [=](float t)
 															  {
-																  t_gray->setOpacity(255);
+																  t_gray->setOpacity(255*0.8f);
 																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("이런.. 다음엔 더 잘 할 수 있겠죠?\n여긴 게임이 끝나면 오게 됩니다.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent32), end_func1);
 															  }));
 	}
 	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)

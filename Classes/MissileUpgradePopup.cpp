@@ -18,6 +18,7 @@
 #include "LoadingLayer.h"
 #include "MyLocalization.h"
 #include "PuzzleScene.h"
+#include "MainFlowScene.h"
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 
@@ -98,7 +99,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	m_container->addChild(title_label);
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_upgradeSubMent), mySGD->getFont().c_str(), 11);
-	sub_label->enableOuterStroke(ccBLACK, 0.5f);
+	sub_label->disableOuterStroke();
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 	sub_label->setPosition(ccp(0,73));
 	m_container->addChild(sub_label);
@@ -263,7 +264,10 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		{
 			addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
 																{
-																	((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+                                                                    if(mySGD->is_endless_mode)
+                                                                        ((MainFlowScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+                                                                    else
+                                                                        ((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
 																}), 9999);
 			is_menu_enable = true;
 			return;

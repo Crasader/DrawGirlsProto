@@ -1093,7 +1093,8 @@ void JsGababo::showResult()
 void JsGababo::setupTutorial()
 {
 	CCSprite* helper = CCSprite::create("kt_cha_hibari_1.png");
-	helper->setPosition(ccp(79.0, 166.5));
+	helper->setPosition(ccp(70.0, 160.5));
+	helper->setScale(0.9f);
 	m_back->addChild(helper, 5);
 	setFormSetter(helper);
 	

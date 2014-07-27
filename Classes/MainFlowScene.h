@@ -23,6 +23,7 @@ enum MainFlowZorder{
 	kMainFlowZorder_table,
 	kMainFlowZorder_top,
 	kMainFlowZorder_uiButton,
+	kMainFlowZorder_uiButton2,
 	kMainFlowZorder_popup
 };
 
@@ -81,6 +82,10 @@ public:
 	
 	void showEndlessOpening();
 	void showEndlessResult();
+    
+    void showShopPopup(int t_code);
+    
+    virtual void onEnterTransitionDidFinish();
 	
 private:
 	

@@ -19,8 +19,14 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 	return getCommonNoti(t_touch_priority, t_comment, [](){});
 }
 
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment)
+{
+	return getCommonNoti(t_touch_priority, t_title, t_comment, [](){});
+}
+
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CCNode* ment_label,
-																				function<void()> close_func, CCPoint t_position, bool Xbutton)
+																				function<void()> close_func,
+																				float titleFontSize, CCPoint t_position, bool Xbutton)
 {
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	startFormSetter(t_popup);
@@ -72,7 +78,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	content_back->setPosition(ccp(0.0,-13)); 			// dt (0.0,-4.5)
 	t_container->addChild(content_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), titleFontSize);
 	setFormSetter(title_label);
 //	title_label->setColor(ccc3(255, 170, 20));
 	title_label->disableOuterStroke();
@@ -278,7 +284,8 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, st
 	
 	KSLabelTTF* ment_label = KSLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 12);
 	ment_label->disableOuterStroke();
-	return ASPopupView::getCommonNoti(t_touch_priority, t_title,ment_label,close_func,t_position, XButton);
+	return ASPopupView::getCommonNoti(t_touch_priority, t_title,ment_label, close_func,
+																		12.f, t_position, XButton);
 }
 
 

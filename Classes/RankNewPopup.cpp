@@ -132,7 +132,6 @@ bool RankNewPopup::init()
 		
 		KSLabelTTF* rewardTitle = KSLabelTTF::create("보상내용", mySGD->getFont().c_str(), 13.f);
 		rewardTitle->setPosition(ccp(40.5f,  189.5f));
-		//rewardTitle->setColor(ccc3(255, 170, 22));
 		main_inner_left->addChild(rewardTitle);
 		setFormSetter(rewardTitle);
 		
@@ -322,7 +321,7 @@ bool RankNewPopup::init()
 		
 		function<void()> end_func1 = [=]()
 		{
-			typing_box->startTyping("순위마다 보상 내용이 다르니\n잘 확인해 주세요.", end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial7), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -335,7 +334,7 @@ bool RankNewPopup::init()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("어머! 여기서 또 만나네요?\n이번엔 랭킹에 대해 설명해 드릴께요.\n \n주간랭킹은 일주일 동안 획득한 스테이지\n점수를 합산하여 랭킹이 산정됩니다.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial6), end_func1);
 															  }));
 	}
 	
@@ -430,6 +429,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		
 		tipBack->setContentSize(CCSizeMake(278, 26));
 		KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
+		tipLbl->disableOuterStroke();
 		//tipLbl->setColor(ccc3(255, 155, 0));
 		title_back->addChild(tipLbl, 4);
 		tipLbl->setPosition(ccpFromSize(title_back->getContentSize()) / 2.f + ccp(0,1));

@@ -111,7 +111,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								   schedule(schedule_selector(ContinueContent::countingSchedule));
 								   
 								   mySGD->clearChangeGoods();
-								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 								   
 								   is_menu_enable = true;
 							   }
@@ -154,7 +154,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   schedule(schedule_selector(ContinueContent::countingSchedule));
 									   
 									   mySGD->clearChangeGoods();
-									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 									   
 									   is_menu_enable = true;
 								   }
@@ -210,7 +210,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   schedule(schedule_selector(ContinueContent::countingSchedule));
 									   
 									   mySGD->clearChangeGoods();
-									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 									   
 									   is_menu_enable = true;
 								   }
@@ -328,6 +328,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	back_case->addChild(back_in,2);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 16);
+	title_label->disableOuterStroke();
 	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-30));
 	back_case->addChild(title_label);
 	

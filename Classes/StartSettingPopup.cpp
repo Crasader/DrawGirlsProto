@@ -175,6 +175,8 @@ void StartSettingPopup::setMain()
 	tab_label->setPosition(ccp(left_tab->getContentSize().width/2.f,left_tab->getContentSize().height/2.f+1.5f));
 	left_tab->addChild(tab_label);
 	
+	CommonAnimation::applyShadow(tab_label);
+	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	right_back->setContentSize(CCSizeMake(280, 145));
 	right_back->setPosition(main_case->getContentSize().width*0.655f, main_case->getContentSize().height*0.545f);
@@ -222,8 +224,8 @@ void StartSettingPopup::setMain()
 		}
 	}
 	
-	if(!mySGD->is_endless_mode)
-	{
+//	if(!mySGD->is_endless_mode)
+//	{
 		CCScale9Sprite* mission_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 		mission_back->setContentSize(CCSizeMake(278, 26));
 		mission_back->setPosition(ccp(main_case->getContentSize().width*0.655f, main_case->getContentSize().height+2-23.5f));
@@ -257,7 +259,7 @@ void StartSettingPopup::setMain()
 		}
 		
 		CCSprite* mission_title_back = CCSprite::create("tabbutton_up.png");
-		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-25));
+		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f+9, main_case->getContentSize().height+2-25));
 		main_case->addChild(mission_title_back);
 		
 		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 10.5f);
@@ -275,7 +277,7 @@ void StartSettingPopup::setMain()
 //		mission_img_label->setColor(ccc3(255, 170, 20));
 //		mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
 //		mission_img->addChild(mission_img_label);
-	}
+//	}
 	
 	
 	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);
@@ -439,6 +441,7 @@ void StartSettingPopup::setMain()
 																	 {
 																		 skip_menu->setEnabled(false);
 																		 
+																		 is_menu_enable = false;
 																		 callStart();
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
@@ -461,6 +464,7 @@ void StartSettingPopup::setMain()
 																  }, [=](float t)
 																  {
 																	  t_gray->setOpacity(0);
+																	  is_menu_enable = false;
 																	  callStart();
 																	  scenario_node->removeFromParent();
 																  }));
@@ -473,7 +477,7 @@ void StartSettingPopup::setMain()
 			t_clipping->removeChildByTag(1);
 			t_stencil_node->removeChildByTag(2);
 			
-			typing_box->startTyping("지금은 하트가 충분하니\n바로 시작하죠.", end_func4);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent17), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -484,7 +488,7 @@ void StartSettingPopup::setMain()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping("게임을 시작하려면 하트가 필요합니다.", end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent16), end_func3);
 			
 			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
 			t_arrow1->setScale(0.6f);
@@ -571,7 +575,7 @@ void StartSettingPopup::setMain()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping("이곳은 게임시작 전에 아이템구입이나\n미사일을 업그레이드 시킬 수 있는\n게임시작화면입니다.", end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent15), end_func1);
 															  }));
 	}
 	
@@ -839,7 +843,7 @@ void StartSettingPopup::setMain()
 			function<void()> end_func2 = [=]()
 			{
 				TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
-				typing_box->startTyping("특별한 아이템을 뽑을 수 있는 상자입니다.\n운이 좋으면 목숨 하나가 추가되는\n부활아이템을 얻을 수 있죠.", end_func3);
+				typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial10), end_func3);
 			};
 			
 			function<void()> end_func1 = [=]()
@@ -859,7 +863,7 @@ void StartSettingPopup::setMain()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping("이건 뭐죠? 아이템인가요?", end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial9), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -874,7 +878,7 @@ void StartSettingPopup::setMain()
 																	  t_gray->setOpacity(255);
 																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping("드디어 뽑기상자가 등장했네요.", end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial8), end_func1);
 																  }));
 		}
 	}
@@ -982,7 +986,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(n_upgrade);
 		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(n_level);
-		n_level->disableOuterStroke();
+		n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		n_level->setPosition(ccp(70,46));
 		n_upgrade->addChild(n_level);
 		
@@ -991,7 +995,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(s_upgrade);
 		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(s_level);
-		s_level->disableOuterStroke();
+		s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		s_level->setPosition(ccp(70,46));
 		s_upgrade->addChild(s_level);
 		
@@ -1663,7 +1667,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		CCLOG("save userdata fail!!!");
 		mySGD->clearChangeGoods();
 		
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}
@@ -1947,6 +1951,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		
 		item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 15, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 		setFormSetter(item_title_label);
+		item_title_label->setColor(ccc3(255, 170, 20));
 		item_title_label->setAnchorPoint(ccp(0,1));
 		item_title_label->setPosition(title_position);
 		main_case->addChild(item_title_label);
@@ -2016,7 +2021,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});
@@ -2059,7 +2064,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});
