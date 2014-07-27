@@ -2290,6 +2290,11 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 					   });
 }
 
+void PuzzleScene::onEnterTransitionDidFinish()
+{
+    TRACE();
+}
+
 void PuzzleScene::showShopPopup(ShopCode t_code)
 {
 	ShopPopup* t_shop = ShopPopup::create();
