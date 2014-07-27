@@ -376,6 +376,7 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 											input_text3->setEnabled(true);
 											
 											this->is_menu_enable = true;
+                                            t_popup->removeFromParent();
 										}
 										
 										
