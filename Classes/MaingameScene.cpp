@@ -1312,7 +1312,7 @@ void Maingame::gachaOn()
 									  else
 									  {
 										  mySGD->clearChangeGoods();
-										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
+										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
 											  mControl->isStun = false;
 											  myJack->isStun = t_jack_stun;
 											  exit_target->onEnter();

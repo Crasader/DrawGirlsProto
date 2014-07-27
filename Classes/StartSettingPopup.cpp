@@ -257,7 +257,7 @@ void StartSettingPopup::setMain()
 		}
 		
 		CCSprite* mission_title_back = CCSprite::create("tabbutton_up.png");
-		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-25));
+		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f+9, main_case->getContentSize().height+2-25));
 		main_case->addChild(mission_title_back);
 		
 		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 10.5f);
@@ -1663,7 +1663,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		CCLOG("save userdata fail!!!");
 		mySGD->clearChangeGoods();
 		
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}
@@ -2017,7 +2017,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});
@@ -2060,7 +2060,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});

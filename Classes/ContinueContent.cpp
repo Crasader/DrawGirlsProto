@@ -111,7 +111,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								   schedule(schedule_selector(ContinueContent::countingSchedule));
 								   
 								   mySGD->clearChangeGoods();
-								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 								   
 								   is_menu_enable = true;
 							   }
@@ -154,7 +154,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   schedule(schedule_selector(ContinueContent::countingSchedule));
 									   
 									   mySGD->clearChangeGoods();
-									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 									   
 									   is_menu_enable = true;
 								   }
@@ -210,7 +210,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   schedule(schedule_selector(ContinueContent::countingSchedule));
 									   
 									   mySGD->clearChangeGoods();
-									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 									   
 									   is_menu_enable = true;
 								   }

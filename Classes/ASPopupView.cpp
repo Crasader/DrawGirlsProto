@@ -19,6 +19,11 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 	return getCommonNoti(t_touch_priority, t_comment, [](){});
 }
 
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment)
+{
+	return getCommonNoti(t_touch_priority, t_title, t_comment, [](){});
+}
+
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CCNode* ment_label,
 																				function<void()> close_func,
 																				float titleFontSize, CCPoint t_position, bool Xbutton)

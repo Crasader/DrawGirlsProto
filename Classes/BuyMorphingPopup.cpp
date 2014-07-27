@@ -291,7 +291,7 @@ void BuyMorphingPopup::resultBuyMorphing(Json::Value result_data)
 	else
 	{
 		mySGD->clearChangeGoods();
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase), [](){}, ccp(240,myDSH->ui_center_y)), 9999);
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase), [](){}, ccp(240,myDSH->ui_center_y)), 9999);
 		is_menu_enable = true;
 	}
 }
