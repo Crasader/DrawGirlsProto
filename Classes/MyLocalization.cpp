@@ -1052,7 +1052,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
 	ko->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
 	ko->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
-	ko->setObject(CCString::create("<font>제한시간 내에 달성도 <font color=961 newline=13>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
+	ko->setObject(CCString::create("<font strokesize=0>제한시간 내에 달성도 <font color=961 newline=13 strokesize=0>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ko->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
 	ko->setObject(CCString::create("겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
@@ -1988,7 +1988,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
 	en->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
 	en->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
-	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
+	en->setObject(CCString::create("<font strokesize=0>제한시간 내에 달성도 <font color=961 newline=13 strokesize=0>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	en->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
 	en->setObject(CCString::create("겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
@@ -2848,13 +2848,13 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
 	
 		
-	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
-	ja->setObject(CCString::create("まずは領域の線の上を移動してみましょう。\n右下にジョイスティックでキャラクターの方向を変えることができます。\nキャラクターを上に移動させてみましょう。"), kMyLocalKey_tutorial2);
-	ja->setObject(CCString::create("キャラクターを上に移動"), kMyLocalKey_tutorial3);
-	ja->setObject(CCString::create("次は領域を獲得する方法を調べてみましょう。\n左下のボタンを押したら\n領域の外に動けますよ。\n領域を獲得してみてください。"), kMyLocalKey_tutorial4);
-	ja->setObject(CCString::create("青のシルエット領域を獲得することでゲームをクリアすることができます。"), kMyLocalKey_tutorial5);
-	ja->setObject(CCString::create("時間制限内に領域を85％以上獲得したらクリア！"), kMyLocalKey_tutorial6);
-	ja->setObject(CCString::create("基本チュートリアルが終わりました。\n5000ゴールドをプレゼントします。\n本ゲームに戻ります。"), kMyLocalKey_tutorial7);
+//	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);
+//	ja->setObject(CCString::create("まずは領域の線の上を移動してみましょう。\n右下にジョイスティックでキャラクターの方向を変えることができます。\nキャラクターを上に移動させてみましょう。"), kMyLocalKey_tutorial2);
+//	ja->setObject(CCString::create("キャラクターを上に移動"), kMyLocalKey_tutorial3);
+//	ja->setObject(CCString::create("次は領域を獲得する方法を調べてみましょう。\n左下のボタンを押したら\n領域の外に動けますよ。\n領域を獲得してみてください。"), kMyLocalKey_tutorial4);
+//	ja->setObject(CCString::create("青のシルエット領域を獲得することでゲームをクリアすることができます。"), kMyLocalKey_tutorial5);
+//	ja->setObject(CCString::create("時間制限内に領域を85％以上獲得したらクリア！"), kMyLocalKey_tutorial6);
+//	ja->setObject(CCString::create("基本チュートリアルが終わりました。\n5000ゴールドをプレゼントします。\n本ゲームに戻ります。"), kMyLocalKey_tutorial7);
 	
 	ja->setObject(CCString::create("ゲームを終了しますか?"), kMyLocalKey_exit);
 	
@@ -2928,7 +2928,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
 	ja->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
 	ja->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
-	ja->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
+	ja->setObject(CCString::create("<font strokesize=0>제한시간 내에 달성도 <font color=961 newline=13 strokesize=0>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
 	ja->setObject(CCString::create("기본 튜토리얼을 모두 진행하셨습니다.\n보상으로 5000골드를 드립니다.\n본 게임으로 들아갑니다."), kMyLocalKey_tutorial8);
 	
 	ja->setObject(CCString::create("겹친선도 획득!"), kMyLocalKey_controlTip_lineTangle_title);
