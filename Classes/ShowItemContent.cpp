@@ -95,8 +95,8 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 	addChild(case_back);
 	
 	CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	content_back->setContentSize(CCSizeMake(case_back->getContentSize().width-45, case_back->getContentSize().height-80));
-	content_back->setPosition(ccp(case_back->getContentSize().width/2.f,case_back->getContentSize().height/2.f-14));
+	content_back->setContentSize(CCSizeMake(case_back->getContentSize().width-45, case_back->getContentSize().height-82));
+	content_back->setPosition(ccp(case_back->getContentSize().width/2.f,case_back->getContentSize().height/2.f-9));
 	case_back->addChild(content_back);
 	
 	

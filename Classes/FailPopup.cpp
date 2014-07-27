@@ -544,7 +544,7 @@ bool FailPopup::init()
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=](){}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
 		addChild(t_popup, kZ_FP_popup+1);
 	}
-	else if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
+	else// if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
 	{
 		EventShopPopup* t_popup = EventShopPopup::create(-300, [=](){});
 		addChild(t_popup, kZ_FP_popup+1);

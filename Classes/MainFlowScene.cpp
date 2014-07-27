@@ -2060,8 +2060,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																												  
 																												  startFormSetter(this);
 																												  CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-																												  back_in->setContentSize(CCSizeMake(251, 113));
-																												  back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-14));
+																												  back_in->setContentSize(CCSizeMake(251, 111));
+																												  back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-9));
 																												  back_case->addChild(back_in);
 																												  
 																												  

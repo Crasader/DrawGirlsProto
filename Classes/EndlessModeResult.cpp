@@ -1490,8 +1490,8 @@ void EndlessModeResult::startCalcAnimation()
 																						t_close_button->setEnabled(false);
 																						
 																						CCScale9Sprite* in_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-																						in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-15.f));
-																						in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-50, -80.f));
+																						in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-10.f));
+																						in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-50, -82.f));
 																						out_back->addChild(in_back);
 																						
 																						StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
