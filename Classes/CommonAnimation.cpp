@@ -86,6 +86,17 @@ void CommonAnimation::closePopup(CCNode* node, CCNode* t_container, CCNodeRGBA* 
 	}));
 }
 
+void CommonAnimation::applyShadow(KSLabelTTF* parent)
+{
+	parent->disableOuterStroke();
+	KSLabelTTF* title_label_shadow = KSLabelTTF::create(parent->getString(), mySGD->getFont().c_str(), parent->getFontSize());
+	title_label_shadow->setColor(ccBLACK);
+	title_label_shadow->enableOuterStroke(ccBLACK, 1, 255 * 0.6f, true);
+	title_label_shadow->setPosition(ccpFromSize(parent->getContentSize()/2.f) + ccp(0,-1));
+	parent->addChild(title_label_shadow, -1);
+	
+}
+
 void CommonAnimation::applyShadow(KSLabelTTF* parent, float shadowFontSize)
 {
 	parent->disableOuterStroke();

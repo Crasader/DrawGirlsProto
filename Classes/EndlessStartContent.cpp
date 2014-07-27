@@ -196,7 +196,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 		
 		
 		CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-		ikaruga->setScale(1.f-(360-myDSH->ui_top)*3.f/16.f);
+		ikaruga->setScale(1.f-((360-myDSH->ui_top)*3.f/16.f)/100.f);
 		ikaruga->setAnchorPoint(ccp(0,0));
 		ikaruga->setPosition(ccp(-240-ikaruga->getContentSize().width*ikaruga->getScale(), -myDSH->ui_center_y));
 		scenario_node->addChild(ikaruga, 1);

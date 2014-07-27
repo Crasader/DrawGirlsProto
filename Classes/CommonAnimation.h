@@ -15,7 +15,8 @@ public:
 												std::function<void(void)> ingFunctor = nullptr, std::function<void(void)> endFunctor = nullptr);
 	static void closePopup(CCNode* node, CCNode* t_container, CCNodeRGBA* gray,
 												std::function<void(void)> ingFunctor = nullptr, std::function<void(void)> endFunctor = nullptr);
-	static void applyShadow(KSLabelTTF* parent, float shadowFontSize=14.f);
+	static void applyShadow(KSLabelTTF* parent);
+	static void applyShadow(KSLabelTTF* parent, float shadowFontSize);
 	//virtual void registerWithTouchDispatcher();
 };
 

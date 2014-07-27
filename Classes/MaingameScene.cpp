@@ -1495,6 +1495,11 @@ void Maingame::removeConditionLabel()
 		CCNode* scenario_node = CCNode::create();
 		getParent()->addChild(scenario_node, 9999);
 		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
 		float screen_scale_y = myDSH->ui_top/320.f;
 		
 		CCNode* t_stencil_node = CCNode::create();
@@ -1506,6 +1511,7 @@ void Maingame::removeConditionLabel()
 		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, 480*screen_scale_y, 320*screen_scale_y));
 		
 		CCSprite* t_gray = CCSprite::create("back_gray.png");
+		t_gray->setScaleX(screen_scale_x);
 		t_gray->setScaleY(screen_scale_y);
 		t_gray->setOpacity(0);
 		t_gray->setPosition(ccp(240,myDSH->ui_center_y));
@@ -1516,7 +1522,7 @@ void Maingame::removeConditionLabel()
 		
 		
 		CCSprite* asuka = CCSprite::create("kt_cha_ikaruga_1.png");
-		asuka->setScale(1.f-(360-myDSH->ui_top)*3.f/16.f);
+		asuka->setScale(1.f-((360-myDSH->ui_top)*3.f/16.f)/100.f);
 		asuka->setAnchorPoint(ccp(1,0));
 		asuka->setPosition(ccp(480+asuka->getContentSize().width*asuka->getScale(), 0));
 		scenario_node->addChild(asuka, 1);
@@ -1688,7 +1694,7 @@ void Maingame::removeConditionLabel()
 		
 		
 		CCSprite* asuka = CCSprite::create("kt_cha_ikaruga_1.png");
-		asuka->setScale(1.f-(360-myDSH->ui_top)*3.f/16.f);
+		asuka->setScale(1.f-((360-myDSH->ui_top)*3.f/16.f)/100.f);
 		asuka->setAnchorPoint(ccp(1,0));
 		asuka->setPosition(ccp(480+asuka->getContentSize().width*asuka->getScale(), 0));
 		scenario_node->addChild(asuka, 1);

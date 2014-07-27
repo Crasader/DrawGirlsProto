@@ -145,7 +145,7 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 	{
 		StyledLabelTTF* ruby_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		ruby_label->setAnchorPoint(ccp(0.5f,0.5f));
-		ruby_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-7));
+		ruby_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-4));
 		t_target->addChild(ruby_label);
 		
 //		KSLabelTTF* ruby_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
@@ -159,7 +159,7 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 	{
 		StyledLabelTTF* gold_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		gold_label->setAnchorPoint(ccp(0.5f,0.5f));
-		gold_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-7));
+		gold_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-4));
 		t_target->addChild(gold_label);
 		
 //		KSLabelTTF* gold_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
@@ -173,7 +173,7 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 	{
 		StyledLabelTTF* heart_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		heart_label->setAnchorPoint(ccp(0.5f,0.5f));
-		heart_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-7));
+		heart_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-4));
 		t_target->addChild(heart_label);
 		
 //		KSLabelTTF* heart_label = KSLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
